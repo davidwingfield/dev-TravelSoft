@@ -1,0 +1,44 @@
+
+.breadcrumb {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding: .75rem 1rem;
+  margin-bottom: 1rem;
+  list-style: none;
+  background-color: transparent;
+  
+  border-radius: .215rem
+}
+
+.breadcrumb-item + .breadcrumb-item {
+  padding-left: 0;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  display: inline-block;
+  padding: 0 5px;
+  color: $page_description_color;
+  content: '/'
+}
+
+.breadcrumb-item + .breadcrumb-item:hover::before {
+  text-decoration: underline
+}
+
+.breadcrumb-item + .breadcrumb-item:hover::before {
+  text-decoration: none
+}
+
+.breadcrumb-item.active {
+  color: $page_title_color
+}
+
+.page-header .breadcrumb {
+  padding: 0;
+  margin: 0;
+}

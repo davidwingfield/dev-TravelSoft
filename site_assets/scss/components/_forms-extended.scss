@@ -1,0 +1,62 @@
+@use 'sass:math';
+@import '../abstracts/variables';
+
+.form-header {
+  padding: $form-header-padding;
+  margin-top: $form-header-mt;
+  margin-bottom: $form-header-mb;
+  color: $form-header-color;
+  text-align: center;
+  border-radius: $form-header-border-radius;
+  box-shadow: $z-depth-1-half;
+}
+
+.form-control:focus:not([readonly]) {
+  color: $fill-dark;
+  background-color: #ffffff;
+  border-color: $custom-secondary-color;
+  outline: 0;
+  box-shadow: none;
+}
+
+.was-validated .form-control:invalid, .form-control.is-invalid {
+  border-color: $custom-danger-color;
+}
+
+.trips-skin input[type=email].form-control.is-invalid:focus:not([readonly]),
+.trips-skin input[type=text].form-control.is-invalid:focus:not([readonly]),
+.trips-skin input[type=password].form-control.is-invalid:focus:not([readonly]),
+.trips-skin input[type=number].form-control.is-invalid:focus:not([readonly]),
+.trips-skin input[type=url].form-control.is-invalid:focus:not([readonly]),
+.trips-skin input[type=email].form-control.is-invalid:focus:not([readonly]),
+.trips-skin input[type=tel].form-control.is-invalid:focus:not([readonly]),
+.trips-skin textarea.md-textarea.form-control.is-invalid:focus:not([readonly])
+.form-control.is-invalid:focus {
+  border-color: $custom-danger-color;
+  box-shadow: 0 0 0 0.2rem rgba($custom-danger-color, .25);
+}
+
+.form-element {
+  margin-bottom: .5rem;
+  
+  div.error {
+    margin-top: .25rem;
+    font-size: .875rem;
+    color: $custom-danger-color;
+    display: none;
+  }
+  
+  label {
+    padding: .429rem 0;
+    font-weight: 300;
+    display: inline-block;
+    margin-bottom: .15rem;
+    font-family: Roboto, sans-serif;
+    font-size: 1rem;
+    line-height: 1.571429;
+    text-align: left;
+    color: #0a070d;
+  }
+  
+  
+}

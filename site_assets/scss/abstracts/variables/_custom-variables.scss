@@ -1,0 +1,87 @@
+@use 'sass:math';
+@use 'sass:color';
+
+
+$custom-primary-color-light: #94c5f5 !default;
+$custom-primary-color: #55a1ec !default;
+$custom-primary-color-dark: #074f95 !default;
+
+$custom-secondary-color-light: #ffb592 !default;
+$custom-secondary-color: #ff884f !default;
+$custom-secondary-color-dark: #e54a00 !default;
+
+$custom-default-color-light: #eeeeee !default;
+$custom-default-color: #dddddd !default;
+$custom-default-color-dark: #999999 !default;
+
+$custom-info-color-light: #d5d2fd !default;
+$custom-info-color: #948ef5 !default;
+$custom-info-color-dark: #2a21c6 !default;
+
+$custom-success-color-light: #8cd8b1 !default;
+$custom-success-color: #48b17d !default;
+$custom-success-color-dark: #016733 !default;
+
+$custom-warning-color-light: #ebbf7a !default;
+$custom-warning-color: #ba8532 !default;
+$custom-warning-color-dark: #442a00 !default;
+
+$custom-danger-color-light: #ff7d73 !default;
+$custom-danger-color: #f44336 !default;
+$custom-danger-color-dark: #7b0900 !default;
+
+
+//
+$fill-light: #f8f8f7 !default;
+$fill-light-secondary: #bcbcb3 !default;
+$fill-dark: #0a070d !default;
+$fill-dark-secondary: #06030a !default;
+$fill-highlight-1: $custom-secondary-color !default; //#f1f4f5 !default;
+$fill-highlight-2: $custom-primary-color-light !default;
+
+$text-light: $fill-light !default;
+$text-light-secondary: $fill-light-secondary !default;
+$text-dark: $fill-dark !default;
+$text-dark-secondary: $fill-dark-secondary !default;
+$text-primary: #1959a6 !default;
+
+
+$xs: 0 !default;
+$sm: 480px !default;
+$md: 768px !default;
+$lg: 992px !default;
+$xl: 1200px !default;
+$xxl: 1600px !default;
+
+// 5. Page
+// ===========================================================================
+
+// Page Details
+$page_background_color: $fill-light !default; //#f1f4f5
+$page_header_padding: 1rem 1rem !default;
+$page_title_color: #3c4858 !default;
+$page_title_font_size: 2rem !default;
+$page_description_color: #4f4f4f !default;
+$page_content_padding: 0 2rem 2rem !default;
+
+
+$input-btn-padding-y: .375rem !default;
+$input-btn-padding-x: .75rem !default;
+
+$input-btn-padding-y-sm: .25rem !default;
+$input-btn-padding-x-sm: .5rem !default;
+
+$input-btn-padding-y-lg: .5rem !default;
+$input-btn-padding-x-lg: 1rem !default;
+
+$input-padding-y: $input-btn-padding-y !default;
+$input-padding-x: $input-btn-padding-x !default;
+
+
+$color-scheme-1: #55a1ec !default;
+$color-scheme-1-light: #94c5f5 !default;
+$color-scheme-1-dark: #074f95 !default;
+
+
+
+

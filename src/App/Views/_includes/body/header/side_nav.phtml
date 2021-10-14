@@ -1,0 +1,37 @@
+<?php
+
+    use Framework\App\Controllers\Page;
+    use Framework\App\Middlewares\Auth;
+
+    if (Auth::logged_in()) {
+        ?>
+        
+        <div id="slide-out" class="side-nav sn-bg-4 fixed" style="transform: translateX(0px);">
+            <ul class="custom-scrollbar ps ps--theme_default">
+                
+                <li class="logo-sn waves-effect">
+                    <a href="/" class="">
+                        <img src="/public/img/logos/trips2italy_logo_small.png" alt="logo" style="height:4.5rem">
+                    </a>
+                </li>
+                
+                <li>
+                    <?php
+                        $parent_id = 0;
+                        $sub_id = 0;
+                        if (defined("PARENT_MENU")) {
+                            $parent_id = PARENT_MENU;
+                        }
+                        if (defined("SUB_MENU")) {
+                            $sub_id = SUB_MENU;
+                        }
+                        echo Page::buildSideMenu($parent_id, $sub_id);
+                    ?>
+                </li>
+            </ul>
+            <div class="sidenav-bg mask-strong"></div>
+        </div>
+
+        <?php
+    }
+?>

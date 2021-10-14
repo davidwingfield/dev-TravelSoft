@@ -1,0 +1,38 @@
+<?php
+    $user_id = 4;
+    if (isset($_SESSION["user_id"])) {
+        $user_id = (int)$_SESSION["user_id"];
+    }
+?>
+<body class="trips-skin">
+<?php include_once(__DIR__ . "/body/pre_loader.phtml"); ?>
+<?php include_once(__DIR__ . "/body/header.phtml"); ?>
+<input type="hidden" id="user_id" name="user_id" value="<?php echo $user_id; ?>"/>
+<?php include_once(__DIR__ . "/body/alert_box.phtml"); ?>
+<?php include_once(__DIR__ . "/body/main.phtml"); ?>
+<?php include_once(__DIR__ . "/body/footer.phtml"); ?>
+<?php include_once(__DIR__ . "/body/scripts.phtml"); ?>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".button-collapse").sideNav({
+            edge: "left", // Choose the horizontal origin
+            closeOnClick: false, // Closes side-nav on &lt;a&gt; clicks, useful for Angular/Meteor
+            breakpoint: 1200, // Breakpoint for button collapse
+            menuWidth: 240, // Width for sidenav
+            timeDurationOpen: 500, // Time duration open menu
+            timeDurationClose: 500, // Time duration open menu
+            timeDurationOverlayOpen: 200, // Time duration open overlay
+            timeDurationOverlayClose: 200, // Time duration close overlay
+            easingOpen: "easeInOutQuad", // Open animation
+            easingClose: "easeInOutQuad", // Close animation
+            showOverlay: true, // Display overflay
+            showCloseButton: false, // Append close button into siednav
+            slim: false, // turn on slime mode
+            onOpen: null, // callback function
+            onClose: null, // callback function
+            mode: "over", // change sidenav mode
+        })
+    })
+</script>
+</body>

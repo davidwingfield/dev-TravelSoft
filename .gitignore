@@ -1,0 +1,10 @@
+vendor/
+.env
+src/phpDocumentor.phar
+src/.phpdoc/
+var/logs/
+.idea/
+/bin/objectGenerator/controllers/
+/bin/objectGenerator/models/
+/bin/objectGenerator/scripts/
+node_modules/

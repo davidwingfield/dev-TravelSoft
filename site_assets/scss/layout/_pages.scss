@@ -1,0 +1,272 @@
+@import '../abstracts/variables';
+
+.page {
+  position: relative;
+  background: $page_background_color; //#f1f4f5
+  color: $page_title_color;
+  height: 100% !important;
+  
+}
+
+.page-dark.layout-full {
+  position: relative;
+  z-index: 0;
+  color: $text-light
+}
+
+.page-dark.layout-full::before {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  content: '';
+  background-position: center top;
+  -webkit-background-size: cover;
+  background-size: cover
+}
+
+.page-dark.layout-full::after {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  content: '';
+  background-color: rgba(38, 50, 56, .6)
+}
+
+.page-dark.layout-full .brand {
+  margin-bottom: 1.57rem
+}
+
+.page-dark.layout-full .brand-text {
+  font-size: 18px;
+  color: $text-light;
+  text-transform: uppercase
+}
+
+//
+
+.page-nav-tabs {
+  padding: 0 30px
+}
+
+.page-content {
+  padding: 30px 30px
+}
+
+
+.page-content-actions {
+  padding: $page_content_padding;
+}
+
+.page-content-actions::after {
+  display: block;
+  clear: both;
+  content: ''
+}
+
+.page-content-actions .dropdown {
+  display: inline-block
+}
+
+.page-content-table {
+  max-width: 100%;
+  padding: 0;
+  overflow-x: auto
+}
+
+.page-content-table .table > tbody > tr > td, .page-content-table .table > tbody > tr > th, .page-content-table .table > thead > tr > td, .page-content-table .table > thead > tr > th {
+  padding-top: 20px;
+  padding-bottom: 20px
+}
+
+.page-content-table .table > tbody > tr > td:first-child, .page-content-table .table > tbody > tr > th:first-child, .page-content-table .table > thead > tr > td:first-child, .page-content-table .table > thead > tr > th:first-child {
+  padding-left: 30px
+}
+
+.page-content-table .table > tbody > tr > td:last-child, .page-content-table .table > tbody > tr > th:last-child, .page-content-table .table > thead > tr > td:last-child, .page-content-table .table > thead > tr > th:last-child {
+  padding-right: 30px
+}
+
+.page-content-table .table > tbody > tr:hover > td {
+  background-color: #f3f7f9
+}
+
+.page-content-table .table > tbody > tr > td {
+  cursor: pointer
+}
+
+.page-content-table .table > tbody > tr:last-child td {
+  border-bottom: 1px solid #e4eaec
+}
+
+.page-content-table .table.is-indent > tbody > tr > td.pre-cell, .page-content-table .table.is-indent > tbody > tr > td.suf-cell, .page-content-table .table.is-indent > tbody > tr > th.pre-cell, .page-content-table .table.is-indent > tbody > tr > th.suf-cell, .page-content-table .table.is-indent > thead > tr > td.pre-cell, .page-content-table .table.is-indent > thead > tr > td.suf-cell, .page-content-table .table.is-indent > thead > tr > th.pre-cell, .page-content-table .table.is-indent > thead > tr > th.suf-cell {
+  width: 30px;
+  padding: 0;
+  border-top: 0;
+  border-bottom: 0
+}
+
+.page-content-table .table.is-indent > tbody > tr:first-child td {
+  border-top: 0
+}
+
+.page-content-table .table.is-indent > tbody > tr:last-child td.pre-cell, .page-content-table .table.is-indent > tbody > tr:last-child td.suf-cell {
+  border-bottom: 0
+}
+
+.page-content-table .table.is-indent > tfoot > tr > td {
+  border-top: 0
+}
+
+.page-content-table .pagination {
+  margin-right: 30px;
+  margin-left: 30px
+}
+
+
+.page-copyright {
+  margin-top: 60px;
+  font-size: .858rem;
+  color: #37474f;
+  letter-spacing: 1px
+}
+
+.page-copyright .social .icon {
+  color: rgba(55, 71, 79, .6);
+  font-size: 1.143rem
+}
+
+.page-copyright .social .icon:focus, .page-copyright .social .icon:hover {
+  color: rgba(55, 71, 79, .8)
+}
+
+.page-copyright .social .icon.active, .page-copyright .social .icon:active {
+  color: #37474f
+}
+
+.page-copyright-inverse {
+  color: $text-light
+}
+
+.page-copyright-inverse .social .icon {
+  color: $text-light
+}
+
+.page-copyright-inverse .social .icon:active, .page-copyright-inverse .social .icon:hover {
+  color: rgba(255, 255, 255, .8)
+}
+
+
+.page-header + .page-content {
+  padding-top: 0
+}
+
+.page-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: $page_title_font_size;
+  color: $text-dark;
+}
+
+.page-title > .icon {
+  margin-right: .3em
+}
+
+//
+
+.page-description {
+  color: $page_description_color;
+  margin-bottom: 0;
+}
+
+
+.page-header {
+  position: relative;
+  padding: $page_header_padding;
+  margin-top: 0;
+  margin-bottom: 0;
+  background: 0 0;
+  border-bottom: 0
+}
+
+
+.page-header-actions {
+  position: absolute;
+  top: 50%;
+  right: 30px;
+  margin: auto;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%)
+}
+
+.page-header-actions .btn-icon {
+  margin-left: 6px
+}
+
+.page-header-actions > * {
+  margin-bottom: 0
+}
+
+.page-header .breadcrumb {
+  padding: 0;
+  margin: 0
+}
+
+.page-header-bordered {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+  background-color: $fill-light;
+  border-bottom: 1px solid transparent
+}
+
+.page-header-tabs {
+  padding-bottom: 0
+}
+
+.page-header-tabs .nav-tabs-line {
+  margin-top: 5px;
+  border-bottom-color: transparent
+}
+
+.page-header-tabs .nav-tabs-line > li > a {
+  padding: 5px 20px
+}
+
+
+@media (max-width: $small-screen) {
+  .page-header {
+    padding: 10px
+  }
+  
+  .page-content {
+    padding: 10px
+  }
+  
+}
+
+
+@media (max-width: $medium-screen) {
+  .page {
+    min-height: -webkit-calc(100% - 53px);
+    min-height: calc(100% - 53px)
+  }
+}
+
+.page-header-actions {
+  .btn-outline-secondary, .btn-outline-primary, .btn-outline-default,
+  .btn-outline-warning, .btn-outline-danger, .btn-outline-success, .btn-outline-info {
+    background: $fill-light;
+  }
+}
+
+.page-content {
+  padding: 1rem 1rem;
+}

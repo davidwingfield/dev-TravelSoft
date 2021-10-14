@@ -1,0 +1,45 @@
+{
+    "description": "MVC for TravelDev ",
+    "type": "project",
+    "version": "1.0.0",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "keywords": [
+        "env",
+        "dotenv",
+        "environment"
+    ],
+    "authors": [
+        {
+            "name": "David Wingfield",
+            "email": "David@trips2italy.com"
+        }
+    ],
+    
+    "require": {
+        "php": ">=7.1",
+        "vlucas/phpdotenv": "3.4.*",
+        "ext-json": "*",
+        "ext-pdo": "*",
+        "cboden/ratchet": "^0.4.1",
+        "stripe/stripe-php": "^6.16",
+        "plivo/php-sdk": "^4.1",
+        "phpmailer/phpmailer": "~6.0",
+        "ext-mysqli": "*",
+        "ext-gd": "*",
+        "ext-fileinfo": "*",
+        "ext-mysql_xdevapi": "*",
+        "ext-soap": "*",
+        "ext-simplexml": "*",
+        "ext-curl": "*",
+        "ext-openssl": "*",
+        "apache/log4php": "2.3.0",
+        "thingengineer/mysqli-database-class": "dev-master",
+        "ext-readline": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Framework\\": "src/"
+        }
+    }
+}

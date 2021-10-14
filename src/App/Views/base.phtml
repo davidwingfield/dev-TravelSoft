@@ -1,0 +1,23 @@
+<?php
+    /**
+     * base.phtml
+     *
+     * Long Api Routes Description
+     *
+     * @package            Application\App
+     * @subpackage         Views
+     */
+
+    use Framework\App\Middlewares\Auth;
+
+    $page_data = [];
+    if (isset($data)) {
+        $page_data = $data;
+    }
+    
+?>
+<!DOCTYPE html>
+<html lang="en">
+<?php include_once(__DIR__ . "/_includes/head.phtml"); ?>
+<?php include_once(__DIR__ . "/_includes/body.phtml"); ?>
+</html>

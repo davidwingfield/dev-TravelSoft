@@ -1,0 +1,101 @@
+
+*, :before, :after {
+  box-sizing: border-box; // habit
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  font-family: $mdb-font-family;
+  font-weight: $font-weight-light;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  text-align: left;
+}
+
+@media (min-width: $sm) {
+  html, body {
+    font-size: 11px;
+    line-height: 1.7;
+    height: 100%;
+  }
+  
+  .debug_demo {
+    background: $custom-secondary-color;
+    color: choose-contrast-color($custom-secondary-color);
+  }
+  
+  .debug_demo:after {
+    content: 'small';
+  }
+  
+  .page {
+    padding-left: 0 !important;
+  }
+}
+
+@media (min-width: $md) {
+  html, body {
+    font-size: 12px;
+    line-height: 1.7;
+    height: 100%;
+  }
+  
+  .debug_demo {
+    background: $custom-info-color;
+    color: choose-contrast-color($custom-info-color);
+  }
+  
+  .debug_demo:after {
+    content: 'medium';
+  }
+  
+  .page {
+    padding-left: 0 !important;
+  }
+}
+
+@media (min-width: $lg) {
+  html, body {
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  
+  .debug_demo {
+    background: $custom-success-color;
+    color: choose-contrast-color($custom-success-color);
+  }
+  
+  .debug_demo:after {
+    content: 'large';
+  }
+  
+  .page {
+    padding-left: 0 !important;
+  }
+}
+
+@media (min-width: $xl) {
+  html, body {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  
+  .debug_demo {
+    background: $custom-warning-color;
+    color: choose-contrast-color($custom-warning-color);
+  }
+  
+  .debug_demo:after {
+    content: 'x-large';
+  }
+  
+  .page {
+    padding-left: 240px !important;
+  }
+}

@@ -1,0 +1,27 @@
+; This is a sample configuration file
+; Comments start with ';', as in php.ini
+
+[application]
+version = 1.0
+path = "/"
+api_path = api
+url = "http://mockups/"
+development_mode = 1
+email = mailer@myapp.com
+
+[database]
+db_name = travelsoft_dev
+db_user = travelsoft_root
+db_pass = "i5S=Sj)*wMb;O#R%"
+db_host = localhost
+db_port = 3306
+db_persistent = false
+db_loginattempts = 50000000
+expire_time = 10800
+;db_name = t
+;db_user = traveldev_root
+;db_pass = LbpDNDeG
+;db_host = 63.111.67.189
+;db_port = 3306
+;db_persistent = false
+;db_loginattempts = 5

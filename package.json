@@ -1,0 +1,59 @@
+{
+  "name": "travelsoft",
+  "version": "1.0.0",
+  "version_short": "1.0",
+  "description": "TravelSoft Web App",
+  "homepage": "https://trips2italy.com/",
+  "main": "public_html/assets/js/mdb.js",
+  "scripts": {
+    "dev_start": "gulp dev-start",
+    "js-build": "gulp js-build",
+    "js-minify": "gulp js-minify",
+    "css-compile": "gulp css-compile",
+    "css-minify": "gulp css-minify"
+  },
+  "keywords": [
+    "Travel",
+    "css",
+    "sass",
+    "mobile-first",
+    "responsive",
+    "front-end",
+    "framework",
+    "web"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidwingfield/TravelSoft.git"
+  },
+  "author": "David Wingfield (David@trips2italy.com)",
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "^2.27.5",
+    "del": "^6.0.0",
+    "eslint": "^5.13.0",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^8.0.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-connect-php": "^1.0.3",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-imagemin": "^7.1.0",
+    "gulp-minify": "^3.1.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-rev": "^9.0.0",
+    "gulp-sass": "^5.0.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "node-sass": "^4.14.1",
+    "sass": "^1.41.1",
+    "stylelint": "^13.13.1",
+    "stylelint-config-standard": "^22.0.0",
+    "uglify-js": "^3.4.9"
+  },
+  "bugs": {
+    "url": "https://github.com/davidwingfield/TravelSoft/issues"
+  },
+  "dependencies": {
+    "jquery": "^3.6.0"
+  }
+}

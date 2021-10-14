@@ -1,0 +1,38 @@
+<?php
+    $page_data = [];
+    if (isset($data)) {
+        $page_data = $data;
+    }
+?>
+<section id="page_dashboard_index">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="d-flex bd-highlight example-parent">
+
+                <div class="flex-fill m-1 dashboard-widget">
+                    <pre style="max-height:500px;overflow:auto;"><?php echo var_export($page_data, 1); ?></pre>
+                </div>
+
+                <div class="flex-fill m-1 dashboard-widget">Flex item</div>
+
+            </div>
+
+            <div class="col-sm-12 col-lg-3 order-1 order-lg-2">
+
+                <div class="dashboard-menu page-aside-section">
+                    <h5 class="page-aside-title">Main</h5>
+                    <div class="list-group">
+                        <a class="list-group-item list-group-item-action active" href="javascript:void(0)"><i class="icon wb-dashboard" aria-hidden="true"></i>Overview</a>
+                        <a class="list-group-item" href="javascript:void(0)"><i class="icon wb-pluse" aria-hidden="true"></i>Activity</a>
+                        <a class="list-group-item" href="javascript:void(0)"><i class="icon wb-heart" aria-hidden="true"></i>Dearest</a>
+                        <a class="list-group-item" href="javascript:void(0)"><i class="icon wb-folder" aria-hidden="true"></i>Folders</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <pre><?php echo var_export($page_data, 1); ?></pre>
+</section>

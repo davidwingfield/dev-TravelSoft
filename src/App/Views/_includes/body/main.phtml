@@ -1,0 +1,26 @@
+<?php
+
+    use Framework\App\Middlewares\Auth;
+
+    $loggedIn = Auth::logged_in();
+
+    if (!defined("PAGEDESCRIPTION")) {
+        define("PAGEDESCRIPTION", "");
+    }
+    if (!defined("BREADCRUMBS")) {
+        define("BREADCRUMBS", "");
+    }
+
+?>
+
+<main id="main" class=" m-0 p-0">
+    <?php
+        if ($loggedIn) {
+            include_once(__DIR__ . "/page/page.phtml");
+        } else {
+            if (defined("MAIN")) {
+                include_once(MAIN);
+            }
+        }
+    ?>
+</main>

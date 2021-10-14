@@ -1,0 +1,15 @@
+<?php
+    $page_data = [];
+    if (isset($data)) {
+        $page_data = $data;
+    }
+?>
+<section id="product_edit_page">
+    <h1>Product Edit</h1>
+    <pre><?php echo var_export($page_data, 1); ?></pre>
+</section>
+<script type="text/javascript">
+    $(document).ready(function () {
+        console.log("page:", "product_edit_page")
+    })
+</script>

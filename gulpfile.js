@@ -100,7 +100,6 @@ function cssMinify (cb) {
 }
 
 function watchCSS (cb) {
-    
     watch(["./site_assets/scss/**/*.scss"], series(
         cssClean,
         cssBundle,
@@ -147,6 +146,21 @@ gulp.task("js-bundle-modules", (done) => {
     done()
 })
 
+gulp.task("dev-start", (done) => {
+    
+    gulp.watch("./site_assets/scss/**/*.scss", gulp.series("buildCSS", (done) => {
+        //browserSync.reload();
+        done()
+    }))
+    
+    gulp.watch("./site_assets/js/**/*.js", gulp.series("buildJS", (done) => {
+        //browserSync.reload();
+        done()
+    }))
+    
+    done()
+})
+
 exports.buildCSS = series(
   cssClean,
   cssBundle,
@@ -158,3 +172,4 @@ exports.buildJS = series(
   jsBundle,
   jsMinify,
 )
+

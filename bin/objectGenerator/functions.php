@@ -76,11 +76,9 @@
         $cCase = getCamelCase($name);
         $uCase = strtoupper($name);
         $fileName = $cCase . ".php";
-        $controller_template = "
-<?php
-    namespace Src\App\Controllers;
+        $controller_template = "<?php\nnamespace Framework\App\Controllers;
 
-    use Src\Core\Controller;
+    use Framework\Core\Controller;
 
 	/**
      * Short $cCase Description
@@ -96,6 +94,8 @@
         {
             parent::__construct();
         }
+        
+       
     }
 ";
 
@@ -112,8 +112,7 @@
         $uCase = strtoupper($name);
         $fileName = $cCase . "Model.php";
 
-        $model_template = "<?php
-    namespace Src\App\Models;
+        $model_template = "<?php\nnamespace Framework\App\Models;
     
     use Exception;
     use Src\Core\Model;
@@ -142,7 +141,7 @@
             
             try{
             if (!is_null($id)) {
-                self::$db->where("id", $id);
+                Model::$db->where("id", $id);
             }
     
             self::$db->where("enabled", 1);
@@ -156,7 +155,7 @@
         {
             try{
             if (!is_null($id)) {
-                self::$db->where("id", $id);
+                Model::$db->where("id", $id);
             }
     
             self::$db->where("enabled", 1);
@@ -169,7 +168,7 @@
         public static function update(array $params = []): array
         {
             $id = 1;
-            return self::get($id);
+            return Model::get($id);
         }
     }';
 
@@ -326,12 +325,6 @@
             ";
         }
 
-        /*
-        echo "<div style='margin-left:.5rem;'>";
-        echo "<h5 style='margin-left:.5rem;'>buildScripts</h5>";
-        echo "<pre style='margin-left:.5rem;'>" . var_export($fields, 1) . "</pre>";
-        echo "</div>";
-        //*/
         $script_template = "    
 const $cCase = (function () {
     'use strict'
@@ -356,6 +349,10 @@ const $cCase = (function () {
     }
     
     $loadGetFunction
+    
+    const init = function(settings){
+        console.log(' -- $cCase -- ', {})
+    }
     
     const set = function ($name) {
         let detail = _default_detail()
@@ -395,7 +392,7 @@ const $cCase = (function () {
            save(params); 
         },
         init: function () {
-            set()
+            init()
         },
     }
 

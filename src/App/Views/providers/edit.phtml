@@ -1,12 +1,80 @@
 <?php
     $page_data = [];
+    $types = array();
     if (isset($data)) {
         $page_data = $data;
     }
+
+    if (isset($page_data["types"])) {
+        $types = json_encode($page_data["types"], 1);
+    }
+
 ?>
 <section id="provider_edit">
+    <div class="panel nav-tabs-horizontal nav-tabs-inverse" id="provider_edit_tabs" data-plugin="tabs">
+        
+        <div class="panel-heading panel-heading-tab">
+            <ul class="nav nav-tabs nav-tabs-solid" role="tablist">
+                
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#panel_tab_company_detail" aria-controls="panel_tab_company_detail" role="tab" aria-expanded="true">
+                        <span class="">Company</span> <span class="d-none d-lg-inline">Details</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#panel_tab_provider_detail" aria-controls="panel_tab_provider_detail" role="tab">
+                        <span class="">Provider</span> <span class="d-none d-lg-inline">Details</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#panel_tab_location_detail" aria-controls="panel_tab_location_detail" role="tab">
+                        <span class="">Location</span> <span class="d-none d-lg-inline">Details</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#panel_tab_vendor_detail" aria-controls="panel_tab_vendor_detail" role="tab">
+                        <span class="">Vendor</span> <span class="d-none d-lg-inline">Details</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#panel_tab_contacts" aria-controls="panel_tab_contacts" role="tab">
+                        <span class="">Contacts</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#panel_tab_addresses" aria-controls="panel_tab_addresses" role="tab">
+                        <span class="">Addresses</span>
+                    </a>
+                </li>
 
+            </ul>
+        </div>
+        
+        <div class="panel-body p-1">
+            
+            <div class="tab-content p-0">
+
+                <!-- Company Detail -->
+                <div class="tab-pane active" id="panel_tab_company_detail" role="tabpanel">
+                    <?php include_once(VIEWS_PATH . "/companies/forms/provider_edit_form_company_detail.phtml"); ?>
+                </div>
+
+                <!-- Provider Detail -->
+                <div class="tab-pane" id="panel_tab_provider_detail" role="tabpanel">
+                    <?php include_once(VIEWS_PATH . "/providers/forms/provider_edit_form_provider_detail.phtml"); ?>
+                </div>
+
+            </div>
+        
+        </div>
+    </div>
 </section>
 <script type="text/javascript">
-
+    $(document).ready(function () {
+        Types.init(<?php echo $types;?>)
+    })
 </script>

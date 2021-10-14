@@ -38,10 +38,11 @@ const Login = (function () {
       })
     ///////////////////////////////////////////////
     const init = function (settings) {
+        console.log("login", {})
         if (_email && _password) {
             Login.validator = validator_init(form_rules)
         }
-        console.log("login", {})
+        
     }
     
     const submit_login = function () {
@@ -64,8 +65,7 @@ const Login = (function () {
                 sendPostRequest("/api/v1.0/users/login", dataToSend, function (data, status, xhr) {
                     console.log("data", data.id)
                     if (data && data.id) {
-                        let result = data
-                        if (result.id) {
+                        if (data.id) {
                             window.location.replace("/")
                         }
                     } else {

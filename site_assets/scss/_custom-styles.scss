@@ -863,3 +863,12 @@ div.dataTables_wrapper div.dataTables_filter input {
   height: auto !important;
 }
 
+.panel-heading-tab {
+  padding: .8rem 1rem 0;
+  background-color: #074f95;
+  color: #ffffff;
+}
+
+div.tab-pane > form {
+  min-height: 62vh;
+}

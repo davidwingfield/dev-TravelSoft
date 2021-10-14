@@ -12,7 +12,7 @@
     require_once("vendor/autoload.php");
 
     session_start();
-    
+
     use Framework\App\Middlewares\Auth;
     use Framework\Core\Request;
     use Framework\Core\Router;
@@ -60,15 +60,8 @@
     Model::init();
     View::init();
     // ----
-    Log::clear();
-
-    $ErrorHandler = new ErrorHandler();
-
-    set_error_handler(array(
-        $ErrorHandler,
-        "handleError",
-    ));
-
+    //Log::clear();
+        
     /*
     ini_set("display_errors", 0);
     ini_set("error_reporting", E_ALL);

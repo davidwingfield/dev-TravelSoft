@@ -17,13 +17,16 @@ const sass = require("gulp-sass")(require("sass"))
 const phpConnect = require("gulp-connect-php")
 const util = require("util")
 // ----
-const cssDestinationPath = "./public/css/";
-const jsDestinationPath = "./public/js/";
+const cssDestinationPath = "./public/css/"
+const jsDestinationPath = "./public/js/"
+
 
 function start (cb) {
     console.clear()
     cb()
 }
+
+
 // ----
 gulp.task("css-compile-modules", (done) => {
     gulp.src("./site_assets/scss/**/modules/**/*.scss")
@@ -44,11 +47,11 @@ gulp.task("css-minify-modules", () => {
       .pipe(rename({
           suffix: ".min",
       }))
-      .pipe(gulp.dest(cssDestinationPath+"/modules"))
+      .pipe(gulp.dest(cssDestinationPath + "/modules"))
 })
 
 gulp.task("css-minify", gulp.series("css-minify-modules", () => {
-    return gulp.src([cssDestinationPath+"/*.css", "!"+cssDestinationPath+"/*.min.css", "!./public/css/bootstrap.css"])
+    return gulp.src([cssDestinationPath + "/*.css", "!" + cssDestinationPath + "/*.min.css", "!./public/css/bootstrap.css"])
       .pipe(cssmin())
       .pipe(rename({
           suffix: ".min",
@@ -66,7 +69,7 @@ gulp.task("css-compile", gulp.series("css-compile-modules", () => {
 }))
 
 
-
+// ----
 function cssClean (cb) {
     del([
         cssDestinationPath + "*.css",
@@ -74,10 +77,12 @@ function cssClean (cb) {
     cb()
 }
 
+
 function getSiteScripts () {
     delete require.cache[require.resolve("./site_assets/js/modules.js")]
     return require("./site_assets/js/modules")
 }
+
 
 function cssBundle (cb) {
     gulp.src("./site_assets/scss/*.scss")
@@ -89,6 +94,7 @@ function cssBundle (cb) {
     cb()
 }
 
+
 function cssMinify (cb) {
     gulp.src(["./public/css/*.css", "!./public/css/*.min.css", "!./public/css/bootstrap.css"])
       .pipe(cssmin())
@@ -98,6 +104,7 @@ function cssMinify (cb) {
       .pipe(gulp.dest("./public/css/"))
     cb()
 }
+
 
 function watchCSS (cb) {
     watch(["./site_assets/scss/**/*.scss"], series(
@@ -109,6 +116,7 @@ function watchCSS (cb) {
     cb()
 }
 
+
 function jsBundle (cb) {
     const plugins = getSiteScripts()
     gulp.src(plugins.modules)
@@ -117,6 +125,7 @@ function jsBundle (cb) {
     cb()
 }
 
+
 function jsClean (cb) {
     del([
         "./public/js/site.*",
@@ -124,19 +133,27 @@ function jsClean (cb) {
     cb()
 }
 
-function jsMinify(cb){
-    const plugins = getSiteScripts()
-    gulp.src(plugins.modules)
-      .pipe(concat("site.js"))
-      .pipe(minify({
-          ext: {
-              min: ".min.js",
-          },
-          noSource: true,
-      }))
-      .pipe(gulp.dest("./public/js/"))
-    cb()
+
+function jsMinify (cb) {
+    try {
+        const plugins = getSiteScripts()
+        
+        gulp.src(plugins.modules)
+          .pipe(concat("site.js"))
+          .pipe(minify({
+              ext: {
+                  min: ".min.js",
+              },
+              noSource: true,
+          }))
+          .pipe(gulp.dest("./public/js/"))
+        cb()
+    } catch (e) {
+        cb(e)
+    }
+    
 }
+
 
 gulp.task("js-bundle-modules", (done) => {
     const plugins = getSiteScripts()

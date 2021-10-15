@@ -5,9 +5,23 @@ $.fn.table = function (settings) {
     let $dTable
     let table_type = "display_list"
     let table_id = $(this).attr("id")
-    ///////////////////////////////////////////////
+    // ----
     const _table = document.getElementById(table_id)
-    ///////////////////////////////////////////////
+    // ----
+    DataTable.render.ellipsis = function (cutoff) {
+        return function (data, type, row) {
+            if (type === "display") {
+                var str = data.toString() // cast numbers
+                
+                return str.length < cutoff ?
+                  str :
+                  str.substr(0, cutoff - 1) + "&#8230;"
+            }
+            
+            // Search, order and type can use the original data
+            return data
+        }
+    }
     
     if (settings) {
         if (settings.columnDefs) {
@@ -20,49 +34,80 @@ $.fn.table = function (settings) {
             data = settings.data
         }
     }
-    ///////////////////////////////////////////////
+    // ----
     const formatTable = function () {
         let _filter = $("#" + table_id + "_wrapper .dataTables_filter")
         let _length = $("#" + table_id + "_wrapper .dataTables_length")
+        let _info = $("#" + table_id + "_wrapper .dataTables_info")
+        let _paginate = $("#" + table_id + "_wrapper .dataTables_paginate")
         let _wrapper = $("#" + table_id + "_wrapper")
         let _wrapper_select = $("#" + table_id + "_wrapper select")
         let _wrapper_table = $("#" + table_id).parent("div")
+        // ----
         _wrapper_table
           .removeClass("col-sm-12")
           .addClass("p-0 m-0 w-100 h-100")
-        _wrapper.find("label").each(function () {
+        _wrapper
+          .find("label").each(function () {
             $(this).parent().append($(this).children())
         })
         
-        _wrapper.find("div.row")
+        _wrapper
+          .find("div.row")
           .removeClass("row")
           .addClass("d-flex justify-content-between")
         
-        _filter.find("input").each(function () {
+        _filter
+          .find("input").each(function () {
             const $this = $(this)
             $this.attr("placeholder", "Search")
             $this.removeClass("form-control-sm")
         })
         
-        _filter.find("label").remove()
+        _filter
+          .find("label").remove()
         
-        _filter.parent("div")
+        _filter
+          .parent("div")
           .removeClass("col-sm-12 col-md-6")
           .addClass("w-50")
         
-        //_length.addClass("d-flex justify-content-start")
+        _info
+          .parent("div")
+          .removeClass("col-sm-12 col-md-5")
+          .addClass("w-50 d-flex align-content-center flex-wrap px-0")
         
-        _length.parent("div")
+        _info
+          .addClass("py-0")
+        
+        _paginate
+          .parent("div")
+          .removeClass("col-sm-12 col-md-7")
+          .addClass("w-50 px-0")
+        
+        _paginate
+          .addClass("py-0")
+        
+        _paginate
+          .find("ul.pagination")
+          .addClass("mb-0")
+        
+        _length
+          .parent("div")
           .removeClass("col-sm-12 col-md-6")
           .addClass("w-50")
         
-        _length.find("label").each(function () {
+        _length
+          .find("label").each(function () {
             const $this = $(this)
             $this.addClass("mb-0 pb-0 mr-3 d-inline-block")
         })
         
-        _wrapper_select.removeClass("custom-select custom-select-sm form-control form-control-sm")
-        _wrapper_select.addClass("form-control d-inline-block")
+        _wrapper_select
+          .removeClass("custom-select custom-select-sm form-control form-control-sm")
+        
+        _wrapper_select
+          .addClass("form-control d-inline-block")
         
         if (table_type === "display_list") {
             $("#" + table_id + ">tbody>tr").css({

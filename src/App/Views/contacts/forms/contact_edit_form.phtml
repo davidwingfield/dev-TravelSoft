@@ -1,0 +1,106 @@
+<!-- Edit Contact Form -->
+<form id="form_edit_contact" name="form_edit_contact" class="" style="" novalidate>
+    <!-- Panel -->
+    <section class="panel z-depth-0 w-100 mb-0" style="">
+        
+        <!-- Panel Heading -->
+        <header class="panel-heading" style="">
+            <div class="row">
+                
+                <!-- Panel Heading Title -->
+                <div class="col-8">
+                    <h4 class="panel-title">Contact Details</h4>
+                </div>
+                <!-- /Panel Heading Title -->
+                
+                <!-- Panel Heading Actions -->
+                <div class="col-4 d-flex align-items-center justify-content-end" style="">
+                    <div class="panel-actions p-0 m-0" style="">
+                        
+                        <!-- Contact Enabled -->
+                        <div class="custom-control custom-switch" style="">
+                            <input id="contact_enabled" name="contact_enabled" type="checkbox" value="1" class="custom-control-input" style="">
+                            <label for="contact_enabled" class="custom-control-label" style="">Enabled</label>
+                        </div>
+                        <!-- /Contact Enabled -->
+                    
+                    </div>
+                </div>
+                <!-- /Panel Heading Actions -->
+            
+            </div>
+        </header>
+        <!-- /Panel Heading -->
+        
+        <!-- Panel Body -->
+        <div class="panel-body px-0 w-100" style="">
+            <div class="row" style="">
+                
+                <div class="col-12 col-lg-6 mb-1" style="">
+                    <div class="container-fluid">
+                        <div class="row" style="">
+
+                            <!-- Contact Id -->
+                            <div class="col-12 col-lg-6 mb-1" style="">
+                                <div class="form-element" style="">
+                                    <label for="contact_id" style="">Contact Id:</label>
+                                    <input type="text" id="contact_id" name="contact_id" class="form-control" style="" aria-label="Contact Id" placeholder="" autocomplete="off" readonly/>
+                                    <div id="contact_id-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                </div>
+                            </div>
+                            <!-- /Contact Id -->
+                            
+                            <!--  -->
+                            <div class="col-12 col-lg-6 mb-1" style="">
+                                <div class="form-element">
+                                    
+                                    <div class="error w-100 text-center" style="">&nbsp;</div>
+                                </div>
+                            </div>
+                            <!-- / -->
+                        
+                        </div>
+                        
+                        <div class="row" style="">
+                            
+                            <!--  -->
+                            <div class="col-12 col-lg-6 mb-1" style="">
+                                <div class="form-element" style="">
+                                    
+                                    <div class="error w-100 text-center" style="">&nbsp;</div>
+                                </div>
+                            </div>
+                            <!-- / -->
+                            
+                            <!--  -->
+                            <div class="col-12 col-lg-6 mb-1" style="">
+                                <div class="form-element" style="">
+                                    
+                                    <div class="error w-100 text-center" style="">&nbsp;</div>
+                                </div>
+                            </div>
+                            <!-- / -->
+                        
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 mb-1" style="">
+                    <?php include_once(VIEWS_PATH . "/contacts/tables/provider_edit_contact_table.phtml"); ?>
+                </div>
+            
+            </div>
+        
+        </div>
+        <!-- /Panel Body -->
+        
+        <!-- Panel Footer -->
+        <div class="panel-footer pb-0 text-right">
+            <button type="button" id="button_submit_form_edit_contact" name="button_submit_form_edit_contact" class="btn btn-primary btn-sm" style="">Save Contact Details</button>
+        </div>
+        <!-- /Panel Footer -->
+    
+    </section>
+    <!-- /Panel -->
+
+</form>
+<!-- /Edit Contact Form -->

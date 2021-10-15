@@ -1,0 +1,107 @@
+<!-- Edit Address Form -->
+<form id="form_edit_address" name="form_edit_address" class="" style="" novalidate>
+
+    <!-- Panel -->
+    <section class="panel z-depth-0 w-100 mb-0" style="">
+
+        <!-- Panel Heading -->
+        <header class="panel-heading" style="">
+            <div class="row">
+
+                <!-- Panel Heading Title -->
+                <div class="col-8">
+                    <h4 class="panel-title">Address Details</h4>
+                </div>
+                <!-- /Panel Heading Title -->
+
+                <!-- Panel Heading Actions -->
+                <div class="col-4 d-flex align-items-center justify-content-end" style="">
+                    <div class="panel-actions p-0 m-0" style="">
+
+                        <!-- Address Enabled -->
+                        <div class="custom-control custom-switch" style="">
+                            <input id="address_enabled" name="address_enabled" type="checkbox" value="1" class="custom-control-input" style="">
+                            <label for="address_enabled" class="custom-control-label" style="">Enabled</label>
+                        </div>
+                        <!-- /Address Enabled -->
+
+                    </div>
+                </div>
+                <!-- /Panel Heading Actions -->
+
+            </div>
+        </header>
+        <!-- /Panel Heading -->
+
+        <!-- Panel Body -->
+        <div class="panel-body px-0 w-100" style="">
+            <div class="row" style="">
+
+                <div class="col-12 col-lg-6 mb-1" style="">
+                    <div class="container-fluid">
+                        <div class="row" style="">
+
+                            <!-- Address Id -->
+                            <div class="col-12 col-lg-6 mb-1" style="">
+                                <div class="form-element" style="">
+                                    <label for="address_id" style="">Address Id:</label>
+                                    <input type="text" id="address_id" name="address_id" class="form-control" style="" aria-label="Address Id" placeholder="" autocomplete="off" readonly/>
+                                    <div id="address_id-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                </div>
+                            </div>
+                            <!-- /Address Id -->
+
+                            <!--  -->
+                            <div class="col-12 col-lg-6 mb-1" style="">
+                                <div class="form-element">
+
+                                    <div class="error w-100 text-center" style="">&nbsp;</div>
+                                </div>
+                            </div>
+                            <!-- / -->
+
+                        </div>
+
+                        <div class="row" style="">
+
+                            <!--  -->
+                            <div class="col-12 col-lg-6 mb-1" style="">
+                                <div class="form-element" style="">
+
+                                    <div class="error w-100 text-center" style="">&nbsp;</div>
+                                </div>
+                            </div>
+                            <!-- / -->
+
+                            <!--  -->
+                            <div class="col-12 col-lg-6 mb-1" style="">
+                                <div class="form-element" style="">
+
+                                    <div class="error w-100 text-center" style="">&nbsp;</div>
+                                </div>
+                            </div>
+                            <!-- / -->
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 mb-1" style="">
+                    <?php include_once(VIEWS_PATH . "/addresses/tables/provider_edit_address_table.phtml"); ?>
+                </div>
+
+            </div>
+
+        </div>
+        <!-- /Panel Body -->
+
+        <!-- Panel Footer -->
+        <div class="panel-footer pb-0 text-right">
+            <button type="button" id="button_submit_form_edit_provider" class="btn btn-primary btn-sm" style="">Save Provider Details</button>
+        </div>
+        <!-- /Panel Footer -->
+
+    </section>
+    <!-- /Panel -->
+
+</form>
+<!-- /Edit Provider Form -->

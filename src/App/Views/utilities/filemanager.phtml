@@ -1,0 +1,25 @@
+<?php
+    $page_data = [];
+    $types = array();
+    if (isset($data)) {
+        $page_data = $data;
+    }
+
+    if (isset($page_data["types"])) {
+        $types = json_encode($page_data["types"], 1);
+    }
+
+?>
+<section id="file_manager_index" class="section">
+    <div class="row">
+        <div class="col-sm-12">
+            <iframe src="/filemanager/dialog.php" style="height:600px;width:100%" class="dem"></iframe>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Types.init(<?php echo $types;?>)
+        Provider.index(<?php echo json_encode($page_data, 1);?>)
+    })
+</script>

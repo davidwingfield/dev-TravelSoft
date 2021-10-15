@@ -199,5 +199,3 @@ const Provider = (function () {
     }
     
 })()
-Provider.init()
-//end object

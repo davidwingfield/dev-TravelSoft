@@ -1,6 +1,6 @@
 $(document).ready(function () {
     const but_toggle = document.querySelectorAll(".but_toggle")
-    // ----
+    
     window.addEventListener("resize", debounce(function (e) {
         resize_elements("end of resizing")
     }))
@@ -17,21 +17,21 @@ $(document).ready(function () {
             }
         }
     }))
-    // ----
+    
     if (mdbPreloader) {
         $("#mdb-preloader").fadeOut(500)
     }
-    // ----
+    
     $("#alert_box").hide()
-    // ----
+    
     new WOW().init()
-    // ----
+    
     $(this).scrollTop(0)
-    // ----
+    
     toastr.options = toastrOptions
-    // ----
+    
     $("body").scrollTop()
-    // ----
+    
     $.fn.dataTableExt.afnFiltering.push(
       function (oSettings, aData, iDataIndex) {
           if (oSettings.nTable.id === "dates_table") {
@@ -62,16 +62,14 @@ $(document).ready(function () {
       },
     )
     
-    // ----
     if ("scrollRestoration" in history) {
         history.scrollRestoration = "manual"
     }
-    // ----
+    
     $(".button-collapse").sideNav(sideNavOptions)
-    // ----
+    
     window.scrollTo(0, 0)
-    // ----
+    
     resize_elements()
-    // ----
+    
 })
-

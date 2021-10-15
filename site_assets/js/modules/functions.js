@@ -339,7 +339,6 @@ const formatDateMySQL = function (date) {
 }
 
 const resize_elements = function () {
-    console.log("resize_elements")
     const _page = document.getElementById("page")
     const _main = document.getElementById("main")
     const _nav = document.getElementsByClassName("double-nav")

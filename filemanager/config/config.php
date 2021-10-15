@@ -76,7 +76,7 @@ $config = array(
     | with start and final /
     |
     */
-    'upload_dir' => '/assets/img/',
+    'upload_dir' => '/public/img/',
     /*
     |--------------------------------------------------------------------------
     | relative path from filemanager folder to upload folder
@@ -85,7 +85,7 @@ $config = array(
     | with final /
     |
     */
-    'current_path' => '../assets/img/',
+    'current_path' => '../public/img/',
     /*
     |--------------------------------------------------------------------------
     | relative path from filemanager folder to thumbs folder
@@ -95,7 +95,7 @@ $config = array(
     | DO NOT put inside upload folder
     |
     */
-    'thumbs_base_path' => '../assets/img/thumbs/',
+    'thumbs_base_path' => '../public/img/thumbs/',
     /*
     |--------------------------------------------------------------------------
     | path from base_url to base of thumbs folder
@@ -105,7 +105,7 @@ $config = array(
     | DO NOT put inside upload folder
     |
     */
-    'thumbs_upload_dir' => '/assets/img/thumbs/',
+    'thumbs_upload_dir' => '/public/img/thumbs/',
 
     /*
     |--------------------------------------------------------------------------
@@ -411,7 +411,7 @@ $config = array(
     // Add or modify the options below as needed - they will be json encoded when added to the configuration so arrays can be utilized as needed
     'tui_active' => true,
     'tui_position' => 'bottom',
-    // 'common.bi.image'                      => "../assets/images/logo.png",
+    // 'common.bi.image'                      => "../public/images/logo.png",
     // 'common.bisize.width'                  => '70px',
     // 'common.bisize.height'                 => '25px',
     'common.backgroundImage' => 'none',

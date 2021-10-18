@@ -25,7 +25,7 @@
             $temp = array();
             $results = array();
             foreach ($addresses AS $address) {
-                Log::trace($address);
+                //Log::trace($address);
                 $address_id = $address["address_id"];
                 if (!isset($temp[$address_id])) {
                     $temp[$address_id] = array(

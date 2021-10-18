@@ -15,6 +15,7 @@
 
     /** STATIC PAGE ROUTES */
     Router::get("", "StaticPages@index");
+    Router::get("register", "StaticPages@register");
     Router::get("login", "StaticPages@login");
     Router::get("logout", "StaticPages@logout");
     Router::get("profile", "StaticPages@profile");

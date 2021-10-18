@@ -63,6 +63,13 @@
             exit(1);
         }
 
+        public static function register()
+        {
+            $data = Page::getDetails(18);
+            View::render_template("pages/register", $data);
+            exit(1);
+        }
+
         public static function framework()
         {
             $data = Page::getDetails(15);

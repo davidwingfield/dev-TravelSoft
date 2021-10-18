@@ -1,42 +1,52 @@
 <!-- Edit Provider Form -->
 <form id="form_edit_provider" name="form_edit_provider" class="" style="" novalidate>
-
+    
     <!-- Panel -->
     <section class="panel z-depth-0 w-100 mb-0" style="">
-
+        
         <!-- Panel Heading -->
         <header class="panel-heading" style="">
             <div class="row">
-
+                
                 <!-- Panel Heading Title -->
                 <div class="col-8">
                     <h4 class="panel-title">Provider Details</h4>
                 </div>
                 <!-- /Panel Heading Title -->
-
+                
                 <!-- Panel Heading Actions -->
                 <div class="col-4 d-flex align-items-center justify-content-end" style="">
                     <div class="panel-actions p-0 m-0" style="">
-
+                        
                         <div class="custom-control custom-switch" style="">
                             <input id="provider_enabled" type="checkbox" value="1" class="custom-control-input" style="">
                             <label for="provider_enabled" class="custom-control-label" style="">Enabled</label>
                         </div>
-
+                    
                     </div>
                 </div>
                 <!-- /Panel Heading Actions -->
-
+            
             </div>
         </header>
         <!-- /Panel Heading -->
-
+        
         <!-- Panel Body -->
         <div class="panel-body px-0 w-100" style="">
             <div class="row" style="">
 
+                <!-- Provider Name -->
+                <div class="col-12 col-lg-4 mb-1" style="">
+                    <div class="form-element" style="">
+                        <label for="provider_name" style="">Provider Name:</label>
+                        <input type="text" id="provider_name" name="provider_name" class="form-control" style="" aria-label="Vendor Id" placeholder="" autocomplete="off"/>
+                        <div id="provider_name-error" class="error w-100 text-center" style="">&nbsp;</div>
+                    </div>
+                </div>
+                <!-- /Vendor Name -->
+
                 <!-- Provider Id -->
-                <div class="col-12 col-lg-6 mb-1" style="">
+                <div class="col-12 col-lg-4 mb-1" style="">
                     <div class="form-element" style="">
                         <label for="provider_id" style="">Provider Id:</label>
                         <input type="text" id="provider_id" name="provider_id" class="form-control" style="" aria-label="Provider Id" placeholder="" autocomplete="off" readonly/>
@@ -44,29 +54,55 @@
                     </div>
                 </div>
                 <!-- /Provider Id -->
-
-                <!--  -->
-                <div class="col-12 col-lg-6 mb-1" style="">
-                    <div class="form-element">
-
-                        <div class="error w-100 text-center" style="">&nbsp;</div>
+                
+                <!-- Provider Company Id -->
+                <div class="col-12 col-lg-4 mb-1" style="">
+                    <div class="form-element" style="">
+                        <label for="provider_company_id" style="">Provider Company Id:</label>
+                        <input type="text" id="provider_company_id" name="provider_company_id" class="form-control" style="" aria-label="Provider Id" placeholder="" autocomplete="off" readonly/>
+                        <div id="provider_company_id-error" class="error w-100 text-center" style="">&nbsp;</div>
                     </div>
                 </div>
-                <!-- / -->
-
+                <!-- /Provider Company Id -->
             </div>
 
             <div class="row" style="">
 
-                <!--  -->
-                <div class="col-12 col-lg-6 mb-1" style="">
+                <!-- Vendor Name -->
+                <div class="col-12 col-lg-4 mb-1" style="">
                     <div class="form-element" style="">
-
-                        <div class="error w-100 text-center" style="">&nbsp;</div>
+                        <label for="vendor_name" style="">Vendor Name:</label>
+                        <input type="text" id="vendor_name" name="vendor_name" class="form-control" style="" aria-label="Vendor Id" placeholder="" autocomplete="off"/>
+                        <div id="vendor_name-error" class="error w-100 text-center" style="">&nbsp;</div>
                     </div>
                 </div>
-                <!-- / -->
+                <!-- /Vendor Name -->
 
+                <!-- Vendor Id -->
+                <div class="col-12 col-lg-4 mb-1" style="">
+                    <div class="form-element" style="">
+                        <label for="vendor_id" style="">Vendor Id:</label>
+                        <input type="text" id="vendor_id" name="vendor_id" class="form-control" style="" aria-label="Vendor Id" placeholder="" autocomplete="off" readonly/>
+                        <div id="vendor_id-error" class="error w-100 text-center" style="">&nbsp;</div>
+                    </div>
+                </div>
+                <!-- /Vendor Id -->
+
+                <!-- Vendor Company Id -->
+                <div class="col-12 col-lg-4 mb-1" style="">
+
+                    <div class="form-element" style="">
+                        <label for="vendor_company_id" style="">Vendor Company Id:</label>
+                        <input type="text" id="vendor_company_id" name="vendor_company_id" class="form-control" style="" aria-label="Provider Id" placeholder="" autocomplete="off" readonly/>
+                        <div id="vendor_company_id-error" class="error w-100 text-center" style="">&nbsp;</div>
+                    </div>
+                </div>
+                <!-- /Vendor Company Id -->
+
+            </div>
+
+            <div class="row" style="">
+                
                 <!-- Code Direct Id -->
                 <div class="col-12 col-lg-6 mb-1" style="">
                     <div class="form-element">
@@ -78,16 +114,16 @@
                 <!-- /Code Direct Id -->
 
             </div>
-
+        
         </div>
         <!-- /Panel Body -->
-
+        
         <!-- Panel Footer -->
         <div class="panel-footer pb-0 text-right">
             <button class="btn btn-primary btn-sm" type="button" id="button_submit_form_edit_provider">Save Provider Details</button>
         </div>
         <!-- /Panel Footer -->
-
+    
     </section>
     <!-- /Panel -->
 

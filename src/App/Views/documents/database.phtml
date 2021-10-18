@@ -1,16 +1,24 @@
 <?php
     $page_data = [];
+    $types = array();
     if (isset($data)) {
         $page_data = $data;
     }
+
+    if (isset($page_data["types"])) {
+        $types = json_encode($page_data["types"], 1);
+    }
+
 ?>
-<section id="database_index">
+<section id="database_index" class="section">
     <div class="row">
-        <div class="col-12 col-lg-6">
-            <img src="" class="" alt="er diagram"/>
+        <div class="col-sm-12" style="max-height:800px;max-width:800px;overflow:auto;">
+            <img src="/docs/Database/er.png" alt="er"/>
         </div>
     </div>
 </section>
 <script type="text/javascript">
-
+    $(function () {
+        Types.init(<?php echo $types;?>)
+    })
 </script>

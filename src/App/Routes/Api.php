@@ -14,10 +14,17 @@
 
     $routeLead = APIPATH . "/v" . VERSION;
 
-    Router::get($routeLead . '/providers', 'Provider@serveGet');
+    Router::get($routeLead . '/countries', 'Country@serveGet');
+    Router::get($routeLead . '/provinces', 'Province@serveGet');
+    Router::get($routeLead . '/cities', 'City@serveGet');
     Router::get($routeLead . '/providers/${provider_id}', "Provider@serveGet");
-    Router::get($routeLead . '/providers/autocomplete', "Provider@autocomplete");
 
+    Router::get($routeLead . '/autocomplete/providers', "Autocomplete@providers");
+    Router::get($routeLead . '/autocomplete/seasons', "Autocomplete@seasons");
+    Router::get($routeLead . '/autocomplete/variants', "Autocomplete@variants");
+    Router::get($routeLead . '/autocomplete/units', "Autocomplete@units");
+    Router::get($routeLead . '/autocomplete/locations', "Autocomplete@locations");
+    // ----
     Router::post($routeLead . '/users/login', 'User@login');
     //Router::get('login', 'StaticPagesController@serveLogin');
     //Router::get('home', 'StaticPagesController@serveHome');

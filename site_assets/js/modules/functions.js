@@ -4,7 +4,6 @@ $.fn.BuildDropDown = function (settings) {
     if (!settings || !settings.text_field || !settings.id_field) {
         return
     }
-    //
     let _this = document.getElementById($(this).attr("id"))
     let data = (settings.data) ? settings.data : []
     let class_list = (settings.class_list) ? settings.class_list : ["form-control"]

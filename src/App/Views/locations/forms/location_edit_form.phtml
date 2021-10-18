@@ -1,3 +1,10 @@
+<?php
+    $location_types = [];
+    if (isset($page_data["types"]["location_types"])) {
+        $location_types = $page_data["types"]["location_types"];
+
+    }
+?>
 <!-- Edit Location Form -->
 <form id="form_edit_location" name="form_edit_location" class="" style="" novalidate>
     
@@ -35,57 +42,215 @@
         
         <!-- Panel Body -->
         <div class="panel-body px-0 w-100" style="">
-            <div class="row" style="">
+            
+            <div class="row">
                 
-                <!-- Location Id -->
-                <div class="col-12 col-lg-6 mb-1" style="">
-                    <div class="form-element" style="">
-                        <label for="location_id" style="">Location Id:</label>
-                        <input type="text" id="location_id" name="location_id" class="form-control" style="" aria-label="Location Id" placeholder="" autocomplete="off" readonly/>
-                        <div id="location_id-error" class="error w-100 text-center" style="">&nbsp;</div>
-                    </div>
-                </div>
-                <!-- /Location Id -->
-                
-                <!--  -->
-                <div class="col-12 col-lg-6 mb-1" style="">
+                <div class="col-lg-12 col-lg-6 mb-1">
+                    
+                    <label for="location_name">Location:</label>
+                    
                     <div class="form-element">
-                        
-                        <div class="error w-100 text-center" style="">&nbsp;</div>
+                        <div class="input-group">
+                            <input type="search" class="form-control form-field" id="location_name_filter" name="location_name_filter" placeholder="Location" aria-label="Location" aria-describedby="button_provider_edit_location" autocomplete="off">
+                            <div class="input-group-append">
+                                <button class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect" type="button" id="button_edit_location">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="error w-100 text-center" id="location_name_filter-error" data-ref="location_name_filter">&nbsp;</div>
                     </div>
+                    
+                    <div class="form-element d-flex align-items-center justify-content-around">
+                        <!-- Short -->
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" id="location_display_short" name="location_display" value="short">
+                            <label class="form-check-label" for="location_display_short" style="padding-top: .22rem;">Short</label>
+                        </div>
+                        
+                        <!-- Medium -->
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" id="location_display_medium" name="location_display" value="medium">
+                            <label class="form-check-label" for="location_display_medium" style="padding-top: .22rem;">Medium</label>
+                        </div>
+                        
+                        <!-- Long -->
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" id="location_display_long" name="location_display" value="long">
+                            <label class="form-check-label" for="location_display_long" style="padding-top: .22rem;">Long</label>
+                        </div>
+                    
+                    </div>
+                
                 </div>
-                <!-- / -->
             
             </div>
             
-            <div class="row" style="">
-                
-                <!--  -->
-                <div class="col-12 col-lg-6 mb-1" style="">
-                    <div class="form-element" style="">
-                        
-                        <div class="error w-100 text-center" style="">&nbsp;</div>
+            <div class="card mt-3 p-2 grey lighten-5" id="form_location_details">
+                <header class="panel-heading">
+                    <div class="row">
+
+                        <div class="col-8">
+                            <h4 class="panel-title">Location</h4>
+                        </div>
+
+                        <div class="col-4 d-flex align-items-center justify-content-end">
+
+                            <div class="panel-actions p-0 m-0">
+
+                                <a class="panel-action fas fa-plus" href="javascript:void(0)" data-toggle="panel-button" aria-hidden="true" id="button_add_location_edit"></a>
+                                <a class="panel-action fas fa-times" href="javascript:void(0)" data-toggle="panel-button" aria-hidden="true" id="button_close_location_edit"></a>
+                            </div>
+                        </div>
+
                     </div>
-                </div>
-                <!-- / -->
-                
-                <!--  -->
-                <div class="col-12 col-lg-6 mb-1" style="">
-                    <div class="form-element" style="">
-                        
-                        <div class="error w-100 text-center" style="">&nbsp;</div>
+                </header>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-lg-6 mb-1">
+                            <label for="location_id">Location Id:</label>
+                            <input type="text" id="location_id" name="location_id" class="form-control" value="" readonly>
+                            <div class="error w-100 text-center" id="location_id-error">&nbsp;</div>
+                        </div>
+                        <div class="col-lg-6 mb-1">
+
+                            <div class="form-element">
+
+                                <label for="location_types_id">Location Type:</label>
+                                <select id="location_types_id" name="location_types_id" class="form-control">
+                                    <?php
+                                        echo "<option value='' selected readonly disabled>-- Location Types --</option>";
+                                        foreach ($location_types AS $k => $v) {
+                                            $val = $v["id"];
+                                            $text = $v["name"];
+                                            echo "<option value='$val'>$text</option>";
+                                        }
+                                    ?>
+                                </select>
+                                <div class="error w-100 text-center" id="location_types_id-error">&nbsp;</div>
+
+                            </div>
+
+                        </div>
+
                     </div>
+
+                    <div class="row">
+
+                        <div class="col-lg-12 mb-1">
+
+                            <div class="form-element">
+
+                                <label for="location_types_id">Location Name:</label>
+                                <input type="text" id="location_name" name="location_name" class="form-control"/>
+                                <div class="error w-100 text-center" id="location_name-error">&nbsp;</div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-lg-12 mb-1">
+
+                            <div class="form-element">
+
+                                <label for="location_street">Street 1:</label>
+                                <input type="text" id="location_street" name="location_street" class="form-control"/>
+                                <div class="error w-100 text-center" id="location_street-error">&nbsp;</div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-lg-12 mb-1">
+
+                            <div class="form-element">
+
+                                <label for="location_street2">Street 2:</label>
+                                <input type="text" id="location_street2" name="location_street2" class="form-control"/>
+                                <div class="error w-100 text-center" id="location_street2-error"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-lg-4 mb-1">
+
+                            <div class="form-element">
+
+                                <label for="location_country_id">Country:</label>
+                                <select class="form-control" name="location_country_id" id="location_country_id" data-type="country" style="width:100%;" required></select>
+                                <div class="error w-100 text-center" id="location_country_id-error"></div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-4 mb-1">
+
+                            <div class="form-element">
+
+                                <label for="location_province_id">Province:</label>
+                                <select class="form-control" name="location_province_id" id="location_province_id" data-type="province" style="width:100%;" required></select>
+                                <div class="error w-100 text-center" id="location_province_id-error"></div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-4 mb-1">
+
+                            <div class="form-element">
+
+                                <label for="location_city_id">City:</label>
+                                <select class="form-control" name="location_city_id" id="location_city_id" data-type="city" style="width:100%;" required></select>
+                                <div class="error w-100 text-center" id="location_city_id-error"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-lg-12 mb-1">
+
+                            <div class="form-element">
+
+                                <label for="location_zipcode">Postal Code:</label>
+                                <input type="text" id="location_zipcode" name="location_zipcode" class="form-control"/>
+                                <div class="error w-100 text-center" id="location_zipcode-error"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
-                <!-- / -->
-            
             </div>
         
         </div>
         <!-- /Panel Body -->
-
+        
         <!-- Panel Footer -->
         <div class="panel-footer pb-0 text-right">
-            <button type="button" id="button_submit_form_edit_provider" name="button_submit_form_edit_provider" class="btn btn-primary btn-sm" style="">Save Location Details</button>
+            <button type="button" id="button_submit_form_edit_location" name="button_submit_form_edit_location" class="btn btn-primary btn-sm" style="">Save Location Details</button>
         </div>
         <!-- /Panel Footer -->
     

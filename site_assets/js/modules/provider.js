@@ -2,19 +2,12 @@ const Provider = (function () {
     "use strict"
     
     const base_url = "/providers"
-    const _input_provider_id = document.getElementById("input_provider_id")
-    const _input_provider_company_id = document.getElementById("input_provider_company_id")
-    const _input_provider_location_id = document.getElementById("input_provider_location_id")
-    const _input_provider_code_direct_id = document.getElementById("input_provider_code_direct_id")
-    const _input_provider_provider_vendor = document.getElementById("input_provider_provider_vendor")
-    const _input_provider_enabled = document.getElementById("input_provider_enabled")
-    const _input_provider_date_created = document.getElementById("input_provider_date_created")
-    const _input_provider_created_by = document.getElementById("input_provider_created_by")
-    const _input_provider_date_modified = document.getElementById("input_provider_date_modified")
-    const _input_provider_modified_by = document.getElementById("input_provider_modified_by")
+    
+    const _provider_name = document.getElementById("provider_name")
     const _button_add_provider_page_heading = document.getElementById("button_add_provider_page_heading")
     const _table_provider_index = document.getElementById("table_provider_index")
     // ----
+    let globalSelectedProvider = false
     let $index_table = $(_table_provider_index)
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     // ----
@@ -23,6 +16,7 @@ const Provider = (function () {
           console.log("test")
       })
     // ----
+    
     const handle_provider_error = function (msg) {
         toastr.error(msg)
     }
@@ -61,7 +55,10 @@ const Provider = (function () {
     }
     
     const navigate = function (provider) {
+        console.log(base_url + "/" + provider.id, provider.id)
+        
         if (provider && provider.id) {
+            
             window.location.replace(base_url + "/" + provider.id)
         }
     }
@@ -72,6 +69,7 @@ const Provider = (function () {
     
     const set = function (provider) {
         let detail = _default_detail()
+        
         if (provider) {
             detail.id = (provider.id) ? provider.id : null
             detail.name = (provider.name) ? provider.name : null
@@ -81,9 +79,9 @@ const Provider = (function () {
             detail.provider_vendor = (provider.provider_vendor) ? provider.provider_vendor : 1
             detail.enabled = (provider.enabled) ? provider.enabled : 1
             detail.date_created = (provider.date_created) ? provider.date_created : formatDateMySQL()
-            detail.created_by = (provider.created_by) ? provider.created_by : created_by
+            detail.created_by = (provider.created_by) ? provider.created_by : user_id
             detail.date_modified = (provider.date_modified) ? provider.date_modified : formatDateMySQL()
-            detail.modified_by = (provider.modified_by) ? provider.modified_by : modified_by
+            detail.modified_by = (provider.modified_by) ? provider.modified_by : user_id
             detail.note = (provider.note) ? provider.note : null
             detail.vendor = (provider.vendor) ? provider.vendor : []
             detail.addresses = (provider.addresses) ? provider.addresses : []
@@ -97,7 +95,26 @@ const Provider = (function () {
     }
     
     const set_autocomplete = function () {
-    
+        
+        $(_provider_name)
+          .on("change", function () {
+          
+          })
+          .autocomplete({
+              serviceUrl: "/api/v1.0/autocomplete/providers",
+              minChars: 2,
+              cache: false,
+              dataType: "json",
+              triggerSelectOnValidInput: false,
+              paramName: "st",
+              onSelect: function (suggestion) {
+                  console.log("suggestion", suggestion.data)
+                  globalSelectedProvider = true
+                  //_provider_company_id.value = suggestion.data.company_id
+                  //_provider_id.value = suggestion.data.provider_id
+                  //_provider_name.value = suggestion.data.company_name
+              },
+          })
     }
     
     const load_all = function (providers) {
@@ -156,15 +173,15 @@ const Provider = (function () {
                     targets: 3,
                     data: "location",
                     render: function (data, type, row, meta) {
-                        console.log("data.location", data)
+                        console.log("data.display_short", data)
                         console.log("defaultLocationDisplayFormat", defaultLocationDisplayFormat)
                         let displayLocation = ""
                         if (defaultLocationDisplayFormat === "short") {
-                            displayLocation = data.short
+                            displayLocation = data.display_short
                         } else if (defaultLocationDisplayFormat === "long") {
-                            displayLocation = data.long
+                            displayLocation = data.display_long
                         } else {
-                            displayLocation = data.medium
+                            displayLocation = data.display_medium
                         }
                         return displayLocation
                     },
@@ -195,6 +212,20 @@ const Provider = (function () {
         },
         index: function (providers) {
             index(providers)
+        },
+        edit: function (settings) {
+            if (settings.provider_detail) {
+                console.log("Provider.provider_detail", settings.provider_detail)
+            }
+            
+            if (settings.address_detail) {
+                console.log("Provider.address_detail", settings.address_detail)
+            }
+            
+            if (settings.company_detail) {
+                console.log("Provider.company_detail", settings.company_detail)
+            }
+            
         },
     }
     

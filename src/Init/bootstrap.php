@@ -61,7 +61,7 @@
     View::init();
     // ----
     //Log::clear();
-        
+
     /*
     ini_set("display_errors", 0);
     ini_set("error_reporting", E_ALL);
@@ -85,7 +85,7 @@
 
         } else {
 
-            if (!Auth::logged_in() && Request::uri() !== "login" && Request::uri() !== "logout") {
+            if (!Auth::logged_in() && Request::uri() !== "login" && Request::uri() !== "logout" && Request::uri() !== "register") {
                 header("Location: /login");
                 exit;
             }

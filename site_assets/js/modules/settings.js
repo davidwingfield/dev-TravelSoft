@@ -167,5 +167,8 @@ colorScheme.set(15, {
     name: "Color - 15",
     backGround: "#9463f7",
     borderColor: "#6141a2",
-    textColor: "#ffffff",
+    textColor: "#fff",
 })
+const tableCellMaxChars = 10
+const default_address_view = "medium"
+let DEBUGMODE = true

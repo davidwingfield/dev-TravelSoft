@@ -1,3 +1,26 @@
-<section id="page_register">
-    
+<?php
+    $page_data = [];
+    $types = array();
+    if (isset($data)) {
+        $page_data = $data;
+    }
+
+    if (isset($page_data["types"])) {
+        $types = json_encode($page_data["types"], 1);
+    }
+
+?>
+<section id="page_register" class="section">
+    <div class="row">
+
+        <div class="col-12 col-lg-8 mb-1">
+            <?php include_once(__DIR__ . "/forms/register_new_form.phtml"); ?>
+        </div>
+    </div>
 </section>
+<script type="text/javascript">
+    $(function () {
+        Types.init(<?php echo $types;?>)
+        Register.init()
+    })
+</script>

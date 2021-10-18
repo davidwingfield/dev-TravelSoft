@@ -127,7 +127,6 @@
         public static function debug($message): void
         {
             self::$debug_log->trace($message);
-            self::$event_log->debug($message);
         }
 
         private static function emptyLog($log)

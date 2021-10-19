@@ -24,6 +24,8 @@
         public static function location_ac(string $st = "", string $default_display = "medium"): array
         {
             $searchTerm = addslashes($st);
+            $orderBy = "";
+
             $where = "
             WHERE		CITY.enabled = 1
                  AND		NOT ISNULL(CITY.name)
@@ -32,11 +34,14 @@
         ";
 
             if ($default_display === "short") {
+                $orderBy = "ORDER BY            CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2, ')') ASC";
                 $where .= "         AND 		CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2, ')') LIKE '%$searchTerm%'";
             } else {
                 if ($default_display === "long") {
+                    $order_by = "ORDER BY           CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', CONCAT(PROVINCE.iso2, ' - ', PROVINCE.name), ', ', CONCAT(COUNTRY.iso2, ' - ', COUNTRY.name), ')') ASC";
                     $where .= "         AND 		CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', CONCAT(PROVINCE.iso2, ' - ', PROVINCE.name), ', ', CONCAT(COUNTRY.iso2, ' - ', COUNTRY.name), ')') LIKE '%$searchTerm%'";
                 } else {
+                    $order_by = "ORDER BY           CONCAT(	LOCATION.name,	' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') ASC";
                     $where .= "         AND 		CONCAT(	LOCATION.name,	' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') LIKE '%$searchTerm%'";
                 }
             }
@@ -109,6 +114,7 @@
             JOIN		province PROVINCE ON PROVINCE.id = CITY.province_id
             JOIN		country COUNTRY ON COUNTRY.id = PROVINCE.country_id
             $where
+            $order_by 
             LIMIT 20;";
 
             Log::$debug_log->trace($sql);

@@ -9,18 +9,6 @@
         $types = json_encode($page_data["types"], 1);
     }
 
-    if (isset($page_data["provider_detail"])) {
-        //$types = json_encode($page_data["provider_detail"], 1);
-    }
-
-    if (isset($page_data["address_detail"])) {
-        //$types = json_encode($page_data["address_detail"], 1);
-    }
-
-    if (isset($page_data["company_detail"])) {
-        //$types = json_encode($page_data["company_detail"], 1);
-    }
-
     $page_data = json_encode($page_data, 1);
 ?>
 <section id="provider_edit">
@@ -71,7 +59,7 @@
         <div class="panel-body p-1">
             
             <div class="tab-content p-0">
-
+                
                 <!-- Provider Detail -->
                 <div class="tab-pane active" id="panel_tab_provider_detail" role="tabpanel">
                     <?php include_once(VIEWS_PATH . "/providers/forms/provider_edit_form.phtml"); ?>
@@ -115,7 +103,24 @@
 </section>
 
 <script type="text/javascript">
+    function test4 () {
+        return true
+    }
+
+
     $(function () {
+        Logger.toggle()
+        /*
+        let test1 = 4.25
+        let test2 = "this is a test"
+        let test3 = true
+        let test5 = [1, 2, "trdt", 65.25]
+        log("Test Variable 1", test1)
+        log("Test Variable 2", test2)
+        log("Test Variable 3", test3)
+        log("Test Variable 4", test4)
+        log("Test Variable 5", test5)
+        //*/
         Types.init(<?php echo $types;?>)
         Provider.edit(<?php echo $page_data;?>)
     })

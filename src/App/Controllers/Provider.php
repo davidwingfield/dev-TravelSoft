@@ -7,6 +7,7 @@
     use Framework\App\Models\AddressModel;
     use Framework\App\Models\CompanyModel;
     use Framework\App\Models\ContactModel;
+    use Framework\App\Models\CountryModel;
     use Framework\App\Models\ProviderModel;
     use Framework\Core\Controller;
     use Framework\Core\View;
@@ -80,12 +81,14 @@
          */
         public static function edit(array $params = [])
         {
+            $contact_detail = [];
+            $address_detail = [];
+            $company_detail = [];
 
             if (isset($params["provider_id"])) {
-
                 $provider_id = (int)$params["provider_id"];
                 $data = Page::getDetails(6);
-                // ----
+                /** breadcrumbs */
                 define("BREAD_CRUMBS", "
                     <li class='breadcrumb-item'>
                         <a href='/'>Home</a>
@@ -97,19 +100,14 @@
                         $provider_id
                     </li>"
                 );
-                // ----
-                $contact_detail = [];
-                $address_detail = [];
-                $company_detail = [];
+
                 $provider_id = (int)$params["provider_id"];
                 $provider_detail = self::format_get(ProviderModel::get($provider_id));
-
-                //[0] =>Array
 
                 if (count($provider_detail) >= 1) {
                     $provider_detail = $provider_detail[0];
                 }
-
+                /** Logging */
                 Log::$debug_log->trace($provider_detail);
 
                 if (isset($provider_detail["company_id"])) {
@@ -142,9 +140,10 @@
                 exit(1);
 
             }
-
-            //header('Location: /providers/new');
-            //exit;
+            /** Logging */
+            Log::$debug_log->trace("Provider Id Not Fuond");
+            header('Location: /providers/new');
+            exit;
         }
 
         /**
@@ -182,6 +181,10 @@
             return self::format_ac(ProviderModel::provider_ac($st));
         }
 
+        /**
+         * format_get
+         *
+         */
         private static function format_get(array $providers = []): array
         {
             $data = [];
@@ -271,7 +274,11 @@
                     "display_short" => $provider["location_short"],
                     "display_medium" => $provider["location"],
                     "display_long" => $provider["location_long"],
+                    "name" => $provider["location_name"],
                     "id" => $provider["location_id"],
+                    "street_1" => $provider["location_street_1"],
+                    "street_2" => $provider["location_street_2"],
+                    "zipcode" => $provider["location_zipcode"],
                     "enabled" => $provider["location_enabled"],
                     "date_created" => $provider["location_date_created"],
                     "created_by" => $provider["location_created_by"],

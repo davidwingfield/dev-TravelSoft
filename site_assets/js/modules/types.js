@@ -19,6 +19,7 @@ const Types = (function () {
         Provider.init()
         Address.init()
         Contact.init()
+        //
         Types.address_types = new Map()
         Types.airport_types = new Map()
         Types.categories_ratings_types = new Map()
@@ -51,6 +52,13 @@ const Types = (function () {
         
         if (settings.contact_types) {
             setType(settings.contact_types, "contact_types")
+        }
+        
+        if (settings.countries) {
+            Country.all = new Map()
+            $.each(settings.countries, function (k, country) {
+                Country.all.set(country.country_id, country)
+            })
         }
         
         if (settings.currency) {

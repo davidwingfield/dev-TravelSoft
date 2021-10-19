@@ -51,40 +51,78 @@
                             </div>
                             <!-- /Address Id -->
 
-                            <!--  -->
+                            <!-- Address Enabled -->
                             <div class="col-12 col-lg-6 mb-1" style="">
                                 <div class="form-element">
 
                                     <div class="error w-100 text-center" style="">&nbsp;</div>
                                 </div>
                             </div>
-                            <!-- / -->
+                            <!-- /Address Enabled -->
 
                         </div>
 
                         <div class="row" style="">
 
-                            <!--  -->
-                            <div class="col-12 col-lg-6 mb-1" style="">
+                            <!-- Address Street 1 -->
+                            <div class="col-12 col-lg-12 mb-1" style="">
                                 <div class="form-element" style="">
-
-                                    <div class="error w-100 text-center" style="">&nbsp;</div>
+                                    <label for="address_street_1" style="">Street 1:</label>
+                                    <input type="text" id="address_street_1" name="address_street_1" class="form-control" style="" aria-label="Address Id" placeholder="" autocomplete="off" readonly/>
+                                    <div id="address_street_1-error" class="error w-100 text-center" style="">&nbsp;</div>
                                 </div>
                             </div>
-                            <!-- / -->
-
-                            <!--  -->
-                            <div class="col-12 col-lg-6 mb-1" style="">
-                                <div class="form-element" style="">
-
-                                    <div class="error w-100 text-center" style="">&nbsp;</div>
-                                </div>
-                            </div>
-                            <!-- / -->
+                            <!-- /Address Street 1 -->
 
                         </div>
+
+                        <div class="row" style="">
+
+                            <!-- Address Street 2 -->
+                            <div class="col-12 col-lg-12 mb-1" style="">
+                                <div class="form-element" style="">
+                                    <label for="address_street_2" style="">Street 2:</label>
+                                    <input type="text" id="address_street_2" name="address_street_2" class="form-control" style="" aria-label="Address Id" placeholder="" autocomplete="off" readonly/>
+                                    <div id="address_street_2-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                </div>
+                            </div>
+                            <!-- /Address Street 2 -->
+
+                        </div>
+
+                        <div class="row" style="">
+
+                            <!-- Address Street 3 -->
+                            <div class="col-12 col-lg-12 mb-1" style="">
+                                <div class="form-element" style="">
+                                    <label for="address_street_3" style="">Street 3:</label>
+                                    <input type="text" id="address_street_3" name="address_street_3" class="form-control" style="" aria-label="Address Id" placeholder="" autocomplete="off" readonly/>
+                                    <div id="address_street_3-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                </div>
+                            </div>
+                            <!-- /Address Street 3 -->
+
+                        </div>
+
+                        <div class="row" style="">
+
+                        </div>
+
+                        <div class="row" style="">
+                            <!-- Address Postal Code -->
+                            <div class="col-12 col-lg-12 mb-1" style="">
+                                <div class="form-element" style="">
+                                    <label for="address_postal_code" style="">Postal Code:</label>
+                                    <input type="text" id="address_postal_code" name="address_postal_code" class="form-control" style="" aria-label="Address Id" placeholder="" autocomplete="off" readonly/>
+                                    <div id="address_postal_code-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                </div>
+                            </div>
+                            <!-- /Address Postal Code -->
+                        </div>
+
                     </div>
                 </div>
+
                 <div class="col-12 col-lg-6 mb-1" style="">
                     <?php include_once(VIEWS_PATH . "/addresses/tables/provider_edit_address_table.phtml"); ?>
                 </div>

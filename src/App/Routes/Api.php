@@ -20,6 +20,7 @@
     Router::get($routeLead . '/providers/${provider_id}', "Provider@serveGet");
 
     Router::get($routeLead . '/autocomplete/providers', "Autocomplete@providers");
+
     Router::get($routeLead . '/autocomplete/seasons', "Autocomplete@seasons");
     Router::get($routeLead . '/autocomplete/variants', "Autocomplete@variants");
     Router::get($routeLead . '/autocomplete/units', "Autocomplete@units");

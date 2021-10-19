@@ -7,12 +7,8 @@
     use Framework\Logger\Log;
 
     /**
-     * Short ProviderModel Description
+     * ProviderModel
      *
-     * Long ProviderModel Description
-     *
-     * @package            Application\App
-     * @subpackage         Models
      */
     class ProviderModel extends Model
     {
@@ -53,10 +49,10 @@
                             COALESCE(COMPANY.fax, '') AS 'company_fax',
                             COALESCE(COMPANY.website, '') AS 'company_website',
                             COALESCE(COMPANY.email, '') AS 'company_email',
-                            COALESCE(COMPANY.enabled, 1) AS 'company_enabled',
-                            COALESCE(COMPANY.created_by, 4) AS 'company_created_by',
+                            COMPANY.enabled AS 'company_enabled',
+                            COMPANY.created_by AS 'company_created_by',
                             DATE_FORMAT(COMPANY.date_created, '%m/%d/%Y') AS 'company_date_created',
-                            COALESCE(COMPANY.modified_by, 4) AS 'company_modified_by',
+                            COMPANY.modified_by AS 'company_modified_by',
                             DATE_FORMAT(COMPANY.date_modified, '%m/%d/%Y') AS 'company_date_modified',
                             COALESCE(COMPANY.status, 10) AS 'company_status',
                             COMPANY.note AS 'company_note',
@@ -137,7 +133,6 @@
                             VENDOR.enabled AS 'vendor_enabled',
                             VENDOR.note  AS 'vendor_note'
             FROM 			provider PROVIDER
-            
             JOIN			company COMPANY ON COMPANY.id = PROVIDER.company_id
             JOIN			location LOCATION ON LOCATION.id = PROVIDER.location_id
             JOIN			location_types LOCATIONTYPES ON LOCATIONTYPES.id = LOCATION.location_types_id    
@@ -166,14 +161,13 @@
          */
         public static function get(int $id = null): array
         {
+            $where = "";
             try {
-                $where = "";
+
                 if (!is_null($id)) {
                     $where = "AND		PROVIDER.id = $id";
                 }
                 $sql = self::$selectQuery . $where;
-
-                //Log::$debug_log->trace($sql);
 
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {
@@ -185,15 +179,16 @@
 
         public static function getOne(int $id = null): array
         {
-            $results = [];
-            if (!is_null($id)) {
-                self::$db->where("id", $id);
-            }
-            self::$db->where("enabled", 1);
-            $results = self::$db->get("provider");
-            if ($results) {
-                return $results;
-            } else {
+            try {
+                if (!is_null($id)) {
+                    Model::$db->where("id", $id);
+                }
+                Model::$db->where("enabled", 1);
+
+                return Model::$db->get("provider");
+            } catch (Exception $e) {
+                Log::$debug_log->error($e);
+
                 return [];
             }
         }
@@ -203,8 +198,10 @@
             try {
                 $searchTerm = addslashes($st);
                 $sql = self::$selectQuery . "
-                    WHERE       COMPANY.name LIKE '%$searchTerm%'          
+                    AND			COMPANY.name LIKE '%$searchTerm%'
+                    ORDER BY    COMPANY.name ASC
                     LIMIT 20;";
+                Log::$debug_log->trace($sql);
 
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {

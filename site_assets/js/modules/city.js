@@ -109,7 +109,7 @@ const City = (function () {
     const fetch_city_list = function (dataToSend, callback) {
         if (dataToSend) {
             try {
-                sendGetRequest("/cities/get", dataToSend, function (data, status, xhr) {
+                sendGetRequest("/api/v1.0/cities", dataToSend, function (data, status, xhr) {
                     if (data) {
                         return callback(data)
                     } else {
@@ -298,9 +298,9 @@ const City = (function () {
             modified_by: null,
             sort_order: null,
             name: null,
-            enabled: null,
-            date_created: null,
-            date_modified: null,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            date_modified: formatDateMySQL(),
             note: null,
         }
         
@@ -310,26 +310,25 @@ const City = (function () {
         let details = clear_detail()
         let id = null
         if (city) {
-            id = validInt(city.city_id)
+            id = validInt(city.id)
             details = {
                 id: id,
-                province_id: validInt(city.city_province_id),
-                country_id: validInt(city.city_country_id),
-                created_by: (city.city_created_by) ? city.city_created_by : user_id,
-                modified_by: (city.city_created_by) ? city.city_created_by : user_id,
-                sort_order: (city.city_sort_order) ? city.city_sort_order : null,
-                name: (city.city_name) ? city.city_name : null,
-                enabled: (city.city_enabled) ? city.city_enabled : 1,
-                date_created: (city.city_date_created) ? city.city_date_created : formatDateMySQL(),
-                date_modified: (city.city_date_modified) ? city.city_date_modified : formatDateMySQL(),
-                note: (city.city_note) ? city.city_note : null,
+                province_id: validInt(city.province_id),
+                country_id: validInt(city.country_id),
+                created_by: (city.created_by) ? city.created_by : user_id,
+                modified_by: (city.created_by) ? city.created_by : user_id,
+                sort_order: (city.sort_order) ? city.sort_order : null,
+                name: (city.name) ? city.name : null,
+                enabled: (city.enabled) ? city.enabled : 1,
+                date_created: (city.date_created) ? city.date_created : formatDateMySQL(),
+                date_modified: (city.date_modified) ? city.date_modified : formatDateMySQL(),
+                note: (city.note) ? city.note : null,
             }
             
         }
         
         City.id = id
         City.detail = details
-        
     }
     
     //------------------------------------------------------------------

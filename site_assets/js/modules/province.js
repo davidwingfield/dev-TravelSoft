@@ -146,7 +146,7 @@ const Province = (function () {
     const fetch_province_list = function (dataToSend, callback) {
         if (dataToSend) {
             try {
-                sendGetRequest("/provinces/get", dataToSend, function (data, status, xhr) {
+                sendGetRequest("/api/v1.0/provinces", dataToSend, function (data, status, xhr) {
                     if (data) {
                         return callback(data)
                     } else {
@@ -201,20 +201,20 @@ const Province = (function () {
         let details = clear_detail()
         let id = null
         if (province) {
-            id = validInt(province.province_id)
+            id = validInt(province.id)
             details = {
-                id: validInt(province.province_id),
-                name: (province.province_name) ? province.province_name : null,
-                sort_order: (province.province_sort_order) ? province.province_sort_order : null,
-                country_id: validInt(province.province_country_id),
-                iso2: (province.province_iso2) ? province.province_iso2 : null,
-                iso3: (province.province_iso3) ? province.province_iso3 : null,
-                enabled: (province.province_enabled) ? province.province_enabled : 1,
-                date_created: (province.province_date_created) ? province.province_date_created : formatDateMySQL(),
-                created_by: (province.province_created_by) ? province.province_created_by : user_id,
-                date_modified: (province.province_date_modified) ? province.province_date_modified : formatDateMySQL(),
-                modified_by: (province.province_modified_by) ? province.province_modified_by : user_id,
-                note: (province.province_note) ? province.province_note : null,
+                id: validInt(province.id),
+                name: (province.name) ? province.name : null,
+                sort_order: (province.sort_order) ? province.sort_order : null,
+                country_id: validInt(province.country_id),
+                iso2: (province.iso2) ? province.iso2 : null,
+                iso3: (province.iso3) ? province.iso3 : null,
+                enabled: (province.enabled) ? province.enabled : 1,
+                date_created: (province.date_created) ? province.date_created : formatDateMySQL(),
+                created_by: (province.created_by) ? province.created_by : user_id,
+                date_modified: (province.date_modified) ? province.date_modified : formatDateMySQL(),
+                modified_by: (province.modified_by) ? province.modified_by : user_id,
+                note: (province.note) ? province.note : null,
             }
         }
         Province.id = id
@@ -414,6 +414,7 @@ const Province = (function () {
         if (Province.id !== null) {
             province_id = Province.id
         }
+        
         if (!el || !country_id) {
             $(el).BuildDropDown({
                 data: Array.from(Province.all.values()),
@@ -489,7 +490,7 @@ const Province = (function () {
     
     return {
         detail: {},
-        all: [],
+        all: new Map(),
         id: null,
         set_detail: function (province) {
             set_detail(province)

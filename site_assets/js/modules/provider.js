@@ -15,7 +15,6 @@ const Provider = (function () {
       .on("click", function () {
           console.log("test")
       })
-    // ----
     
     const handle_provider_error = function (msg) {
         toastr.error(msg)
@@ -25,9 +24,9 @@ const Provider = (function () {
         return {
             addresses: [],
             contacts: [],
-            location: [],
-            company: [],
-            vendor: [],
+            location: {},
+            company: {},
+            vendor: {},
             id: null,
             company_id: null,
             name: null,
@@ -55,25 +54,21 @@ const Provider = (function () {
     }
     
     const navigate = function (provider) {
-        console.log(base_url + "/" + provider.id, provider.id)
-        
         if (provider && provider.id) {
-            
             window.location.replace(base_url + "/" + provider.id)
         }
     }
     
     const init = function (settings) {
-        console.log(" -- Provider -- ", {})
+    
     }
     
     const set = function (provider) {
         let detail = _default_detail()
-        
+        //log("Provider.set", provider)
         if (provider) {
             detail.id = (provider.id) ? provider.id : null
             detail.name = (provider.name) ? provider.name : null
-            detail.company_id = (provider.company_id) ? provider.company_id : null
             detail.location_id = (provider.location_id) ? provider.location_id : null
             detail.code_direct_id = (provider.code_direct_id) ? provider.code_direct_id : null
             detail.provider_vendor = (provider.provider_vendor) ? provider.provider_vendor : 1
@@ -83,38 +78,15 @@ const Provider = (function () {
             detail.date_modified = (provider.date_modified) ? provider.date_modified : formatDateMySQL()
             detail.modified_by = (provider.modified_by) ? provider.modified_by : user_id
             detail.note = (provider.note) ? provider.note : null
-            detail.vendor = (provider.vendor) ? provider.vendor : []
+            detail.vendor = (provider.vendor) ? provider.vendor : {}
             detail.addresses = (provider.addresses) ? provider.addresses : []
             detail.contacts = (provider.contacts) ? provider.contacts : []
-            detail.location = (provider.location) ? provider.location : []
-            detail.company = (provider.company) ? provider.company : []
+            detail.location = (provider.location) ? provider.location : {}
+            detail.company = (provider.company) ? provider.company : {}
         }
         
         Provider.detail = detail
         return detail
-    }
-    
-    const set_autocomplete = function () {
-        
-        $(_provider_name)
-          .on("change", function () {
-          
-          })
-          .autocomplete({
-              serviceUrl: "/api/v1.0/autocomplete/providers",
-              minChars: 2,
-              cache: false,
-              dataType: "json",
-              triggerSelectOnValidInput: false,
-              paramName: "st",
-              onSelect: function (suggestion) {
-                  console.log("suggestion", suggestion.data)
-                  globalSelectedProvider = true
-                  //_provider_company_id.value = suggestion.data.company_id
-                  //_provider_id.value = suggestion.data.provider_id
-                  //_provider_name.value = suggestion.data.company_name
-              },
-          })
     }
     
     const load_all = function (providers) {
@@ -191,6 +163,61 @@ const Provider = (function () {
         })
     }
     
+    const init_edit = function (settings) {
+        let provider_detail = {}
+        let location = {}
+        let addresses = []
+        let contacts = []
+        let company = {}
+        if (settings.provider_detail) {
+            provider_detail = settings.provider_detail
+            if (provider_detail.location) {
+                location = provider_detail.location
+            }
+        }
+        
+        if (settings.address_detail) {
+            addresses = settings.address_detail
+        }
+        
+        if (settings.contact_detail) {
+            contacts = settings.contact_detail
+        }
+        
+        let provider = set(provider_detail)
+        Address.load_all(addresses)
+        set_autocomplete()
+        Location.init(location)
+        
+    }
+    
+    const set_autocomplete = function () {
+        
+        $(_provider_name)
+          .on("change", function () {
+          
+          })
+          .on("click", function () {
+              $(this).select()
+          })
+          .autocomplete({
+              serviceUrl: "/api/v1.0/autocomplete/providers",
+              minChars: 2,
+              cache: false,
+              dataType: "json",
+              triggerSelectOnValidInput: false,
+              paramName: "st",
+              onSelect: function (suggestion) {
+                  // --
+                  //log("Provider.suggestion", suggestion.data)
+                  //globalSelectedProvider = true
+                  //_provider_company_id.value = suggestion.data.company_id
+                  //_provider_id.value = suggestion.data.provider_id
+                  //_provider_name.value = suggestion.data.company_name
+              },
+          })
+    }
+    
     return {
         validator: null,
         detail: {},
@@ -214,17 +241,7 @@ const Provider = (function () {
             index(providers)
         },
         edit: function (settings) {
-            if (settings.provider_detail) {
-                console.log("Provider.provider_detail", settings.provider_detail)
-            }
-            
-            if (settings.address_detail) {
-                console.log("Provider.address_detail", settings.address_detail)
-            }
-            
-            if (settings.company_detail) {
-                console.log("Provider.company_detail", settings.company_detail)
-            }
+            init_edit(settings)
             
         },
     }

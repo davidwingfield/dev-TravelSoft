@@ -2,6 +2,7 @@
 
     namespace Framework\App\Controllers;
 
+    use Framework\App\Models\CountryModel;
     use Framework\Core\Controller;
     use Framework\Core\View;
 
@@ -20,15 +21,19 @@
             parent::__construct();
         }
 
-        public static function serveGet()
+        /**
+         * API get request
+         *
+         * @param array $args
+         */
+        public static function serveGet(array $args = []): void
         {
-            View::render_json(array(
-                1,
-                2,
-                3,
-                4,
-                5,
-            ));
+            $id = null;
+            if (isset($args["id"])) {
+                $id = (int)$args["id"];
+            }
+            $countries = CountryModel::get($id);
+            View::render_json($countries);
             exit(1);
         }
 

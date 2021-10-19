@@ -36,8 +36,7 @@ const Country = (function () {
             },
         },
     }
-    
-    //------------------------------------------------------------------
+    // ----
     
     const handle_country_error = function (msg) {
         toastr.error(msg)
@@ -142,10 +141,12 @@ const Country = (function () {
         
     }
     
+    // ----
+    
     const fetch_country_list = function (dataToSend, callback) {
         if (dataToSend) {
             try {
-                sendGetRequest("/countries/get", dataToSend, function (data, status, xhr) {
+                sendGetRequest("/api/v1.0/countries", dataToSend, function (data, status, xhr) {
                     console.log(data)
                     
                     if (data) {
@@ -193,26 +194,26 @@ const Country = (function () {
         }
     }
     
-    //------------------------------------------------------------------
+    //  ----
     
     const set_detail = function (country) {
         let details = clear_detail()
         let id = null
         if (country) {
-            id = validInt(country.country_id)
+            id = validInt(country.id)
             details = {
-                id: validInt(country.country_id),
-                name: (country.country_name) ? country.country_name : null,
-                sort_order: (country.country_sort_order) ? country.country_sort_order : null,
-                iso2: (country.country_iso2) ? country.country_iso2 : null,
-                iso3: (country.country_iso3) ? country.country_iso3 : null,
-                currency_id: validInt(country.country_currency_id),
-                enabled: (country.country_enabled) ? country.country_enabled : 1,
-                date_created: (country.country_date_created) ? country.country_date_created : formatDateMySQL(),
-                created_by: (country.country_created_by) ? country.country_created_by : user_id,
-                date_modified: (country.country_date_modified) ? country.country_date_modified : formatDateMySQL(),
-                modified_by: (country.country_modified_by) ? country.country_modified_by : user_id,
-                note: (country.country_note) ? country.country_note : null,
+                id: validInt(country.id),
+                name: (country.country_name) ? country.name : null,
+                sort_order: (country.country_sort_order) ? country.sort_order : null,
+                iso2: (country.country_iso2) ? country.iso2 : null,
+                iso3: (country.country_iso3) ? country.iso3 : null,
+                currency_id: validInt(country.currency_id),
+                enabled: (country.country_enabled) ? country.enabled : 1,
+                date_created: (country.country_date_created) ? country.date_created : formatDateMySQL(),
+                created_by: (country.country_created_by) ? country.created_by : user_id,
+                date_modified: (country.country_date_modified) ? country.date_modified : formatDateMySQL(),
+                modified_by: (country.country_modified_by) ? country.modified_by : user_id,
+                note: (country.country_note) ? country.note : null,
             }
         }
         Country.id = id
@@ -235,8 +236,6 @@ const Country = (function () {
             date_modified: formatDateMySQL(),
         }
     }
-    
-    //------------------------------------------------------------------
     
     const build_form = function (elem, val) {
         let id = $(elem).attr("id")
@@ -417,11 +416,16 @@ const Country = (function () {
         return $("#" + form_id).valid()
     }
     
-    //------------------------------------------------------------------
+    const format = function (country) {
+        if (country) {
+        
+        }
+    }
+    
+    //  ----
     
     const set = function (settings) {
-        console.log("-- set --")
-        
+    
     }
     
     const get = function (settings) {
@@ -467,17 +471,14 @@ const Country = (function () {
         
     }
     
-    //------------------------------------------------------------------
-    
     const init = function (settings) {
         build_drop_downs(settings)
     }
     
     //------------------------------------------------------------------
-    
     return {
         detail: {},
-        all: [],
+        all: new Map(),
         close: function () {
             destroy_form()
         },
@@ -500,5 +501,4 @@ const Country = (function () {
             init(settings)
         },
     }
-    
 })()

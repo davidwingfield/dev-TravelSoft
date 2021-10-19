@@ -1,9 +1,20 @@
 <?php
-    $location_types = [];
-    if (isset($page_data["types"]["location_types"])) {
-        $location_types = $page_data["types"]["location_types"];
+    //  $page_data = [];
+    //  $types = array();
+    //  if (isset($data)) {
+    //       $page_data = $data;
+    //  }
 
+    // if (isset($page_data["types"])) {
+    //     $types = $page_data["types"];
+    // }
+
+    $location_types = [];
+    //echo "<pre>" . var_export($data, 1) . "</pre>";
+    if (isset($data["types"]["location_types"])) {
+        $location_types = $data["types"]["location_types"];
     }
+
 ?>
 <!-- Edit Location Form -->
 <form id="form_edit_location" name="form_edit_location" class="" style="" novalidate>
@@ -86,173 +97,161 @@
             
             </div>
             
-            <div class="card mt-3 p-2 grey lighten-5" id="form_location_details">
-                <header class="panel-heading">
-                    <div class="row">
-
-                        <div class="col-8">
-                            <h4 class="panel-title">Location</h4>
-                        </div>
-
-                        <div class="col-4 d-flex align-items-center justify-content-end">
-
-                            <div class="panel-actions p-0 m-0">
-
-                                <a class="panel-action fas fa-plus" href="javascript:void(0)" data-toggle="panel-button" aria-hidden="true" id="button_add_location_edit"></a>
-                                <a class="panel-action fas fa-times" href="javascript:void(0)" data-toggle="panel-button" aria-hidden="true" id="button_close_location_edit"></a>
-                            </div>
-                        </div>
-
-                    </div>
-                </header>
+            <div class="card m-3" id="form_location_details">
 
                 <div class="card-body">
+                    <h5 class="card-title">Panel title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
 
-                    <div class="row">
+                    <div class="">
+                        <div class="row">
 
-                        <div class="col-lg-6 mb-1">
-                            <label for="location_id">Location Id:</label>
-                            <input type="text" id="location_id" name="location_id" class="form-control" value="" readonly>
-                            <div class="error w-100 text-center" id="location_id-error">&nbsp;</div>
-                        </div>
-                        <div class="col-lg-6 mb-1">
+                            <div class="col-lg-6 mb-1">
+                                <label for="location_id">Location Id:</label>
+                                <input type="text" id="location_id" name="location_id" class="form-control" value="" readonly>
+                                <div class="error w-100 text-center" id="location_id-error">&nbsp;</div>
+                            </div>
+                            <div class="col-lg-6 mb-1">
 
-                            <div class="form-element">
+                                <div class="form-element">
 
-                                <label for="location_types_id">Location Type:</label>
-                                <select id="location_types_id" name="location_types_id" class="form-control">
-                                    <?php
-                                        echo "<option value='' selected readonly disabled>-- Location Types --</option>";
-                                        foreach ($location_types AS $k => $v) {
-                                            $val = $v["id"];
-                                            $text = $v["name"];
-                                            echo "<option value='$val'>$text</option>";
-                                        }
-                                    ?>
-                                </select>
-                                <div class="error w-100 text-center" id="location_types_id-error">&nbsp;</div>
+                                    <label for="location_types_id">Location Type:</label>
+                                    <select id="location_types_id" name="location_types_id" class="form-control">
+                                        <?php
+                                            echo "<option value='' selected readonly disabled>-- Location Types --</option>";
+                                            foreach ($location_types AS $k => $v) {
+                                                $val = $v["id"];
+                                                $text = $v["name"];
+                                                echo "<option value='$val'>$text</option>";
+                                            }
+                                        ?>
+                                    </select>
+                                    <div class="error w-100 text-center" id="location_types_id-error">&nbsp;</div>
+
+                                </div>
 
                             </div>
 
                         </div>
 
+                        <div class="row">
+
+                            <div class="col-lg-12 mb-1">
+
+                                <div class="form-element">
+
+                                    <label for="location_types_id">Location Name:</label>
+                                    <input type="text" id="location_name" name="location_name" class="form-control"/>
+                                    <div class="error w-100 text-center" id="location_name-error">&nbsp;</div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-lg-12 mb-1">
+
+                                <div class="form-element">
+
+                                    <label for="location_street_1">Street 1:</label>
+                                    <input type="text" id="location_street_1" name="location_street_1" class="form-control"/>
+                                    <div class="error w-100 text-center" id="location_street_1-error">&nbsp;</div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-lg-12 mb-1">
+
+                                <div class="form-element">
+
+                                    <label for="location_street_2">Street 2:</label>
+                                    <input type="text" id="location_street_2" name="location_street_2" class="form-control"/>
+                                    <div class="error w-100 text-center" id="location_street_2-error"></div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-lg-4 mb-1">
+
+                                <div class="form-element">
+
+                                    <label for="location_country_id">Country:</label>
+                                    <select class="form-control" name="location_country_id" id="location_country_id" data-type="country" style="width:100%;" required></select>
+                                    <div class="error w-100 text-center" id="location_country_id-error"></div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-lg-4 mb-1">
+
+                                <div class="form-element">
+
+                                    <label for="location_province_id">Province:</label>
+                                    <select class="form-control" name="location_province_id" id="location_province_id" data-type="province" style="width:100%;" required></select>
+                                    <div class="error w-100 text-center" id="location_province_id-error"></div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-lg-4 mb-1">
+
+                                <div class="form-element">
+
+                                    <label for="location_city_id">City:</label>
+                                    <select class="form-control" name="location_city_id" id="location_city_id" data-type="city" style="width:100%;" required></select>
+                                    <div class="error w-100 text-center" id="location_city_id-error"></div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-lg-12 mb-1">
+
+                                <div class="form-element">
+
+                                    <label for="location_zipcode">Postal Code:</label>
+                                    <input type="text" id="location_zipcode" name="location_zipcode" class="form-control"/>
+                                    <div class="error w-100 text-center" id="location_zipcode-error"></div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
                     </div>
 
-                    <div class="row">
+                    <a href="#" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0">Update</a>
 
-                        <div class="col-lg-12 mb-1">
+                </div>
 
-                            <div class="form-element">
-
-                                <label for="location_types_id">Location Name:</label>
-                                <input type="text" id="location_name" name="location_name" class="form-control"/>
-                                <div class="error w-100 text-center" id="location_name-error">&nbsp;</div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col-lg-12 mb-1">
-
-                            <div class="form-element">
-
-                                <label for="location_street">Street 1:</label>
-                                <input type="text" id="location_street" name="location_street" class="form-control"/>
-                                <div class="error w-100 text-center" id="location_street-error">&nbsp;</div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col-lg-12 mb-1">
-
-                            <div class="form-element">
-
-                                <label for="location_street2">Street 2:</label>
-                                <input type="text" id="location_street2" name="location_street2" class="form-control"/>
-                                <div class="error w-100 text-center" id="location_street2-error"></div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col-lg-4 mb-1">
-
-                            <div class="form-element">
-
-                                <label for="location_country_id">Country:</label>
-                                <select class="form-control" name="location_country_id" id="location_country_id" data-type="country" style="width:100%;" required></select>
-                                <div class="error w-100 text-center" id="location_country_id-error"></div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="col-lg-4 mb-1">
-
-                            <div class="form-element">
-
-                                <label for="location_province_id">Province:</label>
-                                <select class="form-control" name="location_province_id" id="location_province_id" data-type="province" style="width:100%;" required></select>
-                                <div class="error w-100 text-center" id="location_province_id-error"></div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="col-lg-4 mb-1">
-
-                            <div class="form-element">
-
-                                <label for="location_city_id">City:</label>
-                                <select class="form-control" name="location_city_id" id="location_city_id" data-type="city" style="width:100%;" required></select>
-                                <div class="error w-100 text-center" id="location_city_id-error"></div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col-lg-12 mb-1">
-
-                            <div class="form-element">
-
-                                <label for="location_zipcode">Postal Code:</label>
-                                <input type="text" id="location_zipcode" name="location_zipcode" class="form-control"/>
-                                <div class="error w-100 text-center" id="location_zipcode-error"></div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
+                <div class="rounded-bottom mdb-color lighten-3 text-center py-3">
+                    <button type="button" class="btn btn-primary btn-sm">
+                        Read more <i class="fas fa-angle-double-right"></i>
+                    </button>
                 </div>
             </div>
         
         </div>
         <!-- /Panel Body -->
-        
-        <!-- Panel Footer -->
-        <div class="panel-footer pb-0 text-right">
-            <button type="button" id="button_submit_form_edit_location" name="button_submit_form_edit_location" class="btn btn-primary btn-sm" style="">Save Location Details</button>
-        </div>
-        <!-- /Panel Footer -->
     
     </section>
     <!-- /Panel -->

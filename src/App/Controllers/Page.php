@@ -8,6 +8,7 @@
     use Framework\App\Models\CategoryModel;
     use Framework\App\Models\ColorSchemeModel;
     use Framework\App\Models\ContactTypesModel;
+    use Framework\App\Models\CountryModel;
     use Framework\App\Models\CurrencyModel;
     use Framework\App\Models\LocationTypesModel;
     use Framework\App\Models\MessageTypesModel;
@@ -46,6 +47,7 @@
                 "color_scheme" => ColorSchemeModel::get(),
                 "contact_types" => ContactTypesModel::get(),
                 "currency" => CurrencyModel::get(),
+                "countries" => CountryModel::get(),
                 "location_types" => LocationTypesModel::get(),
                 "message_types" => MessageTypesModel::get(),
                 "pricing_strategy_types" => PricingStrategyTypesModel::get(),

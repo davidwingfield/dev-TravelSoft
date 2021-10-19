@@ -79,7 +79,7 @@ const LocationTypes = (function () {
             LocationTypes.all.set("id", detail)
         })
         
-        console.log(" LocationTypes.all", LocationTypes.all)
+        //console.log(" LocationTypes.all", LocationTypes.all)
     }
     
     return {

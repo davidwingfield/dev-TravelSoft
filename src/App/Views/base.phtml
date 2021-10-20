@@ -11,11 +11,19 @@
     use Framework\App\Middlewares\Auth;
 
     $page_data = [];
+    $types = array();
     if (isset($data)) {
         $page_data = $data;
     }
-    
+
+    if (isset($page_data["types"])) {
+        $types = json_encode($page_data["types"], 1);
+    }
+
+    define("TYPES", $types);
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <?php include_once(__DIR__ . "/_includes/head.phtml"); ?>

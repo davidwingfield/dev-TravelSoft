@@ -36,7 +36,6 @@ const Country = (function () {
             },
         },
     }
-    // ----
     
     const handle_country_error = function (msg) {
         toastr.error(msg)
@@ -44,7 +43,8 @@ const Country = (function () {
     }
     
     const on_click_outside = (e) => {
-        let tar = $(e.target).parents("form." + class_name)
+        let tar = $(e.target).parents("div." + class_name)
+        
         if (!tar[0] && !e.target.className.includes("select-add-option")) {
             Country.close()
         }
@@ -130,7 +130,6 @@ const Country = (function () {
                               } else {
                                   Province.get(null, province_element)
                               }
-                              
                           })
                     }
                     
@@ -140,8 +139,6 @@ const Country = (function () {
         }
         
     }
-    
-    // ----
     
     const fetch_country_list = function (dataToSend, callback) {
         if (dataToSend) {
@@ -167,57 +164,61 @@ const Country = (function () {
     
     const update_country_record = function ($this, dataToSend) {
         if (dataToSend) {
+            
             try {
-                sendPostRequest("/countries/update", dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        Country.all.push(data)
+                sendPostRequest("/api/v1.0/countries/update", dataToSend, function (data, status, xhr) {
+                    if (data && data[0]) {
+                        let new_country = data[0]
+                        
+                        return
+                        Country.all.set(new_country.id, new_country)
                         let country_elements = $("select[data-type='country']")
                         
                         country_elements.each(function (index, element) {
-                            var newOption = new Option(data.country_name, data.country_id, false, false)
+                            var newOption = new Option(new_country.name, new_country.id, false, false)
                             $(element).append(newOption).trigger("change")
                         })
-                        $($this).val(data.country_id).trigger("change")
+                        $($this).val(new_country.id).trigger("change")
                         Country.close()
-                        toastr.success("Country: " + data.country_id + " updated")
+                        toastr.success("Country: " + new_country.id + " updated")
                     } else {
                         return handle_country_error("Error: 1")
                     }
                 })
             } catch (e) {
                 console.log(e)
-                handle_country_error("Error: Validating Province")
+                handle_country_error("Error: Validating Country")
             }
+            
         } else {
             console.log("Error: Missing Data")
             handle_country_error("Error: Missing Data")
         }
     }
     
-    //  ----
-    
     const set_detail = function (country) {
-        let details = clear_detail()
+        let detail = clear_detail()
         let id = null
         if (country) {
             id = validInt(country.id)
-            details = {
+            detail = {
                 id: validInt(country.id),
-                name: (country.country_name) ? country.name : null,
-                sort_order: (country.country_sort_order) ? country.sort_order : null,
-                iso2: (country.country_iso2) ? country.iso2 : null,
-                iso3: (country.country_iso3) ? country.iso3 : null,
+                name: (country.name) ? country.name : null,
+                sort_order: (country.sort_order) ? country.sort_order : null,
+                iso2: (country.iso2) ? country.iso2 : null,
+                iso3: (country.iso3) ? country.iso3 : null,
                 currency_id: validInt(country.currency_id),
-                enabled: (country.country_enabled) ? country.enabled : 1,
-                date_created: (country.country_date_created) ? country.date_created : formatDateMySQL(),
-                created_by: (country.country_created_by) ? country.created_by : user_id,
-                date_modified: (country.country_date_modified) ? country.date_modified : formatDateMySQL(),
-                modified_by: (country.country_modified_by) ? country.modified_by : user_id,
-                note: (country.country_note) ? country.note : null,
+                enabled: (country.enabled) ? country.enabled : 1,
+                date_created: (country.date_created) ? country.date_created : formatDateMySQL(),
+                created_by: (country.created_by) ? country.created_by : user_id,
+                date_modified: (country.date_modified) ? country.date_modified : formatDateMySQL(),
+                modified_by: (country.modified_by) ? country.modified_by : user_id,
+                note: (country.note) ? country.note : null,
             }
         }
         Country.id = id
-        Country.detail = details
+        Country.detail = detail
+        return detail
     }
     
     const clear_detail = function () {
@@ -254,7 +255,7 @@ const Country = (function () {
             return
         }
         
-        let new_country_form = document.createElement("form")
+        let new_country_form = document.createElement("div")
         
         let heading1 = document.createElement("h5")
         
@@ -401,31 +402,56 @@ const Country = (function () {
     }
     
     const validate_form = function () {
-        // -- Fields
         let _name = document.getElementById("country_name")
         let _country_iso2 = document.getElementById("country_iso2")
         let _country_iso3 = document.getElementById("country_iso3")
-        // --
-        
+        let valid = true
+        // ----
         if (!_name || !_country_iso2 || !_country_iso3) {
+            handle_country_error("Error Processing Data")
             return false
         }
         
-        validator_init(form_rules)
-        $("#" + form_id).validate()
-        return $("#" + form_id).valid()
-    }
-    
-    const format = function (country) {
-        if (country) {
-        
+        if (_name.value === "") {
+            $(_name).addClass("is-invalid")
+            $("#country_name-error")
+              .text("Required: Field is required")
+              .show()
+            valid = false
+        } else {
+            $(_name).removeClass("is-invalid")
+            $("#country_name-error")
+              .text("")
+              .hide()
         }
-    }
-    
-    //  ----
-    
-    const set = function (settings) {
-    
+        
+        if (_country_iso2.value === "") {
+            $(_country_iso2).addClass("is-invalid")
+            $("#country_iso2-error")
+              .text("Required: Field is required")
+              .show()
+            valid = false
+        } else {
+            $(_country_iso2).removeClass("is-invalid")
+            $("#country_iso2-error")
+              .text("")
+              .hide()
+        }
+        
+        if (_country_iso3.value === "") {
+            $(_country_iso3).addClass("is-invalid")
+            $("#country_iso3-error")
+              .text("Required: Field is required")
+              .show()
+            valid = false
+        } else {
+            $(_country_iso3).removeClass("is-invalid")
+            $("#country_iso3-error")
+              .text("")
+              .hide()
+        }
+        
+        return valid
     }
     
     const get = function (settings) {
@@ -443,7 +469,6 @@ const Country = (function () {
         }
         
         build_form(elem, val)
-        
     }
     
     const save = function ($this) {
@@ -451,6 +476,7 @@ const Country = (function () {
         let _country_iso2 = document.getElementById("country_iso2")
         let _country_iso3 = document.getElementById("country_iso3")
         if (_name && _country_iso2 && _country_iso3) {
+            
             if (validate_form()) {
                 let country_detail = {}
                 
@@ -462,8 +488,6 @@ const Country = (function () {
                 if (r === true) {
                     update_country_record($this, remove_nulls(country_detail))
                 }
-            } else {
-                toastr.error("Error: 1")
             }
         } else {
             toastr.error("Error: 2")
@@ -475,7 +499,17 @@ const Country = (function () {
         build_drop_downs(settings)
     }
     
-    //------------------------------------------------------------------
+    const load_all = function (countries) {
+        Country.all = new Map()
+        
+        if (countries) {
+            $.each(countries, function (k, country) {
+                let detail = set_detail(country)
+                Country.all.set(detail.id, detail)
+            })
+        }
+    }
+    
     return {
         detail: {},
         all: new Map(),
@@ -493,6 +527,9 @@ const Country = (function () {
         },
         set_detail: function (country) {
             set_detail(country)
+        },
+        load_all: function (countries) {
+            load_all(countries)
         },
         get: function (settings) {
             get(settings)

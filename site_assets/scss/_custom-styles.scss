@@ -983,3 +983,22 @@ div.tab-pane > form {
   border-color: #000000;
   color: #ffffff;
 }
+
+#filter_country_add_icon, #filter_province_add_icon, #filter_city_add_icon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  cursor: pointer;
+}
+
+table td {
+  font-size: .85rem;
+  font-weight: 400;
+  padding: .25rem !important;
+}
+
+.custom-select:focus {
+  border-color: #ff884f;
+  box-shadow: none;
+  outline: 0;
+}

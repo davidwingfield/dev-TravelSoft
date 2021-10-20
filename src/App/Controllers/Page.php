@@ -47,7 +47,7 @@
                 "color_scheme" => ColorSchemeModel::get(),
                 "contact_types" => ContactTypesModel::get(),
                 "currency" => CurrencyModel::get(),
-                "countries" => CountryModel::get(),
+                "countries" => Country::get(),
                 "location_types" => LocationTypesModel::get(),
                 "message_types" => MessageTypesModel::get(),
                 "pricing_strategy_types" => PricingStrategyTypesModel::get(),

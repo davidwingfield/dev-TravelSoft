@@ -74,11 +74,52 @@
             }
         }
 
-        public static function update(array $params = []): array
+        public static function update(array $province = []): array
         {
-            $id = 1;
+            $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+            $id = Model::setInt((isset($province["id"])) ? $province["id"] : null);
+            $country_id = Model::setInt((isset($province["country_id"])) ? $province["country_id"] : null);
+            $sort_order = Model::setInt((isset($province["sort_order"])) ? $province["sort_order"] : 9999999);
+            $name = Model::setString((isset($province["name"])) ? $province["name"] : null);
+            $iso2 = Model::setString((isset($province["iso2"])) ? $province["iso2"] : null);
+            $iso3 = Model::setString((isset($province["iso3"])) ? $province["iso3"] : null);
+            $note = Model::setLongText((isset($province["note"])) ? $province["note"] : null);
+            $enabled = Model::setBool((isset($province["enabled"])) ? $province["enabled"] : null);
+            $created_by = Model::setInt($user_id);
+            $modified_by = Model::setInt($user_id);
 
-            return self::get($id);
+            $sql = "
+		INSERT INTO province (
+			id, country_id, sort_order, name, iso2,
+			iso3, enabled, date_created, created_by,
+			date_modified, modified_by, note
+		) VALUES (
+			$id, $country_id, $sort_order, $name,
+			$iso2, $iso3, $enabled, DEFAULT,
+			$created_by, DEFAULT, $modified_by, $note
+		)
+		ON DUPLICATE KEY UPDATE
+			sort_order = VALUES(sort_order),
+			name = VALUES(name),
+			iso2 = VALUES(iso2),
+			iso3 = VALUES(iso3),
+			note = VALUES(note),
+			modified_by = VALUES(modified_by),
+			date_modified = VALUES(date_modified),
+			enabled = VALUES(enabled);";
+
+            try {
+                Model::$db->rawQuery($sql);
+                $id = Model::$db->getInsertId();
+
+                return self::get($country_id, $id);
+            } catch (Exception $e) {
+                Log::$debug_log->error($e);
+
+                return [];
+            }
         }
+
+        // ----
 
     }

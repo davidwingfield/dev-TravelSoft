@@ -112,6 +112,7 @@ const Provider = (function () {
     }
     
     const build_index_table = function () {
+        log("build_index_table")
         $index_table = $(_table_provider_index).table({
             table_type: "display_list",
             data: Provider.all,
@@ -121,7 +122,7 @@ const Provider = (function () {
                     targets: 0,
                     data: "name",
                     render: function (data, type, row, meta) {
-                        return data
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
                     },
                 },
                 {
@@ -129,7 +130,7 @@ const Provider = (function () {
                     targets: 1,
                     data: "code_direct_id",
                     render: function (data, type, row, meta) {
-                        return data
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
                     },
                 },
                 {
@@ -137,7 +138,7 @@ const Provider = (function () {
                     targets: 2,
                     data: "vendor",
                     render: function (data, type, row, meta) {
-                        return data.sku
+                        return "<span style='white-space: nowrap;'>" + data.sku + "</span>"
                     },
                 },
                 {
@@ -145,8 +146,6 @@ const Provider = (function () {
                     targets: 3,
                     data: "location",
                     render: function (data, type, row, meta) {
-                        console.log("data.display_short", data)
-                        console.log("defaultLocationDisplayFormat", defaultLocationDisplayFormat)
                         let displayLocation = ""
                         if (defaultLocationDisplayFormat === "short") {
                             displayLocation = data.display_short
@@ -155,7 +154,8 @@ const Provider = (function () {
                         } else {
                             displayLocation = data.display_medium
                         }
-                        return displayLocation
+                        
+                        return "<span style='white-space: nowrap;'>" + displayLocation + "</span>"
                     },
                 },
             ],
@@ -163,7 +163,7 @@ const Provider = (function () {
         })
     }
     
-    const init_edit = function (settings) {
+    const edit = function (settings) {
         let provider_detail = {}
         let location = {}
         let addresses = []
@@ -185,6 +185,7 @@ const Provider = (function () {
         }
         
         let provider = set(provider_detail)
+        Address.init()
         Address.load_all(addresses)
         set_autocomplete()
         Location.init(location)
@@ -241,8 +242,7 @@ const Provider = (function () {
             index(providers)
         },
         edit: function (settings) {
-            init_edit(settings)
-            
+            edit(settings)
         },
     }
     

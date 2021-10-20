@@ -8,14 +8,28 @@ const Address = (function () {
     const _address_street_1 = document.getElementById("address_street_1")
     const _address_street_2 = document.getElementById("address_street_2")
     const _address_street_3 = document.getElementById("address_street_3")
+    const _address_country_id = document.getElementById("address_country_id")
+    const _address_province_id = document.getElementById("address_province_id")
+    const _address_city_id = document.getElementById("address_city_id")
     const _address_postal_code = document.getElementById("address_postal_code")
-    
+    const _card_edit_address_form = document.getElementById("card_edit_address_form")
     const _table_address = document.getElementById("table_address")
+    const _button_add_address_table = document.getElementById("button_add_address_table")
     // ----
     let default_display = default_address_view
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $address_table = $(_table_address)
     // ----
+    $(_button_add_address_table)
+      .on("click", function () {
+          load_form()
+      })
+    
+    /**
+     * handle_address_error
+     *
+     * @param msg
+     */
     const handle_address_error = function (msg) {
         toastr.error(msg)
     }
@@ -29,12 +43,70 @@ const Address = (function () {
         
     }
     
+    const unload_form = function () {
+        if (_card_edit_address_form) {
+            $(_card_edit_address_form).hide()
+        }
+        
+    }
+    
+    const load_form = function () {
+        if (_card_edit_address_form) {
+            $(_card_edit_address_form).show()
+        }
+        
+    }
+    
     const init = function (settings) {
         if (_table_address) {
             build_table()
         }
         if (_form_edit_address) {
             clear_form()
+            //unload_form()
+            //Address.validator = $(_form_edit_address).validate()
+            //*
+            $(_address_country_id).BuildDropDown({
+                data: Array.from(Country.all.values()),
+                title: "Country",
+                id_field: "id",
+                text_field: "name",
+                first_selectable: false,
+            })
+            
+            $(_address_province_id).BuildDropDown({
+                data: Array.from(Province.all.values()),
+                title: "Province",
+                id_field: "id",
+                text_field: "name",
+                first_selectable: false,
+            })
+            
+            $(_address_city_id).BuildDropDown({
+                data: Array.from(Province.all.values()),
+                title: "City",
+                id_field: "city_id",
+                text_field: "city_name",
+                first_selectable: false,
+            })
+            
+            Country.init({
+                dropdowns: [
+                    "address_country_id",
+                ],
+            })
+            Province.init({
+                dropdowns: [
+                    "address_province_id",
+                ],
+            })
+            City.init({
+                dropdowns: [
+                    "address_city_id",
+                ],
+            })
+            //*/
+            
         }
     }
     
@@ -237,4 +309,3 @@ const Address = (function () {
     }
     
 })()
-Address.init()

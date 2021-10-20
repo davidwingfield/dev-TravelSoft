@@ -1,15 +1,10 @@
 <?php
-    $page_data = [];
-    $types = array();
-    if (isset($data)) {
-        $page_data = $data;
+    if (!isset($page_data)) {
+        $page_data = [];
     }
 
-    if (isset($page_data["types"])) {
-        $types = json_encode($page_data["types"], 1);
-    }
-    //echo "<pre>" . var_export($page_data["providers"], 1) . "</pre>";
-
+    $settings = json_encode($page_data, 1);
+    $init = "Provider.index($settings)"
 ?>
 <section id="provider_index" class="section">
     
@@ -24,7 +19,14 @@
 </section>
 <script type="text/javascript">
     $(function () {
-        Types.init(<?php echo $types;?>)
-        Provider.index(<?php echo json_encode($page_data, 1);?>)
+        //Types.init(<?php echo TYPES;?>)
+        <?php //echo $init;?>
+    })
+</script>
+<script type="text/javascript">
+
+    $(function () {
+        Types.init(<?php echo TYPES;?>)
+        <?php echo $init;?>
     })
 </script>

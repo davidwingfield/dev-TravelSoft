@@ -53,12 +53,10 @@ const Types = (function () {
         if (settings.contact_types) {
             setType(settings.contact_types, "contact_types")
         }
-        
+        console.log("settings", settings)
         if (settings.countries) {
-            Country.all = new Map()
-            $.each(settings.countries, function (k, country) {
-                Country.all.set(country.country_id, country)
-            })
+            
+            Country.load_all(settings.countries)
         }
         
         if (settings.currency) {

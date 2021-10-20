@@ -27,5 +27,7 @@
     Router::get($routeLead . '/autocomplete/locations', "Autocomplete@locations");
     // ----
     Router::post($routeLead . '/users/login', 'User@login');
-    //Router::get('login', 'StaticPagesController@serveLogin');
-    //Router::get('home', 'StaticPagesController@serveHome');
+    // ----
+    Router::post($routeLead . '/countries/update', 'Country@serveUpdate');
+    Router::post($routeLead . '/provinces/update', 'Province@serveUpdate');
+    Router::post($routeLead . '/cities/update', 'City@serveUpdate');

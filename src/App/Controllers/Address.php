@@ -23,9 +23,9 @@
         private static function format_address_table(array $address = []): array
         {
             $formattedAddress = array();
-            $short_address_formatted = "<address>";
-            $medium_address_formatted = "<address>";
-            $long_address_formatted = "<address>";
+            $short_address_formatted = "<address class='m-0 p-0 '>";
+            $medium_address_formatted = "<address class='m-0 p-0 '>";
+            $long_address_formatted = "<address class='m-0 p-0 '>";
             $streets = [];
             $long_region = [];
             $medium_region = [];
@@ -67,9 +67,9 @@
             }
 
             foreach ($streets AS $street) {
-                $short_address_formatted .= "<span class='' style='white-space: nowrap'>$street</span><br>";
-                $medium_address_formatted .= "<span class='' style='white-space: nowrap'>$street</span><br>";
-                $long_address_formatted .= "<span class='' style='white-space: nowrap'>$street</span><br>";
+                $short_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>$street</span><br>";
+                $medium_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>$street</span><br>";
+                $long_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>$street</span><br>";
             }
 
             if (!is_null($postal)) {
@@ -97,20 +97,20 @@
             $region_medium_line = implode(" ", $medium_region);
             $region_long_line = implode(" ", $long_region);
 
-            $short_address_formatted .= "<span class='' style='white-space: nowrap'>" . $region_short_line . "</span><br>";
-            $medium_address_formatted .= "<span class='' style='white-space: nowrap'>" . $region_medium_line . "</span><br>";
-            $long_address_formatted .= "<span class='' style='white-space: nowrap'>" . $region_long_line . "</span><br>";
+            $short_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>" . $region_short_line . "</span><br>";
+            $medium_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>" . $region_medium_line . "</span><br>";
+            $long_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>" . $region_long_line . "</span><br>";
 
             if (!is_null($country_name)) {
-                $long_address_formatted .= "<span class='' style='white-space: nowrap'>" . $country_name . "</span>";
+                $long_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>" . $country_name . "</span>";
             }
 
             if (!is_null($country_iso2)) {
-                $short_address_formatted .= "<span class='' style='white-space: nowrap'>" . $country_iso2 . "</span>";
+                $short_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>" . $country_iso2 . "</span>";
             }
 
             if (!is_null($country_iso3)) {
-                $medium_address_formatted .= "<span class='' style='white-space: nowrap'>" . $country_iso3 . "</span>";
+                $medium_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>" . $country_iso3 . "</span>";
             }
 
             $short_address_formatted .= "</address>";
@@ -179,7 +179,7 @@
             $formattedAddress["modified_by"] = $modified_by;
             $formattedAddress["note"] = $note;
 
-            Log::$debug_log->trace($formattedAddress);
+            //Log::$debug_log->trace($formattedAddress);
 
             return $formattedAddress;
         }

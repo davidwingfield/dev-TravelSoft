@@ -1,57 +1,67 @@
 <?php
-    $page_data = [];
-    $types = array();
-    if (isset($data)) {
-        $page_data = $data;
+    if (!isset($page_data)) {
+        $page_data = [];
     }
 
-    if (isset($page_data["types"])) {
-        $types = json_encode($page_data["types"], 1);
-    }
-
-    $page_data = json_encode($page_data, 1);
+    $settings = json_encode($page_data, 1);
+    $init = "Provider.edit($settings);";
 ?>
+
 <section id="provider_edit">
     <div class="panel nav-tabs-horizontal nav-tabs-inverse" id="provider_edit_tabs" data-plugin="tabs">
         
         <div class="panel-heading panel-heading-tab">
             <ul class="nav nav-tabs nav-tabs-solid" role="tablist">
                 
+                <!-- Provider Details -->
                 <li class="nav-item">
                     <a class="nav-link active" data-toggle="tab" href="#panel_tab_provider_detail" aria-controls="panel_tab_provider_detail" aria-expanded="true" role="tab">
                         <span class="">Provider</span> <span class="d-none d-lg-inline">Details</span>
                     </a>
                 </li>
+                <!-- /Provider Details -->
                 
+                <!-- Company Details -->
+                <!--
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#panel_tab_company_detail" aria-controls="panel_tab_company_detail" aria-expanded="false" role="tab">
                         <span class="">Company</span> <span class="d-none d-lg-inline">Details</span>
                     </a>
                 </li>
+                -->
+                <!-- /Company Details -->
                 
+                <!-- Location Details -->
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#panel_tab_location_detail" aria-controls="panel_tab_location_detail" aria-expanded="false" role="tab">
                         <span class="">Location</span> <span class="d-none d-lg-inline">Details</span>
                     </a>
                 </li>
+                <!-- /Location Details -->
                 
+                <!-- Vendor Details -->
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#panel_tab_vendor_detail" aria-controls="panel_tab_vendor_detail" role="tab">
                         <span class="">Vendor</span> <span class="d-none d-lg-inline">Details</span>
                     </a>
                 </li>
+                <!-- /Vendor Details -->
                 
+                <!-- Contacts -->
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#panel_tab_contact_detail" aria-controls="panel_tab_contact_detail" aria-expanded="false" role="tab">
                         <span class="">Contacts</span>
                     </a>
                 </li>
+                <!-- /Contacts -->
                 
+                <!-- Addresses -->
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#panel_tab_address_detail" aria-controls="panel_tab_address_detail" aria-expanded="false" role="tab">
                         <span class="">Addresses</span>
                     </a>
                 </li>
+                <!-- /Addresses -->
             
             </ul>
         </div>
@@ -101,27 +111,8 @@
         </div>
     </div>
 </section>
-
 <script type="text/javascript">
-    function test4 () {
-        return true
-    }
-
-
     $(function () {
-        Logger.toggle()
-        /*
-        let test1 = 4.25
-        let test2 = "this is a test"
-        let test3 = true
-        let test5 = [1, 2, "trdt", 65.25]
-        log("Test Variable 1", test1)
-        log("Test Variable 2", test2)
-        log("Test Variable 3", test3)
-        log("Test Variable 4", test4)
-        log("Test Variable 5", test5)
-        //*/
-        Types.init(<?php echo $types;?>)
-        Provider.edit(<?php echo $page_data;?>)
+        <?php echo $init;?>
     })
 </script>

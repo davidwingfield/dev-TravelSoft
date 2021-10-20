@@ -5,24 +5,12 @@ $.fn.table = function (settings) {
     let $dTable
     let table_type = "display_list"
     let table_id = $(this).attr("id")
-    // ----
+    ///////////////////////////////////////////////
     const _table = document.getElementById(table_id)
-    // ----
-    DataTable.render.ellipsis = function (cutoff) {
-        return function (data, type, row) {
-            if (type === "display") {
-                var str = data.toString() // cast numbers
-                
-                return str.length < cutoff ?
-                  str :
-                  str.substr(0, cutoff - 1) + "&#8230;"
-            }
-            
-            // Search, order and type can use the original data
-            return data
-        }
+    if ($.fn.DataTable.isDataTable("#" + table_id)) {
+        return
     }
-    
+    ///////////////////////////////////////////////
     if (settings) {
         if (settings.columnDefs) {
             columnDefs = settings.columnDefs
@@ -34,7 +22,9 @@ $.fn.table = function (settings) {
             data = settings.data
         }
     }
-    // ----
+    
+    ///////////////////////////////////////////////
+    
     const formatTable = function () {
         let _filter = $("#" + table_id + "_wrapper .dataTables_filter")
         let _length = $("#" + table_id + "_wrapper .dataTables_length")
@@ -116,6 +106,7 @@ $.fn.table = function (settings) {
         }
         
     }
+    
     ///////////////////////////////////////////////
     const insertRow = function (row_data) {
         if (row_data) {
@@ -152,32 +143,35 @@ $.fn.table = function (settings) {
     }
     ///////////////////////////////////////////////
     if (_table) {
+        
         try {
+            
             $dTable = $(this).DataTable({
                 pageLength: 5,
                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
                 data: data,
                 columnDefs: columnDefs,
             })
+            
+            if (settings.rowClick) {
+                $dTable.on("click", "tr", function () {
+                    if ($(this).find("td").hasClass("dataTables_empty")) {
+                        
+                    } else {
+                        clear_selected_rows()
+                        $(this).addClass("selected")
+                        let rowData = $dTable.row(this).data()
+                        settings.rowClick(rowData)
+                    }
+                    
+                })
+            }
+            
+            formatTable()
+            
         } catch (e) {
             console.log(e)
         }
-        
-        if (settings.rowClick) {
-            $dTable.on("click", "tr", function () {
-                if ($(this).find("td").hasClass("dataTables_empty")) {
-                
-                } else {
-                    clear_selected_rows()
-                    $(this).addClass("selected")
-                    let rowData = $dTable.row(this).data()
-                    settings.rowClick(rowData)
-                }
-                
-            })
-        }
-        
-        formatTable()
         
     }
     ///////////////////////////////////////////////

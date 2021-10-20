@@ -15,8 +15,6 @@ const City = (function () {
         },
     }
     
-    //------------------------------------------------------------------
-    
     const handle_city_error = function (msg) {
         toastr.error(msg)
         console.log(msg)
@@ -128,7 +126,7 @@ const City = (function () {
     const update_city_record = function ($this, dataToSend) {
         if (dataToSend) {
             try {
-                sendPostRequest("/cities/update", dataToSend, function (data, status, xhr) {
+                sendPostRequest("/api/v1.0/cities/update", dataToSend, function (data, status, xhr) {
                     if (data && data[0]) {
                         City.all.set(data[0].city_id, data[0])
                         let city_elements = $("select[data-type='city']")
@@ -157,8 +155,6 @@ const City = (function () {
         }
     }
     
-    //------------------------------------------------------------------
-    
     const destroy_form = function () {
         let elem = document.getElementById(form_id)
         if (elem) {
@@ -184,7 +180,7 @@ const City = (function () {
             return
         }
         
-        let new_city_form = document.createElement("form")
+        let new_city_form = document.createElement("div")
         
         let heading1 = document.createElement("h5")
         
@@ -286,8 +282,6 @@ const City = (function () {
         window.addEventListener("click", on_click_outside)
     }
     
-    //------------------------------------------------------------------
-    
     const clear_detail = function () {
         
         return {
@@ -307,11 +301,11 @@ const City = (function () {
     }
     
     const set_detail = function (city) {
-        let details = clear_detail()
+        let detail = clear_detail()
         let id = null
         if (city) {
             id = validInt(city.id)
-            details = {
+            detail = {
                 id: id,
                 province_id: validInt(city.province_id),
                 country_id: validInt(city.country_id),
@@ -328,10 +322,9 @@ const City = (function () {
         }
         
         City.id = id
-        City.detail = details
+        City.detail = detail
+        return detail
     }
-    
-    //------------------------------------------------------------------
     
     const get = function (country_id, province_id, el) {
         City.all = new Map()
@@ -348,8 +341,8 @@ const City = (function () {
             $(el).BuildDropDown({
                 data: Array.from(City.all.values()),
                 title: "City",
-                id_field: "city_id",
-                text_field: "city_name",
+                id_field: "id",
+                text_field: "name",
                 first_selectable: false,
             })
             
@@ -359,15 +352,15 @@ const City = (function () {
                 province_id: parseInt(province_id),
             }
             
-            fetch_city_list(dataToSend, function (data) {
-                if (data) {
+            fetch_city_list(dataToSend, function (cities) {
+                if (cities) {
+                    load_all(cities)
                     
-                    City.all = buildMap(data, "city_id")
                     $(el).BuildDropDown({
                         data: Array.from(City.all.values()),
                         title: "City",
-                        id_field: "city_id",
-                        text_field: "city_name",
+                        id_field: "id",
+                        text_field: "name",
                         first_selectable: false,
                     })
                     
@@ -405,13 +398,20 @@ const City = (function () {
         }
     }
     
-    //------------------------------------------------------------------
+    const load_all = function (cities) {
+        City.all = new Map()
+        
+        if (cities) {
+            $.each(cities, function (k, city) {
+                let detail = set_detail(city)
+                City.all.set(detail.id, detail)
+            })
+        }
+    }
     
     const init = function (settings) {
         build_drop_downs(settings)
     }
-    
-    //------------------------------------------------------------------
     
     return {
         id: null,

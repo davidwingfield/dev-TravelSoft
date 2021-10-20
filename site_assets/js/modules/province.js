@@ -41,7 +41,58 @@ const Province = (function () {
         },
     }
     
-    //------------------------------------------------------------------
+    const validate_form = function () {
+        let _name = document.getElementById("province_name")
+        let _province_iso2 = document.getElementById("province_iso2")
+        let _province_iso3 = document.getElementById("province_iso3")
+        let valid = true
+        // ----
+        if (!_name || !_province_iso2 || !_province_iso3) {
+            handle_province_error("Error Processing Data")
+            return false
+        }
+        
+        if (_name.value === "") {
+            $(_name).addClass("is-invalid")
+            $("#province_name-error")
+              .text("Required: Field is required")
+              .show()
+            valid = false
+        } else {
+            $(_name).removeClass("is-invalid")
+            $("#province_name-error")
+              .text("")
+              .hide()
+        }
+        
+        if (_province_iso2.value === "") {
+            $(_province_iso2).addClass("is-invalid")
+            $("#province_iso2-error")
+              .text("Required: Field is required")
+              .show()
+            valid = false
+        } else {
+            $(_province_iso2).removeClass("is-invalid")
+            $("#province_iso2-error")
+              .text("")
+              .hide()
+        }
+        
+        if (_province_iso3.value === "") {
+            $(_province_iso3).addClass("is-invalid")
+            $("#province_iso3-error")
+              .text("Required: Field is required")
+              .show()
+            valid = false
+        } else {
+            $(_province_iso3).removeClass("is-invalid")
+            $("#province_iso3-error")
+              .text("")
+              .hide()
+        }
+        
+        return valid
+    }
     
     const handle_province_error = function (msg) {
         toastr.error(msg)
@@ -162,50 +213,15 @@ const Province = (function () {
         }
     }
     
-    const update_province_record = function ($this, dataToSend) {
-        if (dataToSend) {
-            try {
-                sendPostRequest("/provinces/update", dataToSend, function (data, status, xhr) {
-                    if (data && data[0]) {
-                        Province.all.set(data[0].province_id, data[0])
-                        let province_elements = $("select[data-type='province']")
-                        Province.id = data[0].province_id
-                        City.id = null
-                        province_elements.each(function (index, element) {
-                            var newOption = new Option(data[0].province_name, data[0].province_id, false, false)
-                            $(element).append(newOption).trigger("change")
-                        })
-                        
-                        $($this).val(data[0].province_id).trigger("change")
-                        
-                        Province.close()
-                        toastr.success("Province: " + data[0].province_id + " updated")
-                        
-                    } else {
-                        return handle_province_error("Error: 1")
-                    }
-                })
-            } catch (e) {
-                console.log(e)
-                handle_province_error("Error: Validating Province")
-            }
-        } else {
-            console.log("Error: Missing Data")
-            handle_province_error("Error: Missing Data")
-        }
-    }
-    
-    //------------------------------------------------------------------
-    
     const set_detail = function (province) {
-        let details = clear_detail()
+        let detail = clear_detail()
         let id = null
         if (province) {
             id = validInt(province.id)
-            details = {
+            detail = {
                 id: validInt(province.id),
                 name: (province.name) ? province.name : null,
-                sort_order: (province.sort_order) ? province.sort_order : null,
+                sort_order: (province.sort_order) ? province.sort_order : 9999999,
                 country_id: validInt(province.country_id),
                 iso2: (province.iso2) ? province.iso2 : null,
                 iso3: (province.iso3) ? province.iso3 : null,
@@ -218,14 +234,15 @@ const Province = (function () {
             }
         }
         Province.id = id
-        Province.detail = details
+        Province.detail = detail
+        return detail
     }
     
     const clear_detail = function () {
         return {
             id: null,
             name: null,
-            sort_order: null,
+            sort_order: 9999999,
             iso2: null,
             iso3: null,
             enabled: 1,
@@ -236,8 +253,6 @@ const Province = (function () {
             date_modified: formatDateMySQL(),
         }
     }
-    
-    //------------------------------------------------------------------
     
     const build_form = function (elem, val, dropdown_id) {
         let id = $(elem).attr("id")
@@ -256,7 +271,7 @@ const Province = (function () {
             return
         }
         
-        let newProvinceForm = document.createElement("form")
+        let newProvinceForm = document.createElement("div")
         
         let heading1 = document.createElement("h5")
         
@@ -402,8 +417,6 @@ const Province = (function () {
         }
     }
     
-    //------------------------------------------------------------------
-    
     const set = function (settings) {
     
     }
@@ -431,20 +444,35 @@ const Province = (function () {
             country_id: country_id,
         }
         
-        fetch_province_list(dataToSend, function (data) {
-            if (data) {
-                Province.all = buildMap(data, "province_id")
+        fetch_province_list(dataToSend, function (provinces) {
+            if (provinces) {
+                load_all(provinces)
+                
                 $(el).BuildDropDown({
                     data: Array.from(Province.all.values()),
                     title: "Province",
-                    id_field: "province_id",
-                    text_field: "province_name",
+                    id_field: "id",
+                    text_field: "name",
                     first_selectable: false,
                 })
+                
                 $(el).val(province_id).trigger("change")
+                
             }
         })
         
+    }
+    
+    const load_all = function (provinces) {
+        Province.all = new Map()
+        
+        if (provinces) {
+            
+            $.each(provinces, function (k, province) {
+                let detail = set_detail(province)
+                Province.all.set(detail.id, detail)
+            })
+        }
     }
     
     const add = function (elem, val, dropdown_id) {
@@ -476,17 +504,46 @@ const Province = (function () {
         
     }
     
+    const update_province_record = function ($this, dataToSend) {
+        if (dataToSend) {
+            try {
+                sendPostRequest("/api/v1.0/provinces/update", dataToSend, function (data, status, xhr) {
+                    if (data && data[0]) {
+                        Province.all.set(data[0].province_id, data[0])
+                        let province_elements = $("select[data-type='province']")
+                        Province.id = data[0].province_id
+                        City.id = null
+                        province_elements.each(function (index, element) {
+                            var newOption = new Option(data[0].province_name, data[0].province_id, false, false)
+                            $(element).append(newOption).trigger("change")
+                        })
+                        
+                        $($this).val(data[0].province_id).trigger("change")
+                        
+                        Province.close()
+                        toastr.success("Province: " + data[0].province_id + " updated")
+                        
+                    } else {
+                        return handle_province_error("Error: 1")
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+                handle_province_error("Error: Validating Province")
+            }
+        } else {
+            console.log("Error: Missing Data")
+            handle_province_error("Error: Missing Data")
+        }
+    }
+    
     const update_select = function (country_id, elem) {
     
     }
     
-    //------------------------------------------------------------------
-    
     const init = function (settings) {
         build_drop_downs(settings)
     }
-    
-    //------------------------------------------------------------------
     
     return {
         detail: {},

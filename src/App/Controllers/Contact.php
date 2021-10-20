@@ -3,6 +3,7 @@
     namespace Framework\App\Controllers;
 
     use Framework\Core\Controller;
+    use Framework\Logger\Log;
 
     /**
      * Short Contact Description
@@ -17,6 +18,11 @@
         public function __construct()
         {
             parent::__construct();
+        }
+
+        private static function format_contact_table(array $contact = []): array
+        {
+            return [];
         }
 
         public static function format(array $contacts = []): array

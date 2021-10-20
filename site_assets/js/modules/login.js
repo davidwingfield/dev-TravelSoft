@@ -36,9 +36,9 @@ const Login = (function () {
       .on("click", function () {
       
       })
-    ///////////////////////////////////////////////
+    // ----
     const init = function (settings) {
-        console.log("login", {})
+        //console.log("login", {})
         if (_email && _password) {
             Login.validator = validator_init(form_rules)
         }

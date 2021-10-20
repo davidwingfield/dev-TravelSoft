@@ -211,24 +211,24 @@ const Location = (function () {
             $(_location_country_id).BuildDropDown({
                 data: Array.from(Country.all.values()),
                 title: "Country",
-                id_field: "country_id",
-                text_field: "country_name",
+                id_field: "id",
+                text_field: "name",
                 first_selectable: false,
             })
             
             $(_location_province_id).BuildDropDown({
                 data: Array.from(Province.all.values()),
                 title: "Province",
-                id_field: "province_id",
-                text_field: "province_name",
+                id_field: "id",
+                text_field: "name",
                 first_selectable: false,
             })
             
             $(_location_city_id).BuildDropDown({
                 data: Array.from(Province.all.values()),
                 title: "City",
-                id_field: "city_id",
-                text_field: "city_name",
+                id_field: "id",
+                text_field: "name",
                 first_selectable: false,
             })
             
@@ -414,8 +414,9 @@ const Location = (function () {
     const populate_form = function (location) {
         
         if (location) {
-            Province.set_detail(location.province)
+            console.log("location", location)
             Country.set_detail(location.country)
+            Province.set_detail(location.province)
             City.set_detail(location.city)
             
             City.id = location.city.id
@@ -432,14 +433,16 @@ const Location = (function () {
                     _location_name_filter.value = location.display_long
             }
             
-            _location_enabled.checked = (location.enabled === 1) ? true : false
+            $(_location_country_id).val(location.country.id).trigger("change")
+            
+            _location_enabled.checked = (location.enabled === 1)
             _location_name.value = location.name
             _location_id.value = location.id
             _location_street_1.value = location.street_1
             _location_street_2.value = location.street_2
             _location_zipcode.value = location.zipcode
             _location_types_id.value = location.type.id
-            $(_location_country_id).val(location.country.id).trigger("change")
+            
         }
         
     }

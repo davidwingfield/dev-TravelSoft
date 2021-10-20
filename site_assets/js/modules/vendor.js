@@ -23,7 +23,7 @@ const Vendor = (function () {
     }
     
     const init_autocomplete = function () {
-        console.log("Vendor", "init_autocomplete")
+        //console.log("Vendor", "init_autocomplete")
     }
     
     const _default_detail = function () {

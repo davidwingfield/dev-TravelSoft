@@ -1,4 +1,4 @@
-vendor/
+/vendor/
 .env
 src/phpDocumentor.phar
 src/.phpdoc/

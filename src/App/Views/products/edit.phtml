@@ -1,15 +1,18 @@
 <?php
-    $page_data = [];
-    if (isset($data)) {
-        $page_data = $data;
+    if (!isset($page_data)) {
+        $page_data = [];
     }
+
+    $settings = json_encode($page_data, 1);
+    $init = "Product.index($settings)"
 ?>
-<section id="product_edit_page">
-    <h1>Product Edit</h1>
-    <pre><?php echo var_export($page_data, 1); ?></pre>
+<section id="product_edit_page" class="section">
+
 </section>
 <script type="text/javascript">
-    $(document).ready(function () {
-        console.log("page:", "product_edit_page")
+
+    $(function () {
+        Types.init(<?php echo TYPES;?>)
+        <?php echo $init;?>
     })
 </script>

@@ -1,7 +1,7 @@
 const Contact = (function () {
     "use strict"
     
-    const base_url = "/contact"
+    const base_url = "/contacts"
     const _input_contact_id = document.getElementById("input_contact_id")
     const _input_contact_name_first = document.getElementById("input_contact_name_first")
     const _input_contact_name_last = document.getElementById("input_contact_name_last")
@@ -19,38 +19,40 @@ const Contact = (function () {
     let $contact_table = $(_table_contact)
     // ----
     const build_table = function () {
-        if (!$.fn.DataTable.isDataTable(_table_contact)) {
-            $contact_table = $(_table_contact).table({
-                table_type: "display_list",
-                data: Contact.all,
-                columnDefs: [
-                    {
-                        title: "ID",
-                        targets: 0,
-                        data: "id",
-                        render: function (data, type, row, meta) {
-                            return data
+        if (_table_contact) {
+            if (!$.fn.DataTable.isDataTable(_table_contact)) {
+                $contact_table = $(_table_contact).table({
+                    table_type: "display_list",
+                    data: Contact.all,
+                    columnDefs: [
+                        {
+                            title: "ID",
+                            targets: 0,
+                            data: "id",
+                            render: function (data, type, row, meta) {
+                                return data
+                            },
                         },
-                    },
-                    {
-                        title: "First Name",
-                        targets: 1,
-                        data: "name_first",
-                        render: function (data, type, row, meta) {
-                            return data
+                        {
+                            title: "First Name",
+                            targets: 1,
+                            data: "name_first",
+                            render: function (data, type, row, meta) {
+                                return data
+                            },
                         },
-                    },
-                    {
-                        title: "Last Name",
-                        targets: 2,
-                        data: "name_last",
-                        render: function (data, type, row, meta) {
-                            return data
+                        {
+                            title: "Last Name",
+                            targets: 2,
+                            data: "name_last",
+                            render: function (data, type, row, meta) {
+                                return data
+                            },
                         },
-                    },
-                ],
-                rowClick: Contact.navigate,
-            })
+                    ],
+                    rowClick: Contact.navigate,
+                })
+            }
         }
     }
     
@@ -86,10 +88,12 @@ const Contact = (function () {
         
     }
     
-    const init = function (settings) {
-        console.log(" -- Contact -- ", {})
+    const init = function (contacts) {
         if (_table_contact) {
             build_table()
+        }
+        if (contacts) {
+            load_all(contacts)
         }
     }
     
@@ -122,8 +126,8 @@ const Contact = (function () {
         
         $.each(contacts, function (i, contact) {
             let detail = set(contact)
-            
-            Contact.all.set("id", detail)
+            Contact.all.set(detail.id, detail)
+            $contact_table.insertRow(detail)
         })
         
         console.log(" Contact.all", Contact.all)
@@ -155,6 +159,3 @@ const Contact = (function () {
     }
     
 })()
-
-Contact.init()
-//end object

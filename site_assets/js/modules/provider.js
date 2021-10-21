@@ -185,14 +185,18 @@ const Provider = (function () {
         }
         
         let provider = set(provider_detail)
-        
+        if (settings.provider_detail.vendor) {
+            Vendor.init()
+        }
+        Contact.init(contacts)
         Address.init(addresses)
         Address.load_all(addresses)
         Location.init(location)
-        set_autocomplete()
+        init_autocomplete()
     }
-    
-    const set_autocomplete = function () {
+    const _provider_id = document.getElementById("provider_id")
+    const _provider_company_id = document.getElementById("provider_company_id")
+    const init_autocomplete = function () {
         
         $(_provider_name)
           .on("change", function () {
@@ -209,6 +213,13 @@ const Provider = (function () {
               triggerSelectOnValidInput: false,
               paramName: "st",
               onSelect: function (suggestion) {
+                  if (suggestion.data) {
+                      let provider = suggestion.data
+                      let provider_id = provider.id
+                      let provider_company_id = provider.company.id
+                      _provider_id.value = provider_id
+                      _provider_company_id.value = provider_company_id
+                  }
                   // --
                   //log("Provider.suggestion", suggestion.data)
                   //globalSelectedProvider = true

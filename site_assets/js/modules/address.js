@@ -143,12 +143,7 @@ const Address = (function () {
     }
     
     const populate_form = function (address) {
-        if (!address) {
-            //Province.get(null, _address_province_id)
-            //Country.id = null
-            //City.id = null
-            //$(_address_country_id).val("").trigger("change")
-        } else {
+        if (address) {
             _address_id.value = (address.id) ? address.id : null
             $(_address_types_id).val((address.address_types_id) ? address.address_types_id : [])
             _address_enabled.checked = (address.enabled === 1)
@@ -164,12 +159,9 @@ const Address = (function () {
         }
     }
     
-    const load_modal = function (address) {
-        reset_form()
-        populate_form(address)
-        
-    }
-    
+    /**
+     * reset address edit form
+     */
     const reset_form = function () {
         _address_id.value = ""
         $(_address_types_id).val([])
@@ -234,6 +226,10 @@ const Address = (function () {
         }
     }
     
+    /**
+     * load address into object
+     * @param addresses
+     */
     const load_all = function (addresses) {
         Address.all = new Map()
         if (addresses) {
@@ -250,9 +246,6 @@ const Address = (function () {
             build_table()
         }
         if (_form_edit_address) {
-            //clear_form()
-            //unload_form()
-            //Address.validator = $(_form_edit_address).validate()
             
             $(_address_country_id).BuildDropDown({
                 data: Array.from(Country.all.values()),
@@ -372,7 +365,8 @@ const Address = (function () {
     
     const navigate = function (address) {
         if (address) {
-            load_modal(address)
+            reset_form()
+            populate_form(address)
         }
     }
     

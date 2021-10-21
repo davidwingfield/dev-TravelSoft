@@ -16,10 +16,6 @@ const Types = (function () {
     }
     
     const init = function (settings) {
-        //Provider.init()
-        //Address.init()
-        //Contact.init()
-        
         Types.address_types = new Map()
         Types.airport_types = new Map()
         Types.categories_ratings_types = new Map()

@@ -3,8 +3,8 @@ const Vendor = (function () {
     
     const base_url = "/vendors"
     const _vendor_company_id = document.getElementById("vendor_company_id")
-    const _vendor_name = document.getElementById("vendor_company_id")
-    const _input_vendor_status_id = document.getElementById("input_vendor_status_id")
+    const _vendor_name = document.getElementById("vendor_name")
+    const _vendor_id = document.getElementById("vendor_id")
     const _input_vendor_show_online = document.getElementById("input_vendor_show_online")
     const _input_vendor_show_sales = document.getElementById("input_vendor_show_sales")
     const _input_vendor_show_ops = document.getElementById("input_vendor_show_ops")
@@ -17,13 +17,47 @@ const Vendor = (function () {
     const _input_vendor_modified_by = document.getElementById("input_vendor_modified_by")
     const _input_vendor_note = document.getElementById("input_vendor_note")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    // ----
     
     const handle_vendor_error = function (msg) {
         toastr.error(msg)
     }
     
     const init_autocomplete = function () {
-        //console.log("Vendor", "init_autocomplete")
+        if (_vendor_name) {
+            $(_vendor_name)
+              .on("change", function () {
+              
+              })
+              .on("click", function () {
+                  $(this).select()
+              })
+              .autocomplete({
+                  serviceUrl: "/api/v1.0/autocomplete/vendors",
+                  minChars: 2,
+                  cache: false,
+                  dataType: "json",
+                  triggerSelectOnValidInput: false,
+                  paramName: "st",
+                  onSelect: function (suggestion) {
+                      if (suggestion.data) {
+                          let vendor = suggestion.data
+                          let vendor_id = vendor.id
+                          let vendor_company_id = vendor.company.id
+                          _vendor_id.value = vendor_id
+                          _vendor_company_id.value = vendor_company_id
+                      }
+                      
+                      // --
+                      //log("Provider.suggestion", suggestion.data)
+                      //globalSelectedProvider = true
+                      //_provider_company_id.value = suggestion.data.company_id
+                      //_provider_id.value = suggestion.data.provider_id
+                      //_provider_name.value = suggestion.data.company_name
+                  },
+              })
+        }
+        
     }
     
     const _default_detail = function () {
@@ -114,10 +148,9 @@ const Vendor = (function () {
         save: function (params) {
             save(params)
         },
-        init: function () {
-            init()
+        init: function (settings) {
+            init(settings)
         },
     }
     
 })()
-Vendor.init()

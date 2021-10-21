@@ -3515,12 +3515,7 @@ const Address = (function () {
     }
     
     const populate_form = function (address) {
-        if (!address) {
-            //Province.get(null, _address_province_id)
-            //Country.id = null
-            //City.id = null
-            //$(_address_country_id).val("").trigger("change")
-        } else {
+        if (address) {
             _address_id.value = (address.id) ? address.id : null
             $(_address_types_id).val((address.address_types_id) ? address.address_types_id : [])
             _address_enabled.checked = (address.enabled === 1)
@@ -3536,12 +3531,9 @@ const Address = (function () {
         }
     }
     
-    const load_modal = function (address) {
-        reset_form()
-        populate_form(address)
-        
-    }
-    
+    /**
+     * reset address edit form
+     */
     const reset_form = function () {
         _address_id.value = ""
         $(_address_types_id).val([])
@@ -3606,6 +3598,10 @@ const Address = (function () {
         }
     }
     
+    /**
+     * load address into object
+     * @param addresses
+     */
     const load_all = function (addresses) {
         Address.all = new Map()
         if (addresses) {
@@ -3622,9 +3618,6 @@ const Address = (function () {
             build_table()
         }
         if (_form_edit_address) {
-            //clear_form()
-            //unload_form()
-            //Address.validator = $(_form_edit_address).validate()
             
             $(_address_country_id).BuildDropDown({
                 data: Array.from(Country.all.values()),
@@ -3744,7 +3737,8 @@ const Address = (function () {
     
     const navigate = function (address) {
         if (address) {
-            load_modal(address)
+            reset_form()
+            populate_form(address)
         }
     }
     
@@ -4164,7 +4158,7 @@ ContactTypes.init()
 const Contact = (function () {
     "use strict"
     
-    const base_url = "/contact"
+    const base_url = "/contacts"
     const _input_contact_id = document.getElementById("input_contact_id")
     const _input_contact_name_first = document.getElementById("input_contact_name_first")
     const _input_contact_name_last = document.getElementById("input_contact_name_last")
@@ -4182,38 +4176,40 @@ const Contact = (function () {
     let $contact_table = $(_table_contact)
     // ----
     const build_table = function () {
-        if (!$.fn.DataTable.isDataTable(_table_contact)) {
-            $contact_table = $(_table_contact).table({
-                table_type: "display_list",
-                data: Contact.all,
-                columnDefs: [
-                    {
-                        title: "ID",
-                        targets: 0,
-                        data: "id",
-                        render: function (data, type, row, meta) {
-                            return data
+        if (_table_contact) {
+            if (!$.fn.DataTable.isDataTable(_table_contact)) {
+                $contact_table = $(_table_contact).table({
+                    table_type: "display_list",
+                    data: Contact.all,
+                    columnDefs: [
+                        {
+                            title: "ID",
+                            targets: 0,
+                            data: "id",
+                            render: function (data, type, row, meta) {
+                                return data
+                            },
                         },
-                    },
-                    {
-                        title: "First Name",
-                        targets: 1,
-                        data: "name_first",
-                        render: function (data, type, row, meta) {
-                            return data
+                        {
+                            title: "First Name",
+                            targets: 1,
+                            data: "name_first",
+                            render: function (data, type, row, meta) {
+                                return data
+                            },
                         },
-                    },
-                    {
-                        title: "Last Name",
-                        targets: 2,
-                        data: "name_last",
-                        render: function (data, type, row, meta) {
-                            return data
+                        {
+                            title: "Last Name",
+                            targets: 2,
+                            data: "name_last",
+                            render: function (data, type, row, meta) {
+                                return data
+                            },
                         },
-                    },
-                ],
-                rowClick: Contact.navigate,
-            })
+                    ],
+                    rowClick: Contact.navigate,
+                })
+            }
         }
     }
     
@@ -4249,10 +4245,12 @@ const Contact = (function () {
         
     }
     
-    const init = function (settings) {
-        console.log(" -- Contact -- ", {})
+    const init = function (contacts) {
         if (_table_contact) {
             build_table()
+        }
+        if (contacts) {
+            load_all(contacts)
         }
     }
     
@@ -4285,8 +4283,8 @@ const Contact = (function () {
         
         $.each(contacts, function (i, contact) {
             let detail = set(contact)
-            
-            Contact.all.set("id", detail)
+            Contact.all.set(detail.id, detail)
+            $contact_table.insertRow(detail)
         })
         
         console.log(" Contact.all", Contact.all)
@@ -4318,9 +4316,6 @@ const Contact = (function () {
     }
     
 })()
-
-Contact.init()
-//end object
 
 const Currency = (function () {
     "use strict"
@@ -4440,8 +4435,8 @@ const Vendor = (function () {
     
     const base_url = "/vendors"
     const _vendor_company_id = document.getElementById("vendor_company_id")
-    const _vendor_name = document.getElementById("vendor_company_id")
-    const _input_vendor_status_id = document.getElementById("input_vendor_status_id")
+    const _vendor_name = document.getElementById("vendor_name")
+    const _vendor_id = document.getElementById("vendor_id")
     const _input_vendor_show_online = document.getElementById("input_vendor_show_online")
     const _input_vendor_show_sales = document.getElementById("input_vendor_show_sales")
     const _input_vendor_show_ops = document.getElementById("input_vendor_show_ops")
@@ -4454,13 +4449,47 @@ const Vendor = (function () {
     const _input_vendor_modified_by = document.getElementById("input_vendor_modified_by")
     const _input_vendor_note = document.getElementById("input_vendor_note")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    // ----
     
     const handle_vendor_error = function (msg) {
         toastr.error(msg)
     }
     
     const init_autocomplete = function () {
-        //console.log("Vendor", "init_autocomplete")
+        if (_vendor_name) {
+            $(_vendor_name)
+              .on("change", function () {
+              
+              })
+              .on("click", function () {
+                  $(this).select()
+              })
+              .autocomplete({
+                  serviceUrl: "/api/v1.0/autocomplete/vendors",
+                  minChars: 2,
+                  cache: false,
+                  dataType: "json",
+                  triggerSelectOnValidInput: false,
+                  paramName: "st",
+                  onSelect: function (suggestion) {
+                      if (suggestion.data) {
+                          let vendor = suggestion.data
+                          let vendor_id = vendor.id
+                          let vendor_company_id = vendor.company.id
+                          _vendor_id.value = vendor_id
+                          _vendor_company_id.value = vendor_company_id
+                      }
+                      
+                      // --
+                      //log("Provider.suggestion", suggestion.data)
+                      //globalSelectedProvider = true
+                      //_provider_company_id.value = suggestion.data.company_id
+                      //_provider_id.value = suggestion.data.provider_id
+                      //_provider_name.value = suggestion.data.company_name
+                  },
+              })
+        }
+        
     }
     
     const _default_detail = function () {
@@ -4551,13 +4580,12 @@ const Vendor = (function () {
         save: function (params) {
             save(params)
         },
-        init: function () {
-            init()
+        init: function (settings) {
+            init(settings)
         },
     }
     
 })()
-Vendor.init()
 
     
 const MessageTypes = (function () {
@@ -5109,10 +5137,6 @@ const Types = (function () {
     }
     
     const init = function (settings) {
-        //Provider.init()
-        //Address.init()
-        //Contact.init()
-        
         Types.address_types = new Map()
         Types.airport_types = new Map()
         Types.categories_ratings_types = new Map()
@@ -5511,14 +5535,18 @@ const Provider = (function () {
         }
         
         let provider = set(provider_detail)
-        
+        if (settings.provider_detail.vendor) {
+            Vendor.init()
+        }
+        Contact.init(contacts)
         Address.init(addresses)
         Address.load_all(addresses)
         Location.init(location)
-        set_autocomplete()
+        init_autocomplete()
     }
-    
-    const set_autocomplete = function () {
+    const _provider_id = document.getElementById("provider_id")
+    const _provider_company_id = document.getElementById("provider_company_id")
+    const init_autocomplete = function () {
         
         $(_provider_name)
           .on("change", function () {
@@ -5535,6 +5563,13 @@ const Provider = (function () {
               triggerSelectOnValidInput: false,
               paramName: "st",
               onSelect: function (suggestion) {
+                  if (suggestion.data) {
+                      let provider = suggestion.data
+                      let provider_id = provider.id
+                      let provider_company_id = provider.company.id
+                      _provider_id.value = provider_id
+                      _provider_company_id.value = provider_company_id
+                  }
                   // --
                   //log("Provider.suggestion", suggestion.data)
                   //globalSelectedProvider = true

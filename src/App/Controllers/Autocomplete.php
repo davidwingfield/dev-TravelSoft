@@ -23,6 +23,17 @@
             exit;
         }
 
+        public function vendors(): void
+        {
+            $st = "";
+            extract($_GET);
+            $results = Vendor::autocomplete($st);
+            header("Content-type:application/json");
+            // ----
+            echo json_encode($results);
+            exit;
+        }
+
         public function locations(): void
         {
             $st = "";

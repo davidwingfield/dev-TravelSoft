@@ -83,6 +83,7 @@
                                 <div class="row">
 
                                     <div class="col-12 col-md-6 col-lg-8">
+
                                         <div class="row" style="">
 
                                             <!-- Contact First Name -->
@@ -109,7 +110,7 @@
                                         <div class="row" style="">
 
                                             <!-- Contact Phone -->
-                                            <div class="col-12 col-md-4" style="">
+                                            <div class="col-12 col-md-6" style="">
                                                 <div class="form-element" style="">
                                                     <label for="contact_phone" style="">Phone:</label>
                                                     <input type="text" id="contact_phone" name="contact_phone" class="form-control" style="" aria-label="Contact Street 3" placeholder="" autocomplete="off"/>
@@ -119,7 +120,7 @@
                                             <!-- /Contact Phone -->
 
                                             <!-- Contact Email -->
-                                            <div class="col-12 col-md-4" style="">
+                                            <div class="col-12 col-md-6" style="">
                                                 <div class="form-element" style="">
                                                     <label for="contact_email" style="">Email:</label>
                                                     <input type="text" id="contact_email" name="contact_email" class="form-control" style="" aria-label="Contact Street 3" placeholder="" autocomplete="off"/>
@@ -128,18 +129,28 @@
                                             </div>
                                             <!-- /Contact Email -->
 
-                                            <!-- Contact  -->
-                                            <div class="col-12 col-md-4" style="">
-
-                                            </div>
-                                            <!-- /Contact  -->
-
                                         </div>
 
-                                        <div class="row" style="">
+                                    </div>
 
+                                    <div class="col-12 col-md-6 col-lg-4">
+
+                                        <div class="form-element">
+                                            <label for="contact_types_id">Contact Types:</label>
+                                            <select id="contact_types_id" name="contact_types_id" class="custom-select" style="width:100%;" multiple="multiple">
+                                                <?php
+                                                    if (isset($page_data, $page_data["types"], $page_data["types"]["contact_types"])) {
+                                                        foreach ($page_data["types"]["contact_types"] AS $k => $contactType) {
+                                                            $id = $contactType["id"];
+                                                            $name = $contactType["name"];
+                                                            echo "<option value='$id'>$name</option>";
+                                                        }
+
+                                                    }
+                                                ?>
+                                            </select>
+                                            <div class="error w-100 text-center" id="contact_types_id-error"></div>
                                         </div>
-
                                     </div>
 
                                 </div>

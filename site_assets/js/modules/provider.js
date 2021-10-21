@@ -6,6 +6,9 @@ const Provider = (function () {
     const _provider_name = document.getElementById("provider_name")
     const _button_add_provider_page_heading = document.getElementById("button_add_provider_page_heading")
     const _table_provider_index = document.getElementById("table_provider_index")
+    const _provider_id = document.getElementById("provider_id")
+    const _provider_company_id = document.getElementById("provider_company_id")
+    const _provider_enabled = document.getElementById("provider_enabled")
     // ----
     let globalSelectedProvider = false
     let $index_table = $(_table_provider_index)
@@ -39,6 +42,16 @@ const Provider = (function () {
             modified_by: user_id,
             note: null,
         }
+    }
+    
+    const populate_form = function (provider) {
+        
+        if (provider) {
+            _provider_id.value = (provider.id) ? provider.id : null
+            _provider_name.value = (provider.id) ? provider.id : null
+            _provider_enabled.checked = (provider.enabled === 1)
+        }
+        
     }
     
     const save = function (params) {
@@ -193,9 +206,9 @@ const Provider = (function () {
         Address.load_all(addresses)
         Location.init(location)
         init_autocomplete()
+        populate_form(provider_detail)
     }
-    const _provider_id = document.getElementById("provider_id")
-    const _provider_company_id = document.getElementById("provider_company_id")
+    
     const init_autocomplete = function () {
         
         $(_provider_name)

@@ -56,9 +56,7 @@ const Country = (function () {
             
             if (settings.dropdowns) {
                 $.each(settings.dropdowns, function (i, dropdown_id) {
-                    
                     let element = document.getElementById(dropdown_id)
-                    
                     if (element) {
                         $(element)
                           .select2({
@@ -109,7 +107,12 @@ const Country = (function () {
                           .on("update", function () {
                               console.log("ss")
                           })
+                          // ----
                           .on("change", function () {
+                              // console.log("Country.id", Country.id)
+                              //console.log("Province.id", Province.id)
+                              //console.log("City.id", City.id)
+                              let country_id = (!isNaN(parseInt($(this).val()))) ? parseInt($(this).val()) : null
                               
                               let province_el_id = $(this)
                                 .attr("id")
@@ -125,12 +128,13 @@ const Country = (function () {
                               if (!isNaN(parseInt($(this).val()))) {
                                   if (province_element) {
                                       Province.get(parseInt($(this).val()), province_element)
-                                      City.get(null, null, city_element)
+                                      //City.get(null, null, city_element)
                                   }
                               } else {
                                   Province.get(null, province_element)
                               }
                           })
+                        // ----
                     }
                     
                 })
@@ -144,7 +148,7 @@ const Country = (function () {
         if (dataToSend) {
             try {
                 sendGetRequest("/api/v1.0/countries", dataToSend, function (data, status, xhr) {
-                    console.log(data)
+                    //console.log(data)
                     
                     if (data) {
                         // Country.all = data.result
@@ -522,8 +526,8 @@ const Country = (function () {
         save: function ($this) {
             save($this)
         },
-        set: function (settings) {
-            set(settings)
+        set: function (country_id) {
+            set(country_id)
         },
         set_detail: function (country) {
             set_detail(country)

@@ -16,10 +16,10 @@ const Types = (function () {
     }
     
     const init = function (settings) {
-        Provider.init()
-        Address.init()
-        Contact.init()
-        //
+        //Provider.init()
+        //Address.init()
+        //Contact.init()
+        
         Types.address_types = new Map()
         Types.airport_types = new Map()
         Types.categories_ratings_types = new Map()
@@ -53,10 +53,12 @@ const Types = (function () {
         if (settings.contact_types) {
             setType(settings.contact_types, "contact_types")
         }
+        
         console.log("settings", settings)
+        
         if (settings.countries) {
-            
             Country.load_all(settings.countries)
+            console.log(Country.all)
         }
         
         if (settings.currency) {

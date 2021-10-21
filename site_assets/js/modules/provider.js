@@ -13,7 +13,7 @@ const Provider = (function () {
     // ----
     $(_button_add_provider_page_heading)
       .on("click", function () {
-          console.log("test")
+          //console.log("test")
       })
     
     const handle_provider_error = function (msg) {
@@ -112,7 +112,7 @@ const Provider = (function () {
     }
     
     const build_index_table = function () {
-        log("build_index_table")
+        //log("build_index_table")
         $index_table = $(_table_provider_index).table({
             table_type: "display_list",
             data: Provider.all,
@@ -185,11 +185,11 @@ const Provider = (function () {
         }
         
         let provider = set(provider_detail)
-        Address.init()
-        Address.load_all(addresses)
-        set_autocomplete()
-        Location.init(location)
         
+        Address.init(addresses)
+        Address.load_all(addresses)
+        Location.init(location)
+        set_autocomplete()
     }
     
     const set_autocomplete = function () {

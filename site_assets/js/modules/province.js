@@ -111,6 +111,8 @@ const Province = (function () {
             if (settings.dropdowns) {
                 
                 $.each(settings.dropdowns, function (i, dropdown_id) {
+                    let country_id = Country.id
+                    let province_id = Province.id
                     let element = document.getElementById(dropdown_id)
                     if (element) {
                         
@@ -154,7 +156,7 @@ const Province = (function () {
                               
                           })
                           .on("change", function () {
-                              
+                              console.log(" -- Province.change -- ", Province.id)
                               let city_el_id = $(this)
                                 .attr("id")
                                 .replace("province", "city")
@@ -167,16 +169,23 @@ const Province = (function () {
                               let country_element = document.getElementById(country_el_id)
                               
                               if (city_element) {
-                                  
                                   if (country_element) {
+                                      country_id = parseInt(country_element.value)
                                       if (!isNaN(parseInt(country_element.value))) {
-                                          let country_id = parseInt(country_element.value)
+                                          
+                                          //
+                                          
                                           if (!isNaN(parseInt($(this).val()))) {
                                               City.get(country_id, parseInt($(this).val()), city_element)
                                           } else {
                                               City.id = null
                                               City.get(country_id, null, city_element)
+                                              if (City.id) {
+                                              
+                                              }
                                           }
+                                          //
+                                          
                                       } else {
                                           City.id = null
                                           City.get(null, null, city_element)
@@ -218,6 +227,7 @@ const Province = (function () {
         let id = null
         if (province) {
             id = validInt(province.id)
+            
             detail = {
                 id: validInt(province.id),
                 name: (province.name) ? province.name : null,
@@ -427,13 +437,16 @@ const Province = (function () {
         if (Province.id !== null) {
             province_id = Province.id
         }
+        if (!el) {
+            return
+        }
         
         if (!el || !country_id) {
             $(el).BuildDropDown({
                 data: Array.from(Province.all.values()),
                 title: "Province",
-                id_field: "province_id",
-                text_field: "province_name",
+                id_field: "id",
+                text_field: "name",
                 first_selectable: false,
             })
             $(el).val("").trigger("change")

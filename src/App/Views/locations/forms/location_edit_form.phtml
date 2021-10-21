@@ -35,13 +35,7 @@
                 <!-- Panel Heading Actions -->
                 <div class="col-4 d-flex align-items-center justify-content-end" style="">
                     <div class="panel-actions p-0 m-0" style="">
-                        
-                        <!-- Location Enabled -->
-                        <div class="custom-control custom-switch" style="">
-                            <input id="location_enabled" name="location_enabled" type="checkbox" value="1" class="custom-control-input" style="">
-                            <label for="location_enabled" class="custom-control-label" style="">Enabled</label>
-                        </div>
-                        <!-- /Location Enabled -->
+                        <a class="panel-action fas fa-undo" data-toggle="undo" href="javascript:void(0);" style="display:inline-flex"></a>
                     
                     </div>
                 </div>
@@ -55,8 +49,8 @@
         <div class="panel-body px-0 w-100" style="">
             
             <div class="row">
-                
-                <div class="col-lg-12 col-lg-6 mb-1">
+
+                <div class="col-lg-12 col-lg-6">
                     
                     <label for="location_name">Location:</label>
                     
@@ -100,30 +94,38 @@
             <div class="card rgba-blue-grey-slight m-3" id="form_location_details">
 
                 <div class="card-body">
-                    <h5 class="card-title">Panel title</h5>
+
+                    <h5 class="card-title">
+                        <span>Panel title</span>
+                        <a id="button_close_edit_location_form" href="javascript:void(0);" class="panel-button-close fas fa-times" aria-hidden="true"></a>
+                    </h5>
                     <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
 
+                    <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
                     <div class="">
                         <div class="row">
 
-                            <div class="col-lg-6 mb-1">
+                            <div class="col-12 col-md-4">
                                 <label for="location_id">Location Id:</label>
                                 <input type="text" id="location_id" name="location_id" class="form-control" value="" readonly>
                                 <div class="error w-100 text-center" id="location_id-error">&nbsp;</div>
                             </div>
-                            <div class="col-lg-6 mb-1">
+
+                            <div class="col-12 col-md-4">
 
                                 <div class="form-element">
 
                                     <label for="location_types_id">Location Type:</label>
                                     <select id="location_types_id" name="location_types_id" class="form-control">
                                         <?php
+                                            /*
                                             echo "<option value='' selected readonly disabled>-- Location Types --</option>";
                                             foreach ($location_types AS $k => $v) {
                                                 $val = $v["id"];
                                                 $text = $v["name"];
                                                 echo "<option value='$val'>$text</option>";
                                             }
+                                            //*/
                                         ?>
                                     </select>
                                     <div class="error w-100 text-center" id="location_types_id-error">&nbsp;</div>
@@ -132,11 +134,20 @@
 
                             </div>
 
+                            <div class="col-12 col-md-4 d-flex align-self-center justify-content-end pb-2">
+                                <!-- Location Enabled -->
+                                <div class="custom-control custom-switch" style="">
+                                    <input id="location_enabled" name="location_enabled" type="checkbox" value="1" class="custom-control-input" style="">
+                                    <label for="location_enabled" class="custom-control-label p-0" style="">Enabled</label>
+                                </div>
+                                <!-- /Location Enabled -->
+                            </div>
+
                         </div>
 
                         <div class="row">
 
-                            <div class="col-lg-12 mb-1">
+                            <div class="col-lg-12">
 
                                 <div class="form-element">
 
@@ -152,7 +163,7 @@
 
                         <div class="row">
 
-                            <div class="col-lg-12 mb-1">
+                            <div class="col-lg-12">
 
                                 <div class="form-element">
 
@@ -168,7 +179,7 @@
 
                         <div class="row">
 
-                            <div class="col-lg-12 mb-1">
+                            <div class="col-lg-12">
 
                                 <div class="form-element">
 
@@ -224,7 +235,7 @@
 
                         <div class="row">
 
-                            <div class="col-lg-12 mb-1">
+                            <div class="col-lg-12">
 
                                 <div class="form-element">
 
@@ -239,15 +250,13 @@
                         </div>
                     </div>
 
-                    <a href="#" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0">Update</a>
+                    <div class="text-right w-100">
+                        <a href="javascript:void(0);" id="button_clear_form_edit_location" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+                        <a href="javascript:void(0);" id="button_submit_form_edit_location" class="btn btn-primary btn-sm waves-effect waves-light" style="">Save</a>
+                    </div>
 
                 </div>
 
-                <div class="rounded-bottom mdb-color lighten-3 text-center py-3">
-                    <button type="button" class="btn btn-primary btn-sm">
-                        Read more <i class="fas fa-angle-double-right"></i>
-                    </button>
-                </div>
             </div>
         
         </div>

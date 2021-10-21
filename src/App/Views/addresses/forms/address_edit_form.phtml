@@ -4,191 +4,193 @@
     <!-- Panel -->
     <section class="panel z-depth-0 w-100 mb-0" style="">
         
-        <!-- Panel Heading -->
-        <header class="panel-heading" style="">
-            <div class="row">
-                
-                <!-- Panel Heading Title -->
-                <div class="col-8">
-                    <h4 class="panel-title">Address Details</h4>
-                </div>
-                <!-- /Panel Heading Title -->
-                
-                <!-- Panel Heading Actions -->
-                <div class="col-4 d-flex align-items-center justify-content-end" style="">
-                    <div class="panel-actions p-0 m-0" style="">
-                    
-                    </div>
-                </div>
-                <!-- /Panel Heading Actions -->
-            
-            </div>
-        </header>
-        <!-- /Panel Heading -->
-        
         <!-- Panel Body -->
-        <div class="panel-body px-0 w-100" style="">
+        <div class="panel-body p-0 w-100" style="">
             
             <div class="row" style="">
-                
-                <div class="col-12 col-lg-7 order-2 order-lg-1" style="">
+
+                <div class="col-12 col-lg-5" style="">
+                    <?php include_once(VIEWS_PATH . "/addresses/tables/provider_edit_address_table.phtml"); ?>
+                </div>
+
+                <div class="col-12 col-lg-7" style="">
                     
                     <div class="card  rgba-blue-grey-slight m-3" id="card_edit_address_form">
                         
                         <div class="card-body">
                             
-                            <h5 class="card-title">Address Edit Form</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">&nbsp;</h6>
-                            
-                            <div class="row" style="">
-                                
-                                <!-- Address Id -->
-                                <div class="col-12 col-md-6" style="">
-                                    <div class="form-element" style="">
-                                        <label for="address_id" style="">Address Id:</label>
-                                        <input type="text" id="address_id" name="address_id" class="form-control" style="" aria-label="Address Id" placeholder="" autocomplete="off" readonly/>
-                                        <div id="address_id-error" class="error w-100 text-center" style="">&nbsp;</div>
-                                    </div>
-                                </div>
-                                <!-- /Address Id -->
-                                
-                                <!-- Address Enabled -->
-                                <div class="col-12 col-md-6 d-flex align-self-end justify-content-end pb-2" style="">
-                                    <div class="form-element">
-                                        <div class="custom-control custom-switch" style="">
-                                            <input id="address_enabled" name="address_enabled" type="checkbox" value="1" class="custom-control-input" style="">
-                                            <label for="address_enabled" class="custom-control-label p-0" style="">Enabled</label>
+                            <h5 class="card-title">
+                                Address Edit Form
+                                <a id="button_close_edit_address_form" href="javascript:void(0);" class="panel-button-close fas fa-times" aria-hidden="true"></a>
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
+                            <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+
+                            <div class="">
+                                <div class="row" style="">
+
+                                    <!-- Address Id -->
+                                    <div class="col-12 col-md-6" style="">
+                                        <div class="form-element" style="">
+                                            <label for="address_id" style="">Address Id:</label>
+                                            <input type="text" id="address_id" name="address_id" class="form-control" style="" aria-label="Address Id" placeholder="" autocomplete="off" readonly/>
+                                            <div id="address_id-error" class="error w-100 text-center" style="">&nbsp;</div>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- /Address Enabled -->
-                            
-                            </div>
-                            
-                            <div class="row">
-                                
-                                <div class="col-12 col-md-6 col-lg-8">
-                                    <div class="row" style="">
-                                        
-                                        <!-- Address Street 1 -->
-                                        <div class="col-12 col-lg-12 mb-1" style="">
-                                            <div class="form-element" style="">
-                                                <label for="address_street_1" style="">Street 1:</label>
-                                                <input type="text" id="address_street_1" name="address_street_1" class="form-control" style="" aria-label="Address Street 1" placeholder="" autocomplete="off"/>
-                                                <div id="address_street_1-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                    <!-- /Address Id -->
+
+                                    <!-- Address Enabled -->
+                                    <div class="col-12 col-md-6 d-flex align-self-end justify-content-end pb-2" style="">
+                                        <div class="form-element">
+                                            <div class="custom-control custom-switch" style="">
+                                                <input id="address_enabled" name="address_enabled" type="checkbox" value="1" class="custom-control-input" style="">
+                                                <label for="address_enabled" class="custom-control-label p-0" style="">Enabled</label>
                                             </div>
                                         </div>
-                                        <!-- /Address Street 1 -->
-                                    
                                     </div>
-                                    
-                                    <div class="row" style="">
-                                        
-                                        <!-- Address Street 2 -->
-                                        <div class="col-12 col-lg-12 mb-1" style="">
-                                            <div class="form-element" style="">
-                                                <label for="address_street_2" style="">Street 2:</label>
-                                                <input type="text" id="address_street_2" name="address_street_2" class="form-control" style="" aria-label="Address Street 2" placeholder="" autocomplete="off"/>
-                                                <div id="address_street_2-error" class="error w-100 text-center" style="">&nbsp;</div>
-                                            </div>
-                                        </div>
-                                        <!-- /Address Street 2 -->
-                                    
-                                    </div>
-                                    
-                                    <div class="row" style="">
-                                        
-                                        <!-- Address Street 3 -->
-                                        <div class="col-12 col-lg-12 mb-1" style="">
-                                            <div class="form-element" style="">
-                                                <label for="address_street_3" style="">Street 3:</label>
-                                                <input type="text" id="address_street_3" name="address_street_3" class="form-control" style="" aria-label="Address Street 3" placeholder="" autocomplete="off"/>
-                                                <div id="address_street_3-error" class="error w-100 text-center" style="">&nbsp;</div>
-                                            </div>
-                                        </div>
-                                        <!-- /Address Street 3 -->
-                                    
-                                    </div>
-                                
+                                    <!-- /Address Enabled -->
+
                                 </div>
-                                
-                                <div class="col-12 col-md-6 col-lg-4">
-                                    <div class="form-element">
-                                        <label for="address_types_id">Address Types:</label>
-                                        <select id="address_types_id" name="address_types_id" class="js-example-basic-multiple" style="width:100%;" multiple="multiple">
-                                            <?php
-                                                if (isset($page_data, $page_data["types"], $page_data["types"]["address_types"])) {
-                                                    foreach ($page_data["types"]["address_types"] AS $k => $addressType) {
-                                                        $id = $addressType["id"];
-                                                        $name = $addressType["name"];
-                                                        echo "<option value='$id'>$name</option>";
+
+                                <div class="row">
+
+                                    <div class="col-12 col-md-6 col-lg-8">
+                                        <div class="row" style="">
+
+                                            <!-- Address Street 1 -->
+                                            <div class="col-12 col-lg-12 mb-1" style="">
+                                                <div class="form-element" style="">
+                                                    <label for="address_street_1" style="">Street 1:</label>
+                                                    <input type="text" id="address_street_1" name="address_street_1" class="form-control" style="" aria-label="Address Street 1" placeholder="" autocomplete="off"/>
+                                                    <div id="address_street_1-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                                </div>
+                                            </div>
+                                            <!-- /Address Street 1 -->
+
+                                        </div>
+
+                                        <div class="row" style="">
+
+                                            <!-- Address Street 2 -->
+                                            <div class="col-12 col-lg-12 mb-1" style="">
+                                                <div class="form-element" style="">
+                                                    <label for="address_street_2" style="">Street 2:</label>
+                                                    <input type="text" id="address_street_2" name="address_street_2" class="form-control" style="" aria-label="Address Street 2" placeholder="" autocomplete="off"/>
+                                                    <div id="address_street_2-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                                </div>
+                                            </div>
+                                            <!-- /Address Street 2 -->
+
+                                        </div>
+
+                                        <div class="row" style="">
+
+                                            <!-- Address Street 3 -->
+                                            <div class="col-12 col-lg-12 mb-1" style="">
+                                                <div class="form-element" style="">
+                                                    <label for="address_street_3" style="">Street 3:</label>
+                                                    <input type="text" id="address_street_3" name="address_street_3" class="form-control" style="" aria-label="Address Street 3" placeholder="" autocomplete="off"/>
+                                                    <div id="address_street_3-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                                </div>
+                                            </div>
+                                            <!-- /Address Street 3 -->
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="form-element">
+                                            <label for="address_types_id">Address Types:</label>
+                                            <select id="address_types_id" name="address_types_id" class="custom-select" style="width:100%;" multiple="multiple">
+                                                <?php
+                                                    if (isset($page_data, $page_data["types"], $page_data["types"]["address_types"])) {
+                                                        foreach ($page_data["types"]["address_types"] AS $k => $addressType) {
+                                                            $id = $addressType["id"];
+                                                            $name = $addressType["name"];
+                                                            echo "<option value='$id'>$name</option>";
+                                                        }
+
+                                                    }
+                                                ?>
+                                            </select>
+                                            <div class="error w-100 text-center" id="address_types_id-error"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row" style="">
+                                    <!-- Address Country Id -->
+                                    <div class="col-12 col-md-4">
+                                        <div class="form-element">
+                                            <label for="address_country_id">Country:</label>
+                                            <select id="address_country_id" name="address_country_id" data-type="country" class="form-control" style="width:100%;" required>
+                                                <?php
+                                                    //echo "<option value='' readonly disabled selected>-- Coiuntry --</option>";
+                                                    if (isset($page_data, $page_data["types"], $page_data["types"]["countries"])) {
+                                                        $countries = $page_data["types"]["countries"];
+
+                                                        foreach ($countries AS $k => $country) {
+                                                            $id = $country["id"];
+                                                            $name = $country["name"];
+                                                            //echo "<option value='$id'>$name</option>";
+                                                        }
+                                                        //echo "<pre>" . var_export($page_data["types"]["countries"], 1) . "</pre>";
                                                     }
 
-                                                }
-                                            ?>
-                                        </select>
-                                        <div class="error w-100 text-center" id="address_types_id-error"></div>
+                                                ?>
+                                            </select>
+                                            <div class="error w-100 text-center" id="address_country_id-error"></div>
+                                        </div>
                                     </div>
+                                    <!-- /Address Country Id -->
+
+                                    <!-- Address Province Id -->
+                                    <div class="col-12 col-md-4">
+                                        <div class="form-element">
+                                            <label for="address_province_id">Province:</label>
+                                            <select class="form-control" name="address_province_id" id="address_province_id" data-type="province" style="width:100%;" required></select>
+                                            <div class="error w-100 text-center" id="address_province_id-error"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Address Province Id -->
+
+                                    <!-- Address City Id -->
+                                    <div class="col-12 col-md-4">
+                                        <div class="form-element">
+                                            <label for="address_city_id">City:</label>
+                                            <select class="form-control" name="address_city_id" id="address_city_id" data-type="city" style="width:100%;" required></select>
+                                            <div class="error w-100 text-center" id="address_city_id-error"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Address City Id -->
                                 </div>
-                            
+
+                                <div class="row" style="">
+                                    <!-- Address Postal Code -->
+                                    <div class="col-12 col-lg-12 mb-1" style="">
+                                        <div class="form-element" style="">
+                                            <label for="address_postal_code" style="">Postal Code:</label>
+                                            <input type="text" id="address_postal_code" name="address_postal_code" class="form-control" style="" aria-label="Address Id" placeholder="" autocomplete="off"/>
+                                            <div id="address_postal_code-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                        </div>
+                                    </div>
+                                    <!-- /Address Postal Code -->
+                                </div>
                             </div>
-                            
-                            <div class="row" style="">
-                                <!-- Address Country Id -->
-                                <div class="col-12 col-md-4">
-                                    <div class="form-element">
-                                        <label for="address_country_id">Country:</label>
-                                        <select id="address_country_id" name="address_country_id" data-type="country" class="form-control" style="width:100%;" required></select>
-                                        <div class="error w-100 text-center" id="address_country_id-error"></div>
-                                    </div>
-                                </div>
-                                <!-- /Address Country Id -->
-                                
-                                <!-- Address Province Id -->
-                                <div class="col-12 col-md-4">
-                                    <div class="form-element">
-                                        <label for="address_province_id">Province:</label>
-                                        <select class="form-control" name="address_province_id" id="address_province_id" data-type="province" style="width:100%;" required></select>
-                                        <div class="error w-100 text-center" id="address_province_id-error"></div>
-                                    </div>
-                                </div>
-                                <!-- Address Province Id -->
-                                
-                                <!-- Address City Id -->
-                                <div class="col-12 col-md-4">
-                                    <div class="form-element">
-                                        <label for="address_city_id">City:</label>
-                                        <select class="form-control" name="address_city_id" id="address_city_id" data-type="city" style="width:100%;" required></select>
-                                        <div class="error w-100 text-center" id="address_city_id-error"></div>
-                                    </div>
-                                </div>
-                                <!-- Address City Id -->
+
+                            <div class="text-right w-100">
+                                <a href="javascript:void(0);" id="button_clear_form_edit_address" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+                                <a href="javascript:void(0);" id="button_submit_form_edit_address" class="btn btn-primary btn-sm waves-effect waves-light" style="">Save</a>
                             </div>
-                            
-                            <div class="row" style="">
-                                <!-- Address Postal Code -->
-                                <div class="col-12 col-lg-12 mb-1" style="">
-                                    <div class="form-element" style="">
-                                        <label for="address_postal_code" style="">Postal Code:</label>
-                                        <input type="text" id="address_postal_code" name="address_postal_code" class="form-control" style="" aria-label="Address Id" placeholder="" autocomplete="off"/>
-                                        <div id="address_postal_code-error" class="error w-100 text-center" style="">&nbsp;</div>
-                                    </div>
-                                </div>
-                                <!-- /Address Postal Code -->
-                            </div>
-                            
-                            <a href="#" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect">cancel</a>
-                            <button type="button" id="button_submit_form_edit_provider" class="btn btn-primary btn-sm" style="">Save Provider Details</button>
+                        
                         </div>
                     
                     </div>
                 
                 </div>
-                
-                <div class="col-12 col-lg-5 mb-1 order-1 order-lg-2" style="">
-                    <?php include_once(VIEWS_PATH . "/addresses/tables/provider_edit_address_table.phtml"); ?>
-                </div>
-            
+
             </div>
         
         </div>

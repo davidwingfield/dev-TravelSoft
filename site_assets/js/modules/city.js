@@ -85,13 +85,14 @@ const City = (function () {
                               let id = $(this)
                                 .attr("id")
                                 .replace("city", "city")
-                              let city_element = document.getElementById(id)
+                              
+                              //let city_element = document.getElementById(id)
                               
                               if (!isNaN(parseInt($(this).val()))) {
-                                  City.id = $(this).val()
-                                  if (city_element) {
-                                      //City.get(parseInt($(this).val()), city_element)
-                                  }
+                                  //City.id = $(this).val()
+                                  //if (city_element) {
+                                  //City.get(parseInt($(this).val()), city_element)
+                                  //}
                               }
                               
                           })
@@ -116,7 +117,7 @@ const City = (function () {
                 })
             } catch (e) {
                 console.log(e)
-                return handle_city_error("Error Validating Province")
+                return handle_city_error("Error Validating City")
             }
         } else {
             return handle_city_error("Error Loading Province- Missing Data")
@@ -130,7 +131,7 @@ const City = (function () {
                     if (data && data[0]) {
                         City.all.set(data[0].city_id, data[0])
                         let city_elements = $("select[data-type='city']")
-                        console.log(city_elements.length)
+                        //console.log(city_elements.length)
                         City.id = data[0].city_id
                         city_elements.each(function (index, element) {
                             var newOption = new Option(data[0].city_name, data[0].city_id, false, false)
@@ -306,9 +307,8 @@ const City = (function () {
         if (city) {
             id = validInt(city.id)
             detail = {
-                id: id,
+                id: validInt(city.id),
                 province_id: validInt(city.province_id),
-                country_id: validInt(city.country_id),
                 created_by: (city.created_by) ? city.created_by : user_id,
                 modified_by: (city.created_by) ? city.created_by : user_id,
                 sort_order: (city.sort_order) ? city.sort_order : null,
@@ -321,14 +321,14 @@ const City = (function () {
             
         }
         
-        City.id = id
+        //City.id = id
         City.detail = detail
         return detail
     }
     
     const get = function (country_id, province_id, el) {
         City.all = new Map()
-        let city_id = ""
+        let city_id = null
         if (City.id !== null) {
             city_id = City.id
         }
@@ -346,28 +346,34 @@ const City = (function () {
                 first_selectable: false,
             })
             
-        } else {
-            let dataToSend = {
-                country_id: parseInt(country_id),
-                province_id: parseInt(province_id),
-            }
-            
-            fetch_city_list(dataToSend, function (cities) {
-                if (cities) {
-                    load_all(cities)
-                    
-                    $(el).BuildDropDown({
-                        data: Array.from(City.all.values()),
-                        title: "City",
-                        id_field: "id",
-                        text_field: "name",
-                        first_selectable: false,
-                    })
-                    
+            $(el).val("").trigger("change")
+            return
+        }
+        
+        let dataToSend = {
+            country_id: parseInt(country_id),
+            province_id: parseInt(province_id),
+        }
+        
+        fetch_city_list(dataToSend, function (cities) {
+            if (cities) {
+                load_all(cities)
+                
+                $(el).BuildDropDown({
+                    data: Array.from(City.all.values()),
+                    title: "City",
+                    id_field: "id",
+                    text_field: "name",
+                    first_selectable: false,
+                })
+                
+                if (city_id !== "" && city_id !== null) {
+                    //console.log($(el).attr("id"))
+                    //console.log("city_id", city_id)
                     $(el).val(city_id).trigger("change")
                 }
-            })
-        }
+            }
+        })
         
     }
     

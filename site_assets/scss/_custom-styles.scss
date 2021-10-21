@@ -1002,3 +1002,33 @@ table td {
   box-shadow: none;
   outline: 0;
 }
+
+span.select2-selection:focus,
+span.select2-selection:active, {
+  border-color: #ff884f;
+  box-shadow: none;
+  outline: 0;
+}
+
+.panel-button-close {
+  font-weight: bold;
+  float: right;
+  padding: 8px 10px;
+  cursor: pointer;
+  text-decoration: none;
+  color: #a3afb7;
+  background-color: transparent;
+  
+}
+
+.form-check-input[disabled] ~ .form-check-label,
+.form-check-input:disabled ~ .form-check-label
+.form-check-input[disabled][type=radio]:checked + label:after,
+label.btn input[type=radio]:disabled:checked + label:after {
+
+}
+
+
+.panel-button-close:hover {
+  color: #526069;
+}

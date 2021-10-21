@@ -3,6 +3,13 @@
     if (isset($_SESSION["user_id"])) {
         $user_id = (int)$_SESSION["user_id"];
     }
+
+    if (isset($page_data, $page_data["types"])) {
+        if (!defined("TYPES")) {
+            define("TYPES", json_encode($page_data["types"], 1));
+        }
+    }
+
 ?>
 <body class="trips-skin">
 <?php include_once(__DIR__ . "/body/pre_loader.phtml"); ?>

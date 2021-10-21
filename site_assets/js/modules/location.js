@@ -15,10 +15,12 @@ const Location = (function () {
     const _location_name = document.getElementById("location_name")
     const _location_enabled = document.getElementById("location_enabled")
     const _temp_location_id = document.getElementById("temp_location_id")
+    const _button_clear_form_edit_location = document.getElementById("button_clear_form_edit_location")
     const _button_close_location_edit = document.getElementById("button_close_location_edit")
     const _button_submit_form_edit_location = document.getElementById("button_submit_form_edit_location")
     const _button_edit_location = document.getElementById("button_edit_location")
     const _button_add_location_edit = document.getElementById("button_add_location_edit")
+    const _button_close_edit_location_form = document.getElementById("button_close_edit_location_form")
     const form_rules = {
         rules: {
             location_types_id: {
@@ -64,6 +66,8 @@ const Location = (function () {
         },
     }
     // ----
+    let temp_location = {}
+    let new_filter = false
     let validator
     let validated = false
     let default_display = default_address_view
@@ -145,6 +149,34 @@ const Location = (function () {
         toastr.error(msg)
     }
     // ----
+    $(_button_close_edit_location_form)
+      .on("click", function () {
+          populate_form(temp_location)
+          
+          switch (defaultLocationDisplayFormat) {
+              case "short":
+                  _location_name_filter.value = temp_location.display_short
+                  break
+              case "medium":
+                  _location_name_filter.value = temp_location.display_medium
+                  break
+              default:
+                  _location_name_filter.value = temp_location.display_long
+          }
+          _location_id.value = temp_location.id
+          
+          hide_form()
+      })
+    
+    $(_button_clear_form_edit_location)
+      .on("click", function () {
+      
+      })
+    
+    $(_button_submit_form_edit_location)
+      .on("click", function () {
+          save()
+      })
     
     $(_location_name_filter)
       .on("click", function () {
@@ -158,11 +190,23 @@ const Location = (function () {
           }
       })
       .on("search", function () {
-          //set_detail()
-          //reset_form()
-          //populate_form()
+          new_filter = true
+          set_detail()
+          reset_form()
+          populate_form()
       })
-    
+    $(_button_edit_location)
+      .on("click", function () {
+          if (_location_id.value === "") {
+              //set_detail()
+              //reset_form()
+              //populate_form()
+          } else {
+          
+          }
+          
+          show_form()
+      })
     $("input[name='location_display']")
       .on("change", function () {
           let selected_value = $("input[name='location_display']:checked").val()
@@ -200,13 +244,22 @@ const Location = (function () {
     
     const init = function (location) {
         validator_init(form_rules)
-        reset_form()
+        
         if (location) {
-            set(location)
+            set_detail(location)
         }
         
         if (_form_edit_location) {
+            
             validator = $(_form_edit_location).validate()
+            
+            $(_location_types_id).BuildDropDown({
+                data: Array.from(Types.location_types.values()),
+                title: "Location Types",
+                id_field: "id",
+                text_field: "name",
+                first_selectable: false,
+            })
             
             $(_location_country_id).BuildDropDown({
                 data: Array.from(Country.all.values()),
@@ -251,12 +304,13 @@ const Location = (function () {
         }
         
         init_autocomplete()
-        populate_form(location)
-        //hide_form()
+        set(location)
+        hide_form()
     }
     
-    const set = function (location) {
+    const set_detail = function (location) {
         let detail = _default_detail()
+        temp_location = detail
         
         if (location) {
             
@@ -331,14 +385,45 @@ const Location = (function () {
             detail.modified_by = (location.modified_by) ? location.modified_by : user_id
             detail.note = (location.note) ? location.note : null
             
+            Province.set_detail(detail.province)
+            Country.set_detail(detail.country)
+            City.set_detail(detail.city)
         }
         
         Location.detail = detail
         return detail
     }
     
-    const save = function (params) {
+    const set = function (location) {
+        let detail = set_detail(location)
+        reset_form()
+        populate_form(detail)
+    }
     
+    const save = function (params) {
+        validated = true
+        
+        let dataToSend = {
+            id: (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null,
+            city_id: (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null,
+            province_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null,
+            country_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_country_id.value) : null,
+            location_types_id: (!isNaN(parseInt(_location_types_id.value))) ? parseInt(_location_types_id.value) : null,
+            
+            name: (_location_name && _location_name.value !== "") ? _location_name.value : null,
+            street: (_location_street && _location_street.value !== "") ? _location_street.value : null,
+            street2: (_location_street2 && _location_street2.value !== "") ? _location_street2.value : null,
+            zipcode: (_location_zipcode && _location_zipcode.value !== "") ? _location_zipcode.value : null,
+            
+            created_by: (isNaN(parseInt(_location_id.value))) ? user_id : null,
+            modified_by: user_id,
+            enabled: 1,
+            date_created: (!isNaN(parseInt(_location_id.value))) ? null : formatDateMySQL(),
+            date_modified: (!isNaN(parseInt(_location_id.value))) ? formatDateMySQL() : null,
+            note: null,
+        }
+        
+        console.log("save", dataToSend)
     }
     
     const get = function (id) {
@@ -412,13 +497,16 @@ const Location = (function () {
     }
     
     const populate_form = function (location) {
-        
         if (location) {
-            console.log("location", location)
+            //console.log("Location.country", location.country)
+            //console.log("Location.province", location.province)
+            //console.log("Location.city", location.city)
+            ///////////////////////////////////////////////////
             Country.set_detail(location.country)
             Province.set_detail(location.province)
             City.set_detail(location.city)
             
+            Country.id = location.country.id
             City.id = location.city.id
             Province.id = location.province.id
             

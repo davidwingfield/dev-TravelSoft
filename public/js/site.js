@@ -1124,10 +1124,12 @@ const Location = (function () {
     const _location_name = document.getElementById("location_name")
     const _location_enabled = document.getElementById("location_enabled")
     const _temp_location_id = document.getElementById("temp_location_id")
+    const _button_clear_form_edit_location = document.getElementById("button_clear_form_edit_location")
     const _button_close_location_edit = document.getElementById("button_close_location_edit")
     const _button_submit_form_edit_location = document.getElementById("button_submit_form_edit_location")
     const _button_edit_location = document.getElementById("button_edit_location")
     const _button_add_location_edit = document.getElementById("button_add_location_edit")
+    const _button_close_edit_location_form = document.getElementById("button_close_edit_location_form")
     const form_rules = {
         rules: {
             location_types_id: {
@@ -1173,6 +1175,8 @@ const Location = (function () {
         },
     }
     // ----
+    let temp_location = {}
+    let new_filter = false
     let validator
     let validated = false
     let default_display = default_address_view
@@ -1254,6 +1258,34 @@ const Location = (function () {
         toastr.error(msg)
     }
     // ----
+    $(_button_close_edit_location_form)
+      .on("click", function () {
+          populate_form(temp_location)
+          
+          switch (defaultLocationDisplayFormat) {
+              case "short":
+                  _location_name_filter.value = temp_location.display_short
+                  break
+              case "medium":
+                  _location_name_filter.value = temp_location.display_medium
+                  break
+              default:
+                  _location_name_filter.value = temp_location.display_long
+          }
+          _location_id.value = temp_location.id
+          
+          hide_form()
+      })
+    
+    $(_button_clear_form_edit_location)
+      .on("click", function () {
+      
+      })
+    
+    $(_button_submit_form_edit_location)
+      .on("click", function () {
+          save()
+      })
     
     $(_location_name_filter)
       .on("click", function () {
@@ -1267,11 +1299,23 @@ const Location = (function () {
           }
       })
       .on("search", function () {
-          //set_detail()
-          //reset_form()
-          //populate_form()
+          new_filter = true
+          set_detail()
+          reset_form()
+          populate_form()
       })
-    
+    $(_button_edit_location)
+      .on("click", function () {
+          if (_location_id.value === "") {
+              //set_detail()
+              //reset_form()
+              //populate_form()
+          } else {
+          
+          }
+          
+          show_form()
+      })
     $("input[name='location_display']")
       .on("change", function () {
           let selected_value = $("input[name='location_display']:checked").val()
@@ -1309,13 +1353,22 @@ const Location = (function () {
     
     const init = function (location) {
         validator_init(form_rules)
-        reset_form()
+        
         if (location) {
-            set(location)
+            set_detail(location)
         }
         
         if (_form_edit_location) {
+            
             validator = $(_form_edit_location).validate()
+            
+            $(_location_types_id).BuildDropDown({
+                data: Array.from(Types.location_types.values()),
+                title: "Location Types",
+                id_field: "id",
+                text_field: "name",
+                first_selectable: false,
+            })
             
             $(_location_country_id).BuildDropDown({
                 data: Array.from(Country.all.values()),
@@ -1360,12 +1413,13 @@ const Location = (function () {
         }
         
         init_autocomplete()
-        populate_form(location)
-        //hide_form()
+        set(location)
+        hide_form()
     }
     
-    const set = function (location) {
+    const set_detail = function (location) {
         let detail = _default_detail()
+        temp_location = detail
         
         if (location) {
             
@@ -1440,14 +1494,45 @@ const Location = (function () {
             detail.modified_by = (location.modified_by) ? location.modified_by : user_id
             detail.note = (location.note) ? location.note : null
             
+            Province.set_detail(detail.province)
+            Country.set_detail(detail.country)
+            City.set_detail(detail.city)
         }
         
         Location.detail = detail
         return detail
     }
     
-    const save = function (params) {
+    const set = function (location) {
+        let detail = set_detail(location)
+        reset_form()
+        populate_form(detail)
+    }
     
+    const save = function (params) {
+        validated = true
+        
+        let dataToSend = {
+            id: (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null,
+            city_id: (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null,
+            province_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null,
+            country_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_country_id.value) : null,
+            location_types_id: (!isNaN(parseInt(_location_types_id.value))) ? parseInt(_location_types_id.value) : null,
+            
+            name: (_location_name && _location_name.value !== "") ? _location_name.value : null,
+            street: (_location_street && _location_street.value !== "") ? _location_street.value : null,
+            street2: (_location_street2 && _location_street2.value !== "") ? _location_street2.value : null,
+            zipcode: (_location_zipcode && _location_zipcode.value !== "") ? _location_zipcode.value : null,
+            
+            created_by: (isNaN(parseInt(_location_id.value))) ? user_id : null,
+            modified_by: user_id,
+            enabled: 1,
+            date_created: (!isNaN(parseInt(_location_id.value))) ? null : formatDateMySQL(),
+            date_modified: (!isNaN(parseInt(_location_id.value))) ? formatDateMySQL() : null,
+            note: null,
+        }
+        
+        console.log("save", dataToSend)
     }
     
     const get = function (id) {
@@ -1521,13 +1606,16 @@ const Location = (function () {
     }
     
     const populate_form = function (location) {
-        
         if (location) {
-            console.log("location", location)
+            //console.log("Location.country", location.country)
+            //console.log("Location.province", location.province)
+            //console.log("Location.city", location.city)
+            ///////////////////////////////////////////////////
             Country.set_detail(location.country)
             Province.set_detail(location.province)
             City.set_detail(location.city)
             
+            Country.id = location.country.id
             City.id = location.city.id
             Province.id = location.province.id
             
@@ -1668,13 +1756,14 @@ const City = (function () {
                               let id = $(this)
                                 .attr("id")
                                 .replace("city", "city")
-                              let city_element = document.getElementById(id)
+                              
+                              //let city_element = document.getElementById(id)
                               
                               if (!isNaN(parseInt($(this).val()))) {
-                                  City.id = $(this).val()
-                                  if (city_element) {
-                                      //City.get(parseInt($(this).val()), city_element)
-                                  }
+                                  //City.id = $(this).val()
+                                  //if (city_element) {
+                                  //City.get(parseInt($(this).val()), city_element)
+                                  //}
                               }
                               
                           })
@@ -1699,7 +1788,7 @@ const City = (function () {
                 })
             } catch (e) {
                 console.log(e)
-                return handle_city_error("Error Validating Province")
+                return handle_city_error("Error Validating City")
             }
         } else {
             return handle_city_error("Error Loading Province- Missing Data")
@@ -1713,7 +1802,7 @@ const City = (function () {
                     if (data && data[0]) {
                         City.all.set(data[0].city_id, data[0])
                         let city_elements = $("select[data-type='city']")
-                        console.log(city_elements.length)
+                        //console.log(city_elements.length)
                         City.id = data[0].city_id
                         city_elements.each(function (index, element) {
                             var newOption = new Option(data[0].city_name, data[0].city_id, false, false)
@@ -1889,9 +1978,8 @@ const City = (function () {
         if (city) {
             id = validInt(city.id)
             detail = {
-                id: id,
+                id: validInt(city.id),
                 province_id: validInt(city.province_id),
-                country_id: validInt(city.country_id),
                 created_by: (city.created_by) ? city.created_by : user_id,
                 modified_by: (city.created_by) ? city.created_by : user_id,
                 sort_order: (city.sort_order) ? city.sort_order : null,
@@ -1904,14 +1992,14 @@ const City = (function () {
             
         }
         
-        City.id = id
+        //City.id = id
         City.detail = detail
         return detail
     }
     
     const get = function (country_id, province_id, el) {
         City.all = new Map()
-        let city_id = ""
+        let city_id = null
         if (City.id !== null) {
             city_id = City.id
         }
@@ -1929,28 +2017,34 @@ const City = (function () {
                 first_selectable: false,
             })
             
-        } else {
-            let dataToSend = {
-                country_id: parseInt(country_id),
-                province_id: parseInt(province_id),
-            }
-            
-            fetch_city_list(dataToSend, function (cities) {
-                if (cities) {
-                    load_all(cities)
-                    
-                    $(el).BuildDropDown({
-                        data: Array.from(City.all.values()),
-                        title: "City",
-                        id_field: "id",
-                        text_field: "name",
-                        first_selectable: false,
-                    })
-                    
+            $(el).val("").trigger("change")
+            return
+        }
+        
+        let dataToSend = {
+            country_id: parseInt(country_id),
+            province_id: parseInt(province_id),
+        }
+        
+        fetch_city_list(dataToSend, function (cities) {
+            if (cities) {
+                load_all(cities)
+                
+                $(el).BuildDropDown({
+                    data: Array.from(City.all.values()),
+                    title: "City",
+                    id_field: "id",
+                    text_field: "name",
+                    first_selectable: false,
+                })
+                
+                if (city_id !== "" && city_id !== null) {
+                    //console.log($(el).attr("id"))
+                    //console.log("city_id", city_id)
                     $(el).val(city_id).trigger("change")
                 }
-            })
-        }
+            }
+        })
         
     }
     
@@ -2147,6 +2241,8 @@ const Province = (function () {
             if (settings.dropdowns) {
                 
                 $.each(settings.dropdowns, function (i, dropdown_id) {
+                    let country_id = Country.id
+                    let province_id = Province.id
                     let element = document.getElementById(dropdown_id)
                     if (element) {
                         
@@ -2190,7 +2286,7 @@ const Province = (function () {
                               
                           })
                           .on("change", function () {
-                              
+                              console.log(" -- Province.change -- ", Province.id)
                               let city_el_id = $(this)
                                 .attr("id")
                                 .replace("province", "city")
@@ -2203,16 +2299,23 @@ const Province = (function () {
                               let country_element = document.getElementById(country_el_id)
                               
                               if (city_element) {
-                                  
                                   if (country_element) {
+                                      country_id = parseInt(country_element.value)
                                       if (!isNaN(parseInt(country_element.value))) {
-                                          let country_id = parseInt(country_element.value)
+                                          
+                                          //
+                                          
                                           if (!isNaN(parseInt($(this).val()))) {
                                               City.get(country_id, parseInt($(this).val()), city_element)
                                           } else {
                                               City.id = null
                                               City.get(country_id, null, city_element)
+                                              if (City.id) {
+                                              
+                                              }
                                           }
+                                          //
+                                          
                                       } else {
                                           City.id = null
                                           City.get(null, null, city_element)
@@ -2254,6 +2357,7 @@ const Province = (function () {
         let id = null
         if (province) {
             id = validInt(province.id)
+            
             detail = {
                 id: validInt(province.id),
                 name: (province.name) ? province.name : null,
@@ -2463,13 +2567,16 @@ const Province = (function () {
         if (Province.id !== null) {
             province_id = Province.id
         }
+        if (!el) {
+            return
+        }
         
         if (!el || !country_id) {
             $(el).BuildDropDown({
                 data: Array.from(Province.all.values()),
                 title: "Province",
-                id_field: "province_id",
-                text_field: "province_name",
+                id_field: "id",
+                text_field: "name",
                 first_selectable: false,
             })
             $(el).val("").trigger("change")
@@ -2668,9 +2775,7 @@ const Country = (function () {
             
             if (settings.dropdowns) {
                 $.each(settings.dropdowns, function (i, dropdown_id) {
-                    
                     let element = document.getElementById(dropdown_id)
-                    
                     if (element) {
                         $(element)
                           .select2({
@@ -2721,7 +2826,12 @@ const Country = (function () {
                           .on("update", function () {
                               console.log("ss")
                           })
+                          // ----
                           .on("change", function () {
+                              // console.log("Country.id", Country.id)
+                              //console.log("Province.id", Province.id)
+                              //console.log("City.id", City.id)
+                              let country_id = (!isNaN(parseInt($(this).val()))) ? parseInt($(this).val()) : null
                               
                               let province_el_id = $(this)
                                 .attr("id")
@@ -2737,12 +2847,13 @@ const Country = (function () {
                               if (!isNaN(parseInt($(this).val()))) {
                                   if (province_element) {
                                       Province.get(parseInt($(this).val()), province_element)
-                                      City.get(null, null, city_element)
+                                      //City.get(null, null, city_element)
                                   }
                               } else {
                                   Province.get(null, province_element)
                               }
                           })
+                        // ----
                     }
                     
                 })
@@ -2756,7 +2867,7 @@ const Country = (function () {
         if (dataToSend) {
             try {
                 sendGetRequest("/api/v1.0/countries", dataToSend, function (data, status, xhr) {
-                    console.log(data)
+                    //console.log(data)
                     
                     if (data) {
                         // Country.all = data.result
@@ -3134,8 +3245,8 @@ const Country = (function () {
         save: function ($this) {
             save($this)
         },
-        set: function (settings) {
-            set(settings)
+        set: function (country_id) {
+            set(country_id)
         },
         set_detail: function (country) {
             set_detail(country)
@@ -3263,6 +3374,8 @@ const Address = (function () {
     "use strict"
     
     const base_url = "/address"
+    const _button_clear_form_edit_address = document.getElementById("button_clear_form_edit_address")
+    const _button_submit_form_edit_address = document.getElementById("button_submit_form_edit_address")
     const _form_edit_address = document.getElementById("form_edit_address")
     const _address_id = document.getElementById("address_id")
     const _address_enabled = document.getElementById("address_enabled")
@@ -3270,20 +3383,40 @@ const Address = (function () {
     const _address_street_2 = document.getElementById("address_street_2")
     const _address_street_3 = document.getElementById("address_street_3")
     const _address_country_id = document.getElementById("address_country_id")
+    const _address_types_id = document.getElementById("address_types_id")
     const _address_province_id = document.getElementById("address_province_id")
     const _address_city_id = document.getElementById("address_city_id")
     const _address_postal_code = document.getElementById("address_postal_code")
     const _card_edit_address_form = document.getElementById("card_edit_address_form")
     const _table_address = document.getElementById("table_address")
     const _button_add_address_table = document.getElementById("button_add_address_table")
+    const _button_close_edit_address_form = document.getElementById("button_close_edit_address_form")
     // ----
     let default_display = default_address_view
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $address_table = $(_table_address)
+    let temp_address = {}
     // ----
     $(_button_add_address_table)
       .on("click", function () {
+          $address_table.clearSelectedRows()
+          clear_form()
           load_form()
+      })
+    $(_button_clear_form_edit_address)
+      .on("click", function () {
+          $address_table.clearSelectedRows()
+          clear_form()
+      })
+    $(_button_submit_form_edit_address)
+      .on("click", function () {
+          alert()
+      })
+    $(_button_close_edit_address_form)
+      .on("click", function () {
+          $address_table.clearSelectedRows()
+          clear_form()
+          unload_form()
       })
     
     /**
@@ -3295,125 +3428,12 @@ const Address = (function () {
         toastr.error(msg)
     }
     
-    const save = function (params) {
-    
-    }
-    
-    const get = function () {
-        let data_to_send = {}
-        
-    }
-    
-    const unload_form = function () {
-        if (_card_edit_address_form) {
-            $(_card_edit_address_form).hide()
-        }
-        
-    }
-    
-    const load_form = function () {
-        if (_card_edit_address_form) {
-            $(_card_edit_address_form).show()
-        }
-        
-    }
-    
-    const init = function (settings) {
-        if (_table_address) {
-            build_table()
-        }
-        if (_form_edit_address) {
-            clear_form()
-            //unload_form()
-            //Address.validator = $(_form_edit_address).validate()
-            //*
-            $(_address_country_id).BuildDropDown({
-                data: Array.from(Country.all.values()),
-                title: "Country",
-                id_field: "id",
-                text_field: "name",
-                first_selectable: false,
-            })
-            
-            $(_address_province_id).BuildDropDown({
-                data: Array.from(Province.all.values()),
-                title: "Province",
-                id_field: "id",
-                text_field: "name",
-                first_selectable: false,
-            })
-            
-            $(_address_city_id).BuildDropDown({
-                data: Array.from(Province.all.values()),
-                title: "City",
-                id_field: "city_id",
-                text_field: "city_name",
-                first_selectable: false,
-            })
-            
-            Country.init({
-                dropdowns: [
-                    "address_country_id",
-                ],
-            })
-            Province.init({
-                dropdowns: [
-                    "address_province_id",
-                ],
-            })
-            City.init({
-                dropdowns: [
-                    "address_city_id",
-                ],
-            })
-            //*/
-            
-        }
-    }
-    
-    const clear_form = function () {
-        _address_id.value = ""
-        _address_enabled.checked = true
-        _address_street_1.value = ""
-        _address_street_2.value = ""
-        _address_street_3.value = ""
-        _address_postal_code.value = ""
-    }
-    
-    const navigate = function (address) {
-        console.log("Address.navigate", address)
-        
-    }
-    
-    const build_table = function () {
-        let table_address_render_value = default_display + "_address_formatted"
-        if (!$.fn.DataTable.isDataTable(_table_address)) {
-            $address_table = $(_table_address).table({
-                table_type: "display_list",
-                data: Array.from(Address.all.values()),
-                columnDefs: [
-                    {
-                        title: "ID",
-                        targets: 0,
-                        data: "id",
-                        render: function (data, type, row, meta) {
-                            return data
-                        },
-                    },
-                    {
-                        title: "Address",
-                        targets: 1,
-                        data: table_address_render_value,
-                        render: function (data, type, row, meta) {
-                            return data
-                        },
-                    },
-                ],
-                rowClick: Address.navigate,
-            })
-        }
-    }
-    
+    /**
+     * sets objects default values
+     *
+     * @returns {{note: null, country: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, currency_id: null, enabled: number, iso3: null}, medium_address_formatted: null, city: {note: null, date_modified: *, province_id: null, date_created: *, name: null, modified_by: number, id: null, sort_order: number, created_by: number, enabled: number}, date_created: *, created_by: number, enabled: number, short_address_formatted: null, long_address_formatted: null, street_1: null, date_modified: *, province: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, country_id: null, enabled: number, iso3: null}, street_3: null, street_2: null, modified_by: number, id: null, postal_code: null}}
+     * @private
+     */
     const _default_detail = function () {
         return {
             id: null,
@@ -3446,6 +3466,7 @@ const Address = (function () {
             },
             province: {
                 id: null,
+                country_id: null,
                 name: null,
                 iso2: null,
                 iso3: null,
@@ -3459,6 +3480,7 @@ const Address = (function () {
             },
             city: {
                 id: null,
+                province_id: null,
                 name: null,
                 sort_order: 999,
                 enabled: 1,
@@ -3471,13 +3493,189 @@ const Address = (function () {
         }
     }
     
-    const set = function (address) {
+    const save = function (params) {
+    
+    }
+    
+    const get = function () {
+        let data_to_send = {}
+        
+    }
+    
+    const clear_form = function () {
+        log("Address.clear_form")
+        _address_id.value = ""
+        _address_enabled.checked = true
+        _address_street_1.value = ""
+        _address_street_2.value = ""
+        _address_street_3.value = ""
+        _address_postal_code.value = ""
+        $(_address_types_id).val([])
+        $(_address_country_id).val("").trigger("change")
+    }
+    
+    const populate_form = function (address) {
+        if (!address) {
+            //Province.get(null, _address_province_id)
+            //Country.id = null
+            //City.id = null
+            //$(_address_country_id).val("").trigger("change")
+        } else {
+            _address_id.value = (address.id) ? address.id : null
+            $(_address_types_id).val((address.address_types_id) ? address.address_types_id : [])
+            _address_enabled.checked = (address.enabled === 1)
+            _address_street_1.value = (address.street_1) ? address.street_1 : null
+            _address_street_2.value = (address.street_2) ? address.street_2 : null
+            _address_street_3.value = (address.street_3) ? address.street_3 : null
+            _address_postal_code.value = (Address.detail.postal_code) ? Address.detail.postal_code : null
+            Province.id = address.province.id
+            Country.id = address.country.id
+            City.id = Address.detail.city.id
+            
+            $(_address_country_id).val((Address.detail.country.id) ? Address.detail.country.id : "").trigger("change")
+        }
+    }
+    
+    const load_modal = function (address) {
+        reset_form()
+        populate_form(address)
+        
+    }
+    
+    const reset_form = function () {
+        _address_id.value = ""
+        $(_address_types_id).val([])
+        _address_enabled.checked = true
+        _address_street_1.value = ""
+        _address_street_2.value = ""
+        _address_street_3.value = ""
+        _address_country_id.value = ""
+        _address_province_id.value = ""
+        _address_city_id.value = ""
+        _address_postal_code.value = ""
+    }
+    
+    /**
+     * shows address edit form
+     */
+    const unload_form = function () {
+        if (_card_edit_address_form) {
+            $(_card_edit_address_form).hide()
+        }
+    }
+    
+    /**
+     * hides address edit form
+     */
+    const load_form = function (address) {
+        if (address) {
+            populate_form(address)
+            if (_card_edit_address_form) {
+                $(_card_edit_address_form).show()
+            }
+        }
+        
+    }
+    
+    const build_table = function () {
+        let table_address_render_value = default_display + "_address_formatted"
+        if (!$.fn.DataTable.isDataTable(_table_address)) {
+            $address_table = $(_table_address).table({
+                table_type: "display_list",
+                data: Array.from(Address.all.values()),
+                columnDefs: [
+                    {
+                        title: "ID",
+                        targets: 0,
+                        data: "id",
+                        render: function (data, type, row, meta) {
+                            return data
+                        },
+                    },
+                    {
+                        title: "Address",
+                        targets: 1,
+                        data: table_address_render_value,
+                        render: function (data, type, row, meta) {
+                            return data
+                        },
+                    },
+                ],
+                rowClick: Address.navigate,
+            })
+        }
+    }
+    
+    const load_all = function (addresses) {
+        Address.all = new Map()
+        if (addresses) {
+            $.each(addresses, function (i, address) {
+                let detail = set_detail(address)
+                Address.all.set(detail.id, detail)
+                $address_table.insertRow(detail)
+            })
+        }
+    }
+    
+    const init = function (addresses) {
+        if (_table_address) {
+            build_table()
+        }
+        if (_form_edit_address) {
+            //clear_form()
+            //unload_form()
+            //Address.validator = $(_form_edit_address).validate()
+            
+            $(_address_country_id).BuildDropDown({
+                data: Array.from(Country.all.values()),
+                title: "Country",
+                id_field: "id",
+                text_field: "name",
+                first_selectable: false,
+            })
+            
+            $(_address_province_id).BuildDropDown({
+                data: Array.from(Province.all.values()),
+                title: "Province",
+                id_field: "id",
+                text_field: "name",
+                first_selectable: false,
+            })
+            
+            $(_address_city_id).BuildDropDown({
+                data: Array.from(Province.all.values()),
+                title: "City",
+                id_field: "id",
+                text_field: "name",
+                first_selectable: false,
+            })
+            
+            Country.init({
+                dropdowns: [
+                    "address_country_id",
+                ],
+            })
+            Province.init({
+                dropdowns: [
+                    "address_province_id",
+                ],
+            })
+            City.init({
+                dropdowns: [
+                    "address_city_id",
+                ],
+            })
+            
+        }
+    }
+    
+    const set_detail = function (address) {
         let detail = _default_detail()
         if (address) {
-            
             detail.country = {
                 id: parseInt((address.country.id) ? address.country.id : null),
                 name: (address.country.name) ? address.country.name : null,
+                name_long: (address.country.name_long) ? address.country.name_long : null,
                 currency_id: parseInt((address.country.currency_id) ? address.country.currency_id : null),
                 iso2: (address.country.iso2) ? address.country.iso2 : null,
                 iso3: (address.country.iso3) ? address.country.iso3 : null,
@@ -3492,6 +3690,7 @@ const Address = (function () {
             }
             detail.province = {
                 id: parseInt((address.province.id) ? address.province.id : null),
+                country_id: parseInt((address.country.id) ? address.country.id : null),
                 name: (address.province.name) ? address.province.name : null,
                 iso2: (address.province.iso2) ? address.province.iso2 : null,
                 iso3: (address.province.iso3) ? address.province.iso3 : null,
@@ -3505,6 +3704,7 @@ const Address = (function () {
             }
             detail.city = {
                 id: parseInt((address.city.id) ? address.city.id : null),
+                province_id: parseInt((address.province.id) ? address.province.id : null),
                 name: (address.city.name) ? address.city.name : null,
                 sort_order: parseInt((address.city.sort_order) ? address.city.sort_order : 999),
                 enabled: parseInt((address.city.enabled) ? address.city.enabled : 1),
@@ -3514,13 +3714,11 @@ const Address = (function () {
                 modified_by: parseInt((address.city.modified_by) ? address.city.modified_by : user_id),
                 note: (address.city.note) ? address.city.note : null,
             }
-            
             detail.id = parseInt((address.id) ? address.id : null)
-            
+            detail.address_types_id = getListOfIds(address.address_types_id)
             detail.short_address_formatted = (address.short_address_formatted) ? address.short_address_formatted : null
             detail.medium_address_formatted = (address.medium_address_formatted) ? address.medium_address_formatted : null
             detail.long_address_formatted = (address.long_address_formatted) ? address.long_address_formatted : null
-            
             detail.street_1 = (address.street_1) ? address.street_1 : null
             detail.street_2 = (address.street_2) ? address.street_2 : null
             detail.street_3 = (address.street_3) ? address.street_3 : null
@@ -3532,19 +3730,21 @@ const Address = (function () {
             detail.modified_by = parseInt((address.modified_by) ? address.modified_by : user_id)
             detail.note = (address.note) ? address.note : null
         }
-        //log("detail", detail)
+        temp_address = detail
         Address.detail = detail
         return detail
     }
     
-    const load_all = function (addresses) {
-        Address.all = new Map()
-        if (addresses) {
-            $.each(addresses, function (i, address) {
-                let detail = set(address)
-                Address.all.set(detail.id, detail)
-                $address_table.insertRow(detail)
-            })
+    const set = function (address) {
+        log("Address.set")
+        let detail = set_detail(address)
+        clear_form()
+        populate_form(detail)
+    }
+    
+    const navigate = function (address) {
+        if (address) {
+            load_modal(address)
         }
     }
     
@@ -3564,8 +3764,8 @@ const Address = (function () {
         save: function (params) {
             save(params)
         },
-        init: function () {
-            init()
+        init: function (addresses) {
+            init(addresses)
         },
     }
     
@@ -4122,80 +4322,76 @@ const Contact = (function () {
 Contact.init()
 //end object
 
-    
 const Currency = (function () {
-    'use strict'
+    "use strict"
     
-    const base_url = '/currency'
-    const _input_currency_id = document.getElementById('input_currency_id')
-	const _input_currency_sort_order = document.getElementById('input_currency_sort_order')
-	const _input_currency_name = document.getElementById('input_currency_name')
-	const _input_currency_iso = document.getElementById('input_currency_iso')
-	const _input_currency_minor_unit = document.getElementById('input_currency_minor_unit')
-	const _input_currency_symbol = document.getElementById('input_currency_symbol')
-	const _input_currency_enabled = document.getElementById('input_currency_enabled')
-	const _input_currency_date_created = document.getElementById('input_currency_date_created')
-	const _input_currency_created_by = document.getElementById('input_currency_created_by')
-	const _input_currency_date_modified = document.getElementById('input_currency_date_modified')
-	const _input_currency_modified_by = document.getElementById('input_currency_modified_by')
-	const _input_currency_note = document.getElementById('input_currency_note')
-    let user_id = (document.getElementById('user_id')) ? (!isNaN(parseInt(document.getElementById('user_id').value))) ? parseInt(document.getElementById('user_id').value) : 4 : 4
-    
+    const base_url = "/currency"
+    const _input_currency_id = document.getElementById("input_currency_id")
+    const _input_currency_sort_order = document.getElementById("input_currency_sort_order")
+    const _input_currency_name = document.getElementById("input_currency_name")
+    const _input_currency_iso = document.getElementById("input_currency_iso")
+    const _input_currency_minor_unit = document.getElementById("input_currency_minor_unit")
+    const _input_currency_symbol = document.getElementById("input_currency_symbol")
+    const _input_currency_enabled = document.getElementById("input_currency_enabled")
+    const _input_currency_date_created = document.getElementById("input_currency_date_created")
+    const _input_currency_created_by = document.getElementById("input_currency_created_by")
+    const _input_currency_date_modified = document.getElementById("input_currency_date_modified")
+    const _input_currency_modified_by = document.getElementById("input_currency_modified_by")
+    const _input_currency_note = document.getElementById("input_currency_note")
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     const handle_currency_error = function (msg) {
-            toastr.error(msg)
-        }
-        
+        toastr.error(msg)
+    }
+    
     const _default_detail = function () {
         return {
             id: null,
-			sort_order: null,
-			name: null,
-			iso: null,
-			minor_unit: null,
-			symbol: null,
-			enabled: 1,
-			date_created: formatDateMySQL(),
-			created_by: user_id,
-			date_modified: formatDateMySQL(),
-			modified_by: user_id,
-			note: null
+            sort_order: null,
+            name: null,
+            iso: null,
+            minor_unit: null,
+            symbol: null,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
         }
     }
     
-    const save = function(params){
+    const save = function (params) {
     
     }
     
+    const get = function (id) {
+        let data_to_send = {}
+        if (id) {
+            data_to_send.id = id
+        }
+        
+    }
     
-            const get = function(id){
-                let data_to_send = {}
-                if(id){
-                    data_to_send.id = id
-                }
-                
-            }  
-            
-    
-    const init = function(settings){
-        console.log(' -- Currency -- ', {})
+    const init = function (settings) {
+        //console.log(' -- Currency -- ', {})
     }
     
     const set = function (currency) {
         let detail = _default_detail()
         if (currency) {
-            detail.id = (currency.id)?currency.id:null
-			detail.sort_order = (currency.sort_order)?currency.sort_order:null
-			detail.name = (currency.name)?currency.name:null
-			detail.iso = (currency.iso)?currency.iso:null
-			detail.minor_unit = (currency.minor_unit)?currency.minor_unit:null
-			detail.symbol = (currency.symbol)?currency.symbol:null
-			detail.enabled = (currency.enabled)?currency.enabled:1
-			detail.date_created = (currency.date_created)?currency.date_created:formatDateMySQL()
-			detail.created_by = (currency.created_by)?currency.created_by:created_by
-			detail.date_modified = (currency.date_modified)?currency.date_modified:formatDateMySQL()
-			detail.modified_by = (currency.modified_by)?currency.modified_by:modified_by
-			detail.note = (currency.note)?currency.note:null
+            detail.id = (currency.id) ? currency.id : null
+            detail.sort_order = (currency.sort_order) ? currency.sort_order : null
+            detail.name = (currency.name) ? currency.name : null
+            detail.iso = (currency.iso) ? currency.iso : null
+            detail.minor_unit = (currency.minor_unit) ? currency.minor_unit : null
+            detail.symbol = (currency.symbol) ? currency.symbol : null
+            detail.enabled = (currency.enabled) ? currency.enabled : 1
+            detail.date_created = (currency.date_created) ? currency.date_created : formatDateMySQL()
+            detail.created_by = (currency.created_by) ? currency.created_by : created_by
+            detail.date_modified = (currency.date_modified) ? currency.date_modified : formatDateMySQL()
+            detail.modified_by = (currency.modified_by) ? currency.modified_by : modified_by
+            detail.note = (currency.note) ? currency.note : null
         }
         
         Currency.detail = detail
@@ -4204,36 +4400,36 @@ const Currency = (function () {
     
     const load_all = function (currencies) {
         Currency.all = new Map()
-    
+        
         if (!currencies) {
             return
         }
         $.each(currencies, function (i, currency) {
             let detail = set(currency)
-            Currency.all.set('id', detail)
+            Currency.all.set("id", detail)
         })
         
-        console.log(' Currency.all',  Currency.all);
+        //console.log(' Currency.all',  Currency.all);
     }
     
     return {
         validator: null,
         detail: {},
         all: new Map(),
-        get:function(params){
+        get: function (params) {
             get(params)
         },
-        load_all: function(params){
-            load_all(params);
+        load_all: function (params) {
+            load_all(params)
         },
-        save:function(params){
-           save(params); 
+        save: function (params) {
+            save(params)
         },
         init: function () {
             init()
         },
     }
-
+    
 })()
 
 Currency.init()
@@ -4791,71 +4987,67 @@ const SalesTypes = (function () {
 SalesTypes.init()
 //end object
 
-    
 const StatusTypes = (function () {
-    'use strict'
+    "use strict"
     
-    const base_url = '/status_types'
-    const _input_status_types_id = document.getElementById('input_status_types_id')
-	const _input_status_types_name = document.getElementById('input_status_types_name')
-	const _input_status_types_enabled = document.getElementById('input_status_types_enabled')
-	const _input_status_types_date_created = document.getElementById('input_status_types_date_created')
-	const _input_status_types_created_by = document.getElementById('input_status_types_created_by')
-	const _input_status_types_date_modified = document.getElementById('input_status_types_date_modified')
-	const _input_status_types_modified_by = document.getElementById('input_status_types_modified_by')
-	const _input_status_types_note = document.getElementById('input_status_types_note')
-	const _input_status_types_sort_order = document.getElementById('input_status_types_sort_order')
-    let user_id = (document.getElementById('user_id')) ? (!isNaN(parseInt(document.getElementById('user_id').value))) ? parseInt(document.getElementById('user_id').value) : 4 : 4
-    
+    const base_url = "/status_types"
+    const _input_status_types_id = document.getElementById("input_status_types_id")
+    const _input_status_types_name = document.getElementById("input_status_types_name")
+    const _input_status_types_enabled = document.getElementById("input_status_types_enabled")
+    const _input_status_types_date_created = document.getElementById("input_status_types_date_created")
+    const _input_status_types_created_by = document.getElementById("input_status_types_created_by")
+    const _input_status_types_date_modified = document.getElementById("input_status_types_date_modified")
+    const _input_status_types_modified_by = document.getElementById("input_status_types_modified_by")
+    const _input_status_types_note = document.getElementById("input_status_types_note")
+    const _input_status_types_sort_order = document.getElementById("input_status_types_sort_order")
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     const handle_status_types_error = function (msg) {
-            toastr.error(msg)
-        }
-        
+        toastr.error(msg)
+    }
+    
     const _default_detail = function () {
         return {
             id: null,
-			name: null,
-			enabled: 1,
-			date_created: formatDateMySQL(),
-			created_by: user_id,
-			date_modified: formatDateMySQL(),
-			modified_by: user_id,
-			note: null,
-			sort_order: null
+            name: null,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
+            sort_order: null,
         }
     }
     
-    const save = function(params){
+    const save = function (params) {
     
     }
     
+    const get = function (id) {
+        let data_to_send = {}
+        if (id) {
+            data_to_send.id = id
+        }
+        
+    }
     
-            const get = function(id){
-                let data_to_send = {}
-                if(id){
-                    data_to_send.id = id
-                }
-                
-            }  
-            
-    
-    const init = function(settings){
-        console.log(' -- StatusTypes -- ', {})
+    const init = function (settings) {
+        console.log(" -- StatusTypes -- ", {})
     }
     
     const set = function (status_types) {
         let detail = _default_detail()
         if (status_types) {
-            detail.id = (status_types.id)?status_types.id:null
-			detail.name = (status_types.name)?status_types.name:null
-			detail.enabled = (status_types.enabled)?status_types.enabled:1
-			detail.date_created = (status_types.date_created)?status_types.date_created:formatDateMySQL()
-			detail.created_by = (status_types.created_by)?status_types.created_by:created_by
-			detail.date_modified = (status_types.date_modified)?status_types.date_modified:formatDateMySQL()
-			detail.modified_by = (status_types.modified_by)?status_types.modified_by:modified_by
-			detail.note = (status_types.note)?status_types.note:null
-			detail.sort_order = (status_types.sort_order)?status_types.sort_order:null
+            detail.id = (status_types.id) ? status_types.id : null
+            detail.name = (status_types.name) ? status_types.name : null
+            detail.enabled = (status_types.enabled) ? status_types.enabled : 1
+            detail.date_created = (status_types.date_created) ? status_types.date_created : formatDateMySQL()
+            detail.created_by = (status_types.created_by) ? status_types.created_by : created_by
+            detail.date_modified = (status_types.date_modified) ? status_types.date_modified : formatDateMySQL()
+            detail.modified_by = (status_types.modified_by) ? status_types.modified_by : modified_by
+            detail.note = (status_types.note) ? status_types.note : null
+            detail.sort_order = (status_types.sort_order) ? status_types.sort_order : null
         }
         
         StatusTypes.detail = detail
@@ -4864,36 +5056,36 @@ const StatusTypes = (function () {
     
     const load_all = function (status_types) {
         StatusTypes.all = new Map()
-    
+        
         if (!status_types) {
             return
         }
         $.each(status_types, function (i, status_types) {
             let detail = set(status_types)
-            StatusTypes.all.set('id', detail)
+            StatusTypes.all.set("id", detail)
         })
         
-        console.log(' StatusTypes.all',  StatusTypes.all);
+        //console.log(' StatusTypes.all',  StatusTypes.all);
     }
     
     return {
         validator: null,
         detail: {},
         all: new Map(),
-        get:function(params){
+        get: function (params) {
             get(params)
         },
-        load_all: function(params){
-            load_all(params);
+        load_all: function (params) {
+            load_all(params)
         },
-        save:function(params){
-           save(params); 
+        save: function (params) {
+            save(params)
         },
         init: function () {
             init()
         },
     }
-
+    
 })()
 
 StatusTypes.init()
@@ -4917,10 +5109,10 @@ const Types = (function () {
     }
     
     const init = function (settings) {
-        Provider.init()
-        Address.init()
-        Contact.init()
-        //
+        //Provider.init()
+        //Address.init()
+        //Contact.init()
+        
         Types.address_types = new Map()
         Types.airport_types = new Map()
         Types.categories_ratings_types = new Map()
@@ -4954,10 +5146,12 @@ const Types = (function () {
         if (settings.contact_types) {
             setType(settings.contact_types, "contact_types")
         }
+        
         console.log("settings", settings)
+        
         if (settings.countries) {
-            
             Country.load_all(settings.countries)
+            console.log(Country.all)
         }
         
         if (settings.currency) {
@@ -5145,7 +5339,7 @@ const Provider = (function () {
     // ----
     $(_button_add_provider_page_heading)
       .on("click", function () {
-          console.log("test")
+          //console.log("test")
       })
     
     const handle_provider_error = function (msg) {
@@ -5244,7 +5438,7 @@ const Provider = (function () {
     }
     
     const build_index_table = function () {
-        log("build_index_table")
+        //log("build_index_table")
         $index_table = $(_table_provider_index).table({
             table_type: "display_list",
             data: Provider.all,
@@ -5317,11 +5511,11 @@ const Provider = (function () {
         }
         
         let provider = set(provider_detail)
-        Address.init()
-        Address.load_all(addresses)
-        set_autocomplete()
-        Location.init(location)
         
+        Address.init(addresses)
+        Address.load_all(addresses)
+        Location.init(location)
+        set_autocomplete()
     }
     
     const set_autocomplete = function () {

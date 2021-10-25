@@ -5,17 +5,17 @@ const Vendor = (function () {
     const _vendor_company_id = document.getElementById("vendor_company_id")
     const _vendor_name = document.getElementById("vendor_name")
     const _vendor_id = document.getElementById("vendor_id")
-    const _input_vendor_show_online = document.getElementById("input_vendor_show_online")
-    const _input_vendor_show_sales = document.getElementById("input_vendor_show_sales")
-    const _input_vendor_show_ops = document.getElementById("input_vendor_show_ops")
-    const _input_vendor_is_provider = document.getElementById("input_vendor_is_provider")
-    const _input_vendor_sku = document.getElementById("input_vendor_sku")
-    const _input_vendor_enabled = document.getElementById("input_vendor_enabled")
-    const _input_vendor_date_created = document.getElementById("input_vendor_date_created")
-    const _input_vendor_created_by = document.getElementById("input_vendor_created_by")
-    const _input_vendor_date_modified = document.getElementById("input_vendor_date_modified")
-    const _input_vendor_modified_by = document.getElementById("input_vendor_modified_by")
-    const _input_vendor_note = document.getElementById("input_vendor_note")
+    const _vendor_show_online = document.getElementById("vendor_show_online")
+    const _vendor_show_sales = document.getElementById("vendor_show_sales")
+    const _vendor_show_ops = document.getElementById("vendor_show_ops")
+    const _vendor_is_provider = document.getElementById("vendor_is_provider")
+    const _vendor_sku = document.getElementById("vendor_sku")
+    const _vendor_enabled = document.getElementById("vendor_enabled")
+    const _vendor_date_created = document.getElementById("vendor_date_created")
+    const _vendor_created_by = document.getElementById("vendor_created_by")
+    const _vendor_date_modified = document.getElementById("vendor_date_modified")
+    const _vendor_modified_by = document.getElementById("vendor_modified_by")
+    const _vendor_note = document.getElementById("vendor_note")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     // ----
     
@@ -132,6 +132,31 @@ const Vendor = (function () {
         
         if (_vendor_name) {
             init_autocomplete()
+        }
+        
+        console.log("settings", settings)
+        /**
+         * created_by: 4
+         * date_created: "10/25/2021"
+         * date_modified: "10/25/2021"
+         * enabled: 1
+         * id: 1
+         * is_provider: 1
+         * modified_by: 4
+         * note: null
+         * show_online: 1
+         * show_ops: 1
+         * show_sales: 1
+         * sku: "SKU0000001"
+         */
+        if (_vendor_sku) {
+            _vendor_sku.value = settings.sku
+            _vendor_id.value = settings.id
+            _vendor_enabled.checked = (settings.enabled === 1)
+            _vendor_is_provider.checked = (settings.is_provider === 1)
+            _vendor_show_online.checked = (settings.show_online === 1)
+            _vendor_show_ops.checked = (settings.show_ops === 1)
+            _vendor_show_sales.checked = (settings.show_sales === 1)
         }
     }
     

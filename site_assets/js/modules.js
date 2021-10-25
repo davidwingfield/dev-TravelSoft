@@ -3,7 +3,6 @@ exports.modules = [
     "./site_assets/js/modules/functions.js",
     "./site_assets/js/modules/table.js",
     "./site_assets/js/modules/location_types.js",
-    
     "./site_assets/js/modules/location.js",
     "./site_assets/js/modules/city.js",
     "./site_assets/js/modules/province.js",

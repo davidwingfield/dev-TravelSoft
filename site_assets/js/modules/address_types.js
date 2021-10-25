@@ -102,5 +102,3 @@ const AddressTypes = (function () {
     }
     
 })()
-
-//end object

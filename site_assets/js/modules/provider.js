@@ -197,9 +197,11 @@ const Provider = (function () {
             contacts = settings.contact_detail
         }
         
+        console.log("settings.provider_detail", settings.provider_detail.vendor)
+        
         let provider = set(provider_detail)
         if (settings.provider_detail.vendor) {
-            Vendor.init()
+            Vendor.init(settings.provider_detail.vendor)
         }
         Contact.init(contacts)
         Address.init(addresses)

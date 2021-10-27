@@ -18,7 +18,7 @@
      *
      * Long Provider Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Controllers
      */
     class Provider extends Controller
@@ -81,12 +81,13 @@
          */
         public static function edit(array $params = [])
         {
+            $provider_id = (int)$params["provider_id"];
             $contact_detail = [];
             $address_detail = [];
             $company_detail = [];
+            $vendor_detail = [];
 
             if (isset($params["provider_id"])) {
-                $provider_id = (int)$params["provider_id"];
                 $data = Page::getDetails(6);
                 /** breadcrumbs */
                 define("BREAD_CRUMBS", "
@@ -101,14 +102,14 @@
                     </li>"
                 );
 
-                $provider_id = (int)$params["provider_id"];
                 $provider_detail = self::format_get(ProviderModel::get($provider_id));
-
+                Log::$debug_log->trace($provider_detail);
+                View::render_template("providers/edit", $data);
+                exit(1);
+                /** get only one */
                 if (count($provider_detail) >= 1) {
                     $provider_detail = $provider_detail[0];
                 }
-                /** Logging */
-                Log::$debug_log->trace($provider_detail);
 
                 if (isset($provider_detail["company_id"])) {
                     $company_id = (int)$provider_detail["company_id"];
@@ -116,34 +117,28 @@
                     if (isset($company_id) && intval($company_id) > 0) {
                         $company_detail = CompanyModel::getOne($company_id);
                         $address_detail = AddressModel::getByCompanyId($company_id);
-                        $contact_detail = ContactModel::getByCompanyId($company_id);
+                        $contact_detail = Contact::get(array("company_id" => $company_id));
                     }
 
                 } else {
-                    header('Location: /providers/new');
+                    /** company not found redirecting to new */
+                    header("Location: /providers/new");
                     exit;
                 }
-                // ----
+
                 $data["provider_detail"] = $provider_detail;
                 $data["company_detail"] = $company_detail;
                 $data["address_detail"] = $address_detail;
                 $data["contact_detail"] = $contact_detail;
+                $data["vendor_detail"] = $vendor_detail;
 
-                //$formatted = self::format_get(ProviderModel::get($provider_id));
-
-                //if (count($formatted) >= 1) {
-                //    $data["provider_detail"] = $formatted[0];
-                //}
-
-                //Log::$debug_log->trace($provider_detail);
                 View::render_template("providers/edit", $data);
                 exit(1);
-
             }
-            /** Logging */
+            /** Provider not found Logging and redirecting to new */
             Log::$debug_log->trace("Provider Id Not Fuond");
-            header('Location: /providers/new');
-            exit;
+            header("Location: /providers/new");
+            exit(1);
         }
 
         /**
@@ -219,12 +214,22 @@
          */
         private static function format(array $provider = []): array
         {
-            $temp = array();
-            $results = array();
-            //Log::$debug_log->trace($provider);
-            //foreach ($providers AS $provider) {
-            $provider_id = $provider["provider_id"];
             $company_id = $provider["company_id"];
+            $vendor_id = (isset($provider["vendor_id"])) ? (int)$provider["vendor_id"] : null;
+            $vendor_company_id = (isset($provider["vendor_id"])) ? (int)$provider["vendor_company_id"] : null;
+            $vendor_company_name = (isset($provider["vendor_company_name"])) ? $provider["vendor_company_name"] : null;
+            $vendor_company_phone_1 = (isset($provider["vendor_company_phone_1"])) ? $provider["vendor_company_phone_1"] : null;
+            $vendor_company_phone_2 = (isset($provider["vendor_company_phone_2"])) ? $provider["vendor_company_phone_2"] : null;
+            $vendor_company_fax = (isset($provider["vendor_company_fax"])) ? $provider["vendor_company_fax"] : null;
+            $vendor_company_website = (isset($provider["vendor_company_website"])) ? $provider["vendor_company_website"] : null;
+            $vendor_company_email = (isset($provider["vendor_company_email"])) ? $provider["vendor_company_email"] : null;
+            $vendor_company_enabled = (isset($provider["vendor_company_enabled"])) ? (int)$provider["vendor_company_enabled"] : null;
+            $vendor_company_created_by = (isset($provider["vendor_company_created_by"])) ? (int)$provider["vendor_company_created_by"] : null;
+            $vendor_company_date_created = (isset($provider["vendor_company_date_created"])) ? $provider["vendor_company_date_created"] : null;
+            $vendor_company_modified_by = (isset($provider["vendor_company_modified_by"])) ? (int)$provider["vendor_company_modified_by"] : null;
+            $vendor_company_date_modified = (isset($provider["vendor_company_date_modified"])) ? $provider["vendor_company_date_modified"] : null;
+            $vendor_company_status = (isset($provider["vendor_company_status"])) ? (int)$provider["vendor_company_status"] : null;
+            $vendor_company_note = (isset($provider["vendor_company_note"])) ? $provider["vendor_company_note"] : null;
 
             $temp = array(
                 "id" => $provider["provider_id"],
@@ -239,18 +244,21 @@
                 "created_by" => $provider["provider_created_by"],
                 "modified_by" => $provider["provider_modified_by"],
                 "vendor" => array(
-                    "id" => $provider["vendor_id"],
-                    "sku" => $provider["vendor_sku"],
-                    "is_provider" => $provider["vendor_is_provider"],
-                    "show_online" => $provider["vendor_show_online"],
-                    "show_sales" => $provider["vendor_show_sales"],
-                    "show_ops" => $provider["vendor_show_ops"],
-                    "note" => $provider["vendor_note"],
-                    "enabled" => $provider["vendor_enabled"],
-                    "date_created" => $provider["vendor_date_created"],
-                    "date_modified" => $provider["vendor_date_modified"],
-                    "created_by" => $provider["vendor_created_by"],
-                    "modified_by" => $provider["vendor_modified_by"],
+                    "id" => $vendor_id,
+                    "company_id" => $vendor_company_id,
+                    "company_name" => $vendor_company_name,
+                    "company_phone_1" => $vendor_company_phone_1,
+                    "company_phone_2" => $vendor_company_phone_2,
+                    "company_fax" => $vendor_company_fax,
+                    "company_website" => $vendor_company_website,
+                    "company_email" => $vendor_company_email,
+                    "company_enabled" => $vendor_company_enabled,
+                    "company_created_by" => $vendor_company_created_by,
+                    "company_date_created" => $vendor_company_date_created,
+                    "company_modified_by" => $vendor_company_modified_by,
+                    "company_date_modified" => $vendor_company_date_modified,
+                    "company_status" => $vendor_company_status,
+                    "company_note" => $vendor_company_note,
                 ),
                 "company" => array(
                     "id" => $provider["company_id"],

@@ -10,8 +10,8 @@
      *
      * Long Category Description
      *
-     * @package            Application\App
-     * @subpackage         Controllers
+     * @package            Framework\App
+     * @subpackage         Models
      */
     class CategoryModel extends Model
     {

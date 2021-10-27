@@ -13,7 +13,7 @@
      *
      * Long User Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Controllers
      */
     class User extends Controller
@@ -86,7 +86,7 @@
                         $_SESSION["name_last"] = $name_last;
                         $_SESSION["name_first"] = $name_first;
                         $_SESSION["login_string"] = hash("sha512", $db_password . $user_browser);
-                        
+
                         /** Render View. */
                         View::render_json($users);
                         exit;

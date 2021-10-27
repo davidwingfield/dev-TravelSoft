@@ -7,7 +7,7 @@
      *
      * Long AppIni Description
      *
-     * @package            Application\Init
+     * @package            Framework\Init
      */
     class AppIni
     {

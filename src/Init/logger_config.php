@@ -10,7 +10,7 @@
      *
      * Long Description
      *
-     * @package            Application\Init
+     * @package            Framework\Init
      */
     function initLogger()
     {

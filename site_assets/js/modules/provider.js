@@ -2,18 +2,21 @@ const Provider = (function () {
     "use strict"
     
     const base_url = "/providers"
-    
-    const _provider_name = document.getElementById("provider_name")
+    //Buttons
     const _button_add_provider_page_heading = document.getElementById("button_add_provider_page_heading")
+    //Tables
     const _table_provider_index = document.getElementById("table_provider_index")
+    //Fields
     const _provider_id = document.getElementById("provider_id")
+    const _provider_name = document.getElementById("provider_name")
     const _provider_company_id = document.getElementById("provider_company_id")
     const _provider_enabled = document.getElementById("provider_enabled")
-    // ----
+    const _provider_code_direct_id = document.getElementById("provider_code_direct_id")
+    //Defaults
     let globalSelectedProvider = false
     let $index_table = $(_table_provider_index)
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    // ----
+    
     $(_button_add_provider_page_heading)
       .on("click", function () {
           //console.log("test")
@@ -21,6 +24,17 @@ const Provider = (function () {
     
     const handle_provider_error = function (msg) {
         toastr.error(msg)
+    }
+    
+    const load_all = function (providers) {
+        Provider.all = new Map()
+        if (providers) {
+            $.each(providers, function (i, provider) {
+                let detail = set(provider)
+                $index_table.insertRow(detail)
+                Provider.all.set(detail.id, detail)
+            })
+        }
     }
     
     const _default_detail = function () {
@@ -44,14 +58,19 @@ const Provider = (function () {
         }
     }
     
+    /**
+     * pupulate provider form
+     *
+     * @param provider
+     */
     const populate_form = function (provider) {
-        
         if (provider) {
+            log("provider", provider)
             _provider_id.value = (provider.id) ? provider.id : null
-            _provider_name.value = (provider.id) ? provider.id : null
+            _provider_name.value = (provider.name) ? provider.name : null
+            _provider_code_direct_id.value = (provider.code_direct_id) ? provider.code_direct_id : null
             _provider_enabled.checked = (provider.enabled === 1)
         }
-        
     }
     
     const save = function (params) {
@@ -100,17 +119,6 @@ const Provider = (function () {
         
         Provider.detail = detail
         return detail
-    }
-    
-    const load_all = function (providers) {
-        Provider.all = new Map()
-        if (providers) {
-            $.each(providers, function (i, provider) {
-                let detail = set(provider)
-                $index_table.insertRow(detail)
-                Provider.all.set(detail.id, detail)
-            })
-        }
     }
     
     const index = function (settings) {
@@ -177,11 +185,13 @@ const Provider = (function () {
     }
     
     const edit = function (settings) {
-        let provider_detail = {}
-        let location = {}
         let addresses = []
         let contacts = []
+        let provider_detail = {}
+        let location = {}
         let company = {}
+        let vendor = {}
+        
         if (settings.provider_detail) {
             provider_detail = settings.provider_detail
             if (provider_detail.location) {
@@ -197,12 +207,18 @@ const Provider = (function () {
             contacts = settings.contact_detail
         }
         
-        console.log("settings.provider_detail", settings.provider_detail.vendor)
+        //if (settings.vendor_detail) {
+        //vendor = settings.vendor_detail
+        //}
+        
+        //log("settings", settings)
         
         let provider = set(provider_detail)
-        if (settings.provider_detail.vendor) {
-            Vendor.init(settings.provider_detail.vendor)
-        }
+        
+        //if (settings.provider_detail.vendor) {
+        //Vendor.init(settings.provider_detail.vendor)
+        //}
+        
         Contact.init(contacts)
         Address.init(addresses)
         Address.load_all(addresses)

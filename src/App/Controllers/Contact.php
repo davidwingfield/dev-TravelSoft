@@ -2,7 +2,9 @@
 
     namespace Framework\App\Controllers;
 
+    use Framework\App\Models\ContactModel;
     use Framework\Core\Controller;
+    use Framework\Core\View;
     use Framework\Logger\Log;
 
     /**
@@ -10,7 +12,7 @@
      *
      * Long Contact Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Controllers
      */
     class Contact extends Controller
@@ -25,35 +27,100 @@
             return [];
         }
 
-        public static function format(array $contacts = []): array
+        public static function get(array $params = null): array
         {
             $temp = array();
-            $results = array();
-            foreach ($contacts AS $contact) {
+
+            if (isset($params["company_id"])) {
+                $company_id = (int)$params["company_id"];
+                $results = ContactModel::getByCompanyId($company_id);
+            } else if (isset($params["contact_id"])) {
+                $contact_id = (int)$params["contact_id"];
+                $results = ContactModel::getByContactId($contact_id);
+            } else {
+                $results = ContactModel::getByContactId();
+            }
+
+            foreach ($results AS $contact) {
+                $temp[] = self::format($contact);
+            }
+            Log::$debug_log->trace($temp);
+
+            // ----
+            return $temp;
+        }
+
+        public static function serveGet(array $params = null): array
+        {
+            $temp = array();
+
+            if (isset($params["company_id"])) {
+                $company_id = (int)$params["company_id"];
+                $results = ContactModel::getByCompanyId($company_id);
+            } else if (isset($params["contact_id"])) {
+                $contact_id = (int)$params["contact_id"];
+                $results = ContactModel::get($contact_id);
+            } else {
+                $results = ContactModel::get();
+            }
+
+            foreach ($results AS $contact) {
+                $temp[] = self::format($contact);
+                Log::$debug_log->trace($contact);
+            }
+            // ----
+            View::render_json($temp);
+            exit(1);
+        }
+
+        public static function format(array $contact = []): array
+        {
+
+            $formatted_contact_types = "";
+            if (isset($contact["contact_id"])) {
                 $contact_id = $contact["contact_id"];
-                if (!isset($temp[$contact_id])) {
-                    $temp[$contact_id] = array(
-                        "id" => $contact["contact_id"],
-                        "contact_types_id" => $contact["contact_contact_types_id"],
-                        "name_first" => $contact["contact_name_first"],
-                        "name_last" => $contact["contact_name_last"],
-                        "phone" => $contact["contact_phone"],
-                        "email" => $contact["contact_email"],
-                        "enabled" => $contact["contact_enabled"],
-                        "date_created" => $contact["contact_date_created"],
-                        "date_modified" => $contact["contact_date_modified"],
-                        "created_by" => $contact["contact_created_by"],
-                        "modified_by" => $contact["contact_modified_by"],
-                        "note" => $contact["contact_note"],
-                    );
+                if (isset($contact["contact_contact_types_id"])) {
+                    $pieces = explode(",", trim($contact["contact_contact_types_id"]));
+                    if (count($pieces) > 0) {
+                        for ($n = 0; $n < count($pieces); $n++) {
+                            $contact_type_id = (int)$pieces[$n];
+                            $contact_type = ContactModel::getContactTypeById($contact_type_id);
+                            $name = "";
+                            //Log::$debug_log->trace($contact_type);
+
+                            if (isset($contact_type[0]["name"])) {
+                                $name = "" . $contact_type[0]["name"];
+                            } else if (isset($contact_type["name"])) {
+                                $name = "" . $contact_type["name"];
+                            }
+                            // ----
+                            if ($name !== "") {
+                                $formatted_contact_types .= "$name<br>";
+                            }
+                            // ----
+                        }
+                    }
                 }
+            } else {
+
             }
 
-            foreach ($temp AS $p) {
-                $results[] = $p;
-            }
-
-            return $results;
+            return array(
+                "id" => (isset($contact["contact_id"])) ? (int)$contact["contact_id"] : null,
+                "contact_types_id" => (isset($contact["contact_contact_types_id"])) ? $contact["contact_contact_types_id"] : null,
+                "formatted_types" => ($formatted_contact_types !== "") ? $formatted_contact_types : "",
+                "formatted_names" => (isset($contact["contact_name_first"]) && isset($contact["contact_name_last"])) ? "<span class='' style='white-space: nowrap;'>" . $contact["contact_name_first"] . " " . $contact["contact_name_last"] . "</span>" : "",
+                "name_first" => (isset($contact["contact_name_first"])) ? $contact["contact_name_first"] : null,
+                "name_last" => (isset($contact["contact_name_last"])) ? $contact["contact_name_last"] : null,
+                "phone" => (isset($contact["contact_phone"])) ? $contact["contact_phone"] : null,
+                "email" => (isset($contact["contact_email"])) ? $contact["contact_email"] : null,
+                "enabled" => (isset($contact["contact_enabled"])) ? $contact["contact_enabled"] : 1,
+                "date_created" => (isset($contact["contact_contact_types_id"])) ? $contact["contact_date_created"] : null,
+                "date_modified" => (isset($contact["contact_contact_types_id"])) ? $contact["contact_date_modified"] : null,
+                "created_by" => (isset($contact["contact_contact_types_id"])) ? $contact["contact_created_by"] : null,
+                "modified_by" => (isset($contact["contact_contact_types_id"])) ? $contact["contact_modified_by"] : null,
+                "note" => (isset($contact["contact_contact_types_id"])) ? $contact["contact_note"] : null,
+            );
         }
 
     }

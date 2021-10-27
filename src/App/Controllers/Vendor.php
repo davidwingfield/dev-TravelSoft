@@ -6,20 +6,71 @@
     use Framework\App\Models\ContactModel;
     use Framework\App\Models\VendorModel;
     use Framework\Core\Controller;
+    use Framework\Core\View;
+    use Framework\Logger\Log;
 
     /**
      * Short Vendor Description
      *
      * Long Vendor Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Controllers
      */
     class Vendor extends Controller
     {
+        protected $primaryKey = "id";
+        protected $sku = null;
+
         public function __construct()
         {
             parent::__construct();
+        }
+
+        /**
+         * serveGet
+         *
+         * @param array $params
+         */
+        public static function getByVendorId(int $vendor_id = null): array
+        {
+            $vendors = [];
+
+            if (!isset($vendor_id)) {
+                $vendor_id = null;
+            }
+
+            $results = VendorModel::get($vendor_id);
+
+            if ($results) {
+                foreach ($results AS $vendor) {
+                    $vendors[] = self::format($vendor);
+                }
+            }
+
+            return $vendors;
+        }
+
+        /**
+         * serveGet
+         *
+         * @param array $params
+         */
+        public function serveGet(array $params = [])
+        {
+            $vendor_id = null;
+            if (isset($params["vendor_id"])) {
+                $vendor_id = (int)$params["vendor_id"];
+            }
+            $results = VendorModel::get($vendor_id);
+            if ($results) {
+                foreach ($results AS $vendor) {
+                    $vendors[] = self::format($vendor);
+                }
+            }
+            // ----
+            View::render_json($vendors);
+            exit(1);
         }
 
         /**
@@ -32,6 +83,13 @@
             return self::format_ac(VendorModel::vendor_ac($st));
         }
 
+        /**
+         * format_ac
+         *
+         * @param array $vendors
+         *
+         * @return array
+         */
         private static function format_ac(array $vendors = []): array
         {
             $data["suggestions"] = [];
@@ -47,6 +105,37 @@
             return $data;
         }
 
+        private static function generateSKU(array $vendor): string
+        {
+            $name = $vendor["company_name"];
+            $id = $vendor["vendor_id"];
+
+            $words = preg_split("/\s+/", $name);
+            $count = count($words);
+            $sku = str_pad($id, 11, "0", STR_PAD_LEFT);
+
+            $t = "";
+            if ($count >= 3) {
+                for ($n = 0; $n < 3; $n++) {
+                    $t .= strtoupper(substr($words[$n], 0, 1));
+                }
+            } else if ($count == 2) {
+                for ($n = 0; $n < 2; $n++) {
+                    $t .= strtoupper(substr($words[$n], 0, 1));
+                }
+                $t .= "X";
+            } else if ($count == 1) {
+                for ($n = 0; $n < 1; $n++) {
+                    $t .= strtoupper(substr($words[$n], 0, 1));
+                }
+                $t .= "XX";
+            } else {
+                $t = "XXX";
+            }
+
+            return $t . $sku;
+        }
+
         /**
          * format
          *
@@ -56,27 +145,30 @@
          */
         private static function format(array $vendor = []): array
         {
-            $temp = array();
-            $results = array();
-            //Log::$debug_log->trace($provider);
-            //foreach ($providers AS $provider) {
-            $vendor_id = $vendor["vendor_id"];
-            $company_id = $vendor["company_id"];
+            $company_id = (int)$vendor["company_id"];
+            $vendor_id = (int)$vendor["vendor_id"];
+            $sku = self::generateSKU($vendor);
 
-            $temp = array(
-                "id" => $vendor["vendor_id"],
-                "sku" => $vendor["vendor_sku"],
-                "is_provider" => $vendor["vendor_is_provider"],
-                "show_online" => $vendor["vendor_show_online"],
-                "show_sales" => $vendor["vendor_show_sales"],
-                "show_ops" => $vendor["vendor_show_ops"],
-                "note" => $vendor["vendor_note"],
-                "enabled" => $vendor["vendor_enabled"],
-                "date_created" => $vendor["vendor_date_created"],
-                "date_modified" => $vendor["vendor_date_modified"],
-                "created_by" => $vendor["vendor_created_by"],
-                "modified_by" => $vendor["vendor_modified_by"],
-                "company" => array(
+            /*
+            Log::$debug_log->trace($sku);
+            //*/
+
+            return array(
+                "vendor_detail" => array(
+                    "id" => $vendor["vendor_id"],
+                    "sku" => $sku,
+                    "is_provider" => $vendor["vendor_is_provider"],
+                    "show_online" => $vendor["vendor_show_online"],
+                    "show_sales" => $vendor["vendor_show_sales"],
+                    "show_ops" => $vendor["vendor_show_ops"],
+                    "note" => $vendor["vendor_note"],
+                    "enabled" => $vendor["vendor_enabled"],
+                    "date_created" => $vendor["vendor_date_created"],
+                    "date_modified" => $vendor["vendor_date_modified"],
+                    "created_by" => $vendor["vendor_created_by"],
+                    "modified_by" => $vendor["vendor_modified_by"],
+                ),
+                "company_detail" => array(
                     "id" => $vendor["company_id"],
                     "name" => $vendor["company_name"],
                     "phone_1" => $vendor["company_phone_1"],
@@ -96,7 +188,6 @@
                 "contacts" => ContactModel::getByCompanyId((int)$company_id),
             );
 
-            return $temp;
         }
 
     }

@@ -1,10 +1,18 @@
 const Address = (function () {
     "use strict"
-    
-    const base_url = "/address"
+    //Path
+    const base_url = "/addresses"
+    //Buttons
+    const _button_add_address_table = document.getElementById("button_add_address_table")
+    const _button_close_edit_address_form = document.getElementById("button_close_edit_address_form")
     const _button_clear_form_edit_address = document.getElementById("button_clear_form_edit_address")
     const _button_submit_form_edit_address = document.getElementById("button_submit_form_edit_address")
+    //Blocks
     const _form_edit_address = document.getElementById("form_edit_address")
+    const _card_edit_address_form = document.getElementById("card_edit_address_form")
+    //Tables
+    const _table_address = document.getElementById("table_address")
+    //Fields
     const _address_id = document.getElementById("address_id")
     const _address_enabled = document.getElementById("address_enabled")
     const _address_street_1 = document.getElementById("address_street_1")
@@ -15,31 +23,42 @@ const Address = (function () {
     const _address_province_id = document.getElementById("address_province_id")
     const _address_city_id = document.getElementById("address_city_id")
     const _address_postal_code = document.getElementById("address_postal_code")
-    const _card_edit_address_form = document.getElementById("card_edit_address_form")
-    const _table_address = document.getElementById("table_address")
-    const _button_add_address_table = document.getElementById("button_add_address_table")
-    const _button_close_edit_address_form = document.getElementById("button_close_edit_address_form")
-    // ----
+    //Defaults
     let default_display = default_address_view
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $address_table = $(_table_address)
     let temp_address = {}
-    // ----
+    
+    /**
+     * add new address
+     */
     $(_button_add_address_table)
       .on("click", function () {
           $address_table.clearSelectedRows()
           clear_form()
           load_form()
       })
+    
+    /**
+     * clear address form button
+     */
     $(_button_clear_form_edit_address)
       .on("click", function () {
           $address_table.clearSelectedRows()
           clear_form()
       })
+    
+    /**
+     * submit button save address
+     */
     $(_button_submit_form_edit_address)
       .on("click", function () {
           alert()
       })
+    
+    /**
+     * close address form
+     */
     $(_button_close_edit_address_form)
       .on("click", function () {
           $address_table.clearSelectedRows()
@@ -70,6 +89,7 @@ const Address = (function () {
             street_3: null,
             postal_code: null,
             enabled: 1,
+            address_types_id: [],
             date_created: formatDateMySQL(),
             created_by: parseInt(user_id),
             date_modified: formatDateMySQL(),
@@ -121,17 +141,19 @@ const Address = (function () {
         }
     }
     
+    /**
+     * save address form data
+     *
+     * @param params
+     */
     const save = function (params) {
     
     }
     
-    const get = function () {
-        let data_to_send = {}
-        
-    }
-    
+    /**
+     * clears address form
+     */
     const clear_form = function () {
-        log("Address.clear_form")
         _address_id.value = ""
         _address_enabled.checked = true
         _address_street_1.value = ""
@@ -142,6 +164,11 @@ const Address = (function () {
         $(_address_country_id).val("").trigger("change")
     }
     
+    /**
+     * populate address form
+     *
+     * @param address
+     */
     const populate_form = function (address) {
         if (address) {
             _address_id.value = (address.id) ? address.id : null
@@ -197,6 +224,9 @@ const Address = (function () {
         
     }
     
+    /**
+     * build address table structure
+     */
     const build_table = function () {
         let table_address_render_value = default_display + "_address_formatted"
         if (!$.fn.DataTable.isDataTable(_table_address)) {
@@ -228,10 +258,12 @@ const Address = (function () {
     
     /**
      * load address into object
+     *
      * @param addresses
      */
     const load_all = function (addresses) {
         Address.all = new Map()
+        
         if (addresses) {
             $.each(addresses, function (i, address) {
                 let detail = set_detail(address)
@@ -239,8 +271,21 @@ const Address = (function () {
                 $address_table.insertRow(detail)
             })
         }
+        
+        if (_table_address) {
+            $address_table.clearSelectedRows()
+        }
+        if (_card_edit_address_form) {
+            clear_form()
+            unload_form()
+        }
     }
     
+    /**
+     * initialize address form and table
+     *
+     * @param addresses
+     */
     const init = function (addresses) {
         if (_table_address) {
             build_table()
@@ -290,6 +335,9 @@ const Address = (function () {
         }
     }
     
+    /**
+     * set address object detail
+     */
     const set_detail = function (address) {
         let detail = _default_detail()
         if (address) {
@@ -356,29 +404,28 @@ const Address = (function () {
         return detail
     }
     
-    const set = function (address) {
-        log("Address.set")
-        let detail = set_detail(address)
-        clear_form()
-        populate_form(detail)
-    }
-    
+    /**
+     * populate form with selected address
+     *
+     * @param address
+     */
     const navigate = function (address) {
         if (address) {
             reset_form()
             populate_form(address)
+            load_form()
         }
     }
     
+    /**
+     * globals
+     */
     return {
         validator: null,
         detail: {},
         all: new Map(),
         navigate: function (address) {
             navigate(address)
-        },
-        get: function (params) {
-            get(params)
         },
         load_all: function (params) {
             load_all(params)

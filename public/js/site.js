@@ -1413,11 +1413,12 @@ const Location = (function () {
         }
         
         init_autocomplete()
-        set(location)
+        //set(location)
         hide_form()
     }
     
     const set_detail = function (location) {
+        log("location", location)
         let detail = _default_detail()
         temp_location = detail
         
@@ -2563,15 +2564,15 @@ const Province = (function () {
     
     const get = function (country_id, el) {
         Province.all = new Map()
+        if (!el) {
+            return
+        }
         let province_id = ""
         if (Province.id !== null) {
             province_id = Province.id
         }
-        if (!el) {
-            return
-        }
         
-        if (!el || !country_id) {
+        if (!country_id) {
             $(el).BuildDropDown({
                 data: Array.from(Province.all.values()),
                 title: "Province",
@@ -2590,7 +2591,6 @@ const Province = (function () {
         fetch_province_list(dataToSend, function (provinces) {
             if (provinces) {
                 load_all(provinces)
-                
                 $(el).BuildDropDown({
                     data: Array.from(Province.all.values()),
                     title: "Province",
@@ -2598,7 +2598,6 @@ const Province = (function () {
                     text_field: "name",
                     first_selectable: false,
                 })
-                
                 $(el).val(province_id).trigger("change")
                 
             }
@@ -2606,6 +2605,11 @@ const Province = (function () {
         
     }
     
+    /**
+     * load provinces into object
+     *
+     * @param provinces
+     */
     const load_all = function (provinces) {
         Province.all = new Map()
         
@@ -3370,11 +3374,19 @@ const AddressTypes = (function () {
 
 const Address = (function () {
     "use strict"
-    
-    const base_url = "/address"
+    //Path
+    const base_url = "/addresses"
+    //Buttons
+    const _button_add_address_table = document.getElementById("button_add_address_table")
+    const _button_close_edit_address_form = document.getElementById("button_close_edit_address_form")
     const _button_clear_form_edit_address = document.getElementById("button_clear_form_edit_address")
     const _button_submit_form_edit_address = document.getElementById("button_submit_form_edit_address")
+    //Blocks
     const _form_edit_address = document.getElementById("form_edit_address")
+    const _card_edit_address_form = document.getElementById("card_edit_address_form")
+    //Tables
+    const _table_address = document.getElementById("table_address")
+    //Fields
     const _address_id = document.getElementById("address_id")
     const _address_enabled = document.getElementById("address_enabled")
     const _address_street_1 = document.getElementById("address_street_1")
@@ -3385,31 +3397,42 @@ const Address = (function () {
     const _address_province_id = document.getElementById("address_province_id")
     const _address_city_id = document.getElementById("address_city_id")
     const _address_postal_code = document.getElementById("address_postal_code")
-    const _card_edit_address_form = document.getElementById("card_edit_address_form")
-    const _table_address = document.getElementById("table_address")
-    const _button_add_address_table = document.getElementById("button_add_address_table")
-    const _button_close_edit_address_form = document.getElementById("button_close_edit_address_form")
-    // ----
+    //Defaults
     let default_display = default_address_view
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $address_table = $(_table_address)
     let temp_address = {}
-    // ----
+    
+    /**
+     * add new address
+     */
     $(_button_add_address_table)
       .on("click", function () {
           $address_table.clearSelectedRows()
           clear_form()
           load_form()
       })
+    
+    /**
+     * clear address form button
+     */
     $(_button_clear_form_edit_address)
       .on("click", function () {
           $address_table.clearSelectedRows()
           clear_form()
       })
+    
+    /**
+     * submit button save address
+     */
     $(_button_submit_form_edit_address)
       .on("click", function () {
           alert()
       })
+    
+    /**
+     * close address form
+     */
     $(_button_close_edit_address_form)
       .on("click", function () {
           $address_table.clearSelectedRows()
@@ -3440,6 +3463,7 @@ const Address = (function () {
             street_3: null,
             postal_code: null,
             enabled: 1,
+            address_types_id: [],
             date_created: formatDateMySQL(),
             created_by: parseInt(user_id),
             date_modified: formatDateMySQL(),
@@ -3491,17 +3515,19 @@ const Address = (function () {
         }
     }
     
+    /**
+     * save address form data
+     *
+     * @param params
+     */
     const save = function (params) {
     
     }
     
-    const get = function () {
-        let data_to_send = {}
-        
-    }
-    
+    /**
+     * clears address form
+     */
     const clear_form = function () {
-        log("Address.clear_form")
         _address_id.value = ""
         _address_enabled.checked = true
         _address_street_1.value = ""
@@ -3512,6 +3538,11 @@ const Address = (function () {
         $(_address_country_id).val("").trigger("change")
     }
     
+    /**
+     * populate address form
+     *
+     * @param address
+     */
     const populate_form = function (address) {
         if (address) {
             _address_id.value = (address.id) ? address.id : null
@@ -3567,6 +3598,9 @@ const Address = (function () {
         
     }
     
+    /**
+     * build address table structure
+     */
     const build_table = function () {
         let table_address_render_value = default_display + "_address_formatted"
         if (!$.fn.DataTable.isDataTable(_table_address)) {
@@ -3598,10 +3632,12 @@ const Address = (function () {
     
     /**
      * load address into object
+     *
      * @param addresses
      */
     const load_all = function (addresses) {
         Address.all = new Map()
+        
         if (addresses) {
             $.each(addresses, function (i, address) {
                 let detail = set_detail(address)
@@ -3609,8 +3645,21 @@ const Address = (function () {
                 $address_table.insertRow(detail)
             })
         }
+        
+        if (_table_address) {
+            $address_table.clearSelectedRows()
+        }
+        if (_card_edit_address_form) {
+            clear_form()
+            unload_form()
+        }
     }
     
+    /**
+     * initialize address form and table
+     *
+     * @param addresses
+     */
     const init = function (addresses) {
         if (_table_address) {
             build_table()
@@ -3660,6 +3709,9 @@ const Address = (function () {
         }
     }
     
+    /**
+     * set address object detail
+     */
     const set_detail = function (address) {
         let detail = _default_detail()
         if (address) {
@@ -3726,29 +3778,28 @@ const Address = (function () {
         return detail
     }
     
-    const set = function (address) {
-        log("Address.set")
-        let detail = set_detail(address)
-        clear_form()
-        populate_form(detail)
-    }
-    
+    /**
+     * populate form with selected address
+     *
+     * @param address
+     */
     const navigate = function (address) {
         if (address) {
             reset_form()
             populate_form(address)
+            load_form()
         }
     }
     
+    /**
+     * globals
+     */
     return {
         validator: null,
         detail: {},
         all: new Map(),
         navigate: function (address) {
             navigate(address)
-        },
-        get: function (params) {
-            get(params)
         },
         load_all: function (params) {
             load_all(params)
@@ -4155,24 +4206,68 @@ ContactTypes.init()
 
 const Contact = (function () {
     "use strict"
-    
+    //Path
     const base_url = "/contacts"
-    const _input_contact_id = document.getElementById("input_contact_id")
-    const _input_contact_name_first = document.getElementById("input_contact_name_first")
-    const _input_contact_name_last = document.getElementById("input_contact_name_last")
-    const _input_contact_phone = document.getElementById("input_contact_phone")
-    const _input_contact_email = document.getElementById("input_contact_email")
-    const _input_contact_enabled = document.getElementById("input_contact_enabled")
-    const _input_contact_date_created = document.getElementById("input_contact_date_created")
-    const _input_contact_created_by = document.getElementById("input_contact_created_by")
-    const _input_contact_date_modified = document.getElementById("input_contact_date_modified")
-    const _input_contact_modified_by = document.getElementById("input_contact_modified_by")
-    const _input_contact_note = document.getElementById("input_contact_note")
+    //Buttons
+    const _button_add_contact_table = document.getElementById("button_add_contact_table")
+    const _button_clear_form_edit_contact = document.getElementById("button_clear_form_edit_contact")
+    const _button_close_edit_contact_form = document.getElementById("button_close_edit_contact_form")
+    const _button_submit_form_edit_contact = document.getElementById("button_submit_form_edit_contact")
+    //Fields
+    const _contact_id = document.getElementById("contact_id")
+    const _contact_name_first = document.getElementById("contact_name_first")
+    const _contact_name_last = document.getElementById("contact_name_last")
+    const _contact_phone = document.getElementById("contact_phone")
+    const _contact_email = document.getElementById("contact_email")
+    const _contact_enabled = document.getElementById("contact_enabled")
+    const _contact_types_id = document.getElementById("contact_types_id")
+    //Blocks
+    const _card_edit_contact_form = document.getElementById("card_edit_contact_form")
+    
+    //Tables
     const _table_contact = document.getElementById("table_contact")
-    // ----
+    //Unused
+    const _contact_date_created = document.getElementById("contact_date_created")
+    const _contact_created_by = document.getElementById("contact_created_by")
+    const _contact_date_modified = document.getElementById("contact_date_modified")
+    const _contact_modified_by = document.getElementById("contact_modified_by")
+    const _contact_note = document.getElementById("contact_note")
+    //Defaults
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $contact_table = $(_table_contact)
     // ----
+    
+    /**
+     * submit contact form button
+     */
+    $(_button_submit_form_edit_contact)
+      .on("click", function () {
+          save()
+      })
+    
+    $(_button_add_contact_table)
+      .on("click", function () {
+          $contact_table.clearSelectedRows()
+          clear_form()
+          show_form()
+      })
+    
+    $(_button_clear_form_edit_contact)
+      .on("click", function () {
+          $contact_table.clearSelectedRows()
+          clear_form()
+      })
+    
+    $(_button_close_edit_contact_form)
+      .on("click", function () {
+          $contact_table.clearSelectedRows()
+          clear_form()
+          hide_form()
+      })
+    
+    /**
+     * build contact table structure
+     */
     const build_table = function () {
         if (_table_contact) {
             if (!$.fn.DataTable.isDataTable(_table_contact)) {
@@ -4189,17 +4284,17 @@ const Contact = (function () {
                             },
                         },
                         {
-                            title: "First Name",
+                            title: "Name",
                             targets: 1,
-                            data: "name_first",
+                            data: "formatted_names",
                             render: function (data, type, row, meta) {
                                 return data
                             },
                         },
                         {
-                            title: "Last Name",
+                            title: "Types",
                             targets: 2,
-                            data: "name_last",
+                            data: "formatted_types",
                             render: function (data, type, row, meta) {
                                 return data
                             },
@@ -4211,15 +4306,19 @@ const Contact = (function () {
         }
     }
     
-    const handle_contact_error = function (msg) {
-        toastr.error(msg)
-    }
-    
+    /**
+     * sets objects default values
+     *
+     * @returns {{note: null, country: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, currency_id: null, enabled: number, iso3: null}, medium_address_formatted: null, city: {note: null, date_modified: *, province_id: null, date_created: *, name: null, modified_by: number, id: null, sort_order: number, created_by: number, enabled: number}, date_created: *, created_by: number, enabled: number, short_address_formatted: null, long_address_formatted: null, street_1: null, date_modified: *, province: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, country_id: null, enabled: number, iso3: null}, street_3: null, street_2: null, modified_by: number, id: null, postal_code: null}}
+     * @private
+     */
     const _default_detail = function () {
         return {
             id: null,
             name_first: null,
             name_last: null,
+            formatted_types: "",
+            formatted_names: "",
             phone: null,
             email: null,
             enabled: 1,
@@ -4231,18 +4330,100 @@ const Contact = (function () {
         }
     }
     
-    const save = function (params) {
-    
+    /**
+     * handels contact errors
+     *
+     * @param msg
+     */
+    const handle_contact_error = function (msg) {
+        toastr.error(msg)
     }
     
-    const get = function (id) {
-        let data_to_send = {}
-        if (id) {
-            data_to_send.id = id
-        }
+    /**
+     * reset form fields
+     */
+    const clear_form = function () {
         
+        if (_card_edit_contact_form) {
+            _contact_id.value = ""
+            _contact_name_first.value = ""
+            _contact_name_last.value = ""
+            _contact_phone.value = ""
+            _contact_email.value = ""
+            _contact_enabled.checked = true
+            $(_contact_types_id).val([])
+        }
     }
     
+    /**
+     * populate form fields
+     *
+     * @param contact
+     */
+    const populate_form = function (contact) {
+        log("Contact-PopulateForm.contact", contact)
+        if (_card_edit_contact_form) {
+            _contact_id.value = validInt(contact.id)
+            _contact_name_first.value = (contact.name_first) ? contact.name_first : null
+            _contact_name_last.value = (contact.name_last) ? contact.name_last : null
+            _contact_phone.value = (contact.phone) ? contact.phone : null
+            _contact_email.value = (contact.email) ? contact.email : null
+            _contact_enabled.checked = (contact.enabled) ? (contact.enabled === 1) : true
+            $(_contact_types_id).val((contact.contact_types_id) ? contact.contact_types_id : [])
+        }
+    }
+    
+    /**
+     * show form
+     */
+    const show_form = function () {
+        if (_card_edit_contact_form) {
+            $(_card_edit_contact_form).show()
+        }
+    }
+    
+    /**
+     * hide form
+     */
+    const hide_form = function () {
+        if (_card_edit_contact_form) {
+            $(_card_edit_contact_form).hide()
+        }
+    }
+    
+    /**
+     * save contact
+     */
+    const save = function () {
+        if (validate()) {
+            let dataToSend = {
+                id: null,
+                name_first: (_contact_name_first.value !== "") ? _contact_name_first.value : null,
+                name_last: (_contact_name_last.value !== "") ? _contact_name_last.value : null,
+                email: (_contact_email.value !== "") ? _contact_email.value : null,
+                phone: (_contact_phone.value !== "") ? _contact_phone.value : null,
+                enabled: (_contact_enabled) ? 1 : 0,
+                note: null,
+            }
+            log(dataToSend)
+        }
+    }
+    
+    /**
+     * validate contact form
+     *
+     * @returns {boolean}
+     */
+    const validate = function () {
+        
+        return false
+    }
+    
+    /**
+     * initialize contact form and table
+     *
+     * @param contacts
+     */
     const init = function (contacts) {
         if (_table_contact) {
             build_table()
@@ -4250,14 +4431,24 @@ const Contact = (function () {
         if (contacts) {
             load_all(contacts)
         }
+        hide_form()
     }
     
-    const set = function (contact) {
+    /**
+     * sets detail for contact object
+     *
+     * @param contact
+     * @returns {{note: null, country: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, currency_id: null, enabled: number, iso3: null}, medium_address_formatted: null, city: {note: null, date_modified: *, province_id: null, date_created: *, name: null, modified_by: number, id: null, sort_order: number, created_by: number, enabled: number}, date_created: *, created_by: number, enabled: number, short_address_formatted: null, long_address_formatted: null, street_1: null, date_modified: *, province: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, country_id: null, enabled: number, iso3: null}, street_3: null, street_2: null, modified_by: number, id: null, postal_code: null}}
+     */
+    const set_detail = function (contact) {
         let detail = _default_detail()
         if (contact) {
             detail.id = (contact.id) ? contact.id : null
             detail.name_first = (contact.name_first) ? contact.name_first : null
             detail.name_last = (contact.name_last) ? contact.name_last : null
+            detail.formatted_types = (contact.formatted_types) ? contact.formatted_types : ""
+            detail.formatted_names = (contact.formatted_names) ? contact.formatted_names : ""
+            detail.contact_types_id = getListOfIds(contact.contact_types_id)
             detail.phone = (contact.phone) ? contact.phone : null
             detail.email = (contact.email) ? contact.email : null
             detail.enabled = (contact.enabled) ? contact.enabled : 1
@@ -4272,6 +4463,11 @@ const Contact = (function () {
         return detail
     }
     
+    /**
+     * loads all contacts into object
+     *
+     * @param contacts
+     */
     const load_all = function (contacts) {
         Contact.all = new Map()
         
@@ -4280,27 +4476,34 @@ const Contact = (function () {
         }
         
         $.each(contacts, function (i, contact) {
-            let detail = set(contact)
+            let detail = set_detail(contact)
             Contact.all.set(detail.id, detail)
             $contact_table.insertRow(detail)
         })
         
-        console.log(" Contact.all", Contact.all)
+        //console.log(" Contact.all", Contact.all)
     }
     
+    /**
+     * load selected contact
+     *
+     * @param contact
+     */
     const navigate = function (contact) {
-        console.log("Contact.navigate", contact)
+        clear_form()
+        populate_form(contact)
+        show_form()
     }
     
+    /**
+     * globals
+     */
     return {
         validator: null,
         detail: {},
         all: new Map(),
         navigate: function (contact) {
             navigate(contact)
-        },
-        get: function (params) {
-            get(params)
         },
         load_all: function (params) {
             load_all(params)
@@ -4432,6 +4635,7 @@ const Vendor = (function () {
     "use strict"
     
     const base_url = "/vendors"
+    //Fields
     const _vendor_company_id = document.getElementById("vendor_company_id")
     const _vendor_name = document.getElementById("vendor_name")
     const _vendor_id = document.getElementById("vendor_id")
@@ -4441,6 +4645,7 @@ const Vendor = (function () {
     const _vendor_is_provider = document.getElementById("vendor_is_provider")
     const _vendor_sku = document.getElementById("vendor_sku")
     const _vendor_enabled = document.getElementById("vendor_enabled")
+    //Unused
     const _vendor_date_created = document.getElementById("vendor_date_created")
     const _vendor_created_by = document.getElementById("vendor_created_by")
     const _vendor_date_modified = document.getElementById("vendor_date_modified")
@@ -4559,12 +4764,10 @@ const Vendor = (function () {
     }
     
     const init = function (settings) {
-        
         if (_vendor_name) {
             init_autocomplete()
         }
         
-        console.log("settings", settings)
         /**
          * created_by: 4
          * date_created: "10/25/2021"
@@ -4604,7 +4807,7 @@ const Vendor = (function () {
             save(params)
         },
         init: function (settings) {
-            init(settings)
+            //init(settings)
         },
     }
     
@@ -5375,18 +5578,21 @@ const Provider = (function () {
     "use strict"
     
     const base_url = "/providers"
-    
-    const _provider_name = document.getElementById("provider_name")
+    //Buttons
     const _button_add_provider_page_heading = document.getElementById("button_add_provider_page_heading")
+    //Tables
     const _table_provider_index = document.getElementById("table_provider_index")
+    //Fields
     const _provider_id = document.getElementById("provider_id")
+    const _provider_name = document.getElementById("provider_name")
     const _provider_company_id = document.getElementById("provider_company_id")
     const _provider_enabled = document.getElementById("provider_enabled")
-    // ----
+    const _provider_code_direct_id = document.getElementById("provider_code_direct_id")
+    //Defaults
     let globalSelectedProvider = false
     let $index_table = $(_table_provider_index)
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    // ----
+    
     $(_button_add_provider_page_heading)
       .on("click", function () {
           //console.log("test")
@@ -5394,6 +5600,17 @@ const Provider = (function () {
     
     const handle_provider_error = function (msg) {
         toastr.error(msg)
+    }
+    
+    const load_all = function (providers) {
+        Provider.all = new Map()
+        if (providers) {
+            $.each(providers, function (i, provider) {
+                let detail = set(provider)
+                $index_table.insertRow(detail)
+                Provider.all.set(detail.id, detail)
+            })
+        }
     }
     
     const _default_detail = function () {
@@ -5417,14 +5634,19 @@ const Provider = (function () {
         }
     }
     
+    /**
+     * pupulate provider form
+     *
+     * @param provider
+     */
     const populate_form = function (provider) {
-        
         if (provider) {
+            log("provider", provider)
             _provider_id.value = (provider.id) ? provider.id : null
-            _provider_name.value = (provider.id) ? provider.id : null
+            _provider_name.value = (provider.name) ? provider.name : null
+            _provider_code_direct_id.value = (provider.code_direct_id) ? provider.code_direct_id : null
             _provider_enabled.checked = (provider.enabled === 1)
         }
-        
     }
     
     const save = function (params) {
@@ -5473,17 +5695,6 @@ const Provider = (function () {
         
         Provider.detail = detail
         return detail
-    }
-    
-    const load_all = function (providers) {
-        Provider.all = new Map()
-        if (providers) {
-            $.each(providers, function (i, provider) {
-                let detail = set(provider)
-                $index_table.insertRow(detail)
-                Provider.all.set(detail.id, detail)
-            })
-        }
     }
     
     const index = function (settings) {
@@ -5550,11 +5761,13 @@ const Provider = (function () {
     }
     
     const edit = function (settings) {
-        let provider_detail = {}
-        let location = {}
         let addresses = []
         let contacts = []
+        let provider_detail = {}
+        let location = {}
         let company = {}
+        let vendor = {}
+        
         if (settings.provider_detail) {
             provider_detail = settings.provider_detail
             if (provider_detail.location) {
@@ -5570,12 +5783,18 @@ const Provider = (function () {
             contacts = settings.contact_detail
         }
         
-        console.log("settings.provider_detail", settings.provider_detail.vendor)
+        //if (settings.vendor_detail) {
+        //vendor = settings.vendor_detail
+        //}
+        
+        //log("settings", settings)
         
         let provider = set(provider_detail)
-        if (settings.provider_detail.vendor) {
-            Vendor.init(settings.provider_detail.vendor)
-        }
+        
+        //if (settings.provider_detail.vendor) {
+        //Vendor.init(settings.provider_detail.vendor)
+        //}
+        
         Contact.init(contacts)
         Address.init(addresses)
         Address.load_all(addresses)

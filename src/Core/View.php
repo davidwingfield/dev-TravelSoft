@@ -9,7 +9,7 @@
      *
      * Long View Description
      *
-     * @package            Application\Core
+     * @package            Framework\Core
      * @uses               used in prod env for logging all type of error of php code in a file for further debugging
      *                     and code performance
      */

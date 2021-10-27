@@ -11,8 +11,8 @@
      *
      * Long User Description
      *
-     * @package            Application\App
-     * @subpackage         Controllers
+     * @package            Framework\App
+     * @subpackage         Models
      */
     class UserModel extends Model
     {

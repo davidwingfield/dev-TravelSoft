@@ -7,7 +7,7 @@
      *
      * Long CustomerModel Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Models
      */
     class CustomerModel

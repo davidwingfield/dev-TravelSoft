@@ -11,12 +11,11 @@
      *
      * Long Vendor Description
      *
-     * @package            Application\App
-     * @subpackage         Controllers
+     * @package            Framework\App
+     * @subpackage         Models
      */
     class VendorModel extends Model
     {
-
         protected static $selectQuery = "
             SELECT 
                             COMPANY.id AS 'company_id',
@@ -49,25 +48,38 @@
                             VENDOR.note  AS 'vendor_note'
             FROM 			vendor VENDOR
             JOIN			company COMPANY ON COMPANY.id = VENDOR.company_id
-            WHERE			VENDOR.enabled = 1
+           WHERE			COMPANY.enabled = 1
                 AND			COMPANY.enabled = 1
+                AND			VENDOR.enabled = 1
                 AND			COALESCE(COMPANY.status, 10) = 10
                 ";
+
         protected static $dbTable = "vendor";
+
         protected static $dbFields = Array();
 
+        /**
+         * Gets vendor(s) by id
+         *
+         * If id is passed then we search by it otherwise get all enabled
+         *
+         * @param int|null $id Provider Id
+         *
+         * @return array
+         */
         public static function get(int $id = null): array
         {
-
+            $where = "";
             try {
                 if (!is_null($id)) {
-                    Model::$db->where("id", $id);
+                    $where = "AND		VENDOR.id = $id";
                 }
+                $sql = self::$selectQuery . $where;
 
-                self::$db->where("enabled", 1);
-
-                return self::$db->get(self::$dbTable);
+                return Model::$db->rawQuery($sql);
             } catch (Exception $e) {
+                Log::$debug_log->error($e->getMessage());
+
                 return [];
             }
         }

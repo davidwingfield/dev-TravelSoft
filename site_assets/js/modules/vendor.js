@@ -2,6 +2,7 @@ const Vendor = (function () {
     "use strict"
     
     const base_url = "/vendors"
+    //Fields
     const _vendor_company_id = document.getElementById("vendor_company_id")
     const _vendor_name = document.getElementById("vendor_name")
     const _vendor_id = document.getElementById("vendor_id")
@@ -11,6 +12,7 @@ const Vendor = (function () {
     const _vendor_is_provider = document.getElementById("vendor_is_provider")
     const _vendor_sku = document.getElementById("vendor_sku")
     const _vendor_enabled = document.getElementById("vendor_enabled")
+    //Unused
     const _vendor_date_created = document.getElementById("vendor_date_created")
     const _vendor_created_by = document.getElementById("vendor_created_by")
     const _vendor_date_modified = document.getElementById("vendor_date_modified")
@@ -129,12 +131,10 @@ const Vendor = (function () {
     }
     
     const init = function (settings) {
-        
         if (_vendor_name) {
             init_autocomplete()
         }
         
-        console.log("settings", settings)
         /**
          * created_by: 4
          * date_created: "10/25/2021"
@@ -174,7 +174,7 @@ const Vendor = (function () {
             save(params)
         },
         init: function (settings) {
-            init(settings)
+            //init(settings)
         },
     }
     

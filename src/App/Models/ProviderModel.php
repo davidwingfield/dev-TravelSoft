@@ -9,6 +9,8 @@
     /**
      * ProviderModel
      *
+     * @package            Framework\App
+     * @subpackage         Models
      */
     class ProviderModel extends Model
     {
@@ -118,6 +120,20 @@
                             COUNTRY.created_by AS 'country_created_by',
                             COUNTRY.date_modified AS 'country_date_modified',
                             COUNTRY.modified_by AS 'country_modified_by',
+                            VENDORCOMPANY.id AS 'vendor_company_id',
+                            COALESCE(VENDORCOMPANY.name, '') AS 'vendor_company_name',
+                            COALESCE(VENDORCOMPANY.phone_1, '') AS 'vendor_company_phone_1',
+                            COALESCE(VENDORCOMPANY.phone_2, '') AS 'vendor_company_phone_2',
+                            COALESCE(VENDORCOMPANY.fax, '') AS 'vendor_company_fax',
+                            COALESCE(VENDORCOMPANY.website, '') AS 'vendor_company_website',
+                            COALESCE(VENDORCOMPANY.email, '') AS 'vendor_company_email',
+                            VENDORCOMPANY.enabled AS 'vendor_company_enabled',
+                            VENDORCOMPANY.created_by AS 'vendor_company_created_by',
+                            DATE_FORMAT(VENDORCOMPANY.date_created, '%m/%d/%Y') AS 'vendor_company_date_created',
+                            VENDORCOMPANY.modified_by AS 'vendor_company_modified_by',
+                            DATE_FORMAT(VENDORCOMPANY.date_modified, '%m/%d/%Y') AS 'vendor_company_date_modified',
+                            COALESCE(VENDORCOMPANY.status, 10) AS 'vendor_company_status',
+                            VENDORCOMPANY.note AS 'vendor_company_note',
                             VENDOR.id AS 'vendor_id',
                             VENDOR.company_id AS 'vendor_company_id',
                             VENDOR.status_id AS 'vendor_status_id',
@@ -140,6 +156,7 @@
             JOIN			province PROVINCE ON CITY.province_id = PROVINCE.id
             JOIN			country COUNTRY ON PROVINCE.country_id = COUNTRY.id
             JOIN			vendor VENDOR ON VENDOR.company_id = COMPANY.id AND VENDOR.is_provider = 1
+            LEFT JOIN		company VENDORCOMPANY ON VENDORCOMPANY.id = VENDOR.company_id
             WHERE			PROVIDER.enabled = 1
                 AND			COMPANY.enabled = 1
                 AND			VENDOR.enabled = 1

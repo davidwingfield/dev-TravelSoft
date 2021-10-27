@@ -10,8 +10,8 @@
      *
      * Long RatingTypes Description
      *
-     * @package            Application\App
-     * @subpackage         Controllers
+     * @package            Framework\App
+     * @subpackage         Models
      */
     class RatingTypesModel extends Model
     {

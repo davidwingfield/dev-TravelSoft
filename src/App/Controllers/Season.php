@@ -1,14 +1,15 @@
 <?php
-namespace Framework\App\Controllers;
+
+    namespace Framework\App\Controllers;
 
     use Framework\Core\Controller;
 
-	/**
+    /**
      * Short Season Description
      *
      * Long Season Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Controllers
      */
     class Season extends Controller
@@ -17,6 +18,12 @@ namespace Framework\App\Controllers;
         {
             parent::__construct();
         }
-        
-       
+
+        public static function serveGet(int $season_id = null): array
+        {
+            $seasons = [];
+
+            return $seasons;
+        }
+
     }

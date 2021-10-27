@@ -10,7 +10,7 @@
      *
      * Long Product Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Controllers
      */
     class Product extends Controller

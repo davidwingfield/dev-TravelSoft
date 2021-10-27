@@ -10,8 +10,8 @@
      *
      * Long AddressTypes Description
      *
-     * @package            Application\App
-     * @subpackage         Controllers
+     * @package            Framework\App
+     * @subpackage         Models
      */
     class AddressTypesModel extends Model
     {

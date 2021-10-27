@@ -8,11 +8,15 @@
     use Framework\Logger\Log;
 
     /**
+     * CLASSNAME:        Country
+     * CLASS FILE:       C:\wamp64\www\mockups/generated_classes/Package.php
+     *
+     *
      * Short Country Description
      *
      * Long Country Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Controllers
      */
     class Country extends Controller

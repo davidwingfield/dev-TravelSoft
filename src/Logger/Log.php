@@ -9,7 +9,7 @@
      *
      * Long Config Description
      *
-     * @package            Application\Logger
+     * @package            Framework\Logger
      */
     class Log
     {

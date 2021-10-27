@@ -7,7 +7,7 @@
      *
      * Long DotEnv Description
      *
-     * @package            Application\Init
+     * @package            Framework\Init
      */
     class DotEnv
     {

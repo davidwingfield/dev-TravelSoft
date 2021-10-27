@@ -9,7 +9,7 @@
      *
      * Long Customer Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Controllers
      */
     class Customer extends Controller

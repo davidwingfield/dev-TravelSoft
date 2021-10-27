@@ -10,7 +10,7 @@
      *
      * Long Address Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Controllers
      */
     class Address extends Controller

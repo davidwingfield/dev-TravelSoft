@@ -11,7 +11,7 @@
      *
      * Long ErrorHandler Description
      *
-     * @package         Application\Exception
+     * @package         Framework\Exception
      * @uses            used in prod env for logging all type of error of php code in a file for further debugging
      *                  and code performance
      */

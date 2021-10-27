@@ -4,7 +4,7 @@
      *
      * Long AppIni Description
      *
-     * @package            Application\Init
+     * @package            Framework\Init
      */
 
     namespace Framework\Init;

@@ -9,7 +9,7 @@
      *
      * Long Company Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Controllers
      */
     class Company extends Controller

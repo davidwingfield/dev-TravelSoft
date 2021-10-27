@@ -54,26 +54,26 @@
 <aside class="phpdocumentor-column -four phpdocumentor-sidebar">
                     <section class="phpdocumentor-sidebar__category">
             <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                    <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/src.html">Src</a></h4>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/framework.html">Framework</a></h4>
     <ul class="phpdocumentor-list">
                     <li>
-                <a href="namespaces/src-app.html">App</a>
+                <a href="namespaces/framework-app.html">App</a>
                 
             </li>
                     <li>
-                <a href="namespaces/src-core.html">Core</a>
+                <a href="namespaces/framework-core.html">Core</a>
                 
             </li>
                     <li>
-                <a href="namespaces/src-exception.html">Exception</a>
+                <a href="namespaces/framework-exception.html">Exception</a>
                 
             </li>
                     <li>
-                <a href="namespaces/src-init.html">Init</a>
+                <a href="namespaces/framework-init.html">Init</a>
                 
             </li>
                     <li>
-                <a href="namespaces/src-logger.html">Logger</a>
+                <a href="namespaces/framework-logger.html">Logger</a>
                 
             </li>
             </ul>
@@ -82,25 +82,27 @@
                 <section class="phpdocumentor-sidebar__category">
             <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace"><a href="packages/Application.html">Application</a></h4>
+
+                                    <h4 class="phpdocumentor-sidebar__root-namespace"><a href="packages/Framework.html">Framework</a></h4>
     <ul class="phpdocumentor-list">
                     <li>
-                <a href="packages/Application-App.html">App</a>
+                <a href="packages/Framework-App.html">App</a>
                 
             </li>
                     <li>
-                <a href="packages/Application-Core.html">Core</a>
+                <a href="packages/Framework-Core.html">Core</a>
                 
             </li>
                     <li>
-                <a href="packages/Application-Init.html">Init</a>
+                <a href="packages/Framework-Exception.html">Exception</a>
                 
             </li>
                     <li>
-                <a href="packages/Application-Exception.html">Exception</a>
+                <a href="packages/Framework-Init.html">Init</a>
                 
             </li>
                     <li>
-                <a href="packages/Application-Logger.html">Logger</a>
+                <a href="packages/Framework-Logger.html">Logger</a>
                 
             </li>
             </ul>
@@ -202,7 +204,7 @@
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="namespaces/src-init.html#constant_DEV">DEV</a>
+    <a href="namespaces/framework-init.html#constant_DEV">DEV</a>
     <span>
         &nbsp;= 0                    </span>
 </dt>
@@ -216,7 +218,7 @@
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="namespaces/src-init.html#constant_ENVIRONMENT">ENVIRONMENT</a>
+    <a href="namespaces/framework-init.html#constant_ENVIRONMENT">ENVIRONMENT</a>
     <span>
         &nbsp;= DEV                    </span>
 </dt>
@@ -226,13 +228,6 @@
     <a href="namespaces/default.html#constant_EXPIRETIME">EXPIRETIME</a>
     <span>
         &nbsp;= $ini[&quot;database&quot;][&quot;expire_time&quot;]                    </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="namespaces/default.html#constant_INI_PATH">INI_PATH</a>
-    <span>
-        &nbsp;= ROOT_PATH . &quot;/app.ini&quot;                    </span>
 </dt>
 <dd></dd>
 
@@ -258,30 +253,9 @@
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="namespaces/src-init.html#constant_PRODUCTION">PRODUCTION</a>
+    <a href="namespaces/framework-init.html#constant_PRODUCTION">PRODUCTION</a>
     <span>
         &nbsp;= 1                    </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="namespaces/default.html#constant_ROOT_PATH">ROOT_PATH</a>
-    <span>
-        &nbsp;= $_SERVER[&quot;DOCUMENT_ROOT&quot;]                    </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="namespaces/default.html#constant_ROUTES_PATH">ROUTES_PATH</a>
-    <span>
-        &nbsp;= ROOT_PATH . &quot;/src/App/Routes&quot;                    </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="namespaces/default.html#constant_SECURE">SECURE</a>
-    <span>
-        &nbsp;= false                    </span>
 </dt>
 <dd></dd>
 
@@ -289,13 +263,6 @@
     <a href="namespaces/default.html#constant_VERSION">VERSION</a>
     <span>
         &nbsp;= $ini[&quot;application&quot;][&quot;version&quot;]                    </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="namespaces/default.html#constant_VIEWS_PATH">VIEWS_PATH</a>
-    <span>
-        &nbsp;= ROOT_PATH . &quot;/src/App/Views&quot;                    </span>
 </dt>
 <dd></dd>
 
@@ -318,7 +285,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">45</span>
+    <span class="phpdocumentor-element-found-in__line">42</span>
 
     </aside>
 
@@ -347,7 +314,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">36</span>
+    <span class="phpdocumentor-element-found-in__line">33</span>
 
     </aside>
 
@@ -376,7 +343,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">41</span>
+    <span class="phpdocumentor-element-found-in__line">38</span>
 
     </aside>
 
@@ -405,7 +372,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">37</span>
+    <span class="phpdocumentor-element-found-in__line">34</span>
 
     </aside>
 
@@ -434,7 +401,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">35</span>
+    <span class="phpdocumentor-element-found-in__line">32</span>
 
     </aside>
 
@@ -463,7 +430,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">40</span>
+    <span class="phpdocumentor-element-found-in__line">37</span>
 
     </aside>
 
@@ -492,7 +459,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">39</span>
+    <span class="phpdocumentor-element-found-in__line">36</span>
 
     </aside>
 
@@ -521,7 +488,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">38</span>
+    <span class="phpdocumentor-element-found-in__line">35</span>
 
     </aside>
 
@@ -544,13 +511,13 @@
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_DEV">
         DEV
-        <a href="namespaces/src-init.html#constant_DEV" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="namespaces/framework-init.html#constant_DEV" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">51</span>
+    <span class="phpdocumentor-element-found-in__line">47</span>
 
     </aside>
 
@@ -579,7 +546,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">46</span>
+    <span class="phpdocumentor-element-found-in__line">43</span>
 
     </aside>
 
@@ -602,13 +569,13 @@
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_ENVIRONMENT">
         ENVIRONMENT
-        <a href="namespaces/src-init.html#constant_ENVIRONMENT" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="namespaces/framework-init.html#constant_ENVIRONMENT" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">55</span>
+    <span class="phpdocumentor-element-found-in__line">51</span>
 
     </aside>
 
@@ -637,7 +604,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">42</span>
+    <span class="phpdocumentor-element-found-in__line">39</span>
 
     </aside>
 
@@ -658,35 +625,6 @@
 
 </article>
                     <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_INI_PATH">
-        INI_PATH
-        <a href="namespaces/default.html#constant_INI_PATH" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">26</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">INI_PATH</span>
-    = <span class="phpdocumentor-signature__default-value">ROOT_PATH . &quot;/app.ini&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_LOGINATTEMPTS">
         LOGINATTEMPTS
         <a href="namespaces/default.html#constant_LOGINATTEMPTS" class="headerlink"><i class="fas fa-link"></i></a>
@@ -695,7 +633,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">48</span>
+    <span class="phpdocumentor-element-found-in__line">45</span>
 
     </aside>
 
@@ -724,7 +662,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">47</span>
+    <span class="phpdocumentor-element-found-in__line">44</span>
 
     </aside>
 
@@ -753,7 +691,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">44</span>
+    <span class="phpdocumentor-element-found-in__line">41</span>
 
     </aside>
 
@@ -776,13 +714,13 @@
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_PRODUCTION">
         PRODUCTION
-        <a href="namespaces/src-init.html#constant_PRODUCTION" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="namespaces/framework-init.html#constant_PRODUCTION" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">52</span>
+    <span class="phpdocumentor-element-found-in__line">48</span>
 
     </aside>
 
@@ -803,93 +741,6 @@
 
 </article>
                     <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_ROOT_PATH">
-        ROOT_PATH
-        <a href="namespaces/default.html#constant_ROOT_PATH" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">23</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">ROOT_PATH</span>
-    = <span class="phpdocumentor-signature__default-value">$_SERVER[&quot;DOCUMENT_ROOT&quot;]</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_ROUTES_PATH">
-        ROUTES_PATH
-        <a href="namespaces/default.html#constant_ROUTES_PATH" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">24</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">ROUTES_PATH</span>
-    = <span class="phpdocumentor-signature__default-value">ROOT_PATH . &quot;/src/App/Routes&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_SECURE">
-        SECURE
-        <a href="namespaces/default.html#constant_SECURE" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">49</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">SECURE</span>
-    = <span class="phpdocumentor-signature__default-value">false</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_VERSION">
         VERSION
         <a href="namespaces/default.html#constant_VERSION" class="headerlink"><i class="fas fa-link"></i></a>
@@ -898,7 +749,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">43</span>
+    <span class="phpdocumentor-element-found-in__line">40</span>
 
     </aside>
 
@@ -908,35 +759,6 @@
     <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">VERSION</span>
     = <span class="phpdocumentor-signature__default-value">$ini[&quot;application&quot;][&quot;version&quot;]</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_VIEWS_PATH">
-        VIEWS_PATH
-        <a href="namespaces/default.html#constant_VIEWS_PATH" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Init/bootstrap.php"><a href="files/init-bootstrap.html"><abbr title="Init/bootstrap.php">bootstrap.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">25</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">VIEWS_PATH</span>
-    = <span class="phpdocumentor-signature__default-value">ROOT_PATH . &quot;/src/App/Views&quot;</span>
 </code>
 
 

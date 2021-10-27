@@ -11,7 +11,7 @@
      *
      * Long Province Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Controllers
      */
     class Province extends Controller

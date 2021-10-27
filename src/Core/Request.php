@@ -9,7 +9,7 @@
      *
      * Long Request Description
      *
-     * @package            Application\Core
+     * @package            Framework\Core
      */
     class Request
     {

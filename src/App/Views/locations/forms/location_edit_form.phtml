@@ -1,20 +1,8 @@
 <?php
-    //  $page_data = [];
-    //  $types = array();
-    //  if (isset($data)) {
-    //       $page_data = $data;
-    //  }
-
-    // if (isset($page_data["types"])) {
-    //     $types = $page_data["types"];
-    // }
-
     $location_types = [];
-    //echo "<pre>" . var_export($data, 1) . "</pre>";
     if (isset($data["types"]["location_types"])) {
         $location_types = $data["types"]["location_types"];
     }
-
 ?>
 <!-- Edit Location Form -->
 <form id="form_edit_location" name="form_edit_location" class="" style="" novalidate>

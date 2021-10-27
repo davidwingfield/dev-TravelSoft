@@ -5,7 +5,7 @@
      *
      * Long Web Routes Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Routes
      */
 
@@ -13,7 +13,9 @@
 
     use Framework\Core\Router;
 
-    /** STATIC PAGE ROUTES */
+    /**
+     * Static Page Routes
+     */
     Router::get("", "StaticPages@index");
     Router::get("register", "StaticPages@register");
     Router::get("login", "StaticPages@login");
@@ -23,25 +25,37 @@
     Router::get("documents/database", "StaticPages@database");
     Router::get("utilities/filemanager", "StaticPages@filemanager");
 
-    /** PROVIDER PAGE ROUTES */
+    /**
+     * Provider Page Routes
+     */
     Router::get("providers", "Provider@index");
     Router::get("providers/new", "Provider@new");
     Router::get('providers/${provider_id}', "Provider@edit");
 
-    /** VENDOR PAGE ROUTES */
+    /**
+     * Vendor Page Routes
+     */
     Router::get("vendors", "Vendor@index");
     Router::get("vendors/new", "Vendor@new");
     Router::get('vendors/${vendor_id}', "Vendor@edit");
 
-    /** PRODUCT PAGE ROUTES */
+    /**
+     * Product Page Routes
+     */
     Router::get("products", "Product@index");
     Router::get('products/new', "Product@new");
     Router::get('products/${product_id}', "Product@edit");
-    Router::get("products/packages", "Product@productPackageIndex");
-    Router::get('products/packages/new', "Product@productPackageNew");
-    Router::get('products/packages/${package_id}', "Product@productPackageEdit");
-    Router::get('products/${product_id}/packages/${package_id}', "Product@productPackageEdit");
-    /** TESTPOST */
 
+    /**
+     * Package Page Routes
+     */
+    Router::get("packages", "Package@index");
+    Router::get('packages/new', "Package@new");
+    Router::get('packages/${package_id}', "Package@edit");
+    Router::get('packages/${package_id}/products/${product_id}', "Package@editPackageProduct");
+
+    /**
+     * User Page Routes
+     */
     Router::get('users/${user_id}/products/${product_id}', "User@get_products_by_user");
 

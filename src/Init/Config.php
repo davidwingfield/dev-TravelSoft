@@ -7,7 +7,7 @@
      *
      * Long Config Description
      *
-     * @package            Application\Init
+     * @package            Framework\Init
      */
     class Config
     {

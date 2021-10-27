@@ -24,7 +24,7 @@
      *
      * Long Page Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Controllers
      */
     class Page extends Controller

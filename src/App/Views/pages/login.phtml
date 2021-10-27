@@ -5,12 +5,8 @@
     }
 ?>
 <style>
-  div.view {
-
-    }
-
   #intro {
-    background-image: url('/public/img/backgrounds/img40.jpg');
+    background-image: url("/public/img/backgrounds/img40.jpg");
     min-height: 100vh;
     height: 100vh;
     width: 100vw;
@@ -20,15 +16,18 @@
     z-index: 0;
     }
 
-  /* Height for devices larger than 576px */
   @media (min-width: 992px) {
+
     #intro {
       margin-top: -58.59px;
       }
+
     }
 
 </style>
+
 <div id="intro" class="view jarallax" data-jarallax='{"speed": 0.2}'>
+
     <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
 
         <section id="login">
@@ -52,17 +51,21 @@
 
                     <form id="form_login" novalidate>
 
+                        <!-- Email -->
                         <div class="form-element">
                             <label for="email">Email:<sup>*</sup></label>
                             <input type="email" name="email" id="email" class="form-control" value="tommaso@trips2italy.com" required autocomplete="false"><!--  test@example.com test_ops@trips2italy.com -->
                             <div class="error w-100 text-center" id="email-error">&nbsp;</div>
                         </div>
+                        <!-- /Email -->
 
+                        <!-- Password -->
                         <div class="form-element">
                             <label for="password">Password:<sup>*</sup></label>
                             <input type="password" id="password" name="password" class="form-control" value="6ZaxN2Vzm9NUJT2y" required autocomplete="false"> <!-- 6ZaxN2Vzm9NUJT2y -->
                             <div class="error w-100 text-center" id="password-error">&nbsp;</div>
                         </div>
+                        <!-- /Password -->
 
                         <div class="row">
 

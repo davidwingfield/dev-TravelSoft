@@ -17,9 +17,8 @@
         }
         $sql = "SELECT * FROM information_schema.tables WHERE table_schema = '" . DBNAME . "'$where";
         $results = $db->rawQuery($sql);
-        //var_dump($results, 1);
         $tables = [];
-        //*/
+
         foreach ($results AS $result) {
             if (isset($result["TABLE_TYPE"])) {
                 $table_type = $result["TABLE_TYPE"];
@@ -85,7 +84,7 @@
      *
      * Long $cCase Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Controllers
      */
     class $cCase extends Controller
@@ -122,7 +121,7 @@
      *
      * Long $cCase Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Controllers
      */
     class ${cCase}Model extends Model

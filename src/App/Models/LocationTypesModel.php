@@ -10,8 +10,8 @@
      *
      * Long LocationTypes Description
      *
-     * @package            Application\App
-     * @subpackage         Controllers
+     * @package            Framework\App
+     * @subpackage         Models
      */
     class LocationTypesModel extends Model
     {

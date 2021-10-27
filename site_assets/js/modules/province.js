@@ -433,15 +433,15 @@ const Province = (function () {
     
     const get = function (country_id, el) {
         Province.all = new Map()
+        if (!el) {
+            return
+        }
         let province_id = ""
         if (Province.id !== null) {
             province_id = Province.id
         }
-        if (!el) {
-            return
-        }
         
-        if (!el || !country_id) {
+        if (!country_id) {
             $(el).BuildDropDown({
                 data: Array.from(Province.all.values()),
                 title: "Province",
@@ -460,7 +460,6 @@ const Province = (function () {
         fetch_province_list(dataToSend, function (provinces) {
             if (provinces) {
                 load_all(provinces)
-                
                 $(el).BuildDropDown({
                     data: Array.from(Province.all.values()),
                     title: "Province",
@@ -468,7 +467,6 @@ const Province = (function () {
                     text_field: "name",
                     first_selectable: false,
                 })
-                
                 $(el).val(province_id).trigger("change")
                 
             }
@@ -476,6 +474,11 @@ const Province = (function () {
         
     }
     
+    /**
+     * load provinces into object
+     *
+     * @param provinces
+     */
     const load_all = function (provinces) {
         Province.all = new Map()
         

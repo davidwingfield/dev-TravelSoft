@@ -943,38 +943,38 @@ div.tab-pane > form {
 }
 
 .color-10 {
-  background: #910112;
-  border-color: #3c0007;
-  color: #ffffff;
-}
-
-.color-11 {
   background: #ff666b;
   border-color: #aa4447;
   color: #000000;
 }
 
-.color-12 {
+.color-11 {
   background: #3e8ef7;
   border-color: #295da2;
   color: #000000;
 }
 
-.color-13 {
+.color-12 {
   background: #f74584;
   border-color: #a22d57;
   color: #000000;
 }
 
-.color-14 {
+.color-13 {
   background: #5a9101;
   border-color: #253c00;
   color: #ffffff;
 }
 
-.color-15 {
+.color-14 {
   background: #9463f7;
   border-color: #6141a2;
+  color: #ffffff;
+}
+
+.color-15 {
+  background: #910112;
+  border-color: #3c0007;
   color: #ffffff;
 }
 
@@ -1031,4 +1031,23 @@ label.btn input[type=radio]:disabled:checked + label:after {
 
 .panel-button-close:hover {
   color: #526069;
+}
+
+.md-pills .nav-link:hover,
+.md-pills .nav-link:focus {
+  color: #0a070d;
+  background-color: rgb(255 136 79 / 30%);
+}
+
+.md-pills .nav-link.active,
+.md-pills .nav-link.active:hover,
+.md-pills .nav-link.active:focus,
+.md-pills .nav-link.active:active {
+  background-color: #55a1ec !important;
+  color: #0a070d !important;
+}
+
+.md-pills .nav-link:focus-visible {
+  outline-offset: 0;
+  outline: none;
 }

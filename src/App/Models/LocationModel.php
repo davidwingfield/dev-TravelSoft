@@ -12,8 +12,8 @@
      *
      * Long Location Description
      *
-     * @package            Application\App
-     * @subpackage         Controllers
+     * @package            Framework\App
+     * @subpackage         Models
      */
     class LocationModel extends Model
     {

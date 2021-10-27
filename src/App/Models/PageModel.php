@@ -10,8 +10,8 @@
      *
      * Long Page Description
      *
-     * @package            Application\App
-     * @subpackage         Controllers
+     * @package            Framework\App
+     * @subpackage         Models
      */
     class PageModel extends Model
     {

@@ -12,7 +12,7 @@
      *
      * Long StaticPages Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Controllers
      */
     class StaticPages extends Controller

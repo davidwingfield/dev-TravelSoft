@@ -1,16 +1,16 @@
 <?php
-    if (!isset($page_data)) {
-        $page_data = [];
+
+    $contact_types = [];
+    if (isset($data["types"]["contact_types"])) {
+        $contact_types = $data["types"]["contact_types"];
     }
+
 ?>
-<!-- Panel -->
-<section class="panel z-depth-0 w-100 mb-0" style="">
-    
-    <!-- Panel Heading -->
-    <header class="panel-heading" style="">
+<!-- Contact Table -->
+<section class="panel z-depth-0 mb-0 w-100">
+    <header class="panel-heading">
         <div class="row">
-            
-            <!-- Panel Heading Title -->
+
             <div class="col-8">
                 <h4 class="panel-title">Contact List</h4>
             </div>
@@ -41,15 +41,28 @@
     <div class="panel-body">
         
         <div id="contact_table_filters" class="collapse" style="">
-            <div class="card card-body mb-2" style="">
+            <div class="card rgba-blue-grey-slight m-2" style="">
                 <div class="row" style="">
 
-                    <!-- -->
+                    <!-- Contact Types -->
                     <div class="col-12 col-lg-4 mb-1" style="">
                         <div class="form-element" style="">
+                            <label for="filter_contact_types">Contact Types:</label>
+                            <select id="filter_contact_types" name="filter_contact_types" class="custom-select" style="" multiple>
+                                <?php
+                                    echo "<option value=''>All</option>";
+                                    foreach ($contact_types AS $k => $d) {
+                                        $val = $d["id"];
+                                        $text = $d["name"];
+
+                                        echo "<option value='$val'>$text</option>";
+                                    }
+                                ?>
+                            </select>
+                            <div id="filter_contact_types-error" class="error w-100 text-center" style="">&nbsp;</div>
                         </div>
                     </div>
-                    <!-- / -->
+                    <!-- /Contact Types -->
                 
                 </div>
             </div>
@@ -61,4 +74,4 @@
     <!-- /Panel Body -->
 
 </section>
-<!-- /Panel -->
+<!-- /Contact Table -->

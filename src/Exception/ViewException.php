@@ -12,9 +12,10 @@
      *
      * Long Controller Description
      *
-     * @package         Application\Exception
-     * @uses            used in prod env for logging all type of error of php code in a file for further debugging
-     *                  and code performance
+     * @package            Framework\Exception
+     * @subpackage         Exception
+     * @uses               used in prod env for logging all type of error of php code in a file for further debugging
+     *                     and code performance
      */
     class ViewException extends Exception
     {
@@ -26,7 +27,11 @@
             parent::__construct($message, $code, $previous);
         }
 
-        // custom string representation of object
+        /**
+         * converts to string
+         *
+         * @return string
+         */
         public function __toString()
         {
 

@@ -10,7 +10,7 @@
      *
      * Long Model Description
      *
-     * @package            Application\Core
+     * @package            Framework\Core
      */
     class Model
     {
@@ -22,7 +22,7 @@
 
         public static function init()
         {
-            
+
             if (self::$db === null) {
                 self::$db = new MysqliDb(Config::getDBHost(), Config::getDBUser(), Config::getDBPass(), Config::getDBName());
             }

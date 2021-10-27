@@ -10,8 +10,8 @@
      *
      * Long Company Description
      *
-     * @package            Application\App
-     * @subpackage         Controllers
+     * @package            Framework\App
+     * @subpackage         Models
      */
     class CompanyModel extends Model
     {

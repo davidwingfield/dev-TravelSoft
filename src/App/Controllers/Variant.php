@@ -1,14 +1,15 @@
 <?php
-namespace Framework\App\Controllers;
+
+    namespace Framework\App\Controllers;
 
     use Framework\Core\Controller;
 
-	/**
+    /**
      * Short Variant Description
      *
      * Long Variant Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Controllers
      */
     class Variant extends Controller
@@ -17,6 +18,5 @@ namespace Framework\App\Controllers;
         {
             parent::__construct();
         }
-        
-       
+
     }

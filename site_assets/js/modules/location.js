@@ -304,11 +304,12 @@ const Location = (function () {
         }
         
         init_autocomplete()
-        set(location)
+        //set(location)
         hide_form()
     }
     
     const set_detail = function (location) {
+        log("location", location)
         let detail = _default_detail()
         temp_location = detail
         

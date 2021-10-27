@@ -1,2 +1,2 @@
-cd c:/wamp64/www/mockups/src
+cd c:/wamp64/www/dev.travelsoft/src
 php phpDocumentor.phar -d . -t ../docs/FrameWork

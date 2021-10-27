@@ -10,8 +10,8 @@
      *
      * Long AirportTypes Description
      *
-     * @package            Application\App
-     * @subpackage         Controllers
+     * @package            Framework\App
+     * @subpackage         Models
      */
     class AirportTypesModel extends Model
     {

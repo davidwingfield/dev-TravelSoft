@@ -4,6 +4,12 @@
 
     use Framework\Core\Controller;
 
+    /**
+     * Autocomplete
+     *
+     * @package            Framework\App
+     * @subpackage         Controllers
+     */
     class Autocomplete extends Controller
     {
 

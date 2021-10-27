@@ -13,7 +13,7 @@
      *
      * Long Auth Description
      *
-     * @package            Application\App
+     * @package            Framework\App
      * @subpackage         Middlewares
      */
     class Auth

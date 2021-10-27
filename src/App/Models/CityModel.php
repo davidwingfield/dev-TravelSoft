@@ -11,8 +11,8 @@
      *
      * Long City Description
      *
-     * @package            Application\App
-     * @subpackage         Controllers
+     * @package            Framework\App
+     * @subpackage         Models
      */
     class CityModel extends Model
     {

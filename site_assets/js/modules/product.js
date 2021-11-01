@@ -140,7 +140,7 @@ const Product = (function () {
     }
     
     const init = function (settings) {
-        console.log("-- Product --", {})
+        //console.log("-- Product --", {})
     }
     
     const load_all = function (products) {
@@ -177,5 +177,5 @@ const Product = (function () {
     
 })()
 
-Product.init()
+//Product.init()
 //end object

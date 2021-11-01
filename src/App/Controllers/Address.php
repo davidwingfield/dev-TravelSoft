@@ -66,10 +66,16 @@
                 $streets[] = $street_3;
             }
 
+            $counter = 0;
             foreach ($streets AS $street) {
-                $short_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>$street</span><br>";
-                $medium_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>$street</span><br>";
-                $long_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>$street</span><br>";
+                $comma = "";
+                if ($counter === count($streets)) {
+
+                }
+                $short_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>$street</span>$comma";
+                $medium_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>$street</span>$comma";
+                $long_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>$street</span>$comma";
+                $counter++;
             }
 
             if (!is_null($postal)) {

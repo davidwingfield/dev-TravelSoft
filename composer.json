@@ -15,7 +15,7 @@
             "email": "David@trips2italy.com"
         }
     ],
-    
+    "name": "travelsoft/framework",
     "require": {
         "php": ">=7.1",
         "vlucas/phpdotenv": "3.4.*",
@@ -39,7 +39,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Framework\\": "src/"
+            "Framework": "src/"
         }
     }
 }

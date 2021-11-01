@@ -156,7 +156,6 @@ const Province = (function () {
                               
                           })
                           .on("change", function () {
-                              console.log(" -- Province.change -- ", Province.id)
                               let city_el_id = $(this)
                                 .attr("id")
                                 .replace("province", "city")
@@ -206,6 +205,8 @@ const Province = (function () {
     const fetch_province_list = function (dataToSend, callback) {
         if (dataToSend) {
             try {
+                
+                //*
                 sendGetRequest("/api/v1.0/provinces", dataToSend, function (data, status, xhr) {
                     if (data) {
                         return callback(data)
@@ -213,6 +214,7 @@ const Province = (function () {
                         return handle_province_error("Oops: 1")
                     }
                 })
+                //*/
             } catch (e) {
                 console.log(e)
                 return handle_province_error("Error Validating Province")
@@ -483,7 +485,6 @@ const Province = (function () {
         Province.all = new Map()
         
         if (provinces) {
-            
             $.each(provinces, function (k, province) {
                 let detail = set_detail(province)
                 Province.all.set(detail.id, detail)

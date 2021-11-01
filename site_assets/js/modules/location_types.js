@@ -46,7 +46,7 @@ const LocationTypes = (function () {
     }
     
     const init = function (settings) {
-        console.log(" -- LocationTypes -- ", {})
+        //console.log(" -- LocationTypes -- ", {})
     }
     
     const set = function (location_types) {
@@ -102,5 +102,5 @@ const LocationTypes = (function () {
     
 })()
 
-LocationTypes.init()
+//LocationTypes.init()
 //end object

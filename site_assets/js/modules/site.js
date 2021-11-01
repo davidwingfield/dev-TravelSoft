@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    AlertBox.hide()
+    //AlertBox.show("Message", "Title", "danger")
     const but_toggle = document.querySelectorAll(".but_toggle")
     
     window.addEventListener("resize", debounce(function (e) {
@@ -19,10 +21,8 @@ $(document).ready(function () {
     }))
     
     if (mdbPreloader) {
-        $("#mdb-preloader").fadeOut(500)
+        //$("#mdb-preloader").fadeOut(500)
     }
-    
-    $("#alert_box").hide()
     
     new WOW().init()
     

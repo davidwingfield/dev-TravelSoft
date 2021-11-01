@@ -4,92 +4,93 @@
         $page_data = $data;
     }
 ?>
+<!-- Styles -->
 <style>
-  #intro {
-    background-image: url("/public/img/backgrounds/img40.jpg");
-    min-height: 100vh;
-    height: 100vh;
-    width: 100vw;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-    z-index: 0;
+  main {
+    min-height: calc(100vh - 51px);
+    min-height: -webkit-calc(100vh - 51px);
     }
-
-  @media (min-width: 992px) {
-
-    #intro {
-      margin-top: -58.59px;
-      }
-
-    }
-
 </style>
+<!-- /Styles -->
 
-<div id="intro" class="view jarallax" data-jarallax='{"speed": 0.2}'>
+<!-- Login Page -->
+<section id="login" class="container my-5 px-0" style="">
 
-    <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+    <!-- Card -->
+    <div class="card rgba-blue-grey-slight">
 
-        <section id="login">
+        <!-- Card Body -->
+        <div class="card-body">
 
-            <div class="flex-center flex-column">
+            <!-- Card Heading -->
+            <div class="row">
+                <div class="col-8 col-sm-8 col-md-8 col-lg-9 mb-1">
+                    <h5 class="card-title">
+                        <span>Login</span>
+                    </h5>
+                    <h6>Please fill in your credentials to log in</h6>
+                </div>
+                <div class="col-4 col-sm-4 col-md-4 col-lg-3 text-right">
+                    <img src="/public/img/logos/small_logo.png" class="img-fluid" style="height:4.5rem" alt="small_logo">
+                </div>
+            </div>
+            <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+            <!-- /Card Heading -->
 
-                <div class="card card-body">
+            <!-- Login Form -->
+            <form id="form_login" novalidate>
 
-                    <div class="row">
+                <!-- Email -->
+                <div class="form-element">
+                    <label for="email">Email:<sup class="field-required" style="">*</sup></label>
+                    <input type="email" name="email" id="email" class="form-control" value="tommaso@trips2italy.com" required autocomplete="false"><!--  test@example.com test_ops@trips2italy.com -->
+                    <div class="error w-100 text-center" id="email-error">&nbsp;</div>
+                </div>
+                <!-- /Email -->
 
-                        <div class="col-8 col-sm-8 col-md-8 col-lg-9 mb-1">
-                            <h2>Login</h2>
-                            <p>Please fill in your credentials to log in</p>
-                        </div>
+                <!-- Password -->
+                <div class="form-element">
+                    <label for="password">Password:<sup class="field-required" style="">*</sup></label>
+                    <input type="password" id="password" name="password" class="form-control" value="6ZaxN2Vzm9NUJT2y" required autocomplete="false"> <!-- 6ZaxN2Vzm9NUJT2y -->
+                    <div class="error w-100 text-center" id="password-error">&nbsp;</div>
+                </div>
+                <!-- /Password -->
 
-                        <div class="col-4 col-sm-4 col-md-4 col-lg-3">
-                            <img src="/public/img/logos/small_logo.png" alt="small_logo">
-                        </div>
-
+                <div class="form-group clearfix" style=" margin-top:.5rem">
+                    <div class="form-check form-check-inline float-left" style="">
+                        <input type="checkbox" id="materialInline1" name="remember" class="form-check-input" style="">
+                        <label for="materialInline1" class="form-check-label" style="">Remember me</label>
                     </div>
 
-                    <form id="form_login" novalidate>
-
-                        <!-- Email -->
-                        <div class="form-element">
-                            <label for="email">Email:<sup>*</sup></label>
-                            <input type="email" name="email" id="email" class="form-control" value="tommaso@trips2italy.com" required autocomplete="false"><!--  test@example.com test_ops@trips2italy.com -->
-                            <div class="error w-100 text-center" id="email-error">&nbsp;</div>
-                        </div>
-                        <!-- /Email -->
-
-                        <!-- Password -->
-                        <div class="form-element">
-                            <label for="password">Password:<sup>*</sup></label>
-                            <input type="password" id="password" name="password" class="form-control" value="6ZaxN2Vzm9NUJT2y" required autocomplete="false"> <!-- 6ZaxN2Vzm9NUJT2y -->
-                            <div class="error w-100 text-center" id="password-error">&nbsp;</div>
-                        </div>
-                        <!-- /Password -->
-
-                        <div class="row">
-
-                            <div class="col-12 text-right">
-                                <button type="button" class="btn btn-outline-primary btn-rounded btn-sm waves-effect" id="button_login_register">Register</button>
-                                <button type="button" class="btn btn-primary btn-rounded btn-sm waves-effect" id="button_login_submit">Login</button>
-                            </div>
-
-                        </div>
-
-                    </form>
+                    <a class="float-right" href="reset_password" style="">Forgot password?</a>
 
                 </div>
 
+                <div class="form-group clearfix" style="">
+                    <button type="button" class="btn btn-primary btn-block waves-effect" id="button_login_submit">Login</button>
+                </div>
+
+            </form>
+            <!-- /Login Form -->
+
+            <!-- Register -->
+            <div class="text-center" style="">
+                <p>Still no account? Please go to <a href="register">Sign up</a></p>
             </div>
+            <!-- /Register -->
 
-        </section>
-
+        </div>
+        <!-- /Card Body -->
+    
     </div>
+    <!-- /Card -->
 
-</div>
+</section>
+<!-- /Login Page -->
+
 <script type="text/javascript">
     window.onload = function () {
-
+        
     }
 </script>
 

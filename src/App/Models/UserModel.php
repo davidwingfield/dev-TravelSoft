@@ -119,15 +119,17 @@
             return false;
         }
 
-        public static function getPasswordById(int $id): array
+        public static function getPasswordById(int $id=null): array
         {
             if (!is_null($id)) {
-                //Model::$db->where("id", 8);
+                Model::$db->where("id", $id);
+                self::$db->where("enabled", 1);
+                return self::$db->getOne("user");
             }
+            
+            return [];
 
-            // self::$db->where("enabled", 1);
-
-            return self::$db->getOne("user");
+            
         }
 
     }

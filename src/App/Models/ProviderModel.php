@@ -194,6 +194,30 @@
             }
         }
 
+        public static function getByName(string $name): array
+        {
+            $searchTerm = addslashes($name);
+            try {
+                try {
+                    $where = "
+                    AND			COMPANY.name LIKE '$searchTerm'
+                    ORDER BY    COMPANY.name ASC
+                    ";
+                    $sql = self::$selectQuery . " " . $where;
+
+                    return Model::$db->rawQuery($sql);
+                } catch (Exception $e) {
+                    Log::$debug_log->trace($e);
+
+                    return [];
+                }
+            } catch (Exception $e) {
+                Log::$debug_log->error($e->getMessage());
+
+                return [];
+            }
+        }
+
         public static function getOne(int $id = null): array
         {
             try {
@@ -218,7 +242,8 @@
                     AND			COMPANY.name LIKE '%$searchTerm%'
                     ORDER BY    COMPANY.name ASC
                     LIMIT 20;";
-                Log::$debug_log->trace($sql);
+
+                //Log::$debug_log->trace($sql);
 
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {

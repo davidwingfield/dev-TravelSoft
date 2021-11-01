@@ -104,27 +104,17 @@ const Country = (function () {
                               }
                               
                           })
-                          .on("update", function () {
-                              console.log("ss")
-                          })
-                          // ----
                           .on("change", function () {
-                              // console.log("Country.id", Country.id)
-                              //console.log("Province.id", Province.id)
-                              //console.log("City.id", City.id)
                               let country_id = (!isNaN(parseInt($(this).val()))) ? parseInt($(this).val()) : null
-                              
                               let province_el_id = $(this)
                                 .attr("id")
                                 .replace("country", "province")
-                              
+                              let province_element = document.getElementById(province_el_id)
                               let city_el_id = $(this)
                                 .attr("id")
                                 .replace("country", "city")
-                              
-                              let province_element = document.getElementById(province_el_id)
                               let city_element = document.getElementById(city_el_id)
-                              
+                              // ----
                               if (!isNaN(parseInt($(this).val()))) {
                                   if (province_element) {
                                       Province.get(parseInt($(this).val()), province_element)
@@ -147,6 +137,20 @@ const Country = (function () {
     const fetch_country_list = function (dataToSend, callback) {
         if (dataToSend) {
             try {
+                $.ajax({
+                    type: "GET",
+                    url: "/api/v1.0/countries",
+                    data: dataToSend,
+                    async: false,
+                    
+                }).done(function (data) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handle_country_error("Oops: 1")
+                    }
+                })
+                /*
                 sendGetRequest("/api/v1.0/countries", dataToSend, function (data, status, xhr) {
                     //console.log(data)
                     
@@ -157,6 +161,7 @@ const Country = (function () {
                         return handle_country_error("Oops: 1")
                     }
                 })
+                //*/
             } catch (e) {
                 console.log(e)
                 return handle_country_error("Error Validating Country")

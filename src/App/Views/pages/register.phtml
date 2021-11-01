@@ -1,26 +1,145 @@
 <?php
     $page_data = [];
-    $types = array();
     if (isset($data)) {
         $page_data = $data;
     }
-
-    if (isset($page_data["types"])) {
-        $types = json_encode($page_data["types"], 1);
-    }
-
 ?>
-<section id="page_register" class="section">
-    <div class="row">
+<!-- Styles -->
+<style>
+  main {
+    min-height: calc(100vh - 51px);
+    min-height: -webkit-calc(100vh - 51px);
+    }
+</style>
+<!-- /Styles -->
 
-        <div class="col-12 col-lg-8 mb-1">
-            <?php include_once(__DIR__ . "/forms/register_new_form.phtml"); ?>
+<!-- Register Page -->
+<section id="register" class="container my-5 px-0" style="">
+    
+    <!-- Card -->
+    <div class="card rgba-blue-grey-slight">
+        
+        <!-- Card Body -->
+        <div class="card-body">
+            
+            <!-- Card Heading -->
+            <div class="row">
+                <div class="col-8 col-sm-8 col-md-8 col-lg-9 mb-1">
+                    <h5 class="card-title">
+                        <span>Register</span>
+                    </h5>
+                    <h6>Please fill in your credentials and submit.</h6>
+                </div>
+                <div class="col-4 col-sm-4 col-md-4 col-lg-3 text-right">
+                    <img src="/public/img/logos/small_logo.png" class="img-fluid" style="height:4.5rem" alt="small_logo">
+                </div>
+            </div>
+            <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+            <!-- /Card Heading -->
+            
+            <!-- Register Form -->
+            <form id="form_register" novalidate>
+                
+                <!-- Grid row -->
+                <div class="row">
+                    
+                    <!-- First Name -->
+                    <div class="col">
+                        <div class="form-element">
+                            <label for="user_name_first" class="" style="display: none"></label>
+                            <input type="text" id="user_name_first" name="user_name_first" class="form-control" placeholder="First name">
+                            <div id="user_name_first-error" class="error w-100 text-center" style="">&nbsp;</div>
+                        </div>
+                    </div>
+                    <!-- /First Name -->
+                    
+                    <!-- Last Name -->
+                    <div class="col">
+                        <div class="form-element">
+                            <label for="user_name_last" class="" style="display: none"></label>
+                            <input type="text" id="user_name_last" name="user_name_last" class="form-control" style="" placeholder="Last name">
+                            <div id="user_name_last-error" class="error w-100 text-center" style="">&nbsp;</div>
+                        </div>
+                    </div>
+                    <!-- /Last Name -->
+                
+                </div>
+                <!-- /Grid row -->
+                
+                <!-- Grid row -->
+                <div class="row">
+                    
+                    <!-- Email -->
+                    <div class="col">
+                        <div class="form-element">
+                            <label for="user_email" class="" style="display: none"></label>
+                            <input type="email" id="user_email" name="user_email" class="form-control" style="" placeholder="Email">
+                            <div id="user_email-error" class="error w-100 text-center" style="">&nbsp;</div>
+                        </div>
+                    </div>
+                    <!-- /Email -->
+                
+                </div>
+                <!-- Grid row -->
+                
+                <!-- Grid row -->
+                <div class="row">
+                    
+                    <!-- Password -->
+                    <div class="col">
+                        <div class="form-element">
+                            <label for="user_password" class="" style="display: none"></label>
+                            <input type="text" id="user_password" name="user_password" class="form-control" style="" placeholder="Password">
+                            <div id="user_name_first-error" class="error w-100 text-center" style="">&nbsp;</div>
+                        </div>
+                    </div>
+                    <!-- /Password -->
+                    
+                    <!-- Password Confirm -->
+                    <div class="col">
+                        <div class="form-element">
+                            <label for="user_password_confirm" class="" style="display: none"></label>
+                            <input type="text" id="user_password_confirm" name="user_password_confirm" class="form-control" style="" placeholder="Confirm Password">
+                            <div id="user_password_confirm-error" class="error w-100 text-center" style="">&nbsp;</div>
+                        </div>
+                    </div>
+                    <!-- /Password Confirm -->
+                
+                </div>
+                <!-- Grid row -->
+                
+                <div class="text-right" style="">
+                    
+                    <!-- Cancel Button -->
+                    <a href="/" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">cancel</a>
+                    <!-- Cancel Button -->
+                    
+                    <!-- Submit button -->
+                    <a href="javascript:void(0);" id="register_form_submit_button" class="btn btn-primary btn-sm waves-effect waves-light" style="">Register</a>
+                    <!-- /Submit button -->
+
+                </div>
+            
+            </form>
+            <!-- /Register Form -->
+            
+            <!-- Register -->
+            <div class="text-center" style="">
+                <p>Forgot your password? Please go to <a href="reset_password">Reset Password</a></p>
+            </div>
+            <!-- /Register -->
+        
         </div>
+        <!-- /Card Body -->
+    
     </div>
+    <!-- /Card -->
+
 </section>
+<!-- /Register Page -->
+
 <script type="text/javascript">
-    $(function () {
-        Types.init(<?php echo $types;?>)
-        Register.init()
-    })
+    window.onload = function () {
+        
+    }
 </script>

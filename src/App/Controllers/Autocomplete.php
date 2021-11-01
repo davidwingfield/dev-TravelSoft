@@ -26,7 +26,7 @@
             header("Content-type:application/json");
             // ----
             echo json_encode($results);
-            exit;
+            exit(1);
         }
 
         public function vendors(): void
@@ -37,7 +37,7 @@
             header("Content-type:application/json");
             // ----
             echo json_encode($results);
-            exit;
+            exit(1);
         }
 
         public function locations(): void

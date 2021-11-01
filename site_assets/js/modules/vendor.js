@@ -12,15 +12,13 @@ const Vendor = (function () {
     const _vendor_is_provider = document.getElementById("vendor_is_provider")
     const _vendor_sku = document.getElementById("vendor_sku")
     const _vendor_enabled = document.getElementById("vendor_enabled")
-    //Unused
-    const _vendor_date_created = document.getElementById("vendor_date_created")
-    const _vendor_created_by = document.getElementById("vendor_created_by")
-    const _vendor_date_modified = document.getElementById("vendor_date_modified")
-    const _vendor_modified_by = document.getElementById("vendor_modified_by")
-    const _vendor_note = document.getElementById("vendor_note")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    // ----
     
+    /**
+     * handel errors
+     *
+     * @param msg
+     */
     const handle_vendor_error = function (msg) {
         toastr.error(msg)
     }
@@ -42,14 +40,14 @@ const Vendor = (function () {
                   triggerSelectOnValidInput: false,
                   paramName: "st",
                   onSelect: function (suggestion) {
-                      if (suggestion.data) {
-                          let vendor = suggestion.data
-                          let vendor_id = vendor.id
-                          let vendor_company_id = vendor.company.id
-                          _vendor_id.value = vendor_id
-                          _vendor_company_id.value = vendor_company_id
+                      if (!suggestion.data) {
+                          return
                       }
-                      
+                      let vendor = (suggestion.data.vendor_detail) ? suggestion.data.vendor_detail : {}
+                      let company = (suggestion.data.company_detail) ? suggestion.data.company_detail : {}
+                      let contacts = []
+                      let addresses = []
+                      log("vendor", vendor)
                       // --
                       //log("Provider.suggestion", suggestion.data)
                       //globalSelectedProvider = true
@@ -59,7 +57,6 @@ const Vendor = (function () {
                   },
               })
         }
-        
     }
     
     const _default_detail = function () {
@@ -132,49 +129,70 @@ const Vendor = (function () {
     
     const init = function (settings) {
         if (_vendor_name) {
+            _vendor_name.value = settings.name
             init_autocomplete()
         }
-        
-        /**
-         * created_by: 4
-         * date_created: "10/25/2021"
-         * date_modified: "10/25/2021"
-         * enabled: 1
-         * id: 1
-         * is_provider: 1
-         * modified_by: 4
-         * note: null
-         * show_online: 1
-         * show_ops: 1
-         * show_sales: 1
-         * sku: "SKU0000001"
-         */
+        if (_vendor_id) {
+            _vendor_id.value = settings.id
+        }
+        if (_vendor_company_id) {
+            _vendor_company_id.value = settings.company.id
+        }
         if (_vendor_sku) {
             _vendor_sku.value = settings.sku
-            _vendor_id.value = settings.id
+        }
+        if (_vendor_enabled) {
             _vendor_enabled.checked = (settings.enabled === 1)
+        }
+        if (_vendor_is_provider) {
             _vendor_is_provider.checked = (settings.is_provider === 1)
+        }
+        if (_vendor_show_online) {
             _vendor_show_online.checked = (settings.show_online === 1)
+        }
+        if (_vendor_show_ops) {
             _vendor_show_ops.checked = (settings.show_ops === 1)
+        }
+        if (_vendor_show_sales) {
             _vendor_show_sales.checked = (settings.show_sales === 1)
         }
+    }
+    
+    const reset_form = function () {
+        _vendor_name.value = ""
+        _vendor_id.value = ""
+        _vendor_company_id.value = ""
+        _vendor_show_online.checked = true
+        _vendor_show_sales.checked = true
+        _vendor_show_ops.checked = true
+        _vendor_is_provider.checked = true
+        _vendor_sku.value = ""
+        _vendor_enabled.checked = true
     }
     
     return {
         validator: null,
         detail: {},
         all: new Map(),
+        setProvider: function () {
+            _vendor_is_provider.checked = true
+            _vendor_is_provider.disabled = true
+            $(_vendor_is_provider).attr("readonly", true)
+        },
         get: function (params) {
             get(params)
         },
         load_all: function (params) {
             load_all(params)
         },
+        reset_form: function () {
+            reset_form()
+        },
         save: function (params) {
             save(params)
         },
         init: function (settings) {
-            //init(settings)
+            init(settings)
         },
     }
     

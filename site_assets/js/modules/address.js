@@ -180,7 +180,7 @@ const Address = (function () {
             _address_postal_code.value = (Address.detail.postal_code) ? Address.detail.postal_code : null
             Province.id = address.province.id
             Country.id = address.country.id
-            City.id = Address.detail.city.id
+            City.id = address.city.id
             
             $(_address_country_id).val((Address.detail.country.id) ? Address.detail.country.id : "").trigger("change")
         }
@@ -215,13 +215,11 @@ const Address = (function () {
      * hides address edit form
      */
     const load_form = function (address) {
-        if (address) {
+        if (_card_edit_address_form) {
+            reset_form()
             populate_form(address)
-            if (_card_edit_address_form) {
-                $(_card_edit_address_form).show()
-            }
+            $(_card_edit_address_form).show()
         }
-        
     }
     
     /**
@@ -290,8 +288,12 @@ const Address = (function () {
         if (_table_address) {
             build_table()
         }
+        
+        if (addresses) {
+            load_all(addresses)
+        }
+        
         if (_form_edit_address) {
-            
             $(_address_country_id).BuildDropDown({
                 data: Array.from(Country.all.values()),
                 title: "Country",
@@ -299,17 +301,15 @@ const Address = (function () {
                 text_field: "name",
                 first_selectable: false,
             })
-            
             $(_address_province_id).BuildDropDown({
-                data: Array.from(Province.all.values()),
+                data: [],
                 title: "Province",
                 id_field: "id",
                 text_field: "name",
                 first_selectable: false,
             })
-            
             $(_address_city_id).BuildDropDown({
-                data: Array.from(Province.all.values()),
+                data: [],
                 title: "City",
                 id_field: "id",
                 text_field: "name",
@@ -411,9 +411,7 @@ const Address = (function () {
      */
     const navigate = function (address) {
         if (address) {
-            reset_form()
-            populate_form(address)
-            load_form()
+            load_form(address)
         }
     }
     

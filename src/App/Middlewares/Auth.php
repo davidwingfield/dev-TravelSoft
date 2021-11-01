@@ -20,6 +20,8 @@
     {
 
         /**
+         * checks if user is logged in
+         *
          * @return bool
          */
         public static function logged_in(): bool
@@ -230,13 +232,20 @@
             return false;
         }
 
-        public static function insertBrute(int $id)
+        /**
+         * inserts failed login attempt
+         *
+         * @param int $id
+         *
+         * @return bool
+         */
+        public static function insertBrute(int $id): bool
         {
             if ($id && intval($id) > 0) {
                 return UserModel::insertLoginAttempt($id);
             }
 
-            return null;
+            return false;
         }
 
     }

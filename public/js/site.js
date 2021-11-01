@@ -1048,7 +1048,7 @@ const LocationTypes = (function () {
     }
     
     const init = function (settings) {
-        console.log(" -- LocationTypes -- ", {})
+        //console.log(" -- LocationTypes -- ", {})
     }
     
     const set = function (location_types) {
@@ -1104,436 +1104,96 @@ const LocationTypes = (function () {
     
 })()
 
-LocationTypes.init()
+//LocationTypes.init()
 //end object
 
-const Location = (function () {
+const AlertBox = (function () {
     "use strict"
-    
-    const _form_edit_location = document.getElementById("form_edit_location")
-    const _form_location_details = document.getElementById("form_location_details")
-    const _location_types_id = document.getElementById("location_types_id")
-    const _location_name_filter = document.getElementById("location_name_filter")
-    const _location_city_id = document.getElementById("location_city_id")
-    const _location_country_id = document.getElementById("location_country_id")
-    const _location_province_id = document.getElementById("location_province_id")
-    const _location_id = document.getElementById("location_id")
-    const _location_street_1 = document.getElementById("location_street_1")
-    const _location_street_2 = document.getElementById("location_street_2")
-    const _location_zipcode = document.getElementById("location_zipcode")
-    const _location_name = document.getElementById("location_name")
-    const _location_enabled = document.getElementById("location_enabled")
-    const _temp_location_id = document.getElementById("temp_location_id")
-    const _button_clear_form_edit_location = document.getElementById("button_clear_form_edit_location")
-    const _button_close_location_edit = document.getElementById("button_close_location_edit")
-    const _button_submit_form_edit_location = document.getElementById("button_submit_form_edit_location")
-    const _button_edit_location = document.getElementById("button_edit_location")
-    const _button_add_location_edit = document.getElementById("button_add_location_edit")
-    const _button_close_edit_location_form = document.getElementById("button_close_edit_location_form")
-    const form_rules = {
-        rules: {
-            location_types_id: {
-                required: true,
-                digits: true,
-            },
-            location_city_id: {
-                required: true,
-                digits: true,
-            },
-            location_country_id: {
-                required: true,
-                digits: true,
-            },
-            location_province_id: {
-                required: true,
-                digits: true,
-            },
-            location_name: { required: true },
+    const _alert_box = document.getElementById("alert_box")
+    return {
+        show: function (msg) {
+            /**
+             * "0": "Message",
+             * "1": "Title",
+             * "2": "danger"
+             */
+            let title = ""
+            let level = ""
+            let message = ""
+            if (arguments) {
+                if (arguments[0]) {
+                    message = arguments[0]
+                }
+                
+                if (arguments[1]) {
+                    if (typeof arguments[1] == "string" || typeof arguments[1] == "number") {
+                        title = arguments[1]
+                    }
+                }
+                
+                if (arguments[2]) {
+                    switch (arguments[2]) {
+                        case "danger":
+                        case "warning":
+                        case "info":
+                        case "success":
+                        case "secondary":
+                            level = arguments[2]
+                            break
+                        default:
+                            level = "warning"
+                    }
+                }
+                
+                $(_alert_box).show()
+            }
+            
         },
-        messages: {
-            location_types_id: {
-                required: "field required",
-                digits: "invalid",
-            },
-            location_city_id: {
-                required: "field required",
-                digits: "invalid",
-            },
-            location_country_id: {
-                required: "field required",
-                digits: "invalid",
-            },
-            location_province_id: {
-                required: "field required",
-                digits: "invalid",
-            },
-            location_id: {
-                required: "field required",
-                digits: "invalid",
-            },
-            location_name: { required: "field required" },
+        hide: function () {
+            $(_alert_box).alert("close")
         },
     }
-    // ----
-    let temp_location = {}
-    let new_filter = false
-    let validator
-    let validated = false
-    let default_display = default_address_view
+})()
+
+/**
+ *
+ * @type {{all: Map<any, any>, init: AddressTypes.init, get: AddressTypes.get, validator: null, save: AddressTypes.save, detail: {}, load_all: AddressTypes.load_all}}
+ */
+const AddressTypes = (function () {
+    "use strict"
+    const base_url = "/address_types"
+    const _input_address_types_id = document.getElementById("input_address_types_id")
+    const _input_address_types_name = document.getElementById("input_address_types_name")
+    const _input_address_types_sort_order = document.getElementById("input_address_types_sort_order")
+    const _input_address_types_enabled = document.getElementById("input_address_types_enabled")
+    const _input_address_types_date_created = document.getElementById("input_address_types_date_created")
+    const _input_address_types_created_by = document.getElementById("input_address_types_created_by")
+    const _input_address_types_date_modified = document.getElementById("input_address_types_date_modified")
+    const _input_address_types_modified_by = document.getElementById("input_address_types_modified_by")
+    const _input_address_types_note = document.getElementById("input_address_types_note")
+    
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    // ----
+    
+    const handle_address_types_error = function (msg) {
+        toastr.error(msg)
+    }
+    
     const _default_detail = function () {
         return {
             id: null,
-            display_long: null,
-            display_medium: null,
-            display_short: null,
-            location_types_id: null,
             name: null,
-            street_1: null,
-            street_2: null,
-            zipcode: null,
+            sort_order: null,
             enabled: 1,
             date_created: formatDateMySQL(),
             created_by: user_id,
             date_modified: formatDateMySQL(),
             modified_by: user_id,
             note: null,
-            city: {
-                id: null,
-                name: null,
-                sort_order: 999,
-                enabled: 1,
-                date_created: formatDateMySQL(),
-                created_by: user_id,
-                date_modified: formatDateMySQL(),
-                modified_by: user_id,
-                note: null,
-            },
-            province: {
-                created_by: user_id,
-                date_created: formatDateMySQL(),
-                date_modified: formatDateMySQL(),
-                enabled: 1,
-                id: null,
-                iso2: null,
-                iso3: null,
-                modified_by: user_id,
-                name: null,
-                name_long: null,
-                note: null,
-                sort_order: 999,
-            },
-            country: {
-                created_by: user_id,
-                date_created: formatDateMySQL(),
-                date_modified: formatDateMySQL(),
-                currency_id: null,
-                enabled: 1,
-                id: null,
-                iso2: null,
-                iso3: null,
-                modified_by: user_id,
-                name: null,
-                name_long: null,
-                note: null,
-                sort_order: 999,
-            },
-            type: {
-                created_by: user_id,
-                date_created: formatDateMySQL(),
-                date_modified: formatDateMySQL(),
-                enabled: 1,
-                icon: null,
-                id: null,
-                modified_by: user_id,
-                name: null,
-                note: null,
-                sort_order: 999,
-            },
         }
-    }
-    
-    const handle_location_error = function (msg) {
-        toastr.error(msg)
-    }
-    // ----
-    $(_button_close_edit_location_form)
-      .on("click", function () {
-          populate_form(temp_location)
-          
-          switch (defaultLocationDisplayFormat) {
-              case "short":
-                  _location_name_filter.value = temp_location.display_short
-                  break
-              case "medium":
-                  _location_name_filter.value = temp_location.display_medium
-                  break
-              default:
-                  _location_name_filter.value = temp_location.display_long
-          }
-          _location_id.value = temp_location.id
-          
-          hide_form()
-      })
-    
-    $(_button_clear_form_edit_location)
-      .on("click", function () {
-      
-      })
-    
-    $(_button_submit_form_edit_location)
-      .on("click", function () {
-          save()
-      })
-    
-    $(_location_name_filter)
-      .on("click", function () {
-          $(this).select()
-      })
-      .on("change", function () {
-          if ($(this).val() === "") {
-              //set_detail()
-              //reset_form()
-              //populate_form()
-          }
-      })
-      .on("search", function () {
-          new_filter = true
-          set_detail()
-          reset_form()
-          populate_form()
-      })
-    $(_button_edit_location)
-      .on("click", function () {
-          if (_location_id.value === "") {
-              //set_detail()
-              //reset_form()
-              //populate_form()
-          } else {
-          
-          }
-          
-          show_form()
-      })
-    $("input[name='location_display']")
-      .on("change", function () {
-          let selected_value = $("input[name='location_display']:checked").val()
-          default_display = selected_value
-          init_autocomplete()
-          if (Location.detail["display_" + selected_value] !== null) {
-              _location_name_filter.value = Location.detail["display_" + selected_value]
-          }
-      })
-    
-    const init_autocomplete = function () {
-        $(_location_name_filter)
-          .autocomplete({
-              serviceUrl: "/api/v1.0/autocomplete/locations",
-              minChars: 2,
-              cache: false,
-              dataType: "json",
-              triggerSelectOnValidInput: false,
-              paramName: "st",
-              params: { "default_display": default_display },
-              onSelect: function (suggestion) {
-                  //Province.set_detail(suggestion.data)
-                  //Country.set_detail(suggestion.data)
-                  //City.set_detail(suggestion.data)
-                  //Location.set_detail(suggestion.data)
-                  //populate_form(suggestion.data)
-                  if (_form_edit_location) {
-                      clear_validation(_form_edit_location)
-                  }
-              },
-              onSearchComplete: function (query, suggestions) {
-              },
-          })
-    }
-    
-    const init = function (location) {
-        validator_init(form_rules)
-        
-        if (location) {
-            set_detail(location)
-        }
-        
-        if (_form_edit_location) {
-            
-            validator = $(_form_edit_location).validate()
-            
-            $(_location_types_id).BuildDropDown({
-                data: Array.from(Types.location_types.values()),
-                title: "Location Types",
-                id_field: "id",
-                text_field: "name",
-                first_selectable: false,
-            })
-            
-            $(_location_country_id).BuildDropDown({
-                data: Array.from(Country.all.values()),
-                title: "Country",
-                id_field: "id",
-                text_field: "name",
-                first_selectable: false,
-            })
-            
-            $(_location_province_id).BuildDropDown({
-                data: Array.from(Province.all.values()),
-                title: "Province",
-                id_field: "id",
-                text_field: "name",
-                first_selectable: false,
-            })
-            
-            $(_location_city_id).BuildDropDown({
-                data: Array.from(Province.all.values()),
-                title: "City",
-                id_field: "id",
-                text_field: "name",
-                first_selectable: false,
-            })
-            
-            Country.init({
-                dropdowns: [
-                    "location_country_id",
-                ],
-            })
-            Province.init({
-                dropdowns: [
-                    "location_province_id",
-                ],
-            })
-            City.init({
-                dropdowns: [
-                    "location_city_id",
-                ],
-            })
-            
-        }
-        
-        init_autocomplete()
-        //set(location)
-        hide_form()
-    }
-    
-    const set_detail = function (location) {
-        log("location", location)
-        let detail = _default_detail()
-        temp_location = detail
-        
-        if (location) {
-            
-            detail.city = {
-                created_by: (location.city.created_by) ? location.city.created_by : user_id,
-                date_created: (location.city.date_created) ? location.city.date_created : formatDateMySQL(),
-                date_modified: (location.city.date_modified) ? location.city.date_modified : formatDateMySQL(),
-                enabled: (location.city.enabled) ? location.city.enabled : 1,
-                id: (location.city.id) ? location.city.id : null,
-                modified_by: (location.city.modified_by) ? location.city.modified_by : user_id,
-                name: (location.city.name) ? location.city.name : null,
-                note: (location.city.note) ? location.city.note : null,
-                sort_order: (location.city.sort_order) ? location.city.sort_order : 999,
-            }
-            
-            detail.province = {
-                created_by: (location.province.created_by) ? location.province.created_by : user_id,
-                date_created: (location.province.date_created) ? location.province.date_created : formatDateMySQL(),
-                date_modified: (location.province.date_modified) ? location.province.date_modified : formatDateMySQL(),
-                enabled: (location.province.enabled) ? location.province.enabled : 1,
-                id: (location.province.id) ? location.province.id : null,
-                iso2: (location.province.iso2) ? location.province.iso2 : null,
-                iso3: (location.province.iso3) ? location.province.iso3 : null,
-                modified_by: (location.province.modified_by) ? location.province.modified_by : user_id,
-                name: (location.province.name) ? location.province.name : null,
-                name_long: (location.province.name_long) ? location.province.name_long : null,
-                note: (location.province.note) ? location.province.note : null,
-                sort_order: (location.province.sort_order) ? location.province.sort_order : 999,
-            }
-            
-            detail.country = {
-                created_by: (location.country.created_by) ? location.country.created_by : user_id,
-                date_created: (location.country.date_created) ? location.country.date_created : formatDateMySQL(),
-                date_modified: (location.country.date_modified) ? location.country.date_modified : formatDateMySQL(),
-                currency_id: (location.country.currency_id) ? location.country.currency_id : null,
-                enabled: (location.country.enabled) ? location.country.enabled : 1,
-                id: (location.country.id) ? location.country.id : null,
-                iso2: (location.country.iso2) ? location.country.iso2 : null,
-                iso3: (location.country.iso3) ? location.country.iso3 : null,
-                modified_by: (location.country.modified_by) ? location.country.modified_by : user_id,
-                name: (location.country.name) ? location.country.name : null,
-                name_long: (location.country.name_long) ? location.country.name_long : null,
-                note: (location.country.note) ? location.country.note : null,
-                sort_order: (location.country.sort_order) ? location.country.sort_order : 999,
-            }
-            
-            detail.type = {
-                created_by: (location.type.created_by) ? location.type.created_by : user_id,
-                date_created: (location.type.date_created) ? location.type.date_created : formatDateMySQL(),
-                date_modified: (location.type.date_modified) ? location.type.date_modified : formatDateMySQL(),
-                enabled: (location.type.enabled) ? location.type.enabled : 1,
-                icon: (location.type.icon) ? location.type.icon : null,
-                id: (location.type.id) ? location.type.id : null,
-                modified_by: (location.type.modified_by) ? location.type.modified_by : user_id,
-                name: (location.type.name) ? location.type.name : null,
-                note: (location.type.note) ? location.type.note : null,
-                sort_order: (location.type.sort_order) ? location.type.sort_order : 999,
-            }
-            
-            detail.id = (location.id) ? location.id : null
-            detail.name = (location.name) ? location.name : null
-            detail.street_1 = (location.street_1) ? location.street_1 : null
-            detail.street_2 = (location.street_2) ? location.street_2 : null
-            detail.zipcode = (location.zipcode) ? location.zipcode : null
-            detail.display_long = (location.display_long) ? location.display_long : null
-            detail.display_medium = (location.display_medium) ? location.display_medium : null
-            detail.display_short = (location.display_short) ? location.display_short : null
-            detail.enabled = (location.enabled) ? location.enabled : 1
-            detail.date_created = (location.date_created) ? location.date_created : formatDateMySQL()
-            detail.created_by = (location.created_by) ? location.created_by : user_id
-            detail.date_modified = (location.date_modified) ? location.date_modified : formatDateMySQL()
-            detail.modified_by = (location.modified_by) ? location.modified_by : user_id
-            detail.note = (location.note) ? location.note : null
-            
-            Province.set_detail(detail.province)
-            Country.set_detail(detail.country)
-            City.set_detail(detail.city)
-        }
-        
-        Location.detail = detail
-        return detail
-    }
-    
-    const set = function (location) {
-        let detail = set_detail(location)
-        reset_form()
-        populate_form(detail)
     }
     
     const save = function (params) {
-        validated = true
-        
-        let dataToSend = {
-            id: (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null,
-            city_id: (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null,
-            province_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null,
-            country_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_country_id.value) : null,
-            location_types_id: (!isNaN(parseInt(_location_types_id.value))) ? parseInt(_location_types_id.value) : null,
-            
-            name: (_location_name && _location_name.value !== "") ? _location_name.value : null,
-            street: (_location_street && _location_street.value !== "") ? _location_street.value : null,
-            street2: (_location_street2 && _location_street2.value !== "") ? _location_street2.value : null,
-            zipcode: (_location_zipcode && _location_zipcode.value !== "") ? _location_zipcode.value : null,
-            
-            created_by: (isNaN(parseInt(_location_id.value))) ? user_id : null,
-            modified_by: user_id,
-            enabled: 1,
-            date_created: (!isNaN(parseInt(_location_id.value))) ? null : formatDateMySQL(),
-            date_modified: (!isNaN(parseInt(_location_id.value))) ? formatDateMySQL() : null,
-            note: null,
-        }
-        
-        console.log("save", dataToSend)
+    
     }
     
     const get = function (id) {
@@ -1544,112 +1204,46 @@ const Location = (function () {
         
     }
     
-    const disable = function () {
-        let location_displays = document.getElementsByName("location_display")
-        $.each(location_displays, function (i, elem) {
-            elem.disabled = true
-        })
-        _location_name_filter.disabled = true
-        _button_edit_location.disabled = true
+    const init = function (settings) {
+    
     }
     
-    const enable = function () {
-        let location_displays = document.getElementsByName("location_display")
-        $.each(location_displays, function (i, elem) {
-            elem.disabled = false
-        })
-        _location_name_filter.disabled = false
-        _button_edit_location.disabled = false
-    }
-    
-    const show_form = function () {
-        disable()
-        $(_form_location_details).show()
-    }
-    
-    const hide_form = function () {
-        enable()
-        $(_form_location_details).hide()
-    }
-    
-    const reset_form = function () {
-        //validated = false
-        //validator.resetForm()
-        _location_name.value = ""
-        _location_name_filter.value = ""
-        _location_id.value = ""
-        _location_types_id.value = ""
-        _location_street_1.value = ""
-        _location_street_2.value = ""
-        _location_zipcode.value = ""
-        _location_country_id.value = ""
-        _location_province_id.value = ""
-        _location_city_id.value = ""
-        
-        Province.set_detail()
-        Country.set_detail()
-        City.set_detail()
-        Province.id = null
-        City.id = null
-        
-        switch (defaultLocationDisplayFormat) {
-            case "short":
-                document.getElementById("location_display_short").checked = true
-                break
-            case "medium":
-                document.getElementById("location_display_medium").checked = true
-                break
-            default:
-                document.getElementById("location_display_long").checked = true
+    const set = function (address_types) {
+        let detail = _default_detail()
+        if (address_types) {
+            detail.id = (address_types.id) ? address_types.id : null
+            detail.name = (address_types.name) ? address_types.name : null
+            detail.sort_order = (address_types.sort_order) ? address_types.sort_order : null
+            detail.enabled = (address_types.enabled) ? address_types.enabled : 1
+            detail.date_created = (address_types.date_created) ? address_types.date_created : formatDateMySQL()
+            detail.created_by = (address_types.created_by) ? address_types.created_by : created_by
+            detail.date_modified = (address_types.date_modified) ? address_types.date_modified : formatDateMySQL()
+            detail.modified_by = (address_types.modified_by) ? address_types.modified_by : modified_by
+            detail.note = (address_types.note) ? address_types.note : null
         }
         
-        $(_location_country_id).val("").trigger("change")
+        AddressTypes.detail = detail
+        return detail
     }
     
-    const populate_form = function (location) {
-        if (location) {
-            //console.log("Location.country", location.country)
-            //console.log("Location.province", location.province)
-            //console.log("Location.city", location.city)
-            ///////////////////////////////////////////////////
-            Country.set_detail(location.country)
-            Province.set_detail(location.province)
-            City.set_detail(location.city)
-            
-            Country.id = location.country.id
-            City.id = location.city.id
-            Province.id = location.province.id
-            
-            switch (defaultLocationDisplayFormat) {
-                case "short":
-                    _location_name_filter.value = location.display_short
-                    break
-                case "medium":
-                    _location_name_filter.value = location.display_medium
-                    break
-                default:
-                    _location_name_filter.value = location.display_long
-            }
-            
-            $(_location_country_id).val(location.country.id).trigger("change")
-            
-            _location_enabled.checked = (location.enabled === 1)
-            _location_name.value = location.name
-            _location_id.value = location.id
-            _location_street_1.value = location.street_1
-            _location_street_2.value = location.street_2
-            _location_zipcode.value = location.zipcode
-            _location_types_id.value = location.type.id
-            
-        }
+    const load_all = function (address_types) {
+        AddressTypes.all = new Map()
         
+        if (!address_types) {
+            return
+        }
+        $.each(address_types, function (i, address_types) {
+            let detail = set(address_types)
+            AddressTypes.all.set("id", detail)
+        })
+        
+        console.log(" AddressTypes.all", AddressTypes.all)
     }
     
     return {
         validator: null,
         detail: {},
         all: new Map(),
-        types: new Map(),
         get: function (params) {
             get(params)
         },
@@ -1659,16 +1253,12 @@ const Location = (function () {
         save: function (params) {
             save(params)
         },
-        init: function (settings) {
-            init(settings)
-        },
-        populate_form: function (location) {
-            populate_form(location)
+        init: function () {
+            init()
         },
     }
     
 })()
-
 
 const City = (function () {
     "use strict"
@@ -2287,7 +1877,6 @@ const Province = (function () {
                               
                           })
                           .on("change", function () {
-                              console.log(" -- Province.change -- ", Province.id)
                               let city_el_id = $(this)
                                 .attr("id")
                                 .replace("province", "city")
@@ -2337,6 +1926,8 @@ const Province = (function () {
     const fetch_province_list = function (dataToSend, callback) {
         if (dataToSend) {
             try {
+                
+                //*
                 sendGetRequest("/api/v1.0/provinces", dataToSend, function (data, status, xhr) {
                     if (data) {
                         return callback(data)
@@ -2344,6 +1935,7 @@ const Province = (function () {
                         return handle_province_error("Oops: 1")
                     }
                 })
+                //*/
             } catch (e) {
                 console.log(e)
                 return handle_province_error("Error Validating Province")
@@ -2614,7 +2206,6 @@ const Province = (function () {
         Province.all = new Map()
         
         if (provinces) {
-            
             $.each(provinces, function (k, province) {
                 let detail = set_detail(province)
                 Province.all.set(detail.id, detail)
@@ -2827,27 +2418,17 @@ const Country = (function () {
                               }
                               
                           })
-                          .on("update", function () {
-                              console.log("ss")
-                          })
-                          // ----
                           .on("change", function () {
-                              // console.log("Country.id", Country.id)
-                              //console.log("Province.id", Province.id)
-                              //console.log("City.id", City.id)
                               let country_id = (!isNaN(parseInt($(this).val()))) ? parseInt($(this).val()) : null
-                              
                               let province_el_id = $(this)
                                 .attr("id")
                                 .replace("country", "province")
-                              
+                              let province_element = document.getElementById(province_el_id)
                               let city_el_id = $(this)
                                 .attr("id")
                                 .replace("country", "city")
-                              
-                              let province_element = document.getElementById(province_el_id)
                               let city_element = document.getElementById(city_el_id)
-                              
+                              // ----
                               if (!isNaN(parseInt($(this).val()))) {
                                   if (province_element) {
                                       Province.get(parseInt($(this).val()), province_element)
@@ -2870,6 +2451,20 @@ const Country = (function () {
     const fetch_country_list = function (dataToSend, callback) {
         if (dataToSend) {
             try {
+                $.ajax({
+                    type: "GET",
+                    url: "/api/v1.0/countries",
+                    data: dataToSend,
+                    async: false,
+                    
+                }).done(function (data) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handle_country_error("Oops: 1")
+                    }
+                })
+                /*
                 sendGetRequest("/api/v1.0/countries", dataToSend, function (data, status, xhr) {
                     //console.log(data)
                     
@@ -2880,6 +2475,7 @@ const Country = (function () {
                         return handle_country_error("Oops: 1")
                     }
                 })
+                //*/
             } catch (e) {
                 console.log(e)
                 return handle_country_error("Error Validating Country")
@@ -3267,45 +2863,276 @@ const Country = (function () {
     }
 })()
 
-/**
- *
- * @type {{all: Map<any, any>, init: AddressTypes.init, get: AddressTypes.get, validator: null, save: AddressTypes.save, detail: {}, load_all: AddressTypes.load_all}}
- */
-const AddressTypes = (function () {
+const Location = (function () {
     "use strict"
-    const base_url = "/address_types"
-    const _input_address_types_id = document.getElementById("input_address_types_id")
-    const _input_address_types_name = document.getElementById("input_address_types_name")
-    const _input_address_types_sort_order = document.getElementById("input_address_types_sort_order")
-    const _input_address_types_enabled = document.getElementById("input_address_types_enabled")
-    const _input_address_types_date_created = document.getElementById("input_address_types_date_created")
-    const _input_address_types_created_by = document.getElementById("input_address_types_created_by")
-    const _input_address_types_date_modified = document.getElementById("input_address_types_date_modified")
-    const _input_address_types_modified_by = document.getElementById("input_address_types_modified_by")
-    const _input_address_types_note = document.getElementById("input_address_types_note")
     
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    
-    const handle_address_types_error = function (msg) {
-        toastr.error(msg)
+    const _form_edit_location = document.getElementById("form_edit_location")
+    const _form_location_details = document.getElementById("form_location_details")
+    const _location_types_id = document.getElementById("location_types_id")
+    const _location_name_filter = document.getElementById("location_name_filter")
+    const _location_city_id = document.getElementById("location_city_id")
+    const _location_country_id = document.getElementById("location_country_id")
+    const _location_province_id = document.getElementById("location_province_id")
+    const _location_id = document.getElementById("location_id")
+    const _location_street_1 = document.getElementById("location_street_1")
+    const _location_street_2 = document.getElementById("location_street_2")
+    const _location_zipcode = document.getElementById("location_zipcode")
+    const _location_name = document.getElementById("location_name")
+    const _location_enabled = document.getElementById("location_enabled")
+    const _temp_location_id = document.getElementById("temp_location_id")
+    const _button_clear_form_edit_location = document.getElementById("button_clear_form_edit_location")
+    const _button_close_location_edit = document.getElementById("button_close_location_edit")
+    const _button_submit_form_edit_location = document.getElementById("button_submit_form_edit_location")
+    const _button_edit_location = document.getElementById("button_edit_location")
+    const _button_add_location_edit = document.getElementById("button_add_location_edit")
+    const _button_close_edit_location_form = document.getElementById("button_close_edit_location_form")
+    const form_rules = {
+        rules: {
+            location_types_id: {
+                required: true,
+                digits: true,
+            },
+            location_city_id: {
+                required: true,
+                digits: true,
+            },
+            location_country_id: {
+                required: true,
+                digits: true,
+            },
+            location_province_id: {
+                required: true,
+                digits: true,
+            },
+            location_name: { required: true },
+        },
+        messages: {
+            location_types_id: {
+                required: "field required",
+                digits: "invalid",
+            },
+            location_city_id: {
+                required: "field required",
+                digits: "invalid",
+            },
+            location_country_id: {
+                required: "field required",
+                digits: "invalid",
+            },
+            location_province_id: {
+                required: "field required",
+                digits: "invalid",
+            },
+            location_id: {
+                required: "field required",
+                digits: "invalid",
+            },
+            location_name: { required: "field required" },
+        },
     }
-    
+    // ----
+    let temp_location = {}
+    let new_filter = false
+    let validator
+    let validated = false
+    let default_display = default_address_view
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    // ----
     const _default_detail = function () {
         return {
             id: null,
+            display_long: null,
+            display_medium: null,
+            display_short: null,
+            location_types_id: null,
             name: null,
-            sort_order: null,
+            street_1: null,
+            street_2: null,
+            zipcode: null,
             enabled: 1,
             date_created: formatDateMySQL(),
             created_by: user_id,
             date_modified: formatDateMySQL(),
             modified_by: user_id,
             note: null,
+            city: {
+                id: null,
+                name: null,
+                sort_order: 999,
+                enabled: 1,
+                date_created: formatDateMySQL(),
+                created_by: user_id,
+                date_modified: formatDateMySQL(),
+                modified_by: user_id,
+                note: null,
+            },
+            province: {
+                created_by: user_id,
+                date_created: formatDateMySQL(),
+                date_modified: formatDateMySQL(),
+                enabled: 1,
+                id: null,
+                iso2: null,
+                iso3: null,
+                modified_by: user_id,
+                name: null,
+                name_long: null,
+                note: null,
+                sort_order: 999,
+            },
+            country: {
+                created_by: user_id,
+                date_created: formatDateMySQL(),
+                date_modified: formatDateMySQL(),
+                currency_id: null,
+                enabled: 1,
+                id: null,
+                iso2: null,
+                iso3: null,
+                modified_by: user_id,
+                name: null,
+                name_long: null,
+                note: null,
+                sort_order: 999,
+            },
+            type: {
+                created_by: user_id,
+                date_created: formatDateMySQL(),
+                date_modified: formatDateMySQL(),
+                enabled: 1,
+                icon: null,
+                id: null,
+                modified_by: user_id,
+                name: null,
+                note: null,
+                sort_order: 999,
+            },
         }
     }
     
-    const save = function (params) {
+    const handle_location_error = function (msg) {
+        toastr.error(msg)
+    }
+    // ----
+    $(_button_close_edit_location_form)
+      .on("click", function () {
+          populate_form(temp_location)
+          
+          switch (defaultLocationDisplayFormat) {
+              case "short":
+                  _location_name_filter.value = temp_location.display_short
+                  break
+              case "medium":
+                  _location_name_filter.value = temp_location.display_medium
+                  break
+              default:
+                  _location_name_filter.value = temp_location.display_long
+          }
+          _location_id.value = temp_location.id
+          
+          hide_form()
+      })
     
+    $(_button_clear_form_edit_location)
+      .on("click", function () {
+      
+      })
+    
+    $(_button_submit_form_edit_location)
+      .on("click", function () {
+          save()
+      })
+    
+    $(_location_name_filter)
+      .on("click", function () {
+          $(this).select()
+      })
+      .on("change", function () {
+          if ($(this).val() === "") {
+              //set_detail()
+              //reset_form()
+              //populate_form()
+          }
+      })
+      .on("search", function () {
+          new_filter = true
+          set_detail()
+          reset_form()
+          populate_form()
+      })
+    
+    $(_button_edit_location)
+      .on("click", function () {
+          if (_location_id.value === "") {
+              //set_detail()
+              //reset_form()
+              //populate_form()
+          } else {
+          
+          }
+          
+          show_form()
+      })
+    
+    $("input[name='location_display']")
+      .on("change", function () {
+          let selected_value = $("input[name='location_display']:checked").val()
+          default_display = selected_value
+          init_autocomplete()
+          if (Location.detail["display_" + selected_value] !== null) {
+              _location_name_filter.value = Location.detail["display_" + selected_value]
+          }
+      })
+    
+    const init_autocomplete = function () {
+        $(_location_name_filter)
+          .autocomplete({
+              serviceUrl: "/api/v1.0/autocomplete/locations",
+              minChars: 2,
+              cache: false,
+              dataType: "json",
+              triggerSelectOnValidInput: false,
+              paramName: "st",
+              params: { "default_display": default_display },
+              onSelect: function (suggestion) {
+                  //Province.set_detail(suggestion.data)
+                  //Country.set_detail(suggestion.data)
+                  //City.set_detail(suggestion.data)
+                  //Location.set_detail(suggestion.data)
+                  //populate_form(suggestion.data)
+                  if (_form_edit_location) {
+                      clear_validation(_form_edit_location)
+                  }
+              },
+              onSearchComplete: function (query, suggestions) {
+              },
+          })
+    }
+    
+    const save = function (params) {
+        validated = true
+        
+        let dataToSend = {
+            id: (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null,
+            city_id: (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null,
+            province_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null,
+            country_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_country_id.value) : null,
+            location_types_id: (!isNaN(parseInt(_location_types_id.value))) ? parseInt(_location_types_id.value) : null,
+            
+            name: (_location_name && _location_name.value !== "") ? _location_name.value : null,
+            street: (_location_street && _location_street.value !== "") ? _location_street.value : null,
+            street2: (_location_street2 && _location_street2.value !== "") ? _location_street2.value : null,
+            zipcode: (_location_zipcode && _location_zipcode.value !== "") ? _location_zipcode.value : null,
+            
+            created_by: (isNaN(parseInt(_location_id.value))) ? user_id : null,
+            modified_by: user_id,
+            enabled: 1,
+            date_created: (!isNaN(parseInt(_location_id.value))) ? null : formatDateMySQL(),
+            date_modified: (!isNaN(parseInt(_location_id.value))) ? formatDateMySQL() : null,
+            note: null,
+        }
+        
+        console.log("save", dataToSend)
     }
     
     const get = function (id) {
@@ -3316,46 +3143,239 @@ const AddressTypes = (function () {
         
     }
     
-    const init = function (settings) {
-    
+    const disable = function () {
+        let location_displays = document.getElementsByName("location_display")
+        $.each(location_displays, function (i, elem) {
+            elem.disabled = true
+        })
+        _location_name_filter.disabled = true
+        _button_edit_location.disabled = true
     }
     
-    const set = function (address_types) {
-        let detail = _default_detail()
-        if (address_types) {
-            detail.id = (address_types.id) ? address_types.id : null
-            detail.name = (address_types.name) ? address_types.name : null
-            detail.sort_order = (address_types.sort_order) ? address_types.sort_order : null
-            detail.enabled = (address_types.enabled) ? address_types.enabled : 1
-            detail.date_created = (address_types.date_created) ? address_types.date_created : formatDateMySQL()
-            detail.created_by = (address_types.created_by) ? address_types.created_by : created_by
-            detail.date_modified = (address_types.date_modified) ? address_types.date_modified : formatDateMySQL()
-            detail.modified_by = (address_types.modified_by) ? address_types.modified_by : modified_by
-            detail.note = (address_types.note) ? address_types.note : null
+    const enable = function () {
+        let location_displays = document.getElementsByName("location_display")
+        $.each(location_displays, function (i, elem) {
+            elem.disabled = false
+        })
+        _location_name_filter.disabled = false
+        _button_edit_location.disabled = false
+    }
+    
+    const show_form = function () {
+        disable()
+        $(_form_location_details).show()
+    }
+    
+    const hide_form = function () {
+        enable()
+        $(_form_location_details).hide()
+    }
+    
+    const reset_form = function () {
+        _location_name.value = ""
+        _location_name_filter.value = ""
+        _location_id.value = ""
+        _location_types_id.value = ""
+        _location_street_1.value = ""
+        _location_street_2.value = ""
+        _location_zipcode.value = ""
+        
+        $(_location_country_id).val("").trigger("change")
+        
+        switch (defaultLocationDisplayFormat) {
+            case "short":
+                document.getElementById("location_display_short").checked = true
+                break
+            case "medium":
+                document.getElementById("location_display_medium").checked = true
+                break
+            default:
+                document.getElementById("location_display_long").checked = true
         }
         
-        AddressTypes.detail = detail
+    }
+    
+    const populate_form = function (location) {
+        if (location) {
+            switch (defaultLocationDisplayFormat) {
+                case "short":
+                    _location_name_filter.value = location.display_short
+                    break
+                case "medium":
+                    _location_name_filter.value = location.display_medium
+                    break
+                default:
+                    _location_name_filter.value = location.display_long
+            }
+            
+            _location_enabled.checked = (location.enabled === 1)
+            _location_name.value = location.name
+            _location_id.value = location.id
+            _location_street_1.value = location.street_1
+            _location_street_2.value = location.street_2
+            _location_zipcode.value = location.zipcode
+            _location_types_id.value = location.type.id
+            
+            Country.id = location.country.id.toString()
+            Province.id = location.province.id.toString()
+            City.id = location.city.id.toString()
+            
+            $(_location_country_id).val(location.country.id.toString()).trigger("change")
+        }
+        
+    }
+    
+    const set = function (location) {
+        
+        return set_detail(location)
+        
+    }
+    
+    const set_detail = function (location) {
+        let detail = _default_detail()
+        temp_location = detail
+        
+        if (location) {
+            detail.city = {
+                created_by: (location.city.created_by) ? location.city.created_by : user_id,
+                date_created: (location.city.date_created) ? location.city.date_created : formatDateMySQL(),
+                date_modified: (location.city.date_modified) ? location.city.date_modified : formatDateMySQL(),
+                enabled: (location.city.enabled) ? location.city.enabled : 1,
+                id: (location.city.id) ? location.city.id : null,
+                modified_by: (location.city.modified_by) ? location.city.modified_by : user_id,
+                name: (location.city.name) ? location.city.name : null,
+                note: (location.city.note) ? location.city.note : null,
+                sort_order: (location.city.sort_order) ? location.city.sort_order : 999,
+            }
+            detail.province = {
+                created_by: (location.province.created_by) ? location.province.created_by : user_id,
+                date_created: (location.province.date_created) ? location.province.date_created : formatDateMySQL(),
+                date_modified: (location.province.date_modified) ? location.province.date_modified : formatDateMySQL(),
+                enabled: (location.province.enabled) ? location.province.enabled : 1,
+                id: (location.province.id) ? location.province.id : null,
+                iso2: (location.province.iso2) ? location.province.iso2 : null,
+                iso3: (location.province.iso3) ? location.province.iso3 : null,
+                modified_by: (location.province.modified_by) ? location.province.modified_by : user_id,
+                name: (location.province.name) ? location.province.name : null,
+                name_long: (location.province.name_long) ? location.province.name_long : null,
+                note: (location.province.note) ? location.province.note : null,
+                sort_order: (location.province.sort_order) ? location.province.sort_order : 999,
+            }
+            detail.country = {
+                created_by: (location.country.created_by) ? location.country.created_by : user_id,
+                date_created: (location.country.date_created) ? location.country.date_created : formatDateMySQL(),
+                date_modified: (location.country.date_modified) ? location.country.date_modified : formatDateMySQL(),
+                currency_id: (location.country.currency_id) ? location.country.currency_id : null,
+                enabled: (location.country.enabled) ? location.country.enabled : 1,
+                id: (location.country.id) ? location.country.id : null,
+                iso2: (location.country.iso2) ? location.country.iso2 : null,
+                iso3: (location.country.iso3) ? location.country.iso3 : null,
+                modified_by: (location.country.modified_by) ? location.country.modified_by : user_id,
+                name: (location.country.name) ? location.country.name : null,
+                name_long: (location.country.name_long) ? location.country.name_long : null,
+                note: (location.country.note) ? location.country.note : null,
+                sort_order: (location.country.sort_order) ? location.country.sort_order : 999,
+            }
+            detail.type = {
+                created_by: (location.type.created_by) ? location.type.created_by : user_id,
+                date_created: (location.type.date_created) ? location.type.date_created : formatDateMySQL(),
+                date_modified: (location.type.date_modified) ? location.type.date_modified : formatDateMySQL(),
+                enabled: (location.type.enabled) ? location.type.enabled : 1,
+                icon: (location.type.icon) ? location.type.icon : null,
+                id: (location.type.id) ? location.type.id : null,
+                modified_by: (location.type.modified_by) ? location.type.modified_by : user_id,
+                name: (location.type.name) ? location.type.name : null,
+                note: (location.type.note) ? location.type.note : null,
+                sort_order: (location.type.sort_order) ? location.type.sort_order : 999,
+            }
+            detail.id = (location.id) ? location.id : null
+            detail.name = (location.name) ? location.name : null
+            detail.street_1 = (location.street_1) ? location.street_1 : null
+            detail.street_2 = (location.street_2) ? location.street_2 : null
+            detail.zipcode = (location.zipcode) ? location.zipcode : null
+            detail.display_long = (location.display_long) ? location.display_long : null
+            detail.display_medium = (location.display_medium) ? location.display_medium : null
+            detail.display_short = (location.display_short) ? location.display_short : null
+            detail.enabled = (location.enabled) ? location.enabled : 1
+            detail.date_created = (location.date_created) ? location.date_created : formatDateMySQL()
+            detail.created_by = (location.created_by) ? location.created_by : user_id
+            detail.date_modified = (location.date_modified) ? location.date_modified : formatDateMySQL()
+            detail.modified_by = (location.modified_by) ? location.modified_by : user_id
+            detail.note = (location.note) ? location.note : null
+            
+            Province.set_detail(detail.province)
+            Country.set_detail(detail.country)
+            City.set_detail(detail.city)
+        }
+        
+        Location.detail = detail
         return detail
     }
     
-    const load_all = function (address_types) {
-        AddressTypes.all = new Map()
-        
-        if (!address_types) {
-            return
+    const init = function (location) {
+        validator_init(form_rules)
+        let detail = {}
+        if (location) {
+            detail = set(location)
         }
-        $.each(address_types, function (i, address_types) {
-            let detail = set(address_types)
-            AddressTypes.all.set("id", detail)
-        })
         
-        console.log(" AddressTypes.all", AddressTypes.all)
+        if (_form_edit_location) {
+            //validator = $(_form_edit_location).validate()
+            
+            $(_location_country_id).BuildDropDown({
+                data: Array.from(Country.all.values()),
+                title: "Country",
+                id_field: "id",
+                text_field: "name",
+                first_selectable: false,
+            })
+            
+            $(_location_province_id).BuildDropDown({
+                data: Array.from(Province.all.values()),
+                title: "Province",
+                id_field: "id",
+                text_field: "name",
+                first_selectable: false,
+            })
+            
+            $(_location_city_id).BuildDropDown({
+                data: Array.from(City.all.values()),
+                title: "City",
+                id_field: "id",
+                text_field: "name",
+                first_selectable: false,
+            })
+            
+            Country.init({
+                dropdowns: [
+                    "location_country_id",
+                ],
+            })
+            
+            Province.init({
+                dropdowns: [
+                    "location_province_id",
+                ],
+            })
+            
+            City.init({
+                dropdowns: [
+                    "location_city_id",
+                ],
+            })
+        }
+        reset_form()
+        populate_form(detail)
+        
+        init_autocomplete()
+        hide_form()
     }
     
     return {
         validator: null,
         detail: {},
         all: new Map(),
+        types: new Map(),
         get: function (params) {
             get(params)
         },
@@ -3365,12 +3385,16 @@ const AddressTypes = (function () {
         save: function (params) {
             save(params)
         },
-        init: function () {
-            init()
+        init: function (location) {
+            init(location)
+        },
+        populate_form: function (location) {
+            populate_form(location)
         },
     }
     
 })()
+
 
 const Address = (function () {
     "use strict"
@@ -3554,7 +3578,7 @@ const Address = (function () {
             _address_postal_code.value = (Address.detail.postal_code) ? Address.detail.postal_code : null
             Province.id = address.province.id
             Country.id = address.country.id
-            City.id = Address.detail.city.id
+            City.id = address.city.id
             
             $(_address_country_id).val((Address.detail.country.id) ? Address.detail.country.id : "").trigger("change")
         }
@@ -3589,13 +3613,11 @@ const Address = (function () {
      * hides address edit form
      */
     const load_form = function (address) {
-        if (address) {
+        if (_card_edit_address_form) {
+            reset_form()
             populate_form(address)
-            if (_card_edit_address_form) {
-                $(_card_edit_address_form).show()
-            }
+            $(_card_edit_address_form).show()
         }
-        
     }
     
     /**
@@ -3664,8 +3686,12 @@ const Address = (function () {
         if (_table_address) {
             build_table()
         }
+        
+        if (addresses) {
+            load_all(addresses)
+        }
+        
         if (_form_edit_address) {
-            
             $(_address_country_id).BuildDropDown({
                 data: Array.from(Country.all.values()),
                 title: "Country",
@@ -3673,17 +3699,15 @@ const Address = (function () {
                 text_field: "name",
                 first_selectable: false,
             })
-            
             $(_address_province_id).BuildDropDown({
-                data: Array.from(Province.all.values()),
+                data: [],
                 title: "Province",
                 id_field: "id",
                 text_field: "name",
                 first_selectable: false,
             })
-            
             $(_address_city_id).BuildDropDown({
-                data: Array.from(Province.all.values()),
+                data: [],
                 title: "City",
                 id_field: "id",
                 text_field: "name",
@@ -3785,9 +3809,7 @@ const Address = (function () {
      */
     const navigate = function (address) {
         if (address) {
-            reset_form()
-            populate_form(address)
-            load_form()
+            load_form(address)
         }
     }
     
@@ -3835,71 +3857,67 @@ $.fn.ColorScheme = function (settings) {
     
 }
 
-    
 const AirportTypes = (function () {
-    'use strict'
+    "use strict"
     
-    const base_url = '/airport_types'
-    const _input_airport_types_id = document.getElementById('input_airport_types_id')
-	const _input_airport_types_name = document.getElementById('input_airport_types_name')
-	const _input_airport_types_sort_order = document.getElementById('input_airport_types_sort_order')
-	const _input_airport_types_enabled = document.getElementById('input_airport_types_enabled')
-	const _input_airport_types_date_created = document.getElementById('input_airport_types_date_created')
-	const _input_airport_types_created_by = document.getElementById('input_airport_types_created_by')
-	const _input_airport_types_date_modified = document.getElementById('input_airport_types_date_modified')
-	const _input_airport_types_modified_by = document.getElementById('input_airport_types_modified_by')
-	const _input_airport_types_note = document.getElementById('input_airport_types_note')
-    let user_id = (document.getElementById('user_id')) ? (!isNaN(parseInt(document.getElementById('user_id').value))) ? parseInt(document.getElementById('user_id').value) : 4 : 4
-    
+    const base_url = "/airport_types"
+    const _input_airport_types_id = document.getElementById("input_airport_types_id")
+    const _input_airport_types_name = document.getElementById("input_airport_types_name")
+    const _input_airport_types_sort_order = document.getElementById("input_airport_types_sort_order")
+    const _input_airport_types_enabled = document.getElementById("input_airport_types_enabled")
+    const _input_airport_types_date_created = document.getElementById("input_airport_types_date_created")
+    const _input_airport_types_created_by = document.getElementById("input_airport_types_created_by")
+    const _input_airport_types_date_modified = document.getElementById("input_airport_types_date_modified")
+    const _input_airport_types_modified_by = document.getElementById("input_airport_types_modified_by")
+    const _input_airport_types_note = document.getElementById("input_airport_types_note")
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     const handle_airport_types_error = function (msg) {
-            toastr.error(msg)
-        }
-        
+        toastr.error(msg)
+    }
+    
     const _default_detail = function () {
         return {
             id: null,
-			name: null,
-			sort_order: null,
-			enabled: 1,
-			date_created: formatDateMySQL(),
-			created_by: user_id,
-			date_modified: formatDateMySQL(),
-			modified_by: user_id,
-			note: null
+            name: null,
+            sort_order: null,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
         }
     }
     
-    const save = function(params){
+    const save = function (params) {
     
     }
     
+    const get = function (id) {
+        let data_to_send = {}
+        if (id) {
+            data_to_send.id = id
+        }
+        
+    }
     
-            const get = function(id){
-                let data_to_send = {}
-                if(id){
-                    data_to_send.id = id
-                }
-                
-            }  
-            
-    
-    const init = function(settings){
-        console.log(' -- AirportTypes -- ', {})
+    const init = function (settings) {
+        console.log(" -- AirportTypes -- ", {})
     }
     
     const set = function (airport_types) {
         let detail = _default_detail()
         if (airport_types) {
-            detail.id = (airport_types.id)?airport_types.id:null
-			detail.name = (airport_types.name)?airport_types.name:null
-			detail.sort_order = (airport_types.sort_order)?airport_types.sort_order:null
-			detail.enabled = (airport_types.enabled)?airport_types.enabled:1
-			detail.date_created = (airport_types.date_created)?airport_types.date_created:formatDateMySQL()
-			detail.created_by = (airport_types.created_by)?airport_types.created_by:created_by
-			detail.date_modified = (airport_types.date_modified)?airport_types.date_modified:formatDateMySQL()
-			detail.modified_by = (airport_types.modified_by)?airport_types.modified_by:modified_by
-			detail.note = (airport_types.note)?airport_types.note:null
+            detail.id = (airport_types.id) ? airport_types.id : null
+            detail.name = (airport_types.name) ? airport_types.name : null
+            detail.sort_order = (airport_types.sort_order) ? airport_types.sort_order : null
+            detail.enabled = (airport_types.enabled) ? airport_types.enabled : 1
+            detail.date_created = (airport_types.date_created) ? airport_types.date_created : formatDateMySQL()
+            detail.created_by = (airport_types.created_by) ? airport_types.created_by : created_by
+            detail.date_modified = (airport_types.date_modified) ? airport_types.date_modified : formatDateMySQL()
+            detail.modified_by = (airport_types.modified_by) ? airport_types.modified_by : modified_by
+            detail.note = (airport_types.note) ? airport_types.note : null
         }
         
         AirportTypes.detail = detail
@@ -3908,39 +3926,39 @@ const AirportTypes = (function () {
     
     const load_all = function (airport_types) {
         AirportTypes.all = new Map()
-    
+        
         if (!airport_types) {
             return
         }
         $.each(airport_types, function (i, airport_types) {
             let detail = set(airport_types)
-            AirportTypes.all.set('id', detail)
+            AirportTypes.all.set("id", detail)
         })
         
-        console.log(' AirportTypes.all',  AirportTypes.all);
+        console.log(" AirportTypes.all", AirportTypes.all)
     }
     
     return {
         validator: null,
         detail: {},
         all: new Map(),
-        get:function(params){
+        get: function (params) {
             get(params)
         },
-        load_all: function(params){
-            load_all(params);
+        load_all: function (params) {
+            load_all(params)
         },
-        save:function(params){
-           save(params); 
+        save: function (params) {
+            save(params)
         },
         init: function () {
             init()
         },
     }
-
+    
 })()
 
-AirportTypes.init()
+//AirportTypes.init()
 //end object
 
 const Category = (function () {
@@ -4093,74 +4111,70 @@ const Category = (function () {
     
 })()
 
-Category.init()
+//Category.init()
 //end object
 
-    
 const ContactTypes = (function () {
-    'use strict'
+    "use strict"
     
-    const base_url = '/contact_types'
-    const _input_contact_types_id = document.getElementById('input_contact_types_id')
-	const _input_contact_types_name = document.getElementById('input_contact_types_name')
-	const _input_contact_types_sort_order = document.getElementById('input_contact_types_sort_order')
-	const _input_contact_types_enabled = document.getElementById('input_contact_types_enabled')
-	const _input_contact_types_date_created = document.getElementById('input_contact_types_date_created')
-	const _input_contact_types_created_by = document.getElementById('input_contact_types_created_by')
-	const _input_contact_types_date_modified = document.getElementById('input_contact_types_date_modified')
-	const _input_contact_types_modified_by = document.getElementById('input_contact_types_modified_by')
-	const _input_contact_types_note = document.getElementById('input_contact_types_note')
-    let user_id = (document.getElementById('user_id')) ? (!isNaN(parseInt(document.getElementById('user_id').value))) ? parseInt(document.getElementById('user_id').value) : 4 : 4
-    
+    const base_url = "/contact_types"
+    const _input_contact_types_id = document.getElementById("input_contact_types_id")
+    const _input_contact_types_name = document.getElementById("input_contact_types_name")
+    const _input_contact_types_sort_order = document.getElementById("input_contact_types_sort_order")
+    const _input_contact_types_enabled = document.getElementById("input_contact_types_enabled")
+    const _input_contact_types_date_created = document.getElementById("input_contact_types_date_created")
+    const _input_contact_types_created_by = document.getElementById("input_contact_types_created_by")
+    const _input_contact_types_date_modified = document.getElementById("input_contact_types_date_modified")
+    const _input_contact_types_modified_by = document.getElementById("input_contact_types_modified_by")
+    const _input_contact_types_note = document.getElementById("input_contact_types_note")
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     const handle_contact_types_error = function (msg) {
-            toastr.error(msg)
-        }
-        
+        toastr.error(msg)
+    }
+    
     const _default_detail = function () {
         return {
             id: null,
-			name: null,
-			sort_order: null,
-			enabled: 1,
-			date_created: formatDateMySQL(),
-			created_by: user_id,
-			date_modified: formatDateMySQL(),
-			modified_by: user_id,
-			note: null
+            name: null,
+            sort_order: null,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
         }
     }
     
-    const save = function(params){
+    const save = function (params) {
     
     }
     
+    const get = function (id) {
+        let data_to_send = {}
+        if (id) {
+            data_to_send.id = id
+        }
+        
+    }
     
-            const get = function(id){
-                let data_to_send = {}
-                if(id){
-                    data_to_send.id = id
-                }
-                
-            }  
-            
-    
-    const init = function(settings){
-        console.log(' -- ContactTypes -- ', {})
+    const init = function (settings) {
+        console.log(" -- ContactTypes -- ", {})
     }
     
     const set = function (contact_types) {
         let detail = _default_detail()
         if (contact_types) {
-            detail.id = (contact_types.id)?contact_types.id:null
-			detail.name = (contact_types.name)?contact_types.name:null
-			detail.sort_order = (contact_types.sort_order)?contact_types.sort_order:null
-			detail.enabled = (contact_types.enabled)?contact_types.enabled:1
-			detail.date_created = (contact_types.date_created)?contact_types.date_created:formatDateMySQL()
-			detail.created_by = (contact_types.created_by)?contact_types.created_by:created_by
-			detail.date_modified = (contact_types.date_modified)?contact_types.date_modified:formatDateMySQL()
-			detail.modified_by = (contact_types.modified_by)?contact_types.modified_by:modified_by
-			detail.note = (contact_types.note)?contact_types.note:null
+            detail.id = (contact_types.id) ? contact_types.id : null
+            detail.name = (contact_types.name) ? contact_types.name : null
+            detail.sort_order = (contact_types.sort_order) ? contact_types.sort_order : null
+            detail.enabled = (contact_types.enabled) ? contact_types.enabled : 1
+            detail.date_created = (contact_types.date_created) ? contact_types.date_created : formatDateMySQL()
+            detail.created_by = (contact_types.created_by) ? contact_types.created_by : created_by
+            detail.date_modified = (contact_types.date_modified) ? contact_types.date_modified : formatDateMySQL()
+            detail.modified_by = (contact_types.modified_by) ? contact_types.modified_by : modified_by
+            detail.note = (contact_types.note) ? contact_types.note : null
         }
         
         ContactTypes.detail = detail
@@ -4169,40 +4183,103 @@ const ContactTypes = (function () {
     
     const load_all = function (contact_types) {
         ContactTypes.all = new Map()
-    
+        
         if (!contact_types) {
             return
         }
         $.each(contact_types, function (i, contact_types) {
             let detail = set(contact_types)
-            ContactTypes.all.set('id', detail)
+            ContactTypes.all.set("id", detail)
         })
         
-        console.log(' ContactTypes.all',  ContactTypes.all);
+        console.log(" ContactTypes.all", ContactTypes.all)
     }
     
     return {
         validator: null,
         detail: {},
         all: new Map(),
-        get:function(params){
+        get: function (params) {
             get(params)
         },
-        load_all: function(params){
-            load_all(params);
+        load_all: function (params) {
+            load_all(params)
         },
-        save:function(params){
-           save(params); 
+        save: function (params) {
+            save(params)
         },
         init: function () {
             init()
         },
     }
-
+    
 })()
 
-ContactTypes.init()
+//ContactTypes.init()
 //end object
+
+const Company = (function () {
+    "use strict"
+    
+    let globalSelectedCompany = false
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let suggestionsTempCompany = []
+    
+    const add_to_company_list = function (obj) {
+        if (globalSelectedCompany === false) {
+            if ((obj.value.length > 0 && suggestionsTempCompany.length === 0 && globalSelectedCompany === false) ||
+              (obj.value.length > 0 && suggestionsTempCompany.length > 0 && !globalSelectedCompany)
+            ) {
+            
+            }
+        }
+    }
+    
+    const handle_company_error = function (msg) {
+        toastr.error(msg)
+    }
+    
+    const fetch_company_by_name = function (dataToSend, callback) {
+        let url = "/api/v1.0/companies/validate"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handle_company_error("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+                return handle_company_error("Error Validating Company")
+            }
+        } else {
+            return handle_company_error("Error Loading Company- Missing Data")
+        }
+    }
+    
+    const company_exists = function (name) {
+        if (name && name !== "") {
+            let dataToSend = {
+                name: name,
+            }
+            
+            fetch_company_by_name(dataToSend, function (data) {
+                if (data) {
+                    log(data)
+                }
+            })
+        }
+    }
+    
+    return {
+        company_exists: function (name) {
+            company_exists(name)
+        },
+    }
+})()
 
 const Contact = (function () {
     "use strict"
@@ -4361,8 +4438,8 @@ const Contact = (function () {
      * @param contact
      */
     const populate_form = function (contact) {
-        log("Contact-PopulateForm.contact", contact)
-        if (_card_edit_contact_form) {
+        clear_form()
+        if (contact) {
             _contact_id.value = validInt(contact.id)
             _contact_name_first.value = (contact.name_first) ? contact.name_first : null
             _contact_name_last.value = (contact.name_last) ? contact.name_last : null
@@ -4371,6 +4448,7 @@ const Contact = (function () {
             _contact_enabled.checked = (contact.enabled) ? (contact.enabled === 1) : true
             $(_contact_types_id).val((contact.contact_types_id) ? contact.contact_types_id : [])
         }
+        show_form()
     }
     
     /**
@@ -4429,6 +4507,7 @@ const Contact = (function () {
             build_table()
         }
         if (contacts) {
+            
             load_all(contacts)
         }
         hide_form()
@@ -4490,9 +4569,9 @@ const Contact = (function () {
      * @param contact
      */
     const navigate = function (contact) {
-        clear_form()
-        populate_form(contact)
-        show_form()
+        if (contact) {
+            populate_form(contact)
+        }
     }
     
     /**
@@ -4645,15 +4724,13 @@ const Vendor = (function () {
     const _vendor_is_provider = document.getElementById("vendor_is_provider")
     const _vendor_sku = document.getElementById("vendor_sku")
     const _vendor_enabled = document.getElementById("vendor_enabled")
-    //Unused
-    const _vendor_date_created = document.getElementById("vendor_date_created")
-    const _vendor_created_by = document.getElementById("vendor_created_by")
-    const _vendor_date_modified = document.getElementById("vendor_date_modified")
-    const _vendor_modified_by = document.getElementById("vendor_modified_by")
-    const _vendor_note = document.getElementById("vendor_note")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    // ----
     
+    /**
+     * handel errors
+     *
+     * @param msg
+     */
     const handle_vendor_error = function (msg) {
         toastr.error(msg)
     }
@@ -4675,14 +4752,14 @@ const Vendor = (function () {
                   triggerSelectOnValidInput: false,
                   paramName: "st",
                   onSelect: function (suggestion) {
-                      if (suggestion.data) {
-                          let vendor = suggestion.data
-                          let vendor_id = vendor.id
-                          let vendor_company_id = vendor.company.id
-                          _vendor_id.value = vendor_id
-                          _vendor_company_id.value = vendor_company_id
+                      if (!suggestion.data) {
+                          return
                       }
-                      
+                      let vendor = (suggestion.data.vendor_detail) ? suggestion.data.vendor_detail : {}
+                      let company = (suggestion.data.company_detail) ? suggestion.data.company_detail : {}
+                      let contacts = []
+                      let addresses = []
+                      log("vendor", vendor)
                       // --
                       //log("Provider.suggestion", suggestion.data)
                       //globalSelectedProvider = true
@@ -4692,7 +4769,6 @@ const Vendor = (function () {
                   },
               })
         }
-        
     }
     
     const _default_detail = function () {
@@ -4765,32 +4841,157 @@ const Vendor = (function () {
     
     const init = function (settings) {
         if (_vendor_name) {
+            _vendor_name.value = settings.name
             init_autocomplete()
         }
-        
-        /**
-         * created_by: 4
-         * date_created: "10/25/2021"
-         * date_modified: "10/25/2021"
-         * enabled: 1
-         * id: 1
-         * is_provider: 1
-         * modified_by: 4
-         * note: null
-         * show_online: 1
-         * show_ops: 1
-         * show_sales: 1
-         * sku: "SKU0000001"
-         */
+        if (_vendor_id) {
+            _vendor_id.value = settings.id
+        }
+        if (_vendor_company_id) {
+            _vendor_company_id.value = settings.company.id
+        }
         if (_vendor_sku) {
             _vendor_sku.value = settings.sku
-            _vendor_id.value = settings.id
+        }
+        if (_vendor_enabled) {
             _vendor_enabled.checked = (settings.enabled === 1)
+        }
+        if (_vendor_is_provider) {
             _vendor_is_provider.checked = (settings.is_provider === 1)
+        }
+        if (_vendor_show_online) {
             _vendor_show_online.checked = (settings.show_online === 1)
+        }
+        if (_vendor_show_ops) {
             _vendor_show_ops.checked = (settings.show_ops === 1)
+        }
+        if (_vendor_show_sales) {
             _vendor_show_sales.checked = (settings.show_sales === 1)
         }
+    }
+    
+    const reset_form = function () {
+        _vendor_name.value = ""
+        _vendor_id.value = ""
+        _vendor_company_id.value = ""
+        _vendor_show_online.checked = true
+        _vendor_show_sales.checked = true
+        _vendor_show_ops.checked = true
+        _vendor_is_provider.checked = true
+        _vendor_sku.value = ""
+        _vendor_enabled.checked = true
+    }
+    
+    return {
+        validator: null,
+        detail: {},
+        all: new Map(),
+        setProvider: function () {
+            _vendor_is_provider.checked = true
+            _vendor_is_provider.disabled = true
+            $(_vendor_is_provider).attr("readonly", true)
+        },
+        get: function (params) {
+            get(params)
+        },
+        load_all: function (params) {
+            load_all(params)
+        },
+        reset_form: function () {
+            reset_form()
+        },
+        save: function (params) {
+            save(params)
+        },
+        init: function (settings) {
+            init(settings)
+        },
+    }
+    
+})()
+
+const MessageTypes = (function () {
+    "use strict"
+    
+    const base_url = "/message_types"
+    const _input_message_types_id = document.getElementById("input_message_types_id")
+    const _input_message_types_name = document.getElementById("input_message_types_name")
+    const _input_message_types_icon = document.getElementById("input_message_types_icon")
+    const _input_message_types_sort_order = document.getElementById("input_message_types_sort_order")
+    const _input_message_types_enabled = document.getElementById("input_message_types_enabled")
+    const _input_message_types_date_created = document.getElementById("input_message_types_date_created")
+    const _input_message_types_created_by = document.getElementById("input_message_types_created_by")
+    const _input_message_types_date_modified = document.getElementById("input_message_types_date_modified")
+    const _input_message_types_modified_by = document.getElementById("input_message_types_modified_by")
+    const _input_message_types_note = document.getElementById("input_message_types_note")
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    
+    const handle_message_types_error = function (msg) {
+        toastr.error(msg)
+    }
+    
+    const _default_detail = function () {
+        return {
+            id: null,
+            name: null,
+            icon: null,
+            sort_order: null,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
+        }
+    }
+    
+    const save = function (params) {
+    
+    }
+    
+    const get = function (id) {
+        let data_to_send = {}
+        if (id) {
+            data_to_send.id = id
+        }
+        
+    }
+    
+    const init = function (settings) {
+        console.log(" -- MessageTypes -- ", {})
+    }
+    
+    const set = function (message_types) {
+        let detail = _default_detail()
+        if (message_types) {
+            detail.id = (message_types.id) ? message_types.id : null
+            detail.name = (message_types.name) ? message_types.name : null
+            detail.icon = (message_types.icon) ? message_types.icon : null
+            detail.sort_order = (message_types.sort_order) ? message_types.sort_order : null
+            detail.enabled = (message_types.enabled) ? message_types.enabled : 1
+            detail.date_created = (message_types.date_created) ? message_types.date_created : formatDateMySQL()
+            detail.created_by = (message_types.created_by) ? message_types.created_by : created_by
+            detail.date_modified = (message_types.date_modified) ? message_types.date_modified : formatDateMySQL()
+            detail.modified_by = (message_types.modified_by) ? message_types.modified_by : modified_by
+            detail.note = (message_types.note) ? message_types.note : null
+        }
+        
+        MessageTypes.detail = detail
+        return detail
+    }
+    
+    const load_all = function (message_types) {
+        MessageTypes.all = new Map()
+        
+        if (!message_types) {
+            return
+        }
+        $.each(message_types, function (i, message_types) {
+            let detail = set(message_types)
+            MessageTypes.all.set("id", detail)
+        })
+        
+        console.log(" MessageTypes.all", MessageTypes.all)
     }
     
     return {
@@ -4806,122 +5007,14 @@ const Vendor = (function () {
         save: function (params) {
             save(params)
         },
-        init: function (settings) {
-            //init(settings)
-        },
-    }
-    
-})()
-
-    
-const MessageTypes = (function () {
-    'use strict'
-    
-    const base_url = '/message_types'
-    const _input_message_types_id = document.getElementById('input_message_types_id')
-	const _input_message_types_name = document.getElementById('input_message_types_name')
-	const _input_message_types_icon = document.getElementById('input_message_types_icon')
-	const _input_message_types_sort_order = document.getElementById('input_message_types_sort_order')
-	const _input_message_types_enabled = document.getElementById('input_message_types_enabled')
-	const _input_message_types_date_created = document.getElementById('input_message_types_date_created')
-	const _input_message_types_created_by = document.getElementById('input_message_types_created_by')
-	const _input_message_types_date_modified = document.getElementById('input_message_types_date_modified')
-	const _input_message_types_modified_by = document.getElementById('input_message_types_modified_by')
-	const _input_message_types_note = document.getElementById('input_message_types_note')
-    let user_id = (document.getElementById('user_id')) ? (!isNaN(parseInt(document.getElementById('user_id').value))) ? parseInt(document.getElementById('user_id').value) : 4 : 4
-    
-    
-    const handle_message_types_error = function (msg) {
-            toastr.error(msg)
-        }
-        
-    const _default_detail = function () {
-        return {
-            id: null,
-			name: null,
-			icon: null,
-			sort_order: null,
-			enabled: 1,
-			date_created: formatDateMySQL(),
-			created_by: user_id,
-			date_modified: formatDateMySQL(),
-			modified_by: user_id,
-			note: null
-        }
-    }
-    
-    const save = function(params){
-    
-    }
-    
-    
-            const get = function(id){
-                let data_to_send = {}
-                if(id){
-                    data_to_send.id = id
-                }
-                
-            }  
-            
-    
-    const init = function(settings){
-        console.log(' -- MessageTypes -- ', {})
-    }
-    
-    const set = function (message_types) {
-        let detail = _default_detail()
-        if (message_types) {
-            detail.id = (message_types.id)?message_types.id:null
-			detail.name = (message_types.name)?message_types.name:null
-			detail.icon = (message_types.icon)?message_types.icon:null
-			detail.sort_order = (message_types.sort_order)?message_types.sort_order:null
-			detail.enabled = (message_types.enabled)?message_types.enabled:1
-			detail.date_created = (message_types.date_created)?message_types.date_created:formatDateMySQL()
-			detail.created_by = (message_types.created_by)?message_types.created_by:created_by
-			detail.date_modified = (message_types.date_modified)?message_types.date_modified:formatDateMySQL()
-			detail.modified_by = (message_types.modified_by)?message_types.modified_by:modified_by
-			detail.note = (message_types.note)?message_types.note:null
-        }
-        
-        MessageTypes.detail = detail
-        return detail
-    }
-    
-    const load_all = function (message_types) {
-        MessageTypes.all = new Map()
-    
-        if (!message_types) {
-            return
-        }
-        $.each(message_types, function (i, message_types) {
-            let detail = set(message_types)
-            MessageTypes.all.set('id', detail)
-        })
-        
-        console.log(' MessageTypes.all',  MessageTypes.all);
-    }
-    
-    return {
-        validator: null,
-        detail: {},
-        all: new Map(),
-        get:function(params){
-            get(params)
-        },
-        load_all: function(params){
-            load_all(params);
-        },
-        save:function(params){
-           save(params); 
-        },
         init: function () {
             init()
         },
     }
-
+    
 })()
 
-MessageTypes.init()
+//MessageTypes.init()
 //end object
 
 const PricingStrategyTypes = (function () {
@@ -5025,68 +5118,64 @@ const PricingStrategyTypes = (function () {
 PricingStrategyTypes.init()
 //end object
 
-    
 const RatingTypes = (function () {
-    'use strict'
+    "use strict"
     
-    const base_url = '/rating_types'
-    const _input_rating_types_id = document.getElementById('input_rating_types_id')
-	const _input_rating_types_name = document.getElementById('input_rating_types_name')
-	const _input_rating_types_enabled = document.getElementById('input_rating_types_enabled')
-	const _input_rating_types_date_created = document.getElementById('input_rating_types_date_created')
-	const _input_rating_types_created_by = document.getElementById('input_rating_types_created_by')
-	const _input_rating_types_date_modified = document.getElementById('input_rating_types_date_modified')
-	const _input_rating_types_modified_by = document.getElementById('input_rating_types_modified_by')
-	const _input_rating_types_note = document.getElementById('input_rating_types_note')
-    let user_id = (document.getElementById('user_id')) ? (!isNaN(parseInt(document.getElementById('user_id').value))) ? parseInt(document.getElementById('user_id').value) : 4 : 4
-    
+    const base_url = "/rating_types"
+    const _input_rating_types_id = document.getElementById("input_rating_types_id")
+    const _input_rating_types_name = document.getElementById("input_rating_types_name")
+    const _input_rating_types_enabled = document.getElementById("input_rating_types_enabled")
+    const _input_rating_types_date_created = document.getElementById("input_rating_types_date_created")
+    const _input_rating_types_created_by = document.getElementById("input_rating_types_created_by")
+    const _input_rating_types_date_modified = document.getElementById("input_rating_types_date_modified")
+    const _input_rating_types_modified_by = document.getElementById("input_rating_types_modified_by")
+    const _input_rating_types_note = document.getElementById("input_rating_types_note")
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     const handle_rating_types_error = function (msg) {
-            toastr.error(msg)
-        }
-        
+        toastr.error(msg)
+    }
+    
     const _default_detail = function () {
         return {
             id: null,
-			name: null,
-			enabled: 1,
-			date_created: formatDateMySQL(),
-			created_by: user_id,
-			date_modified: formatDateMySQL(),
-			modified_by: user_id,
-			note: null
+            name: null,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
         }
     }
     
-    const save = function(params){
+    const save = function (params) {
     
     }
     
+    const get = function (id) {
+        let data_to_send = {}
+        if (id) {
+            data_to_send.id = id
+        }
+        
+    }
     
-            const get = function(id){
-                let data_to_send = {}
-                if(id){
-                    data_to_send.id = id
-                }
-                
-            }  
-            
-    
-    const init = function(settings){
-        console.log(' -- RatingTypes -- ', {})
+    const init = function (settings) {
+        console.log(" -- RatingTypes -- ", {})
     }
     
     const set = function (rating_types) {
         let detail = _default_detail()
         if (rating_types) {
-            detail.id = (rating_types.id)?rating_types.id:null
-			detail.name = (rating_types.name)?rating_types.name:null
-			detail.enabled = (rating_types.enabled)?rating_types.enabled:1
-			detail.date_created = (rating_types.date_created)?rating_types.date_created:formatDateMySQL()
-			detail.created_by = (rating_types.created_by)?rating_types.created_by:created_by
-			detail.date_modified = (rating_types.date_modified)?rating_types.date_modified:formatDateMySQL()
-			detail.modified_by = (rating_types.modified_by)?rating_types.modified_by:modified_by
-			detail.note = (rating_types.note)?rating_types.note:null
+            detail.id = (rating_types.id) ? rating_types.id : null
+            detail.name = (rating_types.name) ? rating_types.name : null
+            detail.enabled = (rating_types.enabled) ? rating_types.enabled : 1
+            detail.date_created = (rating_types.date_created) ? rating_types.date_created : formatDateMySQL()
+            detail.created_by = (rating_types.created_by) ? rating_types.created_by : created_by
+            detail.date_modified = (rating_types.date_modified) ? rating_types.date_modified : formatDateMySQL()
+            detail.modified_by = (rating_types.modified_by) ? rating_types.modified_by : modified_by
+            detail.note = (rating_types.note) ? rating_types.note : null
         }
         
         RatingTypes.detail = detail
@@ -5095,109 +5184,105 @@ const RatingTypes = (function () {
     
     const load_all = function (rating_types) {
         RatingTypes.all = new Map()
-    
+        
         if (!rating_types) {
             return
         }
         $.each(rating_types, function (i, rating_types) {
             let detail = set(rating_types)
-            RatingTypes.all.set('id', detail)
+            RatingTypes.all.set("id", detail)
         })
         
-        console.log(' RatingTypes.all',  RatingTypes.all);
+        console.log(" RatingTypes.all", RatingTypes.all)
     }
     
     return {
         validator: null,
         detail: {},
         all: new Map(),
-        get:function(params){
+        get: function (params) {
             get(params)
         },
-        load_all: function(params){
-            load_all(params);
+        load_all: function (params) {
+            load_all(params)
         },
-        save:function(params){
-           save(params); 
+        save: function (params) {
+            save(params)
         },
         init: function () {
             init()
         },
     }
-
+    
 })()
 
-RatingTypes.init()
+//RatingTypes.init()
 //end object
 
-    
 const SalesTypes = (function () {
-    'use strict'
+    "use strict"
     
-    const base_url = '/sales_types'
-    const _input_sales_types_id = document.getElementById('input_sales_types_id')
-	const _input_sales_types_name = document.getElementById('input_sales_types_name')
-	const _input_sales_types_class = document.getElementById('input_sales_types_class')
-	const _input_sales_types_sort_order = document.getElementById('input_sales_types_sort_order')
-	const _input_sales_types_enabled = document.getElementById('input_sales_types_enabled')
-	const _input_sales_types_date_created = document.getElementById('input_sales_types_date_created')
-	const _input_sales_types_created_by = document.getElementById('input_sales_types_created_by')
-	const _input_sales_types_date_modified = document.getElementById('input_sales_types_date_modified')
-	const _input_sales_types_modified_by = document.getElementById('input_sales_types_modified_by')
-	const _input_sales_types_note = document.getElementById('input_sales_types_note')
-    let user_id = (document.getElementById('user_id')) ? (!isNaN(parseInt(document.getElementById('user_id').value))) ? parseInt(document.getElementById('user_id').value) : 4 : 4
-    
+    const base_url = "/sales_types"
+    const _input_sales_types_id = document.getElementById("input_sales_types_id")
+    const _input_sales_types_name = document.getElementById("input_sales_types_name")
+    const _input_sales_types_class = document.getElementById("input_sales_types_class")
+    const _input_sales_types_sort_order = document.getElementById("input_sales_types_sort_order")
+    const _input_sales_types_enabled = document.getElementById("input_sales_types_enabled")
+    const _input_sales_types_date_created = document.getElementById("input_sales_types_date_created")
+    const _input_sales_types_created_by = document.getElementById("input_sales_types_created_by")
+    const _input_sales_types_date_modified = document.getElementById("input_sales_types_date_modified")
+    const _input_sales_types_modified_by = document.getElementById("input_sales_types_modified_by")
+    const _input_sales_types_note = document.getElementById("input_sales_types_note")
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     const handle_sales_types_error = function (msg) {
-            toastr.error(msg)
-        }
-        
+        toastr.error(msg)
+    }
+    
     const _default_detail = function () {
         return {
             id: null,
-			name: null,
-			class: null,
-			sort_order: null,
-			enabled: 1,
-			date_created: formatDateMySQL(),
-			created_by: user_id,
-			date_modified: formatDateMySQL(),
-			modified_by: user_id,
-			note: null
+            name: null,
+            class: null,
+            sort_order: null,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
         }
     }
     
-    const save = function(params){
+    const save = function (params) {
     
     }
     
+    const get = function (id) {
+        let data_to_send = {}
+        if (id) {
+            data_to_send.id = id
+        }
+        
+    }
     
-            const get = function(id){
-                let data_to_send = {}
-                if(id){
-                    data_to_send.id = id
-                }
-                
-            }  
-            
-    
-    const init = function(settings){
-        console.log(' -- SalesTypes -- ', {})
+    const init = function (settings) {
+        console.log(" -- SalesTypes -- ", {})
     }
     
     const set = function (sales_types) {
         let detail = _default_detail()
         if (sales_types) {
-            detail.id = (sales_types.id)?sales_types.id:null
-			detail.name = (sales_types.name)?sales_types.name:null
-			detail.class = (sales_types.class)?sales_types.class:null
-			detail.sort_order = (sales_types.sort_order)?sales_types.sort_order:null
-			detail.enabled = (sales_types.enabled)?sales_types.enabled:1
-			detail.date_created = (sales_types.date_created)?sales_types.date_created:formatDateMySQL()
-			detail.created_by = (sales_types.created_by)?sales_types.created_by:created_by
-			detail.date_modified = (sales_types.date_modified)?sales_types.date_modified:formatDateMySQL()
-			detail.modified_by = (sales_types.modified_by)?sales_types.modified_by:modified_by
-			detail.note = (sales_types.note)?sales_types.note:null
+            detail.id = (sales_types.id) ? sales_types.id : null
+            detail.name = (sales_types.name) ? sales_types.name : null
+            detail.class = (sales_types.class) ? sales_types.class : null
+            detail.sort_order = (sales_types.sort_order) ? sales_types.sort_order : null
+            detail.enabled = (sales_types.enabled) ? sales_types.enabled : 1
+            detail.date_created = (sales_types.date_created) ? sales_types.date_created : formatDateMySQL()
+            detail.created_by = (sales_types.created_by) ? sales_types.created_by : created_by
+            detail.date_modified = (sales_types.date_modified) ? sales_types.date_modified : formatDateMySQL()
+            detail.modified_by = (sales_types.modified_by) ? sales_types.modified_by : modified_by
+            detail.note = (sales_types.note) ? sales_types.note : null
         }
         
         SalesTypes.detail = detail
@@ -5206,39 +5291,39 @@ const SalesTypes = (function () {
     
     const load_all = function (sales_types) {
         SalesTypes.all = new Map()
-    
+        
         if (!sales_types) {
             return
         }
         $.each(sales_types, function (i, sales_types) {
             let detail = set(sales_types)
-            SalesTypes.all.set('id', detail)
+            SalesTypes.all.set("id", detail)
         })
         
-        console.log(' SalesTypes.all',  SalesTypes.all);
+        console.log(" SalesTypes.all", SalesTypes.all)
     }
     
     return {
         validator: null,
         detail: {},
         all: new Map(),
-        get:function(params){
+        get: function (params) {
             get(params)
         },
-        load_all: function(params){
-            load_all(params);
+        load_all: function (params) {
+            load_all(params)
         },
-        save:function(params){
-           save(params); 
+        save: function (params) {
+            save(params)
         },
         init: function () {
             init()
         },
     }
-
+    
 })()
 
-SalesTypes.init()
+//SalesTypes.init()
 //end object
 
 const StatusTypes = (function () {
@@ -5342,7 +5427,7 @@ const StatusTypes = (function () {
     
 })()
 
-StatusTypes.init()
+//StatusTypes.init()
 //end object
 
 const Types = (function () {
@@ -5376,7 +5461,8 @@ const Types = (function () {
         Types.rating_types = new Map()
         Types.sales_types = new Map()
         Types.status_types = new Map()
-        
+        Country.all = new Map()
+        // ----
         if (settings.address_types) {
             setType(settings.address_types, "address_types")
         }
@@ -5395,13 +5481,6 @@ const Types = (function () {
         
         if (settings.contact_types) {
             setType(settings.contact_types, "contact_types")
-        }
-        
-        console.log("settings", settings)
-        
-        if (settings.countries) {
-            Country.load_all(settings.countries)
-            console.log(Country.all)
         }
         
         if (settings.currency) {
@@ -5432,6 +5511,10 @@ const Types = (function () {
             setType(settings.status_types, "status_types")
         }
         
+        if (settings.countries) {
+            Country.load_all(settings.countries)
+        }
+        
     }
     
     return {
@@ -5450,7 +5533,9 @@ const Types = (function () {
         status_types: new Map(),
         
         init: function (settings) {
-            init(settings)
+            if (settings) {
+                init(settings)
+            }
         },
     }
     
@@ -5575,296 +5660,418 @@ const Login = (function () {
 Login.init()
 
 const Provider = (function () {
-    "use strict"
-    
-    const base_url = "/providers"
-    //Buttons
-    const _button_add_provider_page_heading = document.getElementById("button_add_provider_page_heading")
-    //Tables
-    const _table_provider_index = document.getElementById("table_provider_index")
-    //Fields
-    const _provider_id = document.getElementById("provider_id")
-    const _provider_name = document.getElementById("provider_name")
-    const _provider_company_id = document.getElementById("provider_company_id")
-    const _provider_enabled = document.getElementById("provider_enabled")
-    const _provider_code_direct_id = document.getElementById("provider_code_direct_id")
-    //Defaults
-    let globalSelectedProvider = false
-    let $index_table = $(_table_provider_index)
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    
-    $(_button_add_provider_page_heading)
-      .on("click", function () {
-          //console.log("test")
-      })
-    
-    const handle_provider_error = function (msg) {
-        toastr.error(msg)
-    }
-    
-    const load_all = function (providers) {
-        Provider.all = new Map()
-        if (providers) {
-            $.each(providers, function (i, provider) {
-                let detail = set(provider)
-                $index_table.insertRow(detail)
-                Provider.all.set(detail.id, detail)
-            })
-        }
-    }
-    
-    const _default_detail = function () {
-        return {
-            addresses: [],
-            contacts: [],
-            location: {},
-            company: {},
-            vendor: {},
-            id: null,
-            company_id: null,
-            name: null,
-            code_direct_id: null,
-            provider_vendor: 1,
-            enabled: 1,
-            date_created: formatDateMySQL(),
-            created_by: user_id,
-            date_modified: formatDateMySQL(),
-            modified_by: user_id,
-            note: null,
-        }
-    }
-    
-    /**
-     * pupulate provider form
-     *
-     * @param provider
-     */
-    const populate_form = function (provider) {
-        if (provider) {
-            log("provider", provider)
-            _provider_id.value = (provider.id) ? provider.id : null
-            _provider_name.value = (provider.name) ? provider.name : null
-            _provider_code_direct_id.value = (provider.code_direct_id) ? provider.code_direct_id : null
-            _provider_enabled.checked = (provider.enabled === 1)
-        }
-    }
-    
-    const save = function (params) {
-    
-    }
-    
-    const get = function (id) {
-        let data_to_send = {}
-        if (id) {
-            data_to_send.id = id
-        }
-        
-    }
-    
-    const navigate = function (provider) {
-        if (provider && provider.id) {
-            window.location.replace(base_url + "/" + provider.id)
-        }
-    }
-    
-    const init = function (settings) {
-    
-    }
-    
-    const set = function (provider) {
-        let detail = _default_detail()
-        //log("Provider.set", provider)
-        if (provider) {
-            detail.id = (provider.id) ? provider.id : null
-            detail.name = (provider.name) ? provider.name : null
-            detail.location_id = (provider.location_id) ? provider.location_id : null
-            detail.code_direct_id = (provider.code_direct_id) ? provider.code_direct_id : null
-            detail.provider_vendor = (provider.provider_vendor) ? provider.provider_vendor : 1
-            detail.enabled = (provider.enabled) ? provider.enabled : 1
-            detail.date_created = (provider.date_created) ? provider.date_created : formatDateMySQL()
-            detail.created_by = (provider.created_by) ? provider.created_by : user_id
-            detail.date_modified = (provider.date_modified) ? provider.date_modified : formatDateMySQL()
-            detail.modified_by = (provider.modified_by) ? provider.modified_by : user_id
-            detail.note = (provider.note) ? provider.note : null
-            detail.vendor = (provider.vendor) ? provider.vendor : {}
-            detail.addresses = (provider.addresses) ? provider.addresses : []
-            detail.contacts = (provider.contacts) ? provider.contacts : []
-            detail.location = (provider.location) ? provider.location : {}
-            detail.company = (provider.company) ? provider.company : {}
-        }
-        
-        Provider.detail = detail
-        return detail
-    }
-    
-    const index = function (settings) {
-        build_index_table()
-        
-        if (settings) {
-            if (settings.providers) {
-                load_all(settings.providers)
-            }
-        }
-        
-    }
-    
-    const build_index_table = function () {
-        //log("build_index_table")
-        $index_table = $(_table_provider_index).table({
-            table_type: "display_list",
-            data: Provider.all,
-            columnDefs: [
-                {
-                    title: "Name",
-                    targets: 0,
-                    data: "name",
-                    render: function (data, type, row, meta) {
-                        return "<span style='white-space: nowrap;'>" + data + "</span>"
-                    },
-                },
-                {
-                    title: "Code Direct ID",
-                    targets: 1,
-                    data: "code_direct_id",
-                    render: function (data, type, row, meta) {
-                        return "<span style='white-space: nowrap;'>" + data + "</span>"
-                    },
-                },
-                {
-                    title: "SKU",
-                    targets: 2,
-                    data: "vendor",
-                    render: function (data, type, row, meta) {
-                        return "<span style='white-space: nowrap;'>" + data.sku + "</span>"
-                    },
-                },
-                {
-                    title: "Location",
-                    targets: 3,
-                    data: "location",
-                    render: function (data, type, row, meta) {
-                        let displayLocation = ""
-                        if (defaultLocationDisplayFormat === "short") {
-                            displayLocation = data.display_short
-                        } else if (defaultLocationDisplayFormat === "long") {
-                            displayLocation = data.display_long
-                        } else {
-                            displayLocation = data.display_medium
-                        }
-                        
-                        return "<span style='white-space: nowrap;'>" + displayLocation + "</span>"
-                    },
-                },
-            ],
-            rowClick: Provider.navigate,
+      "use strict"
+      
+      const base_url = "/providers"
+      //Buttons
+      const _button_add_provider_page_heading = document.getElementById("button_add_provider_page_heading")
+      const _button_edit_provider_name = document.getElementById("button_edit_provider_name")
+      //Tables
+      const _table_provider_index = document.getElementById("table_provider_index")
+      //Fields
+      const _provider_id = document.getElementById("provider_id")
+      const _provider_name = document.getElementById("provider_name")
+      const _provider_company_id = document.getElementById("provider_company_id")
+      const _provider_enabled = document.getElementById("provider_enabled")
+      const _provider_code_direct_id = document.getElementById("provider_code_direct_id")
+      //Defaults
+      let globalSelectedProvider = false
+      let $index_table = $(_table_provider_index)
+      let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+      
+      $(_button_add_provider_page_heading)
+        .on("click", function () {
+            //console.log("test")
         })
-    }
-    
-    const edit = function (settings) {
-        let addresses = []
-        let contacts = []
-        let provider_detail = {}
-        let location = {}
-        let company = {}
-        let vendor = {}
-        
-        if (settings.provider_detail) {
-            provider_detail = settings.provider_detail
-            if (provider_detail.location) {
-                location = provider_detail.location
-            }
-        }
-        
-        if (settings.address_detail) {
-            addresses = settings.address_detail
-        }
-        
-        if (settings.contact_detail) {
-            contacts = settings.contact_detail
-        }
-        
-        //if (settings.vendor_detail) {
-        //vendor = settings.vendor_detail
-        //}
-        
-        //log("settings", settings)
-        
-        let provider = set(provider_detail)
-        
-        //if (settings.provider_detail.vendor) {
-        //Vendor.init(settings.provider_detail.vendor)
-        //}
-        
-        Contact.init(contacts)
-        Address.init(addresses)
-        Address.load_all(addresses)
-        Location.init(location)
-        init_autocomplete()
-        populate_form(provider_detail)
-    }
-    
-    const init_autocomplete = function () {
-        
-        $(_provider_name)
-          .on("change", function () {
+      
+      $(_button_edit_provider_name)
+        .on("click", function () {
+            enable_form_fields()
+        })
+      
+      // ----
+      /**
+       * initialize provider index page
+       *
+       * @param settings
+       */
+      const index = function (settings) {
+          build_index_table()
           
+          if (settings) {
+              if (settings.providers) {
+                  load_all(settings.providers)
+              }
+          }
+          
+      }
+      
+      /**
+       * build provider index table
+       */
+      const build_index_table = function () {
+          //log("build_index_table")
+          $index_table = $(_table_provider_index).table({
+              table_type: "display_list",
+              data: Provider.all,
+              columnDefs: [
+                  {
+                      title: "Name",
+                      targets: 0,
+                      data: "name",
+                      render: function (data, type, row, meta) {
+                          return "<span style='white-space: nowrap;'>" + data + "</span>"
+                      },
+                  },
+                  {
+                      title: "Code Direct ID",
+                      targets: 1,
+                      data: "code_direct_id",
+                      render: function (data, type, row, meta) {
+                          return "<span style='white-space: nowrap;'>" + data + "</span>"
+                      },
+                  },
+                  {
+                      title: "SKU",
+                      targets: 2,
+                      data: "vendor",
+                      render: function (data, type, row, meta) {
+                          return "<span style='white-space: nowrap;'>" + data.sku + "</span>"
+                      },
+                  },
+                  {
+                      title: "Location",
+                      targets: 3,
+                      data: "location",
+                      render: function (data, type, row, meta) {
+                          let displayLocation = ""
+                          if (defaultLocationDisplayFormat === "short") {
+                              displayLocation = data.display_short
+                          } else if (defaultLocationDisplayFormat === "long") {
+                              displayLocation = data.display_long
+                          } else {
+                              displayLocation = data.display_medium
+                          }
+                          
+                          return "<span style='white-space: nowrap;'>" + displayLocation + "</span>"
+                      },
+                  },
+              ],
+              rowClick: Provider.navigate,
           })
-          .on("click", function () {
-              $(this).select()
-          })
-          .autocomplete({
-              serviceUrl: "/api/v1.0/autocomplete/providers",
-              minChars: 2,
-              cache: false,
-              dataType: "json",
-              triggerSelectOnValidInput: false,
-              paramName: "st",
-              onSelect: function (suggestion) {
-                  if (suggestion.data) {
-                      let provider = suggestion.data
-                      let provider_id = provider.id
-                      let provider_company_id = provider.company.id
-                      _provider_id.value = provider_id
-                      _provider_company_id.value = provider_company_id
+      }
+      
+      /**
+       * when provider index table row clicked handle event
+       *
+       * @param provider
+       */
+      const navigate = function (provider) {
+          if (provider && provider.id) {
+              window.location.replace(base_url + "/" + provider.id)
+          }
+      }
+      
+      // ----
+      
+      /**
+       * handle provider form errors
+       *
+       * @param msg
+       */
+      const handle_provider_error = function (msg) {
+          toastr.error(msg)
+      }
+      
+      /**
+       * set default provider object values
+       *
+       * @returns {{note: null, addresses: *[], company_id: null, date_created: *, code_direct_id: null, created_by: (number|number), enabled: number, provider_vendor: number, date_modified: *, vendor: {}, name: null, modified_by: (number|number), location: {}, company: {}, id: null, contacts: *[]}}
+       * @private
+       */
+      const _default_detail = function () {
+          return {
+              addresses: [],
+              contacts: [],
+              location: {},
+              company: {},
+              vendor: {},
+              id: null,
+              company_id: null,
+              name: null,
+              code_direct_id: null,
+              provider_vendor: 1,
+              enabled: 1,
+              date_created: formatDateMySQL(),
+              created_by: user_id,
+              date_modified: formatDateMySQL(),
+              modified_by: user_id,
+              note: null,
+          }
+      }
+      
+      /**
+       * load all providers into object
+       *
+       * @param providers
+       */
+      const load_all = function (providers) {
+          Provider.all = new Map()
+          if (providers) {
+              $.each(providers, function (i, provider) {
+                  let detail = set(provider)
+                  $index_table.insertRow(detail)
+                  Provider.all.set(detail.id, detail)
+              })
+          }
+      }
+      
+      // ----
+      
+      const save = function (params) {
+      
+      }
+      
+      const get = function (id) {
+          let data_to_send = {}
+          if (id) {
+              data_to_send.id = id
+          }
+          
+      }
+      
+      const init = function (settings) {
+      
+      }
+      
+      /**
+       * set provider object values
+       *
+       * @param provider
+       * @returns {{note: null, addresses: *[], company_id: null, date_created: *, code_direct_id: null, created_by: (number|number), enabled: number, provider_vendor: number, date_modified: *, vendor: {}, name: null, modified_by: (number|number), location: {}, company: {}, id: null, contacts: *[]}}
+       */
+      const set = function (provider) {
+          let detail = _default_detail()
+          
+          if (provider) {
+              detail.id = (provider.id) ? provider.id : null
+              detail.name = (provider.name) ? provider.name : null
+              detail.location_id = (provider.location_id) ? provider.location_id : null
+              detail.code_direct_id = (provider.code_direct_id) ? provider.code_direct_id : null
+              detail.provider_vendor = (provider.provider_vendor) ? provider.provider_vendor : 1
+              detail.enabled = (provider.enabled) ? provider.enabled : 1
+              detail.date_created = (provider.date_created) ? provider.date_created : formatDateMySQL()
+              detail.company_id = (provider.company_id) ? provider.company_id : null
+              detail.created_by = (provider.created_by) ? provider.created_by : user_id
+              detail.date_modified = (provider.date_modified) ? provider.date_modified : formatDateMySQL()
+              detail.modified_by = (provider.modified_by) ? provider.modified_by : user_id
+              detail.note = (provider.note) ? provider.note : null
+              detail.vendor = (provider.vendor) ? provider.vendor : {}
+              detail.addresses = (provider.addresses) ? provider.addresses : []
+              detail.contacts = (provider.contacts) ? provider.contacts : []
+              detail.location = (provider.location) ? provider.location : {}
+              detail.company = (provider.company) ? provider.company : {}
+          }
+          
+          Provider.detail = detail
+          return detail
+      }
+      
+      // ----
+      
+      const enable_form_fields = function () {
+          if (_provider_id.value !== "" && _provider_company_id.value !== "") {
+              _provider_name.disabled = false
+          }
+      }
+      
+      const disable_form_fields = function () {
+          if (_provider_id.value !== "" && _provider_company_id.value !== "") {
+              _provider_name.disabled = true
+          }
+      }
+      
+      // ----
+      
+      const fetch_provider_by_name = function (dataToSend, callback) {
+          let url = "/api/v1.0/providers/validate"
+          
+          if (dataToSend) {
+              try {
+                  sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                      if (data) {
+                          return callback(data)
+                      } else {
+                          return handle_provider_error("Oops: 1")
+                      }
+                  })
+              } catch (e) {
+                  console.log(e)
+                  return handle_provider_error("Error Validating Company")
+              }
+          } else {
+              return handle_provider_error("Error Loading Company- Missing Data")
+          }
+      }
+      
+      // ----
+      const provider_exists = function (name) {
+          if (name && name !== "") {
+              let dataToSend = {
+                  name: name,
+              }
+              
+              fetch_provider_by_name(dataToSend, function (data) {
+                  if (data) {
+                      if (data.length > 0) {
+                          $(".alert").alert()
+                      } else {
+                      
+                      }
                   }
-                  // --
-                  //log("Provider.suggestion", suggestion.data)
-                  //globalSelectedProvider = true
-                  //_provider_company_id.value = suggestion.data.company_id
-                  //_provider_id.value = suggestion.data.provider_id
-                  //_provider_name.value = suggestion.data.company_name
-              },
-          })
-    }
-    
-    return {
-        validator: null,
-        detail: {},
-        all: new Map(),
-        navigate: function (provider) {
-            navigate(provider)
-        },
-        get: function (params) {
-            get(params)
-        },
-        load_all: function (params) {
-            load_all(params)
-        },
-        save: function (params) {
-            save(params)
-        },
-        init: function () {
-            init()
-        },
-        index: function (providers) {
-            index(providers)
-        },
-        edit: function (settings) {
-            edit(settings)
-        },
-    }
-    
-})()
+              })
+          }
+      }
+      
+      /**
+       * pupulate provider form
+       *
+       * @param provider
+       */
+      const populate_form = function (provider) {
+          if (provider) {
+              _provider_id.value = (provider.id) ? provider.id : null
+              _provider_name.value = (provider.name) ? provider.name : null
+              _provider_company_id.value = (provider.company_id) ? provider.company_id : null
+              _provider_code_direct_id.value = (provider.code_direct_id) ? provider.code_direct_id : null
+              _provider_enabled.checked = (provider.enabled === 1)
+          }
+      }
+      
+      /**
+       * initialize provider autocomplete
+       */
+      const init_autocomplete = function () {
+          $(_provider_name)
+            .on("change", function () {
+                setTimeout(function () {
+                    let provider_name = _provider_name.value
+                    if (globalSelectedProvider === false) {
+                        if (provider_name === "") {
+                            _provider_name.value = ""
+                            _provider_company_id.value = ""
+                            globalSelectedProvider = false
+                        } else {
+                            provider_exists(provider_name, function (data) {
+                                log("data", data)
+                                if (data) {
+                                
+                                }
+                            })
+                        }
+                    }
+                }, 200)
+            })
+            .on("search", function () {
+                _provider_id.value = ""
+                _provider_company_id.value = ""
+                Vendor.reset_form()
+            })
+            .on("click", function () {
+                $(this).select()
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/providers",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                paramName: "st",
+                onSelect: function (suggestion) {
+                    if (!suggestion.data) {
+                        return
+                    }
+                    let provider = suggestion.data
+                    let provider_id = provider.id
+                    let provider_company_id = provider.company.id
+                    
+                    _provider_id.value = provider_id
+                    _provider_company_id.value = provider_company_id
+                },
+            })
+      }
+      
+      /**
+       * initialize provider edit page
+       *
+       * @param settings
+       */
+      const edit = function (settings) {
+          if (!settings || !settings.provider_detail) {
+              return
+          }
+          
+          let provider = set(settings.provider_detail)
+          let addresses = (provider.addresses) ? provider.addresses : []
+          let contacts = (provider.contacts) ? provider.contacts : []
+          let location = (provider.location) ? provider.location : {}
+          let company = (provider.company) ? provider.company : {}
+          let vendor = (provider.vendor) ? provider.vendor : {}
+          
+          populate_form(provider)
+          init_autocomplete()
+          
+          // ----
+          Vendor.init(vendor)
+          Location.init(location)
+          Address.init(addresses)
+          Contact.init(contacts)
+          
+          Vendor.setProvider()
+          disable_form_fields()
+      }
+      
+      // ----
+      
+      return {
+          validator: null,
+          detail: {},
+          all: new Map(),
+          navigate: function (provider) {
+              navigate(provider)
+          },
+          get: function (params) {
+              get(params)
+          },
+          load_all: function (params) {
+              load_all(params)
+          },
+          save: function (params) {
+              save(params)
+          },
+          init: function () {
+              init()
+          },
+          provider_exists: function (name) {
+              provider_exists(name)
+          },
+          enable_form_fields: function () {
+              enable_form_fields()
+          },
+          disable_form_fields: function () {
+              disable_form_fields()
+          },
+          index: function (providers) {
+              index(providers)
+          },
+          edit: function (settings) {
+              edit(settings)
+          },
+      }
+      
+  }
+)
+()
 
 const Product = (function () {
     "use strict"
@@ -6008,7 +6215,7 @@ const Product = (function () {
     }
     
     const init = function (settings) {
-        console.log("-- Product --", {})
+        //console.log("-- Product --", {})
     }
     
     const load_all = function (products) {
@@ -6045,10 +6252,12 @@ const Product = (function () {
     
 })()
 
-Product.init()
+//Product.init()
 //end object
 
 $(document).ready(function () {
+    AlertBox.hide()
+    //AlertBox.show("Message", "Title", "danger")
     const but_toggle = document.querySelectorAll(".but_toggle")
     
     window.addEventListener("resize", debounce(function (e) {
@@ -6069,10 +6278,8 @@ $(document).ready(function () {
     }))
     
     if (mdbPreloader) {
-        $("#mdb-preloader").fadeOut(500)
+        //$("#mdb-preloader").fadeOut(500)
     }
-    
-    $("#alert_box").hide()
     
     new WOW().init()
     

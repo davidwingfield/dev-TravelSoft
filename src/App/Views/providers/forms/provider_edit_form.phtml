@@ -33,20 +33,28 @@
         
         <!-- Panel Body -->
         <div class="panel-body px-0 w-100" style="">
+            
             <div class="row" style="">
-
+                
                 <!-- Provider Name -->
-                <div class="col-12 col-lg-4 mb-1" style="">
+                <div class="col-12 col-lg-4 " style="">
                     <div class="form-element" style="">
                         <label for="provider_name" style="">Provider Name:</label>
-                        <input type="text" id="provider_name" name="provider_name" class="form-control" style="" aria-label="Vendor Id" placeholder="" autocomplete="off"/>
+                        <div class="input-group">
+                            <input type="search" id="provider_name" name="provider_name" class="form-control" style="" aria-label="Vendor Id" placeholder="" autocomplete="off"/>
+                            <div class="input-group-append">
+                                <button class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect" type="button" id="button_edit_provider_name">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
                         <div id="provider_name-error" class="error w-100 text-center" style="">&nbsp;</div>
                     </div>
                 </div>
-                <!-- /Vendor Name -->
-
+                <!-- /Provider Name -->
+                
                 <!-- Provider Id -->
-                <div class="col-12 col-lg-4 mb-1" style="">
+                <div class="col-12 col-lg-3 " style="">
                     <div class="form-element" style="">
                         <label for="provider_id" style="">Provider Id:</label>
                         <input type="text" id="provider_id" name="provider_id" class="form-control" style="" aria-label="Provider Id" placeholder="" autocomplete="off" readonly/>
@@ -56,7 +64,7 @@
                 <!-- /Provider Id -->
                 
                 <!-- Provider Company Id -->
-                <div class="col-12 col-lg-4 mb-1" style="">
+                <div class="col-12 col-lg-3 " style="">
                     <div class="form-element" style="">
                         <label for="provider_company_id" style="">Provider Company Id:</label>
                         <input type="text" id="provider_company_id" name="provider_company_id" class="form-control" style="" aria-label="Provider Id" placeholder="" autocomplete="off" readonly/>
@@ -64,47 +72,13 @@
                     </div>
                 </div>
                 <!-- /Provider Company Id -->
-            </div>
-
-            <div class="row" style="">
-
-                <!-- Vendor Name -->
-                <div class="col-12 col-lg-4 mb-1" style="">
-                    <div class="form-element" style="">
-                        <label for="vendor_name" style="">Vendor Name:</label>
-                        <input type="text" id="vendor_name" name="vendor_name" class="form-control" style="" aria-label="Vendor Id" placeholder="" autocomplete="off"/>
-                        <div id="vendor_name-error" class="error w-100 text-center" style="">&nbsp;</div>
-                    </div>
-                </div>
-                <!-- /Vendor Name -->
-
-                <!-- Vendor Id -->
-                <div class="col-12 col-lg-4 mb-1" style="">
-                    <div class="form-element" style="">
-                        <label for="vendor_id" style="">Vendor Id:</label>
-                        <input type="text" id="vendor_id" name="vendor_id" class="form-control" style="" aria-label="Vendor Id" placeholder="" autocomplete="off" readonly/>
-                        <div id="vendor_id-error" class="error w-100 text-center" style="">&nbsp;</div>
-                    </div>
-                </div>
-                <!-- /Vendor Id -->
-
-                <!-- Vendor Company Id -->
-                <div class="col-12 col-lg-4 mb-1" style="">
-
-                    <div class="form-element" style="">
-                        <label for="vendor_company_id" style="">Vendor Company Id:</label>
-                        <input type="text" id="vendor_company_id" name="vendor_company_id" class="form-control" style="" aria-label="Provider Id" placeholder="" autocomplete="off" readonly/>
-                        <div id="vendor_company_id-error" class="error w-100 text-center" style="">&nbsp;</div>
-                    </div>
-                </div>
-                <!-- /Vendor Company Id -->
 
             </div>
-
+            
             <div class="row" style="">
                 
                 <!-- Code Direct Id -->
-                <div class="col-12 col-lg-6 mb-1" style="">
+                <div class="col-12 col-lg-6 " style="">
                     <div class="form-element">
                         <label for="provider_code_direct_id">Code Direct Id:</label>
                         <input type="text" id="provider_code_direct_id" name="provider_code_direct_id" class="form-control" style="" aria-label="Provider Code Direct Id" placeholder="" autocomplete="off"/>
@@ -112,7 +86,7 @@
                     </div>
                 </div>
                 <!-- /Code Direct Id -->
-
+            
             </div>
         
         </div>

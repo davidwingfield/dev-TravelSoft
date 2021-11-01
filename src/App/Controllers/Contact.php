@@ -44,7 +44,7 @@
             foreach ($results AS $contact) {
                 $temp[] = self::format($contact);
             }
-            Log::$debug_log->trace($temp);
+            //Log::$debug_log->trace($temp);
 
             // ----
             return $temp;
@@ -75,7 +75,6 @@
 
         public static function format(array $contact = []): array
         {
-
             $formatted_contact_types = "";
             if (isset($contact["contact_id"])) {
                 $contact_id = $contact["contact_id"];
@@ -86,23 +85,18 @@
                             $contact_type_id = (int)$pieces[$n];
                             $contact_type = ContactModel::getContactTypeById($contact_type_id);
                             $name = "";
-                            //Log::$debug_log->trace($contact_type);
 
                             if (isset($contact_type[0]["name"])) {
                                 $name = "" . $contact_type[0]["name"];
                             } else if (isset($contact_type["name"])) {
                                 $name = "" . $contact_type["name"];
                             }
-                            // ----
                             if ($name !== "") {
                                 $formatted_contact_types .= "$name<br>";
                             }
-                            // ----
                         }
                     }
                 }
-            } else {
-
             }
 
             return array(

@@ -24,6 +24,7 @@
     Router::get("documents/framework", "StaticPages@framework");
     Router::get("documents/database", "StaticPages@database");
     Router::get("utilities/filemanager", "StaticPages@filemanager");
+    Router::get("reset_password", "StaticPages@reset_password");
 
     /**
      * Provider Page Routes

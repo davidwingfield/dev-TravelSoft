@@ -148,5 +148,5 @@ const Category = (function () {
     
 })()
 
-Category.init()
+//Category.init()
 //end object

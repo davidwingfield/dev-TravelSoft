@@ -155,8 +155,8 @@ const Contact = (function () {
      * @param contact
      */
     const populate_form = function (contact) {
-        log("Contact-PopulateForm.contact", contact)
-        if (_card_edit_contact_form) {
+        clear_form()
+        if (contact) {
             _contact_id.value = validInt(contact.id)
             _contact_name_first.value = (contact.name_first) ? contact.name_first : null
             _contact_name_last.value = (contact.name_last) ? contact.name_last : null
@@ -165,6 +165,7 @@ const Contact = (function () {
             _contact_enabled.checked = (contact.enabled) ? (contact.enabled === 1) : true
             $(_contact_types_id).val((contact.contact_types_id) ? contact.contact_types_id : [])
         }
+        show_form()
     }
     
     /**
@@ -223,6 +224,7 @@ const Contact = (function () {
             build_table()
         }
         if (contacts) {
+            
             load_all(contacts)
         }
         hide_form()
@@ -284,9 +286,9 @@ const Contact = (function () {
      * @param contact
      */
     const navigate = function (contact) {
-        clear_form()
-        populate_form(contact)
-        show_form()
+        if (contact) {
+            populate_form(contact)
+        }
     }
     
     /**

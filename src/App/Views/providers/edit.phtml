@@ -5,6 +5,9 @@
 
     $settings = json_encode($page_data, 1);
     $init = "Provider.edit($settings);";
+    if (!defined("COUNTRIES")) {
+        define("COUNTRIES", $page_data["types"]["countries"]);
+    }
 ?>
 
 <section id="provider_edit">
@@ -111,6 +114,9 @@
         </div>
     </div>
 </section>
+<pre>
+    <?php //echo var_export(COUNTRIES, 1); ?>
+</pre>
 <script type="text/javascript">
     $(function () {
         Types.init(<?php echo TYPES;?>)

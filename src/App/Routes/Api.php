@@ -25,6 +25,12 @@
     Router::get($routeLead . "/contacts", "Contact@serveGet");
 
     /**
+     * autocomplete validate
+     */
+    Router::get($routeLead . "/companies/validate", "Company@validateName");
+    Router::get($routeLead . "/providers/validate", "Provider@validateName");
+
+    /**
      * autocomplete requests
      */
     Router::get($routeLead . "/autocomplete/providers", "Autocomplete@providers");

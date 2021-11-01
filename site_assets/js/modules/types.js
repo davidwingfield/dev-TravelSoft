@@ -29,7 +29,8 @@ const Types = (function () {
         Types.rating_types = new Map()
         Types.sales_types = new Map()
         Types.status_types = new Map()
-        
+        Country.all = new Map()
+        // ----
         if (settings.address_types) {
             setType(settings.address_types, "address_types")
         }
@@ -48,13 +49,6 @@ const Types = (function () {
         
         if (settings.contact_types) {
             setType(settings.contact_types, "contact_types")
-        }
-        
-        console.log("settings", settings)
-        
-        if (settings.countries) {
-            Country.load_all(settings.countries)
-            console.log(Country.all)
         }
         
         if (settings.currency) {
@@ -85,6 +79,10 @@ const Types = (function () {
             setType(settings.status_types, "status_types")
         }
         
+        if (settings.countries) {
+            Country.load_all(settings.countries)
+        }
+        
     }
     
     return {
@@ -103,7 +101,9 @@ const Types = (function () {
         status_types: new Map(),
         
         init: function (settings) {
-            init(settings)
+            if (settings) {
+                init(settings)
+            }
         },
     }
     

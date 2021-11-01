@@ -138,4 +138,11 @@
             exit(1);
         }
 
+        public static function reset_password()
+        {
+            $data = Page::getDetails(18);
+            View::render_template("pages/reset_password", $data);
+            exit(1);
+        }
+
     }

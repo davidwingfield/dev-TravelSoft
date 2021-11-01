@@ -99,5 +99,5 @@ const StatusTypes = (function () {
     
 })()
 
-StatusTypes.init()
+//StatusTypes.init()
 //end object

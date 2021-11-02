@@ -117,7 +117,7 @@
             $order_by 
             LIMIT 20;";
 
-            Log::$debug_log->trace($sql);
+//            Log::$debug_log->trace($sql);
             try {
                 $results["dataset"] = Model::$db->ObjectBuilder()->rawQuery($sql);
 

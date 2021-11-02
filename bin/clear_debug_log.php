@@ -51,7 +51,7 @@
         global $logs;
         if ($log === "all") {
             foreach ($logs AS $log) {
-                if (emptyLog($log)) {
+                if (emptyLog("debug")) {
                     echo "\t - $log was cleared.\n";
                 } else {
                     echo "\t ** $log was not cleared. **\n";
@@ -62,14 +62,9 @@
         }
     }
 
-    echo "Which Log to Clear (empty for all): ";
-    $handle = fopen("php://stdin", "r");
-    $line = fgets($handle);
-    $table = trim($line);
-
-    if ($table === "") {
-        $table = "all";
+    if (emptyLog("debug")) {
+        echo "\t - debug was cleared.\n";
+    } else {
+        echo "\t ** debug was not cleared. **\n";
     }
-
-    clear($table);
     exit(1);

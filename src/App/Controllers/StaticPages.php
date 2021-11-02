@@ -145,4 +145,11 @@
             exit(1);
         }
 
+        public static function forgot_password()
+        {
+            $data = Page::getDetails(19);
+            View::render_template("pages/forgot_password", $data);
+            exit(1);
+        }
+
     }

@@ -15,28 +15,26 @@
         
         <div class="panel-heading panel-heading-tab">
             <ul class="nav nav-tabs nav-tabs-solid" role="tablist">
-                
+
+                <!-- Company Details -->
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" id="panel_tab_company" href="#panel_tab_company_detail" aria-controls="panel_tab_provider_detail" aria-expanded="true" role="tab">
+                        <span class="">Company</span> <span class="d-none d-lg-inline">Details</span>
+                    </a>
+                </li>
+                <!-- /Company Details -->
+
                 <!-- Provider Details -->
                 <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#panel_tab_provider_detail" aria-controls="panel_tab_provider_detail" aria-expanded="true" role="tab">
+                    <a class="nav-link" data-toggle="tab" id="panel_tab_provider" href="#panel_tab_provider_detail" aria-controls="panel_tab_provider_detail" aria-expanded="false" role="tab">
                         <span class="">Provider</span> <span class="d-none d-lg-inline">Details</span>
                     </a>
                 </li>
                 <!-- /Provider Details -->
-                
-                <!-- Company Details -->
-                <!--
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#panel_tab_company_detail" aria-controls="panel_tab_company_detail" aria-expanded="false" role="tab">
-                        <span class="">Company</span> <span class="d-none d-lg-inline">Details</span>
-                    </a>
-                </li>
-                -->
-                <!-- /Company Details -->
-                
+
                 <!-- Location Details -->
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#panel_tab_location_detail" aria-controls="panel_tab_location_detail" aria-expanded="false" role="tab">
+                    <a class="nav-link" data-toggle="tab" id="panel_tab_location" href="#panel_tab_location_detail" aria-controls="panel_tab_location_detail" aria-expanded="false" role="tab">
                         <span class="">Location</span> <span class="d-none d-lg-inline">Details</span>
                     </a>
                 </li>
@@ -44,7 +42,7 @@
                 
                 <!-- Vendor Details -->
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#panel_tab_vendor_detail" aria-controls="panel_tab_vendor_detail" role="tab">
+                    <a class="nav-link" data-toggle="tab" id="panel_tab_vendor" href="#panel_tab_vendor_detail" aria-controls="panel_tab_vendor_detail" role="tab">
                         <span class="">Vendor</span> <span class="d-none d-lg-inline">Details</span>
                     </a>
                 </li>
@@ -52,7 +50,7 @@
                 
                 <!-- Contacts -->
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#panel_tab_contact_detail" aria-controls="panel_tab_contact_detail" aria-expanded="false" role="tab">
+                    <a class="nav-link" data-toggle="tab" id="panel_tab_contact" href="#panel_tab_contact_detail" aria-controls="panel_tab_contact_detail" aria-expanded="false" role="tab">
                         <span class="">Contacts</span>
                     </a>
                 </li>
@@ -60,7 +58,7 @@
                 
                 <!-- Addresses -->
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#panel_tab_address_detail" aria-controls="panel_tab_address_detail" aria-expanded="false" role="tab">
+                    <a class="nav-link" data-toggle="tab" id="panel_tab_address" href="#panel_tab_address_detail" aria-controls="panel_tab_address_detail" aria-expanded="false" role="tab">
                         <span class="">Addresses</span>
                     </a>
                 </li>
@@ -68,13 +66,20 @@
             
             </ul>
         </div>
-        
+
+        <!-- Panel Body -->
         <div class="panel-body p-1">
             
             <div class="tab-content p-0">
-                
+
+                <!-- Company Detail -->
+                <div class="tab-pane active" id="panel_tab_company_detail" role="tabpanel">
+                    <?php include_once(VIEWS_PATH . "/companies/forms/edit_company_form.phtml"); ?>
+                </div>
+                <!-- /Company Detail -->
+
                 <!-- Provider Detail -->
-                <div class="tab-pane active" id="panel_tab_provider_detail" role="tabpanel">
+                <div class="tab-pane" id="panel_tab_provider_detail" role="tabpanel">
                     <?php include_once(VIEWS_PATH . "/providers/forms/provider_edit_form.phtml"); ?>
                 </div>
                 <!-- /Provider Detail -->
@@ -112,11 +117,10 @@
             </div>
         
         </div>
+        <!-- /Panel Body -->
+
     </div>
 </section>
-<pre>
-    <?php //echo var_export(COUNTRIES, 1); ?>
-</pre>
 <script type="text/javascript">
     $(function () {
         Types.init(<?php echo TYPES;?>)

@@ -28,9 +28,11 @@
         }
 
         /**
-         * serveGet
+         * get vendor by Id
          *
-         * @param array $params
+         * @param int|null $vendor_id
+         *
+         * @return array
          */
         public static function getByVendorId(int $vendor_id = null): array
         {
@@ -52,7 +54,7 @@
         }
 
         /**
-         * serveGet
+         * api get request
          *
          * @param array $params
          */
@@ -74,6 +76,23 @@
         }
 
         /**
+         * process update post request
+         *
+         * @param array $params
+         */
+        public static function serveUpdate(array $params = [])
+        {
+            $vendor = array();
+            $vendors = VendorModel::updateRecord($params);
+            if (isset($vendors) && isset($vendors[0])) {
+                $vendor = $vendors[0];
+            }
+            // ----
+            View::render_json(self::format_vendor($vendor));
+            exit(1);
+        }
+
+        /**
          * autocomplete
          *
          * Autocomplete json
@@ -84,7 +103,30 @@
         }
 
         /**
-         * format_ac
+         * validate if name already exists
+         *
+         * @param array $args
+         *
+         * @return array
+         */
+        public static function validateName(array $args = []): array
+        {
+            $vendors = array();
+            if (isset($args["name"])) {
+                $name = $args["name"];
+                $results = VendorModel::getByName($name);
+
+                foreach ($results AS $k => $vendor) {
+                    $vendors[] = self::format($vendor);
+                }
+            }
+            // ----
+            View::render_json($vendors);
+            exit(1);
+        }
+
+        /**
+         * format autocomplete result set
          *
          * @param array $vendors
          *
@@ -105,7 +147,14 @@
             return $data;
         }
 
-        private static function generateSKU(array $vendor): string
+        /**
+         * system generated SKU
+         *
+         * @param array $vendor
+         *
+         * @return string
+         */
+        public static function generateSKU(array $vendor): string
         {
             $name = $vendor["company_name"];
             $id = $vendor["vendor_id"];
@@ -137,7 +186,7 @@
         }
 
         /**
-         * format
+         * format result set
          *
          * @param array $vendor
          *
@@ -149,18 +198,16 @@
             $vendor_id = (int)$vendor["vendor_id"];
             $sku = self::generateSKU($vendor);
 
-            /*
-            Log::$debug_log->trace($sku);
-            //*/
-
             return array(
                 "vendor_detail" => array(
                     "id" => $vendor["vendor_id"],
+                    "company_id" => $vendor["company_id"],
                     "sku" => $sku,
                     "is_provider" => $vendor["vendor_is_provider"],
                     "show_online" => $vendor["vendor_show_online"],
                     "show_sales" => $vendor["vendor_show_sales"],
                     "show_ops" => $vendor["vendor_show_ops"],
+                    "status_id" => $vendor["vendor_status_id"],
                     "note" => $vendor["vendor_note"],
                     "enabled" => $vendor["vendor_enabled"],
                     "date_created" => $vendor["vendor_date_created"],
@@ -186,6 +233,34 @@
                 ),
                 "addresses" => AddressModel::getByCompanyId((int)$company_id),
                 "contacts" => ContactModel::getByCompanyId((int)$company_id),
+            );
+
+        }
+
+        /**
+         * format just the vendor results
+         *
+         * @param array $vendor
+         *
+         * @return array
+         */
+        private static function format_vendor(array $vendor = []): array
+        {
+            return array(
+                "id" => $vendor["vendor_id"],
+                "company_id" => $vendor["company_id"],
+                "sku" => $vendor["vendor_sku"],
+                "is_provider" => $vendor["vendor_is_provider"],
+                "show_online" => $vendor["vendor_show_online"],
+                "show_sales" => $vendor["vendor_show_sales"],
+                "show_ops" => $vendor["vendor_show_ops"],
+                "status_id" => $vendor["vendor_status_id"],
+                "note" => $vendor["vendor_note"],
+                "enabled" => $vendor["vendor_enabled"],
+                "date_created" => $vendor["vendor_date_created"],
+                "date_modified" => $vendor["vendor_date_modified"],
+                "created_by" => $vendor["vendor_created_by"],
+                "modified_by" => $vendor["vendor_modified_by"],
             );
 
         }

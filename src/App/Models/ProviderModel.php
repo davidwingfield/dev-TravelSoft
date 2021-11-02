@@ -31,8 +31,12 @@
             "note" => array(),
         ];
 
-        protected static $selectQuery = "
-            SELECT 
+        /**
+         * base select query
+         *
+         * @var string
+         */
+        protected static $selectQuery = "SELECT 
                             PROVIDER.id AS 'provider_id',
                             PROVIDER.company_id AS 'provider_company_id',
                             PROVIDER.location_id AS 'provider_location_id',
@@ -56,7 +60,7 @@
                             DATE_FORMAT(COMPANY.date_created, '%m/%d/%Y') AS 'company_date_created',
                             COMPANY.modified_by AS 'company_modified_by',
                             DATE_FORMAT(COMPANY.date_modified, '%m/%d/%Y') AS 'company_date_modified',
-                            COALESCE(COMPANY.status, 10) AS 'company_status',
+                            COALESCE(COMPANY.status_id, 10) AS 'company_status_id',
                             COMPANY.note AS 'company_note',
                             CONCAT(	LOCATION.name, ' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') AS 'location',
                             CONCAT(LOCATION.name, ' ',	'(' ,CITY.name, ' ', CONCAT(PROVINCE.iso2, ' - ', PROVINCE.name), ', ', CONCAT(COUNTRY.iso2, ' - ', COUNTRY.name),')') AS 'location_long',
@@ -132,7 +136,7 @@
                             DATE_FORMAT(VENDORCOMPANY.date_created, '%m/%d/%Y') AS 'vendor_company_date_created',
                             VENDORCOMPANY.modified_by AS 'vendor_company_modified_by',
                             DATE_FORMAT(VENDORCOMPANY.date_modified, '%m/%d/%Y') AS 'vendor_company_date_modified',
-                            COALESCE(VENDORCOMPANY.status, 10) AS 'vendor_company_status',
+                            COALESCE(VENDORCOMPANY.status_id, 10) AS 'vendor_company_status',
                             VENDORCOMPANY.note AS 'vendor_company_note',
                             VENDOR.id AS 'vendor_id',
                             VENDOR.company_id AS 'vendor_company_id',
@@ -163,9 +167,7 @@
                 AND			COUNTRY.enabled = 1
                 AND			PROVINCE.enabled = 1
                 AND			CITY.enabled = 1
-                AND			LOCATION.enabled = 1
-                AND			COALESCE(COMPANY.status, 10) = 10
-                ";
+                AND			LOCATION.enabled = 1 ";
 
         /**
          * Gets provider(s) by id
@@ -194,30 +196,40 @@
             }
         }
 
+        /**
+         * fetch provider by name
+         *
+         * @param string $name
+         *
+         * @return array
+         */
         public static function getByName(string $name): array
         {
             $searchTerm = addslashes($name);
+
             try {
-                try {
-                    $where = "
+                $where = "
                     AND			COMPANY.name LIKE '$searchTerm'
                     ORDER BY    COMPANY.name ASC
                     ";
-                    $sql = self::$selectQuery . " " . $where;
+                $sql = self::$selectQuery . " " . $where;
 
-                    return Model::$db->rawQuery($sql);
-                } catch (Exception $e) {
-                    Log::$debug_log->trace($e);
-
-                    return [];
-                }
+                return Model::$db->rawQuery($sql);
             } catch (Exception $e) {
-                Log::$debug_log->error($e->getMessage());
+                Log::$debug_log->trace($e);
 
                 return [];
             }
+
         }
 
+        /**
+         * fetch single object
+         *
+         * @param int|null $id
+         *
+         * @return array
+         */
         public static function getOne(int $id = null): array
         {
             try {
@@ -234,6 +246,13 @@
             }
         }
 
+        /**
+         * autocomplete query
+         *
+         * @param string $st
+         *
+         * @return array
+         */
         public static function provider_ac(string $st = ""): array
         {
             try {
@@ -246,6 +265,83 @@
                 //Log::$debug_log->trace($sql);
 
                 return Model::$db->rawQuery($sql);
+            } catch (Exception $e) {
+                Log::$debug_log->error($e);
+
+                return [];
+            }
+        }
+
+        /**
+         * update record
+         *
+         * @param array $provider
+         *
+         * @return array|string[]
+         */
+        public static function updateRecord(array $provider): array
+        {
+            if (!isset($provider) || !isset($provider["location_id"])) {
+                return [];
+            }
+
+            $company = array();
+            $vendor = array();
+            $location = array();
+
+            if (isset($provider["company_detail"])) {
+                $company = CompanyModel::updateRecord($provider["company_detail"]);
+                Log::$debug_log->trace($company);
+            }
+
+            if (isset($provider["vendor_detail"])) {
+                $vendor = VendorModel::updateRecord($provider["vendor_detail"]);
+                Log::$debug_log->trace($company);
+            }
+
+            if (isset($provider["location_detail"])) {
+                //$location = $provider["location_detail"];
+            }
+
+            $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+            $id = Model::setInt((isset($provider["id"])) ? $provider["id"] : null);
+            $company_id = Model::setInt((isset($provider["company_id"])) ? $provider["company_id"] : null);
+            $location_id = Model::setInt((isset($provider["location_id"])) ? $provider["location_id"] : null);
+            $code_direct_id = Model::setString((isset($provider["code_direct_id"])) ? $provider["code_direct_id"] : null);
+            $provider_vendor = Model::setBool((isset($provider["provider_vendor"])) ? $provider["provider_vendor"] : null);
+            $enabled = Model::setBool((isset($provider["enabled"])) ? $provider["enabled"] : null);
+            $note = Model::setLongText((isset($provider["note"])) ? $provider["note"] : null);
+            $created_by = Model::setInt($user_id);
+            $modified_by = Model::setInt($user_id);
+
+            $sql = "
+                INSERT INTO provider (
+                    id, company_id, location_id, code_direct_id,
+                    provider_vendor, enabled, date_created, created_by,
+                    date_modified, modified_by, note
+                ) VALUES (
+                    $id, $company_id, $location_id, $code_direct_id,
+                    $provider_vendor, $enabled, CURRENT_TIMESTAMP, $created_by,
+                    CURRENT_TIMESTAMP, $modified_by, $note
+                )
+                ON DUPLICATE KEY UPDATE
+                    location_id = VALUES(location_id),
+                    enabled = VALUES(enabled),
+                    modified_by = VALUES(modified_by),
+                    date_modified = VALUES(date_modified),
+                    note = VALUES(note)
+            ";
+
+            try {
+                Model::$db->rawQuery($sql);
+                $provider_id = Model::$db->getInsertId();
+                if ($provider_id) {
+                    return self::get($provider_id);
+                }
+
+                Log::$debug_log->error("No Company Id");
+
+                return [];
             } catch (Exception $e) {
                 Log::$debug_log->error($e);
 

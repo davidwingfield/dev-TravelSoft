@@ -85,7 +85,7 @@
 
         } else {
 
-            if (!Auth::logged_in() && Request::uri() !== "login" && Request::uri() !== "logout" && Request::uri() !== "register" && Request::uri() !== "reset_password") {
+            if (!Auth::logged_in() && Request::uri() !== "login" && Request::uri() !== "forgot_password" && Request::uri() !== "logout" && Request::uri() !== "register" && Request::uri() !== "reset_password") {
                 header("Location: /login");
                 exit;
             }

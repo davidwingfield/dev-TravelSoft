@@ -45,6 +45,14 @@
             exit(1);
         }
 
+        public static function serveUpdate(array $params = [])
+        {
+            $company = CompanyModel::updateRecord($params);
+            // ----
+            View::render_json($company);
+            exit(1);
+        }
+
         private static function format(array $company): array
         {
             return array(
@@ -55,7 +63,7 @@
                 "fax" => $company["company_fax"],
                 "website" => $company["company_website"],
                 "email" => $company["company_email"],
-                "status" => $company["company_status"],
+                "status_id" => $company["company_status_id"],
                 "enabled" => $company["company_enabled"],
                 "date_created" => $company["company_date_created"],
                 "created_by" => $company["company_created_by"],

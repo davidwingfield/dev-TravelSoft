@@ -1,34 +1,177 @@
+<style>
+  #drop_zone {
+    border: 5px solid blue;
+    width: 200px;
+    height: 100px;
+    }
+</style>
 <!-- Edit Company Form -->
 <form id="form_edit_company" name="form_edit_company" class="" style="" novalidate>
     
     <!-- Panel -->
     <section class="panel z-depth-0 w-100 mb-0" style="">
-
-        <!-- Panel Body -->
-        <div class="panel-body px-0 w-100" style="">
+        
+        <!-- Panel Heading -->
+        <header class="panel-heading" style="">
             <div class="row">
                 
+                <!-- Panel Heading Title -->
+                <div class="col-8">
+                    <h4 class="panel-title">Company Details</h4>
+                </div>
+                <!-- /Panel Heading Title -->
+                
+                <!-- Panel Heading Actions -->
+                <div class="col-4 d-flex align-items-center justify-content-end" style="">
+                    <div class="panel-actions p-0 m-0" style="">
+                    </div>
+                </div>
+                <!-- /Panel Heading Actions -->
+            
+            </div>
+        </header>
+        <!-- /Panel Heading -->
+        
+        <!-- Panel Body -->
+        <div class="panel-body px-0 w-100" style="">
+            <div class="row" style="">
+
                 <!-- Company Name -->
-                <div class="col-12 col-lg-6 mb-1" style="">
+                <div class="col-12 col-lg-4 " style="">
                     <div class="form-element" style="">
-                        <label for="company_name" style="">Company Name:</label>
-                        <input type="text" id="company_name" name="company_name" class="form-control" style="" aria-label="Provider Id" placeholder="" autocomplete="off"/>
-                        <div id="company_name-error" class="error w-100 text-center" style="">&nbsp;</div>
+                        <label for="provider_name" style="">Name:</label>
+                        <div class="input-group">
+                            <input type="search" id="provider_name" name="provider_name" class="form-control" style="" aria-label="Vendor Id" placeholder="" autocomplete="off"/>
+                            <div class="input-group-append">
+                                <button class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect" type="button" id="button_edit_provider_name">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="provider_name-error" class="error w-100 text-center" style="">&nbsp;</div>
                     </div>
                 </div>
                 <!-- /Company Name -->
+
+                <!-- Company Id -->
+                <div class="col-12 col-lg-3 " style="">
+                    <div class="form-element" style="">
+                        <label for="provider_id" style="">Provider Id:</label>
+                        <input type="text" id="provider_id" name="provider_id" class="form-control" style="" aria-label="Provider Id" placeholder="" autocomplete="off" readonly/>
+                        <div id="provider_id-error" class="error w-100 text-center" style="">&nbsp;</div>
+                    </div>
+                </div>
+                <!-- /Company Id -->
+
+                <!-- Provider Company Id -->
+                <div class="col-12 col-lg-3 " style="">
+                    <div class="form-element" style="">
+                        <label for="provider_company_id" style="">Provider Company Id:</label>
+                        <input type="text" id="provider_company_id" name="provider_company_id" class="form-control" style="" aria-label="Provider Id" placeholder="" autocomplete="off" readonly/>
+                        <div id="provider_company_id-error" class="error w-100 text-center" style="">&nbsp;</div>
+                    </div>
+                </div>
+                <!-- /Provider Company Id -->
+
+                <!-- Provider Enabled -->
+                <div class="col-12 col-lg-2 d-flex align-self-end justify-content-end pb-2" style="">
+                    <div class="form-element">
+                        <div class="custom-control custom-switch" style="">
+                            <input id="provider_enabled" name="provider_enabled" type="checkbox" value="1" class="custom-control-input" style="">
+                            <label for="provider_enabled" class="custom-control-label p-0" style="">Enabled</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Provider Enabled -->
+
+            </div>
+
+            <div class="row" style="">
+
+                <div class="col-12 col-md-6 col-lg-8">
+
+                    <div class="row" style="">
+
+                        <!-- Company Phone 1 -->
+                        <div class="col-12 col-md-4" style="">
+                            <div class="form-element" style="">
+                                <label for="company_phone_1" style="">Phone 1:</label>
+                                <input type="tel" id="company_phone_1" name="company_phone_1" class="form-control" style="" aria-label="Company Street 1" placeholder="" autocomplete="off">
+                                <div id="company_phone_1-error" class="error w-100 text-center" style="">&nbsp;</div>
+                            </div>
+                        </div>
+                        <!-- /Company Phone 1 -->
+
+                        <!-- Company Phone 2 -->
+                        <div class="col-12 col-md-4" style="">
+                            <div class="form-element" style="">
+                                <label for="company_phone_2" style="">Phone 2:</label>
+                                <input type="tel" id="company_phone_2" name="company_phone_2" class="form-control" style="" aria-label="Company Street 2" placeholder="" autocomplete="off">
+                                <div id="company_phone_2-error" class="error w-100 text-center" style="">&nbsp;</div>
+                            </div>
+                        </div>
+                        <!-- /Company Phone 2 -->
+
+                        <!-- Company Fax -->
+                        <div class="col-12 col-md-4" style="">
+                            <div class="form-element" style="">
+                                <label for="company_fax" style="">Phone 2:</label>
+                                <input type="tel" id="company_fax" name="company_fax" class="form-control" style="" aria-label="Company Street 2" placeholder="" autocomplete="off">
+                                <div id="company_fax-error" class="error w-100 text-center" style="">&nbsp;</div>
+                            </div>
+                        </div>
+                        <!-- /Company Fax -->
+
+                    </div>
+
+                    <div class="row" style="">
+
+                        <!-- Company Website -->
+                        <div class="col-12 col-md-6" style="">
+                            <div class="form-element" style="">
+                                <label for="company_website" style="">Website:</label>
+                                <input type="url" id="company_website" name="company_website" class="form-control" style="" aria-label="Company Street 3" placeholder="" autocomplete="off">
+                                <div id="company_website-error" class="error w-100 text-center" style="">&nbsp;</div>
+                            </div>
+                        </div>
+                        <!-- /Company Website -->
+
+                        <!-- Company Email -->
+                        <div class="col-12 col-md-6" style="">
+                            <div class="form-element" style="">
+                                <label for="company_email" style="">Email:</label>
+                                <input type="email" id="company_email" name="company_email" class="form-control" style="" aria-label="Company Street 3" placeholder="" autocomplete="off">
+                                <div id="company_email-error" class="error w-100 text-center" style="">&nbsp;</div>
+                            </div>
+                        </div>
+                        <!-- /Company Email -->
+
+                    </div>
+
+                </div>
+
+                <!-- Company Cover Image -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="form-element" style="">
+                        <label for="company_cover_image">Cover Image:</label>
+                        <input id="company_cover_image" name="company_cover_image" type="file" class="dropify" data-height="200"/>
+                        <div id="company_cover_image-error" class="error w-100 text-center" style="">&nbsp;</div>
+                    </div>
+                </div>
+                <!-- /Company Cover Image -->
+
             </div>
         </div>
         <!-- /Panel Body -->
-        
-        <!-- Panel Footer -->
-        <div class="panel-footer pb-0 text-right">
-            <button class="btn btn-primary btn-sm" type="button" id="button_submit_form_edit_company">Save Company Details</button>
-        </div>
-        <!-- /Panel Footer -->
     
     </section>
     <!-- /Panel -->
 
 </form>
 <!-- /Edit Company Form -->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".dropify").dropify()
+    })
+</script>

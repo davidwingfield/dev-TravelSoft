@@ -37,6 +37,13 @@
             return intval($bool);
         }
 
+        /**
+         * sets value as int
+         *
+         * @param null $int
+         *
+         * @return int|string
+         */
         public static function setInt($int = null)
         {
             if (is_null($int) || intval($int) === 0) {

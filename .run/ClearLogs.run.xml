@@ -1,10 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ClearLogs" type="PhpLocalRunConfigurationType" factoryName="PHP Console" path="$PROJECT_DIR$/bin/clear_debug_log.php">
-    <CommandLine>
-      <PhpTestInterpreterSettings>
-        <option name="interpreterName" value="PHP" />
-      </PhpTestInterpreterSettings>
-    </CommandLine>
+  <configuration default="false" name="Clear Logs" type="PhpLocalRunConfigurationType" factoryName="PHP Console" path="$PROJECT_DIR$/bin/clear_logs.php">
     <method v="2" />
   </configuration>
 </component>

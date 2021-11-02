@@ -1,6 +1,8 @@
 const AlertBox = (function () {
     "use strict"
     const _alert_box = document.getElementById("alert_box")
+    const _alert_message = document.getElementById("alert_message")
+    const _alert_title = document.getElementById("alert_title")
     return {
         show: function (msg) {
             /**
@@ -29,19 +31,37 @@ const AlertBox = (function () {
                         case "info":
                         case "success":
                         case "secondary":
+                        case "light":
+                        case "dark":
                             level = arguments[2]
                             break
                         default:
                             level = "warning"
                     }
                 }
+                if (_alert_box) {
+                    $(_alert_box)[0].className = ""
+                    $(_alert_message).text(htmlDecode(message))
+                    $(_alert_title).text(htmlDecode(title))
+                    $(_alert_box)[0].className = `alert alert-${level} alert-dismissible mx-2 fade show`
+                    $(_alert_box).show()
+                }
                 
-                $(_alert_box).show()
             }
             
         },
         hide: function () {
-            $(_alert_box).alert("close")
+            $(_alert_box).hide()
+        },
+        init: function () {
+            
+            if (_alert_box) {
+                $(_alert_box)[0].className = "alert alert-warning alert-dismissible fade"
+            }
+            
+            AlertBox.hide()
         },
     }
 })()
+
+AlertBox.init()

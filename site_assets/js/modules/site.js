@@ -1,6 +1,5 @@
 $(document).ready(function () {
-    AlertBox.hide()
-    //AlertBox.show("Message", "Title", "danger")
+    
     const but_toggle = document.querySelectorAll(".but_toggle")
     
     window.addEventListener("resize", debounce(function (e) {

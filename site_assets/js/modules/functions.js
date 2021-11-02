@@ -540,6 +540,24 @@ const htmlEncode = function (value) {
     return $("<textarea/>").text(value).html()
 }
 
+
+function paddy (num, padlen, padchar) {
+    var pad_char = typeof padchar !== "undefined" ? padchar : "0"
+    var pad = new Array(1 + padlen).join(pad_char)
+    return (pad + num).slice(-pad.length)
+}
+
+
+const generateCodeDirectId = function (provider) {
+    if (!provider) {
+        return ""
+    }
+    let fu = paddy(14, 11)
+    let codeDirectId = "D" + fu
+    
+    return codeDirectId
+}
+
 jQuery.extend({
     postJSON: function (url, data, callback) {
         let request = $.ajax({

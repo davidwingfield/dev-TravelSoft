@@ -86,7 +86,7 @@
          */
         public static function edit(array $params = [])
         {
-            //Log::$debug_log->trace("-- START EDIT --");
+
             $provider_id = (int)$params["provider_id"];
             $contact_detail = [];
             $address_detail = [];
@@ -95,6 +95,20 @@
             $location_detail = [];
             if (isset($params["provider_id"])) {
                 $data = Page::getDetails(6);
+                $buttons = array();
+                $buttons["save"] = array(
+                    "type" => "button",
+                    "href" => "button",
+                    "classes" => "btn btn-primary waves-light",
+                    "icon" => "fas fa-plus",
+                    "id" => "button_save_provider",
+                    "text" => "save",
+                    "data" => array(
+                        //"toggle" => "tooltip",
+                        //"original-title" => "tooltip",
+                    ),
+
+                );
                 /** breadcrumbs */
                 define("BREAD_CRUMBS", "
                     <li class='breadcrumb-item'>
@@ -147,7 +161,7 @@
                 $data["vendor_detail"] = $vendor_detail;
                 $data["location_detail"] = $location_detail;
                 $data["address_detail"] = $address_detail;
-
+                $data["buttons"] = $buttons;
                 //Log::$debug_log->trace($data["provider_detail"]);
                 /**
                  * render view
@@ -156,7 +170,7 @@
                 exit(1);
             }
             /** Provider not found Logging and redirecting to new */
-            Log::$debug_log->trace("Provider Id Not Fuond");
+            Log::$debug_log->trace("Provider Id Not Found");
             header("Location: /providers/new");
             exit(1);
         }
@@ -169,7 +183,22 @@
         public static function new(array $params = [])
         {
             $data = Page::getDetails(14);
-            // ----
+            $data["is_new"] = true;
+            $buttons = array();
+            $buttons["save"] = array(
+                "type" => "button",
+                "href" => "button",
+                "classes" => "btn btn-primary waves-light",
+                "icon" => "fas fa-plus",
+                "id" => "button_save_provider",
+                "text" => "save",
+                "data" => array(
+                    //"toggle" => "tooltip",
+                    //"original-title" => "tooltip",
+                ),
+
+            );
+            /** breadcrumbs */
             define("BREAD_CRUMBS", "
                     <li class='breadcrumb-item'>
                         <a href='/'>Home</a>
@@ -181,8 +210,22 @@
                         New
                     </li>"
             );
-
+            $data["buttons"] = $buttons;
             View::render_template("providers/edit", $data);
+            exit(1);
+        }
+
+        /**
+         * handle post update request
+         *
+         * @param array $params
+         */
+        public static function serveUpdate(array $params = [])
+        {
+            $provider = ProviderModel::updateRecord($params);
+
+            // ----
+            View::render_json($provider);
             exit(1);
         }
 
@@ -196,6 +239,13 @@
             return self::format_ac(ProviderModel::provider_ac($st));
         }
 
+        /**
+         * validate if name already exists
+         *
+         * @param array $args
+         *
+         * @return array
+         */
         public static function validateName(array $args = []): array
         {
             $providers = array();
@@ -253,6 +303,7 @@
                 "name" => $provider["company_name"],
                 "code_direct_id" => $provider["provider_code_direct_id"],
                 "provider_vendor" => $provider["provider_provider_vendor"],
+                "location_id" => $provider["provider_location_id"],
                 "note" => $provider["provider_note"],
                 "enabled" => $provider["provider_enabled"],
                 "company_id" => $provider["provider_company_id"],
@@ -305,7 +356,7 @@
                     "date_created" => $provider["company_date_created"],
                     "modified_by" => $provider["company_modified_by"],
                     "date_modified" => $provider["company_date_modified"],
-                    "status" => $provider["company_status"],
+                    "status_id" => $provider["company_status_id"],
                     "note" => $provider["company_note"],
                 ),
                 "addresses" => $address_list_formatted,
@@ -416,6 +467,27 @@
             }
 
             return $data;
+        }
+
+        /**
+         * system generated Code Direct Id
+         *
+         * @param array $provider
+         *
+         * @return string
+         */
+        private static function generateCodeDirectId(array $provider): string
+        {
+            $name = $provider["company_name"];
+            $id = $provider["provider_id"];
+
+            $words = preg_split("/\s+/", $name);
+            $count = count($words);
+            $codeDirectId = str_pad($id, 11, "0", STR_PAD_LEFT);
+
+            $t = "D";
+
+            return $t . $codeDirectId;
         }
 
     }

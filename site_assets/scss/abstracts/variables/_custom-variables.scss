@@ -83,5 +83,26 @@ $color-scheme-1-light: #94c5f5 !default;
 $color-scheme-1-dark: #074f95 !default;
 
 
+$dropify-width: 100% !default;
+$dropify-height: 200px !default;
+$dropify-font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial' !default;
+$dropify-font-size: 14px !default;
+$dropify-line-height: 22px !default;
+$dropify-text-color: #777777 !default;
+$dropify-icon-color: #cccccc !default;
+$dropify-background: #ffffff !default;
+$dropify-border-size: 2px !default;
+$dropify-border-color: #e5e5e5 !default;
+$dropify-infos-background: transparentize(#000000, 0.3) !default;
+$dropify-infos-color: #ffffff !default;
+$dropify-clear-color: #ffffff !default;
+$dropify-error-color: #f34141 !default;
+$dropify-stripes: #f6f6f6 !default;
+$dropify-loader-size: 20px !default;
+$dropify-loader-border: 1px !default;
+$dropify-loader-fill: #cccccc !default;
+$dropify-loader-trace: #777777 !default;
+$dropify-font-path: '../fonts' !default;
+
 
 

@@ -29,6 +29,7 @@
      */
     Router::get($routeLead . "/companies/validate", "Company@validateName");
     Router::get($routeLead . "/providers/validate", "Provider@validateName");
+    Router::get($routeLead . "/vendors/validate", "Vendor@validateName");
 
     /**
      * autocomplete requests
@@ -48,9 +49,9 @@
     /**
      * update requests
      */
-    Router::post($routeLead . "/providers/update", "Country@serveUpdate");
-    Router::post($routeLead . "/vendors/update", "Province@serveUpdate");
-    Router::post($routeLead . "/products/update", "City@serveUpdate");
+    Router::post($routeLead . "/providers/update", "Provider@serveUpdate");
+    Router::post($routeLead . "/vendors/update", "Vendor@serveUpdate");
+    Router::post($routeLead . "/companies/update", "Company@serveUpdate");
     Router::post($routeLead . "/packages/update", "Country@serveUpdate");
     Router::post($routeLead . "/seasons/update", "Province@serveUpdate");
     Router::post($routeLead . "/variants/update", "City@serveUpdate");

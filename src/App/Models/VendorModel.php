@@ -3,6 +3,7 @@
     namespace Framework\App\Models;
 
     use Exception;
+    use Framework\App\Controllers\Vendor;
     use Framework\Core\Model;
     use Framework\Logger\Log;
 
@@ -30,7 +31,7 @@
                             DATE_FORMAT(COMPANY.date_created, '%m/%d/%Y') AS 'company_date_created',
                             COMPANY.modified_by AS 'company_modified_by',
                             DATE_FORMAT(COMPANY.date_modified, '%m/%d/%Y') AS 'company_date_modified',
-                            COALESCE(COMPANY.status, 10) AS 'company_status',
+                            COALESCE(COMPANY.status_id, 10) AS 'company_status_id',
                             COMPANY.note AS 'company_note',
                             VENDOR.id AS 'vendor_id',
                             VENDOR.company_id AS 'vendor_company_id',
@@ -51,7 +52,6 @@
            WHERE			COMPANY.enabled = 1
                 AND			COMPANY.enabled = 1
                 AND			VENDOR.enabled = 1
-                AND			COALESCE(COMPANY.status, 10) = 10
                 ";
 
         protected static $dbTable = "vendor";
@@ -84,6 +84,34 @@
             }
         }
 
+        /**
+         * Gets vendor(s) by id
+         *
+         * If id is passed then we search by it otherwise get all enabled
+         *
+         * @param int|null $id Provider Id
+         *
+         * @return array
+         */
+        public static function getByName(string $name = null): array
+        {
+            $searchTerm = addslashes($name);
+
+            try {
+                $where = "
+                    AND			COMPANY.name LIKE '$searchTerm'
+                    ORDER BY    COMPANY.name ASC
+                    ";
+                $sql = self::$selectQuery . " " . $where;
+
+                return Model::$db->rawQuery($sql);
+            } catch (Exception $e) {
+                Log::$debug_log->trace($e);
+
+                return [];
+            }
+        }
+
         public static function getOne(int $id = null): array
         {
             try {
@@ -99,11 +127,68 @@
             }
         }
 
-        public static function update(array $params = []): array
+        public static function updateRecord(array $vendor = []): array
         {
-            $id = 1;
+            if (!isset($vendor)) {
+                return [];
+            }
 
-            return Model::get($id);
+            try {
+                $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+                $id = Model::setInt((isset($vendor["id"])) ? $vendor["id"] : null);
+                $company_id = Model::setInt((isset($vendor["company_id"])) ? $vendor["company_id"] : null);
+                $status_id = Model::setInt((isset($vendor["status_id"])) ? $vendor["status_id"] : null);
+
+                $show_online = Model::setBool((isset($vendor["show_online"])) ? $vendor["show_online"] : null);
+                $show_sales = Model::setBool((isset($vendor["show_sales"])) ? $vendor["show_sales"] : null);
+                $show_ops = Model::setBool((isset($vendor["show_ops"])) ? $vendor["show_ops"] : null);
+                $is_provider = Model::setBool((isset($vendor["is_provider"])) ? $vendor["is_provider"] : null);
+                $sku = Model::setString((isset($vendor["sku"])) ? $vendor["sku"] : Vendor::generateSKU($vendor));
+                //$sku = Model::setString((isset($vendor["sku"])) ? $vendor["sku"] : null);
+                $enabled = Model::setBool((isset($vendor["enabled"])) ? $vendor["enabled"] : null);
+                $note = Model::setLongText((isset($vendor["note"])) ? $vendor["note"] : null);
+                $created_by = Model::setInt($user_id);
+                $modified_by = Model::setInt($user_id);
+                $sql = "
+            INSERT INTO vendor (
+                id, company_id, status_id, show_online,
+                show_sales, show_ops, is_provider, sku,
+                enabled, date_created, created_by, date_modified,
+                modified_by, note
+            )
+            VALUES
+            (
+                $id, $company_id, $status_id, $show_online,
+                $show_sales, $show_ops, $is_provider, $sku,
+                $enabled, CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP,
+                $modified_by, $note
+            )
+            ON DUPLICATE KEY UPDATE
+                status_id = VALUES(status_id),
+                show_online = VALUES(show_online),
+                show_sales = VALUES(show_sales),
+                show_ops = VALUES(show_ops),
+                is_provider = VALUES(is_provider),
+                sku = VALUES(sku),
+                note = VALUES(note),
+                modified_by = VALUES(modified_by),
+                date_modified = VALUES(date_modified),
+                enabled = VALUES(enabled)";
+
+                Model::$db->rawQuery($sql);
+                $vendor_id = Model::$db->getInsertId();
+                if ($vendor_id) {
+                    return self::get($vendor_id);
+                }
+                Log::$debug_log->error("No Vendor Id");
+
+                return [];
+            } catch (Exception $e) {
+                Log::$debug_log->error($e);
+
+                return [];
+            }
+
         }
 
         public static function vendor_ac(string $st = ""): array
@@ -114,7 +199,8 @@
                     AND			COMPANY.name LIKE '%$searchTerm%'
                     ORDER BY    COMPANY.name ASC
                     LIMIT 20;";
-                Log::$debug_log->trace($sql);
+
+                //Log::$debug_log->trace($sql);
 
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {

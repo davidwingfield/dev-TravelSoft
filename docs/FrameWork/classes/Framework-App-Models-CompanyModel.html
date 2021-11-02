@@ -152,7 +152,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CompanyModel.php"><a href="files/app-models-companymodel.html"><abbr title="App/Models/CompanyModel.php">CompanyModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">16</span>
+    <span class="phpdocumentor-element-found-in__line">17</span>
 
     </aside>
 
@@ -210,12 +210,26 @@
 </dt>
 <dd></dd>
 
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/Framework-App-Models-CompanyModel.html#property_selectQuery">$selectQuery</a>
+    <span>
+                &nbsp;: mixed            </span>
+</dt>
+<dd></dd>
+
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-CompanyModel.html#method_get">get()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
 <dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-CompanyModel.html#method_getByName">getByName()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>fetch company data by name</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-CompanyModel.html#method_getOne">getOne()</a>
@@ -326,7 +340,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CompanyModel.php"><a href="files/app-models-companymodel.html"><abbr title="App/Models/CompanyModel.php">CompanyModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">20</span>
+    <span class="phpdocumentor-element-found-in__line">22</span>
 
     </aside>
 
@@ -360,7 +374,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CompanyModel.php"><a href="files/app-models-companymodel.html"><abbr title="App/Models/CompanyModel.php">CompanyModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">19</span>
+    <span class="phpdocumentor-element-found-in__line">20</span>
 
     </aside>
 
@@ -370,6 +384,57 @@
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">$dbTable</span>
      = <span class="phpdocumentor-signature__default-value">&quot;company&quot;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_selectQuery">
+        $selectQuery
+        <a href="classes/Framework-App-Models-CompanyModel.html#property_selectQuery" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CompanyModel.php"><a href="files/app-models-companymodel.html"><abbr title="App/Models/CompanyModel.php">CompanyModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">24</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">$selectQuery</span>
+     = <span class="phpdocumentor-signature__default-value">&quot;
+        SELECT
+                        COMPANY.id AS &#039;company_id&#039;,
+                        COMPANY.name AS &#039;company_name&#039;,
+                        COMPANY.phone_1 AS &#039;company_phone_1&#039;,
+                        COMPANY.phone_2 AS &#039;company_phone_2&#039;,
+                        COMPANY.fax AS &#039;company_fax&#039;,
+                        COMPANY.website AS &#039;company_website&#039;,
+                        COMPANY.email AS &#039;company_email&#039;,
+                        COMPANY.status AS &#039;company_status&#039;,
+                        COMPANY.enabled AS &#039;company_enabled&#039;,
+                        COMPANY.date_created AS &#039;company_date_created&#039;,
+                        COMPANY.created_by AS &#039;company_created_by&#039;,
+                        COMPANY.date_modified AS &#039;company_date_modified&#039;,
+                        COMPANY.modified_by AS &#039;company_modified_by&#039;,
+                        COMPANY.note AS &#039;company_note&#039;
+        FROM 			company COMPANY
+        &quot;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -398,7 +463,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CompanyModel.php"><a href="files/app-models-companymodel.html"><abbr title="App/Models/CompanyModel.php">CompanyModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">43</span>
 
     </aside>
 
@@ -435,6 +500,49 @@
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_getByName">
+        getByName()
+        <a href="classes/Framework-App-Models-CompanyModel.html#method_getByName" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CompanyModel.php"><a href="files/app-models-companymodel.html"><abbr title="App/Models/CompanyModel.php">CompanyModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">88</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">fetch company data by name</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getByName</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_getOne">
         getOne()
         <a href="classes/Framework-App-Models-CompanyModel.html#method_getOne" class="headerlink"><i class="fas fa-link"></i></a>
@@ -442,7 +550,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CompanyModel.php"><a href="files/app-models-companymodel.html"><abbr title="App/Models/CompanyModel.php">CompanyModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">38</span>
+    <span class="phpdocumentor-element-found-in__line">59</span>
 
     </aside>
 
@@ -695,7 +803,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CompanyModel.php"><a href="files/app-models-companymodel.html"><abbr title="App/Models/CompanyModel.php">CompanyModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">53</span>
+    <span class="phpdocumentor-element-found-in__line">74</span>
 
     </aside>
 

@@ -83,8 +83,18 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Company\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "",
+            "summary": "construct\u0020object\u0020from\u0020Controller",
             "url": "classes/Framework-App-Controllers-Company.html#method___construct"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Company\u003A\u003AvalidateName\u0028\u0029",
+            "name": "validateName",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Company.html#method_validateName"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Company\u003A\u003Aformat\u0028\u0029",
+            "name": "format",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Company.html#method_format"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Contact",
             "name": "Contact",
@@ -586,6 +596,16 @@ Search.appendIndex(
             "summary": "autocomplete",
             "url": "classes/Framework-App-Controllers-Provider.html#method_autocomplete"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003AvalidateName\u0028\u0029",
+            "name": "validateName",
+            "summary": "validate\u0020if\u0020name\u0020already\u0020exists",
+            "url": "classes/Framework-App-Controllers-Provider.html#method_validateName"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003Aformat\u0028\u0029",
+            "name": "format",
+            "summary": "format",
+            "url": "classes/Framework-App-Controllers-Provider.html#method_format"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003Aformat_get\u0028\u0029",
             "name": "format_get",
             "summary": "format_get",
@@ -593,17 +613,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003Aformat_ac\u0028\u0029",
             "name": "format_ac",
-            "summary": "",
+            "summary": "format\u0020autocomplete\u0020results",
             "url": "classes/Framework-App-Controllers-Provider.html#method_format_ac"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003Aformat\u0028\u0029",
-            "name": "format",
-            "summary": "format",
-            "url": "classes/Framework-App-Controllers-Provider.html#method_format"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003A\u0024data",
             "name": "data",
-            "summary": "",
+            "summary": "result\u0020values",
             "url": "classes/Framework-App-Controllers-Provider.html#property_data"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Province",
@@ -701,6 +716,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-StaticPages.html#method_logout"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\StaticPages\u003A\u003Areset_password\u0028\u0029",
+            "name": "reset_password",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-StaticPages.html#method_reset_password"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\StaticPages\u003A\u003Aforgot_password\u0028\u0029",
+            "name": "forgot_password",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-StaticPages.html#method_forgot_password"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Unit",
             "name": "Unit",
             "summary": "Short\u0020Unit\u0020Description",
@@ -771,6 +796,11 @@ Search.appendIndex(
             "summary": "autocomplete",
             "url": "classes/Framework-App-Controllers-Vendor.html#method_autocomplete"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003AvalidateName\u0028\u0029",
+            "name": "validateName",
+            "summary": "validate\u0020if\u0020name\u0020already\u0020exists",
+            "url": "classes/Framework-App-Controllers-Vendor.html#method_validateName"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003Aformat_ac\u0028\u0029",
             "name": "format_ac",
             "summary": "format_ac",
@@ -783,7 +813,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003Aformat\u0028\u0029",
             "name": "format",
-            "summary": "format",
+            "summary": "format\u0020result\u0020set",
             "url": "classes/Framework-App-Controllers-Vendor.html#method_format"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003A\u0024primaryKey",
@@ -803,7 +833,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Middlewares\\Auth\u003A\u003Alogged_in\u0028\u0029",
             "name": "logged_in",
-            "summary": "",
+            "summary": "checks\u0020if\u0020user\u0020is\u0020logged\u0020in",
             "url": "classes/Framework-App-Middlewares-Auth.html#method_logged_in"
         },                {
             "fqsen": "\\Framework\\App\\Middlewares\\Auth\u003A\u003Aauthenticate\u0028\u0029",
@@ -848,7 +878,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Middlewares\\Auth\u003A\u003AinsertBrute\u0028\u0029",
             "name": "insertBrute",
-            "summary": "",
+            "summary": "inserts\u0020failed\u0020login\u0020attempt",
             "url": "classes/Framework-App-Middlewares-Auth.html#method_insertBrute"
         },                {
             "fqsen": "\\Framework\\App\\Models\\AddressModel",
@@ -1086,6 +1116,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Models-CompanyModel.html#method_update"
         },                {
+            "fqsen": "\\Framework\\App\\Models\\CompanyModel\u003A\u003AgetByName\u0028\u0029",
+            "name": "getByName",
+            "summary": "fetch\u0020company\u0020data\u0020by\u0020name",
+            "url": "classes/Framework-App-Models-CompanyModel.html#method_getByName"
+        },                {
             "fqsen": "\\Framework\\App\\Models\\CompanyModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
             "summary": "",
@@ -1095,6 +1130,11 @@ Search.appendIndex(
             "name": "dbFields",
             "summary": "",
             "url": "classes/Framework-App-Models-CompanyModel.html#property_dbFields"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\CompanyModel\u003A\u003A\u0024selectQuery",
+            "name": "selectQuery",
+            "summary": "",
+            "url": "classes/Framework-App-Models-CompanyModel.html#property_selectQuery"
         },                {
             "fqsen": "\\Framework\\App\\Models\\ContactModel",
             "name": "ContactModel",
@@ -1506,6 +1546,11 @@ Search.appendIndex(
             "summary": "Gets\u0020provider\u0028s\u0029\u0020by\u0020id",
             "url": "classes/Framework-App-Models-ProviderModel.html#method_get"
         },                {
+            "fqsen": "\\Framework\\App\\Models\\ProviderModel\u003A\u003AgetByName\u0028\u0029",
+            "name": "getByName",
+            "summary": "fetch\u0020provider\u0020by\u0020name",
+            "url": "classes/Framework-App-Models-ProviderModel.html#method_getByName"
+        },                {
             "fqsen": "\\Framework\\App\\Models\\ProviderModel\u003A\u003AgetOne\u0028\u0029",
             "name": "getOne",
             "summary": "",
@@ -1886,6 +1931,11 @@ Search.appendIndex(
             "summary": "Gets\u0020vendor\u0028s\u0029\u0020by\u0020id",
             "url": "classes/Framework-App-Models-VendorModel.html#method_get"
         },                {
+            "fqsen": "\\Framework\\App\\Models\\VendorModel\u003A\u003AgetByName\u0028\u0029",
+            "name": "getByName",
+            "summary": "Gets\u0020vendor\u0028s\u0029\u0020by\u0020id",
+            "url": "classes/Framework-App-Models-VendorModel.html#method_getByName"
+        },                {
             "fqsen": "\\Framework\\App\\Models\\VendorModel\u003A\u003AgetOne\u0028\u0029",
             "name": "getOne",
             "summary": "",
@@ -1930,6 +1980,11 @@ Search.appendIndex(
             "name": "TYPES",
             "summary": "",
             "url": "namespaces/default.html#constant_TYPES"
+        },                {
+            "fqsen": "\\COUNTRIES",
+            "name": "COUNTRIES",
+            "summary": "",
+            "url": "namespaces/default.html#constant_COUNTRIES"
         },                {
             "fqsen": "\\Framework\\Core\\Controller",
             "name": "Controller",

@@ -330,17 +330,27 @@ const Location = (function () {
         
     }
     
+    /**
+     * populate form fields
+     *
+     * @param location
+     */
     const populate_form = function (location) {
+        let country = {}
+        let province = {}
+        let city = {}
+        let type = {}
         if (location) {
+            
             switch (defaultLocationDisplayFormat) {
                 case "short":
-                    _location_name_filter.value = location.display_short
+                    _location_name_filter.value = (location.display_short) ? location.display_short : ""
                     break
                 case "medium":
-                    _location_name_filter.value = location.display_medium
+                    _location_name_filter.value = (location.display_medium) ? location.display_medium : ""
                     break
                 default:
-                    _location_name_filter.value = location.display_long
+                    _location_name_filter.value = (location.display_long) ? location.display_long : ""
             }
             
             _location_enabled.checked = (location.enabled === 1)
@@ -349,13 +359,29 @@ const Location = (function () {
             _location_street_1.value = location.street_1
             _location_street_2.value = location.street_2
             _location_zipcode.value = location.zipcode
-            _location_types_id.value = location.type.id
             
-            Country.id = location.country.id.toString()
-            Province.id = location.province.id.toString()
-            City.id = location.city.id.toString()
+            if (location.type) {
+                type = location.type
+                _location_types_id.value = type.id
+            }
             
-            $(_location_country_id).val(location.country.id.toString()).trigger("change")
+            if (location.country) {
+                country = location.country
+                Country.id = (country.id) ? country.id.toString() : null
+            }
+            
+            if (location.province) {
+                province = location.province
+                Province.id = (province.id) ? province.id.toString() : null
+            }
+            
+            if (location.city) {
+                city = location.city
+                City.id = (city.id) ? city.id.toString() : null
+            }
+            
+            $(_location_country_id).val((country.id) ? country.id : "").trigger("change")
+            
         }
         
     }
@@ -366,82 +392,111 @@ const Location = (function () {
         
     }
     
+    /**
+     * set object param values
+     *
+     * @param location
+     * @returns {{note: null, country: {note: null, date_created: *, created_by: (number|number), enabled: number, date_modified: *, name_long: null, modified_by: (number|number), name: null, id: null, iso2: null, sort_order: number, currency_id: null, iso3: null}, city: {note: null, date_modified: *, date_created: *, name: null, modified_by: (number|number), id: null, sort_order: number, created_by: (number|number), enabled: number}, date_created: *, location_types_id: null, type: {note: null, date_modified: *, date_created: *, icon: null, modified_by: (number|number), name: null, id: null, created_by: (number|number), sort_order: number, enabled: number}, created_by: (number|number), enabled: number, display_medium: null, zipcode: null, display_short: null, street_1: null, date_modified: *, province: {note: null, date_modified: *, date_created: *, name_long: null, modified_by: (number|number), name: null, id: null, iso2: null, created_by: (number|number), sort_order: number, enabled: number, iso3: null}, street_2: null, name: null, modified_by: (number|number), display_long: null, id: null}}
+     */
     const set_detail = function (location) {
         let detail = _default_detail()
         temp_location = detail
-        
+        let country = {}
+        let province = {}
+        let city = {}
+        let type = {}
         if (location) {
-            detail.city = {
-                created_by: (location.city.created_by) ? location.city.created_by : user_id,
-                date_created: (location.city.date_created) ? location.city.date_created : formatDateMySQL(),
-                date_modified: (location.city.date_modified) ? location.city.date_modified : formatDateMySQL(),
-                enabled: (location.city.enabled) ? location.city.enabled : 1,
-                id: (location.city.id) ? location.city.id : null,
-                modified_by: (location.city.modified_by) ? location.city.modified_by : user_id,
-                name: (location.city.name) ? location.city.name : null,
-                note: (location.city.note) ? location.city.note : null,
-                sort_order: (location.city.sort_order) ? location.city.sort_order : 999,
-            }
-            detail.province = {
-                created_by: (location.province.created_by) ? location.province.created_by : user_id,
-                date_created: (location.province.date_created) ? location.province.date_created : formatDateMySQL(),
-                date_modified: (location.province.date_modified) ? location.province.date_modified : formatDateMySQL(),
-                enabled: (location.province.enabled) ? location.province.enabled : 1,
-                id: (location.province.id) ? location.province.id : null,
-                iso2: (location.province.iso2) ? location.province.iso2 : null,
-                iso3: (location.province.iso3) ? location.province.iso3 : null,
-                modified_by: (location.province.modified_by) ? location.province.modified_by : user_id,
-                name: (location.province.name) ? location.province.name : null,
-                name_long: (location.province.name_long) ? location.province.name_long : null,
-                note: (location.province.note) ? location.province.note : null,
-                sort_order: (location.province.sort_order) ? location.province.sort_order : 999,
-            }
-            detail.country = {
-                created_by: (location.country.created_by) ? location.country.created_by : user_id,
-                date_created: (location.country.date_created) ? location.country.date_created : formatDateMySQL(),
-                date_modified: (location.country.date_modified) ? location.country.date_modified : formatDateMySQL(),
-                currency_id: (location.country.currency_id) ? location.country.currency_id : null,
-                enabled: (location.country.enabled) ? location.country.enabled : 1,
-                id: (location.country.id) ? location.country.id : null,
-                iso2: (location.country.iso2) ? location.country.iso2 : null,
-                iso3: (location.country.iso3) ? location.country.iso3 : null,
-                modified_by: (location.country.modified_by) ? location.country.modified_by : user_id,
-                name: (location.country.name) ? location.country.name : null,
-                name_long: (location.country.name_long) ? location.country.name_long : null,
-                note: (location.country.note) ? location.country.note : null,
-                sort_order: (location.country.sort_order) ? location.country.sort_order : 999,
-            }
-            detail.type = {
-                created_by: (location.type.created_by) ? location.type.created_by : user_id,
-                date_created: (location.type.date_created) ? location.type.date_created : formatDateMySQL(),
-                date_modified: (location.type.date_modified) ? location.type.date_modified : formatDateMySQL(),
-                enabled: (location.type.enabled) ? location.type.enabled : 1,
-                icon: (location.type.icon) ? location.type.icon : null,
-                id: (location.type.id) ? location.type.id : null,
-                modified_by: (location.type.modified_by) ? location.type.modified_by : user_id,
-                name: (location.type.name) ? location.type.name : null,
-                note: (location.type.note) ? location.type.note : null,
-                sort_order: (location.type.sort_order) ? location.type.sort_order : 999,
-            }
-            detail.id = (location.id) ? location.id : null
-            detail.name = (location.name) ? location.name : null
-            detail.street_1 = (location.street_1) ? location.street_1 : null
-            detail.street_2 = (location.street_2) ? location.street_2 : null
-            detail.zipcode = (location.zipcode) ? location.zipcode : null
-            detail.display_long = (location.display_long) ? location.display_long : null
-            detail.display_medium = (location.display_medium) ? location.display_medium : null
-            detail.display_short = (location.display_short) ? location.display_short : null
-            detail.enabled = (location.enabled) ? location.enabled : 1
-            detail.date_created = (location.date_created) ? location.date_created : formatDateMySQL()
-            detail.created_by = (location.created_by) ? location.created_by : user_id
-            detail.date_modified = (location.date_modified) ? location.date_modified : formatDateMySQL()
-            detail.modified_by = (location.modified_by) ? location.modified_by : user_id
-            detail.note = (location.note) ? location.note : null
             
-            Province.set_detail(detail.province)
-            Country.set_detail(detail.country)
-            City.set_detail(detail.city)
+            if (location.country) {
+                country = location.country
+            }
+            if (location.province) {
+                province = location.province
+            }
+            if (location.city) {
+                city = location.city
+            }
+            if (location.type) {
+                type = location.type
+            }
+        } else {
+            location = {}
         }
+        
+        detail.id = (location.id) ? location.id : null
+        detail.name = (location.name) ? location.name : null
+        detail.street_1 = (location.street_1) ? location.street_1 : null
+        detail.street_2 = (location.street_2) ? location.street_2 : null
+        detail.zipcode = (location.zipcode) ? location.zipcode : null
+        detail.display_long = (location.display_long) ? location.display_long : null
+        detail.display_medium = (location.display_medium) ? location.display_medium : null
+        detail.display_short = (location.display_short) ? location.display_short : null
+        detail.enabled = (location.enabled) ? location.enabled : 1
+        detail.date_created = (location.date_created) ? location.date_created : formatDateMySQL()
+        detail.created_by = (location.created_by) ? location.created_by : user_id
+        detail.date_modified = (location.date_modified) ? location.date_modified : formatDateMySQL()
+        detail.modified_by = (location.modified_by) ? location.modified_by : user_id
+        detail.note = (location.note) ? location.note : null
+        
+        detail.country = {
+            created_by: (country.created_by) ? country.created_by : user_id,
+            date_created: (country.date_created) ? country.date_created : formatDateMySQL(),
+            date_modified: (country.date_modified) ? country.date_modified : formatDateMySQL(),
+            currency_id: (country.currency_id) ? country.currency_id : null,
+            enabled: (country.enabled) ? country.enabled : 1,
+            id: (country.id) ? country.id : null,
+            iso2: (country.iso2) ? country.iso2 : null,
+            iso3: (country.iso3) ? country.iso3 : null,
+            modified_by: (country.modified_by) ? country.modified_by : user_id,
+            name: (country.name) ? country.name : null,
+            name_long: (country.name_long) ? country.name_long : null,
+            note: (country.note) ? country.note : null,
+            sort_order: (country.sort_order) ? country.sort_order : 999,
+        }
+        
+        detail.province = {
+            created_by: (province.created_by) ? province.created_by : user_id,
+            date_created: (province.date_created) ? province.date_created : formatDateMySQL(),
+            date_modified: (province.date_modified) ? province.date_modified : formatDateMySQL(),
+            enabled: (province.enabled) ? province.enabled : 1,
+            id: (province.id) ? province.id : null,
+            iso2: (province.iso2) ? province.iso2 : null,
+            iso3: (province.iso3) ? province.iso3 : null,
+            modified_by: (province.modified_by) ? province.modified_by : user_id,
+            name: (province.name) ? province.name : null,
+            name_long: (province.name_long) ? province.name_long : null,
+            note: (province.note) ? province.note : null,
+            sort_order: (province.sort_order) ? province.sort_order : 999,
+        }
+        
+        detail.city = {
+            created_by: (city.created_by) ? city.created_by : user_id,
+            date_created: (city.date_created) ? city.date_created : formatDateMySQL(),
+            date_modified: (city.date_modified) ? city.date_modified : formatDateMySQL(),
+            enabled: (city.enabled) ? city.enabled : 1,
+            id: (city.id) ? city.id : null,
+            modified_by: (city.modified_by) ? city.modified_by : user_id,
+            name: (city.name) ? city.name : null,
+            note: (city.note) ? city.note : null,
+            sort_order: (city.sort_order) ? city.sort_order : 999,
+        }
+        
+        detail.type = {
+            created_by: (type.created_by) ? type.created_by : user_id,
+            date_created: (type.date_created) ? type.date_created : formatDateMySQL(),
+            date_modified: (type.date_modified) ? type.date_modified : formatDateMySQL(),
+            enabled: (type.enabled) ? type.enabled : 1,
+            icon: (type.icon) ? type.icon : null,
+            id: (type.id) ? type.id : null,
+            modified_by: (type.modified_by) ? type.modified_by : user_id,
+            name: (type.name) ? type.name : null,
+            note: (type.note) ? type.note : null,
+            sort_order: (type.sort_order) ? type.sort_order : 999,
+        }
+        
+        Province.set_detail(detail.province)
+        Country.set_detail(detail.country)
+        City.set_detail(detail.city)
         
         Location.detail = detail
         return detail

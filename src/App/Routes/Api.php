@@ -18,6 +18,7 @@
      * get requests
      */
     Router::get($routeLead . "/countries", "Country@serveGet");
+    Router::get($routeLead . "/packages", "Package@serveGet");
     Router::get($routeLead . "/provinces", "Province@serveGet");
     Router::get($routeLead . "/cities", "City@serveGet");
     Router::get($routeLead . '/providers/${provider_id}', "Provider@serveGet");

@@ -60,4 +60,4 @@
      * User Page Routes
      */
     Router::get('users/${user_id}/products/${product_id}', "User@get_products_by_user");
-
+    Router::get("admin/users", "User@index");

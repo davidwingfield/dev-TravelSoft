@@ -18,6 +18,9 @@
      */
     class User extends Controller
     {
+        /**
+         * inherit parent construct
+         */
         public function __construct()
         {
             parent::__construct();
@@ -25,6 +28,10 @@
 
         public function index()
         {
+            $data = Page::getDetails(20);
+
+            View::render_template("users/index", $data);
+            exit(1);
 
         }
 

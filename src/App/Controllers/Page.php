@@ -35,6 +35,8 @@
         }
 
         /**
+         * fetch all type lists for select boxes
+         *
          * @return array
          */
         public static function getTypes(): array
@@ -173,6 +175,11 @@
             $menu .= "</ul>";
 
             return $menu;
+        }
+
+        public static function profile()
+        {
+            
         }
 
     }

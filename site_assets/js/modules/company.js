@@ -18,11 +18,11 @@ const Company = (function () {
     let suggestionsTempCompany = []
     let form_rules = {
         rules: {
-            
+            provider_name: {
+                required: true,
+            },
             company_phone_1: {
                 required: true,
-                phoneUS: phoneUS,
-                phoneIT: phoneIT,
             },
             company_phone_2: {
                 phoneUS: phoneUS,
@@ -40,7 +40,9 @@ const Company = (function () {
             },
         },
         messages: {
-            
+            provider_name: {
+                required: "Field Required",
+            },
             company_phone_1: {
                 required: "Field Required",
                 phoneUS: "Field Invalid",

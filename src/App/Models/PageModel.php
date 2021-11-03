@@ -4,6 +4,7 @@
 
     use Exception;
     use Framework\Core\Model;
+    use Framework\Logger\Log;
 
     /**
      * Short Page Description
@@ -83,9 +84,11 @@
                 ";
                 $items = self::$db->rawQuery($sql);
             }
-            $role_id = 3;
+
             $temp = array();
+
             foreach ($items as $value) {
+
                 $obj = (object)$value;
                 $id = $obj->id;
                 $label = $obj->label;
@@ -94,7 +97,8 @@
                 $icon = $obj->icon;
                 $roles_min = $obj->roles_min;
                 $sort_order = $obj->sort_order;
-                if ($roles_min <= $role_id) {
+
+                if ((int)$roles_min <= (int)$role_id) {
 
                     if ($parent_id === 0) {
                         if (!isset($temp[$obj->id])) {

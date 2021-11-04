@@ -17,7 +17,7 @@ const Contact = (function () {
     const _contact_types_id = document.getElementById("contact_types_id")
     //Blocks
     const _card_edit_contact_form = document.getElementById("card_edit_contact_form")
-    
+    const _form_edit_contact = document.getElementById("form_edit_contact")
     //Tables
     const _table_contact = document.getElementById("table_contact")
     //Unused
@@ -29,6 +29,43 @@ const Contact = (function () {
     //Defaults
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $contact_table = $(_table_contact)
+    let form_rules = {
+        rules: {
+            contact_name_first: {
+                required: true,
+            },
+            contact_name_last: {
+                required: true,
+            },
+            contact_phone: {
+                required: true,
+            },
+            contact_email: {
+                required: true,
+            },
+            contact_types_id: {
+                required: true,
+            },
+        },
+        messages: {
+            contact_name_first: {
+                required: "Field Required",
+            },
+            contact_name_last: {
+                required: "Field Required",
+            },
+            contact_phone: {
+                required: "Field Required",
+            },
+            contact_email: {
+                required: "Field Required",
+            },
+            contact_types_id: {
+                required: "Field Required",
+            },
+        },
+    }
+    let validator
     // ----
     
     /**
@@ -58,6 +95,37 @@ const Contact = (function () {
           clear_form()
           hide_form()
       })
+    
+    // ----
+    
+    /**
+     * validate contact form
+     *
+     * @returns {boolean}
+     */
+    const validate_form = function () {
+        return $(_form_edit_contact).valid()
+    }
+    
+    /**
+     * build contact record
+     *
+     * @returns {{}|*}
+     */
+    const build = function () {
+        if (validate_form()) {
+            let dataToSend = {
+                name_first: _contact_name_first.value,
+                name_last: _contact_name_last.value,
+                email: _contact_email.value,
+                phone: _contact_phone.value,
+                contact_types_id: toNumbers(getListOfIds($(_contact_types_id).val())),
+                enabled: (_contact_enabled.checked === true) ? 1 : 0,
+                id: (!isNaN(_contact_id.value)) ? parseInt(_contact_id.value) : null,
+            }
+            return remove_nulls(dataToSend)
+        }
+    }
     
     /**
      * build contact table structure
@@ -98,6 +166,17 @@ const Contact = (function () {
                 })
             }
         }
+    }
+    
+    /**
+     * save contact
+     */
+    const save = function () {
+        let dataToSend = build()
+        if (dataToSend) {
+            console.log("dataToSend", dataToSend)
+        }
+        
     }
     
     /**
@@ -187,50 +266,6 @@ const Contact = (function () {
     }
     
     /**
-     * save contact
-     */
-    const save = function () {
-        if (validate()) {
-            let dataToSend = {
-                id: null,
-                name_first: (_contact_name_first.value !== "") ? _contact_name_first.value : null,
-                name_last: (_contact_name_last.value !== "") ? _contact_name_last.value : null,
-                email: (_contact_email.value !== "") ? _contact_email.value : null,
-                phone: (_contact_phone.value !== "") ? _contact_phone.value : null,
-                enabled: (_contact_enabled) ? 1 : 0,
-                note: null,
-            }
-            log(dataToSend)
-        }
-    }
-    
-    /**
-     * validate contact form
-     *
-     * @returns {boolean}
-     */
-    const validate = function () {
-        
-        return false
-    }
-    
-    /**
-     * initialize contact form and table
-     *
-     * @param contacts
-     */
-    const init = function (contacts) {
-        if (_table_contact) {
-            build_table()
-        }
-        if (contacts) {
-            
-            load_all(contacts)
-        }
-        hide_form()
-    }
-    
-    /**
      * sets detail for contact object
      *
      * @param contact
@@ -289,6 +324,26 @@ const Contact = (function () {
         if (contact) {
             populate_form(contact)
         }
+    }
+    
+    /**
+     * initialize contact form and table
+     *
+     * @param contacts
+     */
+    const init = function (contacts) {
+        if (_table_contact) {
+            build_table()
+        }
+        if (contacts) {
+            
+            load_all(contacts)
+        }
+        if (_form_edit_contact) {
+            validator_init(form_rules)
+            validator = $(_form_edit_contact).validate()
+        }
+        hide_form()
     }
     
     /**

@@ -14,6 +14,7 @@
     session_start();
 
     use Framework\App\Middlewares\Auth;
+    use Framework\Core\Email;
     use Framework\Core\Request;
     use Framework\Core\Router;
     use Framework\Exception\ErrorHandler;
@@ -41,7 +42,15 @@
     define("PATH", $ini["application"]["path"]);
     define("APIPATH", $ini["application"]["api_path"]);
     define("DEVMODE", $ini["application"]["development_mode"]);
-    define("MAILADDRESS", $ini["application"]["email"]);
+    define("MAILUSER", $ini["email"]["user"]);
+    define("MAILPASS", $ini["email"]["pass"]);
+    define("MAILHOST", $ini["email"]["host"]);
+    define("MAILSMTP", $ini["email"]["smtp_auth"]);
+    define("MAILSMTPSECURE", $ini["email"]["smtp_secure"]);
+    define("MAILPORT", $ini["email"]["port"]);
+    define("MAILFROMADDRESS", $ini["email"]["from"]);
+    define("MAILFROMNAME", $ini["email"]["name"]);
+
     define("LOGINATTEMPTS", $ini["database"]["db_loginattempts"]);
 
     const DEV = 0;
@@ -56,6 +65,7 @@
 
     Config::init();
     Controller::init();
+    //Email::init();
     AppIni::init($ini);
     Model::init();
     View::init();

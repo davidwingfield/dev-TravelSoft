@@ -28,6 +28,39 @@ const Address = (function () {
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $address_table = $(_table_address)
     let temp_address = {}
+    let validator
+    let form_rules = {
+        rules: {
+            address_types_id: {
+                required: true,
+            },
+            address_country_id: {
+                required: true,
+            },
+            address_province_id: {
+                required: true,
+            },
+            address_city_id: {
+                required: true,
+            },
+        },
+        messages: {
+            address_types_id: {
+                required: "Field Required",
+            },
+            address_country_id: {
+                required: "Field Required",
+            },
+            address_province_id: {
+                required: "Field Required",
+            },
+            address_city_id: {
+                required: "Field Required",
+            },
+        },
+    }
+    
+    // --
     
     /**
      * add new address
@@ -53,7 +86,7 @@ const Address = (function () {
      */
     $(_button_submit_form_edit_address)
       .on("click", function () {
-          alert()
+          save()
       })
     
     /**
@@ -65,6 +98,42 @@ const Address = (function () {
           clear_form()
           unload_form()
       })
+    
+    // --
+    
+    /**
+     * save address form data
+     *
+     * @param params
+     */
+    const save = function () {
+        let dataToSend = build()
+        if (dataToSend) {
+            console.log("dataToSend", dataToSend)
+        }
+    }
+    
+    const build = function () {
+        if (validate_form()) {
+            let dataToSend = {
+                street_1: _address_street_1.value,
+                street_2: _address_street_2.value,
+                street_3: _address_street_3.value,
+                postal_code: _address_postal_code.value,
+                country_id: (!isNaN(_address_country_id.value)) ? parseInt(_address_country_id.value) : null,
+                province_id: (!isNaN(_address_province_id.value)) ? parseInt(_address_province_id.value) : null,
+                city_id: (!isNaN(_address_city_id.value)) ? parseInt(_address_city_id.value) : null,
+                address_types_id: toNumbers(getListOfIds($(_address_types_id).val())),
+                enabled: (_address_enabled.checked === true) ? 1 : 0,
+                id: (!isNaN(_address_id.value)) ? parseInt(_address_id.value) : null,
+            }
+            return remove_nulls(dataToSend)
+        }
+    }
+    
+    const validate_form = function () {
+        return $(_form_edit_address).valid()
+    }
     
     /**
      * handle_address_error
@@ -139,15 +208,6 @@ const Address = (function () {
                 note: null,
             },
         }
-    }
-    
-    /**
-     * save address form data
-     *
-     * @param params
-     */
-    const save = function (params) {
-    
     }
     
     /**
@@ -294,6 +354,9 @@ const Address = (function () {
         }
         
         if (_form_edit_address) {
+            validator_init(form_rules)
+            validator = $(_form_edit_address).validate()
+            
             $(_address_country_id).BuildDropDown({
                 data: Array.from(Country.all.values()),
                 title: "Country",

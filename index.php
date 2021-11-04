@@ -15,6 +15,7 @@
 
     const ROUTES_PATH = ROOT_PATH . "/src/App/Routes";
     const VIEWS_PATH = ROOT_PATH . "/src/App/Views";
+    const EMAILS_PATH = ROOT_PATH . "/src/App/Emails";
     const INI_PATH = ROOT_PATH . "/app.ini";
     const SECURE = false;
 

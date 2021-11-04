@@ -166,6 +166,8 @@ const validator_init = function (settings) {
     return jQuery.validator
 }
 
+const toNumbers = arr => arr.map(Number)
+
 const remove_nulls = function (obj) {
     let cleanedObject = {}
     $.each(obj, function (i, v) {
@@ -540,13 +542,11 @@ const htmlEncode = function (value) {
     return $("<textarea/>").text(value).html()
 }
 
-
-function paddy (num, padlen, padchar) {
+const paddy = function (num, padlen, padchar) {
     var pad_char = typeof padchar !== "undefined" ? padchar : "0"
     var pad = new Array(1 + padlen).join(pad_char)
     return (pad + num).slice(-pad.length)
 }
-
 
 const generateCodeDirectId = function (provider) {
     if (!provider) {

@@ -1,0 +1,15 @@
+<?php
+    if (!isset($page_data)) {
+        $page_data = [];
+    }
+
+    $settings = json_encode($page_data, 1);
+    $init = "Provider.edit($settings);";
+    if (!defined("COUNTRIES")) {
+        define("COUNTRIES", $page_data["types"]["countries"]);
+    }
+?>
+
+<section id="framework_page">
+    <iframe src="docs/FrameWork/index.html"></iframe>
+</section>

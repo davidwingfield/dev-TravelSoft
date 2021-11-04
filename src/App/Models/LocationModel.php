@@ -20,34 +20,7 @@
 
         protected static $dbTable = "location";
         protected static $dbFields = Array();
-
-        public static function location_ac(string $st = "", string $default_display = "medium"): array
-        {
-            $searchTerm = addslashes($st);
-            $orderBy = "";
-
-            $where = "
-            WHERE		CITY.enabled = 1
-                 AND		NOT ISNULL(CITY.name)
-                 AND		NOT ISNULL(PROVINCE.name)
-                 AND		NOT ISNULL(COUNTRY.name)
-        ";
-
-            if ($default_display === "short") {
-                $orderBy = "ORDER BY            CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2, ')') ASC";
-                $where .= "         AND 		CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2, ')') LIKE '%$searchTerm%'";
-            } else {
-                if ($default_display === "long") {
-                    $order_by = "ORDER BY           CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', CONCAT(PROVINCE.iso2, ' - ', PROVINCE.name), ', ', CONCAT(COUNTRY.iso2, ' - ', COUNTRY.name), ')') ASC";
-                    $where .= "         AND 		CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', CONCAT(PROVINCE.iso2, ' - ', PROVINCE.name), ', ', CONCAT(COUNTRY.iso2, ' - ', COUNTRY.name), ')') LIKE '%$searchTerm%'";
-                } else {
-                    $order_by = "ORDER BY           CONCAT(	LOCATION.name,	' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') ASC";
-                    $where .= "         AND 		CONCAT(	LOCATION.name,	' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') LIKE '%$searchTerm%'";
-                }
-            }
-
-            $sql = "
-            SELECT      CONCAT(	LOCATION.name, ' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') AS 'location',
+        protected static $sql = "SELECT      CONCAT(	LOCATION.name, ' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') AS 'location',
                         CONCAT(LOCATION.name, ' ',	'(' ,CITY.name, ' ', CONCAT(PROVINCE.iso2, ' - ', PROVINCE.name), ', ', CONCAT(COUNTRY.iso2, ' - ', COUNTRY.name),')') AS 'location_long',
                         CONCAT(LOCATION.name, ' ',	'(' ,CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2,')') AS 'location_short',
                         LOCATION.id AS 'location_id',
@@ -112,12 +85,74 @@
             JOIN	    location_types LOCATION_TYPES ON LOCATION_TYPES.id = LOCATION.location_types_id
             JOIN		city CITY ON CITY.id = LOCATION.city_id
             JOIN		province PROVINCE ON PROVINCE.id = CITY.province_id
-            JOIN		country COUNTRY ON COUNTRY.id = PROVINCE.country_id
+            JOIN		country COUNTRY ON COUNTRY.id = PROVINCE.country_id";
+
+        public static function getByName(string $name, string $default_display = "medium"): array
+        {
+
+            if ($name) {
+                $searchTerm = addslashes($name);
+
+                if ($default_display === "short") {
+                    $displayWhere = "CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2, ')') = '$searchTerm'";
+                } else {
+                    if ($default_display === "long") {
+                        $displayWhere = "CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', CONCAT(PROVINCE.iso2, ' - ', PROVINCE.name), ', ', CONCAT(COUNTRY.iso2, ' - ', COUNTRY.name), ')') = '$searchTerm'";
+                    } else {
+                        $displayWhere = "CONCAT(	LOCATION.name,	' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') = '$searchTerm'";
+                    }
+                }
+
+                $where = "
+                    WHERE		(LOCATION.name = '$searchTerm' OR $displayWhere)";
+
+                $sql = self::$sql . "
+                    $where;
+                ";
+                Log::$debug_log->trace($sql);
+                try {
+                    $results["dataset"] = Model::$db->ObjectBuilder()->rawQuery($sql);
+
+                    return $results["dataset"];
+                } catch (Exception $e) {
+                    Controller::$debug_log->error($e);
+
+                    return [];
+                }
+            }
+
+            return [];
+        }
+
+        public static function location_ac(string $st = "", string $default_display = "medium"): array
+        {
+            $searchTerm = addslashes($st);
+            $orderBy = "";
+
+            $where = "
+            WHERE		CITY.enabled = 1
+                 AND		NOT ISNULL(CITY.name)
+                 AND		NOT ISNULL(PROVINCE.name)
+                 AND		NOT ISNULL(COUNTRY.name)";
+
+            if ($default_display === "short") {
+                $orderBy = "ORDER BY            CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2, ')') ASC";
+                $where .= "         AND 		CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2, ')') LIKE '%$searchTerm%'";
+            } else {
+                if ($default_display === "long") {
+                    $order_by = "ORDER BY           CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', CONCAT(PROVINCE.iso2, ' - ', PROVINCE.name), ', ', CONCAT(COUNTRY.iso2, ' - ', COUNTRY.name), ')') ASC";
+                    $where .= "         AND 		CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', CONCAT(PROVINCE.iso2, ' - ', PROVINCE.name), ', ', CONCAT(COUNTRY.iso2, ' - ', COUNTRY.name), ')') LIKE '%$searchTerm%'";
+                } else {
+                    $order_by = "ORDER BY           CONCAT(	LOCATION.name,	' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') ASC";
+                    $where .= "         AND 		CONCAT(	LOCATION.name,	' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') LIKE '%$searchTerm%'";
+                }
+            }
+
+            $sql = self::$sql . "
             $where
-            $order_by 
+            $orderBy 
             LIMIT 20;";
 
-//            Log::$debug_log->trace($sql);
             try {
                 $results["dataset"] = Model::$db->ObjectBuilder()->rawQuery($sql);
 

@@ -4,6 +4,7 @@
 
     use Framework\App\Models\LocationModel;
     use Framework\Core\Controller;
+    use Framework\Core\View;
 
     /**
      * Short Location Description
@@ -18,6 +19,25 @@
         public function __construct()
         {
             parent::__construct();
+        }
+
+        public static function validateName(array $args = []): array
+        {
+            $locations = array();
+            $default_display = (!isset($args["default_display"])) ? $args["default_display"] : "medium";
+            if (isset($args["name"])) {
+                $name = $args["name"];
+                $results = LocationModel::getByName($name, $default_display);
+
+                foreach ($results AS $k => $company) {
+                    $locations[] = self::format($company);
+                }
+            }
+
+            // ----
+
+            View::render_json($locations);
+            exit(1);
         }
 
         public static function autocomplete(string $st = "", string $default_display = "medium"): array
@@ -58,6 +78,10 @@
                 "display_medium" => $location->location,
                 "display_long" => $location->location_long,
                 "id" => $location->location_id,
+                "name" => $location->location_name,
+                "street_1" => $location->location_street_1,
+                "street_2" => $location->location_street_2,
+                "zipcode" => $location->location_zipcode,
                 "type" => array(
                     "id" => $location->location_types_id,
                     "name" => $location->location_types_name,

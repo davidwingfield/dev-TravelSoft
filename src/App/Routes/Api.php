@@ -24,10 +24,12 @@
     Router::get($routeLead . '/providers/${provider_id}', "Provider@serveGet");
     Router::get($routeLead . "/vendors", "Vendor@serveGet");
     Router::get($routeLead . "/contacts", "Contact@serveGet");
+    Router::get($routeLead . "/users/test", "User@test");
 
     /**
      * autocomplete validate
      */
+    Router::get($routeLead . "/locations/validate", "Location@validateName");
     Router::get($routeLead . "/companies/validate", "Company@validateName");
     Router::get($routeLead . "/providers/validate", "Provider@validateName");
     Router::get($routeLead . "/vendors/validate", "Vendor@validateName");
@@ -50,6 +52,7 @@
     /**
      * update requests
      */
+    Router::post($routeLead . "/users/reset_password", "User@serveResetPassword");
     Router::post($routeLead . "/providers/update", "Provider@serveUpdate");
     Router::post($routeLead . "/vendors/update", "Vendor@serveUpdate");
     Router::post($routeLead . "/companies/update", "Company@serveUpdate");

@@ -5,8 +5,10 @@
     use Framework\App\Middlewares\Auth;
     use Framework\App\Models\UserModel;
     use Framework\Core\Controller;
+    use Framework\Core\Email;
     use Framework\Core\View;
     use Framework\Logger\Log;
+    use PHPMailer\PHPMailer\PHPMailer;
 
     /**
      * Short User Description
@@ -96,7 +98,7 @@
 
                         /** Render View. */
                         View::render_json($users);
-                        exit;
+                        exit(1);
                     } else {
                         /** Password Incorrect. */
                         $attempt = Auth::insertBrute($id);
@@ -107,8 +109,112 @@
                     }
                 }
             }
+            /** Render Invalid View. */
             View::render_invalid_json("User Not Found: email - $email");
-            exit;
+            exit(1);
+        }
+
+        public static function serveResetPassword(array $params = [])
+        {
+            if (isset($params, $params["email"])) {
+                $user = UserModel::getOneByEmail($params["email"]);
+                if (count($user)) {
+                    $tempPassword = self::generateRandomPassword();
+                    $tempSalt = self::generateRandomSalt();
+                    $tempPasswordHash = self::generatePasswordHash($tempPassword, $tempSalt);
+                    $user["pass"] = $tempPasswordHash;
+                    $user["salt"] = $tempSalt;
+                    if (self::sendPasswordResetEmail($user, $tempPassword)) {
+                        /** Render View. */
+                        View::render_json($user);
+                        exit(1);
+                    }
+
+                }
+            }
+        }
+
+        private static function sendPasswordResetEmail(array $user, string $tempPassword): bool
+        {
+            if (!$user || !$tempPassword) {
+                return false;
+            }
+            $recipients = array();
+            $name_first = $user["name_first"];
+            $name_last = $user["name_last"];
+            $email = $user["email"];
+            $name = "$name_first $name_last";
+            $recipients[] = array(
+                "type" => "to",
+                // - to, cc, bcc
+                "email" => $email,
+                "name" => $name,
+            );
+
+            $recipients[] = array(
+                "type" => "cc",
+                // - to, cc, bcc
+                "email" => "davidwingfield@outlook.com",
+                "name" => "David Wingfield",
+            );
+
+            $subject = "TravelSoft Password Reset";
+            $template = "emailPasswordResetConfirmation";
+
+            return Email::send($recipients, $subject, $template, [], $user);
+        }
+
+        public static function test()
+        {
+            $testSalt = "e00cd82d22dd26f2b14f96261367cb069f3bf991d61b8fddbf2784e68f79557695da43293397e9d62fa3b0b0782a9269261adbecd05a61ee8547dde6a0817b6d";
+            $testPassword = "Swindon4";
+            //echo self::generateRandomPassword();
+            //echo self::generateRandomSalt();
+
+            echo self::generatePasswordHash($testPassword, $testSalt);
+        }
+
+        /**
+         * getnerates random password
+         *
+         * @return string
+         */
+        public static function generateRandomPassword(): string
+        {
+            $comb = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+            $pass = array();
+            $combLen = strlen($comb) - 1;
+            for ($i = 0; $i < 10; $i++) {
+                $n = rand(0, $combLen);
+                $pass[] = $comb[$n];
+            }
+
+            return implode($pass);
+        }
+
+        /**
+         * generates random salt
+         *
+         * @return string
+         */
+        public static function generateRandomSalt(): string
+        {
+            return hash("sha512", uniqid(openssl_random_pseudo_bytes(16), true));
+        }
+
+        /**
+         * generate random password hash
+         *
+         * @param string $password
+         * @param string $salt
+         *
+         * @return string
+         */
+        public static function generatePasswordHash(string $password, string $salt): string
+        {
+            $_password = hash("sha512", "Swindon4");
+
+            return hash("sha512", $_password . $salt);
         }
 
     }

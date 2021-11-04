@@ -30,6 +30,21 @@ const Provider = (function () {
       let isNew = false
       let $index_table = $(_table_provider_index)
       let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+      let form_rules = {
+          rules: {
+              provider_name: {
+                  required: true,
+              },
+          },
+          messages: {
+              provider_name: {
+                  required: "Field Required",
+              },
+          },
+      }
+      
+      // -
+      
       $(_button_save_provider)
         .on("click", function () {
             let company_detail = Company.build()
@@ -37,7 +52,7 @@ const Provider = (function () {
             let location_detail = Location.detail
             let vendor_detail = Vendor.detail
             let addresses = Array.from(Address.all.values())
-            let contacts = Contact.all
+            let contacts = Array.from(Contact.all.values())
             
             console.log({
                   "company": company_detail,
@@ -50,6 +65,7 @@ const Provider = (function () {
               },
             )
         })
+      
       $(_form_edit_provider)
         .on("change", function () {
             set_progress()
@@ -294,6 +310,9 @@ const Provider = (function () {
           
       }
       
+      /**
+       * disable form fields
+       */
       const disable_form_fields = function () {
           if (_provider_id.value !== "" && _provider_company_id.value !== "") {
               _provider_name.disabled = true

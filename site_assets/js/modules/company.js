@@ -9,11 +9,13 @@ const Company = (function () {
     const _company_email = document.getElementById("company_email")
     const _company_website = document.getElementById("company_website")
     const _provider_company_id = document.getElementById("provider_company_id")
+    //
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    let globalSelectedCompany = false
+    
     let phoneIT = false
     let phoneUS = false
     let validator
+    let globalSelectedCompany = false
     let validated = false
     let suggestionsTempCompany = []
     let form_rules = {
@@ -64,7 +66,7 @@ const Company = (function () {
             },
         },
     }
-    
+    //
     const add_to_company_list = function (obj) {
         if (globalSelectedCompany === false) {
             if ((obj.value.length > 0 && suggestionsTempCompany.length === 0 && globalSelectedCompany === false) ||
@@ -100,13 +102,10 @@ const Company = (function () {
         }
     }
     
-    //--
     const validate_form = function () {
         return $(_form_edit_company).valid()
     }
-    //--
     
-    //
     const company_exists = function (name) {
         if (name && name !== "") {
             let dataToSend = {
@@ -202,7 +201,6 @@ const Company = (function () {
                 website: Company.detail.website,
             }
         }
-        
     }
     
     return {

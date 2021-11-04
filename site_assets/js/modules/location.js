@@ -70,9 +70,133 @@ const Location = (function () {
     let new_filter = false
     let validator
     let validated = false
+    let globalSelectedLocation = false
+    let suggestionsTempLocation = []
     let default_display = default_address_view
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     // ----
+    
+    // ----
+    $(_button_close_edit_location_form)
+      .on("click", function () {
+          reset_form()
+          populate_form(temp_location)
+          
+          switch (defaultLocationDisplayFormat) {
+              case "short":
+                  _location_name_filter.value = temp_location.display_short
+                  break
+              case "medium":
+                  _location_name_filter.value = temp_location.display_medium
+                  break
+              default:
+                  _location_name_filter.value = temp_location.display_long
+          }
+          _location_id.value = temp_location.id
+          
+          hide_form()
+      })
+    
+    $(_button_clear_form_edit_location)
+      .on("click", function () {
+          reset_form()
+          populate_form()
+      })
+    
+    $(_button_submit_form_edit_location)
+      .on("click", function () {
+          save()
+      })
+    
+    $(_button_edit_location)
+      .on("click", function () {
+          if (_location_id.value === "") {
+              //set_detail()
+              //reset_form()
+              //populate_form()
+          } else {
+          
+          }
+          
+          show_form()
+      })
+    
+    $("input[name='location_display']")
+      .on("change", function () {
+          let selected_value = $("input[name='location_display']:checked").val()
+          default_display = selected_value
+          init_autocomplete()
+          if (Location.detail["display_" + selected_value] !== null) {
+              _location_name_filter.value = Location.detail["display_" + selected_value]
+          }
+      })
+    
+    $(_location_name)
+      
+      .on("change", function () {
+          setTimeout(function () {
+              let location_name = _location_name.value
+              location_name_exists(location_name)
+          }, 200)
+      })
+    
+    /**
+     * initialize autocomplete functions
+     */
+    const init_autocomplete = function () {
+        $(_location_name_filter)
+          .on("click", function () {
+              $(this).select()
+          })
+          .on("change", function () {
+              setTimeout(function () {
+                  let location_name = _location_name_filter.value
+                  if (globalSelectedLocation === false) {
+                      if (_location_name_filter.value === "") {
+                          _location_name_filter.value = ""
+                          _location_id.value = ""
+                          reset_form()
+                      } else {
+                          location_exists(location_name)
+                      }
+                  }
+              }, 200)
+          })
+          .on("search", function () {
+              globalSelectedLocation = false
+              _location_id.value = ""
+              _location_name_filter.value = ""
+              new_filter = true
+              set_detail()
+              reset_form()
+              populate_form()
+          })
+          .autocomplete({
+              serviceUrl: "/api/v1.0/autocomplete/locations",
+              minChars: 2,
+              cache: false,
+              dataType: "json",
+              triggerSelectOnValidInput: false,
+              paramName: "st",
+              params: { "default_display": default_display },
+              onSelect: function (suggestion) {
+                  if (suggestion && suggestion.data && suggestion.data.country && suggestion.data.province && suggestion.data.city) {
+                      globalSelectedLocation = true
+                      reset_form()
+                      let location = suggestion.data
+                      temp_location = location
+                      populate_form(location)
+                  }
+                  
+                  if (_form_edit_location) {
+                      clear_validation(_form_edit_location)
+                  }
+              },
+              onSearchComplete: function (query, suggestions) {
+              },
+          })
+    }
+    
     const _default_detail = function () {
         return {
             id: null,
@@ -148,103 +272,95 @@ const Location = (function () {
     const handle_location_error = function (msg) {
         toastr.error(msg)
     }
-    // ----
-    $(_button_close_edit_location_form)
-      .on("click", function () {
-          populate_form(temp_location)
-          
-          switch (defaultLocationDisplayFormat) {
-              case "short":
-                  _location_name_filter.value = temp_location.display_short
-                  break
-              case "medium":
-                  _location_name_filter.value = temp_location.display_medium
-                  break
-              default:
-                  _location_name_filter.value = temp_location.display_long
-          }
-          _location_id.value = temp_location.id
-          
-          hide_form()
-      })
     
-    $(_button_clear_form_edit_location)
-      .on("click", function () {
-      
-      })
-    
-    $(_button_submit_form_edit_location)
-      .on("click", function () {
-          save()
-      })
-    
-    $(_location_name_filter)
-      .on("click", function () {
-          $(this).select()
-      })
-      .on("change", function () {
-          if ($(this).val() === "") {
-              //set_detail()
-              //reset_form()
-              //populate_form()
-          }
-      })
-      .on("search", function () {
-          new_filter = true
-          set_detail()
-          reset_form()
-          populate_form()
-      })
-    
-    $(_button_edit_location)
-      .on("click", function () {
-          if (_location_id.value === "") {
-              //set_detail()
-              //reset_form()
-              //populate_form()
-          } else {
-          
-          }
-          
-          show_form()
-      })
-    
-    $("input[name='location_display']")
-      .on("change", function () {
-          let selected_value = $("input[name='location_display']:checked").val()
-          default_display = selected_value
-          init_autocomplete()
-          if (Location.detail["display_" + selected_value] !== null) {
-              _location_name_filter.value = Location.detail["display_" + selected_value]
-          }
-      })
-    
-    const init_autocomplete = function () {
-        $(_location_name_filter)
-          .autocomplete({
-              serviceUrl: "/api/v1.0/autocomplete/locations",
-              minChars: 2,
-              cache: false,
-              dataType: "json",
-              triggerSelectOnValidInput: false,
-              paramName: "st",
-              params: { "default_display": default_display },
-              onSelect: function (suggestion) {
-                  //Province.set_detail(suggestion.data)
-                  //Country.set_detail(suggestion.data)
-                  //City.set_detail(suggestion.data)
-                  //Location.set_detail(suggestion.data)
-                  //populate_form(suggestion.data)
-                  if (_form_edit_location) {
-                      clear_validation(_form_edit_location)
-                  }
-              },
-              onSearchComplete: function (query, suggestions) {
-              },
-          })
+    const location_name_exists = function (name) {
+        if (name && name !== "") {
+            let dataToSend = {
+                name: name,
+                default_display: default_display,
+            }
+            
+            fetch_location_by_name(dataToSend, function (data) {
+                if (data && data[0]) {
+                    if (confirm(`Location: ${name} all ready exists. Would you like to use it?`)) {
+                        let location = data[0]
+                    } else {
+                        reset_form()
+                        populate_form()
+                    }
+                }
+            })
+        }
     }
     
-    const save = function (params) {
+    const location_exists = function (name) {
+        if (name && name !== "") {
+            let dataToSend = {
+                name: name,
+                default_display: default_display,
+            }
+            
+            fetch_location_by_name(dataToSend, function (data) {
+                if (data && data[0]) {
+                    let location = data[0]
+                    globalSelectedLocation = true
+                    reset_form()
+                    populate_form(location)
+                } else {
+                    globalSelectedLocation = false
+                    if (confirm(`Location: ${name} does not exist. Would you like to create it?`)) {
+                        add_to_location_list(name)
+                    } else {
+                        reset_form()
+                        populate_form(temp_location)
+                        hide_form()
+                    }
+                }
+            })
+        }
+    }
+    
+    const add_to_location_list = function (name) {
+        if (globalSelectedLocation === false) {
+            if (name) {
+                reset_form()
+                populate_form()
+                show_form()
+                _location_name.value = name
+                _location_name.disabled = true
+                
+            }
+        }
+    }
+    
+    /**
+     * fetch locations by name
+     *
+     * @param dataToSend
+     * @param callback
+     */
+    const fetch_location_by_name = function (dataToSend, callback) {
+        let url = "/api/v1.0/locations/validate"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handle_location_error("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+                return handle_location_error("Error Validating Location")
+            }
+        } else {
+            return handle_location_error("Error Loading Location- Missing Data")
+        }
+    }
+    
+    const save = function () {
         validated = true
         
         let dataToSend = {
@@ -307,6 +423,7 @@ const Location = (function () {
     }
     
     const reset_form = function () {
+        _location_name.disabled = false
         _location_name.value = ""
         _location_name_filter.value = ""
         _location_id.value = ""
@@ -502,15 +619,22 @@ const Location = (function () {
         return detail
     }
     
+    /**
+     * initialize location object
+     *
+     * @param location
+     */
     const init = function (location) {
-        validator_init(form_rules)
+        
         let detail = {}
         if (location) {
             detail = set(location)
+            temp_location = detail
         }
         
         if (_form_edit_location) {
-            //validator = $(_form_edit_location).validate()
+            validator_init(form_rules)
+            validator = $(_form_edit_location).validate()
             
             $(_location_country_id).BuildDropDown({
                 data: Array.from(Country.all.values()),
@@ -553,12 +677,16 @@ const Location = (function () {
                     "location_city_id",
                 ],
             })
+            
+            reset_form()
+            populate_form(detail)
+            hide_form()
         }
-        reset_form()
-        populate_form(detail)
         
-        init_autocomplete()
-        hide_form()
+        if (_location_name_filter) {
+            init_autocomplete()
+        }
+        
     }
     
     return {
@@ -580,6 +708,10 @@ const Location = (function () {
         },
         populate_form: function (location) {
             populate_form(location)
+        },
+        set_detail: function (location) {
+            console.log("location", location)
+            set_detail(location)
         },
     }
     

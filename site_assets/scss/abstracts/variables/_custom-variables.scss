@@ -96,13 +96,13 @@ $dropify-border-color: #e5e5e5 !default;
 $dropify-infos-background: transparentize(#000000, 0.3) !default;
 $dropify-infos-color: #ffffff !default;
 $dropify-clear-color: #ffffff !default;
-$dropify-error-color: #f34141 !default;
+$dropify-error-color: $custom-danger-color !default;
 $dropify-stripes: #f6f6f6 !default;
 $dropify-loader-size: 20px !default;
 $dropify-loader-border: 1px !default;
 $dropify-loader-fill: #cccccc !default;
 $dropify-loader-trace: #777777 !default;
-$dropify-font-path: '../fonts' !default;
+$dropify-font-path: '../font/dropify' !default;
 
 
 

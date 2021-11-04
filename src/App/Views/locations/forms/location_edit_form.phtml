@@ -143,7 +143,7 @@
                                 
                                 <div class="form-element">
                                     
-                                    <label for="location_types_id">Location Name:</label>
+                                    <label for="location_name">Location Name:</label>
                                     <input type="text" id="location_name" name="location_name" class="form-control"/>
                                     <div class="error w-100 text-center" id="location_name-error">&nbsp;</div>
                                 
@@ -261,3 +261,18 @@
 
 </form>
 <!-- /Edit Location Form -->
+<script type="text/javascript">
+    function calculateRatio (num_1, num_2) {
+        for (num = num_2; num > 1; num--) {
+            if ((num_1 % num) == 0 && (num_2 % num) == 0) {
+                num_1 = num_1 / num
+                num_2 = num_2 / num
+            }
+        }
+        var ratio = num_1 + ":" + num_2
+        return ratio
+    }
+
+
+    console.log(calculateRatio(300, 200))
+</script>

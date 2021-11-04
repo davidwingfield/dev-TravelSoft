@@ -91,6 +91,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Company.html#method_validateName"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Company\u003A\u003AserveUpdate\u0028\u0029",
+            "name": "serveUpdate",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Company.html#method_serveUpdate"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Company\u003A\u003Aformat\u0028\u0029",
             "name": "format",
             "summary": "",
@@ -198,318 +203,23 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Package",
             "name": "Package",
-            "summary": "Short\u0020Controller\u0020Description",
+            "summary": "Short\u0020Package\u0020Description",
             "url": "classes/Framework-App-Controllers-Package.html"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "constructor\u0020methods",
+            "summary": "",
             "url": "classes/Framework-App-Controllers-Package.html#method___construct"
         },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetid\u0028\u0029",
-            "name": "getid",
-            "summary": "get\u0020id",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getid"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetname\u0028\u0029",
-            "name": "getname",
-            "summary": "get\u0020name",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getname"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetday_span\u0028\u0029",
-            "name": "getday_span",
+            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003AserveGet\u0028\u0029",
+            "name": "serveGet",
             "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getday_span"
+            "url": "classes/Framework-App-Controllers-Package.html#method_serveGet"
         },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetcity_id\u0028\u0029",
-            "name": "getcity_id",
+            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Aformat\u0028\u0029",
+            "name": "format",
             "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getcity_id"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetmin_pax\u0028\u0029",
-            "name": "getmin_pax",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getmin_pax"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetmax_pax\u0028\u0029",
-            "name": "getmax_pax",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getmax_pax"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetdescription_long\u0028\u0029",
-            "name": "getdescription_long",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getdescription_long"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetdescription_short\u0028\u0029",
-            "name": "getdescription_short",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getdescription_short"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetavailable_start\u0028\u0029",
-            "name": "getavailable_start",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getavailable_start"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetavailable_end\u0028\u0029",
-            "name": "getavailable_end",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getavailable_end"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetcost\u0028\u0029",
-            "name": "getcost",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getcost"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetprice\u0028\u0029",
-            "name": "getprice",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getprice"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetmargin\u0028\u0029",
-            "name": "getmargin",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getmargin"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetenabled\u0028\u0029",
-            "name": "getenabled",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getenabled"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetdate_created\u0028\u0029",
-            "name": "getdate_created",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getdate_created"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetcreated_by\u0028\u0029",
-            "name": "getcreated_by",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getcreated_by"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetdate_modified\u0028\u0029",
-            "name": "getdate_modified",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getdate_modified"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetmodified_by\u0028\u0029",
-            "name": "getmodified_by",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getmodified_by"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Agetnote\u0028\u0029",
-            "name": "getnote",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_getnote"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetid\u0028\u0029",
-            "name": "setid",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setid"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetname\u0028\u0029",
-            "name": "setname",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setname"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetday_span\u0028\u0029",
-            "name": "setday_span",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setday_span"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetcity_id\u0028\u0029",
-            "name": "setcity_id",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setcity_id"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetmin_pax\u0028\u0029",
-            "name": "setmin_pax",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setmin_pax"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetmax_pax\u0028\u0029",
-            "name": "setmax_pax",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setmax_pax"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetdescription_long\u0028\u0029",
-            "name": "setdescription_long",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setdescription_long"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetdescription_short\u0028\u0029",
-            "name": "setdescription_short",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setdescription_short"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetavailable_start\u0028\u0029",
-            "name": "setavailable_start",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setavailable_start"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetavailable_end\u0028\u0029",
-            "name": "setavailable_end",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setavailable_end"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetcost\u0028\u0029",
-            "name": "setcost",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setcost"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetprice\u0028\u0029",
-            "name": "setprice",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setprice"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetmargin\u0028\u0029",
-            "name": "setmargin",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setmargin"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetenabled\u0028\u0029",
-            "name": "setenabled",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setenabled"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetdate_created\u0028\u0029",
-            "name": "setdate_created",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setdate_created"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetcreated_by\u0028\u0029",
-            "name": "setcreated_by",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setcreated_by"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetdate_modified\u0028\u0029",
-            "name": "setdate_modified",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setdate_modified"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetmodified_by\u0028\u0029",
-            "name": "setmodified_by",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setmodified_by"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Asetnote\u0028\u0029",
-            "name": "setnote",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_setnote"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Aselect\u0028\u0029",
-            "name": "select",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_select"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Adelete\u0028\u0029",
-            "name": "delete",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_delete"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Ainsert\u0028\u0029",
-            "name": "insert",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_insert"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Aupdate\u0028\u0029",
-            "name": "update",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#method_update"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024id",
-            "name": "id",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_id"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024name",
-            "name": "name",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_name"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024day_span",
-            "name": "day_span",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_day_span"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024city_id",
-            "name": "city_id",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_city_id"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024min_pax",
-            "name": "min_pax",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_min_pax"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024max_pax",
-            "name": "max_pax",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_max_pax"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024description_long",
-            "name": "description_long",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_description_long"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024description_short",
-            "name": "description_short",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_description_short"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024available_start",
-            "name": "available_start",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_available_start"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024available_end",
-            "name": "available_end",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_available_end"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024cost",
-            "name": "cost",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_cost"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024price",
-            "name": "price",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_price"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024margin",
-            "name": "margin",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_margin"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024enabled",
-            "name": "enabled",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_enabled"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024date_created",
-            "name": "date_created",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_date_created"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024created_by",
-            "name": "created_by",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_created_by"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024date_modified",
-            "name": "date_modified",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_date_modified"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024modified_by",
-            "name": "modified_by",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_modified_by"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003A\u0024note",
-            "name": "note",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Package.html#property_note"
+            "url": "classes/Framework-App-Controllers-Package.html#method_format"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Page",
             "name": "Page",
@@ -523,7 +233,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Page\u003A\u003AgetTypes\u0028\u0029",
             "name": "getTypes",
-            "summary": "",
+            "summary": "fetch\u0020all\u0020type\u0020lists\u0020for\u0020select\u0020boxes",
             "url": "classes/Framework-App-Controllers-Page.html#method_getTypes"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Page\u003A\u003AgetDetails\u0028\u0029",
@@ -540,6 +250,11 @@ Search.appendIndex(
             "name": "formatSideMenu",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Page.html#method_formatSideMenu"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Page\u003A\u003Aprofile\u0028\u0029",
+            "name": "profile",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Page.html#method_profile"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Product",
             "name": "Product",
@@ -591,6 +306,11 @@ Search.appendIndex(
             "summary": "new",
             "url": "classes/Framework-App-Controllers-Provider.html#method_new"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003AserveUpdate\u0028\u0029",
+            "name": "serveUpdate",
+            "summary": "handle\u0020post\u0020update\u0020request",
+            "url": "classes/Framework-App-Controllers-Provider.html#method_serveUpdate"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003Aautocomplete\u0028\u0029",
             "name": "autocomplete",
             "summary": "autocomplete",
@@ -615,6 +335,11 @@ Search.appendIndex(
             "name": "format_ac",
             "summary": "format\u0020autocomplete\u0020results",
             "url": "classes/Framework-App-Controllers-Provider.html#method_format_ac"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003AgenerateCodeDirectId\u0028\u0029",
+            "name": "generateCodeDirectId",
+            "summary": "system\u0020generated\u0020Code\u0020Direct\u0020Id",
+            "url": "classes/Framework-App-Controllers-Provider.html#method_generateCodeDirectId"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003A\u0024data",
             "name": "data",
@@ -743,7 +468,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\User\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "",
+            "summary": "inherit\u0020parent\u0020construct",
             "url": "classes/Framework-App-Controllers-User.html#method___construct"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\User\u003A\u003Aindex\u0028\u0029",
@@ -783,13 +508,18 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003AgetByVendorId\u0028\u0029",
             "name": "getByVendorId",
-            "summary": "serveGet",
+            "summary": "get\u0020vendor\u0020by\u0020Id",
             "url": "classes/Framework-App-Controllers-Vendor.html#method_getByVendorId"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003AserveGet\u0028\u0029",
             "name": "serveGet",
-            "summary": "serveGet",
+            "summary": "api\u0020get\u0020request",
             "url": "classes/Framework-App-Controllers-Vendor.html#method_serveGet"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003AserveUpdate\u0028\u0029",
+            "name": "serveUpdate",
+            "summary": "process\u0020update\u0020post\u0020request",
+            "url": "classes/Framework-App-Controllers-Vendor.html#method_serveUpdate"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003Aautocomplete\u0028\u0029",
             "name": "autocomplete",
@@ -803,18 +533,23 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003Aformat_ac\u0028\u0029",
             "name": "format_ac",
-            "summary": "format_ac",
+            "summary": "format\u0020autocomplete\u0020result\u0020set",
             "url": "classes/Framework-App-Controllers-Vendor.html#method_format_ac"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003AgenerateSKU\u0028\u0029",
             "name": "generateSKU",
-            "summary": "",
+            "summary": "system\u0020generated\u0020SKU",
             "url": "classes/Framework-App-Controllers-Vendor.html#method_generateSKU"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003Aformat\u0028\u0029",
             "name": "format",
             "summary": "format\u0020result\u0020set",
             "url": "classes/Framework-App-Controllers-Vendor.html#method_format"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003Aformat_vendor\u0028\u0029",
+            "name": "format_vendor",
+            "summary": "format\u0020just\u0020the\u0020vendor\u0020results",
+            "url": "classes/Framework-App-Controllers-Vendor.html#method_format_vendor"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003A\u0024primaryKey",
             "name": "primaryKey",
@@ -1103,23 +838,23 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\CompanyModel\u003A\u003Aget\u0028\u0029",
             "name": "get",
-            "summary": "",
+            "summary": "fetch\u0020company",
             "url": "classes/Framework-App-Models-CompanyModel.html#method_get"
         },                {
             "fqsen": "\\Framework\\App\\Models\\CompanyModel\u003A\u003AgetOne\u0028\u0029",
             "name": "getOne",
-            "summary": "",
+            "summary": "fetch\u0020single\u0020company\u0020record",
             "url": "classes/Framework-App-Models-CompanyModel.html#method_getOne"
-        },                {
-            "fqsen": "\\Framework\\App\\Models\\CompanyModel\u003A\u003Aupdate\u0028\u0029",
-            "name": "update",
-            "summary": "",
-            "url": "classes/Framework-App-Models-CompanyModel.html#method_update"
         },                {
             "fqsen": "\\Framework\\App\\Models\\CompanyModel\u003A\u003AgetByName\u0028\u0029",
             "name": "getByName",
             "summary": "fetch\u0020company\u0020data\u0020by\u0020name",
             "url": "classes/Framework-App-Models-CompanyModel.html#method_getByName"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\CompanyModel\u003A\u003AupdateRecord\u0028\u0029",
+            "name": "updateRecord",
+            "summary": "update\u0020company\u0020record",
+            "url": "classes/Framework-App-Models-CompanyModel.html#method_updateRecord"
         },                {
             "fqsen": "\\Framework\\App\\Models\\CompanyModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
@@ -1408,33 +1143,303 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\PackageModel",
             "name": "PackageModel",
-            "summary": "Short\u0020Package\u0020Description",
+            "summary": "Short\u0020PackageModel\u0020Description",
             "url": "classes/Framework-App-Models-PackageModel.html"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_id\u0028\u0029",
+            "name": "get_id",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_id"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_name\u0028\u0029",
+            "name": "get_name",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_name"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_day_span\u0028\u0029",
+            "name": "get_day_span",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_day_span"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_city_id\u0028\u0029",
+            "name": "get_city_id",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_city_id"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_min_pax\u0028\u0029",
+            "name": "get_min_pax",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_min_pax"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_max_pax\u0028\u0029",
+            "name": "get_max_pax",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_max_pax"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_description_long\u0028\u0029",
+            "name": "get_description_long",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_description_long"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_description_short\u0028\u0029",
+            "name": "get_description_short",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_description_short"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_available_start\u0028\u0029",
+            "name": "get_available_start",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_available_start"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_available_end\u0028\u0029",
+            "name": "get_available_end",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_available_end"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_cost\u0028\u0029",
+            "name": "get_cost",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_cost"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_price\u0028\u0029",
+            "name": "get_price",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_price"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_margin\u0028\u0029",
+            "name": "get_margin",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_margin"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_enabled\u0028\u0029",
+            "name": "get_enabled",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_enabled"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_date_created\u0028\u0029",
+            "name": "get_date_created",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_date_created"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_created_by\u0028\u0029",
+            "name": "get_created_by",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_created_by"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_date_modified\u0028\u0029",
+            "name": "get_date_modified",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_date_modified"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_modified_by\u0028\u0029",
+            "name": "get_modified_by",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_modified_by"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_note\u0028\u0029",
+            "name": "get_note",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_get_note"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_id\u0028\u0029",
+            "name": "set_id",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_id"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_name\u0028\u0029",
+            "name": "set_name",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_name"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_day_span\u0028\u0029",
+            "name": "set_day_span",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_day_span"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_city_id\u0028\u0029",
+            "name": "set_city_id",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_city_id"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_min_pax\u0028\u0029",
+            "name": "set_min_pax",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_min_pax"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_max_pax\u0028\u0029",
+            "name": "set_max_pax",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_max_pax"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_description_long\u0028\u0029",
+            "name": "set_description_long",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_description_long"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_description_short\u0028\u0029",
+            "name": "set_description_short",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_description_short"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_available_start\u0028\u0029",
+            "name": "set_available_start",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_available_start"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_available_end\u0028\u0029",
+            "name": "set_available_end",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_available_end"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_cost\u0028\u0029",
+            "name": "set_cost",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_cost"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_price\u0028\u0029",
+            "name": "set_price",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_price"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_margin\u0028\u0029",
+            "name": "set_margin",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_margin"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_enabled\u0028\u0029",
+            "name": "set_enabled",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_enabled"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_date_created\u0028\u0029",
+            "name": "set_date_created",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_date_created"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_created_by\u0028\u0029",
+            "name": "set_created_by",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_created_by"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_date_modified\u0028\u0029",
+            "name": "set_date_modified",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_date_modified"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_modified_by\u0028\u0029",
+            "name": "set_modified_by",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_modified_by"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aset_note\u0028\u0029",
+            "name": "set_note",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_set_note"
         },                {
             "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget\u0028\u0029",
             "name": "get",
-            "summary": "",
+            "summary": "fetch\u0020object\u0020values",
             "url": "classes/Framework-App-Models-PackageModel.html#method_get"
-        },                {
-            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003AgetOne\u0028\u0029",
-            "name": "getOne",
-            "summary": "",
-            "url": "classes/Framework-App-Models-PackageModel.html#method_getOne"
-        },                {
-            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aupdate\u0028\u0029",
-            "name": "update",
-            "summary": "",
-            "url": "classes/Framework-App-Models-PackageModel.html#method_update"
         },                {
             "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
             "summary": "",
             "url": "classes/Framework-App-Models-PackageModel.html#property_dbTable"
         },                {
-            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024dbFields",
-            "name": "dbFields",
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024id",
+            "name": "id",
             "summary": "",
-            "url": "classes/Framework-App-Models-PackageModel.html#property_dbFields"
+            "url": "classes/Framework-App-Models-PackageModel.html#property_id"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024name",
+            "name": "name",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_name"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024day_span",
+            "name": "day_span",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_day_span"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024city_id",
+            "name": "city_id",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_city_id"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024min_pax",
+            "name": "min_pax",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_min_pax"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024max_pax",
+            "name": "max_pax",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_max_pax"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024description_long",
+            "name": "description_long",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_description_long"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024description_short",
+            "name": "description_short",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_description_short"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024available_start",
+            "name": "available_start",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_available_start"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024available_end",
+            "name": "available_end",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_available_end"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024cost",
+            "name": "cost",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_cost"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024price",
+            "name": "price",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_price"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024margin",
+            "name": "margin",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_margin"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024enabled",
+            "name": "enabled",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_enabled"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024date_created",
+            "name": "date_created",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_date_created"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024created_by",
+            "name": "created_by",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_created_by"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024date_modified",
+            "name": "date_modified",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_date_modified"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024modified_by",
+            "name": "modified_by",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_modified_by"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024note",
+            "name": "note",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_note"
         },                {
             "fqsen": "\\Framework\\App\\Models\\PageModel",
             "name": "PageModel",
@@ -1553,13 +1558,18 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProviderModel\u003A\u003AgetOne\u0028\u0029",
             "name": "getOne",
-            "summary": "",
+            "summary": "fetch\u0020single\u0020object",
             "url": "classes/Framework-App-Models-ProviderModel.html#method_getOne"
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProviderModel\u003A\u003Aprovider_ac\u0028\u0029",
             "name": "provider_ac",
-            "summary": "",
+            "summary": "autocomplete\u0020query",
             "url": "classes/Framework-App-Models-ProviderModel.html#method_provider_ac"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ProviderModel\u003A\u003AupdateRecord\u0028\u0029",
+            "name": "updateRecord",
+            "summary": "update\u0020record",
+            "url": "classes/Framework-App-Models-ProviderModel.html#method_updateRecord"
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProviderModel\u003A\u003A\u0024data",
             "name": "data",
@@ -1568,7 +1578,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProviderModel\u003A\u003A\u0024selectQuery",
             "name": "selectQuery",
-            "summary": "",
+            "summary": "base\u0020select\u0020query",
             "url": "classes/Framework-App-Models-ProviderModel.html#property_selectQuery"
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProvinceModel",
@@ -1941,10 +1951,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Models-VendorModel.html#method_getOne"
         },                {
-            "fqsen": "\\Framework\\App\\Models\\VendorModel\u003A\u003Aupdate\u0028\u0029",
-            "name": "update",
+            "fqsen": "\\Framework\\App\\Models\\VendorModel\u003A\u003AupdateRecord\u0028\u0029",
+            "name": "updateRecord",
             "summary": "",
-            "url": "classes/Framework-App-Models-VendorModel.html#method_update"
+            "url": "classes/Framework-App-Models-VendorModel.html#method_updateRecord"
         },                {
             "fqsen": "\\Framework\\App\\Models\\VendorModel\u003A\u003Avendor_ac\u0028\u0029",
             "name": "vendor_ac",
@@ -2033,7 +2043,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\Core\\Model\u003A\u003AsetInt\u0028\u0029",
             "name": "setInt",
-            "summary": "",
+            "summary": "sets\u0020value\u0020as\u0020int",
             "url": "classes/Framework-Core-Model.html#method_setInt"
         },                {
             "fqsen": "\\Framework\\Core\\Model\u003A\u003AsetLongText\u0028\u0029",
@@ -2645,6 +2655,16 @@ Search.appendIndex(
             "name": "mysql_log",
             "summary": "",
             "url": "classes/Framework-Logger-Log.html#property_mysql_log"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Admin",
+            "name": "Admin",
+            "summary": "Short\u0020Admin\u0020Description",
+            "url": "classes/Framework-App-Controllers-Admin.html"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Admin\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "inherit\u0020parent\u0020construct",
+            "url": "classes/Framework-App-Controllers-Admin.html#method___construct"
         },                {
             "fqsen": "\\",
             "name": "\\",

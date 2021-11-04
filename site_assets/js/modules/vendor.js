@@ -4,6 +4,7 @@ const Vendor = (function () {
     const base_url = "/vendors"
     //Fields
     const _vendor_company_id = document.getElementById("vendor_company_id")
+    const _form_edit_vendor = document.getElementById("form_edit_vendor")
     const _vendor_name = document.getElementById("vendor_name")
     const _vendor_id = document.getElementById("vendor_id")
     const _vendor_show_online = document.getElementById("vendor_show_online")
@@ -14,6 +15,25 @@ const Vendor = (function () {
     const _vendor_enabled = document.getElementById("vendor_enabled")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let globalSelectedVendor = false
+    let form_rules = {
+        rules: {
+            vendor_sku: {
+                required: true,
+            },
+            vendor_company_id: {
+                required: true,
+            },
+        },
+        messages: {
+            vendor_sku: {
+                required: "Field Required",
+            },
+            vendor_company_id: {
+                required: "Field Required",
+            },
+        },
+    }
+    
     /**
      * handel errors
      *

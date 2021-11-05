@@ -80,7 +80,7 @@
         }
 
         /**
-         * edit
+         * load edit provider page
          *
          * Loads Provider Edit
          */
@@ -106,6 +106,19 @@
                     "data" => array(
                         //"toggle" => "tooltip",
                         //"original-title" => "tooltip",
+                    ),
+
+                );
+                $buttons["new"] = array(
+                    "type" => "a",
+                    "href" => "/providers/new",
+                    "classes" => "btn btn-primary waves-light",
+                    "icon" => "fas fa-plus",
+                    "id" => "button_add_provider_page_heading",
+                    "text" => "new provider",
+                    "data" => array(
+                        "toggle" => "tooltip",
+                        "original-title" => "tooltip",
                     ),
 
                 );
@@ -185,6 +198,7 @@
             $data = Page::getDetails(14);
             $data["is_new"] = true;
             $buttons = array();
+
             $buttons["save"] = array(
                 "type" => "button",
                 "href" => "button",

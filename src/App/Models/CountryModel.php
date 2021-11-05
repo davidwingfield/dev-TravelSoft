@@ -77,7 +77,7 @@
 
         public static function update(array $country = []): array
         {
-            $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+
             $id = Model::setInt((isset($country["id"])) ? $country["id"] : null);
             $sort_order = Model::setInt((isset($country["sort_order"])) ? $country["sort_order"] : 9999999);
             $currency_id = Model::setInt((isset($country["currency_id"])) ? $country["currency_id"] : 5);
@@ -85,6 +85,7 @@
             $iso2 = Model::setString((isset($country["iso2"])) ? $country["iso2"] : null);
             $iso3 = Model::setString((isset($country["iso3"])) ? $country["iso3"] : null);
             $note = Model::setLongText((isset($country["note"])) ? $country["note"] : null);
+            $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
             $enabled = Model::setBool((isset($country["enabled"])) ? $country["enabled"] : null);
             $created_by = Model::setInt($user_id);
             $modified_by = Model::setInt($user_id);

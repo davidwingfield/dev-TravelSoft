@@ -65,7 +65,7 @@
 
     Config::init();
     Controller::init();
-    //Email::init();
+    Email::init();
     AppIni::init($ini);
     Model::init();
     View::init();

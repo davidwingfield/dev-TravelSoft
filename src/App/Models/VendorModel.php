@@ -21,17 +21,17 @@
             SELECT 
                             COMPANY.id AS 'company_id',
                             COMPANY.name AS 'company_name',
-                            COALESCE(COMPANY.phone_1, '') AS 'company_phone_1',
-                            COALESCE(COMPANY.phone_2, '') AS 'company_phone_2',
-                            COALESCE(COMPANY.fax, '') AS 'company_fax',
-                            COALESCE(COMPANY.website, '') AS 'company_website',
-                            COALESCE(COMPANY.email, '') AS 'company_email',
+                            COMPANY.phone_1 AS 'company_phone_1',
+                            COMPANY.phone_2 AS 'company_phone_2',
+                            COMPANY.fax AS 'company_fax',
+                            COMPANY.website AS 'company_website',
+                            COMPANY.email AS 'company_email',
                             COMPANY.enabled AS 'company_enabled',
                             COMPANY.created_by AS 'company_created_by',
                             DATE_FORMAT(COMPANY.date_created, '%m/%d/%Y') AS 'company_date_created',
                             COMPANY.modified_by AS 'company_modified_by',
                             DATE_FORMAT(COMPANY.date_modified, '%m/%d/%Y') AS 'company_date_modified',
-                            COALESCE(COMPANY.status_id, 10) AS 'company_status_id',
+                            COMPANY.status_id AS 'company_status_id',
                             COMPANY.note AS 'company_note',
                             VENDOR.id AS 'vendor_id',
                             VENDOR.company_id AS 'vendor_company_id',
@@ -180,7 +180,8 @@
                 if ($vendor_id) {
                     return self::get($vendor_id);
                 }
-                Log::$debug_log->error("No Vendor Id");
+
+                //Log::$debug_log->error("No Vendor Id");
 
                 return [];
             } catch (Exception $e) {

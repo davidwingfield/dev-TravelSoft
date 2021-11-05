@@ -1,9 +1,57 @@
 <?php
+    $id = "";
     $page_data = [];
+    $role_id = "";
+    $email = "";
+    $name_first = "";
+    $name_last = "";
+    $username = "";
+    $role = "";
     if (isset($data)) {
         $page_data = $data;
     }
+    if (isset($page_data["user_details"])) {
+        extract($page_data["user_details"]);
+    }
+
 ?>
-<section id="page_dashboard_index">
+<section id="page_profile_page">
+    <div class="row" style="">
+        <div class="col-lg-8" style="">
+            <div id="profile_card" class="card" style="">
+                <img id="profile_card_cover_image" class="card-img-top w-full" src="/public/img/backgrounds/48.jpg">
+                <div class="card-block wall-person-info">
+                    <a class="avatar bg-white img-bordered person-avatar">
+                        <img src="/public/img/2.jpg">
+                    </a>
+                    <h2 class="person-name">
+                        <a href="javascript:void(0)" id="profile_edit_name"><span id="profile_edit_name" class="profile_name_edit"><?php echo $name_first; ?>&nbsp;<?php echo $name_last; ?></span></a>
+                    </h2>
+                    <p class="card-text">
+                        <a href="#" class="blue-grey-400"><?php echo $email; ?></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4" style="">
+            <div class="card card-block">
+                <h4 class="card-title">About me</h4>
+                <p class="card-text">
+                    Id non occaecat culpa ad. Duis tempor velit cillum sit. Aute laborum ex sint anim
+                    nostrud commodo labore quis. Pariatur voluptate veniam duis ad culpa.
+                    <a href="#">Read more...</a>
+                </p>
+            </div>
+        </div>
+    
+    </div>
+    
+    <div>
+        <?php
+            echo "<pre>" . var_export($page_data["user_details"], 1) . "</pre>";
+        ?>
+    </div>
 
 </section>
+

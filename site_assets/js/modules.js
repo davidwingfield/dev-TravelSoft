@@ -28,5 +28,6 @@ exports.modules = [
     "./site_assets/js/modules/login.js",
     "./site_assets/js/modules/provider.js",
     "./site_assets/js/modules/product.js",
+    "./site_assets/js/modules/profile_card.js",
     "./site_assets/js/modules/site.js",
 ]

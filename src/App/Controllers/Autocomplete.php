@@ -3,6 +3,7 @@
     namespace Framework\App\Controllers;
 
     use Framework\Core\Controller;
+    use Framework\Logger\Log;
 
     /**
      * Autocomplete
@@ -34,8 +35,8 @@
             $st = "";
             extract($_GET);
             $results = Vendor::autocomplete($st);
-            header("Content-type:application/json");
             // ----
+            header("Content-type:application/json");
             echo json_encode($results);
             exit(1);
         }

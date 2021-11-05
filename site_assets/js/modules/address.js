@@ -7,7 +7,12 @@ const Address = (function () {
     const _button_close_edit_address_form = document.getElementById("button_close_edit_address_form")
     const _button_clear_form_edit_address = document.getElementById("button_clear_form_edit_address")
     const _button_submit_form_edit_address = document.getElementById("button_submit_form_edit_address")
-    //Blocks
+    /**
+     * _form_edit_address
+     *
+     * @type {HTMLElement}
+     * @private
+     */
     const _form_edit_address = document.getElementById("form_edit_address")
     const _card_edit_address_form = document.getElementById("card_edit_address_form")
     //Tables
@@ -103,8 +108,6 @@ const Address = (function () {
     
     /**
      * save address form data
-     *
-     * @param params
      */
     const save = function () {
         let dataToSend = build()

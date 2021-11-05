@@ -57,6 +57,7 @@
     Router::post($routeLead . "/vendors/update", "Vendor@serveUpdate");
     Router::post($routeLead . "/companies/update", "Company@serveUpdate");
     Router::post($routeLead . "/packages/update", "Country@serveUpdate");
+    Router::post($routeLead . "/users/update", "User@serveUpdateUser");
     Router::post($routeLead . "/seasons/update", "Province@serveUpdate");
     Router::post($routeLead . "/variants/update", "City@serveUpdate");
     Router::post($routeLead . "/profiles/update", "Province@serveUpdate");

@@ -46,7 +46,7 @@
                 $params["product_id"] = (int)$params["product_id"];
             }
             View::render_json($params);
-            exit;
+            exit(1);
         }
 
         public static function login(array $params = []): void
@@ -122,16 +122,99 @@
                     $tempPassword = self::generateRandomPassword();
                     $tempSalt = self::generateRandomSalt();
                     $tempPasswordHash = self::generatePasswordHash($tempPassword, $tempSalt);
-                    $user["pass"] = $tempPasswordHash;
-                    $user["salt"] = $tempSalt;
-                    if (self::sendPasswordResetEmail($user, $tempPassword)) {
+                    $user["gen_pass"] = $tempPasswordHash;
+                    $user["gen_salt"] = $tempSalt;
+
+                    $results = UserModel::update($user);
+                    if (isset($results[0])) {
+                        $results = $results[0];
+                        if (self::sendPasswordResetEmail($results, $tempPassword)) {
+                            $results["emailed"] = true;
+                        } else {
+                            $results["emailed"] = true;
+                        }
                         /** Render View. */
-                        View::render_json($user);
+                        View::render_json($results);
                         exit(1);
                     }
-
                 }
             }
+        }
+
+        public static function serveUpdateUser(array $params = [])
+        {
+            $user = array();
+            $role = "";
+            if (!isset($params["email"], $params["name_first"], $params["name_last"])) {
+                View::render_invalid_json("Missing Fields");
+                exit(1);
+            }
+
+            $name_first = (isset($params["name_first"])) ? $params["name_first"] : null;
+            $name_last = (isset($params["name_last"])) ? $params["name_last"] : null;
+            $email = $params["email"];
+            $username = (!isset($params["username"])) ? self::generateUserName($name_first, $name_last) : $params["username"];
+            $userCount = UserModel::countByUsername($username);
+            $emailCount = UserModel::countByEmail($email);
+            $role_id = (isset($params["role_id"])) ? $params["role_id"] : 1;
+            $roles = UserModel::getRoleByRoleId((int)$role_id);
+            if (isset($roles[0])) {
+                $roles = $roles[0];
+            }
+            if (isset($roles["name"])) {
+                $role = ucwords($roles["name"]);
+            }
+
+            $params["role"] = $role;
+            // ----
+            if (!isset($params["id"])) {
+                if ($userCount > 0) {
+                    $username = $username . $userCount;
+                }
+                if ($emailCount > 0) {
+                    /** Render Invalid View. */
+                    View::render_invalid_json("Email is in use - $email");
+                    exit(1);
+                }
+
+                $salt = (!isset($params["salt"])) ? self::generateRandomSalt() : $params["salt"];
+                $hashed_pass = self::generatePasswordHash($params["password"], $salt);
+                $params["username"] = $username;
+                $params["user_count"] = $userCount;
+                $params["email_count"] = $emailCount;
+                $params["salt"] = $salt;
+                $params["role_id"] = $role_id;
+
+                $params["pass"] = $hashed_pass;
+            } else {
+                $updateUser = UserModel::get($params["id"]);
+                if (isset($updateUser, $updateUser[0])) {
+                    $updateUser = $updateUser[0];
+                    $params["pass"] = $updateUser["pass"];
+                    $params["salt"] = $updateUser["salt"];
+                    $params["username"] = $updateUser["username"];
+                }
+            }
+
+            $user = UserModel::update($params);
+            if (isset($user[0])) {
+                $user = $user[0];
+            }
+
+            View::render_json($user);
+            exit(1);
+        }
+
+        private static function generateUserName(string $name_first = "", string $name_last = ""): string
+        {
+            $generated_username = "";
+            if ($name_first !== "" && $name_last !== "") {
+                $name_first = strtolower($name_first);
+                $name_last = strtolower($name_last);
+                $generated_username = $name_first . "_" . $name_last;
+            }
+
+            return $generated_username;
         }
 
         private static function sendPasswordResetEmail(array $user, string $tempPassword): bool
@@ -212,7 +295,7 @@
          */
         public static function generatePasswordHash(string $password, string $salt): string
         {
-            $_password = hash("sha512", "Swindon4");
+            $_password = hash("sha512", $password);
 
             return hash("sha512", $_password . $salt);
         }

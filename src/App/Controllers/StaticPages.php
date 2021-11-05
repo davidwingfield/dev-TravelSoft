@@ -3,6 +3,7 @@
     namespace Framework\App\Controllers;
 
     use Framework\App\Models\PageModel;
+    use Framework\App\Models\UserModel;
     use Framework\Core\Controller;
     use Framework\Core\View;
     use Framework\Logger\Log;
@@ -27,6 +28,11 @@
         public static function profile()
         {
             $data = Page::getDetails(13);
+            $results = UserModel::get((int)$_SESSION["user_id"]);
+            if (isset($results[0])) {
+                $results = $results[0];
+            }
+            $data["user_details"] = $results;
             define("BREADCRUMBS", "
             <li class='breadcrumb-item'>
                 <a href='/'>

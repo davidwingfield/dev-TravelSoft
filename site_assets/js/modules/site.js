@@ -21,6 +21,8 @@ $(document).ready(function () {
     
     if (mdbPreloader) {
         //$("#mdb-preloader").fadeOut(500)
+    } else {
+        console.log("no preloader")
     }
     
     new WOW().init()

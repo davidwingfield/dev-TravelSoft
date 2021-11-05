@@ -3,37 +3,23 @@ const Company = (function () {
     
     const _form_edit_company = document.getElementById("form_edit_company")
     const _company_enabled = document.getElementById("company_enabled")
+    const _company_name = document.getElementById("company_name")
     const _company_phone_1 = document.getElementById("company_phone_1")
     const _company_phone_2 = document.getElementById("company_phone_2")
     const _company_fax = document.getElementById("company_fax")
     const _company_email = document.getElementById("company_email")
     const _company_website = document.getElementById("company_website")
     const _provider_company_id = document.getElementById("provider_company_id")
-    //
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    
-    let phoneIT = false
-    let phoneUS = false
-    let validator
-    let globalSelectedCompany = false
-    let validated = false
-    let suggestionsTempCompany = []
-    let form_rules = {
+    const _company_cover_image = document.getElementById("company_cover_image")
+    const _provider_name = document.getElementById("provider_name")
+    const form_rules = {
         rules: {
-            provider_name: {
+            company_name: {
                 required: true,
             },
-            company_phone_1: {
-                required: true,
-            },
-            company_phone_2: {
-                phoneUS: phoneUS,
-                phoneIT: phoneIT,
-            },
-            company_fax: {
-                phoneUS: phoneUS,
-                phoneIT: phoneIT,
-            },
+            company_phone_1: {},
+            company_phone_2: {},
+            company_fax: {},
             company_email: {
                 email: true,
             },
@@ -42,22 +28,12 @@ const Company = (function () {
             },
         },
         messages: {
-            provider_name: {
+            company_name: {
                 required: "Field Required",
             },
-            company_phone_1: {
-                required: "Field Required",
-                phoneUS: "Field Invalid",
-                phoneIT: "Field Invalid",
-            },
-            company_phone_2: {
-                phoneUS: "Field Invalid",
-                phoneIT: "Field Invalid",
-            },
-            company_fax: {
-                phoneUS: phoneUS,
-                phoneIT: phoneIT,
-            },
+            company_phone_1: {},
+            company_phone_2: {},
+            company_fax: {},
             company_email: {
                 email: "Field Invalid",
             },
@@ -66,6 +42,19 @@ const Company = (function () {
             },
         },
     }
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    
+    let phoneIT = false
+    let phoneUS = false
+    let validator
+    let globalSelectedCompany = false
+    let validated = false
+    let suggestionsTempCompany = []
+    
+    $(_provider_name)
+      .on("change", function () {
+          $(_company_name).val($(_provider_name).val())
+      })
     //
     const add_to_company_list = function (obj) {
         if (globalSelectedCompany === false) {
@@ -163,24 +152,23 @@ const Company = (function () {
         return detail
     }
     
-    const populate_form = function () {
-        //_company_enabled.checked = (Company.detail.email)?Company.detail.email:""
-        _company_phone_1.value = (Company.detail.phone_1) ? Company.detail.phone_1 : ""
-        _company_phone_2.value = (Company.detail.phone_2) ? Company.detail.phone_2 : ""
-        _company_fax.value = (Company.detail.fax) ? Company.detail.fax : ""
-        _company_email.value = (Company.detail.email) ? Company.detail.email : ""
-        _company_website.value = (Company.detail.website) ? Company.detail.website : ""
+    const populate_form = function (company) {
+        _company_phone_1.value = (company.phone_1) ? company.phone_1 : ""
+        _company_phone_2.value = (company.phone_2) ? company.phone_2 : ""
+        _company_fax.value = (company.fax) ? company.fax : ""
+        _company_email.value = (company.email) ? company.email : ""
+        _company_website.value = (company.website) ? company.website : ""
     }
     
     const init = function (company) {
         if (company) {
-            set_detail(company)
+            let detail = set_detail(company)
+            populate_form(detail)
         }
         
         if (_form_edit_company) {
             validator_init(form_rules)
             validator = $(_form_edit_company).validate()
-            populate_form()
             
         }
     }
@@ -188,11 +176,12 @@ const Company = (function () {
     const build = function () {
         if (validate_form()) {
             return {
-                email: Company.detail.email,
-                enabled: Company.detail.enabled,
-                fax: _company_fax.value,
+                email: $(_company_email).val(),
+                //enabled: (_company_enabled.checked === true) ? 1 : 0,
+                enabled: 1,
+                fax: $(_company_fax).val(),
                 id: (!isNaN(_provider_company_id.value)) ? parseInt(_provider_company_id.value) : null,
-                modified_by: Company.detail.modified_by,
+                modified_by: user_id,
                 name: Company.detail.name,
                 note: Company.detail.note,
                 phone_1: Company.detail.phone_1,
@@ -227,6 +216,9 @@ const Company = (function () {
         },
         company_exists: function (name) {
             company_exists(name)
+        },
+        populate_form: function (company) {
+            populate_form(company)
         },
         init: function (company) {
             init(company)

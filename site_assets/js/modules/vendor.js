@@ -13,6 +13,10 @@ const Vendor = (function () {
     const _vendor_is_provider = document.getElementById("vendor_is_provider")
     const _vendor_sku = document.getElementById("vendor_sku")
     const _vendor_enabled = document.getElementById("vendor_enabled")
+    const _provider_edit = document.getElementById("provider_edit")
+    const _provider_name = document.getElementById("provider_name")
+    const _provider_company_id = document.getElementById("provider_company_id")
+    let validator
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let globalSelectedVendor = false
     let form_rules = {
@@ -20,7 +24,7 @@ const Vendor = (function () {
             vendor_sku: {
                 required: true,
             },
-            vendor_company_id: {
+            vendor_name: {
                 required: true,
             },
         },
@@ -28,22 +32,11 @@ const Vendor = (function () {
             vendor_sku: {
                 required: "Field Required",
             },
-            vendor_company_id: {
+            vendor_name: {
                 required: "Field Required",
             },
         },
     }
-    
-    /**
-     * handel errors
-     *
-     * @param msg
-     */
-    const handle_vendor_error = function (msg) {
-        toastr.error(msg)
-    }
-    
-    // ----
     
     const init_autocomplete = function () {
         if (_vendor_name) {
@@ -77,11 +70,11 @@ const Vendor = (function () {
                       if (!suggestion.data) {
                           return
                       }
-                      let vendor = (suggestion.data.vendor_detail) ? suggestion.data.vendor_detail : {}
-                      let company = (suggestion.data.company_detail) ? suggestion.data.company_detail : {}
-                      let contacts = []
-                      let addresses = []
-                      log("vendor", vendor)
+                      //let vendor = (suggestion.data.vendor_detail) ? suggestion.data.vendor_detail : {}
+                      //let company = (suggestion.data.company_detail) ? suggestion.data.company_detail : {}
+                      //let contacts = []
+                      //let addresses = []
+                      //log("vendor", vendor)
                       // --
                       //log("Provider.suggestion", suggestion.data)
                       //globalSelectedProvider = true
@@ -93,13 +86,38 @@ const Vendor = (function () {
         }
     }
     
+    /**
+     * handel errors
+     *
+     * @param msg
+     */
+    const handle_vendor_error = function (msg) {
+        toastr.error(msg)
+    }
+    
+    const build = function () {
+        if (validate_form()) {
+            let vendor = {
+                id: (!isNaN(parseInt(_vendor_id.value))),
+                show_online: (_vendor_show_online.checked === true),
+                show_sales: (_vendor_show_sales.checked === true),
+                show_ops: (_vendor_show_ops.checked === true),
+                is_provider: (_vendor_is_provider.checked === true),
+                sku: _vendor_sku.value,
+            }
+            return remove_nulls(vendor)
+        }
+    }
+    
     const vendor_exists = function (name) {
+        
         if (name && name !== "") {
             let dataToSend = {
                 name: name,
             }
             
             fetch_vendor_by_name(dataToSend, function (data) {
+                
                 let vendor_detail = {}
                 if (data) {
                     if (data.length > 0) {
@@ -174,10 +192,24 @@ const Vendor = (function () {
             
             if (vendor.vendor_detail) {
                 vendor_detail = vendor.vendor_detail
+                detail.id = (vendor_detail.id) ? vendor_detail.id : null
+                detail.status_id = (vendor_detail.status_id) ? vendor_detail.status_id : null
+                detail.show_online = vendor_detail.show_online
+                detail.show_sales = vendor_detail.show_sales
+                detail.show_ops = vendor_detail.show_ops
+                detail.is_provider = vendor_detail.is_provider
+                detail.sku = (vendor_detail.sku) ? vendor_detail.sku : null
+                detail.enabled = vendor_detail.enabled
+                detail.date_created = (vendor_detail.date_created) ? vendor_detail.date_created : formatDateMySQL()
+                detail.created_by = (vendor_detail.created_by) ? vendor_detail.created_by : created_by
+                detail.date_modified = (vendor_detail.date_modified) ? vendor_detail.date_modified : formatDateMySQL()
+                detail.modified_by = (vendor_detail.modified_by) ? vendor_detail.modified_by : modified_by
+                detail.note = (vendor_detail.note) ? vendor_detail.note : null
             }
             
             if (vendor.company_detail) {
                 company_detail = vendor.company_detail
+                detail.company_id = (company_detail.id) ? company_detail.id : null
             }
             
             if (vendor.contacts) {
@@ -187,24 +219,6 @@ const Vendor = (function () {
             if (vendor.addresses) {
                 addresses = vendor.addresses
             }
-            
-            detail.id = (vendor_detail.id) ? vendor_detail.id : null
-            detail.company_id = (company_detail.id) ? company_detail.id : null
-            detail.status_id = (vendor_detail.status_id) ? vendor_detail.status_id : null
-            detail.show_online = vendor_detail.show_online
-            detail.show_sales = vendor_detail.show_sales
-            detail.show_ops = vendor_detail.show_ops
-            detail.is_provider = vendor_detail.is_provider
-            detail.sku = (vendor_detail.sku) ? vendor_detail.sku : null
-            detail.enabled = vendor_detail.enabled
-            detail.date_created = (vendor_detail.date_created) ? vendor_detail.date_created : formatDateMySQL()
-            detail.created_by = (vendor_detail.created_by) ? vendor_detail.created_by : created_by
-            detail.date_modified = (vendor_detail.date_modified) ? vendor_detail.date_modified : formatDateMySQL()
-            detail.modified_by = (vendor_detail.modified_by) ? vendor_detail.modified_by : modified_by
-            detail.note = (vendor_detail.note) ? vendor_detail.note : null
-            //detail.company = company_detail
-            //detail.addresses = addresses
-            //detail.contacts = contacts
         }
         
         Vendor.detail = detail
@@ -238,8 +252,19 @@ const Vendor = (function () {
     const populate_form = function (vendor) {
         let detail = set_detail(vendor)
         _vendor_name.value = (detail.company.name) ? detail.company.name : ""
-        _vendor_id.value = (detail.id) ? detail.id : ""
         _vendor_company_id.value = (detail.company.id) ? detail.company.id : ""
+        
+        if (_provider_edit) {
+            if (_provider_name) {
+                _vendor_name.value = _provider_name.value
+            }
+            
+            if (_provider_company_id) {
+                _vendor_company_id.value = _provider_company_id.value
+            }
+        }
+        
+        _vendor_id.value = (detail.id) ? detail.id : ""
         _vendor_sku.value = (detail.sku) ? detail.sku : ""
         _vendor_show_online.checked = (detail.show_online === 1)
         _vendor_show_sales.checked = (detail.show_sales === 1)
@@ -260,6 +285,10 @@ const Vendor = (function () {
         })
         
         console.log(" Vendor.all", Vendor.all)
+    }
+    
+    const validate_form = function () {
+        return $(_form_edit_vendor).valid()
     }
     
     const init = function (settings) {
@@ -300,6 +329,25 @@ const Vendor = (function () {
         if (_vendor_show_sales) {
             _vendor_show_sales.checked = (settings.show_sales) ? (settings.show_sales === 1) : true
         }
+        
+        if (_form_edit_vendor) {
+            validator_init(form_rules)
+            validator = $(_form_edit_vendor).validate()
+        }
+    }
+    
+    /**
+     * disables fields unused from provider edit
+     */
+    const setProvider = function () {
+        if (_provider_edit) {
+            _vendor_is_provider.checked = true
+            $(_vendor_is_provider).attr("readonly", true)
+            $(_vendor_name).attr("readonly", true)
+            $(_vendor_name).attr("readonly", true)
+            $(_vendor_sku).attr("readonly", true)
+            $(_vendor_is_provider).attr("readonly", true)
+        }
     }
     
     return {
@@ -307,12 +355,7 @@ const Vendor = (function () {
         detail: {},
         all: new Map(),
         setProvider: function () {
-            _vendor_is_provider.checked = true
-            _vendor_is_provider.disabled = true
-            _vendor_name.disabled = true
-            //_vendor_sku.disabled = true
-            $(_vendor_is_provider).attr("readonly", true)
-            
+            setProvider()
         },
         get: function (params) {
             get(params)
@@ -328,6 +371,9 @@ const Vendor = (function () {
         },
         init: function (settings) {
             init(settings)
+        },
+        build: function () {
+            return build()
         },
     }
     

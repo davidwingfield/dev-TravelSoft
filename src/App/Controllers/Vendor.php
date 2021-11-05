@@ -99,7 +99,13 @@
          */
         public static function autocomplete(string $st = ""): array
         {
-            return self::format_ac(VendorModel::vendor_ac($st));
+            $vendors = self::format_ac(VendorModel::vendor_ac($st));
+
+            $vendors_formatted = self::format_ac($vendors);
+
+            //Log::$debug_log->trace($vendors_formatted);
+
+            return $vendors_formatted;
         }
 
         /**
@@ -111,6 +117,7 @@
          */
         public static function validateName(array $args = []): array
         {
+
             $vendors = array();
             if (isset($args["name"])) {
                 $name = $args["name"];
@@ -121,6 +128,7 @@
                 }
             }
             // ----
+
             View::render_json($vendors);
             exit(1);
         }
@@ -194,7 +202,9 @@
          */
         private static function format(array $vendor = []): array
         {
-            $company_id = (int)$vendor["company_id"];
+            //Log::$debug_log->trace($vendor);
+            $company_id = $vendor["company_id"];
+            //Log::$debug_log->trace($company_id);
             $vendor_id = (int)$vendor["vendor_id"];
             $sku = self::generateSKU($vendor);
 
@@ -228,7 +238,7 @@
                     "date_created" => $vendor["company_date_created"],
                     "modified_by" => $vendor["company_modified_by"],
                     "date_modified" => $vendor["company_date_modified"],
-                    "status" => $vendor["company_status"],
+                    "status_id" => $vendor["company_status_id"],
                     "note" => $vendor["company_note"],
                 ),
                 "addresses" => AddressModel::getByCompanyId((int)$company_id),

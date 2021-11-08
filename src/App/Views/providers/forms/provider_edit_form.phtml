@@ -17,12 +17,7 @@
                 <!-- Panel Heading Actions -->
                 <div class="col-4 d-flex align-items-center justify-content-end" style="">
                     <div class="panel-actions p-0 m-0" style="">
-                        
-                        <div class="custom-control custom-switch" style="">
-                            <input id="provider_enabled" type="checkbox" value="1" class="custom-control-input" style="">
-                            <label for="provider_enabled" class="custom-control-label" style="">Enabled</label>
-                        </div>
-                    
+
                     </div>
                 </div>
                 <!-- /Panel Heading Actions -->
@@ -34,13 +29,57 @@
         <!-- Panel Body -->
         <div class="panel-body px-0 w-100" style="">
             
+            <div class="row">
+                
+                <!-- Provider Name -->
+                <div class="col-12 col-lg-3 " style="">
+                    <div class="form-element" style="">
+                        <label for="provider_name" style="" class="active">Provider Name:</label>
+                        <input type="text" id="provider_name" name="provider_name" class="form-control" style="" aria-label="Provider Name" placeholder="" autocomplete="off" readonly>
+                        <div id="provider_name-error" class="error w-100 text-center" style="">&nbsp;</div>
+                    </div>
+                </div>
+                <!-- /Provider Name -->
+                
+                <!-- Provider Id -->
+                <div class="col-12 col-lg-3 " style="">
+                    <div class="form-element" style="">
+                        <label for="provider_id" style="">Provider Id:</label>
+                        <input type="text" id="provider_id" name="provider_id" class="form-control" style="" aria-label="Provider Id" placeholder="" autocomplete="off" readonly/>
+                        <div id="provider_id-error" class="error w-100 text-center" style="">&nbsp;</div>
+                    </div>
+                </div>
+                <!-- /Provider Id -->
+                
+                <!-- Provider Company Id -->
+                <div class="col-12 col-lg-3 " style="">
+                    <div class="form-element" style="">
+                        <label for="provider_company_id" style="">Provider Company Id:</label>
+                        <input type="text" id="provider_company_id" name="provider_company_id" class="form-control" style="" aria-label="Provider Id" placeholder="" autocomplete="off" readonly/>
+                        <div id="provider_company_id-error" class="error w-100 text-center" style="">&nbsp;</div>
+                    </div>
+                </div>
+                <!-- /Provider Company Id -->
+                
+                <!-- Provider Enabled -->
+                <div class="col-12 col-lg-2 d-flex align-self-end justify-content-end pb-2" style="">
+                    <div class="form-element">
+                        <div class="custom-control custom-switch" style="">
+                            <input id="provider_enabled" name="provider_enabled" type="checkbox" value="1" class="custom-control-input" style="">
+                            <label for="provider_enabled" class="custom-control-label p-0" style="">Enabled</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Provider Enabled -->
+            
+            </div>
             <div class="row" style="">
                 
                 <!-- Code Direct Id -->
                 <div class="col-12 col-lg-6 " style="">
                     <div class="form-element">
                         <label for="provider_code_direct_id">Code Direct Id:</label>
-                        <input type="text" id="provider_code_direct_id" name="provider_code_direct_id" class="form-control" style="" aria-label="Provider Code Direct Id" placeholder="" autocomplete="off"/>
+                        <input type="text" id="provider_code_direct_id" name="provider_code_direct_id" class="form-control" style="" aria-label="Provider Code Direct Id" placeholder="" autocomplete="off" readonly/>
                         <div id="provider_code_direct_id-error" class="error w-100 text-center">&nbsp;</div>
                     </div>
                 </div>

@@ -19,6 +19,7 @@ const Address = (function () {
     const _table_address = document.getElementById("table_address")
     //Fields
     const _address_id = document.getElementById("address_id")
+    const _company_id = document.getElementById("company_id")
     const _address_enabled = document.getElementById("address_enabled")
     const _address_street_1 = document.getElementById("address_street_1")
     const _address_street_2 = document.getElementById("address_street_2")
@@ -28,6 +29,8 @@ const Address = (function () {
     const _address_province_id = document.getElementById("address_province_id")
     const _address_city_id = document.getElementById("address_city_id")
     const _address_postal_code = document.getElementById("address_postal_code")
+    const _address_company_id = document.getElementById("address_company_id")
+    const _clear_address_table = document.getElementById("clear_address_table")
     //Defaults
     let default_display = default_address_view
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
@@ -35,8 +38,15 @@ const Address = (function () {
     let temp_address = {}
     let validator
     let form_rules = {
+        groups: {
+            cityGroup: "address_country_id address_province_id address_city_id",
+        },
         rules: {
+            
             address_types_id: {
+                required: true,
+            },
+            address_company_id: {
                 required: true,
             },
             address_country_id: {
@@ -50,6 +60,9 @@ const Address = (function () {
             },
         },
         messages: {
+            address_company_id: {
+                required: "Field Required",
+            },
             address_types_id: {
                 required: "Field Required",
             },
@@ -64,8 +77,6 @@ const Address = (function () {
             },
         },
     }
-    
-    // --
     
     /**
      * add new address
@@ -91,7 +102,11 @@ const Address = (function () {
      */
     $(_button_submit_form_edit_address)
       .on("click", function () {
-          save()
+          confirmDialog(`Would you like to update?`, (ans) => {
+              if (ans) {
+                  save()
+              }
+          })
       })
     
     /**
@@ -104,7 +119,13 @@ const Address = (function () {
           unload_form()
       })
     
-    // --
+    /**
+     * clear address table button
+     */
+    $(_clear_address_table)
+      .on("click", function () {
+          Address.clear_table()
+      })
     
     /**
      * save address form data
@@ -112,28 +133,88 @@ const Address = (function () {
     const save = function () {
         let dataToSend = build()
         if (dataToSend) {
-            console.log("dataToSend", dataToSend)
+            update_address(dataToSend, function (data) {
+                if (data) {
+                    if (data[0]) {
+                        let address = data[0]
+                        let detail = set_detail(address)
+                        
+                        if (Address.all.get(detail.id)) {
+                            $address_table.updateRow(detail)
+                        } else {
+                            $address_table.insertRow(detail)
+                        }
+                        
+                        Address.all.set(detail.id, detail)
+                        
+                        toastr.success("Address Updated")
+                    }
+                }
+            })
         }
     }
     
+    /**
+     * build address record to update
+     *
+     * @returns {{}|*}
+     */
     const build = function () {
+        /**
+         * address_types_id: [1]
+         * city_id: 428
+         * company_id: 1
+         * country_id: 219
+         * enabled: 1
+         * id: 1
+         * postal_code: "12345"
+         * province_id: 51
+         * street_1: "STREET 1"
+         * street_2: "STREET 2"
+         * street_3: "STREET 3"
+         */
         if (validate_form()) {
             let dataToSend = {
-                street_1: _address_street_1.value,
-                street_2: _address_street_2.value,
-                street_3: _address_street_3.value,
-                postal_code: _address_postal_code.value,
+                company_id: (!isNaN(parseInt(_address_company_id.value))) ? parseInt(_address_company_id.value) : null,
+                street_1: (_address_street_1.value !== "") ? _address_street_1.value : null,
+                street_2: (_address_street_2.value !== "") ? _address_street_2.value : null,
+                street_3: (_address_street_3.value !== "") ? _address_street_3.value : null,
+                postal_code: (_address_postal_code.value !== "") ? _address_postal_code.value : null,
                 country_id: (!isNaN(_address_country_id.value)) ? parseInt(_address_country_id.value) : null,
                 province_id: (!isNaN(_address_province_id.value)) ? parseInt(_address_province_id.value) : null,
                 city_id: (!isNaN(_address_city_id.value)) ? parseInt(_address_city_id.value) : null,
                 address_types_id: toNumbers(getListOfIds($(_address_types_id).val())),
                 enabled: (_address_enabled.checked === true) ? 1 : 0,
-                id: (!isNaN(_address_id.value)) ? parseInt(_address_id.value) : null,
+                id: (!isNaN(parseInt(_address_id.value))) ? parseInt(_address_id.value) : null,
             }
             return remove_nulls(dataToSend)
         }
     }
     
+    /**
+     * update address
+     *
+     * @param dataToSend
+     * @param callback
+     */
+    const update_address = function (dataToSend, callback) {
+        let url = "/api/v1.0/addresses/update"
+        if (dataToSend) {
+            sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                if (data) {
+                    return callback(data)
+                } else {
+                    return handle_address_error("Oops: 1")
+                }
+            })
+        }
+    }
+    
+    /**
+     * validate address form for submit
+     *
+     * @returns {*|jQuery}
+     */
     const validate_form = function () {
         return $(_form_edit_address).valid()
     }
@@ -156,6 +237,7 @@ const Address = (function () {
     const _default_detail = function () {
         return {
             id: null,
+            company_id: null,
             street_1: null,
             street_2: null,
             street_3: null,
@@ -234,7 +316,9 @@ const Address = (function () {
      */
     const populate_form = function (address) {
         if (address) {
+            
             _address_id.value = (address.id) ? address.id : null
+            _address_company_id.value = (address.company_id) ? address.company_id : null
             $(_address_types_id).val((address.address_types_id) ? address.address_types_id : [])
             _address_enabled.checked = (address.enabled === 1)
             _address_street_1.value = (address.street_1) ? address.street_1 : null
@@ -254,6 +338,7 @@ const Address = (function () {
      */
     const reset_form = function () {
         _address_id.value = ""
+        _address_company_id.value = _company_id.value
         $(_address_types_id).val([])
         _address_enabled.checked = true
         _address_street_1.value = ""
@@ -324,16 +409,27 @@ const Address = (function () {
      */
     const load_all = function (addresses) {
         Address.all = new Map()
-        
-        if (addresses) {
-            $.each(addresses, function (i, address) {
-                let detail = set_detail(address)
-                Address.all.set(detail.id, detail)
-                $address_table.insertRow(detail)
-            })
+        if (!addresses) {
+            return
         }
+        let loadAddress
+        let count = 0
+        $.each(addresses, function (i, address) {
+            let detail = set_detail(address)
+            if (count === 0) {
+                loadAddress = detail
+            }
+            
+            Address.all.set(detail.id, detail)
+            $address_table.insertRow(detail)
+            count++
+        })
         
         if (_table_address) {
+            if (loadAddress) {
+                $address_table.loadRow(loadAddress)
+            }
+            
             $address_table.clearSelectedRows()
         }
         if (_card_edit_address_form) {
@@ -450,6 +546,7 @@ const Address = (function () {
                 note: (address.city.note) ? address.city.note : null,
             }
             detail.id = parseInt((address.id) ? address.id : null)
+            detail.company_id = parseInt((address.company_id) ? address.company_id : null)
             detail.address_types_id = getListOfIds(address.address_types_id)
             detail.short_address_formatted = (address.short_address_formatted) ? address.short_address_formatted : null
             detail.medium_address_formatted = (address.medium_address_formatted) ? address.medium_address_formatted : null
@@ -482,6 +579,19 @@ const Address = (function () {
     }
     
     /**
+     * clear and empty table
+     */
+    const clear_table = function () {
+        let addresses = Array.from(Address.all.values())
+        
+        $.each(addresses, function (k, address) {
+            $address_table.deleteRow(address)
+        })
+        
+        Address.all = new Map()
+    }
+    
+    /**
      * globals
      */
     return {
@@ -496,6 +606,9 @@ const Address = (function () {
         },
         save: function (params) {
             save(params)
+        },
+        clear_table: function () {
+            clear_table()
         },
         init: function (addresses) {
             init(addresses)

@@ -753,13 +753,11 @@ const Location = (function () {
     }
     
     const build = function () {
-        let err = $("<span class='invalid'>Field Required</span>")
-        let location = (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null
+        //let err = $("<span class='invalid'>Field Required</span>")
+        //let location = (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null
         
         if (validate_edit_location_filter_form()) {
-            return {
-                location_id: (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null,
-            }
+            return Location.detail
         }
     }
     

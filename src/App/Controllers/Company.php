@@ -27,6 +27,16 @@
             parent::__construct();
         }
 
+        /**
+         * autocomplete
+         *
+         * Autocomplete json
+         */
+        public static function autocomplete(string $st = ""): array
+        {
+            return self::format_ac(CompanyModel::company_ac($st));
+        }
+
         public static function validateName(array $args = []): array
         {
             $companies = array();
@@ -47,14 +57,43 @@
 
         public static function serveUpdate(array $params = [])
         {
-            $company = CompanyModel::updateRecord($params);
+            $companies = [];
+
+            $results = CompanyModel::updateRecord($params);
+            foreach ($results AS $company) {
+                $companies[] = self::format($company);
+            }
             // ----
-            View::render_json($company);
+            View::render_json($companies);
             exit(1);
+        }
+
+        /**
+         * format autocomplete results
+         *
+         * @param array $providers
+         *
+         * @return array
+         */
+        private static function format_ac(array $companies = []): array
+        {
+            $data["suggestions"] = [];
+            foreach ($companies AS $k => $company) {
+                $l = (object)$company;
+                $value = utf8_encode($l->company_name);
+                array_push($data["suggestions"], [
+                    "value" => utf8_encode($value),
+                    "data" => self::format($company),
+                ]);
+            }
+
+            return $data;
         }
 
         private static function format(array $company): array
         {
+            Log::$debug_log->trace($company);
+
             return array(
                 "id" => $company["company_id"],
                 "name" => $company["company_name"],
@@ -62,6 +101,7 @@
                 "phone_2" => $company["company_phone_2"],
                 "fax" => $company["company_fax"],
                 "website" => $company["company_website"],
+                "cover_image" => $company["company_cover_image"],
                 "email" => $company["company_email"],
                 "status_id" => $company["company_status_id"],
                 "enabled" => $company["company_enabled"],

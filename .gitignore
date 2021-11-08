@@ -8,3 +8,4 @@ var/logs/
 /bin/objectGenerator/models/
 /bin/objectGenerator/scripts/
 node_modules/
+.ini

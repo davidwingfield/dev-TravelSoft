@@ -3,11 +3,14 @@ const Contact = (function () {
     //Path
     const base_url = "/contacts"
     //Buttons
+    const _clear_contact_table = document.getElementById("clear_contact_table")
     const _button_add_contact_table = document.getElementById("button_add_contact_table")
     const _button_clear_form_edit_contact = document.getElementById("button_clear_form_edit_contact")
     const _button_close_edit_contact_form = document.getElementById("button_close_edit_contact_form")
     const _button_submit_form_edit_contact = document.getElementById("button_submit_form_edit_contact")
     //Fields
+    const _company_id = document.getElementById("company_id")
+    const _contact_company_id = document.getElementById("contact_company_id")
     const _contact_id = document.getElementById("contact_id")
     const _contact_name_first = document.getElementById("contact_name_first")
     const _contact_name_last = document.getElementById("contact_name_last")
@@ -73,7 +76,13 @@ const Contact = (function () {
      */
     $(_button_submit_form_edit_contact)
       .on("click", function () {
-          save()
+          if (validate_form()) {
+              confirmDialog(`Would you like to update?`, (ans) => {
+                  if (ans) {
+                      save()
+                  }
+              })
+          }
       })
     
     $(_button_add_contact_table)
@@ -96,7 +105,10 @@ const Contact = (function () {
           hide_form()
       })
     
-    // ----
+    $(_clear_contact_table)
+      .on("click", function () {
+          Contact.clearTable()
+      })
     
     /**
      * validate contact form
@@ -113,18 +125,19 @@ const Contact = (function () {
      * @returns {{}|*}
      */
     const build = function () {
-        if (validate_form()) {
-            let dataToSend = {
-                name_first: _contact_name_first.value,
-                name_last: _contact_name_last.value,
-                email: _contact_email.value,
-                phone: _contact_phone.value,
-                contact_types_id: toNumbers(getListOfIds($(_contact_types_id).val())),
-                enabled: (_contact_enabled.checked === true) ? 1 : 0,
-                id: (!isNaN(_contact_id.value)) ? parseInt(_contact_id.value) : null,
-            }
-            return remove_nulls(dataToSend)
+        
+        let dataToSend = {
+            name_first: _contact_name_first.value,
+            name_last: _contact_name_last.value,
+            email: _contact_email.value,
+            phone: _contact_phone.value,
+            contact_types_id: toNumbers(getListOfIds($(_contact_types_id).val())),
+            enabled: (_contact_enabled.checked === true) ? 1 : 0,
+            company_id: (!isNaN(_contact_company_id.value)) ? parseInt(_contact_company_id.value) : null,
+            id: (!isNaN(_contact_id.value)) ? parseInt(_contact_id.value) : null,
         }
+        return remove_nulls(dataToSend)
+        
     }
     
     /**
@@ -174,9 +187,47 @@ const Contact = (function () {
     const save = function () {
         let dataToSend = build()
         if (dataToSend) {
-            console.log("dataToSend", dataToSend)
+            update_contact(dataToSend, function (data) {
+                console.log(data)
+                if (data) {
+                    if (data[0]) {
+                        let contact = data[0]
+                        let detail = set_detail(contact)
+                        
+                        if (Contact.all.get(detail.id)) {
+                            $contact_table.updateRow(detail)
+                        } else {
+                            $contact_table.insertRow(detail)
+                        }
+                        
+                        Contact.all.set(detail.id, detail)
+                        
+                        toastr.success("Contact Updated")
+                    }
+                    
+                }
+            })
         }
         
+    }
+    
+    /**
+     * update contact
+     *
+     * @param dataToSend
+     * @param callback
+     */
+    const update_contact = function (dataToSend, callback) {
+        let url = "/api/v1.0/contacts/update"
+        if (dataToSend) {
+            sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                if (data) {
+                    return callback(data)
+                } else {
+                    return handle_contact_error("Oops: 1")
+                }
+            })
+        }
     }
     
     /**
@@ -188,6 +239,7 @@ const Contact = (function () {
     const _default_detail = function () {
         return {
             id: null,
+            company_id: null,
             name_first: null,
             name_last: null,
             formatted_types: "",
@@ -235,6 +287,7 @@ const Contact = (function () {
      */
     const populate_form = function (contact) {
         clear_form()
+        _contact_company_id.value = _company_id.value
         if (contact) {
             _contact_id.value = validInt(contact.id)
             _contact_name_first.value = (contact.name_first) ? contact.name_first : null
@@ -275,6 +328,7 @@ const Contact = (function () {
         let detail = _default_detail()
         if (contact) {
             detail.id = (contact.id) ? contact.id : null
+            detail.company_id = (contact.company_id) ? contact.company_id : null
             detail.name_first = (contact.name_first) ? contact.name_first : null
             detail.name_last = (contact.name_last) ? contact.name_last : null
             detail.formatted_types = (contact.formatted_types) ? contact.formatted_types : ""
@@ -312,6 +366,10 @@ const Contact = (function () {
             $contact_table.insertRow(detail)
         })
         
+        if (contacts[0]) {
+            $contact_table.loadRow(contacts[0])
+        }
+        
         //console.log(" Contact.all", Contact.all)
     }
     
@@ -347,12 +405,26 @@ const Contact = (function () {
     }
     
     /**
+     * clear and empty table
+     */
+    const clearTable = function () {
+        let contacts = Array.from(Contact.all.values())
+        $.each(contacts, function (k, contact) {
+            $contact_table.deleteRow(contact)
+        })
+        Contact.all = new Map()
+    }
+    
+    /**
      * globals
      */
     return {
         validator: null,
         detail: {},
         all: new Map(),
+        clearTable: function () {
+            clearTable()
+        },
         navigate: function (contact) {
             navigate(contact)
         },

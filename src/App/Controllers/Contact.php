@@ -27,6 +27,18 @@
             return [];
         }
 
+        public static function serveUpdate(array $params = [])
+        {
+            $contacts = [];
+            $results = ContactModel::update($params);
+            foreach ($results AS $contact) {
+                $contacts[] = self::format($contact);
+            }
+            // ----
+            View::render_json($contacts);
+            exit(1);
+        }
+
         public static function get(array $params = null): array
         {
             $temp = array();

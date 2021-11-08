@@ -43,6 +43,7 @@
     Router::get($routeLead . "/autocomplete/variants", "Autocomplete@variants");
     Router::get($routeLead . "/autocomplete/units", "Autocomplete@units");
     Router::get($routeLead . "/autocomplete/locations", "Autocomplete@locations");
+    Router::get($routeLead . "/autocomplete/companies", "Autocomplete@companies");
 
     /**
      * login requests
@@ -53,9 +54,11 @@
      * update requests
      */
     Router::post($routeLead . "/users/reset_password", "User@serveResetPassword");
+    Router::post($routeLead . "/contacts/update", "Contact@serveUpdate");
     Router::post($routeLead . "/providers/update", "Provider@serveUpdate");
     Router::post($routeLead . "/vendors/update", "Vendor@serveUpdate");
     Router::post($routeLead . "/companies/update", "Company@serveUpdate");
+    Router::post($routeLead . "/addresses/update", "Address@serveUpdate");
     Router::post($routeLead . "/packages/update", "Country@serveUpdate");
     Router::post($routeLead . "/users/update", "User@serveUpdateUser");
     Router::post($routeLead . "/seasons/update", "Province@serveUpdate");

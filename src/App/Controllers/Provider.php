@@ -359,6 +359,7 @@
                 ),
                 "company" => array(
                     "id" => $provider["company_id"],
+                    "cover_image" => $provider["company_cover_image"],
                     "name" => $provider["company_name"],
                     "phone_1" => $provider["company_phone_1"],
                     "phone_2" => $provider["company_phone_2"],

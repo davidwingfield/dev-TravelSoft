@@ -2,7 +2,9 @@
 
     namespace Framework\App\Controllers;
 
+    use Framework\App\Models\AddressModel;
     use Framework\Core\Controller;
+    use Framework\Core\View;
     use Framework\Logger\Log;
 
     /**
@@ -18,6 +20,15 @@
         public function __construct()
         {
             parent::__construct();
+        }
+
+        public static function serveUpdate(array $params = [])
+        {
+            $addresses = AddressModel::update($params);
+
+            // ----
+            View::render_json($addresses);
+            exit(1);
         }
 
         private static function format_address_table(array $address = []): array
@@ -66,11 +77,11 @@
                 $streets[] = $street_3;
             }
 
-            $counter = 0;
+            $counter = 1;
             foreach ($streets AS $street) {
-                $comma = "";
+                $comma = ", ";
                 if ($counter === count($streets)) {
-
+                    $comma = "<br>";
                 }
                 $short_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>$street</span>$comma";
                 $medium_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>$street</span>$comma";
@@ -175,7 +186,7 @@
             $formattedAddress["street_2"] = $street_2;
             $formattedAddress["street_3"] = $street_3;
             $formattedAddress["postal_code"] = $postal;
-
+            $formattedAddress["company_id"] = $address["company_id"];
             $formattedAddress["id"] = $id;
             $formattedAddress["address_types_id"] = $address["address_types_id"];
             $formattedAddress["enabled"] = $enabled;

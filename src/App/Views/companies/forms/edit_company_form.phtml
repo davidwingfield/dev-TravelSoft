@@ -8,91 +8,49 @@
 <!-- Edit Company Form -->
 <form id="form_edit_company" name="form_edit_company" class="" style="" novalidate>
     
-    <!-- Panel -->
-    <section class="panel z-depth-0 w-100 mb-0" style="">
-        
-        <!-- Panel Heading -->
-        <header class="panel-heading" style="">
-            <div class="row">
-                
-                <!-- Panel Heading Title -->
-                <div class="col-8">
-                    <h4 class="panel-title">Company Details</h4>
-                </div>
-                <!-- /Panel Heading Title -->
-                
-                <!-- Panel Heading Actions -->
-                <div class="col-4 d-flex align-items-center justify-content-end" style="">
-                    <div class="panel-actions p-0 m-0" style="">
-                    </div>
-                </div>
-                <!-- /Panel Heading Actions -->
+    <!-- Card -->
+    <div class="card rgba-blue-grey-slight m-3" style="">
+        <div class="card-body">
+            <h5 class="card-title"><span>Company Details</span></h5>
+            <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
+            <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
             
-            </div>
-        </header>
-        <!-- /Panel Heading -->
-        
-        <!-- Panel Body -->
-        <div class="panel-body px-0 w-100" style="">
             <div class="row" style="">
-
-                <!-- Company Name -->
-                <div class="col-12 col-lg-4 " style="">
-                    <div class="form-element" style="">
-                        <label for="provider_name" style="">Name:</label>
-                        <div class="input-group">
-                            <input type="search" id="provider_name" name="provider_name" class="form-control" style="" aria-label="Vendor Id" placeholder="" autocomplete="off"/>
-                            <input type="text" id="company_name" name="company_name" class="form-control" style="" aria-label="Company Name" placeholder="" autocomplete="off"/>
-                            <div class="input-group-append">
-                                <button class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect" type="button" id="button_edit_provider_name">
-                                    <i class="fas fa-edit"></i>
-                                </button>
+                
+                <div class="col-12 col-md-6 col-lg-8">
+                    <div class="row" style="">
+                        
+                        <!-- Company Id -->
+                        <div class="col-12 col-lg-4 " style="">
+                            <div class="form-element" style="">
+                                <label for="company_id" style="">Company ID:</label>
+                                <input type="text" id="company_id" name="company_id" class="form-control" style="" aria-label="Company Id" placeholder="" autocomplete="off" readonly/>
+                                <div id="company_id-error" class="error w-100 text-center" style="">&nbsp;</div>
                             </div>
                         </div>
-                        <div id="provider_name-error" class="error w-100 text-center" style="">&nbsp;</div>
-                    </div>
-                </div>
-                <!-- /Company Name -->
-
-                <!-- Company Id -->
-                <div class="col-12 col-lg-3 " style="">
-                    <div class="form-element" style="">
-                        <label for="provider_id" style="">Provider Id:</label>
-                        <input type="text" id="provider_id" name="provider_id" class="form-control" style="" aria-label="Provider Id" placeholder="" autocomplete="off" readonly/>
-                        <div id="provider_id-error" class="error w-100 text-center" style="">&nbsp;</div>
-                    </div>
-                </div>
-                <!-- /Company Id -->
-
-                <!-- Provider Company Id -->
-                <div class="col-12 col-lg-3 " style="">
-                    <div class="form-element" style="">
-                        <label for="provider_company_id" style="">Provider Company Id:</label>
-                        <input type="text" id="provider_company_id" name="provider_company_id" class="form-control" style="" aria-label="Provider Id" placeholder="" autocomplete="off" readonly/>
-                        <div id="provider_company_id-error" class="error w-100 text-center" style="">&nbsp;</div>
-                    </div>
-                </div>
-                <!-- /Provider Company Id -->
-
-                <!-- Provider Enabled -->
-                <div class="col-12 col-lg-2 d-flex align-self-end justify-content-end pb-2" style="">
-                    <div class="form-element">
-                        <div class="custom-control custom-switch" style="">
-                            <input id="provider_enabled" name="provider_enabled" type="checkbox" value="1" class="custom-control-input" style="">
-                            <label for="provider_enabled" class="custom-control-label p-0" style="">Enabled</label>
+                        <!-- /Company Id -->
+                        
+                        <!-- Company Name -->
+                        <div class="col-12 col-lg-8 " style="">
+                            <div class="form-element" style="">
+                                <label for="company_name" style="">Company Name:</label>
+                                <div class="input-group">
+                                    <!--<input type="search" id="provider_name" name="provider_name" class="form-control" style="" aria-label="Vendor Id" placeholder="" autocomplete="off"/>-->
+                                    <input type="search" id="company_name" name="company_name" class="form-control" style="" aria-label="Company Name" placeholder="" autocomplete="off"/>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect" type="button" id="button_edit_company_name">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="company_name-error" class="error w-100 text-center" style="">&nbsp;</div>
+                            </div>
                         </div>
+                        <!-- /Company Name -->
+                    
                     </div>
-                </div>
-                <!-- /Provider Enabled -->
-
-            </div>
-
-            <div class="row" style="">
-
-                <div class="col-12 col-md-6 col-lg-8">
-
                     <div class="row" style="">
-
+                        
                         <!-- Company Phone 1 -->
                         <div class="col-12 col-md-4" style="">
                             <div class="form-element" style="">
@@ -102,7 +60,7 @@
                             </div>
                         </div>
                         <!-- /Company Phone 1 -->
-
+                        
                         <!-- Company Phone 2 -->
                         <div class="col-12 col-md-4" style="">
                             <div class="form-element" style="">
@@ -112,7 +70,7 @@
                             </div>
                         </div>
                         <!-- /Company Phone 2 -->
-
+                        
                         <!-- Company Fax -->
                         <div class="col-12 col-md-4" style="">
                             <div class="form-element" style="">
@@ -122,11 +80,11 @@
                             </div>
                         </div>
                         <!-- /Company Fax -->
-
+                    
                     </div>
-
+                    
                     <div class="row" style="">
-
+                        
                         <!-- Company Website -->
                         <div class="col-12 col-md-6" style="">
                             <div class="form-element" style="">
@@ -136,7 +94,7 @@
                             </div>
                         </div>
                         <!-- /Company Website -->
-
+                        
                         <!-- Company Email -->
                         <div class="col-12 col-md-6" style="">
                             <div class="form-element" style="">
@@ -146,11 +104,11 @@
                             </div>
                         </div>
                         <!-- /Company Email -->
-
+                    
                     </div>
-
+                
                 </div>
-
+                
                 <!-- Company Cover Image -->
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="form-element" style="">
@@ -160,13 +118,17 @@
                     </div>
                 </div>
                 <!-- /Company Cover Image -->
-
+            
             </div>
+
+            <div class="text-right w-100">
+                <a href="javascript:void(0);" id="button_clear_form_edit_company" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+                <a href="javascript:void(0);" id="button_submit_form_edit_company" class="btn btn-primary btn-sm waves-effect waves-light" style="">Update</a>
+            </div>
+        
         </div>
-        <!-- /Panel Body -->
-    
-    </section>
-    <!-- /Panel -->
+    </div>
+    <!-- /Card -->
 
 </form>
 <!-- /Edit Company Form -->

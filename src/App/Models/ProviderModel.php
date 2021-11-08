@@ -62,6 +62,7 @@
                             DATE_FORMAT(COMPANY.date_modified, '%m/%d/%Y') AS 'company_date_modified',
                             COALESCE(COMPANY.status_id, 10) AS 'company_status_id',
                             COMPANY.note AS 'company_note',
+                            COMPANY.cover_image AS 'company_cover_image',       
                             CONCAT(	LOCATION.name, ' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') AS 'location',
                             CONCAT(LOCATION.name, ' ',	'(' ,CITY.name, ' ', CONCAT(PROVINCE.iso2, ' - ', PROVINCE.name), ', ', CONCAT(COUNTRY.iso2, ' - ', COUNTRY.name),')') AS 'location_long',
                             CONCAT(LOCATION.name, ' ',	'(' ,CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2,')') AS 'location_short',
@@ -259,7 +260,7 @@
                 $searchTerm = addslashes($st);
                 $sql = self::$selectQuery . "
                     AND			COMPANY.name LIKE '%$searchTerm%'
-                    ORDER BY    COMPANY.name ASC
+                    ORDER BY    LENGTH(Company.name), CAST(Company.name AS UNSIGNED), Company.name ASC
                     LIMIT 20;";
 
                 //Log::$debug_log->trace($sql);

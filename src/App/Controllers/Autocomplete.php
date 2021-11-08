@@ -30,6 +30,17 @@
             exit(1);
         }
 
+        public function companies(): void
+        {
+            $st = "";
+            extract($_GET);
+            $results = Company::autocomplete($st);
+            header("Content-type:application/json");
+            // ----
+            echo json_encode($results);
+            exit(1);
+        }
+
         public function vendors(): void
         {
             $st = "";

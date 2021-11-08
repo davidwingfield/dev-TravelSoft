@@ -75,11 +75,126 @@
             }
         }
 
-        public static function update(array $params = []): array
+        public static function update(array $contact = []): array
         {
-            $id = 1;
+            if (!isset($contact["company_id"])) {
+                Log::$debug_log->error("Missing Company Id");
 
-            return Model::get($id);
+                return [];
+            }
+            // ----
+            $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+            $id = Model::setInt((isset($contact["id"])) ? $contact["id"] : null);
+            $name_first = Model::setString((isset($contact["name_first"])) ? $contact["name_first"] : null);
+            $name_last = Model::setString((isset($contact["name_last"])) ? $contact["name_last"] : null);
+            $phone = Model::setString((isset($contact["phone"])) ? $contact["phone"] : null);
+            $email = Model::setString((isset($contact["email"])) ? $contact["email"] : null);
+            $company_id = Model::setInt((isset($contact["company_id"])) ? $contact["company_id"] : null);
+            $status_id = Model::setInt((isset($contact["status_id"])) ? $contact["status_id"] : null);
+            $note = Model::setLongText((isset($contact["note"])) ? $contact["note"] : null);
+            $enabled = Model::setBool((isset($contact["enabled"])) ? $contact["enabled"] : null);
+            $created_by = Model::setInt($user_id);
+            $modified_by = Model::setInt($user_id);
+            $contact_types_id = [];
+
+            if (isset($contact["contact_types_id"])) {
+                foreach ($contact["contact_types_id"] AS $contact_type) {
+                    $contact_types_id[] = $contact_type;
+                }
+            }
+
+            $sql = "
+                INSERT INTO contact (
+                    id, name_first, name_last, phone, 
+                    email, enabled, date_created, created_by,
+                    date_modified, modified_by, note 
+                ) VALUES (
+                    $id, $name_first, $name_last, $phone,
+                    $email, $enabled, CURRENT_TIMESTAMP, $created_by,
+                    CURRENT_TIMESTAMP, $modified_by, $note
+                )
+                ON DUPLICATE KEY UPDATE
+                    name_first = VALUES(name_first),
+                    name_last = VALUES(name_last),
+                    phone = VALUES(phone),
+                    email = VALUES(email),
+                    enabled = VALUES(enabled),
+                    date_modified = VALUES(date_modified);";
+
+            try {
+                Model::$db->rawQuery($sql);
+                $contact_id = Model::$db->getInsertId();
+                if (isset($company_id, $contact_id, $contact_types_id)) {
+                    $del = self::deleteCompanyContactByCompanyId((int)$company_id, (int)$contact_id);
+                    $company_contact = self::updateCompanyContact((int)$contact_id, (int)$company_id, $contact_types_id);
+                }
+
+                return self::getByContactId((int)$contact_id);
+            } catch (Exception $e) {
+                Log::$debug_log->error($e);
+
+                return [];
+            }
+        }
+
+        public static function updateCompanyContact(int $contact_id, int $company_id, array $contact_types = []): array
+        {
+            if (!isset($company_id, $company_id, $contact_types)) {
+                Log::$debug_log->error("Missing Fields");
+
+                return [];
+            }
+
+            //
+            $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+            $enabled = 1;
+            $note = Model::setLongText((isset($contact["note"])) ? $contact["note"] : null);
+            $created_by = Model::setInt($user_id);
+            $modified_by = Model::setInt($user_id);
+
+            foreach ($contact_types AS $contact_types_id) {
+                try {
+                    $sql = "
+                    INSERT INTO company_contact (
+                        company_id,contact_id, contact_types_id, enabled,
+                        date_created, created_by, date_modified, modified_by,
+                        note
+                    ) VALUES (
+                        $company_id, $contact_id, $contact_types_id, $enabled,
+                        CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP, $modified_by,
+                        $note
+                    )
+                    ON DUPLICATE KEY UPDATE
+                        enabled = VALUES(enabled),
+                        date_modified = VALUES(date_modified);
+                    ";
+                    Model::$db->rawQuery($sql);
+                } catch (Exception $e) {
+                    Log::$debug_log->error($e);
+
+                    return [];
+                }
+            }
+
+            return self::getByCompanyId($company_id);
+        }
+
+        public static function deleteCompanyContactByCompanyId(int $company_id, int $contact_id): bool
+        {
+            $sql = "
+                DELETE FROM company_contact
+                WHERE company_id = $company_id AND contact_id = $contact_id;
+                ";
+
+            try {
+                Model::$db->rawQuery($sql);
+            } catch (Exception $e) {
+                Log::$debug_log->error($e);
+
+                return false;
+            }
+
+            return true;
         }
 
         public static function getContactTypeById(int $contact_types_id = null): array
@@ -135,7 +250,7 @@
 
         public static function getByContactId(int $contact_id = null): array
         {
-            $where = "WHERE			COMPANY_CONTACT.company_id = $contact_id";
+            $where = "WHERE			COMPANY_CONTACT.contact_id = $contact_id";
             $contacts = array();
             $results = [];
             try {
@@ -155,7 +270,7 @@
                                 CONTACT.note AS 'contact_note'
                     FROM 		company_contact COMPANY_CONTACT
                     JOIN		contact CONTACT ON CONTACT.id = COMPANY_CONTACT.contact_id
-                    WHERE		COMPANY_CONTACT.company_id = $contact_id
+                    WHERE		COMPANY_CONTACT.contact_id = $contact_id
                     GROUP BY 	COMPANY_CONTACT.contact_id;";
                 $contacts = Model::$db->rawQuery($sql);
             } catch (Exception $e) {

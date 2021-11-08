@@ -113,17 +113,21 @@ $.fn.table = function (settings) {
             try {
                 $dTable.row.add(row_data).node().id = table_id + "_tr_" + row_data.id
                 $dTable.draw(false)
+                $dTable.page.jumpToData(row_data.id, 0)
                 formatTable()
             } catch (e) {
                 console.log(e)
             }
         }
     }
-    const update_row = function (row_data) {
+    
+    const updateRow = function (row_data) {
         if (row_data) {
-            
             try {
-                $dTable.row(table_id + "_tr_" + row_data.id).data(row_data).draw(false)
+                let rowId = "#" + table_id + "_tr_" + row_data.id
+                let rowData = row_data
+                $dTable.row(rowId).data(rowData).draw()
+                loadRow(row_data.id)
             } catch (e) {
                 console.log(e)
             }
@@ -131,6 +135,34 @@ $.fn.table = function (settings) {
         
         formatTable()
     }
+    
+    const loadRow = function (row_data) {
+        if (row_data) {
+            try {
+                let rowId = row_data.id
+                $dTable.page.jumpToData(rowId, 0)
+            } catch (e) {
+                console.log(e)
+            }
+            
+        }
+    }
+    
+    const deleteRow = function (row_data) {
+        if (row_data) {
+            try {
+                let rowId = "#" + table_id + "_tr_" + row_data.id
+                let rowData = row_data
+                $dTable
+                  .row(rowId)
+                  .remove()
+                  .draw()
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
+    
     const clear_selected_rows = function () {
         try {
             let table = $("#" + table_id + "> tbody  > tr")
@@ -182,8 +214,14 @@ $.fn.table = function (settings) {
         clearSelectedRows: function () {
             clear_selected_rows()
         },
-        update_row (row_data) {
-            update_row(row_data)
+        deleteRow: function (row_data) {
+            deleteRow(row_data)
+        },
+        loadRow: function (id) {
+            loadRow(id)
+        },
+        updateRow (row_data) {
+            updateRow(row_data)
         },
     }
     

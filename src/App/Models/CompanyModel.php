@@ -138,6 +138,7 @@
             $fax = Model::setString((isset($company["fax"])) ? $company["fax"] : null);
             $website = Model::setString((isset($company["website"])) ? $company["website"] : null);
             $email = Model::setString((isset($company["email"])) ? $company["email"] : null);
+            $cover_image = Model::setString((isset($company["cover_image"])) ? $company["cover_image"] : null);
             $status_id = Model::setInt((isset($company["status_id"])) ? $company["status_id"] : null);
 
             $enabled = Model::setBool((isset($company["enabled"])) ? $company["enabled"] : null);
@@ -147,18 +148,19 @@
 
             $sql = "
                 INSERT INTO company (
-                id, name, phone_1, phone_2,
+                id, name, phone_1, phone_2, cover_image, 
                 fax, website, email, status_id,
                 enabled, date_created, created_by, date_modified,
                 modified_by, note
             ) VALUES (
-                $id, $name, $phone_1, $phone_2,
+                $id, $name, $phone_1, $phone_2, $cover_image, 
                 $fax, $website, $email, $status_id,
                 $enabled, CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP,
                 $modified_by, $note
             )
             ON DUPLICATE KEY UPDATE
                 name = VALUES(name),
+                cover_image = VALUES(cover_image),
                 phone_1 = VALUES(phone_1),
                 phone_2 = VALUES(phone_2),
                 fax = VALUES(fax),

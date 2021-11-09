@@ -236,7 +236,7 @@
          */
         public static function serveUpdate(array $params = [])
         {
-            $provider = ProviderModel::updateRecord($params);
+            $provider = ProviderModel::update($params);
 
             // ----
             View::render_json($provider);

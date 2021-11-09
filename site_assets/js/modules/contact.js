@@ -224,7 +224,7 @@ const Contact = (function () {
                 if (data) {
                     return callback(data)
                 } else {
-                    return handle_contact_error("Oops: 1")
+                    return handleContactError("Oops: 1")
                 }
             })
         }
@@ -233,7 +233,7 @@ const Contact = (function () {
     /**
      * sets objects default values
      *
-     * @returns {{note: null, country: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, currency_id: null, enabled: number, iso3: null}, medium_address_formatted: null, city: {note: null, date_modified: *, province_id: null, date_created: *, name: null, modified_by: number, id: null, sort_order: number, created_by: number, enabled: number}, date_created: *, created_by: number, enabled: number, short_address_formatted: null, long_address_formatted: null, street_1: null, date_modified: *, province: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, country_id: null, enabled: number, iso3: null}, street_3: null, street_2: null, modified_by: number, id: null, postal_code: null}}
+     * @returns {{note: null, country: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, currency_id: null, enabled: number, iso3: null}, medium_contact_formatted: null, city: {note: null, date_modified: *, province_id: null, date_created: *, name: null, modified_by: number, id: null, sort_order: number, created_by: number, enabled: number}, date_created: *, created_by: number, enabled: number, short_contact_formatted: null, long_contact_formatted: null, street_1: null, date_modified: *, province: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, country_id: null, enabled: number, iso3: null}, street_3: null, street_2: null, modified_by: number, id: null, postal_code: null}}
      * @private
      */
     const _default_detail = function () {
@@ -260,7 +260,7 @@ const Contact = (function () {
      *
      * @param msg
      */
-    const handle_contact_error = function (msg) {
+    const handleContactError = function (msg) {
         toastr.error(msg)
     }
     
@@ -268,7 +268,6 @@ const Contact = (function () {
      * reset form fields
      */
     const clear_form = function () {
-        
         if (_card_edit_contact_form) {
             _contact_id.value = ""
             _contact_name_first.value = ""
@@ -289,6 +288,7 @@ const Contact = (function () {
         clear_form()
         _contact_company_id.value = _company_id.value
         if (contact) {
+            console.log("contact", contact)
             _contact_id.value = validInt(contact.id)
             _contact_name_first.value = (contact.name_first) ? contact.name_first : null
             _contact_name_last.value = (contact.name_last) ? contact.name_last : null
@@ -322,7 +322,7 @@ const Contact = (function () {
      * sets detail for contact object
      *
      * @param contact
-     * @returns {{note: null, country: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, currency_id: null, enabled: number, iso3: null}, medium_address_formatted: null, city: {note: null, date_modified: *, province_id: null, date_created: *, name: null, modified_by: number, id: null, sort_order: number, created_by: number, enabled: number}, date_created: *, created_by: number, enabled: number, short_address_formatted: null, long_address_formatted: null, street_1: null, date_modified: *, province: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, country_id: null, enabled: number, iso3: null}, street_3: null, street_2: null, modified_by: number, id: null, postal_code: null}}
+     * @returns {{note: null, country: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, currency_id: null, enabled: number, iso3: null}, medium_contact_formatted: null, city: {note: null, date_modified: *, province_id: null, date_created: *, name: null, modified_by: number, id: null, sort_order: number, created_by: number, enabled: number}, date_created: *, created_by: number, enabled: number, short_contact_formatted: null, long_contact_formatted: null, street_1: null, date_modified: *, province: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, country_id: null, enabled: number, iso3: null}, street_3: null, street_2: null, modified_by: number, id: null, postal_code: null}}
      */
     const set_detail = function (contact) {
         let detail = _default_detail()
@@ -415,6 +415,64 @@ const Contact = (function () {
         Contact.all = new Map()
     }
     
+    const fetchContactsByCompanyId = function (dataToSend, callback) {
+        let url = "/api/v1.0/contacts"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handleContactError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+                return handleContactError("Error Validating Company")
+            }
+        } else {
+            return handleContactError("Error Loading Company- Missing Data")
+        }
+    }
+    
+    const populateTable = function (contacts) {
+        if (_table_contact) {
+            Contact.all = new Map()
+            let loadContact
+            let count = 0
+            $.each(contacts, function (i, contact) {
+                if (count === 0) {
+                    loadContact = contact
+                }
+                contact.contact_types_id = getListOfIds(contact.contact_types_id)
+                Contact.all.set(contact.id, contact)
+                $contact_table.insertRow(contact)
+                count++
+            })
+            
+            if (_table_contact) {
+                if (loadContact) {
+                    $contact_table.loadRow(loadContact)
+                }
+                
+                $contact_table.clearSelectedRows()
+            }
+        }
+    }
+    
+    const getByCompanyId = function (company_id) {
+        if (company_id) {
+            fetchContactsByCompanyId({ company_id: company_id }, function (data) {
+                if (data) {
+                    let contacts = data
+                    clearTable()
+                    populateTable(contacts)
+                }
+            })
+        }
+    }
+    
     /**
      * globals
      */
@@ -422,6 +480,9 @@ const Contact = (function () {
         validator: null,
         detail: {},
         all: new Map(),
+        getByCompanyId: function (company_id) {
+            getByCompanyId(company_id)
+        },
         clearTable: function () {
             clearTable()
         },

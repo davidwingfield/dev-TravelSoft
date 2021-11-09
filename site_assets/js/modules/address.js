@@ -124,7 +124,7 @@ const Address = (function () {
      */
     $(_clear_address_table)
       .on("click", function () {
-          Address.clear_table()
+          Address.clearTable()
       })
     
     /**
@@ -316,7 +316,6 @@ const Address = (function () {
      */
     const populate_form = function (address) {
         if (address) {
-            
             _address_id.value = (address.id) ? address.id : null
             _address_company_id.value = (address.company_id) ? address.company_id : null
             $(_address_types_id).val((address.address_types_id) ? address.address_types_id : [])
@@ -324,12 +323,12 @@ const Address = (function () {
             _address_street_1.value = (address.street_1) ? address.street_1 : null
             _address_street_2.value = (address.street_2) ? address.street_2 : null
             _address_street_3.value = (address.street_3) ? address.street_3 : null
-            _address_postal_code.value = (Address.detail.postal_code) ? Address.detail.postal_code : null
+            _address_postal_code.value = (address.postal_code) ? address.postal_code : null
             Province.id = address.province.id
             Country.id = address.country.id
             City.id = address.city.id
             
-            $(_address_country_id).val((Address.detail.country.id) ? Address.detail.country.id : "").trigger("change")
+            $(_address_country_id).val((address.country.id) ? address.country.id : "").trigger("change")
         }
     }
     
@@ -432,9 +431,41 @@ const Address = (function () {
             
             $address_table.clearSelectedRows()
         }
+        
         if (_card_edit_address_form) {
             clear_form()
             unload_form()
+        }
+    }
+    
+    /**
+     * populate address table with addresses
+     *
+     * @param addresses
+     */
+    const populate_table = function (addresses) {
+        if (_table_address) {
+            Address.all = new Map()
+            let loadAddress
+            let count = 0
+            $.each(addresses, function (i, address) {
+                if (count === 0) {
+                    loadAddress = address
+                }
+                address.address_types_id = getListOfIds(address.address_types_id)
+                
+                Address.all.set(address.id, address)
+                $address_table.insertRow(address)
+                count++
+            })
+            
+            if (_table_address) {
+                if (loadAddress) {
+                    $address_table.loadRow(loadAddress)
+                }
+                
+                $address_table.clearSelectedRows()
+            }
         }
     }
     
@@ -501,6 +532,7 @@ const Address = (function () {
      * set address object detail
      */
     const set_detail = function (address) {
+        console.log(address)
         let detail = _default_detail()
         if (address) {
             detail.country = {
@@ -581,7 +613,7 @@ const Address = (function () {
     /**
      * clear and empty table
      */
-    const clear_table = function () {
+    const clearTable = function () {
         let addresses = Array.from(Address.all.values())
         
         $.each(addresses, function (k, address) {
@@ -592,12 +624,62 @@ const Address = (function () {
     }
     
     /**
+     * post request to fetch addresses by company id
+     *
+     * @param dataToSend
+     * @param callback
+     */
+    const fetch_addresses_by_company_id = function (dataToSend, callback) {
+        let url = "/api/v1.0/addresses"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handle_address_error("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+                return handle_address_error("Error Validating Company")
+            }
+        } else {
+            return handle_address_error("Error Loading Company- Missing Data")
+        }
+    }
+    
+    /**
+     * get all addresses by company id
+     *
+     * @param company_id
+     */
+    const get_by_company_id = function (company_id) {
+        if (company_id) {
+            fetch_addresses_by_company_id({ company_id: company_id }, function (data) {
+                if (data) {
+                    let addresses = data
+                    clearTable()
+                    populate_table(addresses)
+                }
+            })
+        }
+    }
+    
+    /**
      * globals
      */
     return {
         validator: null,
         detail: {},
         all: new Map(),
+        get_by_company_id: function (company_id) {
+            get_by_company_id(company_id)
+        },
+        get: function (address_id) {
+        
+        },
         navigate: function (address) {
             navigate(address)
         },
@@ -607,8 +689,8 @@ const Address = (function () {
         save: function (params) {
             save(params)
         },
-        clear_table: function () {
-            clear_table()
+        clearTable: function () {
+            clearTable()
         },
         init: function (addresses) {
             init(addresses)

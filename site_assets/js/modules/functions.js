@@ -115,6 +115,7 @@ const validator_init = function (settings) {
         ignore: "",
         success: "valid",
         invalidHandler: function (event, validator) {
+            var errors = validator.numberOfInvalids()
             let errorEl = validator.findLastActive() || validator.errorList.length && validator.errorList[0].element
             if (errorEl) {
                 $(errorEl).closest(".accordion-body").collapse("show")
@@ -150,9 +151,7 @@ const validator_init = function (settings) {
         errorPlacement: function (error, element) {
             let id = element.attr("id")
             let el = $("#" + id + "-error")
-            
             el.html(error)
-            
         },
         submitHandler: function (form) {
             return true
@@ -438,7 +437,6 @@ const populateMultiSelect = function (arr, elem) {
 }
 
 const addTinyMCE = function (el) {
-    
     tinymce.init({
         selector: "#" + el,
         menubar: false,

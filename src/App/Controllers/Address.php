@@ -22,6 +22,31 @@
             parent::__construct();
         }
 
+        /**
+         * api get request
+         *
+         * @param array $params
+         */
+        public function serveGet(array $params = [])
+        {
+            $company_id = null;
+            $address_id = null;
+            $addresses = array();
+            $results = array();
+            if (isset($params["company_id"])) {
+                $company_id = (int)$params["company_id"];
+                $addresses = AddressModel::getByCompanyId($company_id);
+            }
+            if (isset($params["address_id"])) {
+                $address_id = (int)$params["address_id"];
+                $addresses = AddressModel::getByAddressId($address_id);
+            }
+
+            // ----
+            View::render_json(self::format($addresses));
+            exit(1);
+        }
+
         public static function serveUpdate(array $params = [])
         {
             $addresses = AddressModel::update($params);
@@ -139,46 +164,46 @@
             $formattedAddress["long_address_formatted"] = $long_address_formatted;
 
             $country = array(
-                "id" => $address["country_id"],
+                "id" => (int)$address["country_id"],
                 "name" => $address["country_name"],
-                "currency_id" => $address["country_currency_id"],
+                "currency_id" => (int)$address["country_currency_id"],
                 "iso2" => $address["country_iso2"],
                 "iso3" => $address["country_iso3"],
-                "sort_order" => $address["country_sort_order"],
-                "enabled" => $address["country_enabled"],
+                "sort_order" => (int)$address["country_sort_order"],
+                "enabled" => (int)$address["country_enabled"],
                 "date_created" => $address["country_date_created"],
-                "created_by" => $address["country_created_by"],
+                "created_by" => (int)$address["country_created_by"],
                 "date_modified" => $address["country_date_modified"],
-                "modified_by" => $address["country_modified_by"],
-                "note" => $address["country_note"],
+                "modified_by" => (int)$address["country_modified_by"],
+                "note" => ($address["country_note"] === "") ? null : $address["country_note"],
             );
             $formattedAddress["country"] = $country;
 
             $province = array(
-                "id" => $address["province_id"],
+                "id" => (int)$address["province_id"],
                 "name" => $address["province_name"],
                 "iso2" => $address["province_iso2"],
                 "iso3" => $address["province_iso3"],
-                "sort_order" => $address["province_sort_order"],
-                "enabled" => $address["province_enabled"],
+                "sort_order" => (int)["province_sort_order"],
+                "enabled" => (int)$address["province_enabled"],
                 "date_created" => $address["province_date_created"],
-                "created_by" => $address["province_created_by"],
+                "created_by" => (int)$address["province_created_by"],
                 "date_modified" => $address["province_date_modified"],
-                "modified_by" => $address["province_modified_by"],
-                "note" => $address["province_note"],
+                "modified_by" => (int)$address["province_modified_by"],
+                "note" => ($address["province_note"] === "") ? null : $address["province_note"],
             );
             $formattedAddress["province"] = $province;
 
             $city = array(
-                "id" => $address["city_id"],
+                "id" => (int)$address["city_id"],
                 "name" => $address["city_name"],
-                "sort_order" => $address["city_sort_order"],
-                "enabled" => $address["city_enabled"],
+                "sort_order" => (int)$address["city_sort_order"],
+                "enabled" => (int)$address["city_enabled"],
                 "date_created" => $address["city_date_created"],
-                "created_by" => $address["city_created_by"],
+                "created_by" => (int)$address["city_created_by"],
                 "date_modified" => $address["city_date_modified"],
-                "modified_by" => $address["city_modified_by"],
-                "note" => $address["city_note"],
+                "modified_by" => (int)$address["city_modified_by"],
+                "note" => ($address["city_note"] === "") ? null : $address["city_note"],
             );
             $formattedAddress["city"] = $city;
 
@@ -187,16 +212,14 @@
             $formattedAddress["street_3"] = $street_3;
             $formattedAddress["postal_code"] = $postal;
             $formattedAddress["company_id"] = $address["company_id"];
-            $formattedAddress["id"] = $id;
+            $formattedAddress["id"] = (int)$id;
             $formattedAddress["address_types_id"] = $address["address_types_id"];
-            $formattedAddress["enabled"] = $enabled;
+            $formattedAddress["enabled"] = (int)$enabled;
             $formattedAddress["date_created"] = $date_created;
-            $formattedAddress["created_by"] = $created_by;
+            $formattedAddress["created_by"] = (int)$created_by;
             $formattedAddress["date_modified"] = $date_modified;
-            $formattedAddress["modified_by"] = $modified_by;
-            $formattedAddress["note"] = $note;
-
-            //Log::$debug_log->trace($formattedAddress);
+            $formattedAddress["modified_by"] = (int)$modified_by;
+            $formattedAddress["note"] = ($note === "") ? null : $note;
 
             return $formattedAddress;
         }

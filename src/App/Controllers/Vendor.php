@@ -83,7 +83,7 @@
         public static function serveUpdate(array $params = [])
         {
             $vendor = array();
-            $vendors = VendorModel::updateRecord($params);
+            $results = VendorModel::updateRecord($params);
             if (isset($vendors) && isset($vendors[0])) {
                 $vendor = $vendors[0];
             }

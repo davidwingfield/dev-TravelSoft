@@ -290,6 +290,7 @@ const validator_init = function (settings) {
         ignore: "",
         success: "valid",
         invalidHandler: function (event, validator) {
+            var errors = validator.numberOfInvalids()
             let errorEl = validator.findLastActive() || validator.errorList.length && validator.errorList[0].element
             if (errorEl) {
                 $(errorEl).closest(".accordion-body").collapse("show")
@@ -325,9 +326,7 @@ const validator_init = function (settings) {
         errorPlacement: function (error, element) {
             let id = element.attr("id")
             let el = $("#" + id + "-error")
-            
             el.html(error)
-            
         },
         submitHandler: function (form) {
             return true
@@ -613,7 +612,6 @@ const populateMultiSelect = function (arr, elem) {
 }
 
 const addTinyMCE = function (el) {
-    
     tinymce.init({
         selector: "#" + el,
         menubar: false,
@@ -2975,6 +2973,7 @@ const Location = (function () {
     const _button_close_edit_location_form = document.getElementById("button_close_edit_location_form")
     const _form_edit_location_filter = document.getElementById("form_edit_location_filter")
     const _location_name_filter_id = document.getElementById("location_name_filter_id")
+    //
     const edit_location_filter_form_rules = {
         groups: {
             locationGroup: "location_name_filter location_name_filter_id",
@@ -2998,12 +2997,10 @@ const Location = (function () {
             },
         },
     }
-    
     const form_rules = {
         rules: {
             location_types_id: {
                 required: true,
-                digits: true,
             },
             location_city_id: {
                 required: true,
@@ -3022,7 +3019,6 @@ const Location = (function () {
         messages: {
             location_types_id: {
                 required: "Field Required",
-                digits: "invalid",
             },
             location_city_id: {
                 required: "Field Required",
@@ -3118,7 +3114,9 @@ const Location = (function () {
      */
     $("input[name='location_display']")
       .on("change", function () {
+          
           let selected_value = $("input[name='location_display']:checked").val()
+          console.log("selected_value", selected_value)
           default_display = selected_value
           init_autocomplete()
           if (Location.detail["display_" + selected_value] !== null) {
@@ -3191,6 +3189,7 @@ const Location = (function () {
                       globalSelectedLocation = true
                       reset_form()
                       let location = suggestion.data
+                      Location.detail = location
                       temp_location = location
                       populate_form(location)
                   }
@@ -3371,25 +3370,6 @@ const Location = (function () {
         }
     }
     
-    const save = function () {
-        if (validate_form()) {
-            let dataToSend = {
-                id: (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null,
-                city_id: (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null,
-                province_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null,
-                country_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_country_id.value) : null,
-                location_types_id: (!isNaN(parseInt(_location_types_id.value))) ? parseInt(_location_types_id.value) : null,
-                name: (_location_name && _location_name.value !== "") ? _location_name.value : null,
-                street_1: (_location_street_1 && _location_street_1.value !== "") ? _location_street_1.value : null,
-                street_2: (_location_street_2 && _location_street_2.value !== "") ? _location_street_2.value : null,
-                zipcode: (_location_zipcode && _location_zipcode.value !== "") ? _location_zipcode.value : null,
-                enabled: 1,
-                note: null,
-            }
-            console.log("save", dataToSend)
-        }
-    }
-    
     const get = function (id) {
         let data_to_send = {}
         if (id) {
@@ -3469,7 +3449,7 @@ const Location = (function () {
         let city = {}
         let type = {}
         if (location) {
-            
+            console.log("location", location)
             switch (defaultLocationDisplayFormat) {
                 case "short":
                     _location_name_filter.value = (location.display_short) ? location.display_short : ""
@@ -3488,10 +3468,12 @@ const Location = (function () {
             _location_street_2.value = location.street_2
             _location_zipcode.value = location.zipcode
             
+            let location_type_id = ""
             if (location.type) {
                 type = location.type
-                _location_types_id.value = type.id
+                location_type_id = type.id
             }
+            $(_location_types_id).val(location_type_id)
             
             if (location.country) {
                 country = location.country
@@ -3645,9 +3627,9 @@ const Location = (function () {
         
         if (_form_edit_location) {
             validator_init(form_rules)
+            validator = $(_form_edit_location).validate()
             validator_init(edit_location_filter_form_rules)
             validator_name_filter = $(_form_edit_location_filter).validate()
-            validator = $(_form_edit_location).validate()
             
             $(_location_country_id).BuildDropDown({
                 data: Array.from(Country.all.values()),
@@ -3702,12 +3684,69 @@ const Location = (function () {
         
     }
     
+    /**
+     * update location
+     *
+     * @param dataToSend
+     * @param callback
+     */
+    const update_location = function (dataToSend, callback) {
+        let url = "/api/v1.0/locations/update"
+        if (dataToSend) {
+            sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                if (data) {
+                    return callback(data)
+                } else {
+                    return handle_location_error("Oops: 1")
+                }
+            })
+        }
+    }
+    
+    /**
+     * save object
+     */
+    const save = function () {
+        if (validate_form()) {
+            confirmDialog(`Would you like to update?`, (ans) => {
+                if (ans) {
+                    update_location(build(), function (data) {
+                        let location
+                        if (data) {
+                            if (data[0]) {
+                                let displayView = "medium"
+                                location = data[0]
+                                temp_location = location
+                                
+                                let el = document.getElementsByName("location_display")
+                                for (let i = 0; i < el.length; i++) {
+                                    if (el[i].checked) {
+                                        displayView = el[i].value
+                                    }
+                                }
+                                
+                                _location_name_filter.value = location["display_" + displayView]
+                            }
+                        }
+                    })
+                }
+            })
+        }
+    }
+    
     const build = function () {
-        //let err = $("<span class='invalid'>Field Required</span>")
-        //let location = (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null
-        
-        if (validate_edit_location_filter_form()) {
-            return Location.detail
+        return {
+            id: (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null,
+            city_id: (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null,
+            province_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null,
+            country_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_country_id.value) : null,
+            location_types_id: (!isNaN(parseInt(_location_types_id.value))) ? parseInt(_location_types_id.value) : null,
+            name: (_location_name && _location_name.value !== "") ? _location_name.value : null,
+            street_1: (_location_street_1 && _location_street_1.value !== "") ? _location_street_1.value : null,
+            street_2: (_location_street_2 && _location_street_2.value !== "") ? _location_street_2.value : null,
+            zipcode: (_location_zipcode && _location_zipcode.value !== "") ? _location_zipcode.value : null,
+            enabled: 1,
+            note: null,
         }
     }
     
@@ -3736,7 +3775,9 @@ const Location = (function () {
             set_detail(location)
         },
         build: function () {
-            return build()
+            if (validate_edit_location_filter_form()) {
+                return build()
+            }
         },
     }
     
@@ -3869,7 +3910,7 @@ const Address = (function () {
      */
     $(_clear_address_table)
       .on("click", function () {
-          Address.clear_table()
+          Address.clearTable()
       })
     
     /**
@@ -4061,7 +4102,6 @@ const Address = (function () {
      */
     const populate_form = function (address) {
         if (address) {
-            
             _address_id.value = (address.id) ? address.id : null
             _address_company_id.value = (address.company_id) ? address.company_id : null
             $(_address_types_id).val((address.address_types_id) ? address.address_types_id : [])
@@ -4069,12 +4109,12 @@ const Address = (function () {
             _address_street_1.value = (address.street_1) ? address.street_1 : null
             _address_street_2.value = (address.street_2) ? address.street_2 : null
             _address_street_3.value = (address.street_3) ? address.street_3 : null
-            _address_postal_code.value = (Address.detail.postal_code) ? Address.detail.postal_code : null
+            _address_postal_code.value = (address.postal_code) ? address.postal_code : null
             Province.id = address.province.id
             Country.id = address.country.id
             City.id = address.city.id
             
-            $(_address_country_id).val((Address.detail.country.id) ? Address.detail.country.id : "").trigger("change")
+            $(_address_country_id).val((address.country.id) ? address.country.id : "").trigger("change")
         }
     }
     
@@ -4177,9 +4217,41 @@ const Address = (function () {
             
             $address_table.clearSelectedRows()
         }
+        
         if (_card_edit_address_form) {
             clear_form()
             unload_form()
+        }
+    }
+    
+    /**
+     * populate address table with addresses
+     *
+     * @param addresses
+     */
+    const populate_table = function (addresses) {
+        if (_table_address) {
+            Address.all = new Map()
+            let loadAddress
+            let count = 0
+            $.each(addresses, function (i, address) {
+                if (count === 0) {
+                    loadAddress = address
+                }
+                address.address_types_id = getListOfIds(address.address_types_id)
+                
+                Address.all.set(address.id, address)
+                $address_table.insertRow(address)
+                count++
+            })
+            
+            if (_table_address) {
+                if (loadAddress) {
+                    $address_table.loadRow(loadAddress)
+                }
+                
+                $address_table.clearSelectedRows()
+            }
         }
     }
     
@@ -4246,6 +4318,7 @@ const Address = (function () {
      * set address object detail
      */
     const set_detail = function (address) {
+        console.log(address)
         let detail = _default_detail()
         if (address) {
             detail.country = {
@@ -4326,7 +4399,7 @@ const Address = (function () {
     /**
      * clear and empty table
      */
-    const clear_table = function () {
+    const clearTable = function () {
         let addresses = Array.from(Address.all.values())
         
         $.each(addresses, function (k, address) {
@@ -4337,12 +4410,62 @@ const Address = (function () {
     }
     
     /**
+     * post request to fetch addresses by company id
+     *
+     * @param dataToSend
+     * @param callback
+     */
+    const fetch_addresses_by_company_id = function (dataToSend, callback) {
+        let url = "/api/v1.0/addresses"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handle_address_error("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+                return handle_address_error("Error Validating Company")
+            }
+        } else {
+            return handle_address_error("Error Loading Company- Missing Data")
+        }
+    }
+    
+    /**
+     * get all addresses by company id
+     *
+     * @param company_id
+     */
+    const get_by_company_id = function (company_id) {
+        if (company_id) {
+            fetch_addresses_by_company_id({ company_id: company_id }, function (data) {
+                if (data) {
+                    let addresses = data
+                    clearTable()
+                    populate_table(addresses)
+                }
+            })
+        }
+    }
+    
+    /**
      * globals
      */
     return {
         validator: null,
         detail: {},
         all: new Map(),
+        get_by_company_id: function (company_id) {
+            get_by_company_id(company_id)
+        },
+        get: function (address_id) {
+        
+        },
         navigate: function (address) {
             navigate(address)
         },
@@ -4352,8 +4475,8 @@ const Address = (function () {
         save: function (params) {
             save(params)
         },
-        clear_table: function () {
-            clear_table()
+        clearTable: function () {
+            clearTable()
         },
         init: function (addresses) {
             init(addresses)
@@ -4760,6 +4883,9 @@ const Company = (function () {
     const _address_company_id = document.getElementById("address_company_id")
     const _company_id = document.getElementById("company_id")
     const _contact_company_id = document.getElementById("contact_company_id")
+    const _form_edit_company_block = document.getElementById("form_edit_company_block")
+    const _button_edit_company_name = document.getElementById("button_edit_company_name")
+    const _button_cancel_edit_company_name = document.getElementById("button_cancel_edit_company_name")
     // ----
     const _vendor_name = document.getElementById("vendor_name")
     const _vendor_company_id = document.getElementsByClassName("vendor_company_id")
@@ -4770,9 +4896,6 @@ const Company = (function () {
     
     //
     const form_rules = {
-        groups: {
-            nameGroup: "company_name company_id",
-        },
         rules: {
             company_name: {
                 required: true,
@@ -4791,9 +4914,6 @@ const Company = (function () {
             company_name: {
                 required: "Field Required1",
             },
-            company_phone_1: {},
-            company_phone_2: {},
-            company_fax: {},
             company_email: {
                 email: "Field Invalid",
             },
@@ -4810,6 +4930,21 @@ const Company = (function () {
     let globalSelectedCompany = false
     let suggestionsTempCompany = []
     
+    let tempCompany = {}
+    
+    $(_button_cancel_edit_company_name)
+      .on("click", function () {
+          let detail = set_detail(tempCompany)
+          populate_form(detail)
+          //hide_form()
+      })
+    
+    $(_button_edit_company_name)
+      .on("click", function () {
+          tempCompany = build()
+          show_form()
+      })
+    
     $(_button_clear_form_edit_company)
       .on("click", function () {
           reset_form()
@@ -4818,12 +4953,14 @@ const Company = (function () {
     $(_button_submit_form_edit_company)
       .on("click", function () {
           let company = Company.build()
+          console.log(company)
       })
     
     $(_company_id)
       .on("change", function () {
           _address_company_id.value = _company_id.value
       })
+    
     $(_company_name)
       .on("change", function () {
           if (_provider_name) {
@@ -4833,6 +4970,11 @@ const Company = (function () {
           if (_vendor_name) {
               //$(_vendor_name).val($(_company_name).val())
           }
+      })
+    
+    $(_form_edit_company)
+      .on("change", function () {
+          set_progress()
       })
     
     /**
@@ -4856,16 +4998,18 @@ const Company = (function () {
               }, 200)
           })
           .on("search", function () {
-              //_provider_id.value = ""
-              //_provider_company_id.value = ""
-              
-              //$(_vendor_name).val("").trigger("change")
-              //$(_provider_company_id).val("").trigger("change")
+              hide_form()
+              Company.reset_form(true)
               Provider.reset_form()
               Vendor.reset_form()
           })
-          .on("click", function () {
-              $(this).select()
+          .on("click", function (e) {
+              if ($(this).attr("readonly") === "readonly") {
+                  e.preventDefault()
+              } else {
+                  $(this).select()
+              }
+              
           })
           .autocomplete({
               serviceUrl: "/api/v1.0/autocomplete/companies",
@@ -4904,6 +5048,10 @@ const Company = (function () {
                   if (_provider_company_id) {
                       $(_provider_company_id).val(company.id)
                   }
+                  
+                  Address.get_by_company_id(company.id)
+                  Contact.getByCompanyId(company.id)
+                  
                   /*
                   let provider = suggestion.data
                   let company = (provider.company) ? provider.company : {}
@@ -5009,8 +5157,10 @@ const Company = (function () {
                 }
                 
                 if (company) {
-                    reset_form()
+                    reset_form(true)
                     populate_form(company)
+                    Address.get_by_company_id(company.id)
+                    Contact.getByCompanyId(company.id)
                 } else {
                     confirmDialog(`The company: ${name} does not exist exists. Would you like to create it?`, (ans) => {
                         if (ans) {
@@ -5022,13 +5172,12 @@ const Company = (function () {
                                 if (data) {
                                     if (data[0]) {
                                         company = data[0]
-                                        reset_form()
+                                        reset_form(true)
                                         populate_form(company)
+                                        show_form()
                                     }
                                 }
                             })
-                        } else {
-                        
                         }
                     })
                 }
@@ -5110,20 +5259,24 @@ const Company = (function () {
         return $(_form_edit_company).valid()
     }
     
-    const reset_form = function () {
+    const reset_form = function (toggleFullClear) {
         _company_phone_1.value = ""
         _company_phone_2.value = ""
         _company_fax.value = ""
         _company_email.value = ""
         _company_website.value = ""
-        if (_provider_name) {
-            $(_provider_name).val("").trigger("change")
+        if (toggleFullClear && toggleFullClear === true) {
+            if (_provider_name) {
+                $(_provider_name).val("").trigger("change")
+            }
+            if (_vendor_name) {
+                $(_vendor_name).val("").trigger("change")
+            }
+            $(_company_id).val("").trigger("change")
+            _company_name.value = ""
+            Address.clearTable()
+            Contact.clearTable()
         }
-        if (_vendor_name) {
-            $(_vendor_name).val("").trigger("change")
-        }
-        $(_company_id).val("").trigger("change")
-        _company_name.value = ""
     }
     
     const init = function (company) {
@@ -5136,32 +5289,81 @@ const Company = (function () {
             validator_init(form_rules)
             validator = $(_form_edit_company).validate()
             init_autocomplete()
+            if (_form_edit_company_block) {
+                hide_form()
+            }
         }
     }
     
+    const get_cover_image = function () {
+        var files = document.getElementById("company_cover_image").files
+        
+        console.log("files", files)
+    }
+    
     const build = function () {
-        if (validate_form()) {
-            return {
-                email: $(_company_email).val(),
-                //enabled: (_company_enabled.checked === true) ? 1 : 0,
-                enabled: 1,
-                fax: $(_company_fax).val(),
-                id: (!isNaN(_provider_company_id.value)) ? parseInt(_provider_company_id.value) : null,
-                modified_by: user_id,
-                name: Company.detail.name,
-                note: Company.detail.note,
-                phone_1: Company.detail.phone_1,
-                phone_2: Company.detail.phone_2,
-                status_id: Company.detail.status_id,
-                website: Company.detail.website,
-            }
+        
+        return {
+            email: $(_company_email).val(),
+            //enabled: (_company_enabled.checked === true) ? 1 : 0,
+            enabled: 1,
+            fax: $(_company_fax).val(),
+            id: (!isNaN(_provider_company_id.value)) ? parseInt(_provider_company_id.value) : null,
+            modified_by: user_id,
+            //cover_image: _company_cover_image.value,
+            cover_image: null,
+            name: $(_company_name).val(),
+            note: Company.detail.note,
+            phone_1: $(_company_phone_1).val(),
+            phone_2: $(_company_phone_2).val(),
+            status_id: Company.detail.status_id,
+            website: $(_company_website).val(),
+        }
+        
+    }
+    
+    const show_form = function () {
+        if (_form_edit_company_block) {
+            $(_form_edit_company_block).show()
+            $(_button_cancel_edit_company_name).show()
+            $(_button_edit_company_name).hide()
+            $(_company_name).attr("readonly", true)
+        }
+    }
+    
+    const hide_form = function () {
+        if (_form_edit_company_block) {
+            $(_company_name).attr("readonly", false)
+            $(_form_edit_company_block).hide()
+            $(_button_cancel_edit_company_name).hide()
+            $(_button_edit_company_name).show()
+        }
+    }
+    
+    const set_progress = function () {
+        if (!isNaN(parseInt(_company_id.value))) {
+            $(_company_phone_1).attr("readonly", false)
+            $(_company_phone_2).attr("readonly", false)
+            $(_company_fax).attr("readonly", false)
+            $(_company_email).attr("readonly", false)
+            $(_company_cover_image).attr("readonly", false)
+            _button_edit_company_name.disabled = false
+        } else {
+            _button_edit_company_name.disabled = true
+            $(_company_cover_image).attr("readonly", true)
+            $(_company_phone_1).attr("readonly", true)
+            $(_company_phone_2).attr("readonly", true)
+            $(_company_fax).attr("readonly", true)
+            $(_company_email).attr("readonly", true)
         }
     }
     
     return {
         all: new Map(),
         build: function () {
-            return build()
+            if (validate_form()) {
+                return build()
+            }
         },
         validator: null,
         detail: {
@@ -5186,8 +5388,8 @@ const Company = (function () {
         populate_form: function (company) {
             populate_form(company)
         },
-        reset_form: function () {
-            reset_form()
+        reset_form: function (toggleFullClear) {
+            reset_form(toggleFullClear)
         },
         init: function (company) {
             init(company)
@@ -5421,7 +5623,7 @@ const Contact = (function () {
                 if (data) {
                     return callback(data)
                 } else {
-                    return handle_contact_error("Oops: 1")
+                    return handleContactError("Oops: 1")
                 }
             })
         }
@@ -5430,7 +5632,7 @@ const Contact = (function () {
     /**
      * sets objects default values
      *
-     * @returns {{note: null, country: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, currency_id: null, enabled: number, iso3: null}, medium_address_formatted: null, city: {note: null, date_modified: *, province_id: null, date_created: *, name: null, modified_by: number, id: null, sort_order: number, created_by: number, enabled: number}, date_created: *, created_by: number, enabled: number, short_address_formatted: null, long_address_formatted: null, street_1: null, date_modified: *, province: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, country_id: null, enabled: number, iso3: null}, street_3: null, street_2: null, modified_by: number, id: null, postal_code: null}}
+     * @returns {{note: null, country: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, currency_id: null, enabled: number, iso3: null}, medium_contact_formatted: null, city: {note: null, date_modified: *, province_id: null, date_created: *, name: null, modified_by: number, id: null, sort_order: number, created_by: number, enabled: number}, date_created: *, created_by: number, enabled: number, short_contact_formatted: null, long_contact_formatted: null, street_1: null, date_modified: *, province: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, country_id: null, enabled: number, iso3: null}, street_3: null, street_2: null, modified_by: number, id: null, postal_code: null}}
      * @private
      */
     const _default_detail = function () {
@@ -5457,7 +5659,7 @@ const Contact = (function () {
      *
      * @param msg
      */
-    const handle_contact_error = function (msg) {
+    const handleContactError = function (msg) {
         toastr.error(msg)
     }
     
@@ -5465,7 +5667,6 @@ const Contact = (function () {
      * reset form fields
      */
     const clear_form = function () {
-        
         if (_card_edit_contact_form) {
             _contact_id.value = ""
             _contact_name_first.value = ""
@@ -5486,6 +5687,7 @@ const Contact = (function () {
         clear_form()
         _contact_company_id.value = _company_id.value
         if (contact) {
+            console.log("contact", contact)
             _contact_id.value = validInt(contact.id)
             _contact_name_first.value = (contact.name_first) ? contact.name_first : null
             _contact_name_last.value = (contact.name_last) ? contact.name_last : null
@@ -5519,7 +5721,7 @@ const Contact = (function () {
      * sets detail for contact object
      *
      * @param contact
-     * @returns {{note: null, country: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, currency_id: null, enabled: number, iso3: null}, medium_address_formatted: null, city: {note: null, date_modified: *, province_id: null, date_created: *, name: null, modified_by: number, id: null, sort_order: number, created_by: number, enabled: number}, date_created: *, created_by: number, enabled: number, short_address_formatted: null, long_address_formatted: null, street_1: null, date_modified: *, province: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, country_id: null, enabled: number, iso3: null}, street_3: null, street_2: null, modified_by: number, id: null, postal_code: null}}
+     * @returns {{note: null, country: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, currency_id: null, enabled: number, iso3: null}, medium_contact_formatted: null, city: {note: null, date_modified: *, province_id: null, date_created: *, name: null, modified_by: number, id: null, sort_order: number, created_by: number, enabled: number}, date_created: *, created_by: number, enabled: number, short_contact_formatted: null, long_contact_formatted: null, street_1: null, date_modified: *, province: {note: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, iso2: null, sort_order: number, created_by: number, country_id: null, enabled: number, iso3: null}, street_3: null, street_2: null, modified_by: number, id: null, postal_code: null}}
      */
     const set_detail = function (contact) {
         let detail = _default_detail()
@@ -5612,6 +5814,64 @@ const Contact = (function () {
         Contact.all = new Map()
     }
     
+    const fetchContactsByCompanyId = function (dataToSend, callback) {
+        let url = "/api/v1.0/contacts"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handleContactError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+                return handleContactError("Error Validating Company")
+            }
+        } else {
+            return handleContactError("Error Loading Company- Missing Data")
+        }
+    }
+    
+    const populateTable = function (contacts) {
+        if (_table_contact) {
+            Contact.all = new Map()
+            let loadContact
+            let count = 0
+            $.each(contacts, function (i, contact) {
+                if (count === 0) {
+                    loadContact = contact
+                }
+                contact.contact_types_id = getListOfIds(contact.contact_types_id)
+                Contact.all.set(contact.id, contact)
+                $contact_table.insertRow(contact)
+                count++
+            })
+            
+            if (_table_contact) {
+                if (loadContact) {
+                    $contact_table.loadRow(loadContact)
+                }
+                
+                $contact_table.clearSelectedRows()
+            }
+        }
+    }
+    
+    const getByCompanyId = function (company_id) {
+        if (company_id) {
+            fetchContactsByCompanyId({ company_id: company_id }, function (data) {
+                if (data) {
+                    let contacts = data
+                    clearTable()
+                    populateTable(contacts)
+                }
+            })
+        }
+    }
+    
     /**
      * globals
      */
@@ -5619,6 +5879,9 @@ const Contact = (function () {
         validator: null,
         detail: {},
         all: new Map(),
+        getByCompanyId: function (company_id) {
+            getByCompanyId(company_id)
+        },
         clearTable: function () {
             clearTable()
         },
@@ -5775,17 +6038,11 @@ const Vendor = (function () {
     let globalSelectedVendor = false
     let form_rules = {
         rules: {
-            vendor_sku: {
-                required: true,
-            },
             vendor_name: {
                 required: true,
             },
         },
         messages: {
-            vendor_sku: {
-                required: "Field Required",
-            },
             vendor_name: {
                 required: "Field Required",
             },
@@ -5855,17 +6112,14 @@ const Vendor = (function () {
     }
     
     const build = function () {
-        if (validate_form()) {
-            let vendor = {
-                id: (!isNaN(parseInt(_vendor_id.value))),
-                show_online: (_vendor_show_online.checked === true),
-                show_sales: (_vendor_show_sales.checked === true),
-                show_ops: (_vendor_show_ops.checked === true),
-                is_provider: (_vendor_is_provider.checked === true),
-                sku: _vendor_sku.value,
-            }
-            return remove_nulls(vendor)
-        }
+        return remove_nulls({
+            id: (!isNaN(parseInt(_vendor_id.value))),
+            show_online: (_vendor_show_online.checked === true) ? 1 : 0,
+            show_sales: (_vendor_show_sales.checked === true) ? 1 : 0,
+            show_ops: (_vendor_show_ops.checked === true) ? 1 : 0,
+            is_provider: (_vendor_is_provider.checked === true) ? 1 : 0,
+            sku: _vendor_sku.value,
+        })
     }
     
     const vendor_exists = function (name) {
@@ -6102,8 +6356,9 @@ const Vendor = (function () {
         if (_provider_edit) {
             _vendor_is_provider.checked = true
             $(_vendor_is_provider).attr("readonly", true)
+            _vendor_is_provider.disabled = true
             $(_vendor_name).attr("readonly", true)
-            $(_vendor_name).attr("readonly", true)
+            $(_vendor_id).attr("readonly", true)
             $(_vendor_sku).attr("readonly", true)
             $(_vendor_is_provider).attr("readonly", true)
         }
@@ -6132,7 +6387,9 @@ const Vendor = (function () {
             init(settings)
         },
         build: function () {
-            return build()
+            if (validate_form()) {
+                return build()
+            }
         },
     }
     
@@ -6906,6 +7163,7 @@ const Provider = (function () {
       //Tables
       const _table_provider_index = document.getElementById("table_provider_index")
       //Fields
+      const _location_id = document.getElementById("location_id")
       const _company_name = document.getElementById("company_name")
       const _company_cover_image = document.getElementById("company_cover_image")
       const _provider_id = document.getElementById("provider_id")
@@ -6916,6 +7174,7 @@ const Provider = (function () {
       const _vendor_name = document.getElementById("vendor_name")
       const _vendor_company_id = document.getElementById("vendor_company_id")
       const _company_id = document.getElementById("company_id")
+      const _location_name_filter_id = document.getElementById("location_name_filter_id")
       //Forms
       const _form_edit_provider = document.getElementById("form_edit_provider")
       let globalSelectedProvider = false
@@ -6924,35 +7183,19 @@ const Provider = (function () {
       let $index_table = $(_table_provider_index)
       let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
       let form_rules = {
-          groups: {
-              nameGroup: "provider_name provider_id provider_company_id",
-          },
           rules: {
-              provider_id: {
-                  required: true,
-              },
               provider_name: {
                   required: true,
               },
               provider_company_id: {
                   required: true,
               },
-              provider_code_direct_id: {
-                  required: true,
-              },
-              
           },
           messages: {
-              provider_id: {
-                  required: "Field Required",
-              },
               provider_company_id: {
                   required: "Field Required",
               },
               provider_name: {
-                  required: "Field Required",
-              },
-              provider_code_direct_id: {
                   required: "Field Required",
               },
           },
@@ -6961,7 +7204,7 @@ const Provider = (function () {
       $(_button_save_provider)
         .on("click", function () {
             let tabs = $("#provider_edit_tabs > div.panel-heading.panel-heading-tab > ul.nav.nav-tabs>li.nav-item>a.nav-link")
-            let panels = $("#provider_edit_tabs > div.panel-body.p-1 > div.tab-content > div.tab-pane")
+            let panels = $("div.tab-pane")
             
             let company_detail = Company.build()
             let provider_detail = Provider.build()
@@ -6970,32 +7213,36 @@ const Provider = (function () {
             let addresses = Array.from(Address.all.values())
             let contacts = Array.from(Contact.all.values())
             
-            //if (!company_detail || !location_detail || !vendor_detail) {
-            $.each(panels, function (index, item) {
-                if ($(this).find(".invalid").length > 0) {
-                    let nav_tab = $("body").find("[aria-controls='" + $(this).attr("id") + "']")
-                    tabs.removeClass("active")
-                    panels.removeClass("active")
-                    $(this).addClass("active")
-                    nav_tab.addClass("active")
-                    return false
+            if (!company_detail || !provider_detail || !location_detail || !vendor_detail || !addresses || !contacts) {
+                $.each(panels, function (index, item) {
+                    if ($(this).find(".is-invalid").length > 0) {
+                        let nav_tab = $("body").find("[aria-controls='" + $(this).attr("id") + "']")
+                        tabs.removeClass("active")
+                        panels.removeClass("active")
+                        $(this).addClass("active")
+                        nav_tab.addClass("active")
+                        return false
+                    }
+                })
+            }
+            provider_detail.location_id = (location_detail.id) ? location_detail.id : null
+            vendor_detail.is_provider = (_form_edit_provider) ? 1 : 0
+            confirmDialog(`Would you like to update?`, (ans) => {
+                if (ans) {
+                    save({
+                        "company_detail": company_detail,
+                        "provider_detail": provider_detail,
+                        "location_detail": location_detail,
+                        "vendor_detail": vendor_detail,
+                        "addresses": addresses,
+                        "contacts": contacts,
+                        
+                    })
                 }
             })
-            //}
-            
-            console.log({
-                  "company_detail": company_detail,
-                  "provider_detail": provider_detail,
-                  "location_detail": location_detail,
-                  "vendor_detail": vendor_detail,
-                  "addresses": addresses,
-                  "contacts": contacts,
-                  
-              },
-            )
         })
       
-      $(_form_edit_provider)
+      $("#provider_edit")
         .on("change", function () {
             set_progress()
         })
@@ -7268,20 +7515,19 @@ const Provider = (function () {
           }
       }
       
-      const save = function (params) {
-      
+      const save = function (provider) {
+          console.log("provider", provider)
       }
       
       const build = function () {
-          if (validate_form()) {
-              return {
-                  name: "",
-                  code_direct_id: "",
-                  id: "",
-                  enabled: 1,
-              }
-          }
-          
+          return remove_nulls({
+              location_id: (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null,
+              company_id: (!isNaN(parseInt(_provider_company_id.value))) ? parseInt(_provider_company_id.value) : null,
+              code_direct_id: (_provider_code_direct_id.value === "") ? null : _provider_code_direct_id.value,
+              id: (!isNaN(parseInt(_provider_id.value))) ? parseInt(_provider_id.value) : null,
+              provider_vendor: (_form_edit_provider) ? 1 : 0,
+              enabled: 1,
+          })
       }
       
       const validate_form = function () {
@@ -7335,7 +7581,7 @@ const Provider = (function () {
        */
       const enable_form_fields = function () {
           if (_provider_id.value !== "" && _provider_company_id.value !== "") {
-              $(_provider_name).attr("readonly", true)
+          
           }
       }
       
@@ -7349,24 +7595,16 @@ const Provider = (function () {
           if (company_id === null || company_id === "") {
               $(_panel_tab_contact).addClass("disabled")
               $(_panel_tab_address).addClass("disabled")
+              $(_panel_tab_provider).addClass("disabled")
+              $(_panel_tab_vendor).addClass("disabled")
           } else {
               $(_panel_tab_contact).removeClass("disabled")
               $(_panel_tab_address).removeClass("disabled")
+              $(_panel_tab_provider).removeClass("disabled")
+              $(_panel_tab_vendor).removeClass("disabled")
           }
           
-          if (provider_id === null || provider_id === "") {
-              //$(_panel_tab_contact).addClass("disabled")
-              //$(_panel_tab_address).addClass("disabled")
-              //$(_panel_tab_location).addClass("disabled")
-              //$(_panel_tab_vendor).addClass("disabled")
-              //$(_panel_tab_provider).addClass("disabled")
-          } else {
-              //$(_panel_tab_provider).removeClass("disabled")
-              //$(_panel_tab_location).removeClass("disabled")
-              //$(_panel_tab_vendor).removeClass("disabled")
-              //$(_panel_tab_contact).removeClass("disabled")
-              //$(_panel_tab_address).removeClass("disabled")
-          }
+          _button_save_provider.disabled = !(_company_id.value !== "" && _location_name_filter_id.value !== "")
           
       }
       
@@ -7374,7 +7612,7 @@ const Provider = (function () {
        * disable form fields
        */
       const disable_form_fields = function () {
-          //$(_provider_code_direct_id).attr("readonly", true)
+          $(_provider_name).attr("readonly", true)
           
           if (_form_edit_provider) {
               if (isNew) {
@@ -7472,12 +7710,11 @@ const Provider = (function () {
               if (settings.is_new) {
                   isNew = settings.is_new
                   _button_save_provider.disabled = true
-                  //$(_panel_tab_provider).addClass("disabled")
-                  //$(_panel_tab_vendor).addClass("disabled")
+                  $(_panel_tab_provider).addClass("disabled")
+                  $(_panel_tab_vendor).addClass("disabled")
                   //$(_panel_tab_location).addClass("disabled")
                   $(_panel_tab_contact).addClass("disabled")
                   $(_panel_tab_address).addClass("disabled")
-                  $(_company_cover_image).attr("data-default-file", "/public/img/placeholder.jpg")
               }
               
               if (settings.provider_detail) {
@@ -7515,7 +7752,9 @@ const Provider = (function () {
               get(params)
           },
           build: function () {
-              return build()
+              if (validate_form()) {
+                  return build()
+              }
           },
           load_all: function (params) {
               load_all(params)

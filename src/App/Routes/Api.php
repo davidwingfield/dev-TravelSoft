@@ -22,8 +22,13 @@
     Router::get($routeLead . "/provinces", "Province@serveGet");
     Router::get($routeLead . "/cities", "City@serveGet");
     Router::get($routeLead . '/providers/${provider_id}', "Provider@serveGet");
+    Router::get($routeLead . '/addresses/${company_id}', "Address@serveGet");
+    Router::get($routeLead . '/addresses', "Address@serveGet");
+    Router::get($routeLead . '/contacts/${company_id}', "Contact@serveGet");
+    Router::get($routeLead . '/contacts', "Contact@serveGet");
     Router::get($routeLead . "/vendors", "Vendor@serveGet");
     Router::get($routeLead . "/contacts", "Contact@serveGet");
+    Router::get($routeLead . "/locations", "Location@serveGet");
     Router::get($routeLead . "/users/test", "User@test");
 
     /**
@@ -59,7 +64,7 @@
     Router::post($routeLead . "/vendors/update", "Vendor@serveUpdate");
     Router::post($routeLead . "/companies/update", "Company@serveUpdate");
     Router::post($routeLead . "/addresses/update", "Address@serveUpdate");
-    Router::post($routeLead . "/packages/update", "Country@serveUpdate");
+    Router::post($routeLead . "/locations/update", "Location@serveUpdate");
     Router::post($routeLead . "/users/update", "User@serveUpdateUser");
     Router::post($routeLead . "/seasons/update", "Province@serveUpdate");
     Router::post($routeLead . "/variants/update", "City@serveUpdate");

@@ -5,6 +5,7 @@
     use Exception;
     use Framework\Core\Model;
     use Framework\Logger\Log;
+    use PhpParser\Node\Expr\AssignOp\Mod;
 
     /**
      * ProviderModel
@@ -36,7 +37,8 @@
          *
          * @var string
          */
-        protected static $selectQuery = "SELECT 
+        protected static $selectQuery = "
+            SELECT 
                             PROVIDER.id AS 'provider_id',
                             PROVIDER.company_id AS 'provider_company_id',
                             PROVIDER.location_id AS 'provider_location_id',
@@ -348,6 +350,78 @@
 
                 return [];
             }
+        }
+
+        public static function update($provider = []): array
+        {
+            if (!isset($provider["company_id"], $provider["location_id"])) {
+                Log::$debug_log->error("Missing Data");
+                Log::$debug_log->trace($provider);
+
+                return [];
+            }
+
+            $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+            $enabled = Model::setBool((isset($provider["enabled"])) ? $provider["enabled"] : null);
+            $note = Model::setLongText((isset($provider["note"])) ? $provider["note"] : null);
+            $created_by = Model::setInt($user_id);
+            $modified_by = Model::setInt($user_id);
+
+            $id = Model::setInt((isset($provider["id"])) ? $provider["id"] : null);
+            $company_id = Model::setInt((isset($provider["company_id"])) ? $provider["company_id"] : null);
+            $location_id = Model::setInt((isset($provider["location_id"])) ? $provider["location_id"] : null);
+
+            $provider_vendor = Model::setBool((isset($provider["provider_vendor"])) ? $provider["provider_vendor"] : null);
+
+            $code_direct_id = Model::setString((isset($location["code_direct_id"])) ? $location["code_direct_id"] : null);
+            $sql = "
+                INSERT INTO provider (
+                    id, company_id, location_id, code_direct_id,
+                    provider_vendor, enabled, date_created, created_by,
+                    date_modified, modified_by, note
+                ) VALUES (
+                    $id, $company_id, $location_id, $code_direct_id,
+                    $provider_vendor, $enabled, CURRENT_TIMESTAMP, $created_by,
+                    CURRENT_TIMESTAMP, $modified_by, $note
+                )
+                ON DUPLICATE KEY UPDATE
+                    location_id = VALUES(location_id),
+                    company_id = VALUES(company_id),
+                    code_direct_id = VALUES(code_direct_id),
+                    provider_vendor = VALUES(provider_vendor), 
+                    enabled = VALUES(enabled),
+                    modified_by = VALUES(modified_by),
+                    date_modified = VALUES(date_modified);
+            ";
+
+            try {
+                Model::$db->rawQuery($sql);
+                $provider_id = Model::$db->getInsertId();
+                if ($provider_id) {
+                    $update = "
+                        UPDATE      provider
+                        SET         code_direct_id = generateCodeDirectId($provider_id)
+                        WHERE       id = $provider_id;";
+                    try {
+                        Model::$db->rawQuery($update);
+
+                        return self::get((int)$provider_id);
+                    } catch (Exception $ex) {
+                        Log::$debug_log->error($ex);
+
+                        return [];
+                    }
+                } else {
+                    Log::$debug_log->info("hh");
+                }
+
+                return [];
+            } catch (Exception $e) {
+                Log::$debug_log->error($e);
+
+                return [];
+            }
+
         }
 
     }

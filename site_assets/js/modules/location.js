@@ -25,6 +25,7 @@ const Location = (function () {
     const _button_close_edit_location_form = document.getElementById("button_close_edit_location_form")
     const _form_edit_location_filter = document.getElementById("form_edit_location_filter")
     const _location_name_filter_id = document.getElementById("location_name_filter_id")
+    //
     const edit_location_filter_form_rules = {
         groups: {
             locationGroup: "location_name_filter location_name_filter_id",
@@ -48,12 +49,10 @@ const Location = (function () {
             },
         },
     }
-    
     const form_rules = {
         rules: {
             location_types_id: {
                 required: true,
-                digits: true,
             },
             location_city_id: {
                 required: true,
@@ -72,7 +71,6 @@ const Location = (function () {
         messages: {
             location_types_id: {
                 required: "Field Required",
-                digits: "invalid",
             },
             location_city_id: {
                 required: "Field Required",
@@ -168,7 +166,9 @@ const Location = (function () {
      */
     $("input[name='location_display']")
       .on("change", function () {
+          
           let selected_value = $("input[name='location_display']:checked").val()
+          console.log("selected_value", selected_value)
           default_display = selected_value
           init_autocomplete()
           if (Location.detail["display_" + selected_value] !== null) {
@@ -241,6 +241,7 @@ const Location = (function () {
                       globalSelectedLocation = true
                       reset_form()
                       let location = suggestion.data
+                      Location.detail = location
                       temp_location = location
                       populate_form(location)
                   }
@@ -421,25 +422,6 @@ const Location = (function () {
         }
     }
     
-    const save = function () {
-        if (validate_form()) {
-            let dataToSend = {
-                id: (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null,
-                city_id: (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null,
-                province_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null,
-                country_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_country_id.value) : null,
-                location_types_id: (!isNaN(parseInt(_location_types_id.value))) ? parseInt(_location_types_id.value) : null,
-                name: (_location_name && _location_name.value !== "") ? _location_name.value : null,
-                street_1: (_location_street_1 && _location_street_1.value !== "") ? _location_street_1.value : null,
-                street_2: (_location_street_2 && _location_street_2.value !== "") ? _location_street_2.value : null,
-                zipcode: (_location_zipcode && _location_zipcode.value !== "") ? _location_zipcode.value : null,
-                enabled: 1,
-                note: null,
-            }
-            console.log("save", dataToSend)
-        }
-    }
-    
     const get = function (id) {
         let data_to_send = {}
         if (id) {
@@ -519,7 +501,7 @@ const Location = (function () {
         let city = {}
         let type = {}
         if (location) {
-            
+            console.log("location", location)
             switch (defaultLocationDisplayFormat) {
                 case "short":
                     _location_name_filter.value = (location.display_short) ? location.display_short : ""
@@ -538,10 +520,12 @@ const Location = (function () {
             _location_street_2.value = location.street_2
             _location_zipcode.value = location.zipcode
             
+            let location_type_id = ""
             if (location.type) {
                 type = location.type
-                _location_types_id.value = type.id
+                location_type_id = type.id
             }
+            $(_location_types_id).val(location_type_id)
             
             if (location.country) {
                 country = location.country
@@ -695,9 +679,9 @@ const Location = (function () {
         
         if (_form_edit_location) {
             validator_init(form_rules)
+            validator = $(_form_edit_location).validate()
             validator_init(edit_location_filter_form_rules)
             validator_name_filter = $(_form_edit_location_filter).validate()
-            validator = $(_form_edit_location).validate()
             
             $(_location_country_id).BuildDropDown({
                 data: Array.from(Country.all.values()),
@@ -752,12 +736,69 @@ const Location = (function () {
         
     }
     
+    /**
+     * update location
+     *
+     * @param dataToSend
+     * @param callback
+     */
+    const update_location = function (dataToSend, callback) {
+        let url = "/api/v1.0/locations/update"
+        if (dataToSend) {
+            sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                if (data) {
+                    return callback(data)
+                } else {
+                    return handle_location_error("Oops: 1")
+                }
+            })
+        }
+    }
+    
+    /**
+     * save object
+     */
+    const save = function () {
+        if (validate_form()) {
+            confirmDialog(`Would you like to update?`, (ans) => {
+                if (ans) {
+                    update_location(build(), function (data) {
+                        let location
+                        if (data) {
+                            if (data[0]) {
+                                let displayView = "medium"
+                                location = data[0]
+                                temp_location = location
+                                
+                                let el = document.getElementsByName("location_display")
+                                for (let i = 0; i < el.length; i++) {
+                                    if (el[i].checked) {
+                                        displayView = el[i].value
+                                    }
+                                }
+                                
+                                _location_name_filter.value = location["display_" + displayView]
+                            }
+                        }
+                    })
+                }
+            })
+        }
+    }
+    
     const build = function () {
-        //let err = $("<span class='invalid'>Field Required</span>")
-        //let location = (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null
-        
-        if (validate_edit_location_filter_form()) {
-            return Location.detail
+        return {
+            id: (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null,
+            city_id: (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null,
+            province_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null,
+            country_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_country_id.value) : null,
+            location_types_id: (!isNaN(parseInt(_location_types_id.value))) ? parseInt(_location_types_id.value) : null,
+            name: (_location_name && _location_name.value !== "") ? _location_name.value : null,
+            street_1: (_location_street_1 && _location_street_1.value !== "") ? _location_street_1.value : null,
+            street_2: (_location_street_2 && _location_street_2.value !== "") ? _location_street_2.value : null,
+            zipcode: (_location_zipcode && _location_zipcode.value !== "") ? _location_zipcode.value : null,
+            enabled: 1,
+            note: null,
         }
     }
     
@@ -786,7 +827,9 @@ const Location = (function () {
             set_detail(location)
         },
         build: function () {
-            return build()
+            if (validate_edit_location_filter_form()) {
+                return build()
+            }
         },
     }
     

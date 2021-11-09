@@ -18,6 +18,7 @@
             <div class="row" style="">
                 
                 <div class="col-12 col-md-6 col-lg-8">
+                    
                     <div class="row" style="">
                         
                         <!-- Company Id -->
@@ -35,13 +36,16 @@
                             <div class="form-element" style="">
                                 <label for="company_name" style="">Company Name:</label>
                                 <div class="input-group">
-                                    <!--<input type="search" id="provider_name" name="provider_name" class="form-control" style="" aria-label="Vendor Id" placeholder="" autocomplete="off"/>-->
                                     <input type="search" id="company_name" name="company_name" class="form-control" style="" aria-label="Company Name" placeholder="" autocomplete="off"/>
                                     <div class="input-group-append">
                                         <button class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect" type="button" id="button_edit_company_name">
                                             <i class="fas fa-edit"></i>
                                         </button>
+                                        <button type="button" id="button_cancel_edit_company_name" class="btn btn-md btn-danger m-0 px-3 py-2 z-depth-0 waves-effect" style="display:none">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
                                     </div>
+
                                 </div>
                                 <div id="company_name-error" class="error w-100 text-center" style="">&nbsp;</div>
                             </div>
@@ -49,62 +53,70 @@
                         <!-- /Company Name -->
                     
                     </div>
-                    <div class="row" style="">
-                        
-                        <!-- Company Phone 1 -->
-                        <div class="col-12 col-md-4" style="">
-                            <div class="form-element" style="">
-                                <label for="company_phone_1" style="">Phone 1:</label>
-                                <input type="tel" id="company_phone_1" name="company_phone_1" class="form-control" style="" aria-label="Company Street 1" placeholder="" autocomplete="off">
-                                <div id="company_phone_1-error" class="error w-100 text-center" style="">&nbsp;</div>
-                            </div>
-                        </div>
-                        <!-- /Company Phone 1 -->
-                        
-                        <!-- Company Phone 2 -->
-                        <div class="col-12 col-md-4" style="">
-                            <div class="form-element" style="">
-                                <label for="company_phone_2" style="">Phone 2:</label>
-                                <input type="tel" id="company_phone_2" name="company_phone_2" class="form-control" style="" aria-label="Company Street 2" placeholder="" autocomplete="off">
-                                <div id="company_phone_2-error" class="error w-100 text-center" style="">&nbsp;</div>
-                            </div>
-                        </div>
-                        <!-- /Company Phone 2 -->
-                        
-                        <!-- Company Fax -->
-                        <div class="col-12 col-md-4" style="">
-                            <div class="form-element" style="">
-                                <label for="company_fax" style="">Phone 2:</label>
-                                <input type="tel" id="company_fax" name="company_fax" class="form-control" style="" aria-label="Company Street 2" placeholder="" autocomplete="off">
-                                <div id="company_fax-error" class="error w-100 text-center" style="">&nbsp;</div>
-                            </div>
-                        </div>
-                        <!-- /Company Fax -->
                     
-                    </div>
-                    
-                    <div class="row" style="">
-                        
-                        <!-- Company Website -->
-                        <div class="col-12 col-md-6" style="">
-                            <div class="form-element" style="">
-                                <label for="company_website" style="">Website:</label>
-                                <input type="url" id="company_website" name="company_website" class="form-control" style="" aria-label="Company Street 3" placeholder="" autocomplete="off">
-                                <div id="company_website-error" class="error w-100 text-center" style="">&nbsp;</div>
+                    <div id="form_edit_company_block">
+                        <div class="row" style="">
+                            
+                            <!-- Company Phone 1 -->
+                            <div class="col-12 col-md-4" style="">
+                                <div class="form-element" style="">
+                                    <label for="company_phone_1" style="">Phone 1:</label>
+                                    <input type="tel" id="company_phone_1" name="company_phone_1" class="form-control" style="" aria-label="Company Street 1" placeholder="" autocomplete="off">
+                                    <div id="company_phone_1-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                </div>
                             </div>
-                        </div>
-                        <!-- /Company Website -->
-                        
-                        <!-- Company Email -->
-                        <div class="col-12 col-md-6" style="">
-                            <div class="form-element" style="">
-                                <label for="company_email" style="">Email:</label>
-                                <input type="email" id="company_email" name="company_email" class="form-control" style="" aria-label="Company Street 3" placeholder="" autocomplete="off">
-                                <div id="company_email-error" class="error w-100 text-center" style="">&nbsp;</div>
+                            <!-- /Company Phone 1 -->
+                            
+                            <!-- Company Phone 2 -->
+                            <div class="col-12 col-md-4" style="">
+                                <div class="form-element" style="">
+                                    <label for="company_phone_2" style="">Phone 2:</label>
+                                    <input type="tel" id="company_phone_2" name="company_phone_2" class="form-control" style="" aria-label="Company Street 2" placeholder="" autocomplete="off">
+                                    <div id="company_phone_2-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                </div>
                             </div>
+                            <!-- /Company Phone 2 -->
+                            
+                            <!-- Company Fax -->
+                            <div class="col-12 col-md-4" style="">
+                                <div class="form-element" style="">
+                                    <label for="company_fax" style="">Phone 2:</label>
+                                    <input type="tel" id="company_fax" name="company_fax" class="form-control" style="" aria-label="Company Street 2" placeholder="" autocomplete="off">
+                                    <div id="company_fax-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                </div>
+                            </div>
+                            <!-- /Company Fax -->
+                        
                         </div>
-                        <!-- /Company Email -->
-                    
+
+                        <div class="row" style="">
+
+                            <!-- Company Website -->
+                            <div class="col-12 col-md-6" style="">
+                                <div class="form-element" style="">
+                                    <label for="company_website" style="">Website:</label>
+                                    <input type="url" id="company_website" name="company_website" class="form-control" style="" aria-label="Company Street 3" placeholder="" autocomplete="off">
+                                    <div id="company_website-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                </div>
+                            </div>
+                            <!-- /Company Website -->
+
+                            <!-- Company Email -->
+                            <div class="col-12 col-md-6" style="">
+                                <div class="form-element" style="">
+                                    <label for="company_email" style="">Email:</label>
+                                    <input type="email" id="company_email" name="company_email" class="form-control" style="" aria-label="Company Street 3" placeholder="" autocomplete="off">
+                                    <div id="company_email-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                </div>
+                            </div>
+                            <!-- /Company Email -->
+
+                        </div>
+
+                        <div class="text-right w-100">
+                            <a href="javascript:void(0);" id="button_clear_form_edit_company" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+                            <a href="javascript:void(0);" id="button_submit_form_edit_company" class="btn btn-primary btn-sm waves-effect waves-light" style="">Update</a>
+                        </div>
                     </div>
                 
                 </div>
@@ -121,11 +133,6 @@
             
             </div>
 
-            <div class="text-right w-100">
-                <a href="javascript:void(0);" id="button_clear_form_edit_company" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
-                <a href="javascript:void(0);" id="button_submit_form_edit_company" class="btn btn-primary btn-sm waves-effect waves-light" style="">Update</a>
-            </div>
-        
         </div>
     </div>
     <!-- /Card -->

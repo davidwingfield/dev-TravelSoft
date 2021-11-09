@@ -259,3 +259,7 @@ strong {
 .blue-grey-400 {
   color: #a3afb7 !important;
   }
+
+[readonly='readonly'] {
+  pointer-events: none;
+  }

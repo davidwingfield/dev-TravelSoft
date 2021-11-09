@@ -77,11 +77,8 @@
         </form>
 
         <form id="form_edit_location" name="form_edit_location" class="" style="" novalidate>
-
             <div class="card rgba-blue-grey-slight m-3" id="form_location_details">
-                
                 <div class="card-body">
-                    
                     <h5 class="card-title">
                         <span>Panel title</span>
                         <a id="button_close_edit_location_form" href="javascript:void(0);" class="panel-button-close fas fa-times" aria-hidden="true"></a>
@@ -111,7 +108,7 @@
                                     <label for="location_types_id">Location Type:</label>
                                     <select id="location_types_id" name="location_types_id" class="form-control">
                                         <?php
-                                            echo "<option value='' selected readonly disabled>-- Location Types --</option>";
+                                            echo "<option  value='' disabled selected>-- Location Types --</option>";
                                             foreach ($location_types AS $k => $v) {
                                                 $val = $v["id"];
                                                 $text = $v["name"];
@@ -249,7 +246,6 @@
                     </div>
                 
                 </div>
-            
             </div>
         </form>
     </div>

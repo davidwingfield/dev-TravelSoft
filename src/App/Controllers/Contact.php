@@ -22,11 +22,6 @@
             parent::__construct();
         }
 
-        private static function format_contact_table(array $contact = []): array
-        {
-            return [];
-        }
-
         public static function serveUpdate(array $params = [])
         {
             $contacts = [];
@@ -127,6 +122,11 @@
                 "modified_by" => (isset($contact["contact_contact_types_id"])) ? $contact["contact_modified_by"] : null,
                 "note" => (isset($contact["contact_contact_types_id"])) ? $contact["contact_note"] : null,
             );
+        }
+
+        private static function format_contact_table(array $contact = []): array
+        {
+            return [];
         }
 
     }

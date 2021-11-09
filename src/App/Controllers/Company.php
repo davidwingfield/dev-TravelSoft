@@ -92,8 +92,6 @@
 
         private static function format(array $company): array
         {
-            Log::$debug_log->trace($company);
-
             return array(
                 "id" => $company["company_id"],
                 "name" => $company["company_name"],

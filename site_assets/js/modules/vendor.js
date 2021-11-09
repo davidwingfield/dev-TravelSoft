@@ -22,17 +22,11 @@ const Vendor = (function () {
     let globalSelectedVendor = false
     let form_rules = {
         rules: {
-            vendor_sku: {
-                required: true,
-            },
             vendor_name: {
                 required: true,
             },
         },
         messages: {
-            vendor_sku: {
-                required: "Field Required",
-            },
             vendor_name: {
                 required: "Field Required",
             },
@@ -102,17 +96,14 @@ const Vendor = (function () {
     }
     
     const build = function () {
-        if (validate_form()) {
-            let vendor = {
-                id: (!isNaN(parseInt(_vendor_id.value))),
-                show_online: (_vendor_show_online.checked === true),
-                show_sales: (_vendor_show_sales.checked === true),
-                show_ops: (_vendor_show_ops.checked === true),
-                is_provider: (_vendor_is_provider.checked === true),
-                sku: _vendor_sku.value,
-            }
-            return remove_nulls(vendor)
-        }
+        return remove_nulls({
+            id: (!isNaN(parseInt(_vendor_id.value))),
+            show_online: (_vendor_show_online.checked === true) ? 1 : 0,
+            show_sales: (_vendor_show_sales.checked === true) ? 1 : 0,
+            show_ops: (_vendor_show_ops.checked === true) ? 1 : 0,
+            is_provider: (_vendor_is_provider.checked === true) ? 1 : 0,
+            sku: _vendor_sku.value,
+        })
     }
     
     const vendor_exists = function (name) {
@@ -349,8 +340,9 @@ const Vendor = (function () {
         if (_provider_edit) {
             _vendor_is_provider.checked = true
             $(_vendor_is_provider).attr("readonly", true)
+            _vendor_is_provider.disabled = true
             $(_vendor_name).attr("readonly", true)
-            $(_vendor_name).attr("readonly", true)
+            $(_vendor_id).attr("readonly", true)
             $(_vendor_sku).attr("readonly", true)
             $(_vendor_is_provider).attr("readonly", true)
         }
@@ -379,7 +371,9 @@ const Vendor = (function () {
             init(settings)
         },
         build: function () {
-            return build()
+            if (validate_form()) {
+                return build()
+            }
         },
     }
     

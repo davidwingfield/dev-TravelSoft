@@ -18,8 +18,19 @@
     class LocationModel extends Model
     {
 
+        /**
+         * @var string
+         */
         protected static $dbTable = "location";
+
+        /**
+         * @var array
+         */
         protected static $dbFields = Array();
+
+        /**
+         * @var string
+         */
         protected static $sql = "SELECT      CONCAT(	LOCATION.name, ' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') AS 'location',
                         CONCAT(LOCATION.name, ' ',	'(' ,CITY.name, ' ', CONCAT(PROVINCE.iso2, ' - ', PROVINCE.name), ', ', CONCAT(COUNTRY.iso2, ' - ', COUNTRY.name),')') AS 'location_long',
                         CONCAT(LOCATION.name, ' ',	'(' ,CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2,')') AS 'location_short',
@@ -80,13 +91,22 @@
                         COUNTRY.date_created AS 'country_date_created',
                         COUNTRY.created_by AS 'country_created_by',
                         COUNTRY.date_modified AS 'country_date_modified',
-                        COUNTRY.modified_by AS 'country_modified_by'
+                        COUNTRY.modified_by AS 'country_modified_by',
+                        BIN(CONCAT(LOCATION.name, ' ',	'(' ,CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2,')')) AS binray_not_needed_column_location_short,
+                        BIN(CONCAT(	LOCATION.name, ' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')')) AS binray_not_needed_column_location,
+                        BIN(CONCAT(LOCATION.name, ' ',	'(' ,CITY.name, ' ', CONCAT(PROVINCE.iso2, ' - ', PROVINCE.name), ', ', CONCAT(COUNTRY.iso2, ' - ', COUNTRY.name),')')) AS binray_not_needed_column_location_long
             FROM 		location LOCATION
             JOIN	    location_types LOCATION_TYPES ON LOCATION_TYPES.id = LOCATION.location_types_id
             JOIN		city CITY ON CITY.id = LOCATION.city_id
             JOIN		province PROVINCE ON PROVINCE.id = CITY.province_id
             JOIN		country COUNTRY ON COUNTRY.id = PROVINCE.country_id";
 
+        /**
+         * @param string $name
+         * @param string $default_display
+         *
+         * @return array
+         */
         public static function getByName(string $name, string $default_display = "medium"): array
         {
 
@@ -124,6 +144,12 @@
             return [];
         }
 
+        /**
+         * @param string $st
+         * @param string $default_display
+         *
+         * @return array
+         */
         public static function location_ac(string $st = "", string $default_display = "medium"): array
         {
             $searchTerm = addslashes($st);
@@ -165,22 +191,50 @@
 
         }
 
-        public static function get(int $id = null): array
+        /**
+         * @param int|null $id
+         * @param string   $default_display
+         *
+         * @return array
+         */
+        public static function get(int $id = null, string $default_display = "medium"): array
         {
-
+            $orderBy = "";
+            $where = "
+            WHERE		CITY.enabled = 1
+                 AND		NOT ISNULL(CITY.name)
+                 AND		NOT ISNULL(PROVINCE.name)
+                 AND		NOT ISNULL(COUNTRY.name)";
             try {
                 if (!is_null($id)) {
-                    Model::$db->where("id", $id);
+                    $where .= "
+                             AND 		LOCATION.id = $id";
                 }
 
-                self::$db->where("enabled", 1);
+                if ($default_display === "short") {
+                    $orderBy = "ORDER BY    LENGTH(CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2, ')')), CAST(CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2, ')') AS UNSIGNED), CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2, ')') ASC";
+                } else {
+                    if ($default_display === "long") {
+                        $orderBy = " ORDER BY    LENGTH(CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', CONCAT(PROVINCE.iso2, ' - ', PROVINCE.name), ', ', CONCAT(COUNTRY.iso2, ' - ', COUNTRY.name), ')')), CAST(CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', CONCAT(PROVINCE.iso2, ' - ', PROVINCE.name), ', ', CONCAT(COUNTRY.iso2, ' - ', COUNTRY.name), ')') AS UNSIGNED), CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', CONCAT(PROVINCE.iso2, ' - ', PROVINCE.name), ', ', CONCAT(COUNTRY.iso2, ' - ', COUNTRY.name), ')') ASC";
+                    } else {
+                        $orderBy = "ORDER BY           LENGTH(CONCAT(	LOCATION.name,	' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')')), CAST(CONCAT(	LOCATION.name,	' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') AS UNSIGNED), CONCAT(	LOCATION.name,	' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') ASC";
+                    }
+                }
+                $sql = self::$sql . "
+            $where
+            $orderBy;";
 
-                return self::$db->get(self::$dbTable);
+                return Model::$db->rawQuery($sql);
             } catch (Exception $e) {
                 return [];
             }
         }
 
+        /**
+         * @param int|null $id
+         *
+         * @return array
+         */
         public static function getOne(int $id = null): array
         {
             try {
@@ -196,9 +250,65 @@
             }
         }
 
-        public static function update(array $params = []): array
+        /**
+         * @param array $location
+         *
+         * @return array
+         */
+        public static function update(array $location = []): array
         {
-            return $params;
+            $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+            $id = Model::setInt((isset($location["id"])) ? $location["id"] : null);
+            $street_1 = Model::setString((isset($location["street_1"])) ? $location["street_1"] : null);
+            $street_2 = Model::setString((isset($location["street_2"])) ? $location["street_2"] : null);
+            $zipcode = Model::setString((isset($location["zipcode"])) ? $location["zipcode"] : null);
+            $name = Model::setString((isset($location["name"])) ? $location["name"] : null);
+            $location_types_id = Model::setInt((isset($location["location_types_id"])) ? $location["location_types_id"] : null);
+            $country_id = Model::setInt((isset($location["country_id"])) ? $location["country_id"] : null);
+            $province_id = Model::setInt((isset($location["province_id"])) ? $location["province_id"] : null);
+            $city_id = Model::setInt((isset($location["city_id"])) ? $location["city_id"] : null);
+            $status_id = Model::setInt((isset($location["status_id"])) ? $location["status_id"] : null);
+            $enabled = Model::setBool((isset($location["enabled"])) ? $location["enabled"] : null);
+            $note = Model::setLongText((isset($location["note"])) ? $location["note"] : null);
+            $created_by = Model::setInt($user_id);
+            $modified_by = Model::setInt($user_id);
+            // ----
+            try {
+                $sql = "
+                INSERT INTO location (
+                    id, city_id, location_types_id, name,
+                    street_1, street_2, zipcode, enabled,
+                    date_created, created_by, date_modified, modified_by,
+                    note
+                ) VALUES (
+                    $id, $city_id, $location_types_id, $name,
+                    $street_1, $street_2, $zipcode, $enabled,
+                    CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP, $modified_by,
+                    $note
+                )
+                ON DUPLICATE KEY UPDATE
+                    city_id = VALUES(city_id),
+                    location_types_id = VALUES(location_types_id),
+                    name = VALUES(name),
+                    street_1 = VALUES(street_1), 
+                    street_2 = VALUES(street_2), 
+                    zipcode = VALUES(zipcode), 
+                    enabled = VALUES(enabled),
+                    modified_by = VALUES(modified_by),
+                    date_modified = VALUES(date_modified);
+                ";
+                Model::$db->rawQuery($sql);
+                $location_id = Model::$db->getInsertId();
+                if ($location_id) {
+                    return self::get($location_id);
+                }
+
+                return [];
+            } catch (Exception $e) {
+                Log::$debug_log->error($e);
+
+                return [];
+            }
         }
 
     }

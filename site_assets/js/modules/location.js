@@ -786,8 +786,13 @@ const Location = (function () {
         }
     }
     
+    /**
+     * build location object
+     *
+     * @returns {{}|*}
+     */
     const build = function () {
-        return {
+        return remove_nulls({
             id: (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null,
             city_id: (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null,
             province_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null,
@@ -799,7 +804,7 @@ const Location = (function () {
             zipcode: (_location_zipcode && _location_zipcode.value !== "") ? _location_zipcode.value : null,
             enabled: 1,
             note: null,
-        }
+        })
     }
     
     return {
@@ -828,6 +833,7 @@ const Location = (function () {
         },
         build: function () {
             if (validate_edit_location_filter_form()) {
+                console.log("yes")
                 return build()
             }
         },

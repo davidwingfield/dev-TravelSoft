@@ -3,7 +3,7 @@ const defaultLocationDisplayFormat = "medium" //long medium short
 const sideNavOptions = {
     edge: "left", // Choose the horizontal origin
     closeOnClick: false, // Closes side-nav on &lt;a&gt; clicks, useful for Angular/Meteor
-    breakpoint: 1200, // Breakpoint for button collapse
+    breakpoint: 1199, // Breakpoint for button collapse
     menuWidth: 240, // Width for sidenav
     timeDurationOpen: 500, // Time duration open menu
     timeDurationClose: 500, // Time duration open menu
@@ -720,9 +720,54 @@ const addTinyMCE = function (el) {
     })
 }
 
+/**
+ * converts HTML entities in the string to their corresponding characters.
+ *
+ * @param value
+ * @returns {*|jQuery}
+ */
 const htmlDecode = function (value) {
     return $("<textarea/>").html(value).text()
 }
+
+
+/**
+ * converts HTML entities in the string to their corresponding characters.
+ *
+ * @param str
+ * @returns {*}
+ */
+function decodeHtml (str) {
+    if (!str) {
+        str = ""
+    }
+    var map =
+      {
+          "&amp;": "&",
+          "&lt;": "<",
+          "&gt;": ">",
+          "&quot;": "\"",
+          "&#039;": "'",
+      }
+    return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function (m) {return map[m]})
+}
+
+
+function escapeHtml (text) {
+    if (!text) {
+        text = ""
+    }
+    var map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#039;",
+    }
+    
+    return text.replace(/[&<>"']/g, function (m) { return map[m] })
+}
+
 
 const htmlEncode = function (value) {
     return $("<textarea/>").text(value).html()
@@ -841,31 +886,31 @@ jQuery.extend({
 const confirmDialog = function (message, handler) {
     
     $(`
-    <!--Modal: modalConfirm-->
-<div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirmationLabel" aria-hidden="true">
-	<div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-		<!--Content-->
-		<div class="modal-content text-center">
-			<!--Header-->
-			<div class="modal-header d-flex justify-content-center">
-				<p class="heading">${message}</p>
-			</div>
-
-			<!--Body-->
-			<div class="modal-body">
-				<i class="fas fa-times fa-4x animated rotateIn"></i>
-			</div>
-
-			<!--Footer-->
-			<div class="modal-footer flex-center">
-				<a class="btn btn-outline-danger btn-yes">yes</a>
-				<a type="button" class="btn btn-danger waves-effect btn-no">no</a>
-			</div>
-		</div>
-		<!--/.Content-->
-	</div>
-</div>
-<!--Modal: modalConfirm-->
+        <!--Modal: modalConfirm-->
+        <div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirmationLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-notify modal-info" role="document">
+                <!--Content-->
+                <div class="modal-content text-center">
+                    <!--Header-->
+                    <div class="modal-header d-flex justify-content-center">
+                        <p class="heading">${message}</p>
+                    </div>
+        
+                    <!--Body-->
+                    <div class="modal-body">
+                        <i class="fas fa-check fa-4x mb-3 animated rotateIn"></i>
+                    </div>
+        
+                    <!--Footer-->
+                    <div class="modal-footer flex-center">
+                        <a class="btn btn-outline-info btn-yes">yes</a>
+                        <a type="button" class="btn btn-info waves-effect btn-no">no</a>
+                    </div>
+                </div>
+                <!--/.Content-->
+	        </div>
+        </div>
+        <!--Modal: modalConfirm-->
     `)
       .appendTo("body")
     //Trigger the modal
@@ -899,6 +944,220 @@ const confirmDialog = function (message, handler) {
       })
     
 }
+const deleteDialog = function (message, handler) {
+    
+    $(`
+        <!--Modal: modalConfirm-->
+        <div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirmationLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+		<!--Content-->
+		<div class="modal-content text-center">
+			<!--Header-->
+			<div class="modal-header d-flex justify-content-center">
+				<p class="heading">${message}</p>
+			</div>
+
+			<!--Body-->
+			<div class="modal-body">
+				<i class="fas fa-times fa-4x animated rotateIn"></i>
+			</div>
+
+			<!--Footer-->
+			<div class="modal-footer flex-center">
+				<a class="btn btn-outline-danger btn-yes">yes</a>
+				<a type="button" class="btn btn-danger waves-effect btn-no">no</a>
+			</div>
+		</div>
+		<!--/.Content-->
+	</div>
+</div>
+        <!--Modal: modalConfirm-->
+    `)
+      .appendTo("body")
+    //Trigger the modal
+    $("#modalConfirm")
+      .modal({
+          backdrop: "static",
+          keyboard: false,
+      })
+    
+    //Pass true to a callback function
+    $(".btn-yes")
+      .click(function () {
+          handler(true)
+          $("#modalConfirm")
+            .modal("hide")
+      })
+    
+    //Pass false to callback function
+    $(".btn-no")
+      .click(function () {
+          handler(false)
+          $("#modalConfirm")
+            .modal("hide")
+      })
+    
+    //Remove the modal once it is closed.
+    $("#modalConfirm")
+      .on("hidden.bs.modal", function () {
+          $("#modalConfirm")
+            .remove()
+      })
+    
+}
+
+const tinyEditor = (function () {
+    "use strict"
+    let but_toggle
+    
+    const init = function (settings) {
+        but_toggle = document.querySelectorAll(".but_toggle")
+        console.log("tinyEdit: init", but_toggle.length)
+        
+        but_toggle.forEach(el => el.addEventListener("click", event => {
+            console.log("el.dataset.texted", el.dataset.texted)
+            if (el.dataset.texted) {
+                let editorId = el.dataset.texted
+                let editor = $("#" + editorId)
+                if (tinyMCE.get(editorId)) {
+                    console.log(editorId)
+                    editor.val(decodeHtml(editor.val()))
+                    tinymce.remove("#" + editorId)
+                } else {
+                    editor.val(decodeHtml(editor.val()))
+                    addTinyMCE(editorId)
+                }
+            }
+        }))
+    }
+    
+    const addTinyMCE = function (el) {
+        
+        tinymce.init({
+            selector: "#" + el,
+            menubar: false,
+            height: "400",
+            plugins: "print visualblocks visualchars charmap hr pagebreak advlist lists",
+            content_css: [
+                "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap",
+                "/public/css/bootstrap.min.css",
+                "/public/css/style.css",
+                "/public/css/variant.css",
+            ],
+            body_class: "p-2",
+            font_formats: "Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Open Sans=Open Sans;Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats",
+            toolbar1: "undo redo | styleselect | fontselect fontsizeselect | removeformat | numlist bullist checklist | outdent indent ",
+            toolbar2: "cut copy | bold italic underline strikethrough | forecolor | alignleft aligncenter alignright alignjustify | backcolor",
+            
+            content_style: "body { font-family:\"Open Sans\", sans-serif; font-size:14px; font-weight: 400 }",
+            style_formats: [
+                {
+                    title: "Headers",
+                    items: [
+                        {
+                            title: "h1",
+                            block: "h1",
+                        },
+                        {
+                            title: "h2",
+                            block: "h2",
+                        },
+                        {
+                            title: "h3",
+                            block: "h3",
+                        },
+                        {
+                            title: "h4",
+                            block: "h4",
+                        },
+                        {
+                            title: "h5",
+                            block: "h5",
+                        },
+                        {
+                            title: "h6",
+                            block: "h6",
+                        },
+                    ],
+                }, {
+                    title: "Blocks",
+                    items: [
+                        {
+                            title: "p",
+                            block: "p",
+                        },
+                        {
+                            title: "div",
+                            block: "div",
+                        },
+                        {
+                            title: "pre",
+                            block: "pre",
+                        },
+                    ],
+                },
+                
+                {
+                    title: "Containers",
+                    items: [
+                        {
+                            title: "section",
+                            block: "section",
+                            wrapper: true,
+                            merge_siblings: false,
+                        },
+                        {
+                            title: "article",
+                            block: "article",
+                            wrapper: true,
+                            merge_siblings: false,
+                        },
+                        {
+                            title: "blockquote",
+                            block: "blockquote",
+                            wrapper: true,
+                        },
+                        {
+                            title: "hgroup",
+                            block: "hgroup",
+                            wrapper: true,
+                        },
+                        {
+                            title: "aside",
+                            block: "aside",
+                            wrapper: true,
+                        },
+                        {
+                            title: "figure",
+                            block: "figure",
+                            wrapper: true,
+                        },
+                    ],
+                },
+            ],
+            branding: false,
+            resize: false,
+            setup: function (editor) {
+                editor.on("change", function () {
+                    editor.save()
+                })
+            },
+        })
+    }
+    
+    return {
+        addTinyMCE: function (el) {
+            addTinyMCE(el)
+        },
+        init: function () {
+            init()
+        },
+    }
+})()
+$(document).ready(function () {
+    tinyEditor.init()
+})
+
 
 $.fn.table = function (settings) {
     "use strict"
@@ -1127,6 +1386,176 @@ $.fn.table = function (settings) {
         },
     }
     
+}
+
+$.fn.BuildKeyword = function (keywords) {
+    
+    if (!$(this).hasClass("keyword")) {
+        return
+    }
+    
+    const chip_id = $(this).attr("id")
+    const _chips = document.getElementById(chip_id)
+    
+    let tags = new Map()
+    let $chipsEl = $(_chips)
+    let $submitButton = $(`#${chip_id} > div > div > button`)
+    let $input = $(`#${chip_id} > div > input.user-release-input`)
+    let counter = 0
+    let $container = $(`#${chip_id} > div > div.chips_container`)
+    
+    //--
+    if (!keywords) {
+        keywords = []
+    }
+    
+    if (typeof keywords === "string") {
+        keywords = keywords.split(",").map(function (value) {
+            return value.trim()
+        })
+    }
+    
+    (function ($) {
+        $.event.special.destroyed = {
+            remove: function (o) {
+                if (o.handler) {
+                    o.handler()
+                }
+            },
+        }
+    })(jQuery)
+    
+    $input
+      .on("keypress", function (e) {
+          if (e.which === 13) {
+              add()
+              editMode = false
+          }
+      })
+    
+    $submitButton
+      .on("click", function () {
+          add()
+          editMode = false
+      })
+    
+    let editMode = false
+    const formatTag = function (data) {
+        counter += 1
+        if (data) {
+            let $chip = $("<div>")
+            let $closeIcon = $("<i>")
+            
+            $closeIcon
+              .addClass("close fas fa-times")
+              .on("click", function (e) {
+                  e.stopPropagation()
+                  let $chip = $(this).parents("div.chip")
+                  deleteDialog(`Would you like to delete?`, (ans) => {
+                      if (ans) {
+                          $id = $chip.attr("id")
+                          chipDelete($chip)
+                      }
+                  })
+              })
+            
+            $chip
+              .addClass("chip blue lighten-4 waves-effect")
+              .text(data)
+              .append($closeIcon)
+              .attr("id", chip_id + "_" + counter)
+              .on("click", function (e) {
+                  let $chip = $(this)
+                  editMode = true
+                  let id = $chip.attr("id")
+                  chipSelect(id)
+              })
+            
+            // --
+            
+            return $chip
+        }
+    }
+    
+    const chipDelete = function (chip) {
+        if (chip) {
+            let $chip = chip
+            let data = $chip.text()
+            
+            if (tags.get(data)) {
+                $chip.remove()
+                tags.delete(data)
+            }
+        }
+    }
+    
+    const chipSelect = function (id) {
+        if (id) {
+            let $chip = $("#" + id)
+            let data = $chip.text()
+            let tag = tags.get(data)
+            if (tag) {
+                if (tag) {
+                    console.log("tag", tag)
+                    $input.val(data)
+                }
+                
+            }
+        }
+        
+    }
+    
+    const chipAdd = function (data) {
+        let tag = tags.get(data)
+        if (tag) {
+            toastr.error(`A tag for ${data} already exists`)
+            tags.set(data, tag)
+        } else {
+            let tag = formatTag(data)
+            if (tag) {
+                tags.set(data, tag)
+                if ($container) {
+                    $container.append(tag)
+                }
+            }
+        }
+    }
+    
+    const init = function (keywords) {
+        $.each(keywords, function (k, data) {
+            if (data) {
+                add(data)
+            }
+        })
+    }
+    
+    const add = function (data) {
+        if (!data) {
+            data = $input.val()
+        }
+        
+        if (data !== "") {
+            chipAdd(data)
+            $input.val("")
+        }
+    }
+    
+    init(keywords)
+    
+    return {
+        add: function (data) {
+            chipAdd(data)
+        },
+        delete: function (data) {
+            chipDelete(data)
+        },
+        build: function () {
+            return tags
+        },
+        init: function () {
+            init()
+        },
+    }
 }
 
 const LocationTypes = (function () {
@@ -1375,13 +1804,10 @@ const City = (function () {
     const build_drop_downs = function (settings) {
         if (settings) {
             if (settings.dropdowns) {
-                
                 $.each(settings.dropdowns, function (i, dropdown_id) {
-                    
                     let element = document.getElementById(dropdown_id)
                     
                     if (element) {
-                        
                         $(element)
                           .select2({
                               
@@ -1412,16 +1838,13 @@ const City = (function () {
                                   }
                                   $(".filter_city_add").hide()
                                   if (_filterCitySearch) {
-                                      
                                       _filterCitySearch.addEventListener("keyup", event => {
                                           if (_filterCitySearch.value !== "") {
                                               $(".filter_city_add").show()
                                           } else {
                                               $(".filter_city_add").hide()
                                           }
-                                          
                                       })
-                                      
                                   }
                               }
                               
@@ -1430,22 +1853,9 @@ const City = (function () {
                               let id = $(this)
                                 .attr("id")
                                 .replace("city", "city")
-                              
-                              //let city_element = document.getElementById(id)
-                              
-                              if (!isNaN(parseInt($(this).val()))) {
-                                  //City.id = $(this).val()
-                                  //if (city_element) {
-                                  //City.get(parseInt($(this).val()), city_element)
-                                  //}
-                              }
-                              
                           })
-                        
                     }
-                    
                 })
-                
             }
         }
     }
@@ -2575,8 +2985,7 @@ const Country = (function () {
                 sendPostRequest("/api/v1.0/countries/update", dataToSend, function (data, status, xhr) {
                     if (data && data[0]) {
                         let new_country = data[0]
-                        
-                        return
+                        console.log("new country", new_country)
                         Country.all.set(new_country.id, new_country)
                         let country_elements = $("select[data-type='country']")
                         
@@ -3734,8 +4143,13 @@ const Location = (function () {
         }
     }
     
+    /**
+     * build location object
+     *
+     * @returns {{}|*}
+     */
     const build = function () {
-        return {
+        return remove_nulls({
             id: (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null,
             city_id: (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null,
             province_id: (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null,
@@ -3747,7 +4161,7 @@ const Location = (function () {
             zipcode: (_location_zipcode && _location_zipcode.value !== "") ? _location_zipcode.value : null,
             enabled: 1,
             note: null,
-        }
+        })
     }
     
     return {
@@ -3776,6 +4190,7 @@ const Location = (function () {
         },
         build: function () {
             if (validate_edit_location_filter_form()) {
+                console.log("yes")
                 return build()
             }
         },
@@ -4318,7 +4733,6 @@ const Address = (function () {
      * set address object detail
      */
     const set_detail = function (address) {
-        console.log(address)
         let detail = _default_detail()
         if (address) {
             detail.country = {
@@ -4869,7 +5283,7 @@ const ContactTypes = (function () {
 
 const Company = (function () {
     "use strict"
-    
+    const _button_save_provider = document.getElementById("button_save_provider")
     const _form_edit_company = document.getElementById("form_edit_company")
     const _company_enabled = document.getElementById("company_enabled")
     const _company_name = document.getElementById("company_name")
@@ -4886,6 +5300,7 @@ const Company = (function () {
     const _form_edit_company_block = document.getElementById("form_edit_company_block")
     const _button_edit_company_name = document.getElementById("button_edit_company_name")
     const _button_cancel_edit_company_name = document.getElementById("button_cancel_edit_company_name")
+    const _button_close_edit_company_form = document.getElementById("button_close_edit_company_form")
     // ----
     const _vendor_name = document.getElementById("vendor_name")
     const _vendor_company_id = document.getElementsByClassName("vendor_company_id")
@@ -4936,7 +5351,7 @@ const Company = (function () {
       .on("click", function () {
           let detail = set_detail(tempCompany)
           populate_form(detail)
-          //hide_form()
+          hide_form()
       })
     
     $(_button_edit_company_name)
@@ -4950,10 +5365,30 @@ const Company = (function () {
           reset_form()
       })
     
+    $(_button_close_edit_company_form)
+      .on("click", function () {
+          hide_form()
+      })
+    
     $(_button_submit_form_edit_company)
       .on("click", function () {
           let company = Company.build()
-          console.log(company)
+          if (company) {
+              
+              confirmDialog(`Would you like to update?`, (ans) => {
+                  if (ans) {
+                      add_to_company_list(company, function (data) {
+                          if (data) {
+                              if (data[0]) {
+                                  let company = data[0]
+                                  populate_form(company)
+                                  init_autocomplete()
+                              }
+                          }
+                      })
+                  }
+              })
+          }
       })
     
     $(_company_id)
@@ -4961,21 +5396,28 @@ const Company = (function () {
           _address_company_id.value = _company_id.value
       })
     
-    $(_company_name)
-      .on("change", function () {
-          if (_provider_name) {
-              //$(_provider_name).val($(_company_name).val())
-          }
-          
-          if (_vendor_name) {
-              //$(_vendor_name).val($(_company_name).val())
-          }
-      })
+    let temp_company = {}
     
     $(_form_edit_company)
       .on("change", function () {
           set_progress()
       })
+    
+    const on_click_outside = (e) => {
+        let tar = $(e.target).parents("div.form_element")
+        if (!tar[0] && !e.target.className.includes("company_name")) {
+            if (_company_name.value === "") {
+                populate_form(temp_company)
+            }
+            
+            temp_company = {}
+            destroy_click()
+        }
+    }
+    
+    const destroy_click = function () {
+        window.removeEventListener("click", on_click_outside)
+    }
     
     /**
      * initialize provider autocomplete
@@ -4998,7 +5440,11 @@ const Company = (function () {
               }, 200)
           })
           .on("search", function () {
+              /*
+              temp_company = Company.detail
+              window.addEventListener("click", on_click_outside)
               hide_form()
+              //*/
               Company.reset_form(true)
               Provider.reset_form()
               Vendor.reset_form()
@@ -5140,6 +5586,28 @@ const Company = (function () {
         return detail
     }
     
+    const build = function () {
+        return remove_nulls({
+            email: $(_company_email).val(),
+            //enabled: (_company_enabled.checked === true) ? 1 : 0,
+            enabled: 1,
+            fax: $(_company_fax).val(),
+            id: (!isNaN(_provider_company_id.value)) ? parseInt(_provider_company_id.value) : null,
+            modified_by: user_id,
+            //cover_image: _company_cover_image.value,
+            cover_image: null,
+            name: $(_company_name).val(),
+            note: Company.detail.note,
+            phone_1: $(_company_phone_1).val(),
+            phone_2: $(_company_phone_2).val(),
+            status_id: Company.detail.status_id,
+            website: $(_company_website).val(),
+        })
+        
+    }
+    
+    // ----
+    
     const company_exists = function (name) {
         if (name && name !== "") {
             let dataToSend = {
@@ -5220,6 +5688,56 @@ const Company = (function () {
         }
     }
     
+    // ----
+    
+    const init = function (company) {
+        if (company) {
+            let detail = set_detail(company)
+            populate_form(detail)
+        }
+        
+        if (_form_edit_company) {
+            validator_init(form_rules)
+            validator = $(_form_edit_company).validate()
+            init_autocomplete()
+            if (_form_edit_company_block) {
+                hide_form()
+            }
+        }
+    }
+    
+    const get_cover_image = function () {
+        var files = document.getElementById("company_cover_image").files
+        
+        console.log("files", files)
+    }
+    
+    // ----
+    
+    const validate_form = function () {
+        return $(_form_edit_company).valid()
+    }
+    
+    const reset_form = function (toggleFullClear) {
+        _company_phone_1.value = ""
+        _company_phone_2.value = ""
+        _company_fax.value = ""
+        _company_email.value = ""
+        _company_website.value = ""
+        if (toggleFullClear && toggleFullClear === true) {
+            if (_provider_name) {
+                $(_provider_name).val("").trigger("change")
+            }
+            if (_vendor_name) {
+                $(_vendor_name).val("").trigger("change")
+            }
+            $(_company_id).val("").trigger("change")
+            _company_name.value = ""
+            Address.clearTable()
+            Contact.clearTable()
+        }
+    }
+    
     const populate_form = function (company) {
         $(_company_id).val((company.id) ? company.id : "").trigger("change")
         _company_name.value = (company.name) ? company.name : ""
@@ -5255,79 +5773,17 @@ const Company = (function () {
         
     }
     
-    const validate_form = function () {
-        return $(_form_edit_company).valid()
-    }
-    
-    const reset_form = function (toggleFullClear) {
-        _company_phone_1.value = ""
-        _company_phone_2.value = ""
-        _company_fax.value = ""
-        _company_email.value = ""
-        _company_website.value = ""
-        if (toggleFullClear && toggleFullClear === true) {
-            if (_provider_name) {
-                $(_provider_name).val("").trigger("change")
-            }
-            if (_vendor_name) {
-                $(_vendor_name).val("").trigger("change")
-            }
-            $(_company_id).val("").trigger("change")
-            _company_name.value = ""
-            Address.clearTable()
-            Contact.clearTable()
-        }
-    }
-    
-    const init = function (company) {
-        if (company) {
-            let detail = set_detail(company)
-            populate_form(detail)
-        }
-        
-        if (_form_edit_company) {
-            validator_init(form_rules)
-            validator = $(_form_edit_company).validate()
-            init_autocomplete()
-            if (_form_edit_company_block) {
-                hide_form()
-            }
-        }
-    }
-    
-    const get_cover_image = function () {
-        var files = document.getElementById("company_cover_image").files
-        
-        console.log("files", files)
-    }
-    
-    const build = function () {
-        
-        return {
-            email: $(_company_email).val(),
-            //enabled: (_company_enabled.checked === true) ? 1 : 0,
-            enabled: 1,
-            fax: $(_company_fax).val(),
-            id: (!isNaN(_provider_company_id.value)) ? parseInt(_provider_company_id.value) : null,
-            modified_by: user_id,
-            //cover_image: _company_cover_image.value,
-            cover_image: null,
-            name: $(_company_name).val(),
-            note: Company.detail.note,
-            phone_1: $(_company_phone_1).val(),
-            phone_2: $(_company_phone_2).val(),
-            status_id: Company.detail.status_id,
-            website: $(_company_website).val(),
-        }
-        
-    }
-    
     const show_form = function () {
         if (_form_edit_company_block) {
             $(_form_edit_company_block).show()
             $(_button_cancel_edit_company_name).show()
             $(_button_edit_company_name).hide()
             $(_company_name).attr("readonly", true)
+        }
+        
+        if (_button_save_provider) {
+            $(_button_save_provider).attr("readonly", true)
+            _button_save_provider.disabled = true
         }
     }
     
@@ -5337,8 +5793,16 @@ const Company = (function () {
             $(_form_edit_company_block).hide()
             $(_button_cancel_edit_company_name).hide()
             $(_button_edit_company_name).show()
+            init_autocomplete()
+        }
+        
+        if (_button_save_provider) {
+            $(_button_save_provider).attr("readonly", false)
+            _button_save_provider.disabled = false
         }
     }
+    
+    // ----
     
     const set_progress = function () {
         if (!isNaN(parseInt(_company_id.value))) {
@@ -6033,6 +6497,8 @@ const Vendor = (function () {
     const _provider_name = document.getElementById("provider_name")
     const _provider_company_id = document.getElementById("provider_company_id")
     const _company_id = document.getElementById("company_id")
+    const _button_submit_form_edit_vendor = document.getElementById("button_submit_form_edit_vendor")
+    
     let validator
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let globalSelectedVendor = false
@@ -6052,6 +6518,11 @@ const Vendor = (function () {
     $(_company_id)
       .on("change", function () {
           $(_vendor_company_id).val(_company_id.value)
+      })
+    
+    $(_button_submit_form_edit_vendor)
+      .on("click", function () {
+          let dataToSend = Vendor.build()
       })
     
     const init_autocomplete = function () {
@@ -7145,649 +7616,715 @@ const Login = (function () {
 Login.init()
 
 const Provider = (function () {
-      "use strict"
-      
-      const base_url = "/providers"
-      
-      //Buttons
-      const _button_add_provider_page_heading = document.getElementById("button_add_provider_page_heading")
-      const _button_edit_provider_name = document.getElementById("button_edit_provider_name")
-      const _button_save_provider = document.getElementById("button_save_provider")
-      //Tabs
-      const _panel_tab_contact = document.getElementById("panel_tab_contact")
-      const _panel_tab_company = document.getElementById("panel_tab_company")
-      const _panel_tab_vendor = document.getElementById("panel_tab_vendor")
-      const _panel_tab_location = document.getElementById("panel_tab_location")
-      const _panel_tab_address = document.getElementById("panel_tab_address")
-      const _panel_tab_provider = document.getElementById("panel_tab_provider")
-      //Tables
-      const _table_provider_index = document.getElementById("table_provider_index")
-      //Fields
-      const _location_id = document.getElementById("location_id")
-      const _company_name = document.getElementById("company_name")
-      const _company_cover_image = document.getElementById("company_cover_image")
-      const _provider_id = document.getElementById("provider_id")
-      const _provider_name = document.getElementById("provider_name")
-      const _provider_company_id = document.getElementById("provider_company_id")
-      const _provider_enabled = document.getElementById("provider_enabled")
-      const _provider_code_direct_id = document.getElementById("provider_code_direct_id")
-      const _vendor_name = document.getElementById("vendor_name")
-      const _vendor_company_id = document.getElementById("vendor_company_id")
-      const _company_id = document.getElementById("company_id")
-      const _location_name_filter_id = document.getElementById("location_name_filter_id")
-      //Forms
-      const _form_edit_provider = document.getElementById("form_edit_provider")
-      let globalSelectedProvider = false
-      let isNew = false
-      let validator
-      let $index_table = $(_table_provider_index)
-      let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-      let form_rules = {
-          rules: {
-              provider_name: {
-                  required: true,
+    "use strict"
+    
+    const base_url = "/providers"
+    
+    //Buttons
+    const _button_add_provider_page_heading = document.getElementById("button_add_provider_page_heading")
+    const _button_edit_provider_name = document.getElementById("button_edit_provider_name")
+    const _button_save_provider = document.getElementById("button_save_provider")
+    //Tabs
+    const _panel_tab_contact = document.getElementById("panel_tab_contact")
+    const _panel_tab_company = document.getElementById("panel_tab_company")
+    const _panel_tab_vendor = document.getElementById("panel_tab_vendor")
+    const _panel_tab_location = document.getElementById("panel_tab_location")
+    const _panel_tab_address = document.getElementById("panel_tab_address")
+    const _panel_tab_provider = document.getElementById("panel_tab_provider")
+    //Tables
+    const _table_provider_index = document.getElementById("table_provider_index")
+    //Fields
+    const _location_id = document.getElementById("location_id")
+    const _company_name = document.getElementById("company_name")
+    const _company_cover_image = document.getElementById("company_cover_image")
+    
+    const _provider_description_long = document.getElementById("provider_description_long")
+    const _provider_description_short = document.getElementById("provider_description_short")
+    const _provider_keywords = document.getElementById("provider_keywords")
+    
+    const _provider_id = document.getElementById("provider_id")
+    const _provider_name = document.getElementById("provider_name")
+    const _provider_company_id = document.getElementById("provider_company_id")
+    const _provider_enabled = document.getElementById("provider_enabled")
+    const _provider_code_direct_id = document.getElementById("provider_code_direct_id")
+    const _vendor_name = document.getElementById("vendor_name")
+    const _vendor_company_id = document.getElementById("vendor_company_id")
+    const _company_id = document.getElementById("company_id")
+    const _location_name_filter_id = document.getElementById("location_name_filter_id")
+    const _provider_key = document.getElementById("provider_keyword")
+    let $provider_key
+    //Forms
+    const _form_edit_provider = document.getElementById("form_edit_provider")
+    let globalSelectedProvider = false
+    let isNew = false
+    let validator
+    let $index_table = $(_table_provider_index)
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let form_rules = {
+        rules: {
+            provider_name: {
+                required: true,
+            },
+            provider_company_id: {
+                required: true,
+            },
+        },
+        messages: {
+            provider_company_id: {
+                required: "Field Required",
+            },
+            provider_name: {
+                required: "Field Required",
+            },
+        },
+    }
+    
+    $(_button_save_provider)
+      .on("click", function () {
+          
+          let tabs = $("#provider_edit_tabs > li.nav-item > a.nav-link")
+          let panels = $("div.tab-pane")
+          
+          let company_detail = Company.build()
+          let provider_detail = Provider.build()
+          let location_detail = Location.build()
+          let vendor_detail = Vendor.build()
+          let addresses = Array.from(Address.all.values())
+          let contacts = Array.from(Contact.all.values())
+          
+          if (!company_detail || !provider_detail || !location_detail || !vendor_detail || !addresses || !contacts) {
+              $.each(panels, function (index, item) {
+                  if ($(this).find(".is-invalid").length > 0) {
+                      let nav_tab = $("body").find("[aria-controls='" + $(this).attr("id") + "']")
+                      tabs.removeClass("active")
+                      panels.removeClass("active")
+                      $(this).addClass("active")
+                      nav_tab.addClass("active")
+                      return false
+                  }
+              })
+              return
+          }
+          
+          provider_detail.location_id = (location_detail.id) ? location_detail.id : null
+          vendor_detail.is_provider = (_form_edit_provider) ? 1 : 0
+          
+          // ----
+          
+          confirmDialog(`Would you like to update?`, (ans) => {
+              if (ans) {
+                  save({
+                      "company_detail": company_detail,
+                      "provider_detail": provider_detail,
+                      "location_detail": location_detail,
+                      "vendor_detail": vendor_detail,
+                      "addresses": addresses,
+                      "contacts": contacts,
+                  })
+              }
+          })
+      })
+    
+    $("#provider_edit")
+      .on("change", function () {
+          set_progress()
+      })
+    
+    $(_provider_company_id)
+      .on("change", function () {
+          $(_vendor_company_id).val($(this).val())
+      })
+    
+    $(_button_add_provider_page_heading)
+      .on("click", function () {
+          //console.log("test")
+      })
+    
+    $(_button_edit_provider_name)
+      .on("click", function () {
+          enable_form_fields()
+      })
+    
+    $(_company_id)
+      .on("change", function () {
+          $(_provider_company_id).val(_company_id.value)
+      })
+    
+    /**
+     * initialize provider autocomplete
+     */
+    const init_autocomplete = function () {
+        $(_provider_name)
+          .on("change", function () {
+              /*
+              setTimeout(function () {
+                  let provider_name = _provider_name.value
+                  
+                  if (globalSelectedProvider === false) {
+                      if (provider_name === "") {
+                          _provider_name.value = ""
+                          _provider_company_id.value = ""
+                          globalSelectedProvider = false
+                          $(_vendor_name).val("").trigger("change")
+                          $(_provider_company_id).val("").trigger("change")
+                      } else {
+                          provider_exists(provider_name)
+                      }
+                  }
+              }, 200)
+              //*/
+          })
+          .on("search", function () {
+              //_provider_id.value = ""
+              //_provider_company_id.value = ""
+              
+              //$(_vendor_name).val("").trigger("change")
+              //$(_provider_company_id).val("").trigger("change")
+              Provider.reset_form()
+              Vendor.reset_form()
+          })
+          .on("click", function () {
+              $(this).select()
+          })
+          .autocomplete({
+              serviceUrl: "/api/v1.0/autocomplete/providers",
+              minChars: 2,
+              cache: false,
+              dataType: "json",
+              triggerSelectOnValidInput: false,
+              paramName: "st",
+              onSelect: function (suggestion) {
+                  if (!suggestion.data) {
+                      return
+                  }
+                  console.log("sugges", suggestion)
+                  let provider = suggestion.data
+                  let company = (provider.company) ? provider.company : {}
+                  let addresses = (provider.addresses) ? provider.addresses : {}
+                  let contacts = (provider.contacts) ? provider.contacts : {}
+                  let location = (provider.location) ? provider.location : {}
+                  let vendor = (provider.vendor) ? provider.vendor : {}
+                  //
+                  let provider_id = provider.id
+                  let company_name = provider.company.name
+                  let provider_company_id = provider.company.id
+                  //
+                  if (_form_edit_provider) {
+                      $(_provider_company_id).val(provider_company_id)
+                      $(_provider_id).val(provider_id)
+                      confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
+                          if (ans) {
+                              window.location.replace("/providers/" + provider_id)
+                              populate_form(provider)
+                              Company.populate_form(company)
+                              Location.populate_form(location)
+                              $(_vendor_company_id).val(provider_company_id)
+                              $(_vendor_name).val(company_name).trigger("change")
+                          } else {
+                              Provider.reset_form()
+                              Vendor.reset_form()
+                          }
+                      })
+                  }
               },
-              provider_company_id: {
-                  required: true,
-              },
-          },
-          messages: {
-              provider_company_id: {
-                  required: "Field Required",
-              },
-              provider_name: {
-                  required: "Field Required",
-              },
-          },
-      }
-      
-      $(_button_save_provider)
-        .on("click", function () {
-            let tabs = $("#provider_edit_tabs > div.panel-heading.panel-heading-tab > ul.nav.nav-tabs>li.nav-item>a.nav-link")
-            let panels = $("div.tab-pane")
-            
-            let company_detail = Company.build()
-            let provider_detail = Provider.build()
-            let location_detail = Location.build()
-            let vendor_detail = Vendor.build()
-            let addresses = Array.from(Address.all.values())
-            let contacts = Array.from(Contact.all.values())
-            
-            if (!company_detail || !provider_detail || !location_detail || !vendor_detail || !addresses || !contacts) {
-                $.each(panels, function (index, item) {
-                    if ($(this).find(".is-invalid").length > 0) {
-                        let nav_tab = $("body").find("[aria-controls='" + $(this).attr("id") + "']")
-                        tabs.removeClass("active")
-                        panels.removeClass("active")
-                        $(this).addClass("active")
-                        nav_tab.addClass("active")
-                        return false
-                    }
-                })
+          })
+    }
+    
+    /**
+     * check if provider with same name exists
+     *
+     * @param name
+     */
+    const provider_exists = function (name) {
+        
+        if (name && name !== "") {
+            let dataToSend = {
+                name: name,
             }
-            provider_detail.location_id = (location_detail.id) ? location_detail.id : null
-            vendor_detail.is_provider = (_form_edit_provider) ? 1 : 0
-            confirmDialog(`Would you like to update?`, (ans) => {
-                if (ans) {
-                    save({
-                        "company_detail": company_detail,
-                        "provider_detail": provider_detail,
-                        "location_detail": location_detail,
-                        "vendor_detail": vendor_detail,
-                        "addresses": addresses,
-                        "contacts": contacts,
+            
+            fetch_provider_by_name(dataToSend, function (data) {
+                if (data) {
+                    if (data.length > 0) {
+                        let provider = data[0]
                         
-                    })
-                }
-            })
-        })
-      
-      $("#provider_edit")
-        .on("change", function () {
-            set_progress()
-        })
-      
-      $(_provider_company_id)
-        .on("change", function () {
-            $(_vendor_company_id).val($(this).val())
-        })
-      
-      $(_button_add_provider_page_heading)
-        .on("click", function () {
-            //console.log("test")
-        })
-      
-      $(_button_edit_provider_name)
-        .on("click", function () {
-            enable_form_fields()
-        })
-      
-      $(_company_id)
-        .on("change", function () {
-            $(_provider_company_id).val(_company_id.value)
-        })
-      
-      /**
-       * initialize provider autocomplete
-       */
-      const init_autocomplete = function () {
-          $(_provider_name)
-            .on("change", function () {
-                /*
-                setTimeout(function () {
-                    let provider_name = _provider_name.value
-                    
-                    if (globalSelectedProvider === false) {
-                        if (provider_name === "") {
-                            _provider_name.value = ""
-                            _provider_company_id.value = ""
-                            globalSelectedProvider = false
-                            $(_vendor_name).val("").trigger("change")
-                            $(_provider_company_id).val("").trigger("change")
-                        } else {
-                            provider_exists(provider_name)
-                        }
-                    }
-                }, 200)
-                //*/
-            })
-            .on("search", function () {
-                //_provider_id.value = ""
-                //_provider_company_id.value = ""
-                
-                //$(_vendor_name).val("").trigger("change")
-                //$(_provider_company_id).val("").trigger("change")
-                Provider.reset_form()
-                Vendor.reset_form()
-            })
-            .on("click", function () {
-                $(this).select()
-            })
-            .autocomplete({
-                serviceUrl: "/api/v1.0/autocomplete/providers",
-                minChars: 2,
-                cache: false,
-                dataType: "json",
-                triggerSelectOnValidInput: false,
-                paramName: "st",
-                onSelect: function (suggestion) {
-                    if (!suggestion.data) {
-                        return
-                    }
-                    console.log("sugges", suggestion)
-                    let provider = suggestion.data
-                    let company = (provider.company) ? provider.company : {}
-                    let addresses = (provider.addresses) ? provider.addresses : {}
-                    let contacts = (provider.contacts) ? provider.contacts : {}
-                    let location = (provider.location) ? provider.location : {}
-                    let vendor = (provider.vendor) ? provider.vendor : {}
-                    //
-                    let provider_id = provider.id
-                    let company_name = provider.company.name
-                    let provider_company_id = provider.company.id
-                    //
-                    if (_form_edit_provider) {
-                        $(_provider_company_id).val(provider_company_id)
-                        $(_provider_id).val(provider_id)
                         confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
                             if (ans) {
-                                window.location.replace("/providers/" + provider_id)
-                                populate_form(provider)
-                                Company.populate_form(company)
-                                Location.populate_form(location)
-                                $(_vendor_company_id).val(provider_company_id)
-                                $(_vendor_name).val(company_name).trigger("change")
+                                window.location.href = "/providers/" + provider.id
                             } else {
+                                Company.reset_form()
                                 Provider.reset_form()
                                 Vendor.reset_form()
+                                
                             }
                         })
                     }
-                },
+                }
+                $(_vendor_name).val($(_provider_name).val()).trigger("change")
             })
-      }
-      
-      /**
-       * check if provider with same name exists
-       *
-       * @param name
-       */
-      const provider_exists = function (name) {
-          
-          if (name && name !== "") {
-              let dataToSend = {
-                  name: name,
-              }
-              
-              fetch_provider_by_name(dataToSend, function (data) {
-                  if (data) {
-                      if (data.length > 0) {
-                          let provider = data[0]
-                          
-                          confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
-                              if (ans) {
-                                  window.location.href = "/providers/" + provider.id
-                              } else {
-                                  Company.reset_form()
-                                  Provider.reset_form()
-                                  Vendor.reset_form()
-                                  
-                              }
-                          })
-                      }
-                  }
-                  $(_vendor_name).val($(_provider_name).val()).trigger("change")
-              })
-          }
-      }
-      
-      /**
-       * initialize provider index page
-       *
-       * @param settings
-       */
-      const index = function (settings) {
-          build_index_table()
-          
-          if (settings) {
-              if (settings.providers) {
-                  load_all(settings.providers)
-              }
-          }
-          
-      }
-      
-      /**
-       * build provider index table
-       */
-      const build_index_table = function () {
-          //log("build_index_table")
-          $index_table = $(_table_provider_index).table({
-              table_type: "display_list",
-              data: Provider.all,
-              columnDefs: [
-                  {
-                      title: "Name",
-                      targets: 0,
-                      data: "name",
-                      render: function (data, type, row, meta) {
-                          return "<span style='white-space: nowrap;'>" + data + "</span>"
-                      },
-                  },
-                  {
-                      title: "Code Direct ID",
-                      targets: 1,
-                      data: "code_direct_id",
-                      render: function (data, type, row, meta) {
-                          return "<span style='white-space: nowrap;'>" + data + "</span>"
-                      },
-                  },
-                  {
-                      title: "SKU",
-                      targets: 2,
-                      data: "vendor",
-                      render: function (data, type, row, meta) {
-                          return "<span style='white-space: nowrap;'>" + data.sku + "</span>"
-                      },
-                  },
-                  {
-                      title: "Location",
-                      targets: 3,
-                      data: "location",
-                      render: function (data, type, row, meta) {
-                          let displayLocation = ""
-                          if (defaultLocationDisplayFormat === "short") {
-                              displayLocation = data.display_short
-                          } else if (defaultLocationDisplayFormat === "long") {
-                              displayLocation = data.display_long
-                          } else {
-                              displayLocation = data.display_medium
-                          }
-                          
-                          return "<span style='white-space: nowrap;'>" + displayLocation + "</span>"
-                      },
-                  },
-              ],
-              rowClick: Provider.navigate,
-          })
-      }
-      
-      /**
-       * when provider index table row clicked handle event
-       *
-       * @param provider
-       */
-      const navigate = function (provider) {
-          if (provider && provider.id) {
-              window.location.replace(base_url + "/" + provider.id)
-          }
-      }
-      
-      /**
-       * handle provider form errors
-       *
-       * @param msg
-       */
-      const handle_provider_error = function (msg) {
-          toastr.error(msg)
-      }
-      
-      /**
-       * set default provider object values
-       *
-       * @returns {{note: null, addresses: *[], company_id: null, date_created: *, code_direct_id: null, created_by: (number|number), enabled: number, provider_vendor: number, date_modified: *, vendor: {}, name: null, modified_by: (number|number), location: {}, company: {}, id: null, contacts: *[]}}
-       * @private
-       */
-      const _default_detail = function () {
-          return {
-              addresses: [],
-              contacts: [],
-              location: {},
-              company: {},
-              vendor: {},
-              id: null,
-              company_id: null,
-              name: null,
-              code_direct_id: null,
-              provider_vendor: 1,
-              enabled: 1,
-              date_created: formatDateMySQL(),
-              created_by: user_id,
-              date_modified: formatDateMySQL(),
-              modified_by: user_id,
-              note: null,
-          }
-      }
-      
-      /**
-       * load all providers into object
-       *
-       * @param providers
-       */
-      const load_all = function (providers) {
-          Provider.all = new Map()
-          if (providers) {
-              $.each(providers, function (i, provider) {
-                  let detail = set(provider)
-                  $index_table.insertRow(detail)
-                  Provider.all.set(detail.id, detail)
-              })
-          }
-      }
-      
-      const save = function (provider) {
-          console.log("provider", provider)
-      }
-      
-      const build = function () {
-          return remove_nulls({
-              location_id: (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null,
-              company_id: (!isNaN(parseInt(_provider_company_id.value))) ? parseInt(_provider_company_id.value) : null,
-              code_direct_id: (_provider_code_direct_id.value === "") ? null : _provider_code_direct_id.value,
-              id: (!isNaN(parseInt(_provider_id.value))) ? parseInt(_provider_id.value) : null,
-              provider_vendor: (_form_edit_provider) ? 1 : 0,
-              enabled: 1,
-          })
-      }
-      
-      const validate_form = function () {
-          return $(_form_edit_provider).valid()
-      }
-      
-      /**
-       * initialize provider object
-       *
-       * @param settings
-       */
-      const init = function (settings) {
-      
-      }
-      
-      /**
-       * set provider object values
-       *
-       * @param provider
-       * @returns {{note: null, addresses: *[], company_id: null, date_created: *, code_direct_id: null, created_by: (number|number), enabled: number, provider_vendor: number, date_modified: *, vendor: {}, name: null, modified_by: (number|number), location: {}, company: {}, id: null, contacts: *[]}}
-       */
-      const set = function (provider) {
-          let detail = _default_detail()
-          
-          if (provider) {
-              detail.id = (provider.id) ? provider.id : null
-              detail.name = (provider.name) ? provider.name : null
-              detail.location_id = (provider.location_id) ? provider.location_id : null
-              detail.code_direct_id = (provider.code_direct_id) ? provider.code_direct_id : null
-              detail.provider_vendor = (provider.provider_vendor) ? provider.provider_vendor : 1
-              detail.enabled = (provider.enabled) ? provider.enabled : 1
-              detail.date_created = (provider.date_created) ? provider.date_created : formatDateMySQL()
-              detail.company_id = (provider.company_id) ? provider.company_id : null
-              detail.created_by = (provider.created_by) ? provider.created_by : user_id
-              detail.date_modified = (provider.date_modified) ? provider.date_modified : formatDateMySQL()
-              detail.modified_by = (provider.modified_by) ? provider.modified_by : user_id
-              detail.note = (provider.note) ? provider.note : null
-              detail.vendor = (provider.vendor) ? provider.vendor : {}
-              detail.addresses = (provider.addresses) ? provider.addresses : []
-              detail.contacts = (provider.contacts) ? provider.contacts : []
-              detail.location = (provider.location) ? provider.location : {}
-              detail.company = (provider.company) ? provider.company : {}
-          }
-          
-          Provider.detail = detail
-          return detail
-      }
-      
-      /**
-       * enable form fields
-       */
-      const enable_form_fields = function () {
-          if (_provider_id.value !== "" && _provider_company_id.value !== "") {
-          
-          }
-      }
-      
-      /**
-       * regulate tab access
-       */
-      const set_progress = function () {
-          let provider_id = (!isNaN(_provider_id.value)) ? _provider_id.value : null
-          let company_id = (!isNaN(_provider_company_id.value)) ? _provider_company_id.value : null
-          
-          if (company_id === null || company_id === "") {
-              $(_panel_tab_contact).addClass("disabled")
-              $(_panel_tab_address).addClass("disabled")
-              $(_panel_tab_provider).addClass("disabled")
-              $(_panel_tab_vendor).addClass("disabled")
-          } else {
-              $(_panel_tab_contact).removeClass("disabled")
-              $(_panel_tab_address).removeClass("disabled")
-              $(_panel_tab_provider).removeClass("disabled")
-              $(_panel_tab_vendor).removeClass("disabled")
-          }
-          
-          _button_save_provider.disabled = !(_company_id.value !== "" && _location_name_filter_id.value !== "")
-          
-      }
-      
-      /**
-       * disable form fields
-       */
-      const disable_form_fields = function () {
-          $(_provider_name).attr("readonly", true)
-          
-          if (_form_edit_provider) {
-              if (isNew) {
-                  //$(_provider_name).attr("readonly", false)
-                  //_company_cover_image.disabled = true
-                  //_button_edit_provider_name.disabled = true
-                  //$(_panel_tab_contact).addClass("disabled")
-                  //$(_panel_tab_address).addClass("disabled")
-              } else {
-                  //_company_cover_image.disabled = false
-                  //$(_provider_name).attr("readonly", true)
-                  //_button_edit_provider_name.disabled = false
-                  //$(_panel_tab_contact).removeClass("disabled")
-                  //$(_panel_tab_address).removeClass("disabled")
-              }
-          }
-          
-      }
-      
-      /**
-       * pupulate provider form
-       *
-       * @param provider
-       */
-      const populate_form = function (provider) {
-          if (provider) {
-              _provider_id.value = (provider.id) ? provider.id : null
-              $(_provider_name).val((provider.name) ? provider.name : null)
-              $(_company_name).val($(_provider_name).val())
-              _provider_company_id.value = (provider.company_id) ? provider.company_id : null
-              _provider_code_direct_id.value = (provider.code_direct_id) ? provider.code_direct_id : null
-          }
-          _provider_enabled.checked = (provider.enabled) ? (provider.enabled === 1) : true
-      }
-      
-      /**
-       * reset provider form
-       */
-      const reset_form = function () {
-          _provider_id.value = ""
-          $(_provider_name).val("").trigger("change")
-          _provider_company_id.value = ""
-          _provider_code_direct_id.value = ""
-          _provider_enabled.checked = true
-      }
-      
-      /**
-       * fetch provider by name
-       *
-       * @param dataToSend
-       * @param callback
-       */
-      const fetch_provider_by_name = function (dataToSend, callback) {
-          let url = "/api/v1.0/providers/validate"
-          
-          if (dataToSend) {
-              try {
-                  sendGetRequest(url, dataToSend, function (data, status, xhr) {
-                      if (data) {
-                          return callback(data)
-                      } else {
-                          return handle_provider_error("Oops: 1")
-                      }
-                  })
-              } catch (e) {
-                  console.log(e)
-                  return handle_provider_error("Error Validating Company")
-              }
-          } else {
-              return handle_provider_error("Error Loading Company- Missing Data")
-          }
-      }
-      
-      /**
-       * initialize provider edit page
-       *
-       * @param settings
-       */
-      const edit = function (settings) {
-          let provider = {}
-          let addresses = []
-          let contacts = []
-          let location = {}
-          let company = {}
-          let vendor = {}
-          //
-          if (_form_edit_provider) {
-              init_autocomplete()
-              validator_init(form_rules)
-              validator = $(_form_edit_provider).validate()
-          }
-          
-          if (settings) {
-              
-              if (settings.is_new) {
-                  isNew = settings.is_new
-                  _button_save_provider.disabled = true
-                  $(_panel_tab_provider).addClass("disabled")
-                  $(_panel_tab_vendor).addClass("disabled")
-                  //$(_panel_tab_location).addClass("disabled")
-                  $(_panel_tab_contact).addClass("disabled")
-                  $(_panel_tab_address).addClass("disabled")
-              }
-              
-              if (settings.provider_detail) {
-                  provider = set(settings.provider_detail)
-                  addresses = (provider.addresses) ? provider.addresses : []
-                  contacts = (provider.contacts) ? provider.contacts : []
-                  location = (provider.location) ? provider.location : {}
-                  company = (provider.company) ? provider.company : {}
-                  vendor = (provider.vendor) ? provider.vendor : {}
-              }
-              
-          }
-          
-          populate_form(provider)
-          // ----
-          Vendor.init(vendor)
-          Location.init(location)
-          Address.init(addresses)
-          Contact.init(contacts)
-          Company.init(company)
-          // ----
-          Vendor.setProvider()
-          disable_form_fields()
-          set_progress()
-      }
-      
-      return {
-          validator: null,
-          detail: {},
-          all: new Map(),
-          navigate: function (provider) {
-              navigate(provider)
-          },
-          get: function (params) {
-              get(params)
-          },
-          build: function () {
-              if (validate_form()) {
-                  return build()
-              }
-          },
-          load_all: function (params) {
-              load_all(params)
-          },
-          save: function (params) {
-              save(params)
-          },
-          init: function () {
-              init()
-          },
-          reset_form: function () {
-              reset_form()
-          },
-          provider_exists: function (name) {
-              provider_exists(name)
-          },
-          enable_form_fields: function () {
-              enable_form_fields()
-          },
-          disable_form_fields: function () {
-              disable_form_fields()
-          },
-          index: function (providers) {
-              index(providers)
-          },
-          edit: function (settings) {
-              edit(settings)
-          },
-      }
-      
-  }
-)
-()
+        }
+    }
+    
+    /**
+     * initialize provider index page
+     *
+     * @param settings
+     */
+    const index = function (settings) {
+        build_index_table()
+        
+        if (settings) {
+            if (settings.providers) {
+                load_all(settings.providers)
+            }
+        }
+        
+    }
+    
+    /**
+     * build provider index table
+     */
+    const build_index_table = function () {
+        //log("build_index_table")
+        $index_table = $(_table_provider_index).table({
+            table_type: "display_list",
+            data: Provider.all,
+            columnDefs: [
+                {
+                    title: "Name",
+                    targets: 0,
+                    data: "name",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "Code Direct ID",
+                    targets: 1,
+                    data: "code_direct_id",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "SKU",
+                    targets: 2,
+                    data: "vendor",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data.sku + "</span>"
+                    },
+                },
+                {
+                    title: "Location",
+                    targets: 3,
+                    data: "location",
+                    render: function (data, type, row, meta) {
+                        let displayLocation = ""
+                        if (defaultLocationDisplayFormat === "short") {
+                            displayLocation = data.display_short
+                        } else if (defaultLocationDisplayFormat === "long") {
+                            displayLocation = data.display_long
+                        } else {
+                            displayLocation = data.display_medium
+                        }
+                        
+                        return "<span style='white-space: nowrap;'>" + displayLocation + "</span>"
+                    },
+                },
+            ],
+            rowClick: Provider.navigate,
+        })
+    }
+    
+    /**
+     * when provider index table row clicked handle event
+     *
+     * @param provider
+     */
+    const navigate = function (provider) {
+        if (provider && provider.id) {
+            window.location.replace(base_url + "/" + provider.id)
+        }
+    }
+    
+    /**
+     * handle provider form errors
+     *
+     * @param msg
+     */
+    const handle_provider_error = function (msg) {
+        toastr.error(msg)
+    }
+    
+    /**
+     * set default provider object values
+     *
+     * @returns {{note: null, addresses: *[], company_id: null, date_created: *, code_direct_id: null, created_by: (number|number), enabled: number, provider_vendor: number, date_modified: *, vendor: {}, name: null, modified_by: (number|number), location: {}, company: {}, id: null, contacts: *[]}}
+     * @private
+     */
+    const _default_detail = function () {
+        return {
+            addresses: [],
+            contacts: [],
+            location: {},
+            company: {},
+            vendor: {},
+            id: null,
+            description_long: null,
+            description_short: null,
+            keywords: null,
+            company_id: null,
+            name: null,
+            code_direct_id: null,
+            provider_vendor: 1,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
+        }
+    }
+    
+    /**
+     * load all providers into object
+     *
+     * @param providers
+     */
+    const load_all = function (providers) {
+        Provider.all = new Map()
+        if (providers) {
+            $.each(providers, function (i, provider) {
+                let detail = set(provider)
+                $index_table.insertRow(detail)
+                Provider.all.set(detail.id, detail)
+            })
+        }
+    }
+    
+    /**
+     * save provider object
+     *
+     * @param provider
+     */
+    const save = function (provider) {
+        if (provider) {
+            updateProvider(provider, function (data) {
+                if (data) {
+                    if (data[0]) {
+                        let provider = data[0]
+                        console.log("provider", provider)
+                    }
+                }
+            })
+        }
+    }
+    
+    /**
+     * update provider record
+     *
+     * @param dataToSend
+     * @param callback
+     */
+    const updateProvider = function (dataToSend, callback) {
+        let url = "/api/v1.0/providers/update"
+        if (dataToSend) {
+            sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                if (data) {
+                    return callback(data)
+                } else {
+                    return handle_provider_error("Oops: 1")
+                }
+            })
+        }
+    }
+    
+    /**
+     * build provider object
+     *
+     * @returns {*}
+     */
+    const build = function () {
+        return remove_nulls({
+            location_id: (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null,
+            company_id: (!isNaN(parseInt(_provider_company_id.value))) ? parseInt(_provider_company_id.value) : null,
+            code_direct_id: (_provider_code_direct_id.value === "") ? null : _provider_code_direct_id.value,
+            id: (!isNaN(parseInt(_provider_id.value))) ? parseInt(_provider_id.value) : null,
+            provider_vendor: (_form_edit_provider) ? 1 : 0,
+            enabled: 1,
+        })
+    }
+    
+    /**
+     * validate for values
+     *
+     * @returns {*|jQuery}
+     */
+    const validate_form = function () {
+        return $(_form_edit_provider).valid()
+    }
+    
+    /**
+     * set provider object values
+     *
+     * @param provider
+     * @returns {{note: null, addresses: *[], company_id: null, date_created: *, code_direct_id: null, created_by: (number|number), enabled: number, provider_vendor: number, date_modified: *, vendor: {}, name: null, modified_by: (number|number), location: {}, company: {}, id: null, contacts: *[]}}
+     */
+    const set = function (provider) {
+        let detail = _default_detail()
+        
+        if (provider) {
+            detail.id = (provider.id) ? provider.id : null
+            detail.name = (provider.name) ? provider.name : null
+            detail.location_id = (provider.location_id) ? provider.location_id : null
+            detail.code_direct_id = (provider.code_direct_id) ? provider.code_direct_id : null
+            detail.description_long = (provider.description_long) ? escapeHtml(provider.description_long) : null
+            detail.description_short = (provider.description_short) ? provider.description_short : null
+            detail.keywords = (provider.keywords) ? provider.keywords : null
+            detail.provider_vendor = (provider.provider_vendor) ? provider.provider_vendor : 1
+            detail.enabled = (provider.enabled) ? provider.enabled : 1
+            detail.date_created = (provider.date_created) ? provider.date_created : formatDateMySQL()
+            detail.company_id = (provider.company_id) ? provider.company_id : null
+            detail.created_by = (provider.created_by) ? provider.created_by : user_id
+            detail.date_modified = (provider.date_modified) ? provider.date_modified : formatDateMySQL()
+            detail.modified_by = (provider.modified_by) ? provider.modified_by : user_id
+            detail.note = (provider.note) ? provider.note : null
+            detail.vendor = (provider.vendor) ? provider.vendor : {}
+            detail.addresses = (provider.addresses) ? provider.addresses : []
+            detail.contacts = (provider.contacts) ? provider.contacts : []
+            detail.location = (provider.location) ? provider.location : {}
+            detail.company = (provider.company) ? provider.company : {}
+        }
+        console.log(escapeHtml(provider.description_long))
+        console.log(decodeHtml(escapeHtml(provider.description_long)))
+        Provider.detail = detail
+        return detail
+    }
+    
+    /**
+     * enable form fields
+     */
+    const enable_form_fields = function () {
+        if (_provider_id.value !== "" && _provider_company_id.value !== "") {
+        
+        }
+    }
+    
+    /**
+     * regulate tab access
+     */
+    const set_progress = function () {
+        let provider_id = (!isNaN(_provider_id.value)) ? _provider_id.value : null
+        let company_id = (!isNaN(_provider_company_id.value)) ? _provider_company_id.value : null
+        
+        if (company_id === null || company_id === "") {
+            $(_panel_tab_contact).addClass("disabled")
+            $(_panel_tab_address).addClass("disabled")
+            $(_panel_tab_provider).addClass("disabled")
+            $(_panel_tab_vendor).addClass("disabled")
+        } else {
+            $(_panel_tab_contact).removeClass("disabled")
+            $(_panel_tab_address).removeClass("disabled")
+            $(_panel_tab_provider).removeClass("disabled")
+            $(_panel_tab_vendor).removeClass("disabled")
+        }
+        
+        _button_save_provider.disabled = !(_company_id.value !== "" && _location_name_filter_id.value !== "")
+        
+    }
+    
+    /**
+     * disable form fields
+     */
+    const disable_form_fields = function () {
+        $(_provider_name).attr("readonly", true)
+        
+        if (_form_edit_provider) {
+            if (isNew) {
+                //$(_provider_name).attr("readonly", false)
+                //_company_cover_image.disabled = true
+                //_button_edit_provider_name.disabled = true
+                //$(_panel_tab_contact).addClass("disabled")
+                //$(_panel_tab_address).addClass("disabled")
+            } else {
+                //_company_cover_image.disabled = false
+                //$(_provider_name).attr("readonly", true)
+                //_button_edit_provider_name.disabled = false
+                //$(_panel_tab_contact).removeClass("disabled")
+                //$(_panel_tab_address).removeClass("disabled")
+            }
+        }
+        
+    }
+    
+    /**
+     * pupulate provider form
+     *
+     * @param provider
+     */
+    const populate_form = function (provider) {
+        if (provider) {
+            _provider_id.value = (provider.id) ? provider.id : null
+            $(_provider_name).val((provider.name) ? provider.name : null)
+            $(_company_name).val($(_provider_name).val())
+            _provider_company_id.value = (provider.company_id) ? provider.company_id : null
+            _provider_code_direct_id.value = (provider.code_direct_id) ? provider.code_direct_id : null
+            let provider_keywords = (provider.keywords) ? provider.keywords : ""
+            $provider_key = $(_provider_key).BuildKeyword(provider_keywords)
+            $(_provider_description_long).val(provider.description_long)
+        }
+        _provider_enabled.checked = (provider.enabled) ? (provider.enabled === 1) : true
+    }
+    
+    /**
+     * reset provider form
+     */
+    const reset_form = function () {
+        _provider_id.value = ""
+        $(_provider_name).val("").trigger("change")
+        _provider_company_id.value = ""
+        _provider_code_direct_id.value = ""
+        _provider_enabled.checked = true
+    }
+    
+    // ----
+    
+    /**
+     * fetch provider by name
+     *
+     * @param dataToSend
+     * @param callback
+     */
+    const fetch_provider_by_name = function (dataToSend, callback) {
+        let url = "/api/v1.0/providers/validate"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handle_provider_error("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+                return handle_provider_error("Error Validating Company")
+            }
+        } else {
+            return handle_provider_error("Error Loading Company- Missing Data")
+        }
+    }
+    
+    /**
+     * initialize provider edit page
+     *
+     * @param settings
+     */
+    const edit = function (settings) {
+        let provider = {}
+        let addresses = []
+        let contacts = []
+        let location = {}
+        let company = {}
+        let vendor = {}
+        //
+        if (_form_edit_provider) {
+            init_autocomplete()
+            validator_init(form_rules)
+            validator = $(_form_edit_provider).validate()
+        }
+        
+        if (settings) {
+            
+            if (settings.is_new) {
+                isNew = settings.is_new
+                _button_save_provider.disabled = true
+                $(_panel_tab_provider).addClass("disabled")
+                $(_panel_tab_vendor).addClass("disabled")
+                //$(_panel_tab_location).addClass("disabled")
+                $(_panel_tab_contact).addClass("disabled")
+                $(_panel_tab_address).addClass("disabled")
+            }
+            
+            if (settings.provider_detail) {
+                
+                provider = set(settings.provider_detail)
+                addresses = (provider.addresses) ? provider.addresses : []
+                contacts = (provider.contacts) ? provider.contacts : []
+                location = (provider.location) ? provider.location : {}
+                company = (provider.company) ? provider.company : {}
+                vendor = (provider.vendor) ? provider.vendor : {}
+            }
+            
+        }
+        console.log("Provider:edit - provider", provider)
+        populate_form(provider)
+        // ----
+        Vendor.init(vendor)
+        Location.init(location)
+        Address.init(addresses)
+        Contact.init(contacts)
+        Company.init(company)
+        // ----
+        Vendor.setProvider()
+        disable_form_fields()
+        set_progress()
+    }
+    
+    /**
+     * initialize provider object
+     *
+     * @param settings
+     */
+    const init = function (settings) {
+    
+    }
+    
+    return {
+        validator: null,
+        detail: {},
+        all: new Map(),
+        navigate: function (provider) {
+            navigate(provider)
+        },
+        get: function (params) {
+            get(params)
+        },
+        build: function () {
+            if (validate_form()) {
+                return build()
+            }
+        },
+        load_all: function (params) {
+            load_all(params)
+        },
+        save: function (params) {
+            save(params)
+        },
+        init: function () {
+            init()
+        },
+        reset_form: function () {
+            reset_form()
+        },
+        provider_exists: function (name) {
+            provider_exists(name)
+        },
+        enable_form_fields: function () {
+            enable_form_fields()
+        },
+        disable_form_fields: function () {
+            disable_form_fields()
+        },
+        index: function (providers) {
+            index(providers)
+        },
+        edit: function (settings) {
+            edit(settings)
+        },
+    }
+    
+})()
 
 const Product = (function () {
     "use strict"
@@ -8019,23 +8556,8 @@ $(function () {
 
 $(document).ready(function () {
     
-    const but_toggle = document.querySelectorAll(".but_toggle")
-    
     window.addEventListener("resize", debounce(function (e) {
         resize_elements("end of resizing")
-    }))
-    but_toggle.forEach(el => el.addEventListener("click", event => {
-        if (el.dataset.texted) {
-            let editorId = el.dataset.texted
-            let editor = $("#" + editorId)
-            if (tinyMCE.get(editorId)) {
-                editor.val(htmlDecode(editor.val()))
-                tinymce.remove("#" + editorId)
-            } else {
-                editor.val(htmlDecode(editor.val()))
-                addTinyMCE(editorId)
-            }
-        }
     }))
     
     if (mdbPreloader) {

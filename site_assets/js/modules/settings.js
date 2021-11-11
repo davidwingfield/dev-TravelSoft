@@ -3,7 +3,7 @@ const defaultLocationDisplayFormat = "medium" //long medium short
 const sideNavOptions = {
     edge: "left", // Choose the horizontal origin
     closeOnClick: false, // Closes side-nav on &lt;a&gt; clicks, useful for Angular/Meteor
-    breakpoint: 1200, // Breakpoint for button collapse
+    breakpoint: 1199, // Breakpoint for button collapse
     menuWidth: 240, // Width for sidenav
     timeDurationOpen: 500, // Time duration open menu
     timeDurationClose: 500, // Time duration open menu

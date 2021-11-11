@@ -35,12 +35,11 @@
         "ext-openssl": "*",
         "apache/log4php": "2.3.0",
         "thingengineer/mysqli-database-class": "dev-master",
-        "ext-readline": "*",
-        "ext-csprng": "*"
+        "ext-readline": "*"
     },
     "autoload": {
         "psr-4": {
-            "Framework": "src/"
+            "Framework\\": "src/"
         }
     }
 }

@@ -428,17 +428,17 @@
             SELECT 
                             COMPANY.id AS &#039;company_id&#039;,
                             COMPANY.name AS &#039;company_name&#039;,
-                            COALESCE(COMPANY.phone_1, &#039;&#039;) AS &#039;company_phone_1&#039;,
-                            COALESCE(COMPANY.phone_2, &#039;&#039;) AS &#039;company_phone_2&#039;,
-                            COALESCE(COMPANY.fax, &#039;&#039;) AS &#039;company_fax&#039;,
-                            COALESCE(COMPANY.website, &#039;&#039;) AS &#039;company_website&#039;,
-                            COALESCE(COMPANY.email, &#039;&#039;) AS &#039;company_email&#039;,
+                            COMPANY.phone_1 AS &#039;company_phone_1&#039;,
+                            COMPANY.phone_2 AS &#039;company_phone_2&#039;,
+                            COMPANY.fax AS &#039;company_fax&#039;,
+                            COMPANY.website AS &#039;company_website&#039;,
+                            COMPANY.email AS &#039;company_email&#039;,
                             COMPANY.enabled AS &#039;company_enabled&#039;,
                             COMPANY.created_by AS &#039;company_created_by&#039;,
                             DATE_FORMAT(COMPANY.date_created, &#039;%m/%d/%Y&#039;) AS &#039;company_date_created&#039;,
                             COMPANY.modified_by AS &#039;company_modified_by&#039;,
                             DATE_FORMAT(COMPANY.date_modified, &#039;%m/%d/%Y&#039;) AS &#039;company_date_modified&#039;,
-                            COALESCE(COMPANY.status_id, 10) AS &#039;company_status_id&#039;,
+                            COMPANY.status_id AS &#039;company_status_id&#039;,
                             COMPANY.note AS &#039;company_note&#039;,
                             VENDOR.id AS &#039;vendor_id&#039;,
                             VENDOR.company_id AS &#039;vendor_company_id&#039;,
@@ -877,7 +877,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/VendorModel.php"><a href="files/app-models-vendormodel.html"><abbr title="App/Models/VendorModel.php">VendorModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">194</span>
+    <span class="phpdocumentor-element-found-in__line">195</span>
 
     </aside>
 

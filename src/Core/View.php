@@ -151,7 +151,7 @@
             foreach ($buttons AS $i => $button) {
                 if (isset($button["type"], $button["text"])) {
                     $button_type = $button["type"];
-                    $button_text = $button["text"];
+                    $button_text = (isset($button["text"]) && $button["text"] !== "") ? "<span class='ml-2 d-none d-md-inline'>" . $button["text"] . "</span>" : "";
                     $button_icon = "";
                     $button_classes = "";
                     $button_attributes = "";
@@ -159,7 +159,7 @@
 
                     if (isset($button["icon"])) {
                         $i = $button["icon"];
-                        $button_icon = "<i class='$i'></i>";
+                        $button_icon = "<i class='$i' aria-hidden='true'></i>";
                     }
 
                     if (isset($button["id"])) {
@@ -194,7 +194,7 @@
                     $page_heading_buttons .= "
                     <$el $ref class='$button_classes waves-effect waves-light' $button_attributes $button_data>
                         $button_icon
-                        <span class='ml-2 d-none d-lg-inline'>$button_text</span>
+                        $button_text</span>
                     </$el>
                     ";
                 }

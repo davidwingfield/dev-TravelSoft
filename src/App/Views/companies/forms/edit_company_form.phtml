@@ -7,20 +7,16 @@
 </style>
 <!-- Edit Company Form -->
 <form id="form_edit_company" name="form_edit_company" class="" style="" novalidate>
-    
-    <!-- Card -->
-    <div class="card rgba-blue-grey-slight m-3" style="">
-        <div class="card-body">
-            <h5 class="card-title"><span>Company Details</span></h5>
-            <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
-            <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-            
-            <div class="row" style="">
-                
-                <div class="col-12 col-md-6 col-lg-8">
-                    
+    <div class="row">
+        <div class="col-12 col-md-6 col-xl-5">
+            <div class="card mb-2" style="">
+                <div class="card-body">
+                    <h5 class="card-title"><span>Company Details</span></h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
+                    <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+
                     <div class="row" style="">
-                        
+
                         <!-- Company Id -->
                         <div class="col-12 col-lg-4 " style="">
                             <div class="form-element" style="">
@@ -30,13 +26,13 @@
                             </div>
                         </div>
                         <!-- /Company Id -->
-                        
+
                         <!-- Company Name -->
                         <div class="col-12 col-lg-8 " style="">
                             <div class="form-element" style="">
                                 <label for="company_name" style="">Company Name:</label>
                                 <div class="input-group">
-                                    <input type="search" id="company_name" name="company_name" class="form-control" style="" aria-label="Company Name" placeholder="" autocomplete="off"/>
+                                    <input type="search" id="company_name" name="company_name" class="company_name form-control" style="" aria-label="Company Name" placeholder="" autocomplete="off"/>
                                     <div class="input-group-append">
                                         <button class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect" type="button" id="button_edit_company_name">
                                             <i class="fas fa-edit"></i>
@@ -51,12 +47,26 @@
                             </div>
                         </div>
                         <!-- /Company Name -->
-                    
+
                     </div>
-                    
-                    <div id="form_edit_company_block">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-7">
+
+            <div id="form_edit_company_block" class="" style="">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h5 class="card-title"><span>Company Details</span>
+                            <a id="button_close_edit_company_form" href="javascript:void(0);" class="panel-button-close fas fa-times" aria-hidden="true"></a>
+                        </h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
+                        <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+
                         <div class="row" style="">
-                            
+
                             <!-- Company Phone 1 -->
                             <div class="col-12 col-md-4" style="">
                                 <div class="form-element" style="">
@@ -66,7 +76,7 @@
                                 </div>
                             </div>
                             <!-- /Company Phone 1 -->
-                            
+
                             <!-- Company Phone 2 -->
                             <div class="col-12 col-md-4" style="">
                                 <div class="form-element" style="">
@@ -76,7 +86,7 @@
                                 </div>
                             </div>
                             <!-- /Company Phone 2 -->
-                            
+
                             <!-- Company Fax -->
                             <div class="col-12 col-md-4" style="">
                                 <div class="form-element" style="">
@@ -86,7 +96,7 @@
                                 </div>
                             </div>
                             <!-- /Company Fax -->
-                        
+
                         </div>
 
                         <div class="row" style="">
@@ -118,25 +128,10 @@
                             <a href="javascript:void(0);" id="button_submit_form_edit_company" class="btn btn-primary btn-sm waves-effect waves-light" style="">Update</a>
                         </div>
                     </div>
-                
                 </div>
-                
-                <!-- Company Cover Image -->
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="form-element" style="">
-                        <label for="company_cover_image">Cover Image:</label>
-                        <input id="company_cover_image" name="company_cover_image" type="file" class="dropify" data-height="200"/>
-                        <div id="company_cover_image-error" class="error w-100 text-center" style="">&nbsp;</div>
-                    </div>
-                </div>
-                <!-- /Company Cover Image -->
-            
             </div>
-
         </div>
     </div>
-    <!-- /Card -->
-
 </form>
 <!-- /Edit Company Form -->
 

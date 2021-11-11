@@ -1,0 +1,207 @@
+@import 'variables';
+
+@font-face {
+  font-family: '#{$icomoon-font-family}';
+  src: url('/public/font/web_fonts/Web-icons.eot?ot9s7f');
+  src: url('/public/font/web_fonts/Web-icons.eot?ot9s7f#iefix') format('embedded-opentype'),
+  url('/public/font/web_fonts/Web-icons.ttf?ot9s7f') format('truetype'),
+  url('/public/font/web_fonts/Web-icons.woff?ot9s7f') format('woff'),
+  url('/public/font/web_fonts/Web-icons.svg?ot9s7f##{$icomoon-font-family}') format('svg');
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+}
+
+.icon {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: '#{$icomoon-font-family}' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  
+  position: relative;
+  display: inline-block;
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: auto;
+  
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+.wb-film {
+  &:before {
+    content: $wb-film;
+  }
+}
+
+.wb-play-circle-o {
+  &:before {
+    content: $wb-play-circle-o;
+  }
+}
+
+.wb-video {
+  &:before {
+    content: $wb-video-camera;
+  }
+}
+
+.wb-video-camera {
+  &:before {
+    content: $wb-video-camera;
+  }
+}
+
+.wb-map-marker {
+  &:before {
+    content: $wb-map-marker;
+  }
+}
+
+.wb-play {
+  &:before {
+    content: $wb-play;
+  }
+}
+
+.wb-calendar {
+  &:before {
+    content: $wb-calendar;
+  }
+}
+
+.wb-phone {
+  &:before {
+    content: $wb-phone;
+  }
+}
+
+.wb-sitemap {
+  &:before {
+    content: $wb-sitemap;
+  }
+}
+
+.wb-location-arrow {
+  &:before {
+    content: $wb-location-arrow;
+  }
+}
+
+.wb-calendar-o {
+  &:before {
+    content: $wb-calendar-o;
+  }
+}
+
+.wb-play-circle {
+  &:before {
+    content: $wb-play-circle;
+  }
+}
+
+.wb-youtube-square {
+  &:before {
+    content: $wb-youtube-square;
+  }
+}
+
+.wb-youtube {
+  &:before {
+    content: $wb-youtube;
+  }
+}
+
+.wb-youtube-play {
+  &:before {
+    content: $wb-youtube-play;
+  }
+}
+
+.wb-file-movie-o {
+  &:before {
+    content: $wb-file-movie-o;
+  }
+}
+
+.wb-file-video-o {
+  &:before {
+    content: $wb-file-video-o;
+  }
+}
+
+.wb-calendar-plus-o {
+  &:before {
+    content: $wb-calendar-plus-o;
+  }
+}
+
+.wb-calendar-minus-o {
+  &:before {
+    content: $wb-calendar-minus-o;
+  }
+}
+
+.wb-calendar-times-o {
+  &:before {
+    content: $wb-calendar-times-o;
+  }
+}
+
+.wb-calendar-check-o {
+  &:before {
+    content: $wb-calendar-check-o;
+  }
+}
+
+.wb-map-pin {
+  &:before {
+    content: $wb-map-pin;
+  }
+}
+
+.wb-map-signs {
+  &:before {
+    content: $wb-map-signs;
+  }
+}
+
+.wb-map-o {
+  &:before {
+    content: $wb-map-o;
+  }
+}
+
+.wb-map {
+  &:before {
+    content: $wb-map;
+  }
+}
+
+.wb-image {
+  &:before {
+    content: $wb-image;
+  }
+}
+
+.wb-photo {
+  &:before {
+    content: $wb-photo;
+  }
+}
+
+.wb-picture-o {
+  &:before {
+    content: $wb-picture-o;
+  }
+}

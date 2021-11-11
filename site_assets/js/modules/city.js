@@ -30,13 +30,10 @@ const City = (function () {
     const build_drop_downs = function (settings) {
         if (settings) {
             if (settings.dropdowns) {
-                
                 $.each(settings.dropdowns, function (i, dropdown_id) {
-                    
                     let element = document.getElementById(dropdown_id)
                     
                     if (element) {
-                        
                         $(element)
                           .select2({
                               
@@ -67,16 +64,13 @@ const City = (function () {
                                   }
                                   $(".filter_city_add").hide()
                                   if (_filterCitySearch) {
-                                      
                                       _filterCitySearch.addEventListener("keyup", event => {
                                           if (_filterCitySearch.value !== "") {
                                               $(".filter_city_add").show()
                                           } else {
                                               $(".filter_city_add").hide()
                                           }
-                                          
                                       })
-                                      
                                   }
                               }
                               
@@ -85,22 +79,9 @@ const City = (function () {
                               let id = $(this)
                                 .attr("id")
                                 .replace("city", "city")
-                              
-                              //let city_element = document.getElementById(id)
-                              
-                              if (!isNaN(parseInt($(this).val()))) {
-                                  //City.id = $(this).val()
-                                  //if (city_element) {
-                                  //City.get(parseInt($(this).val()), city_element)
-                                  //}
-                              }
-                              
                           })
-                        
                     }
-                    
                 })
-                
             }
         }
     }

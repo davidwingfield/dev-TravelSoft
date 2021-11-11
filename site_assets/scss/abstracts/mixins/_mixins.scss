@@ -324,7 +324,7 @@ $linear-channel-values: 0 .0003035269835488375 .000607053967097675 .000910580950
 @mixin make-button($name, $color) {
   .btn-#{$name} {
     color: set-notification-text-color($color);
-    background-color: $color !important;
+    background-color: $color;
     
     &:hover {
       color: set-notification-text-color($color);

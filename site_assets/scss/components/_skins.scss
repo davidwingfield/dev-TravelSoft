@@ -401,3 +401,10 @@ $data in $skins {
     }
   }
 }
+
+.pills-secondary .nav-link.active,
+.pills-secondary .nav-link:focus,
+.pills-secondary .show > .nav-link, .tabs-secondary {
+  background: $custom-secondary-color !important;
+  color: choose-contrast-color($custom-secondary-color);
+}

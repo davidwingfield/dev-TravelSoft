@@ -532,7 +532,6 @@ const Address = (function () {
      * set address object detail
      */
     const set_detail = function (address) {
-        console.log(address)
         let detail = _default_detail()
         if (address) {
             detail.country = {

@@ -17,6 +17,8 @@ const Vendor = (function () {
     const _provider_name = document.getElementById("provider_name")
     const _provider_company_id = document.getElementById("provider_company_id")
     const _company_id = document.getElementById("company_id")
+    const _button_submit_form_edit_vendor = document.getElementById("button_submit_form_edit_vendor")
+    
     let validator
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let globalSelectedVendor = false
@@ -36,6 +38,11 @@ const Vendor = (function () {
     $(_company_id)
       .on("change", function () {
           $(_vendor_company_id).val(_company_id.value)
+      })
+    
+    $(_button_submit_form_edit_vendor)
+      .on("click", function () {
+          let dataToSend = Vendor.build()
       })
     
     const init_autocomplete = function () {

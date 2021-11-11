@@ -152,7 +152,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">15</span>
+    <span class="phpdocumentor-element-found-in__line">16</span>
 
     </aside>
 
@@ -272,6 +272,13 @@
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-ProviderModel.html#method_update">update()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-ProviderModel.html#method_updateRecord">updateRecord()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;|array&lt;string|int, string&gt;    </span>
@@ -338,7 +345,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">20</span>
+    <span class="phpdocumentor-element-found-in__line">21</span>
 
     </aside>
 
@@ -372,7 +379,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">39</span>
+    <span class="phpdocumentor-element-found-in__line">40</span>
 
     </aside>
 
@@ -382,7 +389,8 @@
     <span class="phpdocumentor-signature__visibility">protected</span>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$selectQuery</span>
-     = <span class="phpdocumentor-signature__default-value">&quot;SELECT 
+     = <span class="phpdocumentor-signature__default-value">&quot;
+            SELECT 
                             PROVIDER.id AS &#039;provider_id&#039;,
                             PROVIDER.company_id AS &#039;provider_company_id&#039;,
                             PROVIDER.location_id AS &#039;provider_location_id&#039;,
@@ -408,6 +416,7 @@
                             DATE_FORMAT(COMPANY.date_modified, &#039;%m/%d/%Y&#039;) AS &#039;company_date_modified&#039;,
                             COALESCE(COMPANY.status_id, 10) AS &#039;company_status_id&#039;,
                             COMPANY.note AS &#039;company_note&#039;,
+                            COMPANY.cover_image AS &#039;company_cover_image&#039;,       
                             CONCAT(	LOCATION.name, &#039; &#039;,	&#039;(&#039; ,CITY.name,	&#039;, &#039;,	PROVINCE.name,&#039;)&#039;) AS &#039;location&#039;,
                             CONCAT(LOCATION.name, &#039; &#039;,	&#039;(&#039; ,CITY.name, &#039; &#039;, CONCAT(PROVINCE.iso2, &#039; - &#039;, PROVINCE.name), &#039;, &#039;, CONCAT(COUNTRY.iso2, &#039; - &#039;, COUNTRY.name),&#039;)&#039;) AS &#039;location_long&#039;,
                             CONCAT(LOCATION.name, &#039; &#039;,	&#039;(&#039; ,CITY.name, &#039; &#039;, PROVINCE.iso2, &#039;, &#039;, COUNTRY.iso2,&#039;)&#039;) AS &#039;location_short&#039;,
@@ -540,7 +549,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">181</span>
+    <span class="phpdocumentor-element-found-in__line">184</span>
 
     </aside>
 
@@ -587,7 +596,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">206</span>
+    <span class="phpdocumentor-element-found-in__line">209</span>
 
     </aside>
 
@@ -630,7 +639,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">233</span>
+    <span class="phpdocumentor-element-found-in__line">236</span>
 
     </aside>
 
@@ -706,7 +715,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">256</span>
+    <span class="phpdocumentor-element-found-in__line">259</span>
 
     </aside>
 
@@ -917,6 +926,50 @@
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_update">
+        update()
+        <a href="classes/Framework-App-Models-ProviderModel.html#method_update" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">355</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">update</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$provider</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$provider</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_updateRecord">
         updateRecord()
         <a href="classes/Framework-App-Models-ProviderModel.html#method_updateRecord" class="headerlink"><i class="fas fa-link"></i></a>
@@ -924,7 +977,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">282</span>
+    <span class="phpdocumentor-element-found-in__line">285</span>
 
     </aside>
 

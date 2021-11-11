@@ -1,6 +1,6 @@
 const Company = (function () {
     "use strict"
-    
+    const _button_save_provider = document.getElementById("button_save_provider")
     const _form_edit_company = document.getElementById("form_edit_company")
     const _company_enabled = document.getElementById("company_enabled")
     const _company_name = document.getElementById("company_name")
@@ -17,6 +17,7 @@ const Company = (function () {
     const _form_edit_company_block = document.getElementById("form_edit_company_block")
     const _button_edit_company_name = document.getElementById("button_edit_company_name")
     const _button_cancel_edit_company_name = document.getElementById("button_cancel_edit_company_name")
+    const _button_close_edit_company_form = document.getElementById("button_close_edit_company_form")
     // ----
     const _vendor_name = document.getElementById("vendor_name")
     const _vendor_company_id = document.getElementsByClassName("vendor_company_id")
@@ -67,7 +68,7 @@ const Company = (function () {
       .on("click", function () {
           let detail = set_detail(tempCompany)
           populate_form(detail)
-          //hide_form()
+          hide_form()
       })
     
     $(_button_edit_company_name)
@@ -81,10 +82,30 @@ const Company = (function () {
           reset_form()
       })
     
+    $(_button_close_edit_company_form)
+      .on("click", function () {
+          hide_form()
+      })
+    
     $(_button_submit_form_edit_company)
       .on("click", function () {
           let company = Company.build()
-          console.log(company)
+          if (company) {
+              
+              confirmDialog(`Would you like to update?`, (ans) => {
+                  if (ans) {
+                      add_to_company_list(company, function (data) {
+                          if (data) {
+                              if (data[0]) {
+                                  let company = data[0]
+                                  populate_form(company)
+                                  init_autocomplete()
+                              }
+                          }
+                      })
+                  }
+              })
+          }
       })
     
     $(_company_id)
@@ -92,21 +113,28 @@ const Company = (function () {
           _address_company_id.value = _company_id.value
       })
     
-    $(_company_name)
-      .on("change", function () {
-          if (_provider_name) {
-              //$(_provider_name).val($(_company_name).val())
-          }
-          
-          if (_vendor_name) {
-              //$(_vendor_name).val($(_company_name).val())
-          }
-      })
+    let temp_company = {}
     
     $(_form_edit_company)
       .on("change", function () {
           set_progress()
       })
+    
+    const on_click_outside = (e) => {
+        let tar = $(e.target).parents("div.form_element")
+        if (!tar[0] && !e.target.className.includes("company_name")) {
+            if (_company_name.value === "") {
+                populate_form(temp_company)
+            }
+            
+            temp_company = {}
+            destroy_click()
+        }
+    }
+    
+    const destroy_click = function () {
+        window.removeEventListener("click", on_click_outside)
+    }
     
     /**
      * initialize provider autocomplete
@@ -129,7 +157,11 @@ const Company = (function () {
               }, 200)
           })
           .on("search", function () {
+              /*
+              temp_company = Company.detail
+              window.addEventListener("click", on_click_outside)
               hide_form()
+              //*/
               Company.reset_form(true)
               Provider.reset_form()
               Vendor.reset_form()
@@ -271,6 +303,28 @@ const Company = (function () {
         return detail
     }
     
+    const build = function () {
+        return remove_nulls({
+            email: $(_company_email).val(),
+            //enabled: (_company_enabled.checked === true) ? 1 : 0,
+            enabled: 1,
+            fax: $(_company_fax).val(),
+            id: (!isNaN(_provider_company_id.value)) ? parseInt(_provider_company_id.value) : null,
+            modified_by: user_id,
+            //cover_image: _company_cover_image.value,
+            cover_image: null,
+            name: $(_company_name).val(),
+            note: Company.detail.note,
+            phone_1: $(_company_phone_1).val(),
+            phone_2: $(_company_phone_2).val(),
+            status_id: Company.detail.status_id,
+            website: $(_company_website).val(),
+        })
+        
+    }
+    
+    // ----
+    
     const company_exists = function (name) {
         if (name && name !== "") {
             let dataToSend = {
@@ -351,6 +405,56 @@ const Company = (function () {
         }
     }
     
+    // ----
+    
+    const init = function (company) {
+        if (company) {
+            let detail = set_detail(company)
+            populate_form(detail)
+        }
+        
+        if (_form_edit_company) {
+            validator_init(form_rules)
+            validator = $(_form_edit_company).validate()
+            init_autocomplete()
+            if (_form_edit_company_block) {
+                hide_form()
+            }
+        }
+    }
+    
+    const get_cover_image = function () {
+        var files = document.getElementById("company_cover_image").files
+        
+        console.log("files", files)
+    }
+    
+    // ----
+    
+    const validate_form = function () {
+        return $(_form_edit_company).valid()
+    }
+    
+    const reset_form = function (toggleFullClear) {
+        _company_phone_1.value = ""
+        _company_phone_2.value = ""
+        _company_fax.value = ""
+        _company_email.value = ""
+        _company_website.value = ""
+        if (toggleFullClear && toggleFullClear === true) {
+            if (_provider_name) {
+                $(_provider_name).val("").trigger("change")
+            }
+            if (_vendor_name) {
+                $(_vendor_name).val("").trigger("change")
+            }
+            $(_company_id).val("").trigger("change")
+            _company_name.value = ""
+            Address.clearTable()
+            Contact.clearTable()
+        }
+    }
+    
     const populate_form = function (company) {
         $(_company_id).val((company.id) ? company.id : "").trigger("change")
         _company_name.value = (company.name) ? company.name : ""
@@ -386,79 +490,17 @@ const Company = (function () {
         
     }
     
-    const validate_form = function () {
-        return $(_form_edit_company).valid()
-    }
-    
-    const reset_form = function (toggleFullClear) {
-        _company_phone_1.value = ""
-        _company_phone_2.value = ""
-        _company_fax.value = ""
-        _company_email.value = ""
-        _company_website.value = ""
-        if (toggleFullClear && toggleFullClear === true) {
-            if (_provider_name) {
-                $(_provider_name).val("").trigger("change")
-            }
-            if (_vendor_name) {
-                $(_vendor_name).val("").trigger("change")
-            }
-            $(_company_id).val("").trigger("change")
-            _company_name.value = ""
-            Address.clearTable()
-            Contact.clearTable()
-        }
-    }
-    
-    const init = function (company) {
-        if (company) {
-            let detail = set_detail(company)
-            populate_form(detail)
-        }
-        
-        if (_form_edit_company) {
-            validator_init(form_rules)
-            validator = $(_form_edit_company).validate()
-            init_autocomplete()
-            if (_form_edit_company_block) {
-                hide_form()
-            }
-        }
-    }
-    
-    const get_cover_image = function () {
-        var files = document.getElementById("company_cover_image").files
-        
-        console.log("files", files)
-    }
-    
-    const build = function () {
-        
-        return {
-            email: $(_company_email).val(),
-            //enabled: (_company_enabled.checked === true) ? 1 : 0,
-            enabled: 1,
-            fax: $(_company_fax).val(),
-            id: (!isNaN(_provider_company_id.value)) ? parseInt(_provider_company_id.value) : null,
-            modified_by: user_id,
-            //cover_image: _company_cover_image.value,
-            cover_image: null,
-            name: $(_company_name).val(),
-            note: Company.detail.note,
-            phone_1: $(_company_phone_1).val(),
-            phone_2: $(_company_phone_2).val(),
-            status_id: Company.detail.status_id,
-            website: $(_company_website).val(),
-        }
-        
-    }
-    
     const show_form = function () {
         if (_form_edit_company_block) {
             $(_form_edit_company_block).show()
             $(_button_cancel_edit_company_name).show()
             $(_button_edit_company_name).hide()
             $(_company_name).attr("readonly", true)
+        }
+        
+        if (_button_save_provider) {
+            $(_button_save_provider).attr("readonly", true)
+            _button_save_provider.disabled = true
         }
     }
     
@@ -468,8 +510,16 @@ const Company = (function () {
             $(_form_edit_company_block).hide()
             $(_button_cancel_edit_company_name).hide()
             $(_button_edit_company_name).show()
+            init_autocomplete()
+        }
+        
+        if (_button_save_provider) {
+            $(_button_save_provider).attr("readonly", false)
+            _button_save_provider.disabled = false
         }
     }
+    
+    // ----
     
     const set_progress = function () {
         if (!isNaN(parseInt(_company_id.value))) {

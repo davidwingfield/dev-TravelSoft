@@ -10,8 +10,8 @@
 @import 'abstracts/global';
 @import 'abstracts/helpers';
 @import 'abstracts/custom-skin';
-
 @import 'core/typography';
+@import 'core/web-icons';
 @import 'core/masks';
 @import 'core/waves';
 // Layout
@@ -97,6 +97,7 @@
 @import 'addons/datatables2';
 @import 'addons/datatables-select';
 @import 'addons/datatables-select2';
+@import 'addons/tiny-mce';
 // @import 'addons/dropify/dropify';
 // @import "addons/directives";
 // @import "addons/hierarchical-display";

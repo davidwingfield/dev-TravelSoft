@@ -9,11 +9,27 @@
         $pageDescription = PAGEDESCRIPTION;
     }
 
+    $pageHeadingClass = "";
+    if (defined("PAGEHEADINGCLASS")) {
+        $pageHeadingClass = PAGEHEADINGCLASS;
+    }
+    $tabSection = [];
+    if (isset($data["tabs"])) {
+        $tabSection = $data["tabs"];
+    }
 ?>
 
 <div class="page" id="page">
-
-    <div class="page-header" id="page_header">
+    
+    <div class="page-header <?php echo $pageHeadingClass; ?>" id="page_header">
+        
+        <ol class="breadcrumb ">
+            <?php
+                if (defined("BREAD_CRUMBS")) {
+                    echo BREAD_CRUMBS;
+                }
+            ?>
+        </ol>
         <h1 class="page-title" id="page_title">
             <?php
                 if (defined("PAGE_HEADING")) {
@@ -23,26 +39,65 @@
                 }
             ?>
         </h1>
-
         <?php
             if (defined("PAGE_SUBHEADING")) {
-                echo "<p class='page-description'>" . PAGE_SUBHEADING . "</p>";
+                //echo "<p class='page-description'>" . PAGE_SUBHEADING . "</p>";
             }
 
         ?>
-        
-        <ol class="breadcrumb ">
-            <?php
-                if (defined("BREAD_CRUMBS")) {
-                    echo BREAD_CRUMBS;
-                }
-            ?>
-        </ol>
-        
         <div class="page-header-actions">
             <?php echo (isset($page_heading_buttons)) ? $page_heading_buttons : "&nbsp;"; ?>
         </div>
+        <?php
 
+            function buildPageTabs($tab_details)
+            {
+                if ($tab_details) {
+                    $tabs = (isset($tab_details["tabs"])) ? $tab_details["tabs"] : [];
+                    $tab_page_id = (isset($tab_details["id"])) ? "id='" . $tab_details["id"] . "' " : "";
+                    $tab_page_class = (isset($tab_details["class"])) ? "class='" . $tab_details["class"] . "' " : "";
+                    $tab_page_role = (isset($tab_details["role"])) ? "role='" . $tab_details["role"] . "' " : "";
+                    echo "<ul $tab_page_class $tab_page_role $tab_page_id>";
+                    foreach ($tabs AS $tabName => $tab) {
+                        $active = ($tab["active"]) ? " active " : "";
+                        $href = (isset($tab["href"])) ? " href='#" . $tab["href"] . "'" : "";
+                        $li_id = $tab["id"];
+                        $controls = (isset($tab["controls"])) ? " aria-controls='" . $tab["controls"] . "' " : "";
+                        $data = (isset($tab["data"])) ? $tab["data"] : [];
+                        $aria = (isset($tab["aria"])) ? $tab["aria"] : [];
+                        $aria_values = "";
+                        $data_values = "";
+
+                        foreach ($aria AS $name => $value) {
+                            $v = ($value === true) ? "true" : "false";
+                            $aria_values .= " aria-$name='$v' ";
+                        }
+
+                        foreach ($data AS $name => $value) {
+                            $data_values .= " data-$name='$value' ";
+                        }
+
+                        echo "
+                        <li class='nav-item waves-effect waves-light ' role='presentation'>
+                            <a class='nav-link $active' data-toggle='tab' id='$li_id' $href $controls $aria_values $data_values>
+                                $tabName
+                            </a>
+                       </li>";
+                    }
+                    echo "</ul>";
+                }
+
+            }
+
+            function buildPageTabContent($tabs)
+            {
+
+            }
+
+            buildPageTabs($tabSection);
+
+        ?>
+    
     </div>
     <?php include_once(__DIR__ . "/alert_box.phtml"); ?>
     <div class="page-content container-fluid">

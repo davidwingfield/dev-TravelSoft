@@ -263,3 +263,108 @@ strong {
 [readonly='readonly'] {
   pointer-events: none;
   }
+
+.btn.btn-outline-primary[readonly='readonly'] {
+  background: rgba(7, 79, 149, .25) !important;
+  }
+
+.btn-icon, .btn.icon {
+  padding: 0.715rem;
+  line-height: 1em;
+  font-size: 14px;
+  }
+
+.card .card-block > :first-child {
+  margin-top: 0;
+  }
+
+.btn-round {
+  border-radius: 1000px;
+  }
+
+.user-release-input {
+  border: none;
+  border-bottom: 1px solid #e4eaec;
+  border-radius: 0;
+  color: #76838f;
+  background-color: #fff;
+  background-image: none;
+  display: block;
+  padding: 0.715rem 1.286rem;
+  font-size: 1.286rem;
+  line-height: 1.333333;
+  width: 100%;
+  }
+
+.page-header-bordered {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+  background-color: #fff;
+  border-bottom: 1px solid transparent;
+  }
+
+.page-header-tabs {
+  padding-bottom: 0;
+  }
+
+.nav-tabs-line .nav-link:hover {
+  border-bottom-color: #ccd5db;
+  }
+
+.nav-tabs-line .nav-link:focus, .nav-tabs-line .nav-link:hover {
+  background-color: transparent;
+  }
+
+.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+  border-color: transparent transparent #e4eaec;
+  }
+
+.nav-tabs .nav-link {
+  color: #76838f;
+  -webkit-transition: .25s;
+  -o-transition: .25s;
+  transition: .25s;
+  }
+
+.page-header-tabs .nav-tabs-line > li > a {
+  padding: 5px 20px;
+  }
+
+.btn-inverse {
+  color: #111;
+  background-color: #fff;
+  border: solid 1px #e4eaec;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  }
+
+.btn-inverse.focus, .btn-inverse.hover, .btn-inverse:focus, .btn-inverse:hover {
+  color: #76838f;
+  background-color: #fff;
+  border-color: #f3f7f9;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  }
+
+.input-search .input-search-icon + .form-control {
+  padding-left: 3.073rem;
+  }
+
+.input-search-dark .form-control {
+  background: #f3f7f9;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  }
+
+.input-search .form-control {
+  border-radius: 200px;
+  }
+
+ul.nav-tabs-line > li.nav-item, ul.nav-tabs-line > li.nav-item > a.nav-link {
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+  }
+
+
+

@@ -11,115 +11,61 @@
 ?>
 
 <section id="provider_edit">
-    <div class="panel nav-tabs-horizontal nav-tabs-inverse" id="provider_edit_tabs" data-plugin="tabs">
-        
-        <div class="panel-heading panel-heading-tab">
-            <ul class="nav nav-tabs nav-tabs-solid" role="tablist">
 
-                <!-- Company Details -->
-                <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" id="panel_tab_company" href="#panel_tab_company_detail" aria-controls="panel_tab_company_detail" aria-expanded="true" role="tab">
-                        <span class="">Company</span> <span class="d-none d-lg-inline">Details</span>
-                    </a>
-                </li>
-                <!-- /Company Details -->
+    <!-- Tab Content -->
+    <div class="tab-content p-0">
 
-                <!-- Provider Details -->
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" id="panel_tab_provider" href="#panel_tab_provider_detail" aria-controls="panel_tab_provider_detail" aria-expanded="false" role="tab">
-                        <span class="">Provider</span> <span class="d-none d-lg-inline">Details</span>
-                    </a>
-                </li>
-                <!-- /Provider Details -->
-
-                <!-- Location Details -->
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" id="panel_tab_location" href="#panel_tab_location_detail" aria-controls="panel_tab_location_detail" aria-expanded="false" role="tab">
-                        <span class="">Location</span> <span class="d-none d-lg-inline">Details</span>
-                    </a>
-                </li>
-                <!-- /Location Details -->
-                
-                <!-- Vendor Details -->
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" id="panel_tab_vendor" href="#panel_tab_vendor_detail" aria-controls="panel_tab_vendor_detail" role="tab">
-                        <span class="">Vendor</span> <span class="d-none d-lg-inline">Details</span>
-                    </a>
-                </li>
-                <!-- /Vendor Details -->
-                
-                <!-- Contacts -->
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" id="panel_tab_contact" href="#panel_tab_contact_detail" aria-controls="panel_tab_contact_detail" aria-expanded="false" role="tab">
-                        <span class="">Contacts</span>
-                    </a>
-                </li>
-                <!-- /Contacts -->
-                
-                <!-- Addresses -->
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" id="panel_tab_address" href="#panel_tab_address_detail" aria-controls="panel_tab_address_detail" aria-expanded="false" role="tab">
-                        <span class="">Addresses</span>
-                    </a>
-                </li>
-                <!-- /Addresses -->
-            
-            </ul>
+        <!-- Company Detail -->
+        <div class="tab-pane active" id="panel_tab_company_detail" role="tabpanel">
+            <?php include_once(VIEWS_PATH . "/companies/forms/edit_company_form.phtml"); ?>
         </div>
+        <!-- /Company Detail -->
 
-        <!-- Panel Body -->
-        <div class="panel-body p-1">
-            
-            <div class="tab-content p-0">
-
-                <!-- Company Detail -->
-                <div class="tab-pane active" id="panel_tab_company_detail" role="tabpanel">
-                    <?php include_once(VIEWS_PATH . "/companies/forms/edit_company_form.phtml"); ?>
-                </div>
-                <!-- /Company Detail -->
-
-                <!-- Provider Detail -->
-                <div class="tab-pane" id="panel_tab_provider_detail" role="tabpanel">
-                    <?php include_once(VIEWS_PATH . "/providers/forms/provider_edit_form.phtml"); ?>
-                </div>
-                <!-- /Provider Detail -->
-                
-                <!-- Company Detail -->
-                <div class="tab-pane" id="panel_tab_company_detail" role="tabpanel">
-                    <?php include_once(VIEWS_PATH . "/companies/forms/edit_company_form.phtml"); ?>
-                </div>
-                <!-- /Company Detail -->
-                
-                <!-- Location Detail -->
-                <div class="tab-pane" id="panel_tab_location_detail" role="tabpanel">
-                    <?php include_once(VIEWS_PATH . "/locations/forms/location_edit_form.phtml"); ?>
-                </div>
-                <!-- /Location Detail -->
-                
-                <!-- Vendor Detail -->
-                <div class="tab-pane" id="panel_tab_vendor_detail" role="tabpanel">
-                    <?php include_once(VIEWS_PATH . "/vendors/forms/edit_vendor_form.phtml"); ?>
-                </div>
-                <!-- /Vendor Detail -->
-                
-                <!-- Contact Detail -->
-                <div class="tab-pane" id="panel_tab_contact_detail" role="tabpanel">
-                    <?php include_once(VIEWS_PATH . "/contacts/forms/contact_edit_form.phtml"); ?>
-                </div>
-                <!-- /Contact Detail -->
-                
-                <!-- Address Detail -->
-                <div class="tab-pane" id="panel_tab_address_detail" role="tabpanel">
-                    <?php include_once(VIEWS_PATH . "/addresses/forms/address_edit_form.phtml"); ?>
-                </div>
-                <!-- /Address Detail -->
-            
-            </div>
-        
+        <!-- Provider Detail -->
+        <div class="tab-pane" id="panel_tab_provider_detail" role="tabpanel">
+            <?php include_once(VIEWS_PATH . "/providers/forms/provider_edit_form.phtml"); ?>
         </div>
-        <!-- /Panel Body -->
+        <!-- /Provider Detail -->
+
+        <!-- Company Detail -->
+        <div class="tab-pane" id="panel_tab_company_detail" role="tabpanel">
+            <?php include_once(VIEWS_PATH . "/companies/forms/edit_company_form.phtml"); ?>
+        </div>
+        <!-- /Company Detail -->
+
+        <!-- Location Detail -->
+        <div class="tab-pane" id="panel_tab_location_detail" role="tabpanel">
+            <?php include_once(VIEWS_PATH . "/locations/forms/location_edit_form.phtml"); ?>
+        </div>
+        <!-- /Location Detail -->
+
+        <!-- Vendor Detail -->
+        <div class="tab-pane" id="panel_tab_vendor_detail" role="tabpanel">
+            <?php include_once(VIEWS_PATH . "/vendors/forms/edit_vendor_form.phtml"); ?>
+        </div>
+        <!-- /Vendor Detail -->
+
+        <!-- Contact Detail -->
+        <div class="tab-pane" id="panel_tab_contact_detail" role="tabpanel">
+            <?php include_once(VIEWS_PATH . "/contacts/forms/contact_edit_form.phtml"); ?>
+        </div>
+        <!-- /Contact Detail -->
+
+        <!-- Address Detail -->
+        <div class="tab-pane" id="panel_tab_address_detail" role="tabpanel">
+            <?php include_once(VIEWS_PATH . "/addresses/forms/address_edit_form.phtml"); ?>
+        </div>
+        <!-- /Address Detail -->
+
+        <!-- Meta Detail -->
+        <div class="tab-pane" id="panel_tab_meta_detail" role="tabpanel">
+            <?php include_once(VIEWS_PATH . "/providers/forms/provider_meta_form.phtml"); ?>
+        </div>
+        <!-- /Meta Detail -->
 
     </div>
+    <!-- /Tab Content -->
+
 </section>
 <script type="text/javascript">
     $(function () {

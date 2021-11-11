@@ -24,6 +24,112 @@
     class Provider extends Controller
     {
         /**
+         * buttons
+         *
+         * @var array
+         */
+        protected static $buttons = array(
+            "save" => array(
+                "type" => "a",
+                "href" => "javascript:void(0)",
+                "classes" => "btn btn-outline-primary btn-rounded waves-effect",
+                "icon" => "fas fa-plus",
+                "id" => "button_save_provider",
+                "text" => "save provider",
+                "data" => array(
+                    //"toggle" => "tooltip",
+                    //"original-title" => "tooltip",
+                ),
+            ),
+            "new" => array(
+                "type" => "a",
+                "href" => "/providers/new",
+                "classes" => "btn btn-sm btn-icon btn-inverse btn-round",
+                "icon" => "fas fa-plus",
+                "id" => "button_add_provider_page_heading",
+                "text" => "",
+                "data" => array(
+                    "toggle" => "tooltip",
+                    "original-title" => "Edit",
+                ),
+            ),
+        );
+
+        /**
+         * provider tabs
+         *
+         * @var array
+         */
+        protected static $tabs = array(
+            "id" => "provider_edit_tabs",
+            "role" => "tablist",
+            "class" => "nav nav-tabs nav-tabs-line",
+            "tabs" => array(
+                "Company" => array(
+                    "controls" => "panel_tab_company_detail",
+                    "href" => "panel_tab_company_detail",
+                    "id" => "panel_tab_company",
+                    "active" => true,
+                    "aria" => array(
+                        "expanded" => "true",
+                    ),
+                    "data" => array(),
+                ),
+                "Provider" => array(
+                    "controls" => "panel_tab_provider_detail",
+                    "href" => "panel_tab_provider_detail",
+                    "id" => "panel_tab_provider",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+
+                ),
+                "Location" => array(
+                    "controls" => "panel_tab_location_detail",
+                    "href" => "panel_tab_location_detail",
+                    "id" => "panel_tab_location",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
+                "Vendor" => array(
+                    "controls" => "panel_tab_vendor_detail",
+                    "href" => "panel_tab_vendor_detail",
+                    "id" => "panel_tab_vendor",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
+                "Addresses" => array(
+                    "controls" => "panel_tab_address_detail",
+                    "href" => "panel_tab_address_detail",
+                    "id" => "panel_tab_address",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
+                "Meta" => array(
+                    "controls" => "panel_tab_meta_detail",
+                    "href" => "panel_tab_meta_detail",
+                    "id" => "panel_tab_meta",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
+            ),
+        );
+
+        /**
          * result values
          *
          * @var array
@@ -48,8 +154,8 @@
         public static function index(array $params = []): void
         {
             $data = Page::getDetails(5);
-            $buttons = array();
-            // ----
+
+            /** breadcrumbs */
             define("BREAD_CRUMBS", "
                     <li class='breadcrumb-item'>
                         <a href='/'>Home</a>
@@ -58,22 +164,24 @@
                         Providers
                     </li>"
             );
-            // ----
-            $buttons["new"] = array(
-                "type" => "a",
-                "href" => "/providers/new",
-                "classes" => "btn btn-primary waves-light",
-                "icon" => "fas fa-plus",
-                "id" => "button_add_provider_page_heading",
-                "text" => "new provider",
-                "data" => array(
-                    "toggle" => "tooltip",
-                    "original-title" => "tooltip",
-                ),
 
+            /**
+             * buttons
+             */
+            $data["buttons"] = array(
+                self::$buttons["new"],
             );
-            $data["buttons"] = $buttons;
-            // ----
+
+            /**
+             * header
+             */
+            if (!defined("PAGEHEADINGCLASS")) {
+                define("PAGEHEADINGCLASS", " page-header-bordered page-header-tabs");
+            }
+
+            /**
+             * render view
+             */
             $data["providers"] = self::format_get(ProviderModel::get());
             View::render_template("providers/index", $data);
             exit(1);
@@ -86,42 +194,16 @@
          */
         public static function edit(array $params = [])
         {
-
             $provider_id = (int)$params["provider_id"];
             $contact_detail = [];
             $address_detail = [];
             $company_detail = [];
             $vendor_detail = [];
             $location_detail = [];
+            //----
             if (isset($params["provider_id"])) {
                 $data = Page::getDetails(6);
-                $buttons = array();
-                $buttons["save"] = array(
-                    "type" => "button",
-                    "href" => "button",
-                    "classes" => "btn btn-primary waves-light",
-                    "icon" => "fas fa-plus",
-                    "id" => "button_save_provider",
-                    "text" => "save",
-                    "data" => array(
-                        //"toggle" => "tooltip",
-                        //"original-title" => "tooltip",
-                    ),
 
-                );
-                $buttons["new"] = array(
-                    "type" => "a",
-                    "href" => "/providers/new",
-                    "classes" => "btn btn-primary waves-light",
-                    "icon" => "fas fa-plus",
-                    "id" => "button_add_provider_page_heading",
-                    "text" => "new provider",
-                    "data" => array(
-                        "toggle" => "tooltip",
-                        "original-title" => "tooltip",
-                    ),
-
-                );
                 /** breadcrumbs */
                 define("BREAD_CRUMBS", "
                     <li class='breadcrumb-item'>
@@ -135,6 +217,19 @@
                     </li>"
                 );
 
+                /**
+                 * header
+                 */
+                if (!defined("PAGEHEADINGCLASS")) {
+                    define("PAGEHEADINGCLASS", " page-header-bordered page-header-tabs");
+                }
+
+                /**
+                 * tabs
+                 */
+                $tabs = self::$tabs;
+
+                /** get provider details */
                 $provider_detail = self::format_get(ProviderModel::get($provider_id));
 
                 /** get only one */
@@ -153,8 +248,8 @@
                 }
 
                 if (isset($provider_detail["addresses"])) {
-                    $address_detail = $provider_detail["addresses"];
-
+                    $address_detail = Address::format($provider_detail["addresses"]);
+                    $provider_detail["addresses"] = $address_detail;
                 }
 
                 if (isset($provider_detail["location"])) {
@@ -174,8 +269,12 @@
                 $data["vendor_detail"] = $vendor_detail;
                 $data["location_detail"] = $location_detail;
                 $data["address_detail"] = $address_detail;
-                $data["buttons"] = $buttons;
-                //Log::$debug_log->trace($data["provider_detail"]);
+                $data["buttons"] = array(
+                    self::$buttons["save"],
+                    self::$buttons["new"],
+                );
+                $data["tabs"] = self::$tabs;
+
                 /**
                  * render view
                  */
@@ -197,21 +296,7 @@
         {
             $data = Page::getDetails(14);
             $data["is_new"] = true;
-            $buttons = array();
 
-            $buttons["save"] = array(
-                "type" => "button",
-                "href" => "button",
-                "classes" => "btn btn-primary waves-light",
-                "icon" => "fas fa-plus",
-                "id" => "button_save_provider",
-                "text" => "save",
-                "data" => array(
-                    //"toggle" => "tooltip",
-                    //"original-title" => "tooltip",
-                ),
-
-            );
             /** breadcrumbs */
             define("BREAD_CRUMBS", "
                     <li class='breadcrumb-item'>
@@ -224,10 +309,26 @@
                         New
                     </li>"
             );
-            $data["buttons"] = $buttons;
+
+            /**
+             * header
+             */
+            if (!defined("PAGEHEADINGCLASS")) {
+                define("PAGEHEADINGCLASS", " page-header-bordered page-header-tabs");
+            }
+
+            /**
+             * buttons
+             */
+            $data["buttons"] = array(
+                self::$buttons["save"],
+            );
+            $data["tabs"] = self::$tabs;
             View::render_template("providers/edit", $data);
             exit(1);
         }
+
+        // ----
 
         /**
          * handle post update request
@@ -236,7 +337,11 @@
          */
         public static function serveUpdate(array $params = [])
         {
-            $provider = ProviderModel::update($params);
+            $provider = [];
+            Log::$debug_log->trace($params["provider_detail"]);
+            if (isset($params["provider_detail"])) {
+                $provider = self::format_get(ProviderModel::update($params["provider_detail"]));
+            }
 
             // ----
             View::render_json($provider);
@@ -316,7 +421,11 @@
                 "id" => (int)$provider["provider_id"],
                 "name" => $provider["company_name"],
                 "code_direct_id" => $provider["provider_code_direct_id"],
-                "provider_vendor" => $provider["provider_provider_vendor"],
+
+                "description_long" => $provider["provider_description_long"],
+                "description_short" => $provider["provider_description_short"],
+                "keywords" => $provider["provider_keywords"],
+
                 "location_id" => $provider["provider_location_id"],
                 "note" => $provider["provider_note"],
                 "enabled" => $provider["provider_enabled"],

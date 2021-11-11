@@ -11,6 +11,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Address.html#method___construct"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Address\u003A\u003AserveGet\u0028\u0029",
+            "name": "serveGet",
+            "summary": "api\u0020get\u0020request",
+            "url": "classes/Framework-App-Controllers-Address.html#method_serveGet"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Address\u003A\u003AserveUpdate\u0028\u0029",
+            "name": "serveUpdate",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Address.html#method_serveUpdate"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Address\u003A\u003Aformat_address_table\u0028\u0029",
             "name": "format_address_table",
             "summary": "",
@@ -35,6 +45,11 @@ Search.appendIndex(
             "name": "providers",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Autocomplete.html#method_providers"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Autocomplete\u003A\u003Acompanies\u0028\u0029",
+            "name": "companies",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Autocomplete.html#method_companies"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Autocomplete\u003A\u003Avendors\u0028\u0029",
             "name": "vendors",
@@ -86,6 +101,11 @@ Search.appendIndex(
             "summary": "construct\u0020object\u0020from\u0020Controller",
             "url": "classes/Framework-App-Controllers-Company.html#method___construct"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Company\u003A\u003Aautocomplete\u0028\u0029",
+            "name": "autocomplete",
+            "summary": "autocomplete",
+            "url": "classes/Framework-App-Controllers-Company.html#method_autocomplete"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Company\u003A\u003AvalidateName\u0028\u0029",
             "name": "validateName",
             "summary": "",
@@ -95,6 +115,11 @@ Search.appendIndex(
             "name": "serveUpdate",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Company.html#method_serveUpdate"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Company\u003A\u003Aformat_ac\u0028\u0029",
+            "name": "format_ac",
+            "summary": "format\u0020autocomplete\u0020results",
+            "url": "classes/Framework-App-Controllers-Company.html#method_format_ac"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Company\u003A\u003Aformat\u0028\u0029",
             "name": "format",
@@ -111,10 +136,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Contact.html#method___construct"
         },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Contact\u003A\u003Aformat_contact_table\u0028\u0029",
-            "name": "format_contact_table",
+            "fqsen": "\\Framework\\App\\Controllers\\Contact\u003A\u003AserveUpdate\u0028\u0029",
+            "name": "serveUpdate",
             "summary": "",
-            "url": "classes/Framework-App-Controllers-Contact.html#method_format_contact_table"
+            "url": "classes/Framework-App-Controllers-Contact.html#method_serveUpdate"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Contact\u003A\u003Aget\u0028\u0029",
             "name": "get",
@@ -130,6 +155,11 @@ Search.appendIndex(
             "name": "format",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Contact.html#method_format"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Contact\u003A\u003Aformat_contact_table\u0028\u0029",
+            "name": "format_contact_table",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Contact.html#method_format_contact_table"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Country",
             "name": "Country",
@@ -186,10 +216,25 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Location.html#method___construct"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Location\u003A\u003AvalidateName\u0028\u0029",
+            "name": "validateName",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Location.html#method_validateName"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Location\u003A\u003Aautocomplete\u0028\u0029",
             "name": "autocomplete",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Location.html#method_autocomplete"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Location\u003A\u003AserveUpdate\u0028\u0029",
+            "name": "serveUpdate",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Location.html#method_serveUpdate"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Location\u003A\u003AserveGet\u0028\u0029",
+            "name": "serveGet",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Location.html#method_serveGet"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Location\u003A\u003Aformat_ac\u0028\u0029",
             "name": "format_ac",
@@ -200,6 +245,11 @@ Search.appendIndex(
             "name": "format",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Location.html#method_format"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Location\u003A\u003AformatObject\u0028\u0029",
+            "name": "formatObject",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Location.html#method_formatObject"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Package",
             "name": "Package",
@@ -298,7 +348,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003Aedit\u0028\u0029",
             "name": "edit",
-            "summary": "edit",
+            "summary": "load\u0020edit\u0020provider\u0020page",
             "url": "classes/Framework-App-Controllers-Provider.html#method_edit"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003Anew\u0028\u0029",
@@ -340,6 +390,16 @@ Search.appendIndex(
             "name": "generateCodeDirectId",
             "summary": "system\u0020generated\u0020Code\u0020Direct\u0020Id",
             "url": "classes/Framework-App-Controllers-Provider.html#method_generateCodeDirectId"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003A\u0024buttons",
+            "name": "buttons",
+            "summary": "buttons",
+            "url": "classes/Framework-App-Controllers-Provider.html#property_buttons"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003A\u0024tabs",
+            "name": "tabs",
+            "summary": "provider\u0020tabs",
+            "url": "classes/Framework-App-Controllers-Provider.html#property_tabs"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003A\u0024data",
             "name": "data",
@@ -486,6 +546,46 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-User.html#method_login"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\User\u003A\u003AserveResetPassword\u0028\u0029",
+            "name": "serveResetPassword",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-User.html#method_serveResetPassword"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\User\u003A\u003AserveUpdateUser\u0028\u0029",
+            "name": "serveUpdateUser",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-User.html#method_serveUpdateUser"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\User\u003A\u003AgenerateUserName\u0028\u0029",
+            "name": "generateUserName",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-User.html#method_generateUserName"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\User\u003A\u003AsendPasswordResetEmail\u0028\u0029",
+            "name": "sendPasswordResetEmail",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-User.html#method_sendPasswordResetEmail"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\User\u003A\u003Atest\u0028\u0029",
+            "name": "test",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-User.html#method_test"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\User\u003A\u003AgenerateRandomPassword\u0028\u0029",
+            "name": "generateRandomPassword",
+            "summary": "getnerates\u0020random\u0020password",
+            "url": "classes/Framework-App-Controllers-User.html#method_generateRandomPassword"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\User\u003A\u003AgenerateRandomSalt\u0028\u0029",
+            "name": "generateRandomSalt",
+            "summary": "generates\u0020random\u0020salt",
+            "url": "classes/Framework-App-Controllers-User.html#method_generateRandomSalt"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\User\u003A\u003AgeneratePasswordHash\u0028\u0029",
+            "name": "generatePasswordHash",
+            "summary": "generate\u0020random\u0020password\u0020hash",
+            "url": "classes/Framework-App-Controllers-User.html#method_generatePasswordHash"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Variant",
             "name": "Variant",
             "summary": "Short\u0020Variant\u0020Description",
@@ -631,15 +731,30 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Models-AddressModel.html#method_getOne"
         },                {
-            "fqsen": "\\Framework\\App\\Models\\AddressModel\u003A\u003Aupdate\u0028\u0029",
-            "name": "update",
+            "fqsen": "\\Framework\\App\\Models\\AddressModel\u003A\u003AdeleteCompanyAddressByCompanyId\u0028\u0029",
+            "name": "deleteCompanyAddressByCompanyId",
             "summary": "",
-            "url": "classes/Framework-App-Models-AddressModel.html#method_update"
+            "url": "classes/Framework-App-Models-AddressModel.html#method_deleteCompanyAddressByCompanyId"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\AddressModel\u003A\u003AupdateCompanyAddress\u0028\u0029",
+            "name": "updateCompanyAddress",
+            "summary": "",
+            "url": "classes/Framework-App-Models-AddressModel.html#method_updateCompanyAddress"
         },                {
             "fqsen": "\\Framework\\App\\Models\\AddressModel\u003A\u003AgetByCompanyId\u0028\u0029",
             "name": "getByCompanyId",
             "summary": "",
             "url": "classes/Framework-App-Models-AddressModel.html#method_getByCompanyId"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\AddressModel\u003A\u003AgetByAddressId\u0028\u0029",
+            "name": "getByAddressId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-AddressModel.html#method_getByAddressId"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\AddressModel\u003A\u003Aupdate\u0028\u0029",
+            "name": "update",
+            "summary": "",
+            "url": "classes/Framework-App-Models-AddressModel.html#method_update"
         },                {
             "fqsen": "\\Framework\\App\\Models\\AddressModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
@@ -650,6 +765,11 @@ Search.appendIndex(
             "name": "dbFields",
             "summary": "",
             "url": "classes/Framework-App-Models-AddressModel.html#property_dbFields"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\AddressModel\u003A\u003A\u0024sql",
+            "name": "sql",
+            "summary": "",
+            "url": "classes/Framework-App-Models-AddressModel.html#property_sql"
         },                {
             "fqsen": "\\Framework\\App\\Models\\AddressTypesModel",
             "name": "AddressTypesModel",
@@ -856,6 +976,11 @@ Search.appendIndex(
             "summary": "update\u0020company\u0020record",
             "url": "classes/Framework-App-Models-CompanyModel.html#method_updateRecord"
         },                {
+            "fqsen": "\\Framework\\App\\Models\\CompanyModel\u003A\u003Acompany_ac\u0028\u0029",
+            "name": "company_ac",
+            "summary": "autocomplete\u0020query",
+            "url": "classes/Framework-App-Models-CompanyModel.html#method_company_ac"
+        },                {
             "fqsen": "\\Framework\\App\\Models\\CompanyModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
             "summary": "",
@@ -868,7 +993,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\CompanyModel\u003A\u003A\u0024selectQuery",
             "name": "selectQuery",
-            "summary": "",
+            "summary": "selectQuery",
             "url": "classes/Framework-App-Models-CompanyModel.html#property_selectQuery"
         },                {
             "fqsen": "\\Framework\\App\\Models\\ContactModel",
@@ -890,6 +1015,16 @@ Search.appendIndex(
             "name": "update",
             "summary": "",
             "url": "classes/Framework-App-Models-ContactModel.html#method_update"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ContactModel\u003A\u003AupdateCompanyContact\u0028\u0029",
+            "name": "updateCompanyContact",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ContactModel.html#method_updateCompanyContact"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ContactModel\u003A\u003AdeleteCompanyContactByCompanyId\u0028\u0029",
+            "name": "deleteCompanyContactByCompanyId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ContactModel.html#method_deleteCompanyContactByCompanyId"
         },                {
             "fqsen": "\\Framework\\App\\Models\\ContactModel\u003A\u003AgetContactTypeById\u0028\u0029",
             "name": "getContactTypeById",
@@ -1021,6 +1156,11 @@ Search.appendIndex(
             "summary": "Short\u0020Location\u0020Description",
             "url": "classes/Framework-App-Models-LocationModel.html"
         },                {
+            "fqsen": "\\Framework\\App\\Models\\LocationModel\u003A\u003AgetByName\u0028\u0029",
+            "name": "getByName",
+            "summary": "",
+            "url": "classes/Framework-App-Models-LocationModel.html#method_getByName"
+        },                {
             "fqsen": "\\Framework\\App\\Models\\LocationModel\u003A\u003Alocation_ac\u0028\u0029",
             "name": "location_ac",
             "summary": "",
@@ -1050,6 +1190,11 @@ Search.appendIndex(
             "name": "dbFields",
             "summary": "",
             "url": "classes/Framework-App-Models-LocationModel.html#property_dbFields"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\LocationModel\u003A\u003A\u0024sql",
+            "name": "sql",
+            "summary": "",
+            "url": "classes/Framework-App-Models-LocationModel.html#property_sql"
         },                {
             "fqsen": "\\Framework\\App\\Models\\LocationTypesModel",
             "name": "LocationTypesModel",
@@ -1571,6 +1716,11 @@ Search.appendIndex(
             "summary": "update\u0020record",
             "url": "classes/Framework-App-Models-ProviderModel.html#method_updateRecord"
         },                {
+            "fqsen": "\\Framework\\App\\Models\\ProviderModel\u003A\u003Aupdate\u0028\u0029",
+            "name": "update",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ProviderModel.html#method_update"
+        },                {
             "fqsen": "\\Framework\\App\\Models\\ProviderModel\u003A\u003A\u0024data",
             "name": "data",
             "summary": "",
@@ -1826,6 +1976,11 @@ Search.appendIndex(
             "summary": "Short\u0020User\u0020Description",
             "url": "classes/Framework-App-Models-UserModel.html"
         },                {
+            "fqsen": "\\Framework\\App\\Models\\UserModel\u003A\u003AgetRoleByRoleId\u0028\u0029",
+            "name": "getRoleByRoleId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-UserModel.html#method_getRoleByRoleId"
+        },                {
             "fqsen": "\\Framework\\App\\Models\\UserModel\u003A\u003Aget\u0028\u0029",
             "name": "get",
             "summary": "",
@@ -1836,15 +1991,20 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Models-UserModel.html#method_getOne"
         },                {
-            "fqsen": "\\Framework\\App\\Models\\UserModel\u003A\u003Aupdate\u0028\u0029",
-            "name": "update",
-            "summary": "",
-            "url": "classes/Framework-App-Models-UserModel.html#method_update"
-        },                {
             "fqsen": "\\Framework\\App\\Models\\UserModel\u003A\u003AgetOneByEmail\u0028\u0029",
             "name": "getOneByEmail",
             "summary": "",
             "url": "classes/Framework-App-Models-UserModel.html#method_getOneByEmail"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\UserModel\u003A\u003AcountByUsername\u0028\u0029",
+            "name": "countByUsername",
+            "summary": "",
+            "url": "classes/Framework-App-Models-UserModel.html#method_countByUsername"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\UserModel\u003A\u003AcountByEmail\u0028\u0029",
+            "name": "countByEmail",
+            "summary": "",
+            "url": "classes/Framework-App-Models-UserModel.html#method_countByEmail"
         },                {
             "fqsen": "\\Framework\\App\\Models\\UserModel\u003A\u003AgetLoginAttemptsById\u0028\u0029",
             "name": "getLoginAttemptsById",
@@ -1860,6 +2020,16 @@ Search.appendIndex(
             "name": "getPasswordById",
             "summary": "",
             "url": "classes/Framework-App-Models-UserModel.html#method_getPasswordById"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\UserModel\u003A\u003Aupdate\u0028\u0029",
+            "name": "update",
+            "summary": "",
+            "url": "classes/Framework-App-Models-UserModel.html#method_update"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\UserModel\u003A\u003AupdateCredentials\u0028\u0029",
+            "name": "updateCredentials",
+            "summary": "",
+            "url": "classes/Framework-App-Models-UserModel.html#method_updateCredentials"
         },                {
             "fqsen": "\\Framework\\App\\Models\\UserModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
@@ -1985,6 +2155,16 @@ Search.appendIndex(
             "name": "BREADCRUMBS",
             "summary": "",
             "url": "namespaces/default.html#constant_BREADCRUMBS"
+        },                {
+            "fqsen": "\\buildPageTabs\u0028\u0029",
+            "name": "buildPageTabs",
+            "summary": "",
+            "url": "namespaces/default.html#function_buildPageTabs"
+        },                {
+            "fqsen": "\\buildPageTabContent\u0028\u0029",
+            "name": "buildPageTabContent",
+            "summary": "",
+            "url": "namespaces/default.html#function_buildPageTabContent"
         },                {
             "fqsen": "\\TYPES",
             "name": "TYPES",
@@ -2361,10 +2541,45 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/default.html#constant_DEVMODE"
         },                {
-            "fqsen": "\\MAILADDRESS",
-            "name": "MAILADDRESS",
+            "fqsen": "\\MAILUSER",
+            "name": "MAILUSER",
             "summary": "",
-            "url": "namespaces/default.html#constant_MAILADDRESS"
+            "url": "namespaces/default.html#constant_MAILUSER"
+        },                {
+            "fqsen": "\\MAILPASS",
+            "name": "MAILPASS",
+            "summary": "",
+            "url": "namespaces/default.html#constant_MAILPASS"
+        },                {
+            "fqsen": "\\MAILHOST",
+            "name": "MAILHOST",
+            "summary": "",
+            "url": "namespaces/default.html#constant_MAILHOST"
+        },                {
+            "fqsen": "\\MAILSMTP",
+            "name": "MAILSMTP",
+            "summary": "",
+            "url": "namespaces/default.html#constant_MAILSMTP"
+        },                {
+            "fqsen": "\\MAILSMTPSECURE",
+            "name": "MAILSMTPSECURE",
+            "summary": "",
+            "url": "namespaces/default.html#constant_MAILSMTPSECURE"
+        },                {
+            "fqsen": "\\MAILPORT",
+            "name": "MAILPORT",
+            "summary": "",
+            "url": "namespaces/default.html#constant_MAILPORT"
+        },                {
+            "fqsen": "\\MAILFROMADDRESS",
+            "name": "MAILFROMADDRESS",
+            "summary": "",
+            "url": "namespaces/default.html#constant_MAILFROMADDRESS"
+        },                {
+            "fqsen": "\\MAILFROMNAME",
+            "name": "MAILFROMNAME",
+            "summary": "",
+            "url": "namespaces/default.html#constant_MAILFROMNAME"
         },                {
             "fqsen": "\\LOGINATTEMPTS",
             "name": "LOGINATTEMPTS",
@@ -2665,6 +2880,56 @@ Search.appendIndex(
             "name": "__construct",
             "summary": "inherit\u0020parent\u0020construct",
             "url": "classes/Framework-App-Controllers-Admin.html#method___construct"
+        },                {
+            "fqsen": "\\Framework\\Core\\Email",
+            "name": "Email",
+            "summary": "Short\u0020Model\u0020Description",
+            "url": "classes/Framework-Core-Email.html"
+        },                {
+            "fqsen": "\\Framework\\Core\\Email\u003A\u003Ainit\u0028\u0029",
+            "name": "init",
+            "summary": "",
+            "url": "classes/Framework-Core-Email.html#method_init"
+        },                {
+            "fqsen": "\\Framework\\Core\\Email\u003A\u003AgenerateHeaders\u0028\u0029",
+            "name": "generateHeaders",
+            "summary": "",
+            "url": "classes/Framework-Core-Email.html#method_generateHeaders"
+        },                {
+            "fqsen": "\\Framework\\Core\\Email\u003A\u003AsetAttachments\u0028\u0029",
+            "name": "setAttachments",
+            "summary": "",
+            "url": "classes/Framework-Core-Email.html#method_setAttachments"
+        },                {
+            "fqsen": "\\Framework\\Core\\Email\u003A\u003AsetContent\u0028\u0029",
+            "name": "setContent",
+            "summary": "",
+            "url": "classes/Framework-Core-Email.html#method_setContent"
+        },                {
+            "fqsen": "\\Framework\\Core\\Email\u003A\u003AsetRecipient\u0028\u0029",
+            "name": "setRecipient",
+            "summary": "",
+            "url": "classes/Framework-Core-Email.html#method_setRecipient"
+        },                {
+            "fqsen": "\\Framework\\Core\\Email\u003A\u003AcomposeEmail\u0028\u0029",
+            "name": "composeEmail",
+            "summary": "",
+            "url": "classes/Framework-Core-Email.html#method_composeEmail"
+        },                {
+            "fqsen": "\\Framework\\Core\\Email\u003A\u003Asend\u0028\u0029",
+            "name": "send",
+            "summary": "",
+            "url": "classes/Framework-Core-Email.html#method_send"
+        },                {
+            "fqsen": "\\Framework\\Core\\Email\u003A\u003A\u0024mail",
+            "name": "mail",
+            "summary": "",
+            "url": "classes/Framework-Core-Email.html#property_mail"
+        },                {
+            "fqsen": "\\Framework\\Core\\Email\u003A\u003A\u0024body",
+            "name": "body",
+            "summary": "",
+            "url": "classes/Framework-Core-Email.html#property_body"
         },                {
             "fqsen": "\\",
             "name": "\\",

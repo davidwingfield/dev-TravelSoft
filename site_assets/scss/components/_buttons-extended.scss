@@ -5,6 +5,7 @@
     color: inherit;
     background-color: transparent;
     box-shadow: none;
+    
     &:not([disabled]):not(.disabled):active {
       box-shadow: none;
     }
@@ -25,21 +26,26 @@
   box-shadow: $z-depth-1-half;
   transition: $btn-floating-transtion;
   @include make-btn-floating($btn-floating-width, $btn-floating-height, $btn-floating-icon-size, $btn-floating-line-height);
+  
   i {
     display: inline-block;
     width: inherit;
     color: $white-base;
     text-align: center;
   }
+  
   &:hover {
     box-shadow: $z-depth-2;
   }
+  
   &:before {
     border-radius: 0;
   }
+  
   &.btn-sm {
     @include make-btn-floating($btn-floating-width-sm, $btn-floating-height-sm, $btn-floating-icon-size-sm, $btn-floating-line-height-sm);
   }
+  
   &.btn-lg {
     @include make-btn-floating($btn-floating-width-lg, $btn-floating-height-lg, $btn-floating-icon-size-lg, $btn-floating-line-height-lg);
   }
@@ -61,6 +67,7 @@
   padding-left: 15px;
   padding-right: 15px;
   transition: height 400ms;
+  
   ul {
     position: absolute;
     right: 0;
@@ -75,6 +82,7 @@
     transition: 400ms all;
     opacity: 0;
     margin-bottom: 0;
+    
     li {
       z-index: 0;
       display: flex;
@@ -82,11 +90,13 @@
       margin-bottom: $fixed-action-btn-li-margin-bottom;
       margin-left: auto;
     }
+    
     a {
       &.btn-floating {
         opacity: 0;
         transition-duration: .4s;
         transform: scale(.4) translate(0);
+        
         &.shown {
           opacity: 1;
           transform: scale(1) translate(0);
@@ -94,17 +104,19 @@
       }
     }
   }
+  
   &.active ul {
     height: 300px;
     margin-bottom: 40px;
     opacity: 1;
   }
+  
   &.active {
     height: 500px;
   }
 }
 
-button, html [type="button"], [type="reset"], [type="submit"] {
+button, html [type='button'], [type='reset'], [type='submit'] {
   appearance: none;
 }
 
@@ -112,3 +124,4 @@ button, html [type="button"], [type="reset"], [type="submit"] {
 .btn-rounded {
   border-radius: $btn-rounded-border-radius;
 }
+

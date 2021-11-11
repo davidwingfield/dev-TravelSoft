@@ -210,12 +210,33 @@
 </dt>
 <dd></dd>
 
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/Framework-App-Models-AddressModel.html#property_sql">$sql</a>
+    <span>
+                &nbsp;: mixed            </span>
+</dt>
+<dd></dd>
+
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-AddressModel.html#method_deleteCompanyAddressByCompanyId">deleteCompanyAddressByCompanyId()</a>
+    <span>
+                        &nbsp;: bool    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-AddressModel.html#method_get">get()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
 <dd>get</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-AddressModel.html#method_getByAddressId">getByAddressId()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-AddressModel.html#method_getByCompanyId">getByCompanyId()</a>
@@ -268,6 +289,13 @@
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-AddressModel.html#method_update">update()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-AddressModel.html#method_updateCompanyAddress">updateCompanyAddress()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
@@ -385,6 +413,101 @@
     
 
 </article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_sql">
+        $sql
+        <a href="classes/Framework-App-Models-AddressModel.html#property_sql" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">23</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">$sql</span>
+     = <span class="phpdocumentor-signature__default-value">&quot;
+            SELECT
+                                    COMPANY_ADDRESS.company_id,
+                                    COMPANY_ADDRESS.address_id,
+                                    GROUP_CONCAT(COMPANY_ADDRESS.address_types_id ORDER BY COMPANY_ADDRESS.address_types_id ASC SEPARATOR &#039;,&#039;) AS &#039;address_types_id&#039;,
+                                    ADDRESS.id AS &#039;address_id&#039;,
+                                    ADDRESS.street_1 AS &#039;address_street_1&#039;,
+                                    ADDRESS.street_2 AS &#039;address_street_2&#039;,
+                                    ADDRESS.street_3 AS &#039;address_street_3&#039;,
+                                    ADDRESS.city_id AS &#039;address_city_id&#039;,
+                                    ADDRESS.country_id AS &#039;address_country_id&#039;,
+                                    ADDRESS.province_id AS &#039;address_province_id&#039;,
+                                    ADDRESS.postal_code AS &#039;address_postal_code&#039;,
+                                    ADDRESS.date_created AS &#039;address_date_created&#039;,
+                                    ADDRESS.created_by AS &#039;address_created_by&#039;,
+                                    ADDRESS.date_modified AS &#039;address_date_modified&#039;,
+                                    ADDRESS.modified_by AS &#039;address_modified_by&#039;,
+                                    ADDRESS.enabled AS &#039;address_enabled&#039;,
+                                    ADDRESS.note AS &#039;address_note&#039;,
+                                    CITY.id AS &#039;city_id&#039;,
+                                    CITY.sort_order AS &#039;city_sort_order&#039;,
+                                    CITY.name AS &#039;city_name&#039;,
+                                    CITY.enabled AS &#039;city_enabled&#039;,
+                                    CITY.date_created AS &#039;city_date_created&#039;,
+                                    CITY.created_by AS &#039;city_created_by&#039;,
+                                    CITY.date_modified AS &#039;city_date_modified&#039;,
+                                    CITY.modified_by AS &#039;city_modified_by&#039;,
+                                    CITY.note AS &#039;city_note&#039;,
+                                    PROVINCE.id AS &#039;province_id&#039;,
+                                    PROVINCE.country_id AS &#039;province_country_id&#039;,
+                                    PROVINCE.name AS &#039;province_name&#039;,
+                                    PROVINCE.iso2 AS &#039;province_iso2&#039;,
+                                    PROVINCE.iso3 AS &#039;province_iso3&#039;,
+                                    PROVINCE.sort_order AS &#039;province_sort_order&#039;,
+                                    PROVINCE.enabled AS &#039;province_enabled&#039;,
+                                    PROVINCE.date_created AS &#039;province_date_created&#039;,
+                                    PROVINCE.created_by AS &#039;province_created_by&#039;,
+                                    PROVINCE.date_modified AS &#039;province_date_modified&#039;,
+                                    PROVINCE.modified_by AS &#039;province_modified_by&#039;,
+                                    PROVINCE.note AS &#039;province_note&#039;,
+                                    COUNTRY.id AS &#039;country_id&#039;,
+                                    COUNTRY.name AS &#039;country_name&#039;,
+                                    COUNTRY.iso2 AS &#039;country_iso2&#039;,
+                                    COUNTRY.iso3 AS &#039;country_iso3&#039;,
+                                    COUNTRY.currency_id AS &#039;country_currency_id&#039;,
+                                    COUNTRY.sort_order AS &#039;country_sort_order&#039;,
+                                    COUNTRY.enabled AS &#039;country_enabled&#039;,
+                                    COUNTRY.date_created AS &#039;country_date_created&#039;,
+                                    COUNTRY.created_by AS &#039;country_created_by&#039;,
+                                    COUNTRY.date_modified AS &#039;country_date_modified&#039;,
+                                    COUNTRY.modified_by AS &#039;country_modified_by&#039;,
+                                    COUNTRY.note AS &#039;country_note&#039;
+                    FROM 			company_address COMPANY_ADDRESS
+                    JOIN			address ADDRESS ON ADDRESS.id = COMPANY_ADDRESS.address_id
+                    JOIN			city CITY ON CITY.id = ADDRESS.city_id
+                    JOIN			province PROVINCE ON PROVINCE.id = CITY.province_id
+                    JOIN			country COUNTRY ON COUNTRY.id = PROVINCE.country_id
+                    WHERE			ADDRESS.enabled = 1
+                        AND			ADDRESS.enabled = 1
+                        AND			COUNTRY.enabled = 1
+                        AND			PROVINCE.enabled = 1
+                        AND			CITY.enabled = 1&quot;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
             </section>
 
             <section class="phpdocumentor-methods">
@@ -398,6 +521,58 @@
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_deleteCompanyAddressByCompanyId">
+        deleteCompanyAddressByCompanyId()
+        <a href="classes/Framework-App-Models-AddressModel.html#method_deleteCompanyAddressByCompanyId" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">124</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">deleteCompanyAddressByCompanyId</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$company_id</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$address_id</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$company_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$address_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">bool</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_get">
         get()
         <a href="classes/Framework-App-Models-AddressModel.html#method_get" class="headerlink"><i class="fas fa-link"></i></a>
@@ -405,7 +580,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">31</span>
+    <span class="phpdocumentor-element-found-in__line">93</span>
 
     </aside>
 
@@ -441,6 +616,50 @@
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_getByAddressId">
+        getByAddressId()
+        <a href="classes/Framework-App-Models-AddressModel.html#method_getByAddressId" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">209</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getByAddressId</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$address_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$address_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_getByCompanyId">
         getByCompanyId()
         <a href="classes/Framework-App-Models-AddressModel.html#method_getByCompanyId" class="headerlink"><i class="fas fa-link"></i></a>
@@ -448,7 +667,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">69</span>
+    <span class="phpdocumentor-element-found-in__line">187</span>
 
     </aside>
 
@@ -492,7 +711,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">47</span>
+    <span class="phpdocumentor-element-found-in__line">109</span>
 
     </aside>
 
@@ -744,21 +963,81 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">62</span>
+    <span class="phpdocumentor-element-found-in__line">231</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">update</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">update</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$address</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$params</span>
+                <span class="phpdocumentor-signature__argument__name">$address</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_updateCompanyAddress">
+        updateCompanyAddress()
+        <a href="classes/Framework-App-Models-AddressModel.html#method_updateCompanyAddress" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">142</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">updateCompanyAddress</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$address_id</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$company_id</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$address_types</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$address_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$company_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$address_types</span>
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                  = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">

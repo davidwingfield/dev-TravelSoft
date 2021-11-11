@@ -1,22 +1,7 @@
 $(document).ready(function () {
     
-    const but_toggle = document.querySelectorAll(".but_toggle")
-    
     window.addEventListener("resize", debounce(function (e) {
         resize_elements("end of resizing")
-    }))
-    but_toggle.forEach(el => el.addEventListener("click", event => {
-        if (el.dataset.texted) {
-            let editorId = el.dataset.texted
-            let editor = $("#" + editorId)
-            if (tinyMCE.get(editorId)) {
-                editor.val(htmlDecode(editor.val()))
-                tinymce.remove("#" + editorId)
-            } else {
-                editor.val(htmlDecode(editor.val()))
-                addTinyMCE(editorId)
-            }
-        }
     }))
     
     if (mdbPreloader) {

@@ -178,8 +178,7 @@ const Country = (function () {
                 sendPostRequest("/api/v1.0/countries/update", dataToSend, function (data, status, xhr) {
                     if (data && data[0]) {
                         let new_country = data[0]
-                        
-                        return
+                        console.log("new country", new_country)
                         Country.all.set(new_country.id, new_country)
                         let country_elements = $("select[data-type='country']")
                         

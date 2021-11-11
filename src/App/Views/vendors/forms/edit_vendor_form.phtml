@@ -1,81 +1,59 @@
 <!-- Edit Vendor Form -->
 <form id="form_edit_vendor" name="form_edit_vendor" class="" style="" novalidate>
-    
-    <!-- Panel -->
-    <section class="panel z-depth-0 w-100 mb-0" style="">
-        
-        <!-- Panel Heading -->
-        <header class="panel-heading" style="">
-            <div class="row">
-                <div class="col-8">
-                    <h4 class="panel-title">Vendor Details</h4>
-                </div>
-                
-                <div class="col-4 d-flex align-items-center justify-content-end">
-                    <div class="panel-actions p-0 m-0">
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" value="1" class="custom-control-input" id="vendor_enabled">
-                            <label class="custom-control-label" for="vendor_enabled">Enabled</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-        <!-- /Panel Heading -->
-        
-        <!-- Panel Body -->
-        <div class="panel-body px-0 w-100" style="">
+    <div class="card mb-2" style="">
+
+        <!-- Card Body -->
+        <div class="card-body" style="">
+
+            <h5 class="card-title">
+                <span>Vendor Details</span>
+
+            </h5>
+            <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
+            <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
 
             <div class="row" style="">
 
-                <!-- Vendor Name -->
-                <div class="col-12 col-lg-4 " style="">
-                    <div class="form-element" style="">
-                        <label for="vendor_name" style="">Vendor Name:</label>
-                        <input type="text" id="vendor_name" name="vendor_name" class="form-control" style="" aria-label="Vendor Id" placeholder="" autocomplete="off"/>
-                        <div id="vendor_name-error" class="error w-100 text-center" style="">&nbsp;</div>
-                    </div>
-                </div>
-                <!-- /Vendor Name -->
-
-                <!-- Vendor Id -->
-                <div class="col-12 col-lg-4 " style="">
+                <div class="col-12 col-md-3" style="">
                     <div class="form-element" style="">
                         <label for="vendor_id" style="">Vendor Id:</label>
                         <input type="text" id="vendor_id" name="vendor_id" class="form-control" style="" aria-label="Vendor Id" placeholder="" autocomplete="off" readonly/>
                         <div id="vendor_id-error" class="error w-100 text-center" style="">&nbsp;</div>
                     </div>
                 </div>
-                <!-- /Vendor Id -->
 
-                <!-- Vendor Company Id -->
-                <div class="col-12 col-lg-4 " style="">
-
+                <div class="col-12 col-md-3" style="">
                     <div class="form-element" style="">
                         <label for="vendor_company_id" style="">Vendor Company Id:</label>
                         <input type="text" id="vendor_company_id" name="vendor_company_id" class="form-control" style="" aria-label="Provider Id" placeholder="" autocomplete="off" readonly/>
                         <div id="vendor_company_id-error" class="error w-100 text-center" style="">&nbsp;</div>
                     </div>
                 </div>
-                <!-- /Vendor Company Id -->
 
+                <div class="col-12 col-md-3" style="">
+                    <div class="form-element" style="">
+                        <label for="vendor_name" style="">Vendor Name:</label>
+                        <input type="text" id="vendor_name" name="vendor_name" class="form-control" style="" aria-label="Vendor Id" placeholder="" autocomplete="off"/>
+                        <div id="vendor_name-error" class="error w-100 text-center" style="">&nbsp;</div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-3" style="">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" value="1" class="custom-control-input" id="vendor_enabled">
+                        <label class="custom-control-label" for="vendor_enabled">Enabled</label>
+                    </div>
+                </div>
+                '
             </div>
 
-            <div class="row">
-
-                <!-- Vendor SKU -->
-                <div class="col-12 col-md-4 col-lg-3" style="">
+            <div class="row" style="">
+                <div class="col-12 col-md-8  col-xl-7">
                     <div class="form-element">
                         <label for="vendor_sku">Vendor SKU:</label>
                         <input type="text" id="vendor_sku" name="vendor_sku" class="form-control" style="" aria-label="Vendor SKU" placeholder="" autocomplete="off"/>
                         <div id="vendor_sku-error" class="error w-100 text-center">&nbsp;</div>
                     </div>
-                </div>
-                <!-- /Vendor SKU -->
-            </div>
-
-            <div class="row">
-                <div class="col-12">
 
                     <!-- Is Provider -->
                     <div class="custom-control custom-checkbox custom-control-inline">
@@ -104,20 +82,17 @@
                         <label class="custom-control-label" for="vendor_show_sales">Show Sales</label>
                     </div>
                     <!-- /Show Sales -->
-
                 </div>
             </div>
-        </div>
-        <!-- /Panel Body -->
-        
-        <!-- Panel Footer -->
-        <div class="panel-footer pb-0 text-right">
-            <button class="btn btn-primary btn-sm" type="button" id="button_submit_form_edit_vendor">Save Vendor Details</button>
-        </div>
-        <!-- /Panel Footer -->
-    
-    </section>
-    <!-- /Panel -->
 
+            <div class="text-right w-100" style="">
+                <a href="javascript:void(0);" id="button_clear_form_edit_vendor" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+                <a href="javascript:void(0);" id="button_submit_form_edit_vendor" class="btn btn-primary btn-sm waves-effect waves-light" style="">Save</a>
+            </div>
+
+        </div>
+        <!-- /Card Body -->
+
+    </div>
 </form>
 <!-- /Edit Vendor Form -->

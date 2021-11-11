@@ -545,9 +545,54 @@ const addTinyMCE = function (el) {
     })
 }
 
+/**
+ * converts HTML entities in the string to their corresponding characters.
+ *
+ * @param value
+ * @returns {*|jQuery}
+ */
 const htmlDecode = function (value) {
     return $("<textarea/>").html(value).text()
 }
+
+
+/**
+ * converts HTML entities in the string to their corresponding characters.
+ *
+ * @param str
+ * @returns {*}
+ */
+function decodeHtml (str) {
+    if (!str) {
+        str = ""
+    }
+    var map =
+      {
+          "&amp;": "&",
+          "&lt;": "<",
+          "&gt;": ">",
+          "&quot;": "\"",
+          "&#039;": "'",
+      }
+    return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function (m) {return map[m]})
+}
+
+
+function escapeHtml (text) {
+    if (!text) {
+        text = ""
+    }
+    var map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#039;",
+    }
+    
+    return text.replace(/[&<>"']/g, function (m) { return map[m] })
+}
+
 
 const htmlEncode = function (value) {
     return $("<textarea/>").text(value).html()
@@ -666,8 +711,69 @@ jQuery.extend({
 const confirmDialog = function (message, handler) {
     
     $(`
-    <!--Modal: modalConfirm-->
-<div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirmationLabel" aria-hidden="true">
+        <!--Modal: modalConfirm-->
+        <div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirmationLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-notify modal-info" role="document">
+                <!--Content-->
+                <div class="modal-content text-center">
+                    <!--Header-->
+                    <div class="modal-header d-flex justify-content-center">
+                        <p class="heading">${message}</p>
+                    </div>
+        
+                    <!--Body-->
+                    <div class="modal-body">
+                        <i class="fas fa-check fa-4x mb-3 animated rotateIn"></i>
+                    </div>
+        
+                    <!--Footer-->
+                    <div class="modal-footer flex-center">
+                        <a class="btn btn-outline-info btn-yes">yes</a>
+                        <a type="button" class="btn btn-info waves-effect btn-no">no</a>
+                    </div>
+                </div>
+                <!--/.Content-->
+	        </div>
+        </div>
+        <!--Modal: modalConfirm-->
+    `)
+      .appendTo("body")
+    //Trigger the modal
+    $("#modalConfirm")
+      .modal({
+          backdrop: "static",
+          keyboard: false,
+      })
+    
+    //Pass true to a callback function
+    $(".btn-yes")
+      .click(function () {
+          handler(true)
+          $("#modalConfirm")
+            .modal("hide")
+      })
+    
+    //Pass false to callback function
+    $(".btn-no")
+      .click(function () {
+          handler(false)
+          $("#modalConfirm")
+            .modal("hide")
+      })
+    
+    //Remove the modal once it is closed.
+    $("#modalConfirm")
+      .on("hidden.bs.modal", function () {
+          $("#modalConfirm")
+            .remove()
+      })
+    
+}
+const deleteDialog = function (message, handler) {
+    
+    $(`
+        <!--Modal: modalConfirm-->
+        <div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirmationLabel" aria-hidden="true">
 	<div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
 		<!--Content-->
 		<div class="modal-content text-center">
@@ -690,7 +796,7 @@ const confirmDialog = function (message, handler) {
 		<!--/.Content-->
 	</div>
 </div>
-<!--Modal: modalConfirm-->
+        <!--Modal: modalConfirm-->
     `)
       .appendTo("body")
     //Trigger the modal

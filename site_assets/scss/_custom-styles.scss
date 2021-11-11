@@ -1051,3 +1051,190 @@ label.btn input[type=radio]:disabled:checked + label:after {
   outline-offset: 0;
   outline: none;
 }
+
+.transparent-bg {
+
+}
+
+
+.btn-pure, .btn-pure.active, .btn-pure:active, .btn-pure:focus, .btn-pure:hover, .btn-pure[disabled], .open > .btn-pure.dropdown-toggle, fieldset[disabled] .btn-pure {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important
+}
+
+.btn-pure.active.focus, .btn-pure.active:focus, .btn-pure.active:hover, .btn-pure.focus, .btn-pure:active.focus, .btn-pure:active:focus, .btn-pure:active:hover, .btn-pure:focus, .btn-pure:focus.focus, .btn-pure:focus:focus, .btn-pure:focus:hover, .btn-pure:hover, .btn-pure:hover.focus, .btn-pure:hover:focus, .btn-pure:hover:hover, .btn-pure[disabled].focus, .btn-pure[disabled]:focus, .btn-pure[disabled]:hover, .open > .btn-pure.dropdown-toggle.focus, .open > .btn-pure.dropdown-toggle:focus, .open > .btn-pure.dropdown-toggle:hover, fieldset[disabled] .btn-pure.focus, fieldset[disabled] .btn-pure:focus, fieldset[disabled] .btn-pure:hover {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important
+}
+
+.btn-pure.trips-skin.btn-default {
+  color: #a3afb7 !important
+}
+
+.btn-pure.trips-skin.btn-default.active, .btn-pure.trips-skin.btn-default.focus, .btn-pure.trips-skin.btn-default.hover, .btn-pure.trips-skin.btn-default:active, .btn-pure.trips-skin.btn-default:focus, .btn-pure.trips-skin.btn-default:hover, .open > .btn-pure.trips-skin.btn-default.dropdown-toggle, .show > .btn-pure.trips-skin.btn-default.dropdown-toggle {
+  color: #ccd5db !important
+}
+
+.btn-pure.trips-skin.btn-default.active.focus, .btn-pure.trips-skin.btn-default.active.hover, .btn-pure.trips-skin.btn-default.active:focus, .btn-pure.trips-skin.btn-default.active:hover, .btn-pure.trips-skin.btn-default.focus.focus, .btn-pure.trips-skin.btn-default.focus.hover, .btn-pure.trips-skin.btn-default.focus:focus, .btn-pure.trips-skin.btn-default.focus:hover, .btn-pure.trips-skin.btn-default.hover.focus, .btn-pure.trips-skin.btn-default.hover.hover, .btn-pure.trips-skin.btn-default.hover:focus, .btn-pure.trips-skin.btn-default.hover:hover, .btn-pure.trips-skin.btn-default:active.focus, .btn-pure.trips-skin.btn-default:active.hover, .btn-pure.trips-skin.btn-default:active:focus, .btn-pure.trips-skin.btn-default:active:hover, .btn-pure.trips-skin.btn-default:focus.focus, .btn-pure.trips-skin.btn-default:focus.hover, .btn-pure.trips-skin.btn-default:focus:focus, .btn-pure.trips-skin.btn-default:focus:hover, .btn-pure.trips-skin.btn-default:hover.focus, .btn-pure.trips-skin.btn-default:hover.hover, .btn-pure.trips-skin.btn-default:hover:focus, .btn-pure.trips-skin.btn-default:hover:hover, .open > .btn-pure.trips-skin.btn-default.dropdown-toggle.focus, .open > .btn-pure.trips-skin.btn-default.dropdown-toggle.hover, .open > .btn-pure.trips-skin.btn-default.dropdown-toggle:focus, .open > .btn-pure.trips-skin.btn-default.dropdown-toggle:hover, .show > .btn-pure.trips-skin.btn-default.dropdown-toggle.focus, .show > .btn-pure.trips-skin.btn-default.dropdown-toggle.hover, .show > .btn-pure.trips-skin.btn-default.dropdown-toggle:focus, .show > .btn-pure.trips-skin.btn-default.dropdown-toggle:hover {
+  color: #ccd5db !important
+}
+
+.btn-pure.trips-skin.btn-default.active .badge-pill, .btn-pure.trips-skin.btn-default.focus .badge-pill, .btn-pure.trips-skin.btn-default.hover .badge-pill, .btn-pure.trips-skin.btn-default:active .badge-pill, .btn-pure.trips-skin.btn-default:focus .badge-pill, .btn-pure.trips-skin.btn-default:hover .badge-pill, .open > .btn-pure.trips-skin.btn-default.dropdown-toggle .badge-pill, .show > .btn-pure.trips-skin.btn-default.dropdown-toggle .badge-pill {
+  color: #ccd5db !important
+}
+
+.btn-pure.btn-primary {
+  color: #3e8ef7 !important
+}
+
+.btn-pure.btn-primary.active, .btn-pure.btn-primary.focus, .btn-pure.btn-primary.hover, .btn-pure.btn-primary:active, .btn-pure.btn-primary:focus, .btn-pure.btn-primary:hover, .open > .btn-pure.btn-primary.dropdown-toggle, .show > .btn-pure.btn-primary.dropdown-toggle {
+  color: #79b2fc !important
+}
+
+.btn-pure.btn-primary.active.focus, .btn-pure.btn-primary.active.hover, .btn-pure.btn-primary.active:focus, .btn-pure.btn-primary.active:hover, .btn-pure.btn-primary.focus.focus, .btn-pure.btn-primary.focus.hover, .btn-pure.btn-primary.focus:focus, .btn-pure.btn-primary.focus:hover, .btn-pure.btn-primary.hover.focus, .btn-pure.btn-primary.hover.hover, .btn-pure.btn-primary.hover:focus, .btn-pure.btn-primary.hover:hover, .btn-pure.btn-primary:active.focus, .btn-pure.btn-primary:active.hover, .btn-pure.btn-primary:active:focus, .btn-pure.btn-primary:active:hover, .btn-pure.btn-primary:focus.focus, .btn-pure.btn-primary:focus.hover, .btn-pure.btn-primary:focus:focus, .btn-pure.btn-primary:focus:hover, .btn-pure.btn-primary:hover.focus, .btn-pure.btn-primary:hover.hover, .btn-pure.btn-primary:hover:focus, .btn-pure.btn-primary:hover:hover, .open > .btn-pure.btn-primary.dropdown-toggle.focus, .open > .btn-pure.btn-primary.dropdown-toggle.hover, .open > .btn-pure.btn-primary.dropdown-toggle:focus, .open > .btn-pure.btn-primary.dropdown-toggle:hover, .show > .btn-pure.btn-primary.dropdown-toggle.focus, .show > .btn-pure.btn-primary.dropdown-toggle.hover, .show > .btn-pure.btn-primary.dropdown-toggle:focus, .show > .btn-pure.btn-primary.dropdown-toggle:hover {
+  color: #79b2fc !important
+}
+
+.btn-pure.btn-primary.active .badge-pill, .btn-pure.btn-primary.focus .badge-pill, .btn-pure.btn-primary.hover .badge-pill, .btn-pure.btn-primary:active .badge-pill, .btn-pure.btn-primary:focus .badge-pill, .btn-pure.btn-primary:hover .badge-pill, .open > .btn-pure.btn-primary.dropdown-toggle .badge-pill, .show > .btn-pure.btn-primary.dropdown-toggle .badge-pill {
+  color: #79b2fc !important
+}
+
+.btn-pure.btn-success {
+  color: #11c26d !important
+}
+
+.btn-pure.btn-success.active, .btn-pure.btn-success.focus, .btn-pure.btn-success.hover, .btn-pure.btn-success:active, .btn-pure.btn-success:focus, .btn-pure.btn-success:hover, .open > .btn-pure.btn-success.dropdown-toggle, .show > .btn-pure.btn-success.dropdown-toggle {
+  color: #49de94 !important
+}
+
+.btn-pure.btn-success.active.focus, .btn-pure.btn-success.active.hover, .btn-pure.btn-success.active:focus, .btn-pure.btn-success.active:hover, .btn-pure.btn-success.focus.focus, .btn-pure.btn-success.focus.hover, .btn-pure.btn-success.focus:focus, .btn-pure.btn-success.focus:hover, .btn-pure.btn-success.hover.focus, .btn-pure.btn-success.hover.hover, .btn-pure.btn-success.hover:focus, .btn-pure.btn-success.hover:hover, .btn-pure.btn-success:active.focus, .btn-pure.btn-success:active.hover, .btn-pure.btn-success:active:focus, .btn-pure.btn-success:active:hover, .btn-pure.btn-success:focus.focus, .btn-pure.btn-success:focus.hover, .btn-pure.btn-success:focus:focus, .btn-pure.btn-success:focus:hover, .btn-pure.btn-success:hover.focus, .btn-pure.btn-success:hover.hover, .btn-pure.btn-success:hover:focus, .btn-pure.btn-success:hover:hover, .open > .btn-pure.btn-success.dropdown-toggle.focus, .open > .btn-pure.btn-success.dropdown-toggle.hover, .open > .btn-pure.btn-success.dropdown-toggle:focus, .open > .btn-pure.btn-success.dropdown-toggle:hover, .show > .btn-pure.btn-success.dropdown-toggle.focus, .show > .btn-pure.btn-success.dropdown-toggle.hover, .show > .btn-pure.btn-success.dropdown-toggle:focus, .show > .btn-pure.btn-success.dropdown-toggle:hover {
+  color: #49de94 !important
+}
+
+.btn-pure.btn-success.active .badge-pill, .btn-pure.btn-success.focus .badge-pill, .btn-pure.btn-success.hover .badge-pill, .btn-pure.btn-success:active .badge-pill, .btn-pure.btn-success:focus .badge-pill, .btn-pure.btn-success:hover .badge-pill, .open > .btn-pure.btn-success.dropdown-toggle .badge-pill, .show > .btn-pure.btn-success.dropdown-toggle .badge-pill {
+  color: #49de94 !important
+}
+
+.btn-pure.btn-info {
+  color: #0bb2d4 !important
+}
+
+.btn-pure.btn-info.active, .btn-pure.btn-info.focus, .btn-pure.btn-info.hover, .btn-pure.btn-info:active, .btn-pure.btn-info:focus, .btn-pure.btn-info:hover, .open > .btn-pure.btn-info.dropdown-toggle, .show > .btn-pure.btn-info.dropdown-toggle {
+  color: #54cbe3 !important
+}
+
+.btn-pure.btn-info.active.focus, .btn-pure.btn-info.active.hover, .btn-pure.btn-info.active:focus, .btn-pure.btn-info.active:hover, .btn-pure.btn-info.focus.focus, .btn-pure.btn-info.focus.hover, .btn-pure.btn-info.focus:focus, .btn-pure.btn-info.focus:hover, .btn-pure.btn-info.hover.focus, .btn-pure.btn-info.hover.hover, .btn-pure.btn-info.hover:focus, .btn-pure.btn-info.hover:hover, .btn-pure.btn-info:active.focus, .btn-pure.btn-info:active.hover, .btn-pure.btn-info:active:focus, .btn-pure.btn-info:active:hover, .btn-pure.btn-info:focus.focus, .btn-pure.btn-info:focus.hover, .btn-pure.btn-info:focus:focus, .btn-pure.btn-info:focus:hover, .btn-pure.btn-info:hover.focus, .btn-pure.btn-info:hover.hover, .btn-pure.btn-info:hover:focus, .btn-pure.btn-info:hover:hover, .open > .btn-pure.btn-info.dropdown-toggle.focus, .open > .btn-pure.btn-info.dropdown-toggle.hover, .open > .btn-pure.btn-info.dropdown-toggle:focus, .open > .btn-pure.btn-info.dropdown-toggle:hover, .show > .btn-pure.btn-info.dropdown-toggle.focus, .show > .btn-pure.btn-info.dropdown-toggle.hover, .show > .btn-pure.btn-info.dropdown-toggle:focus, .show > .btn-pure.btn-info.dropdown-toggle:hover {
+  color: #54cbe3 !important
+}
+
+.btn-pure.btn-info.active .badge-pill, .btn-pure.btn-info.focus .badge-pill, .btn-pure.btn-info.hover .badge-pill, .btn-pure.btn-info:active .badge-pill, .btn-pure.btn-info:focus .badge-pill, .btn-pure.btn-info:hover .badge-pill, .open > .btn-pure.btn-info.dropdown-toggle .badge-pill, .show > .btn-pure.btn-info.dropdown-toggle .badge-pill {
+  color: #54cbe3 !important
+}
+
+.btn-pure.btn-warning {
+  color: #eb6709 !important
+}
+
+.btn-pure.btn-warning.active, .btn-pure.btn-warning.focus, .btn-pure.btn-warning.hover, .btn-pure.btn-warning:active, .btn-pure.btn-warning:focus, .btn-pure.btn-warning:hover, .open > .btn-pure.btn-warning.dropdown-toggle, .show > .btn-pure.btn-warning.dropdown-toggle {
+  color: #fa983c !important
+}
+
+.btn-pure.btn-warning.active.focus, .btn-pure.btn-warning.active.hover, .btn-pure.btn-warning.active:focus, .btn-pure.btn-warning.active:hover, .btn-pure.btn-warning.focus.focus, .btn-pure.btn-warning.focus.hover, .btn-pure.btn-warning.focus:focus, .btn-pure.btn-warning.focus:hover, .btn-pure.btn-warning.hover.focus, .btn-pure.btn-warning.hover.hover, .btn-pure.btn-warning.hover:focus, .btn-pure.btn-warning.hover:hover, .btn-pure.btn-warning:active.focus, .btn-pure.btn-warning:active.hover, .btn-pure.btn-warning:active:focus, .btn-pure.btn-warning:active:hover, .btn-pure.btn-warning:focus.focus, .btn-pure.btn-warning:focus.hover, .btn-pure.btn-warning:focus:focus, .btn-pure.btn-warning:focus:hover, .btn-pure.btn-warning:hover.focus, .btn-pure.btn-warning:hover.hover, .btn-pure.btn-warning:hover:focus, .btn-pure.btn-warning:hover:hover, .open > .btn-pure.btn-warning.dropdown-toggle.focus, .open > .btn-pure.btn-warning.dropdown-toggle.hover, .open > .btn-pure.btn-warning.dropdown-toggle:focus, .open > .btn-pure.btn-warning.dropdown-toggle:hover, .show > .btn-pure.btn-warning.dropdown-toggle.focus, .show > .btn-pure.btn-warning.dropdown-toggle.hover, .show > .btn-pure.btn-warning.dropdown-toggle:focus, .show > .btn-pure.btn-warning.dropdown-toggle:hover {
+  color: #fa983c !important
+}
+
+.btn-pure.btn-warning.active .badge-pill, .btn-pure.btn-warning.focus .badge-pill, .btn-pure.btn-warning.hover .badge-pill, .btn-pure.btn-warning:active .badge-pill, .btn-pure.btn-warning:focus .badge-pill, .btn-pure.btn-warning:hover .badge-pill, .open > .btn-pure.btn-warning.dropdown-toggle .badge-pill, .show > .btn-pure.btn-warning.dropdown-toggle .badge-pill {
+  color: #fa983c !important
+}
+
+.btn-pure.btn-danger {
+  color: #ff4c52 !important
+}
+
+.btn-pure.btn-danger.active, .btn-pure.btn-danger.focus, .btn-pure.btn-danger.hover, .btn-pure.btn-danger:active, .btn-pure.btn-danger:focus, .btn-pure.btn-danger:hover, .open > .btn-pure.btn-danger.dropdown-toggle, .show > .btn-pure.btn-danger.dropdown-toggle {
+  color: #ff8589 !important
+}
+
+.btn-pure.btn-danger.active.focus, .btn-pure.btn-danger.active.hover, .btn-pure.btn-danger.active:focus, .btn-pure.btn-danger.active:hover, .btn-pure.btn-danger.focus.focus, .btn-pure.btn-danger.focus.hover, .btn-pure.btn-danger.focus:focus, .btn-pure.btn-danger.focus:hover, .btn-pure.btn-danger.hover.focus, .btn-pure.btn-danger.hover.hover, .btn-pure.btn-danger.hover:focus, .btn-pure.btn-danger.hover:hover, .btn-pure.btn-danger:active.focus, .btn-pure.btn-danger:active.hover, .btn-pure.btn-danger:active:focus, .btn-pure.btn-danger:active:hover, .btn-pure.btn-danger:focus.focus, .btn-pure.btn-danger:focus.hover, .btn-pure.btn-danger:focus:focus, .btn-pure.btn-danger:focus:hover, .btn-pure.btn-danger:hover.focus, .btn-pure.btn-danger:hover.hover, .btn-pure.btn-danger:hover:focus, .btn-pure.btn-danger:hover:hover, .open > .btn-pure.btn-danger.dropdown-toggle.focus, .open > .btn-pure.btn-danger.dropdown-toggle.hover, .open > .btn-pure.btn-danger.dropdown-toggle:focus, .open > .btn-pure.btn-danger.dropdown-toggle:hover, .show > .btn-pure.btn-danger.dropdown-toggle.focus, .show > .btn-pure.btn-danger.dropdown-toggle.hover, .show > .btn-pure.btn-danger.dropdown-toggle:focus, .show > .btn-pure.btn-danger.dropdown-toggle:hover {
+  color: #ff8589 !important
+}
+
+.btn-pure.btn-danger.active .badge-pill, .btn-pure.btn-danger.focus .badge-pill, .btn-pure.btn-danger.hover .badge-pill, .btn-pure.btn-danger:active .badge-pill, .btn-pure.btn-danger:focus .badge-pill, .btn-pure.btn-danger:hover .badge-pill, .open > .btn-pure.btn-danger.dropdown-toggle .badge-pill, .show > .btn-pure.btn-danger.dropdown-toggle .badge-pill {
+  color: #ff8589 !important
+}
+
+.btn-pure.btn-dark {
+  color: #526069 !important
+}
+
+.btn-pure.btn-dark.active, .btn-pure.btn-dark.focus, .btn-pure.btn-dark.hover, .btn-pure.btn-dark:active, .btn-pure.btn-dark:focus, .btn-pure.btn-dark:hover, .open > .btn-pure.btn-dark.dropdown-toggle, .show > .btn-pure.btn-dark.dropdown-toggle {
+  color: #76838f !important
+}
+
+.btn-pure.btn-dark.active.focus, .btn-pure.btn-dark.active.hover, .btn-pure.btn-dark.active:focus, .btn-pure.btn-dark.active:hover, .btn-pure.btn-dark.focus.focus, .btn-pure.btn-dark.focus.hover, .btn-pure.btn-dark.focus:focus, .btn-pure.btn-dark.focus:hover, .btn-pure.btn-dark.hover.focus, .btn-pure.btn-dark.hover.hover, .btn-pure.btn-dark.hover:focus, .btn-pure.btn-dark.hover:hover, .btn-pure.btn-dark:active.focus, .btn-pure.btn-dark:active.hover, .btn-pure.btn-dark:active:focus, .btn-pure.btn-dark:active:hover, .btn-pure.btn-dark:focus.focus, .btn-pure.btn-dark:focus.hover, .btn-pure.btn-dark:focus:focus, .btn-pure.btn-dark:focus:hover, .btn-pure.btn-dark:hover.focus, .btn-pure.btn-dark:hover.hover, .btn-pure.btn-dark:hover:focus, .btn-pure.btn-dark:hover:hover, .open > .btn-pure.btn-dark.dropdown-toggle.focus, .open > .btn-pure.btn-dark.dropdown-toggle.hover, .open > .btn-pure.btn-dark.dropdown-toggle:focus, .open > .btn-pure.btn-dark.dropdown-toggle:hover, .show > .btn-pure.btn-dark.dropdown-toggle.focus, .show > .btn-pure.btn-dark.dropdown-toggle.hover, .show > .btn-pure.btn-dark.dropdown-toggle:focus, .show > .btn-pure.btn-dark.dropdown-toggle:hover {
+  color: #76838f !important
+}
+
+.btn-pure.btn-dark.active .badge-pill, .btn-pure.btn-dark.focus .badge-pill, .btn-pure.btn-dark.hover .badge-pill, .btn-pure.btn-dark:active .badge-pill, .btn-pure.btn-dark:focus .badge-pill, .btn-pure.btn-dark:hover .badge-pill, .open > .btn-pure.btn-dark.dropdown-toggle .badge-pill, .show > .btn-pure.btn-dark.dropdown-toggle .badge-pill {
+  color: #76838f !important
+}
+
+.btn-pure.btn-inverse {
+  color: #ffffff !important
+}
+
+.btn-pure.btn-inverse.active, .btn-pure.btn-inverse.focus, .btn-pure.btn-inverse.hover, .btn-pure.btn-inverse:active, .btn-pure.btn-inverse:focus, .btn-pure.btn-inverse:hover, .open > .btn-pure.btn-inverse.dropdown-toggle, .show > .btn-pure.btn-inverse.dropdown-toggle {
+  color: #ffffff !important
+}
+
+.btn-pure.btn-inverse.active.focus, .btn-pure.btn-inverse.active.hover, .btn-pure.btn-inverse.active:focus, .btn-pure.btn-inverse.active:hover, .btn-pure.btn-inverse.focus.focus, .btn-pure.btn-inverse.focus.hover, .btn-pure.btn-inverse.focus:focus, .btn-pure.btn-inverse.focus:hover, .btn-pure.btn-inverse.hover.focus, .btn-pure.btn-inverse.hover.hover, .btn-pure.btn-inverse.hover:focus, .btn-pure.btn-inverse.hover:hover, .btn-pure.btn-inverse:active.focus, .btn-pure.btn-inverse:active.hover, .btn-pure.btn-inverse:active:focus, .btn-pure.btn-inverse:active:hover, .btn-pure.btn-inverse:focus.focus, .btn-pure.btn-inverse:focus.hover, .btn-pure.btn-inverse:focus:focus, .btn-pure.btn-inverse:focus:hover, .btn-pure.btn-inverse:hover.focus, .btn-pure.btn-inverse:hover.hover, .btn-pure.btn-inverse:hover:focus, .btn-pure.btn-inverse:hover:hover, .open > .btn-pure.btn-inverse.dropdown-toggle.focus, .open > .btn-pure.btn-inverse.dropdown-toggle.hover, .open > .btn-pure.btn-inverse.dropdown-toggle:focus, .open > .btn-pure.btn-inverse.dropdown-toggle:hover, .show > .btn-pure.btn-inverse.dropdown-toggle.focus, .show > .btn-pure.btn-inverse.dropdown-toggle.hover, .show > .btn-pure.btn-inverse.dropdown-toggle:focus, .show > .btn-pure.btn-inverse.dropdown-toggle:hover {
+  color: #ffffff !important
+}
+
+.btn-pure.btn-inverse.active .badge-pill, .btn-pure.btn-inverse.focus .badge-pill, .btn-pure.btn-inverse.hover .badge-pill, .btn-pure.btn-inverse:active .badge-pill, .btn-pure.btn-inverse:focus .badge-pill, .btn-pure.btn-inverse:hover .badge-pill, .open > .btn-pure.btn-inverse.dropdown-toggle .badge-pill, .show > .btn-pure.btn-inverse.dropdown-toggle .badge-pill {
+  color: #ffffff !important
+}
+
+.btn-pure.trips-skin.btn-default.active.focus, .btn-pure.trips-skin.btn-default.active.hover, .btn-pure.trips-skin.btn-default.active:focus, .btn-pure.trips-skin.btn-default.active:hover, .btn-pure.trips-skin.btn-default.focus.focus, .btn-pure.trips-skin.btn-default.focus.hover, .btn-pure.trips-skin.btn-default.focus:focus, .btn-pure.trips-skin.btn-default.focus:hover, .btn-pure.trips-skin.btn-default.hover.focus, .btn-pure.trips-skin.btn-default.hover.hover, .btn-pure.trips-skin.btn-default.hover:focus, .btn-pure.trips-skin.btn-default.hover:hover, .btn-pure.trips-skin.btn-default:active.focus, .btn-pure.trips-skin.btn-default:active.hover, .btn-pure.trips-skin.btn-default:active:focus, .btn-pure.trips-skin.btn-default:active:hover, .btn-pure.trips-skin.btn-default:focus.focus, .btn-pure.trips-skin.btn-default:focus.hover, .btn-pure.trips-skin.btn-default:focus:focus, .btn-pure.trips-skin.btn-default:focus:hover, .btn-pure.trips-skin.btn-default:hover.focus, .btn-pure.trips-skin.btn-default:hover.hover, .btn-pure.trips-skin.btn-default:hover:focus, .btn-pure.trips-skin.btn-default:hover:hover, .open > .btn-pure.trips-skin.btn-default.dropdown-toggle.focus, .open > .btn-pure.trips-skin.btn-default.dropdown-toggle.hover, .open > .btn-pure.trips-skin.btn-default.dropdown-toggle:focus, .open > .btn-pure.trips-skin.btn-default.dropdown-toggle:hover, .show > .btn-pure.trips-skin.btn-default.dropdown-toggle.focus, .show > .btn-pure.trips-skin.btn-default.dropdown-toggle.hover, .show > .btn-pure.trips-skin.btn-default.dropdown-toggle:focus, .show > .btn-pure.trips-skin.btn-default.dropdown-toggle:hover {
+  color: #ccd5db !important;
+}
+
+button.btn.btn-pure.trips-skin.btn-default.icon {
+  color: #a3afb7 !important;
+}
+
+button.btn.btn-pure.trips-skin.btn-default.icon:hover {
+  background: transparent;
+  color: #ccd5db !important
+}
+
+button.btn.btn-pure.trips-skin.btn-default.icon:active {
+  background-color: #ccd5db !important;
+  border-color: #ccd5db !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.btn-default:not([disabled]):not(.disabled).active,
+.btn-default:not([disabled]):not(.disabled):active,
+.open > .btn-default.dropdown-toggle, .show > .btn-default.dropdown-toggle {
+  background-color: #ccd5db !important;
+  border-color: #ccd5db !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 740px) {
+  .view:not(.view-table) {
+    height: 100vh;
+  }
+}
+
+.md-pills .nav-link.active {
+  background: $custom-secondary-color !important;
+  color: choose-contrast-color($custom-secondary-color) !important;
+}

@@ -75,21 +75,27 @@
             exit(1);
         }
 
-        /**
-         * process update post request
-         *
-         * @param array $params
-         */
-        public static function serveUpdate(array $params = [])
+        public static function serveUpdate(array $params = null)
         {
-            $vendor = array();
-            $results = VendorModel::updateRecord($params);
-            if (isset($vendors) && isset($vendors[0])) {
-                $vendor = $vendors[0];
+            $results = [];
+            if ($params) {
+                $results = VendorModel::updateRecord($params);
             }
+
             // ----
-            View::render_json(self::format_vendor($vendor));
+            View::render_json(self::format_vendor($results));
             exit(1);
+        }
+
+        public static function callUpdate(array $vendor = []): array
+        {
+            $results = [];
+
+            if ($vendor) {
+                $results = VendorModel::updateRecord($vendor);
+            }
+
+            return $results;
         }
 
         /**

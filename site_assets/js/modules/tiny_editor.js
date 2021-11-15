@@ -4,15 +4,14 @@ const tinyEditor = (function () {
     
     const init = function (settings) {
         but_toggle = document.querySelectorAll(".but_toggle")
-        console.log("tinyEdit: init", but_toggle.length)
         
         but_toggle.forEach(el => el.addEventListener("click", event => {
-            console.log("el.dataset.texted", el.dataset.texted)
+            
             if (el.dataset.texted) {
                 let editorId = el.dataset.texted
                 let editor = $("#" + editorId)
                 if (tinyMCE.get(editorId)) {
-                    console.log(editorId)
+                    
                     editor.val(decodeHtml(editor.val()))
                     tinymce.remove("#" + editorId)
                 } else {

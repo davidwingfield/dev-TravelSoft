@@ -366,5 +366,93 @@ ul.nav-tabs-line > li.nav-item, ul.nav-tabs-line > li.nav-item > a.nav-link {
   border-top-right-radius: 0px !important;
   }
 
+.md-pills .nav-link.active:hover {
+  background: #ff884f !important;
+  color: #0a070d !important;
+  }
+
+.page-header-actions .btn-icon {
+  margin-left: 6px;
+  }
+
+.btn-icon.btn-sm, .btn.icon.btn-sm {
+  padding: 0.572rem;
+  font-size: 1rem;
+  }
+
+[type=reset], [type=submit], button, html [type=button] {
+  -webkit-appearance: button;
+  }
+
+.page-header-actions > * {
+  margin-bottom: .375rem;
+  }
 
 
+.btn-inverse {
+  color: #111;
+  background-color: #fff;
+  border-color: #e4eaec;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  }
+
+
+.btn-round,
+.btn-round:active, .btn-round:hover {
+  border-radius: 1000px !important;
+  box-shadow: none !important;
+  }
+
+div.page-header-actions .btn i {
+  width: 1rem !important;
+  text-align: center !important;
+  margin: 1px 2px 1px 2px !important;
+  height: 1rem;
+  line-height: 1rem !important;
+  vertical-align: middle;
+  }
+
+.btn-group-sm > .btn, .btn-sm {
+  padding: 0.3rem 0.3rem !important;
+  font-size: .64rem !important; /*.858rem !important;*/
+  line-height: 1.5 !important;
+  border-radius: 0.143rem;
+  font-weight: 300;
+  text-align: center;
+  white-space: nowrap;
+  }
+
+
+.btn-icon, .btn.icon {
+  padding: 0.715rem;
+  line-height: 1em;
+  }
+
+div.page-header-actions .btn span {
+  margin-right: 1.5rem
+  }
+
+.trips-skin .btn-primary:not([disabled]):not(.disabled):active, .trips-skin .btn-primary:not([disabled]):not(.disabled).active, .show > .trips-skin .btn-primary.dropdown-toggle {
+  background-color: #0b51c5 !important;
+  }
+
+
+.fa, .fas, .far, .fal, .fad, .fab {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1rem;
+  font-size: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-align: center;
+  vertical-align: middle;
+  }
+
+.btn-rounded {
+  
+  }

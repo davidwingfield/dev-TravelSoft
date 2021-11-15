@@ -32,25 +32,29 @@
             "save" => array(
                 "type" => "a",
                 "href" => "javascript:void(0)",
-                "classes" => "btn btn-outline-primary btn-rounded waves-effect",
-                "icon" => "fas fa-plus",
+                "classes" => "btn btn-sm btn-primary btn-round",
+                "icon" => "fas fa-save",
                 "id" => "button_save_provider",
                 "text" => "save provider",
                 "data" => array(
-                    //"toggle" => "tooltip",
-                    //"original-title" => "tooltip",
+                    "toggle" => "tooltip",
+                    "title" => "Save Provider",
+                    "placement" => "top",
                 ),
             ),
+
             "new" => array(
                 "type" => "a",
                 "href" => "/providers/new",
-                "classes" => "btn btn-sm btn-icon btn-inverse btn-round",
+                "classes" => "btn btn-outline-primary btn-sm btn-icon btn-round",
                 "icon" => "fas fa-plus",
                 "id" => "button_add_provider_page_heading",
                 "text" => "",
                 "data" => array(
                     "toggle" => "tooltip",
-                    "original-title" => "Edit",
+                    "title" => "Creat a New Provider",
+                    "placement" => "top",
+
                 ),
             ),
         );
@@ -328,8 +332,6 @@
             exit(1);
         }
 
-        // ----
-
         /**
          * handle post update request
          *
@@ -338,13 +340,17 @@
         public static function serveUpdate(array $params = [])
         {
             $provider = [];
-            Log::$debug_log->trace($params["provider_detail"]);
+            if (isset($params["vendor_detail"])) {
+                $vendor = Vendor::callUpdate($params["vendor_detail"]);
+            }
+
             if (isset($params["provider_detail"])) {
-                $provider = self::format_get(ProviderModel::update($params["provider_detail"]));
+                $provider = ProviderModel::update($params["provider_detail"]);
             }
 
             // ----
-            View::render_json($provider);
+            
+            View::render_json(self::format_get($provider));
             exit(1);
         }
 

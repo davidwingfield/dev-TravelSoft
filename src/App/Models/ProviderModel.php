@@ -168,12 +168,7 @@
             JOIN			vendor VENDOR ON VENDOR.company_id = COMPANY.id AND VENDOR.is_provider = 1
             LEFT JOIN		company VENDORCOMPANY ON VENDORCOMPANY.id = VENDOR.company_id
             WHERE			PROVIDER.enabled = 1
-                AND			COMPANY.enabled = 1
-                AND			VENDOR.enabled = 1
-                AND			COUNTRY.enabled = 1
-                AND			PROVINCE.enabled = 1
-                AND			CITY.enabled = 1
-                AND			LOCATION.enabled = 1 ";
+            ";
 
         /**
          * Gets provider(s) by id
@@ -193,8 +188,11 @@
                     $where = "AND		PROVIDER.id = $id";
                 }
                 $sql = self::$selectQuery . $where;
+                Log::$debug_log->trace($sql);
+                $ret = Model::$db->rawQuery($sql);
+                Log::$debug_log->trace($ret);
 
-                return Model::$db->rawQuery($sql);
+                return $ret;
             } catch (Exception $e) {
                 Log::$debug_log->error($e->getMessage());
 
@@ -355,7 +353,14 @@
             }
         }
 
-        public static function update($provider = []): array
+        /**
+         * update provider record
+         *
+         * @param null $provider
+         *
+         * @return array
+         */
+        public static function update($provider = null): array
         {
             if (!isset($provider["company_id"], $provider["location_id"])) {
                 Log::$debug_log->error("Missing Data");
@@ -369,28 +374,33 @@
             $note = Model::setLongText((isset($provider["note"])) ? $provider["note"] : null);
             $created_by = Model::setInt($user_id);
             $modified_by = Model::setInt($user_id);
-
             $id = Model::setInt((isset($provider["id"])) ? $provider["id"] : null);
             $company_id = Model::setInt((isset($provider["company_id"])) ? $provider["company_id"] : null);
             $location_id = Model::setInt((isset($provider["location_id"])) ? $provider["location_id"] : null);
-
             $provider_vendor = Model::setBool((isset($provider["provider_vendor"])) ? $provider["provider_vendor"] : null);
+            $code_direct_id = Model::setString((isset($provider["code_direct_id"])) ? $provider["code_direct_id"] : null);
+            $description_long = Model::setLongText((isset($provider["description_long"])) ? $provider["description_long"] : null);
+            $description_short = Model::setLongText((isset($provider["description_short"])) ? $provider["description_short"] : null);
+            $keywords = Model::setLongText((isset($provider["keywords"])) ? $provider["keywords"] : null);
 
-            $code_direct_id = Model::setString((isset($location["code_direct_id"])) ? $location["code_direct_id"] : null);
             $sql = "
                 INSERT INTO provider (
                     id, company_id, location_id, code_direct_id,
                     provider_vendor, enabled, date_created, created_by,
-                    date_modified, modified_by, note
+                    date_modified, modified_by, note, description_long, description_short, keywords
                 ) VALUES (
                     $id, $company_id, $location_id, $code_direct_id,
                     $provider_vendor, $enabled, CURRENT_TIMESTAMP, $created_by,
-                    CURRENT_TIMESTAMP, $modified_by, $note
+                    CURRENT_TIMESTAMP, $modified_by, $note, $description_long, $description_short, $keywords
                 )
                 ON DUPLICATE KEY UPDATE
                     location_id = VALUES(location_id),
                     company_id = VALUES(company_id),
                     code_direct_id = VALUES(code_direct_id),
+                                        
+                    description_long = VALUES(description_long),
+                    description_short = VALUES(description_short),
+                    keywords = VALUES(keywords),                    
                     provider_vendor = VALUES(provider_vendor), 
                     enabled = VALUES(enabled),
                     modified_by = VALUES(modified_by),
@@ -400,6 +410,7 @@
             try {
                 Model::$db->rawQuery($sql);
                 $provider_id = Model::$db->getInsertId();
+
                 if ($provider_id) {
                     $update = "
                         UPDATE      provider
@@ -409,6 +420,7 @@
                         Model::$db->rawQuery($update);
 
                         return self::get((int)$provider_id);
+
                     } catch (Exception $ex) {
                         Log::$debug_log->error($ex);
 

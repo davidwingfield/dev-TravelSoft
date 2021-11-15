@@ -276,7 +276,7 @@
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd></dd>
+<dd>update provider record</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-ProviderModel.html#method_updateRecord">updateRecord()</a>
@@ -396,6 +396,9 @@
                             PROVIDER.location_id AS &#039;provider_location_id&#039;,
                             PROVIDER.code_direct_id AS &#039;provider_code_direct_id&#039;,
                             PROVIDER.provider_vendor AS &#039;provider_provider_vendor&#039;,
+                            PROVIDER.description_long AS &#039;provider_description_long&#039;,
+                            PROVIDER.description_short AS &#039;provider_description_short&#039;,
+                            PROVIDER.keywords AS &#039;provider_keywords&#039;,
                             PROVIDER.enabled AS &#039;provider_enabled&#039;,
                             PROVIDER.date_created AS &#039;provider_date_created&#039;,
                             PROVIDER.created_by AS &#039;provider_created_by&#039;,
@@ -517,12 +520,7 @@
             JOIN			vendor VENDOR ON VENDOR.company_id = COMPANY.id AND VENDOR.is_provider = 1
             LEFT JOIN		company VENDORCOMPANY ON VENDORCOMPANY.id = VENDOR.company_id
             WHERE			PROVIDER.enabled = 1
-                AND			COMPANY.enabled = 1
-                AND			VENDOR.enabled = 1
-                AND			COUNTRY.enabled = 1
-                AND			PROVINCE.enabled = 1
-                AND			CITY.enabled = 1
-                AND			LOCATION.enabled = 1 &quot;</span></code>
+            &quot;</span></code>
 
     
     
@@ -549,7 +547,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">184</span>
+    <span class="phpdocumentor-element-found-in__line">182</span>
 
     </aside>
 
@@ -596,7 +594,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">209</span>
+    <span class="phpdocumentor-element-found-in__line">210</span>
 
     </aside>
 
@@ -639,7 +637,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">236</span>
+    <span class="phpdocumentor-element-found-in__line">237</span>
 
     </aside>
 
@@ -715,7 +713,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">259</span>
+    <span class="phpdocumentor-element-found-in__line">260</span>
 
     </aside>
 
@@ -933,26 +931,25 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">355</span>
+    <span class="phpdocumentor-element-found-in__line">363</span>
 
     </aside>
 
-    
+        <p class="phpdocumentor-summary">update provider record</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">update</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$provider</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">update</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$provider</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$provider</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+                : <span class="phpdocumentor-signature__argument__return-type">null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
@@ -977,7 +974,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">285</span>
+    <span class="phpdocumentor-element-found-in__line">286</span>
 
     </aside>
 

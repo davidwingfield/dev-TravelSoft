@@ -56,13 +56,19 @@ const Company = (function () {
         
     }
     
-    //----
+    let temp_company = {}
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let validator
     let globalSelectedCompany = false
     let suggestionsTempCompany = []
     
     let tempCompany = {}
+    
+    $("a[data-toggle=\"tab\"]").on("hide.bs.tab", function (e) {
+        //e.target // newly activated tab
+        //e.relatedTarget // previous active tab
+        hide_form()
+    })
     
     $(_button_cancel_edit_company_name)
       .on("click", function () {
@@ -91,15 +97,17 @@ const Company = (function () {
       .on("click", function () {
           let company = Company.build()
           if (company) {
-              
               confirmDialog(`Would you like to update?`, (ans) => {
                   if (ans) {
                       add_to_company_list(company, function (data) {
                           if (data) {
                               if (data[0]) {
                                   let company = data[0]
-                                  populate_form(company)
+                                  let detail = set_detail(company)
+                                  reset_company = detail
+                                  populate_form(detail)
                                   init_autocomplete()
+                                  hide_form()
                               }
                           }
                       })
@@ -112,8 +120,6 @@ const Company = (function () {
       .on("change", function () {
           _address_company_id.value = _company_id.value
       })
-    
-    let temp_company = {}
     
     $(_form_edit_company)
       .on("change", function () {
@@ -312,7 +318,7 @@ const Company = (function () {
             id: (!isNaN(_provider_company_id.value)) ? parseInt(_provider_company_id.value) : null,
             modified_by: user_id,
             //cover_image: _company_cover_image.value,
-            cover_image: null,
+            cover_image: "/public/img/placeholder.jpg",
             name: $(_company_name).val(),
             note: Company.detail.note,
             phone_1: $(_company_phone_1).val(),
@@ -320,7 +326,6 @@ const Company = (function () {
             status_id: Company.detail.status_id,
             website: $(_company_website).val(),
         })
-        
     }
     
     // ----
@@ -490,7 +495,11 @@ const Company = (function () {
         
     }
     
+    let reset_company = {}
+    
     const show_form = function () {
+        reset_company = Company.build()
+        
         if (_form_edit_company_block) {
             $(_form_edit_company_block).show()
             $(_button_cancel_edit_company_name).show()
@@ -499,13 +508,17 @@ const Company = (function () {
         }
         
         if (_button_save_provider) {
+            
             $(_button_save_provider).attr("readonly", true)
             _button_save_provider.disabled = true
+            
         }
     }
     
     const hide_form = function () {
         if (_form_edit_company_block) {
+            let detail = set_detail(reset_company)
+            //populate_form(detail)
             $(_company_name).attr("readonly", false)
             $(_form_edit_company_block).hide()
             $(_button_cancel_edit_company_name).hide()
@@ -517,6 +530,7 @@ const Company = (function () {
             $(_button_save_provider).attr("readonly", false)
             _button_save_provider.disabled = false
         }
+        
     }
     
     // ----

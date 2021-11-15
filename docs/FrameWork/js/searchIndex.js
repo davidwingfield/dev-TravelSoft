@@ -618,8 +618,13 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003AserveUpdate\u0028\u0029",
             "name": "serveUpdate",
-            "summary": "process\u0020update\u0020post\u0020request",
+            "summary": "",
             "url": "classes/Framework-App-Controllers-Vendor.html#method_serveUpdate"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003AcallUpdate\u0028\u0029",
+            "name": "callUpdate",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Vendor.html#method_callUpdate"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003Aautocomplete\u0028\u0029",
             "name": "autocomplete",
@@ -1718,7 +1723,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProviderModel\u003A\u003Aupdate\u0028\u0029",
             "name": "update",
-            "summary": "",
+            "summary": "update\u0020provider\u0020record",
             "url": "classes/Framework-App-Models-ProviderModel.html#method_update"
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProviderModel\u003A\u003A\u0024data",

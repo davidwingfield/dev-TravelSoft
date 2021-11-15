@@ -64,17 +64,22 @@ const Provider = (function () {
     
     $(_button_save_provider)
       .on("click", function () {
-          
           let tabs = $("#provider_edit_tabs > li.nav-item > a.nav-link")
           let panels = $("div.tab-pane")
-          
           let company_detail = Company.build()
           let provider_detail = Provider.build()
           let location_detail = Location.build()
           let vendor_detail = Vendor.build()
           let addresses = Array.from(Address.all.values())
           let contacts = Array.from(Contact.all.values())
-          
+          //*
+          console.log("company_detail", company_detail)
+          console.log("provider_detail", provider_detail)
+          console.log("location_detail", location_detail)
+          console.log("vendor_detail", vendor_detail)
+          console.log("addresses", addresses)
+          console.log("contacts", contacts)
+          //*/
           if (!company_detail || !provider_detail || !location_detail || !vendor_detail || !addresses || !contacts) {
               $.each(panels, function (index, item) {
                   if ($(this).find(".is-invalid").length > 0) {
@@ -390,13 +395,29 @@ const Provider = (function () {
      * @param provider
      */
     const save = function (provider) {
+        /*
+        console.log("Provider:save()", provider)
+        //*/
         if (provider) {
             updateProvider(provider, function (data) {
                 if (data) {
                     if (data[0]) {
-                        let provider = data[0]
-                        console.log("provider", provider)
+                        let details = data[0]
+                        if (details.id) {
+                            if (_provider_id.value === "" || isNaN(parseInt(_provider_id.value))) {
+                                window.location.replace(base_url + "/" + details.id)
+                            } else {
+                                let name = _company_name.value
+                                toastr.success(`Provider ${name} has been updated.`)
+                            }
+                        } else {
+                            console.log("details 1", details)
+                        }
+                    } else {
+                        console.log("details 2", data)
                     }
+                } else {
+                    console.log("details 3", provider)
                 }
             })
         }
@@ -410,14 +431,19 @@ const Provider = (function () {
      */
     const updateProvider = function (dataToSend, callback) {
         let url = "/api/v1.0/providers/update"
+        
         if (dataToSend) {
-            sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                if (data) {
-                    return callback(data)
-                } else {
-                    return handle_provider_error("Oops: 1")
-                }
-            })
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handle_provider_error("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+            }
         }
     }
     
@@ -434,6 +460,9 @@ const Provider = (function () {
             id: (!isNaN(parseInt(_provider_id.value))) ? parseInt(_provider_id.value) : null,
             provider_vendor: (_form_edit_provider) ? 1 : 0,
             enabled: 1,
+            description_long: (_provider_description_long.value === "") ? null : _provider_description_long.value,
+            description_short: (_provider_description_short.value === "") ? null : _provider_description_short.value,
+            keywords: $provider_key.build(),
         })
     }
     
@@ -460,7 +489,7 @@ const Provider = (function () {
             detail.name = (provider.name) ? provider.name : null
             detail.location_id = (provider.location_id) ? provider.location_id : null
             detail.code_direct_id = (provider.code_direct_id) ? provider.code_direct_id : null
-            detail.description_long = (provider.description_long) ? escapeHtml(provider.description_long) : null
+            detail.description_long = (provider.description_long) ? provider.description_long : null
             detail.description_short = (provider.description_short) ? provider.description_short : null
             detail.keywords = (provider.keywords) ? provider.keywords : null
             detail.provider_vendor = (provider.provider_vendor) ? provider.provider_vendor : 1
@@ -477,8 +506,7 @@ const Provider = (function () {
             detail.location = (provider.location) ? provider.location : {}
             detail.company = (provider.company) ? provider.company : {}
         }
-        console.log(escapeHtml(provider.description_long))
-        console.log(decodeHtml(escapeHtml(provider.description_long)))
+        
         Provider.detail = detail
         return detail
     }
@@ -554,6 +582,7 @@ const Provider = (function () {
             let provider_keywords = (provider.keywords) ? provider.keywords : ""
             $provider_key = $(_provider_key).BuildKeyword(provider_keywords)
             $(_provider_description_long).val(provider.description_long)
+            $(_provider_description_short).val(provider.description_short)
         }
         _provider_enabled.checked = (provider.enabled) ? (provider.enabled === 1) : true
     }

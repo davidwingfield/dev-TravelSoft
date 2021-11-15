@@ -1,207 +1,207 @@
-@import 'variables';
+@import './web-icons/style';
 
-@font-face {
-  font-family: '#{$icomoon-font-family}';
-  src: url('/public/font/web_fonts/Web-icons.eot?ot9s7f');
-  src: url('/public/font/web_fonts/Web-icons.eot?ot9s7f#iefix') format('embedded-opentype'),
-  url('/public/font/web_fonts/Web-icons.ttf?ot9s7f') format('truetype'),
-  url('/public/font/web_fonts/Web-icons.woff?ot9s7f') format('woff'),
-  url('/public/font/web_fonts/Web-icons.svg?ot9s7f##{$icomoon-font-family}') format('svg');
-  font-style: normal;
-  font-weight: 600;
-  font-display: block;
-}
 
-.icon {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: '#{$icomoon-font-family}' !important;
-  speak: never;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  
-  position: relative;
+.wi,
+.wis,
+.wir,
+.wil,
+.wid,
+.wib {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
   display: inline-block;
-  -webkit-transform: translate(0, 0);
-  -ms-transform: translate(0, 0);
-  -o-transform: translate(0, 0);
-  transform: translate(0, 0);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-style: normal;
+  font-variant: normal;
   text-rendering: auto;
-  
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  line-height: 1rem;
+  font-size: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-align: center;
+  vertical-align: middle;
 }
 
+.wi-lg {
+  font-size: 1.33333em;
+  line-height: 0.75em;
+  vertical-align: -.0667em;
+}
 
-.wb-film {
-  &:before {
-    content: $wb-film;
+.wi-xs {
+  font-size: .75em;
+}
+
+.wi-sm {
+  font-size: .875em;
+}
+
+.wi-1x {
+  font-size: 1em;
+}
+
+.wi-2x {
+  font-size: 2em;
+}
+
+.wi-3x {
+  font-size: 3em;
+}
+
+.wi-4x {
+  font-size: 4em;
+}
+
+.wi-5x {
+  font-size: 5em;
+}
+
+.wi-6x {
+  font-size: 6em;
+}
+
+.wi-7x {
+  font-size: 7em;
+}
+
+.wi-8x {
+  font-size: 8em;
+}
+
+.wi-9x {
+  font-size: 9em;
+}
+
+.wi-10x {
+  font-size: 10em;
+}
+
+.wi-fw {
+  text-align: center;
+  width: 1.25em;
+}
+
+.wi-ul {
+  list-style-type: none;
+  margin-left: 2.5em;
+  padding-left: 0;
+}
+
+.wi-ul > li {
+  position: relative;
+}
+
+.wi-li {
+  left: -2em;
+  position: absolute;
+  text-align: center;
+  width: 2em;
+  line-height: inherit;
+}
+
+.wi-border {
+  border: solid 0.08em #eeeeee;
+  border-radius: .1em;
+  padding: .2em .25em .15em;
+}
+
+.wi-pull-left {
+  float: left;
+}
+
+.wi-pull-right {
+  float: right;
+}
+
+.wi.wi-pull-left,
+.wis.wi-pull-left,
+.wir.wi-pull-left,
+.wil.wi-pull-left,
+.wib.wi-pull-left {
+  margin-right: .3em;
+}
+
+.wi.wi-pull-right,
+.wis.wi-pull-right,
+.wir.wi-pull-right,
+.wil.wi-pull-right,
+.wib.wi-pull-right {
+  margin-left: .3em;
+}
+
+.wi-spin {
+  -webkit-animation: fa-spin 2s infinite linear;
+  animation: fa-spin 2s infinite linear;
+}
+
+.wi-pulse {
+  -webkit-animation: fa-spin 1s infinite steps(8);
+  animation: fa-spin 1s infinite steps(8);
+}
+
+@-webkit-keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
-.wb-play-circle-o {
-  &:before {
-    content: $wb-play-circle-o;
+@keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
-.wb-video {
-  &:before {
-    content: $wb-video-camera;
-  }
+.wi-rotate-90 {
+  -ms-filter: 'progid:DXImageTransform.Microsoft.BasicImage(rotation=1)';
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 
-.wb-video-camera {
-  &:before {
-    content: $wb-video-camera;
-  }
+.wi-rotate-180 {
+  -ms-filter: 'progid:DXImageTransform.Microsoft.BasicImage(rotation=2)';
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
-.wb-map-marker {
-  &:before {
-    content: $wb-map-marker;
-  }
+.wi-rotate-270 {
+  -ms-filter: 'progid:DXImageTransform.Microsoft.BasicImage(rotation=3)';
+  -webkit-transform: rotate(270deg);
+  transform: rotate(270deg);
 }
 
-.wb-play {
-  &:before {
-    content: $wb-play;
-  }
+.wi-flip-horizontal {
+  -ms-filter: 'progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)';
+  -webkit-transform: scale(-1, 1);
+  transform: scale(-1, 1);
 }
 
-.wb-calendar {
-  &:before {
-    content: $wb-calendar;
-  }
+.wi-flip-vertical {
+  -ms-filter: 'progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)';
+  -webkit-transform: scale(1, -1);
+  transform: scale(1, -1);
 }
 
-.wb-phone {
-  &:before {
-    content: $wb-phone;
-  }
+.wi-flip-both, .wi-flip-horizontal.wi-flip-vertical {
+  -ms-filter: 'progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)';
+  -webkit-transform: scale(-1, -1);
+  transform: scale(-1, -1);
 }
 
-.wb-sitemap {
-  &:before {
-    content: $wb-sitemap;
-  }
-}
-
-.wb-location-arrow {
-  &:before {
-    content: $wb-location-arrow;
-  }
-}
-
-.wb-calendar-o {
-  &:before {
-    content: $wb-calendar-o;
-  }
-}
-
-.wb-play-circle {
-  &:before {
-    content: $wb-play-circle;
-  }
-}
-
-.wb-youtube-square {
-  &:before {
-    content: $wb-youtube-square;
-  }
-}
-
-.wb-youtube {
-  &:before {
-    content: $wb-youtube;
-  }
-}
-
-.wb-youtube-play {
-  &:before {
-    content: $wb-youtube-play;
-  }
-}
-
-.wb-file-movie-o {
-  &:before {
-    content: $wb-file-movie-o;
-  }
-}
-
-.wb-file-video-o {
-  &:before {
-    content: $wb-file-video-o;
-  }
-}
-
-.wb-calendar-plus-o {
-  &:before {
-    content: $wb-calendar-plus-o;
-  }
-}
-
-.wb-calendar-minus-o {
-  &:before {
-    content: $wb-calendar-minus-o;
-  }
-}
-
-.wb-calendar-times-o {
-  &:before {
-    content: $wb-calendar-times-o;
-  }
-}
-
-.wb-calendar-check-o {
-  &:before {
-    content: $wb-calendar-check-o;
-  }
-}
-
-.wb-map-pin {
-  &:before {
-    content: $wb-map-pin;
-  }
-}
-
-.wb-map-signs {
-  &:before {
-    content: $wb-map-signs;
-  }
-}
-
-.wb-map-o {
-  &:before {
-    content: $wb-map-o;
-  }
-}
-
-.wb-map {
-  &:before {
-    content: $wb-map;
-  }
-}
-
-.wb-image {
-  &:before {
-    content: $wb-image;
-  }
-}
-
-.wb-photo {
-  &:before {
-    content: $wb-photo;
-  }
-}
-
-.wb-picture-o {
-  &:before {
-    content: $wb-picture-o;
-  }
+:root .wi-rotate-90,
+:root .wi-rotate-180,
+:root .wi-rotate-270,
+:root .wi-flip-horizontal,
+:root .wi-flip-vertical,
+:root .wi-flip-both {
+  -webkit-filter: none;
+  filter: none;
 }

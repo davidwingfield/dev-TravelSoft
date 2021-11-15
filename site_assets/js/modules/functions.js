@@ -253,13 +253,12 @@ const sendGetRequest = function (url, data_to_send, callback) {
 const sendPostRequest = function (url, data_to_send, callback) {
     let msg, result = []
     if (url && data_to_send) {
-        
         $.postJSON(url, data_to_send, function (data, status, xhr) {
-            ///////////////////////////////////////////////
+            /*
             console.log("data", data)
             console.log("status", status)
             console.log("xhr", xhr)
-            ///////////////////////////////////////////////
+            //*/
             if (status === "success" && typeof data.result !== "undefined") {
                 
                 if (data.result) {

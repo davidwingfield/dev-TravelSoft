@@ -57,5 +57,7 @@ $(document).ready(function () {
     window.scrollTo(0, 0)
     
     resize_elements()
-    
+    $(function () {
+        $("[data-toggle=\"tooltip\"]").tooltip()
+    })
 })

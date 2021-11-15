@@ -100,6 +100,7 @@ $.fn.BuildKeyword = function (keywords) {
     }
     
     const chipSelect = function (id) {
+        /*
         if (id) {
             let $chip = $("#" + id)
             let data = $chip.text()
@@ -112,7 +113,7 @@ $.fn.BuildKeyword = function (keywords) {
                 
             }
         }
-        
+        //*/
     }
     
     const chipAdd = function (data) {
@@ -124,7 +125,7 @@ $.fn.BuildKeyword = function (keywords) {
             if (editMode) {
             
             } else {
-                
+            
             }
             let tag = formatTag(data)
             if (tag) {
@@ -165,7 +166,14 @@ $.fn.BuildKeyword = function (keywords) {
             chipDelete(data)
         },
         build: function () {
-            return tags
+            let results = []
+            let t = Array.from(tags.values())
+            for (let n = 0; n < t.length; n++) {
+                let tag_element = t[n]
+                let data = tag_element.text()
+                results.push(data)
+            }
+            return results.join(",")
         },
         init: function () {
             init()

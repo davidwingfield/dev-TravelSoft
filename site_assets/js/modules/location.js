@@ -105,6 +105,12 @@ const Location = (function () {
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     // ----
     
+    $("a[data-toggle=\"tab\"]").on("hide.bs.tab", function (e) {
+        //e.target // newly activated tab
+        //e.relatedTarget // previous active tab
+        hide_form()
+    })
+    
     /**
      * _button_close_edit_location_form
      */
@@ -193,6 +199,11 @@ const Location = (function () {
             .val($(_location_id).val())
       })
     
+    /**
+     * validate location form
+     *
+     * @returns {*|jQuery}
+     */
     const validate_form = function () {
         return $(_form_edit_location).valid()
     }
@@ -454,6 +465,8 @@ const Location = (function () {
     }
     
     const hide_form = function () {
+        let detail = set_detail(temp_location)
+        populate_form(detail)
         enable()
         $(_form_location_details).hide()
     }
@@ -501,7 +514,6 @@ const Location = (function () {
         let city = {}
         let type = {}
         if (location) {
-            console.log("location", location)
             switch (defaultLocationDisplayFormat) {
                 case "short":
                     _location_name_filter.value = (location.display_short) ? location.display_short : ""
@@ -549,9 +561,7 @@ const Location = (function () {
     }
     
     const set = function (location) {
-        
         return set_detail(location)
-        
     }
     
     /**
@@ -776,8 +786,10 @@ const Location = (function () {
                                         displayView = el[i].value
                                     }
                                 }
-                                
+                                _location_id.value = location.id
                                 _location_name_filter.value = location["display_" + displayView]
+                                
+                                hide_form()
                             }
                         }
                     })
@@ -833,7 +845,6 @@ const Location = (function () {
         },
         build: function () {
             if (validate_edit_location_filter_form()) {
-                console.log("yes")
                 return build()
             }
         },

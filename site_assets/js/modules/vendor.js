@@ -104,7 +104,10 @@ const Vendor = (function () {
     
     const build = function () {
         return remove_nulls({
-            id: (!isNaN(parseInt(_vendor_id.value))),
+            id: (!isNaN(parseInt(_vendor_id.value))) ? parseInt(_vendor_id.value) : null,
+            company_id: (!isNaN(parseInt(_vendor_company_id.value))) ? parseInt(_vendor_company_id.value) : null,
+            status_id: 10,
+            enabled: (_vendor_enabled.checked) ? 1 : 0,
             show_online: (_vendor_show_online.checked === true) ? 1 : 0,
             show_sales: (_vendor_show_sales.checked === true) ? 1 : 0,
             show_ops: (_vendor_show_ops.checked === true) ? 1 : 0,

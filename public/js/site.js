@@ -428,13 +428,12 @@ const sendGetRequest = function (url, data_to_send, callback) {
 const sendPostRequest = function (url, data_to_send, callback) {
     let msg, result = []
     if (url && data_to_send) {
-        
         $.postJSON(url, data_to_send, function (data, status, xhr) {
-            ///////////////////////////////////////////////
+            /*
             console.log("data", data)
             console.log("status", status)
             console.log("xhr", xhr)
-            ///////////////////////////////////////////////
+            //*/
             if (status === "success" && typeof data.result !== "undefined") {
                 
                 if (data.result) {
@@ -1012,15 +1011,14 @@ const tinyEditor = (function () {
     
     const init = function (settings) {
         but_toggle = document.querySelectorAll(".but_toggle")
-        console.log("tinyEdit: init", but_toggle.length)
         
         but_toggle.forEach(el => el.addEventListener("click", event => {
-            console.log("el.dataset.texted", el.dataset.texted)
+            
             if (el.dataset.texted) {
                 let editorId = el.dataset.texted
                 let editor = $("#" + editorId)
                 if (tinyMCE.get(editorId)) {
-                    console.log(editorId)
+                    
                     editor.val(decodeHtml(editor.val()))
                     tinymce.remove("#" + editorId)
                 } else {
@@ -1429,17 +1427,17 @@ $.fn.BuildKeyword = function (keywords) {
       .on("keypress", function (e) {
           if (e.which === 13) {
               add()
-              editMode = false
+              editMode = null
           }
       })
     
     $submitButton
       .on("click", function () {
           add()
-          editMode = false
+          editMode = null
       })
     
-    let editMode = false
+    let editMode = null
     const formatTag = function (data) {
         counter += 1
         if (data) {
@@ -1466,7 +1464,7 @@ $.fn.BuildKeyword = function (keywords) {
               .attr("id", chip_id + "_" + counter)
               .on("click", function (e) {
                   let $chip = $(this)
-                  editMode = true
+                  editMode = tags.get($chip.text())
                   let id = $chip.attr("id")
                   chipSelect(id)
               })
@@ -1490,6 +1488,7 @@ $.fn.BuildKeyword = function (keywords) {
     }
     
     const chipSelect = function (id) {
+        /*
         if (id) {
             let $chip = $("#" + id)
             let data = $chip.text()
@@ -1502,7 +1501,7 @@ $.fn.BuildKeyword = function (keywords) {
                 
             }
         }
-        
+        //*/
     }
     
     const chipAdd = function (data) {
@@ -1511,6 +1510,11 @@ $.fn.BuildKeyword = function (keywords) {
             toastr.error(`A tag for ${data} already exists`)
             tags.set(data, tag)
         } else {
+            if (editMode) {
+            
+            } else {
+            
+            }
             let tag = formatTag(data)
             if (tag) {
                 tags.set(data, tag)
@@ -1550,7 +1554,14 @@ $.fn.BuildKeyword = function (keywords) {
             chipDelete(data)
         },
         build: function () {
-            return tags
+            let results = []
+            let t = Array.from(tags.values())
+            for (let n = 0; n < t.length; n++) {
+                let tag_element = t[n]
+                let data = tag_element.text()
+                results.push(data)
+            }
+            return results.join(",")
         },
         init: function () {
             init()
@@ -3462,6 +3473,12 @@ const Location = (function () {
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     // ----
     
+    $("a[data-toggle=\"tab\"]").on("hide.bs.tab", function (e) {
+        //e.target // newly activated tab
+        //e.relatedTarget // previous active tab
+        hide_form()
+    })
+    
     /**
      * _button_close_edit_location_form
      */
@@ -3550,6 +3567,11 @@ const Location = (function () {
             .val($(_location_id).val())
       })
     
+    /**
+     * validate location form
+     *
+     * @returns {*|jQuery}
+     */
     const validate_form = function () {
         return $(_form_edit_location).valid()
     }
@@ -3811,6 +3833,8 @@ const Location = (function () {
     }
     
     const hide_form = function () {
+        let detail = set_detail(temp_location)
+        populate_form(detail)
         enable()
         $(_form_location_details).hide()
     }
@@ -3858,7 +3882,6 @@ const Location = (function () {
         let city = {}
         let type = {}
         if (location) {
-            console.log("location", location)
             switch (defaultLocationDisplayFormat) {
                 case "short":
                     _location_name_filter.value = (location.display_short) ? location.display_short : ""
@@ -3906,9 +3929,7 @@ const Location = (function () {
     }
     
     const set = function (location) {
-        
         return set_detail(location)
-        
     }
     
     /**
@@ -4133,8 +4154,10 @@ const Location = (function () {
                                         displayView = el[i].value
                                     }
                                 }
-                                
+                                _location_id.value = location.id
                                 _location_name_filter.value = location["display_" + displayView]
+                                
+                                hide_form()
                             }
                         }
                     })
@@ -4190,7 +4213,6 @@ const Location = (function () {
         },
         build: function () {
             if (validate_edit_location_filter_form()) {
-                console.log("yes")
                 return build()
             }
         },
@@ -5339,13 +5361,19 @@ const Company = (function () {
         
     }
     
-    //----
+    let temp_company = {}
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let validator
     let globalSelectedCompany = false
     let suggestionsTempCompany = []
     
     let tempCompany = {}
+    
+    $("a[data-toggle=\"tab\"]").on("hide.bs.tab", function (e) {
+        //e.target // newly activated tab
+        //e.relatedTarget // previous active tab
+        hide_form()
+    })
     
     $(_button_cancel_edit_company_name)
       .on("click", function () {
@@ -5374,15 +5402,17 @@ const Company = (function () {
       .on("click", function () {
           let company = Company.build()
           if (company) {
-              
               confirmDialog(`Would you like to update?`, (ans) => {
                   if (ans) {
                       add_to_company_list(company, function (data) {
                           if (data) {
                               if (data[0]) {
                                   let company = data[0]
-                                  populate_form(company)
+                                  let detail = set_detail(company)
+                                  reset_company = detail
+                                  populate_form(detail)
                                   init_autocomplete()
+                                  hide_form()
                               }
                           }
                       })
@@ -5395,8 +5425,6 @@ const Company = (function () {
       .on("change", function () {
           _address_company_id.value = _company_id.value
       })
-    
-    let temp_company = {}
     
     $(_form_edit_company)
       .on("change", function () {
@@ -5595,7 +5623,7 @@ const Company = (function () {
             id: (!isNaN(_provider_company_id.value)) ? parseInt(_provider_company_id.value) : null,
             modified_by: user_id,
             //cover_image: _company_cover_image.value,
-            cover_image: null,
+            cover_image: "/public/img/placeholder.jpg",
             name: $(_company_name).val(),
             note: Company.detail.note,
             phone_1: $(_company_phone_1).val(),
@@ -5603,7 +5631,6 @@ const Company = (function () {
             status_id: Company.detail.status_id,
             website: $(_company_website).val(),
         })
-        
     }
     
     // ----
@@ -5773,7 +5800,11 @@ const Company = (function () {
         
     }
     
+    let reset_company = {}
+    
     const show_form = function () {
+        reset_company = Company.build()
+        
         if (_form_edit_company_block) {
             $(_form_edit_company_block).show()
             $(_button_cancel_edit_company_name).show()
@@ -5782,13 +5813,17 @@ const Company = (function () {
         }
         
         if (_button_save_provider) {
+            
             $(_button_save_provider).attr("readonly", true)
             _button_save_provider.disabled = true
+            
         }
     }
     
     const hide_form = function () {
         if (_form_edit_company_block) {
+            let detail = set_detail(reset_company)
+            //populate_form(detail)
             $(_company_name).attr("readonly", false)
             $(_form_edit_company_block).hide()
             $(_button_cancel_edit_company_name).hide()
@@ -5800,6 +5835,7 @@ const Company = (function () {
             $(_button_save_provider).attr("readonly", false)
             _button_save_provider.disabled = false
         }
+        
     }
     
     // ----
@@ -6584,7 +6620,10 @@ const Vendor = (function () {
     
     const build = function () {
         return remove_nulls({
-            id: (!isNaN(parseInt(_vendor_id.value))),
+            id: (!isNaN(parseInt(_vendor_id.value))) ? parseInt(_vendor_id.value) : null,
+            company_id: (!isNaN(parseInt(_vendor_company_id.value))) ? parseInt(_vendor_company_id.value) : null,
+            status_id: 10,
+            enabled: (_vendor_enabled.checked) ? 1 : 0,
             show_online: (_vendor_show_online.checked === true) ? 1 : 0,
             show_sales: (_vendor_show_sales.checked === true) ? 1 : 0,
             show_ops: (_vendor_show_ops.checked === true) ? 1 : 0,
@@ -7681,17 +7720,22 @@ const Provider = (function () {
     
     $(_button_save_provider)
       .on("click", function () {
-          
           let tabs = $("#provider_edit_tabs > li.nav-item > a.nav-link")
           let panels = $("div.tab-pane")
-          
           let company_detail = Company.build()
           let provider_detail = Provider.build()
           let location_detail = Location.build()
           let vendor_detail = Vendor.build()
           let addresses = Array.from(Address.all.values())
           let contacts = Array.from(Contact.all.values())
-          
+          //*
+          console.log("company_detail", company_detail)
+          console.log("provider_detail", provider_detail)
+          console.log("location_detail", location_detail)
+          console.log("vendor_detail", vendor_detail)
+          console.log("addresses", addresses)
+          console.log("contacts", contacts)
+          //*/
           if (!company_detail || !provider_detail || !location_detail || !vendor_detail || !addresses || !contacts) {
               $.each(panels, function (index, item) {
                   if ($(this).find(".is-invalid").length > 0) {
@@ -8007,13 +8051,29 @@ const Provider = (function () {
      * @param provider
      */
     const save = function (provider) {
+        /*
+        console.log("Provider:save()", provider)
+        //*/
         if (provider) {
             updateProvider(provider, function (data) {
                 if (data) {
                     if (data[0]) {
-                        let provider = data[0]
-                        console.log("provider", provider)
+                        let details = data[0]
+                        if (details.id) {
+                            if (_provider_id.value === "" || isNaN(parseInt(_provider_id.value))) {
+                                window.location.replace(base_url + "/" + details.id)
+                            } else {
+                                let name = _company_name.value
+                                toastr.success(`Provider ${name} has been updated.`)
+                            }
+                        } else {
+                            console.log("details 1", details)
+                        }
+                    } else {
+                        console.log("details 2", data)
                     }
+                } else {
+                    console.log("details 3", provider)
                 }
             })
         }
@@ -8027,14 +8087,19 @@ const Provider = (function () {
      */
     const updateProvider = function (dataToSend, callback) {
         let url = "/api/v1.0/providers/update"
+        
         if (dataToSend) {
-            sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                if (data) {
-                    return callback(data)
-                } else {
-                    return handle_provider_error("Oops: 1")
-                }
-            })
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handle_provider_error("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+            }
         }
     }
     
@@ -8051,6 +8116,9 @@ const Provider = (function () {
             id: (!isNaN(parseInt(_provider_id.value))) ? parseInt(_provider_id.value) : null,
             provider_vendor: (_form_edit_provider) ? 1 : 0,
             enabled: 1,
+            description_long: (_provider_description_long.value === "") ? null : _provider_description_long.value,
+            description_short: (_provider_description_short.value === "") ? null : _provider_description_short.value,
+            keywords: $provider_key.build(),
         })
     }
     
@@ -8077,7 +8145,7 @@ const Provider = (function () {
             detail.name = (provider.name) ? provider.name : null
             detail.location_id = (provider.location_id) ? provider.location_id : null
             detail.code_direct_id = (provider.code_direct_id) ? provider.code_direct_id : null
-            detail.description_long = (provider.description_long) ? escapeHtml(provider.description_long) : null
+            detail.description_long = (provider.description_long) ? provider.description_long : null
             detail.description_short = (provider.description_short) ? provider.description_short : null
             detail.keywords = (provider.keywords) ? provider.keywords : null
             detail.provider_vendor = (provider.provider_vendor) ? provider.provider_vendor : 1
@@ -8094,8 +8162,7 @@ const Provider = (function () {
             detail.location = (provider.location) ? provider.location : {}
             detail.company = (provider.company) ? provider.company : {}
         }
-        console.log(escapeHtml(provider.description_long))
-        console.log(decodeHtml(escapeHtml(provider.description_long)))
+        
         Provider.detail = detail
         return detail
     }
@@ -8171,6 +8238,7 @@ const Provider = (function () {
             let provider_keywords = (provider.keywords) ? provider.keywords : ""
             $provider_key = $(_provider_key).BuildKeyword(provider_keywords)
             $(_provider_description_long).val(provider.description_long)
+            $(_provider_description_short).val(provider.description_short)
         }
         _provider_enabled.checked = (provider.enabled) ? (provider.enabled === 1) : true
     }
@@ -8613,5 +8681,7 @@ $(document).ready(function () {
     window.scrollTo(0, 0)
     
     resize_elements()
-    
+    $(function () {
+        $("[data-toggle=\"tooltip\"]").tooltip()
+    })
 })

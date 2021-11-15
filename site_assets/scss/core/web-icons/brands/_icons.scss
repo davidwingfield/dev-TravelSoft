@@ -1,0 +1,2777 @@
+@import './variables';
+
+@font-face {
+  font-family: '#{$wi-brands-font-family}';
+  src: url('#{$wi-brands-font-path}/#{$wi-brands-font-family}.eot?u64u3r');
+  src: url('#{$wi-brands-font-path}/#{$wi-brands-font-family}.eot?u64u3r#iefix') format('embedded-opentype'),
+  url('#{$wi-brands-font-path}/#{$wi-brands-font-family}.ttf?u64u3r') format('truetype'),
+  url('#{$wi-brands-font-path}/#{$wi-brands-font-family}.woff?u64u3r') format('woff'),
+  url('#{$wi-brands-font-path}/#{$wi-brands-font-family}.svg?u64u3r##{$wi-brands-font-family}') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.wib {
+  font-family: '#{$wi-brands-font-family}' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: 900;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  display: inline-block;
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+  text-rendering: auto;
+  
+  
+  &.wi-px {
+    &:before {
+      content: $wi-brands-px;
+    }
+  }
+  
+  &.wi-accessible-icon {
+    &:before {
+      content: $wi-brands-accessible-icon;
+    }
+  }
+  
+  &.wi-accusoft {
+    &:before {
+      content: $wi-brands-accusoft;
+    }
+  }
+  
+  &.wi-acquisitions-incorporated {
+    &:before {
+      content: $wi-brands-acquisitions-incorporated;
+    }
+  }
+  
+  &.wi-adn {
+    &:before {
+      content: $wi-brands-adn;
+    }
+  }
+  
+  &.wi-adversal {
+    &:before {
+      content: $wi-brands-adversal;
+    }
+  }
+  
+  &.wi-affiliatetheme {
+    &:before {
+      content: $wi-brands-affiliatetheme;
+    }
+  }
+  
+  &.wi-airbnb {
+    &:before {
+      content: $wi-brands-airbnb;
+    }
+  }
+  
+  &.wi-algolia {
+    &:before {
+      content: $wi-brands-algolia;
+    }
+  }
+  
+  &.wi-alipay {
+    &:before {
+      content: $wi-brands-alipay;
+    }
+  }
+  
+  &.wi-amazon {
+    &:before {
+      content: $wi-brands-amazon;
+    }
+  }
+  
+  &.wi-amazon-pay {
+    &:before {
+      content: $wi-brands-amazon-pay;
+    }
+  }
+  
+  &.wi-amilia {
+    &:before {
+      content: $wi-brands-amilia;
+    }
+  }
+  
+  &.wi-android {
+    &:before {
+      content: $wi-brands-android;
+    }
+  }
+  
+  &.wi-angellist {
+    &:before {
+      content: $wi-brands-angellist;
+    }
+  }
+  
+  &.wi-angrycreative {
+    &:before {
+      content: $wi-brands-angrycreative;
+    }
+  }
+  
+  &.wi-angular {
+    &:before {
+      content: $wi-brands-angular;
+    }
+  }
+  
+  &.wi-apper {
+    &:before {
+      content: $wi-brands-apper;
+    }
+  }
+  
+  &.wi-apple {
+    &:before {
+      content: $wi-brands-apple;
+    }
+  }
+  
+  &.wi-apple-pay {
+    &:before {
+      content: $wi-brands-apple-pay;
+    }
+  }
+  
+  &.wi-app-store {
+    &:before {
+      content: $wi-brands-app-store;
+    }
+  }
+  
+  &.wi-app-store-ios {
+    &:before {
+      content: $wi-brands-app-store-ios;
+    }
+  }
+  
+  &.wi-artstation {
+    &:before {
+      content: $wi-brands-artstation;
+    }
+  }
+  
+  &.wi-asymmetrik {
+    &:before {
+      content: $wi-brands-asymmetrik;
+    }
+  }
+  
+  &.wi-atlassian {
+    &:before {
+      content: $wi-brands-atlassian;
+    }
+  }
+  
+  &.wi-audible {
+    &:before {
+      content: $wi-brands-audible;
+    }
+  }
+  
+  &.wi-autoprefixer {
+    &:before {
+      content: $wi-brands-autoprefixer;
+    }
+  }
+  
+  &.wi-avianex {
+    &:before {
+      content: $wi-brands-avianex;
+    }
+  }
+  
+  &.wi-aviato {
+    &:before {
+      content: $wi-brands-aviato;
+    }
+  }
+  
+  &.wi-aws {
+    &:before {
+      content: $wi-brands-aws;
+    }
+  }
+  
+  &.wi-bandcamp {
+    &:before {
+      content: $wi-brands-bandcamp;
+    }
+  }
+  
+  &.wi-battle-net {
+    &:before {
+      content: $wi-brands-battle-net;
+    }
+  }
+  
+  &.wi-behance {
+    &:before {
+      content: $wi-brands-behance;
+    }
+  }
+  
+  &.wi-behance-square {
+    &:before {
+      content: $wi-brands-behance-square;
+    }
+  }
+  
+  &.wi-bimobject {
+    &:before {
+      content: $wi-brands-bimobject;
+    }
+  }
+  
+  &.wi-bitbucket {
+    &:before {
+      content: $wi-brands-bitbucket;
+    }
+  }
+  
+  &.wi-bitcoin {
+    &:before {
+      content: $wi-brands-bitcoin;
+    }
+  }
+  
+  &.wi-bity {
+    &:before {
+      content: $wi-brands-bity;
+    }
+  }
+  
+  &.wi-blackberry {
+    &:before {
+      content: $wi-brands-blackberry;
+    }
+  }
+  
+  &.wi-black-tie {
+    &:before {
+      content: $wi-brands-black-tie;
+    }
+  }
+  
+  &.wi-blogger {
+    &:before {
+      content: $wi-brands-blogger;
+    }
+  }
+  
+  &.wi-blogger-b {
+    &:before {
+      content: $wi-brands-blogger-b;
+    }
+  }
+  
+  &.wi-bluetooth {
+    &:before {
+      content: $wi-brands-bluetooth;
+    }
+  }
+  
+  &.wi-bluetooth-b {
+    &:before {
+      content: $wi-brands-bluetooth-b;
+    }
+  }
+  
+  &.wi-bootstrap {
+    &:before {
+      content: $wi-brands-bootstrap;
+    }
+  }
+  
+  &.wi-btc {
+    &:before {
+      content: $wi-brands-btc;
+    }
+  }
+  
+  &.wi-buffer {
+    &:before {
+      content: $wi-brands-buffer;
+    }
+  }
+  
+  &.wi-buromobelexperte {
+    &:before {
+      content: $wi-brands-buromobelexperte;
+    }
+  }
+  
+  &.wi-buy-n-large {
+    &:before {
+      content: $wi-brands-buy-n-large;
+    }
+  }
+  
+  &.wi-buysellads {
+    &:before {
+      content: $wi-brands-buysellads;
+    }
+  }
+  
+  &.wi-canadian-maple-leaf {
+    &:before {
+      content: $wi-brands-canadian-maple-leaf;
+    }
+  }
+  
+  &.wi-cc-amazon-pay {
+    &:before {
+      content: $wi-brands-cc-amazon-pay;
+    }
+  }
+  
+  &.wi-cc-amex {
+    &:before {
+      content: $wi-brands-cc-amex;
+    }
+  }
+  
+  &.wi-cc-apple-pay {
+    &:before {
+      content: $wi-brands-cc-apple-pay;
+    }
+  }
+  
+  &.wi-cc-diners-club {
+    &:before {
+      content: $wi-brands-cc-diners-club;
+    }
+  }
+  
+  &.wi-cc-discover {
+    &:before {
+      content: $wi-brands-cc-discover;
+    }
+  }
+  
+  &.wi-cc-jcb {
+    &:before {
+      content: $wi-brands-cc-jcb;
+    }
+  }
+  
+  &.wi-cc-mastercard {
+    &:before {
+      content: $wi-brands-cc-mastercard;
+    }
+  }
+  
+  &.wi-cc-paypal {
+    &:before {
+      content: $wi-brands-cc-paypal;
+    }
+  }
+  
+  &.wi-cc-stripe {
+    &:before {
+      content: $wi-brands-cc-stripe;
+    }
+  }
+  
+  &.wi-cc-visa {
+    &:before {
+      content: $wi-brands-cc-visa;
+    }
+  }
+  
+  &.wi-centercode {
+    &:before {
+      content: $wi-brands-centercode;
+    }
+  }
+  
+  &.wi-centos {
+    &:before {
+      content: $wi-brands-centos;
+    }
+  }
+  
+  &.wi-chrome {
+    &:before {
+      content: $wi-brands-chrome;
+    }
+  }
+  
+  &.wi-chromecast {
+    &:before {
+      content: $wi-brands-chromecast;
+    }
+  }
+  
+  &.wi-cloudflare {
+    &:before {
+      content: $wi-brands-cloudflare;
+    }
+  }
+  
+  &.wi-cloudscale {
+    &:before {
+      content: $wi-brands-cloudscale;
+    }
+  }
+  
+  &.wi-cloudsmith {
+    &:before {
+      content: $wi-brands-cloudsmith;
+    }
+  }
+  
+  &.wi-cloudversify {
+    &:before {
+      content: $wi-brands-cloudversify;
+    }
+  }
+  
+  &.wi-codepen {
+    &:before {
+      content: $wi-brands-codepen;
+    }
+  }
+  
+  &.wi-codiepie {
+    &:before {
+      content: $wi-brands-codiepie;
+    }
+  }
+  
+  &.wi-confluence {
+    &:before {
+      content: $wi-brands-confluence;
+    }
+  }
+  
+  &.wi-connectdevelop {
+    &:before {
+      content: $wi-brands-connectdevelop;
+    }
+  }
+  
+  &.wi-contao {
+    &:before {
+      content: $wi-brands-contao;
+    }
+  }
+  
+  &.wi-cotton-bureau {
+    &:before {
+      content: $wi-brands-cotton-bureau;
+    }
+  }
+  
+  &.wi-cpanel {
+    &:before {
+      content: $wi-brands-cpanel;
+    }
+  }
+  
+  &.wi-creative-commons {
+    &:before {
+      content: $wi-brands-creative-commons;
+    }
+  }
+  
+  &.wi-creative-commons-by {
+    &:before {
+      content: $wi-brands-creative-commons-by;
+    }
+  }
+  
+  &.wi-creative-commons-nc {
+    &:before {
+      content: $wi-brands-creative-commons-nc;
+    }
+  }
+  
+  &.wi-creative-commons-nc-eu {
+    &:before {
+      content: $wi-brands-creative-commons-nc-eu;
+    }
+  }
+  
+  &.wi-creative-commons-nc-jp {
+    &:before {
+      content: $wi-brands-creative-commons-nc-jp;
+    }
+  }
+  
+  &.wi-creative-commons-nd {
+    &:before {
+      content: $wi-brands-creative-commons-nd;
+    }
+  }
+  
+  &.wi-creative-commons-pd {
+    &:before {
+      content: $wi-brands-creative-commons-pd;
+    }
+  }
+  
+  &.wi-creative-commons-pd-alt {
+    &:before {
+      content: $wi-brands-creative-commons-pd-alt;
+    }
+  }
+  
+  &.wi-creative-commons-remix {
+    &:before {
+      content: $wi-brands-creative-commons-remix;
+    }
+  }
+  
+  &.wi-creative-commons-sa {
+    &:before {
+      content: $wi-brands-creative-commons-sa;
+    }
+  }
+  
+  &.wi-creative-commons-sampling {
+    &:before {
+      content: $wi-brands-creative-commons-sampling;
+    }
+  }
+  
+  &.wi-creative-commons-sampling-plus {
+    &:before {
+      content: $wi-brands-creative-commons-sampling-plus;
+    }
+  }
+  
+  &.wi-creative-commons-share {
+    &:before {
+      content: $wi-brands-creative-commons-share;
+    }
+  }
+  
+  &.wi-creative-commons-zero {
+    &:before {
+      content: $wi-brands-creative-commons-zero;
+    }
+  }
+  
+  &.wi-critical-role {
+    &:before {
+      content: $wi-brands-critical-role;
+    }
+  }
+  
+  &.wi-css3 {
+    &:before {
+      content: $wi-brands-css3;
+    }
+  }
+  
+  &.wi-css3-alt {
+    &:before {
+      content: $wi-brands-css3-alt;
+    }
+  }
+  
+  &.wi-cuttlefish {
+    &:before {
+      content: $wi-brands-cuttlefish;
+    }
+  }
+  
+  &.wi-dailymotion {
+    &:before {
+      content: $wi-brands-dailymotion;
+    }
+  }
+  
+  &.wi-d-and-d {
+    &:before {
+      content: $wi-brands-d-and-d;
+    }
+  }
+  
+  &.wi-d-and-d-beyond {
+    &:before {
+      content: $wi-brands-d-and-d-beyond;
+    }
+  }
+  
+  &.wi-dashcube {
+    &:before {
+      content: $wi-brands-dashcube;
+    }
+  }
+  
+  &.wi-deezer {
+    &:before {
+      content: $wi-brands-deezer;
+    }
+  }
+  
+  &.wi-delicious {
+    &:before {
+      content: $wi-brands-delicious;
+    }
+  }
+  
+  &.wi-deploydog {
+    &:before {
+      content: $wi-brands-deploydog;
+    }
+  }
+  
+  &.wi-deskpro {
+    &:before {
+      content: $wi-brands-deskpro;
+    }
+  }
+  
+  &.wi-dev {
+    &:before {
+      content: $wi-brands-dev;
+    }
+  }
+  
+  &.wi-deviantart {
+    &:before {
+      content: $wi-brands-deviantart;
+    }
+  }
+  
+  &.wi-dhl {
+    &:before {
+      content: $wi-brands-dhl;
+    }
+  }
+  
+  &.wi-diaspora {
+    &:before {
+      content: $wi-brands-diaspora;
+    }
+  }
+  
+  &.wi-digg {
+    &:before {
+      content: $wi-brands-digg;
+    }
+  }
+  
+  &.wi-digital-ocean {
+    &:before {
+      content: $wi-brands-digital-ocean;
+    }
+  }
+  
+  &.wi-discord {
+    &:before {
+      content: $wi-brands-discord;
+    }
+  }
+  
+  &.wi-discourse {
+    &:before {
+      content: $wi-brands-discourse;
+    }
+  }
+  
+  &.wi-dochub {
+    &:before {
+      content: $wi-brands-dochub;
+    }
+  }
+  
+  &.wi-docker {
+    &:before {
+      content: $wi-brands-docker;
+    }
+  }
+  
+  &.wi-draft2digital {
+    &:before {
+      content: $wi-brands-draft2digital;
+    }
+  }
+  
+  &.wi-dribbble {
+    &:before {
+      content: $wi-brands-dribbble;
+    }
+  }
+  
+  &.wi-dribbble-square {
+    &:before {
+      content: $wi-brands-dribbble-square;
+    }
+  }
+  
+  &.wi-dropbox {
+    &:before {
+      content: $wi-brands-dropbox;
+    }
+  }
+  
+  &.wi-drupal {
+    &:before {
+      content: $wi-brands-drupal;
+    }
+  }
+  
+  &.wi-dyalog {
+    &:before {
+      content: $wi-brands-dyalog;
+    }
+  }
+  
+  &.wi-earlybirds {
+    &:before {
+      content: $wi-brands-earlybirds;
+    }
+  }
+  
+  &.wi-ebay {
+    &:before {
+      content: $wi-brands-ebay;
+    }
+  }
+  
+  &.wi-edge {
+    &:before {
+      content: $wi-brands-edge;
+    }
+  }
+  
+  &.wi-edge-legacy {
+    &:before {
+      content: $wi-brands-edge-legacy;
+    }
+  }
+  
+  &.wi-elementor {
+    &:before {
+      content: $wi-brands-elementor;
+    }
+  }
+  
+  &.wi-ello {
+    &:before {
+      content: $wi-brands-ello;
+    }
+  }
+  
+  &.wi-ember {
+    &:before {
+      content: $wi-brands-ember;
+    }
+  }
+  
+  &.wi-empire {
+    &:before {
+      content: $wi-brands-empire;
+    }
+  }
+  
+  &.wi-envira {
+    &:before {
+      content: $wi-brands-envira;
+    }
+  }
+  
+  &.wi-erlang {
+    &:before {
+      content: $wi-brands-erlang;
+    }
+  }
+  
+  &.wi-ethereum {
+    &:before {
+      content: $wi-brands-ethereum;
+    }
+  }
+  
+  &.wi-etsy {
+    &:before {
+      content: $wi-brands-etsy;
+    }
+  }
+  
+  &.wi-evernote {
+    &:before {
+      content: $wi-brands-evernote;
+    }
+  }
+  
+  &.wi-expeditedssl {
+    &:before {
+      content: $wi-brands-expeditedssl;
+    }
+  }
+  
+  &.wi-facebook {
+    &:before {
+      content: $wi-brands-facebook;
+    }
+  }
+  
+  &.wi-facebook-f {
+    &:before {
+      content: $wi-brands-facebook-f;
+    }
+  }
+  
+  &.wi-facebook-messenger {
+    &:before {
+      content: $wi-brands-facebook-messenger;
+    }
+  }
+  
+  &.wi-facebook-square {
+    &:before {
+      content: $wi-brands-facebook-square;
+    }
+  }
+  
+  &.wi-fantasy-flight-games {
+    &:before {
+      content: $wi-brands-fantasy-flight-games;
+    }
+  }
+  
+  &.wi-fedex {
+    &:before {
+      content: $wi-brands-fedex;
+    }
+  }
+  
+  &.wi-fedora {
+    &:before {
+      content: $wi-brands-fedora;
+    }
+  }
+  
+  &.wi-figma {
+    &:before {
+      content: $wi-brands-figma;
+    }
+  }
+  
+  &.wi-firefox {
+    &:before {
+      content: $wi-brands-firefox;
+    }
+  }
+  
+  &.wi-firefox-browser {
+    &:before {
+      content: $wi-brands-firefox-browser;
+    }
+  }
+  
+  &.wi-firstdraft {
+    &:before {
+      content: $wi-brands-firstdraft;
+    }
+  }
+  
+  &.wi-first-order {
+    &:before {
+      content: $wi-brands-first-order;
+    }
+  }
+  
+  &.wi-first-order-alt {
+    &:before {
+      content: $wi-brands-first-order-alt;
+    }
+  }
+  
+  &.wi-flickr {
+    &:before {
+      content: $wi-brands-flickr;
+    }
+  }
+  
+  &.wi-flipboard {
+    &:before {
+      content: $wi-brands-flipboard;
+    }
+  }
+  
+  &.wi-fly {
+    &:before {
+      content: $wi-brands-fly;
+    }
+  }
+  
+  &.wi-font-awesome {
+    &:before {
+      content: $wi-brands-font-awesome;
+    }
+  }
+  
+  &.wi-font-awesome-alt {
+    &:before {
+      content: $wi-brands-font-awesome-alt;
+    }
+  }
+  
+  &.wi-font-awesome-flag {
+    &:before {
+      content: $wi-brands-font-awesome-flag;
+    }
+  }
+  
+  &.wi-font-awesome-logo-full {
+    &:before {
+      content: $wi-brands-font-awesome-logo-full;
+    }
+  }
+  
+  &.wi-fonticons {
+    &:before {
+      content: $wi-brands-fonticons;
+    }
+  }
+  
+  &.wi-fonticons-fi {
+    &:before {
+      content: $wi-brands-fonticons-fi;
+    }
+  }
+  
+  &.wi-fort-awesome {
+    &:before {
+      content: $wi-brands-fort-awesome;
+    }
+  }
+  
+  &.wi-fort-awesome-alt {
+    &:before {
+      content: $wi-brands-fort-awesome-alt;
+    }
+  }
+  
+  &.wi-forumbee {
+    &:before {
+      content: $wi-brands-forumbee;
+    }
+  }
+  
+  &.wi-foursquare {
+    &:before {
+      content: $wi-brands-foursquare;
+    }
+  }
+  
+  &.wi-freebsd {
+    &:before {
+      content: $wi-brands-freebsd;
+    }
+  }
+  
+  &.wi-free-code-camp {
+    &:before {
+      content: $wi-brands-free-code-camp;
+    }
+  }
+  
+  &.wi-fulcrum {
+    &:before {
+      content: $wi-brands-fulcrum;
+    }
+  }
+  
+  &.wi-galactic-republic {
+    &:before {
+      content: $wi-brands-galactic-republic;
+    }
+  }
+  
+  &.wi-galactic-senate {
+    &:before {
+      content: $wi-brands-galactic-senate;
+    }
+  }
+  
+  &.wi-get-pocket {
+    &:before {
+      content: $wi-brands-get-pocket;
+    }
+  }
+  
+  &.wi-gg {
+    &:before {
+      content: $wi-brands-gg;
+    }
+  }
+  
+  &.wi-gg-circle {
+    &:before {
+      content: $wi-brands-gg-circle;
+    }
+  }
+  
+  &.wi-git {
+    &:before {
+      content: $wi-brands-git;
+    }
+  }
+  
+  &.wi-git-alt {
+    &:before {
+      content: $wi-brands-git-alt;
+    }
+  }
+  
+  &.wi-github {
+    &:before {
+      content: $wi-brands-github;
+    }
+  }
+  
+  &.wi-github-alt {
+    &:before {
+      content: $wi-brands-github-alt;
+    }
+  }
+  
+  &.wi-github-square {
+    &:before {
+      content: $wi-brands-github-square;
+    }
+  }
+  
+  &.wi-gitkraken {
+    &:before {
+      content: $wi-brands-gitkraken;
+    }
+  }
+  
+  &.wi-gitlab {
+    &:before {
+      content: $wi-brands-gitlab;
+    }
+  }
+  
+  &.wi-git-square {
+    &:before {
+      content: $wi-brands-git-square;
+    }
+  }
+  
+  &.wi-gitter {
+    &:before {
+      content: $wi-brands-gitter;
+    }
+  }
+  
+  &.wi-glide {
+    &:before {
+      content: $wi-brands-glide;
+    }
+  }
+  
+  &.wi-glide-g {
+    &:before {
+      content: $wi-brands-glide-g;
+    }
+  }
+  
+  &.wi-gofore {
+    &:before {
+      content: $wi-brands-gofore;
+    }
+  }
+  
+  &.wi-goodreads {
+    &:before {
+      content: $wi-brands-goodreads;
+    }
+  }
+  
+  &.wi-goodreads-g {
+    &:before {
+      content: $wi-brands-goodreads-g;
+    }
+  }
+  
+  &.wi-google {
+    &:before {
+      content: $wi-brands-google;
+    }
+  }
+  
+  &.wi-google-drive {
+    &:before {
+      content: $wi-brands-google-drive;
+    }
+  }
+  
+  &.wi-google-pay {
+    &:before {
+      content: $wi-brands-google-pay;
+    }
+  }
+  
+  &.wi-google-play {
+    &:before {
+      content: $wi-brands-google-play;
+    }
+  }
+  
+  &.wi-google-plus {
+    &:before {
+      content: $wi-brands-google-plus;
+    }
+  }
+  
+  &.wi-google-plus-g {
+    &:before {
+      content: $wi-brands-google-plus-g;
+    }
+  }
+  
+  &.wi-google-plus-square {
+    &:before {
+      content: $wi-brands-google-plus-square;
+    }
+  }
+  
+  &.wi-google-wallet {
+    &:before {
+      content: $wi-brands-google-wallet;
+    }
+  }
+  
+  &.wi-gratipay {
+    &:before {
+      content: $wi-brands-gratipay;
+    }
+  }
+  
+  &.wi-grav {
+    &:before {
+      content: $wi-brands-grav;
+    }
+  }
+  
+  &.wi-gripfire {
+    &:before {
+      content: $wi-brands-gripfire;
+    }
+  }
+  
+  &.wi-grunt {
+    &:before {
+      content: $wi-brands-grunt;
+    }
+  }
+  
+  &.wi-guilded {
+    &:before {
+      content: $wi-brands-guilded;
+    }
+  }
+  
+  &.wi-gulp {
+    &:before {
+      content: $wi-brands-gulp;
+    }
+  }
+  
+  &.wi-hacker-news {
+    &:before {
+      content: $wi-brands-hacker-news;
+    }
+  }
+  
+  &.wi-hacker-news-square {
+    &:before {
+      content: $wi-brands-hacker-news-square;
+    }
+  }
+  
+  &.wi-hackerrank {
+    &:before {
+      content: $wi-brands-hackerrank;
+    }
+  }
+  
+  &.wi-hips {
+    &:before {
+      content: $wi-brands-hips;
+    }
+  }
+  
+  &.wi-hire-a-helper {
+    &:before {
+      content: $wi-brands-hire-a-helper;
+    }
+  }
+  
+  &.wi-hive {
+    &:before {
+      content: $wi-brands-hive;
+    }
+  }
+  
+  &.wi-hooli {
+    &:before {
+      content: $wi-brands-hooli;
+    }
+  }
+  
+  &.wi-hornbill {
+    &:before {
+      content: $wi-brands-hornbill;
+    }
+  }
+  
+  &.wi-hotjar {
+    &:before {
+      content: $wi-brands-hotjar;
+    }
+  }
+  
+  &.wi-houzz {
+    &:before {
+      content: $wi-brands-houzz;
+    }
+  }
+  
+  &.wi-html5 {
+    &:before {
+      content: $wi-brands-html5;
+    }
+  }
+  
+  &.wi-hubspot {
+    &:before {
+      content: $wi-brands-hubspot;
+    }
+  }
+  
+  &.wi-ideal {
+    &:before {
+      content: $wi-brands-ideal;
+    }
+  }
+  
+  &.wi-imdb {
+    &:before {
+      content: $wi-brands-imdb;
+    }
+  }
+  
+  &.wi-innosoft {
+    &:before {
+      content: $wi-brands-innosoft;
+    }
+  }
+  
+  &.wi-instagram {
+    &:before {
+      content: $wi-brands-instagram;
+    }
+  }
+  
+  &.wi-instagram-square {
+    &:before {
+      content: $wi-brands-instagram-square;
+    }
+  }
+  
+  &.wi-instalod {
+    &:before {
+      content: $wi-brands-instalod;
+    }
+  }
+  
+  &.wi-intercom {
+    &:before {
+      content: $wi-brands-intercom;
+    }
+  }
+  
+  &.wi-internet-explorer {
+    &:before {
+      content: $wi-brands-internet-explorer;
+    }
+  }
+  
+  &.wi-invision {
+    &:before {
+      content: $wi-brands-invision;
+    }
+  }
+  
+  &.wi-ioxhost {
+    &:before {
+      content: $wi-brands-ioxhost;
+    }
+  }
+  
+  &.wi-itch-io {
+    &:before {
+      content: $wi-brands-itch-io;
+    }
+  }
+  
+  &.wi-itunes {
+    &:before {
+      content: $wi-brands-itunes;
+    }
+  }
+  
+  &.wi-itunes-note {
+    &:before {
+      content: $wi-brands-itunes-note;
+    }
+  }
+  
+  &.wi-java {
+    &:before {
+      content: $wi-brands-java;
+    }
+  }
+  
+  &.wi-jedi-order {
+    &:before {
+      content: $wi-brands-jedi-order;
+    }
+  }
+  
+  &.wi-jenkins {
+    &:before {
+      content: $wi-brands-jenkins;
+    }
+  }
+  
+  &.wi-jira {
+    &:before {
+      content: $wi-brands-jira;
+    }
+  }
+  
+  &.wi-joget {
+    &:before {
+      content: $wi-brands-joget;
+    }
+  }
+  
+  &.wi-joomla {
+    &:before {
+      content: $wi-brands-joomla;
+    }
+  }
+  
+  &.wi-js {
+    &:before {
+      content: $wi-brands-js;
+    }
+  }
+  
+  &.wi-jsfiddle {
+    &:before {
+      content: $wi-brands-jsfiddle;
+    }
+  }
+  
+  &.wi-js-square {
+    &:before {
+      content: $wi-brands-js-square;
+    }
+  }
+  
+  &.wi-kaggle {
+    &:before {
+      content: $wi-brands-kaggle;
+    }
+  }
+  
+  &.wi-keybase {
+    &:before {
+      content: $wi-brands-keybase;
+    }
+  }
+  
+  &.wi-keycdn {
+    &:before {
+      content: $wi-brands-keycdn;
+    }
+  }
+  
+  &.wi-kickstarter {
+    &:before {
+      content: $wi-brands-kickstarter;
+    }
+  }
+  
+  &.wi-kickstarter-k {
+    &:before {
+      content: $wi-brands-kickstarter-k;
+    }
+  }
+  
+  &.wi-korvue {
+    &:before {
+      content: $wi-brands-korvue;
+    }
+  }
+  
+  &.wi-laravel {
+    &:before {
+      content: $wi-brands-laravel;
+    }
+  }
+  
+  &.wi-lastfm {
+    &:before {
+      content: $wi-brands-lastfm;
+    }
+  }
+  
+  &.wi-lastfm-square {
+    &:before {
+      content: $wi-brands-lastfm-square;
+    }
+  }
+  
+  &.wi-leanpub {
+    &:before {
+      content: $wi-brands-leanpub;
+    }
+  }
+  
+  &.wi-less {
+    &:before {
+      content: $wi-brands-less;
+    }
+  }
+  
+  &.wi-line {
+    &:before {
+      content: $wi-brands-line;
+    }
+  }
+  
+  &.wi-linkedin {
+    &:before {
+      content: $wi-brands-linkedin;
+    }
+  }
+  
+  &.wi-linkedin-in {
+    &:before {
+      content: $wi-brands-linkedin-in;
+    }
+  }
+  
+  &.wi-linode {
+    &:before {
+      content: $wi-brands-linode;
+    }
+  }
+  
+  &.wi-linux {
+    &:before {
+      content: $wi-brands-linux;
+    }
+  }
+  
+  &.wi-lyft {
+    &:before {
+      content: $wi-brands-lyft;
+    }
+  }
+  
+  &.wi-magento {
+    &:before {
+      content: $wi-brands-magento;
+    }
+  }
+  
+  &.wi-mailchimp {
+    &:before {
+      content: $wi-brands-mailchimp;
+    }
+  }
+  
+  &.wi-mandalorian {
+    &:before {
+      content: $wi-brands-mandalorian;
+    }
+  }
+  
+  &.wi-markdown {
+    &:before {
+      content: $wi-brands-markdown;
+    }
+  }
+  
+  &.wi-mastodon {
+    &:before {
+      content: $wi-brands-mastodon;
+    }
+  }
+  
+  &.wi-maxcdn {
+    &:before {
+      content: $wi-brands-maxcdn;
+    }
+  }
+  
+  &.wi-mdb {
+    &:before {
+      content: $wi-brands-mdb;
+    }
+  }
+  
+  &.wi-medapps {
+    &:before {
+      content: $wi-brands-medapps;
+    }
+  }
+  
+  &.wi-medium {
+    &:before {
+      content: $wi-brands-medium;
+    }
+  }
+  
+  &.wi-medium-m {
+    &:before {
+      content: $wi-brands-medium-m;
+    }
+  }
+  
+  &.wi-medrt {
+    &:before {
+      content: $wi-brands-medrt;
+    }
+  }
+  
+  &.wi-meetup {
+    &:before {
+      content: $wi-brands-meetup;
+    }
+  }
+  
+  &.wi-megaport {
+    &:before {
+      content: $wi-brands-megaport;
+    }
+  }
+  
+  &.wi-mendeley {
+    &:before {
+      content: $wi-brands-mendeley;
+    }
+  }
+  
+  &.wi-microblog {
+    &:before {
+      content: $wi-brands-microblog;
+    }
+  }
+  
+  &.wi-microsoft {
+    &:before {
+      content: $wi-brands-microsoft;
+    }
+  }
+  
+  &.wi-mix {
+    &:before {
+      content: $wi-brands-mix;
+    }
+  }
+  
+  &.wi-mixcloud {
+    &:before {
+      content: $wi-brands-mixcloud;
+    }
+  }
+  
+  &.wi-mixer {
+    &:before {
+      content: $wi-brands-mixer;
+    }
+  }
+  
+  &.wi-mizuni {
+    &:before {
+      content: $wi-brands-mizuni;
+    }
+  }
+  
+  &.wi-modx {
+    &:before {
+      content: $wi-brands-modx;
+    }
+  }
+  
+  &.wi-monero {
+    &:before {
+      content: $wi-brands-monero;
+    }
+  }
+  
+  &.wi-napster {
+    &:before {
+      content: $wi-brands-napster;
+    }
+  }
+  
+  &.wi-neos {
+    &:before {
+      content: $wi-brands-neos;
+    }
+  }
+  
+  &.wi-nimblr {
+    &:before {
+      content: $wi-brands-nimblr;
+    }
+  }
+  
+  &.wi-node {
+    &:before {
+      content: $wi-brands-node;
+    }
+  }
+  
+  &.wi-node-js {
+    &:before {
+      content: $wi-brands-node-js;
+    }
+  }
+  
+  &.wi-npm {
+    &:before {
+      content: $wi-brands-npm;
+    }
+  }
+  
+  &.wi-ns8 {
+    &:before {
+      content: $wi-brands-ns8;
+    }
+  }
+  
+  &.wi-nutritionix {
+    &:before {
+      content: $wi-brands-nutritionix;
+    }
+  }
+  
+  &.wi-octopus-deploy {
+    &:before {
+      content: $wi-brands-octopus-deploy;
+    }
+  }
+  
+  &.wi-odnoklassniki {
+    &:before {
+      content: $wi-brands-odnoklassniki;
+    }
+  }
+  
+  &.wi-odnoklassniki-square {
+    &:before {
+      content: $wi-brands-odnoklassniki-square;
+    }
+  }
+  
+  &.wi-old-republic {
+    &:before {
+      content: $wi-brands-old-republic;
+    }
+  }
+  
+  &.wi-opencart {
+    &:before {
+      content: $wi-brands-opencart;
+    }
+  }
+  
+  &.wi-openid {
+    &:before {
+      content: $wi-brands-openid;
+    }
+  }
+  
+  &.wi-opera {
+    &:before {
+      content: $wi-brands-opera;
+    }
+  }
+  
+  &.wi-optin-monster {
+    &:before {
+      content: $wi-brands-optin-monster;
+    }
+  }
+  
+  &.wi-orcid {
+    &:before {
+      content: $wi-brands-orcid;
+    }
+  }
+  
+  &.wi-osi {
+    &:before {
+      content: $wi-brands-osi;
+    }
+  }
+  
+  &.wi-page4 {
+    &:before {
+      content: $wi-brands-page4;
+    }
+  }
+  
+  &.wi-pagelines {
+    &:before {
+      content: $wi-brands-pagelines;
+    }
+  }
+  
+  &.wi-palfed {
+    &:before {
+      content: $wi-brands-palfed;
+    }
+  }
+  
+  &.wi-patreon {
+    &:before {
+      content: $wi-brands-patreon;
+    }
+  }
+  
+  &.wi-paypal {
+    &:before {
+      content: $wi-brands-paypal;
+    }
+  }
+  
+  &.wi-penny-arcade {
+    &:before {
+      content: $wi-brands-penny-arcade;
+    }
+  }
+  
+  &.wi-perbyte {
+    &:before {
+      content: $wi-brands-perbyte;
+    }
+  }
+  
+  &.wi-periscope {
+    &:before {
+      content: $wi-brands-periscope;
+    }
+  }
+  
+  &.wi-phabricator {
+    &:before {
+      content: $wi-brands-phabricator;
+    }
+  }
+  
+  &.wi-phoenix-framework {
+    &:before {
+      content: $wi-brands-phoenix-framework;
+    }
+  }
+  
+  &.wi-phoenix-squadron {
+    &:before {
+      content: $wi-brands-phoenix-squadron;
+    }
+  }
+  
+  &.wi-php {
+    &:before {
+      content: $wi-brands-php;
+    }
+  }
+  
+  &.wi-pied-piper {
+    &:before {
+      content: $wi-brands-pied-piper;
+    }
+  }
+  
+  &.wi-pied-piper-alt {
+    &:before {
+      content: $wi-brands-pied-piper-alt;
+    }
+  }
+  
+  &.wi-pied-piper-hat {
+    &:before {
+      content: $wi-brands-pied-piper-hat;
+    }
+  }
+  
+  &.wi-pied-piper-pp {
+    &:before {
+      content: $wi-brands-pied-piper-pp;
+    }
+  }
+  
+  &.wi-pied-piper-square {
+    &:before {
+      content: $wi-brands-pied-piper-square;
+    }
+  }
+  
+  &.wi-pinterest {
+    &:before {
+      content: $wi-brands-pinterest;
+    }
+  }
+  
+  &.wi-pinterest-p {
+    &:before {
+      content: $wi-brands-pinterest-p;
+    }
+  }
+  
+  &.wi-pinterest-square {
+    &:before {
+      content: $wi-brands-pinterest-square;
+    }
+  }
+  
+  &.wi-playstation {
+    &:before {
+      content: $wi-brands-playstation;
+    }
+  }
+  
+  &.wi-product-hunt {
+    &:before {
+      content: $wi-brands-product-hunt;
+    }
+  }
+  
+  &.wi-pushed {
+    &:before {
+      content: $wi-brands-pushed;
+    }
+  }
+  
+  &.wi-python {
+    &:before {
+      content: $wi-brands-python;
+    }
+  }
+  
+  &.wi-qq {
+    &:before {
+      content: $wi-brands-qq;
+    }
+  }
+  
+  &.wi-quinscape {
+    &:before {
+      content: $wi-brands-quinscape;
+    }
+  }
+  
+  &.wi-quora {
+    &:before {
+      content: $wi-brands-quora;
+    }
+  }
+  
+  &.wi-raspberry-pi {
+    &:before {
+      content: $wi-brands-raspberry-pi;
+    }
+  }
+  
+  &.wi-ravelry {
+    &:before {
+      content: $wi-brands-ravelry;
+    }
+  }
+  
+  &.wi-react {
+    &:before {
+      content: $wi-brands-react;
+    }
+  }
+  
+  &.wi-reacteurope {
+    &:before {
+      content: $wi-brands-reacteurope;
+    }
+  }
+  
+  &.wi-readme {
+    &:before {
+      content: $wi-brands-readme;
+    }
+  }
+  
+  &.wi-rebel {
+    &:before {
+      content: $wi-brands-rebel;
+    }
+  }
+  
+  &.wi-reddit {
+    &:before {
+      content: $wi-brands-reddit;
+    }
+  }
+  
+  &.wi-reddit-alien {
+    &:before {
+      content: $wi-brands-reddit-alien;
+    }
+  }
+  
+  &.wi-reddit-square {
+    &:before {
+      content: $wi-brands-reddit-square;
+    }
+  }
+  
+  &.wi-redhat {
+    &:before {
+      content: $wi-brands-redhat;
+    }
+  }
+  
+  &.wi-red-river {
+    &:before {
+      content: $wi-brands-red-river;
+    }
+  }
+  
+  &.wi-renren {
+    &:before {
+      content: $wi-brands-renren;
+    }
+  }
+  
+  &.wi-replyd {
+    &:before {
+      content: $wi-brands-replyd;
+    }
+  }
+  
+  &.wi-researchgate {
+    &:before {
+      content: $wi-brands-researchgate;
+    }
+  }
+  
+  &.wi-resolving {
+    &:before {
+      content: $wi-brands-resolving;
+    }
+  }
+  
+  &.wi-rev {
+    &:before {
+      content: $wi-brands-rev;
+    }
+  }
+  
+  &.wi-rocketchat {
+    &:before {
+      content: $wi-brands-rocketchat;
+    }
+  }
+  
+  &.wi-rockrms {
+    &:before {
+      content: $wi-brands-rockrms;
+    }
+  }
+  
+  &.wi-r-project {
+    &:before {
+      content: $wi-brands-r-project;
+    }
+  }
+  
+  &.wi-rust {
+    &:before {
+      content: $wi-brands-rust;
+    }
+  }
+  
+  &.wi-safari {
+    &:before {
+      content: $wi-brands-safari;
+    }
+  }
+  
+  &.wi-salesforce {
+    &:before {
+      content: $wi-brands-salesforce;
+    }
+  }
+  
+  &.wi-sass {
+    &:before {
+      content: $wi-brands-sass;
+    }
+  }
+  
+  &.wi-schlix {
+    &:before {
+      content: $wi-brands-schlix;
+    }
+  }
+  
+  &.wi-scribd {
+    &:before {
+      content: $wi-brands-scribd;
+    }
+  }
+  
+  &.wi-searchengin {
+    &:before {
+      content: $wi-brands-searchengin;
+    }
+  }
+  
+  &.wi-sellcast {
+    &:before {
+      content: $wi-brands-sellcast;
+    }
+  }
+  
+  &.wi-sellsy {
+    &:before {
+      content: $wi-brands-sellsy;
+    }
+  }
+  
+  &.wi-servicestack {
+    &:before {
+      content: $wi-brands-servicestack;
+    }
+  }
+  
+  &.wi-shirtsinbulk {
+    &:before {
+      content: $wi-brands-shirtsinbulk;
+    }
+  }
+  
+  &.wi-shopify {
+    &:before {
+      content: $wi-brands-shopify;
+    }
+  }
+  
+  &.wi-shopware {
+    &:before {
+      content: $wi-brands-shopware;
+    }
+  }
+  
+  &.wi-simplybuilt {
+    &:before {
+      content: $wi-brands-simplybuilt;
+    }
+  }
+  
+  &.wi-sistrix {
+    &:before {
+      content: $wi-brands-sistrix;
+    }
+  }
+  
+  &.wi-sith {
+    &:before {
+      content: $wi-brands-sith;
+    }
+  }
+  
+  &.wi-sketch {
+    &:before {
+      content: $wi-brands-sketch;
+    }
+  }
+  
+  &.wi-skyatlas {
+    &:before {
+      content: $wi-brands-skyatlas;
+    }
+  }
+  
+  &.wi-skype {
+    &:before {
+      content: $wi-brands-skype;
+    }
+  }
+  
+  &.wi-slack {
+    &:before {
+      content: $wi-brands-slack;
+    }
+  }
+  
+  &.wi-slack-hash {
+    &:before {
+      content: $wi-brands-slack-hash;
+    }
+  }
+  
+  &.wi-slideshare {
+    &:before {
+      content: $wi-brands-slideshare;
+    }
+  }
+  
+  &.wi-snapchat {
+    &:before {
+      content: $wi-brands-snapchat;
+    }
+  }
+  
+  &.wi-snapchat-ghost {
+    &:before {
+      content: $wi-brands-snapchat-ghost;
+    }
+  }
+  
+  &.wi-snapchat-square {
+    &:before {
+      content: $wi-brands-snapchat-square;
+    }
+  }
+  
+  &.wi-soundcloud {
+    &:before {
+      content: $wi-brands-soundcloud;
+    }
+  }
+  
+  &.wi-sourcetree {
+    &:before {
+      content: $wi-brands-sourcetree;
+    }
+  }
+  
+  &.wi-speakap {
+    &:before {
+      content: $wi-brands-speakap;
+    }
+  }
+  
+  &.wi-speaker-deck {
+    &:before {
+      content: $wi-brands-speaker-deck;
+    }
+  }
+  
+  &.wi-spotify {
+    &:before {
+      content: $wi-brands-spotify;
+    }
+  }
+  
+  &.wi-squarespace {
+    &:before {
+      content: $wi-brands-squarespace;
+    }
+  }
+  
+  &.wi-stack-exchange {
+    &:before {
+      content: $wi-brands-stack-exchange;
+    }
+  }
+  
+  &.wi-stack-overflow {
+    &:before {
+      content: $wi-brands-stack-overflow;
+    }
+  }
+  
+  &.wi-stackpath {
+    &:before {
+      content: $wi-brands-stackpath;
+    }
+  }
+  
+  &.wi-staylinked {
+    &:before {
+      content: $wi-brands-staylinked;
+    }
+  }
+  
+  &.wi-steam {
+    &:before {
+      content: $wi-brands-steam;
+    }
+  }
+  
+  &.wi-steam-square {
+    &:before {
+      content: $wi-brands-steam-square;
+    }
+  }
+  
+  &.wi-steam-symbol {
+    &:before {
+      content: $wi-brands-steam-symbol;
+    }
+  }
+  
+  &.wi-sticker-mule {
+    &:before {
+      content: $wi-brands-sticker-mule;
+    }
+  }
+  
+  &.wi-strava {
+    &:before {
+      content: $wi-brands-strava;
+    }
+  }
+  
+  &.wi-stripe {
+    &:before {
+      content: $wi-brands-stripe;
+    }
+  }
+  
+  &.wi-stripe-s {
+    &:before {
+      content: $wi-brands-stripe-s;
+    }
+  }
+  
+  &.wi-studiovinari {
+    &:before {
+      content: $wi-brands-studiovinari;
+    }
+  }
+  
+  &.wi-stumbleupon {
+    &:before {
+      content: $wi-brands-stumbleupon;
+    }
+  }
+  
+  &.wi-stumbleupon-circle {
+    &:before {
+      content: $wi-brands-stumbleupon-circle;
+    }
+  }
+  
+  &.wi-superpowers {
+    &:before {
+      content: $wi-brands-superpowers;
+    }
+  }
+  
+  &.wi-supple {
+    &:before {
+      content: $wi-brands-supple;
+    }
+  }
+  
+  &.wi-suse {
+    &:before {
+      content: $wi-brands-suse;
+    }
+  }
+  
+  &.wi-swift {
+    &:before {
+      content: $wi-brands-swift;
+    }
+  }
+  
+  &.wi-symfony {
+    &:before {
+      content: $wi-brands-symfony;
+    }
+  }
+  
+  &.wi-teamspeak {
+    &:before {
+      content: $wi-brands-teamspeak;
+    }
+  }
+  
+  &.wi-telegram {
+    &:before {
+      content: $wi-brands-telegram;
+    }
+  }
+  
+  &.wi-telegram-plane {
+    &:before {
+      content: $wi-brands-telegram-plane;
+    }
+  }
+  
+  &.wi-tencent-weibo {
+    &:before {
+      content: $wi-brands-tencent-weibo;
+    }
+  }
+  
+  &.wi-themeco {
+    &:before {
+      content: $wi-brands-themeco;
+    }
+  }
+  
+  &.wi-themeisle {
+    &:before {
+      content: $wi-brands-themeisle;
+    }
+  }
+  
+  &.wi-the-red-yeti {
+    &:before {
+      content: $wi-brands-the-red-yeti;
+    }
+  }
+  
+  &.wi-think-peaks {
+    &:before {
+      content: $wi-brands-think-peaks;
+    }
+  }
+  
+  &.wi-tiktok {
+    &:before {
+      content: $wi-brands-tiktok;
+    }
+  }
+  
+  &.wi-trade-federation {
+    &:before {
+      content: $wi-brands-trade-federation;
+    }
+  }
+  
+  &.wi-trello {
+    &:before {
+      content: $wi-brands-trello;
+    }
+  }
+  
+  &.wi-tumblr {
+    &:before {
+      content: $wi-brands-tumblr;
+    }
+  }
+  
+  &.wi-tumblr-square {
+    &:before {
+      content: $wi-brands-tumblr-square;
+    }
+  }
+  
+  &.wi-twitch {
+    &:before {
+      content: $wi-brands-twitch;
+    }
+  }
+  
+  &.wi-twitter {
+    &:before {
+      content: $wi-brands-twitter;
+    }
+  }
+  
+  &.wi-twitter-square {
+    &:before {
+      content: $wi-brands-twitter-square;
+    }
+  }
+  
+  &.wi-typo3 {
+    &:before {
+      content: $wi-brands-typo3;
+    }
+  }
+  
+  &.wi-uber {
+    &:before {
+      content: $wi-brands-uber;
+    }
+  }
+  
+  &.wi-ubuntu {
+    &:before {
+      content: $wi-brands-ubuntu;
+    }
+  }
+  
+  &.wi-uikit {
+    &:before {
+      content: $wi-brands-uikit;
+    }
+  }
+  
+  &.wi-umbraco {
+    &:before {
+      content: $wi-brands-umbraco;
+    }
+  }
+  
+  &.wi-uncharted {
+    &:before {
+      content: $wi-brands-uncharted;
+    }
+  }
+  
+  &.wi-uniregistry {
+    &:before {
+      content: $wi-brands-uniregistry;
+    }
+  }
+  
+  &.wi-unity {
+    &:before {
+      content: $wi-brands-unity;
+    }
+  }
+  
+  &.wi-unsplash {
+    &:before {
+      content: $wi-brands-unsplash;
+    }
+  }
+  
+  &.wi-untappd {
+    &:before {
+      content: $wi-brands-untappd;
+    }
+  }
+  
+  &.wi-ups {
+    &:before {
+      content: $wi-brands-ups;
+    }
+  }
+  
+  &.wi-usb {
+    &:before {
+      content: $wi-brands-usb;
+    }
+  }
+  
+  &.wi-usps {
+    &:before {
+      content: $wi-brands-usps;
+    }
+  }
+  
+  &.wi-ussunnah {
+    &:before {
+      content: $wi-brands-ussunnah;
+    }
+  }
+  
+  &.wi-vaadin {
+    &:before {
+      content: $wi-brands-vaadin;
+    }
+  }
+  
+  &.wi-viacoin {
+    &:before {
+      content: $wi-brands-viacoin;
+    }
+  }
+  
+  &.wi-viadeo {
+    &:before {
+      content: $wi-brands-viadeo;
+    }
+  }
+  
+  &.wi-viadeo-square {
+    &:before {
+      content: $wi-brands-viadeo-square;
+    }
+  }
+  
+  &.wi-viber {
+    &:before {
+      content: $wi-brands-viber;
+    }
+  }
+  
+  &.wi-vimeo {
+    &:before {
+      content: $wi-brands-vimeo;
+    }
+  }
+  
+  &.wi-vimeo-square {
+    &:before {
+      content: $wi-brands-vimeo-square;
+    }
+  }
+  
+  &.wi-vimeo-v {
+    &:before {
+      content: $wi-brands-vimeo-v;
+    }
+  }
+  
+  &.wi-vine {
+    &:before {
+      content: $wi-brands-vine;
+    }
+  }
+  
+  &.wi-vk {
+    &:before {
+      content: $wi-brands-vk;
+    }
+  }
+  
+  &.wi-vnv {
+    &:before {
+      content: $wi-brands-vnv;
+    }
+  }
+  
+  &.wi-vuejs {
+    &:before {
+      content: $wi-brands-vuejs;
+    }
+  }
+  
+  &.wi-watchman-monitoring {
+    &:before {
+      content: $wi-brands-watchman-monitoring;
+    }
+  }
+  
+  &.wi-waze {
+    &:before {
+      content: $wi-brands-waze;
+    }
+  }
+  
+  &.wi-weebly {
+    &:before {
+      content: $wi-brands-weebly;
+    }
+  }
+  
+  &.wi-weibo {
+    &:before {
+      content: $wi-brands-weibo;
+    }
+  }
+  
+  &.wi-weixin {
+    &:before {
+      content: $wi-brands-weixin;
+    }
+  }
+  
+  &.wi-whatsapp {
+    &:before {
+      content: $wi-brands-whatsapp;
+    }
+  }
+  
+  &.wi-whatsapp-square {
+    &:before {
+      content: $wi-brands-whatsapp-square;
+    }
+  }
+  
+  &.wi-whmcs {
+    &:before {
+      content: $wi-brands-whmcs;
+    }
+  }
+  
+  &.wi-wikipedia-w {
+    &:before {
+      content: $wi-brands-wikipedia-w;
+    }
+  }
+  
+  &.wi-windows {
+    &:before {
+      content: $wi-brands-windows;
+    }
+  }
+  
+  &.wi-wix {
+    &:before {
+      content: $wi-brands-wix;
+    }
+  }
+  
+  &.wi-wizards-of-the-coast {
+    &:before {
+      content: $wi-brands-wizards-of-the-coast;
+    }
+  }
+  
+  &.wi-wodu {
+    &:before {
+      content: $wi-brands-wodu;
+    }
+  }
+  
+  &.wi-wolf-pack-battalion {
+    &:before {
+      content: $wi-brands-wolf-pack-battalion;
+    }
+  }
+  
+  &.wi-wordpress {
+    &:before {
+      content: $wi-brands-wordpress;
+    }
+  }
+  
+  &.wi-wordpress-simple {
+    &:before {
+      content: $wi-brands-wordpress-simple;
+    }
+  }
+  
+  &.wi-wpbeginner {
+    &:before {
+      content: $wi-brands-wpbeginner;
+    }
+  }
+  
+  &.wi-wpexplorer {
+    &:before {
+      content: $wi-brands-wpexplorer;
+    }
+  }
+  
+  &.wi-wpforms {
+    &:before {
+      content: $wi-brands-wpforms;
+    }
+  }
+  
+  &.wi-wpressr {
+    &:before {
+      content: $wi-brands-wpressr;
+    }
+  }
+  
+  &.wi-xbox {
+    &:before {
+      content: $wi-brands-xbox;
+    }
+  }
+  
+  &.wi-xing {
+    &:before {
+      content: $wi-brands-xing;
+    }
+  }
+  
+  &.wi-xing-square {
+    &:before {
+      content: $wi-brands-xing-square;
+    }
+  }
+  
+  &.wi-yahoo {
+    &:before {
+      content: $wi-brands-yahoo;
+    }
+  }
+  
+  &.wi-yammer {
+    &:before {
+      content: $wi-brands-yammer;
+    }
+  }
+  
+  &.wi-yandex {
+    &:before {
+      content: $wi-brands-yandex;
+    }
+  }
+  
+  &.wi-yandex-international {
+    &:before {
+      content: $wi-brands-yandex-international;
+    }
+  }
+  
+  &.wi-yarn {
+    &:before {
+      content: $wi-brands-yarn;
+    }
+  }
+  
+  &.wi-y-combinator {
+    &:before {
+      content: $wi-brands-y-combinator;
+    }
+  }
+  
+  &.wi-yelp {
+    &:before {
+      content: $wi-brands-yelp;
+    }
+  }
+  
+  &.wi-yoast {
+    &:before {
+      content: $wi-brands-yoast;
+    }
+  }
+  
+  &.wi-youtube {
+    &:before {
+      content: $wi-brands-youtube;
+    }
+  }
+  
+  &.wi-youtube-square {
+    &:before {
+      content: $wi-brands-youtube-square;
+    }
+  }
+  
+  &.wi-zhihu {
+    &:before {
+      content: $wi-brands-zhihu;
+    }
+  }
+  
+  
+}

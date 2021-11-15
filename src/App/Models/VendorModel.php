@@ -138,13 +138,12 @@
                 $id = Model::setInt((isset($vendor["id"])) ? $vendor["id"] : null);
                 $company_id = Model::setInt((isset($vendor["company_id"])) ? $vendor["company_id"] : null);
                 $status_id = Model::setInt((isset($vendor["status_id"])) ? $vendor["status_id"] : null);
-
                 $show_online = Model::setBool((isset($vendor["show_online"])) ? $vendor["show_online"] : null);
                 $show_sales = Model::setBool((isset($vendor["show_sales"])) ? $vendor["show_sales"] : null);
                 $show_ops = Model::setBool((isset($vendor["show_ops"])) ? $vendor["show_ops"] : null);
                 $is_provider = Model::setBool((isset($vendor["is_provider"])) ? $vendor["is_provider"] : null);
-                $sku = Model::setString((isset($vendor["sku"])) ? $vendor["sku"] : Vendor::generateSKU($vendor));
-                //$sku = Model::setString((isset($vendor["sku"])) ? $vendor["sku"] : null);
+                //$sku = Model::setString((isset($vendor["sku"])) ? $vendor["sku"] : Vendor::generateSKU($vendor));
+                $sku = Model::setString((isset($vendor["sku"])) ? $vendor["sku"] : null);
                 $enabled = Model::setBool((isset($vendor["enabled"])) ? $vendor["enabled"] : null);
                 $note = Model::setLongText((isset($vendor["note"])) ? $vendor["note"] : null);
                 $created_by = Model::setInt($user_id);
@@ -174,14 +173,30 @@
                 modified_by = VALUES(modified_by),
                 date_modified = VALUES(date_modified),
                 enabled = VALUES(enabled)";
-
+                Log::$debug_log->trace($sql);
                 Model::$db->rawQuery($sql);
                 $vendor_id = Model::$db->getInsertId();
+                Log::$debug_log->trace($vendor_id);
                 if ($vendor_id) {
-                    return self::get($vendor_id);
-                }
+                    if ($vendor_id) {
+                        $update = "
+                        UPDATE      vendor
+                        SET         sku = generateCodeDirectId($vendor_id)
+                        WHERE       id = $vendor_id;";
+                        try {
+                            Model::$db->rawQuery($update);
+                            $ret = self::get((int)$vendor_id);
 
-                //Log::$debug_log->error("No Vendor Id");
+                            return $ret;
+                        } catch (Exception $ex) {
+                            Log::$debug_log->error($ex);
+
+                            return [];
+                        }
+                    } else {
+                        Log::$debug_log->info("hh");
+                    }
+                }
 
                 return [];
             } catch (Exception $e) {
@@ -210,5 +225,5 @@
                 return [];
             }
         }
-        
+
     }

@@ -78,8 +78,8 @@
     //*/
 
     $route_params = Router::load([
-        ROUTES_PATH . "/web.php",
-        ROUTES_PATH . "/api.php",
+        ROUTES_PATH . "/Web.php",
+        ROUTES_PATH . "/Api.php",
     ])::direct(Request::uri(), Request::method());
 
     if (isset($route_params["controller"], $route_params["action"])) {

@@ -73,7 +73,7 @@
 
             foreach ($results AS $contact) {
                 $temp[] = self::format($contact);
-                Log::$debug_log->trace($contact);
+//                Log::$debug_log->trace($contact);
             }
             // ----
             View::render_json($temp);

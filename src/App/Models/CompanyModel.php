@@ -172,7 +172,7 @@
                 date_modified = VALUES(date_modified),
                 enabled = VALUES(enabled)";
 
-            Log::$debug_log->trace($sql);
+//            Log::$debug_log->trace($sql);
             try {
                 Model::$db->rawQuery($sql);
                 $company_id = Model::$db->getInsertId();

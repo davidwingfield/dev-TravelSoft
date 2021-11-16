@@ -1569,6 +1569,352 @@ $.fn.BuildKeyword = function (keywords) {
     }
 }
 
+var Upload = function (file) {
+    this.file = file
+}
+
+Upload.prototype.getType = function () {
+    return this.file.type
+}
+
+Upload.prototype.getSize = function () {
+    return this.file.size
+}
+
+Upload.prototype.getName = function () {
+    return this.file.name
+}
+
+Upload.prototype.doUpload = function () {
+    const _provider_edit = document.getElementById("provider_edit")
+    const _provider_company_id = document.getElementById("provider_company_id")
+    const _image_manager_caption = document.getElementById("image_manager_caption")
+    const _image_manager_title = document.getElementById("image_manager_title")
+    const _image_manager_alt_text = document.getElementById("image_manager_alt_text")
+    const _image_manager_is_cover_image = document.getElementById("image_manager_is_cover_image")
+    var that = this
+    var formData = new FormData()
+    
+    // add assoc key values, this will be posts values
+    formData.append("file", this.file, this.getName())
+    formData.append("upload_file", true)
+    formData.append("title", (_image_manager_title.value !== "") ? _image_manager_title.value : null)
+    formData.append("caption", (_image_manager_caption.value !== "") ? _image_manager_caption.value : null)
+    formData.append("is_cover_image", (_image_manager_is_cover_image.checked !== true) ? parseInt(0) : parseInt(1))
+    formData.append("alt", (_image_manager_alt_text.value !== "") ? _image_manager_alt_text.value : null)
+    
+    if (_provider_edit) {
+        formData.append("directory_id", parseInt(_provider_company_id.value))
+        formData.append("directory", "company")
+    }
+    
+    $.ajax({
+        type: "POST",
+        url: "/api/v1.0/images/update",
+        xhr: function () {
+            var myXhr = $.ajaxSettings.xhr()
+            if (myXhr.upload) {
+                myXhr.upload.addEventListener("progress", that.progressHandling, false)
+            }
+            return myXhr
+        },
+        success: function (data) {
+            let image, result = {}
+            if (data) {
+                if (data.result) {
+                    result = data.result
+                    console.log("result", result)
+                }
+                
+                if (result[0]) {
+                    console.log("result[0]", result[0])
+                    image = result[0]
+                }
+            }
+            
+            console.log("image", image)
+            
+            let imageManager
+            if (_provider_edit) {
+                imageManager = $("#companyImages").imageManager()
+            }
+            
+            imageManager.addImage(image)
+            toastr.success("Image Uploaded")
+            Upload.prototype.progressReset()
+        },
+        error: function (error) {
+            console.log("error", error)
+        },
+        async: true,
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        timeout: 60000,
+    })
+}
+
+Upload.prototype.progressHandling = function (event) {
+    var percent = 0
+    var position = event.loaded || event.position
+    var total = event.total
+    var progress_bar_id = "#progress-wrp"
+    if (event.lengthComputable) {
+        percent = Math.ceil(position / total * 100)
+    }
+    // update progressbars classes so it fits your code
+    $(progress_bar_id + " .progress-bar").css("width", +percent + "%")
+    $(progress_bar_id + " .status").text(percent + "%")
+}
+
+Upload.prototype.progressReset = function () {
+    var percent = 0
+    var progress_bar_id = "#progress-wrp"
+    $(progress_bar_id + " .progress-bar").css("width", +percent + "%")
+    $(progress_bar_id + " .status").text(percent + "%")
+}
+
+$.fn.imageManager = function (options) {
+    const carName = $(this).attr("id")
+    const $carouselWrapper = $(this).find("div.carousel")
+    const $carouselIndicators = $(this).find("ol.carousel-indicators")
+    const $carouselInner = $(this).find("div.carousel-inner")
+    const $dropify = $(this).find("input.dropify")
+    const $imageForm = $("#image_manager_form_data")
+    
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    
+    $("#image_manager_upload_button")
+      .on("click", function () {
+          let file = $("input.dropify")[0].files[0]
+          let upload = new Upload(file)
+          upload.doUpload()
+      })
+    
+    $("button.dropify-clear")
+      .on("click", function () {
+          $("input.dropify").trigger("change")
+      })
+    
+    $("input.dropify")
+      .on("change", function () {
+          
+          if ($(this).val() !== "") {
+              show_form()
+          } else {
+              hide_form()
+          }
+      })
+    
+    const init = function (options) {
+        
+        if (options) {
+            console.log("options", options)
+            if (options.images) {
+                loadAll(options.images)
+            }
+            if (options.id) {
+                carouselId = "carousel-" + options.id
+            }
+        }
+        
+        $carouselWrapper.carousel()
+    }
+    
+    const show_form = function () {
+        $imageForm.show()
+    }
+    
+    const hide_form = function () {
+        $imageForm.hide()
+    }
+    
+    const default_detail = function () {
+        
+        return {
+            id: null,
+            path: null,
+            type: null,
+            caption: null,
+            alt: null,
+            is_cover_image: 0,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
+        }
+        
+    }
+    
+    const set_detail = function (image) {
+        let detail = default_detail()
+        detail.alt = (image.alt) ? image.alt : ""
+        detail._caption = (image.caption) ? image.caption : "This is a Test Caption 3"
+        detail.id = (image.id) ? image.id : 3
+        detail.is_cover_image = (image.is_cover_image) ? image.is_cover_image : 0
+        detail.path = (image.path) ? image.path : "/company/1/image_3"
+        detail.title = (image.title) ? image.title : "Image 3"
+        detail.type = (image.type) ? image.type : "jpg"
+        
+        return detail
+    }
+    
+    const formatImage = function (image, count) {
+        let detail = set_detail(image)
+        let image_alt = (image.alt) ? image.alt : ""
+        let image_name = (image.name) ? image.name : ""
+        let image_caption = (image.caption) ? image.caption : ""
+        let image_id = (image.id) ? image.id : 3
+        let image_is_cover_image = (image.is_cover_image) ? image.is_cover_image : 0
+        let image_path = (image.path) ? image.path : ""
+        let image_title = (image.title) ? image.title : ""
+        let image_type = (image.extension) ? image.extension : "jpg"
+        let active = (count === 0) ? "active " : ""
+        let $heading = $("<H3>")
+        let $image = $("<img>")
+        let $carouselItem = $("<div>")
+        let $carouselCaption = $("<div>")
+        let $view = $("<div>")
+        let $mask = $("<div>")
+        let $caption = $("<p>")
+        
+        $carouselItem
+          .addClass("carousel-item " + active)
+        
+        $view
+          .addClass("view")
+          .appendTo($carouselItem)
+        
+        $image
+          .addClass("d-block w-100 imageManager_edit")
+          .attr("src", `${image_path}/${image_name}.${image_type}`)
+          .data("imgid", image_id)
+          .data("is_cover", image_is_cover_image)
+          .attr("alt", image_alt)
+          .appendTo($view)
+        
+        $mask
+          .addClass("mask rgba-blue-light")
+          .appendTo($view)
+        
+        $heading
+          .addClass("")
+          .text(image_title)
+          .appendTo($carouselCaption)
+        
+        $caption
+          .addClass("")
+          .text(image_caption)
+          .appendTo($carouselCaption)
+        
+        $carouselCaption
+          .addClass("carousel-caption")
+          .appendTo($carouselItem)
+        
+        return $carouselItem
+        
+        switch (image_type) {
+            case "jpg":
+            case "jpeg":
+            case "gif":
+            case "png":
+                return `
+                    <div class="carousel-item ${active}">
+                        <!--Mask color-->
+                        <div class="view">
+                            <img class="d-block w-100 imageManager_edit" src="" data-imgid="${image_id}" data-is_cover="${image_is_cover_image}" alt="${image_alt}">
+                            <div class="mask rgba-blue-light" onclick=""></div>
+                        </div>
+                        <div class="carousel-caption">
+                            <h3 class="h3-responsive" data-imgid="${image_id}"  data-is_cover="${image_is_cover_image}" onclick="$.fn.imageManager.this(this)">${image_title}</h3>
+                            <p>${image_caption}</p>
+                        </div>
+                    </div>
+            `
+            case "avi":
+            case "mpeg":
+            case "mp4":
+                return `
+                    <div class="carousel-item ${active}">
+                        <!--Mask color-->
+                        <div class="view">
+                            <video class="video-fluid" autoplay loop muted>
+                                <source src="/public/img/${image_path}.${image_type}" type="video/mp4" />
+                            </video>
+                            <div class="mask rgba-blue-light"></div>
+                        </div>
+                        <div class="carousel-caption">
+                            <h3 class="h3-responsive" data-imgid="${image_id}"  data-is_cover="${image_is_cover_image}" >${image_title}</h3>
+                            <p>${image_caption}</p>
+                        </div>
+                    </div>
+            `
+        }
+        
+    }
+    
+    const formatIndicator = function (image, count) {
+        let active = (count === 0) ? "active" : ""
+        let $li = $("<li>")
+        $li
+          .addClass(active)
+          .attr("data-slide-to", count)
+          .attr("data-target", "#carousel-companyImageManager")
+        return $li
+        
+        return `
+        <li data-target="#carousel-companyImageManager" data-slide-to="${count}" class="${active}"></li>
+        `
+    }
+    
+    let counter = 0
+    let carouselId = ""
+    
+    const loadAll = function (images) {
+        
+        $carouselIndicators.empty()
+        $carouselInner.empty()
+        this.all = new Map()
+        for (let n = 0; n < images.length; n++) {
+            let im = images[n]
+            this.all.set(im.id, im)
+            $carouselIndicators.append(formatIndicator(im, counter))
+            $carouselInner.append(formatImage(im, counter))
+            counter += 1
+        }
+        console.log("all", this.all)
+    }
+    
+    init(options)
+    
+    const addImage = function (image) {
+        if (image) {
+            this.all.set(image.id, image)
+            $carouselIndicators.appendTo(formatIndicator(image, counter))
+            $carouselInner.appendTo(formatImage(image, counter))
+            counter += 1
+        }
+        
+    }
+    
+    return {
+        addImage: function (image) {
+            addImage(image)
+        },
+        reset: function () {
+        
+        },
+        all: new Map(),
+        init: function (settings) {
+            init(settings)
+        },
+    }
+}
+
+
 const LocationTypes = (function () {
     "use strict"
     
@@ -1806,7 +2152,8 @@ const City = (function () {
     }
     
     const on_click_outside = (e) => {
-        let tar = $(e.target).parents("form." + class_name)
+        let tar = $(e.target).parents("div." + class_name)
+        
         if (!tar[0] && !e.target.className.includes("select-add-option")) {
             City.close()
         }
@@ -1895,18 +2242,19 @@ const City = (function () {
             try {
                 sendPostRequest("/api/v1.0/cities/update", dataToSend, function (data, status, xhr) {
                     if (data && data[0]) {
-                        City.all.set(data[0].city_id, data[0])
+                        let new_city = data[0]
+                        City.all.set(new_city.id, new_city)
                         let city_elements = $("select[data-type='city']")
-                        //console.log(city_elements.length)
-                        City.id = data[0].city_id
+                        
+                        City.id = new_city.id
                         city_elements.each(function (index, element) {
-                            var newOption = new Option(data[0].city_name, data[0].city_id, false, false)
+                            var newOption = new Option(new_city.name, new_city.id, false, false)
                             $(element).append(newOption).trigger("change")
                             
                         })
-                        $($this).val(data[0].city_id).trigger("change")
+                        $($this).val(new_city.id).trigger("change")
                         City.close()
-                        toastr.success("City: " + data[0].city_id + " updated")
+                        toastr.success("City: " + new_city.id + " updated")
                         
                     } else {
                         return handle_city_error("Error: 1")
@@ -2273,7 +2621,7 @@ const Province = (function () {
         let valid = true
         // ----
         if (!_name || !_province_iso2 || !_province_iso3) {
-            handle_province_error("Error Processing Data")
+            handle_country_error("Error Processing Data")
             return false
         }
         
@@ -2325,7 +2673,8 @@ const Province = (function () {
     }
     
     const on_click_outside = (e) => {
-        let tar = $(e.target).parents("form." + class_name)
+        let tar = $(e.target).parents("div." + class_name)
+        
         if (!tar[0] && !e.target.className.includes("select-add-option")) {
             Province.close()
         }
@@ -2548,7 +2897,7 @@ const Province = (function () {
         name_text_element.id = "province_name"
         name_text_element.name = "province_name"
         name_text_element.type = "text"
-        name_text_element.classList = ["form-control"]
+        name_text_element.classList = ["form-control " + class_name]
         name_label_element.htmlFor = "province_name"
         name_label_element.innerHTML = "Name:"
         error_element1.id = "province_name-error"
@@ -2557,7 +2906,7 @@ const Province = (function () {
         iso2_text_element.name = "province_iso2"
         iso2_text_element.type = "text"
         iso2_text_element.maxLength = 2
-        iso2_text_element.classList = ["form-control"]
+        iso2_text_element.classList = ["form-control " + class_name]
         iso2_label_element.htmlFor = "province_iso2"
         iso2_label_element.innerHTML = "ISO2:"
         error_element2.id = "province_iso2-error"
@@ -2566,7 +2915,7 @@ const Province = (function () {
         iso3_text_element.name = "province_iso3"
         iso3_text_element.type = "text"
         iso3_text_element.maxLength = 3
-        iso3_text_element.classList = ["form-control"]
+        iso3_text_element.classList = ["form-control " + class_name]
         iso3_label_element.htmlFor = "province_iso3"
         iso3_label_element.innerHTML = "ISO3:"
         error_element3.id = "province_iso3-error"
@@ -2732,16 +3081,22 @@ const Province = (function () {
         let _province_iso3 = document.getElementById("province_iso3")
         let _country_id = document.getElementById(dropdown_id.replace(/province_id/g, "") + "country_id")
         if (!isNaN(parseInt(_country_id.value))) {
+            
             if (_name, _province_iso2, _province_iso3, _country_id) {
-                province_detail.name = _name.value
-                province_detail.iso2 = _province_iso2.value
-                province_detail.iso3 = _province_iso3.value
-                province_detail.country_id = parseInt(_country_id.value)
-                let r = confirm("Are you sure you want to edit this record?")
-                if (r === true) {
-                    update_province_record($this, remove_nulls(province_detail))
+                if (validate_form()) {
+                    province_detail.name = _name.value
+                    province_detail.iso2 = _province_iso2.value
+                    province_detail.iso3 = _province_iso3.value
+                    province_detail.country_id = parseInt(_country_id.value)
+                    
+                    confirmDialog(`Would you like to update?`, (ans) => {
+                        if (ans) {
+                            update_province_record($this, remove_nulls(province_detail))
+                        }
+                    })
                 }
             }
+            
         }
         
     }
@@ -2751,19 +3106,21 @@ const Province = (function () {
             try {
                 sendPostRequest("/api/v1.0/provinces/update", dataToSend, function (data, status, xhr) {
                     if (data && data[0]) {
-                        Province.all.set(data[0].province_id, data[0])
+                        let new_province = data[0]
+                        console.log("new_province", new_province)
+                        Province.all.set(new_province.id, new_province)
                         let province_elements = $("select[data-type='province']")
-                        Province.id = data[0].province_id
+                        Province.id = new_province.id
                         City.id = null
                         province_elements.each(function (index, element) {
-                            var newOption = new Option(data[0].province_name, data[0].province_id, false, false)
+                            var newOption = new Option(new_province.name, new_province.id, false, false)
                             $(element).append(newOption).trigger("change")
                         })
                         
-                        $($this).val(data[0].province_id).trigger("change")
+                        $($this).val(new_province.id).trigger("change")
                         
                         Province.close()
-                        toastr.success("Province: " + data[0].province_id + " updated")
+                        toastr.success("Province: " + new_province.id + " updated")
                         
                     } else {
                         return handle_province_error("Error: 1")
@@ -2991,15 +3348,12 @@ const Country = (function () {
     
     const update_country_record = function ($this, dataToSend) {
         if (dataToSend) {
-            
             try {
                 sendPostRequest("/api/v1.0/countries/update", dataToSend, function (data, status, xhr) {
                     if (data && data[0]) {
                         let new_country = data[0]
-                        console.log("new country", new_country)
                         Country.all.set(new_country.id, new_country)
                         let country_elements = $("select[data-type='country']")
-                        
                         country_elements.each(function (index, element) {
                             var newOption = new Option(new_country.name, new_country.id, false, false)
                             $(element).append(newOption).trigger("change")
@@ -3310,10 +3664,12 @@ const Country = (function () {
                 country_detail.iso2 = (_country_iso2.value !== "") ? _country_iso2.value : null
                 country_detail.iso3 = (_country_iso3.value !== "") ? _country_iso3.value : null
                 
-                let r = confirm("Are you sure you want to edit this record?")
-                if (r === true) {
-                    update_country_record($this, remove_nulls(country_detail))
-                }
+                confirmDialog(`Would you like to update?`, (ans) => {
+                    if (ans) {
+                        update_country_record($this, remove_nulls(country_detail))
+                    }
+                })
+                
             }
         } else {
             toastr.error("Error: 2")
@@ -5718,8 +6074,11 @@ const Company = (function () {
     // ----
     
     const init = function (company) {
+        console.log("Company:init()", company)
+        let images = []
         if (company) {
             let detail = set_detail(company)
+            images = (company.images) ? company.images : []
             populate_form(detail)
         }
         
@@ -5731,12 +6090,11 @@ const Company = (function () {
                 hide_form()
             }
         }
-    }
-    
-    const get_cover_image = function () {
-        var files = document.getElementById("company_cover_image").files
         
-        console.log("files", files)
+        $("#companyImages").imageManager({
+            id: "company_image_manager",
+            images: images,
+        })
     }
     
     // ----
@@ -5837,8 +6195,6 @@ const Company = (function () {
         }
         
     }
-    
-    // ----
     
     const set_progress = function () {
         if (!isNaN(parseInt(_company_id.value))) {
@@ -7757,6 +8113,7 @@ const Provider = (function () {
           
           confirmDialog(`Would you like to update?`, (ans) => {
               if (ans) {
+                  
                   save({
                       "company_detail": company_detail,
                       "provider_detail": provider_detail,
@@ -7766,6 +8123,7 @@ const Provider = (function () {
                       "contacts": contacts,
                   })
               }
+              
           })
       })
     
@@ -7928,7 +8286,7 @@ const Provider = (function () {
      * build provider index table
      */
     const build_index_table = function () {
-        //log("build_index_table")
+        
         $index_table = $(_table_provider_index).table({
             table_type: "display_list",
             data: Provider.all,
@@ -8051,9 +8409,7 @@ const Provider = (function () {
      * @param provider
      */
     const save = function (provider) {
-        /*
-        console.log("Provider:save()", provider)
-        //*/
+        
         if (provider) {
             updateProvider(provider, function (data) {
                 if (data) {
@@ -8239,8 +8595,9 @@ const Provider = (function () {
             $provider_key = $(_provider_key).BuildKeyword(provider_keywords)
             $(_provider_description_long).val(provider.description_long)
             $(_provider_description_short).val(provider.description_short)
+            _provider_enabled.checked = (provider.enabled) ? (provider.enabled === 1) : true
         }
-        _provider_enabled.checked = (provider.enabled) ? (provider.enabled === 1) : true
+        
     }
     
     /**

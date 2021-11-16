@@ -413,8 +413,11 @@ const Company = (function () {
     // ----
     
     const init = function (company) {
+        console.log("Company:init()", company)
+        let images = []
         if (company) {
             let detail = set_detail(company)
+            images = (company.images) ? company.images : []
             populate_form(detail)
         }
         
@@ -426,12 +429,11 @@ const Company = (function () {
                 hide_form()
             }
         }
-    }
-    
-    const get_cover_image = function () {
-        var files = document.getElementById("company_cover_image").files
         
-        console.log("files", files)
+        $("#companyImages").imageManager({
+            id: "company_image_manager",
+            images: images,
+        })
     }
     
     // ----
@@ -532,8 +534,6 @@ const Company = (function () {
         }
         
     }
-    
-    // ----
     
     const set_progress = function () {
         if (!isNaN(parseInt(_company_id.value))) {

@@ -3,6 +3,7 @@
     namespace Framework\App\Models;
 
     use Exception;
+    use Framework\App\Controllers\Image;
     use Framework\Core\Model;
     use Framework\Logger\Log;
 
@@ -56,14 +57,23 @@
          */
         public static function get(int $id = null): array
         {
+            $company_images = [];
             $where = "";
             try {
                 if (!is_null($id)) {
                     $where = "
                     WHERE           COMPANY.id = $id";
+
+                    $company_images = Image::getByCompanyId((int)$id);
+                    Log::$debug_log->trace($company_images);
                 }
 
                 $sql = self::$selectQuery . $where;
+
+                $companies = Model::$db->rawQuery($sql);
+                foreach ($companies as $company) {
+                    Log::$debug_log->trace($company);
+                }
 
                 return Model::$db->rawQuery($sql);
 

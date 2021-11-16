@@ -120,6 +120,16 @@
                     ),
                     "data" => array(),
                 ),
+                "Contacts" => array(
+                    "controls" => "panel_tab_contact_detail",
+                    "href" => "panel_tab_contact_detail",
+                    "id" => "panel_tab_contact",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
                 "Meta" => array(
                     "controls" => "panel_tab_meta_detail",
                     "href" => "panel_tab_meta_detail",
@@ -203,6 +213,7 @@
             $address_detail = [];
             $company_detail = [];
             $vendor_detail = [];
+            $company_images = [];
             $location_detail = [];
             //----
             if (isset($params["provider_id"])) {
@@ -249,6 +260,7 @@
 
                 if (isset($provider_detail["company"])) {
                     $company_detail = $provider_detail["company"];
+                    $company_detail["images"] = array();
                 }
 
                 if (isset($provider_detail["addresses"])) {
@@ -269,6 +281,7 @@
                  */
                 $data["provider_detail"] = $provider_detail;
                 $data["company_detail"] = $company_detail;
+                $data["company_detail"]["images"] = $company_images;
                 $data["contact_detail"] = $contact_detail;
                 $data["vendor_detail"] = $vendor_detail;
                 $data["location_detail"] = $location_detail;
@@ -349,7 +362,7 @@
             }
 
             // ----
-            
+
             View::render_json(self::format_get($provider));
             exit(1);
         }
@@ -427,11 +440,9 @@
                 "id" => (int)$provider["provider_id"],
                 "name" => $provider["company_name"],
                 "code_direct_id" => $provider["provider_code_direct_id"],
-
                 "description_long" => $provider["provider_description_long"],
                 "description_short" => $provider["provider_description_short"],
                 "keywords" => $provider["provider_keywords"],
-
                 "location_id" => $provider["provider_location_id"],
                 "note" => $provider["provider_note"],
                 "enabled" => $provider["provider_enabled"],
@@ -456,6 +467,7 @@
                     "date_modified" => (isset($provider["vendor_date_modified"])) ? $provider["vendor_date_modified"] : null,
                     "note" => (isset($provider["vendor_note"])) ? $provider["vendor_note"] : null,
                     "company" => array(
+                        "images" => Image::getByCompanyId((int)$vendor_company_id),
                         "id" => $vendor_company_id,
                         "name" => $vendor_company_name,
                         "phone_1" => $vendor_company_phone_1,
@@ -473,6 +485,7 @@
                     ),
                 ),
                 "company" => array(
+                    "images" => Image::getByCompanyId((int)$provider["company_id"]),
                     "id" => $provider["company_id"],
                     "cover_image" => $provider["company_cover_image"],
                     "name" => $provider["company_name"],

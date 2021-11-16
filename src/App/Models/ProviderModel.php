@@ -188,9 +188,10 @@
                     $where = "AND		PROVIDER.id = $id";
                 }
                 $sql = self::$selectQuery . $where;
-                Log::$debug_log->trace($sql);
+//                Log::$debug_log->trace($sql);
                 $ret = Model::$db->rawQuery($sql);
-                Log::$debug_log->trace($ret);
+
+//                Log::$debug_log->trace($ret);
 
                 return $ret;
             } catch (Exception $e) {

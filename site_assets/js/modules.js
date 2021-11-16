@@ -4,6 +4,8 @@ exports.modules = [
     "./site_assets/js/modules/tiny_editor.js",
     "./site_assets/js/modules/table.js",
     "./site_assets/js/modules/keywords.js",
+	"./site_assets/js/modules/upload.js",
+    "./site_assets/js/modules/image_manager.js",
     "./site_assets/js/modules/location_types.js",
     "./site_assets/js/modules/alert_box.js",
     "./site_assets/js/modules/address_types.js",

@@ -173,15 +173,12 @@ const Country = (function () {
     
     const update_country_record = function ($this, dataToSend) {
         if (dataToSend) {
-            
             try {
                 sendPostRequest("/api/v1.0/countries/update", dataToSend, function (data, status, xhr) {
                     if (data && data[0]) {
                         let new_country = data[0]
-                        console.log("new country", new_country)
                         Country.all.set(new_country.id, new_country)
                         let country_elements = $("select[data-type='country']")
-                        
                         country_elements.each(function (index, element) {
                             var newOption = new Option(new_country.name, new_country.id, false, false)
                             $(element).append(newOption).trigger("change")
@@ -492,10 +489,12 @@ const Country = (function () {
                 country_detail.iso2 = (_country_iso2.value !== "") ? _country_iso2.value : null
                 country_detail.iso3 = (_country_iso3.value !== "") ? _country_iso3.value : null
                 
-                let r = confirm("Are you sure you want to edit this record?")
-                if (r === true) {
-                    update_country_record($this, remove_nulls(country_detail))
-                }
+                confirmDialog(`Would you like to update?`, (ans) => {
+                    if (ans) {
+                        update_country_record($this, remove_nulls(country_detail))
+                    }
+                })
+                
             }
         } else {
             toastr.error("Error: 2")

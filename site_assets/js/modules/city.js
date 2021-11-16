@@ -21,7 +21,8 @@ const City = (function () {
     }
     
     const on_click_outside = (e) => {
-        let tar = $(e.target).parents("form." + class_name)
+        let tar = $(e.target).parents("div." + class_name)
+        
         if (!tar[0] && !e.target.className.includes("select-add-option")) {
             City.close()
         }
@@ -110,18 +111,19 @@ const City = (function () {
             try {
                 sendPostRequest("/api/v1.0/cities/update", dataToSend, function (data, status, xhr) {
                     if (data && data[0]) {
-                        City.all.set(data[0].city_id, data[0])
+                        let new_city = data[0]
+                        City.all.set(new_city.id, new_city)
                         let city_elements = $("select[data-type='city']")
-                        //console.log(city_elements.length)
-                        City.id = data[0].city_id
+                        
+                        City.id = new_city.id
                         city_elements.each(function (index, element) {
-                            var newOption = new Option(data[0].city_name, data[0].city_id, false, false)
+                            var newOption = new Option(new_city.name, new_city.id, false, false)
                             $(element).append(newOption).trigger("change")
                             
                         })
-                        $($this).val(data[0].city_id).trigger("change")
+                        $($this).val(new_city.id).trigger("change")
                         City.close()
-                        toastr.success("City: " + data[0].city_id + " updated")
+                        toastr.success("City: " + new_city.id + " updated")
                         
                     } else {
                         return handle_city_error("Error: 1")

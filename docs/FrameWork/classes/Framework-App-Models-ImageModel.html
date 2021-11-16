@@ -131,7 +131,7 @@
 
     <article class="phpdocumentor-element -class">
         <h2 class="phpdocumentor-content__title">
-    CompanyModel
+    ImageModel
 
         <span class="phpdocumentor-element__extends">
         extends <a href="classes/Framework-Core-Model.html"><abbr title="\Framework\Core\Model">Model</abbr></a>
@@ -150,15 +150,15 @@
     </h2>
 
         <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CompanyModel.php"><a href="files/app-models-companymodel.html"><abbr title="App/Models/CompanyModel.php">CompanyModel.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ImageModel.php"><a href="files/app-models-imagemodel.html"><abbr title="App/Models/ImageModel.php">ImageModel.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">18</span>
 
     </aside>
 
-            <p class="phpdocumentor-summary">Short Company Description</p>
+            <p class="phpdocumentor-summary">Short Image Description</p>
 
-    <section class="phpdocumentor-description"><p>Long Company Description</p>
+    <section class="phpdocumentor-description"><p>Long Image Description</p>
 </section>
 
 
@@ -197,53 +197,32 @@
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/Framework-App-Models-CompanyModel.html#property_dbFields">$dbFields</a>
+    <a href="classes/Framework-App-Models-ImageModel.html#property_sql">$sql</a>
     <span>
                 &nbsp;: mixed            </span>
 </dt>
 <dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/Framework-App-Models-CompanyModel.html#property_dbTable">$dbTable</a>
-    <span>
-                &nbsp;: mixed            </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/Framework-App-Models-CompanyModel.html#property_selectQuery">$selectQuery</a>
-    <span>
-                &nbsp;: string            </span>
-</dt>
-<dd>selectQuery</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Framework-App-Models-CompanyModel.html#method_company_ac">company_ac()</a>
+    <a href="classes/Framework-App-Models-ImageModel.html#method_get">get()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>autocomplete query</dd>
+<dd>fetch records by image id or all</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Framework-App-Models-CompanyModel.html#method_get">get()</a>
+    <a href="classes/Framework-App-Models-ImageModel.html#method_getByCompanyId">getByCompanyId()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>fetch company</dd>
+<dd>get images by company id</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Framework-App-Models-CompanyModel.html#method_getByName">getByName()</a>
+    <a href="classes/Framework-App-Models-ImageModel.html#method_getByProductId">getByProductId()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>fetch company data by name</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Framework-App-Models-CompanyModel.html#method_getOne">getOne()</a>
-    <span>
-                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
-</dt>
-<dd>fetch single company record</dd>
+<dd>get images by product id</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-Core-Model.html#method_init">init()</a>
@@ -281,11 +260,18 @@
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Framework-App-Models-CompanyModel.html#method_updateRecord">updateRecord()</a>
+    <a href="classes/Framework-App-Models-ImageModel.html#method_update">update()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>update company record</dd>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-ImageModel.html#method_updateCompanyImage">updateCompanyImage()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
 
         </dl>
 
@@ -297,7 +283,7 @@
     <section class="phpdocumentor-properties">
         <h3 class="phpdocumentor-elements__header" id="properties">
             Properties
-            <a href="classes/Framework-App-Models-CompanyModel.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/Framework-App-Models-ImageModel.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
                     <article
         class="
@@ -338,48 +324,14 @@
             -protected
             -static                                            "
 >
-    <h4 class="phpdocumentor-element__name" id="property_dbFields">
-        $dbFields
-        <a href="classes/Framework-App-Models-CompanyModel.html#property_dbFields" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_sql">
+        $sql
+        <a href="classes/Framework-App-Models-ImageModel.html#property_sql" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CompanyModel.php"><a href="files/app-models-companymodel.html"><abbr title="App/Models/CompanyModel.php">CompanyModel.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">23</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$dbFields</span>
-     = <span class="phpdocumentor-signature__default-value">array()</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -protected
-            -static                                            "
->
-    <h4 class="phpdocumentor-element__name" id="property_dbTable">
-        $dbTable
-        <a href="classes/Framework-App-Models-CompanyModel.html#property_dbTable" class="headerlink"><i class="fas fa-link"></i></a>
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CompanyModel.php"><a href="files/app-models-companymodel.html"><abbr title="App/Models/CompanyModel.php">CompanyModel.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ImageModel.php"><a href="files/app-models-imagemodel.html"><abbr title="App/Models/ImageModel.php">ImageModel.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">21</span>
 
@@ -389,65 +341,34 @@
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$dbTable</span>
-     = <span class="phpdocumentor-signature__default-value">&quot;company&quot;</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -protected
-            -static                                            "
->
-    <h4 class="phpdocumentor-element__name" id="property_selectQuery">
-        $selectQuery
-        <a href="classes/Framework-App-Models-CompanyModel.html#property_selectQuery" class="headerlink"><i class="fas fa-link"></i></a>
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CompanyModel.php"><a href="files/app-models-companymodel.html"><abbr title="App/Models/CompanyModel.php">CompanyModel.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">30</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">selectQuery</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">$selectQuery</span>
+    <span class="phpdocumentor-signature__name">$sql</span>
      = <span class="phpdocumentor-signature__default-value">&quot;
-        SELECT
-                COMPANY.id AS &#039;company_id&#039;,
-                COMPANY.name AS &#039;company_name&#039;,
-                COMPANY.phone_1 AS &#039;company_phone_1&#039;,
-                COMPANY.phone_2 AS &#039;company_phone_2&#039;,
-                COMPANY.fax AS &#039;company_fax&#039;,
-                COMPANY.website AS &#039;company_website&#039;,
-                COMPANY.email AS &#039;company_email&#039;,
-                COMPANY.cover_image AS &#039;company_cover_image&#039;,
-                COMPANY.status_id AS &#039;company_status_id&#039;,
-                COMPANY.enabled AS &#039;company_enabled&#039;,
-                COMPANY.date_created AS &#039;company_date_created&#039;,
-                COMPANY.created_by AS &#039;company_created_by&#039;,
-                COMPANY.date_modified AS &#039;company_date_modified&#039;,
-                COMPANY.modified_by AS &#039;company_modified_by&#039;,
-                COMPANY.note AS &#039;company_note&#039;,
-                BIN(name) AS binray_not_needed_column
-        FROM 			company COMPANY
+            SELECT 
+                            IMAGE.id AS &#039;image_id&#039;,
+                            IMAGE.name AS &#039;image_name&#039;,
+                            IMAGE.alt AS &#039;image_alt&#039;,
+                            IMAGE.title AS &#039;image_title&#039;,
+                            IMAGE.caption AS &#039;image_caption&#039;,
+                            IMAGE.is_cover_image AS &#039;image_is_cover_image&#039;,
+                            IMAGE.path AS &#039;image_path&#039;,
+                            IMAGE.extension AS &#039;image_extension&#039;,
+                            IMAGE.dimensions AS &#039;image_dimensions&#039;,
+                            IMAGE.size AS &#039;image_size&#039;,
+                            IMAGE.height AS &#039;image_height&#039;,
+                            IMAGE.width AS &#039;image_width&#039;,
+                            IMAGE.enabled AS &#039;image_enabled&#039;,
+                            IMAGE.date_created AS &#039;image_date_created&#039;,
+                            IMAGE.created_by AS &#039;image_created_by&#039;,
+                            IMAGE.date_modified AS &#039;image_date_modified&#039;,
+                            IMAGE.modified_by AS &#039;image_modified_by&#039;,
+                            IMAGE.note AS &#039;image_note&#039;
+            FROM 			image IMAGE              
         &quot;</span></code>
 
-    
-    
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
     
 
 </article>
@@ -456,51 +377,8 @@
             <section class="phpdocumentor-methods">
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
-            <a href="classes/Framework-App-Models-CompanyModel.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/Framework-App-Models-ImageModel.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                    -static                    "
->
-    <h4 class="phpdocumentor-element__name" id="method_company_ac">
-        company_ac()
-        <a href="classes/Framework-App-Models-CompanyModel.html#method_company_ac" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CompanyModel.php"><a href="files/app-models-companymodel.html"><abbr title="App/Models/CompanyModel.php">CompanyModel.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">209</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">autocomplete query</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">company_ac</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$st</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
-
-    
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$st</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span>            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
-            &mdash;
-        
-    
-</article>
                     <article
         class="phpdocumentor-element
             -method
@@ -509,26 +387,26 @@
 >
     <h4 class="phpdocumentor-element__name" id="method_get">
         get()
-        <a href="classes/Framework-App-Models-CompanyModel.html#method_get" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/Framework-App-Models-ImageModel.html#method_get" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CompanyModel.php"><a href="files/app-models-companymodel.html"><abbr title="App/Models/CompanyModel.php">CompanyModel.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ImageModel.php"><a href="files/app-models-imagemodel.html"><abbr title="App/Models/ImageModel.php">ImageModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">58</span>
+    <span class="phpdocumentor-element-found-in__line">143</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">fetch company</p>
+        <p class="phpdocumentor-summary">fetch records by image id or all</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">get</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">get</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$image_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$id</span>
+                <span class="phpdocumentor-signature__argument__name">$image_id</span>
                 : <span class="phpdocumentor-signature__argument__return-type">int|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
@@ -550,30 +428,30 @@
             -public
                                     -static                    "
 >
-    <h4 class="phpdocumentor-element__name" id="method_getByName">
-        getByName()
-        <a href="classes/Framework-App-Models-CompanyModel.html#method_getByName" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_getByCompanyId">
+        getByCompanyId()
+        <a href="classes/Framework-App-Models-ImageModel.html#method_getByCompanyId" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CompanyModel.php"><a href="files/app-models-companymodel.html"><abbr title="App/Models/CompanyModel.php">CompanyModel.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ImageModel.php"><a href="files/app-models-imagemodel.html"><abbr title="App/Models/ImageModel.php">ImageModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">114</span>
+    <span class="phpdocumentor-element-found-in__line">260</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">fetch company data by name</p>
+        <p class="phpdocumentor-summary">get images by company id</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getByName</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getByCompanyId</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$company_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$name</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
+                <span class="phpdocumentor-signature__argument__name">$company_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
             </dd>
@@ -593,28 +471,28 @@
             -public
                                     -static                    "
 >
-    <h4 class="phpdocumentor-element__name" id="method_getOne">
-        getOne()
-        <a href="classes/Framework-App-Models-CompanyModel.html#method_getOne" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_getByProductId">
+        getByProductId()
+        <a href="classes/Framework-App-Models-ImageModel.html#method_getByProductId" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CompanyModel.php"><a href="files/app-models-companymodel.html"><abbr title="App/Models/CompanyModel.php">CompanyModel.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ImageModel.php"><a href="files/app-models-imagemodel.html"><abbr title="App/Models/ImageModel.php">ImageModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">92</span>
+    <span class="phpdocumentor-element-found-in__line">204</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">fetch single company record</p>
+        <p class="phpdocumentor-summary">get images by product id</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getOne</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getByProductId</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$product_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$id</span>
+                <span class="phpdocumentor-signature__argument__name">$product_id</span>
                 : <span class="phpdocumentor-signature__argument__return-type">int|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
@@ -844,32 +722,85 @@
             -public
                                     -static                    "
 >
-    <h4 class="phpdocumentor-element__name" id="method_updateRecord">
-        updateRecord()
-        <a href="classes/Framework-App-Models-CompanyModel.html#method_updateRecord" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_update">
+        update()
+        <a href="classes/Framework-App-Models-ImageModel.html#method_update" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CompanyModel.php"><a href="files/app-models-companymodel.html"><abbr title="App/Models/CompanyModel.php">CompanyModel.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ImageModel.php"><a href="files/app-models-imagemodel.html"><abbr title="App/Models/ImageModel.php">ImageModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">137</span>
+    <span class="phpdocumentor-element-found-in__line">44</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">update company record</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">updateRecord</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$company</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">update</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$image</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$company</span>
+                <span class="phpdocumentor-signature__argument__name">$image</span>
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
-                            </dt>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_updateCompanyImage">
+        updateCompanyImage()
+        <a href="classes/Framework-App-Models-ImageModel.html#method_updateCompanyImage" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ImageModel.php"><a href="files/app-models-imagemodel.html"><abbr title="App/Models/ImageModel.php">ImageModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">163</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">updateCompanyImage</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$company_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$image_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$company_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$image_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -959,7 +890,7 @@
 </section>
             </div>
         </div>
-        <a href="classes/Framework-App-Models-CompanyModel.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="classes/Framework-App-Models-ImageModel.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 

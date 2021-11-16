@@ -35,7 +35,9 @@
         "ext-openssl": "*",
         "apache/log4php": "2.3.0",
         "thingengineer/mysqli-database-class": "dev-master",
-        "ext-readline": "*"
+        "ext-readline": "*",
+        "claviska/simpleimage": "*",
+        "ext-imagick": "*"
     },
     "autoload": {
         "psr-4": {

@@ -30,6 +30,9 @@
     Router::get($routeLead . "/contacts", "Contact@serveGet");
     Router::get($routeLead . "/locations", "Location@serveGet");
     Router::get($routeLead . "/users/test", "User@test");
+    Router::get($routeLead . '/images', "Image@serveGet");
+    Router::get($routeLead . '/images/${image_id}', "Image@serveGet");
+    Router::get($routeLead . '/images/company/${company_id}', "Image@serveGetByCompanyId");
 
     /**
      * autocomplete validate
@@ -56,13 +59,17 @@
     Router::post($routeLead . "/users/login", "User@login");
 
     /**
+     * image requests
+     */
+    Router::post($routeLead . "/images/update", "Image@serveUpdate");
+    /**
      * update requests
      */
     Router::post($routeLead . "/users/reset_password", "User@serveResetPassword");
     Router::post($routeLead . "/contacts/update", "Contact@serveUpdate");
     Router::post($routeLead . "/providers/update", "Provider@serveUpdate");
     Router::post($routeLead . "/vendors/update", "Vendor@serveUpdate");
-    
+
     Router::post($routeLead . "/companies/update", "Company@serveUpdate");
 
     Router::post($routeLead . "/addresses/update", "Address@serveUpdate");

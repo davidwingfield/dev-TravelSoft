@@ -48,7 +48,7 @@ const Province = (function () {
         let valid = true
         // ----
         if (!_name || !_province_iso2 || !_province_iso3) {
-            handle_province_error("Error Processing Data")
+            handle_country_error("Error Processing Data")
             return false
         }
         
@@ -100,7 +100,8 @@ const Province = (function () {
     }
     
     const on_click_outside = (e) => {
-        let tar = $(e.target).parents("form." + class_name)
+        let tar = $(e.target).parents("div." + class_name)
+        
         if (!tar[0] && !e.target.className.includes("select-add-option")) {
             Province.close()
         }
@@ -323,7 +324,7 @@ const Province = (function () {
         name_text_element.id = "province_name"
         name_text_element.name = "province_name"
         name_text_element.type = "text"
-        name_text_element.classList = ["form-control"]
+        name_text_element.classList = ["form-control " + class_name]
         name_label_element.htmlFor = "province_name"
         name_label_element.innerHTML = "Name:"
         error_element1.id = "province_name-error"
@@ -332,7 +333,7 @@ const Province = (function () {
         iso2_text_element.name = "province_iso2"
         iso2_text_element.type = "text"
         iso2_text_element.maxLength = 2
-        iso2_text_element.classList = ["form-control"]
+        iso2_text_element.classList = ["form-control " + class_name]
         iso2_label_element.htmlFor = "province_iso2"
         iso2_label_element.innerHTML = "ISO2:"
         error_element2.id = "province_iso2-error"
@@ -341,7 +342,7 @@ const Province = (function () {
         iso3_text_element.name = "province_iso3"
         iso3_text_element.type = "text"
         iso3_text_element.maxLength = 3
-        iso3_text_element.classList = ["form-control"]
+        iso3_text_element.classList = ["form-control " + class_name]
         iso3_label_element.htmlFor = "province_iso3"
         iso3_label_element.innerHTML = "ISO3:"
         error_element3.id = "province_iso3-error"
@@ -507,16 +508,22 @@ const Province = (function () {
         let _province_iso3 = document.getElementById("province_iso3")
         let _country_id = document.getElementById(dropdown_id.replace(/province_id/g, "") + "country_id")
         if (!isNaN(parseInt(_country_id.value))) {
+            
             if (_name, _province_iso2, _province_iso3, _country_id) {
-                province_detail.name = _name.value
-                province_detail.iso2 = _province_iso2.value
-                province_detail.iso3 = _province_iso3.value
-                province_detail.country_id = parseInt(_country_id.value)
-                let r = confirm("Are you sure you want to edit this record?")
-                if (r === true) {
-                    update_province_record($this, remove_nulls(province_detail))
+                if (validate_form()) {
+                    province_detail.name = _name.value
+                    province_detail.iso2 = _province_iso2.value
+                    province_detail.iso3 = _province_iso3.value
+                    province_detail.country_id = parseInt(_country_id.value)
+                    
+                    confirmDialog(`Would you like to update?`, (ans) => {
+                        if (ans) {
+                            update_province_record($this, remove_nulls(province_detail))
+                        }
+                    })
                 }
             }
+            
         }
         
     }
@@ -526,19 +533,21 @@ const Province = (function () {
             try {
                 sendPostRequest("/api/v1.0/provinces/update", dataToSend, function (data, status, xhr) {
                     if (data && data[0]) {
-                        Province.all.set(data[0].province_id, data[0])
+                        let new_province = data[0]
+                        console.log("new_province", new_province)
+                        Province.all.set(new_province.id, new_province)
                         let province_elements = $("select[data-type='province']")
-                        Province.id = data[0].province_id
+                        Province.id = new_province.id
                         City.id = null
                         province_elements.each(function (index, element) {
-                            var newOption = new Option(data[0].province_name, data[0].province_id, false, false)
+                            var newOption = new Option(new_province.name, new_province.id, false, false)
                             $(element).append(newOption).trigger("change")
                         })
                         
-                        $($this).val(data[0].province_id).trigger("change")
+                        $($this).val(new_province.id).trigger("change")
                         
                         Province.close()
-                        toastr.success("Province: " + data[0].province_id + " updated")
+                        toastr.success("Province: " + new_province.id + " updated")
                         
                     } else {
                         return handle_province_error("Error: 1")

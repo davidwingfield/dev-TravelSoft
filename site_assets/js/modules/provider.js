@@ -101,6 +101,7 @@ const Provider = (function () {
           
           confirmDialog(`Would you like to update?`, (ans) => {
               if (ans) {
+                  
                   save({
                       "company_detail": company_detail,
                       "provider_detail": provider_detail,
@@ -110,6 +111,7 @@ const Provider = (function () {
                       "contacts": contacts,
                   })
               }
+              
           })
       })
     
@@ -272,7 +274,7 @@ const Provider = (function () {
      * build provider index table
      */
     const build_index_table = function () {
-        //log("build_index_table")
+        
         $index_table = $(_table_provider_index).table({
             table_type: "display_list",
             data: Provider.all,
@@ -395,9 +397,7 @@ const Provider = (function () {
      * @param provider
      */
     const save = function (provider) {
-        /*
-        console.log("Provider:save()", provider)
-        //*/
+        
         if (provider) {
             updateProvider(provider, function (data) {
                 if (data) {
@@ -583,8 +583,9 @@ const Provider = (function () {
             $provider_key = $(_provider_key).BuildKeyword(provider_keywords)
             $(_provider_description_long).val(provider.description_long)
             $(_provider_description_short).val(provider.description_short)
+            _provider_enabled.checked = (provider.enabled) ? (provider.enabled === 1) : true
         }
-        _provider_enabled.checked = (provider.enabled) ? (provider.enabled === 1) : true
+        
     }
     
     /**

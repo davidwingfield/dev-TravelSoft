@@ -1,0 +1,15 @@
+SELECT
+	CURRENCY.id AS 'currency_id',
+	CURRENCY.sort_order AS 'currency_sort_order',
+	CURRENCY.name AS 'currency_name',
+	CURRENCY.iso AS 'currency_iso',
+	CURRENCY.minor_unit AS 'currency_minor_unit',
+	CURRENCY.symbol AS 'currency_symbol',
+	CURRENCY.enabled AS 'currency_enabled',
+	CURRENCY.date_created AS 'currency_date_created',
+	CURRENCY.created_by AS 'currency_created_by',
+	CURRENCY.date_modified AS 'currency_date_modified',
+	CURRENCY.modified_by AS 'currency_modified_by',
+	CURRENCY.note AS 'currency_note'
+FROM 	currency CURRENCY
+-- JOIN 	currency CURRENCY ON CURRENCY.id = {FK_TABLE}.currency_id

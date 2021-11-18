@@ -1,0 +1,12 @@
+SELECT
+	CUSTOMER.id AS 'customer_id',
+	CUSTOMER.name AS 'customer_name',
+	CUSTOMER.sort_order AS 'customer_sort_order',
+	CUSTOMER.enabled AS 'customer_enabled',
+	CUSTOMER.date_created AS 'customer_date_created',
+	CUSTOMER.created_by AS 'customer_created_by',
+	CUSTOMER.date_modified AS 'customer_date_modified',
+	CUSTOMER.modified_by AS 'customer_modified_by',
+	CUSTOMER.note AS 'customer_note'
+FROM 	customer CUSTOMER
+-- JOIN 	customer CUSTOMER ON CUSTOMER.id = {FK_TABLE}.customer_id

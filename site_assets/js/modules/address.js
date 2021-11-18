@@ -1,23 +1,12 @@
 const Address = (function () {
     "use strict"
-    //Path
-    const base_url = "/addresses"
-    //Buttons
     const _button_add_address_table = document.getElementById("button_add_address_table")
     const _button_close_edit_address_form = document.getElementById("button_close_edit_address_form")
     const _button_clear_form_edit_address = document.getElementById("button_clear_form_edit_address")
     const _button_submit_form_edit_address = document.getElementById("button_submit_form_edit_address")
-    /**
-     * _form_edit_address
-     *
-     * @type {HTMLElement}
-     * @private
-     */
     const _form_edit_address = document.getElementById("form_edit_address")
     const _card_edit_address_form = document.getElementById("card_edit_address_form")
-    //Tables
     const _table_address = document.getElementById("table_address")
-    //Fields
     const _address_id = document.getElementById("address_id")
     const _company_id = document.getElementById("company_id")
     const _address_enabled = document.getElementById("address_enabled")
@@ -31,7 +20,9 @@ const Address = (function () {
     const _address_postal_code = document.getElementById("address_postal_code")
     const _address_company_id = document.getElementById("address_company_id")
     const _clear_address_table = document.getElementById("clear_address_table")
-    //Defaults
+    /**
+     * Defaults
+     */
     let default_display = default_address_view
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $address_table = $(_table_address)

@@ -1,0 +1,12 @@
+SELECT
+	PROVINCE_API.province_id AS 'province_api_province_id',
+	PROVINCE_API.api_id AS 'province_api_api_id',
+	PROVINCE_API.api_province_id AS 'province_api_api_province_id',
+	PROVINCE_API.enabled AS 'province_api_enabled',
+	PROVINCE_API.date_created AS 'province_api_date_created',
+	PROVINCE_API.created_by AS 'province_api_created_by',
+	PROVINCE_API.date_modified AS 'province_api_date_modified',
+	PROVINCE_API.modified_by AS 'province_api_modified_by',
+	PROVINCE_API.note AS 'province_api_note'
+FROM 	province_api PROVINCE_API
+-- JOIN 	province_api PROVINCE_API ON PROVINCE_API.id = {FK_TABLE}.province_api_id

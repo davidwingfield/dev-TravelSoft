@@ -17,6 +17,9 @@
      */
     class Address extends Controller
     {
+        /**
+         * constructs from Controller class
+         */
         public function __construct()
         {
             parent::__construct();
@@ -47,6 +50,11 @@
             exit(1);
         }
 
+        /**
+         * api update request
+         *
+         * @param array $params
+         */
         public static function serveUpdate(array $params = [])
         {
             $addresses = AddressModel::update($params);
@@ -56,6 +64,13 @@
             exit(1);
         }
 
+        /**
+         * format address for table
+         *
+         * @param array $address
+         *
+         * @return array
+         */
         private static function format_address_table(array $address = []): array
         {
             $formattedAddress = array();
@@ -224,6 +239,13 @@
             return $formattedAddress;
         }
 
+        /**
+         * format object
+         *
+         * @param array $addresses
+         *
+         * @return array
+         */
         public static function format(array $addresses = []): array
         {
             $formattedAddress = array();

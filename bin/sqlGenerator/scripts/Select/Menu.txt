@@ -1,0 +1,16 @@
+SELECT
+	MENU.id AS 'menu_id',
+	MENU.label AS 'menu_label',
+	MENU.link_url AS 'menu_link_url',
+	MENU.parent_id AS 'menu_parent_id',
+	MENU.roles_min AS 'menu_roles_min',
+	MENU.icon AS 'menu_icon',
+	MENU.sort_order AS 'menu_sort_order',
+	MENU.enabled AS 'menu_enabled',
+	MENU.date_created AS 'menu_date_created',
+	MENU.created_by AS 'menu_created_by',
+	MENU.date_modified AS 'menu_date_modified',
+	MENU.modified_by AS 'menu_modified_by',
+	MENU.note AS 'menu_note'
+FROM 	menu MENU
+-- JOIN 	menu MENU ON MENU.id = {FK_TABLE}.menu_id

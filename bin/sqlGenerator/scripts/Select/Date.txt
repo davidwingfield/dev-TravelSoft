@@ -1,0 +1,12 @@
+SELECT
+	DATE.id AS 'date_id',
+	DATE.formatted_date AS 'date_formatted_date',
+	DATE.dow AS 'date_dow',
+	DATE.enabled AS 'date_enabled',
+	DATE.date_created AS 'date_date_created',
+	DATE.created_by AS 'date_created_by',
+	DATE.date_modified AS 'date_date_modified',
+	DATE.modified_by AS 'date_modified_by',
+	DATE.note AS 'date_note'
+FROM 	date DATE
+-- JOIN 	date DATE ON DATE.id = {FK_TABLE}.date_id

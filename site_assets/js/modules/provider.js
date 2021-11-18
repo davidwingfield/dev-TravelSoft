@@ -3,20 +3,20 @@ const Provider = (function () {
     
     const base_url = "/providers"
     
-    //Buttons
+    /** Buttons */
     const _button_add_provider_page_heading = document.getElementById("button_add_provider_page_heading")
     const _button_edit_provider_name = document.getElementById("button_edit_provider_name")
     const _button_save_provider = document.getElementById("button_save_provider")
-    //Tabs
+    /** Tabs */
     const _panel_tab_contact = document.getElementById("panel_tab_contact")
     const _panel_tab_company = document.getElementById("panel_tab_company")
     const _panel_tab_vendor = document.getElementById("panel_tab_vendor")
     const _panel_tab_location = document.getElementById("panel_tab_location")
     const _panel_tab_address = document.getElementById("panel_tab_address")
     const _panel_tab_provider = document.getElementById("panel_tab_provider")
-    //Tables
+    /** Tables */
     const _table_provider_index = document.getElementById("table_provider_index")
-    //Fields
+    /** Fields */
     const _location_id = document.getElementById("location_id")
     const _company_name = document.getElementById("company_name")
     const _company_cover_image = document.getElementById("company_cover_image")
@@ -397,11 +397,12 @@ const Provider = (function () {
      * @param provider
      */
     const save = function (provider) {
-        
         if (provider) {
             updateProvider(provider, function (data) {
                 if (data) {
+                    console.log("data 1", data)
                     if (data[0]) {
+                        console.log("data[0] 1", data[0])
                         let details = data[0]
                         if (details.id) {
                             if (_provider_id.value === "" || isNaN(parseInt(_provider_id.value))) {
@@ -435,6 +436,7 @@ const Provider = (function () {
         if (dataToSend) {
             try {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    console.log(data)
                     if (data) {
                         return callback(data)
                     } else {
@@ -599,8 +601,6 @@ const Provider = (function () {
         _provider_enabled.checked = true
     }
     
-    // ----
-    
     /**
      * fetch provider by name
      *
@@ -670,7 +670,7 @@ const Provider = (function () {
             }
             
         }
-        console.log("Provider:edit - provider", provider)
+        
         populate_form(provider)
         // ----
         Vendor.init(vendor)

@@ -1,0 +1,24 @@
+SELECT
+		VARIANT.id AS 'variant_id',
+		VARIANT.category_id AS 'variant_category_id',
+		VARIANT.name AS 'variant_name',
+		VARIANT.enabled AS 'variant_enabled',
+		VARIANT.date_created AS 'variant_date_created',
+		VARIANT.created_by AS 'variant_created_by',
+		VARIANT.date_modified AS 'variant_date_modified',
+		VARIANT.modified_by AS 'variant_modified_by',
+		VARIANT.note AS 'variant_note'
+FROM 	variant VARIANT
+-- JOIN 	variant VARIANT ON VARIANT.id = {FK_TABLE}.variant_id
+
+/*
+'id'=>$variant['variant_id'],
+'category_id'=>$variant['variant_category_id'],
+'name'=>$variant['variant_name'],
+'enabled'=>$variant['variant_enabled'],
+'date_created'=>$variant['variant_date_created'],
+'created_by'=>$variant['variant_created_by'],
+'date_modified'=>$variant['variant_date_modified'],
+'modified_by'=>$variant['variant_modified_by'],
+'note'=>$variant['variant_note']
+*/

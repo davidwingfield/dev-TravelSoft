@@ -92,23 +92,30 @@
 
         private static function format(array $company): array
         {
-            return array(
-                "id" => $company["company_id"],
-                "name" => $company["company_name"],
-                "phone_1" => $company["company_phone_1"],
-                "phone_2" => $company["company_phone_2"],
-                "fax" => $company["company_fax"],
-                "website" => $company["company_website"],
-                "cover_image" => $company["company_cover_image"],
-                "email" => $company["company_email"],
-                "status_id" => $company["company_status_id"],
-                "enabled" => $company["company_enabled"],
-                "date_created" => $company["company_date_created"],
-                "created_by" => $company["company_created_by"],
-                "date_modified" => $company["company_date_modified"],
-                "modified_by" => $company["company_modified_by"],
-                "note" => $company["company_note"],
-            );
+            if (isset($company)) {
+                $id = (int)$company["company_id"];
+
+                return array(
+                    "id" => $company["company_id"],
+                    "name" => $company["company_name"],
+                    "phone_1" => $company["company_phone_1"],
+                    "phone_2" => $company["company_phone_2"],
+                    "fax" => $company["company_fax"],
+                    "website" => $company["company_website"],
+                    "cover_image" => $company["company_cover_image"],
+                    "email" => $company["company_email"],
+                    "status_id" => $company["company_status_id"],
+                    "enabled" => $company["company_enabled"],
+                    "date_created" => $company["company_date_created"],
+                    "created_by" => $company["company_created_by"],
+                    "date_modified" => $company["company_date_modified"],
+                    "modified_by" => $company["company_modified_by"],
+                    "note" => $company["company_note"],
+                    "images" => Image::getByCompanyId($id),
+                );
+            }
+
+            return [];
         }
 
     }

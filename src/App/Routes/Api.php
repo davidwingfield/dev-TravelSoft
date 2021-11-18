@@ -19,6 +19,8 @@
      */
     Router::get($routeLead . "/countries", "Country@serveGet");
     Router::get($routeLead . "/packages", "Package@serveGet");
+    Router::get($routeLead . '/products/${product_id}', "Product@serveGet");
+    Router::get($routeLead . "/products", "Product@serveGet");
     Router::get($routeLead . "/provinces", "Province@serveGet");
     Router::get($routeLead . "/cities", "City@serveGet");
     Router::get($routeLead . '/providers/${provider_id}', "Provider@serveGet");
@@ -27,6 +29,7 @@
     Router::get($routeLead . '/contacts/${company_id}', "Contact@serveGet");
     Router::get($routeLead . '/contacts', "Contact@serveGet");
     Router::get($routeLead . "/vendors", "Vendor@serveGet");
+    Router::get($routeLead . '/vendors/${vendor_id}', "Vendor@serveGet");
     Router::get($routeLead . "/contacts", "Contact@serveGet");
     Router::get($routeLead . "/locations", "Location@serveGet");
     Router::get($routeLead . "/users/test", "User@test");
@@ -69,9 +72,7 @@
     Router::post($routeLead . "/contacts/update", "Contact@serveUpdate");
     Router::post($routeLead . "/providers/update", "Provider@serveUpdate");
     Router::post($routeLead . "/vendors/update", "Vendor@serveUpdate");
-
     Router::post($routeLead . "/companies/update", "Company@serveUpdate");
-
     Router::post($routeLead . "/addresses/update", "Address@serveUpdate");
     Router::post($routeLead . "/locations/update", "Location@serveUpdate");
     Router::post($routeLead . "/users/update", "User@serveUpdateUser");
@@ -82,3 +83,4 @@
     Router::post($routeLead . "/countries/update", "Country@serveUpdate");
     Router::post($routeLead . "/provinces/update", "Province@serveUpdate");
     Router::post($routeLead . "/cities/update", "City@serveUpdate");
+    Router::post($routeLead . "/products/table_update", "Product@serveTableUpdate");

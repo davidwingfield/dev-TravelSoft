@@ -1,0 +1,12 @@
+SELECT
+	PRODUCT_DRAFT.id AS 'product_draft_id',
+	PRODUCT_DRAFT.product_id AS 'product_draft_product_id',
+	PRODUCT_DRAFT.product_json AS 'product_draft_product_json',
+	PRODUCT_DRAFT.enabled AS 'product_draft_enabled',
+	PRODUCT_DRAFT.date_created AS 'product_draft_date_created',
+	PRODUCT_DRAFT.created_by AS 'product_draft_created_by',
+	PRODUCT_DRAFT.date_modified AS 'product_draft_date_modified',
+	PRODUCT_DRAFT.modified_by AS 'product_draft_modified_by',
+	PRODUCT_DRAFT.note AS 'product_draft_note'
+FROM 	product_draft PRODUCT_DRAFT
+-- JOIN 	product_draft PRODUCT_DRAFT ON PRODUCT_DRAFT.id = {FK_TABLE}.product_draft_id

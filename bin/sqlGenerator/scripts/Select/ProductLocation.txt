@@ -1,0 +1,19 @@
+SELECT
+	PRODUCT_LOCATION.product_id AS 'product_location_product_id',
+	PRODUCT_LOCATION.location_id AS 'product_location_location_id',
+	PRODUCT_LOCATION.location_types_id AS 'product_location_location_types_id',
+	PRODUCT_LOCATION.description_long AS 'product_location_description_long',
+	PRODUCT_LOCATION.description_short AS 'product_location_description_short',
+	PRODUCT_LOCATION.arrival_time AS 'product_location_arrival_time',
+	PRODUCT_LOCATION.departure_time AS 'product_location_departure_time',
+	PRODUCT_LOCATION.city_id AS 'product_location_city_id',
+	PRODUCT_LOCATION.province_id AS 'product_location_province_id',
+	PRODUCT_LOCATION.country_id AS 'product_location_country_id',
+	PRODUCT_LOCATION.enabled AS 'product_location_enabled',
+	PRODUCT_LOCATION.date_created AS 'product_location_date_created',
+	PRODUCT_LOCATION.created_by AS 'product_location_created_by',
+	PRODUCT_LOCATION.date_modified AS 'product_location_date_modified',
+	PRODUCT_LOCATION.modified_by AS 'product_location_modified_by',
+	PRODUCT_LOCATION.note AS 'product_location_note'
+FROM 	product_location PRODUCT_LOCATION
+-- JOIN 	product_location PRODUCT_LOCATION ON PRODUCT_LOCATION.id = {FK_TABLE}.product_location_id

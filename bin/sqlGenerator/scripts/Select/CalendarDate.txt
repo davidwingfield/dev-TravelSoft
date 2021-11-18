@@ -1,0 +1,12 @@
+SELECT
+	CALENDAR_DATE.calendar_id AS 'calendar_date_calendar_id',
+	CALENDAR_DATE.date_id AS 'calendar_date_date_id',
+	CALENDAR_DATE.season_id AS 'calendar_date_season_id',
+	CALENDAR_DATE.enabled AS 'calendar_date_enabled',
+	CALENDAR_DATE.date_created AS 'calendar_date_date_created',
+	CALENDAR_DATE.created_by AS 'calendar_date_created_by',
+	CALENDAR_DATE.date_modified AS 'calendar_date_date_modified',
+	CALENDAR_DATE.modified_by AS 'calendar_date_modified_by',
+	CALENDAR_DATE.note AS 'calendar_date_note'
+FROM 	calendar_date CALENDAR_DATE
+-- JOIN 	calendar_date CALENDAR_DATE ON CALENDAR_DATE.id = {FK_TABLE}.calendar_date_id

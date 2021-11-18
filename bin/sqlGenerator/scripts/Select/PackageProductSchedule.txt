@@ -1,0 +1,17 @@
+SELECT
+	PACKAGE_PRODUCT_SCHEDULE.id AS 'package_product_schedule_id',
+	PACKAGE_PRODUCT_SCHEDULE.package_id AS 'package_product_schedule_package_id',
+	PACKAGE_PRODUCT_SCHEDULE.package_product_id AS 'package_product_schedule_package_product_id',
+	PACKAGE_PRODUCT_SCHEDULE.day AS 'package_product_schedule_day',
+	PACKAGE_PRODUCT_SCHEDULE.start AS 'package_product_schedule_start',
+	PACKAGE_PRODUCT_SCHEDULE.stop AS 'package_product_schedule_stop',
+	PACKAGE_PRODUCT_SCHEDULE.date AS 'package_product_schedule_date',
+	PACKAGE_PRODUCT_SCHEDULE.all_day AS 'package_product_schedule_all_day',
+	PACKAGE_PRODUCT_SCHEDULE.enabled AS 'package_product_schedule_enabled',
+	PACKAGE_PRODUCT_SCHEDULE.date_created AS 'package_product_schedule_date_created',
+	PACKAGE_PRODUCT_SCHEDULE.created_by AS 'package_product_schedule_created_by',
+	PACKAGE_PRODUCT_SCHEDULE.date_modified AS 'package_product_schedule_date_modified',
+	PACKAGE_PRODUCT_SCHEDULE.modified_by AS 'package_product_schedule_modified_by',
+	PACKAGE_PRODUCT_SCHEDULE.note AS 'package_product_schedule_note'
+FROM 	package_product_schedule PACKAGE_PRODUCT_SCHEDULE
+-- JOIN 	package_product_schedule PACKAGE_PRODUCT_SCHEDULE ON PACKAGE_PRODUCT_SCHEDULE.id = {FK_TABLE}.package_product_schedule_id

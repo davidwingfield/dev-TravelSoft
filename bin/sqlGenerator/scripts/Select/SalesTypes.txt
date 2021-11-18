@@ -1,0 +1,13 @@
+SELECT
+	SALES_TYPES.id AS 'sales_types_id',
+	SALES_TYPES.name AS 'sales_types_name',
+	SALES_TYPES.class AS 'sales_types_class',
+	SALES_TYPES.sort_order AS 'sales_types_sort_order',
+	SALES_TYPES.enabled AS 'sales_types_enabled',
+	SALES_TYPES.date_created AS 'sales_types_date_created',
+	SALES_TYPES.created_by AS 'sales_types_created_by',
+	SALES_TYPES.date_modified AS 'sales_types_date_modified',
+	SALES_TYPES.modified_by AS 'sales_types_modified_by',
+	SALES_TYPES.note AS 'sales_types_note'
+FROM 	sales_types SALES_TYPES
+-- JOIN 	sales_types SALES_TYPES ON SALES_TYPES.id = {FK_TABLE}.sales_types_id

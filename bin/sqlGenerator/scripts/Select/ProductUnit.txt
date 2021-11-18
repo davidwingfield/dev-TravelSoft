@@ -1,0 +1,46 @@
+SELECT
+		PRODUCT_UNIT.product_id AS 'product_unit_product_id',
+		PRODUCT_UNIT.unit_id AS 'product_unit_unit_id',
+		PRODUCT_UNIT.min_pax AS 'product_unit_min_pax',
+		PRODUCT_UNIT.max_pax AS 'product_unit_max_pax',
+		PRODUCT_UNIT.min_nights AS 'product_unit_min_nights',
+		PRODUCT_UNIT.max_nights AS 'product_unit_max_nights',
+		PRODUCT_UNIT.description_long AS 'product_unit_description_long',
+		PRODUCT_UNIT.description_short AS 'product_unit_description_short',
+		PRODUCT_UNIT.blurb AS 'product_unit_blurb',
+		PRODUCT_UNIT.cover_image AS 'product_unit_cover_image',
+		PRODUCT_UNIT.meeting_point AS 'product_unit_meeting_point',
+		PRODUCT_UNIT.time_notes AS 'product_unit_time_notes',
+		PRODUCT_UNIT.start_time AS 'product_unit_start_time',
+		PRODUCT_UNIT.end_time AS 'product_unit_end_time',
+		PRODUCT_UNIT.enabled AS 'product_unit_enabled',
+		PRODUCT_UNIT.date_created AS 'product_unit_date_created',
+		PRODUCT_UNIT.created_by AS 'product_unit_created_by',
+		PRODUCT_UNIT.date_modified AS 'product_unit_date_modified',
+		PRODUCT_UNIT.modified_by AS 'product_unit_modified_by',
+		PRODUCT_UNIT.note AS 'product_unit_note'
+FROM 	product_unit PRODUCT_UNIT
+-- JOIN 	product_unit PRODUCT_UNIT ON PRODUCT_UNIT.id = {FK_TABLE}.product_unit_id
+
+/*
+'product_id'=>$product_unit['product_unit_product_id'],
+'unit_id'=>$product_unit['product_unit_unit_id'],
+'min_pax'=>$product_unit['product_unit_min_pax'],
+'max_pax'=>$product_unit['product_unit_max_pax'],
+'min_nights'=>$product_unit['product_unit_min_nights'],
+'max_nights'=>$product_unit['product_unit_max_nights'],
+'description_long'=>$product_unit['product_unit_description_long'],
+'description_short'=>$product_unit['product_unit_description_short'],
+'blurb'=>$product_unit['product_unit_blurb'],
+'cover_image'=>$product_unit['product_unit_cover_image'],
+'meeting_point'=>$product_unit['product_unit_meeting_point'],
+'time_notes'=>$product_unit['product_unit_time_notes'],
+'start_time'=>$product_unit['product_unit_start_time'],
+'end_time'=>$product_unit['product_unit_end_time'],
+'enabled'=>$product_unit['product_unit_enabled'],
+'date_created'=>$product_unit['product_unit_date_created'],
+'created_by'=>$product_unit['product_unit_created_by'],
+'date_modified'=>$product_unit['product_unit_date_modified'],
+'modified_by'=>$product_unit['product_unit_modified_by'],
+'note'=>$product_unit['product_unit_note']
+*/

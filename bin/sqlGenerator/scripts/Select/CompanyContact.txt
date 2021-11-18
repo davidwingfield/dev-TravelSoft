@@ -1,0 +1,12 @@
+SELECT
+	COMPANY_CONTACT.company_id AS 'company_contact_company_id',
+	COMPANY_CONTACT.contact_id AS 'company_contact_contact_id',
+	COMPANY_CONTACT.contact_types_id AS 'company_contact_contact_types_id',
+	COMPANY_CONTACT.enabled AS 'company_contact_enabled',
+	COMPANY_CONTACT.date_created AS 'company_contact_date_created',
+	COMPANY_CONTACT.created_by AS 'company_contact_created_by',
+	COMPANY_CONTACT.date_modified AS 'company_contact_date_modified',
+	COMPANY_CONTACT.modified_by AS 'company_contact_modified_by',
+	COMPANY_CONTACT.note AS 'company_contact_note'
+FROM 	company_contact COMPANY_CONTACT
+-- JOIN 	company_contact COMPANY_CONTACT ON COMPANY_CONTACT.id = {FK_TABLE}.company_contact_id

@@ -1,0 +1,16 @@
+SELECT
+	PRODUCT_SEASON.product_id AS 'product_season_product_id',
+	PRODUCT_SEASON.season_id AS 'product_season_season_id',
+	PRODUCT_SEASON.disabled_dow AS 'product_season_disabled_dow',
+	PRODUCT_SEASON.seasons_border AS 'product_season_seasons_border',
+	PRODUCT_SEASON.seasons_text AS 'product_season_seasons_text',
+	PRODUCT_SEASON.seasons_background AS 'product_season_seasons_background',
+	PRODUCT_SEASON.id AS 'product_season_id',
+	PRODUCT_SEASON.enabled AS 'product_season_enabled',
+	PRODUCT_SEASON.date_created AS 'product_season_date_created',
+	PRODUCT_SEASON.created_by AS 'product_season_created_by',
+	PRODUCT_SEASON.date_modified AS 'product_season_date_modified',
+	PRODUCT_SEASON.modified_by AS 'product_season_modified_by',
+	PRODUCT_SEASON.note AS 'product_season_note'
+FROM 	product_season PRODUCT_SEASON
+-- JOIN 	product_season PRODUCT_SEASON ON PRODUCT_SEASON.id = {FK_TABLE}.product_season_id

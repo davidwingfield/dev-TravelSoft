@@ -1,0 +1,18 @@
+SELECT
+	MESSAGE.id AS 'message_id',
+	MESSAGE.subject AS 'message_subject',
+	MESSAGE.body AS 'message_body',
+	MESSAGE.been_read AS 'message_been_read',
+	MESSAGE.priority AS 'message_priority',
+	MESSAGE.to_user_id AS 'message_to_user_id',
+	MESSAGE.from_user_id AS 'message_from_user_id',
+	MESSAGE.enabled AS 'message_enabled',
+	MESSAGE.date_created AS 'message_date_created',
+	MESSAGE.created_by AS 'message_created_by',
+	MESSAGE.date_modified AS 'message_date_modified',
+	MESSAGE.modified_by AS 'message_modified_by',
+	MESSAGE.note AS 'message_note',
+	MESSAGE.date_read AS 'message_date_read',
+	MESSAGE.message_type_id AS 'message_message_type_id'
+FROM 	message MESSAGE
+-- JOIN 	message MESSAGE ON MESSAGE.id = {FK_TABLE}.message_id

@@ -8,7 +8,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Address\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "",
+            "summary": "constructs\u0020from\u0020Controller\u0020class",
             "url": "classes/Framework-App-Controllers-Address.html#method___construct"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Address\u003A\u003AserveGet\u0028\u0029",
@@ -18,17 +18,17 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Address\u003A\u003AserveUpdate\u0028\u0029",
             "name": "serveUpdate",
-            "summary": "",
+            "summary": "api\u0020update\u0020request",
             "url": "classes/Framework-App-Controllers-Address.html#method_serveUpdate"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Address\u003A\u003Aformat_address_table\u0028\u0029",
             "name": "format_address_table",
-            "summary": "",
+            "summary": "format\u0020address\u0020for\u0020table",
             "url": "classes/Framework-App-Controllers-Address.html#method_format_address_table"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Address\u003A\u003Aformat\u0028\u0029",
             "name": "format",
-            "summary": "",
+            "summary": "format\u0020object",
             "url": "classes/Framework-App-Controllers-Address.html#method_format"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Autocomplete",
@@ -231,6 +231,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Location.html#method_serveUpdate"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Location\u003A\u003AgetByLocationId\u0028\u0029",
+            "name": "getByLocationId",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Location.html#method_getByLocationId"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Location\u003A\u003AserveGet\u0028\u0029",
             "name": "serveGet",
             "summary": "",
@@ -240,6 +245,11 @@ Search.appendIndex(
             "name": "format_ac",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Location.html#method_format_ac"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Location\u003A\u003Aformat_location\u0028\u0029",
+            "name": "format_location",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Location.html#method_format_location"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Location\u003A\u003Aformat\u0028\u0029",
             "name": "format",
@@ -331,6 +341,26 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Product.html#method_new"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Product\u003A\u003AserveTableUpdate\u0028\u0029",
+            "name": "serveTableUpdate",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Product.html#method_serveTableUpdate"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Product\u003A\u003AserveGet\u0028\u0029",
+            "name": "serveGet",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Product.html#method_serveGet"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Product\u003A\u003Aformat\u0028\u0029",
+            "name": "format",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Product.html#method_format"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Product\u003A\u003A\u0024buttons",
+            "name": "buttons",
+            "summary": "buttons",
+            "url": "classes/Framework-App-Controllers-Product.html#property_buttons"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider",
             "name": "Provider",
             "summary": "Short\u0020Provider\u0020Description",
@@ -350,6 +380,11 @@ Search.appendIndex(
             "name": "edit",
             "summary": "load\u0020edit\u0020provider\u0020page",
             "url": "classes/Framework-App-Controllers-Provider.html#method_edit"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003AgetByProviderId\u0028\u0029",
+            "name": "getByProviderId",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Provider.html#method_getByProviderId"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003Anew\u0028\u0029",
             "name": "new",
@@ -451,6 +486,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Season.html#method_serveGet"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Season\u003A\u003AgetSeasonsByProductId\u0028\u0029",
+            "name": "getSeasonsByProductId",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Season.html#method_getSeasonsByProductId"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Season\u003A\u003Aformat\u0028\u0029",
+            "name": "format",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Season.html#method_format"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\StaticPages",
             "name": "StaticPages",
             "summary": "Short\u0020StaticPages\u0020Description",
@@ -520,6 +565,16 @@ Search.appendIndex(
             "name": "__construct",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Unit.html#method___construct"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Unit\u003A\u003AgetUnitsByProductId\u0028\u0029",
+            "name": "getUnitsByProductId",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Unit.html#method_getUnitsByProductId"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Unit\u003A\u003Aformat\u0028\u0029",
+            "name": "format",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Unit.html#method_format"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\User",
             "name": "User",
@@ -595,6 +650,16 @@ Search.appendIndex(
             "name": "__construct",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Variant.html#method___construct"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Variant\u003A\u003AgetVariantsByProductId\u0028\u0029",
+            "name": "getVariantsByProductId",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Variant.html#method_getVariantsByProductId"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Variant\u003A\u003Aformat\u0028\u0029",
+            "name": "format",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Variant.html#method_format"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor",
             "name": "Vendor",
@@ -1691,6 +1756,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Models-ProductModel.html#property_dbFields"
         },                {
+            "fqsen": "\\Framework\\App\\Models\\ProductModel\u003A\u003A\u0024sql",
+            "name": "sql",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ProductModel.html#property_sql"
+        },                {
             "fqsen": "\\Framework\\App\\Models\\ProviderModel",
             "name": "ProviderModel",
             "summary": "ProviderModel",
@@ -1876,6 +1946,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Models-SeasonModel.html#method_update"
         },                {
+            "fqsen": "\\Framework\\App\\Models\\SeasonModel\u003A\u003AgetByProductId\u0028\u0029",
+            "name": "getByProductId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-SeasonModel.html#method_getByProductId"
+        },                {
             "fqsen": "\\Framework\\App\\Models\\SeasonModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
             "summary": "",
@@ -1965,6 +2040,11 @@ Search.appendIndex(
             "name": "update",
             "summary": "",
             "url": "classes/Framework-App-Models-UnitModel.html#method_update"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\UnitModel\u003A\u003AgetByProductId\u0028\u0029",
+            "name": "getByProductId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-UnitModel.html#method_getByProductId"
         },                {
             "fqsen": "\\Framework\\App\\Models\\UnitModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
@@ -2065,6 +2145,11 @@ Search.appendIndex(
             "name": "update",
             "summary": "",
             "url": "classes/Framework-App-Models-VariantModel.html#method_update"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\VariantModel\u003A\u003AgetByProductId\u0028\u0029",
+            "name": "getByProductId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-VariantModel.html#method_getByProductId"
         },                {
             "fqsen": "\\Framework\\App\\Models\\VariantModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
@@ -2938,57 +3023,57 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Image",
             "name": "Image",
-            "summary": "Short\u0020Controller\u0020Description",
+            "summary": "Short\u0020Image\u0020Description",
             "url": "classes/Framework-App-Controllers-Image.html"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Image\u003A\u003AgetByCompanyId\u0028\u0029",
             "name": "getByCompanyId",
-            "summary": "",
+            "summary": "get\u0020images\u0020by\u0020company\u0020id",
             "url": "classes/Framework-App-Controllers-Image.html#method_getByCompanyId"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Image\u003A\u003AserveUpdate\u0028\u0029",
             "name": "serveUpdate",
-            "summary": "",
+            "summary": "api\u0020update\u0020request",
             "url": "classes/Framework-App-Controllers-Image.html#method_serveUpdate"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Image\u003A\u003AgetAspectRatio\u0028\u0029",
             "name": "getAspectRatio",
-            "summary": "",
+            "summary": "get\u0020image\u0020aspect\u0020ratio",
             "url": "classes/Framework-App-Controllers-Image.html#method_getAspectRatio"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Image\u003A\u003AmakeThumbnail\u0028\u0029",
             "name": "makeThumbnail",
-            "summary": "",
+            "summary": "generate\u0020image\u0020and\u0020thumbnail",
             "url": "classes/Framework-App-Controllers-Image.html#method_makeThumbnail"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Image\u003A\u003AmoveImage\u0028\u0029",
             "name": "moveImage",
-            "summary": "",
+            "summary": "move\u0020images\u0020to\u0020directories",
             "url": "classes/Framework-App-Controllers-Image.html#method_moveImage"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Image\u003A\u003AbuildDirectory\u0028\u0029",
             "name": "buildDirectory",
-            "summary": "",
+            "summary": "create\u0020directory\u0020folder",
             "url": "classes/Framework-App-Controllers-Image.html#method_buildDirectory"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Image\u003A\u003AserveGetByCompanyId\u0028\u0029",
             "name": "serveGetByCompanyId",
-            "summary": "",
+            "summary": "api\u0020get\u0020request\u0020by\u0020company\u0020id",
             "url": "classes/Framework-App-Controllers-Image.html#method_serveGetByCompanyId"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Image\u003A\u003AserveGet\u0028\u0029",
             "name": "serveGet",
-            "summary": "serve\u0020get\u0020request",
+            "summary": "api\u0020get\u0020request",
             "url": "classes/Framework-App-Controllers-Image.html#method_serveGet"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Image\u003A\u003Aformat\u0028\u0029",
             "name": "format",
-            "summary": "format\u0020image\u0020records",
+            "summary": "format\u0020image\u0020object",
             "url": "classes/Framework-App-Controllers-Image.html#method_format"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Image\u003A\u003AseoUrl\u0028\u0029",
             "name": "seoUrl",
-            "summary": "",
+            "summary": "convert\u0020name\u0020into\u0020html\u0020entity",
             "url": "classes/Framework-App-Controllers-Image.html#method_seoUrl"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Image\u003A\u003A\u0024types",
@@ -3033,7 +3118,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\Core\\SimpleImage",
             "name": "SimpleImage",
-            "summary": "File\u003A\u0020SimpleImage.php\nAuthor\u003A\u0020Simon\u0020Jarvis\nModified\u0020by\u003A\u0020Miguel\u0020Ferm\u00EDn\nBased\u0020in\u003A\u0020http\u003A\/\/www.white\u002Dhat\u002Dweb\u002Ddesign.co.uk\/articles\/php\u002Dimage\u002Dresizing.php",
+            "summary": "Short\u0020SimpleImage\u0020Description",
             "url": "classes/Framework-Core-SimpleImage.html"
         },                {
             "fqsen": "\\Framework\\Core\\SimpleImage\u003A\u003A__construct\u0028\u0029",

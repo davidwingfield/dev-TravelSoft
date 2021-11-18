@@ -1,0 +1,80 @@
+<script type="text/javascript">
+    $(function () {
+        Logger.init()
+        
+    })
+
+    $(function () {
+        $("#image_gallery").load("/public/mdb-addons/mdb-lightbox-ui.html")
+    })
+
+    $(function () {
+        /*
+        $("#product_index_table").Tabledit({
+            url: "/api/v1.0/products/table_update",
+            buttons: {
+                edit: {
+                    class: "btn btn-sm btn-icon btn-flat btn-default",
+                    html: "<i class=\"fas fa-edit\"></i>",
+                    action: "edit",
+                },
+                delete: {
+                    class: "btn btn-sm btn-icon btn-flat btn-default",
+                    html: "<i class=\"fas fa-trash-alt\"></i>",
+                    action: "delete",
+                },
+                navigate: {
+                    class: "btn btn-sm btn-icon btn-flat btn-default",
+                    html: "<i class='fas fa-external-link-alt'></i>",
+                    action: "navigate",
+                },
+                save: {
+                    class: "btn btn-sm btn-success",
+                    html: "Save",
+                },
+                restore: {
+                    class: "btn btn-sm btn-warning",
+                    html: "Restore",
+                    action: "restore",
+                },
+                confirm: {
+                    class: "btn btn-sm btn-danger",
+                    html: "Are you sure?",
+                },
+            },
+            onDraw: function () {
+
+            },
+            onSuccess: function (data, textStatus, jqXHR) {
+                console.log("success", data)
+            },
+            onFail: function (jqXHR, textStatus, errorThrown) {
+                console.log("err", data)
+            },
+            onAlways: function () {},
+            onAjax: function (action, serialize) {},
+            columns: {
+                identifier: [0, "id"],
+                editable: [
+                    [1, "name"],
+                    [2, "sku"],
+                    [5, "location"],
+                    [6, "category_id", "{\"1\":\"Hotels\", \"2\":\"Flights\", \"3\":\"Cars\", \"4\":\"Rail\", \"5\":\"Transport\", \"6\":\"Tours\", \"7\":\"Cruises\", \"8\":\"Packages\", \"9\":\"Other\"}"],
+                ],
+            },
+        })
+        //*/
+
+        /*
+        let table = $("#product_index_table").DataTable({})
+        $('#product_index_table tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected')
+            } else {
+                table.$('tr.selected').removeClass('selected')
+                $(this).addClass('selected')
+            }
+        })
+        //*/
+    })
+</script>

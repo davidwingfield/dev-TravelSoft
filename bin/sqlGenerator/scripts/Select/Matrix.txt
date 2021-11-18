@@ -1,0 +1,23 @@
+SELECT
+	MATRIX.id AS 'matrix_id',
+	MATRIX.product_id AS 'matrix_product_id',
+	MATRIX.season_id AS 'matrix_season_id',
+	MATRIX.unit_id AS 'matrix_unit_id',
+	MATRIX.variant_id AS 'matrix_variant_id',
+	MATRIX.name AS 'matrix_name',
+	MATRIX.cost AS 'matrix_cost',
+	MATRIX.margin AS 'matrix_margin',
+	MATRIX.price AS 'matrix_price',
+	MATRIX.saved AS 'matrix_saved',
+	MATRIX.has_pricing AS 'matrix_has_pricing',
+	MATRIX.flat_cost AS 'matrix_flat_cost',
+	MATRIX.flat_margin AS 'matrix_flat_margin',
+	MATRIX.flat_price AS 'matrix_flat_price',
+	MATRIX.enabled AS 'matrix_enabled',
+	MATRIX.date_created AS 'matrix_date_created',
+	MATRIX.created_by AS 'matrix_created_by',
+	MATRIX.date_modified AS 'matrix_date_modified',
+	MATRIX.modified_by AS 'matrix_modified_by',
+	MATRIX.note AS 'matrix_note'
+FROM 	matrix MATRIX
+-- JOIN 	matrix MATRIX ON MATRIX.id = {FK_TABLE}.matrix_id

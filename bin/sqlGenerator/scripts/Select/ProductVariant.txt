@@ -1,0 +1,26 @@
+SELECT
+		PRODUCT_VARIANT.product_id AS 'product_variant_product_id',
+		PRODUCT_VARIANT.variant_id AS 'product_variant_variant_id',
+		PRODUCT_VARIANT.min_age AS 'product_variant_min_age',
+		PRODUCT_VARIANT.max_age AS 'product_variant_max_age',
+		PRODUCT_VARIANT.enabled AS 'product_variant_enabled',
+		PRODUCT_VARIANT.date_created AS 'product_variant_date_created',
+		PRODUCT_VARIANT.created_by AS 'product_variant_created_by',
+		PRODUCT_VARIANT.date_modified AS 'product_variant_date_modified',
+		PRODUCT_VARIANT.modified_by AS 'product_variant_modified_by',
+		PRODUCT_VARIANT.note AS 'product_variant_note'
+FROM 	product_variant PRODUCT_VARIANT
+-- JOIN 	product_variant PRODUCT_VARIANT ON PRODUCT_VARIANT.id = {FK_TABLE}.product_variant_id
+
+/*
+'product_id'=>$product_variant['product_variant_product_id'],
+'variant_id'=>$product_variant['product_variant_variant_id'],
+'min_age'=>$product_variant['product_variant_min_age'],
+'max_age'=>$product_variant['product_variant_max_age'],
+'enabled'=>$product_variant['product_variant_enabled'],
+'date_created'=>$product_variant['product_variant_date_created'],
+'created_by'=>$product_variant['product_variant_created_by'],
+'date_modified'=>$product_variant['product_variant_date_modified'],
+'modified_by'=>$product_variant['product_variant_modified_by'],
+'note'=>$product_variant['product_variant_note']
+*/

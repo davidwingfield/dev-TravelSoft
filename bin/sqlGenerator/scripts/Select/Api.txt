@@ -1,0 +1,15 @@
+SELECT
+	API.id AS 'api_id',
+	API.name AS 'api_name',
+	API.username AS 'api_username',
+	API.password AS 'api_password',
+	API.wsdl AS 'api_wsdl',
+	API.headerNameSpace AS 'api_headerNameSpace',
+	API.enabled AS 'api_enabled',
+	API.date_created AS 'api_date_created',
+	API.created_by AS 'api_created_by',
+	API.date_modified AS 'api_date_modified',
+	API.modified_by AS 'api_modified_by',
+	API.note AS 'api_note'
+FROM 	api API
+-- JOIN 	api API ON API.id = {FK_TABLE}.api_id

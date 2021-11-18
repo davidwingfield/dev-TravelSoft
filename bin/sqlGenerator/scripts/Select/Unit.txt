@@ -1,0 +1,28 @@
+SELECT
+		UNIT.id AS 'unit_id',
+		UNIT.category_id AS 'unit_category_id',
+		UNIT.api_id AS 'unit_api_id',
+		UNIT.name AS 'unit_name',
+		UNIT.room_code AS 'unit_room_code',
+		UNIT.enabled AS 'unit_enabled',
+		UNIT.date_created AS 'unit_date_created',
+		UNIT.created_by AS 'unit_created_by',
+		UNIT.date_modified AS 'unit_date_modified',
+		UNIT.modified_by AS 'unit_modified_by',
+		UNIT.note AS 'unit_note'
+FROM 	unit UNIT
+-- JOIN 	unit UNIT ON UNIT.id = {FK_TABLE}.unit_id
+
+/*
+'id'=>$unit['unit_id'],
+'category_id'=>$unit['unit_category_id'],
+'api_id'=>$unit['unit_api_id'],
+'name'=>$unit['unit_name'],
+'room_code'=>$unit['unit_room_code'],
+'enabled'=>$unit['unit_enabled'],
+'date_created'=>$unit['unit_date_created'],
+'created_by'=>$unit['unit_created_by'],
+'date_modified'=>$unit['unit_date_modified'],
+'modified_by'=>$unit['unit_modified_by'],
+'note'=>$unit['unit_note']
+*/

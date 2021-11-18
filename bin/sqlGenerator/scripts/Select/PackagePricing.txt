@@ -1,0 +1,18 @@
+SELECT
+	PACKAGE_PRICING.id AS 'package_pricing_id',
+	PACKAGE_PRICING.package_id AS 'package_pricing_package_id',
+	PACKAGE_PRICING.color_scheme_id AS 'package_pricing_color_scheme_id',
+	PACKAGE_PRICING.name AS 'package_pricing_name',
+	PACKAGE_PRICING.price AS 'package_pricing_price',
+	PACKAGE_PRICING.margin AS 'package_pricing_margin',
+	PACKAGE_PRICING.background_color AS 'package_pricing_background_color',
+	PACKAGE_PRICING.border_color AS 'package_pricing_border_color',
+	PACKAGE_PRICING.text_color AS 'package_pricing_text_color',
+	PACKAGE_PRICING.enabled AS 'package_pricing_enabled',
+	PACKAGE_PRICING.date_created AS 'package_pricing_date_created',
+	PACKAGE_PRICING.created_by AS 'package_pricing_created_by',
+	PACKAGE_PRICING.date_modified AS 'package_pricing_date_modified',
+	PACKAGE_PRICING.modified_by AS 'package_pricing_modified_by',
+	PACKAGE_PRICING.note AS 'package_pricing_note'
+FROM 	package_pricing PACKAGE_PRICING
+-- JOIN 	package_pricing PACKAGE_PRICING ON PACKAGE_PRICING.id = {FK_TABLE}.package_pricing_id

@@ -152,7 +152,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProductModel.php"><a href="files/app-models-productmodel.html"><abbr title="App/Models/ProductModel.php">ProductModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">16</span>
+    <span class="phpdocumentor-element-found-in__line">17</span>
 
     </aside>
 
@@ -205,6 +205,13 @@
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/Framework-App-Models-ProductModel.html#property_dbTable">$dbTable</a>
+    <span>
+                &nbsp;: mixed            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/Framework-App-Models-ProductModel.html#property_sql">$sql</a>
     <span>
                 &nbsp;: mixed            </span>
 </dt>
@@ -326,7 +333,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProductModel.php"><a href="files/app-models-productmodel.html"><abbr title="App/Models/ProductModel.php">ProductModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">20</span>
+    <span class="phpdocumentor-element-found-in__line">21</span>
 
     </aside>
 
@@ -360,7 +367,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProductModel.php"><a href="files/app-models-productmodel.html"><abbr title="App/Models/ProductModel.php">ProductModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">19</span>
+    <span class="phpdocumentor-element-found-in__line">20</span>
 
     </aside>
 
@@ -370,6 +377,104 @@
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">$dbTable</span>
      = <span class="phpdocumentor-signature__default-value">&quot;product&quot;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_sql">
+        $sql
+        <a href="classes/Framework-App-Models-ProductModel.html#property_sql" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProductModel.php"><a href="files/app-models-productmodel.html"><abbr title="App/Models/ProductModel.php">ProductModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">22</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">$sql</span>
+     = <span class="phpdocumentor-signature__default-value">&quot;
+            SELECT
+                    PRODUCT.id AS &#039;product_id&#039;,
+                    PRODUCT.category_id AS &#039;product_category_id&#039;,
+                    PRODUCT.pricing_strategy_types_id AS &#039;product_pricing_strategy_types_id&#039;,
+                    PRODUCT.status_types_id AS &#039;product_status_types_id&#039;,
+                    PRODUCT.currency_id AS &#039;product_currency_id&#039;,
+                    PRODUCT.location_id AS &#039;product_location_id&#039;,
+                    PRODUCT.provider_id AS &#039;product_provider_id&#039;,
+                    PRODUCT.vendor_id AS &#039;product_vendor_id&#039;,
+                    PRODUCT.rating_types_id AS &#039;product_rating_types_id&#039;,
+                    PRODUCT.name AS &#039;product_name&#039;,
+                    PRODUCT.description_short AS &#039;product_description_short&#039;,
+                    PRODUCT.description_long AS &#039;product_description_long&#039;,
+                    PRODUCT.sku AS &#039;product_sku&#039;,
+                    PRODUCT.depart_from AS &#039;product_depart_from&#039;,
+                    PRODUCT.arrive_to AS &#039;product_arrive_to&#039;,
+                    PRODUCT.depart_time AS &#039;product_depart_time&#039;,
+                    PRODUCT.arrive_time AS &#039;product_arrive_time&#039;,
+                    PRODUCT.provider_vendor_match AS &#039;product_provider_vendor_match&#039;,
+                    PRODUCT.day_span AS &#039;product_day_span&#039;,
+                    PRODUCT.cover_image AS &#039;product_cover_image&#039;,
+                    PRODUCT.api_id AS &#039;product_api_id&#039;,
+                    PRODUCT.from_api AS &#039;product_from_api&#039;,
+                    PRODUCT.hotel_code AS &#039;product_hotel_code&#039;,
+                    PRODUCT.sort_order AS &#039;product_sort_order&#039;,
+                    PRODUCT.enabled AS &#039;product_enabled&#039;,
+                    PRODUCT.date_created AS &#039;product_date_created&#039;,
+                    PRODUCT.created_by AS &#039;product_created_by&#039;,
+                    PRODUCT.date_modified AS &#039;product_date_modified&#039;,
+                    PRODUCT.modified_by AS &#039;product_modified_by&#039;,
+                    PRODUCT.note AS &#039;product_note&#039;,
+                   PRODUCT.keywords AS &#039;product_keywords&#039;,
+                    CATEGORY.id AS &#039;category_id&#039;,
+                    CATEGORY.pricing_strategy_types_id AS &#039;category_pricing_strategy_types_id&#039;,
+                    CATEGORY.attribute_id AS &#039;category_attribute_id&#039;,
+                    CATEGORY.name AS &#039;category_name&#039;,
+                    CATEGORY.icon AS &#039;category_icon&#039;,
+                    CATEGORY.view_product_index AS &#039;category_view_product_index&#039;,
+                    CATEGORY.view_product_index_filter AS &#039;category_view_product_index_filter&#039;,
+                    CATEGORY.view_product_index_search AS &#039;category_view_product_index_search&#039;,
+                    CATEGORY.view_product_edit AS &#039;category_view_product_edit&#039;,
+                    CATEGORY.view_product_package_edit AS &#039;category_view_product_package_edit&#039;,
+                    CATEGORY.view_product_package_index AS &#039;category_view_product_package_index&#039;,
+                    CATEGORY.all_day AS &#039;category_all_day&#039;,
+                    CATEGORY.overlap AS &#039;category_overlap&#039;,
+                    CATEGORY.editable AS &#039;category_editable&#039;,
+                    CATEGORY.duration_editable AS &#039;category_duration_editable&#039;,
+                    CATEGORY.start_editable AS &#039;category_start_editable&#039;,
+                    CATEGORY.display AS &#039;category_display&#039;,
+                    CATEGORY.background_color AS &#039;category_background_color&#039;,
+                    CATEGORY.text_color AS &#039;category_text_color&#039;,
+                    CATEGORY.border_color AS &#039;category_border_color&#039;,
+                    CATEGORY.sort_order AS &#039;category_sort_order&#039;,
+                    CATEGORY.enabled AS &#039;category_enabled&#039;,
+                    CATEGORY.date_created AS &#039;category_date_created&#039;,
+                    CATEGORY.created_by AS &#039;category_created_by&#039;,
+                    CATEGORY.date_modified AS &#039;category_date_modified&#039;,
+                    CATEGORY.modified_by AS &#039;category_modified_by&#039;,
+                    CATEGORY.note AS &#039;category_note&#039;
+
+            FROM 	product PRODUCT
+            JOIN 	category CATEGORY ON CATEGORY.id = PRODUCT.category_id
+
+            &quot;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -398,7 +503,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProductModel.php"><a href="files/app-models-productmodel.html"><abbr title="App/Models/ProductModel.php">ProductModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">88</span>
 
     </aside>
 
@@ -442,7 +547,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProductModel.php"><a href="files/app-models-productmodel.html"><abbr title="App/Models/ProductModel.php">ProductModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">38</span>
+    <span class="phpdocumentor-element-found-in__line">106</span>
 
     </aside>
 
@@ -694,7 +799,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProductModel.php"><a href="files/app-models-productmodel.html"><abbr title="App/Models/ProductModel.php">ProductModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">53</span>
+    <span class="phpdocumentor-element-found-in__line">121</span>
 
     </aside>
 

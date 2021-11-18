@@ -1,0 +1,14 @@
+SELECT
+	TRAVELER.id AS 'traveler_id',
+	TRAVELER.address_id AS 'traveler_address_id',
+	TRAVELER.first_name AS 'traveler_first_name',
+	TRAVELER.last_name AS 'traveler_last_name',
+	TRAVELER.birthday AS 'traveler_birthday',
+	TRAVELER.enabled AS 'traveler_enabled',
+	TRAVELER.date_created AS 'traveler_date_created',
+	TRAVELER.created_by AS 'traveler_created_by',
+	TRAVELER.date_modified AS 'traveler_date_modified',
+	TRAVELER.modified_by AS 'traveler_modified_by',
+	TRAVELER.note AS 'traveler_note'
+FROM 	traveler TRAVELER
+-- JOIN 	traveler TRAVELER ON TRAVELER.id = {FK_TABLE}.traveler_id

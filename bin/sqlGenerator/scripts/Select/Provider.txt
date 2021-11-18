@@ -1,0 +1,17 @@
+SELECT
+	PROVIDER.id AS 'provider_id',
+	PROVIDER.company_id AS 'provider_company_id',
+	PROVIDER.location_id AS 'provider_location_id',
+	PROVIDER.code_direct_id AS 'provider_code_direct_id',
+	PROVIDER.provider_vendor AS 'provider_provider_vendor',
+	PROVIDER.enabled AS 'provider_enabled',
+	PROVIDER.date_created AS 'provider_date_created',
+	PROVIDER.created_by AS 'provider_created_by',
+	PROVIDER.date_modified AS 'provider_date_modified',
+	PROVIDER.modified_by AS 'provider_modified_by',
+	PROVIDER.note AS 'provider_note',
+	PROVIDER.description_short AS 'provider_description_short',
+	PROVIDER.description_long AS 'provider_description_long',
+	PROVIDER.keywords AS 'provider_keywords'
+FROM 	provider PROVIDER
+-- JOIN 	provider PROVIDER ON PROVIDER.id = {FK_TABLE}.provider_id

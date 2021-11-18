@@ -1,7 +1,7 @@
 const Product = (function () {
     "use strict"
     ///////////////////////////////////////////////
-    const base_url = "/product"
+    const base_url = "/products"
     const _input_product_id = document.getElementById("input_product_id")
     const _input_product_category_id = document.getElementById("input_product_category_id")
     const _input_product_pricing_strategy_types_id = document.getElementById("input_product_pricing_strategy_types_id")
@@ -38,7 +38,9 @@ const Product = (function () {
     const _input_product_modified_by = document.getElementById("input_product_modified_by")
     const _input_product_note = document.getElementById("input_product_note")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    ///////////////////////////////////////////////
+    let $index_table
+    const _product_index_table = document.getElementById("product_index_table")
+    
     const handle_product_error = function (msg) {
         toastr.error(msg)
     }
@@ -80,6 +82,16 @@ const Product = (function () {
             date_modified: formatDateMySQL(),
             modified_by: user_id,
             note: null,
+            keywords: [],
+            seasons: [],
+            units: [],
+            use_provider_location: 0,
+            variants: [],
+            category: {},
+            location: {},
+            vendor: {},
+            profiles: [],
+            provider: {},
         }
     }
     
@@ -129,18 +141,31 @@ const Product = (function () {
             detail.hotel_code = (product.hotel_code) ? product.hotel_code : null
             detail.enabled = (product.enabled) ? product.enabled : 1
             detail.date_created = (product.date_created) ? product.date_created : formatDateMySQL()
-            detail.created_by = (product.created_by) ? product.created_by : created_by
+            detail.created_by = (product.created_by) ? product.created_by : user_id
             detail.date_modified = (product.date_modified) ? product.date_modified : formatDateMySQL()
             detail.modified_by = (product.modified_by) ? product.modified_by : modified_by
             detail.note = (product.note) ? product.note : null
+            detail.category = (product.category) ? product.category : {}
+            detail.keywords = (product.keywords) ? product.keywords : []
+            detail.seasons = (product.seasons) ? product.seasons : []
+            detail.units = (product.units) ? product.units : []
+            detail.use_provider_location = (product.use_provider_location) ? product.use_provider_location : 0
+            detail.variants = (product.variants) ? product.variants : []
+            detail.location = (product.location) ? product.location : {}
+            detail.vendor = (product.vendor) ? product.vendor : {}
+            detail.provider = (product.provider) ? product.provider : {}
         }
         
         Product.detail = detail
         return detail
     }
     
-    const init = function (settings) {
-        //console.log("-- Product --", {})
+    const index = function (settings) {
+        build_index_table()
+        
+        if (settings) {
+            load_all(settings)
+        }
     }
     
     const load_all = function (products) {
@@ -149,12 +174,86 @@ const Product = (function () {
         if (!products) {
             return
         }
+        
         $.each(products, function (i, product) {
             let detail = set(product)
+            $index_table.insertRow(detail)
             Product.all.set("id", detail)
         })
+    }
+    
+    const build_index_table = function () {
         
-        console.log(" Product.all", Product.all)
+        $index_table = $(_product_index_table).table({
+            table_type: "display_list",
+            data: [],
+            columnDefs: [
+                {
+                    title: "Name",
+                    targets: 0,
+                    data: "name",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "SKU",
+                    targets: 1,
+                    data: "sku",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "Provider",
+                    targets: 2,
+                    data: "provider",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data.name + "</span>"
+                    },
+                },
+                {
+                    title: "Vendor",
+                    targets: 3,
+                    data: "vendor",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data.name + "</span>"
+                    },
+                },
+                {
+                    title: "Location",
+                    targets: 4,
+                    data: "location",
+                    render: function (data, type, row, meta) {
+                        let displayLocation = ""
+                        if (defaultLocationDisplayFormat === "short") {
+                            displayLocation = data.display_short
+                        } else if (defaultLocationDisplayFormat === "long") {
+                            displayLocation = data.display_long
+                        } else {
+                            displayLocation = data.display_medium
+                        }
+                        
+                        return "<span style='white-space: nowrap;'>" + displayLocation + "</span>"
+                    },
+                },
+                {
+                    title: "Category",
+                    targets: 5,
+                    data: "category",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data.name + "</span>"
+                    },
+                },
+            ],
+            rowClick: Product.navigate,
+        })
+    }
+    
+    const navigate = function (product) {
+        if (product && product.id) {
+            window.location.replace(base_url + "/" + product.id)
+        }
     }
     ///////////////////////////////////////////////
     return {
@@ -172,6 +271,12 @@ const Product = (function () {
         },
         init: function (settings) {
             init(settings)
+        },
+        index: function (settings) {
+            index(settings)
+        },
+        navigate: function (product) {
+            navigate(product)
         },
     }
     

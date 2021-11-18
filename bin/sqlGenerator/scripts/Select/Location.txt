@@ -1,0 +1,16 @@
+SELECT
+	LOCATION.id AS 'location_id',
+	LOCATION.city_id AS 'location_city_id',
+	LOCATION.location_types_id AS 'location_location_types_id',
+	LOCATION.name AS 'location_name',
+	LOCATION.street_1 AS 'location_street_1',
+	LOCATION.street_2 AS 'location_street_2',
+	LOCATION.zipcode AS 'location_zipcode',
+	LOCATION.enabled AS 'location_enabled',
+	LOCATION.date_created AS 'location_date_created',
+	LOCATION.created_by AS 'location_created_by',
+	LOCATION.date_modified AS 'location_date_modified',
+	LOCATION.modified_by AS 'location_modified_by',
+	LOCATION.note AS 'location_note'
+FROM 	location LOCATION
+-- JOIN 	location LOCATION ON LOCATION.id = {FK_TABLE}.location_id

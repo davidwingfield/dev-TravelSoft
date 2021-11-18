@@ -1,0 +1,18 @@
+SELECT
+	ITINERARY.id AS 'itinerary_id',
+	ITINERARY.customer_id AS 'itinerary_customer_id',
+	ITINERARY.stage_id AS 'itinerary_stage_id',
+	ITINERARY.traveler_id AS 'itinerary_traveler_id',
+	ITINERARY.name AS 'itinerary_name',
+	ITINERARY.start_date AS 'itinerary_start_date',
+	ITINERARY.end_date AS 'itinerary_end_date',
+	ITINERARY.currency_id AS 'itinerary_currency_id',
+	ITINERARY.json AS 'itinerary_json',
+	ITINERARY.enabled AS 'itinerary_enabled',
+	ITINERARY.date_created AS 'itinerary_date_created',
+	ITINERARY.created_by AS 'itinerary_created_by',
+	ITINERARY.date_modified AS 'itinerary_date_modified',
+	ITINERARY.modified_by AS 'itinerary_modified_by',
+	ITINERARY.note AS 'itinerary_note'
+FROM 	itinerary ITINERARY
+-- JOIN 	itinerary ITINERARY ON ITINERARY.id = {FK_TABLE}.itinerary_id

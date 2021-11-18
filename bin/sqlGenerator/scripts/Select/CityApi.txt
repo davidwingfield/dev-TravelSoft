@@ -1,0 +1,12 @@
+SELECT
+	CITY_API.city_id AS 'city_api_city_id',
+	CITY_API.api_id AS 'city_api_api_id',
+	CITY_API.api_city_id AS 'city_api_api_city_id',
+	CITY_API.enabled AS 'city_api_enabled',
+	CITY_API.date_created AS 'city_api_date_created',
+	CITY_API.created_by AS 'city_api_created_by',
+	CITY_API.date_modified AS 'city_api_date_modified',
+	CITY_API.modified_by AS 'city_api_modified_by',
+	CITY_API.note AS 'city_api_note'
+FROM 	city_api CITY_API
+-- JOIN 	city_api CITY_API ON CITY_API.id = {FK_TABLE}.city_api_id

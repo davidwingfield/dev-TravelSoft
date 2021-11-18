@@ -1,0 +1,13 @@
+SELECT
+	MESSAGE_TYPES.id AS 'message_types_id',
+	MESSAGE_TYPES.name AS 'message_types_name',
+	MESSAGE_TYPES.icon AS 'message_types_icon',
+	MESSAGE_TYPES.sort_order AS 'message_types_sort_order',
+	MESSAGE_TYPES.enabled AS 'message_types_enabled',
+	MESSAGE_TYPES.date_created AS 'message_types_date_created',
+	MESSAGE_TYPES.created_by AS 'message_types_created_by',
+	MESSAGE_TYPES.date_modified AS 'message_types_date_modified',
+	MESSAGE_TYPES.modified_by AS 'message_types_modified_by',
+	MESSAGE_TYPES.note AS 'message_types_note'
+FROM 	message_types MESSAGE_TYPES
+-- JOIN 	message_types MESSAGE_TYPES ON MESSAGE_TYPES.id = {FK_TABLE}.message_types_id

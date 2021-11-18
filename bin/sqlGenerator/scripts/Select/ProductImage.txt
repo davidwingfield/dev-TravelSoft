@@ -1,0 +1,13 @@
+SELECT
+	PRODUCT_IMAGE.product_id AS 'product_image_product_id',
+	PRODUCT_IMAGE.image_id AS 'product_image_image_id',
+	PRODUCT_IMAGE.is_shown AS 'product_image_is_shown',
+	PRODUCT_IMAGE.is_cover AS 'product_image_is_cover',
+	PRODUCT_IMAGE.enabled AS 'product_image_enabled',
+	PRODUCT_IMAGE.date_created AS 'product_image_date_created',
+	PRODUCT_IMAGE.created_by AS 'product_image_created_by',
+	PRODUCT_IMAGE.date_modified AS 'product_image_date_modified',
+	PRODUCT_IMAGE.modified_by AS 'product_image_modified_by',
+	PRODUCT_IMAGE.note AS 'product_image_note'
+FROM 	product_image PRODUCT_IMAGE
+-- JOIN 	product_image PRODUCT_IMAGE ON PRODUCT_IMAGE.id = {FK_TABLE}.product_image_id

@@ -208,30 +208,28 @@
          */
         private static function format(array $vendor = []): array
         {
-            //Log::$debug_log->trace($vendor);
-            $company_id = $vendor["company_id"];
-            //Log::$debug_log->trace($company_id);
+            $company_id = (int)$vendor["company_id"];
             $vendor_id = (int)$vendor["vendor_id"];
-            $sku = self::generateSKU($vendor);
+            $sku = (!isset($vendor["vendor_sku"])) ? self::generateSKU($vendor) : $vendor["vendor_sku"];
 
             return array(
-                "vendor_detail" => array(
-                    "id" => $vendor["vendor_id"],
-                    "company_id" => $vendor["company_id"],
-                    "sku" => $sku,
-                    "is_provider" => $vendor["vendor_is_provider"],
-                    "show_online" => $vendor["vendor_show_online"],
-                    "show_sales" => $vendor["vendor_show_sales"],
-                    "show_ops" => $vendor["vendor_show_ops"],
-                    "status_id" => $vendor["vendor_status_id"],
-                    "note" => $vendor["vendor_note"],
-                    "enabled" => $vendor["vendor_enabled"],
-                    "date_created" => $vendor["vendor_date_created"],
-                    "date_modified" => $vendor["vendor_date_modified"],
-                    "created_by" => $vendor["vendor_created_by"],
-                    "modified_by" => $vendor["vendor_modified_by"],
-                ),
-                "company_detail" => array(
+                "id" => $vendor_id,
+                "company_id" => $company_id,
+                "sku" => $sku,
+                "name" => $vendor["company_name"],
+                "is_provider" => $vendor["vendor_is_provider"],
+                "show_online" => $vendor["vendor_show_online"],
+                "show_sales" => $vendor["vendor_show_sales"],
+                "show_ops" => $vendor["vendor_show_ops"],
+                "status_id" => $vendor["vendor_status_id"],
+                "note" => $vendor["vendor_note"],
+                "enabled" => $vendor["vendor_enabled"],
+                "date_created" => $vendor["vendor_date_created"],
+                "date_modified" => $vendor["vendor_date_modified"],
+                "created_by" => $vendor["vendor_created_by"],
+                "modified_by" => $vendor["vendor_modified_by"],
+                "company" => array(
+                    "images" => Image::getByCompanyId($company_id),
                     "id" => $vendor["company_id"],
                     "name" => $vendor["company_name"],
                     "phone_1" => $vendor["company_phone_1"],
@@ -246,9 +244,9 @@
                     "date_modified" => $vendor["company_date_modified"],
                     "status_id" => $vendor["company_status_id"],
                     "note" => $vendor["company_note"],
+                    "addresses" => AddressModel::getByCompanyId((int)$company_id),
+                    "contacts" => ContactModel::getByCompanyId((int)$company_id),
                 ),
-                "addresses" => AddressModel::getByCompanyId((int)$company_id),
-                "contacts" => ContactModel::getByCompanyId((int)$company_id),
             );
 
         }
@@ -277,6 +275,7 @@
                 "date_modified" => $vendor["vendor_date_modified"],
                 "created_by" => $vendor["vendor_created_by"],
                 "modified_by" => $vendor["vendor_modified_by"],
+
             );
 
         }

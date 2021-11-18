@@ -1,0 +1,11 @@
+SELECT
+	LOCATION_PRODUCT.product_id AS 'location_product_product_id',
+	LOCATION_PRODUCT.location_id AS 'location_product_location_id',
+	LOCATION_PRODUCT.enabled AS 'location_product_enabled',
+	LOCATION_PRODUCT.date_created AS 'location_product_date_created',
+	LOCATION_PRODUCT.created_by AS 'location_product_created_by',
+	LOCATION_PRODUCT.date_modified AS 'location_product_date_modified',
+	LOCATION_PRODUCT.modified_by AS 'location_product_modified_by',
+	LOCATION_PRODUCT.note AS 'location_product_note'
+FROM 	location_product LOCATION_PRODUCT
+-- JOIN 	location_product LOCATION_PRODUCT ON LOCATION_PRODUCT.id = {FK_TABLE}.location_product_id

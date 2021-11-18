@@ -1,0 +1,18 @@
+SELECT
+	INVENTORY.product_id AS 'inventory_product_id',
+	INVENTORY.unit_id AS 'inventory_unit_id',
+	INVENTORY.profile_id AS 'inventory_profile_id',
+	INVENTORY.date_id AS 'inventory_date_id',
+	INVENTORY.description AS 'inventory_description',
+	INVENTORY.qty_available AS 'inventory_qty_available',
+	INVENTORY.qty_used AS 'inventory_qty_used',
+	INVENTORY.qty_alotted AS 'inventory_qty_alotted',
+	INVENTORY.qty_lost AS 'inventory_qty_lost',
+	INVENTORY.enabled AS 'inventory_enabled',
+	INVENTORY.date_created AS 'inventory_date_created',
+	INVENTORY.created_by AS 'inventory_created_by',
+	INVENTORY.date_modified AS 'inventory_date_modified',
+	INVENTORY.modified_by AS 'inventory_modified_by',
+	INVENTORY.note AS 'inventory_note'
+FROM 	inventory INVENTORY
+-- JOIN 	inventory INVENTORY ON INVENTORY.id = {FK_TABLE}.inventory_id

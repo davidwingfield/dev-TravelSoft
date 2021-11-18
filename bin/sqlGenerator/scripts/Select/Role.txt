@@ -1,0 +1,13 @@
+SELECT
+	ROLE.id AS 'role_id',
+	ROLE.name AS 'role_name',
+	ROLE.level AS 'role_level',
+	ROLE.sort_order AS 'role_sort_order',
+	ROLE.enabled AS 'role_enabled',
+	ROLE.date_created AS 'role_date_created',
+	ROLE.created_by AS 'role_created_by',
+	ROLE.date_modified AS 'role_date_modified',
+	ROLE.modified_by AS 'role_modified_by',
+	ROLE.note AS 'role_note'
+FROM 	role ROLE
+-- JOIN 	role ROLE ON ROLE.id = {FK_TABLE}.role_id

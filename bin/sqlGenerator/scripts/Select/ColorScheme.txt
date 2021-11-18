@@ -1,0 +1,30 @@
+SELECT
+		COLOR_SCHEME.id AS 'color_scheme_id',
+		COLOR_SCHEME.name AS 'color_scheme_name',
+		COLOR_SCHEME.background_color AS 'color_scheme_background_color',
+		COLOR_SCHEME.border_color AS 'color_scheme_border_color',
+		COLOR_SCHEME.text_color AS 'color_scheme_text_color',
+		COLOR_SCHEME.sort_order AS 'color_scheme_sort_order',
+		COLOR_SCHEME.enabled AS 'color_scheme_enabled',
+		COLOR_SCHEME.date_created AS 'color_scheme_date_created',
+		COLOR_SCHEME.created_by AS 'color_scheme_created_by',
+		COLOR_SCHEME.date_modified AS 'color_scheme_date_modified',
+		COLOR_SCHEME.modified_by AS 'color_scheme_modified_by',
+		COLOR_SCHEME.note AS 'color_scheme_note'
+FROM 	color_scheme COLOR_SCHEME
+-- JOIN 	color_scheme COLOR_SCHEME ON COLOR_SCHEME.id = {FK_TABLE}.color_scheme_id
+
+/*
+'id'=>$color_scheme['color_scheme_id'],
+'name'=>$color_scheme['color_scheme_name'],
+'background_color'=>$color_scheme['color_scheme_background_color'],
+'border_color'=>$color_scheme['color_scheme_border_color'],
+'text_color'=>$color_scheme['color_scheme_text_color'],
+'sort_order'=>$color_scheme['color_scheme_sort_order'],
+'enabled'=>$color_scheme['color_scheme_enabled'],
+'date_created'=>$color_scheme['color_scheme_date_created'],
+'created_by'=>$color_scheme['color_scheme_created_by'],
+'date_modified'=>$color_scheme['color_scheme_date_modified'],
+'modified_by'=>$color_scheme['color_scheme_modified_by'],
+'note'=>$color_scheme['color_scheme_note']
+*/

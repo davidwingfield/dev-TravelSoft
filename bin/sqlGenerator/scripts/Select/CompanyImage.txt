@@ -1,0 +1,11 @@
+SELECT
+	COMPANY_IMAGE.company_id AS 'company_image_company_id',
+	COMPANY_IMAGE.image_id AS 'company_image_image_id',
+	COMPANY_IMAGE.enabled AS 'company_image_enabled',
+	COMPANY_IMAGE.created_by AS 'company_image_created_by',
+	COMPANY_IMAGE.date_created AS 'company_image_date_created',
+	COMPANY_IMAGE.modified_by AS 'company_image_modified_by',
+	COMPANY_IMAGE.date_modified AS 'company_image_date_modified',
+	COMPANY_IMAGE.note AS 'company_image_note'
+FROM 	company_image COMPANY_IMAGE
+-- JOIN 	company_image COMPANY_IMAGE ON COMPANY_IMAGE.id = {FK_TABLE}.company_image_id

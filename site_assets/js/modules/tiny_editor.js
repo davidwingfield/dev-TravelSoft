@@ -4,18 +4,19 @@ const tinyEditor = (function () {
     
     const init = function (settings) {
         but_toggle = document.querySelectorAll(".but_toggle")
-        
         but_toggle.forEach(el => el.addEventListener("click", event => {
-            
             if (el.dataset.texted) {
                 let editorId = el.dataset.texted
                 let editor = $("#" + editorId)
+                let cardBlock = editor.parents("div.card")
                 if (tinyMCE.get(editorId)) {
-                    
-                    editor.val(decodeHtml(editor.val()))
+                    editor.val(htmlEncode(editor.val()))
                     tinymce.remove("#" + editorId)
+                    cardBlock.removeClass("is-fullscreen")
                 } else {
                     editor.val(decodeHtml(editor.val()))
+                    cardBlock.addClass("is-fullscreen")
+                    console.dir(cardBlock)
                     addTinyMCE(editorId)
                 }
             }
@@ -23,7 +24,6 @@ const tinyEditor = (function () {
     }
     
     const addTinyMCE = function (el) {
-        
         tinymce.init({
             selector: "#" + el,
             menubar: false,
@@ -39,7 +39,6 @@ const tinyEditor = (function () {
             font_formats: "Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Open Sans=Open Sans;Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats",
             toolbar1: "undo redo | styleselect | fontselect fontsizeselect | removeformat | numlist bullist checklist | outdent indent ",
             toolbar2: "cut copy | bold italic underline strikethrough | forecolor | alignleft aligncenter alignright alignjustify | backcolor",
-            
             content_style: "body { font-family:\"Open Sans\", sans-serif; font-size:14px; font-weight: 400 }",
             style_formats: [
                 {
@@ -145,7 +144,7 @@ const tinyEditor = (function () {
         },
     }
 })()
-$(document).ready(function () {
+$(function () {
     tinyEditor.init()
 })
 

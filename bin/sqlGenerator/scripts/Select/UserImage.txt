@@ -1,0 +1,11 @@
+SELECT
+	USER_IMAGE.user_id AS 'user_image_user_id',
+	USER_IMAGE.image_id AS 'user_image_image_id',
+	USER_IMAGE.enabled AS 'user_image_enabled',
+	USER_IMAGE.created_by AS 'user_image_created_by',
+	USER_IMAGE.date_created AS 'user_image_date_created',
+	USER_IMAGE.modified_by AS 'user_image_modified_by',
+	USER_IMAGE.date_modified AS 'user_image_date_modified',
+	USER_IMAGE.note AS 'user_image_note'
+FROM 	user_image USER_IMAGE
+-- JOIN 	user_image USER_IMAGE ON USER_IMAGE.id = {FK_TABLE}.user_image_id

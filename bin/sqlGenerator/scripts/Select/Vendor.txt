@@ -1,0 +1,17 @@
+SELECT
+	VENDOR.id AS 'vendor_id',
+	VENDOR.company_id AS 'vendor_company_id',
+	VENDOR.status_id AS 'vendor_status_id',
+	VENDOR.show_online AS 'vendor_show_online',
+	VENDOR.show_sales AS 'vendor_show_sales',
+	VENDOR.show_ops AS 'vendor_show_ops',
+	VENDOR.is_provider AS 'vendor_is_provider',
+	VENDOR.sku AS 'vendor_sku',
+	VENDOR.enabled AS 'vendor_enabled',
+	VENDOR.date_created AS 'vendor_date_created',
+	VENDOR.created_by AS 'vendor_created_by',
+	VENDOR.date_modified AS 'vendor_date_modified',
+	VENDOR.modified_by AS 'vendor_modified_by',
+	VENDOR.note AS 'vendor_note'
+FROM 	vendor VENDOR
+-- JOIN 	vendor VENDOR ON VENDOR.id = {FK_TABLE}.vendor_id

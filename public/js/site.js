@@ -1011,18 +1011,19 @@ const tinyEditor = (function () {
     
     const init = function (settings) {
         but_toggle = document.querySelectorAll(".but_toggle")
-        
         but_toggle.forEach(el => el.addEventListener("click", event => {
-            
             if (el.dataset.texted) {
                 let editorId = el.dataset.texted
                 let editor = $("#" + editorId)
+                let cardBlock = editor.parents("div.card")
                 if (tinyMCE.get(editorId)) {
-                    
-                    editor.val(decodeHtml(editor.val()))
+                    editor.val(htmlEncode(editor.val()))
                     tinymce.remove("#" + editorId)
+                    cardBlock.removeClass("is-fullscreen")
                 } else {
                     editor.val(decodeHtml(editor.val()))
+                    cardBlock.addClass("is-fullscreen")
+                    console.dir(cardBlock)
                     addTinyMCE(editorId)
                 }
             }
@@ -1030,7 +1031,6 @@ const tinyEditor = (function () {
     }
     
     const addTinyMCE = function (el) {
-        
         tinymce.init({
             selector: "#" + el,
             menubar: false,
@@ -1046,7 +1046,6 @@ const tinyEditor = (function () {
             font_formats: "Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Open Sans=Open Sans;Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats",
             toolbar1: "undo redo | styleselect | fontselect fontsizeselect | removeformat | numlist bullist checklist | outdent indent ",
             toolbar2: "cut copy | bold italic underline strikethrough | forecolor | alignleft aligncenter alignright alignjustify | backcolor",
-            
             content_style: "body { font-family:\"Open Sans\", sans-serif; font-size:14px; font-weight: 400 }",
             style_formats: [
                 {
@@ -1152,7 +1151,7 @@ const tinyEditor = (function () {
         },
     }
 })()
-$(document).ready(function () {
+$(function () {
     tinyEditor.init()
 })
 
@@ -1569,9 +1568,19 @@ $.fn.BuildKeyword = function (keywords) {
     }
 }
 
-var Upload = function (file) {
+const Upload = function (file) {
     this.file = file
 }
+
+const _image_manager_is_cover_image = document.getElementById("image_manager_is_cover_image")
+const _image_manager_title = document.getElementById("image_manager_title")
+const _image_manager_caption = document.getElementById("image_manager_caption")
+const _image_manager_upload = document.getElementById("image_manager_upload")
+const _image_manager_alt_text = document.getElementById("image_manager_alt_text")
+const _image_manager_form_data = document.getElementById("image_manager_form_data")
+const _image_manager_image_id = document.getElementById("image_manager_id")
+const _provider_edit = document.getElementById("provider_edit")
+const _provider_company_id = document.getElementById("provider_company_id")
 
 Upload.prototype.getType = function () {
     return this.file.type
@@ -1586,16 +1595,12 @@ Upload.prototype.getName = function () {
 }
 
 Upload.prototype.doUpload = function () {
-    const _provider_edit = document.getElementById("provider_edit")
-    const _provider_company_id = document.getElementById("provider_company_id")
-    const _image_manager_caption = document.getElementById("image_manager_caption")
-    const _image_manager_title = document.getElementById("image_manager_title")
-    const _image_manager_alt_text = document.getElementById("image_manager_alt_text")
-    const _image_manager_is_cover_image = document.getElementById("image_manager_is_cover_image")
-    var that = this
-    var formData = new FormData()
+    let that = this
+    let formData = new FormData()
     
-    // add assoc key values, this will be posts values
+    /**
+     * add assoc key values, this will be posts values
+     */
     formData.append("file", this.file, this.getName())
     formData.append("upload_file", true)
     formData.append("title", (_image_manager_title.value !== "") ? _image_manager_title.value : null)
@@ -1603,6 +1608,9 @@ Upload.prototype.doUpload = function () {
     formData.append("is_cover_image", (_image_manager_is_cover_image.checked !== true) ? parseInt(0) : parseInt(1))
     formData.append("alt", (_image_manager_alt_text.value !== "") ? _image_manager_alt_text.value : null)
     
+    /**
+     * check if provider, user, unit, or product
+     */
     if (_provider_edit) {
         formData.append("directory_id", parseInt(_provider_company_id.value))
         formData.append("directory", "company")
@@ -1619,31 +1627,32 @@ Upload.prototype.doUpload = function () {
             return myXhr
         },
         success: function (data) {
-            let image, result = {}
+            console.log("data", data)
+            let image, result = null
             if (data) {
                 if (data.result) {
                     result = data.result
-                    console.log("result", result)
+                    if (result[0]) {
+                        image = result[0]
+                    }
+                }
+            }
+            
+            if (image) {
+                let imageManager
+                if (_provider_edit) {
+                    imageManager = $("#companyImages").imageManager()
                 }
                 
-                if (result[0]) {
-                    console.log("result[0]", result[0])
-                    image = result[0]
-                }
+                imageManager.addImage(image)
+                toastr.success("Image Uploaded")
+                Upload.prototype.resetForm()
+                $("button.dropify-clear").click()
             }
             
-            console.log("image", image)
-            
-            let imageManager
-            if (_provider_edit) {
-                imageManager = $("#companyImages").imageManager()
-            }
-            
-            imageManager.addImage(image)
-            toastr.success("Image Uploaded")
-            Upload.prototype.progressReset()
         },
         error: function (error) {
+            toastr.error("Error")
             console.log("error", error)
         },
         async: true,
@@ -1669,27 +1678,108 @@ Upload.prototype.progressHandling = function (event) {
 }
 
 Upload.prototype.progressReset = function () {
-    var percent = 0
-    var progress_bar_id = "#progress-wrp"
+    let percent = 0
+    let progress_bar_id = "#progress-wrp"
     $(progress_bar_id + " .progress-bar").css("width", +percent + "%")
     $(progress_bar_id + " .status").text(percent + "%")
 }
 
+Upload.prototype.resetForm = function () {
+    Upload.prototype.progressReset()
+    _image_manager_is_cover_image.checked = false
+    _image_manager_image_id.value = ""
+    _image_manager_title.value = ""
+    _image_manager_upload.value = ""
+    _image_manager_caption.value = ""
+    _image_manager_alt_text.value = ""
+    _image_manager_upload.disabled = false
+    $(_image_manager_form_data).hide()
+}
+
+Upload.prototype.populateForm = function (image) {
+    console.log("populateForm", image)
+    Upload.prototype.progressReset()
+    let img = image.path + "/" + image.name + "." + image.extension
+    _image_manager_is_cover_image.checked = (image.is_cover_image === 1)
+    _image_manager_image_id.value = image.id
+    _image_manager_title.value = image.title
+    _image_manager_caption.value = image.caption
+    _image_manager_alt_text.value = image.alt
+    $("button.dropify-clear").click()
+    _image_manager_upload.disabled = true
+    $(_image_manager_form_data).show()
+    
+}
+
+$("#image_manager_upload")
+  .on("change", function () {
+      _image_manager_is_cover_image.checked = false
+      _image_manager_image_id.value = ""
+      _image_manager_title.value = ""
+      _image_manager_caption.value = ""
+      _image_manager_alt_text.value = ""
+      $(_image_manager_form_data).show()
+  })
+$("#image_manager_clear_button")
+  .on("click", function () {
+      Upload.prototype.resetForm()
+  })
+
 $.fn.imageManager = function (options) {
-    const carName = $(this).attr("id")
     const $carouselWrapper = $(this).find("div.carousel")
     const $carouselIndicators = $(this).find("ol.carousel-indicators")
     const $carouselInner = $(this).find("div.carousel-inner")
-    const $dropify = $(this).find("input.dropify")
+    const _form_edit_company_images = document.getElementById("companyImageManager")
+    const _image_manager_is_cover_image = document.getElementById("image_manager_is_cover_image")
+    const _image_manager_title = document.getElementById("image_manager_title")
+    const _image_manager_caption = document.getElementById("image_manager_caption")
+    const _image_manager_upload = document.getElementById("image_manager_upload")
+    const _image_manager_alt_text = document.getElementById("image_manager_alt_text")
+    const _image_manager_form_data = document.getElementById("image_manager_form_data")
+    const _image_manager_image_id = document.getElementById("image_manager_id")
     const $imageForm = $("#image_manager_form_data")
-    
+    const _image_manager_cancel_upload = document.getElementById("image_manager_cancel_upload")
+    let drEvent, validator
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let counter = 0
+    let carouselId = ""
+    
+    const form_rules = {
+        rules: {
+            image_manager_title: {
+                required: true,
+            },
+            image_manager_alt_text: {
+                required: true,
+            },
+            image_manager_caption: {
+                required: true,
+            },
+        },
+        messages: {
+            image_manager_title: {
+                required: "Field Required",
+            },
+            image_manager_alt_text: {
+                required: "Field Required",
+            },
+            image_manager_caption: {
+                required: "Field Required",
+            },
+        },
+    }
     
     $("#image_manager_upload_button")
       .on("click", function () {
-          let file = $("input.dropify")[0].files[0]
-          let upload = new Upload(file)
-          upload.doUpload()
+          if (_form_edit_company_images) {
+              if (validate_form()) {
+                  confirmDialog(`Would you like to update?`, (ans) => {
+                      if (ans) {
+                          save()
+                      }
+                  })
+              }
+          }
       })
     
     $("button.dropify-clear")
@@ -1697,20 +1787,41 @@ $.fn.imageManager = function (options) {
           $("input.dropify").trigger("change")
       })
     
-    $("input.dropify")
-      .on("change", function () {
-          
-          if ($(this).val() !== "") {
-              show_form()
-          } else {
-              hide_form()
-          }
+    $(_image_manager_cancel_upload)
+      .on("click", function () {
+          Upload.prototype.resetForm()
+          $("button.dropify-clear").click()
       })
     
-    const init = function (options) {
+    handle_image_error = function (msg) {
+        toastr.error(msg)
+    }
+    
+    const updateImage = function (dataToSend, callback) {
+        let url = "/api/v1.0/images/update"
         
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handle_image_error("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
+    
+    const validate_form = function () {
+        return $(_form_edit_company_images).valid()
+    }
+    
+    const init = function (options) {
+        drEvent = $("#image_manager_upload").dropify({})
         if (options) {
-            console.log("options", options)
             if (options.images) {
                 loadAll(options.images)
             }
@@ -1718,20 +1829,70 @@ $.fn.imageManager = function (options) {
                 carouselId = "carousel-" + options.id
             }
         }
+        if (_form_edit_company_images) {
+            validator_init(form_rules)
+            validator = $(_form_edit_company_images).validate()
+            
+        }
         
         $carouselWrapper.carousel()
     }
     
-    const show_form = function () {
-        $imageForm.show()
-    }
-    
-    const hide_form = function () {
-        $imageForm.hide()
+    const save = function () {
+        let file = null
+        if (_image_manager_image_id) {
+            if (!isNaN(parseInt(_image_manager_image_id.value))) {
+                let dataToSend = this.all.get(parseInt(_image_manager_image_id.value))
+                
+                dataToSend.alt = (_image_manager_alt_text.value !== "") ? _image_manager_alt_text.value : null
+                dataToSend.caption = (_image_manager_caption.value !== "") ? _image_manager_caption.value : null
+                dataToSend.is_cover_image = (_image_manager_is_cover_image.checked === true) ? 1 : 0
+                dataToSend.title = (_image_manager_title.value !== "") ? _image_manager_title.value : null
+                
+                if (_provider_edit) {
+                    dataToSend.directory_id = (parseInt(_provider_company_id.value))
+                    dataToSend.directory = "company"
+                }
+                
+                updateImage(dataToSend, function (data) {
+                    console.log("data", data)
+                    let image
+                    
+                    if (data) {
+                        if (data[0]) {
+                            image = data[0]
+                            set(image)
+                        }
+                    }
+                })
+                
+            } else {
+                let $input = $(_image_manager_upload)
+                
+                if ($input) {
+                    if ($input[0]) {
+                        if ($input[0].files) {
+                            if ($input[0].files[0]) {
+                                file = $input[0].files[0]
+                                let upload = new Upload(file)
+                                upload.doUpload()
+                            } else {
+                                //console.log("Missing $input[0].files[0]")
+                            }
+                        } else {
+                            //console.log("Missing $input[0].files")
+                        }
+                    } else {
+                        //console.log("Missing $input[0]")
+                    }
+                } else {
+                    //console.log("Missing $input")
+                }
+            }
+        }
     }
     
     const default_detail = function () {
-        
         return {
             id: null,
             path: null,
@@ -1746,7 +1907,6 @@ $.fn.imageManager = function (options) {
             modified_by: user_id,
             note: null,
         }
-        
     }
     
     const set_detail = function (image) {
@@ -1780,9 +1940,10 @@ $.fn.imageManager = function (options) {
         let $view = $("<div>")
         let $mask = $("<div>")
         let $caption = $("<p>")
+        let is_cover = (image.is_cover_image === 1) ? " is_cover " : ""
         
         $carouselItem
-          .addClass("carousel-item " + active)
+          .addClass("carousel-item " + active + is_cover)
         
         $view
           .addClass("view")
@@ -1798,17 +1959,32 @@ $.fn.imageManager = function (options) {
         
         $mask
           .addClass("mask rgba-blue-light")
+          .data("key", image)
+          .css({ "cursor": "pointer" })
+          .on("click", function () {
+              populate_form($(this).data("key"))
+          })
           .appendTo($view)
         
         $heading
           .addClass("")
           .text(image_title)
           .appendTo($carouselCaption)
+          .css({ "cursor": "pointer" })
+          .data("key", image)
+          .on("click", function () {
+              populate_form($(this).data("key"))
+          })
         
         $caption
           .addClass("")
           .text(image_caption)
           .appendTo($carouselCaption)
+          .data("key", image)
+          .css({ "cursor": "pointer" })
+          .on("click", function () {
+              populate_form($(this).data("key"))
+          })
         
         $carouselCaption
           .addClass("carousel-caption")
@@ -1816,89 +1992,86 @@ $.fn.imageManager = function (options) {
         
         return $carouselItem
         
-        switch (image_type) {
-            case "jpg":
-            case "jpeg":
-            case "gif":
-            case "png":
-                return `
-                    <div class="carousel-item ${active}">
-                        <!--Mask color-->
-                        <div class="view">
-                            <img class="d-block w-100 imageManager_edit" src="" data-imgid="${image_id}" data-is_cover="${image_is_cover_image}" alt="${image_alt}">
-                            <div class="mask rgba-blue-light" onclick=""></div>
-                        </div>
-                        <div class="carousel-caption">
-                            <h3 class="h3-responsive" data-imgid="${image_id}"  data-is_cover="${image_is_cover_image}" onclick="$.fn.imageManager.this(this)">${image_title}</h3>
-                            <p>${image_caption}</p>
-                        </div>
-                    </div>
-            `
-            case "avi":
-            case "mpeg":
-            case "mp4":
-                return `
-                    <div class="carousel-item ${active}">
-                        <!--Mask color-->
-                        <div class="view">
-                            <video class="video-fluid" autoplay loop muted>
-                                <source src="/public/img/${image_path}.${image_type}" type="video/mp4" />
-                            </video>
-                            <div class="mask rgba-blue-light"></div>
-                        </div>
-                        <div class="carousel-caption">
-                            <h3 class="h3-responsive" data-imgid="${image_id}"  data-is_cover="${image_is_cover_image}" >${image_title}</h3>
-                            <p>${image_caption}</p>
-                        </div>
-                    </div>
-            `
-        }
-        
+    }
+    
+    const populate_form = function (image) {
+        Upload.prototype.populateForm(image)
     }
     
     const formatIndicator = function (image, count) {
         let active = (count === 0) ? "active" : ""
+        let is_cover = (image.is_cover_image === 1) ? " is_cover " : ""
         let $li = $("<li>")
         $li
-          .addClass(active)
+          .addClass(active + " " + is_cover)
           .attr("data-slide-to", count)
           .attr("data-target", "#carousel-companyImageManager")
         return $li
-        
-        return `
-        <li data-target="#carousel-companyImageManager" data-slide-to="${count}" class="${active}"></li>
-        `
     }
     
-    let counter = 0
-    let carouselId = ""
+    const format_image_lightbox = function (image) {
+        console.log(image)
+        
+        if (image) {
+            let image_alt = (image.alt) ? image.alt : ""
+            let image_name = (image.name) ? image.name : ""
+            let image_caption = (image.caption) ? image.caption : ""
+            let image_id = (image.id) ? image.id : 3
+            let image_is_cover_image = (image.is_cover_image) ? image.is_cover_image : 0
+            let image_path = (image.path) ? image.path : ""
+            let image_title = (image.title) ? image.title : ""
+            let image_type = (image.extension) ? image.extension : "jpg"
+            let data_size = image.width + "x" + image.height
+            let thumbs_path = image.path.replace("public/img", "public/img/thumbs")
+            let $img = $(`<img src="${thumbs_path}/${image_name}.${image_type}"  alt="${image_alt}" class="img-fluid" >`)
+            $img.data("key", image)
+            
+            let $figure = $("<figure class='col-md-4'>")
+            let $a = $(`<a href="${image_path}/${image_name}.${image_type}" data-size="${data_size}">`)
+            $img.appendTo($a)
+            
+            let $figcaption = $("<figcaption itemprop='caption description'>")
+            $figcaption.text = image_caption
+            
+            $a.appendTo($figure)
+            $figcaption.appendTo($figure)
+            return $figure
+        }
+        
+    }
     
     const loadAll = function (images) {
-        
+        counter = 0
         $carouselIndicators.empty()
         $carouselInner.empty()
         this.all = new Map()
+        
         for (let n = 0; n < images.length; n++) {
             let im = images[n]
             this.all.set(im.id, im)
+            //$("div.mdb-lightbox").append(format_image_lightbox(im))
             $carouselIndicators.append(formatIndicator(im, counter))
             $carouselInner.append(formatImage(im, counter))
             counter += 1
         }
-        console.log("all", this.all)
+        
     }
     
-    init(options)
+    const set = function (image) {
+        if (image) {
+            this.all.set(image.id, image)
+            loadAll(Array.from(this.all.values()))
+        }
+    }
     
     const addImage = function (image) {
         if (image) {
             this.all.set(image.id, image)
-            $carouselIndicators.appendTo(formatIndicator(image, counter))
-            $carouselInner.appendTo(formatImage(image, counter))
-            counter += 1
+            loadAll(Array.from(this.all.values()))
         }
-        
     }
+    
+    init(options)
     
     return {
         addImage: function (image) {
@@ -1910,6 +2083,9 @@ $.fn.imageManager = function (options) {
         all: new Map(),
         init: function (settings) {
             init(settings)
+        },
+        loadAll: function (images) {
+            loadAll(images)
         },
     }
 }
@@ -4579,24 +4755,13 @@ const Location = (function () {
 
 const Address = (function () {
     "use strict"
-    //Path
-    const base_url = "/addresses"
-    //Buttons
     const _button_add_address_table = document.getElementById("button_add_address_table")
     const _button_close_edit_address_form = document.getElementById("button_close_edit_address_form")
     const _button_clear_form_edit_address = document.getElementById("button_clear_form_edit_address")
     const _button_submit_form_edit_address = document.getElementById("button_submit_form_edit_address")
-    /**
-     * _form_edit_address
-     *
-     * @type {HTMLElement}
-     * @private
-     */
     const _form_edit_address = document.getElementById("form_edit_address")
     const _card_edit_address_form = document.getElementById("card_edit_address_form")
-    //Tables
     const _table_address = document.getElementById("table_address")
-    //Fields
     const _address_id = document.getElementById("address_id")
     const _company_id = document.getElementById("company_id")
     const _address_enabled = document.getElementById("address_enabled")
@@ -4610,7 +4775,9 @@ const Address = (function () {
     const _address_postal_code = document.getElementById("address_postal_code")
     const _address_company_id = document.getElementById("address_company_id")
     const _clear_address_table = document.getElementById("clear_address_table")
-    //Defaults
+    /**
+     * Defaults
+     */
     let default_display = default_address_view
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $address_table = $(_table_address)
@@ -5686,8 +5853,6 @@ const Company = (function () {
     const _provider_company_id = document.getElementById("provider_company_id")
     const _button_clear_form_edit_company = document.getElementById("button_clear_form_edit_company")
     const _company_edit_table_filters = document.getElementById("company_edit_table_filters")
-    
-    //
     const form_rules = {
         rules: {
             company_name: {
@@ -5716,13 +5881,11 @@ const Company = (function () {
         },
         
     }
-    
     let temp_company = {}
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let validator
     let globalSelectedCompany = false
     let suggestionsTempCompany = []
-    
     let tempCompany = {}
     
     $("a[data-toggle=\"tab\"]").on("hide.bs.tab", function (e) {
@@ -5989,8 +6152,6 @@ const Company = (function () {
         })
     }
     
-    // ----
-    
     const company_exists = function (name) {
         if (name && name !== "") {
             let dataToSend = {
@@ -6071,10 +6232,7 @@ const Company = (function () {
         }
     }
     
-    // ----
-    
     const init = function (company) {
-        console.log("Company:init()", company)
         let images = []
         if (company) {
             let detail = set_detail(company)
@@ -6096,8 +6254,6 @@ const Company = (function () {
             images: images,
         })
     }
-    
-    // ----
     
     const validate_form = function () {
         return $(_form_edit_company).valid()
@@ -8015,20 +8171,20 @@ const Provider = (function () {
     
     const base_url = "/providers"
     
-    //Buttons
+    /** Buttons */
     const _button_add_provider_page_heading = document.getElementById("button_add_provider_page_heading")
     const _button_edit_provider_name = document.getElementById("button_edit_provider_name")
     const _button_save_provider = document.getElementById("button_save_provider")
-    //Tabs
+    /** Tabs */
     const _panel_tab_contact = document.getElementById("panel_tab_contact")
     const _panel_tab_company = document.getElementById("panel_tab_company")
     const _panel_tab_vendor = document.getElementById("panel_tab_vendor")
     const _panel_tab_location = document.getElementById("panel_tab_location")
     const _panel_tab_address = document.getElementById("panel_tab_address")
     const _panel_tab_provider = document.getElementById("panel_tab_provider")
-    //Tables
+    /** Tables */
     const _table_provider_index = document.getElementById("table_provider_index")
-    //Fields
+    /** Fields */
     const _location_id = document.getElementById("location_id")
     const _company_name = document.getElementById("company_name")
     const _company_cover_image = document.getElementById("company_cover_image")
@@ -8409,11 +8565,12 @@ const Provider = (function () {
      * @param provider
      */
     const save = function (provider) {
-        
         if (provider) {
             updateProvider(provider, function (data) {
                 if (data) {
+                    console.log("data 1", data)
                     if (data[0]) {
+                        console.log("data[0] 1", data[0])
                         let details = data[0]
                         if (details.id) {
                             if (_provider_id.value === "" || isNaN(parseInt(_provider_id.value))) {
@@ -8447,6 +8604,7 @@ const Provider = (function () {
         if (dataToSend) {
             try {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    console.log(data)
                     if (data) {
                         return callback(data)
                     } else {
@@ -8611,8 +8769,6 @@ const Provider = (function () {
         _provider_enabled.checked = true
     }
     
-    // ----
-    
     /**
      * fetch provider by name
      *
@@ -8682,7 +8838,7 @@ const Provider = (function () {
             }
             
         }
-        console.log("Provider:edit - provider", provider)
+        
         populate_form(provider)
         // ----
         Vendor.init(vendor)
@@ -8754,7 +8910,7 @@ const Provider = (function () {
 const Product = (function () {
     "use strict"
     ///////////////////////////////////////////////
-    const base_url = "/product"
+    const base_url = "/products"
     const _input_product_id = document.getElementById("input_product_id")
     const _input_product_category_id = document.getElementById("input_product_category_id")
     const _input_product_pricing_strategy_types_id = document.getElementById("input_product_pricing_strategy_types_id")
@@ -8791,7 +8947,9 @@ const Product = (function () {
     const _input_product_modified_by = document.getElementById("input_product_modified_by")
     const _input_product_note = document.getElementById("input_product_note")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    ///////////////////////////////////////////////
+    let $index_table
+    const _product_index_table = document.getElementById("product_index_table")
+    
     const handle_product_error = function (msg) {
         toastr.error(msg)
     }
@@ -8833,6 +8991,16 @@ const Product = (function () {
             date_modified: formatDateMySQL(),
             modified_by: user_id,
             note: null,
+            keywords: [],
+            seasons: [],
+            units: [],
+            use_provider_location: 0,
+            variants: [],
+            category: {},
+            location: {},
+            vendor: {},
+            profiles: [],
+            provider: {},
         }
     }
     
@@ -8882,18 +9050,31 @@ const Product = (function () {
             detail.hotel_code = (product.hotel_code) ? product.hotel_code : null
             detail.enabled = (product.enabled) ? product.enabled : 1
             detail.date_created = (product.date_created) ? product.date_created : formatDateMySQL()
-            detail.created_by = (product.created_by) ? product.created_by : created_by
+            detail.created_by = (product.created_by) ? product.created_by : user_id
             detail.date_modified = (product.date_modified) ? product.date_modified : formatDateMySQL()
             detail.modified_by = (product.modified_by) ? product.modified_by : modified_by
             detail.note = (product.note) ? product.note : null
+            detail.category = (product.category) ? product.category : {}
+            detail.keywords = (product.keywords) ? product.keywords : []
+            detail.seasons = (product.seasons) ? product.seasons : []
+            detail.units = (product.units) ? product.units : []
+            detail.use_provider_location = (product.use_provider_location) ? product.use_provider_location : 0
+            detail.variants = (product.variants) ? product.variants : []
+            detail.location = (product.location) ? product.location : {}
+            detail.vendor = (product.vendor) ? product.vendor : {}
+            detail.provider = (product.provider) ? product.provider : {}
         }
         
         Product.detail = detail
         return detail
     }
     
-    const init = function (settings) {
-        //console.log("-- Product --", {})
+    const index = function (settings) {
+        build_index_table()
+        
+        if (settings) {
+            load_all(settings)
+        }
     }
     
     const load_all = function (products) {
@@ -8902,12 +9083,86 @@ const Product = (function () {
         if (!products) {
             return
         }
+        
         $.each(products, function (i, product) {
             let detail = set(product)
+            $index_table.insertRow(detail)
             Product.all.set("id", detail)
         })
+    }
+    
+    const build_index_table = function () {
         
-        console.log(" Product.all", Product.all)
+        $index_table = $(_product_index_table).table({
+            table_type: "display_list",
+            data: [],
+            columnDefs: [
+                {
+                    title: "Name",
+                    targets: 0,
+                    data: "name",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "SKU",
+                    targets: 1,
+                    data: "sku",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "Provider",
+                    targets: 2,
+                    data: "provider",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data.name + "</span>"
+                    },
+                },
+                {
+                    title: "Vendor",
+                    targets: 3,
+                    data: "vendor",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data.name + "</span>"
+                    },
+                },
+                {
+                    title: "Location",
+                    targets: 4,
+                    data: "location",
+                    render: function (data, type, row, meta) {
+                        let displayLocation = ""
+                        if (defaultLocationDisplayFormat === "short") {
+                            displayLocation = data.display_short
+                        } else if (defaultLocationDisplayFormat === "long") {
+                            displayLocation = data.display_long
+                        } else {
+                            displayLocation = data.display_medium
+                        }
+                        
+                        return "<span style='white-space: nowrap;'>" + displayLocation + "</span>"
+                    },
+                },
+                {
+                    title: "Category",
+                    targets: 5,
+                    data: "category",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data.name + "</span>"
+                    },
+                },
+            ],
+            rowClick: Product.navigate,
+        })
+    }
+    
+    const navigate = function (product) {
+        if (product && product.id) {
+            window.location.replace(base_url + "/" + product.id)
+        }
     }
     ///////////////////////////////////////////////
     return {
@@ -8925,6 +9180,12 @@ const Product = (function () {
         },
         init: function (settings) {
             init(settings)
+        },
+        index: function (settings) {
+            index(settings)
+        },
+        navigate: function (product) {
+            navigate(product)
         },
     }
     
@@ -8986,6 +9247,7 @@ $(document).ready(function () {
     }))
     
     if (mdbPreloader) {
+        console.log("preloader")
         //$("#mdb-preloader").fadeOut(500)
     } else {
         console.log("no preloader")

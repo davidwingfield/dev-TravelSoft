@@ -1,0 +1,15 @@
+SELECT
+	PROVINCE.id AS 'province_id',
+	PROVINCE.country_id AS 'province_country_id',
+	PROVINCE.name AS 'province_name',
+	PROVINCE.iso2 AS 'province_iso2',
+	PROVINCE.iso3 AS 'province_iso3',
+	PROVINCE.sort_order AS 'province_sort_order',
+	PROVINCE.enabled AS 'province_enabled',
+	PROVINCE.date_created AS 'province_date_created',
+	PROVINCE.created_by AS 'province_created_by',
+	PROVINCE.date_modified AS 'province_date_modified',
+	PROVINCE.modified_by AS 'province_modified_by',
+	PROVINCE.note AS 'province_note'
+FROM 	province PROVINCE
+-- JOIN 	province PROVINCE ON PROVINCE.id = {FK_TABLE}.province_id

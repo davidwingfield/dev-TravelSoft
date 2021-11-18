@@ -1,0 +1,5 @@
+SELECT
+	LOGIN_ATTEMPTS.user_id AS 'login_attempts_user_id',
+	LOGIN_ATTEMPTS.time AS 'login_attempts_time'
+FROM 	login_attempts LOGIN_ATTEMPTS
+-- JOIN 	login_attempts LOGIN_ATTEMPTS ON LOGIN_ATTEMPTS.id = {FK_TABLE}.login_attempts_id

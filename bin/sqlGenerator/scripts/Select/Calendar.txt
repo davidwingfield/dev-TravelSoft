@@ -1,0 +1,11 @@
+SELECT
+	CALENDAR.id AS 'calendar_id',
+	CALENDAR.product_id AS 'calendar_product_id',
+	CALENDAR.enabled AS 'calendar_enabled',
+	CALENDAR.date_created AS 'calendar_date_created',
+	CALENDAR.created_by AS 'calendar_created_by',
+	CALENDAR.date_modified AS 'calendar_date_modified',
+	CALENDAR.modified_by AS 'calendar_modified_by',
+	CALENDAR.note AS 'calendar_note'
+FROM 	calendar CALENDAR
+-- JOIN 	calendar CALENDAR ON CALENDAR.id = {FK_TABLE}.calendar_id

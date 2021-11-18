@@ -1,0 +1,21 @@
+SELECT
+	IMAGE.id AS 'image_id',
+	IMAGE.name AS 'image_name',
+	IMAGE.alt AS 'image_alt',
+	IMAGE.title AS 'image_title',
+	IMAGE.caption AS 'image_caption',
+	IMAGE.is_cover_image AS 'image_is_cover_image',
+	IMAGE.path AS 'image_path',
+	IMAGE.extension AS 'image_extension',
+	IMAGE.dimensions AS 'image_dimensions',
+	IMAGE.size AS 'image_size',
+	IMAGE.height AS 'image_height',
+	IMAGE.width AS 'image_width',
+	IMAGE.enabled AS 'image_enabled',
+	IMAGE.date_created AS 'image_date_created',
+	IMAGE.created_by AS 'image_created_by',
+	IMAGE.date_modified AS 'image_date_modified',
+	IMAGE.modified_by AS 'image_modified_by',
+	IMAGE.note AS 'image_note'
+FROM 	image IMAGE
+-- JOIN 	image IMAGE ON IMAGE.id = {FK_TABLE}.image_id

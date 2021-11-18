@@ -70,10 +70,10 @@
 
                 $sql = self::$selectQuery . $where;
 
-                $companies = Model::$db->rawQuery($sql);
-                foreach ($companies as $company) {
-                    Log::$debug_log->trace($company);
-                }
+                // $companies = Model::$db->rawQuery($sql);
+                //foreach ($companies as $company) {
+                //Log::$debug_log->trace($company);
+                //}
 
                 return Model::$db->rawQuery($sql);
 

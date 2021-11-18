@@ -1,0 +1,14 @@
+SELECT
+	CITY.id AS 'city_id',
+	CITY.province_id AS 'city_province_id',
+	CITY.country_id AS 'city_country_id',
+	CITY.sort_order AS 'city_sort_order',
+	CITY.name AS 'city_name',
+	CITY.enabled AS 'city_enabled',
+	CITY.date_created AS 'city_date_created',
+	CITY.created_by AS 'city_created_by',
+	CITY.date_modified AS 'city_date_modified',
+	CITY.modified_by AS 'city_modified_by',
+	CITY.note AS 'city_note'
+FROM 	city CITY
+-- JOIN 	city CITY ON CITY.id = {FK_TABLE}.city_id

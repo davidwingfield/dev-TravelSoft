@@ -1,0 +1,12 @@
+SELECT
+	AIRPORT_TYPES.id AS 'airport_types_id',
+	AIRPORT_TYPES.name AS 'airport_types_name',
+	AIRPORT_TYPES.sort_order AS 'airport_types_sort_order',
+	AIRPORT_TYPES.enabled AS 'airport_types_enabled',
+	AIRPORT_TYPES.date_created AS 'airport_types_date_created',
+	AIRPORT_TYPES.created_by AS 'airport_types_created_by',
+	AIRPORT_TYPES.date_modified AS 'airport_types_date_modified',
+	AIRPORT_TYPES.modified_by AS 'airport_types_modified_by',
+	AIRPORT_TYPES.note AS 'airport_types_note'
+FROM 	airport_types AIRPORT_TYPES
+-- JOIN 	airport_types AIRPORT_TYPES ON AIRPORT_TYPES.id = {FK_TABLE}.airport_types_id

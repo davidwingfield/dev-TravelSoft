@@ -1,0 +1,11 @@
+SELECT
+	PRICING_STRATEGY_TYPES.id AS 'pricing_strategy_types_id',
+	PRICING_STRATEGY_TYPES.name AS 'pricing_strategy_types_name',
+	PRICING_STRATEGY_TYPES.enabled AS 'pricing_strategy_types_enabled',
+	PRICING_STRATEGY_TYPES.date_created AS 'pricing_strategy_types_date_created',
+	PRICING_STRATEGY_TYPES.created_by AS 'pricing_strategy_types_created_by',
+	PRICING_STRATEGY_TYPES.date_modified AS 'pricing_strategy_types_date_modified',
+	PRICING_STRATEGY_TYPES.modified_by AS 'pricing_strategy_types_modified_by',
+	PRICING_STRATEGY_TYPES.note AS 'pricing_strategy_types_note'
+FROM 	pricing_strategy_types PRICING_STRATEGY_TYPES
+-- JOIN 	pricing_strategy_types PRICING_STRATEGY_TYPES ON PRICING_STRATEGY_TYPES.id = {FK_TABLE}.pricing_strategy_types_id

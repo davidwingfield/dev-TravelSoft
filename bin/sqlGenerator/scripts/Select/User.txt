@@ -1,0 +1,18 @@
+SELECT
+	USER.id AS 'user_id',
+	USER.role_id AS 'user_role_id',
+	USER.email AS 'user_email',
+	USER.name_first AS 'user_name_first',
+	USER.name_last AS 'user_name_last',
+	USER.username AS 'user_username',
+	USER.role AS 'user_role',
+	USER.pass AS 'user_pass',
+	USER.salt AS 'user_salt',
+	USER.enabled AS 'user_enabled',
+	USER.date_created AS 'user_date_created',
+	USER.created_by AS 'user_created_by',
+	USER.date_modified AS 'user_date_modified',
+	USER.modified_by AS 'user_modified_by',
+	USER.note AS 'user_note'
+FROM 	user USER
+-- JOIN 	user USER ON USER.id = {FK_TABLE}.user_id

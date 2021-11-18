@@ -1,387 +1,73 @@
 <?php
-    $page_data = [];
-    if (isset($data)) {
-        $page_data = $data;
+    if (!isset($page_data)) {
+        $page_data = [];
+    }
+
+    $settings = json_encode($page_data["products"], 1);
+    $init = "Product.index($settings);";
+    if (!defined("COUNTRIES")) {
+        define("COUNTRIES", $page_data["types"]["countries"]);
     }
 ?>
 <section id="product_index" class="section">
-
     <div class="row">
-        <div class="col-12 col-lg-3">
-
-        </div>
-        <div class="col-12 col-lg-9">
+        <div class="col-12">
             <section class="panel">
-                <div class="panel-body nav-tabs-animate nav-tabs-horizontal" data-plugin="tabs">
-                    <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation"><a class="nav-link active" data-toggle="tab" href="#activities" aria-controls="activities" role="tab">Activities <span class="badge badge-pill badge-danger">5</span></a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#profile" aria-controls="profile" role="tab">Profile</a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#messages" aria-controls="messages" role="tab">Messages</a></li>
-                        <li class="nav-item dropdown" style="display: none;">
-                            <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#" aria-expanded="false">Menu </a>
-                            <div class="dropdown-menu" role="menu">
-                                <a class="dropdown-item" data-toggle="tab" href="#activities" aria-controls="activities" role="tab">Activities <span class="badge badge-pill badge-danger">5</span></a>
-                                <a class="dropdown-item" data-toggle="tab" href="#profile" aria-controls="profile" role="tab">Profile</a>
-                                <a class="dropdown-item" data-toggle="tab" href="#messages" aria-controls="messages" role="tab">Messages</a>
-                            </div>
-                        </li>
-                    </ul>
+                <header class="panel-heading">
+                    <div class="panel-actions"></div>
+                    <h3 class="panel-title">Basic</h3>
+                </header>
+                <div class="panel-body mx-4 my-4">
+                    <table id="product_index_table" class="table table-hover dataTable table-striped w-full dtr-inline">
+                        <!--
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>SKU</th>
+                            <th>Provider</th>
+                            <th>Vendor</th>
+                            <th>Location</th>
+                            <th>Category</th>
+                        </tr>
+                        </thead>
 
-                    <div class="tab-content">
-                        <div class="tab-pane active animation-slide-left" id="activities" role="tabpanel">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="pr-20">
-                                            <a class="avatar" href="javascript:void(0)">
-                                                <img class="img-fluid" src="../../global/portraits/2.jpg" alt="...">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5 class="mt-0 mb-5">Ida Fleming
-                                                <small>posted an updated</small>
-                                            </h5>
-                                            <small>active 14 minutes ago</small>
-                                            <div class="profile-brief">“Check if it can be corrected with overflow : hidden”</div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="pr-20">
-                                            <a class="avatar" href="javascript:void(0)">
-                                                <img class="img-fluid" src="../../global/portraits/3.jpg" alt="...">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5 class="mt-0 mb-5">Julius
-                                                <small>uploaded 4 photos</small>
-                                            </h5>
-                                            <small>active 14 minutes ago</small>
-                                            <div class="profile-brief clearfix">
-                                                <img class="profile-uploaded" src="../../global/photos/animal-2-240x160.jpg" alt="...">
-                                                <img class="profile-uploaded" src="../../global/photos/animal-3-240x160.jpg" alt="...">
-                                                <img class="profile-uploaded" src="../../global/photos/animal-4-240x160.jpg" alt="...">
-                                                <img class="profile-uploaded" src="../../global/photos/animal-5-240x160.jpg" alt="...">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="pr-20">
-                                            <a class="avatar" href="javascript:void(0)">
-                                                <img class="img-fluid" src="../../global/portraits/4.jpg" alt="...">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5 class="mt-0 mb-5">Owen Hunt
-                                                <small>posted a new note</small>
-                                            </h5>
-                                            <small>active 14 minutes ago</small>
-                                            <div class="profile-brief">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                                       Integer nec odio. Praesent libero. Sed cursus ante
-                                                                       dapibus diam. Sed nisi. Nulla quis sem at nibh elementum
-                                                                       imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce
-                                                                       nec tellus sed augue semper porta. Mauris massa.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="pr-20">
-                                            <a class="avatar" href="javascript:void(0)">
-                                                <img class="img-fluid" src="../../global/portraits/5.jpg" alt="...">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5 class="mt-0 mb-5">Terrance Arnold
-                                                <small>posted a new blog</small>
-                                            </h5>
-                                            <small>active 14 minutes ago</small>
-                                            <div class="profile-brief">
-                                                <div class="media">
-                                                    <a class="pr-20">
-                                                        <img class="w-160" src="../../global/photos/animal-1-240x160.jpg" alt="...">
-                                                    </a>
-                                                    <div class="media-body pl-20">
-                                                        <h4 class="mt-0 mb-5">Getting Started</h4>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing
-                                                           elit. Integer nec odio. Praesent libero. Sed
-                                                           cursus ante dapibus diam. Sed nisi. Nulla quis
-                                                           sem at nibh elementum imperdiet. Duis sagittis
-                                                           ipsum. Praesent mauris.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="pr-20">
-                                            <a class="avatar" href="javascript:void(0)">
-                                                <img class="img-fluid" src="../../global/portraits/2.jpg" alt="...">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5 class="mt-0 mb-5">Ida Fleming
-                                                <small>posted an new activity comment</small>
-                                            </h5>
-                                            <small>active 14 minutes ago</small>
-                                            <div class="profile-brief">Cras sit amet nibh libero, in gravida nulla. Nulla vel
-                                                                       metus.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="pr-20">
-                                            <a class="avatar" href="javascript:void(0)">
-                                                <img class="img-fluid" src="../../global/portraits/3.jpg" alt="...">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5 class="mt-0 mb-5">Julius
-                                                <small>posted an updated</small>
-                                            </h5>
-                                            <small>active 14 minutes ago</small>
-                                            <div class="profile-brief">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                                       Integer nec odio. Praesent libero. Sed cursus ante
-                                                                       dapibus diam.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                            <a class="btn btn-block btn-default profile-readMore" href="javascript:void(0)" role="button">Show more</a>
-                        </div>
-
-                        <div class="tab-pane animation-slide-left" id="profile" role="tabpanel">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="pr-20">
-                                            <a class="avatar" href="javascript:void(0)">
-                                                <img class="img-fluid" src="../../global/portraits/5.jpg" alt="...">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5 class="mt-0 mb-5">Terrance Arnold
-                                                <small>posted a new blog</small>
-                                            </h5>
-                                            <small>active 14 minutes ago</small>
-                                            <div class="profile-brief">
-                                                <div class="media">
-                                                    <a class="pr-20">
-                                                        <img class="w-160" src="../../global/photos/animal-1-240x160.jpg" alt="...">
-                                                    </a>
-                                                    <div class="media-body pl-20">
-                                                        <h4 class="mt-0 mb-5">Getting Started</h4>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing
-                                                           elit. Integer nec odio. Praesent libero. Sed
-                                                           cursus ante dapibus diam. Sed nisi. Nulla quis
-                                                           sem at nibh elementum imperdiet. Duis sagittis
-                                                           ipsum. Praesent mauris.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="pr-20">
-                                            <a class="avatar" href="javascript:void(0)">
-                                                <img class="img-fluid" src="../../global/portraits/2.jpg" alt="...">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5 class="mt-0 mb-5">Ida Fleming
-                                                <small>posted an updated</small>
-                                            </h5>
-                                            <small>active 14 minutes ago</small>
-                                            <div class="profile-brief">“Check if it can be corrected with overflow : hidden”</div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="pr-20">
-                                            <a class="avatar" href="javascript:void(0)">
-                                                <img class="img-fluid" src="../../global/portraits/4.jpg" alt="...">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5 class="mt-0 mb-5">Owen Hunt
-                                                <small>posted a new note</small>
-                                            </h5>
-                                            <small>active 14 minutes ago</small>
-                                            <div class="profile-brief">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                                       Integer nec odio. Praesent libero. Sed cursus ante
-                                                                       dapibus diam. Sed nisi. Nulla quis sem at nibh elementum
-                                                                       imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce
-                                                                       nec tellus sed augue semper porta. Mauris massa.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="pr-20">
-                                            <a class="avatar" href="javascript:void(0)">
-                                                <img class="img-fluid" src="../../global/portraits/2.jpg" alt="...">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5 class="mt-0 mb-5">Ida Fleming
-                                                <small>posted an new activity comment</small>
-                                            </h5>
-                                            <small>active 14 minutes ago</small>
-                                            <div class="profile-brief">Cras sit amet nibh libero, in gravida nulla. Nulla vel
-                                                                       metus.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="pr-20">
-                                            <a class="avatar" href="javascript:void(0)">
-                                                <img class="img-fluid" src="../../global/portraits/3.jpg" alt="...">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5 class="mt-0 mb-5">Julius
-                                                <small>uploaded 4 photos</small>
-                                            </h5>
-                                            <small>active 14 minutes ago</small>
-                                            <div class="profile-brief clearfix">
-                                                <img class="profile-uploaded" src="../../global/photos/animal-2-240x160.jpg" alt="...">
-                                                <img class="profile-uploaded" src="../../global/photos/animal-3-240x160.jpg" alt="...">
-                                                <img class="profile-uploaded" src="../../global/photos/animal-4-240x160.jpg" alt="...">
-                                                <img class="profile-uploaded" src="../../global/photos/animal-5-240x160.jpg" alt="...">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="tab-pane animation-slide-left" id="messages" role="tabpanel">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="pr-20">
-                                            <a class="avatar" href="javascript:void(0)">
-                                                <img class="img-fluid" src="../../global/portraits/2.jpg" alt="...">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5 class="mt-0 mb-5">Ida Fleming
-                                                <small>posted an updated</small>
-                                            </h5>
-                                            <small>active 14 minutes ago</small>
-                                            <div class="profile-brief">“Check if it can be corrected with overflow : hidden”</div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="pr-20">
-                                            <a class="avatar" href="javascript:void(0)">
-                                                <img class="img-fluid" src="../../global/portraits/5.jpg" alt="...">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5 class="mt-0 mb-5">Terrance Arnold
-                                                <small>posted a new blog</small>
-                                            </h5>
-                                            <small>active 14 minutes ago</small>
-                                            <div class="profile-brief">
-                                                <div class="media">
-                                                    <a class="pr-20">
-                                                        <img class="w-160" src="../../global/photos/animal-1-240x160.jpg" alt="...">
-                                                    </a>
-                                                    <div class="media-body pl-20">
-                                                        <h4 class="mt-0 mb-5">Getting Started</h4>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing
-                                                           elit. Integer nec odio. Praesent libero. Sed
-                                                           cursus ante dapibus diam. Sed nisi. Nulla quis
-                                                           sem at nibh elementum imperdiet. Duis sagittis
-                                                           ipsum. Praesent mauris.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="pr-20">
-                                            <a class="avatar" href="javascript:void(0)">
-                                                <img class="img-fluid" src="../../global/portraits/4.jpg" alt="...">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5 class="mt-0 mb-5">Owen Hunt
-                                                <small>posted a new note</small>
-                                            </h5>
-                                            <small>active 14 minutes ago</small>
-                                            <div class="profile-brief">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                                       Integer nec odio. Praesent libero. Sed cursus ante
-                                                                       dapibus diam. Sed nisi. Nulla quis sem at nibh elementum
-                                                                       imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce
-                                                                       nec tellus sed augue semper porta. Mauris massa.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="pr-20">
-                                            <a class="avatar" href="javascript:void(0)">
-                                                <img class="img-fluid" src="../../global/portraits/3.jpg" alt="...">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5 class="mt-0 mb-5">Julius
-                                                <small>posted an updated</small>
-                                            </h5>
-                                            <small>active 14 minutes ago</small>
-                                            <div class="profile-brief">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                                       Integer nec odio. Praesent libero. Sed cursus ante
-                                                                       dapibus diam.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                        <tbody>
+                        <?php
+                            foreach ($page_data["products"] AS $product) {
+                                $id = $product["id"];
+                                $name = $product["name"];
+                                $sku = $product["sku"];
+                                $provider = $product["provider"]["name"];
+                                $vendor = $product["vendor"]["name"];
+                                $location = $product["location"]["display_medium"];
+                                $category = $product["category"]["name"];
+                                /*
+                                echo "
+                                    <tr>
+                                        <td>$id</td>
+                                        <td>$name</td>
+                                        <td>$sku</td>
+                                        <td>$provider</td>
+                                        <td>$vendor</td>
+                                        <td>$location</td>
+                                        <td>$category</td>
+                                    </tr>
+                                ";
+                                //*/
+                            }
+                        ?>
+                        </tbody>
+                        -->
+                    </table>
                 </div>
             </section>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-12 col-lg-6">
-            <table id="table_product_index" class=""></table>
-        </div>
-    </div>
-
 </section>
+<script type="text/javascript">
+    $(function () {
+        Types.init(<?php echo TYPES;?>)
+        <?php echo $init;?>
+    })
+</script>

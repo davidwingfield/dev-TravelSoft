@@ -1,0 +1,11 @@
+SELECT
+	RATING_TYPES.id AS 'rating_types_id',
+	RATING_TYPES.name AS 'rating_types_name',
+	RATING_TYPES.enabled AS 'rating_types_enabled',
+	RATING_TYPES.date_created AS 'rating_types_date_created',
+	RATING_TYPES.created_by AS 'rating_types_created_by',
+	RATING_TYPES.date_modified AS 'rating_types_date_modified',
+	RATING_TYPES.modified_by AS 'rating_types_modified_by',
+	RATING_TYPES.note AS 'rating_types_note'
+FROM 	rating_types RATING_TYPES
+-- JOIN 	rating_types RATING_TYPES ON RATING_TYPES.id = {FK_TABLE}.rating_types_id

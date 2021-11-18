@@ -2,8 +2,10 @@
 
     namespace Framework\App\Controllers;
 
+    use Framework\App\Models\ProductModel;
     use Framework\Core\Controller;
     use Framework\Core\View;
+    use Framework\Logger\Log;
 
     /**
      * Short Product Description
@@ -15,6 +17,41 @@
      */
     class Product extends Controller
     {
+        /**
+         * buttons
+         *
+         * @var array
+         */
+        protected static $buttons = array(
+            "save" => array(
+                "type" => "a",
+                "href" => "javascript:void(0)",
+                "classes" => "btn btn-sm btn-primary btn-round",
+                "icon" => "fas fa-save",
+                "id" => "button_save_product",
+                "text" => "save product",
+                "data" => array(
+                    "toggle" => "tooltip",
+                    "title" => "Save Product",
+                    "placement" => "top",
+                ),
+            ),
+
+            "new" => array(
+                "type" => "a",
+                "href" => "/products/new",
+                "classes" => "btn btn-outline-primary btn-sm btn-icon btn-round",
+                "icon" => "fas fa-plus",
+                "id" => "button_add_product_page_heading",
+                "text" => "",
+                "data" => array(
+                    "toggle" => "tooltip",
+                    "title" => "Creat a New Product",
+                    "placement" => "top",
+                ),
+            ),
+        );
+
         public function __construct()
         {
             parent::__construct();
@@ -23,14 +60,37 @@
         public static function index(array $params = [])
         {
             $data = Page::getDetails(9);
+            $products = [];
+
+            /** breadcrumbs */
             define("BREAD_CRUMBS", "
-            <li class='breadcrumb-item'>
-                <a href='/'>Home</a>
-            </li>
-            <li class='breadcrumb-item'>
-                Products
-            </li>"
+                <li class='breadcrumb-item'>
+                    <a href='/'>Home</a>
+                </li>
+                <li class='breadcrumb-item'>
+                    Products
+                </li>"
             );
+
+            /**
+             * buttons
+             */
+            $data["buttons"] = array(
+                self::$buttons["new"],
+            );
+            $results = ProductModel::get();
+            foreach ($results AS $k => $product) {
+                $products[] = self::format($product);
+            }
+            $data["products"] = $products;
+
+            /**
+             * header
+             */
+            if (!defined("PAGEHEADINGCLASS")) {
+                define("PAGEHEADINGCLASS", " page-header-bordered page-header-tabs");
+            }
+
             // ----
             View::render_template("products/index", $data);
             exit(1);
@@ -80,6 +140,143 @@
             // ----
             View::render_template("products/edit", $data);
             exit(1);
+        }
+
+        public static function serveTableUpdate(array $params = [])
+        {
+            $input = filter_input_array(INPUT_POST);
+            Log::$debug_log->trace($input);
+
+            // ----
+
+            View::render_json($input);
+        }
+
+        public static function serveGet(array $params = [])
+        {
+            $product_id = null;
+            $products = [];
+            if ($params["product_id"]) {
+                $product_id = (int)$params["product_id"];
+            }
+            $results = ProductModel::get($product_id);
+            foreach ($results AS $k => $product) {
+                $products[] = self::format($product);
+            }
+            View::render_json($products);
+        }
+
+        private static function format(array $product = null): array
+        {
+            if (is_null($product)) {
+                return [];
+            }
+            $rooms = array();
+
+            $seasons = Season::getSeasonsByProductId((int)$product['product_id']);
+            $units = Unit::getUnitsByProductId((int)$product['product_id']);
+            $variants = Variant::getVariantsByProductId((int)$product['product_id']);
+            //*
+            foreach ($seasons AS $season) {
+                $season_name = $season["name"];
+                if (!isset($rooms[$season_name])) {
+                    $rooms[$season_name] = $season;
+                    $rooms[$season_name]["units"] = array();
+                    foreach ($units AS $unit) {
+                        $unit_name = $unit["name"];
+                        $rooms[$season_name]["units"][$unit_name] = $unit;
+                        $rooms[$season_name]["units"][$unit_name]["variants"] = $variants;
+                    }
+                }
+            }
+
+            //*/
+            $provider = Provider::getByProviderId((int)$product['product_provider_id']);
+            $provider = (isset($provider[0])) ? $provider[0] : [];
+
+            $vendor = Vendor::getByVendorId((int)$product['product_vendor_id']);
+            $vendor = (isset($vendor[0])) ? $vendor[0] : [];
+            $use_provider_location = false;
+            if (!isset($product['product_location_id'])) {
+                $use_provider_location = true;
+                $location = $provider["location"];
+                $location_id = (int)$provider["location"];
+            } else {
+                $use_provider_location = false;
+                $location = Location::getByLocationId((int)$product['product_location_id']);
+                $location_id = (int)$product['product_location_id'];
+            }
+
+            return array(
+                //'offers' => $rooms,
+                'id' => $product['product_id'],
+                'use_provider_location' => $use_provider_location,
+                'category_id' => $product['product_category_id'],
+                'pricing_strategy_types_id' => $product['product_pricing_strategy_types_id'],
+                'status_types_id' => $product['product_status_types_id'],
+                'category' => array(
+                    'id' => $product['category_id'],
+                    'pricing_strategy_types_id' => $product['category_pricing_strategy_types_id'],
+                    'attribute_id' => $product['category_attribute_id'],
+                    'name' => $product['category_name'],
+                    'icon' => $product['category_icon'],
+                    'view_product_index' => $product['category_view_product_index'],
+                    'view_product_index_filter' => $product['category_view_product_index_filter'],
+                    'view_product_index_search' => $product['category_view_product_index_search'],
+                    'view_product_edit' => $product['category_view_product_edit'],
+                    'view_product_package_edit' => $product['category_view_product_package_edit'],
+                    'view_product_package_index' => $product['category_view_product_package_index'],
+                    'all_day' => $product['category_all_day'],
+                    'overlap' => $product['category_overlap'],
+                    'editable' => $product['category_editable'],
+                    'duration_editable' => $product['category_duration_editable'],
+                    'start_editable' => $product['category_start_editable'],
+                    'display' => $product['category_display'],
+                    'background_color' => $product['category_background_color'],
+                    'text_color' => $product['category_text_color'],
+                    'border_color' => $product['category_border_color'],
+                    'sort_order' => $product['category_sort_order'],
+                    'enabled' => $product['category_enabled'],
+                    'date_created' => $product['category_date_created'],
+                    'created_by' => $product['category_created_by'],
+                    'date_modified' => $product['category_date_modified'],
+                    'modified_by' => $product['category_modified_by'],
+                    'note' => $product['category_note'],
+                ),
+                'currency_id' => $product['product_currency_id'],
+                'location_id' => $location_id,
+                'provider_id' => $product['product_provider_id'],
+                'vendor_id' => $product['product_vendor_id'],
+                'rating_types_id' => $product['product_rating_types_id'],
+                'name' => $product['product_name'],
+                'description_short' => $product['product_description_short'],
+                'description_long' => $product['product_description_long'],
+                'sku' => $product['product_sku'],
+                'depart_from' => $product['product_depart_from'],
+                'arrive_to' => $product['product_arrive_to'],
+                'depart_time' => $product['product_depart_time'],
+                'arrive_time' => $product['product_arrive_time'],
+                'provider_vendor_match' => $product['product_provider_vendor_match'],
+                'day_span' => $product['product_day_span'],
+                'cover_image' => $product['product_cover_image'],
+                'api_id' => $product['product_api_id'],
+                'from_api' => $product['product_from_api'],
+                'hotel_code' => $product['product_hotel_code'],
+                'sort_order' => $product['product_sort_order'],
+                'keywords' => $product['product_keywords'],
+                'enabled' => $product['product_enabled'],
+                'date_created' => $product['product_date_created'],
+                'created_by' => $product['product_created_by'],
+                'date_modified' => $product['product_date_modified'],
+                'modified_by' => $product['product_modified_by'],
+                'note' => $product['product_note'],
+                'location' => $location,
+                'provider' => $provider,
+                'vendor' => $vendor,
+                'seasons' => $seasons,
+                'units' => $units,
+                'variants' => $variants,
+            );
         }
 
     }

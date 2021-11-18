@@ -1,0 +1,12 @@
+SELECT
+	CONTACT_TYPES.id AS 'contact_types_id',
+	CONTACT_TYPES.name AS 'contact_types_name',
+	CONTACT_TYPES.sort_order AS 'contact_types_sort_order',
+	CONTACT_TYPES.enabled AS 'contact_types_enabled',
+	CONTACT_TYPES.date_created AS 'contact_types_date_created',
+	CONTACT_TYPES.created_by AS 'contact_types_created_by',
+	CONTACT_TYPES.date_modified AS 'contact_types_date_modified',
+	CONTACT_TYPES.modified_by AS 'contact_types_modified_by',
+	CONTACT_TYPES.note AS 'contact_types_note'
+FROM 	contact_types CONTACT_TYPES
+-- JOIN 	contact_types CONTACT_TYPES ON CONTACT_TYPES.id = {FK_TABLE}.contact_types_id

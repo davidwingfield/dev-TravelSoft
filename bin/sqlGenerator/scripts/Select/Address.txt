@@ -1,0 +1,17 @@
+SELECT
+	ADDRESS.id AS 'address_id',
+	ADDRESS.city_id AS 'address_city_id',
+	ADDRESS.province_id AS 'address_province_id',
+	ADDRESS.country_id AS 'address_country_id',
+	ADDRESS.street_1 AS 'address_street_1',
+	ADDRESS.street_2 AS 'address_street_2',
+	ADDRESS.street_3 AS 'address_street_3',
+	ADDRESS.postal_code AS 'address_postal_code',
+	ADDRESS.enabled AS 'address_enabled',
+	ADDRESS.date_created AS 'address_date_created',
+	ADDRESS.created_by AS 'address_created_by',
+	ADDRESS.date_modified AS 'address_date_modified',
+	ADDRESS.modified_by AS 'address_modified_by',
+	ADDRESS.note AS 'address_note'
+FROM 	address ADDRESS
+-- JOIN 	address ADDRESS ON ADDRESS.id = {FK_TABLE}.address_id

@@ -5,6 +5,7 @@ $(document).ready(function () {
     }))
     
     if (mdbPreloader) {
+        console.log("preloader")
         //$("#mdb-preloader").fadeOut(500)
     } else {
         console.log("no preloader")

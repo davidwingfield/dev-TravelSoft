@@ -1,0 +1,12 @@
+SELECT
+	ADDRESS_TYPES.id AS 'address_types_id',
+	ADDRESS_TYPES.name AS 'address_types_name',
+	ADDRESS_TYPES.sort_order AS 'address_types_sort_order',
+	ADDRESS_TYPES.enabled AS 'address_types_enabled',
+	ADDRESS_TYPES.date_created AS 'address_types_date_created',
+	ADDRESS_TYPES.created_by AS 'address_types_created_by',
+	ADDRESS_TYPES.date_modified AS 'address_types_date_modified',
+	ADDRESS_TYPES.modified_by AS 'address_types_modified_by',
+	ADDRESS_TYPES.note AS 'address_types_note'
+FROM 	address_types ADDRESS_TYPES
+-- JOIN 	address_types ADDRESS_TYPES ON ADDRESS_TYPES.id = {FK_TABLE}.address_types_id

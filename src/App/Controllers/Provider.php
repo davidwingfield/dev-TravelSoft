@@ -304,6 +304,11 @@
             exit(1);
         }
 
+        public static function getByProviderId(int $provider_id = null): array
+        {
+            return self::format_get(ProviderModel::get($provider_id));
+        }
+
         /**
          * new
          *

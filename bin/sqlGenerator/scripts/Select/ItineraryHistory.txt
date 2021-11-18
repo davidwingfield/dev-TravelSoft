@@ -1,0 +1,14 @@
+SELECT
+	ITINERARY_HISTORY.id AS 'itinerary_history_id',
+	ITINERARY_HISTORY.itinerary_id AS 'itinerary_history_itinerary_id',
+	ITINERARY_HISTORY.json AS 'itinerary_history_json',
+	ITINERARY_HISTORY.saved_by AS 'itinerary_history_saved_by',
+	ITINERARY_HISTORY.comment AS 'itinerary_history_comment',
+	ITINERARY_HISTORY.enabled AS 'itinerary_history_enabled',
+	ITINERARY_HISTORY.date_created AS 'itinerary_history_date_created',
+	ITINERARY_HISTORY.created_by AS 'itinerary_history_created_by',
+	ITINERARY_HISTORY.date_modified AS 'itinerary_history_date_modified',
+	ITINERARY_HISTORY.modified_by AS 'itinerary_history_modified_by',
+	ITINERARY_HISTORY.note AS 'itinerary_history_note'
+FROM 	itinerary_history ITINERARY_HISTORY
+-- JOIN 	itinerary_history ITINERARY_HISTORY ON ITINERARY_HISTORY.id = {FK_TABLE}.itinerary_history_id

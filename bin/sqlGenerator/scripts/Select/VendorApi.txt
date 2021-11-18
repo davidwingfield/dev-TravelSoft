@@ -1,0 +1,11 @@
+SELECT
+	VENDOR_API.vendor_id AS 'vendor_api_vendor_id',
+	VENDOR_API.api_id AS 'vendor_api_api_id',
+	VENDOR_API.enabled AS 'vendor_api_enabled',
+	VENDOR_API.date_created AS 'vendor_api_date_created',
+	VENDOR_API.created_by AS 'vendor_api_created_by',
+	VENDOR_API.date_modified AS 'vendor_api_date_modified',
+	VENDOR_API.modified_by AS 'vendor_api_modified_by',
+	VENDOR_API.note AS 'vendor_api_note'
+FROM 	vendor_api VENDOR_API
+-- JOIN 	vendor_api VENDOR_API ON VENDOR_API.id = {FK_TABLE}.vendor_api_id

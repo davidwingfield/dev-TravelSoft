@@ -25,8 +25,6 @@ const Company = (function () {
     const _provider_company_id = document.getElementById("provider_company_id")
     const _button_clear_form_edit_company = document.getElementById("button_clear_form_edit_company")
     const _company_edit_table_filters = document.getElementById("company_edit_table_filters")
-    
-    //
     const form_rules = {
         rules: {
             company_name: {
@@ -55,13 +53,11 @@ const Company = (function () {
         },
         
     }
-    
     let temp_company = {}
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let validator
     let globalSelectedCompany = false
     let suggestionsTempCompany = []
-    
     let tempCompany = {}
     
     $("a[data-toggle=\"tab\"]").on("hide.bs.tab", function (e) {
@@ -328,8 +324,6 @@ const Company = (function () {
         })
     }
     
-    // ----
-    
     const company_exists = function (name) {
         if (name && name !== "") {
             let dataToSend = {
@@ -410,10 +404,7 @@ const Company = (function () {
         }
     }
     
-    // ----
-    
     const init = function (company) {
-        console.log("Company:init()", company)
         let images = []
         if (company) {
             let detail = set_detail(company)
@@ -435,8 +426,6 @@ const Company = (function () {
             images: images,
         })
     }
-    
-    // ----
     
     const validate_form = function () {
         return $(_form_edit_company).valid()

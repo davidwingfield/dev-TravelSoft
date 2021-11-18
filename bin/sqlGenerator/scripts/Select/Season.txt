@@ -1,0 +1,38 @@
+SELECT
+		SEASON.id AS 'season_id',
+		SEASON.color_scheme_id AS 'season_color_scheme_id',
+		SEASON.name AS 'season_name',
+		SEASON.view_product_index AS 'season_view_product_index',
+		SEASON.view_product_index_filter AS 'season_view_product_index_filter',
+		SEASON.view_product_index_search AS 'season_view_product_index_search',
+		SEASON.view_product_edit AS 'season_view_product_edit',
+		SEASON.view_product_package_edit AS 'season_view_product_package_edit',
+		SEASON.view_product_package_index AS 'season_view_product_package_index',
+		SEASON.enabled AS 'season_enabled',
+		SEASON.date_created AS 'season_date_created',
+		SEASON.created_by AS 'season_created_by',
+		SEASON.date_modified AS 'season_date_modified',
+		SEASON.modified_by AS 'season_modified_by',
+		SEASON.note AS 'season_note',
+		SEASON.category_id AS 'season_category_id'
+FROM 	season SEASON
+-- JOIN 	season SEASON ON SEASON.id = {FK_TABLE}.season_id
+
+/*
+'id'=>$season['season_id'],
+'color_scheme_id'=>$season['season_color_scheme_id'],
+'name'=>$season['season_name'],
+'view_product_index'=>$season['season_view_product_index'],
+'view_product_index_filter'=>$season['season_view_product_index_filter'],
+'view_product_index_search'=>$season['season_view_product_index_search'],
+'view_product_edit'=>$season['season_view_product_edit'],
+'view_product_package_edit'=>$season['season_view_product_package_edit'],
+'view_product_package_index'=>$season['season_view_product_package_index'],
+'enabled'=>$season['season_enabled'],
+'date_created'=>$season['season_date_created'],
+'created_by'=>$season['season_created_by'],
+'date_modified'=>$season['season_date_modified'],
+'modified_by'=>$season['season_modified_by'],
+'note'=>$season['season_note'],
+'category_id'=>$season['season_category_id']
+*/

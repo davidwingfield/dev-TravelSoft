@@ -1,0 +1,12 @@
+SELECT
+	COMPANY_ADDRESS.company_id AS 'company_address_company_id',
+	COMPANY_ADDRESS.address_id AS 'company_address_address_id',
+	COMPANY_ADDRESS.address_types_id AS 'company_address_address_types_id',
+	COMPANY_ADDRESS.enabled AS 'company_address_enabled',
+	COMPANY_ADDRESS.date_created AS 'company_address_date_created',
+	COMPANY_ADDRESS.created_by AS 'company_address_created_by',
+	COMPANY_ADDRESS.date_modified AS 'company_address_date_modified',
+	COMPANY_ADDRESS.modified_by AS 'company_address_modified_by',
+	COMPANY_ADDRESS.note AS 'company_address_note'
+FROM 	company_address COMPANY_ADDRESS
+-- JOIN 	company_address COMPANY_ADDRESS ON COMPANY_ADDRESS.id = {FK_TABLE}.company_address_id

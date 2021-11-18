@@ -1,0 +1,13 @@
+SELECT
+	EXCHANGE_RATES.client_id AS 'exchange_rates_client_id',
+	EXCHANGE_RATES.base_currency_id AS 'exchange_rates_base_currency_id',
+	EXCHANGE_RATES.exchange_currency_id AS 'exchange_rates_exchange_currency_id',
+	EXCHANGE_RATES.exchange_rate AS 'exchange_rates_exchange_rate',
+	EXCHANGE_RATES.enabled AS 'exchange_rates_enabled',
+	EXCHANGE_RATES.date_created AS 'exchange_rates_date_created',
+	EXCHANGE_RATES.created_by AS 'exchange_rates_created_by',
+	EXCHANGE_RATES.date_modified AS 'exchange_rates_date_modified',
+	EXCHANGE_RATES.modified_by AS 'exchange_rates_modified_by',
+	EXCHANGE_RATES.note AS 'exchange_rates_note'
+FROM 	exchange_rates EXCHANGE_RATES
+-- JOIN 	exchange_rates EXCHANGE_RATES ON EXCHANGE_RATES.id = {FK_TABLE}.exchange_rates_id

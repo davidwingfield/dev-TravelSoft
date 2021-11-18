@@ -1,0 +1,11 @@
+SELECT
+	PRODUCT_PROFILE.product_id AS 'product_profile_product_id',
+	PRODUCT_PROFILE.profile_id AS 'product_profile_profile_id',
+	PRODUCT_PROFILE.enabled AS 'product_profile_enabled',
+	PRODUCT_PROFILE.date_created AS 'product_profile_date_created',
+	PRODUCT_PROFILE.created_by AS 'product_profile_created_by',
+	PRODUCT_PROFILE.date_modified AS 'product_profile_date_modified',
+	PRODUCT_PROFILE.modified_by AS 'product_profile_modified_by',
+	PRODUCT_PROFILE.note AS 'product_profile_note'
+FROM 	product_profile PRODUCT_PROFILE
+-- JOIN 	product_profile PRODUCT_PROFILE ON PRODUCT_PROFILE.id = {FK_TABLE}.product_profile_id

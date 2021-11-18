@@ -1,29 +1,38 @@
 <?php
-    /**
-     * Image.php
-     *
-     * @return
-     */
 
     namespace Framework\App\Controllers;
 
     use Framework\App\Models\ImageModel;
-    use Framework\Core\SimpleImage;
-
-    use DateTime;
     use Framework\Core\Controller;
     use Framework\Core\View;
     use Framework\Logger\Log;
-    use Imagick;
 
+    /**
+     * Short Image Description
+     *
+     * Long Image Description
+     *
+     * @package            Framework\App
+     * @subpackage         Controllers
+     */
     class Image extends Controller
     {
 
+        /**
+         * @var string[]
+         */
         private static $types = array(
             "image/jpeg" => "jpg",
             "image/png" => "png",
         );
 
+        /**
+         * get images by company id
+         *
+         * @param int|null $company_id
+         *
+         * @return array
+         */
         public static function getByCompanyId(int $company_id = null): array
         {
             $images = [];
@@ -37,30 +46,58 @@
             return $images;
         }
 
+        /**
+         * api update request
+         *
+         * @param array|null $params
+         */
         public static function serveUpdate(array $params = null)
         {
-            if (is_null($params) || !isset($_FILES) || !isset($_POST)) {
+            $images = array();
+            if (is_null($params) || !isset($_POST)) {
                 View::render_invalid_json("Missing Data");
                 exit(1);
             }
-            if (!isset($_FILES["file"], $_POST["alt"], $_POST["title"], $_POST["caption"], $_POST["is_cover_image"])) {
-                View::render_invalid_json("Missing Data");
+
+            if (!isset($_FILES["file"])) {
+                $result = ImageModel::update($_POST);
+
+                foreach ($result AS $k => $image) {
+                    $images[] = self::format($image);
+                }
+                Log::$debug_log->trace($_POST);
+                View::render_json($images);
+                exit(1);
+
+            } else {
+
+                if (!isset($_FILES["file"], $_POST["alt"], $_POST["title"], $_POST["caption"], $_POST["is_cover_image"])) {
+                    View::render_invalid_json("Missing Data");
+                    exit(1);
+                }
+                $type = $_FILES["file"]["type"];
+
+                if (!isset(self::$types[$type])) {
+                    View::render_invalid_json("Unsupported File Type");
+                    exit(1);
+                }
+
+                $results = self::makeThumbnail($_FILES, $_POST);
+                View::render_json($results);
                 exit(1);
             }
-            $type = $_FILES["file"]["type"];
-
-            if (!isset(self::$types[$type])) {
-                View::render_invalid_json("Unsupported File Type");
-                exit(1);
-            }
-
-            $results = self::makeThumbnail($_FILES, $_POST);
-            View::render_json($results);
-            exit(1);
 
         }
 
-        public static function getAspectRatio(int $width, int $height)
+        /**
+         * get image aspect ratio
+         *
+         * @param int $width
+         * @param int $height
+         *
+         * @return string
+         */
+        public static function getAspectRatio(int $width, int $height): string
         {
             // search for greatest common divisor
             $greatestCommonDivisor = static function ($width, $height) use (&$greatestCommonDivisor) {
@@ -72,8 +109,17 @@
             return $width / $divisor . ':' . $height / $divisor;
         }
 
+        /**
+         * generate image and thumbnail
+         *
+         * @param $file
+         * @param $params
+         *
+         * @return array
+         */
         private static function makeThumbnail($file, $params): array
         {
+            $images = [];
             $imagename = self::seoUrl(substr($file['file']['name'], 0, (strrpos($file['file']['name'], "."))));
             $alt = $params["alt"];
             $title = $params["title"];
@@ -234,6 +280,14 @@
             return $images;
         }
 
+        /**
+         * move images to directories
+         *
+         * @param string $source
+         * @param string $target
+         *
+         * @return bool
+         */
         private static function moveImage(string $source = "", string $target = ""): bool
         {
 
@@ -242,6 +296,13 @@
             return true;
         }
 
+        /**
+         * create directory folder
+         *
+         * @param string $path
+         *
+         * @return bool
+         */
         private static function buildDirectory(string $path = ""): bool
         {
             if (!file_exists($path)) {
@@ -251,6 +312,11 @@
             return true;
         }
 
+        /**
+         * api get request by company id
+         *
+         * @param array $params
+         */
         public static function serveGetByCompanyId(array $params = [])
         {
             $images = array();
@@ -271,7 +337,7 @@
         }
 
         /**
-         * serve get request
+         * api get request
          *
          * @param array $params
          */
@@ -292,13 +358,13 @@
         }
 
         /**
-         * format image records
+         * format image object
          *
          * @param array $image
          *
          * @return array
          */
-        private static function format(array $image = [])
+        private static function format(array $image = []): array
         {
             return array(
                 "id" => (isset($image["image_id"])) ? (int)$image["image_id"] : null,
@@ -322,6 +388,13 @@
             );
         }
 
+        /**
+         * convert name into html entity
+         *
+         * @param $string
+         *
+         * @return string|string[]|null
+         */
         private static function seoUrl($string)
         {
             //Lower case everything

@@ -1,0 +1,22 @@
+SELECT
+	PACKAGE.id AS 'package_id',
+	PACKAGE.name AS 'package_name',
+	PACKAGE.day_span AS 'package_day_span',
+	PACKAGE.city_id AS 'package_city_id',
+	PACKAGE.min_pax AS 'package_min_pax',
+	PACKAGE.max_pax AS 'package_max_pax',
+	PACKAGE.description_long AS 'package_description_long',
+	PACKAGE.description_short AS 'package_description_short',
+	PACKAGE.available_start AS 'package_available_start',
+	PACKAGE.available_end AS 'package_available_end',
+	PACKAGE.cost AS 'package_cost',
+	PACKAGE.price AS 'package_price',
+	PACKAGE.margin AS 'package_margin',
+	PACKAGE.enabled AS 'package_enabled',
+	PACKAGE.date_created AS 'package_date_created',
+	PACKAGE.created_by AS 'package_created_by',
+	PACKAGE.date_modified AS 'package_date_modified',
+	PACKAGE.modified_by AS 'package_modified_by',
+	PACKAGE.note AS 'package_note'
+FROM 	package PACKAGE
+-- JOIN 	package PACKAGE ON PACKAGE.id = {FK_TABLE}.package_id

@@ -1,0 +1,14 @@
+SELECT
+	PRODUCT_LOCATION_IMAGE.product_id AS 'product_location_image_product_id',
+	PRODUCT_LOCATION_IMAGE.location_id AS 'product_location_image_location_id',
+	PRODUCT_LOCATION_IMAGE.image_id AS 'product_location_image_image_id',
+	PRODUCT_LOCATION_IMAGE.is_shown AS 'product_location_image_is_shown',
+	PRODUCT_LOCATION_IMAGE.is_cover AS 'product_location_image_is_cover',
+	PRODUCT_LOCATION_IMAGE.enabled AS 'product_location_image_enabled',
+	PRODUCT_LOCATION_IMAGE.date_created AS 'product_location_image_date_created',
+	PRODUCT_LOCATION_IMAGE.created_by AS 'product_location_image_created_by',
+	PRODUCT_LOCATION_IMAGE.date_modified AS 'product_location_image_date_modified',
+	PRODUCT_LOCATION_IMAGE.modified_by AS 'product_location_image_modified_by',
+	PRODUCT_LOCATION_IMAGE.note AS 'product_location_image_note'
+FROM 	product_location_image PRODUCT_LOCATION_IMAGE
+-- JOIN 	product_location_image PRODUCT_LOCATION_IMAGE ON PRODUCT_LOCATION_IMAGE.id = {FK_TABLE}.product_location_image_id

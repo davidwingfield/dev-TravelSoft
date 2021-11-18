@@ -1,0 +1,22 @@
+SELECT
+	AIRPORT.id AS 'airport_id',
+	AIRPORT.airport_types_id AS 'airport_airport_types_id',
+	AIRPORT.city_id AS 'airport_city_id',
+	AIRPORT.province_id AS 'airport_province_id',
+	AIRPORT.country_id AS 'airport_country_id',
+	AIRPORT.name AS 'airport_name',
+	AIRPORT.iata_code AS 'airport_iata_code',
+	AIRPORT.gps_code AS 'airport_gps_code',
+	AIRPORT.local_code AS 'airport_local_code',
+	AIRPORT.home_link AS 'airport_home_link',
+	AIRPORT.wikipedia_link AS 'airport_wikipedia_link',
+	AIRPORT.scheduled_service AS 'airport_scheduled_service',
+	AIRPORT.keywords AS 'airport_keywords',
+	AIRPORT.enabled AS 'airport_enabled',
+	AIRPORT.date_created AS 'airport_date_created',
+	AIRPORT.created_by AS 'airport_created_by',
+	AIRPORT.date_modified AS 'airport_date_modified',
+	AIRPORT.modified_by AS 'airport_modified_by',
+	AIRPORT.note AS 'airport_note'
+FROM 	airport AIRPORT
+-- JOIN 	airport AIRPORT ON AIRPORT.id = {FK_TABLE}.airport_id

@@ -1,0 +1,14 @@
+SELECT
+	CONTACT.id AS 'contact_id',
+	CONTACT.name_first AS 'contact_name_first',
+	CONTACT.name_last AS 'contact_name_last',
+	CONTACT.phone AS 'contact_phone',
+	CONTACT.email AS 'contact_email',
+	CONTACT.enabled AS 'contact_enabled',
+	CONTACT.date_created AS 'contact_date_created',
+	CONTACT.created_by AS 'contact_created_by',
+	CONTACT.date_modified AS 'contact_date_modified',
+	CONTACT.modified_by AS 'contact_modified_by',
+	CONTACT.note AS 'contact_note'
+FROM 	contact CONTACT
+-- JOIN 	contact CONTACT ON CONTACT.id = {FK_TABLE}.contact_id

@@ -1,0 +1,12 @@
+SELECT
+	PACKAGE_PRICING_DATE.package_id AS 'package_pricing_date_package_id',
+	PACKAGE_PRICING_DATE.date AS 'package_pricing_date_date',
+	PACKAGE_PRICING_DATE.package_pricing_id AS 'package_pricing_date_package_pricing_id',
+	PACKAGE_PRICING_DATE.enabled AS 'package_pricing_date_enabled',
+	PACKAGE_PRICING_DATE.date_created AS 'package_pricing_date_date_created',
+	PACKAGE_PRICING_DATE.created_by AS 'package_pricing_date_created_by',
+	PACKAGE_PRICING_DATE.date_modified AS 'package_pricing_date_date_modified',
+	PACKAGE_PRICING_DATE.modified_by AS 'package_pricing_date_modified_by',
+	PACKAGE_PRICING_DATE.note AS 'package_pricing_date_note'
+FROM 	package_pricing_date PACKAGE_PRICING_DATE
+-- JOIN 	package_pricing_date PACKAGE_PRICING_DATE ON PACKAGE_PRICING_DATE.id = {FK_TABLE}.package_pricing_date_id

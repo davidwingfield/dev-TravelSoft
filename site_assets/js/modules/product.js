@@ -35,8 +35,8 @@ const Product = (function () {
     const _input_product_date_created = document.getElementById("input_product_date_created")
     const _input_product_created_by = document.getElementById("input_product_created_by")
     const _input_product_date_modified = document.getElementById("input_product_date_modified")
-    const _input_product_modified_by = document.getElementById("input_product_modified_by")
-    const _input_product_note = document.getElementById("input_product_note")
+    const _panel_tab_season = document.getElementById("panel_tab_season")
+    const _panel_tab_provider = document.getElementById("panel_tab_provider")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $index_table
     const _product_index_table = document.getElementById("product_index_table")
@@ -143,7 +143,7 @@ const Product = (function () {
             detail.date_created = (product.date_created) ? product.date_created : formatDateMySQL()
             detail.created_by = (product.created_by) ? product.created_by : user_id
             detail.date_modified = (product.date_modified) ? product.date_modified : formatDateMySQL()
-            detail.modified_by = (product.modified_by) ? product.modified_by : modified_by
+            detail.modified_by = (product.modified_by) ? product.modified_by : user_id
             detail.note = (product.note) ? product.note : null
             detail.category = (product.category) ? product.category : {}
             detail.keywords = (product.keywords) ? product.keywords : []
@@ -161,10 +161,12 @@ const Product = (function () {
     }
     
     const index = function (settings) {
-        build_index_table()
-        
-        if (settings) {
-            load_all(settings)
+        if (_product_index_table) {
+            build_index_table()
+            
+            if (settings) {
+                load_all(settings)
+            }
         }
     }
     

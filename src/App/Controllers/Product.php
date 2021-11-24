@@ -208,7 +208,6 @@
             }
 
             return array(
-                //'offers' => $rooms,
                 'id' => $product['product_id'],
                 'use_provider_location' => $use_provider_location,
                 'category_id' => $product['product_category_id'],

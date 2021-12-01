@@ -1,4 +1,25 @@
-<section id="provider_index">
-    <h1>Provider Index</h1>
-    <pre><?php echo var_dump($data, 1); ?></pre>
+<?php
+    if (!isset($page_data)) {
+        $page_data = [];
+    }
+    
+    $settings = json_encode($page_data, 1);
+    $init = "Vendor.index($settings);";
+?>
+
+<section id="vendor_index" class="section">
+    <div class="row">
+        
+        <div class="col-12 col-lg-8 mb-1">
+            <?php
+                include_once(__DIR__ . "/tables/vendor_index_table.phtml"); ?>
+        </div>
+    
+    </div>
 </section>
+<script type="text/javascript">
+    $(function () {
+        Types.init(<?php echo TYPES;?>)
+        <?php echo $init;?>
+    })
+</script>

@@ -60,6 +60,8 @@
      * login requests
      */
     Router::post($routeLead . "/users/login", "User@login");
+    Router::post($routeLead . "/users/register", "User@serveUpdateUser");
+    Router::post($routeLead . "/users/update", "User@serveUpdateUser");
 
     /**
      * image requests
@@ -75,7 +77,7 @@
     Router::post($routeLead . "/companies/update", "Company@serveUpdate");
     Router::post($routeLead . "/addresses/update", "Address@serveUpdate");
     Router::post($routeLead . "/locations/update", "Location@serveUpdate");
-    Router::post($routeLead . "/users/update", "User@serveUpdateUser");
+
     Router::post($routeLead . "/seasons/update", "Province@serveUpdate");
     Router::post($routeLead . "/variants/update", "City@serveUpdate");
     Router::post($routeLead . "/profiles/update", "Province@serveUpdate");

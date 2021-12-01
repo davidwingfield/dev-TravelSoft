@@ -1,15 +1,14 @@
 <?php
-
+    
     namespace Framework\App\Controllers;
-
+    
     use Framework\App\Models\AddressModel;
     use Framework\Core\Controller;
     use Framework\Core\View;
     use Framework\Logger\Log;
-
+    
     /**
      * Short Address Description
-     *
      * Long Address Description
      *
      * @package            Framework\App
@@ -24,7 +23,7 @@
         {
             parent::__construct();
         }
-
+        
         /**
          * api get request
          *
@@ -44,12 +43,12 @@
                 $address_id = (int)$params["address_id"];
                 $addresses = AddressModel::getByAddressId($address_id);
             }
-
+            
             // ----
             View::render_json(self::format($addresses));
             exit(1);
         }
-
+        
         /**
          * api update request
          *
@@ -57,13 +56,12 @@
          */
         public static function serveUpdate(array $params = [])
         {
-            $addresses = AddressModel::update($params);
-
+            $addresses = self::format(AddressModel::update($params));
             // ----
             View::render_json($addresses);
             exit(1);
         }
-
+        
         /**
          * format address for table
          *
@@ -85,18 +83,18 @@
             $country_name = ($address["country_name"]) ? strtoupper($address["country_name"]) : null;
             $country_iso2 = ($address["country_iso2"]) ? strtoupper($address["country_iso2"]) : null;
             $country_iso3 = ($address["country_iso3"]) ? strtoupper($address["country_iso3"]) : null;
-
+            
             $province_name = ($address["province_name"]) ? strtoupper($address["province_name"]) : null;
             $province_iso2 = ($address["province_iso2"]) ? strtoupper($address["province_iso2"]) : null;
-
+            
             $city_name = ($address["city_name"]) ? strtoupper($address["city_name"]) : null;
-
+            
             $street_1 = ($address["address_street_1"]) ? strtoupper($address["address_street_1"]) : null;
             $street_2 = ($address["address_street_2"]) ? strtoupper($address["address_street_2"]) : null;
             $street_3 = ($address["address_street_3"]) ? strtoupper($address["address_street_3"]) : null;
-
+            
             $postal = ($address["address_postal_code"]) ? strtoupper($address["address_postal_code"]) : null;
-
+            
             $id = ($address["address_id"]) ? strtoupper($address["address_id"]) : null;
             $enabled = ($address["address_enabled"]) ? strtoupper($address["address_enabled"]) : null;
             $date_created = ($address["address_date_created"]) ? strtoupper($address["address_date_created"]) : null;
@@ -104,19 +102,19 @@
             $date_modified = ($address["address_date_modified"]) ? strtoupper($address["address_date_modified"]) : null;
             $modified_by = ($address["address_modified_by"]) ? strtoupper($address["address_modified_by"]) : null;
             $note = ($address["address_note"]) ? strtoupper($address["address_note"]) : null;
-
+            
             if (!is_null($street_1)) {
                 $streets[] = $street_1;
             }
-
+            
             if (!is_null($street_2)) {
                 $streets[] = $street_2;
             }
-
+            
             if (!is_null($street_3)) {
                 $streets[] = $street_3;
             }
-
+            
             $counter = 1;
             foreach ($streets AS $street) {
                 $comma = ", ";
@@ -128,56 +126,56 @@
                 $long_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>$street</span>$comma";
                 $counter++;
             }
-
+            
             if (!is_null($postal)) {
                 $long_region[] = $postal;
                 $medium_region[] = $postal;
                 $short_region[] = $postal;
             }
-
+            
             if (!is_null($city_name)) {
                 $long_region[] = $city_name;
                 $medium_region[] = $city_name;
                 $short_region[] = $city_name;
             }
-
+            
             if (!is_null($province_name)) {
                 $long_region[] = $province_name;
             }
-
+            
             if (!is_null($province_iso2)) {
                 $medium_region[] = $province_iso2;
                 $short_region[] = $province_iso2;
             }
-
+            
             $region_short_line = implode(" ", $short_region);
             $region_medium_line = implode(" ", $medium_region);
             $region_long_line = implode(" ", $long_region);
-
+            
             $short_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>" . $region_short_line . "</span><br>";
             $medium_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>" . $region_medium_line . "</span><br>";
             $long_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>" . $region_long_line . "</span><br>";
-
+            
             if (!is_null($country_name)) {
                 $long_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>" . $country_name . "</span>";
             }
-
+            
             if (!is_null($country_iso2)) {
                 $short_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>" . $country_iso2 . "</span>";
             }
-
+            
             if (!is_null($country_iso3)) {
                 $medium_address_formatted .= "<span class='' style='white-space: nowrap; font-size:.75rem;'>" . $country_iso3 . "</span>";
             }
-
+            
             $short_address_formatted .= "</address>";
             $medium_address_formatted .= "</address>";
             $long_address_formatted .= "</address>";
-
+            
             $formattedAddress["short_address_formatted"] = $short_address_formatted;
             $formattedAddress["medium_address_formatted"] = $medium_address_formatted;
             $formattedAddress["long_address_formatted"] = $long_address_formatted;
-
+            
             $country = array(
                 "id" => (int)$address["country_id"],
                 "name" => $address["country_name"],
@@ -193,7 +191,7 @@
                 "note" => ($address["country_note"] === "") ? null : $address["country_note"],
             );
             $formattedAddress["country"] = $country;
-
+            
             $province = array(
                 "id" => (int)$address["province_id"],
                 "name" => $address["province_name"],
@@ -208,7 +206,7 @@
                 "note" => ($address["province_note"] === "") ? null : $address["province_note"],
             );
             $formattedAddress["province"] = $province;
-
+            
             $city = array(
                 "id" => (int)$address["city_id"],
                 "name" => $address["city_name"],
@@ -221,7 +219,7 @@
                 "note" => ($address["city_note"] === "") ? null : $address["city_note"],
             );
             $formattedAddress["city"] = $city;
-
+            
             $formattedAddress["street_1"] = $street_1;
             $formattedAddress["street_2"] = $street_2;
             $formattedAddress["street_3"] = $street_3;
@@ -235,10 +233,10 @@
             $formattedAddress["date_modified"] = $date_modified;
             $formattedAddress["modified_by"] = (int)$modified_by;
             $formattedAddress["note"] = ($note === "") ? null : $note;
-
+            
             return $formattedAddress;
         }
-
+        
         /**
          * format object
          *
@@ -252,8 +250,8 @@
             foreach ($addresses AS $address) {
                 $formattedAddress[] = self::format_address_table($address);
             }
-
+            
             return $formattedAddress;
         }
-
+        
     }

@@ -2,16 +2,22 @@
     if (!isset($page_data)) {
         $page_data = [];
     }
-
+    
     $settings = json_encode($page_data["products"], 1);
-    $init = "Product.index($settings);";
+    $init = "Product.init($settings);";
     if (!defined("COUNTRIES")) {
         define("COUNTRIES", $page_data["types"]["countries"]);
     }
+    $currency = [];
+    if (isset($page_data["types"]["currency"])) {
+        $currency = $page_data["types"]["currency"];
+    }
 ?>
-<section id="product_index" class="section">
+<!-- Product Index Page -->
+<section id="product_index_page" class="section">
     <div class="row">
         <div class="col-12">
+            
             <section class="panel">
                 <header class="panel-heading">
                     <div class="panel-actions"></div>
@@ -62,9 +68,21 @@
                     </table>
                 </div>
             </section>
+        
         </div>
     </div>
+
 </section>
+<!-- /Product Index Page -->
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_new_product">
+    Launch modal
+</button>
+
+<?php
+    include_once(VIEWS_PATH . "/products/modals/new_product_modal.phtml"); ?>
+
 <script type="text/javascript">
     $(function () {
         Types.init(<?php echo TYPES;?>)

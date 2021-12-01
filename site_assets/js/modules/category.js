@@ -2,7 +2,7 @@ const Category = (function () {
     "use strict"
     
     const base_url = "/category"
-    const _input_category_category_id = document.getElementById("input_category_category_id")
+    const _modal_product_category_id = document.getElementById("modal_product_category_id")
     const _input_category_name = document.getElementById("input_category_name")
     const _input_category_last_update = document.getElementById("input_category_last_update")
     const _input_category_id = document.getElementById("input_category_id")
@@ -33,6 +33,11 @@ const Category = (function () {
     const handle_category_error = function (msg) {
         toastr.error(msg)
     }
+    
+    $(_modal_product_category_id)
+      .on("change", function () {
+          Product.init_autocomplete()
+      })
     
     const _default_detail = function () {
         return {

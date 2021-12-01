@@ -19,10 +19,12 @@
     class StaticPages extends Controller
     {
 
+        /**
+         * constructor
+         */
         public function __construct()
         {
             parent::__construct();
-
         }
 
         public static function profile()

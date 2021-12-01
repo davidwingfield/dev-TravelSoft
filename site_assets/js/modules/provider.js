@@ -4,6 +4,8 @@ const Provider = (function () {
     const base_url = "/providers"
     
     /** Buttons */
+    const _button_add_provider_page_heading_table = document.getElementById("button_add_provider_page_heading_table")
+    
     const _button_add_provider_page_heading = document.getElementById("button_add_provider_page_heading")
     const _button_edit_provider_name = document.getElementById("button_edit_provider_name")
     const _button_save_provider = document.getElementById("button_save_provider")
@@ -274,7 +276,6 @@ const Provider = (function () {
      * build provider index table
      */
     const build_index_table = function () {
-        
         $index_table = $(_table_provider_index).table({
             table_type: "display_list",
             data: Provider.all,

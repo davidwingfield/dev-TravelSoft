@@ -1,15 +1,14 @@
 <?php
-
+    
     namespace Framework\App\Controllers;
-
+    
     use Framework\App\Models\ProductModel;
     use Framework\Core\Controller;
     use Framework\Core\View;
     use Framework\Logger\Log;
-
+    
     /**
      * Short Product Description
-     *
      * Long Product Description
      *
      * @package            Framework\App
@@ -36,10 +35,10 @@
                     "placement" => "top",
                 ),
             ),
-
+            
             "new" => array(
                 "type" => "a",
-                "href" => "/products/new",
+                "href" => "javascript:void(0)",
                 "classes" => "btn btn-outline-primary btn-sm btn-icon btn-round",
                 "icon" => "fas fa-plus",
                 "id" => "button_add_product_page_heading",
@@ -51,17 +50,17 @@
                 ),
             ),
         );
-
+        
         public function __construct()
         {
             parent::__construct();
         }
-
+        
         public static function index(array $params = [])
         {
             $data = Page::getDetails(9);
             $products = [];
-
+            
             /** breadcrumbs */
             define("BREAD_CRUMBS", "
                 <li class='breadcrumb-item'>
@@ -71,7 +70,7 @@
                     Products
                 </li>"
             );
-
+            
             /**
              * buttons
              */
@@ -83,25 +82,35 @@
                 $products[] = self::format($product);
             }
             $data["products"] = $products;
-
+            
             /**
              * header
              */
             if (!defined("PAGEHEADINGCLASS")) {
-                define("PAGEHEADINGCLASS", " page-header-bordered page-header-tabs");
+                //define("PAGEHEADINGCLASS", " page-header-bordered page-header-tabs");
+                define("PAGEHEADINGCLASS", " ");
             }
-
-            // ----
+            
+            /**
+             * render index view
+             */
             View::render_template("products/index", $data);
             exit(1);
         }
-
+        
         public static function edit(array $params = [])
         {
             if (isset($params["product_id"])) {
                 $product_id = (int)$params["product_id"];
-                $data = Page::getDetails(6);
-                $data["product_details"] = [];
+                $data = Page::getDetails(10);
+                $results = [];
+                foreach (ProductModel::get($product_id) AS $k => $product) {
+                    $results[] = self::format($product);
+                }
+                if (isset($results[0])) {
+                    $results = $results[0];
+                }
+                $data["product_details"] = $results;
                 // ----
                 define("BREAD_CRUMBS", "
                     <li class='breadcrumb-item'>
@@ -118,11 +127,11 @@
                 View::render_template("products/edit", $data);
                 exit(1);
             }
-
+            
             header("Location: /products");
             exit(1);
         }
-
+        
         public static function new(array $params = [])
         {
             $data = Page::getDetails(9);
@@ -141,17 +150,17 @@
             View::render_template("products/edit", $data);
             exit(1);
         }
-
+        
         public static function serveTableUpdate(array $params = [])
         {
             $input = filter_input_array(INPUT_POST);
             Log::$debug_log->trace($input);
-
+            
             // ----
-
+            
             View::render_json($input);
         }
-
+        
         public static function serveGet(array $params = [])
         {
             $product_id = null;
@@ -165,14 +174,14 @@
             }
             View::render_json($products);
         }
-
+        
         private static function format(array $product = null): array
         {
             if (is_null($product)) {
                 return [];
             }
             $rooms = array();
-
+            
             $seasons = Season::getSeasonsByProductId((int)$product['product_id']);
             $units = Unit::getUnitsByProductId((int)$product['product_id']);
             $variants = Variant::getVariantsByProductId((int)$product['product_id']);
@@ -189,11 +198,11 @@
                     }
                 }
             }
-
+            
             //*/
             $provider = Provider::getByProviderId((int)$product['product_provider_id']);
             $provider = (isset($provider[0])) ? $provider[0] : [];
-
+            
             $vendor = Vendor::getByVendorId((int)$product['product_vendor_id']);
             $vendor = (isset($vendor[0])) ? $vendor[0] : [];
             $use_provider_location = false;
@@ -206,7 +215,7 @@
                 $location = Location::getByLocationId((int)$product['product_location_id']);
                 $location_id = (int)$product['product_location_id'];
             }
-
+            
             return array(
                 'id' => $product['product_id'],
                 'use_provider_location' => $use_provider_location,
@@ -277,5 +286,5 @@
                 'variants' => $variants,
             );
         }
-
+        
     }

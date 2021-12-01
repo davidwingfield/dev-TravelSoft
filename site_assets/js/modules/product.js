@@ -1,42 +1,18 @@
 const Product = (function () {
     "use strict"
-    ///////////////////////////////////////////////
+    const _product_edit_page = document.getElementById("product_edit_page")
+    const _button_add_product_page_heading = document.getElementById("button_add_product_page_heading")
+    const _modal_button_cancel_add_product = document.getElementById("modal_button_cancel_add_product")
+    const _modal_button_submit_add_product = document.getElementById("modal_button_cancel_add_product")
+    const _modal_new_product = document.getElementById("modal_new_product")
+    const _modal_product_name = document.getElementById("modal_product_name")
+    const _modal_product_category_id = document.getElementById("modal_product_category_id")
+    const _modal_product_sku = document.getElementById("modal_product_sku")
+    const _modal_product_rating_types_id = document.getElementById("modal_product_rating_types_id")
+    const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
+    const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
     const base_url = "/products"
-    const _input_product_id = document.getElementById("input_product_id")
-    const _input_product_category_id = document.getElementById("input_product_category_id")
-    const _input_product_pricing_strategy_types_id = document.getElementById("input_product_pricing_strategy_types_id")
-    const _input_product_status_types_id = document.getElementById("input_product_status_types_id")
-    const _input_product_product_status_types_id = document.getElementById("input_product_product_status_types_id")
-    const _input_product_currency_id = document.getElementById("input_product_currency_id")
-    const _input_product_location_id = document.getElementById("input_product_location_id")
-    const _input_product_city_id = document.getElementById("input_product_city_id")
-    const _input_product_vendor_id = document.getElementById("input_product_vendor_id")
-    const _input_product_provider_id = document.getElementById("input_product_provider_id")
-    const _input_product_name = document.getElementById("input_product_name")
-    const _input_product_provider_vendor_match = document.getElementById("input_product_provider_vendor_match")
-    const _input_product_description_short = document.getElementById("input_product_description_short")
-    const _input_product_description_long = document.getElementById("input_product_description_long")
-    const _input_product_rating = document.getElementById("input_product_rating")
-    const _input_product_sku = document.getElementById("input_product_sku")
-    const _input_product_phone = document.getElementById("input_product_phone")
-    const _input_product_infant = document.getElementById("input_product_infant")
-    const _input_product_child = document.getElementById("input_product_child")
-    const _input_product_teen = document.getElementById("input_product_teen")
-    const _input_product_depart_from = document.getElementById("input_product_depart_from")
-    const _input_product_arrive_to = document.getElementById("input_product_arrive_to")
-    const _input_product_depart_time = document.getElementById("input_product_depart_time")
-    const _input_product_arrive_time = document.getElementById("input_product_arrive_time")
-    const _input_product_day_span = document.getElementById("input_product_day_span")
-    const _input_product_cover_image = document.getElementById("input_product_cover_image")
-    const _input_product_api_id = document.getElementById("input_product_api_id")
-    const _input_product_from_api = document.getElementById("input_product_from_api")
-    const _input_product_hotel_code = document.getElementById("input_product_hotel_code")
-    const _input_product_enabled = document.getElementById("input_product_enabled")
-    const _input_product_date_created = document.getElementById("input_product_date_created")
-    const _input_product_created_by = document.getElementById("input_product_created_by")
-    const _input_product_date_modified = document.getElementById("input_product_date_modified")
-    const _panel_tab_season = document.getElementById("panel_tab_season")
-    const _panel_tab_provider = document.getElementById("panel_tab_provider")
+    const _product_index_page = document.getElementById("product_index_page")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $index_table
     const _product_index_table = document.getElementById("product_index_table")
@@ -93,6 +69,38 @@ const Product = (function () {
             profiles: [],
             provider: {},
         }
+    }
+    
+    $(_button_add_product_page_heading)
+      .on("click", function () {
+          set_new_product_modal()
+      })
+    
+    $(_modal_button_cancel_add_product)
+      .on("click", function () {
+          $(_modal_new_product).modal("hide")
+      })
+    
+    $(_modal_button_submit_add_product)
+      .on("click", function () {
+          save_new()
+      })
+    
+    const clear_modal_form = function () {
+        _modal_product_name.value = ""
+        _modal_product_category_id.value = ""
+        _modal_product_sku.value = ""
+        _modal_product_rating_types_id.value = ""
+        _modal_product_currency_id.value = ""
+        _modal_product_pricing_strategies_types_id.value = ""
+    }
+    
+    const save_new = function () {
+    
+    }
+    
+    const set_new_product_modal = function () {
+        $(_modal_new_product).modal("show")
     }
     
     const save = function (params) {
@@ -158,16 +166,6 @@ const Product = (function () {
         
         Product.detail = detail
         return detail
-    }
-    
-    const index = function (settings) {
-        if (_product_index_table) {
-            build_index_table()
-            
-            if (settings) {
-                load_all(settings)
-            }
-        }
     }
     
     const load_all = function (products) {
@@ -257,13 +255,48 @@ const Product = (function () {
             window.location.replace(base_url + "/" + product.id)
         }
     }
-    ///////////////////////////////////////////////
+    
+    const init_autocomplete = function () {
+        if (_modal_product_name) {
+        
+        }
+    }
+    
+    const init = function (settings) {
+        console.log("Product.init()", settings)
+        if (_modal_new_product) {
+            Category.init()
+        }
+        
+        if (_product_edit_page) {
+            return true
+        }
+        
+        if (_product_index_page) {
+            Product.index(settings)
+            return true
+        }
+    }
+    
+    const index = function (settings) {
+        if (_product_index_table) {
+            build_index_table()
+            
+            if (settings) {
+                load_all(settings)
+            }
+        }
+    }
+    
     return {
         validator: null,
         detail: {},
         all: new Map(),
         get: function (params) {
             get(params)
+        },
+        init_autocomplete: function () {
+            init_autocomplete()
         },
         load_all: function (params) {
             load_all(params)
@@ -283,6 +316,3 @@ const Product = (function () {
     }
     
 })()
-
-//Product.init()
-//end object

@@ -1,104 +1,105 @@
 <section>
-    <div class="row" style="">
+    <div class="row">
         <div class="col-12 col-lg-5">
-            <?php include_once(VIEWS_PATH . "/addresses/tables/provider_edit_address_table.phtml"); ?>
+            <?php
+                include_once(VIEWS_PATH . "/addresses/tables/provider_edit_address_table.phtml"); ?>
         </div>
-        <div class="col-12 col-lg-7" style="">
-
+        <div class="col-12 col-lg-7">
+            
             <div class="card mb-2" id="card_edit_address_form">
-                <form id="form_edit_address" name="form_edit_address" class="" style="" novalidate>
+                <form id="form_edit_address" name="form_edit_address" class="" novalidate>
                     <div class="card-body">
-
+                        
                         <h5 class="card-title">
                             Address Edit Form
                             <a id="button_close_edit_address_form" href="javascript:void(0);" class="panel-button-close fas fa-times" aria-hidden="true"></a>
                         </h5>
                         <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
                         <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-
+                        
                         <div class="">
-                            <div class="row" style="">
+                            <div class="row">
                                 <!--  -->
                                 <!-- Address Company Id -->
-                                <div class="col-12 col-md-4" style="">
-                                    <div class="form-element" style="">
-                                        <label for="address_company_id" style="">Company Id:</label>
-                                        <input type="text" id="address_company_id" name="address_company_id" class="form-control" style="" aria-label="Address Company Id" placeholder="" autocomplete="off" readonly/>
-                                        <div id="address_company_id-error" class="error w-100 text-center" style="">&nbsp;</div>
-                                    </div>
-                                </div>
-                                <!-- /Address Id -->
-
-                                <!-- Address Id -->
-                                <div class="col-12 col-md-4" style="">
-                                    <div class="form-element" style="">
-                                        <label for="address_id" style="">Address Id:</label>
-                                        <input type="text" id="address_id" name="address_id" class="form-control" style="" aria-label="Address Id" placeholder="" autocomplete="off" readonly/>
-                                        <div id="address_id-error" class="error w-100 text-center" style="">&nbsp;</div>
-                                    </div>
-                                </div>
-                                <!-- /Address Id -->
-
-                                <!-- Address Enabled -->
-                                <div class="col-12 col-md-4 d-flex align-self-end justify-content-end pb-2" style="">
+                                <div class="col-12 col-md-4">
                                     <div class="form-element">
-                                        <div class="custom-control custom-switch" style="">
-                                            <input id="address_enabled" name="address_enabled" type="checkbox" value="1" class="custom-control-input" style="">
-                                            <label for="address_enabled" class="custom-control-label p-0" style="">Enabled</label>
+                                        <label for="address_company_id">Company Id:</label>
+                                        <input type="text" id="address_company_id" name="address_company_id" class="form-control" aria-label="Address Company Id" placeholder="" autocomplete="off" readonly/>
+                                        <div id="address_company_id-error" class="error w-100 text-center">&nbsp;</div>
+                                    </div>
+                                </div>
+                                <!-- /Address Id -->
+                                
+                                <!-- Address Id -->
+                                <div class="col-12 col-md-4">
+                                    <div class="form-element">
+                                        <label for="address_id">Address Id:</label>
+                                        <input type="text" id="address_id" name="address_id" class="form-control" aria-label="Address Id" placeholder="" autocomplete="off" readonly/>
+                                        <div id="address_id-error" class="error w-100 text-center">&nbsp;</div>
+                                    </div>
+                                </div>
+                                <!-- /Address Id -->
+                                
+                                <!-- Address Enabled -->
+                                <div class="col-12 col-md-4 d-flex align-self-end justify-content-end pb-2">
+                                    <div class="form-element">
+                                        <div class="custom-control custom-switch">
+                                            <input id="address_enabled" name="address_enabled" type="checkbox" value="1" class="custom-control-input">
+                                            <label for="address_enabled" class="custom-control-label p-0">Enabled</label>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- /Address Enabled -->
-
+                            
                             </div>
-
+                            
                             <div class="row">
-
+                                
                                 <div class="col-12 col-md-6 col-lg-8">
-                                    <div class="row" style="">
-
+                                    <div class="row">
+                                        
                                         <!-- Address Street 1 -->
-                                        <div class="col-12 col-lg-12 " style="">
-                                            <div class="form-element" style="">
-                                                <label for="address_street_1" style="">Street 1:</label>
-                                                <input type="text" id="address_street_1" name="address_street_1" class="form-control" style="" aria-label="Address Street 1" placeholder="" autocomplete="off"/>
-                                                <div id="address_street_1-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                        <div class="col-12 col-lg-12 ">
+                                            <div class="form-element">
+                                                <label for="address_street_1">Street 1:</label>
+                                                <input type="text" id="address_street_1" name="address_street_1" class="form-control" aria-label="Address Street 1" placeholder="" autocomplete="off"/>
+                                                <div id="address_street_1-error" class="error w-100 text-center">&nbsp;</div>
                                             </div>
                                         </div>
                                         <!-- /Address Street 1 -->
-
+                                    
                                     </div>
-
-                                    <div class="row" style="">
-
+                                    
+                                    <div class="row">
+                                        
                                         <!-- Address Street 2 -->
-                                        <div class="col-12 col-lg-12 " style="">
-                                            <div class="form-element" style="">
-                                                <label for="address_street_2" style="">Street 2:</label>
-                                                <input type="text" id="address_street_2" name="address_street_2" class="form-control" style="" aria-label="Address Street 2" placeholder="" autocomplete="off"/>
-                                                <div id="address_street_2-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                        <div class="col-12 col-lg-12 ">
+                                            <div class="form-element">
+                                                <label for="address_street_2">Street 2:</label>
+                                                <input type="text" id="address_street_2" name="address_street_2" class="form-control" aria-label="Address Street 2" placeholder="" autocomplete="off"/>
+                                                <div id="address_street_2-error" class="error w-100 text-center">&nbsp;</div>
                                             </div>
                                         </div>
                                         <!-- /Address Street 2 -->
-
+                                    
                                     </div>
-
-                                    <div class="row" style="">
-
+                                    
+                                    <div class="row">
+                                        
                                         <!-- Address Street 3 -->
-                                        <div class="col-12 col-lg-12 " style="">
-                                            <div class="form-element" style="">
-                                                <label for="address_street_3" style="">Street 3:</label>
-                                                <input type="text" id="address_street_3" name="address_street_3" class="form-control" style="" aria-label="Address Street 3" placeholder="" autocomplete="off"/>
-                                                <div id="address_street_3-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                        <div class="col-12 col-lg-12 ">
+                                            <div class="form-element">
+                                                <label for="address_street_3">Street 3:</label>
+                                                <input type="text" id="address_street_3" name="address_street_3" class="form-control" aria-label="Address Street 3" placeholder="" autocomplete="off"/>
+                                                <div id="address_street_3-error" class="error w-100 text-center">&nbsp;</div>
                                             </div>
                                         </div>
                                         <!-- /Address Street 3 -->
-
+                                    
                                     </div>
-
+                                
                                 </div>
-
+                                
                                 <div class="col-12 col-md-6 col-lg-4">
                                     <div class="form-element">
                                         <label for="address_types_id">Address Types:</label>
@@ -110,17 +111,17 @@
                                                         $name = $addressType["name"];
                                                         echo "<option value='$id'>$name</option>";
                                                     }
-
+                                                    
                                                 }
                                             ?>
                                         </select>
                                         <div class="error w-100 text-center" id="address_types_id-error"></div>
                                     </div>
                                 </div>
-
+                            
                             </div>
-
-                            <div class="row" style="">
+                            
+                            <div class="row">
                                 <!-- Address Country Id -->
                                 <div class="col-12 col-md-4">
                                     <div class="form-element">
@@ -130,7 +131,7 @@
                                                 //echo "<option value='' readonly disabled selected>-- Coiuntry --</option>";
                                                 if (isset($page_data, $page_data["types"], $page_data["types"]["countries"])) {
                                                     $countries = $page_data["types"]["countries"];
-
+                                                    
                                                     foreach ($countries AS $k => $country) {
                                                         $id = $country["id"];
                                                         $name = $country["name"];
@@ -138,14 +139,14 @@
                                                     }
                                                     //echo "<pre>" . var_export($page_data["types"]["countries"], 1) . "</pre>";
                                                 }
-
+                                            
                                             ?>
                                         </select>
                                         <div class="error w-100 text-center" id="address_country_id-error"></div>
                                     </div>
                                 </div>
                                 <!-- /Address Country Id -->
-
+                                
                                 <!-- Address Province Id -->
                                 <div class="col-12 col-md-4">
                                     <div class="form-element">
@@ -155,7 +156,7 @@
                                     </div>
                                 </div>
                                 <!-- Address Province Id -->
-
+                                
                                 <!-- Address City Id -->
                                 <div class="col-12 col-md-4">
                                     <div class="form-element">
@@ -166,29 +167,29 @@
                                 </div>
                                 <!-- Address City Id -->
                             </div>
-
-                            <div class="row" style="">
+                            
+                            <div class="row">
                                 <!-- Address Postal Code -->
-                                <div class="col-12 col-lg-12 " style="">
-                                    <div class="form-element" style="">
-                                        <label for="address_postal_code" style="">Postal Code:</label>
-                                        <input type="text" id="address_postal_code" name="address_postal_code" class="form-control" style="" aria-label="Address Id" placeholder="" autocomplete="off"/>
-                                        <div id="address_postal_code-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                <div class="col-12 col-lg-12 ">
+                                    <div class="form-element">
+                                        <label for="address_postal_code">Postal Code:</label>
+                                        <input type="text" id="address_postal_code" name="address_postal_code" class="form-control" aria-label="Address Id" placeholder="" autocomplete="off"/>
+                                        <div id="address_postal_code-error" class="error w-100 text-center">&nbsp;</div>
                                     </div>
                                 </div>
                                 <!-- /Address Postal Code -->
                             </div>
                         </div>
-
+                        
                         <div class="text-right w-100">
                             <a href="javascript:void(0);" id="button_clear_form_edit_address" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
-                            <a href="javascript:void(0);" id="button_submit_form_edit_address" class="btn btn-primary btn-sm waves-effect waves-light" style="">Save</a>
+                            <a href="javascript:void(0);" id="button_submit_form_edit_address" class="btn btn-primary btn-sm waves-effect waves-light">Save</a>
                         </div>
-
+                    
                     </div>
                 </form>
             </div>
-
+        
         </div>
     </div>
 </section>

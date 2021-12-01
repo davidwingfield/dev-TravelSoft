@@ -1,7 +1,7 @@
 <?php
-
+    
     namespace Framework\App\Controllers;
-
+    
     use Exception;
     use Framework\App\Controllers\StaticPages;
     use Framework\App\Models\AddressModel;
@@ -12,10 +12,9 @@
     use Framework\Core\Controller;
     use Framework\Core\View;
     use Framework\Logger\Log;
-
+    
     /**
      * Short Provider Description
-     *
      * Long Provider Description
      *
      * @package            Framework\App
@@ -42,7 +41,7 @@
                     "placement" => "top",
                 ),
             ),
-
+            
             "new" => array(
                 "type" => "a",
                 "href" => "/providers/new",
@@ -54,11 +53,11 @@
                     "toggle" => "tooltip",
                     "title" => "Creat a New Provider",
                     "placement" => "top",
-
+                
                 ),
             ),
         );
-
+        
         /**
          * provider tabs
          *
@@ -69,6 +68,16 @@
             "role" => "tablist",
             "class" => "nav nav-tabs nav-tabs-line",
             "tabs" => array(
+                "Overview" => array(
+                    "controls" => "panel_tab_provider_overview",
+                    "href" => "panel_tab_provider_overview",
+                    "id" => "panel_tab_provider_o",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
                 "Company" => array(
                     "controls" => "panel_tab_company_detail",
                     "href" => "panel_tab_company_detail",
@@ -88,7 +97,7 @@
                         "expanded" => "false",
                     ),
                     "data" => array(),
-
+                
                 ),
                 "Location" => array(
                     "controls" => "panel_tab_location_detail",
@@ -142,33 +151,31 @@
                 ),
             ),
         );
-
+        
         /**
          * result values
          *
          * @var array
          */
         protected static $data = [];
-
+        
         /**
          * __construct
-         *
          * Loads Controller Elements
          */
         public function __construct()
         {
             parent::__construct();
         }
-
+        
         /**
          * index
-         *
          * Loads Provider Index
          */
         public static function index(array $params = []): void
         {
             $data = Page::getDetails(5);
-
+            
             /** breadcrumbs */
             define("BREAD_CRUMBS", "
                     <li class='breadcrumb-item'>
@@ -178,21 +185,21 @@
                         Providers
                     </li>"
             );
-
+            
             /**
              * buttons
              */
             $data["buttons"] = array(
                 self::$buttons["new"],
             );
-
+            
             /**
              * header
              */
             if (!defined("PAGEHEADINGCLASS")) {
-                define("PAGEHEADINGCLASS", " page-header-bordered page-header-tabs");
+                define("PAGEHEADINGCLASS", "");
             }
-
+            
             /**
              * render view
              */
@@ -200,10 +207,9 @@
             View::render_template("providers/index", $data);
             exit(1);
         }
-
+        
         /**
          * load edit provider page
-         *
          * Loads Provider Edit
          */
         public static function edit(array $params = [])
@@ -218,7 +224,7 @@
             //----
             if (isset($params["provider_id"])) {
                 $data = Page::getDetails(6);
-
+                
                 /** breadcrumbs */
                 define("BREAD_CRUMBS", "
                     <li class='breadcrumb-item'>
@@ -231,51 +237,51 @@
                         $provider_id
                     </li>"
                 );
-
+                
                 /**
                  * header
                  */
                 if (!defined("PAGEHEADINGCLASS")) {
-                    define("PAGEHEADINGCLASS", " page-header-bordered page-header-tabs");
+                    define("PAGEHEADINGCLASS", " page-header page-header-bordered page-header-tabs");
                 }
-
+                
                 /**
                  * tabs
                  */
                 $tabs = self::$tabs;
-
+                
                 /** get provider details */
                 $provider_detail = self::format_get(ProviderModel::get($provider_id));
-
+                
                 /** get only one */
                 if (count($provider_detail) >= 1) {
                     $provider_detail = $provider_detail[0];
                 }
-
+                
                 if (isset($provider_detail["contacts"])) {
                     foreach ($provider_detail["contacts"] AS $k => $contact) {
                         $contact_detail[] = Contact::format($contact);
                     }
                 }
-
+                
                 if (isset($provider_detail["company"])) {
                     $company_detail = $provider_detail["company"];
                     $company_detail["images"] = array();
                 }
-
+                
                 if (isset($provider_detail["addresses"])) {
                     $address_detail = Address::format($provider_detail["addresses"]);
                     $provider_detail["addresses"] = $address_detail;
                 }
-
+                
                 if (isset($provider_detail["location"])) {
                     $location_detail = $provider_detail["location"];
                 }
-
+                
                 if (isset($provider_detail["vendor"])) {
                     $vendor_detail = $provider_detail["vendor"];
                 }
-
+                
                 /**
                  * set data params
                  */
@@ -291,7 +297,7 @@
                     self::$buttons["new"],
                 );
                 $data["tabs"] = self::$tabs;
-
+                
                 /**
                  * render view
                  */
@@ -303,22 +309,27 @@
             header("Location: /providers/new");
             exit(1);
         }
-
+        
+        /** get by provider id
+         *
+         * @param int|null $provider_id
+         *
+         * @return array
+         */
         public static function getByProviderId(int $provider_id = null): array
         {
             return self::format_get(ProviderModel::get($provider_id));
         }
-
+        
         /**
          * new
-         *
          * Loads New Provider
          */
         public static function new(array $params = [])
         {
             $data = Page::getDetails(14);
             $data["is_new"] = true;
-
+            
             /** breadcrumbs */
             define("BREAD_CRUMBS", "
                     <li class='breadcrumb-item'>
@@ -331,14 +342,14 @@
                         New
                     </li>"
             );
-
+            
             /**
              * header
              */
             if (!defined("PAGEHEADINGCLASS")) {
                 define("PAGEHEADINGCLASS", " page-header-bordered page-header-tabs");
             }
-
+            
             /**
              * buttons
              */
@@ -349,7 +360,7 @@
             View::render_template("providers/edit", $data);
             exit(1);
         }
-
+        
         /**
          * handle post update request
          *
@@ -361,27 +372,26 @@
             if (isset($params["vendor_detail"])) {
                 $vendor = Vendor::callUpdate($params["vendor_detail"]);
             }
-
+            
             if (isset($params["provider_detail"])) {
                 $provider = ProviderModel::update($params["provider_detail"]);
             }
-
+            
             // ----
-
+            
             View::render_json(self::format_get($provider));
             exit(1);
         }
-
+        
         /**
          * autocomplete
-         *
          * Autocomplete json
          */
         public static function autocomplete(string $st = ""): array
         {
             return self::format_ac(ProviderModel::provider_ac($st));
         }
-
+        
         /**
          * validate if name already exists
          *
@@ -395,7 +405,7 @@
             if (isset($args["name"])) {
                 $name = $args["name"];
                 $results = ProviderModel::getByName($name);
-
+                
                 foreach ($results AS $k => $provider) {
                     $providers[] = self::format($provider);
                 }
@@ -404,7 +414,7 @@
             View::render_json($providers);
             exit(1);
         }
-
+        
         /**
          * format
          *
@@ -440,7 +450,7 @@
             foreach ($contacts AS $k => $contact) {
                 $contact_list_formatted[] = Contact::format($contact);
             }
-
+            
             $temp = array(
                 "id" => (int)$provider["provider_id"],
                 "name" => $provider["company_name"],
@@ -577,13 +587,12 @@
                     ),
                 ),
             );
-
+            
             return $temp;
         }
-
+        
         /**
          * format_get
-         *
          */
         private static function format_get(array $providers = []): array
         {
@@ -591,10 +600,10 @@
             foreach ($providers AS $k => $provider) {
                 array_push($data, self::format($provider));
             }
-
+            
             return $data;
         }
-
+        
         /**
          * format autocomplete results
          *
@@ -613,10 +622,10 @@
                     "data" => self::format($provider),
                 ]);
             }
-
+            
             return $data;
         }
-
+        
         /**
          * system generated Code Direct Id
          *
@@ -628,14 +637,14 @@
         {
             $name = $provider["company_name"];
             $id = $provider["provider_id"];
-
+            
             $words = preg_split("/\s+/", $name);
             $count = count($words);
             $codeDirectId = str_pad($id, 11, "0", STR_PAD_LEFT);
-
+            
             $t = "D";
-
+            
             return $t . $codeDirectId;
         }
-
+        
     }

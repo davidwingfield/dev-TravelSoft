@@ -1,17 +1,16 @@
 <?php
-
+    
     namespace Framework\App\Controllers;
-
+    
     use Framework\App\Models\AddressModel;
     use Framework\App\Models\ContactModel;
     use Framework\App\Models\VendorModel;
     use Framework\Core\Controller;
     use Framework\Core\View;
     use Framework\Logger\Log;
-
+    
     /**
      * Short Vendor Description
-     *
      * Long Vendor Description
      *
      * @package            Framework\App
@@ -21,12 +20,207 @@
     {
         protected $primaryKey = "id";
         protected $sku = null;
-
+        /**
+         * buttons
+         *
+         * @var array
+         */
+        protected static $buttons = array(
+            "save" => array(
+                "type" => "a",
+                "href" => "javascript:void(0)",
+                "classes" => "btn btn-sm btn-primary btn-round",
+                "icon" => "fas fa-save",
+                "id" => "button_save_provider",
+                "text" => "save provider",
+                "data" => array(
+                    "toggle" => "tooltip",
+                    "title" => "Save Provider",
+                    "placement" => "top",
+                ),
+            ),
+            
+            "new" => array(
+                "type" => "a",
+                "href" => "javascript:void(0)",
+                "classes" => "btn btn-outline-primary btn-sm btn-icon btn-round",
+                "icon" => "fas fa-plus",
+                "id" => "button_add_vendor_page_heading",
+                "text" => "",
+                "data" => array(
+                    "toggle" => "tooltip",
+                    "title" => "Creat a New Vendor",
+                    "placement" => "top",
+                
+                ),
+            ),
+        );
+        
+        /**
+         * vendor tabs
+         *
+         * @var array
+         */
+        protected static $tabs = array(
+            "id" => "vendor_edit_tabs",
+            "role" => "tablist",
+            "class" => "nav nav-tabs nav-tabs-line",
+            "tabs" => array(
+                "Overview" => array(
+                    "controls" => "panel_tab_vendor_overview",
+                    "href" => "panel_tab_vendor_overview",
+                    "id" => "panel_tab_overview",
+                    "active" => true,
+                    "aria" => array(
+                        "expanded" => "true",
+                    ),
+                    "data" => array(),
+                ),
+                "Company" => array(
+                    "controls" => "panel_tab_company_detail",
+                    "href" => "panel_tab_company_detail",
+                    "id" => "panel_tab_company",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
+                "Addresses" => array(
+                    "controls" => "panel_tab_address_detail",
+                    "href" => "panel_tab_address_detail",
+                    "id" => "panel_tab_address",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
+                "Contacts" => array(
+                    "controls" => "panel_tab_contact_detail",
+                    "href" => "panel_tab_contact_detail",
+                    "id" => "panel_tab_contact",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
+                "Meta" => array(
+                    "controls" => "panel_tab_meta_detail",
+                    "href" => "panel_tab_meta_detail",
+                    "id" => "panel_tab_meta",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
+            ),
+        );
+        
+        /**
+         * result values
+         *
+         * @var array
+         */
+        protected static $data = [];
+        
         public function __construct()
         {
             parent::__construct();
         }
-
+        
+        public static function edit(array $params = [])
+        {
+            
+            $contact_detail = [];
+            $address_detail = [];
+            $company_detail = [];
+            $company_images = [];
+            //----
+            if (isset($params["vendor_id"])) {
+                $vendor_id = (int)$params["vendor_id"];
+                $data = Page::getDetails(8);
+                
+                /** breadcrumbs */
+                define("BREAD_CRUMBS", "
+                    <li class='breadcrumb-item'>
+                        <a href='/'>Home</a>
+                    </li>
+                    <li class='breadcrumb-item'>
+                        <a href='/vendors'>Vendors</a>
+                    </li>
+                    <li class='breadcrumb-item'>
+                        $vendor_id
+                    </li>"
+                );
+                
+                /**
+                 * header
+                 */
+                if (!defined("PAGEHEADINGCLASS")) {
+                    define("PAGEHEADINGCLASS", " page-header page-header-bordered page-header-tabs");
+                }
+                
+                /**
+                 * tabs
+                 */
+                $tabs = self::$tabs;
+                
+                /** get provider details */
+                $vendor_detail = self::format_get(VendorModel::get($vendor_id));
+                $data["vendor_detail"] = $vendor_detail;
+                
+                $data["buttons"] = array(
+                    self::$buttons["save"],
+                    self::$buttons["new"],
+                );
+                $data["tabs"] = self::$tabs;
+                
+                /**
+                 * render view
+                 */
+                View::render_template("vendors/edit", $data);
+                exit(1);
+            }
+        }
+        
+        public static function index()
+        {
+            $data = Page::getDetails(7);
+            /** breadcrumbs */
+            define("BREAD_CRUMBS", "
+                    <li class='breadcrumb-item'>
+                        <a href='/'>Home</a>
+                    </li>
+                    <li class='breadcrumb-item'>
+                        Vendors
+                    </li>"
+            );
+            
+            /**
+             * buttons
+             */
+            $data["buttons"] = array(
+                self::$buttons["new"],
+            );
+            
+            /**
+             * header
+             */
+            if (!defined("PAGEHEADINGCLASS")) {
+                define("PAGEHEADINGCLASS", " ");
+            }
+            
+            /**
+             * render view
+             */
+            $data["vendors"] = self::format_get(VendorModel::get());
+            View::render_template("vendors/index", $data);
+            exit(1);
+        }
+        
         /**
          * get vendor by Id
          *
@@ -37,22 +231,22 @@
         public static function getByVendorId(int $vendor_id = null): array
         {
             $vendors = [];
-
+            
             if (!isset($vendor_id)) {
                 $vendor_id = null;
             }
-
+            
             $results = VendorModel::get($vendor_id);
-
+            
             if ($results) {
                 foreach ($results AS $vendor) {
                     $vendors[] = self::format($vendor);
                 }
             }
-
+            
             return $vendors;
         }
-
+        
         /**
          * api get request
          *
@@ -74,46 +268,45 @@
             View::render_json($vendors);
             exit(1);
         }
-
+        
         public static function serveUpdate(array $params = null)
         {
             $results = [];
             if ($params) {
                 $results = VendorModel::updateRecord($params);
             }
-
+            
             // ----
             View::render_json(self::format_vendor($results));
             exit(1);
         }
-
+        
         public static function callUpdate(array $vendor = []): array
         {
             $results = [];
-
+            
             if ($vendor) {
                 $results = VendorModel::updateRecord($vendor);
             }
-
+            
             return $results;
         }
-
+        
         /**
          * autocomplete
-         *
          * Autocomplete json
          */
         public static function autocomplete(string $st = ""): array
         {
             $vendors = self::format_ac(VendorModel::vendor_ac($st));
-
+            
             $vendors_formatted = self::format_ac($vendors);
-
+            
             //Log::$debug_log->trace($vendors_formatted);
-
+            
             return $vendors_formatted;
         }
-
+        
         /**
          * validate if name already exists
          *
@@ -123,22 +316,22 @@
          */
         public static function validateName(array $args = []): array
         {
-
+            
             $vendors = array();
             if (isset($args["name"])) {
                 $name = $args["name"];
                 $results = VendorModel::getByName($name);
-
+                
                 foreach ($results AS $k => $vendor) {
                     $vendors[] = self::format($vendor);
                 }
             }
             // ----
-
+            
             View::render_json($vendors);
             exit(1);
         }
-
+        
         /**
          * format autocomplete result set
          *
@@ -157,10 +350,10 @@
                     "data" => self::format($vendor),
                 ]);
             }
-
+            
             return $data;
         }
-
+        
         /**
          * system generated SKU
          *
@@ -172,11 +365,11 @@
         {
             $name = $vendor["company_name"];
             $id = $vendor["vendor_id"];
-
+            
             $words = preg_split("/\s+/", $name);
             $count = count($words);
             $sku = str_pad($id, 11, "0", STR_PAD_LEFT);
-
+            
             $t = "";
             if ($count >= 3) {
                 for ($n = 0; $n < 3; $n++) {
@@ -195,10 +388,10 @@
             } else {
                 $t = "XXX";
             }
-
+            
             return $t . $sku;
         }
-
+        
         /**
          * format result set
          *
@@ -211,7 +404,7 @@
             $company_id = (int)$vendor["company_id"];
             $vendor_id = (int)$vendor["vendor_id"];
             $sku = (!isset($vendor["vendor_sku"])) ? self::generateSKU($vendor) : $vendor["vendor_sku"];
-
+            
             return array(
                 "id" => $vendor_id,
                 "company_id" => $company_id,
@@ -248,9 +441,9 @@
                     "contacts" => ContactModel::getByCompanyId((int)$company_id),
                 ),
             );
-
+            
         }
-
+        
         /**
          * format just the vendor results
          *
@@ -275,9 +468,21 @@
                 "date_modified" => $vendor["vendor_date_modified"],
                 "created_by" => $vendor["vendor_created_by"],
                 "modified_by" => $vendor["vendor_modified_by"],
-
             );
-
+            
         }
-
+        
+        /**
+         * format_get
+         */
+        private static function format_get(array $vendors = []): array
+        {
+            $data = [];
+            foreach ($vendors AS $k => $vendor) {
+                array_push($data, self::format($vendor));
+            }
+            
+            return $data;
+        }
+        
     }

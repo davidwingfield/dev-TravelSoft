@@ -3,6 +3,14 @@
 ?>
 <script type="text/javascript" src="/public/js/jquery-3.4.1.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/min/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js" integrity="sha512-o0rWIsZigOfRAgBxl4puyd0t6YKzeAw9em/29Ag7lhCQfaaua/mDwnpE2PVzwqJ08N7/wqrgdjc2E0mwdSY2Tg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" integrity="sha512-KXkS7cFeWpYwcoXxyfOumLyRGXMp7BTMTjwrgjMg0+hls4thG2JGzRgQtRfnAuKTn2KWTDZX4UdPg+xTs8k80Q==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@3.10.2/dist/fullcalendar.print.css" rel="stylesheet" media="print"/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/public/font/fontawesome/v5.15.3/css/all.css"/>
 <link rel="stylesheet" href="/public/css/bootstrap.css"/>
 <link rel="stylesheet" href="/public/vendor/autocomplete/autocomplete.css"/>
@@ -11,5 +19,7 @@
 <link rel="stylesheet" href="/public/vendor/select2/select2.css"/>
 <link rel="stylesheet" href="/public/vendor/fancybox/jquery.fancybox.css"/>
 <link rel="stylesheet" href="/public/vendor/fullcalendar/fullcalendar.min.css"/>
-<link rel="stylesheet" href="/public/css/style.css?v=<?php echo $date->format("U"); ?>">
-<link rel="stylesheet" href="/public/css/variant.css?v=<?php echo $date->format("U"); ?>">
+<link rel="stylesheet" href="/public/css/style.css?v=<?php
+    echo $date->format("U"); ?>">
+<link rel="stylesheet" href="/public/css/variant.css?v=<?php
+    echo $date->format("U"); ?>">

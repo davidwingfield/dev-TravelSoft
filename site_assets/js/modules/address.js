@@ -93,9 +93,13 @@ const Address = (function () {
      */
     $(_button_submit_form_edit_address)
       .on("click", function () {
+          let dataToSend = build()
+          if (!dataToSend) {
+              return
+          }
           confirmDialog(`Would you like to update?`, (ans) => {
               if (ans) {
-                  save()
+                  save(dataToSend)
               }
           })
       })
@@ -121,15 +125,14 @@ const Address = (function () {
     /**
      * save address form data
      */
-    const save = function () {
-        let dataToSend = build()
+    const save = function (dataToSend) {
+        
         if (dataToSend) {
             update_address(dataToSend, function (data) {
                 if (data) {
                     if (data[0]) {
                         let address = data[0]
                         let detail = set_detail(address)
-                        
                         if (Address.all.get(detail.id)) {
                             $address_table.updateRow(detail)
                         } else {
@@ -138,7 +141,12 @@ const Address = (function () {
                         
                         Address.all.set(detail.id, detail)
                         
+                        $address_table.clearSelectedRows()
+                        clear_form()
+                        unload_form()
+                        
                         toastr.success("Address Updated")
+                        
                     }
                 }
             })
@@ -525,6 +533,7 @@ const Address = (function () {
     const set_detail = function (address) {
         let detail = _default_detail()
         if (address) {
+            //console.log("address", address)
             detail.country = {
                 id: parseInt((address.country.id) ? address.country.id : null),
                 name: (address.country.name) ? address.country.name : null,

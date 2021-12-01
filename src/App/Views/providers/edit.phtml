@@ -2,7 +2,7 @@
     if (!isset($page_data)) {
         $page_data = [];
     }
-
+    
     $settings = json_encode($page_data, 1);
     $init = "Provider.edit($settings);";
     if (!defined("COUNTRIES")) {
@@ -11,59 +11,130 @@
 ?>
 
 <section id="provider_edit">
-    <!-- Tab Content -->
-    <div class="tab-content p-0">
-
-        <!-- Company Detail -->
-        <div class="tab-pane active" id="panel_tab_company_detail" role="tabpanel">
-            <?php include_once(VIEWS_PATH . "/companies/forms/edit_company_form.phtml"); ?>
+    
+    <div class="row">
+        <div class="col">
+            <!-- Tab Content -->
+            <div class="tab-content p-0">
+                <!-- Provider Overview -->
+                <div class="tab-pane" id="panel_tab_provider_overview" role="tabpanel">
+                    <section>
+                    
+                    </section>
+                </div>
+                <!-- /Provider Overview -->
+                
+                <!-- Company Detail -->
+                <div class="tab-pane active" id="panel_tab_company_detail" role="tabpanel">
+                    <?php
+                        include_once(VIEWS_PATH . "/companies/forms/edit_company_form.phtml"); ?>
+                </div>
+                <!-- /Company Detail -->
+                
+                <!-- Provider Detail -->
+                <div class="tab-pane" id="panel_tab_provider_detail" role="tabpanel">
+                    <?php
+                        include_once(VIEWS_PATH . "/providers/forms/provider_edit_form.phtml"); ?>
+                </div>
+                <!-- /Provider Detail -->
+                
+                <!-- Company Detail -->
+                <div class="tab-pane" id="panel_tab_company_detail" role="tabpanel">
+                    <?php
+                        include_once(VIEWS_PATH . "/companies/forms/edit_company_form.phtml"); ?>
+                </div>
+                <!-- /Company Detail -->
+                
+                <!-- Location Detail -->
+                <div class="tab-pane" id="panel_tab_location_detail" role="tabpanel">
+                    <?php
+                        include_once(VIEWS_PATH . "/locations/forms/location_edit_form.phtml"); ?>
+                </div>
+                <!-- /Location Detail -->
+                
+                <!-- Vendor Detail -->
+                <div class="tab-pane" id="panel_tab_vendor_detail" role="tabpanel">
+                    <?php
+                        include_once(VIEWS_PATH . "/vendors/forms/edit_vendor_form.phtml"); ?>
+                </div>
+                <!-- /Vendor Detail -->
+                
+                <!-- Contact Detail -->
+                <div class="tab-pane" id="panel_tab_contact_detail" role="tabpanel">
+                    <?php
+                        include_once(VIEWS_PATH . "/contacts/forms/contact_edit_form.phtml"); ?>
+                </div>
+                <!-- /Contact Detail -->
+                
+                <!-- Address Detail -->
+                <div class="tab-pane" id="panel_tab_address_detail" role="tabpanel">
+                    <?php
+                        include_once(VIEWS_PATH . "/addresses/forms/address_edit_form.phtml"); ?>
+                </div>
+                <!-- /Address Detail -->
+                
+                <!-- Meta Detail -->
+                <div class="tab-pane" id="panel_tab_meta_detail" role="tabpanel">
+                    <?php
+                        include_once(VIEWS_PATH . "/providers/forms/provider_meta_form.phtml"); ?>
+                </div>
+                <!-- /Meta Detail -->
+            
+            </div>
+            <!-- /Tab Content -->
         </div>
-        <!-- /Company Detail -->
-
-        <!-- Provider Detail -->
-        <div class="tab-pane" id="panel_tab_provider_detail" role="tabpanel">
-            <?php include_once(VIEWS_PATH . "/providers/forms/provider_edit_form.phtml"); ?>
-        </div>
-        <!-- /Provider Detail -->
-
-        <!-- Company Detail -->
-        <div class="tab-pane" id="panel_tab_company_detail" role="tabpanel">
-            <?php include_once(VIEWS_PATH . "/companies/forms/edit_company_form.phtml"); ?>
-        </div>
-        <!-- /Company Detail -->
-
-        <!-- Location Detail -->
-        <div class="tab-pane" id="panel_tab_location_detail" role="tabpanel">
-            <?php include_once(VIEWS_PATH . "/locations/forms/location_edit_form.phtml"); ?>
-        </div>
-        <!-- /Location Detail -->
-
-        <!-- Vendor Detail -->
-        <div class="tab-pane" id="panel_tab_vendor_detail" role="tabpanel">
-            <?php include_once(VIEWS_PATH . "/vendors/forms/edit_vendor_form.phtml"); ?>
-        </div>
-        <!-- /Vendor Detail -->
-
-        <!-- Contact Detail -->
-        <div class="tab-pane" id="panel_tab_contact_detail" role="tabpanel">
-            <?php include_once(VIEWS_PATH . "/contacts/forms/contact_edit_form.phtml"); ?>
-        </div>
-        <!-- /Contact Detail -->
-
-        <!-- Address Detail -->
-        <div class="tab-pane" id="panel_tab_address_detail" role="tabpanel">
-            <?php include_once(VIEWS_PATH . "/addresses/forms/address_edit_form.phtml"); ?>
-        </div>
-        <!-- /Address Detail -->
-
-        <!-- Meta Detail -->
-        <div class="tab-pane" id="panel_tab_meta_detail" role="tabpanel">
-            <?php include_once(VIEWS_PATH . "/providers/forms/provider_meta_form.phtml"); ?>
-        </div>
-        <!-- /Meta Detail -->
-
+        <!--
+          <div class="col-lg-3 col-xl-3">
+              
+              <div class="card card-block mb-2">
+                  <h4 class="card-title">About me</h4>
+                  <p class="card-text">
+                      Id non occaecat culpa ad. Duis tempor velit cillum sit. Aute laborum ex sint anim
+                      nostrud commodo labore quis. Pariatur voluptate veniam duis ad culpa.
+                      <a href="#">Read more...</a>
+                  </p>
+              </div>
+              
+              <div class="card card-block mb-2">
+                  <h4 class="card-title">
+                      Contact Information
+                  </h4>
+                  <p class="card-text">
+                      Fusce eget dolor id justo luctus commodo vel pharetra nisi. Donec velit libero
+                  </p>
+                  
+                  <div class="card-block p-0">
+                      <p data-info-type="phone" class="mb-10 text-nowrap">
+                          <i class="fas fa-user mr-1"></i>
+                          <span class="text-break">00971123456789
+                    <span>
+                </span></span></p>
+                      <p data-info-type="email" class="mb-10 text-nowrap">
+                          <i class="fas fa-envelope mr-10"></i>
+                          <span class="text-break">malinda.h@gmail.com
+                    <span>
+                </span></span></p>
+                      <p data-info-type="fb" class="mb-10 text-nowrap">
+                          <i class="fab fa-facebook mr-10"></i>
+                          <span class="text-break">malinda.hollaway
+                    <span>
+                </span></span></p>
+                      <p data-info-type="twitter" class="mb-10 text-nowrap">
+                          <i class="fab fa-twitter mr-10"></i>
+                          <span class="text-break">@malinda (twitter.com/malinda)
+                    <span>
+                </span></span></p>
+                      <p data-info-type="address" class="mb-10 text-nowrap">
+                          <i class="fas fa-map mr-10"></i>
+                          <span class="text-break">44-46 Morningside Road,Edinburgh,Scotland
+                    <span>
+                </span></span></p>
+                  </div>
+              </div>
+          </div>
+          -->
     </div>
-    <!-- /Tab Content -->
+
 </section>
 <script type="text/javascript">
     $(function () {

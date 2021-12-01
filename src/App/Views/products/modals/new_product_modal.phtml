@@ -1,0 +1,172 @@
+<?php
+    if (!isset($page_data)) {
+        $page_data = [];
+    }
+    
+    $currency = [];
+    if (isset($page_data["types"]["currency"])) {
+        $currency = $page_data["types"]["currency"];
+    }
+    
+    $pricing_strategies = [];
+    if (isset($page_data["types"]["pricing_strategy_types"])) {
+        $pricing_strategies = $page_data["types"]["pricing_strategy_types"];
+    }
+    
+    $categories = [];
+    if (isset($page_data["types"]["category"])) {
+        $categories = $page_data["types"]["category"];
+    }
+    
+    $rating_types = [];
+    if (isset($page_data["types"]["rating_types"])) {
+        $rating_types = $page_data["types"]["rating_types"];
+    }
+?>
+<div class="modal fade" id="modal_new_product" tabindex="-1" role="dialog" aria-labelledby="modal_new_product" aria-hidden="true">
+    
+    <div class="modal-dialog modal-simple">
+        
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                
+                <h4 class="modal-title" id="modal_addressLabel">New Product</h4>
+            
+            </div>
+            
+            <div class="modal-body">
+                
+                <form id="form_product_add" novalidate>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-element">
+                                <label for="modal_product_name">Name:</label>
+                                <input type="text" id="modal_product_name" name="modal_product_name" class="form-control"/>
+                                <div id="modal_product_name-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                    
+                    <div class="row">
+                        
+                        <div class="col-6">
+                            <div class="form-element">
+                                <label for="modal_product_category_id">Category:</label>
+                                <select id="modal_product_category_id" name="modal_product_category_id" class="form-control">
+                                    <?php
+                                        $options = "<option  value='' disabled selected>-- Category --</option>";
+                                        foreach ($categories AS $k => $value) {
+                                            $name = $value["name"];
+                                            $val = $value["id"];
+                                            $options .= "<option value='$val'>$name</option>";
+                                        }
+                                        echo $options;
+                                    ?>
+                                </select>
+                                <div id="modal_product_category_id-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-element">
+                                <label for="modal_product_sku">SKU:</label>
+                                <input type="text" id="modal_product_sku" name="modal_product_sku" class="form-control"/>
+                                <div id="modal_product_sku-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-element">
+                                <label for="modal_product_rating_types_id">Rating:</label>
+                                <select id="modal_product_rating_types_id" name="modal_product_rating_types_id" class="form-control">
+                                    <?php
+                                        $options = "<option  value='' disabled selected>-- Rating --</option>";
+                                        foreach ($rating_types AS $k => $value) {
+                                            $name = $value["name"];
+                                            $val = $value["id"];
+                                            $options .= "<option value='$val'>$name</option>";
+                                        }
+                                        echo $options;
+                                    ?>
+                                </select>
+                                <div id="modal_product_rating_types_id-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-element">
+                                <label for="modal_product_currency_id">Currency:</label>
+                                <select id="modal_product_currency_id" name="modal_product_currency_id" class="form-control">
+                                    <?php
+                                        $options = "<option  value='' disabled selected>-- Currency --</option>";
+                                        foreach ($currency AS $k => $value) {
+                                            $name = $value["name"];
+                                            $val = $value["id"];
+                                            $options .= "<option value='$val'>$name</option>";
+                                        }
+                                        echo $options;
+                                    ?>
+                                </select>
+                                <div id="modal_product_currency_id-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <div class="form-element">
+                                <label for="modal_product_pricing_strategies_types_id">Pricing Strategy:</label>
+                                <select id="modal_product_pricing_strategies_types_id" name="modal_product_pricing_strategies_types_id" class="form-control">
+                                    <?php
+                                        $options = "<option  value='' disabled selected>-- Pricing Strategy --</option>";
+                                        foreach ($pricing_strategies AS $k => $value) {
+                                            $name = $value["name"];
+                                            $val = $value["id"];
+                                            $options .= "<option value='$val'>$name</option>";
+                                        }
+                                        echo $options;
+                                    ?>
+                                </select>
+                                <div id="modal_product_pricing_strategies_types_id-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                    </div>
+                
+                </form>
+            
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-outline-danger btn-sm" id="modal_button_cancel_add_product">Cancel</button>
+                <button class="btn btn-primary btn-sm" id="modal_button_submit_add_product">Save</button>
+            </div>
+        
+        </div>
+    
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        const $rating = $('#rating')
+        const $rating_types_id = $('#rating_types_id')
+        if ($rating) {
+            $rating.mdbRate()
+        }
+        
+        $stars = $rating.children()
+        $stars.on("mouseover", function () {
+            let index = (!isNaN($(this).attr("data-index"))) ? parseInt($(this).attr("data-index")) : 0
+            $rating_types_id.val((index) + 1)
+        })
+        
+    })
+</script>

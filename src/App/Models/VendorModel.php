@@ -1,15 +1,14 @@
 <?php
-
+    
     namespace Framework\App\Models;
-
+    
     use Exception;
     use Framework\App\Controllers\Vendor;
     use Framework\Core\Model;
     use Framework\Logger\Log;
-
+    
     /**
      * Short Vendor Description
-     *
      * Long Vendor Description
      *
      * @package            Framework\App
@@ -18,7 +17,7 @@
     class VendorModel extends Model
     {
         protected static $selectQuery = "
-            SELECT 
+            SELECT
                             COMPANY.id AS 'company_id',
                             COMPANY.name AS 'company_name',
                             COMPANY.phone_1 AS 'company_phone_1',
@@ -53,14 +52,13 @@
                 AND			COMPANY.enabled = 1
                 AND			VENDOR.enabled = 1
                 ";
-
+        
         protected static $dbTable = "vendor";
-
+        
         protected static $dbFields = Array();
-
+        
         /**
          * Gets vendor(s) by id
-         *
          * If id is passed then we search by it otherwise get all enabled
          *
          * @param int|null $id Provider Id
@@ -70,23 +68,24 @@
         public static function get(int $id = null): array
         {
             $where = "";
+            $order = "ORDER BY VENDOR.id DESC";
             try {
                 if (!is_null($id)) {
-                    $where = "AND		VENDOR.id = $id";
+                    $where = "AND		VENDOR.id = $id
+                   ";
                 }
-                $sql = self::$selectQuery . $where;
-
+                $sql = self::$selectQuery . $where . $order;
+                
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {
                 Log::$debug_log->error($e->getMessage());
-
+                
                 return [];
             }
         }
-
+        
         /**
          * Gets vendor(s) by id
-         *
          * If id is passed then we search by it otherwise get all enabled
          *
          * @param int|null $id Provider Id
@@ -96,43 +95,43 @@
         public static function getByName(string $name = null): array
         {
             $searchTerm = addslashes($name);
-
+            
             try {
                 $where = "
                     AND			COMPANY.name LIKE '$searchTerm'
                     ORDER BY    COMPANY.name ASC
                     ";
                 $sql = self::$selectQuery . " " . $where;
-
+                
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {
                 Log::$debug_log->trace($e);
-
+                
                 return [];
             }
         }
-
+        
         public static function getOne(int $id = null): array
         {
             try {
                 if (!is_null($id)) {
                     Model::$db->where("id", $id);
                 }
-
+                
                 self::$db->where("enabled", 1);
-
+                
                 return self::$db->getOne(self::$dbTable);
             } catch (Exception $e) {
                 return [];
             }
         }
-
+        
         public static function updateRecord(array $vendor = []): array
         {
             if (!isset($vendor)) {
                 return [];
             }
-
+            
             try {
                 $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
                 $id = Model::setInt((isset($vendor["id"])) ? $vendor["id"] : null);
@@ -186,27 +185,27 @@
                         try {
                             Model::$db->rawQuery($update);
                             $ret = self::get((int)$vendor_id);
-
+                            
                             return $ret;
                         } catch (Exception $ex) {
                             Log::$debug_log->error($ex);
-
+                            
                             return [];
                         }
                     } else {
                         Log::$debug_log->info("hh");
                     }
                 }
-
+                
                 return [];
             } catch (Exception $e) {
                 Log::$debug_log->error($e);
-
+                
                 return [];
             }
-
+            
         }
-
+        
         public static function vendor_ac(string $st = ""): array
         {
             try {
@@ -215,15 +214,15 @@
                     AND			COMPANY.name LIKE '%$searchTerm%'
                     ORDER BY    COMPANY.name ASC
                     LIMIT 20;";
-
+                
                 //Log::$debug_log->trace($sql);
-
+                
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {
                 Log::$debug_log->error($e);
-
+                
                 return [];
             }
         }
-
+        
     }

@@ -18,7 +18,7 @@ const Vendor = (function () {
     const _provider_company_id = document.getElementById("provider_company_id")
     const _company_id = document.getElementById("company_id")
     const _button_submit_form_edit_vendor = document.getElementById("button_submit_form_edit_vendor")
-    
+    const _table_vendor_index = document.getElementById("table_vendor_index")
     let validator
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let globalSelectedVendor = false
@@ -34,6 +34,7 @@ const Vendor = (function () {
             },
         },
     }
+    let $index_table = $(_table_vendor_index)
     
     $(_company_id)
       .on("change", function () {
@@ -91,6 +92,44 @@ const Vendor = (function () {
                   },
               })
         }
+    }
+    
+    /**
+     * build vendor index table
+     */
+    const build_index_table = function () {
+        
+        $index_table = $(_table_vendor_index).table({
+            table_type: "display_list",
+            data: Vendor.all,
+            columnDefs: [
+                {
+                    title: "Id",
+                    targets: 0,
+                    data: "id",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "Name",
+                    targets: 1,
+                    data: "name",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "SKU",
+                    targets: 2,
+                    data: "sku",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+            ],
+            rowClick: Vendor.navigate,
+        })
     }
     
     /**
@@ -170,8 +209,9 @@ const Vendor = (function () {
     const _default_detail = function () {
         return {
             id: null,
+            name: null,
             company_id: null,
-            status_id: null,
+            status_id: 1,
             show_online: 1,
             show_sales: 1,
             show_ops: 1,
@@ -232,6 +272,31 @@ const Vendor = (function () {
         return detail
     }
     
+    const set = function (vendor) {
+        
+        let detail = _default_detail()
+        detail.id = (vendor.id) ? vendor.id : null
+        detail.name = (vendor.name) ? vendor.name : null
+        detail.status_id = (vendor.status_id) ? vendor.status_id : null
+        detail.show_online = vendor.show_online
+        detail.show_sales = vendor.show_sales
+        detail.show_ops = vendor.show_ops
+        detail.is_provider = vendor.is_provider
+        detail.sku = (vendor.sku) ? vendor.sku : null
+        detail.enabled = vendor.enabled
+        detail.date_created = (vendor.date_created) ? vendor.date_created : formatDateMySQL()
+        detail.created_by = (vendor.created_by) ? vendor.created_by : created_by
+        detail.date_modified = (vendor.date_modified) ? vendor.date_modified : formatDateMySQL()
+        detail.modified_by = (vendor.modified_by) ? vendor.modified_by : modified_by
+        detail.note = (vendor.note) ? vendor.note : null
+        detail.addresses = (vendor.company.addresses) ? vendor.company.addresses : []
+        detail.contacts = (vendor.company.contacts) ? vendor.company.contacts : []
+        detail.company = (vendor.company) ? vendor.company : {}
+        
+        Vendor.detail = detail
+        return detail
+    }
+    
     const save = function (params) {
     
     }
@@ -282,14 +347,13 @@ const Vendor = (function () {
     
     const load_all = function (vendors) {
         Vendor.all = new Map()
-        
-        if (!vendors) {
-            return
+        if (vendors) {
+            $.each(vendors, function (i, vendor) {
+                let detail = set(vendor)
+                $index_table.insertRow(detail)
+                Vendor.all.set(detail.id, detail)
+            })
         }
-        $.each(vendors, function (i, vendor) {
-            let detail = set_detail(vendor)
-            Vendor.all.set(detail.id, detail)
-        })
         
         console.log(" Vendor.all", Vendor.all)
     }
@@ -343,6 +407,12 @@ const Vendor = (function () {
         }
     }
     
+    const navigate = function (vendor) {
+        if (vendor && vendor.id) {
+            window.location.replace(base_url + "/" + vendor.id)
+        }
+    }
+    
     /**
      * disables fields unused from provider edit
      */
@@ -358,10 +428,28 @@ const Vendor = (function () {
         }
     }
     
+    /**
+     * initialize vendor index page
+     *
+     * @param settings
+     */
+    const index = function (settings) {
+        build_index_table()
+        
+        if (settings) {
+            if (settings.vendors) {
+                load_all(settings.vendors)
+            }
+        }
+        
+    }
     return {
         validator: null,
         detail: {},
         all: new Map(),
+        index: function (settings) {
+            index(settings)
+        },
         setProvider: function () {
             setProvider()
         },
@@ -384,6 +472,9 @@ const Vendor = (function () {
             if (validate_form()) {
                 return build()
             }
+        },
+        navigate: function (vendor) {
+            navigate(vendor)
         },
     }
     

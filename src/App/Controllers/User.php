@@ -141,6 +141,9 @@
             }
         }
 
+        /**
+         * @param array $params
+         */
         public static function serveUpdateUser(array $params = [])
         {
             $user = array();

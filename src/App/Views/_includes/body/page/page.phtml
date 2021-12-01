@@ -1,14 +1,14 @@
 <?php
     $pageHeading = "Page Heading";
-
+    
     if (defined("PAGEHEADING")) {
         $pageHeading = PAGEHEADING;
     }
-
+    
     if (defined("PAGEDESCRIPTION")) {
         $pageDescription = PAGEDESCRIPTION;
     }
-
+    
     $pageHeadingClass = "";
     if (defined("PAGEHEADINGCLASS")) {
         $pageHeadingClass = PAGEHEADINGCLASS;
@@ -21,20 +21,21 @@
 
 <div class="page" id="page">
     
-    <div class="page-header <?php echo $pageHeadingClass; ?>" id="page_header">
-        <!-- BREADCRUMBS -->
-        <ol class="breadcrumb ">
-            <?php
-                if (defined("BREAD_CRUMBS")) {
-                    echo BREAD_CRUMBS;
-                }
-            ?>
-        </ol>
-        <!-- /BREADCRUMBS -->
-
+    <div class="page-header <?php
+        echo $pageHeadingClass; ?>" id="page_header">
+        
         <!-- PAGE TITLE -->
         <div class="row">
             <div class="col-9">
+                <!-- BREADCRUMBS -->
+                <ol class="breadcrumb ">
+                    <?php
+                        if (defined("BREAD_CRUMBS")) {
+                            echo BREAD_CRUMBS;
+                        }
+                    ?>
+                </ol>
+                <!-- /BREADCRUMBS -->
                 <h1 class="page-title" id="page_title">
                     <?php
                         if (defined("PAGE_HEADING")) {
@@ -42,25 +43,27 @@
                         } else {
                             echo "Trips2Italy";
                         }
+                        
+                        if (defined("PAGE_SUBHEADING")) {
+                            //echo "<p class='page-description'>" . PAGE_SUBHEADING . "</p>";
+                            //echo "<p class='page-description'>&nbsp;</p>";
+                        } else {
+                            //echo "<p class='page-description'>&nbsp;</p>";
+                        }
                     ?>
                 </h1>
-                <?php
-                    if (defined("PAGE_SUBHEADING")) {
-                        //echo "<p class='page-description'>" . PAGE_SUBHEADING . "</p>";
-                    }
-
-                ?>
             </div>
-
+            
             <div class="col-3">
                 <div class="page-header-actions">
-                    <?php echo (isset($page_heading_buttons)) ? $page_heading_buttons : "&nbsp;"; ?>
+                    <?php
+                        echo (isset($page_heading_buttons)) ? $page_heading_buttons : "&nbsp;"; ?>
                 </div>
             </div>
         </div>
-
+        
         <?php
-
+            
             function buildPageTabs($tab_details)
             {
                 if ($tab_details) {
@@ -78,16 +81,16 @@
                         $aria = (isset($tab["aria"])) ? $tab["aria"] : [];
                         $aria_values = "";
                         $data_values = "";
-
+                        
                         foreach ($aria AS $name => $value) {
                             $v = ($value === true) ? "true" : "false";
                             $aria_values .= " aria-$name='$v' ";
                         }
-
+                        
                         foreach ($data AS $name => $value) {
                             $data_values .= " data-$name='$value' ";
                         }
-
+                        
                         echo "
                         <li class='nav-item waves-effect waves-light ' role='presentation'>
                             <a class='nav-link $active' data-toggle='tab' id='$li_id' $href $controls $aria_values $data_values>
@@ -97,21 +100,24 @@
                     }
                     echo "</ul>";
                 }
-
+                
             }
-
+            
             function buildPageTabContent($tabs)
             {
-
+            
             }
-
+            
             buildPageTabs($tabSection);
-
+        
         ?>
     
     </div>
-    <?php include_once(__DIR__ . "/alert_box.phtml"); ?>
+    <?php
+        include_once(__DIR__ . "/alert_box.phtml");
+    ?>
     <div class="page-content container-fluid">
+        
         <?php
             if (defined("MAIN")) {
                 include_once(MAIN);

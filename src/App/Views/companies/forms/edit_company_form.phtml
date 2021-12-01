@@ -6,128 +6,120 @@
     }
 </style>
 <!-- Edit Company Form -->
-<form id="form_edit_company" name="form_edit_company" class="" style="" novalidate>
-    <div class="row">
-        <div class="col-12 col-md-6 col-xl-5">
-            <div class="card mb-2" style="">
-                <div class="card-body">
-                    <h5 class="card-title"><span>Company Details</span></h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
-                    <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-
-                    <div class="row" style="">
-
-                        <!-- Company Id -->
-                        <div class="col-12 col-lg-4 " style="">
-                            <div class="form-element" style="">
-                                <label for="company_id" style="">Company ID:</label>
-                                <input type="text" id="company_id" name="company_id" class="form-control" style="" aria-label="Company Id" placeholder="" autocomplete="off" readonly/>
-                                <div id="company_id-error" class="error w-100 text-center" style="">&nbsp;</div>
-                            </div>
-                        </div>
-                        <!-- /Company Id -->
-
-                        <!-- Company Name -->
-                        <div class="col-12 col-lg-8 " style="">
-                            <div class="form-element" style="">
-                                <label for="company_name" style="">Company Name:</label>
-                                <div class="input-group">
-                                    <input type="search" id="company_name" name="company_name" class="company_name form-control" style="" aria-label="Company Name" placeholder="" autocomplete="off"/>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect" type="button" id="button_edit_company_name">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" id="button_cancel_edit_company_name" class="btn btn-md btn-danger m-0 px-3 py-2 z-depth-0 waves-effect" style="display:none">
-                                            <i class="fas fa-ban"></i>
-                                        </button>
-                                    </div>
-
-                                </div>
-                                <div id="company_name-error" class="error w-100 text-center" style="">&nbsp;</div>
-                            </div>
-                        </div>
-                        <!-- /Company Name -->
-
+<form id="form_edit_company" name="form_edit_company" class="" novalidate>
+    <div class="card mb-2">
+        <div class="card-body">
+            <h5 class="card-title"><span>Company Details</span></h5>
+            <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
+            <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+            
+            <div class="row">
+                
+                <!-- Company Id -->
+                <div class="col-12 col-lg-4 ">
+                    <div class="form-element">
+                        <label for="company_id">Company ID:</label>
+                        <input type="text" id="company_id" name="company_id" class="form-control" aria-label="Company Id" placeholder="" autocomplete="off" readonly/>
+                        <div id="company_id-error" class="error w-100 text-center">&nbsp;</div>
                     </div>
-
                 </div>
+                <!-- /Company Id -->
+                
+                <!-- Company Name -->
+                <div class="col-12 col-lg-8 ">
+                    <div class="form-element">
+                        <label for="company_name">Company Name:</label>
+                        <div class="input-group">
+                            <input type="search" id="company_name" name="company_name" class="company_name form-control" aria-label="Company Name" placeholder="" autocomplete="off"/>
+                            <div class="input-group-append">
+                                <button class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect" type="button" id="button_edit_company_name">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" id="button_cancel_edit_company_name" class="btn btn-md btn-danger m-0 px-3 py-2 z-depth-0 waves-effect" style="display:none">
+                                    <i class="fas fa-ban"></i>
+                                </button>
+                            </div>
+                        
+                        </div>
+                        <div id="company_name-error" class="error w-100 text-center">&nbsp;</div>
+                    </div>
+                </div>
+                <!-- /Company Name -->
+            
             </div>
+        
         </div>
-
-        <div class="col-12 col-md-6 col-xl-7">
-
-            <div id="form_edit_company_block" class="" style="">
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <h5 class="card-title"><span>Company Details</span>
-                            <a id="button_close_edit_company_form" href="javascript:void(0);" class="panel-button-close fas fa-times" aria-hidden="true"></a>
-                        </h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
-                        <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-
-                        <div class="row" style="">
-
-                            <!-- Company Phone 1 -->
-                            <div class="col-12 col-md-4" style="">
-                                <div class="form-element" style="">
-                                    <label for="company_phone_1" style="">Phone 1:</label>
-                                    <input type="tel" id="company_phone_1" name="company_phone_1" class="form-control" style="" aria-label="Company Street 1" placeholder="" autocomplete="off">
-                                    <div id="company_phone_1-error" class="error w-100 text-center" style="">&nbsp;</div>
-                                </div>
-                            </div>
-                            <!-- /Company Phone 1 -->
-
-                            <!-- Company Phone 2 -->
-                            <div class="col-12 col-md-4" style="">
-                                <div class="form-element" style="">
-                                    <label for="company_phone_2" style="">Phone 2:</label>
-                                    <input type="tel" id="company_phone_2" name="company_phone_2" class="form-control" style="" aria-label="Company Street 2" placeholder="" autocomplete="off">
-                                    <div id="company_phone_2-error" class="error w-100 text-center" style="">&nbsp;</div>
-                                </div>
-                            </div>
-                            <!-- /Company Phone 2 -->
-
-                            <!-- Company Fax -->
-                            <div class="col-12 col-md-4" style="">
-                                <div class="form-element" style="">
-                                    <label for="company_fax" style="">Phone 2:</label>
-                                    <input type="tel" id="company_fax" name="company_fax" class="form-control" style="" aria-label="Company Street 2" placeholder="" autocomplete="off">
-                                    <div id="company_fax-error" class="error w-100 text-center" style="">&nbsp;</div>
-                                </div>
-                            </div>
-                            <!-- /Company Fax -->
-
-                        </div>
-
-                        <div class="row" style="">
-
-                            <!-- Company Website -->
-                            <div class="col-12 col-md-6" style="">
-                                <div class="form-element" style="">
-                                    <label for="company_website" style="">Website:</label>
-                                    <input type="url" id="company_website" name="company_website" class="form-control" style="" aria-label="Company Street 3" placeholder="" autocomplete="off">
-                                    <div id="company_website-error" class="error w-100 text-center" style="">&nbsp;</div>
-                                </div>
-                            </div>
-                            <!-- /Company Website -->
-
-                            <!-- Company Email -->
-                            <div class="col-12 col-md-6" style="">
-                                <div class="form-element" style="">
-                                    <label for="company_email" style="">Email:</label>
-                                    <input type="email" id="company_email" name="company_email" class="form-control" style="" aria-label="Company Street 3" placeholder="" autocomplete="off">
-                                    <div id="company_email-error" class="error w-100 text-center" style="">&nbsp;</div>
-                                </div>
-                            </div>
-                            <!-- /Company Email -->
-
-                        </div>
-
-                        <div class="text-right w-100">
-                            <a href="javascript:void(0);" id="button_clear_form_edit_company" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
-                            <a href="javascript:void(0);" id="button_submit_form_edit_company" class="btn btn-primary btn-sm waves-effect waves-light" style="">Update</a>
+    </div>
+    <div id="form_edit_company_block" class="card mb-2">
+        <div class="">
+            <div class="card-body">
+                <h5 class="card-title"><span>Company Details</span>
+                    <a id="button_close_edit_company_form" href="javascript:void(0);" class="panel-button-close fas fa-times" aria-hidden="true"></a>
+                </h5>
+                <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
+                <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+                
+                <div class="row">
+                    
+                    <!-- Company Phone 1 -->
+                    <div class="col-12 col-md-4">
+                        <div class="form-element">
+                            <label for="company_phone_1">Phone 1:</label>
+                            <input type="tel" id="company_phone_1" name="company_phone_1" class="form-control" aria-label="Company Street 1" placeholder="" autocomplete="off">
+                            <div id="company_phone_1-error" class="error w-100 text-center">&nbsp;</div>
                         </div>
                     </div>
+                    <!-- /Company Phone 1 -->
+                    
+                    <!-- Company Phone 2 -->
+                    <div class="col-12 col-md-4">
+                        <div class="form-element">
+                            <label for="company_phone_2">Phone 2:</label>
+                            <input type="tel" id="company_phone_2" name="company_phone_2" class="form-control" aria-label="Company Street 2" placeholder="" autocomplete="off">
+                            <div id="company_phone_2-error" class="error w-100 text-center">&nbsp;</div>
+                        </div>
+                    </div>
+                    <!-- /Company Phone 2 -->
+                    
+                    <!-- Company Fax -->
+                    <div class="col-12 col-md-4">
+                        <div class="form-element">
+                            <label for="company_fax">Phone 2:</label>
+                            <input type="tel" id="company_fax" name="company_fax" class="form-control" aria-label="Company Street 2" placeholder="" autocomplete="off">
+                            <div id="company_fax-error" class="error w-100 text-center">&nbsp;</div>
+                        </div>
+                    </div>
+                    <!-- /Company Fax -->
+                
+                </div>
+                
+                <div class="row">
+                    
+                    <!-- Company Website -->
+                    <div class="col-12 col-md-6">
+                        <div class="form-element">
+                            <label for="company_website">Website:</label>
+                            <input type="url" id="company_website" name="company_website" class="form-control" aria-label="Company Street 3" placeholder="" autocomplete="off">
+                            <div id="company_website-error" class="error w-100 text-center">&nbsp;</div>
+                        </div>
+                    </div>
+                    <!-- /Company Website -->
+                    
+                    <!-- Company Email -->
+                    <div class="col-12 col-md-6">
+                        <div class="form-element">
+                            <label for="company_email">Email:</label>
+                            <input type="email" id="company_email" name="company_email" class="form-control" aria-label="Company Street 3" placeholder="" autocomplete="off">
+                            <div id="company_email-error" class="error w-100 text-center">&nbsp;</div>
+                        </div>
+                    </div>
+                    <!-- /Company Email -->
+                
+                </div>
+                
+                <div class="text-right w-100">
+                    <a href="javascript:void(0);" id="button_clear_form_edit_company" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+                    <a href="javascript:void(0);" id="button_submit_form_edit_company" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
                 </div>
             </div>
         </div>

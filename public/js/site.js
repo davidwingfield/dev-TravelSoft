@@ -4848,9 +4848,13 @@ const Address = (function () {
      */
     $(_button_submit_form_edit_address)
       .on("click", function () {
+          let dataToSend = build()
+          if (!dataToSend) {
+              return
+          }
           confirmDialog(`Would you like to update?`, (ans) => {
               if (ans) {
-                  save()
+                  save(dataToSend)
               }
           })
       })
@@ -4876,15 +4880,14 @@ const Address = (function () {
     /**
      * save address form data
      */
-    const save = function () {
-        let dataToSend = build()
+    const save = function (dataToSend) {
+        
         if (dataToSend) {
             update_address(dataToSend, function (data) {
                 if (data) {
                     if (data[0]) {
                         let address = data[0]
                         let detail = set_detail(address)
-                        
                         if (Address.all.get(detail.id)) {
                             $address_table.updateRow(detail)
                         } else {
@@ -4893,7 +4896,12 @@ const Address = (function () {
                         
                         Address.all.set(detail.id, detail)
                         
+                        $address_table.clearSelectedRows()
+                        clear_form()
+                        unload_form()
+                        
                         toastr.success("Address Updated")
+                        
                     }
                 }
             })
@@ -5280,6 +5288,7 @@ const Address = (function () {
     const set_detail = function (address) {
         let detail = _default_detail()
         if (address) {
+            //console.log("address", address)
             detail.country = {
                 id: parseInt((address.country.id) ? address.country.id : null),
                 name: (address.country.name) ? address.country.name : null,
@@ -5573,7 +5582,7 @@ const Category = (function () {
     "use strict"
     
     const base_url = "/category"
-    const _input_category_category_id = document.getElementById("input_category_category_id")
+    const _modal_product_category_id = document.getElementById("modal_product_category_id")
     const _input_category_name = document.getElementById("input_category_name")
     const _input_category_last_update = document.getElementById("input_category_last_update")
     const _input_category_id = document.getElementById("input_category_id")
@@ -5604,6 +5613,11 @@ const Category = (function () {
     const handle_category_error = function (msg) {
         toastr.error(msg)
     }
+    
+    $(_modal_product_category_id)
+      .on("change", function () {
+          Product.init_autocomplete()
+      })
     
     const _default_detail = function () {
         return {
@@ -7046,7 +7060,7 @@ const Vendor = (function () {
     const _provider_company_id = document.getElementById("provider_company_id")
     const _company_id = document.getElementById("company_id")
     const _button_submit_form_edit_vendor = document.getElementById("button_submit_form_edit_vendor")
-    
+    const _table_vendor_index = document.getElementById("table_vendor_index")
     let validator
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let globalSelectedVendor = false
@@ -7062,6 +7076,7 @@ const Vendor = (function () {
             },
         },
     }
+    let $index_table = $(_table_vendor_index)
     
     $(_company_id)
       .on("change", function () {
@@ -7119,6 +7134,44 @@ const Vendor = (function () {
                   },
               })
         }
+    }
+    
+    /**
+     * build vendor index table
+     */
+    const build_index_table = function () {
+        
+        $index_table = $(_table_vendor_index).table({
+            table_type: "display_list",
+            data: Vendor.all,
+            columnDefs: [
+                {
+                    title: "Id",
+                    targets: 0,
+                    data: "id",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "Name",
+                    targets: 1,
+                    data: "name",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "SKU",
+                    targets: 2,
+                    data: "sku",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+            ],
+            rowClick: Vendor.navigate,
+        })
     }
     
     /**
@@ -7198,8 +7251,9 @@ const Vendor = (function () {
     const _default_detail = function () {
         return {
             id: null,
+            name: null,
             company_id: null,
-            status_id: null,
+            status_id: 1,
             show_online: 1,
             show_sales: 1,
             show_ops: 1,
@@ -7260,6 +7314,31 @@ const Vendor = (function () {
         return detail
     }
     
+    const set = function (vendor) {
+        
+        let detail = _default_detail()
+        detail.id = (vendor.id) ? vendor.id : null
+        detail.name = (vendor.name) ? vendor.name : null
+        detail.status_id = (vendor.status_id) ? vendor.status_id : null
+        detail.show_online = vendor.show_online
+        detail.show_sales = vendor.show_sales
+        detail.show_ops = vendor.show_ops
+        detail.is_provider = vendor.is_provider
+        detail.sku = (vendor.sku) ? vendor.sku : null
+        detail.enabled = vendor.enabled
+        detail.date_created = (vendor.date_created) ? vendor.date_created : formatDateMySQL()
+        detail.created_by = (vendor.created_by) ? vendor.created_by : created_by
+        detail.date_modified = (vendor.date_modified) ? vendor.date_modified : formatDateMySQL()
+        detail.modified_by = (vendor.modified_by) ? vendor.modified_by : modified_by
+        detail.note = (vendor.note) ? vendor.note : null
+        detail.addresses = (vendor.company.addresses) ? vendor.company.addresses : []
+        detail.contacts = (vendor.company.contacts) ? vendor.company.contacts : []
+        detail.company = (vendor.company) ? vendor.company : {}
+        
+        Vendor.detail = detail
+        return detail
+    }
+    
     const save = function (params) {
     
     }
@@ -7310,14 +7389,13 @@ const Vendor = (function () {
     
     const load_all = function (vendors) {
         Vendor.all = new Map()
-        
-        if (!vendors) {
-            return
+        if (vendors) {
+            $.each(vendors, function (i, vendor) {
+                let detail = set(vendor)
+                $index_table.insertRow(detail)
+                Vendor.all.set(detail.id, detail)
+            })
         }
-        $.each(vendors, function (i, vendor) {
-            let detail = set_detail(vendor)
-            Vendor.all.set(detail.id, detail)
-        })
         
         console.log(" Vendor.all", Vendor.all)
     }
@@ -7371,6 +7449,12 @@ const Vendor = (function () {
         }
     }
     
+    const navigate = function (vendor) {
+        if (vendor && vendor.id) {
+            window.location.replace(base_url + "/" + vendor.id)
+        }
+    }
+    
     /**
      * disables fields unused from provider edit
      */
@@ -7386,10 +7470,28 @@ const Vendor = (function () {
         }
     }
     
+    /**
+     * initialize vendor index page
+     *
+     * @param settings
+     */
+    const index = function (settings) {
+        build_index_table()
+        
+        if (settings) {
+            if (settings.vendors) {
+                load_all(settings.vendors)
+            }
+        }
+        
+    }
     return {
         validator: null,
         detail: {},
         all: new Map(),
+        index: function (settings) {
+            index(settings)
+        },
         setProvider: function () {
             setProvider()
         },
@@ -7412,6 +7514,9 @@ const Vendor = (function () {
             if (validate_form()) {
                 return build()
             }
+        },
+        navigate: function (vendor) {
+            navigate(vendor)
         },
     }
     
@@ -8050,119 +8155,205 @@ const Types = (function () {
 
 const Login = (function () {
     "use strict"
-    ///////////////////////////////////////////////
+    const _user_email = document.getElementById("dataToSend")
     const _email = document.getElementById("email")
     const _password = document.getElementById("password")
     const _button_login_submit = document.getElementById("button_login_submit")
     const _button_login_register = document.getElementById("button_login_register")
     const _form_login = document.getElementById("form_login")
-    ///////////////////////////////////////////////
-    let form_rules = {
-        rules: {
-            email: {
-                required: true,
-                email: true,
-            },
-            password: {
-                required: true,
-            },
-        },
-        messages: {
-            email: {
-                required: "Field Required",
-                email: "Field invalid",
-            },
-            password: {
-                required: "Field Required",
-            },
-        },
+    const _register_form_submit_button = document.getElementById("register_form_submit_button")
+    const _register_page_form = document.getElementById("register_page_form")
+    const _register_page = document.getElementById("register_page")
+    
+    const validate_form = function (_form, _rules) {
+        Login.validator = validator_init(_rules)
+        return $(_form).valid()
     }
-    ///////////////////////////////////////////////
-    $(_button_login_submit)
-      .on("click", function () {
-          submit_login()
-      })
-    $(_button_login_register)
-      .on("click", function () {
-      
-      })
-    // ----
-    const init = function (settings) {
-        //console.log("login", {})
-        if (_email && _password) {
-            Login.validator = validator_init(form_rules)
+    
+    const route = function (settings) {
+        if (_form_login) {
+            Login.login(settings)
         }
         
-    }
-    
-    const submit_login = function () {
-        if (validate_form()) {
-            let dataToSend = {
-                email: _email.value,
-                password: _password.value,
-            }
-            send_login(remove_nulls(dataToSend))
+        if (_register_page) {
+            Login.register(settings)
         }
     }
     
-    const handle_login_error = function (msg) {
-        toastr.error(msg)
-    }
-    
-    const send_login = function (dataToSend) {
-        if (dataToSend) {
-            try {
-                sendPostRequest("/api/v1.0/users/login", dataToSend, function (data, status, xhr) {
-                    console.log("data", data.id)
-                    if (data && data.id) {
-                        if (data.id) {
-                            window.location.replace("/")
-                        }
-                    } else {
-                        return handle_login_error("Error Logging In: 1")
-                    }
-                })
-            } catch (e) {
-                console.error("Error", e)
-                return handle_login_error("Error: 2")
-            }
-        } else {
-            return handle_login_error("Error: 3")
+    const login = function (settings) {
+        let form_rules = {
+            rules: {
+                email: {
+                    required: true,
+                    email: true,
+                },
+                password: {
+                    required: true,
+                },
+            },
+            messages: {
+                email: {
+                    required: "Field Required",
+                    email: "Field invalid",
+                },
+                password: {
+                    required: "Field Required",
+                },
+            },
         }
-    }
-    
-    const validate_form = function () {
+        
         Login.validator = validator_init(form_rules)
-        let is_valid = $(_form_login).valid()
-        if (!is_valid) {
-            /*
-            $.each(panels, function (index, item) {
-                
-                if ($(this).find(".invalid").length > 0) {
-                    let nav_tab = $("body").find("[aria-controls='" + $(this).attr("id") + "']")
-                    tabs.removeClass("active")
-                    panels.removeClass("active")
-                    $(this).addClass("active")
-                    nav_tab.addClass("active")
-                    return false
-                }
-            })
-            //*/
-            
+        
+        $(_button_login_register)
+          .on("click", function () {
+          
+          })
+        
+        $(_button_login_submit)
+          .on("click", function () {
+              submit_login()
+          })
+        
+        const handle_login_error = function (msg) {
+            toastr.error(msg)
         }
         
-        return is_valid
+        const send_login = function (dataToSend) {
+            if (dataToSend) {
+                try {
+                    sendPostRequest("/api/v1.0/users/login", dataToSend, function (data, status, xhr) {
+                        console.log("data", data.id)
+                        if (data && data.id) {
+                            if (data.id) {
+                                window.location.replace("/")
+                            }
+                        } else {
+                            return handle_login_error("Error Logging In: 1")
+                        }
+                    })
+                } catch (e) {
+                    console.error("Error", e)
+                    return handle_login_error("Error: 2")
+                }
+            } else {
+                return handle_login_error("Error: 3")
+            }
+        }
+        
+        const submit_login = function () {
+            if (validate_form(_form_login, form_rules)) {
+                let dataToSend = {
+                    email: _email.value,
+                    password: _password.value,
+                }
+                send_login(remove_nulls(dataToSend))
+            }
+        }
     }
-    ///////////////////////////////////////////////
+    
+    const register = function (settings) {
+        let form_rules_register = {
+            rules: {
+                user_name_first: {
+                    required: true,
+                },
+                user_name_last: {
+                    required: true,
+                },
+                user_email: {
+                    required: true,
+                    email: true,
+                },
+                user_password: {
+                    required: true,
+                    minlength: 5,
+                },
+                user_password_confirm: {
+                    required: true,
+                    minlength: 5,
+                    equalTo: "#user_password",
+                },
+            },
+            messages: {
+                user_name_first: {
+                    required: "Field Required",
+                },
+                user_name_last: {
+                    required: "Field Required",
+                },
+                user_email: {
+                    required: "Field Required",
+                    email: "Field invalid",
+                },
+                user_password: {
+                    required: "Field Required",
+                },
+            },
+        }
+        
+        const _user_name_first = document.getElementById("user_name_first")
+        const _user_name_last = document.getElementById("user_name_last")
+        const _user_email = document.getElementById("user_email")
+        const _user_password = document.getElementById("user_password")
+        
+        Login.validator = validator_init(form_rules_register)
+        
+        $(_register_form_submit_button)
+          .on("click", function () {
+              submit_register()
+          })
+        
+        const submit_register = function () {
+            if (validate_form(_register_page_form, form_rules_register)) {
+                let dataToSend = {
+                    name_first: _user_name_first.value,
+                    name_last: _user_name_last.value,
+                    email: _user_email.value,
+                    password: _user_password.value,
+                }
+                
+                send_register(remove_nulls(dataToSend))
+            }
+        }
+        
+        const send_register = function (dataToSend) {
+            console.log("Login.register->send_register", dataToSend)
+            if (dataToSend) {
+                try {
+                    sendPostRequest("/api/v1.0/users/register", dataToSend, function (data, status, xhr) {
+                        console.log("data", data.id)
+                        if (data && data.id) {
+                            if (data.id) {
+                                window.location.replace("/")
+                            }
+                        } else {
+                            return handle_login_error("Error Logging In: 1")
+                        }
+                    })
+                } catch (e) {
+                    console.error("Error", e)
+                    return handle_login_error("Error: 2")
+                }
+            } else {
+                return handle_login_error("Error: 3")
+            }
+        }
+    }
+    
     return {
         detail: {},
         all: new Map(),
         validator: null,
         init: function (settings) {
-            init(settings)
+            route(settings)
+        },
+        login: function (settings) {
+            login(settings)
+        },
+        register: function (settings) {
+            register(settings)
         },
     }
-    ///////////////////////////////////////////////
 })()
 Login.init()
 
@@ -8172,6 +8363,8 @@ const Provider = (function () {
     const base_url = "/providers"
     
     /** Buttons */
+    const _button_add_provider_page_heading_table = document.getElementById("button_add_provider_page_heading_table")
+    
     const _button_add_provider_page_heading = document.getElementById("button_add_provider_page_heading")
     const _button_edit_provider_name = document.getElementById("button_edit_provider_name")
     const _button_save_provider = document.getElementById("button_save_provider")
@@ -8442,7 +8635,6 @@ const Provider = (function () {
      * build provider index table
      */
     const build_index_table = function () {
-        
         $index_table = $(_table_provider_index).table({
             table_type: "display_list",
             data: Provider.all,
@@ -8907,45 +9099,23 @@ const Provider = (function () {
     
 })()
 
+
+
 const Product = (function () {
     "use strict"
-    ///////////////////////////////////////////////
+    const _product_edit_page = document.getElementById("product_edit_page")
+    const _button_add_product_page_heading = document.getElementById("button_add_product_page_heading")
+    const _modal_button_cancel_add_product = document.getElementById("modal_button_cancel_add_product")
+    const _modal_button_submit_add_product = document.getElementById("modal_button_cancel_add_product")
+    const _modal_new_product = document.getElementById("modal_new_product")
+    const _modal_product_name = document.getElementById("modal_product_name")
+    const _modal_product_category_id = document.getElementById("modal_product_category_id")
+    const _modal_product_sku = document.getElementById("modal_product_sku")
+    const _modal_product_rating_types_id = document.getElementById("modal_product_rating_types_id")
+    const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
+    const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
     const base_url = "/products"
-    const _input_product_id = document.getElementById("input_product_id")
-    const _input_product_category_id = document.getElementById("input_product_category_id")
-    const _input_product_pricing_strategy_types_id = document.getElementById("input_product_pricing_strategy_types_id")
-    const _input_product_status_types_id = document.getElementById("input_product_status_types_id")
-    const _input_product_product_status_types_id = document.getElementById("input_product_product_status_types_id")
-    const _input_product_currency_id = document.getElementById("input_product_currency_id")
-    const _input_product_location_id = document.getElementById("input_product_location_id")
-    const _input_product_city_id = document.getElementById("input_product_city_id")
-    const _input_product_vendor_id = document.getElementById("input_product_vendor_id")
-    const _input_product_provider_id = document.getElementById("input_product_provider_id")
-    const _input_product_name = document.getElementById("input_product_name")
-    const _input_product_provider_vendor_match = document.getElementById("input_product_provider_vendor_match")
-    const _input_product_description_short = document.getElementById("input_product_description_short")
-    const _input_product_description_long = document.getElementById("input_product_description_long")
-    const _input_product_rating = document.getElementById("input_product_rating")
-    const _input_product_sku = document.getElementById("input_product_sku")
-    const _input_product_phone = document.getElementById("input_product_phone")
-    const _input_product_infant = document.getElementById("input_product_infant")
-    const _input_product_child = document.getElementById("input_product_child")
-    const _input_product_teen = document.getElementById("input_product_teen")
-    const _input_product_depart_from = document.getElementById("input_product_depart_from")
-    const _input_product_arrive_to = document.getElementById("input_product_arrive_to")
-    const _input_product_depart_time = document.getElementById("input_product_depart_time")
-    const _input_product_arrive_time = document.getElementById("input_product_arrive_time")
-    const _input_product_day_span = document.getElementById("input_product_day_span")
-    const _input_product_cover_image = document.getElementById("input_product_cover_image")
-    const _input_product_api_id = document.getElementById("input_product_api_id")
-    const _input_product_from_api = document.getElementById("input_product_from_api")
-    const _input_product_hotel_code = document.getElementById("input_product_hotel_code")
-    const _input_product_enabled = document.getElementById("input_product_enabled")
-    const _input_product_date_created = document.getElementById("input_product_date_created")
-    const _input_product_created_by = document.getElementById("input_product_created_by")
-    const _input_product_date_modified = document.getElementById("input_product_date_modified")
-    const _panel_tab_season = document.getElementById("panel_tab_season")
-    const _panel_tab_provider = document.getElementById("panel_tab_provider")
+    const _product_index_page = document.getElementById("product_index_page")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $index_table
     const _product_index_table = document.getElementById("product_index_table")
@@ -9002,6 +9172,38 @@ const Product = (function () {
             profiles: [],
             provider: {},
         }
+    }
+    
+    $(_button_add_product_page_heading)
+      .on("click", function () {
+          set_new_product_modal()
+      })
+    
+    $(_modal_button_cancel_add_product)
+      .on("click", function () {
+          $(_modal_new_product).modal("hide")
+      })
+    
+    $(_modal_button_submit_add_product)
+      .on("click", function () {
+          save_new()
+      })
+    
+    const clear_modal_form = function () {
+        _modal_product_name.value = ""
+        _modal_product_category_id.value = ""
+        _modal_product_sku.value = ""
+        _modal_product_rating_types_id.value = ""
+        _modal_product_currency_id.value = ""
+        _modal_product_pricing_strategies_types_id.value = ""
+    }
+    
+    const save_new = function () {
+    
+    }
+    
+    const set_new_product_modal = function () {
+        $(_modal_new_product).modal("show")
     }
     
     const save = function (params) {
@@ -9067,16 +9269,6 @@ const Product = (function () {
         
         Product.detail = detail
         return detail
-    }
-    
-    const index = function (settings) {
-        if (_product_index_table) {
-            build_index_table()
-            
-            if (settings) {
-                load_all(settings)
-            }
-        }
     }
     
     const load_all = function (products) {
@@ -9166,13 +9358,48 @@ const Product = (function () {
             window.location.replace(base_url + "/" + product.id)
         }
     }
-    ///////////////////////////////////////////////
+    
+    const init_autocomplete = function () {
+        if (_modal_product_name) {
+        
+        }
+    }
+    
+    const init = function (settings) {
+        console.log("Product.init()", settings)
+        if (_modal_new_product) {
+            Category.init()
+        }
+        
+        if (_product_edit_page) {
+            return true
+        }
+        
+        if (_product_index_page) {
+            Product.index(settings)
+            return true
+        }
+    }
+    
+    const index = function (settings) {
+        if (_product_index_table) {
+            build_index_table()
+            
+            if (settings) {
+                load_all(settings)
+            }
+        }
+    }
+    
     return {
         validator: null,
         detail: {},
         all: new Map(),
         get: function (params) {
             get(params)
+        },
+        init_autocomplete: function () {
+            init_autocomplete()
         },
         load_all: function (params) {
             load_all(params)
@@ -9192,9 +9419,6 @@ const Product = (function () {
     }
     
 })()
-
-//Product.init()
-//end object
 
 $(function () {
     const _profile_card = document.getElementById("profile_card")

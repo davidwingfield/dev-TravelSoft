@@ -3,7 +3,7 @@ Search.appendIndex(
                 {
             "fqsen": "\\Framework\\App\\Controllers\\Address",
             "name": "Address",
-            "summary": "Short\u0020Address\u0020Description",
+            "summary": "Short\u0020Address\u0020Description\nLong\u0020Address\u0020Description",
             "url": "classes/Framework-App-Controllers-Address.html"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Address\u003A\u003A__construct\u0028\u0029",
@@ -363,32 +363,32 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider",
             "name": "Provider",
-            "summary": "Short\u0020Provider\u0020Description",
+            "summary": "Short\u0020Provider\u0020Description\nLong\u0020Provider\u0020Description",
             "url": "classes/Framework-App-Controllers-Provider.html"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "__construct",
+            "summary": "__construct\nLoads\u0020Controller\u0020Elements",
             "url": "classes/Framework-App-Controllers-Provider.html#method___construct"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003Aindex\u0028\u0029",
             "name": "index",
-            "summary": "index",
+            "summary": "index\nLoads\u0020Provider\u0020Index",
             "url": "classes/Framework-App-Controllers-Provider.html#method_index"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003Aedit\u0028\u0029",
             "name": "edit",
-            "summary": "load\u0020edit\u0020provider\u0020page",
+            "summary": "load\u0020edit\u0020provider\u0020page\nLoads\u0020Provider\u0020Edit",
             "url": "classes/Framework-App-Controllers-Provider.html#method_edit"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003AgetByProviderId\u0028\u0029",
             "name": "getByProviderId",
-            "summary": "",
+            "summary": "get\u0020by\u0020provider\u0020id",
             "url": "classes/Framework-App-Controllers-Provider.html#method_getByProviderId"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003Anew\u0028\u0029",
             "name": "new",
-            "summary": "new",
+            "summary": "new\nLoads\u0020New\u0020Provider",
             "url": "classes/Framework-App-Controllers-Provider.html#method_new"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003AserveUpdate\u0028\u0029",
@@ -398,7 +398,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003Aautocomplete\u0028\u0029",
             "name": "autocomplete",
-            "summary": "autocomplete",
+            "summary": "autocomplete\nAutocomplete\u0020json",
             "url": "classes/Framework-App-Controllers-Provider.html#method_autocomplete"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider\u003A\u003AvalidateName\u0028\u0029",
@@ -503,7 +503,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\StaticPages\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "",
+            "summary": "constructor",
             "url": "classes/Framework-App-Controllers-StaticPages.html#method___construct"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\StaticPages\u003A\u003Aprofile\u0028\u0029",
@@ -663,7 +663,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor",
             "name": "Vendor",
-            "summary": "Short\u0020Vendor\u0020Description",
+            "summary": "Short\u0020Vendor\u0020Description\nLong\u0020Vendor\u0020Description",
             "url": "classes/Framework-App-Controllers-Vendor.html"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003A__construct\u0028\u0029",
@@ -693,7 +693,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003Aautocomplete\u0028\u0029",
             "name": "autocomplete",
-            "summary": "autocomplete",
+            "summary": "autocomplete\nAutocomplete\u0020json",
             "url": "classes/Framework-App-Controllers-Vendor.html#method_autocomplete"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003AvalidateName\u0028\u0029",
@@ -721,6 +721,11 @@ Search.appendIndex(
             "summary": "format\u0020just\u0020the\u0020vendor\u0020results",
             "url": "classes/Framework-App-Controllers-Vendor.html#method_format_vendor"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003Aindex\u0028\u0029",
+            "name": "index",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Vendor.html#method_index"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003A\u0024primaryKey",
             "name": "primaryKey",
             "summary": "",
@@ -730,6 +735,21 @@ Search.appendIndex(
             "name": "sku",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Vendor.html#property_sku"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003A\u0024buttons",
+            "name": "buttons",
+            "summary": "buttons",
+            "url": "classes/Framework-App-Controllers-Vendor.html#property_buttons"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003A\u0024tabs",
+            "name": "tabs",
+            "summary": "vendor\u0020tabs",
+            "url": "classes/Framework-App-Controllers-Vendor.html#property_tabs"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003A\u0024data",
+            "name": "data",
+            "summary": "result\u0020values",
+            "url": "classes/Framework-App-Controllers-Vendor.html#property_data"
         },                {
             "fqsen": "\\Framework\\App\\Middlewares\\Auth",
             "name": "Auth",
@@ -2363,7 +2383,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\Core\\Router",
             "name": "Router",
-            "summary": "Short\u0020Router\u0020Description",
+            "summary": "Short\u0020Router\u0020Description\nLong\u0020Router\u0020Description",
             "url": "classes/Framework-Core-Router.html"
         },                {
             "fqsen": "\\Framework\\Core\\Router\u003A\u003Aget\u0028\u0029",
@@ -2963,13 +2983,18 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Admin",
             "name": "Admin",
-            "summary": "Short\u0020Admin\u0020Description",
+            "summary": "Short\u0020Admin\u0020Description\nLong\u0020Admin\u0020Description",
             "url": "classes/Framework-App-Controllers-Admin.html"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Admin\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
             "summary": "inherit\u0020parent\u0020construct",
             "url": "classes/Framework-App-Controllers-Admin.html#method___construct"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Admin\u003A\u003ApageEdit\u0028\u0029",
+            "name": "pageEdit",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Admin.html#method_pageEdit"
         },                {
             "fqsen": "\\Framework\\Core\\Email",
             "name": "Email",

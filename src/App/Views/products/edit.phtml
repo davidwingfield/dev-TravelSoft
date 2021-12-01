@@ -2,83 +2,26 @@
     if (!isset($page_data)) {
         $page_data = [];
     }
-
+    
     $settings = json_encode($page_data, 1);
-    $init = "Product.index($settings)"
+    $init = "Product.init($settings)";
+    
+    $currencies = [];
+    $pricing_strategies = [];
+    if (isset($page_data["types"]["pricing_strategies"])) {
+        $pricing_strategies = $page_data["types"]["pricing_strategies"];
+    }
+    
+    if (isset($page_data["types"]["currency"])) {
+        $currencies = $page_data["types"]["currency"];
+    }
 ?>
+<!-- /Product Edit Page -->
 <section id="product_edit_page" class="section">
-    <div class="panel nav-tabs-horizontal nav-tabs-inverse" id="provider_edit_tabs" data-plugin="tabs">
-        <div class="panel-heading panel-heading-tab">
-            <ul class="nav nav-tabs nav-tabs-solid" role="tablist">
-
-                <!-- Product Details -->
-                <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" id="panel_tab_company" href="#panel_tab_product_detail" aria-controls="panel_tab_company_detail" aria-expanded="true" role="tab">
-                        <span class="">Product</span>
-                    </a>
-                </li>
-                <!-- /Product Details -->
-
-                <!-- Provider Details -->
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" id="panel_tab_provider" href="#panel_tab_provider_detail" aria-controls="panel_tab_provider_detail" aria-expanded="false" role="tab">
-                        <span class="">Provider</span>
-                    </a>
-                </li>
-                <!-- /Provider Details -->
-
-                <!-- Vendor Details -->
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" id="panel_tab_vendor" href="#panel_tab_vendor_detail" aria-controls="panel_tab_vendor_detail" role="tab">
-                        <span class="">Vendor</span>
-                    </a>
-                </li>
-                <!-- /Vendor Details -->
-
-                <!-- Location Details -->
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" id="panel_tab_location" href="#panel_tab_location_detail" aria-controls="panel_tab_location_detail" aria-expanded="false" role="tab">
-                        <span class="">Location</span>
-                    </a>
-                </li>
-                <!-- /Location Details -->
-
-                <!-- Season Details -->
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" id="panel_tab_season" href="#panel_tab_season_detail" aria-controls="panel_tab_contact_detail" aria-expanded="false" role="tab">
-                        <span class="">Season</span>
-                    </a>
-                </li>
-                <!-- /Season Details -->
-
-                <!-- Unit Details -->
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" id="panel_tab_unit" href="#panel_tab_unit_detail" aria-controls="panel_tab_address_detail" aria-expanded="false" role="tab">
-                        <span class="">Unit</span>
-                    </a>
-                </li>
-                <!-- /Unit Details -->
-
-                <!-- Variant Details -->
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" id="panel_tab_variant" href="#panel_tab_variant_detail" aria-controls="panel_tab_address_detail" aria-expanded="false" role="tab">
-                        <span class="">Variant</span>
-                    </a>
-                </li>
-                <!-- /Variant Details -->
-
-                <!-- Pricing Details -->
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" id="panel_tab_pricing" href="#panel_tab_pricing_detail" aria-controls="panel_tab_address_detail" aria-expanded="false" role="tab">
-                        <span class="">Pricing</span>
-                    </a>
-                </li>
-                <!-- /Pricing Details -->
-
-            </ul>
-        </div>
-    </div>
+    <?php
+        include_once(VIEWS_PATH . "/products/forms/product_edit_form.phtml"); ?>
 </section>
+<!-- /Product Edit Page -->
 <script type="text/javascript">
     $(function () {
         Types.init(<?php echo TYPES;?>)

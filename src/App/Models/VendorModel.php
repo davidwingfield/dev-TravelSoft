@@ -16,6 +16,11 @@
      */
     class VendorModel extends Model
     {
+        /**
+         * default select query
+         *
+         * @var string
+         */
         protected static $selectQuery = "
             SELECT
                             COMPANY.id AS 'company_id',
@@ -50,8 +55,7 @@
             JOIN			company COMPANY ON COMPANY.id = VENDOR.company_id
            WHERE			COMPANY.enabled = 1
                 AND			COMPANY.enabled = 1
-                AND			VENDOR.enabled = 1
-                ";
+                AND			VENDOR.enabled = 1";
         
         protected static $dbTable = "vendor";
         
@@ -71,10 +75,10 @@
             $order = "ORDER BY VENDOR.id DESC";
             try {
                 if (!is_null($id)) {
-                    $where = "AND		VENDOR.id = $id
+                    $where = " AND		VENDOR.id = $id
                    ";
                 }
-                $sql = self::$selectQuery . $where . $order;
+                $sql = self::$selectQuery . $where . " " . $order;
                 
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {
@@ -141,7 +145,6 @@
                 $show_sales = Model::setBool((isset($vendor["show_sales"])) ? $vendor["show_sales"] : null);
                 $show_ops = Model::setBool((isset($vendor["show_ops"])) ? $vendor["show_ops"] : null);
                 $is_provider = Model::setBool((isset($vendor["is_provider"])) ? $vendor["is_provider"] : null);
-                //$sku = Model::setString((isset($vendor["sku"])) ? $vendor["sku"] : Vendor::generateSKU($vendor));
                 $sku = Model::setString((isset($vendor["sku"])) ? $vendor["sku"] : null);
                 $enabled = Model::setBool((isset($vendor["enabled"])) ? $vendor["enabled"] : null);
                 $note = Model::setLongText((isset($vendor["note"])) ? $vendor["note"] : null);
@@ -172,17 +175,25 @@
                 modified_by = VALUES(modified_by),
                 date_modified = VALUES(date_modified),
                 enabled = VALUES(enabled)";
-                Log::$debug_log->trace($sql);
+                
                 Model::$db->rawQuery($sql);
+                
                 $vendor_id = Model::$db->getInsertId();
-                Log::$debug_log->trace($vendor_id);
+                
                 if ($vendor_id) {
                     if ($vendor_id) {
+                        $sku = Vendor::generateSKU(array(
+                            "company_name" => $vendor["name"],
+                            "vendor_id" => $vendor_id,
+                        ));
+                        
                         $update = "
                         UPDATE      vendor
-                        SET         sku = generateCodeDirectId($vendor_id)
+                        SET         sku = '$sku'
                         WHERE       id = $vendor_id;";
+                        Log::$debug_log->trace($update);
                         try {
+                            
                             Model::$db->rawQuery($update);
                             $ret = self::get((int)$vendor_id);
                             
@@ -212,10 +223,8 @@
                 $searchTerm = addslashes($st);
                 $sql = self::$selectQuery . "
                     AND			COMPANY.name LIKE '%$searchTerm%'
-                    ORDER BY    COMPANY.name ASC
+                    ORDER BY    LENGTH(Company.name), CAST(Company.name AS UNSIGNED), Company.name ASC
                     LIMIT 20;";
-                
-                //Log::$debug_log->trace($sql);
                 
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {

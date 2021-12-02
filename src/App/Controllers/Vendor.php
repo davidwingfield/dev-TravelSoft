@@ -19,7 +19,9 @@
     class Vendor extends Controller
     {
         protected $primaryKey = "id";
+        
         protected $sku = null;
+        
         /**
          * buttons
          *
@@ -31,11 +33,11 @@
                 "href" => "javascript:void(0)",
                 "classes" => "btn btn-sm btn-primary btn-round",
                 "icon" => "fas fa-save",
-                "id" => "button_save_provider",
-                "text" => "save provider",
+                "id" => "button_save_vendor",
+                "text" => "save vendor",
                 "data" => array(
                     "toggle" => "tooltip",
-                    "title" => "Save Provider",
+                    "title" => "Save Vendor",
                     "placement" => "top",
                 ),
             ),
@@ -70,9 +72,9 @@
                     "controls" => "panel_tab_vendor_overview",
                     "href" => "panel_tab_vendor_overview",
                     "id" => "panel_tab_overview",
-                    "active" => true,
+                    "active" => false,
                     "aria" => array(
-                        "expanded" => "true",
+                        "expanded" => "false",
                     ),
                     "data" => array(),
                 ),
@@ -80,6 +82,16 @@
                     "controls" => "panel_tab_company_detail",
                     "href" => "panel_tab_company_detail",
                     "id" => "panel_tab_company",
+                    "active" => true,
+                    "aria" => array(
+                        "expanded" => "true",
+                    ),
+                    "data" => array(),
+                ),
+                "Vendor" => array(
+                    "controls" => "panel_tab_vendor_detail",
+                    "href" => "panel_tab_vendor_detail",
+                    "id" => "panel_tab_vendor",
                     "active" => false,
                     "aria" => array(
                         "expanded" => "false",
@@ -170,14 +182,35 @@
                 
                 /** get provider details */
                 $vendor_detail = self::format_get(VendorModel::get($vendor_id));
-                $data["vendor_detail"] = $vendor_detail;
+                
+                if (count($vendor_detail) === 1) {
+                    $vendor_detail = $vendor_detail[0];
+                }
+                $company_detail = [];
+                if (isset($vendor_detail["company"])) {
+                    $company_detail = $vendor_detail["company"];
+                }
+                
+                if (isset($company_detail["contacts"])) {
+                    foreach ($company_detail["contacts"] AS $k => $contact) {
+                        $contact_detail[] = Contact::format($contact);
+                    }
+                }
+                
+                if (isset($company_detail["addresses"])) {
+                    $address_detail = Address::format($company_detail["addresses"]);
+                }
                 
                 $data["buttons"] = array(
                     self::$buttons["save"],
                     self::$buttons["new"],
                 );
-                $data["tabs"] = self::$tabs;
+                $data["tabs"] = $tabs;
                 
+                $data["vendor_detail"] = $vendor_detail;
+                $data["company_detail"] = $company_detail;
+                $data["contact_detail"] = $contact_detail;
+                $data["address_detail"] = $address_detail;
                 /**
                  * render view
                  */
@@ -216,10 +249,14 @@
             /**
              * render view
              */
-            $data["vendors"] = self::format_get(VendorModel::get());
+            $vendors = VendorModel::get();
+            $data["vendors"] = self::format_get($vendors);
+            
             View::render_template("vendors/index", $data);
             exit(1);
         }
+        
+        // --
         
         /**
          * get vendor by Id
@@ -269,15 +306,76 @@
             exit(1);
         }
         
+        public static function serveAdd(array $params = null)
+        {
+            $vendors = [];
+            if ($params) {
+                $params["status_id"] = 1;
+                $company_name = null;
+                if (isset($params["name"])) {
+                    $company_name = $params["name"];
+                }
+                
+                $company = Company::add($params);
+                
+                if (isset($company["id"])) {
+                    $company_id = (int)$company["id"];
+                    $status_id = 1;
+                    
+                    $vendor_params = array(
+                        "name" => $company_name,
+                        "company_id" => $company_id,
+                        "status_id" => $status_id,
+                        "show_online" => 1,
+                        "show_sales" => 1,
+                        "show_ops" => 1,
+                        "is_provider" => 0,
+                        "enabled" => 1,
+                    );
+                    // ----
+                    
+                    $results = VendorModel::updateRecord($vendor_params);
+                    
+                    foreach ($results AS $k => $vendor) {
+                        $vendors[] = self::format_vendor($vendor);
+                    }
+                    
+                }
+            }
+            
+            // ----
+            Log::$debug_log->trace($vendors);
+            View::render_json($vendors);
+            exit(1);
+        }
+        
+        public static function add(array $params = null)
+        {
+            $vendors = [];
+            if ($params) {
+                $results = VendorModel::updateRecord($params);
+            }
+            foreach ($results AS $k => $vendor) {
+                $vendors[] = self::format_vendor($vendor);
+            }
+            
+            // ----
+            View::render_json($vendors);
+            exit(1);
+        }
+        
         public static function serveUpdate(array $params = null)
         {
+            $vendors = [];
             $results = [];
             if ($params) {
                 $results = VendorModel::updateRecord($params);
             }
-            
+            foreach ($results AS $k => $vendor) {
+                $vendors[] = self::format_vendor($vendor);
+            }
             // ----
-            View::render_json(self::format_vendor($results));
+            View::render_json($vendors);
             exit(1);
         }
         
@@ -298,13 +396,7 @@
          */
         public static function autocomplete(string $st = ""): array
         {
-            $vendors = self::format_ac(VendorModel::vendor_ac($st));
-            
-            $vendors_formatted = self::format_ac($vendors);
-            
-            //Log::$debug_log->trace($vendors_formatted);
-            
-            return $vendors_formatted;
+            return self::format_ac(VendorModel::vendor_ac($st));
         }
         
         /**
@@ -341,10 +433,11 @@
          */
         private static function format_ac(array $vendors = []): array
         {
+            
             $data["suggestions"] = [];
+            
             foreach ($vendors AS $k => $vendor) {
-                $l = (object)$vendor;
-                $value = utf8_encode($l->company_name);
+                $value = utf8_encode($vendor["company_name"]);
                 array_push($data["suggestions"], [
                     "value" => utf8_encode($value),
                     "data" => self::format($vendor),
@@ -403,12 +496,11 @@
         {
             $company_id = (int)$vendor["company_id"];
             $vendor_id = (int)$vendor["vendor_id"];
-            $sku = (!isset($vendor["vendor_sku"])) ? self::generateSKU($vendor) : $vendor["vendor_sku"];
             
             return array(
                 "id" => $vendor_id,
                 "company_id" => $company_id,
-                "sku" => $sku,
+                "sku" => $vendor["vendor_sku"],
                 "name" => $vendor["company_name"],
                 "is_provider" => $vendor["vendor_is_provider"],
                 "show_online" => $vendor["vendor_show_online"],
@@ -453,6 +545,8 @@
          */
         private static function format_vendor(array $vendor = []): array
         {
+            Log::$debug_log->trace($vendor);
+            
             return array(
                 "id" => $vendor["vendor_id"],
                 "company_id" => $vendor["company_id"],

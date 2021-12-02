@@ -291,6 +291,7 @@ const Address = (function () {
                 modified_by: parseInt(user_id),
                 note: null,
             },
+            formatted_types: "",
         }
     }
     
@@ -394,6 +395,14 @@ const Address = (function () {
                             return data
                         },
                     },
+                    {
+                        title: "Types",
+                        targets: 2,
+                        data: "formatted_types",
+                        render: function (data, type, row, meta) {
+                            return data
+                        },
+                    },
                 ],
                 rowClick: Address.navigate,
             })
@@ -448,12 +457,15 @@ const Address = (function () {
             let loadAddress
             let count = 0
             $.each(addresses, function (i, address) {
+                
                 if (count === 0) {
                     loadAddress = address
                 }
+                
                 address.address_types_id = getListOfIds(address.address_types_id)
                 
                 Address.all.set(address.id, address)
+                
                 $address_table.insertRow(address)
                 count++
             })
@@ -592,6 +604,7 @@ const Address = (function () {
             detail.date_modified = (address.date_modified) ? address.date_modified : formatDateMySQL()
             detail.modified_by = parseInt((address.modified_by) ? address.modified_by : user_id)
             detail.note = (address.note) ? address.note : null
+            detail.formatted_types = (address.formatted_types) ? address.formatted_types : ""
         }
         temp_address = detail
         Address.detail = detail

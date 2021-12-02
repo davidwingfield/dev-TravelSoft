@@ -1,19 +1,18 @@
 <?php
     /**
      * Short Api Routes Description
-     *
      * Long Api Routes Description
      *
      * @package            Framework\App
      * @subpackage         Routes
      */
-
+    
     namespace Framework\App\Routes;
-
+    
     use Framework\Core\Router;
-
+    
     $routeLead = APIPATH . "/v" . VERSION;
-
+    
     /**
      * get requests
      */
@@ -36,7 +35,7 @@
     Router::get($routeLead . '/images', "Image@serveGet");
     Router::get($routeLead . '/images/${image_id}', "Image@serveGet");
     Router::get($routeLead . '/images/company/${company_id}', "Image@serveGetByCompanyId");
-
+    
     /**
      * autocomplete validate
      */
@@ -44,7 +43,7 @@
     Router::get($routeLead . "/companies/validate", "Company@validateName");
     Router::get($routeLead . "/providers/validate", "Provider@validateName");
     Router::get($routeLead . "/vendors/validate", "Vendor@validateName");
-
+    
     /**
      * autocomplete requests
      */
@@ -55,14 +54,14 @@
     Router::get($routeLead . "/autocomplete/units", "Autocomplete@units");
     Router::get($routeLead . "/autocomplete/locations", "Autocomplete@locations");
     Router::get($routeLead . "/autocomplete/companies", "Autocomplete@companies");
-
+    
     /**
      * login requests
      */
     Router::post($routeLead . "/users/login", "User@login");
     Router::post($routeLead . "/users/register", "User@serveUpdateUser");
     Router::post($routeLead . "/users/update", "User@serveUpdateUser");
-
+    
     /**
      * image requests
      */
@@ -70,14 +69,16 @@
     /**
      * update requests
      */
+    
     Router::post($routeLead . "/users/reset_password", "User@serveResetPassword");
     Router::post($routeLead . "/contacts/update", "Contact@serveUpdate");
     Router::post($routeLead . "/providers/update", "Provider@serveUpdate");
     Router::post($routeLead . "/vendors/update", "Vendor@serveUpdate");
+    Router::post($routeLead . "/vendors/add", "Vendor@serveAdd");
     Router::post($routeLead . "/companies/update", "Company@serveUpdate");
     Router::post($routeLead . "/addresses/update", "Address@serveUpdate");
     Router::post($routeLead . "/locations/update", "Location@serveUpdate");
-
+    
     Router::post($routeLead . "/seasons/update", "Province@serveUpdate");
     Router::post($routeLead . "/variants/update", "City@serveUpdate");
     Router::post($routeLead . "/profiles/update", "Province@serveUpdate");

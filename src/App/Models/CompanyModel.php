@@ -1,15 +1,14 @@
 <?php
-
+    
     namespace Framework\App\Models;
-
+    
     use Exception;
     use Framework\App\Controllers\Image;
     use Framework\Core\Model;
     use Framework\Logger\Log;
-
+    
     /**
      * Short Company Description
-     *
      * Long Company Description
      *
      * @package            Framework\App
@@ -17,11 +16,11 @@
      */
     class CompanyModel extends Model
     {
-
+        
         protected static $dbTable = "company";
-
+        
         protected static $dbFields = Array();
-
+        
         /**
          * selectQuery
          *
@@ -47,7 +46,7 @@
                 BIN(name) AS binray_not_needed_column
         FROM 			company COMPANY
         ";
-
+        
         /**
          * fetch company
          *
@@ -63,25 +62,25 @@
                 if (!is_null($id)) {
                     $where = "
                     WHERE           COMPANY.id = $id";
-
+                    
                     $company_images = Image::getByCompanyId((int)$id);
                     Log::$debug_log->trace($company_images);
                 }
-
+                
                 $sql = self::$selectQuery . $where;
-
+                
                 // $companies = Model::$db->rawQuery($sql);
                 //foreach ($companies as $company) {
                 //Log::$debug_log->trace($company);
                 //}
-
+                
                 return Model::$db->rawQuery($sql);
-
+                
             } catch (Exception $e) {
                 return [];
             }
         }
-
+        
         /**
          * fetch single company record
          *
@@ -95,15 +94,15 @@
                 if (!is_null($id)) {
                     self::$db->where("id", $id);
                 }
-
+                
                 self::$db->where("enabled", 1);
-
+                
                 return self::$db->getOne(self::$dbTable);
             } catch (Exception $e) {
                 return [];
             }
         }
-
+        
         /**
          * fetch company data by name
          *
@@ -114,19 +113,19 @@
         public static function getByName(string $name): array
         {
             $searchTerm = addslashes($name);
-
+            
             try {
                 $where = "WHERE			COMPANY.name LIKE '$searchTerm'";
                 $sql = self::$selectQuery . " " . $where;
-
+                
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {
                 Log::$debug_log->error($e);
-
+                
                 return [];
             }
         }
-
+        
         /**
          * update company record
          *
@@ -139,7 +138,7 @@
             if (!isset($company)) {
                 return [];
             }
-
+            
             $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
             $id = Model::setInt((isset($company["id"])) ? $company["id"] : null);
             $name = Model::setString((isset($company["name"])) ? $company["name"] : null);
@@ -150,20 +149,19 @@
             $email = Model::setString((isset($company["email"])) ? $company["email"] : null);
             $cover_image = Model::setString((isset($company["cover_image"])) ? $company["cover_image"] : null);
             $status_id = Model::setInt((isset($company["status_id"])) ? $company["status_id"] : null);
-
             $enabled = Model::setBool((isset($company["enabled"])) ? $company["enabled"] : null);
             $note = Model::setLongText((isset($company["note"])) ? $company["note"] : null);
             $created_by = Model::setInt($user_id);
             $modified_by = Model::setInt($user_id);
-
+            
             $sql = "
                 INSERT INTO company (
-                id, name, phone_1, phone_2, cover_image, 
+                id, name, phone_1, phone_2, cover_image,
                 fax, website, email, status_id,
                 enabled, date_created, created_by, date_modified,
                 modified_by, note
             ) VALUES (
-                $id, $name, $phone_1, $phone_2, $cover_image, 
+                $id, $name, $phone_1, $phone_2, $cover_image,
                 $fax, $website, $email, $status_id,
                 $enabled, CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP,
                 $modified_by, $note
@@ -190,15 +188,15 @@
                     return self::get($company_id);
                 }
                 Log::$debug_log->error("No Company Id");
-
+                
                 return [];
             } catch (Exception $e) {
                 Log::$debug_log->error($e);
-
+                
                 return [];
             }
         }
-
+        
         /**
          * autocomplete query
          *
@@ -214,13 +212,13 @@
                     WHERE		COMPANY.name LIKE '%$searchTerm%'
                     ORDER BY    LENGTH(Company.name), CAST(Company.name AS UNSIGNED), Company.name ASC
                     LIMIT 20;";
-
+                
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {
                 Log::$debug_log->error($e);
-
+                
                 return [];
             }
         }
-
+        
     }

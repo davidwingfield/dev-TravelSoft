@@ -465,10 +465,13 @@ const Location = (function () {
     }
     
     const hide_form = function () {
+        if (!_form_location_details) {
+            return
+        }
         let detail = set_detail(temp_location)
         populate_form(detail)
         enable()
-        $(_form_location_details).hide()
+        $().hide()
     }
     
     const validate_edit_location_filter_form = function () {

@@ -71,7 +71,31 @@
          */
         private static function format_address_table(array $address = []): array
         {
+            
             $formattedAddress = array();
+            $formatted_address_types = "";
+            if (isset($address["address_types_id"])) {
+                $pieces = explode(",", trim($address["address_types_id"]));
+                
+                if (count($pieces) > 0) {
+                    for ($n = 0; $n < count($pieces); $n++) {
+                        $address_type_id = (int)$pieces[$n];
+                        $address_type = AddressModel::getAddressTypeById($address_type_id);
+                        $name = "";
+                        
+                        if (isset($address_type[0]["name"])) {
+                            $name = "" . $address_type[0]["name"];
+                        } else if (isset($address_type["name"])) {
+                            $name = "" . $address_type["name"];
+                        }
+                        if ($name !== "") {
+                            $formatted_address_types .= "$name<br>";
+                        }
+                    }
+                    
+                }
+                
+            }
             $short_address_formatted = "<address class='m-0 p-0 '>";
             $medium_address_formatted = "<address class='m-0 p-0 '>";
             $long_address_formatted = "<address class='m-0 p-0 '>";
@@ -105,6 +129,7 @@
             
             if (!is_null($street_1)) {
                 $streets[] = $street_1;
+                
             }
             
             if (!is_null($street_2)) {
@@ -233,6 +258,7 @@
             $formattedAddress["date_modified"] = $date_modified;
             $formattedAddress["modified_by"] = (int)$modified_by;
             $formattedAddress["note"] = ($note === "") ? null : $note;
+            $formattedAddress["formatted_types"] = $formatted_address_types;
             
             return $formattedAddress;
         }

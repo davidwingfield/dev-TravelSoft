@@ -74,7 +74,7 @@ const Provider = (function () {
           let vendor_detail = Vendor.build()
           let addresses = Array.from(Address.all.values())
           let contacts = Array.from(Contact.all.values())
-          //*
+          /*
           console.log("company_detail", company_detail)
           console.log("provider_detail", provider_detail)
           console.log("location_detail", location_detail)
@@ -656,12 +656,11 @@ const Provider = (function () {
                 $(_panel_tab_provider).addClass("disabled")
                 $(_panel_tab_vendor).addClass("disabled")
                 //$(_panel_tab_location).addClass("disabled")
-                $(_panel_tab_contact).addClass("disabled")
+                
                 $(_panel_tab_address).addClass("disabled")
             }
             
             if (settings.provider_detail) {
-                
                 provider = set(settings.provider_detail)
                 addresses = (provider.addresses) ? provider.addresses : []
                 contacts = (provider.contacts) ? provider.contacts : []

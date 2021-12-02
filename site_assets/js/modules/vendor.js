@@ -2,7 +2,15 @@ const Vendor = (function () {
     "use strict"
     
     const base_url = "/vendors"
-    //Fields
+    /** Tabs */
+    const _panel_tab_contact = document.getElementById("panel_tab_contact")
+    const _panel_tab_company = document.getElementById("panel_tab_company")
+    const _panel_tab_vendor = document.getElementById("panel_tab_vendor")
+    const _panel_tab_location = document.getElementById("panel_tab_location")
+    const _panel_tab_address = document.getElementById("panel_tab_address")
+    const _panel_tab_provider = document.getElementById("panel_tab_provider")
+    const _button_add_vendor_page_heading = document.getElementById("button_add_vendor_page_heading")
+    const _vendor_index_table_add_button = document.getElementById("vendor_index_table_add_button")
     const _vendor_company_id = document.getElementById("vendor_company_id")
     const _form_edit_vendor = document.getElementById("form_edit_vendor")
     const _vendor_name = document.getElementById("vendor_name")
@@ -19,7 +27,16 @@ const Vendor = (function () {
     const _company_id = document.getElementById("company_id")
     const _button_submit_form_edit_vendor = document.getElementById("button_submit_form_edit_vendor")
     const _table_vendor_index = document.getElementById("table_vendor_index")
-    let validator
+    const _form_vendor_add = document.getElementById("form_vendor_add")
+    const _modal_button_submit_add_vendor = document.getElementById("modal_button_submit_add_vendor")
+    const _modal_button_cancel_add_vendor = document.getElementById("modal_button_cancel_add_vendor")
+    const _modal_new_vendor = document.getElementById("modal_new_vendor")
+    const _vendor_modal_vendor_name = document.getElementById("vendor_modal_vendor_name")
+    const _button_save_vendor = document.getElementById("button_save_vendor")
+    const _company_name = document.getElementById("company_name")
+    // ----
+    
+    let new_vendor_validator, validator
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let globalSelectedVendor = false
     let form_rules = {
@@ -34,7 +51,99 @@ const Vendor = (function () {
             },
         },
     }
+    let add_modal_form_rules = {
+        rules: {
+            vendor_modal_vendor_name: {
+                required: true,
+            },
+        },
+        messages: {
+            vendor_modal_vendor_name: {
+                required: "Field Required",
+            },
+        },
+    }
     let $index_table = $(_table_vendor_index)
+    
+    // ----
+    
+    $(_button_save_vendor)
+      .on("click", function () {
+          validate_all()
+      })
+    
+    $(_button_add_vendor_page_heading)
+      .on("click", function () {
+          load_new_modal()
+      })
+    
+    $(_vendor_index_table_add_button)
+      .on("click", function () {
+          load_new_modal()
+      })
+    
+    $(_modal_button_cancel_add_vendor)
+      .on("click", function () {
+          hide_new_modal()
+      })
+    
+    $(_modal_button_submit_add_vendor)
+      .on("click", function () {
+          if (validate_new_modal_form()) {
+              let dataToSend = {
+                  name: _vendor_modal_vendor_name.value,
+              }
+              add(dataToSend)
+          }
+      })
+    
+    $(_vendor_modal_vendor_name)
+      .on("change", function () {
+          setTimeout(function () {
+              let vendor_name = _vendor_modal_vendor_name.value
+              
+              if (globalSelectedVendor === false) {
+                  if (vendor_name === "") {
+                      _vendor_modal_vendor_name.value = ""
+                      globalSelectedVendor = false
+                  } else {
+                      vendor_exists(vendor_name)
+                  }
+              }
+          }, 200)
+      })
+      .on("search", function () {
+      
+      })
+      .on("click", function (e) {
+          if ($(this).attr("readonly") === "readonly") {
+              e.preventDefault()
+          } else {
+              $(this).select()
+          }
+      })
+      .autocomplete({
+          serviceUrl: "/api/v1.0/autocomplete/vendors",
+          minChars: 2,
+          cache: false,
+          dataType: "json",
+          triggerSelectOnValidInput: false,
+          paramName: "st",
+          onSelect: function (suggestion) {
+              if (!suggestion.data) {
+                  return
+              }
+              let vendor = suggestion.data
+              let name = vendor.name
+              confirmDialog(`Vender ${name} is exists. Would you like to load this record?`, (ans) => {
+                  if (ans) {
+                      window.location.replace(base_url + "/" + vendor.id)
+                  } else {
+                      reset_modal()
+                  }
+              })
+          },
+      })
     
     $(_company_id)
       .on("change", function () {
@@ -43,7 +152,7 @@ const Vendor = (function () {
     
     $(_button_submit_form_edit_vendor)
       .on("click", function () {
-          let dataToSend = Vendor.build()
+          update()
       })
     
     const init_autocomplete = function () {
@@ -92,6 +201,75 @@ const Vendor = (function () {
                   },
               })
         }
+    }
+    
+    const hide_new_modal = function () {
+        $(_modal_new_vendor).modal("hide")
+    }
+    
+    const load_new_modal = function () {
+        $(_modal_new_vendor).modal("show")
+    }
+    
+    const validate_new_modal_form = function () {
+        if (_form_vendor_add) {
+            return $(_form_vendor_add).valid()
+        }
+        return false
+    }
+    
+    const add = function (vendor) {
+        if (vendor) {
+            newVendor(vendor, function (data) {
+                if (data) {
+                    console.log("data 1", data)
+                    if (data[0]) {
+                        console.log("data[0] 1", data[0])
+                        let details = data[0]
+                        
+                        if (details.id) {
+                            
+                            window.location.replace("/vendors/" + details.id)
+                        } else {
+                            console.log("details 1", details)
+                        }
+                    } else {
+                        console.log("details 2", data)
+                    }
+                } else {
+                    console.log("details 3", vendor)
+                }
+            })
+        }
+        
+    }
+    
+    /**
+     * update vendor record
+     *
+     * @param dataToSend
+     * @param callback
+     */
+    const newVendor = function (dataToSend, callback) {
+        let url = "/api/v1.0/vendors/add"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handle_vendor_error("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
+    
+    const reset_modal = function () {
+        _vendor_modal_vendor_name.value = ""
     }
     
     /**
@@ -145,6 +323,7 @@ const Vendor = (function () {
         return remove_nulls({
             id: (!isNaN(parseInt(_vendor_id.value))) ? parseInt(_vendor_id.value) : null,
             company_id: (!isNaN(parseInt(_vendor_company_id.value))) ? parseInt(_vendor_company_id.value) : null,
+            name: (_vendor_name.value !== "") ? _vendor_name.value : null,
             status_id: 10,
             enabled: (_vendor_enabled.checked) ? 1 : 0,
             show_online: (_vendor_show_online.checked === true) ? 1 : 0,
@@ -156,31 +335,27 @@ const Vendor = (function () {
     }
     
     const vendor_exists = function (name) {
-        
         if (name && name !== "") {
             let dataToSend = {
                 name: name,
             }
             
             fetch_vendor_by_name(dataToSend, function (data) {
-                
-                let vendor_detail = {}
+                let vendor = {}
                 if (data) {
                     if (data.length > 0) {
                         if (data[0]) {
-                            vendor_detail = data[0]
+                            console.log("Vendor Exists")
+                            vendor = data[0]
                         }
                     }
                 }
-                
-                populate_form(vendor_detail)
-                
             })
         }
     }
     
     /**
-     * fetch provider by name
+     * fetch vendor by name
      *
      * @param dataToSend
      * @param callback
@@ -297,8 +472,141 @@ const Vendor = (function () {
         return detail
     }
     
-    const save = function (params) {
+    /**
+     * update provider record
+     *
+     * @param dataToSend
+     * @param callback
+     */
+    const updateVendor = function (dataToSend, callback) {
+        let url = "/api/v1.0/vendors/update"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    console.log(data)
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handle_vendor_error("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
     
+    const update = function () {
+        let vendor_detail = Vendor.build()
+        if (vendor_detail) {
+            confirmDialog(`Would you like to update?`, (ans) => {
+                if (ans) {
+                    updateVendor(vendor_detail, function (data) {
+                        if (data) {
+                            console.log("data 1", data)
+                            if (data[0]) {
+                                console.log("data[0] 1", data[0])
+                                let details = data[0]
+                                if (details.id) {
+                                    if (_vendor_id.value === "" || isNaN(parseInt(_vendor_id.value))) {
+                                        window.location.replace(base_url + "/" + details.id)
+                                    } else {
+                                        let name = _company_name.value
+                                        toastr.success(`Vendor ${name} has been updated.`)
+                                    }
+                                } else {
+                                    console.log("details 1", details)
+                                }
+                            } else {
+                                console.log("details 2", data)
+                            }
+                        } else {
+                            console.log("details 3", provider)
+                        }
+                    })
+                }
+                
+            })
+            
+        }
+    }
+    
+    /**
+     * save provider object
+     *
+     * @param vendor
+     */
+    const save = function (vendor) {
+        
+        if (vendor) {
+            updateVendor(vendor, function (data) {
+                if (data) {
+                    console.log("data 1", data)
+                    if (data[0]) {
+                        console.log("data[0] 1", data[0])
+                        let details = data[0]
+                        if (details.id) {
+                            if (_vendor_id.value === "" || isNaN(parseInt(_vendor_id.value))) {
+                                window.location.replace(base_url + "/" + details.id)
+                            } else {
+                                let name = _company_name.value
+                                toastr.success(`Vendor ${name} has been updated.`)
+                            }
+                        } else {
+                            console.log("details 1", details)
+                        }
+                    } else {
+                        console.log("details 2", data)
+                    }
+                } else {
+                    console.log("details 3", provider)
+                }
+            })
+        }
+    }
+    
+    const validate_all = function (params) {
+        let tabs = $("#vendor_edit_tabs > li.nav-item > a.nav-link")
+        let panels = $("div.tab-pane")
+        let company_detail = Company.build()
+        let vendor_detail = Vendor.build()
+        let addresses = Array.from(Address.all.values())
+        let contacts = Array.from(Contact.all.values())
+        /*
+          console.log("company_detail", company_detail)
+          console.log("provider_detail", provider_detail)
+          console.log("location_detail", location_detail)
+          console.log("vendor_detail", vendor_detail)
+          console.log("addresses", addresses)
+          console.log("contacts", contacts)
+          //*/
+        if (!company_detail || !vendor_detail || !addresses || !contacts) {
+            $.each(panels, function (index, item) {
+                if ($(this).find(".is-invalid").length > 0) {
+                    let nav_tab = $("body").find("[aria-controls='" + $(this).attr("id") + "']")
+                    tabs.removeClass("active")
+                    panels.removeClass("active")
+                    $(this).addClass("active")
+                    nav_tab.addClass("active")
+                    return false
+                }
+            })
+            return
+        }
+        
+        confirmDialog(`Would you like to update?`, (ans) => {
+            if (ans) {
+                
+                save({
+                    "company_detail": company_detail,
+                    "vendor_detail": vendor_detail,
+                    "addresses": addresses,
+                    "contacts": contacts,
+                })
+            }
+            
+        })
     }
     
     const get = function (id) {
@@ -434,6 +742,11 @@ const Vendor = (function () {
      * @param settings
      */
     const index = function (settings) {
+        if (_form_vendor_add) {
+            console.log("_form_vendor_add")
+            validator_init(add_modal_form_rules)
+            new_vendor_validator = $(_form_vendor_add).validate()
+        }
         build_index_table()
         
         if (settings) {
@@ -443,6 +756,42 @@ const Vendor = (function () {
         }
         
     }
+    
+    const setVendor = function () {
+        if (_vendor_name) {
+            _vendor_is_provider.checked = false
+            $(_vendor_is_provider).attr("readonly", true)
+            _vendor_is_provider.disabled = true
+            $(_vendor_name).attr("readonly", true)
+            $(_vendor_id).attr("readonly", true)
+            $(_vendor_sku).attr("readonly", true)
+            $(_vendor_is_provider).attr("readonly", true)
+        }
+    }
+    
+    const edit = function (settings) {
+        let addresses = []
+        let contacts = []
+        let company = {}
+        let vendor = {}
+        if (settings) {
+            if (settings.vendor_detail) {
+                vendor = set(settings.vendor_detail)
+                addresses = (settings.address_detail) ? settings.address_detail : []
+                contacts = (settings.contact_detail) ? settings.contact_detail : []
+                company = (settings.company_detail) ? settings.company_detail : {}
+            }
+        }
+        
+        $(_panel_tab_contact).removeClass("disabled")
+        
+        Vendor.init(vendor)
+        Address.init(addresses)
+        Contact.init(contacts)
+        Company.init(company)
+        setVendor()
+    }
+    
     return {
         validator: null,
         detail: {},
@@ -475,6 +824,12 @@ const Vendor = (function () {
         },
         navigate: function (vendor) {
             navigate(vendor)
+        },
+        edit: function (settings) {
+            edit(settings)
+        },
+        setVendor: function () {
+            setVendor()
         },
     }
     

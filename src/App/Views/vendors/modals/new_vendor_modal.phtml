@@ -1,0 +1,84 @@
+<?php
+    if (!isset($page_data)) {
+        $page_data = [];
+    }
+    
+    $currency = [];
+    if (isset($page_data["types"]["currency"])) {
+        $currency = $page_data["types"]["currency"];
+    }
+    
+    $pricing_strategies = [];
+    if (isset($page_data["types"]["pricing_strategy_types"])) {
+        $pricing_strategies = $page_data["types"]["pricing_strategy_types"];
+    }
+    
+    $categories = [];
+    if (isset($page_data["types"]["category"])) {
+        $categories = $page_data["types"]["category"];
+    }
+    
+    $rating_types = [];
+    if (isset($page_data["types"]["rating_types"])) {
+        $rating_types = $page_data["types"]["rating_types"];
+    }
+?>
+<div class="modal fade" id="modal_new_vendor" tabindex="-1" role="dialog" aria-labelledby="modal_new_vendor" aria-hidden="true">
+    
+    <div class="modal-dialog modal-simple">
+        
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                
+                <h4 class="modal-title" id="modal_addressLabel">New Vendor</h4>
+            
+            </div>
+            
+            <div class="modal-body">
+                
+                <form id="form_vendor_add" novalidate>
+                    
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-element">
+                                <label for="vendor_modal_vendor_name">Name</label>
+                                <input type="text" id="vendor_modal_vendor_name" name="vendor_modal_vendor_name" class="form-control"/>
+                                <div id="vendor_modal_vendor_name-error" class="error w-100 text-center" style="display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-outline-danger btn-sm" id="modal_button_cancel_add_vendor">Cancel</button>
+                <button class="btn btn-primary btn-sm" id="modal_button_submit_add_vendor">Save</button>
+            </div>
+        
+        </div>
+    
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        const $rating = $('#rating')
+        const $rating_types_id = $('#rating_types_id')
+        if ($rating) {
+            $rating.mdbRate()
+        }
+        
+        $stars = $rating.children()
+        $stars.on("mouseover", function () {
+            let index = (!isNaN($(this).attr("data-index"))) ? parseInt($(this).attr("data-index")) : 0
+            $rating_types_id.val((index) + 1)
+        })
+        
+    })
+</script>

@@ -18,6 +18,8 @@ const Company = (function () {
     const _button_edit_company_name = document.getElementById("button_edit_company_name")
     const _button_cancel_edit_company_name = document.getElementById("button_cancel_edit_company_name")
     const _button_close_edit_company_form = document.getElementById("button_close_edit_company_form")
+    const _form_edit_vendor = document.getElementById("form_edit_vendor")
+    const _form_edit_provider = document.getElementById("form_edit_provider")
     // ----
     const _vendor_name = document.getElementById("vendor_name")
     const _vendor_company_id = document.getElementsByClassName("vendor_company_id")
@@ -165,8 +167,13 @@ const Company = (function () {
               hide_form()
               //*/
               Company.reset_form(true)
-              Provider.reset_form()
-              Vendor.reset_form()
+              if (_form_edit_provider) {
+                  Provider.reset_form()
+              }
+              if (_form_edit_vendor) {
+                  Vendor.reset_form()
+              }
+              
           })
           .on("click", function (e) {
               if ($(this).attr("readonly") === "readonly") {
@@ -209,7 +216,10 @@ const Company = (function () {
                   populate_form(company)
                   if (_provider_name) {
                       $(_provider_name).val(company.name).trigger("change")
+                  } else {
+                      $(_vendor_name).val(company.name)
                   }
+                  
                   if (_provider_company_id) {
                       $(_provider_company_id).val(company.id)
                   }
@@ -306,14 +316,13 @@ const Company = (function () {
     }
     
     const build = function () {
+        
         return remove_nulls({
             email: $(_company_email).val(),
-            //enabled: (_company_enabled.checked === true) ? 1 : 0,
             enabled: 1,
             fax: $(_company_fax).val(),
-            id: (!isNaN(_provider_company_id.value)) ? parseInt(_provider_company_id.value) : null,
+            id: (!isNaN(_company_id.value)) ? parseInt(_company_id.value) : null,
             modified_by: user_id,
-            //cover_image: _company_cover_image.value,
             cover_image: "/public/img/placeholder.jpg",
             name: $(_company_name).val(),
             note: Company.detail.note,
@@ -326,10 +335,14 @@ const Company = (function () {
     
     const company_exists = function (name) {
         if (name && name !== "") {
+            /**
+             * data to send to the server
+             *
+             * @type {{name}}
+             */
             let dataToSend = {
                 name: name,
             }
-            
             fetch_company_by_name(dataToSend, function (data) {
                 
                 let company = null
@@ -489,6 +502,7 @@ const Company = (function () {
     let reset_company = {}
     
     const show_form = function () {
+        console.log("Company.show_form")
         reset_company = Company.build()
         
         if (_form_edit_company_block) {
@@ -499,7 +513,6 @@ const Company = (function () {
         }
         
         if (_button_save_provider) {
-            
             $(_button_save_provider).attr("readonly", true)
             _button_save_provider.disabled = true
             

@@ -53,6 +53,18 @@
             exit(1);
         }
         
+        public static function update(array $params = []): array
+        {
+            $companies = [];
+            
+            $results = CompanyModel::updateRecord($params);
+            foreach ($results AS $company) {
+                $companies[] = self::format($company);
+            }
+            
+            return $companies;
+        }
+        
         public static function serveUpdate(array $params = [])
         {
             $companies = [];
@@ -108,6 +120,13 @@
         {
             if (isset($company)) {
                 $id = (int)$company["company_id"];
+                $images = Image::getByCompanyId($id);
+                $cover_image = "";
+                for ($n = 0; $n < count($images); $n++) {
+                    if ($images[$n]["is_cover_image"] === 1) {
+                        $cover_image = $images[$n]["path"];
+                    }
+                }
                 
                 return array(
                     "id" => $company["company_id"],
@@ -116,7 +135,7 @@
                     "phone_2" => $company["company_phone_2"],
                     "fax" => $company["company_fax"],
                     "website" => $company["company_website"],
-                    "cover_image" => $company["company_cover_image"],
+                    "cover_image" => $cover_image,
                     "email" => $company["company_email"],
                     "status_id" => $company["company_status_id"],
                     "enabled" => $company["company_enabled"],
@@ -125,6 +144,10 @@
                     "date_modified" => $company["company_date_modified"],
                     "modified_by" => $company["company_modified_by"],
                     "note" => $company["company_note"],
+                    "keywords" => (isset($company["company_keywords"])) ? $company["company_keywords"] : "",
+                    "description_long" => (isset($company["company_description_long"])) ? $company["company_description_long"] : "",
+                    "description_short" => (isset($company["company_description_short"])) ? $company["company_description_short"] : "",
+                    "logo" => (isset($company["company_logo"])) ? $company["company_logo"] : "/public/img/logo_placeholder.jpg",
                     "images" => Image::getByCompanyId($id),
                 );
             }

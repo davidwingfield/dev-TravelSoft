@@ -310,7 +310,8 @@
             exit(1);
         }
         
-        /** get by provider id
+        /**
+         * get by provider id
          *
          * @param int|null $provider_id
          *
@@ -369,6 +370,10 @@
         public static function serveUpdate(array $params = [])
         {
             $provider = [];
+            if (isset($params["company_detail"])) {
+                $company = Company::update($params["company_detail"]);
+            }
+            
             if (isset($params["vendor_detail"])) {
                 $vendor = Vendor::callUpdate($params["vendor_detail"]);
             }
@@ -377,8 +382,9 @@
                 $provider = ProviderModel::update($params["provider_detail"]);
             }
             
-            // ----
-            
+            /**
+             * render json response
+             */
             View::render_json(self::format_get($provider));
             exit(1);
         }
@@ -451,6 +457,14 @@
                 $contact_list_formatted[] = Contact::format($contact);
             }
             
+            $cover_image = "";
+            $images = Image::getByCompanyId((int)$provider["company_id"]);
+            for ($n = 0; $n < count($images); $n++) {
+                if ($images[$n]["is_cover_image"] === 1) {
+                    $cover_image = $images[$n]["path"] . "/" . $images[$n]["name"] . "." . $images[$n]["extension"];
+                }
+            }
+            
             $temp = array(
                 "id" => (int)$provider["provider_id"],
                 "name" => $provider["company_name"],
@@ -483,6 +497,7 @@
                     "note" => (isset($provider["vendor_note"])) ? $provider["vendor_note"] : null,
                     "company" => array(
                         "images" => Image::getByCompanyId((int)$vendor_company_id),
+                        
                         "id" => $vendor_company_id,
                         "name" => $vendor_company_name,
                         "phone_1" => $vendor_company_phone_1,
@@ -500,9 +515,13 @@
                     ),
                 ),
                 "company" => array(
-                    "images" => Image::getByCompanyId((int)$provider["company_id"]),
+                    "images" => $images,
+                    "keywords" => $provider["company_keywords"],
+                    "description_short" => $provider["company_description_short"],
+                    "description_long" => $provider["company_description_long"],
+                    "logo" => $provider["company_logo"],
                     "id" => $provider["company_id"],
-                    "cover_image" => $provider["company_cover_image"],
+                    "cover_image" => $cover_image,
                     "name" => $provider["company_name"],
                     "phone_1" => $provider["company_phone_1"],
                     "phone_2" => $provider["company_phone_2"],

@@ -8,6 +8,10 @@
     if (!defined("COUNTRIES")) {
         define("COUNTRIES", $page_data["types"]["countries"]);
     }
+    
+    $coverImage = $page_data["company_detail"]["cover_image"];
+    $companyName = $page_data["company_detail"]["name"];
+    $description_short = $page_data["company_detail"]["description_short"];
 ?>
 <section id="vendor_edit">
     <div class="row">
@@ -16,9 +20,8 @@
             <div class="tab-content p-0">
                 <!-- Vendor Overview -->
                 <div class="tab-pane" id="panel_tab_vendor_overview" role="tabpanel">
-                    <section>
-                    
-                    </section>
+                    <?php
+                        include_once(VIEWS_PATH . "/vendors/forms/overview.phtml"); ?>
                 </div>
                 <!-- /Vendor Overview -->
                 
@@ -52,8 +55,9 @@
                 
                 <!-- Meta Detail -->
                 <div class="tab-pane" id="panel_tab_meta_detail" role="tabpanel">
+                    
                     <?php
-                        include_once(VIEWS_PATH . "/providers/forms/provider_meta_form.phtml"); ?>
+                        include_once(VIEWS_PATH . "/companies/forms/company_meta_form.phtml"); ?>
                 </div>
                 <!-- /Meta Detail -->
             

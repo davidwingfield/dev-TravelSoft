@@ -69,7 +69,9 @@ const Vendor = (function () {
     
     $(_button_save_vendor)
       .on("click", function () {
-          validate_all()
+          let company = Company.build()
+          console.log("_button_save_vendor", company)
+          update()
       })
     
     $(_button_add_vendor_page_heading)
@@ -482,9 +484,10 @@ const Vendor = (function () {
         let url = "/api/v1.0/vendors/update"
         
         if (dataToSend) {
+            
             try {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    console.log(data)
+                    console.log("data", data)
                     if (data) {
                         return callback(data)
                     } else {
@@ -499,10 +502,16 @@ const Vendor = (function () {
     
     const update = function () {
         let vendor_detail = Vendor.build()
+        
+        vendor_detail.company_detail = Company.build()
         if (vendor_detail) {
+            
             confirmDialog(`Would you like to update?`, (ans) => {
                 if (ans) {
+                    console.log("vendor_detail", vendor_detail)
+                    
                     updateVendor(vendor_detail, function (data) {
+                        console.log("data", data)
                         if (data) {
                             console.log("data 1", data)
                             if (data[0]) {
@@ -671,6 +680,7 @@ const Vendor = (function () {
     }
     
     const init = function (settings) {
+        console.log("settings", settings)
         let company = {}
         if (settings) {
             if (settings.company) {
@@ -697,16 +707,16 @@ const Vendor = (function () {
             _vendor_enabled.checked = (settings.enabled) ? (settings.enabled === 1) : true
         }
         if (_vendor_is_provider) {
-            _vendor_is_provider.checked = (settings.is_provider) ? (settings.is_provider === 1) : true
+            _vendor_is_provider.checked = (settings.is_provider === 1)
         }
         if (_vendor_show_online) {
-            _vendor_show_online.checked = (settings.show_online) ? (settings.show_online === 1) : true
+            _vendor_show_online.checked = (settings.show_online === 1)
         }
         if (_vendor_show_ops) {
-            _vendor_show_ops.checked = (settings.show_ops) ? (settings.show_ops === 1) : true
+            _vendor_show_ops.checked = (settings.show_ops === 1)
         }
         if (_vendor_show_sales) {
-            _vendor_show_sales.checked = (settings.show_sales) ? (settings.show_sales === 1) : true
+            _vendor_show_sales.checked = (settings.show_sales === 1)
         }
         
         if (_form_edit_vendor) {
@@ -758,8 +768,8 @@ const Vendor = (function () {
     }
     
     const setVendor = function () {
+        
         if (_vendor_name) {
-            _vendor_is_provider.checked = false
             $(_vendor_is_provider).attr("readonly", true)
             _vendor_is_provider.disabled = true
             $(_vendor_name).attr("readonly", true)

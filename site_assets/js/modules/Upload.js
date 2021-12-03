@@ -10,8 +10,9 @@ const _image_manager_alt_text = document.getElementById("image_manager_alt_text"
 const _image_manager_form_data = document.getElementById("image_manager_form_data")
 const _image_manager_image_id = document.getElementById("image_manager_id")
 const _provider_edit = document.getElementById("provider_edit")
+const _vendor_edit = document.getElementById("vendor_edit")
 const _provider_company_id = document.getElementById("provider_company_id")
-
+const _vendor_company_id = document.getElementById("vendor_company_id")
 Upload.prototype.getType = function () {
     return this.file.type
 }
@@ -46,6 +47,11 @@ Upload.prototype.doUpload = function () {
         formData.append("directory", "company")
     }
     
+    if (_vendor_edit) {
+        formData.append("directory_id", parseInt(_vendor_company_id.value))
+        formData.append("directory", "company")
+    }
+    
     $.ajax({
         type: "POST",
         url: "/api/v1.0/images/update",
@@ -71,6 +77,10 @@ Upload.prototype.doUpload = function () {
             if (image) {
                 let imageManager
                 if (_provider_edit) {
+                    imageManager = $("#companyImages").imageManager()
+                }
+                
+                if (_vendor_edit) {
                     imageManager = $("#companyImages").imageManager()
                 }
                 
@@ -127,7 +137,6 @@ Upload.prototype.resetForm = function () {
 }
 
 Upload.prototype.populateForm = function (image) {
-    console.log("populateForm", image)
     Upload.prototype.progressReset()
     let img = image.path + "/" + image.name + "." + image.extension
     _image_manager_is_cover_image.checked = (image.is_cover_image === 1)
@@ -150,6 +159,7 @@ $("#image_manager_upload")
       _image_manager_alt_text.value = ""
       $(_image_manager_form_data).show()
   })
+
 $("#image_manager_clear_button")
   .on("click", function () {
       Upload.prototype.resetForm()

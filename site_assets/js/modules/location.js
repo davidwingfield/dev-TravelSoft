@@ -471,7 +471,7 @@ const Location = (function () {
         let detail = set_detail(temp_location)
         populate_form(detail)
         enable()
-        $().hide()
+        $(_form_location_details).hide()
     }
     
     const validate_edit_location_filter_form = function () {

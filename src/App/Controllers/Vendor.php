@@ -366,19 +366,34 @@
         
         public static function serveUpdate(array $params = null)
         {
-            $vendors = [];
-            $results = [];
+            $vendor = [];
+            $company = [];
+            
             if ($params) {
+                if (isset($params["company_detail"])) {
+                    $company = Company::update($params["company_detail"]);
+                }
+                
                 $results = VendorModel::updateRecord($params);
+                
             }
+            
             foreach ($results AS $k => $vendor) {
                 $vendors[] = self::format_vendor($vendor);
             }
+            
             // ----
             View::render_json($vendors);
             exit(1);
         }
         
+        /**
+         * update that return string
+         *
+         * @param array $vendor
+         *
+         * @return array
+         */
         public static function callUpdate(array $vendor = []): array
         {
             $results = [];
@@ -496,6 +511,13 @@
         {
             $company_id = (int)$vendor["company_id"];
             $vendor_id = (int)$vendor["vendor_id"];
+            $cover_image = "";
+            $images = Image::getByCompanyId($company_id);
+            for ($n = 0; $n < count($images); $n++) {
+                if ($images[$n]["is_cover_image"] === 1) {
+                    $cover_image = $images[$n]["path"] . "/" . $images[$n]["name"] . "." . $images[$n]["extension"];
+                }
+            }
             
             return array(
                 "id" => $vendor_id,
@@ -513,8 +535,9 @@
                 "date_modified" => $vendor["vendor_date_modified"],
                 "created_by" => $vendor["vendor_created_by"],
                 "modified_by" => $vendor["vendor_modified_by"],
+                
                 "company" => array(
-                    "images" => Image::getByCompanyId($company_id),
+                    "images" => $images,
                     "id" => $vendor["company_id"],
                     "name" => $vendor["company_name"],
                     "phone_1" => $vendor["company_phone_1"],
@@ -528,7 +551,12 @@
                     "modified_by" => $vendor["company_modified_by"],
                     "date_modified" => $vendor["company_date_modified"],
                     "status_id" => $vendor["company_status_id"],
+                    "cover_image" => $cover_image,
                     "note" => $vendor["company_note"],
+                    "keywords" => $vendor["company_keywords"],
+                    "description_short" => $vendor["company_description_short"],
+                    "description_long" => $vendor["company_description_long"],
+                    "logo" => $vendor["company_logo"],
                     "addresses" => AddressModel::getByCompanyId((int)$company_id),
                     "contacts" => ContactModel::getByCompanyId((int)$company_id),
                 ),
@@ -545,7 +573,7 @@
          */
         private static function format_vendor(array $vendor = []): array
         {
-            Log::$debug_log->trace($vendor);
+            //Log::$debug_log->trace($vendor);
             
             return array(
                 "id" => $vendor["vendor_id"],
@@ -558,6 +586,10 @@
                 "status_id" => $vendor["vendor_status_id"],
                 "note" => $vendor["vendor_note"],
                 "enabled" => $vendor["vendor_enabled"],
+                "keywords" => $vendor["company_keywords"],
+                "description_short" => $vendor["company_description_short"],
+                "description_long" => $vendor["company_description_long"],
+                "logo" => $vendor["company_logo"],
                 "date_created" => $vendor["vendor_date_created"],
                 "date_modified" => $vendor["vendor_date_modified"],
                 "created_by" => $vendor["vendor_created_by"],

@@ -252,6 +252,13 @@ Long Vendor Description</p>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Controllers-Vendor.html#method_add">add()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Controllers-Vendor.html#method_autocomplete">autocomplete()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
@@ -263,6 +270,13 @@ Autocomplete json</dd>
     <a href="classes/Framework-App-Controllers-Vendor.html#method_callUpdate">callUpdate()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>update that return string</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Controllers-Vendor.html#method_edit">edit()</a>
+    <span>
+                        &nbsp;: mixed    </span>
 </dt>
 <dd></dd>
 
@@ -289,6 +303,13 @@ Autocomplete json</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-Core-Controller.html#method_init">init()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Controllers-Vendor.html#method_serveAdd">serveAdd()</a>
     <span>
                         &nbsp;: mixed    </span>
 </dt>
@@ -328,6 +349,13 @@ Autocomplete json</dd>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
 <dd>format autocomplete result set</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/Framework-App-Controllers-Vendor.html#method_format_get">format_get()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>format_get</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/Framework-App-Controllers-Vendor.html#method_format_vendor">format_vendor()</a>
@@ -466,7 +494,7 @@ Autocomplete json</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">28</span>
+    <span class="phpdocumentor-element-found-in__line">30</span>
 
     </aside>
 
@@ -476,7 +504,7 @@ Autocomplete json</dd>
     <span class="phpdocumentor-signature__visibility">protected</span>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$buttons</span>
-     = <span class="phpdocumentor-signature__default-value">array(&quot;save&quot; =&gt; array(&quot;type&quot; =&gt; &quot;a&quot;, &quot;href&quot; =&gt; &quot;javascript:void(0)&quot;, &quot;classes&quot; =&gt; &quot;btn btn-sm btn-primary btn-round&quot;, &quot;icon&quot; =&gt; &quot;fas fa-save&quot;, &quot;id&quot; =&gt; &quot;button_save_provider&quot;, &quot;text&quot; =&gt; &quot;save provider&quot;, &quot;data&quot; =&gt; array(&quot;toggle&quot; =&gt; &quot;tooltip&quot;, &quot;title&quot; =&gt; &quot;Save Provider&quot;, &quot;placement&quot; =&gt; &quot;top&quot;)), &quot;new&quot; =&gt; array(&quot;type&quot; =&gt; &quot;a&quot;, &quot;href&quot; =&gt; &quot;/vendors/new&quot;, &quot;classes&quot; =&gt; &quot;btn btn-outline-primary btn-sm btn-icon btn-round&quot;, &quot;icon&quot; =&gt; &quot;fas fa-plus&quot;, &quot;id&quot; =&gt; &quot;button_add_vendor_page_heading&quot;, &quot;text&quot; =&gt; &quot;&quot;, &quot;data&quot; =&gt; array(&quot;toggle&quot; =&gt; &quot;tooltip&quot;, &quot;title&quot; =&gt; &quot;Creat a New Vendor&quot;, &quot;placement&quot; =&gt; &quot;top&quot;)))</span></code>
+     = <span class="phpdocumentor-signature__default-value">array(&quot;save&quot; =&gt; array(&quot;type&quot; =&gt; &quot;a&quot;, &quot;href&quot; =&gt; &quot;javascript:void(0)&quot;, &quot;classes&quot; =&gt; &quot;btn btn-sm btn-primary btn-round&quot;, &quot;icon&quot; =&gt; &quot;fas fa-save&quot;, &quot;id&quot; =&gt; &quot;button_save_vendor&quot;, &quot;text&quot; =&gt; &quot;save vendor&quot;, &quot;data&quot; =&gt; array(&quot;toggle&quot; =&gt; &quot;tooltip&quot;, &quot;title&quot; =&gt; &quot;Save Vendor&quot;, &quot;placement&quot; =&gt; &quot;top&quot;)), &quot;new&quot; =&gt; array(&quot;type&quot; =&gt; &quot;a&quot;, &quot;href&quot; =&gt; &quot;javascript:void(0)&quot;, &quot;classes&quot; =&gt; &quot;btn btn-outline-primary btn-sm btn-icon btn-round&quot;, &quot;icon&quot; =&gt; &quot;fas fa-plus&quot;, &quot;id&quot; =&gt; &quot;button_add_vendor_page_heading&quot;, &quot;text&quot; =&gt; &quot;&quot;, &quot;data&quot; =&gt; array(&quot;toggle&quot; =&gt; &quot;tooltip&quot;, &quot;title&quot; =&gt; &quot;Creat a New Vendor&quot;, &quot;placement&quot; =&gt; &quot;top&quot;)))</span></code>
 
     
     
@@ -499,7 +527,7 @@ Autocomplete json</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">158</span>
+    <span class="phpdocumentor-element-found-in__line">139</span>
 
     </aside>
 
@@ -566,7 +594,7 @@ Autocomplete json</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">23</span>
 
     </aside>
 
@@ -600,7 +628,7 @@ Autocomplete json</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">64</span>
+    <span class="phpdocumentor-element-found-in__line">66</span>
 
     </aside>
 
@@ -610,7 +638,7 @@ Autocomplete json</dd>
     <span class="phpdocumentor-signature__visibility">protected</span>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$tabs</span>
-     = <span class="phpdocumentor-signature__default-value">array(&quot;id&quot; =&gt; &quot;vendor_edit_tabs&quot;, &quot;role&quot; =&gt; &quot;tablist&quot;, &quot;class&quot; =&gt; &quot;nav nav-tabs nav-tabs-line&quot;, &quot;tabs&quot; =&gt; array(&quot;Overview&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_vendor_overview&quot;, &quot;href&quot; =&gt; &quot;panel_tab_vendor_overview&quot;, &quot;id&quot; =&gt; &quot;panel_tab_overview&quot;, &quot;active&quot; =&gt; true, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;true&quot;), &quot;data&quot; =&gt; array()), &quot;Company&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_company_detail&quot;, &quot;href&quot; =&gt; &quot;panel_tab_company_detail&quot;, &quot;id&quot; =&gt; &quot;panel_tab_company&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Provider&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_provider_detail&quot;, &quot;href&quot; =&gt; &quot;panel_tab_provider_detail&quot;, &quot;id&quot; =&gt; &quot;panel_tab_provider&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Location&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_location_detail&quot;, &quot;href&quot; =&gt; &quot;panel_tab_location_detail&quot;, &quot;id&quot; =&gt; &quot;panel_tab_location&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Vendor&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_vendor_detail&quot;, &quot;href&quot; =&gt; &quot;panel_tab_vendor_detail&quot;, &quot;id&quot; =&gt; &quot;panel_tab_vendor&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Addresses&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_address_detail&quot;, &quot;href&quot; =&gt; &quot;panel_tab_address_detail&quot;, &quot;id&quot; =&gt; &quot;panel_tab_address&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Contacts&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_contact_detail&quot;, &quot;href&quot; =&gt; &quot;panel_tab_contact_detail&quot;, &quot;id&quot; =&gt; &quot;panel_tab_contact&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Meta&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_meta_detail&quot;, &quot;href&quot; =&gt; &quot;panel_tab_meta_detail&quot;, &quot;id&quot; =&gt; &quot;panel_tab_meta&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array())))</span></code>
+     = <span class="phpdocumentor-signature__default-value">array(&quot;id&quot; =&gt; &quot;vendor_edit_tabs&quot;, &quot;role&quot; =&gt; &quot;tablist&quot;, &quot;class&quot; =&gt; &quot;nav nav-tabs nav-tabs-line&quot;, &quot;tabs&quot; =&gt; array(&quot;Overview&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_vendor_overview&quot;, &quot;href&quot; =&gt; &quot;panel_tab_vendor_overview&quot;, &quot;id&quot; =&gt; &quot;panel_tab_overview&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Company&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_company_detail&quot;, &quot;href&quot; =&gt; &quot;panel_tab_company_detail&quot;, &quot;id&quot; =&gt; &quot;panel_tab_company&quot;, &quot;active&quot; =&gt; true, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;true&quot;), &quot;data&quot; =&gt; array()), &quot;Vendor&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_vendor_detail&quot;, &quot;href&quot; =&gt; &quot;panel_tab_vendor_detail&quot;, &quot;id&quot; =&gt; &quot;panel_tab_vendor&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Addresses&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_address_detail&quot;, &quot;href&quot; =&gt; &quot;panel_tab_address_detail&quot;, &quot;id&quot; =&gt; &quot;panel_tab_address&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Contacts&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_contact_detail&quot;, &quot;href&quot; =&gt; &quot;panel_tab_contact_detail&quot;, &quot;id&quot; =&gt; &quot;panel_tab_contact&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Meta&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_meta_detail&quot;, &quot;href&quot; =&gt; &quot;panel_tab_meta_detail&quot;, &quot;id&quot; =&gt; &quot;panel_tab_meta&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array())))</span></code>
 
     
     
@@ -637,7 +665,7 @@ Autocomplete json</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">160</span>
+    <span class="phpdocumentor-element-found-in__line">141</span>
 
     </aside>
 
@@ -663,6 +691,50 @@ Autocomplete json</dd>
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_add">
+        add()
+        <a href="classes/Framework-App-Controllers-Vendor.html#method_add" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">352</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">add</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_autocomplete">
         autocomplete()
         <a href="classes/Framework-App-Controllers-Vendor.html#method_autocomplete" class="headerlink"><i class="fas fa-link"></i></a>
@@ -670,7 +742,7 @@ Autocomplete json</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">240</span>
+    <span class="phpdocumentor-element-found-in__line">412</span>
 
     </aside>
 
@@ -715,17 +787,17 @@ Autocomplete json</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">225</span>
+    <span class="phpdocumentor-element-found-in__line">397</span>
 
     </aside>
 
-    
+        <p class="phpdocumentor-summary">update that return string</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">callUpdate</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$vendor</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -733,8 +805,7 @@ Autocomplete json</p>
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                  = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
@@ -752,6 +823,50 @@ Autocomplete json</p>
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_edit">
+        edit()
+        <a href="classes/Framework-App-Controllers-Vendor.html#method_edit" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">146</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">edit</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_generateSKU">
         generateSKU()
         <a href="classes/Framework-App-Controllers-Vendor.html#method_generateSKU" class="headerlink"><i class="fas fa-link"></i></a>
@@ -759,7 +874,7 @@ Autocomplete json</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">305</span>
+    <span class="phpdocumentor-element-found-in__line">472</span>
 
     </aside>
 
@@ -802,7 +917,7 @@ Autocomplete json</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">172</span>
+    <span class="phpdocumentor-element-found-in__line">268</span>
 
     </aside>
 
@@ -845,7 +960,7 @@ Autocomplete json</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">417</span>
+    <span class="phpdocumentor-element-found-in__line">222</span>
 
     </aside>
 
@@ -902,6 +1017,50 @@ Autocomplete json</p>
         class="phpdocumentor-element
             -method
             -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_serveAdd">
+        serveAdd()
+        <a href="classes/Framework-App-Controllers-Vendor.html#method_serveAdd" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">309</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">serveAdd</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
                                                         "
 >
     <h4 class="phpdocumentor-element__name" id="method_serveGet">
@@ -911,7 +1070,7 @@ Autocomplete json</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">196</span>
+    <span class="phpdocumentor-element-found-in__line">292</span>
 
     </aside>
 
@@ -954,7 +1113,7 @@ Autocomplete json</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">213</span>
+    <span class="phpdocumentor-element-found-in__line">367</span>
 
     </aside>
 
@@ -998,7 +1157,7 @@ Autocomplete json</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">258</span>
+    <span class="phpdocumentor-element-found-in__line">424</span>
 
     </aside>
 
@@ -1041,7 +1200,7 @@ Autocomplete json</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">343</span>
+    <span class="phpdocumentor-element-found-in__line">510</span>
 
     </aside>
 
@@ -1084,7 +1243,7 @@ Autocomplete json</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">283</span>
+    <span class="phpdocumentor-element-found-in__line">449</span>
 
     </aside>
 
@@ -1120,6 +1279,50 @@ Autocomplete json</p>
             -private
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_format_get">
+        format_get()
+        <a href="classes/Framework-App-Controllers-Vendor.html#method_format_get" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">604</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">format_get</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">format_get</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$vendors</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$vendors</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_format_vendor">
         format_vendor()
         <a href="classes/Framework-App-Controllers-Vendor.html#method_format_vendor" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1127,7 +1330,7 @@ Autocomplete json</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Vendor.php"><a href="files/app-controllers-vendor.html"><abbr title="App/Controllers/Vendor.php">Vendor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">395</span>
+    <span class="phpdocumentor-element-found-in__line">574</span>
 
     </aside>
 

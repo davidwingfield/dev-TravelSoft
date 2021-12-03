@@ -32,11 +32,15 @@
                             COMPANY.email AS 'company_email',
                             COMPANY.enabled AS 'company_enabled',
                             COMPANY.created_by AS 'company_created_by',
-                            DATE_FORMAT(COMPANY.date_created, '%m/%d/%Y') AS 'company_date_created',
+                            COMPANY.date_created AS 'company_date_created',
                             COMPANY.modified_by AS 'company_modified_by',
-                            DATE_FORMAT(COMPANY.date_modified, '%m/%d/%Y') AS 'company_date_modified',
+                            COMPANY.date_modified AS 'company_date_modified',
                             COMPANY.status_id AS 'company_status_id',
                             COMPANY.note AS 'company_note',
+                   COMPANY.logo AS 'company_logo',
+                   COMPANY.description_short AS 'company_description_short',
+                   COMPANY.description_long AS 'company_description_long',
+                   COMPANY.keywords AS 'company_keywords',
                             VENDOR.id AS 'vendor_id',
                             VENDOR.company_id AS 'vendor_company_id',
                             VENDOR.status_id AS 'vendor_status_id',
@@ -55,7 +59,8 @@
             JOIN			company COMPANY ON COMPANY.id = VENDOR.company_id
            WHERE			COMPANY.enabled = 1
                 AND			COMPANY.enabled = 1
-                AND			VENDOR.enabled = 1";
+                AND			VENDOR.enabled = 1
+                ";
         
         protected static $dbTable = "vendor";
         
@@ -138,7 +143,7 @@
             
             try {
                 $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
-                $id = Model::setInt((isset($vendor["id"])) ? $vendor["id"] : null);
+                $vendor_id = Model::setInt((isset($vendor["id"])) ? $vendor["id"] : null);
                 $company_id = Model::setInt((isset($vendor["company_id"])) ? $vendor["company_id"] : null);
                 $status_id = Model::setInt((isset($vendor["status_id"])) ? $vendor["status_id"] : null);
                 $show_online = Model::setBool((isset($vendor["show_online"])) ? $vendor["show_online"] : null);
@@ -159,7 +164,7 @@
             )
             VALUES
             (
-                $id, $company_id, $status_id, $show_online,
+                $vendor_id, $company_id, $status_id, $show_online,
                 $show_sales, $show_ops, $is_provider, $sku,
                 $enabled, CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP,
                 $modified_by, $note
@@ -174,41 +179,37 @@
                 note = VALUES(note),
                 modified_by = VALUES(modified_by),
                 date_modified = VALUES(date_modified),
-                enabled = VALUES(enabled)";
+                enabled = VALUES(enabled)
+                ";
                 
                 Model::$db->rawQuery($sql);
-                
-                $vendor_id = Model::$db->getInsertId();
-                
+                $vendor_id = (!$vendor_id) ? Model::$db->getInsertId() : $vendor_id;
                 if ($vendor_id) {
-                    if ($vendor_id) {
-                        $sku = Vendor::generateSKU(array(
-                            "company_name" => $vendor["name"],
-                            "vendor_id" => $vendor_id,
-                        ));
+                    $sku = Vendor::generateSKU(array(
+                        "company_name" => $vendor["name"],
+                        "vendor_id" => $vendor_id,
+                    ));
+                    
+                    $update = "
+                            UPDATE      vendor
+                            SET         sku = '$sku'
+                            WHERE       id = $vendor_id;
+                        ";
+                    
+                    try {
+                        Model::$db->rawQuery($update);
                         
-                        $update = "
-                        UPDATE      vendor
-                        SET         sku = '$sku'
-                        WHERE       id = $vendor_id;";
-                        Log::$debug_log->trace($update);
-                        try {
-                            
-                            Model::$db->rawQuery($update);
-                            $ret = self::get((int)$vendor_id);
-                            
-                            return $ret;
-                        } catch (Exception $ex) {
-                            Log::$debug_log->error($ex);
-                            
-                            return [];
-                        }
-                    } else {
-                        Log::$debug_log->info("hh");
+                        return self::get((int)$vendor_id);
+                    } catch (Exception $ex) {
+                        Log::$debug_log->error($ex);
+                        
+                        return [];
                     }
+                } else {
+                    Log::$debug_log->info("Vendor Id Missing");
+                    
+                    return [];
                 }
-                
-                return [];
             } catch (Exception $e) {
                 Log::$debug_log->error($e);
                 
@@ -223,8 +224,9 @@
                 $searchTerm = addslashes($st);
                 $sql = self::$selectQuery . "
                     AND			COMPANY.name LIKE '%$searchTerm%'
-                    ORDER BY    LENGTH(Company.name), CAST(Company.name AS UNSIGNED), Company.name ASC
+                    ORDER BY    LENGTH(COMPANY.name), CAST(COMPANY.name AS UNSIGNED), COMPANY.name ASC
                     LIMIT 20;";
+                Log::$debug_log->trace($sql);
                 
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {

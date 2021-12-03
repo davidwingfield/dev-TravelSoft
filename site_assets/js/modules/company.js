@@ -20,11 +20,15 @@ const Company = (function () {
     const _button_close_edit_company_form = document.getElementById("button_close_edit_company_form")
     const _form_edit_vendor = document.getElementById("form_edit_vendor")
     const _form_edit_provider = document.getElementById("form_edit_provider")
-    // ----
     const _vendor_name = document.getElementById("vendor_name")
     const _vendor_company_id = document.getElementsByClassName("vendor_company_id")
     const _provider_name = document.getElementById("provider_name")
     const _provider_company_id = document.getElementById("provider_company_id")
+    const _company_key = document.getElementById("company_keywords")
+    const _company_keywords = document.getElementById("company_keywords")
+    const _company_logo = document.getElementById("company_logo")
+    const _company_description_long = document.getElementById("company_description_long")
+    const _company_description_short = document.getElementById("company_description_short")
     const _button_clear_form_edit_company = document.getElementById("button_clear_form_edit_company")
     const _company_edit_table_filters = document.getElementById("company_edit_table_filters")
     const form_rules = {
@@ -55,11 +59,11 @@ const Company = (function () {
         },
         
     }
+    let $company_key
     let temp_company = {}
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let validator
     let globalSelectedCompany = false
-    let suggestionsTempCompany = []
     let tempCompany = {}
     
     $("a[data-toggle=\"tab\"]").on("hide.bs.tab", function (e) {
@@ -123,6 +127,117 @@ const Company = (function () {
       .on("change", function () {
           set_progress()
       })
+    
+    // ----
+    
+    /**
+     * set object default values
+     *
+     * @returns {{phone_2: null, note: null, phone_1: null, website: null, keywords: null, date_created: *, description_long: null, created_by: (number|number), enabled: number, description_short: null, status_id: number, date_modified: *, modified_by: (number|number), name: null, logo: null, cover_image: string, id: null, fax: null, email: null}}
+     * @private
+     */
+    const _default_detail = function () {
+        return {
+            created_by: user_id,
+            date_created: formatDateMySQL(),
+            date_modified: formatDateMySQL(),
+            email: null,
+            cover_image: "/public/img/placeholder.jpg",
+            enabled: 1,
+            fax: null,
+            id: null,
+            modified_by: user_id,
+            name: null,
+            note: null,
+            phone_1: null,
+            phone_2: null,
+            status_id: 10,
+            website: null,
+            description_short: null,
+            description_long: null,
+            keywords: null,
+            logo: null,
+        }
+    }
+    
+    /**
+     * set detail from data
+     *
+     * @param company
+     * @returns {{phone_2: null, note: null, phone_1: null, website: null, keywords: null, date_created: *, description_long: null, created_by: number, enabled: number, description_short: null, status_id: number, date_modified: *, modified_by: number, name: null, logo: null, cover_image: string, id: null, fax: null, email: null}}
+     */
+    const set_detail = function (company) {
+        let detail = _default_detail()
+        
+        if (company) {
+            detail.created_by = (company.created_by) ? company.created_by : user_id
+            detail.date_created = (company.date_created) ? company.date_created : formatDateMySQL()
+            detail.date_modified = (company.date_modified) ? company.date_modified : formatDateMySQL()
+            detail.email = (company.email) ? company.email : null
+            detail.cover_image = (company.cover_image) ? company.cover_image : null
+            detail.enabled = (company.enabled) ? company.enabled : 1
+            detail.fax = (company.fax) ? company.fax : null
+            detail.id = (company.id) ? company.id : null
+            detail.modified_by = (company.modified_by) ? company.modified_by : user_id
+            detail.name = (company.name) ? company.name : null
+            detail.note = (company.note) ? company.note : null
+            detail.phone_1 = (company.phone_1) ? company.phone_1 : null
+            detail.phone_2 = (company.phone_2) ? company.phone_2 : null
+            detail.status_id = (company.status_id) ? company.status_id : 10
+            detail.website = (company.website) ? company.website : null
+            detail.logo = (company.logo) ? company.logo : ""
+            detail.keywords = (company.keywords) ? company.keywords : ""
+            detail.description_long = (company.description_long) ? company.description_long : ""
+            detail.description_short = (company.description_short) ? company.description_short : ""
+        }
+        
+        Company.detail = detail
+        return detail
+    }
+    
+    /**
+     * fill in form data
+     *
+     * @param company
+     */
+    const populate_form = function (company) {
+        let company_logo_image = $("#company_logo").dropify()
+        $(_company_id).val((company.id) ? company.id : "").trigger("change")
+        _company_name.value = (company.name) ? company.name : ""
+        _company_phone_1.value = (company.phone_1) ? company.phone_1 : ""
+        _company_phone_2.value = (company.phone_2) ? company.phone_2 : ""
+        _company_fax.value = (company.fax) ? company.fax : ""
+        _company_email.value = (company.email) ? company.email : ""
+        _company_website.value = (company.website) ? company.website : ""
+        _company_description_long.value = (company.description_long) ? company.description_long : ""
+        _company_description_short.value = (company.description_short) ? company.description_short : ""
+        let company_keywords = (company.keywords) ? company.keywords : ""
+        $company_key = $(_company_key).BuildKeyword(company_keywords)
+        if (_provider_name) {
+            $(_provider_name).val((company.name) ? company.name : "").trigger("change")
+        }
+        
+        if (_vendor_name) {
+            _vendor_name.value = (company.name) ? company.name : null
+        }
+        
+        if (_provider_company_id) {
+            _provider_company_id.value = (company.id) ? company.id : null
+        }
+        
+        if (_vendor_company_id) {
+            _vendor_company_id.value = (company.id) ? company.id : null
+        }
+        
+        if (_contact_company_id) {
+            _contact_company_id.value = (company.id) ? company.id : null
+        }
+        
+        if (_address_company_id) {
+            _address_company_id.value = (company.id) ? company.id : null
+        }
+        
+    }
     
     const on_click_outside = (e) => {
         let tar = $(e.target).parents("div.form_element")
@@ -270,53 +385,7 @@ const Company = (function () {
         toastr.error(msg)
     }
     
-    const _default_detail = function () {
-        return {
-            created_by: user_id,
-            date_created: formatDateMySQL(),
-            date_modified: formatDateMySQL(),
-            email: null,
-            cover_image: "/public/img/placeholder.jpg",
-            enabled: 1,
-            fax: null,
-            id: null,
-            modified_by: user_id,
-            name: null,
-            note: null,
-            phone_1: null,
-            phone_2: null,
-            status_id: 10,
-            website: null,
-        }
-    }
-    
-    const set_detail = function (company) {
-        let detail = _default_detail()
-        
-        if (company) {
-            detail.created_by = (company.created_by) ? company.created_by : user_id
-            detail.date_created = (company.date_created) ? company.date_created : formatDateMySQL()
-            detail.date_modified = (company.date_modified) ? company.date_modified : formatDateMySQL()
-            detail.email = (company.email) ? company.email : null
-            detail.cover_image = (company.cover_image) ? company.cover_image : null
-            detail.enabled = (company.enabled) ? company.enabled : 1
-            detail.fax = (company.fax) ? company.fax : null
-            detail.id = (company.id) ? company.id : null
-            detail.modified_by = (company.modified_by) ? company.modified_by : user_id
-            detail.name = (company.name) ? company.name : null
-            detail.note = (company.note) ? company.note : null
-            detail.phone_1 = (company.phone_1) ? company.phone_1 : null
-            detail.phone_2 = (company.phone_2) ? company.phone_2 : null
-            detail.status_id = (company.status_id) ? company.status_id : 10
-            detail.website = (company.website) ? company.website : null
-        }
-        
-        Company.detail = detail
-        return detail
-    }
-    
     const build = function () {
-        
         return remove_nulls({
             email: $(_company_email).val(),
             enabled: 1,
@@ -324,11 +393,14 @@ const Company = (function () {
             id: (!isNaN(_company_id.value)) ? parseInt(_company_id.value) : null,
             modified_by: user_id,
             cover_image: "/public/img/placeholder.jpg",
+            description_short: _company_description_short.value,
+            description_long: _company_description_long.value,
+            keywords: $company_key.build(),
             name: $(_company_name).val(),
-            note: Company.detail.note,
+            note: null,
             phone_1: $(_company_phone_1).val(),
             phone_2: $(_company_phone_2).val(),
-            status_id: Company.detail.status_id,
+            status_id: 10,
             website: $(_company_website).val(),
         })
     }
@@ -462,41 +534,6 @@ const Company = (function () {
             Address.clearTable()
             Contact.clearTable()
         }
-    }
-    
-    const populate_form = function (company) {
-        $(_company_id).val((company.id) ? company.id : "").trigger("change")
-        _company_name.value = (company.name) ? company.name : ""
-        _company_phone_1.value = (company.phone_1) ? company.phone_1 : ""
-        _company_phone_2.value = (company.phone_2) ? company.phone_2 : ""
-        _company_fax.value = (company.fax) ? company.fax : ""
-        _company_email.value = (company.email) ? company.email : ""
-        _company_website.value = (company.website) ? company.website : ""
-        
-        if (_provider_name) {
-            $(_provider_name).val((company.name) ? company.name : "").trigger("change")
-        }
-        
-        if (_vendor_name) {
-            _vendor_name.value = (company.name) ? company.name : null
-        }
-        
-        if (_provider_company_id) {
-            _provider_company_id.value = (company.id) ? company.id : null
-        }
-        
-        if (_vendor_company_id) {
-            _vendor_company_id.value = (company.id) ? company.id : null
-        }
-        
-        if (_contact_company_id) {
-            _contact_company_id.value = (company.id) ? company.id : null
-        }
-        
-        if (_address_company_id) {
-            _address_company_id.value = (company.id) ? company.id : null
-        }
-        
     }
     
     let reset_company = {}

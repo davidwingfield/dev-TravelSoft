@@ -21,12 +21,12 @@ const sideNavOptions = {
 const toastrOptions = {
     "closeButton": true,
     "debug": false,
-    "newestOnTop": true,
+    "newestOnTop": false,
     "progressBar": false,
-    "positionClass": "md-toast-top-center",
+    "positionClass": "md-toast-bottom-right",
     "preventDuplicates": true,
     "onclick": null,
-    "showDuration": 301,
+    "showDuration": 300,
     "hideDuration": 1000,
     "timeOut": 5000,
     "extendedTimeOut": 1000,
@@ -78,6 +78,7 @@ const days = [
     },
 ]
 const dowStart = 1
+const short_dexcription_max = 250
 const colorScheme = new Map()
 colorScheme.set(1, {
     name: "Color - 1",

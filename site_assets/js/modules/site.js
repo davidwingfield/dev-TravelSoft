@@ -5,7 +5,6 @@ $(document).ready(function () {
     }))
     
     if (mdbPreloader) {
-        console.log("preloader")
         //$("#mdb-preloader").fadeOut(500)
     } else {
         console.log("no preloader")
@@ -61,4 +60,8 @@ $(document).ready(function () {
     $(function () {
         $("[data-toggle=\"tooltip\"]").tooltip()
     })
+    
+    //toastr.success('I do not think that word means what you think it means.', 'Success!')
+    //toastr.warning('I do not think that word means what you think it means.', 'Warning!')
+    //toastr.error('I do not think that word means what you think it means.', 'Error!')
 })

@@ -1,15 +1,14 @@
 <?php
-
+    
     namespace Framework\App\Controllers;
-
+    
     use Framework\App\Models\ImageModel;
     use Framework\Core\Controller;
     use Framework\Core\View;
     use Framework\Logger\Log;
-
+    
     /**
      * Short Image Description
-     *
      * Long Image Description
      *
      * @package            Framework\App
@@ -17,7 +16,7 @@
      */
     class Image extends Controller
     {
-
+        
         /**
          * @var string[]
          */
@@ -25,7 +24,7 @@
             "image/jpeg" => "jpg",
             "image/png" => "png",
         );
-
+        
         /**
          * get images by company id
          *
@@ -36,16 +35,22 @@
         public static function getByCompanyId(int $company_id = null): array
         {
             $images = [];
-
+            
             $results = ImageModel::getByCompanyId($company_id);
-
+            $has_cover = false;
             foreach ($results AS $k => $image) {
+                if ($image["image_is_cover_image"] === 1) {
+                    $has_cover = true;
+                }
                 $images[] = self::format($image);
             }
-
+            if (count($images) > 0 && $has_cover === false) {
+                $images[0]["is_cover_image"] = 1;
+            }
+            
             return $images;
         }
-
+        
         /**
          * api update request
          *
@@ -58,37 +63,37 @@
                 View::render_invalid_json("Missing Data");
                 exit(1);
             }
-
+            
             if (!isset($_FILES["file"])) {
                 $result = ImageModel::update($_POST);
-
+                
                 foreach ($result AS $k => $image) {
                     $images[] = self::format($image);
                 }
                 Log::$debug_log->trace($_POST);
                 View::render_json($images);
                 exit(1);
-
+                
             } else {
-
+                
                 if (!isset($_FILES["file"], $_POST["alt"], $_POST["title"], $_POST["caption"], $_POST["is_cover_image"])) {
                     View::render_invalid_json("Missing Data");
                     exit(1);
                 }
                 $type = $_FILES["file"]["type"];
-
+                
                 if (!isset(self::$types[$type])) {
                     View::render_invalid_json("Unsupported File Type");
                     exit(1);
                 }
-
+                
                 $results = self::makeThumbnail($_FILES, $_POST);
                 View::render_json($results);
                 exit(1);
             }
-
+            
         }
-
+        
         /**
          * get image aspect ratio
          *
@@ -103,12 +108,12 @@
             $greatestCommonDivisor = static function ($width, $height) use (&$greatestCommonDivisor) {
                 return ($width % $height) ? $greatestCommonDivisor($height, $width % $height) : $height;
             };
-
+            
             $divisor = $greatestCommonDivisor($width, $height);
-
+            
             return $width / $divisor . ':' . $height / $divisor;
         }
-
+        
         /**
          * generate image and thumbnail
          *
@@ -148,13 +153,13 @@
                 "size" => $filesize . " MB",
                 "enabled" => 1,
             );
-
+            
             if (isset($params["id"])) {
                 $record["id"] = (int)$params["id"];
             }
-
+            
             // ----
-
+            
             if (self::buildDirectory($target) && self::buildDirectory($thumbs_target)) {
                 $mod_width = 1200;
                 $mod_height = 900;
@@ -164,64 +169,64 @@
                     $fn = $saveTo;
                     list($width, $height) = getimagesize($saveTo);
                     list($width_orig, $height_orig) = getimagesize($saveTo);
-
+                    
                     $ratio_orig = $width_orig / $height_orig;
-
+                    
                     if ($width / $height > $ratio_orig) {
                         $width = $height * $ratio_orig;
                     } else {
                         $height = $width / $ratio_orig;
                     }
-
+                    
                     if ($width > $mod_width) {
                         $width = $mod_width;
                         if ($width > $height) {
                             $height = $height / $ratio_orig;
                         }
                     }
-
+                    
                     if ($height > $mod_height) {
                         $height = $mod_height;
                         if ($width > $height) {
                             $width = $width / $ratio_orig;
                         }
                     }
-
+                    
                     $record["height"] = (int)$height;
                     $record["width"] = (int)$width;
-
+                    
                     if ($record["extension"] === "jpg") {
                         /** Resample */
                         $image_p = imagecreatetruecolor($width, $height);
                         $image = imagecreatefromjpeg("$target/$imagename.$imageType");
                         imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
-
+                        
                         /** Output */
                         imagejpeg($image_p, $saveTo, 100);
                     }
-
+                    
                     if ($record["extension"] === "png") {
                         /** Resample */
                         $image_p = imagecreatetruecolor($width, $height);
                         $image = imagecreatefrompng("$target/$imagename.$imageType");
                         imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
-
+                        
                         /** Output */
                         imagepng($image_p, $saveTo, 9);
                     }
-
+                    
                     if ($record["extension"] === "gif") {
                         /** Resample */
                         $image_p = imagecreatetruecolor($width, $height);
                         $image = imagecreatefromgif($saveTo);
                         imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
-
+                        
                         /** Output */
                         imagegif($image_p, $saveTo, 100);
                     }
-
+                    
                     // ----
-
+                    
                     $mod_width = 90;
                     $mod_height = 60;
                     $save = "$thumbs_target/$imagename.$imageType";
@@ -233,53 +238,53 @@
                             $height = $height / $ratio_orig;
                         }
                     }
-
+                    
                     if ($height > $mod_height) {
                         $height = $mod_height;
                         if ($width > $height) {
                             $width = $width / $ratio_orig;
                         }
                     }
-
+                    
                     if ($record["extension"] === "jpg") {
                         $tn = imagecreatetruecolor($width, $height);
                         $image = imagecreatefromjpeg("$target/$imagename.$imageType");
                         imagecopyresampled($tn, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
                         imagejpeg($tn, $save, 100);
                     }
-
+                    
                     if ($record["extension"] === "png") {
                         /** Resample */
                         $tn = imagecreatetruecolor($width, $height);
                         $image = imagecreatefrompng("$target/$imagename.$imageType");
-
+                        
                         imagecopyresampled($tn, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
-
+                        
                         /** Output */
                         imagepng($tn, $saveTo, 9);
                     }
-
+                    
                     if ($record["extension"] === "gif") {
                         $tn = imagecreatetruecolor($width, $height);
                         $image = imagecreatefromgif("$target/$imagename.$imageType");
                         imagecopyresampled($tn, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
                         imagegif($tn, $save, 100);
                     }
-
+                    
                     $record["directory"] = $directory;
                     $record["directory_id"] = $directory_id;
-
+                    
                     $result = ImageModel::update($record);
-
+                    
                     foreach ($result AS $k => $image) {
                         $images[] = self::format($image);
                     }
                 }
             }
-
+            
             return $images;
         }
-
+        
         /**
          * move images to directories
          *
@@ -290,12 +295,12 @@
          */
         private static function moveImage(string $source = "", string $target = ""): bool
         {
-
+            
             move_uploaded_file($source, $target);
-
+            
             return true;
         }
-
+        
         /**
          * create directory folder
          *
@@ -308,10 +313,10 @@
             if (!file_exists($path)) {
                 mkdir($path, 0777);
             }
-
+            
             return true;
         }
-
+        
         /**
          * api get request by company id
          *
@@ -324,18 +329,18 @@
                 View::render_invalid_json("Missing Data: Company ID");
                 exit(1);
             }
-
+            
             $results = ImageModel::getByCompanyId((int)$params["company_id"]);
-
+            
             foreach ($results AS $k => $image) {
                 $images[] = self::format($image);
             }
-
+            
             // ----
             View::render_json($images);
             exit(1);
         }
-
+        
         /**
          * api get request
          *
@@ -345,18 +350,26 @@
         {
             $images = array();
             $image_id = (isset($params["image_id"])) ? (int)$params["image_id"] : null;
-
+            
             $results = ImageModel::get($image_id);
-
+            
+            $has_cover = false;
             foreach ($results AS $k => $image) {
+                if ($image["image_is_cover_image"] === 1) {
+                    $has_cover = true;
+                }
                 $images[] = self::format($image);
             }
-
+            
+            if (count($images) > 0 && $has_cover === false) {
+                $images[0]["is_cover_image"] = 1;
+            }
+            
             // ----
             View::render_json($images);
             exit(1);
         }
-
+        
         /**
          * format image object
          *
@@ -387,7 +400,7 @@
                 "width" => (isset($image["image_height"])) ? (int)$image["image_width"] : null,
             );
         }
-
+        
         /**
          * convert name into html entity
          *
@@ -405,8 +418,8 @@
             $string = preg_replace("/[\s-]+/", " ", $string);
             //Convert whitespaces and underscore to dash
             $string = preg_replace("/[\s_]/", "-", $string);
-
+            
             return $string;
         }
-
+        
     }

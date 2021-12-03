@@ -43,6 +43,10 @@
                 COMPANY.date_modified AS 'company_date_modified',
                 COMPANY.modified_by AS 'company_modified_by',
                 COMPANY.note AS 'company_note',
+                COMPANY.description_short AS 'company_description_short',
+                COMPANY.description_long AS 'company_description_long',
+                COMPANY.keywords AS 'company_keywords',
+                COMPANY.logo AS 'company_logo',
                 BIN(name) AS binray_not_needed_column
         FROM 			company COMPANY
         ";
@@ -64,7 +68,6 @@
                     WHERE           COMPANY.id = $id";
                     
                     $company_images = Image::getByCompanyId((int)$id);
-                    Log::$debug_log->trace($company_images);
                 }
                 
                 $sql = self::$selectQuery . $where;
@@ -151,6 +154,9 @@
             $status_id = Model::setInt((isset($company["status_id"])) ? $company["status_id"] : null);
             $enabled = Model::setBool((isset($company["enabled"])) ? $company["enabled"] : null);
             $note = Model::setLongText((isset($company["note"])) ? $company["note"] : null);
+            $description_long = Model::setLongText((isset($company["description_long"])) ? $company["description_long"] : null);
+            $keywords = Model::setLongText((isset($company["keywords"])) ? $company["keywords"] : null);
+            $description_short = Model::setString((isset($company["description_short"])) ? $company["description_short"] : null);
             $created_by = Model::setInt($user_id);
             $modified_by = Model::setInt($user_id);
             
@@ -159,12 +165,12 @@
                 id, name, phone_1, phone_2, cover_image,
                 fax, website, email, status_id,
                 enabled, date_created, created_by, date_modified,
-                modified_by, note
+                modified_by, note, description_short, description_long, keywords
             ) VALUES (
                 $id, $name, $phone_1, $phone_2, $cover_image,
                 $fax, $website, $email, $status_id,
                 $enabled, CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP,
-                $modified_by, $note
+                $modified_by, $note, $description_short, $description_long, $keywords
             )
             ON DUPLICATE KEY UPDATE
                 name = VALUES(name),
@@ -176,11 +182,14 @@
                 email = VALUES(email),
                 status_id = VALUES(status_id),
                 note = VALUES(note),
+                                    description_short = VALUES(description_short),
+                                    description_long = VALUES(description_long),
+                                     keywords = VALUES(keywords),
+                                    
                 modified_by = VALUES(modified_by),
                 date_modified = VALUES(date_modified),
                 enabled = VALUES(enabled)";
-
-//            Log::$debug_log->trace($sql);
+            
             try {
                 Model::$db->rawQuery($sql);
                 $company_id = Model::$db->getInsertId();

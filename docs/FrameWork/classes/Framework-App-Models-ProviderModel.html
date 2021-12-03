@@ -213,7 +213,8 @@
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>Gets provider(s) by id</dd>
+<dd>Gets provider(s) by id
+If id is passed then we search by it otherwise get all enabled</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-ProviderModel.html#method_getByName">getByName()</a>
@@ -313,7 +314,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Core/Model.php"><a href="files/core-model.html"><abbr title="Core/Model.php">Model.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">21</span>
+    <span class="phpdocumentor-element-found-in__line">20</span>
 
     </aside>
 
@@ -390,7 +391,7 @@
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$selectQuery</span>
      = <span class="phpdocumentor-signature__default-value">&quot;
-            SELECT 
+            SELECT
                             PROVIDER.id AS &#039;provider_id&#039;,
                             PROVIDER.company_id AS &#039;provider_company_id&#039;,
                             PROVIDER.location_id AS &#039;provider_location_id&#039;,
@@ -405,6 +406,10 @@
                             PROVIDER.date_modified AS &#039;provider_date_modified&#039;,
                             PROVIDER.modified_by AS &#039;provider_modified_by&#039;,
                             PROVIDER.note AS &#039;provider_note&#039;,
+                            COMPANY.logo AS &#039;company_logo&#039;,
+                            COMPANY.description_short AS &#039;company_description_short&#039;,
+                            COMPANY.description_long AS &#039;company_description_long&#039;,
+                            COMPANY.keywords AS &#039;company_keywords&#039;,
                             COMPANY.id AS &#039;company_id&#039;,
                             COMPANY.name AS &#039;company_name&#039;,
                             COALESCE(COMPANY.phone_1, &#039;&#039;) AS &#039;company_phone_1&#039;,
@@ -419,7 +424,7 @@
                             DATE_FORMAT(COMPANY.date_modified, &#039;%m/%d/%Y&#039;) AS &#039;company_date_modified&#039;,
                             COALESCE(COMPANY.status_id, 10) AS &#039;company_status_id&#039;,
                             COMPANY.note AS &#039;company_note&#039;,
-                            COMPANY.cover_image AS &#039;company_cover_image&#039;,       
+                            COMPANY.cover_image AS &#039;company_cover_image&#039;,
                             CONCAT(	LOCATION.name, &#039; &#039;,	&#039;(&#039; ,CITY.name,	&#039;, &#039;,	PROVINCE.name,&#039;)&#039;) AS &#039;location&#039;,
                             CONCAT(LOCATION.name, &#039; &#039;,	&#039;(&#039; ,CITY.name, &#039; &#039;, CONCAT(PROVINCE.iso2, &#039; - &#039;, PROVINCE.name), &#039;, &#039;, CONCAT(COUNTRY.iso2, &#039; - &#039;, COUNTRY.name),&#039;)&#039;) AS &#039;location_long&#039;,
                             CONCAT(LOCATION.name, &#039; &#039;,	&#039;(&#039; ,CITY.name, &#039; &#039;, PROVINCE.iso2, &#039;, &#039;, COUNTRY.iso2,&#039;)&#039;) AS &#039;location_short&#039;,
@@ -513,7 +518,7 @@
             FROM 			provider PROVIDER
             JOIN			company COMPANY ON COMPANY.id = PROVIDER.company_id
             JOIN			location LOCATION ON LOCATION.id = PROVIDER.location_id
-            JOIN			location_types LOCATIONTYPES ON LOCATIONTYPES.id = LOCATION.location_types_id    
+            JOIN			location_types LOCATIONTYPES ON LOCATIONTYPES.id = LOCATION.location_types_id
             JOIN			city CITY ON CITY.id = LOCATION.city_id
             JOIN			province PROVINCE ON CITY.province_id = PROVINCE.id
             JOIN			country COUNTRY ON PROVINCE.country_id = COUNTRY.id
@@ -547,19 +552,18 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">182</span>
+    <span class="phpdocumentor-element-found-in__line">185</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Gets provider(s) by id</p>
+        <p class="phpdocumentor-summary">Gets provider(s) by id
+If id is passed then we search by it otherwise get all enabled</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">get</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
-        <section class="phpdocumentor-description"><p>If id is passed then we search by it otherwise get all enabled</p>
-</section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -594,7 +598,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">211</span>
+    <span class="phpdocumentor-element-found-in__line">214</span>
 
     </aside>
 
@@ -637,7 +641,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">238</span>
+    <span class="phpdocumentor-element-found-in__line">241</span>
 
     </aside>
 
@@ -680,7 +684,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Core/Model.php"><a href="files/core-model.html"><abbr title="Core/Model.php">Model.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">23</span>
+    <span class="phpdocumentor-element-found-in__line">22</span>
 
     </aside>
 
@@ -713,7 +717,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">261</span>
+    <span class="phpdocumentor-element-found-in__line">264</span>
 
     </aside>
 
@@ -756,7 +760,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Core/Model.php"><a href="files/core-model.html"><abbr title="Core/Model.php">Model.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">31</span>
+    <span class="phpdocumentor-element-found-in__line">30</span>
 
     </aside>
 
@@ -800,7 +804,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Core/Model.php"><a href="files/core-model.html"><abbr title="Core/Model.php">Model.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">47</span>
+    <span class="phpdocumentor-element-found-in__line">46</span>
 
     </aside>
 
@@ -843,7 +847,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Core/Model.php"><a href="files/core-model.html"><abbr title="Core/Model.php">Model.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">56</span>
+    <span class="phpdocumentor-element-found-in__line">55</span>
 
     </aside>
 
@@ -887,7 +891,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Core/Model.php"><a href="files/core-model.html"><abbr title="Core/Model.php">Model.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">68</span>
+    <span class="phpdocumentor-element-found-in__line">67</span>
 
     </aside>
 
@@ -931,7 +935,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">364</span>
+    <span class="phpdocumentor-element-found-in__line">367</span>
 
     </aside>
 
@@ -974,7 +978,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">287</span>
+    <span class="phpdocumentor-element-found-in__line">290</span>
 
     </aside>
 

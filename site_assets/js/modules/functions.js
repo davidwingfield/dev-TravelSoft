@@ -628,12 +628,12 @@ jQuery.extend({
             }
         })
         request.fail(function (jqXHR, textStatus, msg) {
-            ///////////////////////////////////////////////
-            //console.log("jqXHR", jqXHR.responseJSON)
-            //console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
-            //console.log("textStatus", textStatus)
-            //console.log("msg", msg)
-            ///////////////////////////////////////////////
+            /*
+            console.log("jqXHR", jqXHR)
+            console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
+            console.log("textStatus", textStatus)
+            console.log("msg", msg)
+            //*/
             if (typeof textStatus !== "undefined") {
                 console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
             } else {
@@ -645,7 +645,6 @@ jQuery.extend({
                 } else {
                     callback(jqXHR, "failed")
                 }
-                
             }
             return false
         })

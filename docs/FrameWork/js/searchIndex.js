@@ -93,7 +93,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Company",
             "name": "Company",
-            "summary": "Short\u0020Company\u0020Description",
+            "summary": "Short\u0020Company\u0020Description\nLong\u0020Company\u0020Description",
             "url": "classes/Framework-App-Controllers-Company.html"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Company\u003A\u003A__construct\u0028\u0029",
@@ -103,7 +103,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Company\u003A\u003Aautocomplete\u0028\u0029",
             "name": "autocomplete",
-            "summary": "autocomplete",
+            "summary": "autocomplete\nAutocomplete\u0020json",
             "url": "classes/Framework-App-Controllers-Company.html#method_autocomplete"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Company\u003A\u003AvalidateName\u0028\u0029",
@@ -111,10 +111,20 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Company.html#method_validateName"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Company\u003A\u003Aupdate\u0028\u0029",
+            "name": "update",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Company.html#method_update"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Company\u003A\u003AserveUpdate\u0028\u0029",
             "name": "serveUpdate",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Company.html#method_serveUpdate"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Company\u003A\u003Aadd\u0028\u0029",
+            "name": "add",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Company.html#method_add"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Company\u003A\u003Aformat_ac\u0028\u0029",
             "name": "format_ac",
@@ -318,7 +328,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Product",
             "name": "Product",
-            "summary": "Short\u0020Product\u0020Description",
+            "summary": "Short\u0020Product\u0020Description\nLong\u0020Product\u0020Description",
             "url": "classes/Framework-App-Controllers-Product.html"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Product\u003A\u003A__construct\u0028\u0029",
@@ -671,6 +681,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Vendor.html#method___construct"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003Aedit\u0028\u0029",
+            "name": "edit",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Vendor.html#method_edit"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003Aindex\u0028\u0029",
+            "name": "index",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Vendor.html#method_index"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003AgetByVendorId\u0028\u0029",
             "name": "getByVendorId",
             "summary": "get\u0020vendor\u0020by\u0020Id",
@@ -681,6 +701,16 @@ Search.appendIndex(
             "summary": "api\u0020get\u0020request",
             "url": "classes/Framework-App-Controllers-Vendor.html#method_serveGet"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003AserveAdd\u0028\u0029",
+            "name": "serveAdd",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Vendor.html#method_serveAdd"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003Aadd\u0028\u0029",
+            "name": "add",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Vendor.html#method_add"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003AserveUpdate\u0028\u0029",
             "name": "serveUpdate",
             "summary": "",
@@ -688,7 +718,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003AcallUpdate\u0028\u0029",
             "name": "callUpdate",
-            "summary": "",
+            "summary": "update\u0020that\u0020return\u0020string",
             "url": "classes/Framework-App-Controllers-Vendor.html#method_callUpdate"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003Aautocomplete\u0028\u0029",
@@ -721,10 +751,10 @@ Search.appendIndex(
             "summary": "format\u0020just\u0020the\u0020vendor\u0020results",
             "url": "classes/Framework-App-Controllers-Vendor.html#method_format_vendor"
         },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003Aindex\u0028\u0029",
-            "name": "index",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Vendor.html#method_index"
+            "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003Aformat_get\u0028\u0029",
+            "name": "format_get",
+            "summary": "format_get",
+            "url": "classes/Framework-App-Controllers-Vendor.html#method_format_get"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003A\u0024primaryKey",
             "name": "primaryKey",
@@ -808,7 +838,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\AddressModel",
             "name": "AddressModel",
-            "summary": "Short\u0020Address\u0020Description",
+            "summary": "Short\u0020Address\u0020Description\nLong\u0020Address\u0020Description",
             "url": "classes/Framework-App-Models-AddressModel.html"
         },                {
             "fqsen": "\\Framework\\App\\Models\\AddressModel\u003A\u003Aget\u0028\u0029",
@@ -845,6 +875,11 @@ Search.appendIndex(
             "name": "update",
             "summary": "",
             "url": "classes/Framework-App-Models-AddressModel.html#method_update"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\AddressModel\u003A\u003AgetAddressTypeById\u0028\u0029",
+            "name": "getAddressTypeById",
+            "summary": "",
+            "url": "classes/Framework-App-Models-AddressModel.html#method_getAddressTypeById"
         },                {
             "fqsen": "\\Framework\\App\\Models\\AddressModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
@@ -1043,7 +1078,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\CompanyModel",
             "name": "CompanyModel",
-            "summary": "Short\u0020Company\u0020Description",
+            "summary": "Short\u0020Company\u0020Description\nLong\u0020Company\u0020Description",
             "url": "classes/Framework-App-Models-CompanyModel.html"
         },                {
             "fqsen": "\\Framework\\App\\Models\\CompanyModel\u003A\u003Aget\u0028\u0029",
@@ -1208,7 +1243,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\CurrencyModel",
             "name": "CurrencyModel",
-            "summary": "Short\u0020Currency\u0020Description",
+            "summary": "Short\u0020Currency\u0020Description\nLong\u0020Currency\u0020Description",
             "url": "classes/Framework-App-Models-CurrencyModel.html"
         },                {
             "fqsen": "\\Framework\\App\\Models\\CurrencyModel\u003A\u003Aget\u0028\u0029",
@@ -1788,7 +1823,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProviderModel\u003A\u003Aget\u0028\u0029",
             "name": "get",
-            "summary": "Gets\u0020provider\u0028s\u0029\u0020by\u0020id",
+            "summary": "Gets\u0020provider\u0028s\u0029\u0020by\u0020id\nIf\u0020id\u0020is\u0020passed\u0020then\u0020we\u0020search\u0020by\u0020it\u0020otherwise\u0020get\u0020all\u0020enabled",
             "url": "classes/Framework-App-Models-ProviderModel.html#method_get"
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProviderModel\u003A\u003AgetByName\u0028\u0029",
@@ -2213,17 +2248,17 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\VendorModel",
             "name": "VendorModel",
-            "summary": "Short\u0020Vendor\u0020Description",
+            "summary": "Short\u0020Vendor\u0020Description\nLong\u0020Vendor\u0020Description",
             "url": "classes/Framework-App-Models-VendorModel.html"
         },                {
             "fqsen": "\\Framework\\App\\Models\\VendorModel\u003A\u003Aget\u0028\u0029",
             "name": "get",
-            "summary": "Gets\u0020vendor\u0028s\u0029\u0020by\u0020id",
+            "summary": "Gets\u0020vendor\u0028s\u0029\u0020by\u0020id\nIf\u0020id\u0020is\u0020passed\u0020then\u0020we\u0020search\u0020by\u0020it\u0020otherwise\u0020get\u0020all\u0020enabled",
             "url": "classes/Framework-App-Models-VendorModel.html#method_get"
         },                {
             "fqsen": "\\Framework\\App\\Models\\VendorModel\u003A\u003AgetByName\u0028\u0029",
             "name": "getByName",
-            "summary": "Gets\u0020vendor\u0028s\u0029\u0020by\u0020id",
+            "summary": "Gets\u0020vendor\u0028s\u0029\u0020by\u0020id\nIf\u0020id\u0020is\u0020passed\u0020then\u0020we\u0020search\u0020by\u0020it\u0020otherwise\u0020get\u0020all\u0020enabled",
             "url": "classes/Framework-App-Models-VendorModel.html#method_getByName"
         },                {
             "fqsen": "\\Framework\\App\\Models\\VendorModel\u003A\u003AgetOne\u0028\u0029",
@@ -2243,7 +2278,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\VendorModel\u003A\u003A\u0024selectQuery",
             "name": "selectQuery",
-            "summary": "",
+            "summary": "default\u0020select\u0020query",
             "url": "classes/Framework-App-Models-VendorModel.html#property_selectQuery"
         },                {
             "fqsen": "\\Framework\\App\\Models\\VendorModel\u003A\u003A\u0024dbTable",
@@ -2318,7 +2353,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\Core\\Model",
             "name": "Model",
-            "summary": "Short\u0020Model\u0020Description",
+            "summary": "Short\u0020Model\u0020Description\nLong\u0020Model\u0020Description",
             "url": "classes/Framework-Core-Model.html"
         },                {
             "fqsen": "\\Framework\\Core\\Model\u003A\u003Ainit\u0028\u0029",
@@ -3048,7 +3083,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Image",
             "name": "Image",
-            "summary": "Short\u0020Image\u0020Description",
+            "summary": "Short\u0020Image\u0020Description\nLong\u0020Image\u0020Description",
             "url": "classes/Framework-App-Controllers-Image.html"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Image\u003A\u003AgetByCompanyId\u0028\u0029",

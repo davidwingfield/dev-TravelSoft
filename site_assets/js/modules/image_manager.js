@@ -11,6 +11,7 @@ $.fn.imageManager = function (options) {
     const _image_manager_form_data = document.getElementById("image_manager_form_data")
     const _image_manager_image_id = document.getElementById("image_manager_id")
     const $imageForm = $("#image_manager_form_data")
+    const _vendor_edit = document.getElementById("vendor_edit")
     const _image_manager_cancel_upload = document.getElementById("image_manager_cancel_upload")
     let drEvent, validator
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
@@ -63,10 +64,10 @@ $.fn.imageManager = function (options) {
     $(_image_manager_cancel_upload)
       .on("click", function () {
           Upload.prototype.resetForm()
-          $("button.dropify-clear").click()
+          $("button.dropify-clear").trigger("click")
       })
     
-    handle_image_error = function (msg) {
+    const handle_image_error = function (msg) {
         toastr.error(msg)
     }
     
@@ -74,6 +75,7 @@ $.fn.imageManager = function (options) {
         let url = "/api/v1.0/images/update"
         
         if (dataToSend) {
+            console.log("data", dataToSend)
             try {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
                     if (data) {
@@ -123,6 +125,11 @@ $.fn.imageManager = function (options) {
                 dataToSend.title = (_image_manager_title.value !== "") ? _image_manager_title.value : null
                 
                 if (_provider_edit) {
+                    dataToSend.directory_id = (parseInt(_provider_company_id.value))
+                    dataToSend.directory = "company"
+                }
+                
+                if (_vendor_edit) {
                     dataToSend.directory_id = (parseInt(_provider_company_id.value))
                     dataToSend.directory = "company"
                 }
@@ -322,7 +329,6 @@ $.fn.imageManager = function (options) {
         for (let n = 0; n < images.length; n++) {
             let im = images[n]
             this.all.set(im.id, im)
-            //$("div.mdb-lightbox").append(format_image_lightbox(im))
             $carouselIndicators.append(formatIndicator(im, counter))
             $carouselInner.append(formatImage(im, counter))
             counter += 1

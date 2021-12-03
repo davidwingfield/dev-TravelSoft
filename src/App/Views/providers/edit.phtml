@@ -11,16 +11,14 @@
 ?>
 
 <section id="provider_edit">
-    
     <div class="row">
         <div class="col">
             <!-- Tab Content -->
             <div class="tab-content p-0">
                 <!-- Provider Overview -->
                 <div class="tab-pane" id="panel_tab_provider_overview" role="tabpanel">
-                    <section>
-                    
-                    </section>
+                    <?php
+                        include_once(VIEWS_PATH . "/providers/forms/overview.phtml"); ?>
                 </div>
                 <!-- /Provider Overview -->
                 
@@ -76,65 +74,14 @@
                 <!-- Meta Detail -->
                 <div class="tab-pane" id="panel_tab_meta_detail" role="tabpanel">
                     <?php
-                        include_once(VIEWS_PATH . "/providers/forms/provider_meta_form.phtml"); ?>
+                        include_once(VIEWS_PATH . "/companies/forms/company_meta_form.phtml"); ?>
                 </div>
                 <!-- /Meta Detail -->
             
             </div>
             <!-- /Tab Content -->
         </div>
-        <!--
-          <div class="col-lg-3 col-xl-3">
-              
-              <div class="card card-block mb-2">
-                  <h4 class="card-title">About me</h4>
-                  <p class="card-text">
-                      Id non occaecat culpa ad. Duis tempor velit cillum sit. Aute laborum ex sint anim
-                      nostrud commodo labore quis. Pariatur voluptate veniam duis ad culpa.
-                      <a href="#">Read more...</a>
-                  </p>
-              </div>
-              
-              <div class="card card-block mb-2">
-                  <h4 class="card-title">
-                      Contact Information
-                  </h4>
-                  <p class="card-text">
-                      Fusce eget dolor id justo luctus commodo vel pharetra nisi. Donec velit libero
-                  </p>
-                  
-                  <div class="card-block p-0">
-                      <p data-info-type="phone" class="mb-10 text-nowrap">
-                          <i class="fas fa-user mr-1"></i>
-                          <span class="text-break">00971123456789
-                    <span>
-                </span></span></p>
-                      <p data-info-type="email" class="mb-10 text-nowrap">
-                          <i class="fas fa-envelope mr-10"></i>
-                          <span class="text-break">malinda.h@gmail.com
-                    <span>
-                </span></span></p>
-                      <p data-info-type="fb" class="mb-10 text-nowrap">
-                          <i class="fab fa-facebook mr-10"></i>
-                          <span class="text-break">malinda.hollaway
-                    <span>
-                </span></span></p>
-                      <p data-info-type="twitter" class="mb-10 text-nowrap">
-                          <i class="fab fa-twitter mr-10"></i>
-                          <span class="text-break">@malinda (twitter.com/malinda)
-                    <span>
-                </span></span></p>
-                      <p data-info-type="address" class="mb-10 text-nowrap">
-                          <i class="fas fa-map mr-10"></i>
-                          <span class="text-break">44-46 Morningside Road,Edinburgh,Scotland
-                    <span>
-                </span></span></p>
-                  </div>
-              </div>
-          </div>
-          -->
     </div>
-
 </section>
 <script type="text/javascript">
     $(function () {

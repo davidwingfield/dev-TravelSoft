@@ -1,32 +1,16 @@
 const Provider = (function () {
     "use strict"
-    
     const base_url = "/providers"
-    
-    /** Buttons */
-    const _button_add_provider_page_heading_table = document.getElementById("button_add_provider_page_heading_table")
-    
     const _button_add_provider_page_heading = document.getElementById("button_add_provider_page_heading")
     const _button_edit_provider_name = document.getElementById("button_edit_provider_name")
     const _button_save_provider = document.getElementById("button_save_provider")
-    /** Tabs */
     const _panel_tab_contact = document.getElementById("panel_tab_contact")
-    const _panel_tab_company = document.getElementById("panel_tab_company")
     const _panel_tab_vendor = document.getElementById("panel_tab_vendor")
-    const _panel_tab_location = document.getElementById("panel_tab_location")
     const _panel_tab_address = document.getElementById("panel_tab_address")
     const _panel_tab_provider = document.getElementById("panel_tab_provider")
-    /** Tables */
     const _table_provider_index = document.getElementById("table_provider_index")
-    /** Fields */
     const _location_id = document.getElementById("location_id")
     const _company_name = document.getElementById("company_name")
-    const _company_cover_image = document.getElementById("company_cover_image")
-    
-    const _provider_description_long = document.getElementById("provider_description_long")
-    const _provider_description_short = document.getElementById("provider_description_short")
-    const _provider_keywords = document.getElementById("provider_keywords")
-    
     const _provider_id = document.getElementById("provider_id")
     const _provider_name = document.getElementById("provider_name")
     const _provider_company_id = document.getElementById("provider_company_id")
@@ -36,11 +20,8 @@ const Provider = (function () {
     const _vendor_company_id = document.getElementById("vendor_company_id")
     const _company_id = document.getElementById("company_id")
     const _location_name_filter_id = document.getElementById("location_name_filter_id")
-    const _provider_key = document.getElementById("provider_keyword")
-    let $provider_key
-    //Forms
     const _form_edit_provider = document.getElementById("form_edit_provider")
-    let globalSelectedProvider = false
+    
     let isNew = false
     let validator
     let $index_table = $(_table_provider_index)
@@ -74,7 +55,7 @@ const Provider = (function () {
           let vendor_detail = Vendor.build()
           let addresses = Array.from(Address.all.values())
           let contacts = Array.from(Contact.all.values())
-          /*
+          //*
           console.log("company_detail", company_detail)
           console.log("provider_detail", provider_detail)
           console.log("location_detail", location_detail)
@@ -103,7 +84,6 @@ const Provider = (function () {
           
           confirmDialog(`Would you like to update?`, (ans) => {
               if (ans) {
-                  
                   save({
                       "company_detail": company_detail,
                       "provider_detail": provider_detail,
@@ -437,7 +417,6 @@ const Provider = (function () {
         if (dataToSend) {
             try {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    console.log(data)
                     if (data) {
                         return callback(data)
                     } else {
@@ -463,9 +442,9 @@ const Provider = (function () {
             id: (!isNaN(parseInt(_provider_id.value))) ? parseInt(_provider_id.value) : null,
             provider_vendor: (_form_edit_provider) ? 1 : 0,
             enabled: 1,
-            description_long: (_provider_description_long.value === "") ? null : _provider_description_long.value,
-            description_short: (_provider_description_short.value === "") ? null : _provider_description_short.value,
-            keywords: $provider_key.build(),
+            //description_long: (_provider_description_long.value === "") ? null : _provider_description_long.value,
+            //description_short: (_provider_description_short.value === "") ? null : _provider_description_short.value,
+            //keywords: $provider_key.build(),
         })
     }
     
@@ -560,11 +539,7 @@ const Provider = (function () {
                 //$(_panel_tab_contact).addClass("disabled")
                 //$(_panel_tab_address).addClass("disabled")
             } else {
-                //_company_cover_image.disabled = false
-                //$(_provider_name).attr("readonly", true)
-                //_button_edit_provider_name.disabled = false
-                //$(_panel_tab_contact).removeClass("disabled")
-                //$(_panel_tab_address).removeClass("disabled")
+                $(_company_name).attr("readonly", true)
             }
         }
         
@@ -582,10 +557,12 @@ const Provider = (function () {
             $(_company_name).val($(_provider_name).val())
             _provider_company_id.value = (provider.company_id) ? provider.company_id : null
             _provider_code_direct_id.value = (provider.code_direct_id) ? provider.code_direct_id : null
+            /*
             let provider_keywords = (provider.keywords) ? provider.keywords : ""
             $provider_key = $(_provider_key).BuildKeyword(provider_keywords)
             $(_provider_description_long).val(provider.description_long)
-            $(_provider_description_short).val(provider.description_short)
+            $(_provider_description_short).val(provider.description_short
+              //*/
             _provider_enabled.checked = (provider.enabled) ? (provider.enabled === 1) : true
         }
         
@@ -655,8 +632,6 @@ const Provider = (function () {
                 _button_save_provider.disabled = true
                 $(_panel_tab_provider).addClass("disabled")
                 $(_panel_tab_vendor).addClass("disabled")
-                //$(_panel_tab_location).addClass("disabled")
-                
                 $(_panel_tab_address).addClass("disabled")
             }
             
@@ -693,6 +668,9 @@ const Provider = (function () {
     
     }
     
+    /**
+     * return public params
+     */
     return {
         validator: null,
         detail: {},

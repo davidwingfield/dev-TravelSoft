@@ -21,12 +21,12 @@ const sideNavOptions = {
 const toastrOptions = {
     "closeButton": true,
     "debug": false,
-    "newestOnTop": true,
+    "newestOnTop": false,
     "progressBar": false,
-    "positionClass": "md-toast-top-center",
+    "positionClass": "md-toast-bottom-right",
     "preventDuplicates": true,
     "onclick": null,
-    "showDuration": 301,
+    "showDuration": 300,
     "hideDuration": 1000,
     "timeOut": 5000,
     "extendedTimeOut": 1000,
@@ -78,6 +78,7 @@ const days = [
     },
 ]
 const dowStart = 1
+const short_dexcription_max = 250
 const colorScheme = new Map()
 colorScheme.set(1, {
     name: "Color - 1",
@@ -803,12 +804,12 @@ jQuery.extend({
             }
         })
         request.fail(function (jqXHR, textStatus, msg) {
-            ///////////////////////////////////////////////
-            //console.log("jqXHR", jqXHR.responseJSON)
-            //console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
-            //console.log("textStatus", textStatus)
-            //console.log("msg", msg)
-            ///////////////////////////////////////////////
+            /*
+            console.log("jqXHR", jqXHR)
+            console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
+            console.log("textStatus", textStatus)
+            console.log("msg", msg)
+            //*/
             if (typeof textStatus !== "undefined") {
                 console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
             } else {
@@ -820,7 +821,6 @@ jQuery.extend({
                 } else {
                     callback(jqXHR, "failed")
                 }
-                
             }
             return false
         })
@@ -1580,8 +1580,9 @@ const _image_manager_alt_text = document.getElementById("image_manager_alt_text"
 const _image_manager_form_data = document.getElementById("image_manager_form_data")
 const _image_manager_image_id = document.getElementById("image_manager_id")
 const _provider_edit = document.getElementById("provider_edit")
+const _vendor_edit = document.getElementById("vendor_edit")
 const _provider_company_id = document.getElementById("provider_company_id")
-
+const _vendor_company_id = document.getElementById("vendor_company_id")
 Upload.prototype.getType = function () {
     return this.file.type
 }
@@ -1616,6 +1617,11 @@ Upload.prototype.doUpload = function () {
         formData.append("directory", "company")
     }
     
+    if (_vendor_edit) {
+        formData.append("directory_id", parseInt(_vendor_company_id.value))
+        formData.append("directory", "company")
+    }
+    
     $.ajax({
         type: "POST",
         url: "/api/v1.0/images/update",
@@ -1641,6 +1647,10 @@ Upload.prototype.doUpload = function () {
             if (image) {
                 let imageManager
                 if (_provider_edit) {
+                    imageManager = $("#companyImages").imageManager()
+                }
+                
+                if (_vendor_edit) {
                     imageManager = $("#companyImages").imageManager()
                 }
                 
@@ -1697,7 +1707,6 @@ Upload.prototype.resetForm = function () {
 }
 
 Upload.prototype.populateForm = function (image) {
-    console.log("populateForm", image)
     Upload.prototype.progressReset()
     let img = image.path + "/" + image.name + "." + image.extension
     _image_manager_is_cover_image.checked = (image.is_cover_image === 1)
@@ -1720,6 +1729,7 @@ $("#image_manager_upload")
       _image_manager_alt_text.value = ""
       $(_image_manager_form_data).show()
   })
+
 $("#image_manager_clear_button")
   .on("click", function () {
       Upload.prototype.resetForm()
@@ -1738,6 +1748,7 @@ $.fn.imageManager = function (options) {
     const _image_manager_form_data = document.getElementById("image_manager_form_data")
     const _image_manager_image_id = document.getElementById("image_manager_id")
     const $imageForm = $("#image_manager_form_data")
+    const _vendor_edit = document.getElementById("vendor_edit")
     const _image_manager_cancel_upload = document.getElementById("image_manager_cancel_upload")
     let drEvent, validator
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
@@ -1790,10 +1801,10 @@ $.fn.imageManager = function (options) {
     $(_image_manager_cancel_upload)
       .on("click", function () {
           Upload.prototype.resetForm()
-          $("button.dropify-clear").click()
+          $("button.dropify-clear").trigger("click")
       })
     
-    handle_image_error = function (msg) {
+    const handle_image_error = function (msg) {
         toastr.error(msg)
     }
     
@@ -1801,6 +1812,7 @@ $.fn.imageManager = function (options) {
         let url = "/api/v1.0/images/update"
         
         if (dataToSend) {
+            console.log("data", dataToSend)
             try {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
                     if (data) {
@@ -1850,6 +1862,11 @@ $.fn.imageManager = function (options) {
                 dataToSend.title = (_image_manager_title.value !== "") ? _image_manager_title.value : null
                 
                 if (_provider_edit) {
+                    dataToSend.directory_id = (parseInt(_provider_company_id.value))
+                    dataToSend.directory = "company"
+                }
+                
+                if (_vendor_edit) {
                     dataToSend.directory_id = (parseInt(_provider_company_id.value))
                     dataToSend.directory = "company"
                 }
@@ -2049,7 +2066,6 @@ $.fn.imageManager = function (options) {
         for (let n = 0; n < images.length; n++) {
             let im = images[n]
             this.all.set(im.id, im)
-            //$("div.mdb-lightbox").append(format_image_lightbox(im))
             $carouselIndicators.append(formatIndicator(im, counter))
             $carouselInner.append(formatImage(im, counter))
             counter += 1
@@ -4371,7 +4387,7 @@ const Location = (function () {
         let detail = set_detail(temp_location)
         populate_form(detail)
         enable()
-        $().hide()
+        $(_form_location_details).hide()
     }
     
     const validate_edit_location_filter_form = function () {
@@ -5878,11 +5894,15 @@ const Company = (function () {
     const _button_close_edit_company_form = document.getElementById("button_close_edit_company_form")
     const _form_edit_vendor = document.getElementById("form_edit_vendor")
     const _form_edit_provider = document.getElementById("form_edit_provider")
-    // ----
     const _vendor_name = document.getElementById("vendor_name")
     const _vendor_company_id = document.getElementsByClassName("vendor_company_id")
     const _provider_name = document.getElementById("provider_name")
     const _provider_company_id = document.getElementById("provider_company_id")
+    const _company_key = document.getElementById("company_keywords")
+    const _company_keywords = document.getElementById("company_keywords")
+    const _company_logo = document.getElementById("company_logo")
+    const _company_description_long = document.getElementById("company_description_long")
+    const _company_description_short = document.getElementById("company_description_short")
     const _button_clear_form_edit_company = document.getElementById("button_clear_form_edit_company")
     const _company_edit_table_filters = document.getElementById("company_edit_table_filters")
     const form_rules = {
@@ -5913,11 +5933,11 @@ const Company = (function () {
         },
         
     }
+    let $company_key
     let temp_company = {}
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let validator
     let globalSelectedCompany = false
-    let suggestionsTempCompany = []
     let tempCompany = {}
     
     $("a[data-toggle=\"tab\"]").on("hide.bs.tab", function (e) {
@@ -5981,6 +6001,117 @@ const Company = (function () {
       .on("change", function () {
           set_progress()
       })
+    
+    // ----
+    
+    /**
+     * set object default values
+     *
+     * @returns {{phone_2: null, note: null, phone_1: null, website: null, keywords: null, date_created: *, description_long: null, created_by: (number|number), enabled: number, description_short: null, status_id: number, date_modified: *, modified_by: (number|number), name: null, logo: null, cover_image: string, id: null, fax: null, email: null}}
+     * @private
+     */
+    const _default_detail = function () {
+        return {
+            created_by: user_id,
+            date_created: formatDateMySQL(),
+            date_modified: formatDateMySQL(),
+            email: null,
+            cover_image: "/public/img/placeholder.jpg",
+            enabled: 1,
+            fax: null,
+            id: null,
+            modified_by: user_id,
+            name: null,
+            note: null,
+            phone_1: null,
+            phone_2: null,
+            status_id: 10,
+            website: null,
+            description_short: null,
+            description_long: null,
+            keywords: null,
+            logo: null,
+        }
+    }
+    
+    /**
+     * set detail from data
+     *
+     * @param company
+     * @returns {{phone_2: null, note: null, phone_1: null, website: null, keywords: null, date_created: *, description_long: null, created_by: number, enabled: number, description_short: null, status_id: number, date_modified: *, modified_by: number, name: null, logo: null, cover_image: string, id: null, fax: null, email: null}}
+     */
+    const set_detail = function (company) {
+        let detail = _default_detail()
+        
+        if (company) {
+            detail.created_by = (company.created_by) ? company.created_by : user_id
+            detail.date_created = (company.date_created) ? company.date_created : formatDateMySQL()
+            detail.date_modified = (company.date_modified) ? company.date_modified : formatDateMySQL()
+            detail.email = (company.email) ? company.email : null
+            detail.cover_image = (company.cover_image) ? company.cover_image : null
+            detail.enabled = (company.enabled) ? company.enabled : 1
+            detail.fax = (company.fax) ? company.fax : null
+            detail.id = (company.id) ? company.id : null
+            detail.modified_by = (company.modified_by) ? company.modified_by : user_id
+            detail.name = (company.name) ? company.name : null
+            detail.note = (company.note) ? company.note : null
+            detail.phone_1 = (company.phone_1) ? company.phone_1 : null
+            detail.phone_2 = (company.phone_2) ? company.phone_2 : null
+            detail.status_id = (company.status_id) ? company.status_id : 10
+            detail.website = (company.website) ? company.website : null
+            detail.logo = (company.logo) ? company.logo : ""
+            detail.keywords = (company.keywords) ? company.keywords : ""
+            detail.description_long = (company.description_long) ? company.description_long : ""
+            detail.description_short = (company.description_short) ? company.description_short : ""
+        }
+        
+        Company.detail = detail
+        return detail
+    }
+    
+    /**
+     * fill in form data
+     *
+     * @param company
+     */
+    const populate_form = function (company) {
+        let company_logo_image = $("#company_logo").dropify()
+        $(_company_id).val((company.id) ? company.id : "").trigger("change")
+        _company_name.value = (company.name) ? company.name : ""
+        _company_phone_1.value = (company.phone_1) ? company.phone_1 : ""
+        _company_phone_2.value = (company.phone_2) ? company.phone_2 : ""
+        _company_fax.value = (company.fax) ? company.fax : ""
+        _company_email.value = (company.email) ? company.email : ""
+        _company_website.value = (company.website) ? company.website : ""
+        _company_description_long.value = (company.description_long) ? company.description_long : ""
+        _company_description_short.value = (company.description_short) ? company.description_short : ""
+        let company_keywords = (company.keywords) ? company.keywords : ""
+        $company_key = $(_company_key).BuildKeyword(company_keywords)
+        if (_provider_name) {
+            $(_provider_name).val((company.name) ? company.name : "").trigger("change")
+        }
+        
+        if (_vendor_name) {
+            _vendor_name.value = (company.name) ? company.name : null
+        }
+        
+        if (_provider_company_id) {
+            _provider_company_id.value = (company.id) ? company.id : null
+        }
+        
+        if (_vendor_company_id) {
+            _vendor_company_id.value = (company.id) ? company.id : null
+        }
+        
+        if (_contact_company_id) {
+            _contact_company_id.value = (company.id) ? company.id : null
+        }
+        
+        if (_address_company_id) {
+            _address_company_id.value = (company.id) ? company.id : null
+        }
+        
+    }
     
     const on_click_outside = (e) => {
         let tar = $(e.target).parents("div.form_element")
@@ -6128,53 +6259,7 @@ const Company = (function () {
         toastr.error(msg)
     }
     
-    const _default_detail = function () {
-        return {
-            created_by: user_id,
-            date_created: formatDateMySQL(),
-            date_modified: formatDateMySQL(),
-            email: null,
-            cover_image: "/public/img/placeholder.jpg",
-            enabled: 1,
-            fax: null,
-            id: null,
-            modified_by: user_id,
-            name: null,
-            note: null,
-            phone_1: null,
-            phone_2: null,
-            status_id: 10,
-            website: null,
-        }
-    }
-    
-    const set_detail = function (company) {
-        let detail = _default_detail()
-        
-        if (company) {
-            detail.created_by = (company.created_by) ? company.created_by : user_id
-            detail.date_created = (company.date_created) ? company.date_created : formatDateMySQL()
-            detail.date_modified = (company.date_modified) ? company.date_modified : formatDateMySQL()
-            detail.email = (company.email) ? company.email : null
-            detail.cover_image = (company.cover_image) ? company.cover_image : null
-            detail.enabled = (company.enabled) ? company.enabled : 1
-            detail.fax = (company.fax) ? company.fax : null
-            detail.id = (company.id) ? company.id : null
-            detail.modified_by = (company.modified_by) ? company.modified_by : user_id
-            detail.name = (company.name) ? company.name : null
-            detail.note = (company.note) ? company.note : null
-            detail.phone_1 = (company.phone_1) ? company.phone_1 : null
-            detail.phone_2 = (company.phone_2) ? company.phone_2 : null
-            detail.status_id = (company.status_id) ? company.status_id : 10
-            detail.website = (company.website) ? company.website : null
-        }
-        
-        Company.detail = detail
-        return detail
-    }
-    
     const build = function () {
-        
         return remove_nulls({
             email: $(_company_email).val(),
             enabled: 1,
@@ -6182,11 +6267,14 @@ const Company = (function () {
             id: (!isNaN(_company_id.value)) ? parseInt(_company_id.value) : null,
             modified_by: user_id,
             cover_image: "/public/img/placeholder.jpg",
+            description_short: _company_description_short.value,
+            description_long: _company_description_long.value,
+            keywords: $company_key.build(),
             name: $(_company_name).val(),
-            note: Company.detail.note,
+            note: null,
             phone_1: $(_company_phone_1).val(),
             phone_2: $(_company_phone_2).val(),
-            status_id: Company.detail.status_id,
+            status_id: 10,
             website: $(_company_website).val(),
         })
     }
@@ -6320,41 +6408,6 @@ const Company = (function () {
             Address.clearTable()
             Contact.clearTable()
         }
-    }
-    
-    const populate_form = function (company) {
-        $(_company_id).val((company.id) ? company.id : "").trigger("change")
-        _company_name.value = (company.name) ? company.name : ""
-        _company_phone_1.value = (company.phone_1) ? company.phone_1 : ""
-        _company_phone_2.value = (company.phone_2) ? company.phone_2 : ""
-        _company_fax.value = (company.fax) ? company.fax : ""
-        _company_email.value = (company.email) ? company.email : ""
-        _company_website.value = (company.website) ? company.website : ""
-        
-        if (_provider_name) {
-            $(_provider_name).val((company.name) ? company.name : "").trigger("change")
-        }
-        
-        if (_vendor_name) {
-            _vendor_name.value = (company.name) ? company.name : null
-        }
-        
-        if (_provider_company_id) {
-            _provider_company_id.value = (company.id) ? company.id : null
-        }
-        
-        if (_vendor_company_id) {
-            _vendor_company_id.value = (company.id) ? company.id : null
-        }
-        
-        if (_contact_company_id) {
-            _contact_company_id.value = (company.id) ? company.id : null
-        }
-        
-        if (_address_company_id) {
-            _address_company_id.value = (company.id) ? company.id : null
-        }
-        
     }
     
     let reset_company = {}
@@ -7140,7 +7193,9 @@ const Vendor = (function () {
     
     $(_button_save_vendor)
       .on("click", function () {
-          validate_all()
+          let company = Company.build()
+          console.log("_button_save_vendor", company)
+          update()
       })
     
     $(_button_add_vendor_page_heading)
@@ -7553,9 +7608,10 @@ const Vendor = (function () {
         let url = "/api/v1.0/vendors/update"
         
         if (dataToSend) {
+            
             try {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    console.log(data)
+                    console.log("data", data)
                     if (data) {
                         return callback(data)
                     } else {
@@ -7570,10 +7626,16 @@ const Vendor = (function () {
     
     const update = function () {
         let vendor_detail = Vendor.build()
+        
+        vendor_detail.company_detail = Company.build()
         if (vendor_detail) {
+            
             confirmDialog(`Would you like to update?`, (ans) => {
                 if (ans) {
+                    console.log("vendor_detail", vendor_detail)
+                    
                     updateVendor(vendor_detail, function (data) {
+                        console.log("data", data)
                         if (data) {
                             console.log("data 1", data)
                             if (data[0]) {
@@ -7742,6 +7804,7 @@ const Vendor = (function () {
     }
     
     const init = function (settings) {
+        console.log("settings", settings)
         let company = {}
         if (settings) {
             if (settings.company) {
@@ -7768,16 +7831,16 @@ const Vendor = (function () {
             _vendor_enabled.checked = (settings.enabled) ? (settings.enabled === 1) : true
         }
         if (_vendor_is_provider) {
-            _vendor_is_provider.checked = (settings.is_provider) ? (settings.is_provider === 1) : true
+            _vendor_is_provider.checked = (settings.is_provider === 1)
         }
         if (_vendor_show_online) {
-            _vendor_show_online.checked = (settings.show_online) ? (settings.show_online === 1) : true
+            _vendor_show_online.checked = (settings.show_online === 1)
         }
         if (_vendor_show_ops) {
-            _vendor_show_ops.checked = (settings.show_ops) ? (settings.show_ops === 1) : true
+            _vendor_show_ops.checked = (settings.show_ops === 1)
         }
         if (_vendor_show_sales) {
-            _vendor_show_sales.checked = (settings.show_sales) ? (settings.show_sales === 1) : true
+            _vendor_show_sales.checked = (settings.show_sales === 1)
         }
         
         if (_form_edit_vendor) {
@@ -7829,8 +7892,8 @@ const Vendor = (function () {
     }
     
     const setVendor = function () {
+        
         if (_vendor_name) {
-            _vendor_is_provider.checked = false
             $(_vendor_is_provider).attr("readonly", true)
             _vendor_is_provider.disabled = true
             $(_vendor_name).attr("readonly", true)
@@ -8743,33 +8806,17 @@ Login.init()
 
 const Provider = (function () {
     "use strict"
-    
     const base_url = "/providers"
-    
-    /** Buttons */
-    const _button_add_provider_page_heading_table = document.getElementById("button_add_provider_page_heading_table")
-    
     const _button_add_provider_page_heading = document.getElementById("button_add_provider_page_heading")
     const _button_edit_provider_name = document.getElementById("button_edit_provider_name")
     const _button_save_provider = document.getElementById("button_save_provider")
-    /** Tabs */
     const _panel_tab_contact = document.getElementById("panel_tab_contact")
-    const _panel_tab_company = document.getElementById("panel_tab_company")
     const _panel_tab_vendor = document.getElementById("panel_tab_vendor")
-    const _panel_tab_location = document.getElementById("panel_tab_location")
     const _panel_tab_address = document.getElementById("panel_tab_address")
     const _panel_tab_provider = document.getElementById("panel_tab_provider")
-    /** Tables */
     const _table_provider_index = document.getElementById("table_provider_index")
-    /** Fields */
     const _location_id = document.getElementById("location_id")
     const _company_name = document.getElementById("company_name")
-    const _company_cover_image = document.getElementById("company_cover_image")
-    
-    const _provider_description_long = document.getElementById("provider_description_long")
-    const _provider_description_short = document.getElementById("provider_description_short")
-    const _provider_keywords = document.getElementById("provider_keywords")
-    
     const _provider_id = document.getElementById("provider_id")
     const _provider_name = document.getElementById("provider_name")
     const _provider_company_id = document.getElementById("provider_company_id")
@@ -8779,11 +8826,8 @@ const Provider = (function () {
     const _vendor_company_id = document.getElementById("vendor_company_id")
     const _company_id = document.getElementById("company_id")
     const _location_name_filter_id = document.getElementById("location_name_filter_id")
-    const _provider_key = document.getElementById("provider_keyword")
-    let $provider_key
-    //Forms
     const _form_edit_provider = document.getElementById("form_edit_provider")
-    let globalSelectedProvider = false
+    
     let isNew = false
     let validator
     let $index_table = $(_table_provider_index)
@@ -8817,7 +8861,7 @@ const Provider = (function () {
           let vendor_detail = Vendor.build()
           let addresses = Array.from(Address.all.values())
           let contacts = Array.from(Contact.all.values())
-          /*
+          //*
           console.log("company_detail", company_detail)
           console.log("provider_detail", provider_detail)
           console.log("location_detail", location_detail)
@@ -8846,7 +8890,6 @@ const Provider = (function () {
           
           confirmDialog(`Would you like to update?`, (ans) => {
               if (ans) {
-                  
                   save({
                       "company_detail": company_detail,
                       "provider_detail": provider_detail,
@@ -9180,7 +9223,6 @@ const Provider = (function () {
         if (dataToSend) {
             try {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    console.log(data)
                     if (data) {
                         return callback(data)
                     } else {
@@ -9206,9 +9248,9 @@ const Provider = (function () {
             id: (!isNaN(parseInt(_provider_id.value))) ? parseInt(_provider_id.value) : null,
             provider_vendor: (_form_edit_provider) ? 1 : 0,
             enabled: 1,
-            description_long: (_provider_description_long.value === "") ? null : _provider_description_long.value,
-            description_short: (_provider_description_short.value === "") ? null : _provider_description_short.value,
-            keywords: $provider_key.build(),
+            //description_long: (_provider_description_long.value === "") ? null : _provider_description_long.value,
+            //description_short: (_provider_description_short.value === "") ? null : _provider_description_short.value,
+            //keywords: $provider_key.build(),
         })
     }
     
@@ -9303,11 +9345,7 @@ const Provider = (function () {
                 //$(_panel_tab_contact).addClass("disabled")
                 //$(_panel_tab_address).addClass("disabled")
             } else {
-                //_company_cover_image.disabled = false
-                //$(_provider_name).attr("readonly", true)
-                //_button_edit_provider_name.disabled = false
-                //$(_panel_tab_contact).removeClass("disabled")
-                //$(_panel_tab_address).removeClass("disabled")
+                $(_company_name).attr("readonly", true)
             }
         }
         
@@ -9325,10 +9363,12 @@ const Provider = (function () {
             $(_company_name).val($(_provider_name).val())
             _provider_company_id.value = (provider.company_id) ? provider.company_id : null
             _provider_code_direct_id.value = (provider.code_direct_id) ? provider.code_direct_id : null
+            /*
             let provider_keywords = (provider.keywords) ? provider.keywords : ""
             $provider_key = $(_provider_key).BuildKeyword(provider_keywords)
             $(_provider_description_long).val(provider.description_long)
-            $(_provider_description_short).val(provider.description_short)
+            $(_provider_description_short).val(provider.description_short
+              //*/
             _provider_enabled.checked = (provider.enabled) ? (provider.enabled === 1) : true
         }
         
@@ -9398,8 +9438,6 @@ const Provider = (function () {
                 _button_save_provider.disabled = true
                 $(_panel_tab_provider).addClass("disabled")
                 $(_panel_tab_vendor).addClass("disabled")
-                //$(_panel_tab_location).addClass("disabled")
-                
                 $(_panel_tab_address).addClass("disabled")
             }
             
@@ -9436,6 +9474,9 @@ const Provider = (function () {
     
     }
     
+    /**
+     * return public params
+     */
     return {
         validator: null,
         detail: {},
@@ -9856,7 +9897,6 @@ $(document).ready(function () {
     }))
     
     if (mdbPreloader) {
-        console.log("preloader")
         //$("#mdb-preloader").fadeOut(500)
     } else {
         console.log("no preloader")
@@ -9912,4 +9952,8 @@ $(document).ready(function () {
     $(function () {
         $("[data-toggle=\"tooltip\"]").tooltip()
     })
+    
+    //toastr.success('I do not think that word means what you think it means.', 'Success!')
+    //toastr.warning('I do not think that word means what you think it means.', 'Warning!')
+    //toastr.error('I do not think that word means what you think it means.', 'Error!')
 })

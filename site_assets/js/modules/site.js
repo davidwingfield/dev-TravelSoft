@@ -60,7 +60,7 @@ $(document).ready(function () {
     $(function () {
         $("[data-toggle=\"tooltip\"]").tooltip()
     })
-    
+    //toastr.info('I do not think that word means what you think it means.', 'Info!')
     //toastr.success('I do not think that word means what you think it means.', 'Success!')
     //toastr.warning('I do not think that word means what you think it means.', 'Warning!')
     //toastr.error('I do not think that word means what you think it means.', 'Error!')

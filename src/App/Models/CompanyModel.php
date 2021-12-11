@@ -182,10 +182,9 @@
                 email = VALUES(email),
                 status_id = VALUES(status_id),
                 note = VALUES(note),
-                                    description_short = VALUES(description_short),
-                                    description_long = VALUES(description_long),
-                                     keywords = VALUES(keywords),
-                                    
+                description_short = VALUES(description_short),
+                description_long = VALUES(description_long),
+                keywords = VALUES(keywords),
                 modified_by = VALUES(modified_by),
                 date_modified = VALUES(date_modified),
                 enabled = VALUES(enabled)";
@@ -193,10 +192,18 @@
             try {
                 Model::$db->rawQuery($sql);
                 $company_id = Model::$db->getInsertId();
+                
                 if ($company_id) {
                     return self::get($company_id);
+                } else {
+                    $lastError = Model::$db->getLastError();
+                    $lastQuery = Model::$db->getLastQuery();
+                    Log::$debug_log->error("Company Id did not save: $company_id");
+                    Log::$debug_log->error($sql);
+                    Log::$debug_log->error($lastError);
+                    Log::$debug_log->error($lastQuery);
+                    
                 }
-                Log::$debug_log->error("No Company Id");
                 
                 return [];
             } catch (Exception $e) {

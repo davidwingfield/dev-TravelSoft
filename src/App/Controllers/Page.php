@@ -1,7 +1,7 @@
 <?php
-
+    
     namespace Framework\App\Controllers;
-
+    
     use Framework\App\Models\AddressTypesModel;
     use Framework\App\Models\AirportTypesModel;
     use Framework\App\Models\CategoriesRatingsTypesModel;
@@ -18,10 +18,9 @@
     use Framework\App\Models\SalesTypesModel;
     use Framework\App\Models\StatusTypesModel;
     use Framework\Core\Controller;
-
+    
     /**
      * Short Page Description
-     *
      * Long Page Description
      *
      * @package            Framework\App
@@ -33,7 +32,7 @@
         {
             parent::__construct();
         }
-
+        
         /**
          * fetch all type lists for select boxes
          *
@@ -42,10 +41,15 @@
         public static function getTypes(): array
         {
             $results = array(
+                "season_types" => Season::getSeasonTypes(),
                 "address_types" => AddressTypesModel::get(),
                 "airport_types" => AirportTypesModel::get(),
                 "categories_ratings_types" => CategoriesRatingsTypesModel::get(),
-                "category" => CategoryModel::get(),
+                "category" => Category::getTypes(array(
+                    "category_id" => null,
+                    "color_scheme_id" => null,
+                    "season_id" => null,
+                )),
                 "color_scheme" => ColorSchemeModel::get(),
                 "contact_types" => ContactTypesModel::get(),
                 "currency" => CurrencyModel::get(),
@@ -56,11 +60,12 @@
                 "rating_types" => RatingTypesModel::get(),
                 "sales_types" => SalesTypesModel::get(),
                 "status_types" => StatusTypesModel::get(),
+            
             );
-
+            
             return $results;
         }
-
+        
         public static function getDetails(int $page_id): array
         {
             $details = array(
@@ -70,9 +75,9 @@
                 "heading" => "",
                 "sub_heading" => "",
             );
-
+            
             $page = PageModel::getOne($page_id);
-
+            
             if ($page) {
                 if (isset($page["menu_id"])) {
                     $menu = PageModel::getMenus($page["menu_id"]);
@@ -94,28 +99,28 @@
                 define("PAGE_TITLE", $details["title"]);
                 define("PAGE_DESCRIPTION", $details["description"]);
                 define("PAGE_KEYWORDS", $details["keywords"]);
-
+                
                 define("PAGE_HEADING", $details["heading"]);
                 define("PAGE_SUBHEADING", $details["sub_heading"]);
-
+                
             }
-
+            
             return $details;
         }
-
+        
         public static function buildSideMenu(int $parent_id = 0, int $sub_id = 0): string
         {
             $menus = PageModel::getMenus();
-
+            
             return self::formatSideMenu($menus, $parent_id, $sub_id);
         }
-
+        
         private static function formatSideMenu(array $menus = [], int $parent_id = 0, int $sub_id = 0): string
         {
             $menu = "<ul id='side-menu' class='collapsible collapsible-accordion'>";
             foreach ($menus AS $k => $parentMenu) {
                 $id = $parentMenu["id"];
-
+                
                 $parentLink = "javascript:void(0);";
                 if (isset($parentMenu["link_url"])) {
                     $parentLink = $parentMenu["link_url"];
@@ -126,7 +131,7 @@
                 }
                 $parentLabel = $parentMenu["label"];
                 $sub_menus = $parentMenu["sub_menus"];
-
+                
                 if (count($sub_menus)) {
                     $parentIsActive = "";
                     if ($parentMenu["id"] === $parent_id) {
@@ -140,7 +145,7 @@
                     $menu .= "</a>";
                     $menu .= "<div class='collapsible-body'>";
                     $menu .= "<ul class='sub-menu'>";
-
+                    
                     foreach ($sub_menus AS $subMenu) {
                         $subIsActive = "";
                         $subLabel = $subMenu["label"];
@@ -152,12 +157,12 @@
                         if (isset($subMenu["link"])) {
                             $subLink = $subMenu["link"];
                         }
-
+                        
                         $menu .= "<li id='menu-item-$subId' class='$subIsActive'>";
                         $menu .= "<a href='$subLink' class='waves-effect $subIsActive'>$subLabel</a>";
                         $menu .= "</li>";
                     }
-
+                    
                     $menu .= "</ul>";
                     $menu .= "</div>";
                     $menu .= "</li>";
@@ -169,17 +174,17 @@
                     $menu .= "</a>";
                     $menu .= "</li>";
                 }
-
+                
             }
-
+            
             $menu .= "</ul>";
-
+            
             return $menu;
         }
-
+        
         public static function profile()
         {
-            
+        
         }
-
+        
     }

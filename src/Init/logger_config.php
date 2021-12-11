@@ -1,20 +1,19 @@
 <?php
-
+    
     namespace Framework\Init;
-
+    
     use Logger;
     use LoggerMDC;
-
+    
     /**
      * Short Description
-     *
      * Long Description
      *
      * @package            Framework\Init
      */
     function initLogger()
     {
-
+        
         return array(
             //////
             "rootLogger" => array(
@@ -24,7 +23,7 @@
             "loggers" => array(
                 //////
                 "MAIN" => array(
-                    "level" => "warn",
+                    "level" => "trace",
                     "appenders" => array("default"),
                 ),
                 //////
@@ -152,13 +151,13 @@
                 //////
             ),
         );
-
+        
     }
-
+    
     if (isset($_SERVER["REMOTE_ADDR"])) {
         LoggerMDC::put("ip", $_SERVER["REMOTE_ADDR"]);
     }
-
+    
     Logger::configure(initLogger());
     // ----
     $EVENT_LOGGER = Logger::getLogger("MAIN");

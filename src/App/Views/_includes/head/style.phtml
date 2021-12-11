@@ -418,6 +418,7 @@
     font-weight: 400
     }
   
+  
   .card .card-body .card-title a {
     transition: .2s ease-in-out
     }
@@ -564,22 +565,23 @@
     }
   
   .card .card-body h6 i {
-    font-size: 14px;
-    height: 100%;
-    width: fit-content;
+    font-size: 1rem;
+    height: 1.2rem;
+    width: 1rem;
     vertical-align: middle;
     text-align: center;
     line-height: 1;
+    margin-right: 0.5rem;
     }
   
   .card .card-body h5.card-title span {
     font-weight: 400;
     }
   
-  .card .card-body h6 span {
-    font-size: 14px;
-    height: 100%;
-    line-height: 1.2;
+  div.card div.card-body h6 span {
+    font-size: 1rem;
+    height: 1.2rem;
+    line-height: 1.2rem;
     vertical-align: middle;
     text-align: center;
     font-weight: 300;
@@ -671,9 +673,23 @@
     vertical-align: baseline;
     border-radius: 0.125rem;
     transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-    
     }
   
+  #toast-container > div.md-toast.md-toast-info {
+    color: #0a070d !important; /*#241DAA*/
+    background-color: #d5d2fd !important;
+    border-color: #2a21c6 !important;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAFGSURBVDhPpZO9SgNREEY3KaIINoqtkELSWVj5AqIWSWXhQ1ily3vYWKZLYaMWCvEBtAloFywCtqKNIGgRPGczubjrIqgfHGZ2fu7evXe2lpW0tLDcwHRgB5rG0ASu4ezt/fUjj4QKC9DcxhzDOrzAGFQLVuARjljkwmBBNHdhCiPYhXqkzNUjZs6abqRmItCOxAD8hFz4mxKPPjeixlp3m9UMYh/gGbbn30jcxpE+2iJ+rxP1N7AKG27TA/Obe+UDqlLU9MCejjs4wTmANZJTbFLswqb87XMR98VPcKrjVY0rmi8xd3CbB74oar2hZjrpCvXDLoatlAs4JK3YVhJvGYT7TVHrbEx0nDCHxMlLougw3IIfstae4U/X6Bns6aMr4vs6UZ+u0ZjBykEqy1zUpEFKIvCnUf73z/Sb33kI5/MzminLPgEWGncWlHVkdQAAAABJRU5ErkJggg==) !important;
+    }
+  
+  #toast-container > div.md-toast.md-toast-info > button.md-toast-close-button {
+    color: #0a070d !important;
+    }
+  
+  #toast-container > div.md-toast.md-toast-info > div.md-toast-title {
+    color: #241DAA !important;
+    font-weight: 500
+    }
   
   #toast-container > div.md-toast.md-toast-success {
     font-weight: 400;
@@ -682,6 +698,7 @@
     border-color: #016733 !important;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAD3SURBVEhL7ZOxCsIwGIRTF0EQZx0d9BGcdXH1UV2Lg7MPIOigo85SEJz07k9aiIY0fy1OfnDkT5reNWli/vyUXrc/gDbQHppyLJMnLUBzNDk0kwFjLtCilYCAecm544rGRMxJ8dUKasyP0LxxQIr5/VFcZYsweQLxz/ME8MUoqebsZDRHu4VGHAA7aIkJN9v10ZgTBpzQjm23IhiiNSfcosKWHjTInaHQxJxwBUO03CK5eW/ISmypNydyihJCiNqcVMe0JiRErTnx7oEiJMmcfFy0hJBkcxK8yZEQlXkUhkAH6OnEmsEqgisocYZr2zOrVr78j48xLydnabp09vnmAAAAAElFTkSuQmCC) !important;
     }
+  
   
   #toast-container > div.md-toast.md-toast-success > button.md-toast-close-button {
     color: #0a070d !important;
@@ -725,5 +742,515 @@
     color: #330300 !important;
     font-weight: 500
     }
-
+  
+  #carousel-example-multi > div.controls-top > a:nth-child(1) > i {
+    height: 47px;
+    width: 47px;
+    text-align: center;
+    vertical-align: middle;
+    margin-left: -3px;
+    }
+  
+  #carousel-example-multi > div.controls-top > a:nth-child(2) > i {
+    height: 47px;
+    width: 47px;
+    text-align: center;
+    vertical-align: middle;
+    margin-right: -3px;
+    }
+  
+  #carousel-example-multi > ol > li {
+    width: 1.25rem;
+    max-width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 3px;
+    margin-left: 3px;
+    text-indent: -999px;
+    margin-bottom: -3.75rem;
+    background-color: #ff884f;
+    background-clip: padding-box;
+    border-color: transparent;
+    opacity: .5;
+    transition: opacity .6s ease;
+    }
+  
+  #carousel-example-multi > ol > li.active,
+  #carousel-example-multi > ol > li:active {
+    width: 1.56rem;
+    max-width: 1.56rem;
+    height: 1.56rem;
+    background-color: #ff884f;
+    border-radius: 50%;
+    opacity: 1;
+    }
+  
+  #carousel-example-multi > div.carousel-inner,
+  #carousel-example-multi > div.carousel-inner > div.carousel-item {
+    height: initial;
+    max-height: initial;
+    min-height: initial;
+    }
+  
+  .panel_link {
+    margin-right: 2rem;
+    position: absolute;
+    right: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    }
+  
+  div.card.card-body.panel-code {
+    max-height: 500px;
+    
+    padding: 0;
+    }
+  
+  
+  div.panel-actions > a.panel-action.fas {
+    display: inline-block;
+    padding: 0 0;
+    color: #a3afb7;
+    text-decoration: none;
+    cursor: pointer;
+    background-color: transparent;
+    margin: 0;
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+    }
+  
+  div.panel-footer, div.panel-body, div.panel-title {
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    padding-bottom: 1.5rem;
+    }
+  
+  div.panel-actions > a.panel-action.fas:hover {
+    color: #526069;
+    }
+  
+  .bd-highlight {
+    background-color: #33b5e5;
+    border: 2px solid #fff;
+    color: #fff;
+    }
+  
+  div.selected-day {
+    background: #bce8f1;
+    opacity: .3;
+    }
+  
+  a.btn-floating.btn-lg > i {
+    font-size: 1.6rem !important;
+    line-height: 3.2rem !important;
+    }
+  
+  pre[class*="language-"] {
+    padding: 1em;
+    margin: 0.5em 0;
+    overflow: auto;
+    border-radius: 0.3em;
+    height: 100%;
+    min-height: 300px;
+    }
+  
+  .text-secondary {
+    color: #e54a00 !important;
+    }
+  
+  div.panel > div.panel-body.panel-code > div.code-toolbar {
+    height: 100%;
+    max-height: 400px
+    }
+  
+  div.panel > div.panel-body.panel-code {
+    height: 100%;
+    max-height: 400px
+    }
+  
+  
+  div.panel.is-fullscreen > div.panel-body.panel-code > div.code-toolbar {
+    max-height: 86vh;
+    height: 100%;
+    }
+  
+  div.panel.is-fullscreen > div.panel-body.panel-code {
+    max-height: 86vh;
+    height: 100%;
+    }
+  
+  .fc td, .fc th {
+    padding: 0 !important
+    }
+  
+  form.search-form {
+    min-height: initial !important;
+    height: fit-content !important;
+    }
+  
+  
+  .md-pills .nav-link.active, .md-pills .nav-link.active:hover, .md-pills .nav-link.active:focus, .md-pills .nav-link.active:active {
+    background: #ff884f !important;
+    color: #0a070d !important;
+    }
+  
+  
+  div.code-toolbar {
+    position: relative;
+    }
+  
+  div.code-toolbar > .toolbar {
+    position: absolute;
+    z-index: 10;
+    top: .3em;
+    right: .2em;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+    }
+  
+  div.code-toolbar:hover > .toolbar {
+    opacity: 1;
+    }
+  
+  /* Separate line b/c rules are thrown out if selector is invalid.
+     IE11 and old Edge versions don't support :focus-within. */
+  div.code-toolbar:focus-within > .toolbar {
+    opacity: 1;
+    }
+  
+  div.code-toolbar > .toolbar > .toolbar-item {
+    display: inline-block;
+    }
+  
+  div.code-toolbar > .toolbar > .toolbar-item > a {
+    cursor: pointer;
+    }
+  
+  div.code-toolbar > .toolbar > .toolbar-item > button {
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    line-height: normal;
+    overflow: visible;
+    padding: 0;
+    -webkit-user-select: none; /* for button */
+    -moz-user-select: none;
+    -ms-user-select: none;
+    }
+  
+  div.code-toolbar > .toolbar > .toolbar-item > a,
+  div.code-toolbar > .toolbar > .toolbar-item > button,
+  div.code-toolbar > .toolbar > .toolbar-item > span {
+    color: #bbb;
+    font-size: .8em;
+    padding: 0 .5em;
+    background: #f5f2f0;
+    background: rgba(224, 224, 224, 0.2);
+    box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
+    border-radius: .5em;
+    }
+  
+  div.code-toolbar > .toolbar > .toolbar-item > a:hover,
+  div.code-toolbar > .toolbar > .toolbar-item > a:focus,
+  div.code-toolbar > .toolbar > .toolbar-item > button:hover,
+  div.code-toolbar > .toolbar > .toolbar-item > button:focus,
+  div.code-toolbar > .toolbar > .toolbar-item > span:hover,
+  div.code-toolbar > .toolbar > .toolbar-item > span:focus {
+    color: inherit;
+    text-decoration: none;
+    }
+  
+  .trips-skin .btn-primary:focus, .trips-skin .btn-primary:active, .trips-skin .btn-primary.active {
+    background-color: #0b51c5 !important;
+    }
+  
+  .popover-header {
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0;
+    font-size: 1rem;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #ebebeb;
+    border-top-left-radius: calc(0.3rem - 1px);
+    border-top-right-radius: calc(0.3rem - 1px);
+    line-height: 1.5;
+    }
+  
+  .number-input input[type="number"] {
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+    text-align: center;
+    font-size: 1rem;
+    color: #495057;
+    }
+  
+  .number-input input[type=number]::-webkit-inner-spin-button,
+  .number-input input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    }
+  
+  
+  .popover {
+    width: 451px;
+    min-width: 451px;
+    max-width: 451px;
+    }
+  
+  .form-label-popover {
+    height: 30px;
+    width: 100%;
+    line-height: 30px;
+    vertical-align: middle;
+    font-size: 1rem;
+    font-weight: 500;
+    padding-left: 1rem;
+    }
+  
+  div.input-group > .form-element > .form-control {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    max-width: 100px;
+    font-size: 1rem;
+    }
+  
+  div.input-group > div.input-group-prepend > span.input-group-text,
+  div.input-group > div.input-group-append > span.input-group-text {
+    cursor: pointer;
+    }
+  
+  div.input-group > div.input-group-prepend > span.input-group-text > i,
+  div.input-group > div.input-group-append > span.input-group-text > i {
+    font-size: 1rem;
+    font-weight: 900;
+    line-height: 1.1
+    }
+  
+  .popup-window-button-close {
+    font-weight: bold;
+    float: right;
+    padding: 8px 10px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #a3afb7;
+    background-color: transparent;
+    height: 100%;
+    width: 14px;
+    line-height: 1;
+    margin-top: -3px;
+    }
+  
+  /*
+   button.btn.guest-picker > div.guest-picker-wrapper {
+     margin-left: 8px;
+     border-left-width: 0;
+     box-shadow: -8px 0 0 #757575;
+     }
+   
+   button.btn.guest-picker > div.guest-picker-wrapper > i {
+     margin: 0 2px 0 8px;
+     font-size: 1.25em;
+     color: #757575;
+     height: auto;
+     width: auto;
+     
+     }
+   
+   button.btn.guest-picker > div.guest-picker-wrapper > span.guest-picker-title {
+     
+     }
+   
+   button.btn.guest-picker > div.guest-picker-wrapper > span.guest-picker-title > span.guest-picker-title-text {
+     display: block;
+     margin-bottom: 2px;
+     font-size: .75em;
+     line-height: normal;
+     color: #333;
+     }
+   
+   button.btn.guest-picker > div.guest-picker-wrapper > span.guest-picker-title > span.guest-picker-results-text {
+     font-size: .8125em;
+     line-height: 20px;
+     white-space: nowrap;
+     }
+   
+   button.btn.guest-picker > div.guest-picker-wrapper > span.guest-picker-title > span.guest-picker-results-text > span.num_rooms {
+     font-weight: 700;
+     font-size: .8125em;
+     line-height: 20px;
+     }
+   */
+  
+  .btn.btn-guest-picker {
+    margin: 0 0 0 0;
+    background: #fff;
+    padding: 0;
+    font-size: inherit;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .10);
+    text-align: left;
+    border-left: solid .4rem #757575;
+    width: 100%;
+    max-width: 300px;
+    }
+  
+  .btn.btn-check-in-picker {
+    margin: 0 0 0 0;
+    background: #fff;
+    padding: 0;
+    font-size: inherit;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .10);
+    text-align: left;
+    border-left: solid .4rem #00aa6c;
+    width: 100%;
+    max-width: 300px;
+    }
+  
+  .btn.btn-check-out-picker {
+    margin: 0 0 0 0;
+    background: #fff;
+    padding: 0;
+    font-size: inherit;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .10);
+    text-align: left;
+    border-left: solid .4rem #c00;
+    width: 100%;
+    max-width: 300px;
+    }
+  
+  i.btn-guest-picker-icon {
+    margin: 0 2px 0 8px;
+    font-size: 1.25em;
+    color: #757575;
+    height: auto;
+    width: auto;
+    }
+  
+  span.btn-guest-picker-details {
+    display: inline-block;
+    margin-top: 3px;
+    padding: 0 6px;
+    max-width: 100%;
+    vertical-align: middle;
+    }
+  
+  span.btn-guest-picker-details-title {
+    margin-bottom: 2px;
+    font-size: .75em;
+    line-height: normal;
+    color: #333;
+    white-space: nowrap;
+    }
+  
+  span.btn-guest-picker-details-info {
+    display: block;
+    font-size: .8125em;
+    line-height: 20px;
+    }
+  
+  span.btn-guest-picker-details-info-wrapper {
+    font-size: .8125em;
+    line-height: 20px;
+    white-space: nowrap;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    }
+  
+  span.btn-guest-picker-details-info-wrapper-rooms,
+  span.btn-guest-picker-details-info-wrapper-rooms,
+  span.btn-guest-picker-details-info-wrapper-rooms {
+    
+    }
+  
+  td[role=presentation] {
+    padding: 0 !important;
+    }
+  
+  
+  div.datepicker.datepicker-dropdown {
+    padding: 0;
+    }
+  
+  div.datepicker-days > table > thead > tr:first-child {
+    content: "ss"
+    }
+  
+  .datepicker table {
+    width: 451px;
+    min-width: 451px;
+    max-width: 451px;
+    }
+  
+  .datepicker td, .datepicker th {
+    text-align: center;
+    width: auto;
+    height: auto;
+    padding-top: 2px !important;
+    padding-left: 2px !important;
+    padding-bottom: 2px !important;
+    padding-right: 2px !important;
+    }
+  
+  .cPZwQ, .GtzMn {
+    margin: 0 15px;
+    color: #000
+    }
+  
+  .cPZwQ {
+    padding: 15px 27px 10px;
+    font-size: 15px;
+    border: solid var(--gray-80);
+    border-width: 0 0 1px;
+    font-weight: 700
+    }
+  
+  @media (min-width: 768px) {
+    .cPZwQ {
+      padding: 15px 0 10px
+      }
+    }
+  
+  @media (min-width: 768px) {
+    .cPZwQ {
+      text-align: center
+      }
+    
+    .eMrph {
+      width: 266px;
+      box-sizing: content-box
+      }
+    }
+  
+  
+  td div.date-container {
+    font-weight: 700;
+    height: 30px;
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 30px;
+    border-radius: 2px;
+    background: #fff;
+    padding-top: 0;
+    padding-bottom: 0;
+    }
+  
+  .datepicker table tr td.active.active div.date-container {
+    background: #fff;
+    color: #000;
+    }
+  
+  .datepicker table tr td.active, .datepicker table tr td.active:hover, .datepicker table tr td.active.disabled, .datepicker table tr td.active.disabled:hover {
+    background-color: #00aa6c !important;
+    background-image: none;
+    background-repeat: initial;
+    text-shadow: none;
+    }
 </style>

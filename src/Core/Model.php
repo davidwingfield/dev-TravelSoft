@@ -72,7 +72,7 @@
                 $temp = $string;
                 
                 //$temp = htmlentities($_string);
-                return "'" . addslashes($temp) . "'";
+                return "'" . addslashes(html_entity_decode($string)) . "'";
             }
         }
         

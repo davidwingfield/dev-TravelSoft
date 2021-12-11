@@ -23,12 +23,10 @@
         $rating_types = $page_data["types"]["rating_types"];
     }
 ?>
+
 <div class="modal fade" id="modal_new_product" tabindex="-1" role="dialog" aria-labelledby="modal_new_product" aria-hidden="true">
-    
     <div class="modal-dialog modal-simple">
-        
         <div class="modal-content">
-            
             <div class="modal-header">
                 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -40,22 +38,9 @@
             </div>
             
             <div class="modal-body">
-                
                 <form id="form_product_add" novalidate>
                     
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-element">
-                                <label for="modal_product_name">Name:</label>
-                                <input type="text" id="modal_product_name" name="modal_product_name" class="form-control"/>
-                                <div id="modal_product_name-error" class="error w-100 text-center"></div>
-                            </div>
-                        </div>
-                    
-                    </div>
-                    
-                    <div class="row">
-                        
+                    <div class="row gx-1 ">
                         <div class="col-6">
                             <div class="form-element">
                                 <label for="modal_product_category_id">Category:</label>
@@ -73,16 +58,49 @@
                                 <div id="modal_product_category_id-error" class="error w-100 text-center"></div>
                             </div>
                         </div>
+                    </div>
+                    
+                    <div class="row gx-1 ">
                         <div class="col-6">
                             <div class="form-element">
-                                <label for="modal_product_sku">SKU:</label>
-                                <input type="text" id="modal_product_sku" name="modal_product_sku" class="form-control"/>
-                                <div id="modal_product_sku-error" class="error w-100 text-center"></div>
+                                <label for="modal_product_provider_name">Provider:</label>
+                                <input type="search" id="modal_product_provider_name" name="modal_product_provider_name" class="form-control"/>
+                                <div id="modal_product_provider_name-error" class="error w-100 text-center"></div>
+                                <input type="text" id="modal_product_provider_id" name="modal_product_provider_id"/>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <div class="form-element">
+                                <div class="form-element">
+                                    <label for="modal_product_vendor_name">Vendor:</label>
+                                    <input type="search" id="modal_product_vendor_name" name="modal_product_vendor_name" class="form-control"/>
+                                    <div id="modal_product_vendor_name-error" class="error w-100 text-center"></div>
+                                    <input type="text" id="modal_product_vendor_id" name="modal_product_vendor_id"/>
+                                </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="row">
+                    <div class="row gx-1 ">
+                        <div class="col-12">
+                            <div class="form-element">
+                                <label for="modal_product_name">Name:</label>
+                                <input type="text" id="modal_product_name" name="modal_product_name" class="form-control"/>
+                                <div id="modal_product_name-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row gx-1 ">
+                        <div class="col-6">
+                            <div class="form-element">
+                                <label for="modal_product_sku">Sku:</label>
+                                <input type="texy" id="modal_product_sku" name="modal_product_sku" class="form-control"/>
+                                <div id="modal_product_sku-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                        
                         <div class="col-6">
                             <div class="form-element">
                                 <label for="modal_product_rating_types_id">Rating:</label>
@@ -102,7 +120,7 @@
                         </div>
                     </div>
                     
-                    <div class="row">
+                    <div class="row gx-1 ">
                         <div class="col-6">
                             <div class="form-element">
                                 <label for="modal_product_currency_id">Currency:</label>
@@ -141,19 +159,16 @@
                     </div>
                 
                 </form>
-            
             </div>
             
             <div class="modal-footer">
                 <button class="btn btn-outline-danger btn-sm" id="modal_button_cancel_add_product">Cancel</button>
                 <button class="btn btn-primary btn-sm" id="modal_button_submit_add_product">Save</button>
             </div>
-        
         </div>
-    
     </div>
-
 </div>
+
 <script>
     $(document).ready(function () {
         const $rating = $('#rating')
@@ -167,6 +182,64 @@
             let index = (!isNaN($(this).attr("data-index"))) ? parseInt($(this).attr("data-index")) : 0
             $rating_types_id.val((index) + 1)
         })
+        
+        const buildSKU = function (stringValue) {
+            let myArray = []
+            let categorySection = null
+            let productSection = ""
+            let providerSection = null
+            let vendorSection = null
+            
+            if ((isNaN(parseInt($("#modal_product_category_id").val())))) {
+                return
+            }
+            let category_id = (!isNaN(parseInt($("#modal_product_category_id").val()))) ? parseInt($("#modal_product_category_id").val()) : null
+            let category = Types.category.get(category_id)
+            if (category) {
+                categorySection = category.attribute_id
+            }
+            
+            let codeValue = ""
+            if (stringValue) {
+                codeValue = stringValue.toUpperCase().trim()
+                myArray = codeValue.split(" ")
+                console.log("myArray", myArray)
+            }
+            
+            if (myArray.length === 0) {
+                /**
+                 * no words
+                 */
+                
+            } else if (myArray.length === 1) {
+                /**
+                 * one words
+                 */
+                
+            } else if (myArray.length === 2) {
+                /**
+                 * two words
+                 */
+                
+            } else if (myArray.length === 3) {
+                for (let n = 0; n < myArray.length; n++) {
+                    productSection += myArray[n].charAt(0)
+                }
+            } else {
+            
+            }
+            console.log("sku", categorySection + "-" + productSection)
+            if (categorySection !== "" && productSection !== "" && providerSection !== "" && vendorSection !== "") {
+                console.log("sku", categorySection + "-" + productSection)
+            }
+            
+            return codeValue
+        }
+        
+        $("#modal_product_name")
+          .on("keyup", function () {
+              // console.log("string", buildSKU($(this).val()))
+          })
         
     })
 </script>

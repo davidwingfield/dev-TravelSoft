@@ -293,7 +293,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Page",
             "name": "Page",
-            "summary": "Short\u0020Page\u0020Description",
+            "summary": "Short\u0020Page\u0020Description\nLong\u0020Page\u0020Description",
             "url": "classes/Framework-App-Controllers-Page.html"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Page\u003A\u003A__construct\u0028\u0029",
@@ -370,6 +370,11 @@ Search.appendIndex(
             "name": "buttons",
             "summary": "buttons",
             "url": "classes/Framework-App-Controllers-Product.html#property_buttons"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Product\u003A\u003A\u0024tabs",
+            "name": "tabs",
+            "summary": "Tabs",
+            "url": "classes/Framework-App-Controllers-Product.html#property_tabs"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Provider",
             "name": "Provider",
@@ -483,13 +488,18 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Season",
             "name": "Season",
-            "summary": "Short\u0020Season\u0020Description",
+            "summary": "Short\u0020Season\u0020Description\nLong\u0020Season\u0020Description",
             "url": "classes/Framework-App-Controllers-Season.html"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Season\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Season.html#method___construct"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Season\u003A\u003AgetSeasonTypes\u0028\u0029",
+            "name": "getSeasonTypes",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Season.html#method_getSeasonTypes"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Season\u003A\u003AserveGet\u0028\u0029",
             "name": "serveGet",
@@ -505,6 +515,11 @@ Search.appendIndex(
             "name": "format",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Season.html#method_format"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Season\u003A\u003AformatSeasonType\u0028\u0029",
+            "name": "formatSeasonType",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Season.html#method_formatSeasonType"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\StaticPages",
             "name": "StaticPages",
@@ -988,13 +1003,18 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\CategoryModel",
             "name": "CategoryModel",
-            "summary": "Short\u0020Category\u0020Description",
+            "summary": "Short\u0020Category\u0020Description\nLong\u0020Category\u0020Description",
             "url": "classes/Framework-App-Models-CategoryModel.html"
         },                {
             "fqsen": "\\Framework\\App\\Models\\CategoryModel\u003A\u003Aget\u0028\u0029",
             "name": "get",
             "summary": "",
             "url": "classes/Framework-App-Models-CategoryModel.html#method_get"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\CategoryModel\u003A\u003AgetAllTypes\u0028\u0029",
+            "name": "getAllTypes",
+            "summary": "",
+            "url": "classes/Framework-App-Models-CategoryModel.html#method_getAllTypes"
         },                {
             "fqsen": "\\Framework\\App\\Models\\CategoryModel\u003A\u003AgetOne\u0028\u0029",
             "name": "getOne",
@@ -1015,6 +1035,11 @@ Search.appendIndex(
             "name": "dbFields",
             "summary": "",
             "url": "classes/Framework-App-Models-CategoryModel.html#property_dbFields"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\CategoryModel\u003A\u003A\u0024getTypesSQL",
+            "name": "getTypesSQL",
+            "summary": "",
+            "url": "classes/Framework-App-Models-CategoryModel.html#property_getTypesSQL"
         },                {
             "fqsen": "\\Framework\\App\\Models\\CityModel",
             "name": "CityModel",
@@ -1783,7 +1808,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProductModel",
             "name": "ProductModel",
-            "summary": "Short\u0020Product\u0020Description",
+            "summary": "Short\u0020Product\u0020Description\nLong\u0020Product\u0020Description",
             "url": "classes/Framework-App-Models-ProductModel.html"
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProductModel\u003A\u003Aget\u0028\u0029",
@@ -1983,13 +2008,18 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\SeasonModel",
             "name": "SeasonModel",
-            "summary": "Short\u0020Season\u0020Description",
+            "summary": "Short\u0020Season\u0020Description\nLong\u0020Season\u0020Description",
             "url": "classes/Framework-App-Models-SeasonModel.html"
         },                {
             "fqsen": "\\Framework\\App\\Models\\SeasonModel\u003A\u003Aget\u0028\u0029",
             "name": "get",
             "summary": "",
             "url": "classes/Framework-App-Models-SeasonModel.html#method_get"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\SeasonModel\u003A\u003AgetTypes\u0028\u0029",
+            "name": "getTypes",
+            "summary": "",
+            "url": "classes/Framework-App-Models-SeasonModel.html#method_getTypes"
         },                {
             "fqsen": "\\Framework\\App\\Models\\SeasonModel\u003A\u003AgetOne\u0028\u0029",
             "name": "getOne",
@@ -2015,6 +2045,11 @@ Search.appendIndex(
             "name": "dbFields",
             "summary": "",
             "url": "classes/Framework-App-Models-SeasonModel.html#property_dbFields"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\SeasonModel\u003A\u003A\u0024seasonTypesSQL",
+            "name": "seasonTypesSQL",
+            "summary": "",
+            "url": "classes/Framework-App-Models-SeasonModel.html#property_seasonTypesSQL"
         },                {
             "fqsen": "\\Framework\\App\\Models\\StageModel",
             "name": "StageModel",
@@ -2278,7 +2313,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\VendorModel\u003A\u003A\u0024selectQuery",
             "name": "selectQuery",
-            "summary": "default\u0020select\u0020query",
+            "summary": "",
             "url": "classes/Framework-App-Models-VendorModel.html#property_selectQuery"
         },                {
             "fqsen": "\\Framework\\App\\Models\\VendorModel\u003A\u003A\u0024dbTable",
@@ -2320,6 +2355,11 @@ Search.appendIndex(
             "name": "COUNTRIES",
             "summary": "",
             "url": "namespaces/default.html#constant_COUNTRIES"
+        },                {
+            "fqsen": "\\displayJsonOnPage\u0028\u0029",
+            "name": "displayJsonOnPage",
+            "summary": "",
+            "url": "namespaces/default.html#function_displayJsonOnPage"
         },                {
             "fqsen": "\\Framework\\Core\\Controller",
             "name": "Controller",
@@ -3270,6 +3310,26 @@ Search.appendIndex(
             "name": "image_type",
             "summary": "",
             "url": "classes/Framework-Core-SimpleImage.html#property_image_type"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Category",
+            "name": "Category",
+            "summary": "Short\u0020Category\u0020Description\nLong\u0020Category\u0020Description",
+            "url": "classes/Framework-App-Controllers-Category.html"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Category\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Category.html#method___construct"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Category\u003A\u003AgetTypes\u0028\u0029",
+            "name": "getTypes",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Category.html#method_getTypes"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Category\u003A\u003AformatTypes\u0028\u0029",
+            "name": "formatTypes",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Category.html#method_formatTypes"
         },                {
             "fqsen": "\\",
             "name": "\\",

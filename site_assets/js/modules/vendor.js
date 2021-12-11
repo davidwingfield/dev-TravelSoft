@@ -34,7 +34,11 @@ const Vendor = (function () {
     const _vendor_modal_vendor_name = document.getElementById("vendor_modal_vendor_name")
     const _button_save_vendor = document.getElementById("button_save_vendor")
     const _company_name = document.getElementById("company_name")
-    // ----
+    const _form_product_add = document.getElementById("form_product_add")
+    const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
+    const _modal_product_provider_id = document.getElementById("modal_product_provider_id")
+    const _modal_product_vendor_id = document.getElementById("modal_product_vendor_id")
+    const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
     
     let new_vendor_validator, validator
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
@@ -92,10 +96,17 @@ const Vendor = (function () {
     $(_modal_button_submit_add_vendor)
       .on("click", function () {
           if (validate_new_modal_form()) {
+              
               let dataToSend = {
                   name: _vendor_modal_vendor_name.value,
               }
-              add(dataToSend)
+              
+              confirmDialog(`Vender ${name} is exists. Would you like to load this record?`, (ans) => {
+                  if (ans) {
+                      add(dataToSend)
+                  }
+              })
+              
           }
       })
     
@@ -137,13 +148,61 @@ const Vendor = (function () {
               }
               let vendor = suggestion.data
               let name = vendor.name
-              confirmDialog(`Vender ${name} is exists. Would you like to load this record?`, (ans) => {
+              confirmDialog(`Would you like to create Vendor: ${name}`, (ans) => {
                   if (ans) {
                       window.location.replace(base_url + "/" + vendor.id)
                   } else {
                       reset_modal()
                   }
               })
+          },
+      })
+    
+    $(_modal_product_vendor_name)
+      .on("change", function () {
+          setTimeout(function () {
+              let vendor_name = _modal_product_vendor_name.value
+              
+              if (globalSelectedVendor === false) {
+                  if (vendor_name === "") {
+                      _modal_product_vendor_id.value = ""
+                      _modal_product_vendor_name.value = ""
+                      globalSelectedVendor = false
+                  } else {
+                      vendor_exists(vendor_name)
+                  }
+              }
+          }, 200)
+      })
+      .on("search", function () {
+          _modal_product_vendor_id.value = ""
+          _modal_product_vendor_name.value = ""
+          globalSelectedVendor = false
+      })
+      .on("click", function (e) {
+          if ($(this).attr("readonly") === "readonly") {
+              e.preventDefault()
+          } else {
+              $(this).select()
+          }
+      })
+      .autocomplete({
+          serviceUrl: "/api/v1.0/autocomplete/vendors",
+          minChars: 2,
+          cache: false,
+          dataType: "json",
+          triggerSelectOnValidInput: false,
+          paramName: "st",
+          onSelect: function (suggestion) {
+              if (suggestion) {
+                  if (suggestion.data) {
+                      console.log("suggestion.data", suggestion.data)
+                      let vendor = suggestion.data
+                      _modal_product_vendor_id.value = suggestion.data.id
+                      _modal_product_vendor_name.value = suggestion.data.name
+                      globalSelectedVendor = true
+                  }
+              }
           },
       })
     
@@ -210,6 +269,7 @@ const Vendor = (function () {
     }
     
     const load_new_modal = function () {
+        $(_vendor_modal_vendor_name).val("")
         $(_modal_new_vendor).modal("show")
     }
     
@@ -243,7 +303,6 @@ const Vendor = (function () {
                 }
             })
         }
-        
     }
     
     /**
@@ -278,7 +337,6 @@ const Vendor = (function () {
      * build vendor index table
      */
     const build_index_table = function () {
-        
         $index_table = $(_table_vendor_index).table({
             table_type: "display_list",
             data: Vendor.all,
@@ -343,12 +401,15 @@ const Vendor = (function () {
             }
             
             fetch_vendor_by_name(dataToSend, function (data) {
+                console.log("fetch_vendor_by_name", data)
                 let vendor = {}
                 if (data) {
+                    
                     if (data.length > 0) {
                         if (data[0]) {
-                            console.log("Vendor Exists")
                             vendor = data[0]
+                            console.log("Vendor Exists", vendor)
+                            
                         }
                     }
                 }
@@ -481,10 +542,10 @@ const Vendor = (function () {
      * @param callback
      */
     const updateVendor = function (dataToSend, callback) {
+        console.log("updateVendor()", dataToSend)
         let url = "/api/v1.0/vendors/update"
         
         if (dataToSend) {
-            
             try {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
                     console.log("data", data)
@@ -505,7 +566,6 @@ const Vendor = (function () {
         
         vendor_detail.company_detail = Company.build()
         if (vendor_detail) {
-            
             confirmDialog(`Would you like to update?`, (ans) => {
                 if (ans) {
                     console.log("vendor_detail", vendor_detail)
@@ -537,7 +597,6 @@ const Vendor = (function () {
                 }
                 
             })
-            
         }
     }
     
@@ -680,7 +739,6 @@ const Vendor = (function () {
     }
     
     const init = function (settings) {
-        console.log("settings", settings)
         let company = {}
         if (settings) {
             if (settings.company) {
@@ -688,38 +746,35 @@ const Vendor = (function () {
             }
         }
         
-        if (_vendor_name) {
-            _vendor_name.value = (settings.name) ? settings.name : ""
-            init_autocomplete()
-        }
-        
-        if (_vendor_id) {
-            _vendor_id.value = (settings.id) ? settings.id : ""
-        }
-        
-        if (_vendor_company_id) {
-            _vendor_company_id.value = (company.id) ? company.id : ""
-        }
-        if (_vendor_sku) {
-            _vendor_sku.value = (settings.sku) ? settings.sku : ""
-        }
-        if (_vendor_enabled) {
-            _vendor_enabled.checked = (settings.enabled) ? (settings.enabled === 1) : true
-        }
-        if (_vendor_is_provider) {
-            _vendor_is_provider.checked = (settings.is_provider === 1)
-        }
-        if (_vendor_show_online) {
-            _vendor_show_online.checked = (settings.show_online === 1)
-        }
-        if (_vendor_show_ops) {
-            _vendor_show_ops.checked = (settings.show_ops === 1)
-        }
-        if (_vendor_show_sales) {
-            _vendor_show_sales.checked = (settings.show_sales === 1)
-        }
-        
         if (_form_edit_vendor) {
+            if (_vendor_name) {
+                _vendor_name.value = (settings.name) ? settings.name : ""
+                init_autocomplete()
+            }
+            if (_vendor_id) {
+                _vendor_id.value = (settings.id) ? settings.id : ""
+            }
+            if (_vendor_company_id) {
+                _vendor_company_id.value = (company.id) ? company.id : ""
+            }
+            if (_vendor_sku) {
+                _vendor_sku.value = (settings.sku) ? settings.sku : ""
+            }
+            if (_vendor_enabled) {
+                _vendor_enabled.checked = (settings.enabled) ? (settings.enabled === 1) : true
+            }
+            if (_vendor_is_provider) {
+                _vendor_is_provider.checked = (settings.is_provider === 1)
+            }
+            if (_vendor_show_online) {
+                _vendor_show_online.checked = (settings.show_online === 1)
+            }
+            if (_vendor_show_ops) {
+                _vendor_show_ops.checked = (settings.show_ops === 1)
+            }
+            if (_vendor_show_sales) {
+                _vendor_show_sales.checked = (settings.show_sales === 1)
+            }
             validator_init(form_rules)
             validator = $(_form_edit_vendor).validate()
         }
@@ -753,10 +808,10 @@ const Vendor = (function () {
      */
     const index = function (settings) {
         if (_form_vendor_add) {
-            console.log("_form_vendor_add")
             validator_init(add_modal_form_rules)
             new_vendor_validator = $(_form_vendor_add).validate()
         }
+        
         build_index_table()
         
         if (settings) {
@@ -768,7 +823,6 @@ const Vendor = (function () {
     }
     
     const setVendor = function () {
-        
         if (_vendor_name) {
             $(_vendor_is_provider).attr("readonly", true)
             _vendor_is_provider.disabled = true

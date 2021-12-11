@@ -17,9 +17,7 @@
     class VendorModel extends Model
     {
         /**
-         * default select query
-         *
-         * @var string
+         * @var string $selectQuery Select Query Template
          */
         protected static $selectQuery = "
             SELECT
@@ -59,7 +57,6 @@
             JOIN			company COMPANY ON COMPANY.id = VENDOR.company_id
            WHERE			COMPANY.enabled = 1
                 AND			COMPANY.enabled = 1
-                AND			VENDOR.enabled = 1
                 ";
         
         protected static $dbTable = "vendor";
@@ -156,34 +153,35 @@
                 $created_by = Model::setInt($user_id);
                 $modified_by = Model::setInt($user_id);
                 $sql = "
-            INSERT INTO vendor (
-                id, company_id, status_id, show_online,
-                show_sales, show_ops, is_provider, sku,
-                enabled, date_created, created_by, date_modified,
-                modified_by, note
-            )
-            VALUES
-            (
-                $vendor_id, $company_id, $status_id, $show_online,
-                $show_sales, $show_ops, $is_provider, $sku,
-                $enabled, CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP,
-                $modified_by, $note
-            )
-            ON DUPLICATE KEY UPDATE
-                status_id = VALUES(status_id),
-                show_online = VALUES(show_online),
-                show_sales = VALUES(show_sales),
-                show_ops = VALUES(show_ops),
-                is_provider = VALUES(is_provider),
-                sku = VALUES(sku),
-                note = VALUES(note),
-                modified_by = VALUES(modified_by),
-                date_modified = VALUES(date_modified),
-                enabled = VALUES(enabled)
-                ";
-                
+                    INSERT INTO vendor (
+                        id, company_id, status_id, show_online,
+                        show_sales, show_ops, is_provider, sku,
+                        enabled, date_created, created_by, date_modified,
+                        modified_by, note
+                    )
+                    VALUES
+                    (
+                        $vendor_id, $company_id, $status_id, $show_online,
+                        $show_sales, $show_ops, $is_provider, $sku,
+                        $enabled, CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP,
+                        $modified_by, $note
+                    )
+                    ON DUPLICATE KEY UPDATE
+                        status_id = VALUES(status_id),
+                        show_online = VALUES(show_online),
+                        show_sales = VALUES(show_sales),
+                        show_ops = VALUES(show_ops),
+                        is_provider = VALUES(is_provider),
+                        sku = VALUES(sku),
+                        note = VALUES(note),
+                        modified_by = VALUES(modified_by),
+                        date_modified = VALUES(date_modified),
+                        enabled = VALUES(enabled)
+                    ";
+//                Log::$debug_log->trace($sql);
                 Model::$db->rawQuery($sql);
-                $vendor_id = (!$vendor_id) ? Model::$db->getInsertId() : $vendor_id;
+                $vendor_id = Model::$db->getInsertId();
+                Log::$debug_log->trace(Model::$db->getInsertId());
                 if ($vendor_id) {
                     $sku = Vendor::generateSKU(array(
                         "company_name" => $vendor["name"],
@@ -226,7 +224,8 @@
                     AND			COMPANY.name LIKE '%$searchTerm%'
                     ORDER BY    LENGTH(COMPANY.name), CAST(COMPANY.name AS UNSIGNED), COMPANY.name ASC
                     LIMIT 20;";
-                Log::$debug_log->trace($sql);
+                
+                //  Log::$debug_log->trace($sql);
                 
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {

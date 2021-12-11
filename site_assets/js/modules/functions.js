@@ -254,7 +254,7 @@ const sendPostRequest = function (url, data_to_send, callback) {
     let msg, result = []
     if (url && data_to_send) {
         $.postJSON(url, data_to_send, function (data, status, xhr) {
-            /*
+            //*
             console.log("data", data)
             console.log("status", status)
             console.log("xhr", xhr)
@@ -271,6 +271,7 @@ const sendPostRequest = function (url, data_to_send, callback) {
                 if (data.error) {
                     return handleError(data.error)
                 }
+                
                 return handleError("Error Posting Data")
             } else {
                 
@@ -296,7 +297,7 @@ const _display_ajax_error = function (jqXHR, exception, uri) {
         status: "",
         uri: uri,
     }
-    
+    console.log("jqXHR", jqXHR.responseText)
     if (jqXHR.status === 0) {
         msg = "Not connected, verify Network."
     } else if (jqXHR.status === 404) {
@@ -321,13 +322,13 @@ const _display_ajax_error = function (jqXHR, exception, uri) {
     error.message = msg
     error.status = jqXHR.status
     error.uri = uri
-    
+    error.jqXHR = jqXHR
     return error
 }
 
 const handleError = function (msg) {
     if (!msg) {
-        msg = "Error processing request"
+        msg = "3Error processing request"
     }
     toastr.error(msg)
 }
@@ -613,6 +614,10 @@ const generateCodeDirectId = function (provider) {
     return codeDirectId
 }
 
+const getDate = function (element) {
+    return element.pickadate("picker").get()
+}
+
 jQuery.extend({
     postJSON: function (url, data, callback) {
         let request = $.ajax({
@@ -629,19 +634,40 @@ jQuery.extend({
         })
         request.fail(function (jqXHR, textStatus, msg) {
             /*
+            if (toggleAJAXResponse) {
+                const link = document.createElement("a")
+                link.id = 'someLink' //give it an ID!
+                link.href = "javascript:void(0);"
+                link.addEventListener("click", function () {
+                    var file = new Blob([jqXHR.responseText], { type: "text/html" })
+                    var fileURL = URL.createObjectURL(file)
+                    var win = window.open()
+                    win.document.write('<iframe src="' + fileURL + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>')
+                })
+                let pageFrame = document.getElementById("page")
+                pageFrame.appendChild(link)
+                document.getElementById("someLink").click()
+                link.removeEventListener("click")
+                pageFrame.parentNode.removeChild(link)
+            }
+            //*/
+            /*
             console.log("jqXHR", jqXHR)
+            console.log("jqXHR", jqXHR.responseText)
             console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
             console.log("textStatus", textStatus)
             console.log("msg", msg)
+            console.log('http://dev.travelsoft.com/error')
             //*/
             if (typeof textStatus !== "undefined") {
                 console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
             } else {
                 console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
             }
+            
             if ($.isFunction(callback)) {
                 if (jqXHR.responseJSON) {
-                    callback(jqXHR.responseJSON, "failed")
+                    callback(jqXHR, "failed")
                 } else {
                     callback(jqXHR, "failed")
                 }

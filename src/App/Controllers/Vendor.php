@@ -306,8 +306,14 @@
             exit(1);
         }
         
+        /**
+         * handle server request add
+         *
+         * @param array|null $params
+         */
         public static function serveAdd(array $params = null)
         {
+            
             $vendors = [];
             if ($params) {
                 $params["status_id"] = 1;
@@ -333,7 +339,7 @@
                         "enabled" => 1,
                     );
                     // ----
-                    
+//                    Log::$debug_log->trace($vendor_params);
                     $results = VendorModel::updateRecord($vendor_params);
                     
                     foreach ($results AS $k => $vendor) {
@@ -349,6 +355,11 @@
             exit(1);
         }
         
+        /**
+         * handle add process
+         *
+         * @param array|null $params
+         */
         public static function add(array $params = null)
         {
             $vendors = [];
@@ -364,14 +375,18 @@
             exit(1);
         }
         
+        /**
+         * @param array|null $params
+         */
         public static function serveUpdate(array $params = null)
         {
-            $vendor = [];
+            $results = [];
             $company = [];
-            
+            $vendors = array();
             if ($params) {
                 if (isset($params["company_detail"])) {
                     $company = Company::update($params["company_detail"]);
+                    Log::$debug_log->trace($company);
                 }
                 
                 $results = VendorModel::updateRecord($params);
@@ -381,7 +396,10 @@
             foreach ($results AS $k => $vendor) {
                 $vendors[] = self::format_vendor($vendor);
             }
-            
+            if (count($vendors) === 1 && isset($vendors[0])) {
+                $vendors = $vendors[0];
+            }
+            Log::$debug_log->trace($vendors);
             // ----
             View::render_json($vendors);
             exit(1);
@@ -584,12 +602,12 @@
                 "show_sales" => $vendor["vendor_show_sales"],
                 "show_ops" => $vendor["vendor_show_ops"],
                 "status_id" => $vendor["vendor_status_id"],
-                "note" => $vendor["vendor_note"],
+                "note" => addslashes($vendor["vendor_note"]),
                 "enabled" => $vendor["vendor_enabled"],
-                "keywords" => $vendor["company_keywords"],
-                "description_short" => $vendor["company_description_short"],
-                "description_long" => $vendor["company_description_long"],
-                "logo" => $vendor["company_logo"],
+                "keywords" => addslashes($vendor["company_keywords"]),
+                "description_short" => addslashes($vendor["company_description_short"]),
+                "description_long" => addslashes($vendor["company_description_long"]),
+                "logo" => addslashes($vendor["company_logo"]),
                 "date_created" => $vendor["vendor_date_created"],
                 "date_modified" => $vendor["vendor_date_modified"],
                 "created_by" => $vendor["vendor_created_by"],

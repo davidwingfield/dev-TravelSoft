@@ -12,12 +12,144 @@
     if (isset($page_data["types"]["currency"])) {
         $currency = $page_data["types"]["currency"];
     }
+
 ?>
 <!-- Product Index Page -->
 <section id="product_index_page" class="section">
     <div class="row">
         <div class="col-12">
+            <ul class="nav md-pills nav-justified pills-secondary mb-4">
+                <li class="nav-item pl-0">
+                    <a class="nav-link active " data-toggle="tab" href="#panel_hotels" role="tab">Hotels</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#panel_flights" role="tab">Flights</a>
+                </li>
+                <li class="nav-item pr-0">
+                    <a class="nav-link" data-toggle="tab" href="#panel_cars" role="tab">Cars</a>
+                </li>
+                <li class="nav-item pr-0">
+                    <a class="nav-link" data-toggle="tab" href="#panel_rails" role="tab">Rail</a>
+                </li>
+                <li class="nav-item pr-0">
+                    <a class="nav-link" data-toggle="tab" href="#panel_transport" role="tab">Transport</a>
+                </li>
+                <li class="nav-item pr-0">
+                    <a class="nav-link" data-toggle="tab" href="#panel_tours" role="tab">Tours</a>
+                </li>
+                <li class="nav-item pr-0">
+                    <a class="nav-link" data-toggle="tab" href="#panel_cruises" role="tab">Cruises</a>
+                </li>
+                <li class="nav-item pr-0">
+                    <a class="nav-link" data-toggle="tab" href="#panel_packages" role="tab">Packages</a>
+                </li>
+                <li class="nav-item pr-0">
+                    <a class="nav-link" data-toggle="tab" href="#panel_other" role="tab">Other</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row gx-1">
+        <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 p-1">
+            <?php
+                include_once(VIEWS_PATH . "/products/forms/product.phtml"); ?>
+        </div>
+        <div class="col-12 col-sm-12 col-md-7 col-lg-7 col-xl-7 p-1">
+            <!-- Section: Search Results -->
+            <section>
+                
+                <div class="card">
+                    <div class="card-body px-2">
+                        
+                        <h4 class="card-title text-center font-weight-bold mb-4">Search Results</h4>
+                        
+                        <hr>
+                        
+                        <div class="row">
+                            <div class="col-12 mb-3 mx-auto">
+                                
+                                <div class="media">
+                                    <img class="d-flex mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder1.jpg" alt="Generic placeholder image">
+                                    <div class="media-body">
+                                        <h6 class="mt-1 font-weight-bold"><a href="#!">Samsung TV</a><a><span class="badge badge-warning float-right">$1800</span></a></h6>
+                                        <p class="text-muted">Samsung 32" 1080p 60Hz LED Smart HDTV.</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                
+                                <div class="media">
+                                    <img class="d-flex mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder1.jpg" alt="Generic placeholder image">
+                                    <div class="media-body">
+                                        <h6 class="mt-1 font-weight-bold"><a href="#!">Bicycle</a><a><span class="badge badge-info float-right">$700</span></a></h6>
+                                        <p class="text-muted">26" Mongoose Dolomite Men's 7-speed, Navy Blue.</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                
+                                <div class="media">
+                                    <img class="d-flex mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder1.jpg" alt="Generic placeholder image">
+                                    <div class="media-body">
+                                        <h6 class="mt-1 font-weight-bold"><a href="#!">Xbox One</a><a><span class="badge badge-danger float-right">$350</span></a></h6>
+                                        <p class="text-muted">Xbox One Console Bundle with Halo Master Chief Collection.</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                
+                                <!-- Product Search Result -->
+                                <div class="media">
+                                    
+                                    <img class="d-flex mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder1.jpg" alt="Generic placeholder image"/>
+                                    
+                                    <div class="media-body">
+                                        
+                                        <h6 class="mt-1 font-weight-bold">
+                                            <a href="#!" id="product_search_results_name">PlayStation 4</a>
+                                            <div>
+                                                <ul class="list-unstyled list-inline rating mb-1 mt-1" id="product_search_results_rating">
+                                                    <li class="list-inline-item mr-0">
+                                                        <i class="fas fa-star rating"></i>
+                                                    </li>
+                                                    <li class="list-inline-item mr-0">
+                                                        <i class="fas fa-star rating"></i>
+                                                    </li>
+                                                    <li class="list-inline-item mr-0">
+                                                        <i class="fas fa-star rating"></i>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <a>
+                                                <span id="product_search_results_price" class="badge badge-success float-right" style="line-height:.8rem">$399</span>
+                                            </a>
+                                        </h6>
+                                        
+                                        <p class="text-muted" id="product_search_results_description_short">
+                                            PlayStation 4 500GB Console (PS4)
+                                        </p>
+                                    
+                                    </div>
+                                
+                                </div>
+                                <!-- /Product Search Result -->
+                            
+                            </div>
+                            <!--Grid column-->
+                        
+                        </div>
+                        <!--Grid row-->
+                        
+                        <hr>
+                        
+                        <p class="text-center mt-4 mb-1"><a href="#!">Clear Search Results</a></p>
+                    
+                    </div>
+                </div>
             
+            </section>
+            <!-- Section: Block Content -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
             <section class="panel">
                 <header class="panel-heading">
                     <div class="panel-actions"></div>
@@ -68,23 +200,483 @@
                     </table>
                 </div>
             </section>
-        
         </div>
     </div>
+</section>
 
+<section class="language-javascript" data-plugin-header="show-language" id="javascriptIds">
+    <pre>
+        <code class="language-javascript match-braces">
+            <script>
+            
+            
+            
+            </script>
+        const _test = document.getElementById("test");
+        let test = [
+            {
+                id:4,
+                name:'hhh'
+            }
+        ]
+        </code>
+    </pre>
 </section>
 <!-- /Product Index Page -->
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_new_product">
-    Launch modal
-</button>
+<section id="testDemo">
+    <textarea id="textbox" class="form-control">Type something here</textarea>
+    <button id="create">Create file</button>
+    <a download="info.txt" id="downloadlink" style="display: none">Download</a>
+
+</section>
 
 <?php
     include_once(VIEWS_PATH . "/products/modals/new_product_modal.phtml"); ?>
 
 <script type="text/javascript">
+    
+    (function () {
+        let textFile = null
+        const makeTextFile = function (text) {
+            let data = new Blob([text], { type: "text/plain" })
+            
+            if (textFile !== null) {
+                window.URL.revokeObjectURL(textFile)
+            }
+            
+            textFile = window.URL.createObjectURL(data)
+            
+            return textFile
+        }
+        const getIds = function (page) {
+            if (!page) {
+                page = document
+            }
+            var allElements = page.getElementsByTagName("*")
+            var allIds = []
+            for (var i = 0, n = allElements.length; i < n; ++i) {
+                var el = allElements[i]
+                if (el.id) { allIds.push(el.id) }
+            }
+            
+            return allIds
+        }
+        let create = document.getElementById("create"),
+          textbox = document.getElementById("textbox")
+        
+        create.addEventListener("click", function () {
+            let link = document.getElementById("downloadlink")
+            let page = document.getElementById("product_index_page")
+            let ids = getIds(page)
+            let temp = ""
+            $.each(ids, function (k, el) {
+                temp += `const _${el} = document.getElementById("${el}")\n`
+            })
+            textbox.value = temp
+            link.href = makeTextFile(textbox.value)
+            link.style.display = "block"
+        }, false)
+        
+    })()
+    
+    $.fn.showIds = function (settings) {
+        "use strict"
+        let _el = this
+        let $el = $(_el)
+        const Languages = /*languages_placeholder[*/{
+            "none": "Plain text",
+            "plain": "Plain text",
+            "plaintext": "Plain text",
+            "text": "Plain text",
+            "txt": "Plain text",
+            "html": "HTML",
+            "xml": "XML",
+            "svg": "SVG",
+            "mathml": "MathML",
+            "ssml": "SSML",
+            "rss": "RSS",
+            "css": "CSS",
+            "clike": "C-like",
+            "js": "JavaScript",
+            "abap": "ABAP",
+            "abnf": "ABNF",
+            "al": "AL",
+            "antlr4": "ANTLR4",
+            "g4": "ANTLR4",
+            "apacheconf": "Apache Configuration",
+            "apl": "APL",
+            "aql": "AQL",
+            "ino": "Arduino",
+            "arff": "ARFF",
+            "asciidoc": "AsciiDoc",
+            "adoc": "AsciiDoc",
+            "aspnet": "ASP.NET (C#)",
+            "asm6502": "6502 Assembly",
+            "asmatmel": "Atmel AVR Assembly",
+            "autohotkey": "AutoHotkey",
+            "autoit": "AutoIt",
+            "avisynth": "AviSynth",
+            "avs": "AviSynth",
+            "avro-idl": "Avro IDL",
+            "avdl": "Avro IDL",
+            "basic": "BASIC",
+            "bbcode": "BBcode",
+            "bnf": "BNF",
+            "rbnf": "RBNF",
+            "bsl": "BSL (1C:Enterprise)",
+            "oscript": "OneScript",
+            "csharp": "C#",
+            "cs": "C#",
+            "dotnet": "C#",
+            "cpp": "C++",
+            "cfscript": "CFScript",
+            "cfc": "CFScript",
+            "cil": "CIL",
+            "cmake": "CMake",
+            "cobol": "COBOL",
+            "coffee": "CoffeeScript",
+            "conc": "Concurnas",
+            "csp": "Content-Security-Policy",
+            "css-extras": "CSS Extras",
+            "csv": "CSV",
+            "dataweave": "DataWeave",
+            "dax": "DAX",
+            "django": "Django/Jinja2",
+            "jinja2": "Django/Jinja2",
+            "dns-zone-file": "DNS zone file",
+            "dns-zone": "DNS zone file",
+            "dockerfile": "Docker",
+            "dot": "DOT (Graphviz)",
+            "gv": "DOT (Graphviz)",
+            "ebnf": "EBNF",
+            "editorconfig": "EditorConfig",
+            "ejs": "EJS",
+            "etlua": "Embedded Lua templating",
+            "erb": "ERB",
+            "excel-formula": "Excel Formula",
+            "xlsx": "Excel Formula",
+            "xls": "Excel Formula",
+            "fsharp": "F#",
+            "firestore-security-rules": "Firestore security rules",
+            "ftl": "FreeMarker Template Language",
+            "gml": "GameMaker Language",
+            "gamemakerlanguage": "GameMaker Language",
+            "gap": "GAP (CAS)",
+            "gcode": "G-code",
+            "gdscript": "GDScript",
+            "gedcom": "GEDCOM",
+            "glsl": "GLSL",
+            "gn": "GN",
+            "gni": "GN",
+            "go-module": "Go module",
+            "go-mod": "Go module",
+            "graphql": "GraphQL",
+            "hbs": "Handlebars",
+            "hs": "Haskell",
+            "hcl": "HCL",
+            "hlsl": "HLSL",
+            "http": "HTTP",
+            "hpkp": "HTTP Public-Key-Pins",
+            "hsts": "HTTP Strict-Transport-Security",
+            "ichigojam": "IchigoJam",
+            "icu-message-format": "ICU Message Format",
+            "idr": "Idris",
+            "ignore": ".ignore",
+            "gitignore": ".gitignore",
+            "hgignore": ".hgignore",
+            "npmignore": ".npmignore",
+            "inform7": "Inform 7",
+            "javadoc": "JavaDoc",
+            "javadoclike": "JavaDoc-like",
+            "javastacktrace": "Java stack trace",
+            "jq": "JQ",
+            "jsdoc": "JSDoc",
+            "js-extras": "JS Extras",
+            "json": "JSON",
+            "webmanifest": "Web App Manifest",
+            "json5": "JSON5",
+            "jsonp": "JSONP",
+            "jsstacktrace": "JS stack trace",
+            "js-templates": "JS Templates",
+            "keepalived": "Keepalived Configure",
+            "kts": "Kotlin Script",
+            "kt": "Kotlin",
+            "kumir": "KuMir (КуМир)",
+            "kum": "KuMir (КуМир)",
+            "latex": "LaTeX",
+            "tex": "TeX",
+            "context": "ConTeXt",
+            "lilypond": "LilyPond",
+            "ly": "LilyPond",
+            "emacs": "Lisp",
+            "elisp": "Lisp",
+            "emacs-lisp": "Lisp",
+            "llvm": "LLVM IR",
+            "log": "Log file",
+            "lolcode": "LOLCODE",
+            "magma": "Magma (CAS)",
+            "md": "Markdown",
+            "markup-templating": "Markup templating",
+            "matlab": "MATLAB",
+            "maxscript": "MAXScript",
+            "mel": "MEL",
+            "mongodb": "MongoDB",
+            "moon": "MoonScript",
+            "n1ql": "N1QL",
+            "n4js": "N4JS",
+            "n4jsd": "N4JS",
+            "nand2tetris-hdl": "Nand To Tetris HDL",
+            "naniscript": "Naninovel Script",
+            "nani": "Naninovel Script",
+            "nasm": "NASM",
+            "neon": "NEON",
+            "nginx": "nginx",
+            "nsis": "NSIS",
+            "objectivec": "Objective-C",
+            "objc": "Objective-C",
+            "ocaml": "OCaml",
+            "opencl": "OpenCL",
+            "openqasm": "OpenQasm",
+            "qasm": "OpenQasm",
+            "parigp": "PARI/GP",
+            "objectpascal": "Object Pascal",
+            "psl": "PATROL Scripting Language",
+            "pcaxis": "PC-Axis",
+            "px": "PC-Axis",
+            "peoplecode": "PeopleCode",
+            "pcode": "PeopleCode",
+            "php": "PHP",
+            "phpdoc": "PHPDoc",
+            "php-extras": "PHP Extras",
+            "plsql": "PL/SQL",
+            "powerquery": "PowerQuery",
+            "pq": "PowerQuery",
+            "mscript": "PowerQuery",
+            "powershell": "PowerShell",
+            "promql": "PromQL",
+            "properties": ".properties",
+            "protobuf": "Protocol Buffers",
+            "purebasic": "PureBasic",
+            "pbfasm": "PureBasic",
+            "purs": "PureScript",
+            "py": "Python",
+            "qsharp": "Q#",
+            "qs": "Q#",
+            "q": "Q (kdb+ database)",
+            "qml": "QML",
+            "rkt": "Racket",
+            "cshtml": "Razor C#",
+            "razor": "Razor C#",
+            "jsx": "React JSX",
+            "tsx": "React TSX",
+            "renpy": "Ren'py",
+            "rpy": "Ren'py",
+            "rest": "reST (reStructuredText)",
+            "robotframework": "Robot Framework",
+            "robot": "Robot Framework",
+            "rb": "Ruby",
+            "sas": "SAS",
+            "sass": "Sass (Sass)",
+            "scss": "Sass (Scss)",
+            "shell-session": "Shell session",
+            "sh-session": "Shell session",
+            "shellsession": "Shell session",
+            "sml": "SML",
+            "smlnj": "SML/NJ",
+            "solidity": "Solidity (Ethereum)",
+            "sol": "Solidity (Ethereum)",
+            "solution-file": "Solution file",
+            "sln": "Solution file",
+            "soy": "Soy (Closure Template)",
+            "sparql": "SPARQL",
+            "rq": "SPARQL",
+            "splunk-spl": "Splunk SPL",
+            "sqf": "SQF: Status Quo Function (Arma 3)",
+            "sql": "SQL",
+            "iecst": "Structured Text (IEC 61131-3)",
+            "systemd": "Systemd configuration file",
+            "t4-templating": "T4 templating",
+            "t4-cs": "T4 Text Templates (C#)",
+            "t4": "T4 Text Templates (C#)",
+            "t4-vb": "T4 Text Templates (VB)",
+            "tap": "TAP",
+            "tt2": "Template Toolkit 2",
+            "toml": "TOML",
+            "trickle": "trickle",
+            "troy": "troy",
+            "trig": "TriG",
+            "ts": "TypeScript",
+            "tsconfig": "TSConfig",
+            "uscript": "UnrealScript",
+            "uc": "UnrealScript",
+            "uri": "URI",
+            "url": "URL",
+            "vbnet": "VB.Net",
+            "vhdl": "VHDL",
+            "vim": "vim",
+            "visual-basic": "Visual Basic",
+            "vba": "VBA",
+            "vb": "Visual Basic",
+            "wasm": "WebAssembly",
+            "web-idl": "Web IDL",
+            "webidl": "Web IDL",
+            "wiki": "Wiki markup",
+            "wolfram": "Wolfram language",
+            "nb": "Mathematica Notebook",
+            "wl": "Wolfram language",
+            "xeoracube": "XeoraCube",
+            "xml-doc": "XML doc (.net)",
+            "xojo": "Xojo (REALbasic)",
+            "xquery": "XQuery",
+            "yaml": "YAML",
+            "yml": "YAML",
+            "yang": "YANG",
+        }/*]*/
+        
+        let language, page, id, allElements
+        
+        const init = function (settings) {
+            if (!settings) {
+                settings = {}
+            }
+            
+            language = (settings.language) ? settings.language : "none"
+            page = (settings.page) ? document.getElementById(settings.page) : document
+            id = ($el.attr("id")) ? $el.attr("id") : "idList"
+            
+            renderSection(getIds(page))
+            //let el = document.getElementById("testDemo")
+            //Prism.highlightElement(el)
+        }
+        
+        const getIds = function (page) {
+            if (!page) {
+                page = document
+            }
+            var allElements = page.getElementsByTagName("*")
+            var allIds = []
+            for (var i = 0, n = allElements.length; i < n; ++i) {
+                var el = allElements[i]
+                if (el.id) { allIds.push(el.id) }
+            }
+            
+            return allIds
+        }
+        
+        const renderConstants = function (ids) {
+            let temp = ""
+            let $code = document.getElementById("testDemoCode")
+            $.each(ids, function (k, el) {
+                temp += `const _${el} = document.getElementById("${el}")\n`
+            })
+            $($code).text(temp)
+            return temp
+        }
+        
+        const renderSection = function (ids) {
+            $(_el)
+              .addClass("language-javascript")
+            let _pre = document.createElement("pre")
+            let _code = document.createElement("code")
+            
+            $(_code)
+              .addClass("match-braces language-javascript")
+              .attr("id", "testDemoCode")
+            
+            $(_pre).append($(_code))
+            $(_el).append($(_pre))
+            
+            renderConstants(ids)
+        }
+        
+        init(settings)
+        
+        return {
+            page: document,
+            getIds: function () {
+                return getIds()
+            },
+        }
+        
+    }
+    
+    const getAllPageIds = function (page) {
+        
+        console.log("Prism", Prism)
+        if (typeof Prism === 'undefined' || typeof document === 'undefined') {
+            return
+        }
+        
+        if (!Prism.plugins.toolbar) {
+            console.warn('Show Languages plugin loaded before Toolbar plugin.')
+            return
+        }
+        
+        Prism.plugins.NormalizeWhitespace.setDefaults({
+            'remove-trailing': true,
+            'remove-indent': true,
+            'left-trim': true,
+            'right-trim': true,
+        })
+        
+        const buildPreElement = function () {
+            let $pre = $("<pre>")
+            let $section = $("<section>")
+              .addClass("language-javascript")
+            
+            let $code = $("<code>")
+              .addClass("language-javascript match-braces")
+              .html("let x=5;")
+            $pre.append($code)
+            $section.append($pre)
+            $(page).append($section)
+        }
+        
+        const getIds = function (page) {
+            let allIds = []
+            let allElements = page.getElementsByTagName("*")
+            
+            for (var i = 0, n = allElements.length; i < n; ++i) {
+                var el = allElements[i]
+                if (el.id) { allIds.push(el.id) }
+            }
+            
+            return allIds
+        }
+        
+        const init = function (page) {
+            buildPreElement(page)
+            //let temp = ""
+            //let allIds = getIds(page)
+            
+            //$.each(allIds, function (key, elId) {
+            //    temp += `const _${elId} = document.getElementById("${elId}")\n`
+            //})
+        }
+        
+        init(page)
+    }
+    
     $(function () {
+        let _product_index_page = document.getElementById("product_index_page")
+        $("#testDemo").showIds({
+            page: "product_index_page",
+            language: "javascript",
+        })
+        //getAllPageIds(_product_index_page)
+        /*
+        var allElements = document.getElementsByTagName("*")
+        let ids = getAllPageIds(document.getElementById("product_index_page"))
+        
+        
+        let _idListEl = document.getElementById("idListEl")
+        $(_idListEl).empty()
+        let temp = ""
+        
+        temp += "\n"
+        $(_idListEl).html(temp)
+        //*/
         Types.init(<?php echo TYPES;?>)
         <?php echo $init;?>
     })

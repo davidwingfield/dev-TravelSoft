@@ -21,7 +21,12 @@ const Provider = (function () {
     const _company_id = document.getElementById("company_id")
     const _location_name_filter_id = document.getElementById("location_name_filter_id")
     const _form_edit_provider = document.getElementById("form_edit_provider")
-    
+    const _form_product_add = document.getElementById("form_product_add")
+    const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
+    const _modal_product_provider_id = document.getElementById("modal_product_provider_id")
+    const _modal_product_vendor_id = document.getElementById("modal_product_vendor_id")
+    const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
+    let globalSelectedProvider = false
     let isNew = false
     let validator
     let $index_table = $(_table_provider_index)
@@ -200,6 +205,52 @@ const Provider = (function () {
                   }
               },
           })
+        
+        $(_modal_product_provider_name)
+          .on("change", function () {
+              setTimeout(function () {
+                  let provider_name = _modal_product_provider_name.value
+                  
+                  if (globalSelectedProvider === false) {
+                      if (provider_name === "") {
+                          _modal_product_vendor_id.value = ""
+                          _modal_product_provider_id.value = ""
+                          _modal_product_vendor_name.value = ""
+                          _modal_product_provider_name.value = ""
+                          globalSelectedProvider = false
+                      } else {
+                          provider_exists(provider_name)
+                      }
+                  }
+              }, 200)
+          })
+          .on("search", function () {
+              _modal_product_vendor_id.value = ""
+              _modal_product_provider_id.value = ""
+              _modal_product_vendor_name.value = ""
+              _modal_product_provider_name.value = ""
+          })
+          .on("click", function () {
+              $(this).select()
+          })
+          .autocomplete({
+              serviceUrl: "/api/v1.0/autocomplete/providers",
+              minChars: 2,
+              cache: false,
+              dataType: "json",
+              triggerSelectOnValidInput: false,
+              paramName: "st",
+              onSelect: function (suggestion) {
+                  if (!suggestion.data) {
+                      return
+                  }
+                  let vendor_id = suggestion.data.vendor.id
+                  _modal_product_vendor_id.value = vendor_id
+                  _modal_product_provider_id.value = suggestion.data.id
+                  _modal_product_vendor_name.value = suggestion.data.name
+                  console.log("suggestion", suggestion)
+              },
+          })
     }
     
     /**
@@ -215,23 +266,45 @@ const Provider = (function () {
             }
             
             fetch_provider_by_name(dataToSend, function (data) {
-                if (data) {
-                    if (data.length > 0) {
-                        let provider = data[0]
-                        
-                        confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
+                if (_form_product_add) {
+                    console.log("data", data)
+                    if (!data || data.length === 0) {
+                        confirmDialog("This provider does not exists. Would you like to create it?", (ans) => {
                             if (ans) {
-                                window.location.href = "/providers/" + provider.id
+                            
                             } else {
-                                Company.reset_form()
-                                Provider.reset_form()
-                                Vendor.reset_form()
-                                
+                                _modal_product_vendor_id.value = ""
+                                _modal_product_provider_id.value = ""
+                                _modal_product_vendor_name.value = ""
+                                _modal_product_provider_name.value = ""
+                                globalSelectedProvider = false
                             }
                         })
                     }
                 }
-                $(_vendor_name).val($(_provider_name).val()).trigger("change")
+                
+                if (_form_edit_provider) {
+                    if (data) {
+                        if (data.length > 0) {
+                            
+                            let provider = data[0]
+                            
+                            console.log("provider", provider)
+                            confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
+                                if (ans) {
+                                    window.location.href = "/providers/" + provider.id
+                                } else {
+                                    Company.reset_form()
+                                    Provider.reset_form()
+                                    Vendor.reset_form()
+                                }
+                            })
+                            
+                        }
+                    }
+                    $(_vendor_name).val($(_provider_name).val()).trigger("change")
+                }
+                
             })
         }
     }
@@ -665,7 +738,7 @@ const Provider = (function () {
      * @param settings
      */
     const init = function (settings) {
-    
+        init_autocomplete()
     }
     
     /**

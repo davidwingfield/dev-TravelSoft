@@ -364,7 +364,7 @@ function getCssFloat(el, prop) {
 ----------------------------------------------------------------------------------------------------------------------*/
 // Returns a boolean whether this was a left mouse click and no ctrl key (which means right click on Mac)
 function isPrimaryMouseButton(ev) {
-    return ev.which === 1 || ev.ctrlKey;
+    return ev.which === 1 || ev.ctrlKey || ev.which === 2;
 }
 exports.isPrimaryMouseButton = isPrimaryMouseButton;
 function getEvX(ev) {

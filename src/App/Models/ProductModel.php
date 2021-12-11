@@ -1,14 +1,13 @@
 <?php
-
+    
     namespace Framework\App\Models;
-
+    
     use Exception;
     use Framework\Core\Model;
     use Framework\Logger\Log;
-
+    
     /**
      * Short Product Description
-     *
      * Long Product Description
      *
      * @package            Framework\App
@@ -16,7 +15,7 @@
      */
     class ProductModel extends Model
     {
-
+        
         protected static $dbTable = "product";
         protected static $dbFields = Array();
         protected static $sql = "
@@ -51,7 +50,7 @@
                     PRODUCT.date_modified AS 'product_date_modified',
                     PRODUCT.modified_by AS 'product_modified_by',
                     PRODUCT.note AS 'product_note',
-                   PRODUCT.keywords AS 'product_keywords',
+                    PRODUCT.keywords AS 'product_keywords',
                     CATEGORY.id AS 'category_id',
                     CATEGORY.pricing_strategy_types_id AS 'category_pricing_strategy_types_id',
                     CATEGORY.attribute_id AS 'category_attribute_id',
@@ -84,45 +83,45 @@
             JOIN 	category CATEGORY ON CATEGORY.id = PRODUCT.category_id
 
             ";
-
+        
         public static function get(int $id = null): array
         {
             $where = "";
             if (!is_null($id)) {
                 $where = "WHERE   PRODUCT.id = $id";
             }
-
+            
             try {
                 $sql = self::$sql . $where;
-
+                
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {
                 Log::$debug_log->error($e);
-
+                
                 return [];
             }
         }
-
+        
         public static function getOne(int $id = null): array
         {
             try {
                 if (!is_null($id)) {
                     Model::$db->where("id", $id);
                 }
-
+                
                 Model::$db->where("enabled", 1);
-
+                
                 return Model::$db->getOne(self::$dbTable);
             } catch (Exception $e) {
                 return [];
             }
         }
-
+        
         public static function update(array $params = []): array
         {
             $id = 1;
-
+            
             return self::get($id);
         }
-
+        
     }

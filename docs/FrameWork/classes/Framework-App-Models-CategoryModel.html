@@ -156,10 +156,9 @@
 
     </aside>
 
-            <p class="phpdocumentor-summary">Short Category Description</p>
+            <p class="phpdocumentor-summary">Short Category Description
+Long Category Description</p>
 
-    <section class="phpdocumentor-description"><p>Long Category Description</p>
-</section>
 
 
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
@@ -210,8 +209,22 @@
 </dt>
 <dd></dd>
 
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/Framework-App-Models-CategoryModel.html#property_getTypesSQL">$getTypesSQL</a>
+    <span>
+                &nbsp;: mixed            </span>
+</dt>
+<dd></dd>
+
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-CategoryModel.html#method_get">get()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-CategoryModel.html#method_getAllTypes">getAllTypes()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
@@ -378,6 +391,112 @@
     
 
 </article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_getTypesSQL">
+        $getTypesSQL
+        <a href="classes/Framework-App-Models-CategoryModel.html#property_getTypesSQL" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CategoryModel.php"><a href="files/app-models-categorymodel.html"><abbr title="App/Models/CategoryModel.php">CategoryModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">21</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">$getTypesSQL</span>
+     = <span class="phpdocumentor-signature__default-value">&quot;
+		SELECT
+                        SEASON.id AS &#039;season_id&#039;,
+                        SEASON.color_scheme_id AS &#039;season_color_scheme_id&#039;,
+                        SEASON.name AS &#039;season_name&#039;,
+                        SEASON.view_product_index AS &#039;season_view_product_index&#039;,
+                        SEASON.view_product_index_filter AS &#039;season_view_product_index_filter&#039;,
+                        SEASON.view_product_index_search AS &#039;season_view_product_index_search&#039;,
+                        SEASON.view_product_edit AS &#039;season_view_product_edit&#039;,
+                        SEASON.view_product_package_edit AS &#039;season_view_product_package_edit&#039;,
+                        SEASON.view_product_package_index AS &#039;season_view_product_package_index&#039;,
+                        SEASON.enabled AS &#039;season_enabled&#039;,
+                        SEASON.date_created AS &#039;season_date_created&#039;,
+                        SEASON.created_by AS &#039;season_created_by&#039;,
+                        SEASON.date_modified AS &#039;season_date_modified&#039;,
+                        SEASON.modified_by AS &#039;season_modified_by&#039;,
+                        SEASON.note AS &#039;season_note&#039;,
+                        SEASON.category_id AS &#039;season_category_id&#039;,
+                        COLOR_SCHEME.id AS &#039;color_scheme_id&#039;,
+                        COLOR_SCHEME.name AS &#039;color_scheme_name&#039;,
+                        COLOR_SCHEME.background_color AS &#039;color_scheme_background_color&#039;,
+                        COLOR_SCHEME.border_color AS &#039;color_scheme_border_color&#039;,
+                        COLOR_SCHEME.text_color AS &#039;color_scheme_text_color&#039;,
+                        COLOR_SCHEME.sort_order AS &#039;color_scheme_sort_order&#039;,
+                        COLOR_SCHEME.enabled AS &#039;color_scheme_enabled&#039;,
+                        COLOR_SCHEME.date_created AS &#039;color_scheme_date_created&#039;,
+                        COLOR_SCHEME.created_by AS &#039;color_scheme_created_by&#039;,
+                        COLOR_SCHEME.date_modified AS &#039;color_scheme_date_modified&#039;,
+                        COLOR_SCHEME.modified_by AS &#039;color_scheme_modified_by&#039;,
+                        COLOR_SCHEME.note AS &#039;color_scheme_note&#039;,
+                        CATEGORY.id AS &#039;category_id&#039;,
+                        CATEGORY.pricing_strategy_types_id AS &#039;category_pricing_strategy_types_id&#039;,
+                        CATEGORY.attribute_id AS &#039;category_attribute_id&#039;,
+                        CATEGORY.name AS &#039;category_name&#039;,
+                        CATEGORY.icon AS &#039;category_icon&#039;,
+                        CATEGORY.view_product_index AS &#039;category_view_product_index&#039;,
+                        CATEGORY.view_product_index_filter AS &#039;category_view_product_index_filter&#039;,
+                        CATEGORY.view_product_index_search AS &#039;category_view_product_index_search&#039;,
+                        CATEGORY.view_product_edit AS &#039;category_view_product_edit&#039;,
+                        CATEGORY.view_product_package_edit AS &#039;category_view_product_package_edit&#039;,
+                        CATEGORY.view_product_package_index AS &#039;category_view_product_package_index&#039;,
+                        CATEGORY.all_day AS &#039;category_all_day&#039;,
+                        CATEGORY.overlap AS &#039;category_overlap&#039;,
+                        CATEGORY.editable AS &#039;category_editable&#039;,
+                        CATEGORY.duration_editable AS &#039;category_duration_editable&#039;,
+                        CATEGORY.start_editable AS &#039;category_start_editable&#039;,
+                        CATEGORY.display AS &#039;category_display&#039;,
+                        CATEGORY.background_color AS &#039;category_background_color&#039;,
+                        CATEGORY.text_color AS &#039;category_text_color&#039;,
+                        CATEGORY.border_color AS &#039;category_border_color&#039;,
+                        CATEGORY.sort_order AS &#039;category_sort_order&#039;,
+                        CATEGORY.enabled AS &#039;category_enabled&#039;,
+                        CATEGORY.date_created AS &#039;category_date_created&#039;,
+                        CATEGORY.created_by AS &#039;category_created_by&#039;,
+                        CATEGORY.date_modified AS &#039;category_date_modified&#039;,
+                        CATEGORY.modified_by AS &#039;category_modified_by&#039;,
+                        CATEGORY.note AS &#039;category_note&#039;,
+                        COLOR_SCHEME.id AS &#039;color_scheme_id&#039;,
+                        COLOR_SCHEME.name AS &#039;color_scheme_name&#039;,
+                        COLOR_SCHEME.background_color AS &#039;color_scheme_background_color&#039;,
+                        COLOR_SCHEME.border_color AS &#039;color_scheme_border_color&#039;,
+                        COLOR_SCHEME.text_color AS &#039;color_scheme_text_color&#039;,
+                        COLOR_SCHEME.sort_order AS &#039;color_scheme_sort_order&#039;,
+                        COLOR_SCHEME.enabled AS &#039;color_scheme_enabled&#039;,
+                        COLOR_SCHEME.date_created AS &#039;color_scheme_date_created&#039;,
+                        COLOR_SCHEME.created_by AS &#039;color_scheme_created_by&#039;,
+                        COLOR_SCHEME.date_modified AS &#039;color_scheme_date_modified&#039;,
+                        COLOR_SCHEME.modified_by AS &#039;color_scheme_modified_by&#039;,
+                        COLOR_SCHEME.note AS &#039;color_scheme_note&#039;
+        FROM 			category CATEGORY
+        LEFT JOIN 			season SEASON ON CATEGORY.id = SEASON.category_id
+        LEFT JOIN 			color_scheme COLOR_SCHEME ON COLOR_SCHEME.id = SEASON.color_scheme_id
+		&quot;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
             </section>
 
             <section class="phpdocumentor-methods">
@@ -398,7 +517,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CategoryModel.php"><a href="files/app-models-categorymodel.html"><abbr title="App/Models/CategoryModel.php">CategoryModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">95</span>
 
     </aside>
 
@@ -435,6 +554,50 @@
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_getAllTypes">
+        getAllTypes()
+        <a href="classes/Framework-App-Models-CategoryModel.html#method_getAllTypes" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CategoryModel.php"><a href="files/app-models-categorymodel.html"><abbr title="App/Models/CategoryModel.php">CategoryModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">111</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getAllTypes</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_getOne">
         getOne()
         <a href="classes/Framework-App-Models-CategoryModel.html#method_getOne" class="headerlink"><i class="fas fa-link"></i></a>
@@ -442,7 +605,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CategoryModel.php"><a href="files/app-models-categorymodel.html"><abbr title="App/Models/CategoryModel.php">CategoryModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">38</span>
+    <span class="phpdocumentor-element-found-in__line">147</span>
 
     </aside>
 
@@ -694,7 +857,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CategoryModel.php"><a href="files/app-models-categorymodel.html"><abbr title="App/Models/CategoryModel.php">CategoryModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">53</span>
+    <span class="phpdocumentor-element-found-in__line">162</span>
 
     </aside>
 

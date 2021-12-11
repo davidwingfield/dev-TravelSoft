@@ -130,12 +130,12 @@
                 
                 return array(
                     "id" => $company["company_id"],
-                    "name" => $company["company_name"],
+                    "name" => addslashes($company["company_name"]),
                     "phone_1" => $company["company_phone_1"],
                     "phone_2" => $company["company_phone_2"],
                     "fax" => $company["company_fax"],
                     "website" => $company["company_website"],
-                    "cover_image" => $cover_image,
+                    "cover_image" => addslashes($cover_image),
                     "email" => $company["company_email"],
                     "status_id" => $company["company_status_id"],
                     "enabled" => $company["company_enabled"],
@@ -144,10 +144,10 @@
                     "date_modified" => $company["company_date_modified"],
                     "modified_by" => $company["company_modified_by"],
                     "note" => $company["company_note"],
-                    "keywords" => (isset($company["company_keywords"])) ? $company["company_keywords"] : "",
-                    "description_long" => (isset($company["company_description_long"])) ? $company["company_description_long"] : "",
+                    "keywords" => (isset($company["company_keywords"])) ? addslashes($company["company_keywords"]) : "",
+                    "description_long" => (isset($company["company_description_long"])) ? addslashes($company["company_description_long"]) : "",
                     "description_short" => (isset($company["company_description_short"])) ? $company["company_description_short"] : "",
-                    "logo" => (isset($company["company_logo"])) ? $company["company_logo"] : "/public/img/logo_placeholder.jpg",
+                    "logo" => (isset($company["company_logo"])) ? $company["company_logo"] : addslashes("/public/img/logo_placeholder.jpg"),
                     "images" => Image::getByCompanyId($id),
                 );
             }

@@ -35,12 +35,23 @@ const Types = (function () {
             setType(settings.address_types, "address_types")
         }
         
+        if (settings.season_types) {
+            setType(settings.season_types, "season_types")
+            Season.init({
+                seasons: settings.season_types,
+            })
+        }
+        
         if (settings.airport_types) {
             setType(settings.airport_types, "airport_types")
         }
         
         if (settings.category) {
             setType(settings.category, "category")
+            Category.init({
+                categories: settings.category,
+            })
+            
         }
         
         if (settings.color_scheme) {
@@ -87,6 +98,7 @@ const Types = (function () {
     
     return {
         address_types: new Map(),
+        season_types: new Map(),
         airport_types: new Map(),
         categories_ratings_types: new Map(),
         category: new Map(),

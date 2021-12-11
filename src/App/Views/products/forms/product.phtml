@@ -1,0 +1,615 @@
+<div class="tab-content pt-0">
+    
+    <!--Panel Hotels-->
+    <div class="tab-pane fade in show active" id="panel_hotels" role="tabpanel">
+        <div class="card">
+            <div class="card-body px-2">
+                <form id="form_product_search_panel_hotels" class="search-form" novalidate>
+                    
+                    <!-- Title -->
+                    <h4 class="card-title">Hotels Search</h4>
+                    <!-- Text -->
+                    
+                    <div class="row">
+                        
+                        <!-- Product Search Hotels Product Name -->
+                        <div class="col-12 col-md-12">
+                            <div class="form-element">
+                                <label for="form_product_search_hotel_product_name">Name:</label>
+                                <input type="search" id="form_product_search_hotel_product_name" name="form_product_search_hotel_product_name" class="form-control"/>
+                                <div id="form_product_search_hotel_product_name-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                        <!-- /Product Search Hotels Product Name -->
+                    
+                    </div>
+                    
+                    <div class="row">
+                        
+                        <!-- Product Search Hotels Product Location -->
+                        <div class="col-12 col-md-12">
+                            <div class="form-element">
+                                <label for="form_product_search_hotel_product_location">Location:</label>
+                                <input type="search" id="form_product_search_hotel_product_location" name="form_product_search_hotel_product_location" class="form-control"/>
+                                <div id="form_product_search_hotel_product_location-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                        <!-- /Product Search Hotels Product Location -->
+                    
+                    </div>
+                    
+                    <div class="row mx-0">
+                        
+                        <div class="col-4 p-1">
+                            <button type="button" id="form_product_search_hotel_product_check_in" name="form_product_search_hotel_product_check_in" class="btn btn-check-in-picker">
+                                <i class="fas fa-calendar btn-guest-picker-icon"></i>
+                                <span class="btn-guest-picker-details">
+                                    <span class="btn-guest-picker-details-title">Check in</span>
+                                    <span class="btn-guest-picker-details-info">
+                                        <span class="btn-guest-picker-details-info-wrapper">
+                                            <span id="product_search_check_in_display"> — / — / — </span>
+                                        </span>
+                                    </span>
+                                </span>
+                            </button>
+                        </div>
+                        
+                        <div class="col-4 p-1">
+                            <button type="button" id="form_product_search_hotel_product_check_out" name="form_product_search_hotel_product_check_out" class="btn btn-check-out-picker" data-date="2021-12-05">
+                                <i class="fas fa-calendar btn-guest-picker-icon"></i>
+                                <span class="btn-guest-picker-details">
+                                    <span class="btn-guest-picker-details-title">Check out</span>
+                                    <span class="btn-guest-picker-details-info">
+                                        <span class="btn-guest-picker-details-info-wrapper">
+                                            <span id="product_search_check_out_display" class="btn-guest-picker-details-info-wrapper-rooms"> — / — / — </span>
+                                        </span>
+                                    </span>
+                                </span>
+                            </button>
+                        </div>
+                        
+                        <div class="col-4 p-1">
+                            <button type="button" id="form_product_search_hotel_product_guest" class="btn btn-guest-picker" data-placement="bottom" data-toggle="popover" data-container="body" data-html="true">
+                                <i class="fas fa-bed btn-guest-picker-icon"></i>
+                                <span class="btn-guest-picker-details">
+                                    <span class="btn-guest-picker-details-title">Guests</span>
+                                    <span class="btn-guest-picker-details-info">
+                                        <span class="btn-guest-picker-details-info-wrapper">
+                                            <span id="product_search_room_quantity_display" class="btn-guest-picker-details-info-wrapper-rooms">1 room,</span>
+                                            <span id="product_search_adult_quantity_display" class="btn-guest-picker-details-info-wrapper-rooms">1 adult,</span>
+                                            <span id="product_search_children_quantity_display" class="btn-guest-picker-details-info-wrapper-rooms">0 children</span>
+                                        </span>
+                                    </span>
+                                </span>
+                            </button>
+                        </div>
+                    
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <a href="javascript:void(0);" id="button_product_search_panel_hotels_clear" class="btn btn-outline-primary btn-sm waves-effect waves-light">Clear</a>
+                            <a href="javascript:void(0);" id="button_product_search_panel_hotels_submit" class="btn btn-primary btn-sm waves-effect waves-light">Search</a>
+                        </div>
+                    </div>
+                    
+                    <div class="row mx-0">
+                        
+                        <input type="text" id="form_product_search_hotel_product_arrive_date" name="form_product_search_hotel_product_arrive_date" class="col-sm-3 m-1" value=""/>
+                        <input type="text" id="form_product_search_hotel_product_number_of_children" name="form_product_search_hotel_product_number_of_children" min="0" class="col-sm-3 m-1" value="0"/>
+                        <input type="text" id="form_product_search_hotel_product_number_of_adults" name="form_product_search_hotel_product_number_of_adults" min="1" class="col-sm-3 m-1" value="1"/>
+                        <input type="text" id="form_product_search_hotel_product_number_of_rooms" name="form_product_search_hotel_product_number_of_rooms" min="1" class="col-sm-3 m-1" value="1"/>
+                        <input type="text" id="form_product_search_hotel_product_depart_date" name="form_product_search_hotel_product_depart_date" class="col-sm-3 m-1" value=""/>
+                    
+                    </div>
+                
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--/.Panel Hotels-->
+    
+    <!--Panel Flights-->
+    <div class="tab-pane fade in" id="panel_flights" role="tabpanel">
+        <div class="card">
+            <div class="card-body px-2">
+                <form id="form_product_search_panel_flights" class="search-form" novalidate>
+                    <!-- Title -->
+                    <h4 class="card-title">Flights Search</h4>
+                    <!-- Text -->
+                    
+                    <div class="row">
+                    
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <a href="#" class="btn btn-primary">Button</a>
+                        </div>
+                    </div>
+                
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--/.Panel Flights-->
+    
+    <!--Panel Cars-->
+    <div class="tab-pane fade in" id="panel_cars" role="tabpanel">
+        <div class="card">
+            <div class="card-body px-2">
+                <form id="form_product_search_panel_cars" class="search-form" novalidate>
+                    <!-- Title -->
+                    <h4 class="card-title">Cars Search</h4>
+                    <!-- Text -->
+                    
+                    <div class="row">
+                    
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <a href="#" class="btn btn-primary">Button</a>
+                        </div>
+                    </div>
+                
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--/.Panel Cars-->
+    
+    <!--Panel Rails-->
+    <div class="tab-pane fade in" id="panel_rails" role="tabpanel">
+        <div class="card">
+            <div class="card-body px-2">
+                <form id="form_product_search_panel_rails" class="search-form" novalidate>
+                    <!-- Title -->
+                    <h4 class="card-title">Rails Search</h4>
+                    <!-- Text -->
+                    
+                    <div class="row">
+                    
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <a href="#" class="btn btn-primary">Button</a>
+                        </div>
+                    </div>
+                
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--/.Panel Rails-->
+    
+    <!--Panel Transport-->
+    <div class="tab-pane fade in" id="panel_transport" role="tabpanel">
+        <div class="card">
+            <div class="card-body px-2">
+                <form id="form_product_search_panel_transport" class="search-form" novalidate>
+                    <!-- Title -->
+                    <h4 class="card-title">Transport Search</h4>
+                    <!-- Text -->
+                    
+                    <div class="row">
+                    
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <a href="#" class="btn btn-primary">Button</a>
+                        </div>
+                    </div>
+                
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--/.Panel Transport-->
+    
+    <!--Panel Tours-->
+    <div class="tab-pane fade in" id="panel_tours" role="tabpanel">
+        <div class="card">
+            <div class="card-body px-2">
+                <form id="form_product_search_panel_tours" class="search-form" novalidate>
+                    <!-- Title -->
+                    <h4 class="card-title">Tours Search</h4>
+                    <!-- Text -->
+                    
+                    <div class="row">
+                    
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <a href="#" class="btn btn-primary">Button</a>
+                        </div>
+                    </div>
+                
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--/.Panel Tours-->
+    
+    <!--Panel Cruises-->
+    <div class="tab-pane fade in" id="panel_cruises" role="tabpanel">
+        <div class="card">
+            <div class="card-body px-2">
+                <form id="form_product_search_panel_cruises" class="search-form" novalidate>
+                    <!-- Title -->
+                    <h4 class="card-title">Cruises Search</h4>
+                    <!-- Text -->
+                    
+                    <div class="row">
+                    
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <a href="#" class="btn btn-primary">Button</a>
+                        </div>
+                    </div>
+                
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--/.Panel Cruises-->
+    
+    <!--Panel Packages-->
+    <div class="tab-pane fade in" id="panel_packages" role="tabpanel">
+        <div class="card">
+            <div class="card-body px-2">
+                <form id="form_product_search_panel_packages" class="search-form" novalidate>
+                    <!-- Title -->
+                    <h4 class="card-title">Packages Search</h4>
+                    <!-- Text -->
+                    
+                    <div class="row">
+                    
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <a href="#" class="btn btn-primary">Button</a>
+                        </div>
+                    </div>
+                
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--/.Panel Packages-->
+    
+    <!--Panel Other-->
+    <div class="tab-pane fade in" id="panel_other" role="tabpanel">
+        <div class="card">
+            <div class="card-body px-2">
+                <form id="form_product_search_panel_other" class="search-form" novalidate>
+                    <!-- Title -->
+                    <h4 class="card-title">Other Search</h4>
+                    <!-- Text -->
+                    
+                    <div class="row">
+                    
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <a href="#" class="btn btn-primary">Button</a>
+                        </div>
+                    </div>
+                
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--/.Panel Other-->
+
+</div>
+
+<div id="message_popover_content" class="d-none">
+    <div class="popover-head">
+        
+        <h5 class="card-title mb-1">
+            &nbsp;
+            <a href="javascript:void(0);" class="popup-window-button-close fas fa-times" aria-hidden="true" onclick="
+            const _form_product_search_hotel_product_guest = document.getElementById('form_product_search_hotel_product_guest')
+            if(_form_product_search_hotel_product_guest){
+                $(_form_product_search_hotel_product_guest).popover('hide');
+            }
+            
+            "></a>
+        </h5>
+    
+    </div>
+    
+    <div class="popover-body">
+        
+        <form id="myForm" class="form-inline" role="form">
+            
+            <div id="popForm" class="w-100">
+                
+                <div class="row mb-2">
+                    
+                    <div class="col-4">
+                        <label for="product_search_room_quantity" class="form-label-popover d-flex justify-content-start">
+                            <i class="fas fa-bed mr-3"></i> Rooms
+                        </label>
+                    </div>
+                    
+                    <div class="col-8">
+                        
+                        <div class="input-group d-flex justify-content-end number-input">
+                            
+                            <div class="input-group-prepend" onclick="
+                            let input = this.parentNode.querySelector('input[type=number]');
+                            input.stepDown();
+                            let min = (input.min)?parseInt(input.min):0;
+                            let numberValue = input.value;
+                            let roomDisplay = document.getElementById('product_search_room_quantity_display')
+                            if(parseInt(numberValue)>1){
+                                //roomDisplay.innerText = numberValue+ ' rooms,';
+                            } else {
+                                //roomDisplay.innerText = numberValue + ' room,';
+                            }
+                            // -- end --">
+                                <span class="input-group-text">
+                                    <i class="fas fa-minus"></i>
+                                </span>
+                            </div>
+                            
+                            <div class="form-element mb-0">
+                                <input type="number" id="product_search_room_quantity" name="product_search_room_quantity" class="form-control rounded-0 m-0 quantity" min="1" value="1" onclick="this.select()" onchange="let min = (this.min)?parseInt(this.min):0; if(parseInt(this.value)<min){this.value = 1}" placeholder="">
+                            </div>
+                            
+                            <div class="input-group-append" onclick="
+                                let input = this.parentNode.querySelector('input[type=number]');
+                                input.stepUp();
+                                let min = (input.min)?parseInt(input.min):0;
+                                let numberValue = input.value;
+                                let roomDisplay = document.getElementById('product_search_room_quantity_display')
+                                // -- end --">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-plus"></i>
+                                    </span>
+                            </div>
+                        
+                        </div>
+                    
+                    </div>
+                
+                </div>
+                
+                <div class="row mb-2">
+                    
+                    <div class="col-4">
+                        <label for="product_search_adult_quantity" class="form-label-popover d-flex justify-content-start">
+                            <i class="fas fa-user-friends mr-3"></i> Adults
+                        </label>
+                    </div>
+                    
+                    <div class="col-8">
+                        
+                        <div class="input-group d-flex justify-content-end number-input">
+                            
+                            <div class="input-group-prepend" onclick="let input = this.parentNode.querySelector('input[type=number]'); input.stepDown()">
+                                                            <span class="input-group-text">
+                                                                <i class="fas fa-minus"></i>
+                                                            </span>
+                            </div>
+                            
+                            <div class="form-element mb-0">
+                                <input type="number" id="product_search_adult_quantity" name="product_search_adult_quantity" class="form-control rounded-0 m-0 quantity" min="1" value="1" onclick="this.select()" onchange="let min = (this.min)?parseInt(this.min):0;if(parseInt(this.value)<min){this.value = 1}" placeholder="">
+                            </div>
+                            
+                            <div class="input-group-append" onclick="let input = this.parentNode.querySelector('input[type=number]');input.stepUp()">
+                                                            <span class="input-group-text">
+                                                                <i class="fas fa-plus"></i>
+                                                            </span>
+                            </div>
+                        
+                        </div>
+                    
+                    </div>
+                
+                </div>
+                
+                <div class="row mb-2">
+                    
+                    <div class="col-4">
+                        <label for="product_search_clild_quantity" class="form-label-popover d-flex justify-content-start">
+                            <i class="fas fa-child mr-3"></i> Children
+                        </label>
+                    </div>
+                    
+                    <div class="col-8">
+                        
+                        <div class="input-group d-flex justify-content-end number-input">
+                            
+                            <div class="input-group-prepend" onclick="let input = this.parentNode.querySelector('input[type=number]'); input.stepDown()">
+                                                            <span class="input-group-text">
+                                                                <i class="fas fa-minus"></i>
+                                                            </span>
+                            </div>
+                            
+                            <div class="form-element mb-0">
+                                <input type="number" id="product_search_clild_quantity" name="product_search_clild_quantity" class="form-control rounded-0 m-0 quantity" min="0" value="0" onclick="this.select()" onchange="
+                                let min = (this.min)?parseInt(this.min):0;if(parseInt(this.value)<min){this.value = 1}" placeholder="">
+                            </div>
+                            
+                            <div class="input-group-append" onclick="let input = this.parentNode.querySelector('input[type=number]');input.stepUp()">
+                                                            <span class="input-group-text">
+                                                                <i class="fas fa-plus"></i>
+                                                            </span>
+                            </div>
+                        
+                        </div>
+                    
+                    </div>
+                
+                </div>
+                
+                <div class="row mb-2">
+                    
+                    <div class="col">
+                        
+                        <button type="button" class="btn btn-primary btn-sm btn-block" onclick="
+                        const roomNumber = document.getElementById('product_search_room_quantity');
+                        const adultNumber = document.getElementById('product_search_adult_quantity');
+                        const childNumber = document.getElementById('product_search_clild_quantity');
+                        const _form_product_search_hotel_product_number_of_rooms = document.getElementById('form_product_search_hotel_product_number_of_rooms');
+                        const _form_product_search_hotel_product_number_of_adults = document.getElementById('form_product_search_hotel_product_number_of_adults');
+                        const _form_product_search_hotel_product_number_of_children = document.getElementById('form_product_search_hotel_product_number_of_children');
+                        const _form_product_search_hotel_product_guest = document.getElementById('form_product_search_hotel_product_guest')
+                        const roomDisplay = document.getElementById('product_search_room_quantity_display')
+                        const adultDisplay = document.getElementById('product_search_adult_quantity_display')
+                        const childDisplay = document.getElementById('product_search_children_quantity_display')
+                        
+                        if(
+                            roomNumber && adultNumber && childNumber
+                            && _form_product_search_hotel_product_number_of_rooms && _form_product_search_hotel_product_number_of_adults && _form_product_search_hotel_product_number_of_children
+                            && roomDisplay && adultDisplay && childDisplay
+                        ){
+                            let roomCount = (!isNaN(parseInt(roomNumber.value)))?parseInt(roomNumber.value):1
+                            let adultCount = (!isNaN(parseInt(adultNumber.value)))?parseInt(adultNumber.value):1
+                            let childCount = (!isNaN(parseInt(childNumber.value)))?parseInt(childNumber.value):0
+                            
+                            
+                            roomDisplay.innerText = (roomCount>1) ? roomCount + ' rooms, ': roomCount + ' room, ';
+                            adultDisplay.innerText = (adultCount>1) ? adultCount + ' adults, ': adultCount + ' adult, ';
+                            childDisplay.innerText = (childCount>1) ? childCount + ' children': childCount + ' child';
+                            
+                            _form_product_search_hotel_product_number_of_rooms.value = (roomCount>1) ? roomCount : 1;
+                            _form_product_search_hotel_product_number_of_adults.value = (adultCount>1) ? adultCount : 1;
+                            _form_product_search_hotel_product_number_of_children.value = (childCount>0) ? childCount : 0;
+
+                            if(_form_product_search_hotel_product_guest){
+                                $(_form_product_search_hotel_product_guest).popover('hide');
+                            }
+                        }
+                        
+                        //---- END ----
+                        ">Update
+                        </button>
+                    </div>
+                </div>
+            
+            </div>
+        </form>
+    
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    let today = new Date()
+    let today_year = today.getFullYear()
+    let today_month = today.getMonth()
+    let today_date = today.getDate()
+    
+    console.log("today", today)
+    console.log("today_year", today_year)
+    console.log("today_month", today_month)
+    console.log("today_date", today_date)
+    
+    $(function () {
+        let popupGuestTitle, popupGuestContent
+        
+        const _form_product_search_hotel_product_check_out = document.getElementById("form_product_search_hotel_product_check_out")
+        const _form_product_search_hotel_product_check_in = document.getElementById("form_product_search_hotel_product_check_in")
+        const _form_product_search_hotel_product_arrive_date = document.getElementById("form_product_search_hotel_product_arrive_date")
+        const _form_product_search_hotel_product_depart_date = document.getElementById("form_product_search_hotel_product_depart_date")
+        let arrivePicker = $(_form_product_search_hotel_product_check_in).pickadate("picker")
+        popupGuestTitle = ($("#message_popover_content .popover-head h5"))
+        
+        $(_form_product_search_hotel_product_check_in)
+          .datepicker({
+              startDate: '-1d',
+              autoclose: true,
+              numberOfMonths: 2,
+              title: function () {
+                  return "<div class='popover-header'><span class='cPZwQ'>Select a date to continue</span></div>"
+              },
+              clearBtn: true,
+              todayHighlight: true,
+              todayBtn: true,
+              format: "yyyy-mm-dd",
+              orientation: "bottom auto",
+              showOnFocus: "false",
+          })
+          .on("changeDate", function (selected) {
+              const _form_product_search_hotel_product_check_in = document.getElementById("form_product_search_hotel_product_check_in")
+              let formattedDate = $(_form_product_search_hotel_product_check_in).datepicker("getFormattedDate")
+              $(_form_product_search_hotel_product_check_out).datepicker("getFormattedDate")
+              _form_product_search_hotel_product_arrive_date.value = formattedDate
+              const roomDisplay = document.getElementById('form_product_search_hotel_product_check_in')
+              if (roomDisplay) {
+                  $(roomDisplay).find("span#product_search_check_in_display").text((formattedDate === "") ? " — / — / — " : formattedDate)
+              }
+              //startDate = new Date(selected.date.valueOf())
+              //startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())))
+              $(_form_product_search_hotel_product_check_out)
+                .val('')
+                .datepicker('update')
+                .datepicker('setStartDate', (formattedDate !== "") ? formattedDate : null)
+                .trigger("changeDate")
+          })
+        
+        $(_form_product_search_hotel_product_check_out)
+          .datepicker({
+              startDate: '-1d',
+              autoclose: true,
+              todayBtn: "linked",
+              numberOfMonths: 2,
+              title: function () {
+                  return "<div class='popover-header'><span class='cPZwQ'>Select a date to continue</span></div>"
+              },
+              clearBtn: true,
+              todayHighlight: true,
+              maxViewMode: 2,
+              format: "yyyy-mm-dd",
+              orientation: "bottom auto",
+              showOnFocus: "false",
+              beforeShowMonth: function (date) {
+                  console.log(date)
+              },
+              datesDisabled: ['12/06/2021', '12/21/2021'],
+              toggleActive: true,
+              defaultViewDate: {
+                  year: today_year,
+                  month: today_month,
+                  day: today_date,
+              },
+          })
+          .on("changeDate", function (e) {
+              let formattedDate = $(_form_product_search_hotel_product_check_out).datepicker("getFormattedDate")
+              _form_product_search_hotel_product_depart_date.value = formattedDate
+              const roomDisplay = document.getElementById('form_product_search_hotel_product_check_out')
+              if (roomDisplay) {
+                  $(roomDisplay).find("span#product_search_check_out_display").text((formattedDate === "") ? " — / — / — " : formattedDate)
+              }
+              
+          })
+        
+        const _form_product_search_hotel_product_guest = document.getElementById("form_product_search_hotel_product_guest")
+        if (_form_product_search_hotel_product_guest) {
+            popupGuestTitle = $("#message_popover_content .popover-head h5")
+            popupGuestContent = $("#message_popover_content .popover-body form")
+            
+            $(_form_product_search_hotel_product_guest).popover({
+                placement: "bottom",
+                title: () => popupGuestTitle,//$("#message_popover_content .popover-head h5"),
+                html: true,
+                container: "body",
+                content: () => popupGuestContent,//$("#message_popover_content .popover-body form"),
+                
+            })
+        }
+        
+    })
+
+</script>

@@ -1,9 +1,14 @@
 const Product = (function () {
     "use strict"
+    const _form_product_add = document.getElementById("form_product_add")
     const _product_edit_page = document.getElementById("product_edit_page")
     const _button_add_product_page_heading = document.getElementById("button_add_product_page_heading")
     const _modal_button_cancel_add_product = document.getElementById("modal_button_cancel_add_product")
-    const _modal_button_submit_add_product = document.getElementById("modal_button_cancel_add_product")
+    const _modal_button_submit_add_product = document.getElementById("modal_button_submit_add_product")
+    const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
+    const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
+    const _modal_product_provider_id = document.getElementById("modal_product_provider_id")
+    const _modal_product_vendor_id = document.getElementById("modal_product_vendor_id")
     const _modal_new_product = document.getElementById("modal_new_product")
     const _modal_product_name = document.getElementById("modal_product_name")
     const _modal_product_category_id = document.getElementById("modal_product_category_id")
@@ -11,10 +16,129 @@ const Product = (function () {
     const _modal_product_rating_types_id = document.getElementById("modal_product_rating_types_id")
     const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
     const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
+    
+    /**
+     * product search: panels - hotels
+     * @type {HTMLElement}
+     * @private
+     */
+    const _panel_hotels = document.getElementById("panel_hotels")
+    const _panel_flights = document.getElementById("panel_flights")
+    const _panel_cars = document.getElementById("panel_cars")
+    const _panel_rails = document.getElementById("panel_rails")
+    const _panel_transport = document.getElementById("panel_transport")
+    const _panel_tours = document.getElementById("panel_tours")
+    const _panel_cruises = document.getElementById("panel_cruises")
+    const _panel_packages = document.getElementById("panel_packages")
+    const _panel_other = document.getElementById("panel_other")
+    const _form_product_search_panel_hotels = document.getElementById("form_product_search_panel_hotels")
+    const _form_product_search_panel_flights = document.getElementById("form_product_search_panel_flights")
+    const _form_product_search_panel_cars = document.getElementById("form_product_search_panel_cars")
+    const _form_product_search_panel_rails = document.getElementById("form_product_search_panel_rails")
+    const _form_product_search_panel_transport = document.getElementById("form_product_search_panel_transport")
+    const _form_product_search_panel_tours = document.getElementById("form_product_search_panel_tours")
+    const _form_product_search_panel_cruises = document.getElementById("form_product_search_panel_cruises")
+    const _form_product_search_panel_packages = document.getElementById("form_product_search_panel_packages")
+    const _form_product_search_panel_other = document.getElementById("form_product_search_panel_other")
+    /**
+     * product search: panels - hotels product_name
+     *
+     * @type {HTMLElement}
+     * @private
+     */
+    const _form_product_search_hotel_product_name = document.getElementById("form_product_search_hotel_product_name")
+    const _button_product_search_panel_hotels_clear = document.getElementById("button_product_search_panel_hotels_clear")
+    const _button_product_search_panel_hotels_submit = document.getElementById("button_product_search_panel_hotels_submit")
+    
     const base_url = "/products"
     const _product_index_page = document.getElementById("product_index_page")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    let $index_table
+    let $index_table, new_product_validator
+    
+    let add_modal_form_rules = {
+        groups: {
+            providerNameGroup: "modal_product_provider_id modal_product_provider_name",
+        },
+        rules: {
+            modal_product_sku: {
+                required: true,
+            },
+            modal_product_rating_types_id: {
+                required: true,
+            },
+            modal_product_currency_id: {
+                required: true,
+            },
+            modal_product_pricing_strategies_types_id: {
+                required: true,
+            },
+            modal_product_name: {
+                required: true,
+            },
+            modal_product_category_id: {
+                required: true,
+            },
+            modal_product_provider_name: {
+                required: true,
+            },
+            modal_product_provider_id: {
+                required: true,
+            },
+            modal_product_vendor_name: {
+                required: true,
+            },
+        },
+        messages: {
+            modal_product_sku: {
+                required: "Field Required",
+            },
+            modal_product_rating_types_id: {
+                required: "Field Required",
+            },
+            modal_product_currency_id: {
+                required: "Field Required",
+            },
+            modal_product_pricing_strategies_types_id: {
+                required: "Field Required",
+            },
+            modal_product_name: {
+                required: "Field Required",
+            },
+            modal_product_provider_id: {
+                required: "Field Required",
+            },
+            modal_product_category_id: {
+                required: "Field Required",
+            },
+            modal_product_provider_name: {
+                required: "Field Required",
+            },
+            modal_product_vendor_name: {
+                required: "Field Required",
+            },
+        },
+    }
+    
+    $(_button_add_product_page_heading)
+      .on("click", function () {
+          set_new_product_modal()
+      })
+    
+    $(_modal_button_cancel_add_product)
+      .on("click", function () {
+          $(_modal_new_product).modal("hide")
+      })
+    
+    $(_modal_button_submit_add_product)
+      .on("click", function () {
+          console.log(validate_new_form())
+          save_new()
+      })
+    
+    const init_new_product_autocomplete = function () {
+    
+    }
+    
     const _product_index_table = document.getElementById("product_index_table")
     
     const handle_product_error = function (msg) {
@@ -71,20 +195,13 @@ const Product = (function () {
         }
     }
     
-    $(_button_add_product_page_heading)
-      .on("click", function () {
-          set_new_product_modal()
-      })
-    
-    $(_modal_button_cancel_add_product)
-      .on("click", function () {
-          $(_modal_new_product).modal("hide")
-      })
-    
-    $(_modal_button_submit_add_product)
-      .on("click", function () {
-          save_new()
-      })
+    const validate_new_form = function () {
+        console.log("validate_new_form", "")
+        if (_form_product_add) {
+            return $(_form_product_add).valid()
+        }
+        return false
+    }
     
     const clear_modal_form = function () {
         _modal_product_name.value = ""
@@ -93,6 +210,26 @@ const Product = (function () {
         _modal_product_rating_types_id.value = ""
         _modal_product_currency_id.value = ""
         _modal_product_pricing_strategies_types_id.value = ""
+        Product.reset_new_product_details()
+    }
+    
+    const reset_new_product_details = function () {
+        _modal_product_provider_id.value = ""
+        _modal_product_vendor_id.value = ""
+        _modal_product_provider_name.value = ""
+        _modal_product_vendor_name.value = ""
+        //_modal_product_provider_name.disabled = true
+        //_modal_product_vendor_name.disabled = true
+        _modal_product_name.value = ""
+        _modal_product_sku.value = ""
+        _modal_product_rating_types_id.value = ""
+        _modal_product_currency_id.value = ""
+        _modal_product_pricing_strategies_types_id.value = ""
+        _modal_product_name.disabled = true
+        _modal_product_sku.disabled = true
+        _modal_product_rating_types_id.disabled = true
+        _modal_product_currency_id.disabled = true
+        _modal_product_pricing_strategies_types_id.disabled = true
     }
     
     const save_new = function () {
@@ -100,6 +237,7 @@ const Product = (function () {
     }
     
     const set_new_product_modal = function () {
+        clear_modal_form()
         $(_modal_new_product).modal("show")
     }
     
@@ -273,9 +411,17 @@ const Product = (function () {
         }
         
         if (_product_index_page) {
+            Provider.init()
             Product.index(settings)
+            if (_form_product_add) {
+                console.log("Product.init() _form_product_add", Types.category)
+                validator_init(add_modal_form_rules)
+                new_product_validator = $(_form_product_add).validate()
+                
+            }
             return true
         }
+        
     }
     
     const index = function (settings) {
@@ -288,10 +434,19 @@ const Product = (function () {
         }
     }
     
+    const setNewFormDetails = function (category_id) {
+        console.log("setNewFormDetails()", category_id)
+        
+    }
+    
     return {
         validator: null,
         detail: {},
         all: new Map(),
+        setNewFormDetails: function (category_id) {
+            console.log("Product.setNewFormDetails()", category_id)
+            setNewFormDetails(category_id)
+        },
         get: function (params) {
             get(params)
         },
@@ -312,6 +467,12 @@ const Product = (function () {
         },
         navigate: function (product) {
             navigate(product)
+        },
+        reset_new_product_details: function () {
+            reset_new_product_details()
+        },
+        init_new_product_autocomplete: function () {
+            init_new_product_autocomplete()
         },
     }
     

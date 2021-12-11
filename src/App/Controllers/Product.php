@@ -51,6 +51,117 @@
             ),
         );
         
+        /**
+         * Tabs
+         */
+        protected static $tabs = array(
+            "id" => "product_edit_tabs",
+            "role" => "tablist",
+            "class" => "nav nav-tabs nav-tabs-line",
+            "tabs" => array(
+                
+                "Overview" => array(
+                    "controls" => "panel_tab_product_overview",
+                    "href" => "panel_tab_product_overview",
+                    "id" => "panel_tab_product_o",
+                    "active" => true,
+                    "aria" => array(
+                        "expanded" => "true",
+                    ),
+                    "data" => array(),
+                ),
+                
+                "Product" => array(
+                    "controls" => "panel_tab_product_detail",
+                    "href" => "panel_tab_product_detail",
+                    "id" => "panel_tab_product",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
+                
+                "Location" => array(
+                    "controls" => "panel_tab_product_location",
+                    "href" => "panel_tab_product_location",
+                    "id" => "panel_tab_location",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
+                
+                "Season" => array(
+                    "controls" => "panel_tab_product_season",
+                    "href" => "panel_tab_product_season",
+                    "id" => "panel_tab_season",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
+                
+                "Unit" => array(
+                    "controls" => "panel_tab_product_unit",
+                    "href" => "panel_tab_product_unit",
+                    "id" => "panel_tab_unit",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
+                
+                "Variant" => array(
+                    "controls" => "panel_tab_product_variant",
+                    "href" => "panel_tab_product_variant",
+                    "id" => "panel_tab_variant",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
+                
+                "Inventory" => array(
+                    "controls" => "panel_tab_product_inventory",
+                    "href" => "panel_tab_product_inventory",
+                    "id" => "panel_tab_inventory",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
+                
+                "Pricing" => array(
+                    "controls" => "panel_tab_product_pricing",
+                    "href" => "panel_tab_product_pricing",
+                    "id" => "panel_tab_pricing",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
+                
+                "Meta" => array(
+                    "controls" => "panel_tab_product_meta",
+                    "href" => "panel_tab_product_meta",
+                    "id" => "panel_tab_meta",
+                    "active" => false,
+                    "aria" => array(
+                        "expanded" => "false",
+                    ),
+                    "data" => array(),
+                ),
+            
+            ),
+        );
+        
         public function __construct()
         {
             parent::__construct();
@@ -111,7 +222,8 @@
                     $results = $results[0];
                 }
                 $data["product_details"] = $results;
-                // ----
+                
+                /** breadcrumbs */
                 define("BREAD_CRUMBS", "
                     <li class='breadcrumb-item'>
                         <a href='/'>Home</a>
@@ -123,6 +235,17 @@
                         $product_id
                     </li>"
                 );
+                
+                /**
+                 * tabs
+                 */
+                $tabs = self::$tabs;
+                
+                $data["buttons"] = array(
+                    self::$buttons["save"],
+                    self::$buttons["new"],
+                );
+                $data["tabs"] = $tabs;
                 // ----
                 View::render_template("products/edit", $data);
                 exit(1);

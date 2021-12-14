@@ -4,11 +4,6 @@ const Vendor = (function () {
     const base_url = "/vendors"
     /** Tabs */
     const _panel_tab_contact = document.getElementById("panel_tab_contact")
-    const _panel_tab_company = document.getElementById("panel_tab_company")
-    const _panel_tab_vendor = document.getElementById("panel_tab_vendor")
-    const _panel_tab_location = document.getElementById("panel_tab_location")
-    const _panel_tab_address = document.getElementById("panel_tab_address")
-    const _panel_tab_provider = document.getElementById("panel_tab_provider")
     const _button_add_vendor_page_heading = document.getElementById("button_add_vendor_page_heading")
     const _vendor_index_table_add_button = document.getElementById("vendor_index_table_add_button")
     const _vendor_company_id = document.getElementById("vendor_company_id")
@@ -35,11 +30,12 @@ const Vendor = (function () {
     const _button_save_vendor = document.getElementById("button_save_vendor")
     const _company_name = document.getElementById("company_name")
     const _form_product_add = document.getElementById("form_product_add")
-    const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
-    const _modal_product_provider_id = document.getElementById("modal_product_provider_id")
     const _modal_product_vendor_id = document.getElementById("modal_product_vendor_id")
     const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
-    
+    const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
+    const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
+    const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
+    //
     let new_vendor_validator, validator
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let globalSelectedVendor = false
@@ -96,17 +92,14 @@ const Vendor = (function () {
     $(_modal_button_submit_add_vendor)
       .on("click", function () {
           if (validate_new_modal_form()) {
-              
               let dataToSend = {
                   name: _vendor_modal_vendor_name.value,
               }
-              
-              confirmDialog(`Vender ${name} is exists. Would you like to load this record?`, (ans) => {
+              confirmDialog(`Vendor: ${name} will be added`, (ans) => {
                   if (ans) {
                       add(dataToSend)
                   }
               })
-              
           }
       })
     
@@ -147,8 +140,7 @@ const Vendor = (function () {
                   return
               }
               let vendor = suggestion.data
-              let name = vendor.name
-              confirmDialog(`Would you like to create Vendor: ${name}`, (ans) => {
+              confirmDialog(`Vendor ${vendor.name} ALREADY exists. Would you like to load this record to edit?`, (ans) => {
                   if (ans) {
                       window.location.replace(base_url + "/" + vendor.id)
                   } else {
@@ -167,6 +159,9 @@ const Vendor = (function () {
                   if (vendor_name === "") {
                       _modal_product_vendor_id.value = ""
                       _modal_product_vendor_name.value = ""
+                      _modal_product_vendor_company_id.value = ""
+                      Product.attr3 = null
+                      Product.update_product_sku()
                       globalSelectedVendor = false
                   } else {
                       vendor_exists(vendor_name)
@@ -177,6 +172,10 @@ const Vendor = (function () {
       .on("search", function () {
           _modal_product_vendor_id.value = ""
           _modal_product_vendor_name.value = ""
+          _modal_product_vendor_company_id.value = ""
+          _modal_product_provider_vendor_match.checked = false
+          Product.attr3 = null
+          Product.update_product_sku()
           globalSelectedVendor = false
       })
       .on("click", function (e) {
@@ -194,15 +193,22 @@ const Vendor = (function () {
           triggerSelectOnValidInput: false,
           paramName: "st",
           onSelect: function (suggestion) {
-              if (suggestion) {
-                  if (suggestion.data) {
-                      console.log("suggestion.data", suggestion.data)
-                      let vendor = suggestion.data
-                      _modal_product_vendor_id.value = suggestion.data.id
-                      _modal_product_vendor_name.value = suggestion.data.name
-                      globalSelectedVendor = true
-                  }
+              if (!suggestion || !suggestion.data) {
+                  return
               }
+              console.log("suggestion.data", suggestion.data)
+              let vendor = suggestion.data
+              if (_form_product_add) {
+                  let provider_company_id = (isNaN(parseInt(_modal_product_provider_company_id.value))) ? null : parseInt(_modal_product_provider_company_id.value)
+                  _modal_product_vendor_id.value = suggestion.data.id
+                  _modal_product_vendor_name.value = suggestion.data.name
+                  _modal_product_vendor_company_id.value = suggestion.data.company_id
+                  Product.attr3 = suggestion.data.sku
+                  Product.update_product_sku()
+                  _modal_product_provider_vendor_match.checked = parseInt(suggestion.data.company_id) === provider_company_id
+              }
+              globalSelectedVendor = true
+              
           },
       })
     
@@ -217,6 +223,7 @@ const Vendor = (function () {
       })
     
     const init_autocomplete = function () {
+        
         if (_vendor_name) {
             $(_vendor_name)
               .on("change", function () {
@@ -264,6 +271,50 @@ const Vendor = (function () {
         }
     }
     
+    const vendor_exists = function (name) {
+        if (name && name !== "") {
+            let dataToSend = {
+                name: name,
+            }
+            
+            fetch_vendor_by_name(dataToSend, function (data) {
+                console.log("fetch_vendor_by_name", data)
+                let vendor, company
+                if (data) {
+                    vendor = data
+                    if (data.length > 0) {
+                        if (data[0]) {
+                            vendor = data[0]
+                            
+                        }
+                    }
+                    company = vendor.company
+                    console.log("Vendor Exists", vendor)
+                    if (_vendor_modal_vendor_name) {
+                        confirmDialog(`Vendor ${vendor.name} ALREADY exists. Would you like to load this record to edit?`, (ans) => {
+                            if (ans) {
+                                window.location.replace(base_url + "/" + vendor.id)
+                            }
+                        })
+                    }
+                    
+                    if (_form_product_add) {
+                        _modal_product_vendor_id.value = vendor.id
+                        _modal_product_vendor_company_id.value = vendor.company_id
+                        Product.attr3 = vendor.sku
+                        Product.update_product_sku()
+                    }
+                } else {
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
+                    Product.attr3 = null
+                    Product.update_product_sku()
+                    console.log("Vendor Does Not Exist")
+                }
+            })
+        }
+    }
+    
     const hide_new_modal = function () {
         $(_modal_new_vendor).modal("hide")
     }
@@ -290,8 +341,13 @@ const Vendor = (function () {
                         let details = data[0]
                         
                         if (details.id) {
+                            if (_form_product_add) {
                             
-                            window.location.replace("/vendors/" + details.id)
+                            }
+                            
+                            if (_form_vendor_add) {
+                                window.location.replace("/vendors/" + details.id)
+                            }
                         } else {
                             console.log("details 1", details)
                         }
@@ -392,29 +448,6 @@ const Vendor = (function () {
             is_provider: (_vendor_is_provider.checked === true) ? 1 : 0,
             sku: _vendor_sku.value,
         })
-    }
-    
-    const vendor_exists = function (name) {
-        if (name && name !== "") {
-            let dataToSend = {
-                name: name,
-            }
-            
-            fetch_vendor_by_name(dataToSend, function (data) {
-                console.log("fetch_vendor_by_name", data)
-                let vendor = {}
-                if (data) {
-                    
-                    if (data.length > 0) {
-                        if (data[0]) {
-                            vendor = data[0]
-                            console.log("Vendor Exists", vendor)
-                            
-                        }
-                    }
-                }
-            })
-        }
     }
     
     /**
@@ -610,11 +643,14 @@ const Vendor = (function () {
         if (vendor) {
             updateVendor(vendor, function (data) {
                 if (data) {
-                    console.log("data 1", data)
+                    console.log("data", data)
+                    console.log(data.length)
                     if (data[0]) {
-                        console.log("data[0] 1", data[0])
+                        console.log("data[0]", data[0])
                         let details = data[0]
                         if (details.id) {
+                            console.log("details.id", details.id)
+                            console.log("_vendor_id.value", _vendor_id.value)
                             if (_vendor_id.value === "" || isNaN(parseInt(_vendor_id.value))) {
                                 window.location.replace(base_url + "/" + details.id)
                             } else {
@@ -860,6 +896,9 @@ const Vendor = (function () {
         validator: null,
         detail: {},
         all: new Map(),
+        newVendor: function (dataToSend, callback) {
+            return newVendor(dataToSend, callback)
+        },
         index: function (settings) {
             index(settings)
         },

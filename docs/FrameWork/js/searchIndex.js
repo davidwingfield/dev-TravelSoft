@@ -46,6 +46,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Autocomplete.html#method_providers"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Autocomplete\u003A\u003Aproducts\u0028\u0029",
+            "name": "products",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Autocomplete.html#method_products"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Autocomplete\u003A\u003Acompanies\u0028\u0029",
             "name": "companies",
             "summary": "",
@@ -365,6 +370,16 @@ Search.appendIndex(
             "name": "format",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Product.html#method_format"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Product\u003A\u003Aautocomplete\u0028\u0029",
+            "name": "autocomplete",
+            "summary": "autocomplete\nAutocomplete\u0020json",
+            "url": "classes/Framework-App-Controllers-Product.html#method_autocomplete"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Product\u003A\u003Aformat_ac\u0028\u0029",
+            "name": "format_ac",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Product.html#method_format_ac"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Product\u003A\u003A\u0024buttons",
             "name": "buttons",
@@ -718,12 +733,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003AserveAdd\u0028\u0029",
             "name": "serveAdd",
-            "summary": "",
+            "summary": "handle\u0020server\u0020request\u0020add",
             "url": "classes/Framework-App-Controllers-Vendor.html#method_serveAdd"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003Aadd\u0028\u0029",
             "name": "add",
-            "summary": "",
+            "summary": "handle\u0020add\u0020process",
             "url": "classes/Framework-App-Controllers-Vendor.html#method_add"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor\u003A\u003AserveUpdate\u0028\u0029",
@@ -1825,6 +1840,11 @@ Search.appendIndex(
             "name": "update",
             "summary": "",
             "url": "classes/Framework-App-Models-ProductModel.html#method_update"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ProductModel\u003A\u003Aproduct_ac\u0028\u0029",
+            "name": "product_ac",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ProductModel.html#method_product_ac"
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProductModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
@@ -2948,7 +2968,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\Init\\initLogger\u0028\u0029",
             "name": "initLogger",
-            "summary": "Short\u0020Description",
+            "summary": "Short\u0020Description\nLong\u0020Description",
             "url": "namespaces/framework-init.html#function_initLogger"
         },                {
             "fqsen": "\\Framework\\Logger\\Log",

@@ -555,6 +555,10 @@ const htmlDecode = function (value) {
     return $("<textarea/>").html(value).text()
 }
 
+const is_null = function (val) {
+    return val === null || val === undefined
+}
+
 
 /**
  * converts HTML entities in the string to their corresponding characters.

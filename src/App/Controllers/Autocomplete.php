@@ -1,10 +1,10 @@
 <?php
-
+    
     namespace Framework\App\Controllers;
-
+    
     use Framework\Core\Controller;
     use Framework\Logger\Log;
-
+    
     /**
      * Autocomplete
      *
@@ -13,12 +13,12 @@
      */
     class Autocomplete extends Controller
     {
-
+        
         public function __construct()
         {
             parent::__construct();
         }
-
+        
         public function providers(): void
         {
             $st = "";
@@ -29,7 +29,27 @@
             echo json_encode($results);
             exit(1);
         }
-
+        
+        public function products(): void
+        {
+            $results = [];
+            $category_id = null;
+            $st = "";
+            if (isset($_GET["category_id"])) {
+                extract($_GET);
+                
+                $results = Product::autocomplete(array(
+                    "st" => $st,
+                    "category_id" => (int)$category_id,
+                ));
+            }
+            
+            header("Content-type:application/json");
+            // ----
+            echo json_encode($results);
+            exit(1);
+        }
+        
         public function companies(): void
         {
             $st = "";
@@ -40,7 +60,7 @@
             echo json_encode($results);
             exit(1);
         }
-
+        
         public function vendors(): void
         {
             $st = "";
@@ -51,7 +71,7 @@
             echo json_encode($results);
             exit(1);
         }
-
+        
         public function locations(): void
         {
             $st = "";
@@ -63,5 +83,5 @@
             echo json_encode($results);
             exit;
         }
-
+        
     }

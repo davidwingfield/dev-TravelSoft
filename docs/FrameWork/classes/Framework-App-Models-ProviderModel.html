@@ -152,7 +152,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">16</span>
+    <span class="phpdocumentor-element-found-in__line">17</span>
 
     </aside>
 
@@ -346,7 +346,7 @@ If id is passed then we search by it otherwise get all enabled</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">21</span>
+    <span class="phpdocumentor-element-found-in__line">22</span>
 
     </aside>
 
@@ -380,7 +380,7 @@ If id is passed then we search by it otherwise get all enabled</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">40</span>
+    <span class="phpdocumentor-element-found-in__line">41</span>
 
     </aside>
 
@@ -422,7 +422,7 @@ If id is passed then we search by it otherwise get all enabled</dd>
                             DATE_FORMAT(COMPANY.date_created, &#039;%m/%d/%Y&#039;) AS &#039;company_date_created&#039;,
                             COMPANY.modified_by AS &#039;company_modified_by&#039;,
                             DATE_FORMAT(COMPANY.date_modified, &#039;%m/%d/%Y&#039;) AS &#039;company_date_modified&#039;,
-                            COALESCE(COMPANY.status_id, 10) AS &#039;company_status_id&#039;,
+                            COMPANY.status_id AS &#039;company_status_id&#039;,
                             COMPANY.note AS &#039;company_note&#039;,
                             COMPANY.cover_image AS &#039;company_cover_image&#039;,
                             CONCAT(	LOCATION.name, &#039; &#039;,	&#039;(&#039; ,CITY.name,	&#039;, &#039;,	PROVINCE.name,&#039;)&#039;) AS &#039;location&#039;,
@@ -488,18 +488,18 @@ If id is passed then we search by it otherwise get all enabled</dd>
                             COUNTRY.date_modified AS &#039;country_date_modified&#039;,
                             COUNTRY.modified_by AS &#039;country_modified_by&#039;,
                             VENDORCOMPANY.id AS &#039;vendor_company_id&#039;,
-                            COALESCE(VENDORCOMPANY.name, &#039;&#039;) AS &#039;vendor_company_name&#039;,
-                            COALESCE(VENDORCOMPANY.phone_1, &#039;&#039;) AS &#039;vendor_company_phone_1&#039;,
-                            COALESCE(VENDORCOMPANY.phone_2, &#039;&#039;) AS &#039;vendor_company_phone_2&#039;,
-                            COALESCE(VENDORCOMPANY.fax, &#039;&#039;) AS &#039;vendor_company_fax&#039;,
-                            COALESCE(VENDORCOMPANY.website, &#039;&#039;) AS &#039;vendor_company_website&#039;,
-                            COALESCE(VENDORCOMPANY.email, &#039;&#039;) AS &#039;vendor_company_email&#039;,
+                            VENDORCOMPANY.name AS &#039;vendor_company_name&#039;,
+                            VENDORCOMPANY.phone_1 AS &#039;vendor_company_phone_1&#039;,
+                            VENDORCOMPANY.phone_2 AS &#039;vendor_company_phone_2&#039;,
+                            VENDORCOMPANY.fax AS &#039;vendor_company_fax&#039;,
+                            VENDORCOMPANY.website AS &#039;vendor_company_website&#039;,
+                            VENDORCOMPANY.email AS &#039;vendor_company_email&#039;,
                             VENDORCOMPANY.enabled AS &#039;vendor_company_enabled&#039;,
                             VENDORCOMPANY.created_by AS &#039;vendor_company_created_by&#039;,
                             DATE_FORMAT(VENDORCOMPANY.date_created, &#039;%m/%d/%Y&#039;) AS &#039;vendor_company_date_created&#039;,
                             VENDORCOMPANY.modified_by AS &#039;vendor_company_modified_by&#039;,
                             DATE_FORMAT(VENDORCOMPANY.date_modified, &#039;%m/%d/%Y&#039;) AS &#039;vendor_company_date_modified&#039;,
-                            COALESCE(VENDORCOMPANY.status_id, 10) AS &#039;vendor_company_status&#039;,
+                            VENDORCOMPANY.status_id AS &#039;vendor_company_status&#039;,
                             VENDORCOMPANY.note AS &#039;vendor_company_note&#039;,
                             VENDOR.id AS &#039;vendor_id&#039;,
                             VENDOR.company_id AS &#039;vendor_company_id&#039;,
@@ -516,13 +516,14 @@ If id is passed then we search by it otherwise get all enabled</dd>
                             VENDOR.enabled AS &#039;vendor_enabled&#039;,
                             VENDOR.note  AS &#039;vendor_note&#039;
             FROM 			provider PROVIDER
-            JOIN			company COMPANY ON COMPANY.id = PROVIDER.company_id
-            JOIN			location LOCATION ON LOCATION.id = PROVIDER.location_id
-            JOIN			location_types LOCATIONTYPES ON LOCATIONTYPES.id = LOCATION.location_types_id
-            JOIN			city CITY ON CITY.id = LOCATION.city_id
-            JOIN			province PROVINCE ON CITY.province_id = PROVINCE.id
-            JOIN			country COUNTRY ON PROVINCE.country_id = COUNTRY.id
-            JOIN			vendor VENDOR ON VENDOR.company_id = COMPANY.id AND VENDOR.is_provider = 1
+            
+            LEFT JOIN			company COMPANY ON COMPANY.id = PROVIDER.company_id
+            LEFT JOIN			location LOCATION ON LOCATION.id = PROVIDER.location_id
+            LEFT JOIN			location_types LOCATIONTYPES ON LOCATIONTYPES.id = LOCATION.location_types_id
+            LEFT JOIN			city CITY ON CITY.id = LOCATION.city_id
+            LEFT JOIN			province PROVINCE ON CITY.province_id = PROVINCE.id
+            LEFT JOIN			country COUNTRY ON PROVINCE.country_id = COUNTRY.id
+            LEFT JOIN			vendor VENDOR ON VENDOR.company_id = COMPANY.id AND VENDOR.is_provider = 1
             LEFT JOIN		company VENDORCOMPANY ON VENDORCOMPANY.id = VENDOR.company_id
             WHERE			PROVIDER.enabled = 1
             &quot;</span></code>
@@ -552,7 +553,7 @@ If id is passed then we search by it otherwise get all enabled</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">185</span>
+    <span class="phpdocumentor-element-found-in__line">187</span>
 
     </aside>
 
@@ -598,7 +599,7 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">214</span>
+    <span class="phpdocumentor-element-found-in__line">216</span>
 
     </aside>
 
@@ -641,7 +642,7 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">241</span>
+    <span class="phpdocumentor-element-found-in__line">243</span>
 
     </aside>
 
@@ -717,7 +718,7 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">264</span>
+    <span class="phpdocumentor-element-found-in__line">266</span>
 
     </aside>
 
@@ -935,7 +936,7 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">367</span>
+    <span class="phpdocumentor-element-found-in__line">380</span>
 
     </aside>
 
@@ -978,7 +979,7 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">290</span>
+    <span class="phpdocumentor-element-found-in__line">292</span>
 
     </aside>
 

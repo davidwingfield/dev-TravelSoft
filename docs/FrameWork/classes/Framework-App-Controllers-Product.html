@@ -231,6 +231,14 @@ Long Product Description</p>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Controllers-Product.html#method_autocomplete">autocomplete()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>autocomplete
+Autocomplete json</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Controllers-Product.html#method_edit">edit()</a>
     <span>
                         &nbsp;: mixed    </span>
@@ -274,6 +282,13 @@ Long Product Description</p>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/Framework-App-Controllers-Product.html#method_format">format()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/Framework-App-Controllers-Product.html#method_format_ac">format_ac()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
@@ -419,7 +434,7 @@ Long Product Description</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$buttons</span>
-     = <span class="phpdocumentor-signature__default-value">array(&quot;save&quot; =&gt; array(&quot;type&quot; =&gt; &quot;a&quot;, &quot;href&quot; =&gt; &quot;javascript:void(0)&quot;, &quot;classes&quot; =&gt; &quot;btn btn-sm btn-primary btn-round&quot;, &quot;icon&quot; =&gt; &quot;fas fa-save&quot;, &quot;id&quot; =&gt; &quot;button_save_product&quot;, &quot;text&quot; =&gt; &quot;save product&quot;, &quot;data&quot; =&gt; array(&quot;toggle&quot; =&gt; &quot;tooltip&quot;, &quot;title&quot; =&gt; &quot;Save Product&quot;, &quot;placement&quot; =&gt; &quot;top&quot;)), &quot;new&quot; =&gt; array(&quot;type&quot; =&gt; &quot;a&quot;, &quot;href&quot; =&gt; &quot;javascript:void(0)&quot;, &quot;classes&quot; =&gt; &quot;btn btn-outline-primary btn-sm btn-icon btn-round&quot;, &quot;icon&quot; =&gt; &quot;fas fa-plus&quot;, &quot;id&quot; =&gt; &quot;button_add_product_page_heading&quot;, &quot;text&quot; =&gt; &quot;&quot;, &quot;data&quot; =&gt; array(&quot;toggle&quot; =&gt; &quot;tooltip&quot;, &quot;title&quot; =&gt; &quot;Creat a New Product&quot;, &quot;placement&quot; =&gt; &quot;top&quot;)))</span></code>
+     = <span class="phpdocumentor-signature__default-value">array(&quot;save&quot; =&gt; array(&quot;type&quot; =&gt; &quot;a&quot;, &quot;href&quot; =&gt; &quot;javascript:void(0)&quot;, &quot;classes&quot; =&gt; &quot;btn btn-sm btn-primary btn-round&quot;, &quot;icon&quot; =&gt; &quot;fas fa-save&quot;, &quot;id&quot; =&gt; &quot;button_save_product&quot;, &quot;text&quot; =&gt; &quot;save product&quot;, &quot;data&quot; =&gt; array(&quot;toggle&quot; =&gt; &quot;tooltip&quot;, &quot;title&quot; =&gt; &quot;Save Product&quot;, &quot;placement&quot; =&gt; &quot;top&quot;)), &quot;new&quot; =&gt; array(&quot;type&quot; =&gt; &quot;a&quot;, &quot;href&quot; =&gt; &quot;javascript:void(0)&quot;, &quot;classes&quot; =&gt; &quot;btn btn-primary &quot;, &quot;icon&quot; =&gt; &quot;fas fa-plus mr-2&quot;, &quot;id&quot; =&gt; &quot;button_add_product_page_heading&quot;, &quot;text&quot; =&gt; &quot;New Product&quot;, &quot;data&quot; =&gt; array(&quot;toggle&quot; =&gt; &quot;tooltip&quot;, &quot;title&quot; =&gt; &quot;Creat a New Product&quot;, &quot;placement&quot; =&gt; &quot;top&quot;)))</span></code>
 
     
     
@@ -496,6 +511,51 @@ Long Product Description</p>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_autocomplete">
+        autocomplete()
+        <a href="classes/Framework-App-Controllers-Product.html#method_autocomplete" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">417</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">autocomplete
+Autocomplete json</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">autocomplete</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
             &mdash;
         
     
@@ -783,6 +843,50 @@ Long Product Description</p>
                 <span class="phpdocumentor-signature__argument__name">$product</span>
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_format_ac">
+        format_ac()
+        <a href="classes/Framework-App-Controllers-Product.html#method_format_ac" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">429</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">format_ac</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$products</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$products</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
 

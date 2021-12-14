@@ -81,7 +81,7 @@
 
             FROM 	product PRODUCT
             JOIN 	category CATEGORY ON CATEGORY.id = PRODUCT.category_id
-
+            WHERE   PRODUCT.enabled = 1
             ";
         
         public static function get(int $id = null): array
@@ -122,6 +122,30 @@
             $id = 1;
             
             return self::get($id);
+        }
+        
+        public static function product_ac(string $st = "", int $category_id = null): array
+        {
+            if (is_null($category_id)) {
+                return [];
+            }
+            
+            try {
+                $searchTerm = addslashes($st);
+                $sql = self::$sql . "
+                    AND			PRODUCT.name LIKE '%$searchTerm%'
+                    AND         PRODUCT.category_id = $category_id
+                    ORDER BY    LENGTH(PRODUCT.name), CAST(PRODUCT.name AS UNSIGNED), PRODUCT.name ASC
+                    LIMIT 20;";
+                
+                //Log::$debug_log->trace($sql);
+                
+                return Model::$db->rawQuery($sql);
+            } catch (Exception $e) {
+                Log::$debug_log->error($e);
+                
+                return [];
+            }
         }
         
     }

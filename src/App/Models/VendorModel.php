@@ -56,7 +56,7 @@
             FROM 			vendor VENDOR
             JOIN			company COMPANY ON COMPANY.id = VENDOR.company_id
            WHERE			COMPANY.enabled = 1
-                AND			COMPANY.enabled = 1
+                
                 ";
         
         protected static $dbTable = "vendor";

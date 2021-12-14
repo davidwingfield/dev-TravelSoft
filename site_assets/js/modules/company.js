@@ -161,41 +161,6 @@ const Company = (function () {
     }
     
     /**
-     * set detail from data
-     *
-     * @param company
-     * @returns {{phone_2: null, note: null, phone_1: null, website: null, keywords: null, date_created: *, description_long: null, created_by: number, enabled: number, description_short: null, status_id: number, date_modified: *, modified_by: number, name: null, logo: null, cover_image: string, id: null, fax: null, email: null}}
-     */
-    const set_detail = function (company) {
-        let detail = _default_detail()
-        
-        if (company) {
-            detail.created_by = (company.created_by) ? company.created_by : user_id
-            detail.date_created = (company.date_created) ? company.date_created : formatDateMySQL()
-            detail.date_modified = (company.date_modified) ? company.date_modified : formatDateMySQL()
-            detail.email = (company.email) ? company.email : null
-            detail.cover_image = (company.cover_image) ? company.cover_image : null
-            detail.enabled = (company.enabled) ? company.enabled : 1
-            detail.fax = (company.fax) ? company.fax : null
-            detail.id = (company.id) ? company.id : null
-            detail.modified_by = (company.modified_by) ? company.modified_by : user_id
-            detail.name = (company.name) ? company.name : null
-            detail.note = (company.note) ? company.note : null
-            detail.phone_1 = (company.phone_1) ? company.phone_1 : null
-            detail.phone_2 = (company.phone_2) ? company.phone_2 : null
-            detail.status_id = (company.status_id) ? company.status_id : 10
-            detail.website = (company.website) ? company.website : null
-            detail.logo = (company.logo) ? company.logo : ""
-            detail.keywords = (company.keywords) ? company.keywords : ""
-            detail.description_long = (company.description_long) ? company.description_long : ""
-            detail.description_short = (company.description_short) ? company.description_short : ""
-        }
-        
-        Company.detail = detail
-        return detail
-    }
-    
-    /**
      * fill in form data
      *
      * @param company
@@ -441,6 +406,7 @@ const Company = (function () {
                                 if (data) {
                                     if (data[0]) {
                                         company = data[0]
+                                        tempCompany = company
                                         reset_form(true)
                                         populate_form(company)
                                         show_form()
@@ -538,8 +504,42 @@ const Company = (function () {
     
     let reset_company = {}
     
+    /**
+     * set detail from data
+     *
+     * @param company
+     * @returns {{phone_2: null, note: null, phone_1: null, website: null, keywords: null, date_created: *, description_long: null, created_by: number, enabled: number, description_short: null, status_id: number, date_modified: *, modified_by: number, name: null, logo: null, cover_image: string, id: null, fax: null, email: null}}
+     */
+    const set_detail = function (company) {
+        let detail = _default_detail()
+        
+        if (company) {
+            detail.created_by = (company.created_by) ? company.created_by : user_id
+            detail.date_created = (company.date_created) ? company.date_created : formatDateMySQL()
+            detail.date_modified = (company.date_modified) ? company.date_modified : formatDateMySQL()
+            detail.email = (company.email) ? company.email : null
+            detail.cover_image = (company.cover_image) ? company.cover_image : null
+            detail.enabled = (company.enabled) ? company.enabled : 1
+            detail.fax = (company.fax) ? company.fax : null
+            detail.id = (company.id) ? company.id : null
+            detail.modified_by = (company.modified_by) ? company.modified_by : user_id
+            detail.name = (company.name) ? company.name : null
+            detail.note = (company.note) ? company.note : null
+            detail.phone_1 = (company.phone_1) ? company.phone_1 : null
+            detail.phone_2 = (company.phone_2) ? company.phone_2 : null
+            detail.status_id = (company.status_id) ? company.status_id : 10
+            detail.website = (company.website) ? company.website : null
+            detail.logo = (company.logo) ? company.logo : ""
+            detail.keywords = (company.keywords) ? company.keywords : ""
+            detail.description_long = (company.description_long) ? company.description_long : ""
+            detail.description_short = (company.description_short) ? company.description_short : ""
+        }
+        
+        Company.detail = detail
+        return detail
+    }
+    
     const show_form = function () {
-        console.log("Company.show_form")
         reset_company = Company.build()
         
         if (_form_edit_company_block) {
@@ -552,7 +552,6 @@ const Company = (function () {
         if (_button_save_provider) {
             $(_button_save_provider).attr("readonly", true)
             _button_save_provider.disabled = true
-            
         }
     }
     
@@ -615,6 +614,9 @@ const Company = (function () {
             phone_2: null,
             status_id: 10,
             website: null,
+        },
+        add_to_company_list: function (dataToSend, callback) {
+            return add_to_company_list(dataToSend, callback)
         },
         company_exists: function (name) {
             company_exists(name)

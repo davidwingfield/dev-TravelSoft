@@ -52,9 +52,22 @@ const Category = (function () {
     const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
     
     const handle_product_change = function (category_id) {
-        Product.reset_new_product_details()
-        Product.init_autocomplete(category_id)
+        if (!category_id) {
+            return
+        }
         
+        category_id = parseInt(category_id)
+        
+        Product.reset_new_product_details()
+        Product.init_new_product_autocomplete(category_id)
+        let category = Types.category.get(category_id)
+        if (!category) {
+            return
+        }
+        Product.attr1 = category.attribute_id
+        Product.attr2 = null
+        Product.attr3 = null
+        Product.update_product_sku()
         if (category_id && !isNaN(parseInt(category_id))) {
             
             switch (parseInt(category_id)) {
@@ -62,9 +75,13 @@ const Category = (function () {
                     /**
                      * Hotels
                      */
+                    _modal_product_provider_name.disabled = false
+                    _modal_product_vendor_name.disabled = false
+                    _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
+                    _modal_product_pricing_strategies_types_id.disabled = false
                     console.log("Hotels")
                     break
                 case 2:
@@ -132,9 +149,7 @@ const Category = (function () {
                     _modal_product_rating_types_id.value = ""
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_rating_types_id.disabled = false
-                    
                     _modal_product_currency_id.disabled = false
-                    
                     console.log("Cruises")
                     break
                 case 8:
@@ -143,9 +158,7 @@ const Category = (function () {
                      */
                     _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    
                     _modal_product_rating_types_id.disabled = false
-                    
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     console.log("Packages")
@@ -166,13 +179,11 @@ const Category = (function () {
                     /**
                      * default
                      */
-                    
                     _modal_product_name.disabled = true
                     _modal_product_sku.disabled = true
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_currency_id.disabled = true
                     _modal_product_pricing_strategies_types_id.disabled = true
-                    
                     console.log("Default")
                     break
             }

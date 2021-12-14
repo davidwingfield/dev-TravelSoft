@@ -16,7 +16,9 @@ const Product = (function () {
     const _modal_product_rating_types_id = document.getElementById("modal_product_rating_types_id")
     const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
     const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
-    
+    const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
+    const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
+    const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
     /**
      * product search: panels - hotels
      * @type {HTMLElement}
@@ -49,15 +51,19 @@ const Product = (function () {
     const _form_product_search_hotel_product_name = document.getElementById("form_product_search_hotel_product_name")
     const _button_product_search_panel_hotels_clear = document.getElementById("button_product_search_panel_hotels_clear")
     const _button_product_search_panel_hotels_submit = document.getElementById("button_product_search_panel_hotels_submit")
-    
     const base_url = "/products"
     const _product_index_page = document.getElementById("product_index_page")
+    const _product_index_table = document.getElementById("product_index_table")
+    //
+    
+    //
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $index_table, new_product_validator
-    
+    //
     let add_modal_form_rules = {
         groups: {
-            providerNameGroup: "modal_product_provider_id modal_product_provider_name",
+            providerNameGroup: "modal_product_provider_id modal_product_provider_name modal_product_provider_company_id",
+            vendorNameGroup: "modal_product_vendor_id modal_product_vendor_name modal_product_vendor_company_id",
         },
         rules: {
             modal_product_sku: {
@@ -84,7 +90,16 @@ const Product = (function () {
             modal_product_provider_id: {
                 required: true,
             },
+            modal_product_provider_company_id: {
+                required: true,
+            },
             modal_product_vendor_name: {
+                required: true,
+            },
+            modal_product_vendor_id: {
+                required: true,
+            },
+            modal_product_vendor_company_id: {
                 required: true,
             },
         },
@@ -116,6 +131,15 @@ const Product = (function () {
             modal_product_vendor_name: {
                 required: "Field Required",
             },
+            modal_product_provider_company_id: {
+                required: "Field Required",
+            },
+            modal_product_vendor_id: {
+                required: "Field Required",
+            },
+            modal_product_vendor_company_id: {
+                required: "Field Required",
+            },
         },
     }
     
@@ -124,8 +148,14 @@ const Product = (function () {
           set_new_product_modal()
       })
     
+    $(_modal_new_product)
+      .on("hide.bs.modal", function () {
+          clear_validation(_form_product_add)
+      })
+    
     $(_modal_button_cancel_add_product)
       .on("click", function () {
+          clear_validation(_form_product_add)
           $(_modal_new_product).modal("hide")
       })
     
@@ -135,11 +165,135 @@ const Product = (function () {
           save_new()
       })
     
-    const init_new_product_autocomplete = function () {
+    $(_modal_product_provider_vendor_match)
+      .on("change", function () {
+          let provider_company_id = (isNaN(parseInt(_modal_product_provider_company_id.value))) ? null : parseInt(_modal_product_provider_company_id.value)
+          
+          if (provider_company_id !== null) {
+              if (_modal_product_provider_vendor_match.checked) {
+                  _modal_product_vendor_company_id.value = _modal_product_provider_company_id.value
+                  if (Provider.detail !== null) {
+                      _modal_product_vendor_company_id.value = Provider.detail.vendor.company_id
+                      _modal_product_vendor_id.value = Provider.detail.vendor.id
+                      _modal_product_vendor_name.value = Provider.detail.vendor.name
+                  } else {
+                      _modal_product_vendor_company_id.value = ""
+                      _modal_product_vendor_id.value = ""
+                      _modal_product_vendor_name.value = ""
+                  }
+              } else {
+                  _modal_product_vendor_company_id.value = ""
+                  _modal_product_vendor_id.value = ""
+                  _modal_product_vendor_name.value = ""
+              }
+          }
+      })
     
+    const init_new_product_autocomplete = function () {
+        let category_id = (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null
+        
+        if (category_id !== null) {
+            $(_modal_product_name)
+              .on("change", function () {
+                  /*
+                  setTimeout(function () {
+                      let provider_name = _provider_name.value
+                      
+                      if (globalSelectedProvider === false) {
+                          if (provider_name === "") {
+                              _provider_name.value = ""
+                              _provider_company_id.value = ""
+                              globalSelectedProvider = false
+                              $(_vendor_name).val("").trigger("change")
+                              $(_provider_company_id).val("").trigger("change")
+                          } else {
+                              provider_exists(provider_name)
+                          }
+                      }
+                  }, 200)
+                  //*/
+              })
+              .on("search", function () {
+              
+              })
+              .on("click", function () {
+                  $(this).select()
+              })
+              .autocomplete({
+                  serviceUrl: "/api/v1.0/autocomplete/products",
+                  minChars: 2,
+                  params: { "category_id": category_id },
+                  cache: false,
+                  dataType: "json",
+                  triggerSelectOnValidInput: false,
+                  paramName: "st",
+                  onSelect: function (suggestion) {
+                      if (!suggestion || !suggestion.data) {
+                          return
+                      }
+                      //console.log("suggestion.data", suggestion.data)
+                      let product = suggestion.data
+                      console.log("product", product)
+                  },
+              })
+        }
+        console.log("init_new_product_autocomplete()", category_id)
     }
     
-    const _product_index_table = document.getElementById("product_index_table")
+    const validate_new_form = function () {
+        console.log("validate_new_form", "")
+        if (_form_product_add) {
+            return $(_form_product_add).valid()
+        }
+        return false
+    }
+    
+    const clear_modal_form = function () {
+        _modal_product_name.value = ""
+        _modal_product_category_id.value = ""
+        _modal_product_sku.value = ""
+        _modal_product_rating_types_id.value = ""
+        _modal_product_currency_id.value = ""
+        _modal_product_provider_company_id.value = ""
+        _modal_product_vendor_company_id.value = ""
+        _modal_product_vendor_name.disabled = true
+        _modal_product_provider_name.disabled = true
+        _modal_product_pricing_strategies_types_id.value = ""
+        Product.attr1 = null
+        Product.attr2 = null
+        Product.attr3 = null
+        Product.update_product_sku()
+        Product.reset_new_product_details()
+        clear_validation(_form_product_add)
+    }
+    
+    const reset_new_product_details = function () {
+        _modal_product_provider_id.value = ""
+        _modal_product_vendor_id.value = ""
+        _modal_product_provider_name.value = ""
+        _modal_product_vendor_name.value = ""
+        //_modal_product_provider_name.disabled = true
+        //_modal_product_vendor_name.disabled = true
+        _modal_product_name.value = ""
+        _modal_product_sku.value = ""
+        _modal_product_rating_types_id.value = ""
+        _modal_product_currency_id.value = ""
+        _modal_product_pricing_strategies_types_id.value = ""
+        _modal_product_name.disabled = true
+        _modal_product_sku.disabled = true
+        _modal_product_rating_types_id.disabled = true
+        _modal_product_currency_id.disabled = true
+        _modal_product_pricing_strategies_types_id.disabled = true
+    }
+    
+    const set_new_product_modal = function () {
+        clear_modal_form()
+        $(_modal_new_product).modal("show")
+    }
+    
+    const save_new = function () {
+    
+    }
     
     const handle_product_error = function (msg) {
         toastr.error(msg)
@@ -193,52 +347,6 @@ const Product = (function () {
             profiles: [],
             provider: {},
         }
-    }
-    
-    const validate_new_form = function () {
-        console.log("validate_new_form", "")
-        if (_form_product_add) {
-            return $(_form_product_add).valid()
-        }
-        return false
-    }
-    
-    const clear_modal_form = function () {
-        _modal_product_name.value = ""
-        _modal_product_category_id.value = ""
-        _modal_product_sku.value = ""
-        _modal_product_rating_types_id.value = ""
-        _modal_product_currency_id.value = ""
-        _modal_product_pricing_strategies_types_id.value = ""
-        Product.reset_new_product_details()
-    }
-    
-    const reset_new_product_details = function () {
-        _modal_product_provider_id.value = ""
-        _modal_product_vendor_id.value = ""
-        _modal_product_provider_name.value = ""
-        _modal_product_vendor_name.value = ""
-        //_modal_product_provider_name.disabled = true
-        //_modal_product_vendor_name.disabled = true
-        _modal_product_name.value = ""
-        _modal_product_sku.value = ""
-        _modal_product_rating_types_id.value = ""
-        _modal_product_currency_id.value = ""
-        _modal_product_pricing_strategies_types_id.value = ""
-        _modal_product_name.disabled = true
-        _modal_product_sku.disabled = true
-        _modal_product_rating_types_id.disabled = true
-        _modal_product_currency_id.disabled = true
-        _modal_product_pricing_strategies_types_id.disabled = true
-    }
-    
-    const save_new = function () {
-    
-    }
-    
-    const set_new_product_modal = function () {
-        clear_modal_form()
-        $(_modal_new_product).modal("show")
     }
     
     const save = function (params) {
@@ -414,17 +522,15 @@ const Product = (function () {
             Provider.init()
             Product.index(settings)
             if (_form_product_add) {
-                console.log("Product.init() _form_product_add", Types.category)
                 validator_init(add_modal_form_rules)
                 new_product_validator = $(_form_product_add).validate()
-                
             }
             return true
         }
-        
     }
     
     const index = function (settings) {
+        
         if (_product_index_table) {
             build_index_table()
             
@@ -439,10 +545,41 @@ const Product = (function () {
         
     }
     
+    const update_product_sku = function () {
+        let att1 = Product.attr1
+        let att2 = Product.attr2
+        let att3 = Product.attr3
+        let sku = ""
+        if (!is_null(att1) && !is_null(att2) && !is_null(att3)) {
+            sku = att1.replace(/-/g, "") + "-" + att2.replace(/-/g, "") + "-" + att3.replace(/-/g, "")
+            _modal_product_sku.value = sku
+        } else {
+            _modal_product_sku.value = ""
+            if (is_null(att1)) {
+                console.log("att1 is null", att1)
+            }
+            
+            if (is_null(att2)) {
+                console.log("att2 is null", att2)
+            }
+            
+            if (is_null(att3)) {
+                console.log("att3 is null", att3)
+            }
+        }
+        
+    }
+    
     return {
         validator: null,
         detail: {},
         all: new Map(),
+        attr1: null,
+        attr2: null,
+        attr3: null,
+        update_product_sku: function () {
+            update_product_sku()
+        },
         setNewFormDetails: function (category_id) {
             console.log("Product.setNewFormDetails()", category_id)
             setNewFormDetails(category_id)

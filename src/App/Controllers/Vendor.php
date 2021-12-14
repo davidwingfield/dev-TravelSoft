@@ -316,7 +316,7 @@
             
             $vendors = [];
             if ($params) {
-                $params["status_id"] = 1;
+                $params["status_id"] = (isset($params["status_id"])) ? $params["status_id"] : 1;
                 $company_name = null;
                 if (isset($params["name"])) {
                     $company_name = $params["name"];
@@ -332,11 +332,11 @@
                         "name" => $company_name,
                         "company_id" => $company_id,
                         "status_id" => $status_id,
-                        "show_online" => 1,
-                        "show_sales" => 1,
-                        "show_ops" => 1,
-                        "is_provider" => 0,
-                        "enabled" => 1,
+                        "show_online" => (isset($params["show_online"])) ? $params["show_online"] : 1,
+                        "show_sales" => (isset($params["show_sales"])) ? $params["show_sales"] : 1,
+                        "show_ops" => (isset($params["show_ops"])) ? $params["show_ops"] : 1,
+                        "is_provider" => (isset($params["is_provider"])) ? $params["is_provider"] : 0,
+                        "enabled" => (isset($params["enabled"])) ? $params["enabled"] : 1,
                     );
                     // ----
 //                    Log::$debug_log->trace($vendor_params);

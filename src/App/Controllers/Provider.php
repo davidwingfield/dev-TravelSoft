@@ -370,22 +370,37 @@
         public static function serveUpdate(array $params = [])
         {
             $provider = [];
+            
             if (isset($params["company_detail"])) {
+                Log::$debug_log->trace($params["company_detail"]);
                 $company = Company::update($params["company_detail"]);
             }
             
             if (isset($params["vendor_detail"])) {
+                Log::$debug_log->trace($params["vendor_detail"]);
                 $vendor = Vendor::callUpdate($params["vendor_detail"]);
             }
             
             if (isset($params["provider_detail"])) {
+                Log::$debug_log->trace($params["provider_detail"]);
+                if (!isset($params["provider_detail"]["sku"])) {
+                    //$params["provider_detail"]["sku"]
+                }
+                
                 $provider = ProviderModel::update($params["provider_detail"]);
             }
+            if (count($provider) === 1) {
+                $provider = $provider[0];
+            }
+            $provider_id = $provider["provider_id"];
+            $provider_detail = self::format_get(ProviderModel::get($provider_id));
+            Log::$debug_log->trace($provider_detail);
+            //
             
             /**
              * render json response
              */
-            View::render_json(self::format_get($provider));
+            View::render_json($provider_detail);
             exit(1);
         }
         
@@ -652,16 +667,19 @@
          *
          * @return string
          */
-        private static function generateCodeDirectId(array $provider): string
+        public static function generateCodeDirectId(array $provider): string
         {
+            Log::$debug_log->trace("-------- generateCodeDirectId --------");
+            Log::$debug_log->trace($provider);
+            Log::$debug_log->trace("-------------------------");
             $name = $provider["company_name"];
             $id = $provider["provider_id"];
             
             $words = preg_split("/\s+/", $name);
             $count = count($words);
-            $codeDirectId = str_pad($id, 11, "0", STR_PAD_LEFT);
+            $codeDirectId = str_pad($id, 1, "0", STR_PAD_LEFT);
             
-            $t = "D";
+            $t = "P-";
             
             return $t . $codeDirectId;
         }

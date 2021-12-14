@@ -66,7 +66,11 @@
                                 <label for="modal_product_provider_name">Provider:</label>
                                 <input type="search" id="modal_product_provider_name" name="modal_product_provider_name" class="form-control"/>
                                 <div id="modal_product_provider_name-error" class="error w-100 text-center"></div>
-                                <input type="text" id="modal_product_provider_id" name="modal_product_provider_id"/>
+                                
+                                <label for="modal_product_provider_id" class="dev-element">Provider Id:</label>
+                                <input type="text" id="modal_product_provider_id" name="modal_product_provider_id" class="form-control" placeholder="" readonly="readonly"/>
+                                <label for="modal_product_provider_company_id" class="dev-element">Provider Company Id:</label>
+                                <input type="text" id="modal_product_provider_company_id" name="modal_product_provider_company_id" class="form-control" placeholder="" readonly="readonly"/>
                             </div>
                         </div>
                         
@@ -76,8 +80,22 @@
                                     <label for="modal_product_vendor_name">Vendor:</label>
                                     <input type="search" id="modal_product_vendor_name" name="modal_product_vendor_name" class="form-control"/>
                                     <div id="modal_product_vendor_name-error" class="error w-100 text-center"></div>
-                                    <input type="text" id="modal_product_vendor_id" name="modal_product_vendor_id"/>
+                                    
+                                    <label for="modal_product_vendor_id" class="dev-element">Vendor Id:</label>
+                                    <input type="text" id="modal_product_vendor_id" name="modal_product_vendor_id" class="form-control" placeholder="" readonly="readonly"/>
+                                    <label for="modal_product_vendor_company_id" class="dev-element">Vendor Company Id:</label>
+                                    <input type="text" id="modal_product_vendor_company_id" name="modal_vendor_provider_company_id" class="form-control" placeholder="" readonly="readonly"/>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row gx-1 ">
+                        <div class="col-12">
+                            <!-- Default unchecked -->
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" class="custom-control-input" id="modal_product_provider_vendor_match" name="modal_product_provider_vendor_match">
+                                <label class="custom-control-label" for="modal_product_provider_vendor_match">Provider is also Vendor</label>
                             </div>
                         </div>
                     </div>

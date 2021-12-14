@@ -26,6 +26,10 @@ const Provider = (function () {
     const _modal_product_provider_id = document.getElementById("modal_product_provider_id")
     const _modal_product_vendor_id = document.getElementById("modal_product_vendor_id")
     const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
+    const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
+    const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
+    const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
+    
     let globalSelectedProvider = false
     let isNew = false
     let validator
@@ -60,7 +64,7 @@ const Provider = (function () {
           let vendor_detail = Vendor.build()
           let addresses = Array.from(Address.all.values())
           let contacts = Array.from(Contact.all.values())
-          //*
+          /*
           console.log("company_detail", company_detail)
           console.log("provider_detail", provider_detail)
           console.log("location_detail", location_detail)
@@ -127,10 +131,94 @@ const Provider = (function () {
           $(_provider_company_id).val(_company_id.value)
       })
     
+    const add = function (provider) {
+        console.log("add", provider)
+        if (provider) {
+            
+            let dataToSend = {
+                name: _modal_product_provider_name.value,
+                status_id: 1,
+                show_online: 1,
+                show_sales: 1,
+                show_ops: 1,
+                is_provider: 1,
+                enabled: 1,
+            }
+            
+            Vendor.newVendor(dataToSend, function (data) {
+                let vendor_detail, provider_detail = {}
+                
+                if (data) {
+                    vendor_detail = data
+                    if (data[0]) {
+                        vendor_detail = data[0]
+                    }
+                    console.log("Provider Upodateing Vendor: vendor_detail", vendor_detail)
+                    
+                    provider.location_id = (provider.location_id) ? provider.location_id : 1
+                    provider.vendor_id = vendor_detail.id
+                    provider_detail = {
+                        provider_detail: provider,
+                    }
+                    
+                    console.log("Provider : provider_detail", provider_detail)
+                    updateProvider(provider_detail, function (data) {
+                        if (data) {
+                            console.log("data", data)
+                            if (data[0]) {
+                                //console.log("data[0]", data[0])
+                                let provider = data[0]
+                                let vendor = provider.vendor
+                                let company = provider.company
+                                let provider_detail = set(provider)
+                                _modal_product_provider_name.value = provider.name
+                                _modal_product_provider_id.value = provider.id
+                                _modal_product_provider_company_id.value = company.id
+                                _modal_product_vendor_name.value = provider.name
+                                _modal_product_vendor_id.value = vendor.id
+                                _modal_product_vendor_company_id.value = company.id
+                                init_autocomplete()
+                                let sku = (vendor.sku) ? vendor.sku : null
+                                let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
+                                Product.attr2 = code_direct
+                                Product.attr3 = sku
+                                Product.update_product_sku()
+                                
+                            }
+                        }
+                    })
+                }
+            })
+            /*
+            updateProvider(dataToSend, function (data) {
+                let details
+                if (data) {
+                    console.log("data", data)
+                    details = data
+                    if (data[0]) {
+                        console.log("data[0]", data[0])
+                        details = data[0]
+                    }
+                    
+                    if (details.id) {
+                    
+                    } else {
+                        
+                        console.log("Provider: Missing id from details", details)
+                    }
+                } else {
+                    console.log("details 3", provider)
+                }
+            })
+            //*/
+        }
+    }
+    
     /**
      * initialize provider autocomplete
      */
     const init_autocomplete = function () {
+        
         $(_provider_name)
           .on("change", function () {
               /*
@@ -174,14 +262,16 @@ const Provider = (function () {
                   if (!suggestion.data) {
                       return
                   }
-                  console.log("sugges", suggestion)
+                  console.log("suggestion.data", suggestion.data)
                   let provider = suggestion.data
                   let company = (provider.company) ? provider.company : {}
                   let addresses = (provider.addresses) ? provider.addresses : {}
                   let contacts = (provider.contacts) ? provider.contacts : {}
                   let location = (provider.location) ? provider.location : {}
                   let vendor = (provider.vendor) ? provider.vendor : {}
+                  
                   //
+                  
                   let provider_id = provider.id
                   let company_name = provider.company.name
                   let provider_company_id = provider.company.id
@@ -217,6 +307,12 @@ const Provider = (function () {
                           _modal_product_provider_id.value = ""
                           _modal_product_vendor_name.value = ""
                           _modal_product_provider_name.value = ""
+                          _modal_product_vendor_company_id.value = ""
+                          _modal_product_provider_company_id.value = ""
+                          _modal_product_vendor_name.disabled = true
+                          Product.attr2 = null
+                          Product.attr3 = null
+                          Product.update_product_sku()
                           globalSelectedProvider = false
                       } else {
                           provider_exists(provider_name)
@@ -229,6 +325,12 @@ const Provider = (function () {
               _modal_product_provider_id.value = ""
               _modal_product_vendor_name.value = ""
               _modal_product_provider_name.value = ""
+              _modal_product_vendor_company_id.value = ""
+              _modal_product_provider_company_id.value = ""
+              Product.attr2 = null
+              Product.attr3 = null
+              Product.update_product_sku()
+              _modal_product_vendor_name.disabled = true
           })
           .on("click", function () {
               $(this).select()
@@ -241,16 +343,31 @@ const Provider = (function () {
               triggerSelectOnValidInput: false,
               paramName: "st",
               onSelect: function (suggestion) {
-                  if (!suggestion.data) {
+                  if (!suggestion || !suggestion.data) {
                       return
                   }
-                  let vendor_id = suggestion.data.vendor.id
-                  _modal_product_vendor_id.value = vendor_id
+                  console.log("suggestion.data", suggestion.data)
+                  let provider = set(suggestion.data)
+                  let vendor = provider.vendor
+                  let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
+                  let sku = (vendor.sku) ? vendor.sku : null
+                  
+                  _modal_product_vendor_id.value = parseInt(suggestion.data.vendor.id)
                   _modal_product_provider_id.value = suggestion.data.id
                   _modal_product_vendor_name.value = suggestion.data.name
-                  console.log("suggestion", suggestion)
+                  _modal_product_vendor_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
+                  _modal_product_provider_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
+                  _modal_product_provider_vendor_match.checked = true
+                  _modal_product_vendor_name.disabled = false
+                  
+                  Product.attr2 = code_direct
+                  Product.attr3 = sku
+                  Product.update_product_sku()
+                  
+                  //$(_modal_product_vendor_name).trigger("change")
               },
           })
+        
     }
     
     /**
@@ -269,9 +386,32 @@ const Provider = (function () {
                 if (_form_product_add) {
                     console.log("data", data)
                     if (!data || data.length === 0) {
-                        confirmDialog("This provider does not exists. Would you like to create it?", (ans) => {
+                        confirmDialog("This provider does not exist. Would you like to create it?", (ans) => {
                             if (ans) {
-                            
+                                Company.add_to_company_list({
+                                    name: _modal_product_provider_name.value,
+                                    status_id: 10,
+                                    enabled: 1,
+                                }, function (data) {
+                                    if (data) {
+                                        if (data[0]) {
+                                            let company = data[0]
+                                            _modal_product_provider_company_id.value = company.id
+                                            _modal_product_vendor_company_id.value = company.id
+                                            _modal_product_provider_name.value = company.name
+                                            _modal_product_vendor_name.value = company.name
+                                            _modal_product_provider_vendor_match.checked = true
+                                            add(remove_nulls({
+                                                location_id: null,
+                                                company_id: company.id,
+                                                code_direct_id: null,
+                                                id: null,
+                                                provider_vendor: 1,
+                                                enabled: 1,
+                                            }))
+                                        }
+                                    }
+                                })
                             } else {
                                 _modal_product_vendor_id.value = ""
                                 _modal_product_provider_id.value = ""
@@ -451,6 +591,7 @@ const Provider = (function () {
      * @param provider
      */
     const save = function (provider) {
+        console.log("save", provider)
         if (provider) {
             updateProvider(provider, function (data) {
                 if (data) {
@@ -515,9 +656,6 @@ const Provider = (function () {
             id: (!isNaN(parseInt(_provider_id.value))) ? parseInt(_provider_id.value) : null,
             provider_vendor: (_form_edit_provider) ? 1 : 0,
             enabled: 1,
-            //description_long: (_provider_description_long.value === "") ? null : _provider_description_long.value,
-            //description_short: (_provider_description_short.value === "") ? null : _provider_description_short.value,
-            //keywords: $provider_key.build(),
         })
     }
     
@@ -630,12 +768,6 @@ const Provider = (function () {
             $(_company_name).val($(_provider_name).val())
             _provider_company_id.value = (provider.company_id) ? provider.company_id : null
             _provider_code_direct_id.value = (provider.code_direct_id) ? provider.code_direct_id : null
-            /*
-            let provider_keywords = (provider.keywords) ? provider.keywords : ""
-            $provider_key = $(_provider_key).BuildKeyword(provider_keywords)
-            $(_provider_description_long).val(provider.description_long)
-            $(_provider_description_short).val(provider.description_short
-              //*/
             _provider_enabled.checked = (provider.enabled) ? (provider.enabled === 1) : true
         }
         

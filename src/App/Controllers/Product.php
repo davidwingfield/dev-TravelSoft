@@ -39,10 +39,10 @@
             "new" => array(
                 "type" => "a",
                 "href" => "javascript:void(0)",
-                "classes" => "btn btn-outline-primary btn-sm btn-icon btn-round",
-                "icon" => "fas fa-plus",
+                "classes" => "btn btn-primary ",
+                "icon" => "fas fa-plus mr-2",
                 "id" => "button_add_product_page_heading",
-                "text" => "",
+                "text" => "New Product",
                 "data" => array(
                     "toggle" => "tooltip",
                     "title" => "Creat a New Product",
@@ -408,6 +408,37 @@
                 'units' => $units,
                 'variants' => $variants,
             );
+        }
+        
+        /**
+         * autocomplete
+         * Autocomplete json
+         */
+        public static function autocomplete(array $params = []): array
+        {
+            //Log::$debug_log->trace($params);
+            if (!isset($params["category_id"])) {
+                return [];
+            }
+            $st = (isset($params["st"])) ? $params["st"] : "";
+            $category_id = (isset($params["category_id"])) ? (int)$params["category_id"] : null;
+            
+            return self::format_ac(ProductModel::product_ac($st, (int)$category_id));
+        }
+        
+        private static function format_ac(array $products = []): array
+        {
+            $data["suggestions"] = [];
+            foreach ($products AS $k => $product) {
+                $l = (object)$product;
+                $value = utf8_encode($l->product_name);
+                array_push($data["suggestions"], [
+                    "value" => utf8_encode($value),
+                    "data" => self::format($product),
+                ]);
+            }
+            
+            return $data;
         }
         
     }

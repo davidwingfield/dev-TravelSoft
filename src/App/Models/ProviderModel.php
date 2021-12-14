@@ -3,6 +3,7 @@
     namespace Framework\App\Models;
     
     use Exception;
+    use Framework\App\Controllers\Provider;
     use Framework\Core\Model;
     use Framework\Logger\Log;
     use PhpParser\Node\Expr\AssignOp\Mod;
@@ -69,7 +70,7 @@
                             DATE_FORMAT(COMPANY.date_created, '%m/%d/%Y') AS 'company_date_created',
                             COMPANY.modified_by AS 'company_modified_by',
                             DATE_FORMAT(COMPANY.date_modified, '%m/%d/%Y') AS 'company_date_modified',
-                            COALESCE(COMPANY.status_id, 10) AS 'company_status_id',
+                            COMPANY.status_id AS 'company_status_id',
                             COMPANY.note AS 'company_note',
                             COMPANY.cover_image AS 'company_cover_image',
                             CONCAT(	LOCATION.name, ' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') AS 'location',
@@ -135,18 +136,18 @@
                             COUNTRY.date_modified AS 'country_date_modified',
                             COUNTRY.modified_by AS 'country_modified_by',
                             VENDORCOMPANY.id AS 'vendor_company_id',
-                            COALESCE(VENDORCOMPANY.name, '') AS 'vendor_company_name',
-                            COALESCE(VENDORCOMPANY.phone_1, '') AS 'vendor_company_phone_1',
-                            COALESCE(VENDORCOMPANY.phone_2, '') AS 'vendor_company_phone_2',
-                            COALESCE(VENDORCOMPANY.fax, '') AS 'vendor_company_fax',
-                            COALESCE(VENDORCOMPANY.website, '') AS 'vendor_company_website',
-                            COALESCE(VENDORCOMPANY.email, '') AS 'vendor_company_email',
+                            VENDORCOMPANY.name AS 'vendor_company_name',
+                            VENDORCOMPANY.phone_1 AS 'vendor_company_phone_1',
+                            VENDORCOMPANY.phone_2 AS 'vendor_company_phone_2',
+                            VENDORCOMPANY.fax AS 'vendor_company_fax',
+                            VENDORCOMPANY.website AS 'vendor_company_website',
+                            VENDORCOMPANY.email AS 'vendor_company_email',
                             VENDORCOMPANY.enabled AS 'vendor_company_enabled',
                             VENDORCOMPANY.created_by AS 'vendor_company_created_by',
                             DATE_FORMAT(VENDORCOMPANY.date_created, '%m/%d/%Y') AS 'vendor_company_date_created',
                             VENDORCOMPANY.modified_by AS 'vendor_company_modified_by',
                             DATE_FORMAT(VENDORCOMPANY.date_modified, '%m/%d/%Y') AS 'vendor_company_date_modified',
-                            COALESCE(VENDORCOMPANY.status_id, 10) AS 'vendor_company_status',
+                            VENDORCOMPANY.status_id AS 'vendor_company_status',
                             VENDORCOMPANY.note AS 'vendor_company_note',
                             VENDOR.id AS 'vendor_id',
                             VENDOR.company_id AS 'vendor_company_id',
@@ -163,13 +164,14 @@
                             VENDOR.enabled AS 'vendor_enabled',
                             VENDOR.note  AS 'vendor_note'
             FROM 			provider PROVIDER
-            JOIN			company COMPANY ON COMPANY.id = PROVIDER.company_id
-            JOIN			location LOCATION ON LOCATION.id = PROVIDER.location_id
-            JOIN			location_types LOCATIONTYPES ON LOCATIONTYPES.id = LOCATION.location_types_id
-            JOIN			city CITY ON CITY.id = LOCATION.city_id
-            JOIN			province PROVINCE ON CITY.province_id = PROVINCE.id
-            JOIN			country COUNTRY ON PROVINCE.country_id = COUNTRY.id
-            JOIN			vendor VENDOR ON VENDOR.company_id = COMPANY.id AND VENDOR.is_provider = 1
+            
+            LEFT JOIN			company COMPANY ON COMPANY.id = PROVIDER.company_id
+            LEFT JOIN			location LOCATION ON LOCATION.id = PROVIDER.location_id
+            LEFT JOIN			location_types LOCATIONTYPES ON LOCATIONTYPES.id = LOCATION.location_types_id
+            LEFT JOIN			city CITY ON CITY.id = LOCATION.city_id
+            LEFT JOIN			province PROVINCE ON CITY.province_id = PROVINCE.id
+            LEFT JOIN			country COUNTRY ON PROVINCE.country_id = COUNTRY.id
+            LEFT JOIN			vendor VENDOR ON VENDOR.company_id = COMPANY.id AND VENDOR.is_provider = 1
             LEFT JOIN		company VENDORCOMPANY ON VENDORCOMPANY.id = VENDOR.company_id
             WHERE			PROVIDER.enabled = 1
             ";
@@ -191,7 +193,7 @@
                     $where = "AND		PROVIDER.id = $id";
                 }
                 $sql = self::$selectQuery . $where;
-//                Log::$debug_log->trace($sql);
+                Log::$debug_log->trace($sql);
                 $ret = Model::$db->rawQuery($sql);
 
 //                Log::$debug_log->trace($ret);
@@ -299,18 +301,18 @@
             
             if (isset($provider["company_detail"])) {
                 $company = CompanyModel::updateRecord($provider["company_detail"]);
-                Log::$debug_log->trace($company);
+                Log::$debug_log->trace($provider["company_detail"]);
             }
             
             if (isset($provider["vendor_detail"])) {
                 $vendor = VendorModel::updateRecord($provider["vendor_detail"]);
-                Log::$debug_log->trace($company);
+                //Log::$debug_log->trace($company);
             }
             
             if (isset($provider["location_detail"])) {
                 //$location = $provider["location_detail"];
             }
-            
+            $name = Model::setInt((isset($provider["name"])) ? $provider["name"] : null);
             $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
             $id = Model::setInt((isset($provider["id"])) ? $provider["id"] : null);
             $company_id = Model::setInt((isset($provider["company_id"])) ? $provider["company_id"] : null);
@@ -334,6 +336,7 @@
                 )
                 ON DUPLICATE KEY UPDATE
                     location_id = VALUES(location_id),
+                    code_direct_id = VALUES(code_direct_id),
                     enabled = VALUES(enabled),
                     modified_by = VALUES(modified_by),
                     date_modified = VALUES(date_modified),
@@ -344,6 +347,16 @@
                 Model::$db->rawQuery($sql);
                 $provider_id = Model::$db->getInsertId();
                 if ($provider_id) {
+                    if (is_null($id)) {
+                        $code_direct_id = Provider::generateCodeDirectId(array(
+                            "company_name" => $name,
+                            "provider_id" => $provider_id,
+                        ));
+                        Log::$debug_log->trace("-------------------------");
+                        Log::$debug_log->trace($code_direct_id);
+                        Log::$debug_log->trace("-------------------------");
+                    }
+                    
                     return self::get($provider_id);
                 }
                 
@@ -366,7 +379,7 @@
          */
         public static function update($provider = null): array
         {
-            if (!isset($provider["company_id"], $provider["location_id"])) {
+            if (!isset($provider["company_id"])) {
                 Log::$debug_log->error("Missing Data");
                 Log::$debug_log->trace($provider);
                 
@@ -401,7 +414,6 @@
                     location_id = VALUES(location_id),
                     company_id = VALUES(company_id),
                     code_direct_id = VALUES(code_direct_id),
-                    
                     description_long = VALUES(description_long),
                     description_short = VALUES(description_short),
                     keywords = VALUES(keywords),
@@ -410,18 +422,21 @@
                     modified_by = VALUES(modified_by),
                     date_modified = VALUES(date_modified);
             ";
-            
+            Log::$debug_log->trace($sql);
             try {
                 Model::$db->rawQuery($sql);
                 $provider_id = Model::$db->getInsertId();
                 
                 if ($provider_id) {
+                    Log::$debug_log->trace($provider_id);
                     $update = "
                         UPDATE      provider
                         SET         code_direct_id = generateCodeDirectId($provider_id)
                         WHERE       id = $provider_id;";
+                    Log::$debug_log->trace($update);
                     try {
                         Model::$db->rawQuery($update);
+                        Log::$debug_log->trace(self::get((int)$provider_id));
                         
                         return self::get((int)$provider_id);
                         

@@ -717,6 +717,7 @@ const Provider = (function () {
      * regulate tab access
      */
     const set_progress = function () {
+        console.log("set_progress()")
         let provider_id = (!isNaN(_provider_id.value)) ? _provider_id.value : null
         let company_id = (!isNaN(_provider_company_id.value)) ? _provider_company_id.value : null
         

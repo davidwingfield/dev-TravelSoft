@@ -295,7 +295,11 @@
             foreach ($results AS $k => $product) {
                 $products[] = self::format($product);
             }
+            
+            //
+            
             View::render_json($products);
+            exit(0);
         }
         
         private static function format(array $product = null): array
@@ -439,6 +443,16 @@
             }
             
             return $data;
+        }
+        
+        public static function serveAdd(array $params = []): void
+        {
+            Log::$debug_log->trace($params);
+            $results = ProductModel::addRecord($params);
+            
+            // --
+            View::render_json($params);
+            exit(0);
         }
         
     }

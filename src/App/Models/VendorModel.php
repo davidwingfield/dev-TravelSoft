@@ -181,7 +181,7 @@
 //                Log::$debug_log->trace($sql);
                 Model::$db->rawQuery($sql);
                 $vendor_id = Model::$db->getInsertId();
-                Log::$debug_log->trace(Model::$db->getInsertId());
+//                Log::$debug_log->trace(Model::$db->getInsertId());
                 if ($vendor_id) {
                     $sku = Vendor::generateSKU(array(
                         "company_name" => $vendor["name"],

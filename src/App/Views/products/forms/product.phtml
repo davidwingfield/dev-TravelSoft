@@ -94,13 +94,18 @@
                     </div>
                     
                     <div class="row mx-0">
-                        
-                        <input type="text" id="form_product_search_hotel_product_arrive_date" name="form_product_search_hotel_product_arrive_date" class="col-sm-3 m-1" value=""/>
-                        <input type="text" id="form_product_search_hotel_product_number_of_children" name="form_product_search_hotel_product_number_of_children" min="0" class="col-sm-3 m-1" value="0"/>
-                        <input type="text" id="form_product_search_hotel_product_number_of_adults" name="form_product_search_hotel_product_number_of_adults" min="1" class="col-sm-3 m-1" value="1"/>
-                        <input type="text" id="form_product_search_hotel_product_number_of_rooms" name="form_product_search_hotel_product_number_of_rooms" min="1" class="col-sm-3 m-1" value="1"/>
-                        <input type="text" id="form_product_search_hotel_product_depart_date" name="form_product_search_hotel_product_depart_date" class="col-sm-3 m-1" value=""/>
-                    
+                        <div class="col-sm-3 m-1">
+                            <label for="form_product_search_hotel_product_arrive_date" class="dev-element d-none">arrive date</label>
+                            <input type="hidden" id="form_product_search_hotel_product_arrive_date" class="dev-element" value=""/>
+                        </div>
+                        <label for="form_product_search_hotel_product_number_of_children" class="dev-element d-none">children</label>
+                        <input type="hidden" id="form_product_search_hotel_product_number_of_children" name="form_product_search_hotel_product_number_of_children" min="0" class="form-control dev-element" value="0"/>
+                        <label for="form_product_search_hotel_product_number_of_adults" class="dev-element d-none">form_product_search_hotel_product_number_of_adults</label>
+                        <input type="hidden" id="form_product_search_hotel_product_number_of_adults" name="form_product_search_hotel_product_number_of_adults" min="1" class="form-control dev-element" value="1"/>
+                        <label for="form_product_search_hotel_product_number_of_rooms" class="dev-element d-none">form_product_search_hotel_product_number_of_rooms</label>
+                        <input type="hidden" id="form_product_search_hotel_product_number_of_rooms" name="form_product_search_hotel_product_number_of_rooms" min="1" class="form-control dev-element" value="1"/>
+                        <label for="form_product_search_hotel_product_depart_date" class="dev-element d-none">depart date</label>
+                        <input type="hidden" id="form_product_search_hotel_product_depart_date" name="form_product_search_hotel_product_depart_date" class="form-control dev-element" placeholder="" readonly="readonly"/>
                     </div>
                 
                 </form>

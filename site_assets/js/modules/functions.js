@@ -735,7 +735,74 @@ jQuery.extend({
         })
     },
 })
+const logger = {
+    
+    log: function () {
+        console.log(args)
+    },
+}
 
+const infoDialog = function (message, handler) {
+    
+    $(`
+        <!--Modal: modalConfirm-->
+        <div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirmationLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm modal-notify modal-info" role="document">
+		<!--Content-->
+		<div class="modal-content text-center">
+			<!--Header-->
+			<div class="modal-header d-flex justify-content-center">
+				<p class="heading">${message}</p>
+			</div>
+
+			<!--Body-->
+			<div class="modal-body">
+				<i class="fas fa-info fa-4x animated rotateIn"></i>
+			</div>
+
+			<!--Footer-->
+			<div class="modal-footer flex-center">
+				<a class="btn btn-outline-info btn-yes">yes</a>
+				<a type="button" class="btn btn-info waves-effect btn-no">no</a>
+			</div>
+		</div>
+		<!--/.Content-->
+	</div>
+</div>
+        <!--Modal: modalConfirm-->
+    `)
+      .appendTo("body")
+    //Trigger the modal
+    $("#modalConfirm")
+      .modal({
+          backdrop: "static",
+          keyboard: false,
+      })
+    
+    //Pass true to a callback function
+    $(".btn-yes")
+      .click(function () {
+          handler(true)
+          $("#modalConfirm")
+            .modal("hide")
+      })
+    
+    //Pass false to callback function
+    $(".btn-no")
+      .click(function () {
+          handler(false)
+          $("#modalConfirm")
+            .modal("hide")
+      })
+    
+    //Remove the modal once it is closed.
+    $("#modalConfirm")
+      .on("hidden.bs.modal", function () {
+          $("#modalConfirm")
+            .remove()
+      })
+    
+}
 const confirmDialog = function (message, handler) {
     
     $(`

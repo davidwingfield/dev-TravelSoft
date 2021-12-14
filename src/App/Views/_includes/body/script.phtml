@@ -1,7 +1,49 @@
 <script type="text/javascript">
     $(function () {
         Logger.init()
-        
+    })
+    
+    $(function () {
+        $(".debug_demo")
+          .on("click", function () {
+              let showElements = false
+              if (!$(this).attr("data-shown")) {
+                  $(this).attr("data-shown", "false")
+                  showElements = false
+              }
+              
+              if ($(this).attr("data-shown") === "false") {
+                  $(this).attr("data-shown", "true")
+                  showElements = true
+              } else {
+                  showElements = false
+                  $(this).attr("data-shown", "false")
+              }
+              
+              console.log("showElements", showElements)
+              
+              let els = document.getElementsByClassName("dev-element")
+              
+              for (var i = 0; i < els.length; i++) {
+                  var element = els[i]
+                  let tagName = element.tagName.toLowerCase()
+                  
+                  if (tagName === "input") {
+                      
+                      if (showElements === false) {
+                          element.hidden = false
+                      } else {
+                          element.hidden = true
+                      }
+                  } else if (tagName === "label") {
+                      if (showElements === false) {
+                          $(element).removeClass("d-none")
+                      } else {
+                          $(element).addClass("d-none")
+                      }
+                  }
+              }
+          })
     })
     
     $(function () {
@@ -9,6 +51,7 @@
     })
     
     $(function () {
+        
         /*
         $("#product_index_table").Tabledit({
             url: "/api/v1.0/products/table_update",

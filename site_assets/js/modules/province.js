@@ -110,7 +110,6 @@ const Province = (function () {
     const build_drop_downs = function (settings) {
         if (settings) {
             if (settings.dropdowns) {
-                
                 $.each(settings.dropdowns, function (i, dropdown_id) {
                     let country_id = Country.id
                     let province_id = Province.id
@@ -198,7 +197,6 @@ const Province = (function () {
                         
                     }
                 })
-                
             }
         }
     }

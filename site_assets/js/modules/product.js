@@ -61,10 +61,12 @@ const Product = (function () {
     let $index_table, new_product_validator
     //
     let add_modal_form_rules = {
+        //*
         groups: {
             providerNameGroup: "modal_product_provider_id modal_product_provider_name modal_product_provider_company_id",
             vendorNameGroup: "modal_product_vendor_id modal_product_vendor_name modal_product_vendor_company_id",
         },
+        //*/
         rules: {
             modal_product_sku: {
                 required: true,
@@ -161,8 +163,9 @@ const Product = (function () {
     
     $(_modal_button_submit_add_product)
       .on("click", function () {
-          console.log(validate_new_form())
-          save_new()
+          if (validate_new_form()) {
+              save_new()
+          }
       })
     
     $(_modal_product_provider_vendor_match)
@@ -170,8 +173,10 @@ const Product = (function () {
           let provider_company_id = (isNaN(parseInt(_modal_product_provider_company_id.value))) ? null : parseInt(_modal_product_provider_company_id.value)
           
           if (provider_company_id !== null) {
+              
               if (_modal_product_provider_vendor_match.checked) {
                   _modal_product_vendor_company_id.value = _modal_product_provider_company_id.value
+                  
                   if (Provider.detail !== null) {
                       _modal_product_vendor_company_id.value = Provider.detail.vendor.company_id
                       _modal_product_vendor_id.value = Provider.detail.vendor.id
@@ -181,6 +186,7 @@ const Product = (function () {
                       _modal_product_vendor_id.value = ""
                       _modal_product_vendor_name.value = ""
                   }
+                  
               } else {
                   _modal_product_vendor_company_id.value = ""
                   _modal_product_vendor_id.value = ""
@@ -292,7 +298,7 @@ const Product = (function () {
     }
     
     const save_new = function () {
-    
+        let dataToSend = {}
     }
     
     const handle_product_error = function (msg) {

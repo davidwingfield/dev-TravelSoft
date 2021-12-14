@@ -382,7 +382,7 @@
             }
             
             if (isset($params["provider_detail"])) {
-                Log::$debug_log->trace($params["provider_detail"]);
+//                Log::$debug_log->trace($params["provider_detail"]);
                 if (!isset($params["provider_detail"]["sku"])) {
                     //$params["provider_detail"]["sku"]
                 }

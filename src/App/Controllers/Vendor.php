@@ -350,7 +350,7 @@
             }
             
             // ----
-            Log::$debug_log->trace($vendors);
+//            Log::$debug_log->trace($vendors);
             View::render_json($vendors);
             exit(1);
         }

@@ -913,7 +913,74 @@ jQuery.extend({
         })
     },
 })
+const logger = {
+    
+    log: function () {
+        console.log(args)
+    },
+}
 
+const infoDialog = function (message, handler) {
+    
+    $(`
+        <!--Modal: modalConfirm-->
+        <div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirmationLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm modal-notify modal-info" role="document">
+		<!--Content-->
+		<div class="modal-content text-center">
+			<!--Header-->
+			<div class="modal-header d-flex justify-content-center">
+				<p class="heading">${message}</p>
+			</div>
+
+			<!--Body-->
+			<div class="modal-body">
+				<i class="fas fa-info fa-4x animated rotateIn"></i>
+			</div>
+
+			<!--Footer-->
+			<div class="modal-footer flex-center">
+				<a class="btn btn-outline-info btn-yes">yes</a>
+				<a type="button" class="btn btn-info waves-effect btn-no">no</a>
+			</div>
+		</div>
+		<!--/.Content-->
+	</div>
+</div>
+        <!--Modal: modalConfirm-->
+    `)
+      .appendTo("body")
+    //Trigger the modal
+    $("#modalConfirm")
+      .modal({
+          backdrop: "static",
+          keyboard: false,
+      })
+    
+    //Pass true to a callback function
+    $(".btn-yes")
+      .click(function () {
+          handler(true)
+          $("#modalConfirm")
+            .modal("hide")
+      })
+    
+    //Pass false to callback function
+    $(".btn-no")
+      .click(function () {
+          handler(false)
+          $("#modalConfirm")
+            .modal("hide")
+      })
+    
+    //Remove the modal once it is closed.
+    $("#modalConfirm")
+      .on("hidden.bs.modal", function () {
+          $("#modalConfirm")
+            .remove()
+      })
+    
+}
 const confirmDialog = function (message, handler) {
     
     $(`
@@ -7645,19 +7712,19 @@ const Vendor = (function () {
       .on("change", function () {
           setTimeout(function () {
               let vendor_name = _modal_product_vendor_name.value
+              globalSelectedVendor = false
               
-              if (globalSelectedVendor === false) {
-                  if (vendor_name === "") {
-                      _modal_product_vendor_id.value = ""
-                      _modal_product_vendor_name.value = ""
-                      _modal_product_vendor_company_id.value = ""
-                      Product.attr3 = null
-                      Product.update_product_sku()
-                      globalSelectedVendor = false
-                  } else {
-                      vendor_exists(vendor_name)
-                  }
+              if (vendor_name === "") {
+                  _modal_product_vendor_id.value = ""
+                  _modal_product_vendor_name.value = ""
+                  _modal_product_vendor_company_id.value = ""
+                  Product.attr3 = null
+                  Product.update_product_sku()
+                  globalSelectedVendor = false
+              } else {
+                  vendor_exists(vendor_name)
               }
+              
           }, 200)
       })
       .on("search", function () {
@@ -7714,22 +7781,20 @@ const Vendor = (function () {
       })
     
     const init_autocomplete = function () {
-        
         if (_vendor_name) {
             $(_vendor_name)
               .on("change", function () {
                   setTimeout(function () {
                       let vendor_name = _vendor_name.value
-                      
-                      if (globalSelectedVendor === false) {
-                          if (vendor_name === "") {
-                              _vendor_name.value = ""
-                              _vendor_company_id.value = ""
-                              globalSelectedVendor = false
-                          } else {
-                              vendor_exists(vendor_name)
-                          }
+                      globalSelectedVendor = false
+                      if (vendor_name === "") {
+                          _vendor_name.value = ""
+                          _vendor_company_id.value = ""
+                          
+                      } else {
+                          vendor_exists(vendor_name)
                       }
+                      
                   }, 200)
               })
               .on("click", function () {
@@ -7763,24 +7828,54 @@ const Vendor = (function () {
     }
     
     const vendor_exists = function (name) {
+        console.log("vendor_exists()", name)
+        
         if (name && name !== "") {
             let dataToSend = {
                 name: name,
             }
             
+            console.log("dataToSend", dataToSend)
+            
             fetch_vendor_by_name(dataToSend, function (data) {
-                console.log("fetch_vendor_by_name", data)
+                console.log("fetch_vendor_by_name()", data)
                 let vendor, company
-                if (data) {
+                
+                if (data && data.length > 0) {
                     vendor = data
                     if (data.length > 0) {
                         if (data[0]) {
                             vendor = data[0]
-                            
                         }
                     }
-                    company = vendor.company
+                    
+                } else {
+                    console.log("Vendor Does Not Exist")
+                    
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
+                    
+                    Product.attr3 = null
+                    Product.update_product_sku()
+                    
+                    let name = _modal_product_vendor_name.value
+                    if (name !== "") {
+                        confirmDialog(`Vendor ${name} does not exists. Would you like to create this`, (ans) => {
+                            if (ans) {
+                                let dataToSend = {
+                                    name: _modal_product_vendor_name.value,
+                                }
+                                add(dataToSend)
+                            } else {
+                                _modal_product_vendor_name.value = ""
+                            }
+                        })
+                    }
+                }
+                
+                if (vendor) {
                     console.log("Vendor Exists", vendor)
+                    
                     if (_vendor_modal_vendor_name) {
                         confirmDialog(`Vendor ${vendor.name} ALREADY exists. Would you like to load this record to edit?`, (ans) => {
                             if (ans) {
@@ -7790,20 +7885,18 @@ const Vendor = (function () {
                     }
                     
                     if (_form_product_add) {
-                        _modal_product_vendor_id.value = vendor.id
-                        _modal_product_vendor_company_id.value = vendor.company_id
-                        Product.attr3 = vendor.sku
+                        _modal_product_vendor_id.value = (vendor.id) ? vendor.id : ""
+                        _modal_product_vendor_company_id.value = (vendor.company_id) ? vendor.company_id : ""
+                        Product.attr3 = (vendor.sku) ? vendor.sku : null
                         Product.update_product_sku()
                     }
-                } else {
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
-                    Product.attr3 = null
-                    Product.update_product_sku()
-                    console.log("Vendor Does Not Exist")
+                    
                 }
+                
             })
+            
         }
+        
     }
     
     const hide_new_modal = function () {
@@ -7833,7 +7926,12 @@ const Vendor = (function () {
                         
                         if (details.id) {
                             if (_form_product_add) {
-                            
+                                console.log("_form_product_add: details", details)
+                                _modal_product_vendor_company_id.value = (details.company_id) ? details.company_id : ""
+                                _modal_product_vendor_id.value = (details.id) ? details.id : ""
+                                _modal_product_provider_vendor_match.checked = (_modal_product_vendor_company_id.value === _modal_product_provider_company_id.value)
+                                Product.attr3 = (details.sku) ? details.sku : null
+                                Product.update_product_sku()
                             }
                             
                             if (_form_vendor_add) {
@@ -8317,14 +8415,15 @@ const Vendor = (function () {
      * disables fields unused from provider edit
      */
     const setProvider = function () {
+        console.log("Set Provider")
         if (_provider_edit) {
             _vendor_is_provider.checked = true
-            $(_vendor_is_provider).attr("readonly", true)
+            $(_vendor_is_provider).attr("readonly", "true")
             _vendor_is_provider.disabled = true
-            $(_vendor_name).attr("readonly", true)
-            $(_vendor_id).attr("readonly", true)
-            $(_vendor_sku).attr("readonly", true)
-            $(_vendor_is_provider).attr("readonly", true)
+            $(_vendor_name).attr("readonly", "true")
+            $(_vendor_id).attr("readonly", "true")
+            $(_vendor_sku).attr("readonly", "true")
+            $(_vendor_is_provider).attr("readonly", "true")
         }
     }
     
@@ -9995,6 +10094,7 @@ const Provider = (function () {
      * regulate tab access
      */
     const set_progress = function () {
+        console.log("set_progress()")
         let provider_id = (!isNaN(_provider_id.value)) ? _provider_id.value : null
         let company_id = (!isNaN(_provider_company_id.value)) ? _provider_company_id.value : null
         
@@ -10265,10 +10365,12 @@ const Product = (function () {
     let $index_table, new_product_validator
     //
     let add_modal_form_rules = {
+        //*
         groups: {
             providerNameGroup: "modal_product_provider_id modal_product_provider_name modal_product_provider_company_id",
             vendorNameGroup: "modal_product_vendor_id modal_product_vendor_name modal_product_vendor_company_id",
         },
+        //*/
         rules: {
             modal_product_sku: {
                 required: true,
@@ -10365,8 +10467,9 @@ const Product = (function () {
     
     $(_modal_button_submit_add_product)
       .on("click", function () {
-          console.log(validate_new_form())
-          save_new()
+          if (validate_new_form()) {
+              save_new()
+          }
       })
     
     $(_modal_product_provider_vendor_match)
@@ -10374,8 +10477,10 @@ const Product = (function () {
           let provider_company_id = (isNaN(parseInt(_modal_product_provider_company_id.value))) ? null : parseInt(_modal_product_provider_company_id.value)
           
           if (provider_company_id !== null) {
+              
               if (_modal_product_provider_vendor_match.checked) {
                   _modal_product_vendor_company_id.value = _modal_product_provider_company_id.value
+                  
                   if (Provider.detail !== null) {
                       _modal_product_vendor_company_id.value = Provider.detail.vendor.company_id
                       _modal_product_vendor_id.value = Provider.detail.vendor.id
@@ -10385,6 +10490,7 @@ const Product = (function () {
                       _modal_product_vendor_id.value = ""
                       _modal_product_vendor_name.value = ""
                   }
+                  
               } else {
                   _modal_product_vendor_company_id.value = ""
                   _modal_product_vendor_id.value = ""
@@ -10496,7 +10602,7 @@ const Product = (function () {
     }
     
     const save_new = function () {
-    
+        let dataToSend = {}
     }
     
     const handle_product_error = function (msg) {

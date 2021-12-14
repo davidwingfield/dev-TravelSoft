@@ -148,4 +148,97 @@
             }
         }
         
+        public static function addRecord(array $product = null): array
+        {
+            $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+            
+            $id = Model::setInt((isset($product["id"])) ? $product["id"] : null);
+            $category_id = Model::setInt((isset($product["category_id"])) ? $product["category_id"] : null);
+            $location_id = Model::setInt((isset($product["location_id"])) ? $product["location_id"] : 1);
+            $pricing_strategy_types_id = Model::setInt((isset($product["pricing_strategy_types_id"])) ? $product["pricing_strategy_types_id"] : null);
+            $status_types_id = Model::setInt((isset($product["status_types_id"])) ? $product["status_types_id"] : 1);
+            $currency_id = Model::setInt((isset($product["currency_id"])) ? $product["currency_id"] : 5);
+            $provider_id = Model::setInt((isset($product["provider_id"])) ? $product["provider_id"] : null);
+            $vendor_id = Model::setInt((isset($product["vendor_id"])) ? $product["vendor_id"] : null);
+            $rating_types_id = Model::setInt((isset($product["rating_types_id"])) ? $product["rating_types_id"] : 5);
+            $api_id = Model::setInt((isset($product["api_id"])) ? $product["api_id"] : null);
+            $created_by = Model::setInt($user_id);
+            $modified_by = Model::setInt($user_id);
+            $day_span = Model::setInt((isset($product["day_span"])) ? $product["day_span"] : 1);
+            
+            $provider_vendor_match = Model::setBool((isset($product["provider_vendor_match"])) ? $product["provider_vendor_match"] : 0);
+            $enabled = Model::setBool((isset($product["enabled"])) ? $product["enabled"] : 1);
+            $use_provider_id = Model::setBool((isset($product["use_provider_id"])) ? $product["use_provider_id"] : 0);
+            
+            $sku = Model::setString((isset($product["sku"])) ? $product["sku"] : null);
+            $name = Model::setString((isset($product["name"])) ? $product["name"] : null);
+            $depart_from = Model::setString((isset($product["depart_from"])) ? $product["depart_from"] : null);
+            $arrive_to = Model::setString((isset($product["arrive_to"])) ? $product["arrive_to"] : null);
+            $depart_time = Model::setString((isset($product["depart_time"])) ? $product["depart_time"] : null);
+            $arrive_time = Model::setString((isset($product["arrive_time"])) ? $product["arrive_time"] : null);
+            $hotel_code = Model::setString((isset($product["hotel_code"])) ? $product["hotel_code"] : null);
+            
+            $note = Model::setLongText((isset($product["note"])) ? $product["note"] : null);
+            $description_long = Model::setLongText((isset($product["description_long"])) ? $product["description_long"] : null);
+            $description_short = Model::setLongText((isset($product["description_short"])) ? $product["description_short"] : null);
+            $keywords = Model::setLongText((isset($product["keywords"])) ? $product["keywords"] : null);
+            
+            $sql = "
+                INSERT INTO product (
+                    id, category_id, pricing_strategy_types_id, status_types_id, currency_id,
+                    location_id, provider_id, vendor_id, rating_types_id, name,
+                    description_short, description_long, keywords, sku, depart_from,
+                    arrive_to, depart_time, arrive_time, provider_vendor_match, use_provider_id,
+                    day_span, cover_image, api_id, from_api, hotel_code,
+                    sort_order, enabled, date_created, created_by, date_modified,
+                    modified_by, note
+                ) VALUES (
+                    $id, $category_id, $pricing_strategy_types_id, $status_types_id, $currency_id,
+                    $location_id, $provider_id, $vendor_id, $rating_types_id, $name,
+                    $description_short, $description_long, $keywords, $sku, $depart_from,
+                    $arrive_to, $depart_time, $arrive_time, $provider_vendor_match, $use_provider_id,
+                    $day_span, '/public/img/placeholder.jpg', $api_id, 0, $hotel_code,
+                    999, $enabled, CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP,
+                    $modified_by, $note
+                )
+                ON DUPLICATE KEY UPDATE
+                    category_id = VALUES(category_id),
+                    pricing_strategy_types_id = VALUES(pricing_strategy_types_id),
+                    status_types_id = VALUES(status_types_id),
+                    currency_id = VALUES(currency_id),
+                    location_id = VALUES(location_id),
+                    provider_id = VALUES(provider_id),
+                    vendor_id = VALUES(vendor_id),
+                    rating_types_id = VALUES(rating_types_id),
+                    name = VALUES(name),
+                    
+                    description_short = VALUES(description_short),
+                    description_long = VALUES(description_long),
+                    keywords = VALUES(keywords),
+                    
+                    sku = VALUES(sku),
+                    
+                    depart_from = VALUES(depart_from),
+                    arrive_to = VALUES(arrive_to),
+                    depart_time = VALUES(depart_time),
+                    arrive_time = VALUES(arrive_time),
+                    provider_vendor_match = VALUES(provider_vendor_match),
+                    use_provider_id = VALUES(use_provider_id),
+                    day_span = VALUES(day_span),
+                    cover_image = VALUES(cover_image),
+                    api_id = VALUES(api_id),
+                    from_api = VALUES(from_api),
+                    hotel_code = VALUES(hotel_code),
+                    sort_order = VALUES(sort_order),
+                    note = VALUES(note),
+                    enabled = VALUES(enabled),
+                    modified_by = VALUES(modified_by),
+                    date_modified = VALUES(date_modified);
+            ";
+            
+            Log::$debug_log->trace($sql);
+            
+            return $product;
+        }
+        
     }

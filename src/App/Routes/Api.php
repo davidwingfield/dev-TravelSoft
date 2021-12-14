@@ -70,7 +70,7 @@
     /**
      * update requests
      */
-    
+    Router::post($routeLead . "/products/add", "Product@serveAdd");
     Router::post($routeLead . "/users/reset_password", "User@serveResetPassword");
     Router::post($routeLead . "/contacts/update", "Contact@serveUpdate");
     Router::post($routeLead . "/providers/update", "Provider@serveUpdate");

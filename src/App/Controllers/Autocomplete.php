@@ -30,6 +30,18 @@
             exit(1);
         }
         
+        public function cities(): void
+        {
+            $st = "";
+            extract($_GET);
+            $results = City::autocomplete($st);
+            
+            // ----
+            header("Content-type:application/json");
+            echo json_encode($results);
+            exit(1);
+        }
+        
         public function products(): void
         {
             $results = [];

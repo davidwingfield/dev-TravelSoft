@@ -1,0 +1,545 @@
+<?php
+    $product_address = [];
+    $product_location = [];
+    $provider_address = [];
+    $provider_location = [];
+    
+    if (isset($product["location"])) {
+        $product_location = $product["location"];
+        $product_city_name = (isset($product_location["city"]["name"])) ? $product_location["city"]["name"] : null;
+        $product_country_iso2 = (isset($product_location["country"]["iso2"])) ? $product_location["country"]["iso2"] : null;
+        $product_country_iso3 = (isset($product_location["country"]["iso3"])) ? $product_location["country"]["iso3"] : null;
+        $product_country_name = (isset($product_location["country"]["name"])) ? $product_location["country"]["name"] : null;
+        $product_province_iso2 = (isset($product_location["province"]["iso2"])) ? $product_location["province"]["iso2"] : null;
+        $product_province_iso3 = (isset($product_location["province"]["iso3"])) ? $product_location["province"]["iso3"] : null;
+        $product_province_name = (isset($product_location["province"]["name"])) ? $product_location["province"]["name"] : null;
+        $product_city_name = (isset($product_location["city"]["name"])) ? $product_location["city"]["name"] : null;
+        $product_location_type_icon = (isset($product_location["type"]["icon"])) ? $product_location["type"]["icon"] : "";
+        $product_location_name = (isset($product_location["display_short"])) ? $product_location["display_short"] : "";
+        $product_location_street_1 = (isset($product_location["street_1"])) ? $product_location["street_1"] : null;
+        $product_location_street_2 = (isset($product_location["street_2"])) ? $product_location["street_2"] : null;
+        $product_location_zipcode = (isset($product_location["zipcode"])) ? $product_location["zipcode"] : null;
+        
+        if (!is_null($product_location_street_1)) {
+            $product_address[] = $product_location_street_1;
+        }
+        
+        if (!is_null($product_location_street_2)) {
+            $product_address[] = $product_location_street_2;
+        }
+        
+        if (!is_null($product_city_name)) {
+            $product_address[] = $product_city_name;
+        }
+        
+        if (is_null($product_location_zipcode)) {
+            $product_location_zipcode = "";
+        }
+        
+        if (!is_null($product_province_iso2)) {
+            $product_address[] = $product_province_iso2 . " " . $product_location_zipcode;
+        } else if (!is_null($product_province_iso3)) {
+            $product_address[] = $product_province_iso3 . " " . $product_location_zipcode;
+        } else if (!is_null($product_province_name)) {
+            $product_address[] = $product_province_name . " " . $product_location_zipcode;
+        }
+        
+        if (!is_null($product_country_iso3)) {
+            $product_address[] = $product_country_iso3;
+        } else if (!is_null($product_country_iso2)) {
+            $product_address[] = $product_country_iso2;
+        } else if (!is_null($product_country_name)) {
+            $product_address[] = $product_country_name;
+        }
+        
+        $product_location_address = implode(", ", $product_address);
+    }
+    if (isset($product["provider"]["location"])) {
+        $provider_location = $product["provider"]["location"];
+        $provider_city_name = (isset($provider_location["city"]["name"])) ? $provider_location["city"]["name"] : null;
+        $provider_country_iso2 = (isset($provider_location["country"]["iso2"])) ? $provider_location["country"]["iso2"] : null;
+        $provider_country_iso3 = (isset($provider_location["country"]["iso3"])) ? $provider_location["country"]["iso3"] : null;
+        $provider_country_name = (isset($provider_location["country"]["name"])) ? $provider_location["country"]["name"] : null;
+        $provider_province_iso2 = (isset($provider_location["province"]["iso2"])) ? $provider_location["province"]["iso2"] : null;
+        $provider_province_iso3 = (isset($provider_location["province"]["iso3"])) ? $provider_location["province"]["iso3"] : null;
+        $provider_province_name = (isset($provider_location["province"]["name"])) ? $provider_location["province"]["name"] : null;
+        $provider_city_name = (isset($provider_location["city"]["name"])) ? $provider_location["city"]["name"] : null;
+        $provider_location_type_icon = (isset($provider_location["type"]["icon"])) ? $provider_location["type"]["icon"] : "";
+        $provider_location_name = (isset($provider_location["display_short"])) ? $provider_location["display_short"] : "";
+        $provider_location_street_1 = (isset($provider_location["street_1"])) ? $provider_location["street_1"] : null;
+        $provider_location_street_2 = (isset($provider_location["street_2"])) ? $provider_location["street_2"] : null;
+        $provider_location_zipcode = (isset($provider_location["zipcode"])) ? $provider_location["zipcode"] : null;
+        
+        if (!is_null($provider_location_street_1)) {
+            $provider_address[] = $provider_location_street_1;
+        }
+        
+        if (!is_null($provider_location_street_2)) {
+            $provider_address[] = $provider_location_street_2;
+        }
+        
+        if (!is_null($provider_city_name)) {
+            $provider_address[] = $provider_city_name;
+        }
+        
+        if (is_null($provider_location_zipcode)) {
+            $provider_location_zipcode = "";
+        }
+        
+        if (!is_null($provider_province_iso2)) {
+            $provider_address[] = $provider_province_iso2 . " " . $provider_location_zipcode;
+        } else if (!is_null($provider_province_iso3)) {
+            $provider_address[] = $provider_province_iso3 . " " . $provider_location_zipcode;
+        } else if (!is_null($provider_province_name)) {
+            $provider_address[] = $provider_province_name . " " . $provider_location_zipcode;
+        }
+        
+        if (!is_null($provider_country_iso3)) {
+            $provider_address[] = $provider_country_iso3;
+        } else if (!is_null($provider_country_iso2)) {
+            $provider_address[] = $provider_country_iso2;
+        } else if (!is_null($provider_country_name)) {
+            $provider_address[] = $provider_country_name;
+        }
+        
+        $provider_location_address = implode(", ", $provider_address);
+    }
+    
+    //
+    
+    if ($product["use_provider_location"]) {
+        $display_location = $product_location["name"];
+    } else {
+        $display_location = $provider_location["name"];
+    }
+    
+    $location_types = [];
+    if (isset($data["types"]["location_types"])) {
+        $location_types = $data["types"]["location_types"];
+    }
+?>
+<section class="">
+    <div class="row gx-1 my-0">
+        <div class="col-12 col-md-3 p-1">
+            <label for="product_edit_location_id" class="dev-element d-none">Product Location:</label>
+            <input type="hidden" id="product_edit_location_id" name="product_edit_location_id" class="form-control mb-1 dev-element" readonly="readonly"/>
+        </div>
+    </div>
+    
+    <div class="row">
+        
+        <div class="col-12 col-sm-12">
+            
+            <div class="form-element">
+                
+                <div class="input-group form-sm form-1 pl-0">
+                    
+                    <div class="input-group-prepend">
+                        
+                        <span class="input-group-text">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </span>
+                    
+                    </div>
+                    
+                    <input type="search" id="product_location_search" name="product_location_search" class="form-control my-0 py-1" placeholder="Search" aria-label="Search" value="<?php echo ($display_location) ? $display_location : ''; ?>"/>
+                    
+                    <div class="input-group-append">
+                        
+                        <button type="button" class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect" id="button_edit_product_location">
+                            <i class="fas fa-edit" aria-hidden="true"></i>
+                        </button>
+                    
+                    </div>
+                
+                </div>
+            
+            </div>
+        
+        </div>
+    
+    </div>
+    
+    <div class="row">
+        <div class="col-12 col-md-9 mb-2 d-flex align-items-center">
+            <div class="px-3">
+                <!-- USE PROVIDER LOCATION -->
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="use_provider_location" name="location_to_use" class="custom-control-input" value="use_provider_location">
+                    <label class="custom-control-label" for="use_provider_location">Use Provider Location</label>
+                </div>
+                <!-- /USE PROVIDER LOCATION -->
+                
+                <!-- USE PRODUCT LOCATION -->
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="use_product_location" name="location_to_use" class="custom-control-input" value="use_product_location">
+                    <label class="custom-control-label" for="use_product_location">Use Product Location</label>
+                </div>
+                <!-- /USE PRODUCT LOCATION -->
+            </div>
+        </div>
+        
+        <div class="col-12 col-md-3 mb-2 d-flex justify-content-end">
+            <button type="button" id="button_change_product_location" name="button_change_product_location" class="btn btn-primary btn-sm waves-effect waves-light">Update</button>
+        </div>
+    </div>
+    
+    <div class="card mb-2" id="card_product_edit_location" style="display:none">
+        <div class="card-body">
+            
+            <h4 class="card-title">
+                <span>Edit Location</span>
+                <a type="button" id="button_close_edit_product_location_form" href="javascript:void(0);" class="panel-button-close fas fa-times" aria-hidden="true"></a>
+            </h4>
+            <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
+            <hr class="">
+            
+            <form id="form_product_edit_location" name="form_edit_location" class="" novalidate>
+                
+                <div class="row">
+                    
+                    <!-- LOCATION ID -->
+                    <div class="col-12 col-md-3">
+                        <div class="form-element">
+                            <label for="location_id" class="">Location Id:</label>
+                            <input type="text" id="location_id" name="location_id" class="form-control" aria-label="Location id" placeholder="" autocomplete="off"/>
+                            <div class="error w-100 text-center" id="location_id-error"></div>
+                        </div>
+                    </div>
+                    <!-- /LOCATION ID -->
+                    
+                    <!-- LOCATION NAME -->
+                    <div class="col-5">
+                        <div class="form-element">
+                            <label for="location_name" class="">Location Name:</label>
+                            <input type="text" id="location_name" name="location_name" class="form-control" aria-label="Location name" placeholder="" autocomplete="off"/>
+                            <div id="location_name-error" class="error w-100 text-center"></div>
+                        </div>
+                    </div>
+                    <!-- /LOCATION NAME -->
+                    
+                    <!-- LOCATION TYPES ID -->
+                    <div class="col-12 col-md-4">
+                        <div class="form-element">
+                            <label for="location_types_id" class="">Location Type:</label>
+                            <select id="location_types_id" name="location_types_id" class="form-control" aria-label="Location Type">
+                                <?php
+                                    echo "<option  value='' disabled selected>-- Location Types --</option>";
+                                    foreach ($location_types AS $k => $v) {
+                                        $val = $v["id"];
+                                        $text = $v["name"];
+                                        echo "<option value='$val'>$text</option>";
+                                    }
+                                ?>
+                            </select>
+                            <div id="location_types_id-error" class="error w-100 text-center"></div>
+                        </div>
+                    </div>
+                    <!-- /LOCATION TYPES ID -->
+                
+                </div>
+                
+                <div class="row">
+                    
+                    <div class="col-12 col-md-8">
+                        
+                        <div class="row">
+                            
+                            <!-- STREET 1 -->
+                            <div class="col-12">
+                                <div class="form-element">
+                                    <label for="location_street_1" class="">Street 1:</label>
+                                    <input type="text" id="location_street_1" name="location_street_1" class="form-control" aria-label="Location name" placeholder="" autocomplete="off"/>
+                                    <div id="location_street_1-error" class="error w-100 text-center"></div>
+                                </div>
+                            </div>
+                            <!-- /STREET 1 -->
+                        
+                        </div>
+                        
+                        <div class="row">
+                            
+                            <!-- STREET 2 -->
+                            <div class="col-12">
+                                <div class="form-element">
+                                    <label for="location_street_2" class="">Street 2:</label>
+                                    <input type="text" id="location_street_2" name="location_street_2" class="form-control" aria-label="Location name" placeholder="" autocomplete="off"/>
+                                    <div id="location_street_2-error" class="error w-100 text-center"></div>
+                                </div>
+                            </div>
+                            <!-- /STREET 2 -->
+                        
+                        </div>
+                        
+                        <div class="row">
+                            
+                            <!-- COUNTRY ID -->
+                            <div class="col-12 col-md-4">
+                                
+                                <div class="form-element">
+                                    
+                                    <label for="location_country_id">Country:</label>
+                                    <select class="form-control" name="location_country_id" id="location_country_id" data-type="country" style="width:100%;" required>
+                                    
+                                    </select>
+                                    <div class="error w-100 text-center" id="location_country_id-error"></div>
+                                
+                                </div>
+                            
+                            </div>
+                            <!-- /COUNTRY ID -->
+                            
+                            <!-- PROVINCE ID -->
+                            <div class="col-12 col-md-4">
+                                
+                                <div class="form-element">
+                                    
+                                    <label for="location_province_id">Province:</label>
+                                    <select class="form-control" name="location_province_id" id="location_province_id" data-type="province" style="width:100%;" required></select>
+                                    <div class="error w-100 text-center" id="location_province_id-error"></div>
+                                
+                                </div>
+                            
+                            </div>
+                            <!-- /PROVINCE ID -->
+                            
+                            <!-- CITY ID -->
+                            <div class="col-12 col-md-4">
+                                
+                                <div class="form-element">
+                                    
+                                    <label for="location_city_id">City:</label>
+                                    <select class="form-control" name="location_city_id" id="location_city_id" data-type="city" style="width:100%;" required></select>
+                                    <div class="error w-100 text-center" id="location_city_id-error"></div>
+                                
+                                </div>
+                            
+                            </div>
+                            <!-- /CITY ID -->
+                        
+                        </div>
+                        
+                        <div class="row">
+                            
+                            <div class="col-lg-12">
+                                
+                                <div class="form-element">
+                                    
+                                    <label for="location_zipcode">Postal Code:</label>
+                                    <input type="text" id="location_zipcode" name="location_zipcode" class="form-control"/>
+                                    <div class="error w-100 text-center" id="location_zipcode-error"></div>
+                                
+                                </div>
+                            
+                            </div>
+                        
+                        </div>
+                    
+                    </div>
+                    
+                    <div class="col-12 col-md-4">
+                    
+                    </div>
+                
+                </div>
+                
+                <div class="text-right w-100">
+                    <a href="javascript:void(0);" id="button_clear_form_edit_product_location" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+                    <a href="javascript:void(0);" id="button_submit_form_edit_product_location" class="btn btn-primary btn-sm waves-effect waves-light">Save</a>
+                </div>
+            
+            </form>
+        
+        </div>
+    </div>
+    
+    <div class="row">
+        
+        <!-- PROVIDER LOCATION -->
+        <div class="col-12 col-md-6">
+            <!-- Card -->
+            <div class="card map-card">
+                
+                <!--Google map-->
+                <div id="map-container-provider-location" class="z-depth-1-half map-container" style="height: 500px">
+                    <iframe src="https://maps.google.com/maps?q=<?php echo strtolower($provider_city_name); ?>+<?php echo strtolower($provider_province_iso2); ?>&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" style="border:0" allowfullscreen></iframe>
+                </div>
+                
+                <!-- Card content -->
+                <div class="card-body closed px-0">
+                    
+                    <div class="button px-2 mt-3">
+                        <a class="btn-floating btn-lg living-coral float-right"><i class="<?php echo $provider_location_type_icon; ?>"></i></a>
+                    </div>
+                    
+                    <div class="white px-4 pb-4 pt-3-5" style="padding-top:1.5rem">
+                        
+                        <!-- Title -->
+                        <h5 class="card-title h5 living-coral-text">Provider Details</h5>
+                        
+                        <div class="d-flex justify-content-between living-coral-text">
+                            <h6 class="card-subtitle"><?php echo $provider_location_name; ?></h6>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="d-flex justify-content-between pt-2 mt-1 text-center text-uppercase living-coral-text">
+                            <div>
+                                <i class="fas fa-phone fa-lg mb-3"></i>
+                                <p class="mb-0">Call</p>
+                            </div>
+                            <div>
+                                <i class="fas fa-cat fa-lg mb-3"></i>
+                                <p class="mb-0">Love</p>
+                            </div>
+                            <div>
+                                <i class="far fa-grin-beam-sweat fa-lg mb-3"></i>
+                                <p class="mb-0">Smile</p>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <table class="table table-borderless">
+                            <tbody>
+                            <tr>
+                                <th scope="row" class="px-0 pb-3 pt-2">
+                                    <i class="fas fa-map-marker-alt living-coral-text"></i>
+                                </th>
+                                <td class="pb-3 pt-2"><?php echo $provider_location_address; ?><!--East 64th Street, New York, NY 10021, US--></td>
+                            </tr>
+                            <tr class="mt-2">
+                                <th scope="row" class="px-0 pb-3 pt-2">
+                                    <i class="far fa-clock living-coral-text"></i>
+                                </th>
+                                <td class="pb-3 pt-2"><span class="deep-purple-text mr-2"> Closed</span> Opens 10 AM</td>
+                            </tr>
+                            <tr class="mt-2">
+                                <th scope="row" class="px-0 pb-3 pt-2">
+                                    <i class="fas fa-cloud-moon living-coral-text"></i>
+                                </th>
+                                <td class="pb-3 pt-2">Sunny weather tomorrow</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    
+                    </div>
+                
+                </div>
+            
+            </div>
+            <!-- Card -->
+        </div>
+        <!-- PROVIDER LOCATION -->
+        
+        <!-- PRODUCT LOCATION -->
+        <div class="col-12 col-md-6">
+            <!-- Card -->
+            <div class="card map-card">
+                
+                <div id="map-container-product-location" class="z-depth-1-half map-container" style="height: 500px">
+                    <div class="gmap_canvas">
+                        <iframe
+                                width="500"
+                                height="500"
+                                id="product_location_map"
+                                src="https://maps.google.com/maps?q=Viale Rinascimento, 141, 63074 San Benedetto del Tronto AP, Italy&t=&z=7&ie=UTF8&iwloc=&output=embed"
+                                frameborder="0"
+                                scrolling="no"
+                                marginheight="0"
+                                marginwidth="0">
+                        </iframe>
+                    </div>
+                </div>
+                
+                <!-- Card content -->
+                <div class="card-body closed px-0">
+                    
+                    <div class="button px-2 mt-3">
+                        <a class="btn-floating btn-lg living-coral float-right"><i class="<?php echo $product_location_type_icon; ?>"></i></a>
+                    </div>
+                    
+                    <div class="white px-4 pb-4 pt-3-5">
+                        
+                        <!-- Title -->
+                        <h5 class="card-title h5 living-coral-text">Product Details</h5>
+                        
+                        <div class="d-flex justify-content-between living-coral-text">
+                            <h6 class="card-subtitle"><?php echo $product_location_name; ?></h6>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="d-flex justify-content-between pt-2 mt-1 text-center text-uppercase living-coral-text">
+                            <div>
+                                <i class="fas fa-phone fa-lg mb-3"></i>
+                                <p class="mb-0">Call</p>
+                            </div>
+                            <div>
+                                <i class="fas fa-cat fa-lg mb-3"></i>
+                                <p class="mb-0">Love</p>
+                            </div>
+                            <div>
+                                <i class="far fa-grin-beam-sweat fa-lg mb-3"></i>
+                                <p class="mb-0">Smile</p>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <table class="table table-borderless">
+                            <tbody>
+                            <tr>
+                                <th scope="row" class="px-0 pb-3 pt-2">
+                                    <i class="fas fa-map-marker-alt living-coral-text"></i>
+                                </th>
+                                <td class="pb-3 pt-2"><?php echo $product_location_address; ?></td>
+                            </tr>
+                            <tr class="mt-2">
+                                <th scope="row" class="px-0 pb-3 pt-2">
+                                    <i class="far fa-clock living-coral-text"></i>
+                                </th>
+                                <td class="pb-3 pt-2"><span class="deep-purple-text mr-2"> Closed</span> Opens 10 AM</td>
+                            </tr>
+                            <tr class="mt-2">
+                                <th scope="row" class="px-0 pb-3 pt-2">
+                                    <i class="fas fa-cloud-moon living-coral-text"></i>
+                                </th>
+                                <td class="pb-3 pt-2">Sunny weather tomorrow</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    
+                    </div>
+                
+                </div>
+            
+            </div>
+            <!-- Card -->
+        </div>
+        <!-- /PRODUCT LOCATION -->
+    
+    </div>
+    
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <?php displayJsonOnPage($product, "Product"); ?>
+        </div>
+        
+        <div class="col-12 col-md-6">
+            <?php displayJsonOnPage($product_location, "Product Location"); ?>
+        </div>
+        
+        <div class="col-12 col-md-6">
+            <?php displayJsonOnPage($provider_location, "Provider Location"); ?>
+        </div>
+    
+    </div>
+
+</section>
+<script>
+    
+    $(document).ready(function () {
+    
+    })
+</script>

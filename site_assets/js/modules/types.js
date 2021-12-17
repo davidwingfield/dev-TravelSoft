@@ -12,7 +12,7 @@ const Types = (function () {
             Types[types_name].set(type.id, type)
         })
         
-        //console.log(types_name, Types[types_name])
+        //Console.log(types_name, Types[types_name])
     }
     
     const init = function (settings) {

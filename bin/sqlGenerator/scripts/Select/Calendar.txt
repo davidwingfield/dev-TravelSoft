@@ -1,11 +1,24 @@
 SELECT
-	CALENDAR.id AS 'calendar_id',
-	CALENDAR.product_id AS 'calendar_product_id',
-	CALENDAR.enabled AS 'calendar_enabled',
-	CALENDAR.date_created AS 'calendar_date_created',
-	CALENDAR.created_by AS 'calendar_created_by',
-	CALENDAR.date_modified AS 'calendar_date_modified',
-	CALENDAR.modified_by AS 'calendar_modified_by',
-	CALENDAR.note AS 'calendar_note'
+		CALENDAR.date AS 'calendar_date',
+		CALENDAR.product_id AS 'calendar_product_id',
+		CALENDAR.season_id AS 'calendar_season_id',
+		CALENDAR.enabled AS 'calendar_enabled',
+		CALENDAR.date_created AS 'calendar_date_created',
+		CALENDAR.created_by AS 'calendar_created_by',
+		CALENDAR.date_modified AS 'calendar_date_modified',
+		CALENDAR.modified_by AS 'calendar_modified_by',
+		CALENDAR.note AS 'calendar_note'
 FROM 	calendar CALENDAR
 -- JOIN 	calendar CALENDAR ON CALENDAR.id = {FK_TABLE}.calendar_id
+
+/*
+'date'=>$calendar['calendar_date'],
+'product_id'=>$calendar['calendar_product_id'],
+'season_id'=>$calendar['calendar_season_id'],
+'enabled'=>$calendar['calendar_enabled'],
+'date_created'=>$calendar['calendar_date_created'],
+'created_by'=>$calendar['calendar_created_by'],
+'date_modified'=>$calendar['calendar_date_modified'],
+'modified_by'=>$calendar['calendar_modified_by'],
+'note'=>$calendar['calendar_note']
+*/

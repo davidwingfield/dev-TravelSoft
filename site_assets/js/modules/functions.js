@@ -86,7 +86,7 @@ const get_errors = function (validator) {
     //for (var i = 0; i < validator.errorList.length; i++) {
     //    submitErrorsList[validator.errorList[i].element.name] = validator.errorList[i].message
     //}
-    //console.log("Submit Errors", submitErrorsList)
+    //Console.log("Submit Errors", submitErrorsList)
 }
 
 const validator_init = function (settings) {
@@ -227,14 +227,14 @@ const sendGetRequest = function (url, data_to_send, callback) {
                 result = data.result
                 return callback(result)
             } else if (status === "failed" && typeof data.error === "undefined") {
-                //console.log("getError:2")
+                //Console.log("getError:2")
                 return handleError("failed")
             } else if (status === "success" && typeof data.error !== "undefined") {
-                console.log(data.error)
-                //console.log("getError:3")
+                Console.log(data.error)
+                //Console.log("getError:3")
                 return handleError(data.error)
             } else {
-                //console.log("getError:4")
+                //Console.log("getError:4")
             }
         })
     } else {
@@ -255,9 +255,9 @@ const sendPostRequest = function (url, data_to_send, callback) {
     if (url && data_to_send) {
         $.postJSON(url, data_to_send, function (data, status, xhr) {
             //*
-            console.log("data", data)
-            console.log("status", status)
-            console.log("xhr", xhr)
+            Console.log("data", data)
+            Console.log("status", status)
+            Console.log("xhr", xhr)
             //*/
             if (status === "success" && typeof data.result !== "undefined") {
                 
@@ -297,7 +297,7 @@ const _display_ajax_error = function (jqXHR, exception, uri) {
         status: "",
         uri: uri,
     }
-    console.log("jqXHR", jqXHR.responseText)
+    Console.log("jqXHR", jqXHR.responseText)
     if (jqXHR.status === 0) {
         msg = "Not connected, verify Network."
     } else if (jqXHR.status === 404) {
@@ -429,7 +429,7 @@ const populateMultiSelect = function (arr, elem) {
         o = elem.options[i]
         
         if (arr.indexOf(o.value) !== -1) {
-            //console.log("ggg")
+            //Console.log("ggg")
             o.selected = true
         }
         
@@ -656,12 +656,12 @@ jQuery.extend({
             }
             //*/
             /*
-            console.log("jqXHR", jqXHR)
-            console.log("jqXHR", jqXHR.responseText)
-            console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
-            console.log("textStatus", textStatus)
-            console.log("msg", msg)
-            console.log('http://dev.travelsoft.com/error')
+            Console.log("jqXHR", jqXHR)
+            Console.log("jqXHR", jqXHR.responseText)
+            Console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
+            Console.log("textStatus", textStatus)
+            Console.log("msg", msg)
+            Console.log('http://dev.travelsoft.com/error')
             //*/
             if (typeof textStatus !== "undefined") {
                 console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
@@ -697,11 +697,11 @@ jQuery.extend({
             if (typeof textStatus !== "undefined") {
                 let err = _display_ajax_error(jqXHR, textStatus, url)
                 handleError(err.message)
-                console.log(err)
+                Console.log(err)
             } else {
                 let err = _display_ajax_error(jqXHR, textStatus, url)
                 handleError(err.message)
-                console.log(err)
+                Console.log(err)
             }
             if ($.isFunction(callback)) {
                 callback(msg, "failed")
@@ -723,11 +723,11 @@ jQuery.extend({
         })
         getRequest.fail(function (jqXHR, textStatus, msg) {
             if (typeof textStatus !== "undefined") {
-                console.log("Request failed")
-                console.log(_display_ajax_error(jqXHR, textStatus, url))
+                Console.log("Request failed")
+                Console.log(_display_ajax_error(jqXHR, textStatus, url))
             } else {
-                console.log("Request failed")
-                console.log(_display_ajax_error(jqXHR, textStatus, url))
+                Console.log("Request failed")
+                Console.log(_display_ajax_error(jqXHR, textStatus, url))
             }
             if ($.isFunction(callback)) {
                 callback(msg, "failed")
@@ -738,7 +738,7 @@ jQuery.extend({
 const logger = {
     
     log: function () {
-        console.log(args)
+        Console.log(args)
     },
 }
 

@@ -116,7 +116,7 @@ $.fn.table = function (settings) {
                 $dTable.page.jumpToData(row_data.id, 0)
                 formatTable()
             } catch (e) {
-                console.log(e)
+                Console.log(e)
             }
         }
     }
@@ -129,7 +129,7 @@ $.fn.table = function (settings) {
                 $dTable.row(rowId).data(rowData).draw()
                 loadRow(row_data.id)
             } catch (e) {
-                console.log(e)
+                Console.log(e)
             }
         }
         
@@ -142,7 +142,7 @@ $.fn.table = function (settings) {
                 let rowId = row_data.id
                 $dTable.page.jumpToData(rowId, 0)
             } catch (e) {
-                console.log(e)
+                Console.log(e)
             }
             
         }
@@ -158,7 +158,7 @@ $.fn.table = function (settings) {
                   .remove()
                   .draw()
             } catch (e) {
-                console.log(e)
+                Console.log(e)
             }
         }
     }
@@ -170,7 +170,7 @@ $.fn.table = function (settings) {
                 $(row).removeClass("selected")
             })
         } catch (e) {
-            console.log("clear_selected_rows", e)
+            Console.log("clear_selected_rows", e)
         }
     }
     ///////////////////////////////////////////////
@@ -202,7 +202,7 @@ $.fn.table = function (settings) {
             formatTable()
             
         } catch (e) {
-            console.log(e)
+            Console.log(e)
         }
         
     }

@@ -75,7 +75,7 @@ $.fn.imageManager = function (options) {
         let url = "/api/v1.0/images/update"
         
         if (dataToSend) {
-            console.log("data", dataToSend)
+            Console.log("data", dataToSend)
             try {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
                     if (data) {
@@ -85,7 +85,7 @@ $.fn.imageManager = function (options) {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
             }
         }
     }
@@ -135,7 +135,7 @@ $.fn.imageManager = function (options) {
                 }
                 
                 updateImage(dataToSend, function (data) {
-                    console.log("data", data)
+                    Console.log("data", data)
                     let image
                     
                     if (data) {
@@ -157,16 +157,16 @@ $.fn.imageManager = function (options) {
                                 let upload = new Upload(file)
                                 upload.doUpload()
                             } else {
-                                //console.log("Missing $input[0].files[0]")
+                                //Console.log("Missing $input[0].files[0]")
                             }
                         } else {
-                            //console.log("Missing $input[0].files")
+                            //Console.log("Missing $input[0].files")
                         }
                     } else {
-                        //console.log("Missing $input[0]")
+                        //Console.log("Missing $input[0]")
                     }
                 } else {
-                    //console.log("Missing $input")
+                    //Console.log("Missing $input")
                 }
             }
         }
@@ -290,7 +290,7 @@ $.fn.imageManager = function (options) {
     }
     
     const format_image_lightbox = function (image) {
-        console.log(image)
+        Console.log(image)
         
         if (image) {
             let image_alt = (image.alt) ? image.alt : ""

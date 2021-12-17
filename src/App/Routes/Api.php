@@ -16,6 +16,10 @@
     /**
      * get requests
      */
+    Router::get($routeLead . '/profiles/${product_id}', "Profile@getByProductId");
+    Router::get($routeLead . '/calendars/${product_id}', "Calendar@getByProductId");
+    Router::get($routeLead . '/calendars', "Calendar@serveGet");
+    Router::get($routeLead . '/profiles', "Profile@serveGet");
     Router::get($routeLead . "/countries", "Country@serveGet");
     Router::get($routeLead . "/packages", "Package@serveGet");
     Router::get($routeLead . '/products/${product_id}', "Product@serveGet");
@@ -48,6 +52,7 @@
      * autocomplete requests
      */
     Router::get($routeLead . "/autocomplete/providers", "Autocomplete@providers");
+    Router::get($routeLead . "/autocomplete/cities", "Autocomplete@cities");
     Router::get($routeLead . "/autocomplete/products", "Autocomplete@products");
     Router::get($routeLead . "/autocomplete/vendors", "Autocomplete@vendors");
     Router::get($routeLead . "/autocomplete/seasons", "Autocomplete@seasons");

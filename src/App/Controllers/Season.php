@@ -56,7 +56,27 @@
                 return [];
             }
             
-            return array(
+            $product_season = null;
+            
+            if (isset($season["product_season_product_id"])) {
+                $product_season = array(
+                    'product_id' => $season['product_season_product_id'],
+                    'season_id' => $season['product_season_season_id'],
+                    'disabled_dow' => $season['product_season_disabled_dow'],
+                    'seasons_border' => $season['product_season_seasons_border'],
+                    'seasons_text' => $season['product_season_seasons_text'],
+                    'seasons_background' => $season['product_season_seasons_background'],
+                    'id' => $season['product_season_id'],
+                    'enabled' => $season['product_season_enabled'],
+                    'date_created' => $season['product_season_date_created'],
+                    'created_by' => $season['product_season_created_by'],
+                    'date_modified' => $season['product_season_date_modified'],
+                    'modified_by' => $season['product_season_modified_by'],
+                    'note' => $season['product_season_note'],
+                );
+            }
+            
+            $temp = array(
                 'id' => $season['season_id'],
                 'color_scheme_id' => $season['season_color_scheme_id'],
                 'name' => $season['season_name'],
@@ -89,6 +109,12 @@
                 
                 ),
             );
+            
+            if (!is_null($product_season)) {
+                $temp["product_season_detail"] = $product_season;
+            }
+            
+            return $temp;
         }
         
         private static function formatSeasonType(array $seasonType = null): array

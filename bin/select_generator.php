@@ -22,7 +22,12 @@
         $table = null;
     }
     echo "Processing...\n";
-	
+	//notepad.exe C:\wamp64\www\dev.travelsoft\bin/sqlGenerator/scripts/Select/Category.txt
+   
 	exe($table);
+     $output=null;
+$retval=null;
+exec('notepad.exe '.__DIR__.'/sqlGenerator/scripts/Select/'.ucwords($table).'.txt', $output, $retval);
+echo "Returned with status $retval and output:\n";
 	
 	

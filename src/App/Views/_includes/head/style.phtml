@@ -1,4 +1,166 @@
 <style>
+  
+  .modal-fullscreen {
+    width: 100vw;
+    max-width: none;
+    height: 100%;
+    margin: 0
+    }
+  
+  .modal-fullscreen .modal-content {
+    height: 100%;
+    border: 0;
+    border-radius: 0
+    }
+  
+  .modal-fullscreen .modal-header {
+    border-radius: 0
+    }
+  
+  .modal-fullscreen .modal-body {
+    overflow-y: auto
+    }
+  
+  .modal-fullscreen .modal-footer {
+    border-radius: 0
+    }
+  
+  @media (max-width: 575.98px) {
+    .modal-fullscreen-sm-down {
+      width: 100vw;
+      max-width: none;
+      height: 100%;
+      margin: 0
+      }
+    
+    .modal-fullscreen-sm-down .modal-content {
+      height: 100%;
+      border: 0;
+      border-radius: 0
+      }
+    
+    .modal-fullscreen-sm-down .modal-header {
+      border-radius: 0
+      }
+    
+    .modal-fullscreen-sm-down .modal-body {
+      overflow-y: auto
+      }
+    
+    .modal-fullscreen-sm-down .modal-footer {
+      border-radius: 0
+      }
+    }
+  
+  @media (max-width: 767.98px) {
+    .modal-fullscreen-md-down {
+      width: 100vw;
+      max-width: none;
+      height: 100%;
+      margin: 0
+      }
+    
+    .modal-fullscreen-md-down .modal-content {
+      height: 100%;
+      border: 0;
+      border-radius: 0
+      }
+    
+    .modal-fullscreen-md-down .modal-header {
+      border-radius: 0
+      }
+    
+    .modal-fullscreen-md-down .modal-body {
+      overflow-y: auto
+      }
+    
+    .modal-fullscreen-md-down .modal-footer {
+      border-radius: 0
+      }
+    }
+  
+  @media (max-width: 991.98px) {
+    .modal-fullscreen-lg-down {
+      width: 100vw;
+      max-width: none;
+      height: 100%;
+      margin: 0
+      }
+    
+    .modal-fullscreen-lg-down .modal-content {
+      height: 100%;
+      border: 0;
+      border-radius: 0
+      }
+    
+    .modal-fullscreen-lg-down .modal-header {
+      border-radius: 0
+      }
+    
+    .modal-fullscreen-lg-down .modal-body {
+      overflow-y: auto
+      }
+    
+    .modal-fullscreen-lg-down .modal-footer {
+      border-radius: 0
+      }
+    }
+  
+  @media (max-width: 1199.98px) {
+    .modal-fullscreen-xl-down {
+      width: 100vw;
+      max-width: none;
+      height: 100%;
+      margin: 0
+      }
+    
+    .modal-fullscreen-xl-down .modal-content {
+      height: 100%;
+      border: 0;
+      border-radius: 0
+      }
+    
+    .modal-fullscreen-xl-down .modal-header {
+      border-radius: 0
+      }
+    
+    .modal-fullscreen-xl-down .modal-body {
+      overflow-y: auto
+      }
+    
+    .modal-fullscreen-xl-down .modal-footer {
+      border-radius: 0
+      }
+    }
+  
+  @media (max-width: 1399.98px) {
+    .modal-fullscreen-xxl-down {
+      width: 100vw;
+      max-width: none;
+      height: 100%;
+      margin: 0
+      }
+    
+    .modal-fullscreen-xxl-down .modal-content {
+      height: 100%;
+      border: 0;
+      border-radius: 0
+      }
+    
+    .modal-fullscreen-xxl-down .modal-header {
+      border-radius: 0
+      }
+    
+    .modal-fullscreen-xxl-down .modal-body {
+      overflow-y: auto
+      }
+    
+    .modal-fullscreen-xxl-down .modal-footer {
+      border-radius: 0
+      }
+    }
+  
+  
   body.dark {
     background-color: hsl(218, 41%, 15%);
     background-image: radial-gradient(
@@ -1110,6 +1272,34 @@
     max-width: 300px;
     }
   
+  .btn.btn-name-picker {
+    margin: 0 0 0 0;
+    background: #fff;
+    padding: 0;
+    font-size: inherit;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .10);
+    text-align: left;
+    border-left: solid .4rem #eda600;
+    width: 100%;
+    max-width: 300px;
+    }
+  
+  .btn.btn-location-picker {
+    margin: 0 0 0 0;
+    background: #fff;
+    padding: 0;
+    font-size: inherit;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .10);
+    text-align: left;
+    border-left: solid .4rem #0040a8;
+    width: 100%;
+    max-width: 300px;
+    }
+  
   .btn.btn-check-out-picker {
     margin: 0 0 0 0;
     background: #fff;
@@ -1252,6 +1442,176 @@
     background-image: none;
     background-repeat: initial;
     text-shadow: none;
+    }
+  
+  .card.map-card .living-coral-text {
+    color: #fa7268;
+    margin-bottom: 0.8rem;
+    }
+  
+  .input-search-dark .input-search-icon {
+    color: #76838f;
+    }
+  
+  .input-search .input-search-icon {
+    
+    
+    }
+  
+  
+  .input-search .input-search-icon {
+    font-size: 16px;
+    color: #a3afb7;
+    text-align: center;
+    pointer-events: none;
+    position: absolute;
+    top: 1.03rem;
+    z-index: 1;
+    -webkit-transform: translateY(-40%);
+    -ms-transform: translateY(-40%);
+    -o-transform: translateY(-40%);
+    transform: translateY(-40%);
+    height: 28px;
+    width: 28px;
+    vertical-align: middle;
+    line-height: 1.8;
+    margin-left: 0;
+    left: 1.4rem;
+    }
+  
+  .input-search .input-search-close {
+    position: absolute;
+    top: .73rem;
+    right: 1.4rem;
+    height: 28px;
+    width: 28px;
+    vertical-align: middle;
+    line-height: 1.8;
+    
+    -webkit-transform: translateY(-26%);
+    -ms-transform: translateY(-26%);
+    -o-transform: translateY(-26%);
+    transform: translateY(-26%);
+    
+    font-size: 16px;
+    color: #a3afb7;
+    text-align: center;
+    
+    z-index: 1.2;
+    
+    
+    outline: none;
+    border: none;
+    background: transparent;
+    }
+  
+  .input-search .form-control {
+    border-radius: 200px;
+    padding-left: 30px;
+    padding-right: 30px;
+    height: 28px;
+    width: 100%;
+    line-height: 1rem;
+    font-size: 16px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    margin: 0;
+    }
+  
+  .input-search .input-search-close,
+  .input-search .input-search-icon {
+    border: none;
+    }
+  
+  .input-search-close > i {
+    font-size: 16px;
+    height: 100%;
+    width: 100%;
+    line-height: 1.25;
+    }
+  
+  input.dev-element[readonly='readonly'] {
+    background: rgb(255, 0, 0, .4);
+    color: #420000
+    }
+  
+  td.selected-day {
+    background: rgba(23, 162, 184, .11);
+    }
+  
+  div.card.profile-card {
+    font-size: .9rem;
+    font-weight: 400;
+    color: #747373;
+    margin-bottom: 1rem;
+    border: solid 1px transparent;
+    background: #fff;
+    }
+  
+  
+  div.card.profile-card .card-body {
+    font-size: .9rem;
+    font-weight: 400;
+    color: #747373;
+    padding: 0.5rem;
+    }
+  
+  
+  div.card.profile-card.notavailable > div.card-body > h5.card-title,
+  div.card.profile-card.notavailable > div.card-body > h5.card-title,
+  div.card.profile-card.notavailable > div.card-body > h5.card-title,
+  div.card.profile-card.notavailable > div.card-body > h5.card-title {
+    color: #000000 !important;
+    font-weight: 400 !important;
+    }
+  
+  div.card.profile-card.notavailable > div.card-body > p.card-text,
+  div.card.profile-card.freesale > div.card-body > p.card-text,
+  div.card.profile-card.allotment > div.card-body > p.card-text,
+  div.card.profile-card.onrequest > div.card-body > p.card-text {
+    color: #000000 !important;
+    opacity: 90% !important;
+    font-weight: 300 !important;
+    }
+  
+  div.card.profile-card.blackout > div.card-body > p.card-text {
+    color: #eeeeee !important;
+    font-weight: 300 !important;
+    }
+  
+  div.card.profile-card.blackout > div.card-body > h5.card-title {
+    color: #eeeeee !important;
+    font-weight: 400 !important;
+    }
+  
+  div.card.profile-card.freesale > div.card-body > table.table td {
+    border-top-color: #357f8e !important;
+    color: #000;
+    padding: .5rem;
+    }
+  
+  div.card.profile-card.allotment > div.card-body > table.table td {
+    border-top-color: #2d895b !important;
+    color: #000;
+    padding: .5rem;
+    }
+  
+  div.card.profile-card.onrequest > div.card-body > table.table td {
+    border-top-color: #aa890f !important;
+    color: #000;
+    padding: .5rem;
+    }
+  
+  div.card.profile-card.blackout > div.card-body > table.table td {
+    border-top-color: #30353a !important;
+    color: #FFF;
+    padding: .5rem;
+    }
+  
+  div.card.profile-card.notavailable > div.card-body > table.table td {
+    border-top-color: #686868 !important;
+    color: #000000;
+    padding: .5rem;
     }
 
 </style>

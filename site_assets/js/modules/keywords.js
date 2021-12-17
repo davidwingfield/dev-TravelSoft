@@ -107,7 +107,7 @@ $.fn.BuildKeyword = function (keywords) {
             let tag = tags.get(data)
             if (tag) {
                 if (tag) {
-                    console.log("tag", tag)
+                    Console.log("tag", tag)
                     $input.val(data)
                 }
                 

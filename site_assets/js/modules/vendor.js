@@ -70,7 +70,7 @@ const Vendor = (function () {
     $(_button_save_vendor)
       .on("click", function () {
           let company = Company.build()
-          console.log("_button_save_vendor", company)
+          Console.log("_button_save_vendor", company)
           update()
       })
     
@@ -196,7 +196,7 @@ const Vendor = (function () {
               if (!suggestion || !suggestion.data) {
                   return
               }
-              console.log("suggestion.data", suggestion.data)
+              Console.log("suggestion.data", suggestion.data)
               let vendor = suggestion.data
               if (_form_product_add) {
                   let provider_company_id = (isNaN(parseInt(_modal_product_provider_company_id.value))) ? null : parseInt(_modal_product_provider_company_id.value)
@@ -270,17 +270,17 @@ const Vendor = (function () {
     }
     
     const vendor_exists = function (name) {
-        console.log("vendor_exists()", name)
+        Console.log("vendor_exists()", name)
         
         if (name && name !== "") {
             let dataToSend = {
                 name: name,
             }
             
-            console.log("dataToSend", dataToSend)
+            Console.log("dataToSend", dataToSend)
             
             fetch_vendor_by_name(dataToSend, function (data) {
-                console.log("fetch_vendor_by_name()", data)
+                Console.log("fetch_vendor_by_name()", data)
                 let vendor, company
                 
                 if (data && data.length > 0) {
@@ -292,7 +292,7 @@ const Vendor = (function () {
                     }
                     
                 } else {
-                    console.log("Vendor Does Not Exist")
+                    Console.log("Vendor Does Not Exist")
                     
                     _modal_product_vendor_id.value = ""
                     _modal_product_vendor_company_id.value = ""
@@ -316,7 +316,7 @@ const Vendor = (function () {
                 }
                 
                 if (vendor) {
-                    console.log("Vendor Exists", vendor)
+                    Console.log("Vendor Exists", vendor)
                     
                     if (_vendor_modal_vendor_name) {
                         confirmDialog(`Vendor ${vendor.name} ALREADY exists. Would you like to load this record to edit?`, (ans) => {
@@ -361,14 +361,14 @@ const Vendor = (function () {
         if (vendor) {
             newVendor(vendor, function (data) {
                 if (data) {
-                    console.log("data 1", data)
+                    Console.log("data 1", data)
                     if (data[0]) {
-                        console.log("data[0] 1", data[0])
+                        Console.log("data[0] 1", data[0])
                         let details = data[0]
                         
                         if (details.id) {
                             if (_form_product_add) {
-                                console.log("_form_product_add: details", details)
+                                Console.log("_form_product_add: details", details)
                                 _modal_product_vendor_company_id.value = (details.company_id) ? details.company_id : ""
                                 _modal_product_vendor_id.value = (details.id) ? details.id : ""
                                 _modal_product_provider_vendor_match.checked = (_modal_product_vendor_company_id.value === _modal_product_provider_company_id.value)
@@ -380,13 +380,13 @@ const Vendor = (function () {
                                 window.location.replace("/vendors/" + details.id)
                             }
                         } else {
-                            console.log("details 1", details)
+                            Console.log("details 1", details)
                         }
                     } else {
-                        console.log("details 2", data)
+                        Console.log("details 2", data)
                     }
                 } else {
-                    console.log("details 3", vendor)
+                    Console.log("details 3", vendor)
                 }
             })
         }
@@ -411,7 +411,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
             }
         }
     }
@@ -500,7 +500,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 return handle_vendor_error("Error Validating Company")
             }
         } else {
@@ -606,13 +606,13 @@ const Vendor = (function () {
      * @param callback
      */
     const updateVendor = function (dataToSend, callback) {
-        console.log("updateVendor()", dataToSend)
+        Console.log("updateVendor()", dataToSend)
         let url = "/api/v1.0/vendors/update"
         
         if (dataToSend) {
             try {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    console.log("data", data)
+                    Console.log("data", data)
                     if (data) {
                         return callback(data)
                     } else {
@@ -620,7 +620,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
             }
         }
     }
@@ -632,14 +632,14 @@ const Vendor = (function () {
         if (vendor_detail) {
             confirmDialog(`Would you like to update?`, (ans) => {
                 if (ans) {
-                    console.log("vendor_detail", vendor_detail)
+                    Console.log("vendor_detail", vendor_detail)
                     
                     updateVendor(vendor_detail, function (data) {
-                        console.log("data", data)
+                        Console.log("data", data)
                         if (data) {
-                            console.log("data 1", data)
+                            Console.log("data 1", data)
                             if (data[0]) {
-                                console.log("data[0] 1", data[0])
+                                Console.log("data[0] 1", data[0])
                                 let details = data[0]
                                 if (details.id) {
                                     if (_vendor_id.value === "" || isNaN(parseInt(_vendor_id.value))) {
@@ -649,13 +649,13 @@ const Vendor = (function () {
                                         toastr.success(`Vendor ${name} has been updated.`)
                                     }
                                 } else {
-                                    console.log("details 1", details)
+                                    Console.log("details 1", details)
                                 }
                             } else {
-                                console.log("details 2", data)
+                                Console.log("details 2", data)
                             }
                         } else {
-                            console.log("details 3", provider)
+                            Console.log("details 3", provider)
                         }
                     })
                 }
@@ -674,14 +674,14 @@ const Vendor = (function () {
         if (vendor) {
             updateVendor(vendor, function (data) {
                 if (data) {
-                    console.log("data", data)
-                    console.log(data.length)
+                    Console.log("data", data)
+                    Console.log(data.length)
                     if (data[0]) {
-                        console.log("data[0]", data[0])
+                        Console.log("data[0]", data[0])
                         let details = data[0]
                         if (details.id) {
-                            console.log("details.id", details.id)
-                            console.log("_vendor_id.value", _vendor_id.value)
+                            Console.log("details.id", details.id)
+                            Console.log("_vendor_id.value", _vendor_id.value)
                             if (_vendor_id.value === "" || isNaN(parseInt(_vendor_id.value))) {
                                 window.location.replace(base_url + "/" + details.id)
                             } else {
@@ -689,13 +689,13 @@ const Vendor = (function () {
                                 toastr.success(`Vendor ${name} has been updated.`)
                             }
                         } else {
-                            console.log("details 1", details)
+                            Console.log("details 1", details)
                         }
                     } else {
-                        console.log("details 2", data)
+                        Console.log("details 2", data)
                     }
                 } else {
-                    console.log("details 3", provider)
+                    Console.log("details 3", provider)
                 }
             })
         }
@@ -709,12 +709,12 @@ const Vendor = (function () {
         let addresses = Array.from(Address.all.values())
         let contacts = Array.from(Contact.all.values())
         /*
-          console.log("company_detail", company_detail)
-          console.log("provider_detail", provider_detail)
-          console.log("location_detail", location_detail)
-          console.log("vendor_detail", vendor_detail)
-          console.log("addresses", addresses)
-          console.log("contacts", contacts)
+          Console.log("company_detail", company_detail)
+          Console.log("provider_detail", provider_detail)
+          Console.log("location_detail", location_detail)
+          Console.log("vendor_detail", vendor_detail)
+          Console.log("addresses", addresses)
+          Console.log("contacts", contacts)
           //*/
         if (!company_detail || !vendor_detail || !addresses || !contacts) {
             $.each(panels, function (index, item) {
@@ -798,7 +798,7 @@ const Vendor = (function () {
             })
         }
         
-        console.log(" Vendor.all", Vendor.all)
+        Console.log(" Vendor.all", Vendor.all)
     }
     
     const validate_form = function () {
@@ -857,7 +857,7 @@ const Vendor = (function () {
      * disables fields unused from provider edit
      */
     const setProvider = function () {
-        console.log("Set Provider")
+        Console.log("Set Provider")
         if (_provider_edit) {
             _vendor_is_provider.checked = true
             $(_vendor_is_provider).attr("readonly", "true")

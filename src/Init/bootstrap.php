@@ -49,6 +49,7 @@
     define("MAILPORT", $ini["email"]["port"]);
     define("MAILFROMADDRESS", $ini["email"]["from"]);
     define("MAILFROMNAME", $ini["email"]["name"]);
+    define("LOCATIONDISPLAY", "medium");
     
     define("LOGINATTEMPTS", $ini["database"]["db_loginattempts"]);
     

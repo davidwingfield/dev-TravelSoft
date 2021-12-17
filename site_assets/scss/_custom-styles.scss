@@ -889,99 +889,105 @@ div.tab-pane > form {
 
 
 .color-1, .notavailable {
-  background: #d5d5d5;
-  border-color: #686868;
-  color: #000000;
+  background: #8c9ba1 !important;
+  border-color: #686868 !important;
+  color: #000000 !important;
+  
+  &div.card.profile-card.notavailable > div.card-body > h5.card-title {
+  
+  }
+  
 }
 
+
 .color-2, .freesale {
-  background: #54cbe3;
-  border-color: #357f8e;
-  color: #000000;
+  background: #54cbe3 !important;
+  border-color: #357f8e !important;
+  color: #000000 !important;
 }
 
 .color-3, .allotment {
-  background: #49de94;
-  border-color: #2d895b;
-  color: #000000;
+  background: #49de94 !important;
+  border-color: #2d895b !important;
+  color: #000000 !important;
 }
 
 .color-4 {
-  background: #ab8c82;
-  border-color: #564641;
-  color: #000000;
+  background: #ab8c82 !important;
+  border-color: #564641 !important;
+  color: #000000 !important;
 }
 
 .color-5, .onrequest {
-  background: #ffcd17;
-  border-color: #aa890f;
-  color: #000000;
+  background: #ffcd17 !important;
+  border-color: #aa890f !important;
+  color: #000000 !important;
 }
 
 .color-6 {
-  background: #96a3fa;
-  border-color: #636ca5;
-  color: #000000;
+  background: #96a3fa !important;
+  border-color: #636ca5 !important;
+  color: #000000 !important;
 }
 
 .color-7 {
-  background: #fa983c;
-  border-color: #a56428;
-  color: #000000;
+  background: #fa983c !important;
+  border-color: #a56428 !important;
+  color: #000000 !important;
 }
 
 .color-8 {
-  background: #17b3a3;
-  border-color: #0c5e56;
-  color: #000000;
+  background: #17b3a3 !important;
+  border-color: #0c5e56 !important;
+  color: #000000 !important;
 }
 
 .color-9, .blackout {
-  background: #76838f;
-  border-color: #30353a;
-  color: #ffffff;
+  background: #76838f !important;
+  border-color: #30353a !important;
+  color: #ffffff !important;
 }
 
 .color-10 {
-  background: #ff666b;
-  border-color: #aa4447;
-  color: #000000;
+  background: #ff666b !important;
+  border-color: #aa4447 !important;
+  color: #000000 !important;
 }
 
 .color-11 {
-  background: #3e8ef7;
-  border-color: #295da2;
-  color: #000000;
+  background: #3e8ef7 !important;
+  border-color: #295da2 !important;
+  color: #000000 !important;
 }
 
 .color-12 {
-  background: #f74584;
-  border-color: #a22d57;
-  color: #000000;
+  background: #f74584 !important;
+  border-color: #a22d57 !important;
+  color: #000000 !important;
 }
 
 .color-13 {
-  background: #5a9101;
-  border-color: #253c00;
-  color: #ffffff;
+  background: #5a9101 !important;
+  border-color: #253c00 !important;
+  color: #ffffff !important;
 }
 
 .color-14 {
-  background: #9463f7;
-  border-color: #6141a2;
-  color: #ffffff;
+  background: #9463f7 !important;
+  border-color: #6141a2 !important;
+  color: #ffffff !important;
 }
 
 .color-15 {
-  background: #910112;
-  border-color: #3c0007;
-  color: #ffffff;
+  background: #910112 !important;
+  border-color: #3c0007 !important;
+  color: #ffffff !important;
 }
 
 .color-16 {
-  background: #999999;
-  border-color: #000000;
-  color: #ffffff;
+  background: #999999 !important;
+  border-color: #000000 !important;
+  color: #ffffff !important;
 }
 
 #filter_country_add_icon, #filter_province_add_icon, #filter_city_add_icon {

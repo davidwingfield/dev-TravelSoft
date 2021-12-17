@@ -63,7 +63,7 @@ Upload.prototype.doUpload = function () {
             return myXhr
         },
         success: function (data) {
-            console.log("data", data)
+            Console.log("data", data)
             let image, result = null
             if (data) {
                 if (data.result) {
@@ -93,7 +93,7 @@ Upload.prototype.doUpload = function () {
         },
         error: function (error) {
             toastr.error("Error")
-            console.log("error", error)
+            Console.log("error", error)
         },
         async: true,
         data: formData,

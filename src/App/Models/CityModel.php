@@ -1,14 +1,13 @@
 <?php
-
+    
     namespace Framework\App\Models;
-
+    
     use Exception;
     use Framework\Core\Model;
     use Framework\Logger\Log;
-
+    
     /**
      * Short City Description
-     *
      * Long City Description
      *
      * @package            Framework\App
@@ -16,28 +15,87 @@
      */
     class CityModel extends Model
     {
-
+        
         protected static $dbTable = "city";
         protected static $dbFields = Array();
-
+        protected static $selectQuery = "
+            SELECT
+                        CONCAT( CITY.name, ' (',  PROVINCE.name, ', ', COUNTRY.name, ')') AS 'location',
+                        CITY.id AS 'city_id',
+                        CITY.province_id AS 'city_province_id',
+                        CITY.country_id AS 'city_country_id',
+                        CITY.sort_order AS 'city_sort_order',
+                        CITY.name AS 'city_name',
+                        CITY.enabled AS 'city_enabled',
+                        CITY.date_created AS 'city_date_created',
+                        CITY.created_by AS 'city_created_by',
+                        CITY.date_modified AS 'city_date_modified',
+                        CITY.modified_by AS 'city_modified_by',
+                        CITY.note AS 'city_note',
+                        PROVINCE.id AS 'province_id',
+                        PROVINCE.country_id AS 'province_country_id',
+                        PROVINCE.name AS 'province_name',
+                        PROVINCE.iso2 AS 'province_iso2',
+                        PROVINCE.iso3 AS 'province_iso3',
+                        PROVINCE.sort_order AS 'province_sort_order',
+                        PROVINCE.enabled AS 'province_enabled',
+                        PROVINCE.date_created AS 'province_date_created',
+                        PROVINCE.created_by AS 'province_created_by',
+                        PROVINCE.date_modified AS 'province_date_modified',
+                        PROVINCE.modified_by AS 'province_modified_by',
+                        PROVINCE.note AS 'province_note',
+                        COUNTRY.id AS 'country_id',
+                        COUNTRY.currency_id AS 'country_currency_id',
+                        COUNTRY.sort_order AS 'country_sort_order',
+                        COUNTRY.name AS 'country_name',
+                        COUNTRY.iso2 AS 'country_iso2',
+                        COUNTRY.iso3 AS 'country_iso3',
+                        COUNTRY.enabled AS 'country_enabled',
+                        COUNTRY.date_created AS 'country_date_created',
+                        COUNTRY.created_by AS 'country_created_by',
+                        COUNTRY.date_modified AS 'country_date_modified',
+                        COUNTRY.modified_by AS 'country_modified_by',
+                        COUNTRY.note AS 'country_note'
+            FROM 		city CITY
+            JOIN 		province PROVINCE ON PROVINCE.id = CITY.province_id
+            JOIN 		country COUNTRY ON COUNTRY.id = PROVINCE.country_id
+            ";
+        
+        public static function city_ac(string $st = ""): array
+        {
+            try {
+                $searchTerm = addslashes($st);
+                $sql = self::$selectQuery . "
+                    WHERE		CONCAT( CITY.name, ' (',  PROVINCE.name, ', ', COUNTRY.name, ')') LIKE '%$searchTerm%'
+                    ORDER BY	CONCAT( CITY.name, ' (',  PROVINCE.name, ', ', COUNTRY.name, ')')
+                    LIMIT 20;";
+                
+                return Model::$db->rawQuery($sql);
+            } catch (Exception $e) {
+                Log::$debug_log->error($e);
+                
+                return [];
+            }
+        }
+        
         public static function get(int $country_id = null, int $province_id = null, int $city_id = null): array
         {
             $where = "WHERE			CITY.enabled = 1";
             if (!is_null($country_id)) {
                 $where .= " AND         CITY.country_id = $country_id";
             }
-
+            
             if (!is_null($province_id)) {
                 $where .= " AND         CITY.province_id = $province_id";
             }
-
+            
             if (!is_null($city_id)) {
                 $where .= " AND         CITY.id = $city_id";
             }
-
+            
             try {
                 $sql = "
-                SELECT 
+                SELECT
                                 CITY.id AS 'city_id',
                                 CITY.country_id AS 'city_country_id',
                                 CITY.province_id AS 'city_province_id',
@@ -52,28 +110,28 @@
                 FROM 			city CITY
                 $where
                 ORDER BY 		CITY.sort_order ASC, CITY.name ASC;";
-
+                
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {
                 return [];
             }
         }
-
+        
         public static function getOne(int $id = null): array
         {
             try {
                 if (!is_null($id)) {
                     Model::$db->where("id", $id);
                 }
-
+                
                 self::$db->where("enabled", 1);
-
+                
                 return self::$db->getOne(self::$dbTable);
             } catch (Exception $e) {
                 return [];
             }
         }
-
+        
         public static function update(array $city = []): array
         {
             $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
@@ -86,7 +144,7 @@
             $enabled = Model::setBool((isset($city["enabled"])) ? $city["enabled"] : null);
             $created_by = Model::setInt($user_id);
             $modified_by = Model::setInt($user_id);
-
+            
             $sql = "
                 INSERT INTO city (
                     id, country_id, province_id, sort_order, name,
@@ -104,17 +162,17 @@
                     modified_by = VALUES(modified_by),
                     date_modified = VALUES(date_modified),
                     enabled = VALUES(enabled);";
-
+            
             try {
                 Model::$db->rawQuery($sql);
                 $id = Model::$db->getInsertId();
-
+                
                 return self::get($country_id, $province_id, $id);
             } catch (Exception $e) {
                 Log::$debug_log->error($e);
-
+                
                 return [];
             }
         }
-
+        
     }

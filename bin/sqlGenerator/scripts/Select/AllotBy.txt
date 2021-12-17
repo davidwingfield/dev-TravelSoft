@@ -1,12 +1,24 @@
 SELECT
-	ALLOT_BY.id AS 'allot_by_id',
-	ALLOT_BY.name AS 'allot_by_name',
-	ALLOT_BY.sort_order AS 'allot_by_sort_order',
-	ALLOT_BY.enabled AS 'allot_by_enabled',
-	ALLOT_BY.date_created AS 'allot_by_date_created',
-	ALLOT_BY.created_by AS 'allot_by_created_by',
-	ALLOT_BY.date_modified AS 'allot_by_date_modified',
-	ALLOT_BY.modified_by AS 'allot_by_modified_by',
-	ALLOT_BY.note AS 'allot_by_note'
+		ALLOT_BY.id AS 'allot_by_id',
+		ALLOT_BY.name AS 'allot_by_name',
+		ALLOT_BY.sort_order AS 'allot_by_sort_order',
+		ALLOT_BY.enabled AS 'allot_by_enabled',
+		ALLOT_BY.date_created AS 'allot_by_date_created',
+		ALLOT_BY.created_by AS 'allot_by_created_by',
+		ALLOT_BY.date_modified AS 'allot_by_date_modified',
+		ALLOT_BY.modified_by AS 'allot_by_modified_by',
+		ALLOT_BY.note AS 'allot_by_note'
 FROM 	allot_by ALLOT_BY
 -- JOIN 	allot_by ALLOT_BY ON ALLOT_BY.id = {FK_TABLE}.allot_by_id
+
+/*
+'id'=>$allot_by['allot_by_id'],
+'name'=>$allot_by['allot_by_name'],
+'sort_order'=>$allot_by['allot_by_sort_order'],
+'enabled'=>$allot_by['allot_by_enabled'],
+'date_created'=>$allot_by['allot_by_date_created'],
+'created_by'=>$allot_by['allot_by_created_by'],
+'date_modified'=>$allot_by['allot_by_date_modified'],
+'modified_by'=>$allot_by['allot_by_modified_by'],
+'note'=>$allot_by['allot_by_note']
+*/

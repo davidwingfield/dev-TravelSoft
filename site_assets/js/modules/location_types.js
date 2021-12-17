@@ -46,7 +46,7 @@ const LocationTypes = (function () {
     }
     
     const init = function (settings) {
-        //console.log(" -- LocationTypes -- ", {})
+        //Console.log(" -- LocationTypes -- ", {})
     }
     
     const set = function (location_types) {
@@ -79,7 +79,7 @@ const LocationTypes = (function () {
             LocationTypes.all.set("id", detail)
         })
         
-        //console.log(" LocationTypes.all", LocationTypes.all)
+        //Console.log(" LocationTypes.all", LocationTypes.all)
     }
     
     return {

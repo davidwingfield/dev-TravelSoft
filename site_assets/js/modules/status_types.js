@@ -44,7 +44,7 @@ const StatusTypes = (function () {
     }
     
     const init = function (settings) {
-        console.log(" -- StatusTypes -- ", {})
+        Console.log(" -- StatusTypes -- ", {})
     }
     
     const set = function (status_types) {
@@ -76,7 +76,7 @@ const StatusTypes = (function () {
             StatusTypes.all.set("id", detail)
         })
         
-        //console.log(' StatusTypes.all',  StatusTypes.all);
+        //Console.log(' StatusTypes.all',  StatusTypes.all);
     }
     
     return {

@@ -10,13 +10,13 @@ document.addEventListener("DOMContentLoaded", function () {
         $.each($panelLinks, function (k, elem) {
             let dataToggle = $(elem).attr("data-toggle")
             if (dataToggle) {
-                console.log("dataToggle", dataToggle)
+                Console.log("dataToggle", dataToggle)
                 switch (dataToggle) {
                     case "panel-refresh":
                         
                         break
                     case "panel-collapse":
-                        console.log("collapse")
+                        Console.log("collapse")
                         break
                     case"panel-fullscreen":
                         elem.addEventListener("click", function () {
@@ -31,10 +31,10 @@ document.addEventListener("DOMContentLoaded", function () {
                                 $el.removeClass("is-fullscreen")
                             }
                         })
-                        console.log("fullscreen")
+                        Console.log("fullscreen")
                         break
                     case "panel-close":
-                        console.log("close")
+                        Console.log("close")
                         break
                     default:
                         break

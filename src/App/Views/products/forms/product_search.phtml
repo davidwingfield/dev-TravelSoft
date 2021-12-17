@@ -1,3 +1,5 @@
+<?php
+?>
 <div class="tab-content pt-0">
     
     <!--Panel Hotels-->
@@ -39,9 +41,37 @@
                     </div>
                     
                     <div class="row mx-0">
+                        <div class="col-4 p-1">
+                            <button type="button" id="test" name="test" class="btn btn-name-picker">
+                                <i class="fas fa-hotel btn-guest-picker-icon"></i>
+                                <span class="btn-guest-picker-details">
+                                    <span class="btn-guest-picker-details-title">Name</span>
+                                    <span class="btn-guest-picker-details-info">
+                                        <span class="btn-guest-picker-details-info-wrapper">
+                                            <span id="product_search_location_display"> Any </span>
+                                        </span>
+                                    </span>
+                                </span>
+                            </button>
+                        </div>
                         
                         <div class="col-4 p-1">
-                            <button type="button" id="form_product_search_hotel_product_check_in" name="form_product_search_hotel_product_check_in" class="btn btn-check-in-picker">
+                            <button type="button" id="test" name="test" class="btn btn-location-picker">
+                                <i class="fas fa-map-marker-alt btn-guest-picker-icon"></i>
+                                <span class="btn-guest-picker-details">
+                                    <span class="btn-guest-picker-details-title">Location</span>
+                                    <span class="btn-guest-picker-details-info">
+                                        <span class="btn-guest-picker-details-info-wrapper">
+                                            <span id="product_search_location_display"> Location Name </span>
+                                        </span>
+                                    </span>
+                                </span>
+                            </button>
+                        </div>
+                        
+                        <div class="col-4 p-1">
+                            <button type="button" id="form_product_search_hotel_product_check_in" name="form_product_search_hotel_product_check_in"
+                                    class="btn btn-check-in-picker">
                                 <i class="fas fa-calendar btn-guest-picker-icon"></i>
                                 <span class="btn-guest-picker-details">
                                     <span class="btn-guest-picker-details-title">Check in</span>
@@ -68,7 +98,7 @@
                             </button>
                         </div>
                         
-                        <div class="col-4 p-1">
+                        <div class="col-5 p-1">
                             <button type="button" id="form_product_search_hotel_product_guest" class="btn btn-guest-picker" data-placement="bottom" data-toggle="popover" data-container="body" data-html="true">
                                 <i class="fas fa-bed btn-guest-picker-icon"></i>
                                 <span class="btn-guest-picker-details">
@@ -87,26 +117,42 @@
                     </div>
                     
                     <div class="row">
-                        <div class="col-12 text-right">
+                        <div class="col-12 p-1 text-right">
                             <a href="javascript:void(0);" id="button_product_search_panel_hotels_clear" class="btn btn-outline-primary btn-sm waves-effect waves-light">Clear</a>
                             <a href="javascript:void(0);" id="button_product_search_panel_hotels_submit" class="btn btn-primary btn-sm waves-effect waves-light">Search</a>
                         </div>
                     </div>
                     
+                    <!-- HIDDEN FIELDS -->
                     <div class="row mx-0">
-                        <div class="col-sm-3 m-1">
-                            <label for="form_product_search_hotel_product_arrive_date" class="dev-element d-none">arrive date</label>
-                            <input type="hidden" id="form_product_search_hotel_product_arrive_date" class="dev-element" value=""/>
+                        
+                        <div class="col-sm-3 p-1">
+                            <label for="form_product_search_hotel_product_arrive_date" class="dev-element d-none">Arrive:</label>
+                            <input type="hidden" id="form_product_search_hotel_product_arrive_date" name="form_product_search_hotel_product_arrive_date" class="form-control dev-element" value="" readonly="readonly"/>
                         </div>
-                        <label for="form_product_search_hotel_product_number_of_children" class="dev-element d-none">children</label>
-                        <input type="hidden" id="form_product_search_hotel_product_number_of_children" name="form_product_search_hotel_product_number_of_children" min="0" class="form-control dev-element" value="0"/>
-                        <label for="form_product_search_hotel_product_number_of_adults" class="dev-element d-none">form_product_search_hotel_product_number_of_adults</label>
-                        <input type="hidden" id="form_product_search_hotel_product_number_of_adults" name="form_product_search_hotel_product_number_of_adults" min="1" class="form-control dev-element" value="1"/>
-                        <label for="form_product_search_hotel_product_number_of_rooms" class="dev-element d-none">form_product_search_hotel_product_number_of_rooms</label>
-                        <input type="hidden" id="form_product_search_hotel_product_number_of_rooms" name="form_product_search_hotel_product_number_of_rooms" min="1" class="form-control dev-element" value="1"/>
-                        <label for="form_product_search_hotel_product_depart_date" class="dev-element d-none">depart date</label>
-                        <input type="hidden" id="form_product_search_hotel_product_depart_date" name="form_product_search_hotel_product_depart_date" class="form-control dev-element" placeholder="" readonly="readonly"/>
+                        
+                        <div class="col-sm-3 p-1">
+                            <label for="form_product_search_hotel_product_number_of_children" class="dev-element d-none">Children:</label>
+                            <input type="hidden" id="form_product_search_hotel_product_number_of_children" name="form_product_search_hotel_product_number_of_children" min="0" class="form-control dev-element" value="0" readonly="readonly"/>
+                        </div>
+                        
+                        <div class="col-sm-3 p-1">
+                            <label for="form_product_search_hotel_product_number_of_adults" class="dev-element d-none">Adults:</label>
+                            <input type="hidden" id="form_product_search_hotel_product_number_of_adults" name="form_product_search_hotel_product_number_of_adults" min="1" class="form-control dev-element" value="1" readonly="readonly"/>
+                        </div>
+                        
+                        <div class="col-sm-3 p-1">
+                            <label for="form_product_search_hotel_product_number_of_rooms" class="dev-element d-none">Rooms:</label>
+                            <input type="hidden" id="form_product_search_hotel_product_number_of_rooms" name="form_product_search_hotel_product_number_of_rooms" min="1" class="form-control dev-element" value="1" readonly="readonly"/>
+                        </div>
+                        
+                        <div class="col-sm-3 p-1">
+                            <label for="form_product_search_hotel_product_depart_date" class="dev-element d-none">Depart:</label>
+                            <input type="hidden" id="form_product_search_hotel_product_depart_date" name="form_product_search_hotel_product_depart_date" class="form-control dev-element" placeholder="" readonly="readonly"/>
+                        </div>
+                    
                     </div>
+                    <!-- /HIDDEN FIELDS -->
                 
                 </form>
             </div>
@@ -326,7 +372,7 @@
             if(_form_product_search_hotel_product_guest){
                 $(_form_product_search_hotel_product_guest).popover('hide');
             }
-            
+
             "></a>
         </h5>
     
@@ -473,7 +519,7 @@
                         const roomDisplay = document.getElementById('product_search_room_quantity_display')
                         const adultDisplay = document.getElementById('product_search_adult_quantity_display')
                         const childDisplay = document.getElementById('product_search_children_quantity_display')
-                        
+
                         if(
                             roomNumber && adultNumber && childNumber
                             && _form_product_search_hotel_product_number_of_rooms && _form_product_search_hotel_product_number_of_adults && _form_product_search_hotel_product_number_of_children
@@ -482,12 +528,12 @@
                             let roomCount = (!isNaN(parseInt(roomNumber.value)))?parseInt(roomNumber.value):1
                             let adultCount = (!isNaN(parseInt(adultNumber.value)))?parseInt(adultNumber.value):1
                             let childCount = (!isNaN(parseInt(childNumber.value)))?parseInt(childNumber.value):0
-                            
-                            
+
+
                             roomDisplay.innerText = (roomCount>1) ? roomCount + ' rooms, ': roomCount + ' room, ';
                             adultDisplay.innerText = (adultCount>1) ? adultCount + ' adults, ': adultCount + ' adult, ';
                             childDisplay.innerText = (childCount>1) ? childCount + ' children': childCount + ' child';
-                            
+
                             _form_product_search_hotel_product_number_of_rooms.value = (roomCount>1) ? roomCount : 1;
                             _form_product_search_hotel_product_number_of_adults.value = (adultCount>1) ? adultCount : 1;
                             _form_product_search_hotel_product_number_of_children.value = (childCount>0) ? childCount : 0;
@@ -496,7 +542,7 @@
                                 $(_form_product_search_hotel_product_guest).popover('hide');
                             }
                         }
-                        
+
                         //---- END ----
                         ">Update
                         </button>

@@ -84,9 +84,9 @@ const Season = (function () {
         
         let category = categories.get(category_id)
         let category_seasons = (category.seasons) ? category.seasons : []
-        //console.log(categories.get(category_id).seasons)
-        //console.log("category", category)
-        //console.log(detail)
+        //Console.log(categories.get(category_id).seasons)
+        //Console.log("category", category)
+        //Console.log(detail)
         return detail
     }
     

@@ -6,6 +6,85 @@ const City = (function () {
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
+    $("#form_product_search_hotel_product_location")
+      .on("change", function () {
+          setTimeout(function () {
+          
+          }, 200)
+      })
+      .on("search", function () {
+      
+      })
+      .on("click", function (e) {
+          if ($(this).attr("readonly") === "readonly") {
+              e.preventDefault()
+          } else {
+              $(this).select()
+          }
+          
+      })
+      .autocomplete({
+          serviceUrl: "/api/v1.0/autocomplete/cities",
+          minChars: 2,
+          cache: false,
+          dataType: "json",
+          triggerSelectOnValidInput: false,
+          paramName: "st",
+          onSelect: function (suggestion) {
+              Console.log("city", suggestion)
+              if (!suggestion.data) {
+                  return
+              }
+              
+              Console.log("city", suggestion)
+              /*
+                  "value": "Abano Terme (Padova, Italy)",
+                  "data": {
+                      "id": 1,
+                      "country_id": 102,
+                      "province_id": 250,
+                      "sort_order": 999,
+                      "name": "Abano Terme",
+                      "enabled": 1,
+                      "date_created": "2021-08-03 14:40:07",
+                      "created_by": 4,
+                      "date_modified": "2021-08-03 14:40:07",
+                      "modified_by": 4,
+                      "note": "",
+                      "province": {
+                          "id": 250,
+                          "country_id": 102,
+                          "name": "Padova",
+                          "iso2": "PD",
+                          "iso3": "",
+                          "sort_order": 999,
+                          "enabled": 1,
+                          "date_created": "2021-12-15 10:58:47",
+                          "created_by": 4,
+                          "date_modified": "2021-12-15 10:58:47",
+                          "modified_by": 4,
+                          "note": null
+                      },
+                      "country": {
+                          "id": 102,
+                          "currency_id": 2,
+                          "sort_order": 0,
+                          "name": "Italy",
+                          "iso2": "IT",
+                          "iso3": "ITA",
+                          "enabled": 1,
+                          "date_created": "2021-08-03 13:04:10",
+                          "created_by": 4,
+                          "date_modified": "2021-08-03 15:13:45",
+                          "modified_by": 4,
+                          "note": ""
+                      }
+                  }
+              //*/
+              
+          },
+      })
+    
     const form_rules = {
         rules: {
             city_name: "required",
@@ -17,7 +96,7 @@ const City = (function () {
     
     const handle_city_error = function (msg) {
         toastr.error(msg)
-        console.log(msg)
+        Console.log(msg)
     }
     
     const on_click_outside = (e) => {
@@ -98,7 +177,7 @@ const City = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 return handle_city_error("Error Validating City")
             }
         } else {
@@ -130,11 +209,11 @@ const City = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 handle_city_error("Error: Validating City")
             }
         } else {
-            console.log("Error: Missing Data")
+            Console.log("Error: Missing Data")
             handle_city_error("Error: Missing Data")
         }
     }
@@ -351,8 +430,8 @@ const City = (function () {
                 })
                 
                 if (city_id !== "" && city_id !== null) {
-                    //console.log($(el).attr("id"))
-                    //console.log("city_id", city_id)
+                    //Console.log($(el).attr("id"))
+                    //Console.log("city_id", city_id)
                     $(el).val(city_id).trigger("change")
                 }
             }

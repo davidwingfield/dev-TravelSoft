@@ -188,7 +188,7 @@ const Contact = (function () {
         let dataToSend = build()
         if (dataToSend) {
             update_contact(dataToSend, function (data) {
-                console.log(data)
+                Console.log(data)
                 if (data) {
                     if (data[0]) {
                         let contact = data[0]
@@ -288,7 +288,7 @@ const Contact = (function () {
         clear_form()
         _contact_company_id.value = _company_id.value
         if (contact) {
-            console.log("contact", contact)
+            Console.log("contact", contact)
             _contact_id.value = validInt(contact.id)
             _contact_name_first.value = (contact.name_first) ? contact.name_first : null
             _contact_name_last.value = (contact.name_last) ? contact.name_last : null
@@ -370,7 +370,7 @@ const Contact = (function () {
             $contact_table.loadRow(contacts[0])
         }
         
-        //console.log(" Contact.all", Contact.all)
+        //Console.log(" Contact.all", Contact.all)
     }
     
     /**
@@ -428,7 +428,7 @@ const Contact = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 return handleContactError("Error Validating Company")
             }
         } else {

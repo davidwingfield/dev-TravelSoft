@@ -29,7 +29,11 @@ const Provider = (function () {
     const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
     const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
     const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
+    const _modal_product_provider_location_id = document.getElementById("modal_product_provider_location_id")
+    const _modal_product_location_id = document.getElementById("modal_product_location_id")
+    // --
     
+    // --
     let globalSelectedProvider = false
     let isNew = false
     let validator
@@ -65,12 +69,12 @@ const Provider = (function () {
           let addresses = Array.from(Address.all.values())
           let contacts = Array.from(Contact.all.values())
           /*
-          console.log("company_detail", company_detail)
-          console.log("provider_detail", provider_detail)
-          console.log("location_detail", location_detail)
-          console.log("vendor_detail", vendor_detail)
-          console.log("addresses", addresses)
-          console.log("contacts", contacts)
+          Console.log("company_detail", company_detail)
+          Console.log("provider_detail", provider_detail)
+          Console.log("location_detail", location_detail)
+          Console.log("vendor_detail", vendor_detail)
+          Console.log("addresses", addresses)
+          Console.log("contacts", contacts)
           //*/
           if (!company_detail || !provider_detail || !location_detail || !vendor_detail || !addresses || !contacts) {
               $.each(panels, function (index, item) {
@@ -118,7 +122,7 @@ const Provider = (function () {
     
     $(_button_add_provider_page_heading)
       .on("click", function () {
-          //console.log("test")
+          //Console.log("test")
       })
     
     $(_button_edit_provider_name)
@@ -131,8 +135,9 @@ const Provider = (function () {
           $(_provider_company_id).val(_company_id.value)
       })
     
+    //
     const add = function (provider) {
-        console.log("add", provider)
+        Console.log("add", provider)
         if (provider) {
             
             let dataToSend = {
@@ -153,7 +158,7 @@ const Provider = (function () {
                     if (data[0]) {
                         vendor_detail = data[0]
                     }
-                    console.log("Provider Upodateing Vendor: vendor_detail", vendor_detail)
+                    Console.log("Provider Upodating Vendor: vendor_detail", vendor_detail)
                     
                     provider.location_id = (provider.location_id) ? provider.location_id : 1
                     provider.vendor_id = vendor_detail.id
@@ -161,12 +166,12 @@ const Provider = (function () {
                         provider_detail: provider,
                     }
                     
-                    console.log("Provider : provider_detail", provider_detail)
+                    Console.log("Provider : provider_detail", provider_detail)
                     updateProvider(provider_detail, function (data) {
                         if (data) {
-                            console.log("data", data)
+                            Console.log("data", data)
                             if (data[0]) {
-                                //console.log("data[0]", data[0])
+                                //Console.log("data[0]", data[0])
                                 let provider = data[0]
                                 let vendor = provider.vendor
                                 let company = provider.company
@@ -177,11 +182,11 @@ const Provider = (function () {
                                 _modal_product_vendor_name.value = provider.name
                                 _modal_product_vendor_id.value = vendor.id
                                 _modal_product_vendor_company_id.value = company.id
+                                
                                 init_autocomplete()
-                                let sku = (vendor.sku) ? vendor.sku : null
-                                let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
-                                Product.attr2 = code_direct
-                                Product.attr3 = sku
+                                
+                                Product.attr2 = (provider.code_direct_id) ? provider.code_direct_id : null
+                                Product.attr3 = (vendor.sku) ? vendor.sku : null
                                 Product.update_product_sku()
                                 
                             }
@@ -189,28 +194,7 @@ const Provider = (function () {
                     })
                 }
             })
-            /*
-            updateProvider(dataToSend, function (data) {
-                let details
-                if (data) {
-                    console.log("data", data)
-                    details = data
-                    if (data[0]) {
-                        console.log("data[0]", data[0])
-                        details = data[0]
-                    }
-                    
-                    if (details.id) {
-                    
-                    } else {
-                        
-                        console.log("Provider: Missing id from details", details)
-                    }
-                } else {
-                    console.log("details 3", provider)
-                }
-            })
-            //*/
+            
         }
     }
     
@@ -262,7 +246,7 @@ const Provider = (function () {
                   if (!suggestion.data) {
                       return
                   }
-                  console.log("suggestion.data", suggestion.data)
+                  Console.log("suggestion.data", suggestion.data)
                   let provider = suggestion.data
                   let company = (provider.company) ? provider.company : {}
                   let addresses = (provider.addresses) ? provider.addresses : {}
@@ -309,6 +293,7 @@ const Provider = (function () {
                           _modal_product_provider_name.value = ""
                           _modal_product_vendor_company_id.value = ""
                           _modal_product_provider_company_id.value = ""
+                          _modal_product_provider_location_id.value = ""
                           _modal_product_vendor_name.disabled = true
                           Product.attr2 = null
                           Product.attr3 = null
@@ -327,6 +312,7 @@ const Provider = (function () {
               _modal_product_provider_name.value = ""
               _modal_product_vendor_company_id.value = ""
               _modal_product_provider_company_id.value = ""
+              _modal_product_provider_location_id.value = ""
               Product.attr2 = null
               Product.attr3 = null
               Product.update_product_sku()
@@ -346,7 +332,7 @@ const Provider = (function () {
                   if (!suggestion || !suggestion.data) {
                       return
                   }
-                  console.log("suggestion.data", suggestion.data)
+                  Console.log("suggestion.data", suggestion.data)
                   let provider = set(suggestion.data)
                   let vendor = provider.vendor
                   let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
@@ -359,6 +345,7 @@ const Provider = (function () {
                   _modal_product_provider_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
                   _modal_product_provider_vendor_match.checked = true
                   _modal_product_vendor_name.disabled = false
+                  _modal_product_provider_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
                   
                   Product.attr2 = code_direct
                   Product.attr3 = sku
@@ -383,8 +370,10 @@ const Provider = (function () {
             }
             
             fetch_provider_by_name(dataToSend, function (data) {
+                let provider
+                
                 if (_form_product_add) {
-                    console.log("data", data)
+                    
                     if (!data || data.length === 0) {
                         confirmDialog("This provider does not exist. Would you like to create it?", (ans) => {
                             if (ans) {
@@ -420,6 +409,46 @@ const Provider = (function () {
                                 globalSelectedProvider = false
                             }
                         })
+                    } else {
+                        if (data) {
+                            provider = data
+                            if (data.length > 0) {
+                                provider = data[0]
+                            }
+                        }
+                        
+                        Console.log("provider", provider)
+                        
+                        let vendor = provider.vendor
+                        let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
+                        let sku = (vendor.sku) ? vendor.sku : null
+                        Console.log("code_direct", code_direct)
+                        Console.log("sku", sku)
+                        
+                        _modal_product_vendor_id.value = parseInt(vendor.id)
+                        _modal_product_provider_id.value = provider.id
+                        _modal_product_vendor_name.value = provider.name
+                        _modal_product_vendor_company_id.value = (!isNaN(parseInt(provider.company_id))) ? parseInt(provider.company_id) : null
+                        _modal_product_provider_company_id.value = (!isNaN(parseInt(provider.company_id))) ? parseInt(provider.company_id) : null
+                        _modal_product_provider_vendor_match.checked = true
+                        _modal_product_vendor_name.disabled = false
+                        _modal_product_provider_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
+                        _modal_product_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
+                        Product.attr2 = code_direct
+                        Product.attr3 = sku
+                        Product.update_product_sku()
+                        
+                        /*
+                        
+                        
+    
+                        
+                        
+    
+                        Product.attr2 = code_direct
+                        Product.attr3 = sku
+                        Product.update_product_sku()
+                        //*/
                     }
                 }
                 
@@ -427,9 +456,11 @@ const Provider = (function () {
                     if (data) {
                         if (data.length > 0) {
                             
-                            let provider = data[0]
+                            provider = data[0]
                             
-                            console.log("provider", provider)
+                            if (_form_product_add) {
+                            
+                            }
                             confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
                                 if (ans) {
                                     window.location.href = "/providers/" + provider.id
@@ -442,6 +473,7 @@ const Provider = (function () {
                             
                         }
                     }
+                    Console.log("provider", provider)
                     $(_vendor_name).val($(_provider_name).val()).trigger("change")
                 }
                 
@@ -591,13 +623,13 @@ const Provider = (function () {
      * @param provider
      */
     const save = function (provider) {
-        console.log("save", provider)
+        Console.log("save", provider)
         if (provider) {
             updateProvider(provider, function (data) {
                 if (data) {
-                    console.log("data 1", data)
+                    Console.log("data 1", data)
                     if (data[0]) {
-                        console.log("data[0] 1", data[0])
+                        Console.log("data[0] 1", data[0])
                         let details = data[0]
                         if (details.id) {
                             if (_provider_id.value === "" || isNaN(parseInt(_provider_id.value))) {
@@ -607,13 +639,13 @@ const Provider = (function () {
                                 toastr.success(`Provider ${name} has been updated.`)
                             }
                         } else {
-                            console.log("details 1", details)
+                            Console.log("details 1", details)
                         }
                     } else {
-                        console.log("details 2", data)
+                        Console.log("details 2", data)
                     }
                 } else {
-                    console.log("details 3", provider)
+                    Console.log("details 3", provider)
                 }
             })
         }
@@ -638,7 +670,7 @@ const Provider = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
             }
         }
     }
@@ -717,7 +749,7 @@ const Provider = (function () {
      * regulate tab access
      */
     const set_progress = function () {
-        console.log("set_progress()")
+        Console.log("set_progress()")
         let provider_id = (!isNaN(_provider_id.value)) ? _provider_id.value : null
         let company_id = (!isNaN(_provider_company_id.value)) ? _provider_company_id.value : null
         
@@ -804,7 +836,7 @@ const Provider = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 return handle_provider_error("Error Validating Company")
             }
         } else {

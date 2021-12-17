@@ -1,18 +1,38 @@
 <?php
+    
+    use Framework\Logger\Log;
+    
     if (!isset($page_data)) {
         $page_data = [];
     }
+    $days = array(
+        "sun",
+        "mon",
+        "tue",
+        "wed",
+        "thu",
+        "fri",
+        "sat",
+    );
     
     $settings = json_encode($page_data, 1);
     $init = "Product.init($settings)";
     $units = [];
+    $matrices = [];
+    $variants = [];
+    $provider = [];
+    $vendor = [];
+    $status_type_detail = [];
     $rating_line = "";
     $currencies = [];
     $pricing_strategies = [];
     $product = [];
     $location = [];
+    $provider_location = [];
     $location_type = [];
     $categories = [];
+    $profiles = [];
+    $seasons = [];
     //
     
     //
@@ -26,6 +46,34 @@
     
     if (isset($page_data["product_details"])) {
         $product = $page_data["product_details"];
+        
+        if (isset($product["profiles"])) {
+            $profiles = $product["profiles"];
+        }
+        
+        if (isset($product["provider"])) {
+            $provider = $product["provider"];
+        }
+        
+        if (isset($product["vendor"])) {
+            $vendor = $product["vendor"];
+        }
+        
+        if (isset($product["matrices"])) {
+            $matrices = $product["matrices"];
+        }
+        
+        if (isset($product["variants"])) {
+            $variants = $product["variants"];
+        }
+        
+        if (isset($product["status_type_detail"])) {
+            $status_type_detail = $product["status_type_detail"];
+        }
+        
+        if (isset($product["seasons"])) {
+            $seasons = $product["seasons"];
+        }
         
         if (isset($product["category"])) {
             $categories = $product["category"];
@@ -43,6 +91,12 @@
             $location_type = $product["location"]["type"];
         }
     }
+    
+    /**
+     * STATUS DETAIL
+     */
+    $status_name = (isset($status_type_detail["name"])) ? $status_type_detail["name"] : "fyf";
+    $status_id = $status_type_detail["id"];
     
     /**
      * LOCATION VARIABLES
@@ -95,356 +149,515 @@
         ";
     }
     
-    //
+    /**
+     * Loication Variables
+     */
     $l = $location_display["display_medium"];
     $location_type_icon = ($location_type["icon"]) ? "<i class='" . $location_type["icon"] . " mr-2'></i>" : "";
     $location_type_name = ($location_type["name"]) ? $location_type["name"] : "";
-    
     $street = array();
-    
     $location_street_1 = ((isset($location["street_1"])) && ($location["street_1"] !== "")) ? $street[] = "<span class='mb-1'>" . $location["street_1"] . "</span>" : "";
     $location_street_2 = ((isset($location["street_2"])) && ($location["street_2"] !== "")) ? $street[] = "<span class='mb-1'>" . $location["street_2"] . "</span>" : "";
     $location_zipcode = ((isset($location["zipcode"])) && ($location["zipcode"] !== "")) ? "<span class='mb-1'>" . $location["zipcode"] . "</span>" : "";
     $country_name = ($location_country["name"]) ? $location_country["name"] : "";
     $country_name_short = ($location_country["iso2"]) ? $location_country["iso2"] : "";
-    
     $province_name = ($location_province["name"]) ? $location_province["name"] : "";
     $province_name_short = ($location_province["iso2"]) ? $location_province["iso2"] : "";
-    
     $city_name = ($location_city["name"]) ? $location_city["name"] : "";
-    
     $location_name = ($location["name"]) ? $location["name"] : "";
-    
     $address_line = "<address><i class='fas fa-map-marker-alt living-coral-text mr-3'></i>" . implode(", ", $street) . " $city_name, $province_name_short $location_zipcode, $country_name_short</address>";
+    $location_card = "$location_type_icon $l";
+    $use_provider_location = (isset($product["use_provider_location"])) ? ($product["use_provider_location"] === true) ? true : false : false;
+    $provider_city_name = (isset($provider_location["city"]["name"])) ? $provider_location["city"]["name"] : null;
+    $provider_province_name = (isset($provider_location["province"]["name"])) ? $provider_location["province"]["name"] : null;
+    $provider_country_name = (isset($provider_location["country"]["name"])) ? $provider_location["country"]["name"] : null;
+    $product_city_name = (isset($location["city"]["name"])) ? $location["city"]["name"] : null;
+    $product_province_name = (isset($location["province"]["name"])) ? $location["province"]["name"] : null;
+    $product_country_name = (isset($location["country"]["name"])) ? $location["country"]["name"] : null;
+    $city_name = ($use_provider_location === true) ? $provider_city_name : $product_city_name;
+    $province_name = ($use_provider_location === true) ? $provider_province_name : $product_province_name;
     
-    $location_card = "
-        $location_type_icon $l
-    ";
-    
-    if ($use_provider_location) {
-    
-    }
-    
-    function displayJsonOnPage(array $values = [], string $name = "Test Value")
-    {
-        $json = json_encode($values, 1);
-        $title = $name;
-        echo "
-            <div class='panel'>
-                <div class='panel-heading'>
-                    <h3 class='panel-title'>$title</h3>
-                    <div class='panel-actions panel-actions-keep'>
-                        <a class='panel-action fas fa-expand' data-toggle='panel-fullscreen' aria-hidden='true'></a>
-                    </div>
-                </div>
-                <div class='panel-body p-2 panel-code' data-datatype='jsonp'>
-                    $json
+    /**
+     * Inventory Variables
+     */
+    $inventory_section = "";
+    foreach ($profiles AS $profile) {
+        $allot_by_details = (isset($profile["allot_by_details"])) ? $profile["allot_by_details"] : [];
+        $sales_types_details = (isset($profile["sales_types_details"])) ? $profile["sales_types_details"] : [];
+        $transfer_sales_types_details = (isset($profile["transfer_sales_types_details"])) ? $profile["transfer_sales_types_details"] : [];
+        
+        $expires = (isset($profile["expires"])) ? $profile["expires"] : null;
+        $expire_date = (!is_null($expires)) ? "<tr><td class='bolder p-1'>Expire Date:</td><td class='p-1'>" . date("Y-m-d", strtotime($expires)) . "</td></tr>" : "";
+        $days_out = (isset($profile["days_out"])) ? $profile["days_out"] : null;
+        $days_out_row = (!is_null($days_out)) ? "<tr><td class='bolder p-1'>Days Out:</td><td class='p-1'>$days_out</td></tr>" : "";
+        $allot_by_name = (isset($allot_by_details["name"])) ? $allot_by_details["name"] : null;
+        $profile_name = (isset($profile["name"])) ? $profile["name"] : null;
+        $sales_type_name = (isset($sales_types_details["name"])) ? $sales_types_details["name"] : null;
+        $quantity = (isset($profile["quantity"])) ? $profile["quantity"] : null;
+        $quantity_row = (!is_null($quantity)) ? "<tr><td class='bolder p-1'>Quantity:</td><td class='p-1'>$quantity</td></tr>" : "";
+        
+        $class_name = (isset($sales_types_details["class"])) ? $sales_types_details["class"] : null;
+        if (is_null($quantity)) {
+            if ((int)$profile["sales_types_id"] === 2) {
+                $quantity_row = "<tr><td class='bolder p-1'>Quantity:</td><td class='p-1'>Unlimited</td></tr>";
+            } else if ((int)$profile["sales_types_id"] === 3) {
+                $quantity_row = "<tr><td class='bolder p-1'>Quantity:</td><td class='p-1'>On Request</td></tr>";
+            } else if ((int)$profile["sales_types_id"] === 4) {
+                $quantity_row = "<tr><td class='bolder p-1'>Quantity:</td><td class='p-1'>Not Available</td></tr>";
+            } else {
+                $quantity_row = "<tr><td class='bolder p-1'>Quantity:</td><td class='p-1'>Blackout</td></tr>";
+            }
+        }
+        
+        $inventory_profile = "
+            <div class='col-12 col-sm-12 col-md-4 px-1'>
+            <div class='card profile-card $class_name'>
+                <div class='card-body'>
+                
+                    <h5 class='card-title'>$profile_name</h5>
+                    
+                    <p class='card-text'>$sales_type_name: $allot_by_name</p>
+   
+                    <table class='table table-sm'>
+                        $days_out_row
+                        $expire_date
+                        $quantity_row
+                    </table>
                 </div>
             </div>
-    ";
+        </div>
+        ";
+        $inventory_section .= $inventory_profile;
     }
-
+    
+    /**
+     * Units Variables
+     */
+    $unit_section = "";
+    foreach ($units AS $unit) {
+        $name = $unit["name"];
+        $id = (int)$unit["id"];
+        $min_pax = $unit["min_pax"];
+        $max_pax = $unit["max_pax"];
+        $min_nights = $unit["min_nights"];
+        $max_nights = $unit["max_nights"];
+        $description_short = $unit["description_short"];
+        $cover_image = $unit["cover_image"];
+        $room_code = (isset($unit["room_code"])) ? $unit["room_code"] : buildCode($id, $name, "unit");
+        
+        $unit_profile = "
+            <div class='col-12 col-sm-12 col-md-4 px-1'>
+            <div class='card'>
+                <div class='card-body'>
+                
+                    <h5 class='card-title'>$name</h5>
+                    <h6 class='card-subtitle my-2 text-muted'>$room_code</h6>
+                    <p class='card-text'>$description_short</p>
+   
+                    <table class='table table-sm'>
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Min</th>
+                                <th>Max</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Pax:</th>
+                                <td>$min_pax</td>
+                                <td>$max_pax</td>
+                            </tr>
+                            <tr>
+                                <th>Nights:</th>
+                                <td>$min_nights</td>
+                                <td>$max_nights</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        ";
+        $unit_section .= $unit_profile;
+    }
+    
+    /**
+     * Variant Variables
+     */
+    $variant_section = "";
+    
+    foreach ($variants AS $variant) {
+        $id = (int)$variant["id"];
+        $name = $variant["name"];
+        $min_age = (isset($variant["min_age"]) && !is_null($variant["min_age"])) ? $variant["min_age"] : "0";
+        $max_age = (isset($variant["max_age"]) && !is_null($variant["max_age"])) ? $variant["max_age"] : "And Up";
+        $str = buildCode($id, $name, "variant");
+        $variant_profile = "
+            <div class='col-12 col-sm-12 col-md-4 px-1'>
+            <div class='card'>
+                <div class='card-body'>
+                
+                    <h5 class='card-title'>$name</h5>
+                    <h6 class='card-subtitle my-2 text-muted'>$str</h6>
+                    <p class='card-text'></p>
+   
+                    <table class='table table-sm'>
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Min</th>
+                                <th>Max</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Age</td>
+                                <td>$min_age</td>
+                                <td>$max_age</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        ";
+        $variant_section .= $variant_profile;
+    }
+    
+    /**
+     * Season Variables
+     */
+    $season_section = "";
+    foreach ($seasons AS $season) {
+        $color_scheme = (isset($season["color_scheme"])) ? $season["color_scheme"] : [];
+        $product_season_detail = (isset($season["product_season_detail"])) ? $season["product_season_detail"] : [];
+        
+        $disabled_dow = (isset($product_season_detail["disabled_dow"])) ? $product_season_detail["disabled_dow"] : "";
+        $disabled_dow = preg_replace('/\s+/', '', trim($disabled_dow));
+        $disabled_dow_list = explode(",", $disabled_dow);
+        $day_temp = [];
+        foreach ($disabled_dow_list AS $disabled_day) {
+            $day_temp[] = $days[(int)$disabled_day];
+        }
+        $disabled_day_line = implode(". ", $day_temp);
+        $color_scheme_background_color = $color_scheme["background_color"];
+        $color_scheme_border_color = $color_scheme["border_color"];
+        $color_scheme_text_color = $color_scheme["text_color"];
+        
+        $season_name = (isset($season["name"])) ? $season["name"] : "";
+        
+        $season_id = (isset($season["id"])) ? $season["id"] : "";
+        
+        $season_profile = "
+        <div class='col-12 col-sm-12 col-md-4 px-1'>
+        
+            <div class='card' style='background:$color_scheme_background_color;color:$color_scheme_text_color;border-color:$color_scheme_border_color;'>
+                <div class='card-body'>
+                    <h5 class='card-title'  style='color:$color_scheme_text_color;'>$season_name</h5>
+                    <h6 class='card-subtitle' style='font-size:.75rem;color:" . adjustBrightness($color_scheme_text_color, 100) . ";'>
+                        <p class='m-0 mb-1' style='font-size:.75rem;color:$color_scheme_text_color;'>Disabled Days:</p>
+                        <p class='m-0 mb-1' style='font-size:.75rem;color:" . adjustBrightness($color_scheme_text_color, 100) . ";'>$disabled_day_line</p>
+                    </h6>
+                </div>
+            </div>
+        </div>
+        ";
+        $season_section .= $season_profile;
+    }
+    
+    /**
+     * Provider Variables
+     */
+    $provider_images = [];
+    $provider_description_short = (isset($provider["description_short"])) ? $provider["description_short"] : "";
+    $provider_name = (isset($provider["name"])) ? $provider["name"] : "";
+    $provider_code_direct_id = (isset($provider["code_direct_id"])) ? $provider["code_direct_id"] : "";
+    $provider_description_long = (isset($provider["description_long"])) ? $provider["description_long"] : "";
+    /**
+     * Vendor Variables
+     */
+    $vendor_images = [];
+    $vendor_description_short = (isset($vendor["description_short"])) ? $provider["description_short"] : "";
+    $vendor_name = (isset($provider["name"])) ? $provider["name"] : "";
+    $vendor_sku = (isset($provider["sku"])) ? $provider["sku"] : "";
+    $vendor_description_long = (isset($provider["description_long"])) ? $provider["description_long"] : "";
 ?>
-<!-- /Product Edit Page -->
+<!-- Product Edit Page -->
 <section id="product_edit_page" class="section">
-    <input type="hidden" id="category_id" name="category_id" value="<?php echo $product_category_id; ?>"/>
-    <div class="tab-content p-0">
-        <div class="tab-pane active" id="panel_tab_product_overview" role="tabpanel">
-            
-            <div class="row gx-1 ">
-                <div class="col-12 col-sm-12 col-md-8 col-lg-9 col-xl-9 px-1">
-                    <div>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-6 mb-4">
-                                <?php displayJsonOnPage($units, "Units"); ?>
-                            </div>
+    
+    <!-- Hidden Elements -->
+    <div class="row gx-1 my-0">
+        <div class="col-3 px-1 my-0">
+            <label for="category_id" class="dev-element d-none">Category Id:</label>
+            <input type="hidden" id="category_id" name="category_id" class="form-control dev-element" value="<?php echo $product_category_id; ?>" readonly="readonly"/>
+        </div>
+    </div>
+    <!-- /Hidden Elements -->
+    
+    <div class="row gx-1">
+        
+        <div class="col-12 col-xl-9 p-1">
+            <div class="tab-content p-1">
+                
+                <div class="tab-pane active" id="panel_tab_product_overview" role="tabpanel">
+                    <div class="row">
+                        <div class="col-12">
                             
-                            <div class="col-lg-4 col-md-6 mb-4">
-                                <?php displayJsonOnPage($product['location'], "Location"); ?>
-                            </div>
-                            
-                            <div class="col-lg-4 col-md-6 mb-4">
-                                <!-- Card -->
-                                <div class="card map-card">
+                            <div class="card booking-card mb-2">
+                                <div class="card-body">
+                                    <h5 class="card-title font-weight-bold"><span id="product_name" class=""><?php echo $product_name; ?></span>
+                                        <a href="javascript:void(0);" id="product_panel_link_product" class="panel_link" aria-hidden="true">Edit</a>
+                                    </h5>
+                                    <h6 class="card-subtitle my-2 text-muted">
+                                        <span>
+                                            <i class="<?php echo $category_icon; ?>"></i>
+                                            <?php echo $category_name; ?>
+                                        </span>
+                                    </h6>
                                     
-                                    <!--Google map-->
-                                    <div id="map-container-google-1" class="z-depth-1-half map-container" style="height: 500px">
-                                        <iframe src="https://maps.google.com/maps?q=<?php echo strtolower($city_name); ?>&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0"
-                                                style="border:0" allowfullscreen></iframe>
-                                    </div>
+                                    <ul class="list-unstyled list-inline rating">
+                                        <?php echo $rating_line; ?>
+                                    </ul>
                                     
-                                    <!-- Card content -->
-                                    <div class="card-body closed px-0">
-                                        
-                                        <div class="button px-2 mt-3">
-                                            <a class="btn-floating btn-lg living-coral float-right"><?php echo $location_type_icon; ?></a>
+                                    <p id="product_description_short" class="card-text">
+                                        <?php echo $product_description_short; ?>
+                                    </p>
+                                    <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-12 mb-4">
+                                            <h5 class="mb-3 h5">Provider</h5>
+                                            <p class="text-muted"><?php echo $provider_name; ?></p>
+                                            <p class="">
+                                                <?php echo $provider_description_short; ?>
+                                            </p>
                                         </div>
                                         
-                                        <div class="white px-4 pb-4 pt-3-5">
+                                        <div class="col-lg-4 col-md-6 mb-4">
+                                            <h5 class="mb-3 h5">Vendor</h5>
+                                            <p class="text-muted"><?php echo $vendor_name; ?></p>
+                                            <p class="card-text">
+                                                <?php echo $vendor_description_short; ?>
+                                            </p>
+                                        </div>
+                                        
+                                        <div class="col-lg-4 col-md-6 mb-4">
                                             
-                                            <!-- Title -->
-                                            <h5 class="card-title h5 living-coral-text"><?php echo $location_name; ?></h5>
+                                            <h5 class="mb-3 h5">Location</h5>
+                                            <p class="text-muted">
+                                                <?php echo $location_card; ?>
+                                            </p>
                                             
-                                            <div class="d-flex justify-content-between living-coral-text">
-                                                <h6 class="card-subtitle font-weight-light">A place to relax</h6>
-                                                <h6 class="font-small font-weight-light mt-n1">25 min</h6>
-                                            </div>
-                                            
-                                            <hr>
-                                            
-                                            <div class="d-flex justify-content-between pt-2 mt-1 text-center text-uppercase living-coral-text">
-                                                <div>
-                                                    <i class="fas fa-phone fa-lg mb-3"></i>
-                                                    <p class="mb-0">Call</p>
-                                                </div>
-                                                <div>
-                                                    <i class="fas fa-cat fa-lg mb-3"></i>
-                                                    <p class="mb-0">Love</p>
-                                                </div>
-                                                <div>
-                                                    <i class="far fa-grin-beam-sweat fa-lg mb-3"></i>
-                                                    <p class="mb-0">Smile</p>
-                                                </div>
-                                            </div>
-                                            
-                                            <hr>
-                                            
-                                            <table class="table table-borderless">
-                                                <tbody>
-                                                <tr>
-                                                    <th scope="row" class="px-0 pb-3 pt-2">
-                                                        <i class="fas fa-map-marker-alt living-coral-text"></i>
-                                                    </th>
-                                                    <td class="pb-3 pt-2">East 64th Street, New York, NY 10021, US</td>
-                                                </tr>
-                                                <tr class="mt-2">
-                                                    <th scope="row" class="px-0 pb-3 pt-2">
-                                                        <i class="far fa-clock living-coral-text"></i>
-                                                    </th>
-                                                    <td class="pb-3 pt-2"><span class="deep-purple-text mr-2"> Closed</span> Opens 10 AM</td>
-                                                </tr>
-                                                <tr class="mt-2">
-                                                    <th scope="row" class="px-0 pb-3 pt-2">
-                                                        <i class="fas fa-cloud-moon living-coral-text"></i>
-                                                    </th>
-                                                    <td class="pb-3 pt-2">Sunny weather tomorrow</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <p class="card-text">
+                                                <?php echo $address_line; ?>
+                                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. A
+                                                nemo commodi odio veniam nisi? Cupiditate nobis doloremque
+                                                unde in ut, consequatur reprehenderit saepe iure
+                                                perspiciatis, veniam facilis asperiores deleniti at?
+                                            </p>
                                         
                                         </div>
-                                    
                                     </div>
-                                
+                                    <div>
+                                        <?php echo $product_description_long; ?>
+                                    </div>
                                 </div>
-                                <!-- Card -->
                             </div>
-                        </div>
-                    </div>
-                
-                </div>
-            </div>
-            
-            <div class="row gx-1 ">
-                <div class="col-12 col-sm-12 col-md-8 col-lg-9 col-xl-9 px-1">
-                    
-                    <div class="card booking-card mb-2">
-                        <div class="card-body">
-                            <h5 class="card-title font-weight-bold"><span id="product_name" class=""><?php echo $product_name; ?></span>
-                                <a href="javascript:void(0);" id="product_panel_link_product" class="panel_link" aria-hidden="true">Edit</a>
-                            </h5>
-                            <h6 class="card-subtitle my-2 text-muted">
-                                <span>
-                                <i class="<?php echo $category_icon; ?>"></i>
-                                <?php echo $category_name; ?>
-                                </span>
-                            </h6>
-                            <ul class="list-unstyled list-inline rating">
-                                <?php echo $rating_line; ?>
-                            </ul>
-                            <p id="product_description_short" class="card-text">
-                                <?php echo $product_description_short; ?>
-                            </p>
-                            <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-12 mb-4">
-                                    <h5 class="mb-3 h5">Provider</h5>
-                                    <p class="text-muted">Component subheading</p>
-                                    <p class="">
-                                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. A
-                                        nemo commodi odio veniam nisi? Cupiditate nobis doloremque
-                                        unde in ut, consequatur reprehenderit saepe iure
-                                        perspiciatis, veniam facilis asperiores deleniti at?
-                                    </p>
-                                </div>
-                                <div class="col-lg-4 col-md-6 mb-4">
-                                    <h5 class="mb-3 h5">Vendor</h5>
-                                    <p class="text-muted">Component subheading</p>
-                                    <p class="">
-                                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. A
-                                        nemo commodi odio veniam nisi? Cupiditate nobis doloremque
-                                        unde in ut, consequatur reprehenderit saepe iure
-                                        perspiciatis, veniam facilis asperiores deleniti at?
-                                    </p>
-                                </div>
-                                
-                                <div class="col-lg-4 col-md-6 mb-4">
+                            
+                            <!-- Seasons -->
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <h5 class="card-title"><span>Seasons</span>
+                                        <a href="javascript:void(0);" id="product_panel_link_season" class="panel_link" aria-hidden="true">Edit</a>
+                                    </h5>
+                                    <!--<h6 class="card-subtitle mb-2 text-muted"><span>Category</span></h6>-->
+                                    <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
                                     
-                                    <h5 class="mb-3 h5">Location</h5>
-                                    <p class="text-muted">
-                                        <?php echo $location_card; ?>
-                                    </p>
-                                    
-                                    <p class="card-text">
-                                        <?php echo $address_line; ?>
-                                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. A
-                                        nemo commodi odio veniam nisi? Cupiditate nobis doloremque
-                                        unde in ut, consequatur reprehenderit saepe iure
-                                        perspiciatis, veniam facilis asperiores deleniti at?
-                                    </p>
-                                
+                                    <div class="row">
+                                        <?php echo $season_section; ?>
+                                    </div>
                                 </div>
                             </div>
-                            <div>
-                                <?php echo $product_description_long; ?>
+                            
+                            <!-- Units -->
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <h5 class="card-title"><span>Units</span>
+                                        <a href="javascript:void(0);" id="product_panel_link_unit" class="panel_link" aria-hidden="true">Edit</a>
+                                    </h5>
+                                    <!--<h6 class="card-subtitle mb-2 text-muted"><span>Category</span></h6>-->
+                                    <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+                                    <div class="row">
+                                        <?php echo $unit_section; ?>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    
-                    </div>
-                    
-                    <!-- Seasons -->
-                    <div class="card mb-2">
-                        <div class="card-body">
-                            <h5 class="card-title"><span>Seasons</span>
-                                <a href="javascript:void(0);" id="product_panel_link_season" class="panel_link" aria-hidden="true">Edit</a>
-                            </h5>
-                            <!--<h6 class="card-subtitle mb-2 text-muted"><span>Category</span></h6>-->
-                            <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-                        </div>
-                    </div>
-                    
-                    <!-- Units -->
-                    <div class="card mb-2">
-                        <div class="card-body">
-                            <h5 class="card-title"><span>Units</span>
-                                <a href="javascript:void(0);" id="product_panel_link_unit" class="panel_link" aria-hidden="true">Edit</a>
-                            </h5>
-                            <!--<h6 class="card-subtitle mb-2 text-muted"><span>Category</span></h6>-->
-                            <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-                            <div class="">
+                            
+                            <!-- Variants -->
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <h5 class="card-title"><span>Variants</span>
+                                        <a href="javascript:void(0);" id="product_panel_link_variant" class="panel_link" aria-hidden="true">Edit</a>
+                                    </h5>
+                                    <!--<h6 class="card-subtitle mb-2 text-muted"><span>Category</span></h6>-->
+                                    <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+                                    <div class="row">
+                                        <?php echo $variant_section; ?>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Inventory Profiles -->
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <h5 class="card-title"><span>Inventory Profiles</span>
+                                        <a href="javascript:void(0);" id="product_panel_link_inventory" class="panel_link" aria-hidden="true">Edit</a>
+                                    </h5>
+                                    <!--<h6 class='card-subtitle mb-2 text-muted'><span>Category</span></h6>-->
+                                    <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+                                    
+                                    <div class="row">
+                                        <?php echo $inventory_section; ?>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <h5 class="card-title"><span>Pricing</span>
+                                        <a href="javascript:void(0);" id="product_panel_link_pricing" class="panel_link" aria-hidden="true">Edit</a>
+                                    </h5>
+                                    <!--<h6 class="card-subtitle mb-2 text-muted"><span>Category</span></h6>-->
+                                    <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+                                </div>
                             
                             </div>
-                        </div>
-                    
-                    </div>
-                    
-                    <div class="card mb-2">
-                        <div class="card-body">
-                            <h5 class="card-title"><span>Variants</span>
-                                <a href="javascript:void(0);" id="product_panel_link_variant" class="panel_link" aria-hidden="true">Edit</a>
-                            </h5>
-                            <!--<h6 class="card-subtitle mb-2 text-muted"><span>Category</span></h6>-->
-                            <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-                        </div>
-                    
-                    </div>
-                    
-                    <!-- Inventory Profiles -->
-                    <div class="card mb-2">
-                        <div class="card-body">
-                            <h5 class="card-title"><span>Inventory Profiles</span>
-                                <a href="javascript:void(0);" id="product_panel_link_inventory" class="panel_link" aria-hidden="true">Edit</a>
-                            </h5>
-                            <!--<h6 class="card-subtitle mb-2 text-muted"><span>Category</span></h6>-->
-                            <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-                        </div>
-                    
-                    </div>
-                    
-                    <div class="card mb-2">
-                        <div class="card-body">
-                            <h5 class="card-title"><span>Pricing</span>
-                                <a href="javascript:void(0);" id="product_panel_link_pricing" class="panel_link" aria-hidden="true">Edit</a>
-                            </h5>
-                            <!--<h6 class="card-subtitle mb-2 text-muted"><span>Category</span></h6>-->
-                            <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-                        </div>
-                    
-                    </div>
-                    
-                    <div class="card mb-2">
-                        <div class="card-body">
-                            <h5 class="card-title"><span>Meta</span>
-                                <a href="javascript:void(0);" id="product_panel_link_meta" class="panel_link" aria-hidden="true">Edit</a>
-                            </h5>
-                            <!--<h6 class="card-subtitle mb-2 text-muted"><span>Category</span></h6>-->
-                            <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-                        </div>
-                    
-                    </div>
-                
-                </div>
-                <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 px-1">
-                    <div class="card mb-2">
-                        <div class="card-body">
+                            
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <h5 class="card-title"><span>Meta</span>
+                                        <a href="javascript:void(0);" id="product_panel_link_meta" class="panel_link" aria-hidden="true">Edit</a>
+                                    </h5>
+                                    <!--<h6 class="card-subtitle mb-2 text-muted"><span>Category</span></h6>-->
+                                    <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+                                </div>
+                            
+                            </div>
                         
                         </div>
-                    
                     </div>
                 </div>
+                
+                <div class="tab-pane" id="panel_tab_product_detail" role="tabpanel">
+                    <?php include_once(VIEWS_PATH . "/products/forms/product_edit_details_form.phtml"); ?>
+                </div>
+                
+                <div class="tab-pane" id="panel_tab_product_location" role="tabpanel">
+                    <?php include_once(VIEWS_PATH . "/locations/forms/product_edit_location_form.phtml"); ?>
+                </div>
+                
+                <div class="tab-pane" id="panel_tab_product_season" role="tabpanel">
+                    <?php include_once(VIEWS_PATH . "/seasons/forms/product_edit_season_form.phtml"); ?>
+                </div>
+                
+                <div class="tab-pane" id="panel_tab_product_unit" role="tabpanel">
+                
+                </div>
+                
+                <div class="tab-pane" id="panel_tab_product_variant" role="tabpanel">
+                    panel_tab_product_variant
+                </div>
+                
+                <div class="tab-pane" id="panel_tab_product_inventory" role="tabpanel">
+                    panel_tab_product_inventory
+                </div>
+                
+                <div class="tab-pane" id="panel_tab_product_pricing" role="tabpanel">
+                    panel_tab_product_pricing
+                </div>
+                
+                <div class="tab-pane" id="panel_tab_product_meta" role="tabpanel">
+                    META
+                </div>
+            
             </div>
         </div>
         
-        <div class="tab-pane" id="panel_tab_product_detail" role="tabpanel">
-            <pre><code class="language-css">p { color: red }</code></pre>
-            panel_tab_product_detail
-        </div>
-        
-        <div class="tab-pane" id="panel_tab_product_location" role="tabpanel">
-            panel_tab_product_location
-        </div>
-        
-        <div class="tab-pane" id="panel_tab_product_season" role="tabpanel">
-            <div id="calendar"></div>
-        </div>
-        
-        <div class="tab-pane" id="panel_tab_product_unit" role="tabpanel">
-            panel_tab_product_unit
-        </div>
-        
-        <div class="tab-pane" id="panel_tab_product_variant" role="tabpanel">
-            panel_tab_product_variant
-        </div>
-        
-        <div class="tab-pane" id="panel_tab_product_inventory" role="tabpanel">
-            panel_tab_product_inventory
-        </div>
-        
-        <div class="tab-pane" id="panel_tab_product_pricing" role="tabpanel">
-            panel_tab_product_pricing
-        </div>
-        
-        <div class="tab-pane" id="panel_tab_product_meta" role="tabpanel">
-            <section id="examplePanel" class="panel mb-0" data-load-callback="customRefreshCallback">
-                
-                <div class="panel-heading">
-                    <h3 class="panel-title">Live Example</h3>
-                    <div class="panel-actions">
-                        <a class="panel-action fas fa-expand" data-toggle="panel-fullscreen" aria-hidden="true"></a>
-                    </div>
-                </div>
-                
-                <div class="panel-body">
-                    
-                    <div class="code-data" data-datatype="json"><?php echo $settings; ?></div>
-                
-                </div>
-            </section>
+        <div class="col-12 col-xl-3 p-1">
+            <div class="card card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item list-group-item d-flex justify-content-between">Status:</li>
+                    <li class="list-group-item list-group-item">
+                        <div class="row gx-1">
+                            <div class="col-12 p-1 d-flex justify-content-between">
+                                <span>Created By:</span>
+                                <span id="product_edit_detail_created_by">David Wingfield</span>
+                            </div>
+                        </div>
+                        <div class="row gx-1">
+                            <div class="col-12 p-1 d-flex justify-content-between">
+                                <span>Status:</span>
+                                <span id="product_edit_detail_status"><?php echo $status_name; ?></span>
+                                <input type="hidden" id="product_status_id" class="form-control dev-element" value="<?php echo $status_name; ?>"/>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item list-group-item">
+                        <div class="row gx-1">
+                            <div class="col-12 p-1 d-flex justify-content-between">
+                                <span>Country:</span>
+                                <span id="product_edit_detail_location_city"><?php echo $country_name; ?></span>
+                            </div>
+                        </div>
+                        <div class="row gx-1">
+                            <div class="col-12 p-1 d-flex justify-content-between">
+                                <span>Province:</span>
+                                <span id="product_edit_detail_location_province"><?php echo $province_name; ?></span>
+                            </div>
+                        </div>
+                        <div class="row gx-1">
+                            <div class="col-12 p-1 d-flex justify-content-between">
+                                <span>City:</span>
+                                <span id="product_edit_detail_location_country"><?php echo $city_name; ?></span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     
     </div>
+    
+    <div class="row gx-1">
+        <div class="col-12 col-md-4 p-1">
+            <?php displayJsonOnPage($seasons, "Seasons"); ?>
+        </div>
+        <div class="col-12 col-md-4 p-1">
+            <?php displayJsonOnPage($units, "Units"); ?>
+        </div>
+        <div class="col-12 col-md-4 p-1">
+            <?php displayJsonOnPage($variants, "Variants"); ?>
+        </div>
+        <div class="col-12 col-md-4 p-1">
+            <?php displayJsonOnPage($matrices, "Matrices"); ?>
+        </div>
+        <div class="col-12 col-md-4 p-1">
+            <?php displayJsonOnPage($profiles, "Profiles"); ?>
+        </div>
+        <div class="col-12 col-md-4 p-1">
+            <?php displayJsonOnPage($provider, "Provider"); ?>
+        </div>
+        <div class="col-12 col-md-4 p-1">
+            <?php displayJsonOnPage($vendor, "Vendor"); ?>
+        </div>
+    </div>
+
 </section>
 <!-- /Product Edit Page -->
+
+<!-- Calendar Modal -->
+<?php include_once(VIEWS_PATH . "/products/modals/product_edit_calendar.phtml"); ?>
+
 <script type="text/javascript">
     const _product_panel_link_overview = document.getElementById("product_panel_link_overview")
     const _panel_tab_product_o = document.getElementById("panel_tab_product_o")
@@ -512,7 +725,7 @@
     
     document.addEventListener("DOMContentLoaded", function () {
         const jsonPrettify = (json) => {
-            if (typeof json === 'object' && json !== null) {
+            if (typeof json === "object" && json !== null) {
                 return JSON.stringify(json, undefined, '\t')
             }
             
@@ -526,7 +739,6 @@
         
         let codeData = document.querySelectorAll(".panel-code")
         codeData.forEach(el => {
-            
             let html = $(el).html()
             let formattedCode = ""
             let classValue = ""
@@ -551,7 +763,6 @@
             
             pre.appendChild(code)
             el.appendChild(pre)
-            
         })
         
     })
@@ -1259,6 +1470,7 @@
         }
     }
     
+    /*
     $(function () {
         let cals = $("#calendar").myCalendar({
             displayEventTime: false,
@@ -1266,5 +1478,6 @@
             events: myEvents,
         })
     })
+    //*/
 
 </script>

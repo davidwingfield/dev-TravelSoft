@@ -434,7 +434,7 @@ const Company = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 return handle_company_error("Error Validating Company")
             }
         } else {

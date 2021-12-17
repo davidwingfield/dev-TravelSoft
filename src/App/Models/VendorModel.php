@@ -35,10 +35,10 @@
                             COMPANY.date_modified AS 'company_date_modified',
                             COMPANY.status_id AS 'company_status_id',
                             COMPANY.note AS 'company_note',
-                   COMPANY.logo AS 'company_logo',
-                   COMPANY.description_short AS 'company_description_short',
-                   COMPANY.description_long AS 'company_description_long',
-                   COMPANY.keywords AS 'company_keywords',
+                            COMPANY.logo AS 'company_logo',
+                            COMPANY.description_short AS 'company_description_short',
+                            COMPANY.description_long AS 'company_description_long',
+                            COMPANY.keywords AS 'company_keywords',
                             VENDOR.id AS 'vendor_id',
                             VENDOR.company_id AS 'vendor_company_id',
                             VENDOR.status_id AS 'vendor_status_id',
@@ -47,12 +47,14 @@
                             VENDOR.show_sales AS 'vendor_show_sales',
                             VENDOR.show_ops AS 'vendor_show_ops',
                             VENDOR.is_provider AS 'vendor_is_provider',
-                            DATE_FORMAT(VENDOR.date_created, '%m/%d/%Y') AS 'vendor_date_created',
+                            VENDOR.date_created AS 'vendor_date_created',
                             VENDOR.created_by  AS 'vendor_created_by',
-                            DATE_FORMAT(VENDOR.date_modified, '%m/%d/%Y') AS 'vendor_date_modified',
+                            VENDOR.date_modified AS 'vendor_date_modified',
                             VENDOR.modified_by  AS 'vendor_modified_by',
                             VENDOR.enabled AS 'vendor_enabled',
-                            VENDOR.note  AS 'vendor_note'
+                            VENDOR.note  AS 'vendor_note',
+                            VENDOR.description_short AS 'vendor_description_short',
+                            VENDOR.description_long AS 'vendor_description_long'
             FROM 			vendor VENDOR
             JOIN			company COMPANY ON COMPANY.id = VENDOR.company_id
            WHERE			COMPANY.enabled = 1

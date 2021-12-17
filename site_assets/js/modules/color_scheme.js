@@ -1,4 +1,4 @@
 $.fn.ColorScheme = function (settings) {
-    console.log("Test", Types.color_scheme)
+    Console.log("Test", Types.color_scheme)
     
 }

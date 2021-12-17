@@ -67,7 +67,7 @@ const Login = (function () {
             if (dataToSend) {
                 try {
                     sendPostRequest("/api/v1.0/users/login", dataToSend, function (data, status, xhr) {
-                        console.log("data", data.id)
+                        Console.log("data", data.id)
                         if (data && data.id) {
                             if (data.id) {
                                 window.location.replace("/")
@@ -162,11 +162,11 @@ const Login = (function () {
         }
         
         const send_register = function (dataToSend) {
-            console.log("Login.register->send_register", dataToSend)
+            Console.log("Login.register->send_register", dataToSend)
             if (dataToSend) {
                 try {
                     sendPostRequest("/api/v1.0/users/register", dataToSend, function (data, status, xhr) {
-                        console.log("data", data.id)
+                        Console.log("data", data.id)
                         if (data && data.id) {
                             if (data.id) {
                                 window.location.replace("/")

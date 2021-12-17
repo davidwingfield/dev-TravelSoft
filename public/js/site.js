@@ -264,7 +264,7 @@ const get_errors = function (validator) {
     //for (var i = 0; i < validator.errorList.length; i++) {
     //    submitErrorsList[validator.errorList[i].element.name] = validator.errorList[i].message
     //}
-    //console.log("Submit Errors", submitErrorsList)
+    //Console.log("Submit Errors", submitErrorsList)
 }
 
 const validator_init = function (settings) {
@@ -405,14 +405,14 @@ const sendGetRequest = function (url, data_to_send, callback) {
                 result = data.result
                 return callback(result)
             } else if (status === "failed" && typeof data.error === "undefined") {
-                //console.log("getError:2")
+                //Console.log("getError:2")
                 return handleError("failed")
             } else if (status === "success" && typeof data.error !== "undefined") {
-                console.log(data.error)
-                //console.log("getError:3")
+                Console.log(data.error)
+                //Console.log("getError:3")
                 return handleError(data.error)
             } else {
-                //console.log("getError:4")
+                //Console.log("getError:4")
             }
         })
     } else {
@@ -433,9 +433,9 @@ const sendPostRequest = function (url, data_to_send, callback) {
     if (url && data_to_send) {
         $.postJSON(url, data_to_send, function (data, status, xhr) {
             //*
-            console.log("data", data)
-            console.log("status", status)
-            console.log("xhr", xhr)
+            Console.log("data", data)
+            Console.log("status", status)
+            Console.log("xhr", xhr)
             //*/
             if (status === "success" && typeof data.result !== "undefined") {
                 
@@ -475,7 +475,7 @@ const _display_ajax_error = function (jqXHR, exception, uri) {
         status: "",
         uri: uri,
     }
-    console.log("jqXHR", jqXHR.responseText)
+    Console.log("jqXHR", jqXHR.responseText)
     if (jqXHR.status === 0) {
         msg = "Not connected, verify Network."
     } else if (jqXHR.status === 404) {
@@ -607,7 +607,7 @@ const populateMultiSelect = function (arr, elem) {
         o = elem.options[i]
         
         if (arr.indexOf(o.value) !== -1) {
-            //console.log("ggg")
+            //Console.log("ggg")
             o.selected = true
         }
         
@@ -834,12 +834,12 @@ jQuery.extend({
             }
             //*/
             /*
-            console.log("jqXHR", jqXHR)
-            console.log("jqXHR", jqXHR.responseText)
-            console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
-            console.log("textStatus", textStatus)
-            console.log("msg", msg)
-            console.log('http://dev.travelsoft.com/error')
+            Console.log("jqXHR", jqXHR)
+            Console.log("jqXHR", jqXHR.responseText)
+            Console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
+            Console.log("textStatus", textStatus)
+            Console.log("msg", msg)
+            Console.log('http://dev.travelsoft.com/error')
             //*/
             if (typeof textStatus !== "undefined") {
                 console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
@@ -875,11 +875,11 @@ jQuery.extend({
             if (typeof textStatus !== "undefined") {
                 let err = _display_ajax_error(jqXHR, textStatus, url)
                 handleError(err.message)
-                console.log(err)
+                Console.log(err)
             } else {
                 let err = _display_ajax_error(jqXHR, textStatus, url)
                 handleError(err.message)
-                console.log(err)
+                Console.log(err)
             }
             if ($.isFunction(callback)) {
                 callback(msg, "failed")
@@ -901,11 +901,11 @@ jQuery.extend({
         })
         getRequest.fail(function (jqXHR, textStatus, msg) {
             if (typeof textStatus !== "undefined") {
-                console.log("Request failed")
-                console.log(_display_ajax_error(jqXHR, textStatus, url))
+                Console.log("Request failed")
+                Console.log(_display_ajax_error(jqXHR, textStatus, url))
             } else {
-                console.log("Request failed")
-                console.log(_display_ajax_error(jqXHR, textStatus, url))
+                Console.log("Request failed")
+                Console.log(_display_ajax_error(jqXHR, textStatus, url))
             }
             if ($.isFunction(callback)) {
                 callback(msg, "failed")
@@ -916,7 +916,7 @@ jQuery.extend({
 const logger = {
     
     log: function () {
-        console.log(args)
+        Console.log(args)
     },
 }
 
@@ -1341,9 +1341,9 @@ const Season = (function () {
         
         let category = categories.get(category_id)
         let category_seasons = (category.seasons) ? category.seasons : []
-        //console.log(categories.get(category_id).seasons)
-        //console.log("category", category)
-        //console.log(detail)
+        //Console.log(categories.get(category_id).seasons)
+        //Console.log("category", category)
+        //Console.log(detail)
         return detail
     }
     
@@ -1391,13 +1391,13 @@ document.addEventListener("DOMContentLoaded", function () {
         $.each($panelLinks, function (k, elem) {
             let dataToggle = $(elem).attr("data-toggle")
             if (dataToggle) {
-                console.log("dataToggle", dataToggle)
+                Console.log("dataToggle", dataToggle)
                 switch (dataToggle) {
                     case "panel-refresh":
                         
                         break
                     case "panel-collapse":
-                        console.log("collapse")
+                        Console.log("collapse")
                         break
                     case"panel-fullscreen":
                         elem.addEventListener("click", function () {
@@ -1412,10 +1412,10 @@ document.addEventListener("DOMContentLoaded", function () {
                                 $el.removeClass("is-fullscreen")
                             }
                         })
-                        console.log("fullscreen")
+                        Console.log("fullscreen")
                         break
                     case "panel-close":
-                        console.log("close")
+                        Console.log("close")
                         break
                     default:
                         break
@@ -1544,7 +1544,7 @@ $.fn.table = function (settings) {
                 $dTable.page.jumpToData(row_data.id, 0)
                 formatTable()
             } catch (e) {
-                console.log(e)
+                Console.log(e)
             }
         }
     }
@@ -1557,7 +1557,7 @@ $.fn.table = function (settings) {
                 $dTable.row(rowId).data(rowData).draw()
                 loadRow(row_data.id)
             } catch (e) {
-                console.log(e)
+                Console.log(e)
             }
         }
         
@@ -1570,7 +1570,7 @@ $.fn.table = function (settings) {
                 let rowId = row_data.id
                 $dTable.page.jumpToData(rowId, 0)
             } catch (e) {
-                console.log(e)
+                Console.log(e)
             }
             
         }
@@ -1586,7 +1586,7 @@ $.fn.table = function (settings) {
                   .remove()
                   .draw()
             } catch (e) {
-                console.log(e)
+                Console.log(e)
             }
         }
     }
@@ -1598,7 +1598,7 @@ $.fn.table = function (settings) {
                 $(row).removeClass("selected")
             })
         } catch (e) {
-            console.log("clear_selected_rows", e)
+            Console.log("clear_selected_rows", e)
         }
     }
     ///////////////////////////////////////////////
@@ -1630,7 +1630,7 @@ $.fn.table = function (settings) {
             formatTable()
             
         } catch (e) {
-            console.log(e)
+            Console.log(e)
         }
         
     }
@@ -1764,7 +1764,7 @@ $.fn.BuildKeyword = function (keywords) {
             let tag = tags.get(data)
             if (tag) {
                 if (tag) {
-                    console.log("tag", tag)
+                    Console.log("tag", tag)
                     $input.val(data)
                 }
                 
@@ -1903,7 +1903,7 @@ Upload.prototype.doUpload = function () {
             return myXhr
         },
         success: function (data) {
-            console.log("data", data)
+            Console.log("data", data)
             let image, result = null
             if (data) {
                 if (data.result) {
@@ -1933,7 +1933,7 @@ Upload.prototype.doUpload = function () {
         },
         error: function (error) {
             toastr.error("Error")
-            console.log("error", error)
+            Console.log("error", error)
         },
         async: true,
         data: formData,
@@ -2082,7 +2082,7 @@ $.fn.imageManager = function (options) {
         let url = "/api/v1.0/images/update"
         
         if (dataToSend) {
-            console.log("data", dataToSend)
+            Console.log("data", dataToSend)
             try {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
                     if (data) {
@@ -2092,7 +2092,7 @@ $.fn.imageManager = function (options) {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
             }
         }
     }
@@ -2142,7 +2142,7 @@ $.fn.imageManager = function (options) {
                 }
                 
                 updateImage(dataToSend, function (data) {
-                    console.log("data", data)
+                    Console.log("data", data)
                     let image
                     
                     if (data) {
@@ -2164,16 +2164,16 @@ $.fn.imageManager = function (options) {
                                 let upload = new Upload(file)
                                 upload.doUpload()
                             } else {
-                                //console.log("Missing $input[0].files[0]")
+                                //Console.log("Missing $input[0].files[0]")
                             }
                         } else {
-                            //console.log("Missing $input[0].files")
+                            //Console.log("Missing $input[0].files")
                         }
                     } else {
-                        //console.log("Missing $input[0]")
+                        //Console.log("Missing $input[0]")
                     }
                 } else {
-                    //console.log("Missing $input")
+                    //Console.log("Missing $input")
                 }
             }
         }
@@ -2297,7 +2297,7 @@ $.fn.imageManager = function (options) {
     }
     
     const format_image_lightbox = function (image) {
-        console.log(image)
+        Console.log(image)
         
         if (image) {
             let image_alt = (image.alt) ? image.alt : ""
@@ -2425,7 +2425,7 @@ const LocationTypes = (function () {
     }
     
     const init = function (settings) {
-        //console.log(" -- LocationTypes -- ", {})
+        //Console.log(" -- LocationTypes -- ", {})
     }
     
     const set = function (location_types) {
@@ -2458,7 +2458,7 @@ const LocationTypes = (function () {
             LocationTypes.all.set("id", detail)
         })
         
-        //console.log(" LocationTypes.all", LocationTypes.all)
+        //Console.log(" LocationTypes.all", LocationTypes.all)
     }
     
     return {
@@ -2568,7 +2568,7 @@ const AddressTypes = (function () {
             AddressTypes.all.set("id", detail)
         })
         
-        console.log(" AddressTypes.all", AddressTypes.all)
+        Console.log(" AddressTypes.all", AddressTypes.all)
     }
     
     return {
@@ -2599,6 +2599,85 @@ const City = (function () {
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
+    $("#form_product_search_hotel_product_location")
+      .on("change", function () {
+          setTimeout(function () {
+          
+          }, 200)
+      })
+      .on("search", function () {
+      
+      })
+      .on("click", function (e) {
+          if ($(this).attr("readonly") === "readonly") {
+              e.preventDefault()
+          } else {
+              $(this).select()
+          }
+          
+      })
+      .autocomplete({
+          serviceUrl: "/api/v1.0/autocomplete/cities",
+          minChars: 2,
+          cache: false,
+          dataType: "json",
+          triggerSelectOnValidInput: false,
+          paramName: "st",
+          onSelect: function (suggestion) {
+              Console.log("city", suggestion)
+              if (!suggestion.data) {
+                  return
+              }
+              
+              Console.log("city", suggestion)
+              /*
+                  "value": "Abano Terme (Padova, Italy)",
+                  "data": {
+                      "id": 1,
+                      "country_id": 102,
+                      "province_id": 250,
+                      "sort_order": 999,
+                      "name": "Abano Terme",
+                      "enabled": 1,
+                      "date_created": "2021-08-03 14:40:07",
+                      "created_by": 4,
+                      "date_modified": "2021-08-03 14:40:07",
+                      "modified_by": 4,
+                      "note": "",
+                      "province": {
+                          "id": 250,
+                          "country_id": 102,
+                          "name": "Padova",
+                          "iso2": "PD",
+                          "iso3": "",
+                          "sort_order": 999,
+                          "enabled": 1,
+                          "date_created": "2021-12-15 10:58:47",
+                          "created_by": 4,
+                          "date_modified": "2021-12-15 10:58:47",
+                          "modified_by": 4,
+                          "note": null
+                      },
+                      "country": {
+                          "id": 102,
+                          "currency_id": 2,
+                          "sort_order": 0,
+                          "name": "Italy",
+                          "iso2": "IT",
+                          "iso3": "ITA",
+                          "enabled": 1,
+                          "date_created": "2021-08-03 13:04:10",
+                          "created_by": 4,
+                          "date_modified": "2021-08-03 15:13:45",
+                          "modified_by": 4,
+                          "note": ""
+                      }
+                  }
+              //*/
+              
+          },
+      })
+    
     const form_rules = {
         rules: {
             city_name: "required",
@@ -2610,7 +2689,7 @@ const City = (function () {
     
     const handle_city_error = function (msg) {
         toastr.error(msg)
-        console.log(msg)
+        Console.log(msg)
     }
     
     const on_click_outside = (e) => {
@@ -2691,7 +2770,7 @@ const City = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 return handle_city_error("Error Validating City")
             }
         } else {
@@ -2723,11 +2802,11 @@ const City = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 handle_city_error("Error: Validating City")
             }
         } else {
-            console.log("Error: Missing Data")
+            Console.log("Error: Missing Data")
             handle_city_error("Error: Missing Data")
         }
     }
@@ -2944,8 +3023,8 @@ const City = (function () {
                 })
                 
                 if (city_id !== "" && city_id !== null) {
-                    //console.log($(el).attr("id"))
-                    //console.log("city_id", city_id)
+                    //Console.log($(el).attr("id"))
+                    //Console.log("city_id", city_id)
                     $(el).val(city_id).trigger("change")
                 }
             }
@@ -3131,7 +3210,7 @@ const Province = (function () {
     
     const handle_province_error = function (msg) {
         toastr.error(msg)
-        console.log(msg)
+        Console.log(msg)
     }
     
     const on_click_outside = (e) => {
@@ -3145,7 +3224,6 @@ const Province = (function () {
     const build_drop_downs = function (settings) {
         if (settings) {
             if (settings.dropdowns) {
-                
                 $.each(settings.dropdowns, function (i, dropdown_id) {
                     let country_id = Country.id
                     let province_id = Province.id
@@ -3233,7 +3311,6 @@ const Province = (function () {
                         
                     }
                 })
-                
             }
         }
     }
@@ -3252,7 +3329,7 @@ const Province = (function () {
                 })
                 //*/
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 return handle_province_error("Error Validating Province")
             }
         } else {
@@ -3569,7 +3646,7 @@ const Province = (function () {
                 sendPostRequest("/api/v1.0/provinces/update", dataToSend, function (data, status, xhr) {
                     if (data && data[0]) {
                         let new_province = data[0]
-                        console.log("new_province", new_province)
+                        Console.log("new_province", new_province)
                         Province.all.set(new_province.id, new_province)
                         let province_elements = $("select[data-type='province']")
                         Province.id = new_province.id
@@ -3589,11 +3666,11 @@ const Province = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 handle_province_error("Error: Validating Province")
             }
         } else {
-            console.log("Error: Missing Data")
+            Console.log("Error: Missing Data")
             handle_province_error("Error: Missing Data")
         }
     }
@@ -3676,7 +3753,7 @@ const Country = (function () {
     
     const handle_country_error = function (msg) {
         toastr.error(msg)
-        console.log(msg)
+        Console.log(msg)
     }
     
     const on_click_outside = (e) => {
@@ -3789,7 +3866,7 @@ const Country = (function () {
                 })
                 /*
                 sendGetRequest("/api/v1.0/countries", dataToSend, function (data, status, xhr) {
-                    //console.log(data)
+                    //Console.log(data)
                     
                     if (data) {
                         // Country.all = data.result
@@ -3800,7 +3877,7 @@ const Country = (function () {
                 })
                 //*/
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 return handle_country_error("Error Validating Country")
             }
         } else {
@@ -3828,12 +3905,12 @@ const Country = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 handle_country_error("Error: Validating Country")
             }
             
         } else {
-            console.log("Error: Missing Data")
+            Console.log("Error: Missing Data")
             handle_country_error("Error: Missing Data")
         }
     }
@@ -4212,6 +4289,7 @@ const Location = (function () {
     const _form_edit_location_filter = document.getElementById("form_edit_location_filter")
     const _location_name_filter_id = document.getElementById("location_name_filter_id")
     //
+    
     const edit_location_filter_form_rules = {
         groups: {
             locationGroup: "location_name_filter location_name_filter_id",
@@ -4279,6 +4357,18 @@ const Location = (function () {
     }
     
     /**
+     * Product Variables
+     */
+    const _form_product_edit_location = document.getElementById("form_product_edit_location")
+    const _button_edit_product_location = document.getElementById("button_edit_product_location")
+    const _button_clear_form_edit_product_location = document.getElementById("button_clear_form_edit_product_location")
+    const _button_submit_form_edit_product_location = document.getElementById("button_submit_form_edit_product_location")
+    const _button_close_edit_product_location_form = document.getElementById("button_close_edit_product_location_form")
+    const _product_location_search = document.getElementById("product_location_search")
+    const _card_product_edit_location = document.getElementById("card_product_edit_location")
+    //
+    
+    /**
      * Global Variables
      */
     let temp_location = {}
@@ -4296,6 +4386,153 @@ const Location = (function () {
         //e.relatedTarget // previous active tab
         hide_form()
     })
+    
+    const clear_product_location_form = function () {
+        Console.log("Location.clear_product_location_form()")
+        _location_id.value = ""
+        _location_types_id.value = ""
+        _location_name.value = ""
+        _location_street_1.value = ""
+        _location_street_2.value = ""
+        _location_zipcode.value = ""
+        $(_location_country_id).val("").trigger("change")
+        /*
+        switch (defaultLocationDisplayFormat) {
+            case "short":
+                document.getElementById("location_display_short").checked = true
+                break
+            case "medium":
+                document.getElementById("location_display_medium").checked = true
+                break
+            default:
+                document.getElementById("location_display_long").checked = true
+        }
+        //*/
+        
+    }
+    
+    const populate_product_location_form = function (location) {
+        Console.log("Location.populate_product_location_form(location)", location)
+        clear_product_location_form()
+        let country = {}
+        let province = {}
+        let city = {}
+        let type = {}
+        if (location) {
+            switch (defaultLocationDisplayFormat) {
+                case "short":
+                    _product_location_search.value = (location.display_short) ? location.display_short : ""
+                    break
+                case "medium":
+                    _product_location_search.value = (location.display_medium) ? location.display_medium : ""
+                    break
+                default:
+                    _product_location_search.value = (location.display_long) ? location.display_long : ""
+            }
+            
+            _location_name.value = location.name
+            $(_location_id).val(location.id).trigger("change")
+            _location_street_1.value = location.street_1
+            _location_street_2.value = location.street_2
+            _location_zipcode.value = location.zipcode
+            
+            let location_type_id = ""
+            if (location.type) {
+                type = location.type
+                location_type_id = type.id
+            }
+            $(_location_types_id).val(location_type_id)
+            
+            if (location.country) {
+                country = location.country
+                Country.id = (country.id) ? country.id.toString() : null
+            }
+            
+            if (location.province) {
+                province = location.province
+                Province.id = (province.id) ? province.id.toString() : null
+            }
+            
+            if (location.city) {
+                city = location.city
+                City.id = (city.id) ? city.id : null
+            }
+            
+            $(_location_country_id).val((country.id) ? country.id : "").trigger("change")
+        }
+    }
+    
+    const unload_product_location_form = function (location) {
+        clear_product_location_form()
+        $(_card_product_edit_location).hide()
+    }
+    
+    const load_product_location_form = function (location) {
+        Console.log("Location.load_product_location_form(location)", location)
+        clear_product_location_form()
+        populate_product_location_form(location)
+        $(_card_product_edit_location).show()
+    }
+    
+    $(_button_submit_form_edit_product_location)
+      .on("click", function () {
+          load_product_location_form()
+      })
+    
+    $(_button_edit_product_location)
+      .on("click", function () {
+          if (Location.detail) {
+              load_product_location_form(Location.detail)
+          }
+      })
+    
+    $(_button_submit_form_edit_product_location)
+      .on("click", function () {
+      
+      })
+    
+    $(_button_clear_form_edit_product_location)
+      .on("click", function () {
+          unload_product_location_form()
+      })
+    
+    $(_button_close_edit_product_location_form)
+      .on("click", function () {
+          unload_product_location_form()
+      })
+    
+    $(_product_location_search)
+      .on("click", function () {
+          $(this).select()
+      })
+      .on("change", function () {
+          globalSelectedLocation = false
+          setTimeout(function () {
+              let location_name = _location_name_filter.value
+              Console.log("location_name", location_name)
+          }, 200)
+      })
+      .on("search", function () {
+          globalSelectedLocation = false
+          
+      })
+      .autocomplete({
+          serviceUrl: "/api/v1.0/autocomplete/locations",
+          minChars: 2,
+          cache: false,
+          dataType: "json",
+          triggerSelectOnValidInput: false,
+          paramName: "st",
+          params: { "default_display": default_display },
+          onSelect: function (suggestion) {
+              if (suggestion && suggestion.data) {
+                  globalSelectedLocation = true
+                  Console.log("suggestion", suggestion)
+              }
+          },
+          onSearchComplete: function (query, suggestions) {
+          },
+      })
     
     /**
      * _button_close_edit_location_form
@@ -4360,7 +4597,7 @@ const Location = (function () {
       .on("change", function () {
           
           let selected_value = $("input[name='location_display']:checked").val()
-          console.log("selected_value", selected_value)
+          Console.log("selected_value", selected_value)
           default_display = selected_value
           init_autocomplete()
           if (Location.detail["display_" + selected_value] !== null) {
@@ -4611,7 +4848,7 @@ const Location = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 return handle_location_error("Error Validating Location")
             }
         } else {
@@ -4929,6 +5166,55 @@ const Location = (function () {
             hide_form()
         }
         
+        if (_form_product_edit_location) {
+            
+            $(_location_country_id).BuildDropDown({
+                data: Array.from(Country.all.values()),
+                title: "Country",
+                id_field: "id",
+                text_field: "name",
+                first_selectable: false,
+            })
+            
+            $(_location_province_id).BuildDropDown({
+                data: Array.from(Province.all.values()),
+                title: "Province",
+                id_field: "id",
+                text_field: "name",
+                first_selectable: false,
+            })
+            
+            $(_location_city_id).BuildDropDown({
+                data: Array.from(City.all.values()),
+                title: "City",
+                id_field: "id",
+                text_field: "name",
+                first_selectable: false,
+            })
+            
+            Country.init({
+                dropdowns: [
+                    "location_country_id",
+                ],
+            })
+            
+            Province.init({
+                dropdowns: [
+                    "location_province_id",
+                ],
+            })
+            
+            City.init({
+                dropdowns: [
+                    "location_city_id",
+                ],
+            })
+            
+            Location.detail = detail
+            
+            populate_product_location_form(detail)
+        }
+        
         if (_location_name_filter) {
             init_autocomplete()
         }
@@ -5029,7 +5315,7 @@ const Location = (function () {
             populate_form(location)
         },
         set_detail: function (location) {
-            console.log("location", location)
+            Console.log("location", location)
             set_detail(location)
         },
         build: function () {
@@ -5589,7 +5875,7 @@ const Address = (function () {
     const set_detail = function (address) {
         let detail = _default_detail()
         if (address) {
-            //console.log("address", address)
+            //Console.log("address", address)
             detail.country = {
                 id: parseInt((address.country.id) ? address.country.id : null),
                 name: (address.country.name) ? address.country.name : null,
@@ -5698,7 +5984,7 @@ const Address = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 return handle_address_error("Error Validating Company")
             }
         } else {
@@ -5772,7 +6058,7 @@ const Register = (function () {
 })()
 
 $.fn.ColorScheme = function (settings) {
-    console.log("Test", Types.color_scheme)
+    Console.log("Test", Types.color_scheme)
     
 }
 
@@ -5822,7 +6108,7 @@ const AirportTypes = (function () {
     }
     
     const init = function (settings) {
-        console.log(" -- AirportTypes -- ", {})
+        Console.log(" -- AirportTypes -- ", {})
     }
     
     const set = function (airport_types) {
@@ -5854,7 +6140,7 @@ const AirportTypes = (function () {
             AirportTypes.all.set("id", detail)
         })
         
-        console.log(" AirportTypes.all", AirportTypes.all)
+        Console.log(" AirportTypes.all", AirportTypes.all)
     }
     
     return {
@@ -5964,7 +6250,7 @@ const Category = (function () {
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
-                    console.log("Hotels")
+                    Console.log("Hotels")
                     break
                 case 2:
                     /**
@@ -5975,7 +6261,7 @@ const Category = (function () {
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = true
-                    console.log("Flight")
+                    Console.log("Flight")
                     break
                 case 3:
                     /**
@@ -5986,7 +6272,7 @@ const Category = (function () {
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = true
-                    console.log("Cars")
+                    Console.log("Cars")
                     break
                 case 4:
                     /**
@@ -5997,7 +6283,7 @@ const Category = (function () {
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = true
-                    console.log("Rail")
+                    Console.log("Rail")
                     break
                 case 5:
                     /**
@@ -6008,7 +6294,7 @@ const Category = (function () {
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = false
-                    console.log("Transport")
+                    Console.log("Transport")
                     break
                 case 6:
                     /**
@@ -6019,7 +6305,7 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.value = "2"
                     _modal_product_rating_types_id.value = ""
                     _modal_product_rating_types_id.disabled = true
-                    console.log("Tours")
+                    Console.log("Tours")
                     break
                 case 7:
                     /**
@@ -6032,7 +6318,7 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_currency_id.disabled = false
-                    console.log("Cruises")
+                    Console.log("Cruises")
                     break
                 case 8:
                     /**
@@ -6043,7 +6329,7 @@ const Category = (function () {
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
-                    console.log("Packages")
+                    Console.log("Packages")
                     break
                 case 9:
                     /**
@@ -6055,7 +6341,7 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    console.log("Other")
+                    Console.log("Other")
                     break
                 default:
                     /**
@@ -6066,7 +6352,7 @@ const Category = (function () {
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_currency_id.disabled = true
                     _modal_product_pricing_strategies_types_id.disabled = true
-                    console.log("Default")
+                    Console.log("Default")
                     break
             }
         }
@@ -6113,7 +6399,7 @@ const Category = (function () {
     }
     
     const init = function (settings) {
-        //console.log("Category.init()", settings)
+        //Console.log("Category.init()", settings)
         let categories = []
         if (settings) {
             if (settings.categories) {
@@ -6125,7 +6411,7 @@ const Category = (function () {
     }
     
     const set = function (category) {
-        //console.log("Category.set()", category)
+        //Console.log("Category.set()", category)
         let detail = _default_detail()
         if (category) {
             detail.id = (category.id) ? category.id : null
@@ -6163,7 +6449,7 @@ const Category = (function () {
     }
     
     const load_all = function (categories) {
-        //console.log("Category.load_all()", categories)
+        //Console.log("Category.load_all()", categories)
         Category.all = new Map()
         
         if (!categories) {
@@ -6172,12 +6458,12 @@ const Category = (function () {
         
         $.each(categories, function (i, category) {
             let detail = set(category)
-            //console.log("detail", detail)
-            //console.log("detail.id", detail.id)
+            //Console.log("detail", detail)
+            //Console.log("detail.id", detail.id)
             Category.all.set(detail.id, detail)
         })
         
-        //console.log(" Category.all", Category.all)
+        //Console.log(" Category.all", Category.all)
     }
     
     return {
@@ -6246,7 +6532,7 @@ const ContactTypes = (function () {
     }
     
     const init = function (settings) {
-        console.log(" -- ContactTypes -- ", {})
+        Console.log(" -- ContactTypes -- ", {})
     }
     
     const set = function (contact_types) {
@@ -6278,7 +6564,7 @@ const ContactTypes = (function () {
             ContactTypes.all.set("id", detail)
         })
         
-        console.log(" ContactTypes.all", ContactTypes.all)
+        Console.log(" ContactTypes.all", ContactTypes.all)
     }
     
     return {
@@ -6740,7 +7026,7 @@ const Company = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 return handle_company_error("Error Validating Company")
             }
         } else {
@@ -7129,7 +7415,7 @@ const Contact = (function () {
         let dataToSend = build()
         if (dataToSend) {
             update_contact(dataToSend, function (data) {
-                console.log(data)
+                Console.log(data)
                 if (data) {
                     if (data[0]) {
                         let contact = data[0]
@@ -7229,7 +7515,7 @@ const Contact = (function () {
         clear_form()
         _contact_company_id.value = _company_id.value
         if (contact) {
-            console.log("contact", contact)
+            Console.log("contact", contact)
             _contact_id.value = validInt(contact.id)
             _contact_name_first.value = (contact.name_first) ? contact.name_first : null
             _contact_name_last.value = (contact.name_last) ? contact.name_last : null
@@ -7311,7 +7597,7 @@ const Contact = (function () {
             $contact_table.loadRow(contacts[0])
         }
         
-        //console.log(" Contact.all", Contact.all)
+        //Console.log(" Contact.all", Contact.all)
     }
     
     /**
@@ -7369,7 +7655,7 @@ const Contact = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 return handleContactError("Error Validating Company")
             }
         } else {
@@ -7495,7 +7781,7 @@ const Currency = (function () {
     }
     
     const init = function (settings) {
-        //console.log(' -- Currency -- ', {})
+        //Console.log(' -- Currency -- ', {})
     }
     
     const set = function (currency) {
@@ -7530,7 +7816,7 @@ const Currency = (function () {
             Currency.all.set("id", detail)
         })
         
-        //console.log(' Currency.all',  Currency.all);
+        //Console.log(' Currency.all',  Currency.all);
     }
     
     return {
@@ -7628,7 +7914,7 @@ const Vendor = (function () {
     $(_button_save_vendor)
       .on("click", function () {
           let company = Company.build()
-          console.log("_button_save_vendor", company)
+          Console.log("_button_save_vendor", company)
           update()
       })
     
@@ -7754,7 +8040,7 @@ const Vendor = (function () {
               if (!suggestion || !suggestion.data) {
                   return
               }
-              console.log("suggestion.data", suggestion.data)
+              Console.log("suggestion.data", suggestion.data)
               let vendor = suggestion.data
               if (_form_product_add) {
                   let provider_company_id = (isNaN(parseInt(_modal_product_provider_company_id.value))) ? null : parseInt(_modal_product_provider_company_id.value)
@@ -7828,17 +8114,17 @@ const Vendor = (function () {
     }
     
     const vendor_exists = function (name) {
-        console.log("vendor_exists()", name)
+        Console.log("vendor_exists()", name)
         
         if (name && name !== "") {
             let dataToSend = {
                 name: name,
             }
             
-            console.log("dataToSend", dataToSend)
+            Console.log("dataToSend", dataToSend)
             
             fetch_vendor_by_name(dataToSend, function (data) {
-                console.log("fetch_vendor_by_name()", data)
+                Console.log("fetch_vendor_by_name()", data)
                 let vendor, company
                 
                 if (data && data.length > 0) {
@@ -7850,7 +8136,7 @@ const Vendor = (function () {
                     }
                     
                 } else {
-                    console.log("Vendor Does Not Exist")
+                    Console.log("Vendor Does Not Exist")
                     
                     _modal_product_vendor_id.value = ""
                     _modal_product_vendor_company_id.value = ""
@@ -7874,7 +8160,7 @@ const Vendor = (function () {
                 }
                 
                 if (vendor) {
-                    console.log("Vendor Exists", vendor)
+                    Console.log("Vendor Exists", vendor)
                     
                     if (_vendor_modal_vendor_name) {
                         confirmDialog(`Vendor ${vendor.name} ALREADY exists. Would you like to load this record to edit?`, (ans) => {
@@ -7919,14 +8205,14 @@ const Vendor = (function () {
         if (vendor) {
             newVendor(vendor, function (data) {
                 if (data) {
-                    console.log("data 1", data)
+                    Console.log("data 1", data)
                     if (data[0]) {
-                        console.log("data[0] 1", data[0])
+                        Console.log("data[0] 1", data[0])
                         let details = data[0]
                         
                         if (details.id) {
                             if (_form_product_add) {
-                                console.log("_form_product_add: details", details)
+                                Console.log("_form_product_add: details", details)
                                 _modal_product_vendor_company_id.value = (details.company_id) ? details.company_id : ""
                                 _modal_product_vendor_id.value = (details.id) ? details.id : ""
                                 _modal_product_provider_vendor_match.checked = (_modal_product_vendor_company_id.value === _modal_product_provider_company_id.value)
@@ -7938,13 +8224,13 @@ const Vendor = (function () {
                                 window.location.replace("/vendors/" + details.id)
                             }
                         } else {
-                            console.log("details 1", details)
+                            Console.log("details 1", details)
                         }
                     } else {
-                        console.log("details 2", data)
+                        Console.log("details 2", data)
                     }
                 } else {
-                    console.log("details 3", vendor)
+                    Console.log("details 3", vendor)
                 }
             })
         }
@@ -7969,7 +8255,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
             }
         }
     }
@@ -8058,7 +8344,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 return handle_vendor_error("Error Validating Company")
             }
         } else {
@@ -8164,13 +8450,13 @@ const Vendor = (function () {
      * @param callback
      */
     const updateVendor = function (dataToSend, callback) {
-        console.log("updateVendor()", dataToSend)
+        Console.log("updateVendor()", dataToSend)
         let url = "/api/v1.0/vendors/update"
         
         if (dataToSend) {
             try {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    console.log("data", data)
+                    Console.log("data", data)
                     if (data) {
                         return callback(data)
                     } else {
@@ -8178,7 +8464,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
             }
         }
     }
@@ -8190,14 +8476,14 @@ const Vendor = (function () {
         if (vendor_detail) {
             confirmDialog(`Would you like to update?`, (ans) => {
                 if (ans) {
-                    console.log("vendor_detail", vendor_detail)
+                    Console.log("vendor_detail", vendor_detail)
                     
                     updateVendor(vendor_detail, function (data) {
-                        console.log("data", data)
+                        Console.log("data", data)
                         if (data) {
-                            console.log("data 1", data)
+                            Console.log("data 1", data)
                             if (data[0]) {
-                                console.log("data[0] 1", data[0])
+                                Console.log("data[0] 1", data[0])
                                 let details = data[0]
                                 if (details.id) {
                                     if (_vendor_id.value === "" || isNaN(parseInt(_vendor_id.value))) {
@@ -8207,13 +8493,13 @@ const Vendor = (function () {
                                         toastr.success(`Vendor ${name} has been updated.`)
                                     }
                                 } else {
-                                    console.log("details 1", details)
+                                    Console.log("details 1", details)
                                 }
                             } else {
-                                console.log("details 2", data)
+                                Console.log("details 2", data)
                             }
                         } else {
-                            console.log("details 3", provider)
+                            Console.log("details 3", provider)
                         }
                     })
                 }
@@ -8232,14 +8518,14 @@ const Vendor = (function () {
         if (vendor) {
             updateVendor(vendor, function (data) {
                 if (data) {
-                    console.log("data", data)
-                    console.log(data.length)
+                    Console.log("data", data)
+                    Console.log(data.length)
                     if (data[0]) {
-                        console.log("data[0]", data[0])
+                        Console.log("data[0]", data[0])
                         let details = data[0]
                         if (details.id) {
-                            console.log("details.id", details.id)
-                            console.log("_vendor_id.value", _vendor_id.value)
+                            Console.log("details.id", details.id)
+                            Console.log("_vendor_id.value", _vendor_id.value)
                             if (_vendor_id.value === "" || isNaN(parseInt(_vendor_id.value))) {
                                 window.location.replace(base_url + "/" + details.id)
                             } else {
@@ -8247,13 +8533,13 @@ const Vendor = (function () {
                                 toastr.success(`Vendor ${name} has been updated.`)
                             }
                         } else {
-                            console.log("details 1", details)
+                            Console.log("details 1", details)
                         }
                     } else {
-                        console.log("details 2", data)
+                        Console.log("details 2", data)
                     }
                 } else {
-                    console.log("details 3", provider)
+                    Console.log("details 3", provider)
                 }
             })
         }
@@ -8267,12 +8553,12 @@ const Vendor = (function () {
         let addresses = Array.from(Address.all.values())
         let contacts = Array.from(Contact.all.values())
         /*
-          console.log("company_detail", company_detail)
-          console.log("provider_detail", provider_detail)
-          console.log("location_detail", location_detail)
-          console.log("vendor_detail", vendor_detail)
-          console.log("addresses", addresses)
-          console.log("contacts", contacts)
+          Console.log("company_detail", company_detail)
+          Console.log("provider_detail", provider_detail)
+          Console.log("location_detail", location_detail)
+          Console.log("vendor_detail", vendor_detail)
+          Console.log("addresses", addresses)
+          Console.log("contacts", contacts)
           //*/
         if (!company_detail || !vendor_detail || !addresses || !contacts) {
             $.each(panels, function (index, item) {
@@ -8356,7 +8642,7 @@ const Vendor = (function () {
             })
         }
         
-        console.log(" Vendor.all", Vendor.all)
+        Console.log(" Vendor.all", Vendor.all)
     }
     
     const validate_form = function () {
@@ -8415,7 +8701,7 @@ const Vendor = (function () {
      * disables fields unused from provider edit
      */
     const setProvider = function () {
-        console.log("Set Provider")
+        Console.log("Set Provider")
         if (_provider_edit) {
             _vendor_is_provider.checked = true
             $(_vendor_is_provider).attr("readonly", "true")
@@ -8576,7 +8862,7 @@ const MessageTypes = (function () {
     }
     
     const init = function (settings) {
-        console.log(" -- MessageTypes -- ", {})
+        Console.log(" -- MessageTypes -- ", {})
     }
     
     const set = function (message_types) {
@@ -8609,7 +8895,7 @@ const MessageTypes = (function () {
             MessageTypes.all.set("id", detail)
         })
         
-        console.log(" MessageTypes.all", MessageTypes.all)
+        Console.log(" MessageTypes.all", MessageTypes.all)
     }
     
     return {
@@ -8679,7 +8965,7 @@ const PricingStrategyTypes = (function () {
     }
     
     const init = function (settings) {
-        //console.log(' -- PricingStrategyTypes -- ', {})
+        //Console.log(' -- PricingStrategyTypes -- ', {})
     }
     
     const set = function (pricing_strategy_types) {
@@ -8710,7 +8996,7 @@ const PricingStrategyTypes = (function () {
             PricingStrategyTypes.all.set("id", detail)
         })
         
-        console.log(" PricingStrategyTypes.all", PricingStrategyTypes.all)
+        Console.log(" PricingStrategyTypes.all", PricingStrategyTypes.all)
     }
     
     return {
@@ -8780,7 +9066,7 @@ const RatingTypes = (function () {
     }
     
     const init = function (settings) {
-        console.log(" -- RatingTypes -- ", {})
+        Console.log(" -- RatingTypes -- ", {})
     }
     
     const set = function (rating_types) {
@@ -8811,7 +9097,7 @@ const RatingTypes = (function () {
             RatingTypes.all.set("id", detail)
         })
         
-        console.log(" RatingTypes.all", RatingTypes.all)
+        Console.log(" RatingTypes.all", RatingTypes.all)
     }
     
     return {
@@ -8885,7 +9171,7 @@ const SalesTypes = (function () {
     }
     
     const init = function (settings) {
-        console.log(" -- SalesTypes -- ", {})
+        Console.log(" -- SalesTypes -- ", {})
     }
     
     const set = function (sales_types) {
@@ -8918,7 +9204,7 @@ const SalesTypes = (function () {
             SalesTypes.all.set("id", detail)
         })
         
-        console.log(" SalesTypes.all", SalesTypes.all)
+        Console.log(" SalesTypes.all", SalesTypes.all)
     }
     
     return {
@@ -8990,7 +9276,7 @@ const StatusTypes = (function () {
     }
     
     const init = function (settings) {
-        console.log(" -- StatusTypes -- ", {})
+        Console.log(" -- StatusTypes -- ", {})
     }
     
     const set = function (status_types) {
@@ -9022,7 +9308,7 @@ const StatusTypes = (function () {
             StatusTypes.all.set("id", detail)
         })
         
-        //console.log(' StatusTypes.all',  StatusTypes.all);
+        //Console.log(' StatusTypes.all',  StatusTypes.all);
     }
     
     return {
@@ -9062,7 +9348,7 @@ const Types = (function () {
             Types[types_name].set(type.id, type)
         })
         
-        //console.log(types_name, Types[types_name])
+        //Console.log(types_name, Types[types_name])
     }
     
     const init = function (settings) {
@@ -9240,7 +9526,7 @@ const Login = (function () {
             if (dataToSend) {
                 try {
                     sendPostRequest("/api/v1.0/users/login", dataToSend, function (data, status, xhr) {
-                        console.log("data", data.id)
+                        Console.log("data", data.id)
                         if (data && data.id) {
                             if (data.id) {
                                 window.location.replace("/")
@@ -9335,11 +9621,11 @@ const Login = (function () {
         }
         
         const send_register = function (dataToSend) {
-            console.log("Login.register->send_register", dataToSend)
+            Console.log("Login.register->send_register", dataToSend)
             if (dataToSend) {
                 try {
                     sendPostRequest("/api/v1.0/users/register", dataToSend, function (data, status, xhr) {
-                        console.log("data", data.id)
+                        Console.log("data", data.id)
                         if (data && data.id) {
                             if (data.id) {
                                 window.location.replace("/")
@@ -9406,7 +9692,11 @@ const Provider = (function () {
     const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
     const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
     const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
+    const _modal_product_provider_location_id = document.getElementById("modal_product_provider_location_id")
+    const _modal_product_location_id = document.getElementById("modal_product_location_id")
+    // --
     
+    // --
     let globalSelectedProvider = false
     let isNew = false
     let validator
@@ -9442,12 +9732,12 @@ const Provider = (function () {
           let addresses = Array.from(Address.all.values())
           let contacts = Array.from(Contact.all.values())
           /*
-          console.log("company_detail", company_detail)
-          console.log("provider_detail", provider_detail)
-          console.log("location_detail", location_detail)
-          console.log("vendor_detail", vendor_detail)
-          console.log("addresses", addresses)
-          console.log("contacts", contacts)
+          Console.log("company_detail", company_detail)
+          Console.log("provider_detail", provider_detail)
+          Console.log("location_detail", location_detail)
+          Console.log("vendor_detail", vendor_detail)
+          Console.log("addresses", addresses)
+          Console.log("contacts", contacts)
           //*/
           if (!company_detail || !provider_detail || !location_detail || !vendor_detail || !addresses || !contacts) {
               $.each(panels, function (index, item) {
@@ -9495,7 +9785,7 @@ const Provider = (function () {
     
     $(_button_add_provider_page_heading)
       .on("click", function () {
-          //console.log("test")
+          //Console.log("test")
       })
     
     $(_button_edit_provider_name)
@@ -9508,8 +9798,9 @@ const Provider = (function () {
           $(_provider_company_id).val(_company_id.value)
       })
     
+    //
     const add = function (provider) {
-        console.log("add", provider)
+        Console.log("add", provider)
         if (provider) {
             
             let dataToSend = {
@@ -9530,7 +9821,7 @@ const Provider = (function () {
                     if (data[0]) {
                         vendor_detail = data[0]
                     }
-                    console.log("Provider Upodateing Vendor: vendor_detail", vendor_detail)
+                    Console.log("Provider Upodating Vendor: vendor_detail", vendor_detail)
                     
                     provider.location_id = (provider.location_id) ? provider.location_id : 1
                     provider.vendor_id = vendor_detail.id
@@ -9538,12 +9829,12 @@ const Provider = (function () {
                         provider_detail: provider,
                     }
                     
-                    console.log("Provider : provider_detail", provider_detail)
+                    Console.log("Provider : provider_detail", provider_detail)
                     updateProvider(provider_detail, function (data) {
                         if (data) {
-                            console.log("data", data)
+                            Console.log("data", data)
                             if (data[0]) {
-                                //console.log("data[0]", data[0])
+                                //Console.log("data[0]", data[0])
                                 let provider = data[0]
                                 let vendor = provider.vendor
                                 let company = provider.company
@@ -9554,11 +9845,11 @@ const Provider = (function () {
                                 _modal_product_vendor_name.value = provider.name
                                 _modal_product_vendor_id.value = vendor.id
                                 _modal_product_vendor_company_id.value = company.id
+                                
                                 init_autocomplete()
-                                let sku = (vendor.sku) ? vendor.sku : null
-                                let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
-                                Product.attr2 = code_direct
-                                Product.attr3 = sku
+                                
+                                Product.attr2 = (provider.code_direct_id) ? provider.code_direct_id : null
+                                Product.attr3 = (vendor.sku) ? vendor.sku : null
                                 Product.update_product_sku()
                                 
                             }
@@ -9566,28 +9857,7 @@ const Provider = (function () {
                     })
                 }
             })
-            /*
-            updateProvider(dataToSend, function (data) {
-                let details
-                if (data) {
-                    console.log("data", data)
-                    details = data
-                    if (data[0]) {
-                        console.log("data[0]", data[0])
-                        details = data[0]
-                    }
-                    
-                    if (details.id) {
-                    
-                    } else {
-                        
-                        console.log("Provider: Missing id from details", details)
-                    }
-                } else {
-                    console.log("details 3", provider)
-                }
-            })
-            //*/
+            
         }
     }
     
@@ -9639,7 +9909,7 @@ const Provider = (function () {
                   if (!suggestion.data) {
                       return
                   }
-                  console.log("suggestion.data", suggestion.data)
+                  Console.log("suggestion.data", suggestion.data)
                   let provider = suggestion.data
                   let company = (provider.company) ? provider.company : {}
                   let addresses = (provider.addresses) ? provider.addresses : {}
@@ -9686,6 +9956,7 @@ const Provider = (function () {
                           _modal_product_provider_name.value = ""
                           _modal_product_vendor_company_id.value = ""
                           _modal_product_provider_company_id.value = ""
+                          _modal_product_provider_location_id.value = ""
                           _modal_product_vendor_name.disabled = true
                           Product.attr2 = null
                           Product.attr3 = null
@@ -9704,6 +9975,7 @@ const Provider = (function () {
               _modal_product_provider_name.value = ""
               _modal_product_vendor_company_id.value = ""
               _modal_product_provider_company_id.value = ""
+              _modal_product_provider_location_id.value = ""
               Product.attr2 = null
               Product.attr3 = null
               Product.update_product_sku()
@@ -9723,7 +9995,7 @@ const Provider = (function () {
                   if (!suggestion || !suggestion.data) {
                       return
                   }
-                  console.log("suggestion.data", suggestion.data)
+                  Console.log("suggestion.data", suggestion.data)
                   let provider = set(suggestion.data)
                   let vendor = provider.vendor
                   let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
@@ -9736,6 +10008,7 @@ const Provider = (function () {
                   _modal_product_provider_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
                   _modal_product_provider_vendor_match.checked = true
                   _modal_product_vendor_name.disabled = false
+                  _modal_product_provider_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
                   
                   Product.attr2 = code_direct
                   Product.attr3 = sku
@@ -9760,8 +10033,10 @@ const Provider = (function () {
             }
             
             fetch_provider_by_name(dataToSend, function (data) {
+                let provider
+                
                 if (_form_product_add) {
-                    console.log("data", data)
+                    
                     if (!data || data.length === 0) {
                         confirmDialog("This provider does not exist. Would you like to create it?", (ans) => {
                             if (ans) {
@@ -9797,6 +10072,46 @@ const Provider = (function () {
                                 globalSelectedProvider = false
                             }
                         })
+                    } else {
+                        if (data) {
+                            provider = data
+                            if (data.length > 0) {
+                                provider = data[0]
+                            }
+                        }
+                        
+                        Console.log("provider", provider)
+                        
+                        let vendor = provider.vendor
+                        let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
+                        let sku = (vendor.sku) ? vendor.sku : null
+                        Console.log("code_direct", code_direct)
+                        Console.log("sku", sku)
+                        
+                        _modal_product_vendor_id.value = parseInt(vendor.id)
+                        _modal_product_provider_id.value = provider.id
+                        _modal_product_vendor_name.value = provider.name
+                        _modal_product_vendor_company_id.value = (!isNaN(parseInt(provider.company_id))) ? parseInt(provider.company_id) : null
+                        _modal_product_provider_company_id.value = (!isNaN(parseInt(provider.company_id))) ? parseInt(provider.company_id) : null
+                        _modal_product_provider_vendor_match.checked = true
+                        _modal_product_vendor_name.disabled = false
+                        _modal_product_provider_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
+                        _modal_product_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
+                        Product.attr2 = code_direct
+                        Product.attr3 = sku
+                        Product.update_product_sku()
+                        
+                        /*
+                        
+                        
+    
+                        
+                        
+    
+                        Product.attr2 = code_direct
+                        Product.attr3 = sku
+                        Product.update_product_sku()
+                        //*/
                     }
                 }
                 
@@ -9804,9 +10119,11 @@ const Provider = (function () {
                     if (data) {
                         if (data.length > 0) {
                             
-                            let provider = data[0]
+                            provider = data[0]
                             
-                            console.log("provider", provider)
+                            if (_form_product_add) {
+                            
+                            }
                             confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
                                 if (ans) {
                                     window.location.href = "/providers/" + provider.id
@@ -9819,6 +10136,7 @@ const Provider = (function () {
                             
                         }
                     }
+                    Console.log("provider", provider)
                     $(_vendor_name).val($(_provider_name).val()).trigger("change")
                 }
                 
@@ -9968,13 +10286,13 @@ const Provider = (function () {
      * @param provider
      */
     const save = function (provider) {
-        console.log("save", provider)
+        Console.log("save", provider)
         if (provider) {
             updateProvider(provider, function (data) {
                 if (data) {
-                    console.log("data 1", data)
+                    Console.log("data 1", data)
                     if (data[0]) {
-                        console.log("data[0] 1", data[0])
+                        Console.log("data[0] 1", data[0])
                         let details = data[0]
                         if (details.id) {
                             if (_provider_id.value === "" || isNaN(parseInt(_provider_id.value))) {
@@ -9984,13 +10302,13 @@ const Provider = (function () {
                                 toastr.success(`Provider ${name} has been updated.`)
                             }
                         } else {
-                            console.log("details 1", details)
+                            Console.log("details 1", details)
                         }
                     } else {
-                        console.log("details 2", data)
+                        Console.log("details 2", data)
                     }
                 } else {
-                    console.log("details 3", provider)
+                    Console.log("details 3", provider)
                 }
             })
         }
@@ -10015,7 +10333,7 @@ const Provider = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
             }
         }
     }
@@ -10094,7 +10412,7 @@ const Provider = (function () {
      * regulate tab access
      */
     const set_progress = function () {
-        console.log("set_progress()")
+        Console.log("set_progress()")
         let provider_id = (!isNaN(_provider_id.value)) ? _provider_id.value : null
         let company_id = (!isNaN(_provider_company_id.value)) ? _provider_company_id.value : null
         
@@ -10181,7 +10499,7 @@ const Provider = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 return handle_provider_error("Error Validating Company")
             }
         } else {
@@ -10323,6 +10641,8 @@ const Product = (function () {
     const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
     const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
     const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
+    const _modal_product_provider_location_id = document.getElementById("modal_product_provider_location_id")
+    const _modal_product_location_id = document.getElementById("modal_product_location_id")
     /**
      * product search: panels - hotels
      * @type {HTMLElement}
@@ -10358,14 +10678,11 @@ const Product = (function () {
     const base_url = "/products"
     const _product_index_page = document.getElementById("product_index_page")
     const _product_index_table = document.getElementById("product_index_table")
-    //
     
-    //
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $index_table, new_product_validator
-    //
     let add_modal_form_rules = {
-        //*
+        /*
         groups: {
             providerNameGroup: "modal_product_provider_id modal_product_provider_name modal_product_provider_company_id",
             vendorNameGroup: "modal_product_vendor_id modal_product_vendor_name modal_product_vendor_company_id",
@@ -10468,7 +10785,11 @@ const Product = (function () {
     $(_modal_button_submit_add_product)
       .on("click", function () {
           if (validate_new_form()) {
-              save_new()
+              confirmDialog(`Would you like to update?`, (ans) => {
+                  if (ans) {
+                      save_new()
+                  }
+              })
           }
       })
     
@@ -10498,6 +10819,71 @@ const Product = (function () {
               }
           }
       })
+    
+    const buildInsertData = function () {
+        let dataToSend = {
+            category_id: (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null,
+            pricing_strategy_types_id: (!isNaN(parseInt(_modal_product_pricing_strategies_types_id.value))) ? parseInt(_modal_product_pricing_strategies_types_id.value) : null,
+            status_types_id: 1,
+            currency_id: (!isNaN(parseInt(_modal_product_currency_id.value))) ? parseInt(_modal_product_currency_id.value) : null,
+            location_id: (!isNaN(parseInt(_modal_product_location_id.value))) ? parseInt(_modal_product_location_id.value) : null,
+            rating_types_id: (!isNaN(parseInt(_modal_product_rating_types_id.value))) ? parseInt(_modal_product_rating_types_id.value) : null,
+            provider_id: (!isNaN(parseInt(_modal_product_provider_id.value))) ? parseInt(_modal_product_provider_id.value) : null,
+            vendor_id: (!isNaN(parseInt(_modal_product_vendor_id.value))) ? parseInt(_modal_product_vendor_id.value) : null,
+            provider_vendor_match: (((!isNaN(parseInt(_modal_product_provider_company_id.value))) ? parseInt(_modal_product_provider_company_id.value) : null) === ((!isNaN(parseInt(_modal_product_vendor_company_id.value))) ? parseInt(_modal_product_vendor_company_id.value) : null)) ? 1 : 0,
+            name: _modal_product_name.value,
+            sku: _modal_product_sku.value,
+            use_provider_location_id: 1,
+            //provider_company_id: (!isNaN(parseInt(_modal_product_provider_company_id.value))) ? parseInt(_modal_product_provider_company_id.value) : null,
+            //vendor_company_id: (!isNaN(parseInt(_modal_product_vendor_company_id.value))) ? parseInt(_modal_product_vendor_company_id.value) : null,
+            //vendor_name: _modal_product_vendor_name.value,
+            //provider_name: _modal_product_provider_name.value,
+            //provider_location_id: (!isNaN(parseInt(_modal_product_provider_location_id.value))) ? parseInt(_modal_product_provider_location_id.value) : null,
+        }
+        return remove_nulls(dataToSend)
+    }
+    
+    const save_new = function () {
+        Console.log("save_new()")
+        let dataToSend = buildInsertData()
+        
+        Console.log("dataToSend", remove_nulls(dataToSend))
+        
+        new_product(dataToSend, function (data) {
+            let product
+            
+            if (data) {
+                Console.log("data", data)
+                product = data
+                if (data.length === 1) {
+                    product = data[0]
+                }
+            }
+            
+            if (product.id) {
+                window.location.replace("/products/" + product.id)
+            }
+        })
+        
+    }
+    
+    const new_product = function (dataToSend, callback) {
+        let url = "/api/v1.0/products/add"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handle_product_error("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                Console.log(e)
+            }
+        }
+    }
     
     const init_new_product_autocomplete = function () {
         let category_id = (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null
@@ -10541,17 +10927,17 @@ const Product = (function () {
                       if (!suggestion || !suggestion.data) {
                           return
                       }
-                      //console.log("suggestion.data", suggestion.data)
+                      //Console.log("suggestion.data", suggestion.data)
                       let product = suggestion.data
-                      console.log("product", product)
+                      Console.log("product", product)
                   },
               })
         }
-        console.log("init_new_product_autocomplete()", category_id)
+        Console.log("init_new_product_autocomplete()", category_id)
     }
     
     const validate_new_form = function () {
-        console.log("validate_new_form", "")
+        Console.log("validate_new_form", "")
         if (_form_product_add) {
             return $(_form_product_add).valid()
         }
@@ -10569,6 +10955,8 @@ const Product = (function () {
         _modal_product_vendor_name.disabled = true
         _modal_product_provider_name.disabled = true
         _modal_product_pricing_strategies_types_id.value = ""
+        _modal_product_provider_location_id.value = ""
+        _modal_product_location_id.value = ""
         Product.attr1 = null
         Product.attr2 = null
         Product.attr3 = null
@@ -10599,10 +10987,6 @@ const Product = (function () {
     const set_new_product_modal = function () {
         clear_modal_form()
         $(_modal_new_product).modal("show")
-    }
-    
-    const save_new = function () {
-        let dataToSend = {}
     }
     
     const handle_product_error = function (msg) {
@@ -10812,19 +11196,157 @@ const Product = (function () {
         }
     }
     
+    let provider_initial_location, product_initial_location = {}
+    let radios = document.querySelectorAll('input[type=radio][name="location_to_use"]')
+    const _use_provider_location = document.getElementById("use_provider_location")
+    const _use_product_location = document.getElementById("use_product_location")
+    
+    const changeHandler = function (event) {
+        Console.log("value", this.value)
+        if (this.value === "use_provider_location") {
+            Console.log("use_provider_location", provider_initial_location)
+            Location.init(provider_initial_location)
+        } else if (this.value === "use_product_location") {
+            Console.log("use_product_location", product_initial_location)
+            Location.init(product_initial_location)
+        }
+    }
+    
     const init_autocomplete = function () {
         if (_modal_product_name) {
         
         }
     }
     
+    const set_default_product_details = function () {
+        return {
+            location: {},
+            provider: {},
+            vendor: {},
+            seasons: [],
+            units: [],
+            variants: [],
+            profiles: [],
+            matrix: [],
+        }
+    }
+    
+    const set_edit_form_values = function (product) {
+        Console.log("Product.set_edit_form_values(product)", product)
+        let provider, vendor, product_location,
+          seasons, units, variants, profiles, provider_location
+        
+        if (product.location) {
+            product_location = product.location
+            Product.product_initial_location = product_location
+        }
+        Console.log("Product.init(): product_location", product_location)
+        
+        if (product.provider) {
+            provider = product.provider
+        }
+        Console.log("Product.init(): provider", provider)
+        
+        if (provider.location) {
+            provider_location = provider.location
+            Product.provider_initial_location = provider_location
+        }
+        Console.log("Product.init(): provider_location", provider_location)
+        
+        if (product.vendor) {
+            vendor = product.vendor
+        }
+        Console.log("Product.init(): vendor", vendor)
+        
+        if (product.seasons) {
+            seasons = product.seasons
+        }
+        Console.log("Product.init(): seasons", seasons)
+        
+        if (product.units) {
+            units = product.units
+        }
+        Console.log("Product.init(): units", units)
+        
+        if (product.variants) {
+            variants = product.variants
+        }
+        Console.log("Product.init(): variants", variants)
+        
+        if (product.profiles) {
+            profiles = product.profiles
+        }
+        Console.log("Product.init(): profiles", profiles)
+        
+        if (product.use_provider_location) {
+            $(_use_provider_location).attr("checked", "true")
+            Location.init(provider_location)
+        } else {
+            $(_use_product_location).attr("checked", "true")
+            Location.init(product_location)
+        }
+        
+        load_product_location(product_location)
+        load_provider_location(provider_location)
+    }
+    
+    const load_product_location = function (product_location) {
+        Console.log("Product.load_product_location(product_location)", product_location)
+        product_initial_location = product_location
+        let $frame = $("#map-container-product-location").find("iframe")
+        Console.log("$frame", $frame.attr("src"))
+        let url = buildMapsURL(product_location)
+        Console.log("url", url)
+        $frame.attr("src", url)
+    }
+    
+    const load_provider_location = function (provider_location) {
+        Console.log("Product.load_provider_location(provider_location)", provider_location)
+        provider_initial_location = provider_location
+        let $frame = $("#map-container-provider-location").find("iframe")
+        Console.log("$frame", $frame.attr("src"))
+        let url = buildMapsURL(provider_location)
+        Console.log("url", url)
+        $frame.attr("src", url)
+    }
+    
+    const init_edit_form = function (settings) {
+        Console.log("Product.init_edit_form(settings)", settings)
+        let product = set_default_product_details()
+        
+        if (settings) {
+            product = settings
+        }
+        Console.log("Product.init_edit_form(): product", product)
+        
+        Array.prototype.forEach.call(radios, function (radio) {
+            radio.addEventListener("change", changeHandler)
+        })
+        
+        set_edit_form_values(product)
+    }
+    
     const init = function (settings) {
-        console.log("Product.init()", settings)
+        Console.log("Product.init()", settings)
+        let product_details
+        
         if (_modal_new_product) {
             Category.init()
         }
         
         if (_product_edit_page) {
+            if (settings) {
+                if (settings.product_details) {
+                    product_details = settings.product_details
+                }
+                
+                //
+                $(document).ready(function () {
+                    init_edit_form(product_details)
+                })
+                
+            }
+            
             return true
         }
         
@@ -10851,7 +11373,7 @@ const Product = (function () {
     }
     
     const setNewFormDetails = function (category_id) {
-        console.log("setNewFormDetails()", category_id)
+        Console.log("setNewFormDetails()", category_id)
         
     }
     
@@ -10866,15 +11388,15 @@ const Product = (function () {
         } else {
             _modal_product_sku.value = ""
             if (is_null(att1)) {
-                console.log("att1 is null", att1)
+                Console.log("att1 is null", att1)
             }
             
             if (is_null(att2)) {
-                console.log("att2 is null", att2)
+                Console.log("att2 is null", att2)
             }
             
             if (is_null(att3)) {
-                console.log("att3 is null", att3)
+                Console.log("att3 is null", att3)
             }
         }
         
@@ -10882,6 +11404,8 @@ const Product = (function () {
     
     return {
         validator: null,
+        product_initial_location: null,
+        provider_initial_location: null,
         detail: {},
         all: new Map(),
         attr1: null,
@@ -10891,7 +11415,7 @@ const Product = (function () {
             update_product_sku()
         },
         setNewFormDetails: function (category_id) {
-            console.log("Product.setNewFormDetails()", category_id)
+            Console.log("Product.setNewFormDetails()", category_id)
             setNewFormDetails(category_id)
         },
         get: function (params) {
@@ -10932,7 +11456,7 @@ $(function () {
     
     $(_profile_edit_name)
       .on("click", function () {
-          console.log("_profile_edit_name:click")
+          Console.log("_profile_edit_name:click")
       })
     
     let tempName = {
@@ -10980,7 +11504,7 @@ $(document).ready(function () {
     if (mdbPreloader) {
         //$("#mdb-preloader").fadeOut(500)
     } else {
-        console.log("no preloader")
+        Console.log("no preloader")
     }
     
     new WOW().init()

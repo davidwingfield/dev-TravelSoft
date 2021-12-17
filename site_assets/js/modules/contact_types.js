@@ -44,7 +44,7 @@ const ContactTypes = (function () {
     }
     
     const init = function (settings) {
-        console.log(" -- ContactTypes -- ", {})
+        Console.log(" -- ContactTypes -- ", {})
     }
     
     const set = function (contact_types) {
@@ -76,7 +76,7 @@ const ContactTypes = (function () {
             ContactTypes.all.set("id", detail)
         })
         
-        console.log(" ContactTypes.all", ContactTypes.all)
+        Console.log(" ContactTypes.all", ContactTypes.all)
     }
     
     return {

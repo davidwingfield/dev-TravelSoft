@@ -162,6 +162,8 @@
             ),
         );
         
+        //
+        
         public function __construct()
         {
             parent::__construct();
@@ -308,7 +310,8 @@
                 return [];
             }
             $rooms = array();
-            
+            $matrices = [];
+            $profiles = Profile::getByProductId((int)$product['product_id']);
             $seasons = Season::getSeasonsByProductId((int)$product['product_id']);
             $units = Unit::getUnitsByProductId((int)$product['product_id']);
             $variants = Variant::getVariantsByProductId((int)$product['product_id']);
@@ -349,6 +352,17 @@
                 'category_id' => $product['product_category_id'],
                 'pricing_strategy_types_id' => $product['product_pricing_strategy_types_id'],
                 'status_types_id' => $product['product_status_types_id'],
+                'status_type_detail' => array(
+                    'id' => $product['status_types_id'],
+                    'name' => $product['status_types_name'],
+                    'enabled' => $product['status_types_enabled'],
+                    'date_created' => $product['status_types_date_created'],
+                    'created_by' => $product['status_types_created_by'],
+                    'date_modified' => $product['status_types_date_modified'],
+                    'modified_by' => $product['status_types_modified_by'],
+                    'note' => $product['status_types_note'],
+                    'sort_order' => $product['status_types_sort_order'],
+                ),
                 'category' => array(
                     'id' => $product['category_id'],
                     'pricing_strategy_types_id' => $product['category_pricing_strategy_types_id'],
@@ -411,6 +425,8 @@
                 'seasons' => $seasons,
                 'units' => $units,
                 'variants' => $variants,
+                'profiles' => $profiles,
+                'matrices' => $matrices,
             );
         }
         
@@ -448,10 +464,15 @@
         public static function serveAdd(array $params = []): void
         {
             Log::$debug_log->trace($params);
+            $products = array();
+            
             $results = ProductModel::addRecord($params);
+            foreach ($results as $result) {
+                $products[] = self::format($result);
+            }
             
             // --
-            View::render_json($params);
+            View::render_json($products);
             exit(0);
         }
         

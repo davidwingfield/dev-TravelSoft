@@ -46,7 +46,7 @@ const MessageTypes = (function () {
     }
     
     const init = function (settings) {
-        console.log(" -- MessageTypes -- ", {})
+        Console.log(" -- MessageTypes -- ", {})
     }
     
     const set = function (message_types) {
@@ -79,7 +79,7 @@ const MessageTypes = (function () {
             MessageTypes.all.set("id", detail)
         })
         
-        console.log(" MessageTypes.all", MessageTypes.all)
+        Console.log(" MessageTypes.all", MessageTypes.all)
     }
     
     return {

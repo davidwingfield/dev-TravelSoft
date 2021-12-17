@@ -5,7 +5,7 @@ $(function () {
     
     $(_profile_edit_name)
       .on("click", function () {
-          console.log("_profile_edit_name:click")
+          Console.log("_profile_edit_name:click")
       })
     
     let tempName = {

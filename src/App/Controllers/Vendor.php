@@ -531,6 +531,9 @@
             $vendor_id = (int)$vendor["vendor_id"];
             $cover_image = "";
             $images = Image::getByCompanyId($company_id);
+            
+            //
+            
             for ($n = 0; $n < count($images); $n++) {
                 if ($images[$n]["is_cover_image"] === 1) {
                     $cover_image = $images[$n]["path"] . "/" . $images[$n]["name"] . "." . $images[$n]["extension"];
@@ -553,7 +556,8 @@
                 "date_modified" => $vendor["vendor_date_modified"],
                 "created_by" => $vendor["vendor_created_by"],
                 "modified_by" => $vendor["vendor_modified_by"],
-                
+                "description_short" => $vendor["vendor_description_short"],
+                "description_long" => $vendor["vendor_description_long"],
                 "company" => array(
                     "images" => $images,
                     "id" => $vendor["company_id"],

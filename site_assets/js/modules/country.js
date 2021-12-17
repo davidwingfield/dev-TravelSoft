@@ -39,7 +39,7 @@ const Country = (function () {
     
     const handle_country_error = function (msg) {
         toastr.error(msg)
-        console.log(msg)
+        Console.log(msg)
     }
     
     const on_click_outside = (e) => {
@@ -152,7 +152,7 @@ const Country = (function () {
                 })
                 /*
                 sendGetRequest("/api/v1.0/countries", dataToSend, function (data, status, xhr) {
-                    //console.log(data)
+                    //Console.log(data)
                     
                     if (data) {
                         // Country.all = data.result
@@ -163,7 +163,7 @@ const Country = (function () {
                 })
                 //*/
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 return handle_country_error("Error Validating Country")
             }
         } else {
@@ -191,12 +191,12 @@ const Country = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 handle_country_error("Error: Validating Country")
             }
             
         } else {
-            console.log("Error: Missing Data")
+            Console.log("Error: Missing Data")
             handle_country_error("Error: Missing Data")
         }
     }

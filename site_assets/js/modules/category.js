@@ -82,7 +82,7 @@ const Category = (function () {
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
-                    console.log("Hotels")
+                    Console.log("Hotels")
                     break
                 case 2:
                     /**
@@ -93,7 +93,7 @@ const Category = (function () {
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = true
-                    console.log("Flight")
+                    Console.log("Flight")
                     break
                 case 3:
                     /**
@@ -104,7 +104,7 @@ const Category = (function () {
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = true
-                    console.log("Cars")
+                    Console.log("Cars")
                     break
                 case 4:
                     /**
@@ -115,7 +115,7 @@ const Category = (function () {
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = true
-                    console.log("Rail")
+                    Console.log("Rail")
                     break
                 case 5:
                     /**
@@ -126,7 +126,7 @@ const Category = (function () {
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = false
-                    console.log("Transport")
+                    Console.log("Transport")
                     break
                 case 6:
                     /**
@@ -137,7 +137,7 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.value = "2"
                     _modal_product_rating_types_id.value = ""
                     _modal_product_rating_types_id.disabled = true
-                    console.log("Tours")
+                    Console.log("Tours")
                     break
                 case 7:
                     /**
@@ -150,7 +150,7 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_currency_id.disabled = false
-                    console.log("Cruises")
+                    Console.log("Cruises")
                     break
                 case 8:
                     /**
@@ -161,7 +161,7 @@ const Category = (function () {
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
-                    console.log("Packages")
+                    Console.log("Packages")
                     break
                 case 9:
                     /**
@@ -173,7 +173,7 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    console.log("Other")
+                    Console.log("Other")
                     break
                 default:
                     /**
@@ -184,7 +184,7 @@ const Category = (function () {
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_currency_id.disabled = true
                     _modal_product_pricing_strategies_types_id.disabled = true
-                    console.log("Default")
+                    Console.log("Default")
                     break
             }
         }
@@ -231,7 +231,7 @@ const Category = (function () {
     }
     
     const init = function (settings) {
-        //console.log("Category.init()", settings)
+        //Console.log("Category.init()", settings)
         let categories = []
         if (settings) {
             if (settings.categories) {
@@ -243,7 +243,7 @@ const Category = (function () {
     }
     
     const set = function (category) {
-        //console.log("Category.set()", category)
+        //Console.log("Category.set()", category)
         let detail = _default_detail()
         if (category) {
             detail.id = (category.id) ? category.id : null
@@ -281,7 +281,7 @@ const Category = (function () {
     }
     
     const load_all = function (categories) {
-        //console.log("Category.load_all()", categories)
+        //Console.log("Category.load_all()", categories)
         Category.all = new Map()
         
         if (!categories) {
@@ -290,12 +290,12 @@ const Category = (function () {
         
         $.each(categories, function (i, category) {
             let detail = set(category)
-            //console.log("detail", detail)
-            //console.log("detail.id", detail.id)
+            //Console.log("detail", detail)
+            //Console.log("detail.id", detail.id)
             Category.all.set(detail.id, detail)
         })
         
-        //console.log(" Category.all", Category.all)
+        //Console.log(" Category.all", Category.all)
     }
     
     return {

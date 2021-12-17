@@ -96,7 +96,7 @@ const Province = (function () {
     
     const handle_province_error = function (msg) {
         toastr.error(msg)
-        console.log(msg)
+        Console.log(msg)
     }
     
     const on_click_outside = (e) => {
@@ -215,7 +215,7 @@ const Province = (function () {
                 })
                 //*/
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 return handle_province_error("Error Validating Province")
             }
         } else {
@@ -532,7 +532,7 @@ const Province = (function () {
                 sendPostRequest("/api/v1.0/provinces/update", dataToSend, function (data, status, xhr) {
                     if (data && data[0]) {
                         let new_province = data[0]
-                        console.log("new_province", new_province)
+                        Console.log("new_province", new_province)
                         Province.all.set(new_province.id, new_province)
                         let province_elements = $("select[data-type='province']")
                         Province.id = new_province.id
@@ -552,11 +552,11 @@ const Province = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 handle_province_error("Error: Validating Province")
             }
         } else {
-            console.log("Error: Missing Data")
+            Console.log("Error: Missing Data")
             handle_province_error("Error: Missing Data")
         }
     }

@@ -26,6 +26,7 @@ const Location = (function () {
     const _form_edit_location_filter = document.getElementById("form_edit_location_filter")
     const _location_name_filter_id = document.getElementById("location_name_filter_id")
     //
+    
     const edit_location_filter_form_rules = {
         groups: {
             locationGroup: "location_name_filter location_name_filter_id",
@@ -93,6 +94,18 @@ const Location = (function () {
     }
     
     /**
+     * Product Variables
+     */
+    const _form_product_edit_location = document.getElementById("form_product_edit_location")
+    const _button_edit_product_location = document.getElementById("button_edit_product_location")
+    const _button_clear_form_edit_product_location = document.getElementById("button_clear_form_edit_product_location")
+    const _button_submit_form_edit_product_location = document.getElementById("button_submit_form_edit_product_location")
+    const _button_close_edit_product_location_form = document.getElementById("button_close_edit_product_location_form")
+    const _product_location_search = document.getElementById("product_location_search")
+    const _card_product_edit_location = document.getElementById("card_product_edit_location")
+    //
+    
+    /**
      * Global Variables
      */
     let temp_location = {}
@@ -110,6 +123,153 @@ const Location = (function () {
         //e.relatedTarget // previous active tab
         hide_form()
     })
+    
+    const clear_product_location_form = function () {
+        Console.log("Location.clear_product_location_form()")
+        _location_id.value = ""
+        _location_types_id.value = ""
+        _location_name.value = ""
+        _location_street_1.value = ""
+        _location_street_2.value = ""
+        _location_zipcode.value = ""
+        $(_location_country_id).val("").trigger("change")
+        /*
+        switch (defaultLocationDisplayFormat) {
+            case "short":
+                document.getElementById("location_display_short").checked = true
+                break
+            case "medium":
+                document.getElementById("location_display_medium").checked = true
+                break
+            default:
+                document.getElementById("location_display_long").checked = true
+        }
+        //*/
+        
+    }
+    
+    const populate_product_location_form = function (location) {
+        Console.log("Location.populate_product_location_form(location)", location)
+        clear_product_location_form()
+        let country = {}
+        let province = {}
+        let city = {}
+        let type = {}
+        if (location) {
+            switch (defaultLocationDisplayFormat) {
+                case "short":
+                    _product_location_search.value = (location.display_short) ? location.display_short : ""
+                    break
+                case "medium":
+                    _product_location_search.value = (location.display_medium) ? location.display_medium : ""
+                    break
+                default:
+                    _product_location_search.value = (location.display_long) ? location.display_long : ""
+            }
+            
+            _location_name.value = location.name
+            $(_location_id).val(location.id).trigger("change")
+            _location_street_1.value = location.street_1
+            _location_street_2.value = location.street_2
+            _location_zipcode.value = location.zipcode
+            
+            let location_type_id = ""
+            if (location.type) {
+                type = location.type
+                location_type_id = type.id
+            }
+            $(_location_types_id).val(location_type_id)
+            
+            if (location.country) {
+                country = location.country
+                Country.id = (country.id) ? country.id.toString() : null
+            }
+            
+            if (location.province) {
+                province = location.province
+                Province.id = (province.id) ? province.id.toString() : null
+            }
+            
+            if (location.city) {
+                city = location.city
+                City.id = (city.id) ? city.id : null
+            }
+            
+            $(_location_country_id).val((country.id) ? country.id : "").trigger("change")
+        }
+    }
+    
+    const unload_product_location_form = function (location) {
+        clear_product_location_form()
+        $(_card_product_edit_location).hide()
+    }
+    
+    const load_product_location_form = function (location) {
+        Console.log("Location.load_product_location_form(location)", location)
+        clear_product_location_form()
+        populate_product_location_form(location)
+        $(_card_product_edit_location).show()
+    }
+    
+    $(_button_submit_form_edit_product_location)
+      .on("click", function () {
+          load_product_location_form()
+      })
+    
+    $(_button_edit_product_location)
+      .on("click", function () {
+          if (Location.detail) {
+              load_product_location_form(Location.detail)
+          }
+      })
+    
+    $(_button_submit_form_edit_product_location)
+      .on("click", function () {
+      
+      })
+    
+    $(_button_clear_form_edit_product_location)
+      .on("click", function () {
+          unload_product_location_form()
+      })
+    
+    $(_button_close_edit_product_location_form)
+      .on("click", function () {
+          unload_product_location_form()
+      })
+    
+    $(_product_location_search)
+      .on("click", function () {
+          $(this).select()
+      })
+      .on("change", function () {
+          globalSelectedLocation = false
+          setTimeout(function () {
+              let location_name = _location_name_filter.value
+              Console.log("location_name", location_name)
+          }, 200)
+      })
+      .on("search", function () {
+          globalSelectedLocation = false
+          
+      })
+      .autocomplete({
+          serviceUrl: "/api/v1.0/autocomplete/locations",
+          minChars: 2,
+          cache: false,
+          dataType: "json",
+          triggerSelectOnValidInput: false,
+          paramName: "st",
+          params: { "default_display": default_display },
+          onSelect: function (suggestion) {
+              if (suggestion && suggestion.data) {
+                  globalSelectedLocation = true
+                  Console.log("suggestion", suggestion)
+              }
+          },
+          onSearchComplete: function (query, suggestions) {
+          },
+      })
     
     /**
      * _button_close_edit_location_form
@@ -174,7 +334,7 @@ const Location = (function () {
       .on("change", function () {
           
           let selected_value = $("input[name='location_display']:checked").val()
-          console.log("selected_value", selected_value)
+          Console.log("selected_value", selected_value)
           default_display = selected_value
           init_autocomplete()
           if (Location.detail["display_" + selected_value] !== null) {
@@ -425,7 +585,7 @@ const Location = (function () {
                     }
                 })
             } catch (e) {
-                console.log(e)
+                Console.log(e)
                 return handle_location_error("Error Validating Location")
             }
         } else {
@@ -743,6 +903,55 @@ const Location = (function () {
             hide_form()
         }
         
+        if (_form_product_edit_location) {
+            
+            $(_location_country_id).BuildDropDown({
+                data: Array.from(Country.all.values()),
+                title: "Country",
+                id_field: "id",
+                text_field: "name",
+                first_selectable: false,
+            })
+            
+            $(_location_province_id).BuildDropDown({
+                data: Array.from(Province.all.values()),
+                title: "Province",
+                id_field: "id",
+                text_field: "name",
+                first_selectable: false,
+            })
+            
+            $(_location_city_id).BuildDropDown({
+                data: Array.from(City.all.values()),
+                title: "City",
+                id_field: "id",
+                text_field: "name",
+                first_selectable: false,
+            })
+            
+            Country.init({
+                dropdowns: [
+                    "location_country_id",
+                ],
+            })
+            
+            Province.init({
+                dropdowns: [
+                    "location_province_id",
+                ],
+            })
+            
+            City.init({
+                dropdowns: [
+                    "location_city_id",
+                ],
+            })
+            
+            Location.detail = detail
+            
+            populate_product_location_form(detail)
+        }
+        
         if (_location_name_filter) {
             init_autocomplete()
         }
@@ -843,7 +1052,7 @@ const Location = (function () {
             populate_form(location)
         },
         set_detail: function (location) {
-            console.log("location", location)
+            Console.log("location", location)
             set_detail(location)
         },
         build: function () {

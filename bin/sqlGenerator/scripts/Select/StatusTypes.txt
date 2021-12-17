@@ -1,12 +1,24 @@
 SELECT
-	STATUS_TYPES.id AS 'status_types_id',
-	STATUS_TYPES.name AS 'status_types_name',
-	STATUS_TYPES.enabled AS 'status_types_enabled',
-	STATUS_TYPES.date_created AS 'status_types_date_created',
-	STATUS_TYPES.created_by AS 'status_types_created_by',
-	STATUS_TYPES.date_modified AS 'status_types_date_modified',
-	STATUS_TYPES.modified_by AS 'status_types_modified_by',
-	STATUS_TYPES.note AS 'status_types_note',
-	STATUS_TYPES.sort_order AS 'status_types_sort_order'
+		STATUS_TYPES.id AS 'status_types_id',
+		STATUS_TYPES.name AS 'status_types_name',
+		STATUS_TYPES.enabled AS 'status_types_enabled',
+		STATUS_TYPES.date_created AS 'status_types_date_created',
+		STATUS_TYPES.created_by AS 'status_types_created_by',
+		STATUS_TYPES.date_modified AS 'status_types_date_modified',
+		STATUS_TYPES.modified_by AS 'status_types_modified_by',
+		STATUS_TYPES.note AS 'status_types_note',
+		STATUS_TYPES.sort_order AS 'status_types_sort_order'
 FROM 	status_types STATUS_TYPES
 -- JOIN 	status_types STATUS_TYPES ON STATUS_TYPES.id = {FK_TABLE}.status_types_id
+
+/*
+'id'=>$status_types['status_types_id'],
+'name'=>$status_types['status_types_name'],
+'enabled'=>$status_types['status_types_enabled'],
+'date_created'=>$status_types['status_types_date_created'],
+'created_by'=>$status_types['status_types_created_by'],
+'date_modified'=>$status_types['status_types_date_modified'],
+'modified_by'=>$status_types['status_types_modified_by'],
+'note'=>$status_types['status_types_note'],
+'sort_order'=>$status_types['status_types_sort_order']
+*/

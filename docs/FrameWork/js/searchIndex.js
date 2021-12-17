@@ -46,6 +46,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Autocomplete.html#method_providers"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Autocomplete\u003A\u003Acities\u0028\u0029",
+            "name": "cities",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Autocomplete.html#method_cities"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Autocomplete\u003A\u003Aproducts\u0028\u0029",
             "name": "products",
             "summary": "",
@@ -68,7 +73,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\City",
             "name": "City",
-            "summary": "Short\u0020City\u0020Description",
+            "summary": "Short\u0020City\u0020Description\nLong\u0020City\u0020Description",
             "url": "classes/Framework-App-Controllers-City.html"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\City\u003A\u003A__construct\u0028\u0029",
@@ -95,6 +100,21 @@ Search.appendIndex(
             "name": "format",
             "summary": "",
             "url": "classes/Framework-App-Controllers-City.html#method_format"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\City\u003A\u003Aautocomplete\u0028\u0029",
+            "name": "autocomplete",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-City.html#method_autocomplete"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\City\u003A\u003AformatACRecord\u0028\u0029",
+            "name": "formatACRecord",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-City.html#method_formatACRecord"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\City\u003A\u003Aformat_ac\u0028\u0029",
+            "name": "format_ac",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-City.html#method_format_ac"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Company",
             "name": "Company",
@@ -381,6 +401,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Product.html#method_format_ac"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Product\u003A\u003AserveAdd\u0028\u0029",
+            "name": "serveAdd",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Product.html#method_serveAdd"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Product\u003A\u003A\u0024buttons",
             "name": "buttons",
             "summary": "buttons",
@@ -598,7 +623,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Unit",
             "name": "Unit",
-            "summary": "Short\u0020Unit\u0020Description",
+            "summary": "Short\u0020Unit\u0020Description\nLong\u0020Unit\u0020Description",
             "url": "classes/Framework-App-Controllers-Unit.html"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Unit\u003A\u003A__construct\u0028\u0029",
@@ -1058,8 +1083,13 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\CityModel",
             "name": "CityModel",
-            "summary": "Short\u0020City\u0020Description",
+            "summary": "Short\u0020City\u0020Description\nLong\u0020City\u0020Description",
             "url": "classes/Framework-App-Models-CityModel.html"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\CityModel\u003A\u003Acity_ac\u0028\u0029",
+            "name": "city_ac",
+            "summary": "",
+            "url": "classes/Framework-App-Models-CityModel.html#method_city_ac"
         },                {
             "fqsen": "\\Framework\\App\\Models\\CityModel\u003A\u003Aget\u0028\u0029",
             "name": "get",
@@ -1085,6 +1115,11 @@ Search.appendIndex(
             "name": "dbFields",
             "summary": "",
             "url": "classes/Framework-App-Models-CityModel.html#property_dbFields"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\CityModel\u003A\u003A\u0024selectQuery",
+            "name": "selectQuery",
+            "summary": "",
+            "url": "classes/Framework-App-Models-CityModel.html#property_selectQuery"
         },                {
             "fqsen": "\\Framework\\App\\Models\\ColorSchemeModel",
             "name": "ColorSchemeModel",
@@ -1823,7 +1858,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProductModel",
             "name": "ProductModel",
-            "summary": "Short\u0020Product\u0020Description\nLong\u0020Product\u0020Description",
+            "summary": "Short\u0020ProductModel\u0020Description\nLong\u0020ProductModel\u0020Description",
             "url": "classes/Framework-App-Models-ProductModel.html"
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProductModel\u003A\u003Aget\u0028\u0029",
@@ -1845,6 +1880,11 @@ Search.appendIndex(
             "name": "product_ac",
             "summary": "",
             "url": "classes/Framework-App-Models-ProductModel.html#method_product_ac"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ProductModel\u003A\u003AaddRecord\u0028\u0029",
+            "name": "addRecord",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ProductModel.html#method_addRecord"
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProductModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
@@ -1938,7 +1978,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\RatingTypesModel",
             "name": "RatingTypesModel",
-            "summary": "Short\u0020RatingTypes\u0020Description",
+            "summary": "Short\u0020RatingTypes\u0020Description\nLong\u0020RatingTypes\u0020Description",
             "url": "classes/Framework-App-Models-RatingTypesModel.html"
         },                {
             "fqsen": "\\Framework\\App\\Models\\RatingTypesModel\u003A\u003Aget\u0028\u0029",
@@ -2133,7 +2173,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\UnitModel",
             "name": "UnitModel",
-            "summary": "Short\u0020Unit\u0020Description",
+            "summary": "Short\u0020Unit\u0020Description\nLong\u0020Unit\u0020Description",
             "url": "classes/Framework-App-Models-UnitModel.html"
         },                {
             "fqsen": "\\Framework\\App\\Models\\UnitModel\u003A\u003Aget\u0028\u0029",
@@ -2375,11 +2415,6 @@ Search.appendIndex(
             "name": "COUNTRIES",
             "summary": "",
             "url": "namespaces/default.html#constant_COUNTRIES"
-        },                {
-            "fqsen": "\\displayJsonOnPage\u0028\u0029",
-            "name": "displayJsonOnPage",
-            "summary": "",
-            "url": "namespaces/default.html#function_displayJsonOnPage"
         },                {
             "fqsen": "\\Framework\\Core\\Controller",
             "name": "Controller",
@@ -2786,6 +2821,11 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/default.html#constant_MAILFROMNAME"
         },                {
+            "fqsen": "\\LOCATIONDISPLAY",
+            "name": "LOCATIONDISPLAY",
+            "summary": "",
+            "url": "namespaces/default.html#constant_LOCATIONDISPLAY"
+        },                {
             "fqsen": "\\LOGINATTEMPTS",
             "name": "LOGINATTEMPTS",
             "summary": "",
@@ -2965,6 +3005,26 @@ Search.appendIndex(
             "name": "esc_url",
             "summary": "",
             "url": "namespaces/default.html#function_esc_url"
+        },                {
+            "fqsen": "\\getLetterCombo\u0028\u0029",
+            "name": "getLetterCombo",
+            "summary": "",
+            "url": "namespaces/default.html#function_getLetterCombo"
+        },                {
+            "fqsen": "\\buildCode\u0028\u0029",
+            "name": "buildCode",
+            "summary": "",
+            "url": "namespaces/default.html#function_buildCode"
+        },                {
+            "fqsen": "\\adjustBrightness\u0028\u0029",
+            "name": "adjustBrightness",
+            "summary": "",
+            "url": "namespaces/default.html#function_adjustBrightness"
+        },                {
+            "fqsen": "\\displayJsonOnPage\u0028\u0029",
+            "name": "displayJsonOnPage",
+            "summary": "",
+            "url": "namespaces/default.html#function_displayJsonOnPage"
         },                {
             "fqsen": "\\Framework\\Init\\initLogger\u0028\u0029",
             "name": "initLogger",
@@ -3350,6 +3410,116 @@ Search.appendIndex(
             "name": "formatTypes",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Category.html#method_formatTypes"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Calendar",
+            "name": "Calendar",
+            "summary": "Short\u0020Calendar\u0020Description\nLong\u0020Calendar\u0020Description",
+            "url": "classes/Framework-App-Controllers-Calendar.html"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Calendar\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Calendar.html#method___construct"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Calendar\u003A\u003AgetCalendarByProductId\u0028\u0029",
+            "name": "getCalendarByProductId",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Calendar.html#method_getCalendarByProductId"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Calendar\u003A\u003AserveGet\u0028\u0029",
+            "name": "serveGet",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Calendar.html#method_serveGet"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Calendar\u003A\u003Aformat\u0028\u0029",
+            "name": "format",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Calendar.html#method_format"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Profile",
+            "name": "Profile",
+            "summary": "Short\u0020Profile\u0020Description\nLong\u0020Profile\u0020Description",
+            "url": "classes/Framework-App-Controllers-Profile.html"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Profile\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Profile.html#method___construct"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Profile\u003A\u003AserveGet\u0028\u0029",
+            "name": "serveGet",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Profile.html#method_serveGet"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Profile\u003A\u003AgetByProductId\u0028\u0029",
+            "name": "getByProductId",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Profile.html#method_getByProductId"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Profile\u003A\u003Aformat\u0028\u0029",
+            "name": "format",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Profile.html#method_format"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\CalendarModel",
+            "name": "CalendarModel",
+            "summary": "Short\u0020CalendarModel\u0020Description\nLong\u0020CalendarModel\u0020Description",
+            "url": "classes/Framework-App-Models-CalendarModel.html"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\CalendarModel\u003A\u003Aget\u0028\u0029",
+            "name": "get",
+            "summary": "",
+            "url": "classes/Framework-App-Models-CalendarModel.html#method_get"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\CalendarModel\u003A\u003AgetByProductId\u0028\u0029",
+            "name": "getByProductId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-CalendarModel.html#method_getByProductId"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\CalendarModel\u003A\u003A\u0024dbTable",
+            "name": "dbTable",
+            "summary": "",
+            "url": "classes/Framework-App-Models-CalendarModel.html#property_dbTable"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\CalendarModel\u003A\u003A\u0024dbFields",
+            "name": "dbFields",
+            "summary": "",
+            "url": "classes/Framework-App-Models-CalendarModel.html#property_dbFields"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ProfileModel",
+            "name": "ProfileModel",
+            "summary": "Short\u0020ProfileModel\u0020Description\nLong\u0020ProfileModel\u0020Description",
+            "url": "classes/Framework-App-Models-ProfileModel.html"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ProfileModel\u003A\u003Aget\u0028\u0029",
+            "name": "get",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ProfileModel.html#method_get"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ProfileModel\u003A\u003AfetchProfilesByProductId\u0028\u0029",
+            "name": "fetchProfilesByProductId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ProfileModel.html#method_fetchProfilesByProductId"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ProfileModel\u003A\u003A\u0024dbTable",
+            "name": "dbTable",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ProfileModel.html#property_dbTable"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ProfileModel\u003A\u003A\u0024dbFields",
+            "name": "dbFields",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ProfileModel.html#property_dbFields"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ProfileModel\u003A\u003A\u0024sql",
+            "name": "sql",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ProfileModel.html#property_sql"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ProfileModel\u003A\u003A\u0024base_sql",
+            "name": "base_sql",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ProfileModel.html#property_base_sql"
         },                {
             "fqsen": "\\",
             "name": "\\",

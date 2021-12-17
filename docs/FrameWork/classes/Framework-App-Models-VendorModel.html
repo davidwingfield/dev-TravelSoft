@@ -348,7 +348,7 @@ If id is passed then we search by it otherwise get all enabled</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/VendorModel.php"><a href="files/app-models-vendormodel.html"><abbr title="App/Models/VendorModel.php">VendorModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">64</span>
+    <span class="phpdocumentor-element-found-in__line">66</span>
 
     </aside>
 
@@ -382,7 +382,7 @@ If id is passed then we search by it otherwise get all enabled</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/VendorModel.php"><a href="files/app-models-vendormodel.html"><abbr title="App/Models/VendorModel.php">VendorModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">62</span>
+    <span class="phpdocumentor-element-found-in__line">64</span>
 
     </aside>
 
@@ -441,10 +441,10 @@ If id is passed then we search by it otherwise get all enabled</dd>
                             COMPANY.date_modified AS &#039;company_date_modified&#039;,
                             COMPANY.status_id AS &#039;company_status_id&#039;,
                             COMPANY.note AS &#039;company_note&#039;,
-                   COMPANY.logo AS &#039;company_logo&#039;,
-                   COMPANY.description_short AS &#039;company_description_short&#039;,
-                   COMPANY.description_long AS &#039;company_description_long&#039;,
-                   COMPANY.keywords AS &#039;company_keywords&#039;,
+                            COMPANY.logo AS &#039;company_logo&#039;,
+                            COMPANY.description_short AS &#039;company_description_short&#039;,
+                            COMPANY.description_long AS &#039;company_description_long&#039;,
+                            COMPANY.keywords AS &#039;company_keywords&#039;,
                             VENDOR.id AS &#039;vendor_id&#039;,
                             VENDOR.company_id AS &#039;vendor_company_id&#039;,
                             VENDOR.status_id AS &#039;vendor_status_id&#039;,
@@ -453,12 +453,14 @@ If id is passed then we search by it otherwise get all enabled</dd>
                             VENDOR.show_sales AS &#039;vendor_show_sales&#039;,
                             VENDOR.show_ops AS &#039;vendor_show_ops&#039;,
                             VENDOR.is_provider AS &#039;vendor_is_provider&#039;,
-                            DATE_FORMAT(VENDOR.date_created, &#039;%m/%d/%Y&#039;) AS &#039;vendor_date_created&#039;,
+                            VENDOR.date_created AS &#039;vendor_date_created&#039;,
                             VENDOR.created_by  AS &#039;vendor_created_by&#039;,
-                            DATE_FORMAT(VENDOR.date_modified, &#039;%m/%d/%Y&#039;) AS &#039;vendor_date_modified&#039;,
+                            VENDOR.date_modified AS &#039;vendor_date_modified&#039;,
                             VENDOR.modified_by  AS &#039;vendor_modified_by&#039;,
                             VENDOR.enabled AS &#039;vendor_enabled&#039;,
-                            VENDOR.note  AS &#039;vendor_note&#039;
+                            VENDOR.note  AS &#039;vendor_note&#039;,
+                            VENDOR.description_short AS &#039;vendor_description_short&#039;,
+                            VENDOR.description_long AS &#039;vendor_description_long&#039;
             FROM 			vendor VENDOR
             JOIN			company COMPANY ON COMPANY.id = VENDOR.company_id
            WHERE			COMPANY.enabled = 1
@@ -492,7 +494,7 @@ If id is passed then we search by it otherwise get all enabled</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/VendorModel.php"><a href="files/app-models-vendormodel.html"><abbr title="App/Models/VendorModel.php">VendorModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">74</span>
+    <span class="phpdocumentor-element-found-in__line">76</span>
 
     </aside>
 
@@ -538,7 +540,7 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/VendorModel.php"><a href="files/app-models-vendormodel.html"><abbr title="App/Models/VendorModel.php">VendorModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">101</span>
+    <span class="phpdocumentor-element-found-in__line">103</span>
 
     </aside>
 
@@ -583,7 +585,7 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/VendorModel.php"><a href="files/app-models-vendormodel.html"><abbr title="App/Models/VendorModel.php">VendorModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">120</span>
+    <span class="phpdocumentor-element-found-in__line">122</span>
 
     </aside>
 
@@ -835,7 +837,7 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/VendorModel.php"><a href="files/app-models-vendormodel.html"><abbr title="App/Models/VendorModel.php">VendorModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">135</span>
+    <span class="phpdocumentor-element-found-in__line">137</span>
 
     </aside>
 
@@ -879,7 +881,7 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/VendorModel.php"><a href="files/app-models-vendormodel.html"><abbr title="App/Models/VendorModel.php">VendorModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">219</span>
+    <span class="phpdocumentor-element-found-in__line">221</span>
 
     </aside>
 

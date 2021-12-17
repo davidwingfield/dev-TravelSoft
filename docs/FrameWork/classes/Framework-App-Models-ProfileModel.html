@@ -131,7 +131,7 @@
 
     <article class="phpdocumentor-element -class">
         <h2 class="phpdocumentor-content__title">
-    UnitModel
+    ProfileModel
 
         <span class="phpdocumentor-element__extends">
         extends <a href="classes/Framework-Core-Model.html"><abbr title="\Framework\Core\Model">Model</abbr></a>
@@ -150,14 +150,14 @@
     </h2>
 
         <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/UnitModel.php"><a href="files/app-models-unitmodel.html"><abbr title="App/Models/UnitModel.php">UnitModel.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProfileModel.php"><a href="files/app-models-profilemodel.html"><abbr title="App/Models/ProfileModel.php">ProfileModel.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">16</span>
 
     </aside>
 
-            <p class="phpdocumentor-summary">Short Unit Description
-Long Unit Description</p>
+            <p class="phpdocumentor-summary">Short ProfileModel Description
+Long ProfileModel Description</p>
 
 
 
@@ -196,35 +196,42 @@ Long Unit Description</p>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/Framework-App-Models-UnitModel.html#property_dbFields">$dbFields</a>
+    <a href="classes/Framework-App-Models-ProfileModel.html#property_base_sql">$base_sql</a>
     <span>
                 &nbsp;: mixed            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/Framework-App-Models-UnitModel.html#property_dbTable">$dbTable</a>
+    <a href="classes/Framework-App-Models-ProfileModel.html#property_dbFields">$dbFields</a>
+    <span>
+                &nbsp;: mixed            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/Framework-App-Models-ProfileModel.html#property_dbTable">$dbTable</a>
+    <span>
+                &nbsp;: mixed            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/Framework-App-Models-ProfileModel.html#property_sql">$sql</a>
     <span>
                 &nbsp;: mixed            </span>
 </dt>
 <dd></dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Framework-App-Models-UnitModel.html#method_get">get()</a>
+    <a href="classes/Framework-App-Models-ProfileModel.html#method_fetchProfilesByProductId">fetchProfilesByProductId()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Framework-App-Models-UnitModel.html#method_getByProductId">getByProductId()</a>
-    <span>
-                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Framework-App-Models-UnitModel.html#method_getOne">getOne()</a>
+    <a href="classes/Framework-App-Models-ProfileModel.html#method_get">get()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
@@ -265,13 +272,6 @@ Long Unit Description</p>
 </dt>
 <dd></dd>
 
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Framework-App-Models-UnitModel.html#method_update">update()</a>
-    <span>
-                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
-</dt>
-<dd></dd>
-
         </dl>
 
 
@@ -282,7 +282,7 @@ Long Unit Description</p>
     <section class="phpdocumentor-properties">
         <h3 class="phpdocumentor-elements__header" id="properties">
             Properties
-            <a href="classes/Framework-App-Models-UnitModel.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/Framework-App-Models-ProfileModel.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
                     <article
         class="
@@ -323,16 +323,116 @@ Long Unit Description</p>
             -protected
             -static                                            "
 >
-    <h4 class="phpdocumentor-element__name" id="property_dbFields">
-        $dbFields
-        <a href="classes/Framework-App-Models-UnitModel.html#property_dbFields" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_base_sql">
+        $base_sql
+        <a href="classes/Framework-App-Models-ProfileModel.html#property_base_sql" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/UnitModel.php"><a href="files/app-models-unitmodel.html"><abbr title="App/Models/UnitModel.php">UnitModel.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProfileModel.php"><a href="files/app-models-profilemodel.html"><abbr title="App/Models/ProfileModel.php">ProfileModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">20</span>
+    <span class="phpdocumentor-element-found-in__line">94</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">$base_sql</span>
+     = <span class="phpdocumentor-signature__default-value">&quot;
+		SELECT
+				PROFILE.id AS &#039;profile_id&#039;,
+				PROFILE.allot_by_id AS &#039;profile_allot_by_id&#039;,
+				PROFILE.sales_types_id AS &#039;profile_sales_types_id&#039;,
+				PROFILE.name AS &#039;profile_name&#039;,
+				PROFILE.quantity AS &#039;profile_quantity&#039;,
+				PROFILE.expires AS &#039;profile_expires&#039;,
+				PROFILE.transfer_sales_types_id AS &#039;profile_transfer_sales_types_id&#039;,
+				PROFILE.release_amt AS &#039;profile_release_amt&#039;,
+				PROFILE.min_length_days AS &#039;profile_min_length_days&#039;,
+				PROFILE.checkin_dow AS &#039;profile_checkin_dow&#039;,
+				PROFILE.checkout_dow AS &#039;profile_checkout_dow&#039;,
+				PROFILE.departure_dow AS &#039;profile_departure_dow&#039;,
+				PROFILE.return_dow AS &#039;profile_return_dow&#039;,
+				PROFILE.inc_days_dow AS &#039;profile_inc_days_dow&#039;,
+				PROFILE.min_duration AS &#039;profile_min_duration&#039;,
+				PROFILE.max_duration AS &#039;profile_max_duration&#039;,
+				PROFILE.equal_duration AS &#039;profile_equal_duration&#039;,
+				PROFILE.advanced_booking_min AS &#039;profile_advanced_booking_min&#039;,
+				PROFILE.advanced_booking_max AS &#039;profile_advanced_booking_max&#039;,
+				PROFILE.advanced_booking_date AS &#039;profile_advanced_booking_date&#039;,
+				PROFILE.weekday_dow AS &#039;profile_weekday_dow&#039;,
+				PROFILE.days_out AS &#039;profile_days_out&#039;,
+				PROFILE.enabled AS &#039;profile_enabled&#039;,
+				PROFILE.date_created AS &#039;profile_date_created&#039;,
+				PROFILE.created_by AS &#039;profile_created_by&#039;,
+				PROFILE.date_modified AS &#039;profile_date_modified&#039;,
+				PROFILE.modified_by AS &#039;profile_modified_by&#039;,
+				PROFILE.note AS &#039;profile_note&#039;,
+		  
+				ALLOT_BY.id AS &#039;allot_by_id&#039;,
+				ALLOT_BY.name AS &#039;allot_by_name&#039;,
+				ALLOT_BY.sort_order AS &#039;allot_by_sort_order&#039;,
+				ALLOT_BY.enabled AS &#039;allot_by_enabled&#039;,
+				ALLOT_BY.date_created AS &#039;allot_by_date_created&#039;,
+				ALLOT_BY.created_by AS &#039;allot_by_created_by&#039;,
+				ALLOT_BY.date_modified AS &#039;allot_by_date_modified&#039;,
+				ALLOT_BY.modified_by AS &#039;allot_by_modified_by&#039;,
+				ALLOT_BY.note AS &#039;allot_by_note&#039;,
+		  
+				SALES_TYPES.id AS &#039;sales_types_id&#039;,
+				SALES_TYPES.name AS &#039;sales_types_name&#039;,
+				SALES_TYPES.class AS &#039;sales_types_class&#039;,
+				SALES_TYPES.sort_order AS &#039;sales_types_sort_order&#039;,
+				SALES_TYPES.enabled AS &#039;sales_types_enabled&#039;,
+				SALES_TYPES.date_created AS &#039;sales_types_date_created&#039;,
+				SALES_TYPES.created_by AS &#039;sales_types_created_by&#039;,
+				SALES_TYPES.date_modified AS &#039;sales_types_date_modified&#039;,
+				SALES_TYPES.modified_by AS &#039;sales_types_modified_by&#039;,
+				SALES_TYPES.note AS &#039;sales_types_note&#039;,
+		  
+				SALES_TYPES_TRANSFER.id AS &#039;sales_types_transfer_id&#039;,
+				SALES_TYPES_TRANSFER.name AS &#039;sales_types_transfer_name&#039;,
+				SALES_TYPES_TRANSFER.class AS &#039;sales_types_transfer_class&#039;,
+				SALES_TYPES_TRANSFER.sort_order AS &#039;sales_types_transfer_sort_order&#039;,
+				SALES_TYPES_TRANSFER.enabled AS &#039;sales_types_transfer_enabled&#039;,
+				SALES_TYPES_TRANSFER.date_created AS &#039;sales_types_transfer_date_created&#039;,
+				SALES_TYPES_TRANSFER.created_by AS &#039;sales_types_transfer_created_by&#039;,
+				SALES_TYPES_TRANSFER.date_modified AS &#039;sales_types_transfer_date_modified&#039;,
+				SALES_TYPES_TRANSFER.modified_by AS &#039;sales_types_transfer_modified_by&#039;,
+				SALES_TYPES_TRANSFER.note AS &#039;sales_types_transfer_note&#039;
+		FROM 	profile PROFILE
+		LEFT JOIN 	allot_by ALLOT_BY ON ALLOT_BY.id = PROFILE.allot_by_id
+		LEFT JOIN 	sales_types SALES_TYPES ON SALES_TYPES.id = PROFILE.sales_types_id
+		LEFT JOIN 	sales_types SALES_TYPES_TRANSFER ON SALES_TYPES_TRANSFER.id = PROFILE.transfer_sales_types_id
+		&quot;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_dbFields">
+        $dbFields
+        <a href="classes/Framework-App-Models-ProfileModel.html#property_dbFields" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProfileModel.php"><a href="files/app-models-profilemodel.html"><abbr title="App/Models/ProfileModel.php">ProfileModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">19</span>
 
     </aside>
 
@@ -359,14 +459,14 @@ Long Unit Description</p>
 >
     <h4 class="phpdocumentor-element__name" id="property_dbTable">
         $dbTable
-        <a href="classes/Framework-App-Models-UnitModel.html#property_dbTable" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/Framework-App-Models-ProfileModel.html#property_dbTable" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/UnitModel.php"><a href="files/app-models-unitmodel.html"><abbr title="App/Models/UnitModel.php">UnitModel.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProfileModel.php"><a href="files/app-models-profilemodel.html"><abbr title="App/Models/ProfileModel.php">ProfileModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">19</span>
+    <span class="phpdocumentor-element-found-in__line">18</span>
 
     </aside>
 
@@ -375,7 +475,113 @@ Long Unit Description</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">$dbTable</span>
-     = <span class="phpdocumentor-signature__default-value">&quot;unit&quot;</span></code>
+     = <span class="phpdocumentor-signature__default-value">&quot;profile&quot;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_sql">
+        $sql
+        <a href="classes/Framework-App-Models-ProfileModel.html#property_sql" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProfileModel.php"><a href="files/app-models-profilemodel.html"><abbr title="App/Models/ProfileModel.php">ProfileModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">20</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">$sql</span>
+     = <span class="phpdocumentor-signature__default-value">&quot;
+		SELECT
+				PRODUCT_PROFILE.product_id AS &#039;product_profile_product_id&#039;,
+				PRODUCT_PROFILE.profile_id AS &#039;product_profile_profile_id&#039;,
+				PRODUCT_PROFILE.enabled AS &#039;product_profile_enabled&#039;,
+				PRODUCT_PROFILE.date_created AS &#039;product_profile_date_created&#039;,
+				PRODUCT_PROFILE.created_by AS &#039;product_profile_created_by&#039;,
+				PRODUCT_PROFILE.date_modified AS &#039;product_profile_date_modified&#039;,
+				PRODUCT_PROFILE.modified_by AS &#039;product_profile_modified_by&#039;,
+				PRODUCT_PROFILE.note AS &#039;product_profile_note&#039;,
+				PROFILE.id AS &#039;profile_id&#039;,
+				PROFILE.allot_by_id AS &#039;profile_allot_by_id&#039;,
+				PROFILE.sales_types_id AS &#039;profile_sales_types_id&#039;,
+				PROFILE.name AS &#039;profile_name&#039;,
+				PROFILE.quantity AS &#039;profile_quantity&#039;,
+				PROFILE.expires AS &#039;profile_expires&#039;,
+				PROFILE.transfer_sales_types_id AS &#039;profile_transfer_sales_types_id&#039;,
+				PROFILE.release_amt AS &#039;profile_release_amt&#039;,
+				PROFILE.min_length_days AS &#039;profile_min_length_days&#039;,
+				PROFILE.checkin_dow AS &#039;profile_checkin_dow&#039;,
+				PROFILE.checkout_dow AS &#039;profile_checkout_dow&#039;,
+				PROFILE.departure_dow AS &#039;profile_departure_dow&#039;,
+				PROFILE.return_dow AS &#039;profile_return_dow&#039;,
+				PROFILE.inc_days_dow AS &#039;profile_inc_days_dow&#039;,
+				PROFILE.min_duration AS &#039;profile_min_duration&#039;,
+				PROFILE.max_duration AS &#039;profile_max_duration&#039;,
+				PROFILE.equal_duration AS &#039;profile_equal_duration&#039;,
+				PROFILE.advanced_booking_min AS &#039;profile_advanced_booking_min&#039;,
+				PROFILE.advanced_booking_max AS &#039;profile_advanced_booking_max&#039;,
+				PROFILE.advanced_booking_date AS &#039;profile_advanced_booking_date&#039;,
+				PROFILE.weekday_dow AS &#039;profile_weekday_dow&#039;,
+				PROFILE.days_out AS &#039;profile_days_out&#039;,
+				PROFILE.enabled AS &#039;profile_enabled&#039;,
+				PROFILE.date_created AS &#039;profile_date_created&#039;,
+				PROFILE.created_by AS &#039;profile_created_by&#039;,
+				PROFILE.date_modified AS &#039;profile_date_modified&#039;,
+				PROFILE.modified_by AS &#039;profile_modified_by&#039;,
+				PROFILE.note AS &#039;profile_note&#039;,
+				ALLOT_BY.id AS &#039;allot_by_id&#039;,
+				ALLOT_BY.name AS &#039;allot_by_name&#039;,
+				ALLOT_BY.sort_order AS &#039;allot_by_sort_order&#039;,
+				ALLOT_BY.enabled AS &#039;allot_by_enabled&#039;,
+				ALLOT_BY.date_created AS &#039;allot_by_date_created&#039;,
+				ALLOT_BY.created_by AS &#039;allot_by_created_by&#039;,
+				ALLOT_BY.date_modified AS &#039;allot_by_date_modified&#039;,
+				ALLOT_BY.modified_by AS &#039;allot_by_modified_by&#039;,
+				ALLOT_BY.note AS &#039;allot_by_note&#039;,
+				SALES_TYPES.id AS &#039;sales_types_id&#039;,
+				SALES_TYPES.name AS &#039;sales_types_name&#039;,
+				SALES_TYPES.class AS &#039;sales_types_class&#039;,
+				SALES_TYPES.sort_order AS &#039;sales_types_sort_order&#039;,
+				SALES_TYPES.enabled AS &#039;sales_types_enabled&#039;,
+				SALES_TYPES.date_created AS &#039;sales_types_date_created&#039;,
+				SALES_TYPES.created_by AS &#039;sales_types_created_by&#039;,
+				SALES_TYPES.date_modified AS &#039;sales_types_date_modified&#039;,
+				SALES_TYPES.modified_by AS &#039;sales_types_modified_by&#039;,
+				SALES_TYPES.note AS &#039;sales_types_note&#039;,
+				SALES_TYPES_TRANSFER.id AS &#039;sales_types_transfer_id&#039;,
+				SALES_TYPES_TRANSFER.name AS &#039;sales_types_transfer_name&#039;,
+				SALES_TYPES_TRANSFER.class AS &#039;sales_types_transfer_class&#039;,
+				SALES_TYPES_TRANSFER.sort_order AS &#039;sales_types_transfer_sort_order&#039;,
+				SALES_TYPES_TRANSFER.enabled AS &#039;sales_types_transfer_enabled&#039;,
+				SALES_TYPES_TRANSFER.date_created AS &#039;sales_types_transfer_date_created&#039;,
+				SALES_TYPES_TRANSFER.created_by AS &#039;sales_types_transfer_created_by&#039;,
+				SALES_TYPES_TRANSFER.date_modified AS &#039;sales_types_transfer_date_modified&#039;,
+				SALES_TYPES_TRANSFER.modified_by AS &#039;sales_types_transfer_modified_by&#039;,
+				SALES_TYPES_TRANSFER.note AS &#039;sales_types_transfer_note&#039;
+		FROM 	product_profile PRODUCT_PROFILE
+		LEFT JOIN 	profile PROFILE ON PROFILE.id = PRODUCT_PROFILE.profile_id
+		LEFT JOIN 	allot_by ALLOT_BY ON ALLOT_BY.id = PROFILE.allot_by_id
+		LEFT JOIN 	sales_types SALES_TYPES ON SALES_TYPES.id = PROFILE.sales_types_id
+		LEFT JOIN 	sales_types SALES_TYPES_TRANSFER ON SALES_TYPES_TRANSFER.id = PROFILE.transfer_sales_types_id
+		&quot;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -389,7 +595,7 @@ Long Unit Description</p>
             <section class="phpdocumentor-methods">
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
-            <a href="classes/Framework-App-Models-UnitModel.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/Framework-App-Models-ProfileModel.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
                     <article
         class="phpdocumentor-element
@@ -397,65 +603,21 @@ Long Unit Description</p>
             -public
                                     -static                    "
 >
-    <h4 class="phpdocumentor-element__name" id="method_get">
-        get()
-        <a href="classes/Framework-App-Models-UnitModel.html#method_get" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_fetchProfilesByProductId">
+        fetchProfilesByProductId()
+        <a href="classes/Framework-App-Models-ProfileModel.html#method_fetchProfilesByProductId" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/UnitModel.php"><a href="files/app-models-unitmodel.html"><abbr title="App/Models/UnitModel.php">UnitModel.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProfileModel.php"><a href="files/app-models-profilemodel.html"><abbr title="App/Models/ProfileModel.php">ProfileModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">181</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">get</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$id</span>
-                : <span class="phpdocumentor-signature__argument__return-type">int</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                    -static                    "
->
-    <h4 class="phpdocumentor-element__name" id="method_getByProductId">
-        getByProductId()
-        <a href="classes/Framework-App-Models-UnitModel.html#method_getByProductId" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/UnitModel.php"><a href="files/app-models-unitmodel.html"><abbr title="App/Models/UnitModel.php">UnitModel.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">60</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getByProductId</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$product_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fetchProfilesByProductId</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$product_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -485,21 +647,21 @@ Long Unit Description</p>
             -public
                                     -static                    "
 >
-    <h4 class="phpdocumentor-element__name" id="method_getOne">
-        getOne()
-        <a href="classes/Framework-App-Models-UnitModel.html#method_getOne" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_get">
+        get()
+        <a href="classes/Framework-App-Models-ProfileModel.html#method_get" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/UnitModel.php"><a href="files/app-models-unitmodel.html"><abbr title="App/Models/UnitModel.php">UnitModel.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProfileModel.php"><a href="files/app-models-profilemodel.html"><abbr title="App/Models/ProfileModel.php">ProfileModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">38</span>
+    <span class="phpdocumentor-element-found-in__line">162</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getOne</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">get</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -731,50 +893,6 @@ Long Unit Description</p>
         
     
 </article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                    -static                    "
->
-    <h4 class="phpdocumentor-element__name" id="method_update">
-        update()
-        <a href="classes/Framework-App-Models-UnitModel.html#method_update" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/UnitModel.php"><a href="files/app-models-unitmodel.html"><abbr title="App/Models/UnitModel.php">UnitModel.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">53</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">update</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$params</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
-            &mdash;
-        
-    
-</article>
             </section>
 
         
@@ -853,7 +971,7 @@ Long Unit Description</p>
 </section>
             </div>
         </div>
-        <a href="classes/Framework-App-Models-UnitModel.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="classes/Framework-App-Models-ProfileModel.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 

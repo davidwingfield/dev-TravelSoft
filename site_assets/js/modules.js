@@ -15,6 +15,8 @@ exports.modules = [
     "./site_assets/js/modules/province.js",
     "./site_assets/js/modules/country.js",
     "./site_assets/js/modules/location.js",
+    "./site_assets/js/modules/variant.js",
+    "./site_assets/js/modules/unit.js",
     "./site_assets/js/modules/address.js",
     "./site_assets/js/modules/register.js",
     "./site_assets/js/modules/color_scheme.js",

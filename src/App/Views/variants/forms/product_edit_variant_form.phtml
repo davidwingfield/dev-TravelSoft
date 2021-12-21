@@ -1,0 +1,64 @@
+<section>
+    <!-- Table with panel -->
+    <div class="card card-cascade narrower mb-2">
+        
+        <!--Card image-->
+        <div class="view view-cascade view-table gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+            
+            <div>
+                <button type="button" class="btn btn-outline-white btn-rounded btn-sm px-2">
+                    <i class="fas fa-th-large mt-0"></i>
+                </button>
+                <button type="button" class="btn btn-outline-white btn-rounded btn-sm px-2">
+                    <i class="fas fa-columns mt-0"></i>
+                </button>
+            </div>
+            
+            <a href="" class="white-text mx-3">Variants</a>
+            
+            <div>
+                <a href="javascript:void(0);" id="variant_index_table_add_button" class="btn btn-outline-white btn-sm px-2">
+                    <i class="wir wi-plus"></i>
+                </a>
+                <button type="button" class="btn btn-outline-white btn-rounded btn-sm px-2" disabled>
+                    <i class="far fa-trash-alt"></i>
+                </button>
+                <button type="button" class="btn btn-outline-white btn-rounded btn-sm px-2" disabled>
+                    <i class="wir wi-info-circle"></i>
+                </button>
+            </div>
+        
+        </div>
+        <!--/Card image-->
+        
+        <div class="px-4">
+            
+            <div class="table-wrapper">
+                <!--Table-->
+                <table class="table table-hover w-100 mb-0" id="table_variant_product_edit"></table>
+                <!--Table-->
+            </div>
+        
+        </div>
+    
+    </div>
+    <!-- Table with panel -->
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="form-element">
+                <label for="product_edit_variant_form_variant_name_filter">Variant Search:</label>
+                <div class="input-group">
+                    <input type="search" id="product_edit_variant_form_variant_name_filter" name="product_edit_variant_form_variant_name_filter" class="form-control" placeholder="Search Seasons">
+                    <div class="input-group-append">
+                        <button type="button" id="product_edit_variant_form_variant_name_filter_add_new_button" name="product_edit_variant_form_variant_name_filter_add_new_button" class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="product_edit_variant_form_variant_name_filter-error" class="error w-100 text-center"></div>
+            </div>
+        </div>
+    </div>
+
+</section>

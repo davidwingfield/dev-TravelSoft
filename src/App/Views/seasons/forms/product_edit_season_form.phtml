@@ -1,10 +1,672 @@
-<section>
-    <h3>Edit Season</h3>
+<?php
+    
+    $swatches = [];
+    $swatchObjects = [];
+    $season_dropdown = "
+    <a id='product_edit_season_id' class='btn btn-primary dropdown-toggle m-0 season_toggle waves-effect waves-light' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+	    <span id='product_edit_season_id_name_display'>Color Scheme Select</span>
+    </a>
+    <div class='dropdown-menu'>
+    
+    ";
+    $color_scheme = json_encode((isset($page_data, $page_data["types"], $page_data["types"]["color_scheme"])) ? $page_data["types"]["color_scheme"] : [], 1);
+    if (isset($page_data["types"]["color_scheme"])) {
+        for ($n = 0; $n < count($page_data["types"]["color_scheme"]); $n++) {
+            $backgroundColor = $page_data["types"]["color_scheme"][$n]["background_color"];
+            $name = $page_data["types"]["color_scheme"][$n]["name"];
+            $id = $page_data["types"]["color_scheme"][$n]["id"];
+            $textColor = $page_data["types"]["color_scheme"][$n]["text_color"];
+            $borderColor = $page_data["types"]["color_scheme"][$n]["border_color"];
+            $option = $n + 1;
+            $season_dropdown .= "
+                <a id='$id' class='dropdown-item season_toggle_item' data-schemeName = '$name' data-backgroundColor = '$backgroundColor' data-textColor = '$textColor' data-borderColor = '$borderColor' data-colorSchemeId = '$id'  href='javascript:void(0)'>$name</a>
+            ";
+            $swatches[] = $page_data["types"]["color_scheme"][$n]["background_color"];
+            $swatchObjects[] = "
+                <div class='col-3 text-center'>
+                    <div id='color_scheme_$id' class='m-1 p-1 color_scheme_block' style='background:$backgroundColor;color:$textColor;border:solid 1px $borderColor;cursor:pointer;' onclick='ColorSwatches.edit(this)'>
+                       <span class=''>$name</span>
+                       <span class='color_scheme_block_edit'>
+                       <i class='fas fa-edit'></i>
+                       </span>
+                    </div>
+                </div>
+            ";
+        }
+    }
+    
+    $season_dropdown .= "</div>";
+?>
+<section id="product_edit_season_section">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title"><span>Add/Edit Season</span></h5>
+            <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
+            <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+            
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-element">
+                        <label for="product_edit_season_form_season_name_filter">Season Search:</label>
+                        <div class="input-group">
+                            <input type="search" id="product_edit_season_form_season_name_filter" name="product_edit_season_form_season_name_filter" class="form-control" placeholder="Search Seasons"/>
+                            <div class="input-group-append">
+                                <button type="button" id="product_edit_season_form_season_name_filter_add_new_button" name="product_edit_season_form_season_name_filter_add_new_button" class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="product_edit_season_form_season_name_filter-error" class="error w-100 text-center"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card card-body">
+                
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <?php echo $season_dropdown; ?>
+                    </div>
+                </div>
+                
+                <div class="card card-body border border-dark z-depth-0 mb-2" id="edit_season">
+                    <div class="row">
+                        
+                        <!-- Season Id -->
+                        <div class="col-12 col-md-6 col-lg-2">
+                            <div class="form-element">
+                                <label for="product_edit_season_form_season_id">Id:</label>
+                                <input type="text" id="product_edit_season_form_season_id" name="product_edit_season_form_season_id" class="form-control" readonly="readonly"/>
+                                <div id="product_edit_season_form_season_id-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                        <!-- /Season Id -->
+                        
+                        <!-- Season Name -->
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="form-element">
+                                <label for="product_edit_season_form_season_name">Name:</label>
+                                <input type="text" id="product_edit_season_form_season_name" name="product_edit_season_form_season_name" class="form-control" readonly="readonly"/>
+                                <div id="product_edit_season_form_season_name-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                        <!-- /Season Name -->
+                        
+                        <!-- Season Color Scheme ID -->
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="form-element">
+                                <label for="product_edit_season_form_season_color_scheme_id">Color Scheme:</label>
+                                <input type="hidden" id="product_edit_season_form_season_color_scheme_id" name="product_edit_season_form_season_color_scheme_id" class="form-control dev-element" readonly="readonly"/>
+                                <div id="product_edit_season_form_season_name-error" class="error w-100 text-center"></div>
+                                <div id="color_scheme_display" class="m-0 p-1 color_scheme_block" style="background:#54cbe3;color:#000000;border:solid 1px #357f8e;cursor:pointer;" onclick="ColorSwatches.change(this)">
+                                    <span class="">color-2</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Season Color Scheme ID -->
+                        
+                        <!-- Season Enabled -->
+                        <div class="col-12 col-lg-2 d-flex align-self-end justify-content-end pb-2">
+                            <div class="form-element">
+                                <div class="custom-control custom-switch">
+                                    <input id="product_edit_season_form_season_enabled" name="product_edit_season_form_season_enabled" type="checkbox" value="1" class="custom-control-input" readonly="readonly">
+                                    <label for="product_edit_season_form_season_enabled" class="custom-control-label p-0">Enabled</label>
+                                </div>
+                                <div id="product_edit_season_form_season_enabled-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                        <!-- /Season Enabled -->
+                        
+                        <div class="col-12 col-lg-2 d-flex align-self-end justify-content-end pb-2">
+                            <button type="button" id="edit_season_button" class="btn btn-outline-primary btn-sm" disabled="disabled">
+                                <i class="fas fa-edit mx-2"></i>
+                                <span class="">Edit</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-12 col-md-2">
+                            <label for="">Disabled DOW:</label>
+                        </div>
+                        <div class="col-12 col-md-10">
+                            <!-- Default inline 1-->
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" class="custom-control-input" id="defaultInline1">
+                                <label class="custom-control-label" for="defaultInline1">Select All</label>
+                            </div>
+                            
+                            <!-- Default inline 2-->
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" class="custom-control-input" id="defaultInline2">
+                                <label class="custom-control-label" for="defaultInline2">Sunday</label>
+                            </div>
+                            
+                            <!-- Default inline 3-->
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" class="custom-control-input" id="defaultInline3">
+                                <label class="custom-control-label" for="defaultInline3">Monday</label>
+                            </div>
+                            
+                            <!-- Default inline 4-->
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" class="custom-control-input" id="defaultInline4">
+                                <label class="custom-control-label" for="defaultInline4">Tuesday</label>
+                            </div>
+                            
+                            <!-- Default inline 5-->
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" class="custom-control-input" id="defaultInline5">
+                                <label class="custom-control-label" for="defaultInline5">Wednesday</label>
+                            </div>
+                            
+                            <!-- Default inline 6-->
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" class="custom-control-input" id="defaultInline6">
+                                <label class="custom-control-label" for="defaultInline6">Thursday</label>
+                            </div>
+                            
+                            <!-- Default inline 7-->
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" class="custom-control-input" id="defaultInline7">
+                                <label class="custom-control-label" for="defaultInline7">Friday</label>
+                            </div>
+                            
+                            <!-- Default inline 8-->
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" class="custom-control-input" id="defaultInline8">
+                                <label class="custom-control-label" for="defaultInline8">Saturday</label>
+                            </div>
+                        
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-left w-100">
+                            <a href="javascript:void(0);" id="button_assign_season_to_product" class="btn btn-secondary btn-sm waves-effect waves-light">Assign</a>
+                        </div>
+                        <div class="col-6 text-right w-100">
+                            <a href="javascript:void(0);" id="button_clear_form_edit_season" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+                            <a href="javascript:void(0);" id="button_submit_form_edit_season" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card card-body border border-primary z-depth-0" id="edit_scheme">
+                    
+                    <h5 class="card-title font-weight-bold">
+                        <span>Color Schemes</span>
+                        <a id="button_close_edit_scheme" href="javascript:void(0);" class="panel-button-close fas fa-times" aria-hidden="true"></a>
+                    </h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
+                    <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+                    
+                    <div class="row">
+                        <?php
+                            foreach ($swatchObjects AS $k => $swatch) {
+                                echo $swatch;
+                            }
+                        ?>
+                    </div>
+                    
+                    <div class="card card-body border border-primary z-depth-0" id="edit_scheme_detail">
+                        <form id="form_edit_scheme" class="" novalidate>
+                            
+                            <!-- Season Background Color -->
+                            <div class="row">
+                                
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <label for="form_edit_scheme_background_color">Background Color:</label>
+                                </div>
+                                
+                                <div class="col-6 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                    <div class="form-element">
+                                        <input type="text" id="form_edit_scheme_background_color" name="form_edit_scheme_background_color" class="form-control"/>
+                                        <div id="form_edit_scheme_background_color-error" class="error w-100 text-center"></div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <!-- /Season Background Color -->
+                            
+                            <!-- Season Text Color -->
+                            <div class="row">
+                                
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <label for="form_edit_scheme_text_color">Text Color:</label>
+                                </div>
+                                
+                                <div class="col-6 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                    <div class="form-element">
+                                        <input type="text" id="form_edit_scheme_text_color" name="form_edit_scheme_text_color" class="form-control"/>
+                                        <div id="form_edit_scheme_text_color-error" class="error w-100 text-center"></div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <!-- /Season Text Color -->
+                            
+                            <!-- Season Border Color -->
+                            <div class="row">
+                                
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <label for="form_edit_scheme_border_color">Border Color:</label>
+                                </div>
+                                
+                                <div class="col-6 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                    <div class="form-element">
+                                        <input type="text" id="form_edit_scheme_border_color" name="form_edit_scheme_border_color" class="form-control"/>
+                                        <div id="form_edit_scheme_border_color-error" class="error w-100 text-center"></div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <!-- /Season Border Color -->
+                        
+                        </form>
+                        <div class="text-right w-100">
+                            <a href="javascript:void(0);" id="button_clear_form_edit_scheme" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+                            <a href="javascript:void(0);" id="button_submit_form_edit_scheme" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+        
+        </div>
+    </div>
+    
+    <form id="product_edit_season_form" novalidate>
+    
+    </form>
 </section>
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gridSystemModal">
-    Launch demo modal
-</button>
+<script type="text/javascript">
+    /**
+     *
+     * background_color: "#9463f7"
+     * border_color: "#6141a2"
+     * created_by: 4
+     * date_created: "2021-12-20 17:39:37"
+     * date_modified: "2021-12-20 17:39:37"
+     * enabled: 1
+     * id: 14
+     * modified_by: 4
+     * name: "color-14"
+     * note: null
+     * sort_order: 14
+     * text_color: "#ffffff"
+     **/
+    const ColorSwatches = (function () {
+        "use strict"
+        const _product_edit_season_id = document.getElementById("product_edit_season_id")
+        const _season_id = document.getElementById("season_id")
+        const _edit_scheme = document.getElementById("edit_scheme")
+        const _form_edit_scheme = document.getElementById("form_edit_scheme")
+        const _product_edit_season_id_name_display = document.getElementById("product_edit_season_id_name_display")
+        const _button_close_edit_scheme = document.getElementById("button_close_edit_scheme")
+        let season_toggle_items
+        
+        //
+        $(_button_close_edit_scheme)
+          .on("click", function () {
+              $(_edit_scheme).hide()
+          })
+        
+        $(_season_id)
+          .on("click", function () {
+              $(_edit_scheme).show()
+          })
+        
+        //
+        const reset_form = function () {
+        
+        }
+        
+        const load_form = function (scheme) {
+            if (scheme) {
+            
+            }
+        }
+        
+        const edit = function (el) {
+            $(".color_scheme_block").removeClass("active")
+            $(el).addClass("active")
+        }
+        
+        const load_all = function (swatches) {
+            ColorSwatches.all = new Map()
+            if (swatches) {
+                $.each(swatches, function (k, swatch) {
+                    //Console.log("swatch", swatch)
+                })
+            }
+        }
+        
+        const val = function (scheme) {
+        
+        }
+        
+        const init = function (settings) {
+            //Console.log("ColorSwatches:init(settings)", settings)
+            if (settings) {
+                if (settings.swatches) {
+                    load_all(settings.swatches)
+                }
+            }
+            season_toggle_items = document.querySelectorAll(".season_toggle_item")
+            season_toggle_items.forEach(el => el.addEventListener("click", event => {
+                let background_color = (el.dataset.backgroundcolor) ? el.dataset.textcolor : null
+                let border_color = (el.dataset.bordercolor) ? el.dataset.bordercolor : null
+                let color_scheme_id = parseInt(el.dataset.colorschemeid)
+                let text_color = (el.dataset.textcolor) ? el.dataset.textcolor : null
+                let scheme_name = (el.dataset.schemename) ? el.dataset.schemename : null
+                
+                $(_product_edit_season_id_name_display).text(`
+                    ${scheme_name}
+                `)
+                
+                $(el).addClass("active")
+                console.log({
+                    background_color: background_color,
+                    border_color: border_color,
+                    text_color: text_color,
+                    id: color_scheme_id,
+                    name: scheme_name,
+                })
+            }))
+        }
+        const _color_scheme_display = document.getElementById("color_scheme_display")
+        
+        const load = function (scheme) {
+            console.log("scheme", scheme)
+            _color_scheme_display.style.color = scheme.text_color
+            _color_scheme_display.style.background = scheme.background_color
+            _color_scheme_display.style.borderColor = scheme.border_color
+            $(_color_scheme_display).find("span").text(scheme.name)
+        }
+        
+        const change = function (el) {
+            Console.log("ColorSwatches:change(el)", el)
+        }
+        
+        return {
+            all: new Map(),
+            load: function (scheme) {
+                load(scheme)
+            },
+            edit: function (el) {
+                edit(el)
+            },
+            change: function (el) {
+                change(el)
+            },
+            init: function (settings) {
+                init(settings)
+            },
+        }
+    })()
+    
+    $(document).ready(function () {
+        
+        let swatches = <?php echo json_encode($swatches, 1);?>;
+        let settings = {
+            swatches: <?php echo $color_scheme;?>,
+            els: [
+                "#form_edit_scheme_background_color",
+                "#form_edit_scheme_text_color",
+                "#form_edit_scheme_border_color",
+            ],
+        }
+        
+        ColorSwatches.init(settings)
+        
+        const pickrText = Pickr.create({
+            el: "#form_edit_scheme_text_color",
+            default: "303030",
+            theme: "classic", // or 'classic', or 'monolith', or 'nano'
+            swatches: swatches,
+            components: {
+                
+                preview: true,
+                opacity: true,
+                hue: true,
+                
+                interaction: {
+                    hex: true,
+                    rgba: true,
+                    hsla: true,
+                    hsva: true,
+                    cmyk: true,
+                    input: true,
+                    clear: true,
+                    save: true,
+                },
+            },
+        })
+        
+        const pickrBackground = Pickr.create({
+            el: "#form_edit_scheme_background_color",
+            default: "303030",
+            theme: "classic", // or 'classic', or 'monolith', or 'nano'
+            swatches: swatches,
+            components: {
+                
+                preview: true,
+                opacity: true,
+                hue: true,
+                
+                interaction: {
+                    hex: true,
+                    rgba: true,
+                    hsla: true,
+                    hsva: true,
+                    cmyk: true,
+                    input: true,
+                    clear: true,
+                    save: true,
+                },
+            },
+        })
+        
+        const pickrBorder = Pickr.create({
+            el: "#form_edit_scheme_border_color",
+            default: "303030",
+            theme: "classic", // or 'classic', or 'monolith', or 'nano'
+            swatches: swatches,
+            components: {
+                
+                preview: true,
+                opacity: true,
+                hue: true,
+                
+                interaction: {
+                    hex: true,
+                    rgba: true,
+                    hsla: true,
+                    hsva: true,
+                    cmyk: true,
+                    input: true,
+                    clear: true,
+                    save: true,
+                },
+            },
+        })
+        
+        pickrText.on("init", instance => {
+            //Console.log('Event: "init"', instance)
+        }).on("hide", instance => {
+            //Console.log('Event: "hide"', instance)
+        }).on("show", (color, instance) => {
+            //Console.log('Event: "show"', color, instance)
+        }).on("save", (color, instance) => {
+            Console.log('Event: "save"', color, instance)
+        }).on("clear", instance => {
+            Console.log('Event: "clear"', instance)
+        }).on('change', (color, source, instance) => {
+            Console.log('Event: "change"', color, source, instance)
+        }).on('changestop', (source, instance) => {
+            //Console.log('Event: "changestop"', source, instance)
+        }).on('cancel', instance => {
+            Console.log('Event: "cancel"', instance)
+        }).on('swatchselect', (color, instance) => {
+            Console.log('Event: "swatchselect"', color, instance)
+            let c = "#" + color.toHEXA().join('')
+            Console.log('Event: "swatchselect"', c)
+        })
+        
+        const LightenDarkenColor = function (col, amt) {
+            var usePound = false
+            if (col[0] === "#") {
+                col = col.slice(1)
+                usePound = true
+            }
+            
+            var num = parseInt(col, 16)
+            
+            var r = (num >> 16) + amt
+            
+            if (r > 255) {
+                r = 255
+            } else if (r < 0) {
+                r = 0
+            }
+            
+            var b = ((num >> 8) & 0x00FF) + amt
+            
+            if (b > 255) {
+                b = 255
+            } else if (b < 0) {
+                b = 0
+            }
+            
+            var g = (num & 0x0000FF) + amt
+            
+            if (g > 255) {
+                g = 255
+            } else if (g < 0) {
+                g = 0
+            }
+            
+            return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16)
+        }
+        
+        const contrastingColor = function (color) {
+            return (luma(color) >= 165) ? "000" : "fff"
+        }
+        
+        const luma = function (color) {
+            var rgb = (typeof color === 'string') ? hexToRGBArray(color) : color
+            return (0.2126 * rgb[0]) + (0.7152 * rgb[1]) + (0.0722 * rgb[2]) // SMPTE C, Rec. 709 weightings
+        }
+        
+        const hexToRGBArray = function (color) {
+            if (color.length === 3) {
+                color = color.charAt(0) + color.charAt(0) + color.charAt(1) + color.charAt(1) + color.charAt(2) + color.charAt(2)
+            } else if (color.length !== 6) {
+                throw('Invalid hex color: ' + color)
+            }
+            var rgb = []
+            for (var i = 0; i <= 2; i++)
+                rgb[i] = parseInt(color.substr(i * 2, 2), 16)
+            return rgb
+        }
+        
+        const pSBC = (p, c0, c1, l) => {
+            let r, g, b, P, f, t, h, i = parseInt, m = Math.round, a = typeof (c1) == "string"
+            if (typeof (p) != "number" || p < -1 || p > 1 || typeof (c0) != "string" || (c0[0] != 'r' && c0[0] != '#') || (c1 && !a)) {
+                return null
+            }
+            if (!this.pSBCr) {
+                this.pSBCr = (d) => {
+                    let n = d.length, x = {}
+                    if (n > 9) {
+                        [r, g, b, a] = d = d.split(","), n = d.length
+                        if (n < 3 || n > 4) {
+                            return null
+                        }
+                        x.r = i(r[3] == "a" ? r.slice(5) : r.slice(4)), x.g = i(g), x.b = i(b), x.a = a ? parseFloat(a) : -1
+                    } else {
+                        if (n == 8 || n == 6 || n < 4) {
+                            return null
+                        }
+                        if (n < 6) {
+                            d = "#" + d[1] + d[1] + d[2] + d[2] + d[3] + d[3] + (n > 4 ? d[4] + d[4] : "")
+                        }
+                        d = i(d.slice(1), 16)
+                        if (n == 9 || n == 5) {
+                            x.r = d >> 24 & 255, x.g = d >> 16 & 255, x.b = d >> 8 & 255, x.a = m((d & 255) / 0.255) / 1000
+                        } else {
+                            x.r = d >> 16, x.g = d >> 8 & 255, x.b = d & 255, x.a = -1
+                        }
+                    }
+                    return x
+                }
+            }
+            h = c0.length > 9, h = a ? c1.length > 9 ? true : c1 == "c" ? !h : false : h, f = this.pSBCr(c0), P = p < 0, t = c1 && c1 != "c" ? this.pSBCr(c1) : P ? {
+                r: 0,
+                g: 0,
+                b: 0,
+                a: -1,
+            } : {
+                r: 255,
+                g: 255,
+                b: 255,
+                a: -1,
+            }, p = P ? p * -1 : p, P = 1 - p
+            if (!f || !t) {
+                return null
+            }
+            if (l) {
+                r = m(P * f.r + p * t.r), g = m(P * f.g + p * t.g), b = m(P * f.b + p * t.b)
+            } else {
+                r = m((P * f.r ** 2 + p * t.r ** 2) ** 0.5), g = m((P * f.g ** 2 + p * t.g ** 2) ** 0.5), b = m((P * f.b ** 2 + p * t.b ** 2) ** 0.5)
+            }
+            a = f.a, t = t.a, f = a >= 0 || t >= 0, a = f ? a < 0 ? t : t < 0 ? a : a * P + t * p : 0
+            if (h) {
+                return "rgb" + (f ? "a(" : "(") + r + "," + g + "," + b + (f ? "," + m(a * 1000) / 1000 : "") + ")"
+            } else {
+                return "#" + (4294967296 + r * 16777216 + g * 65536 + b * 256 + (f ? m(a * 255) : 0)).toString(16).slice(1, f ? undefined : -2)
+            }
+        }
+        
+        const updateSwatch = function (c) {
+            
+            if (c) {
+                let background = c.replace(/#/, "")
+                let text = contrastingColor(background)
+                let border = pSBC(-0.6, c)
+                return {
+                    background: "#" + background,
+                    text: "#" + text,
+                    border: border,
+                }
+            }
+        }
+        
+        /*
+        $.each(swatches, function (k, v) {
+            let test = updateSwatch(v)
+            let backgroundColor = test.background
+            let borderColor = test.border
+            let textColor = test.text
+            $("div.page").append(`
+            <div class="col-xl-3">
+                <div style="background:${backgroundColor};height:50px;width:100px;padding:2px;margin:5px">
+                    <div style="background-color:${borderColor};height:46px;width:96px;">
+                        <p class="m-0 p-0 mb-1" style="line-height:20px;font-size:12px;text-align: center;vertical-align: middle;color:${textColor}!important;">name</p>
+                        <p class="m-0 p-0" style="line-height:20px;font-size:12px;text-align: center;vertical-align: middle;color:${textColor}!important;">${borderColor}</p>
+                    </div>
+                </div>
+            </div>
+            `)
+            //Console.log("test", test)
+        })
+        //*/
+        
+    })
+
+</script>
 
 

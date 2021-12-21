@@ -157,4 +157,39 @@
             );
         }
         
+        /**
+         * autocomplete method
+         *
+         * @param string   $st
+         * @param int|null $category_id
+         *
+         * @return array
+         */
+        public static function autocomplete(string $st = "", int $category_id = null): array
+        {
+            return self::format_ac(SeasonModel::season_ac($st, $category_id));
+        }
+        
+        /**
+         * format autocomplete results
+         *
+         * @param array|null $seasons
+         *
+         * @return array
+         */
+        private static function format_ac(array $seasons = null): array
+        {
+            $data["suggestions"] = [];
+            foreach ($seasons AS $k => $season) {
+                $l = (object)$season;
+                $value = utf8_encode($l->season_name);
+                array_push($data["suggestions"], [
+                    "value" => utf8_encode($value),
+                    "data" => self::format($season),
+                ]);
+            }
+            
+            return $data;
+        }
+        
     }

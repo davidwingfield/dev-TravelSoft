@@ -71,6 +71,21 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Autocomplete.html#method_locations"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Autocomplete\u003A\u003Aseasons\u0028\u0029",
+            "name": "seasons",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Autocomplete.html#method_seasons"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Autocomplete\u003A\u003Aunits\u0028\u0029",
+            "name": "units",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Autocomplete.html#method_units"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Autocomplete\u003A\u003Avariants\u0028\u0029",
+            "name": "variants",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Autocomplete.html#method_variants"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\City",
             "name": "City",
             "summary": "Short\u0020City\u0020Description\nLong\u0020City\u0020Description",
@@ -393,7 +408,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Product\u003A\u003Aautocomplete\u0028\u0029",
             "name": "autocomplete",
-            "summary": "autocomplete\nAutocomplete\u0020json",
+            "summary": "",
             "url": "classes/Framework-App-Controllers-Product.html#method_autocomplete"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Product\u003A\u003Aformat_ac\u0028\u0029",
@@ -408,7 +423,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Product\u003A\u003A\u0024buttons",
             "name": "buttons",
-            "summary": "buttons",
+            "summary": "Buttons",
             "url": "classes/Framework-App-Controllers-Product.html#property_buttons"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Product\u003A\u003A\u0024tabs",
@@ -561,6 +576,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Season.html#method_formatSeasonType"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Season\u003A\u003Aautocomplete\u0028\u0029",
+            "name": "autocomplete",
+            "summary": "autocomplete\u0020method",
+            "url": "classes/Framework-App-Controllers-Season.html#method_autocomplete"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Season\u003A\u003Aformat_ac\u0028\u0029",
+            "name": "format_ac",
+            "summary": "format\u0020autocomplete\u0020results",
+            "url": "classes/Framework-App-Controllers-Season.html#method_format_ac"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\StaticPages",
             "name": "StaticPages",
             "summary": "Short\u0020StaticPages\u0020Description",
@@ -636,10 +661,20 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Unit.html#method_getUnitsByProductId"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Unit\u003A\u003Aautocomplete\u0028\u0029",
+            "name": "autocomplete",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Unit.html#method_autocomplete"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Unit\u003A\u003Aformat\u0028\u0029",
             "name": "format",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Unit.html#method_format"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Unit\u003A\u003Aformat_ac\u0028\u0029",
+            "name": "format_ac",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Unit.html#method_format_ac"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\User",
             "name": "User",
@@ -708,22 +743,32 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Variant",
             "name": "Variant",
-            "summary": "Short\u0020Variant\u0020Description",
+            "summary": "Short\u0020Variant\u0020Description\nLong\u0020Variant\u0020Description",
             "url": "classes/Framework-App-Controllers-Variant.html"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Variant\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "",
+            "summary": "controller\u0020method",
             "url": "classes/Framework-App-Controllers-Variant.html#method___construct"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Variant\u003A\u003AgetVariantsByProductId\u0028\u0029",
             "name": "getVariantsByProductId",
-            "summary": "",
+            "summary": "get\u0020variants\u0020by\u0020product\u0020id",
             "url": "classes/Framework-App-Controllers-Variant.html#method_getVariantsByProductId"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Variant\u003A\u003Aautocomplete\u0028\u0029",
+            "name": "autocomplete",
+            "summary": "autocomplete\u0020method",
+            "url": "classes/Framework-App-Controllers-Variant.html#method_autocomplete"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Variant\u003A\u003Aformat_ac\u0028\u0029",
+            "name": "format_ac",
+            "summary": "format\u0020autocomplete\u0020results",
+            "url": "classes/Framework-App-Controllers-Variant.html#method_format_ac"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Variant\u003A\u003Aformat\u0028\u0029",
             "name": "format",
-            "summary": "",
+            "summary": "format\u0020object\u0020results",
             "url": "classes/Framework-App-Controllers-Variant.html#method_format"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Vendor",
@@ -2096,6 +2141,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Models-SeasonModel.html#method_getByProductId"
         },                {
+            "fqsen": "\\Framework\\App\\Models\\SeasonModel\u003A\u003Aseason_ac\u0028\u0029",
+            "name": "season_ac",
+            "summary": "database\u0020method\u0020to\u0020fetch\u0020autocomplete\u0020search\u0020results",
+            "url": "classes/Framework-App-Models-SeasonModel.html#method_season_ac"
+        },                {
             "fqsen": "\\Framework\\App\\Models\\SeasonModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
             "summary": "",
@@ -2110,6 +2160,11 @@ Search.appendIndex(
             "name": "seasonTypesSQL",
             "summary": "",
             "url": "classes/Framework-App-Models-SeasonModel.html#property_seasonTypesSQL"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\SeasonModel\u003A\u003A\u0024selectQuery",
+            "name": "selectQuery",
+            "summary": "",
+            "url": "classes/Framework-App-Models-SeasonModel.html#property_selectQuery"
         },                {
             "fqsen": "\\Framework\\App\\Models\\StageModel",
             "name": "StageModel",
@@ -2196,6 +2251,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Models-UnitModel.html#method_getByProductId"
         },                {
+            "fqsen": "\\Framework\\App\\Models\\UnitModel\u003A\u003Aunit_ac\u0028\u0029",
+            "name": "unit_ac",
+            "summary": "",
+            "url": "classes/Framework-App-Models-UnitModel.html#method_unit_ac"
+        },                {
             "fqsen": "\\Framework\\App\\Models\\UnitModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
             "summary": "",
@@ -2205,6 +2265,11 @@ Search.appendIndex(
             "name": "dbFields",
             "summary": "",
             "url": "classes/Framework-App-Models-UnitModel.html#property_dbFields"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\UnitModel\u003A\u003A\u0024selectQuery",
+            "name": "selectQuery",
+            "summary": "",
+            "url": "classes/Framework-App-Models-UnitModel.html#property_selectQuery"
         },                {
             "fqsen": "\\Framework\\App\\Models\\UserModel",
             "name": "UserModel",
@@ -2278,7 +2343,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\VariantModel",
             "name": "VariantModel",
-            "summary": "Short\u0020Variant\u0020Description",
+            "summary": "Short\u0020Variant\u0020Description\nLong\u0020Variant\u0020Description",
             "url": "classes/Framework-App-Models-VariantModel.html"
         },                {
             "fqsen": "\\Framework\\App\\Models\\VariantModel\u003A\u003Aget\u0028\u0029",
@@ -2301,6 +2366,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Models-VariantModel.html#method_getByProductId"
         },                {
+            "fqsen": "\\Framework\\App\\Models\\VariantModel\u003A\u003Avariant_ac\u0028\u0029",
+            "name": "variant_ac",
+            "summary": "",
+            "url": "classes/Framework-App-Models-VariantModel.html#method_variant_ac"
+        },                {
             "fqsen": "\\Framework\\App\\Models\\VariantModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
             "summary": "",
@@ -2310,6 +2380,11 @@ Search.appendIndex(
             "name": "dbFields",
             "summary": "",
             "url": "classes/Framework-App-Models-VariantModel.html#property_dbFields"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\VariantModel\u003A\u003A\u0024selectQuery",
+            "name": "selectQuery",
+            "summary": "",
+            "url": "classes/Framework-App-Models-VariantModel.html#property_selectQuery"
         },                {
             "fqsen": "\\Framework\\App\\Models\\VendorApiModel",
             "name": "VendorApiModel",
@@ -3006,16 +3081,6 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/default.html#function_esc_url"
         },                {
-            "fqsen": "\\getLetterCombo\u0028\u0029",
-            "name": "getLetterCombo",
-            "summary": "",
-            "url": "namespaces/default.html#function_getLetterCombo"
-        },                {
-            "fqsen": "\\buildCode\u0028\u0029",
-            "name": "buildCode",
-            "summary": "",
-            "url": "namespaces/default.html#function_buildCode"
-        },                {
             "fqsen": "\\adjustBrightness\u0028\u0029",
             "name": "adjustBrightness",
             "summary": "",
@@ -3025,6 +3090,16 @@ Search.appendIndex(
             "name": "displayJsonOnPage",
             "summary": "",
             "url": "namespaces/default.html#function_displayJsonOnPage"
+        },                {
+            "fqsen": "\\getLetterCombo\u0028\u0029",
+            "name": "getLetterCombo",
+            "summary": "",
+            "url": "namespaces/default.html#function_getLetterCombo"
+        },                {
+            "fqsen": "\\buildCode\u0028\u0029",
+            "name": "buildCode",
+            "summary": "",
+            "url": "namespaces/default.html#function_buildCode"
         },                {
             "fqsen": "\\Framework\\Init\\initLogger\u0028\u0029",
             "name": "initLogger",

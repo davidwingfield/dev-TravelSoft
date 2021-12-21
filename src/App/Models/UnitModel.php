@@ -18,6 +18,34 @@
         
         protected static $dbTable = "unit";
         protected static $dbFields = Array();
+        protected static $selectQuery = "
+                SELECT
+                    UNIT.id AS 'unit_id',
+                    UNIT.category_id AS 'unit_category_id',
+                    UNIT.min_pax AS 'unit_min_pax',
+                    UNIT.max_pax AS 'unit_max_pax',
+                    UNIT.min_nights AS 'unit_min_nights',
+                    UNIT.max_nights AS 'unit_max_nights',
+                    UNIT.api_id AS 'unit_api_id',
+                    UNIT.name AS 'unit_name',
+                    UNIT.room_code AS 'unit_room_code',
+                    UNIT.blurb AS 'unit_blurb',
+                    UNIT.cover_image AS 'unit_cover_image',
+                    UNIT.meeting_point AS 'unit_meeting_point',
+                    UNIT.time_notes AS 'unit_time_notes',
+                    UNIT.start_time AS 'unit_start_time',
+                    UNIT.end_time AS 'unit_end_time',
+                    UNIT.description_short AS 'unit_description_short',
+                    UNIT.description_long AS 'unit_description_long',
+                    UNIT.enabled AS 'unit_enabled',
+                    UNIT.date_created AS 'unit_date_created',
+                    UNIT.created_by AS 'unit_created_by',
+                    UNIT.date_modified AS 'unit_date_modified',
+                    UNIT.modified_by AS 'unit_modified_by',
+                    UNIT.note AS 'unit_note'
+                FROM 	unit UNIT
+                WHERE   UNIT.enabled = 1
+        ";
         
         public static function get(int $id = null): array
         {
@@ -101,6 +129,31 @@
                 WHERE   PRODUCT_UNIT.product_id = $product_id
             ";
             try {
+                return Model::$db->rawQuery($sql);
+            } catch (Exception $e) {
+                Log::$debug_log->error($e);
+                
+                return [];
+            }
+        }
+        
+        public static function unit_ac(string $st = "", int $category_id = null): array
+        {
+            if (is_null($category_id)) {
+                return [];
+            }
+            
+            try {
+                $searchTerm = addslashes($st);
+                
+                $sql = self::$selectQuery . "
+                    AND			UNIT.name LIKE '%$searchTerm%'
+                    AND         UNIT.category_id = $category_id
+                    ORDER BY    LENGTH(UNIT.name), CAST(UNIT.name AS UNSIGNED), UNIT.name ASC
+                    LIMIT 20;";
+                
+                //Log::$debug_log->trace($sql);
+                
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {
                 Log::$debug_log->error($e);

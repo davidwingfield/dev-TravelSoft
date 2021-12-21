@@ -37,6 +37,49 @@
         }
     }
     
+    function adjustBrightness($hex, $steps): string
+    {
+        // Steps should be between -255 and 255. Negative = darker, positive = lighter
+        $steps = max(-255, min(255, $steps));
+        
+        // Normalize into a six character long hex string
+        $hex = str_replace('#', '', $hex);
+        if (strlen($hex) == 3) {
+            $hex = str_repeat(substr($hex, 0, 1), 2) . str_repeat(substr($hex, 1, 1), 2) . str_repeat(substr($hex, 2, 1), 2);
+        }
+        
+        // Split into three parts: R, G and B
+        $color_parts = str_split($hex, 2);
+        $return = '#';
+        
+        foreach ($color_parts as $color) {
+            $color = hexdec($color);                                  // Convert to decimal
+            $color = max(0, min(255, $color + $steps));               // Adjust color
+            $return .= str_pad(dechex($color), 2, '0', STR_PAD_LEFT); // Make two char hex code
+        }
+        
+        return $return;
+    }
+    
+    function displayJsonOnPage(array $values = [], string $name = "Test Value")
+    {
+        $json = json_encode($values, 1);
+        $title = $name;
+        echo "
+            <div class='panel'>
+                <div class='panel-heading'>
+                    <h3 class='panel-title'>$title</h3>
+                    <div class='panel-actions panel-actions-keep'>
+                        <a class='panel-action fas fa-expand' data-toggle='panel-fullscreen' aria-hidden='true'></a>
+                    </div>
+                </div>
+                <div class='panel-body p-2 panel-code' data-datatype='jsonp'>
+                    $json
+                </div>
+            </div>
+    ";
+    }
+    
     function getLetterCombo(string $name = null): string
     {
         if (!isset($name) || is_null($name)) {
@@ -49,8 +92,9 @@
             strtoupper('at'),
             strtoupper('in'),
         );
-        
+        $letterCombo = "";
         $name = trim($name);
+        $input = 'Lorem Ipsum is simply dummy text of the printing industry.';
         $words = [];
         
         preg_match_all('/(?<match>\w{3,}+)/', strtoupper($name), $matches, PREG_PATTERN_ORDER);
@@ -170,9 +214,11 @@
         return $letterCombo;
     }
     
-    function buildCode(int $id = null, string $name = null, string $type = null): ?string
+    function buildCode(int $id = null, string $name = null, string $type = null): string
     {
         $errors = [];
+        $code = "";
+        $lead = "X";
         if (!isset($type) || is_null($id)) {
             $errors[] = "<div class=''>empty value: id</div>";
         }
@@ -187,13 +233,15 @@
         
         if (count($errors) > 0) {
             $errors = implode("", $errors);
-            
-            return null;
+            exit(0);
         } else {
             $letters = getLetterCombo($name);
             $decString = "$id";
             $length = 11 - strlen($decString);
-            $numbers = str_repeat("0", $length);
+            $numbers = "";
+            for ($n = 0; $n < $length; $n++) {
+                $numbers .= "0";
+            }
             $numbers .= $id;
             
             $code = $numbers . "-" . $letters;
@@ -221,47 +269,4 @@
         }
         
         return $code;
-    }
-    
-    function adjustBrightness($hex, $steps): string
-    {
-        // Steps should be between -255 and 255. Negative = darker, positive = lighter
-        $steps = max(-255, min(255, $steps));
-        
-        // Normalize into a six character long hex string
-        $hex = str_replace('#', '', $hex);
-        if (strlen($hex) == 3) {
-            $hex = str_repeat(substr($hex, 0, 1), 2) . str_repeat(substr($hex, 1, 1), 2) . str_repeat(substr($hex, 2, 1), 2);
-        }
-        
-        // Split into three parts: R, G and B
-        $color_parts = str_split($hex, 2);
-        $return = '#';
-        
-        foreach ($color_parts as $color) {
-            $color = hexdec($color);                                  // Convert to decimal
-            $color = max(0, min(255, $color + $steps));               // Adjust color
-            $return .= str_pad(dechex($color), 2, '0', STR_PAD_LEFT); // Make two char hex code
-        }
-        
-        return $return;
-    }
-    
-    function displayJsonOnPage(array $values = [], string $name = "Test Value")
-    {
-        $json = json_encode($values, 1);
-        $title = $name;
-        echo "
-            <div class='panel'>
-                <div class='panel-heading'>
-                    <h3 class='panel-title'>$title</h3>
-                    <div class='panel-actions panel-actions-keep'>
-                        <a class='panel-action fas fa-expand' data-toggle='panel-fullscreen' aria-hidden='true'></a>
-                    </div>
-                </div>
-                <div class='panel-body p-2 panel-code' data-datatype='jsonp'>
-                    $json
-                </div>
-            </div>
-    ";
     }

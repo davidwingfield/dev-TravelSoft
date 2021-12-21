@@ -1,0 +1,79 @@
+<section>
+    <div class="card card-body">
+        <div class="row">
+            <div class="col-12 col-sm-9 col-md-10 col-lg-8 col-xl-11">
+                <label for="product_edit_unit_form_unit_name_filter" class="d-none">Unit Search:</label>
+                <div class="input-group">
+                    <input type="search" id="product_edit_unit_form_unit_name_filter" name="product_edit_unit_form_unit_name_filter" class="form-control" placeholder="Search Units">
+                    <div class="input-group-append">
+                        <button type="button" id="product_edit_unit_form_unit_name_filter_add_new_button" name="product_edit_unit_form_unit_name_filter_add_new_button" class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="product_edit_unit_form_unit_name_filter-error" class="error w-100 text-center"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card card-body mb-2">
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="card card-body border border-dark z-depth-0 mb-2">
+                    
+                    <div class="row">
+                        
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4">
+                            <div class="form-element">
+                                <label for="product_edit_unit_form_unit_id">Id:</label>
+                                <input type="text" id="product_edit_unit_form_unit_id" name="product_edit_unit_form_unit_id" class="form-control" readonly="readonly"/>
+                                <div id="product_edit_unit_form_unit_id-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4">
+                            <div class="form-element">
+                                <label for="product_edit_unit_form_unit_name">Name:</label>
+                                <input type="text" id="product_edit_unit_form_unit_name" name="product_edit_unit_form_unit_name" class="form-control"/>
+                                <div id="product_edit_unit_form_unit_name-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 d-flex align-self-end justify-content-end pb-2">
+                            <div class="form-element">
+                                <div class="custom-control custom-switch">
+                                    <input id="product_edit_unit_form_unit_enabled" name="product_edit_unit_form_unit_enabled" type="checkbox" value="1" class="custom-control-input" readonly="readonly">
+                                    <label for="product_edit_unit_form_unit_enabled" class="custom-control-label p-0">Enabled</label>
+                                </div>
+                                <div id="product_edit_unit_form_unit_enabled-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                    
+                    <div class="row">
+                        
+                        <div class="col-6">
+                            <div class="form-element">
+                                <label for="product_edit_unit_form_unit_min_nights">Minimum Nights:</label>
+                                <input type="text" id="product_edit_unit_form_unit_min_nights" name="product_edit_unit_form_unit_min_nights" class="form-control"/>
+                                <div id="product_edit_unit_form_unit_min_nights-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <div class="form-element">
+                                <label for="product_edit_unit_form_unit_max_nights">Maximum Nights:</label>
+                                <input type="text" id="product_edit_unit_form_unit_max_nights" name="product_edit_unit_form_unit_max_nights" class="form-control"/>
+                                <div id="product_edit_unit_form_unit_max_nights-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <?php include_once(VIEWS_PATH . "/units/tables/product_edit_unit_table.phtml"); ?>
+</section>

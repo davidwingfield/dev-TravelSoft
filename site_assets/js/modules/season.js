@@ -1,7 +1,68 @@
 const Season = (function () {
     "use strict"
+    const _product_edit_season_form_season_name_filter = document.getElementById("product_edit_season_form_season_name_filter")
+    const _category_id = document.getElementById("category_id")
+    const _product_edit_season_form_season_id = document.getElementById("product_edit_season_form_season_id")
+    const _product_edit_season_form_season_name = document.getElementById("product_edit_season_form_season_name")
+    const _product_edit_season_form_season_color_scheme_id = document.getElementById("product_edit_season_form_season_color_scheme_id")
+    const _product_edit_season_form_season_enabled = document.getElementById("product_edit_season_form_season_enabled")
+    const _edit_season_button = document.getElementById("edit_season_button")
+    
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let categories = new Map()
+    
+    const init_autocomplete = function () {
+        let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+        
+        $(_product_edit_season_form_season_name_filter)
+          .on("click", function () {
+          
+          })
+          .on("search", function () {
+          
+          })
+          .on("change", function () {
+              /*
+              setTimeout(function () {
+                  let provider_name = _provider_name.value
+                  
+                  if (globalSelectedProvider === false) {
+                      if (provider_name === "") {
+                          _provider_name.value = ""
+                          _provider_company_id.value = ""
+                          globalSelectedProvider = false
+                          $(_vendor_name).val("").trigger("change")
+                          $(_provider_company_id).val("").trigger("change")
+                      } else {
+                          provider_exists(provider_name)
+                      }
+                  }
+              }, 200)
+              //*/
+          })
+          .autocomplete({
+              serviceUrl: "/api/v1.0/autocomplete/seasons",
+              minChars: 2,
+              cache: false,
+              dataType: "json",
+              triggerSelectOnValidInput: false,
+              paramName: "st",
+              params: { "category_id": category_id },
+              onSelect: function (suggestion) {
+                  if (!suggestion.data) {
+                      return
+                  }
+                  let season = suggestion.data
+                  let color_scheme = (season.color_scheme) ? season.color_scheme : {}
+                  Console.log("season", season)
+                  _product_edit_season_form_season_id.value = season.id
+                  _product_edit_season_form_season_name.value = season.name
+                  _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
+                  _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
+                  ColorSwatches.load(color_scheme)
+              },
+          })
+    }
     
     const defaultDetail = function () {
         return {
@@ -100,12 +161,24 @@ const Season = (function () {
         }
     }
     
+    const load_all = function (seasons) {
+        if (!seasons) {
+            seasons = []
+        }
+    }
+    
     const init = function (settings) {
         let seasons = []
         if (settings) {
             if (settings.seasons) {
                 seasons = settings.seasons
+                
             }
+        }
+        
+        if (_product_edit_season_form_season_name_filter) {
+            init_autocomplete()
+            Console.log("seasons", settings)
         }
         
         load_types(seasons)

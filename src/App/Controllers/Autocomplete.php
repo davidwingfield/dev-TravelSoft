@@ -96,4 +96,40 @@
             exit;
         }
         
+        public function seasons(): void
+        {
+            $st = "";
+            $category_id = 1;
+            extract($_GET);
+            $results = Season::autocomplete($st, $category_id);
+            // ----
+            header("Content-type:application/json");
+            echo json_encode($results);
+            exit;
+        }
+        
+        public function units(): void
+        {
+            $st = "";
+            $category_id = 1;
+            extract($_GET);
+            $results = Unit::autocomplete($st, $category_id);
+            // ----
+            header("Content-type:application/json");
+            echo json_encode($results);
+            exit;
+        }
+        
+        public function variants(): void
+        {
+            $st = "";
+            $category_id = 1;
+            extract($_GET);
+            $results = Variant::autocomplete($st, $category_id);
+            // ----
+            header("Content-type:application/json");
+            echo json_encode($results);
+            exit;
+        }
+        
     }

@@ -1613,5 +1613,39 @@
     color: #000000;
     padding: .5rem;
     }
-
+  
+  
+  .color_swatch_selector.active {
+    background: #ff0000;
+    }
+  
+  .color_swatch_selector:hover .color_scheme_block_edit,
+  .color_swatch_selector.active:hover .color_scheme_block_edit {
+    display: block;
+    }
+  
+  .color_scheme_block_edit {
+    position: absolute;
+    height: 2.3rem;
+    background: rgba(153, 153, 153, .78);
+    top: 0.3rem;
+    right: 1.4rem;
+    width: 2rem;
+    font-size: .8rem;
+    line-height: 2.3rem;
+    color: #4e4e4e;
+    cursor: pointer;
+    display: none;
+    }
+  
+  .color_scheme_block.active {
+    box-shadow: 0 0px 5px 0 rgba(255, 0, 0, .50)
+    }
+  
+  .season_toggle {
+    white-space: nowrap !important;
+    padding: 5px 5px 5px 5px !important;
+    font-size: .8rem !important;
+    font-weight: 400 !important;
+    }
 </style>

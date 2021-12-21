@@ -262,15 +262,14 @@
          */
         public static function provider_ac(string $st = ""): array
         {
-            //ORDER BY    LENGTH(Company.name), CAST(Company.name AS UNSIGNED), Company.name ASC
             try {
                 $searchTerm = addslashes($st);
                 $sql = self::$selectQuery . "
                     AND			COMPANY.name LIKE '%$searchTerm%'
-                   
+                    ORDER BY    LENGTH(COMPANY.name), CAST(COMPANY.name AS UNSIGNED), COMPANY.name ASC
                     LIMIT 20;";
                 
-                Log::$debug_log->trace($sql);
+                //Log::$debug_log->trace($sql);
                 
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {

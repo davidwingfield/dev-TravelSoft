@@ -311,7 +311,7 @@ const Product = (function () {
                   },
               })
         }
-        Console.log("init_new_product_autocomplete()", category_id)
+        //Console.log("init_new_product_autocomplete()", category_id)
     }
     
     const validate_new_form = function () {
@@ -706,7 +706,7 @@ const Product = (function () {
     
     const init = function (settings) {
         Console.log("Product.init()", settings)
-        let product_details
+        let product_details, variants, seasons, units
         
         if (_modal_new_product) {
             Category.init()
@@ -718,9 +718,26 @@ const Product = (function () {
                     product_details = settings.product_details
                 }
                 
-                //
+                if (product_details.variants) {
+                    variants = product_details.variants
+                }
+                
+                if (product_details.seasons) {
+                    seasons = product_details.seasons
+                }
+                
+                if (product_details.units) {
+                    units = product_details.units
+                }
+                Console.log("seasons", seasons)
+                Console.log("units", units)
                 $(document).ready(function () {
-                    init_edit_form(product_details)
+                    if (_product_edit_page) {
+                        init_edit_form(product_details)
+                        Variant.init(variants)
+                        Season.init(seasons)
+                        Unit.init(units)
+                    }
                 })
                 
             }

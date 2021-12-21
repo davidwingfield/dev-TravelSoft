@@ -187,7 +187,8 @@
             
             try {
                 $sql = self::$sql . $where;
-                Log::$debug_log->trace($sql);
+
+//                Log::$debug_log->trace($sql);
                 
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {

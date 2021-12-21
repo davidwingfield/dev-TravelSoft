@@ -1257,8 +1257,69 @@ $(function () {
 
 const Season = (function () {
     "use strict"
+    const _product_edit_season_form_season_name_filter = document.getElementById("product_edit_season_form_season_name_filter")
+    const _category_id = document.getElementById("category_id")
+    const _product_edit_season_form_season_id = document.getElementById("product_edit_season_form_season_id")
+    const _product_edit_season_form_season_name = document.getElementById("product_edit_season_form_season_name")
+    const _product_edit_season_form_season_color_scheme_id = document.getElementById("product_edit_season_form_season_color_scheme_id")
+    const _product_edit_season_form_season_enabled = document.getElementById("product_edit_season_form_season_enabled")
+    const _edit_season_button = document.getElementById("edit_season_button")
+    
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let categories = new Map()
+    
+    const init_autocomplete = function () {
+        let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+        
+        $(_product_edit_season_form_season_name_filter)
+          .on("click", function () {
+          
+          })
+          .on("search", function () {
+          
+          })
+          .on("change", function () {
+              /*
+              setTimeout(function () {
+                  let provider_name = _provider_name.value
+                  
+                  if (globalSelectedProvider === false) {
+                      if (provider_name === "") {
+                          _provider_name.value = ""
+                          _provider_company_id.value = ""
+                          globalSelectedProvider = false
+                          $(_vendor_name).val("").trigger("change")
+                          $(_provider_company_id).val("").trigger("change")
+                      } else {
+                          provider_exists(provider_name)
+                      }
+                  }
+              }, 200)
+              //*/
+          })
+          .autocomplete({
+              serviceUrl: "/api/v1.0/autocomplete/seasons",
+              minChars: 2,
+              cache: false,
+              dataType: "json",
+              triggerSelectOnValidInput: false,
+              paramName: "st",
+              params: { "category_id": category_id },
+              onSelect: function (suggestion) {
+                  if (!suggestion.data) {
+                      return
+                  }
+                  let season = suggestion.data
+                  let color_scheme = (season.color_scheme) ? season.color_scheme : {}
+                  Console.log("season", season)
+                  _product_edit_season_form_season_id.value = season.id
+                  _product_edit_season_form_season_name.value = season.name
+                  _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
+                  _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
+                  ColorSwatches.load(color_scheme)
+              },
+          })
+    }
     
     const defaultDetail = function () {
         return {
@@ -1357,12 +1418,24 @@ const Season = (function () {
         }
     }
     
+    const load_all = function (seasons) {
+        if (!seasons) {
+            seasons = []
+        }
+    }
+    
     const init = function (settings) {
         let seasons = []
         if (settings) {
             if (settings.seasons) {
                 seasons = settings.seasons
+                
             }
+        }
+        
+        if (_product_edit_season_form_season_name_filter) {
+            init_autocomplete()
+            Console.log("seasons", settings)
         }
         
         load_types(seasons)
@@ -5327,6 +5400,424 @@ const Location = (function () {
     
 })()
 
+
+const Variant = (function () {
+    "use strict"
+    
+    //
+    const _category_id = document.getElementById("category_id")
+    const _product_edit_variant_form_variant_name_filter = document.getElementById("product_edit_variant_form_variant_name_filter")
+    const _product_edit_variant_form_variant_name_filter_add_new_button = document.getElementById("product_edit_variant_form_variant_name_filter_add_new_button")
+    const _table_variant_product_edit = document.getElementById("table_variant_product_edit")
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let $table_variant_product_edit = $(_table_variant_product_edit)
+    
+    //
+    $(_product_edit_variant_form_variant_name_filter_add_new_button)
+      .on("click", function () {
+          alert()
+      })
+    
+    const init_autocomplete = function () {
+        let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+        
+        $(_product_edit_variant_form_variant_name_filter)
+          .on("click", function () {
+          
+          })
+          .on("search", function () {
+          
+          })
+          .on("change", function () {
+              /*
+              setTimeout(function () {
+                  let provider_name = _provider_name.value
+                  
+                  if (globalSelectedProvider === false) {
+                      if (provider_name === "") {
+                          _provider_name.value = ""
+                          _provider_company_id.value = ""
+                          globalSelectedProvider = false
+                          $(_vendor_name).val("").trigger("change")
+                          $(_provider_company_id).val("").trigger("change")
+                      } else {
+                          provider_exists(provider_name)
+                      }
+                  }
+              }, 200)
+              //*/
+          })
+          .autocomplete({
+              serviceUrl: "/api/v1.0/autocomplete/variants",
+              minChars: 2,
+              cache: false,
+              dataType: "json",
+              triggerSelectOnValidInput: false,
+              paramName: "st",
+              params: { "category_id": category_id },
+              onSelect: function (suggestion) {
+                  if (!suggestion.data) {
+                      return
+                  }
+                  Console.log("suggestion.data", suggestion.data)
+                  
+              },
+          })
+    }
+    
+    const _default_detail = function () {
+        return {
+            id: null,
+            category_id: null,
+            name: null,
+            min_age: null,
+            max_age: null,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
+        }
+    }
+    
+    const build_product_edit_table = function () {
+        $table_variant_product_edit = $(_table_variant_product_edit).table({
+            table_type: "display_list",
+            data: Variant.all,
+            columnDefs: [
+                {
+                    title: "Name",
+                    targets: 0,
+                    data: "name",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "Code",
+                    targets: 1,
+                    data: "code",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "Min Age",
+                    targets: 2,
+                    data: "min_age",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "Max Age",
+                    targets: 3,
+                    data: "max_age",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+            ],
+            rowClick: Variant.edit,
+        })
+    }
+    
+    const set = function (variant) {
+        let detail = _default_detail()
+        if (variant) {
+            detail.id = (variant.id) ? variant.id : null
+            detail.category_id = (variant.category_id) ? variant.category_id : null
+            detail.name = (variant.name) ? variant.name : null
+            detail.code = (variant.code) ? variant.code : null
+            detail.min_age = (variant.min_age) ? variant.min_age.toString() : null
+            detail.max_age = (variant.max_age) ? variant.max_age : null
+            detail.enabled = (variant.enabled) ? variant.enabled : 1
+            detail.date_created = (variant.date_created) ? variant.date_created : formatDateMySQL()
+            detail.created_by = (variant.created_by) ? variant.created_by : user_id
+            detail.date_modified = (variant.date_modified) ? variant.date_modified : formatDateMySQL()
+            detail.modified_by = (variant.modified_by) ? variant.modified_by : user_id
+            detail.note = (variant.note) ? variant.note : null
+        }
+        
+        Product.detail = detail
+        return detail
+    }
+    
+    const load_all = function (variants) {
+        Variant.all = new Map()
+        Console.log("variants", variants)
+        if (variants) {
+            $.each(variants, function (k, variant) {
+                let detail = set(variant)
+                $table_variant_product_edit.insertRow(detail)
+                Variant.all.set(detail.id, detail)
+            })
+        }
+    }
+    
+    const init = function (settings) {
+        let variants = []
+        Console.log("Variant.init(settings)", settings)
+        if (settings) {
+            if (settings) {
+                variants = settings
+            }
+        }
+        Console.log("variants", variants)
+        if (_table_variant_product_edit) {
+            build_product_edit_table()
+        }
+        
+        load_all(variants)
+        
+        if (_product_edit_variant_form_variant_name_filter) {
+            init_autocomplete()
+        }
+        
+        Console.log("init", Variant.all)
+    }
+    
+    const edit = function (variant) {
+        Console.log("variant", variant)
+    }
+    
+    return {
+        all: new Map(),
+        edit: function (variant) {
+            edit(variant)
+        },
+        init: function (settings) {
+            init(settings)
+        },
+    }
+})()
+
+const Unit = (function () {
+    "use strict"
+    
+    const _category_id = document.getElementById("category_id")
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    const _product_edit_unit_form_unit_name_filter = document.getElementById("product_edit_unit_form_unit_name_filter")
+    const _table_unit_product_edit = document.getElementById("table_unit_product_edit")
+    let $table_unit_product_edit = $(_table_unit_product_edit)
+    
+    const build_product_edit_table = function () {
+        $table_unit_product_edit = $(_table_unit_product_edit).table({
+            table_type: "display_list",
+            data: Unit.all,
+            columnDefs: [
+                {
+                    title: "Name",
+                    targets: 0,
+                    data: "name",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "Code",
+                    targets: 1,
+                    data: "room_code",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "Min Pax",
+                    targets: 2,
+                    data: "min_pax",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "Max Pax",
+                    targets: 3,
+                    data: "max_pax",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+            ],
+            rowClick: Unit.edit,
+        })
+    }
+    
+    const init_autocomplete = function () {
+        let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+        
+        $(_product_edit_unit_form_unit_name_filter)
+          .on("click", function () {
+          
+          })
+          .on("search", function () {
+          
+          })
+          .on("change", function () {
+              /*
+              setTimeout(function () {
+                  let provider_name = _provider_name.value
+                  
+                  if (globalSelectedProvider === false) {
+                      if (provider_name === "") {
+                          _provider_name.value = ""
+                          _provider_company_id.value = ""
+                          globalSelectedProvider = false
+                          $(_vendor_name).val("").trigger("change")
+                          $(_provider_company_id).val("").trigger("change")
+                      } else {
+                          provider_exists(provider_name)
+                      }
+                  }
+              }, 200)
+              //*/
+          })
+          .autocomplete({
+              serviceUrl: "/api/v1.0/autocomplete/units",
+              minChars: 2,
+              cache: false,
+              dataType: "json",
+              triggerSelectOnValidInput: false,
+              paramName: "st",
+              params: { "category_id": category_id },
+              onSelect: function (suggestion) {
+                  if (!suggestion.data) {
+                      return
+                  }
+                  let unit = suggestion.data
+                  
+                  Console.log("unit", unit)
+              },
+          })
+    }
+    
+    const _defaultDetail = function () {
+        /**
+         * api_id: null
+         * blurb: null
+         * category_id: 1
+         * cover_image: null
+         * created_by: 4
+         * date_created: "2021-12-21 16:32:23"
+         * date_modified: "2021-12-21 16:32:23"
+         * description_long: "<div class=\"card-block \">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.</div>"
+         * description_short: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu."
+         * enabled: 1
+         * end_time: null
+         * id: 204
+         * max_nights: 7
+         * max_pax: 4
+         * meeting_point: null
+         * min_nights: 1
+         * min_pax: 1
+         * modified_by: 4
+         * name: "Suite"
+         * note: null
+         * room_code: "UN-00000000204-SUIT"
+         * start_time: null
+         * time_notes: nul
+         */
+        return {
+            api_id: null,
+            blurb: null,
+            category_id: 1,
+            cover_image: null,
+            created_by: user_id,
+            date_created: formatDateMySQL(),
+            date_modified: formatDateMySQL(),
+            description_long: null,
+            description_short: null,
+            enabled: 1,
+            end_time: null,
+            id: null,
+            max_nights: null,
+            max_pax: null,
+            meeting_point: null,
+            min_nights: 1,
+            min_pax: 1,
+            modified_by: user_id,
+            name: null,
+            note: null,
+            room_code: null,
+            start_time: null,
+            time_notes: null,
+        }
+    }
+    
+    const set = function (unit) {
+        let detail = _defaultDetail()
+        if (unit) {
+            detail.api_id = (unit.api_id) ? unit.api_id : null
+            detail.blurb = (unit.blurb) ? unit.blurb : null
+            detail.category_id = (unit.category_id) ? unit.category_id : null
+            detail.cover_image = (unit.cover_image) ? unit.cover_image : null
+            detail.created_by = (unit.created_by) ? unit.created_by : user_id
+            detail.date_created = (unit.date_created) ? unit.date_created : formatDateMySQL()
+            detail.date_modified = (unit.date_modified) ? unit.date_modified : formatDateMySQL()
+            detail.description_long = (unit.description_long) ? unit.description_long : null
+            detail.description_short = (unit.description_short) ? unit.description_short : null
+            detail.enabled = (unit.enabled) ? unit.enabled : 1
+            detail.end_time = (unit.end_time) ? unit.end_time : null
+            detail.id = (unit.id) ? unit.id : null
+            detail.max_nights = (unit.max_nights) ? unit.max_nights : null
+            detail.max_pax = (unit.max_pax) ? unit.max_pax : null
+            detail.meeting_point = (unit.meeting_point) ? unit.meeting_point : null
+            detail.min_nights = (unit.min_nights) ? unit.min_nights : 1
+            detail.min_pax = (unit.min_pax) ? unit.min_pax : 1
+            detail.modified_by = (unit.modified_by) ? unit.modified_by : user_id
+            detail.name = (unit.name) ? unit.name : null
+            detail.note = (unit.note) ? unit.note : null
+            detail.room_code = (unit.room_code) ? unit.room_code : null
+            detail.start_time = (unit.start_time) ? unit.start_time : null
+            detail.time_notes = (unit.time_notes) ? unit.time_notes : null
+        }
+        
+        return detail
+    }
+    
+    const load_all = function (units) {
+        if (!units) {
+            units = []
+        }
+        Console.log("Units", units)
+        $.each(units, function (k, unit) {
+            let detail = set(unit)
+            Console.log("detail", detail)
+        })
+    }
+    
+    const init = function (settings) {
+        let units = []
+        if (settings) {
+            units = settings
+            if (settings.units) {
+                units = settings.units
+            }
+        }
+        
+        if (_product_edit_unit_form_unit_name_filter) {
+            init_autocomplete()
+            Console.log("units", units)
+            load_all(units)
+        }
+        
+    }
+    
+    const edit = function (unit) {
+        Console.log("Unit", unit)
+    }
+    
+    return {
+        all: new Map(),
+        edit: function (unit) {
+            edit(unit)
+        },
+        init: function (settings) {
+            init(settings)
+        },
+    }
+})()
 
 const Address = (function () {
     "use strict"
@@ -9798,7 +10289,11 @@ const Provider = (function () {
           $(_provider_company_id).val(_company_id.value)
       })
     
-    //
+    /**
+     * add provider
+     *
+     * @param provider
+     */
     const add = function (provider) {
         Console.log("add", provider)
         if (provider) {
@@ -10933,7 +11428,7 @@ const Product = (function () {
                   },
               })
         }
-        Console.log("init_new_product_autocomplete()", category_id)
+        //Console.log("init_new_product_autocomplete()", category_id)
     }
     
     const validate_new_form = function () {
@@ -11328,7 +11823,7 @@ const Product = (function () {
     
     const init = function (settings) {
         Console.log("Product.init()", settings)
-        let product_details
+        let product_details, variants, seasons, units
         
         if (_modal_new_product) {
             Category.init()
@@ -11340,9 +11835,26 @@ const Product = (function () {
                     product_details = settings.product_details
                 }
                 
-                //
+                if (product_details.variants) {
+                    variants = product_details.variants
+                }
+                
+                if (product_details.seasons) {
+                    seasons = product_details.seasons
+                }
+                
+                if (product_details.units) {
+                    units = product_details.units
+                }
+                Console.log("seasons", seasons)
+                Console.log("units", units)
                 $(document).ready(function () {
-                    init_edit_form(product_details)
+                    if (_product_edit_page) {
+                        init_edit_form(product_details)
+                        Variant.init(variants)
+                        Season.init(seasons)
+                        Unit.init(units)
+                    }
                 })
                 
             }

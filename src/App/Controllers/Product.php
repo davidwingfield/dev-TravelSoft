@@ -17,7 +17,7 @@
     class Product extends Controller
     {
         /**
-         * buttons
+         * Buttons
          *
          * @var array
          */
@@ -161,8 +161,6 @@
             
             ),
         );
-        
-        //
         
         public function __construct()
         {
@@ -315,6 +313,7 @@
             $seasons = Season::getSeasonsByProductId((int)$product['product_id']);
             $units = Unit::getUnitsByProductId((int)$product['product_id']);
             $variants = Variant::getVariantsByProductId((int)$product['product_id']);
+            Log::$debug_log->trace($variants);
             //*
             foreach ($seasons AS $season) {
                 $season_name = $season["name"];
@@ -430,10 +429,6 @@
             );
         }
         
-        /**
-         * autocomplete
-         * Autocomplete json
-         */
         public static function autocomplete(array $params = []): array
         {
             //Log::$debug_log->trace($params);

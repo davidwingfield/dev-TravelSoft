@@ -135,7 +135,11 @@ const Provider = (function () {
           $(_provider_company_id).val(_company_id.value)
       })
     
-    //
+    /**
+     * add provider
+     *
+     * @param provider
+     */
     const add = function (provider) {
         Console.log("add", provider)
         if (provider) {

@@ -27,7 +27,7 @@
 	exe($table);
      $output=null;
 $retval=null;
-exec('notepad.exe '.__DIR__.'/sqlGenerator/scripts/Select/'.ucwords($table).'.txt', $output, $retval);
+exec('notepad.exe '.__DIR__.'/sqlGenerator/scripts/Select/'.getCamelCase($table).'.txt', $output, $retval);
 echo "Returned with status $retval and output:\n";
 	
 	

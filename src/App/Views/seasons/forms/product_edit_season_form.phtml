@@ -192,6 +192,7 @@
                         <input type="checkbox" class="custom-control-input dow_select" name="dow_select" id="dow_select_wed">
                         <label class="custom-control-label" for="dow_select_wed">Wednesday</label>
                     </div>
+                    <!-- /Default inline 5-->
                     
                     <!-- Default inline 6-->
                     <div class="custom-control custom-checkbox custom-control-inline">
@@ -587,138 +588,252 @@
     
     $.fn.DisabledDOW = function (settings) {
         "use strict"
-        Console.log("DisabledDOW", this)
-        const disabled_dow = document.querySelectorAll(".dow_select")
-        let disabled_dows = []
+        let id = this.attr("id")
+        let name = id + "_dow_select"
         
-        disabled_dow.forEach(el => el.addEventListener("click", event => {
-            let id = (el.id) ? el.id : ""
+        const _this = document.getElementById(id)
+        const $this = $(_this)
+        
+        const disabled_dow = document.querySelectorAll(".dow_select")
+        
+        $this.on("change", function () {
+            console.log("change")
+        })
+        
+        const buildCheckBox = function (id) {
+            //<input type="checkbox" class="custom-control-input dow_select" name="dow_select" id="dow_select_sun">
+            let input = document.createElement("input")
+            input.classList = "custom-control-label"
+            input.id = name + "_" + id
+            
+            return input
+        }
+        
+        const buildCheckBoxWrapper = function (id) {
+            //<div class="custom-control custom-checkbox custom-control-inline">
+        }
+        const days = new Map()
+        days.set("*", {
+            label: "All",
+            for: "dow_select_all",
+        })
+        days.set(0, {
+            label: "Sunday",
+            for: "dow_select_sun",
+        })
+        days.set(1, {
+            label: "Monday",
+            for: "dow_select_mon",
+        })
+        days.set(2, {
+            label: "Tuesday",
+            for: "dow_select_mon",
+        })
+        days.set(3, {
+            label: "Monday",
+            for: "dow_select_mon",
+        })
+        days.set(4, {
+            label: "Monday",
+            for: "dow_select_mon",
+        })
+        days.set(5, {
+            label: "Monday",
+            for: "dow_select_mon",
+        })
+        days.set(6, {
+            label: "Saturday",
+            for: "dow_select_sat",
+        })
+        const buildCheckBoxLabel = function (name) {
+            //<label class="custom-control-label" for="dow_select_sun">Sunday</label>
+            let label = document.createElement("label")
+            label.classList = "custom-control-label"
+            label.htmlFor = name
+            return label
+        }
+        
+        const buildCheckBoxColumn = function () {
+            let div = document.createElement("div")
+            div.classList = "col-12 col-md-10"
+            
+            $.each(days, function (k, day) {
+                console.log(day)
+            })
+            return div
+        }
+        
+        const buildCheckBoxColumnLabel = function () {
+            let div = document.createElement("div")
+            let label = document.createElement("label")
+            label.innerText = "Disabled DOW:"
+            
+            div.classList = "col-12 col-md-2"
+            
+            div.appendChild(label)
+            return div
+        }
+        
+        const buildCheckBoxRow = function () {
+            let div = document.createElement("div")
+            div.classList = "row"
+            return div
+        }
+        
+        const buildForm = function () {
+            $this.empty()
+            let row = buildCheckBoxRow()
+            let leadColumn = buildCheckBoxColumnLabel()
+            let column = buildCheckBoxColumn()
+            row.appendChild(leadColumn)
+            row.appendChild(column)
+            _this.appendChild(row)
+        }
+        
+        const set = function (el, val) {
             let indexId, index
-            switch (id) {
+            switch (val) {
                 case "dow_select_all":
                     
                     if (el.checked === true) {
-                        disabled_dows = [0, 1, 2, 3, 4, 5, 6]
+                        DisabledDOW.disabled_dows = [0, 1, 2, 3, 4, 5, 6]
                     } else {
-                        disabled_dows = []
+                        DisabledDOW.disabled_dows = []
                     }
-                    disabled_dows.sort()
-                    Console.log("dow_select_all", disabled_dows)
+                    DisabledDOW.disabled_dows.sort()
+                    Console.log("dow_select_all", DisabledDOW.disabled_dows)
                     break
                 case "dow_select_sun":
                     indexId = 0
-                    index = disabled_dows.indexOf(indexId)
+                    index = DisabledDOW.disabled_dows.indexOf(indexId)
                     if (el.checked === true) {
                         if (!index > -1) {
-                            disabled_dows.push(indexId)
+                            DisabledDOW.disabled_dows.push(indexId)
                         }
                     } else {
                         if (index > -1) {
-                            disabled_dows.splice(index, 1)
+                            DisabledDOW.disabled_dows.splice(index, 1)
                         }
                     }
-                    disabled_dows.sort()
-                    Console.log("dow_select_sun", disabled_dows)
+                    DisabledDOW.disabled_dows.sort()
+                    Console.log("dow_select_sun", DisabledDOW.disabled_dows)
                     break
                 case "dow_select_mon":
                     indexId = 1
-                    index = disabled_dows.indexOf(indexId)
+                    index = DisabledDOW.disabled_dows.indexOf(indexId)
                     if (el.checked === true) {
                         if (!index > -1) {
-                            disabled_dows.push(indexId)
+                            DisabledDOW.disabled_dows.push(indexId)
                         }
                     } else {
                         if (index > -1) {
-                            disabled_dows.splice(index, 1)
+                            DisabledDOW.disabled_dows.splice(index, 1)
                         }
                     }
-                    disabled_dows.sort()
-                    Console.log("dow_select_mon", disabled_dows)
+                    DisabledDOW.disabled_dows.sort()
+                    Console.log("dow_select_mon", DisabledDOW.disabled_dows)
                     break
                 case "dow_select_tue":
                     indexId = 2
-                    index = disabled_dows.indexOf(indexId)
+                    index = DisabledDOW.disabled_dows.indexOf(indexId)
                     if (el.checked === true) {
                         if (!index > -1) {
-                            disabled_dows.push(indexId)
+                            DisabledDOW.disabled_dows.push(indexId)
                         }
                     } else {
                         if (index > -1) {
-                            disabled_dows.splice(index, 1)
+                            DisabledDOW.disabled_dows.splice(index, 1)
                         }
                     }
-                    disabled_dows.sort()
-                    Console.log("dow_select_tue", disabled_dows)
+                    DisabledDOW.disabled_dows.sort()
+                    Console.log("dow_select_tue", DisabledDOW.disabled_dows)
                     break
                 case "dow_select_wed":
                     indexId = 3
-                    index = disabled_dows.indexOf(indexId)
+                    index = DisabledDOW.disabled_dows.indexOf(indexId)
                     if (el.checked === true) {
                         if (!index > -1) {
-                            disabled_dows.push(indexId)
+                            DisabledDOW.disabled_dows.push(indexId)
                         }
                     } else {
                         if (index > -1) {
-                            disabled_dows.splice(index, 1)
+                            DisabledDOW.disabled_dows.splice(index, 1)
                         }
                     }
-                    disabled_dows.sort()
-                    Console.log("dow_select_wed", disabled_dows)
+                    DisabledDOW.disabled_dows.sort()
+                    Console.log("dow_select_wed", DisabledDOW.disabled_dows)
                     break
                 case "dow_select_thu":
                     indexId = 4
-                    index = disabled_dows.indexOf(indexId)
+                    index = DisabledDOW.disabled_dows.indexOf(indexId)
                     if (el.checked === true) {
                         if (!index > -1) {
-                            disabled_dows.push(indexId)
+                            DisabledDOW.disabled_dows.push(indexId)
                         }
                     } else {
                         if (index > -1) {
-                            disabled_dows.splice(index, 1)
+                            DisabledDOW.disabled_dows.splice(index, 1)
                         }
                     }
-                    disabled_dows.sort()
-                    Console.log("dow_select_thu", disabled_dows)
+                    DisabledDOW.disabled_dows.sort()
+                    Console.log("dow_select_thu", DisabledDOW.disabled_dows)
                     break
                 case "dow_select_fri":
                     indexId = 5
-                    index = disabled_dows.indexOf(indexId)
+                    index = DisabledDOW.disabled_dows.indexOf(indexId)
                     if (el.checked === true) {
                         if (!index > -1) {
-                            disabled_dows.push(indexId)
+                            DisabledDOW.disabled_dows.push(indexId)
                         }
                     } else {
                         if (index > -1) {
-                            disabled_dows.splice(index, 1)
+                            DisabledDOW.disabled_dows.splice(index, 1)
                         }
                     }
-                    disabled_dows.sort()
-                    Console.log("dow_select_fri", disabled_dows)
+                    DisabledDOW.disabled_dows.sort()
+                    Console.log("dow_select_fri", DisabledDOW.disabled_dows)
                     break
                 case "dow_select_sat":
                     indexId = 6
-                    index = disabled_dows.indexOf(indexId)
+                    index = DisabledDOW.disabled_dows.indexOf(indexId)
                     if (el.checked === true) {
                         if (!index > -1) {
-                            disabled_dows.push(indexId)
+                            DisabledDOW.disabled_dows.push(indexId)
                         }
                     } else {
                         if (index > -1) {
-                            disabled_dows.splice(index, 1)
+                            DisabledDOW.disabled_dows.splice(index, 1)
                         }
                     }
-                    disabled_dows.sort()
-                    Console.log("dow_select_sat", disabled_dows)
+                    DisabledDOW.disabled_dows.sort()
+                    Console.log("dow_select_sat", DisabledDOW.disabled_dows)
                     break
                 default:
                     break
             }
+        }
+        
+        disabled_dow.forEach(el => el.addEventListener("click", event => {
+            let id = (el.id) ? el.id : ""
+            set(el, id)
         }))
+        
+        const DisabledDOW = {
+            disabled_dows: [],
+            els: [],
+        }
+        
+        buildForm()
+        return DisabledDOW
     }
     
     $(document).ready(function () {
-        $("#season_disabled_dow").DisabledDOW({})
+        let disabledDays = $("#season_disabled_dow").DisabledDOW({
+            name: "",
+        })
     })
-
+    /*
+    
+     */
 </script>
 

@@ -1,16 +1,32 @@
 SELECT
-	LOCATION.id AS 'location_id',
-	LOCATION.city_id AS 'location_city_id',
-	LOCATION.location_types_id AS 'location_location_types_id',
-	LOCATION.name AS 'location_name',
-	LOCATION.street_1 AS 'location_street_1',
-	LOCATION.street_2 AS 'location_street_2',
-	LOCATION.zipcode AS 'location_zipcode',
-	LOCATION.enabled AS 'location_enabled',
-	LOCATION.date_created AS 'location_date_created',
-	LOCATION.created_by AS 'location_created_by',
-	LOCATION.date_modified AS 'location_date_modified',
-	LOCATION.modified_by AS 'location_modified_by',
-	LOCATION.note AS 'location_note'
+		LOCATION.id AS 'location_id',
+		LOCATION.city_id AS 'location_city_id',
+		LOCATION.location_types_id AS 'location_location_types_id',
+		LOCATION.name AS 'location_name',
+		LOCATION.street_1 AS 'location_street_1',
+		LOCATION.street_2 AS 'location_street_2',
+		LOCATION.zipcode AS 'location_zipcode',
+		LOCATION.enabled AS 'location_enabled',
+		LOCATION.date_created AS 'location_date_created',
+		LOCATION.created_by AS 'location_created_by',
+		LOCATION.date_modified AS 'location_date_modified',
+		LOCATION.modified_by AS 'location_modified_by',
+		LOCATION.note AS 'location_note'
 FROM 	location LOCATION
 -- JOIN 	location LOCATION ON LOCATION.id = {FK_TABLE}.location_id
+
+/*
+'id'=>$location['location_id'],
+'city_id'=>$location['location_city_id'],
+'location_types_id'=>$location['location_location_types_id'],
+'name'=>$location['location_name'],
+'street_1'=>$location['location_street_1'],
+'street_2'=>$location['location_street_2'],
+'zipcode'=>$location['location_zipcode'],
+'enabled'=>$location['location_enabled'],
+'date_created'=>$location['location_date_created'],
+'created_by'=>$location['location_created_by'],
+'date_modified'=>$location['location_date_modified'],
+'modified_by'=>$location['location_modified_by'],
+'note'=>$location['location_note']
+*/

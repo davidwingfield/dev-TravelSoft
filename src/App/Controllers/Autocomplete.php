@@ -90,10 +90,13 @@
             $default_display = "medium";
             extract($_GET);
             $results = Location::autocomplete($st, $default_display);
-            // ----
+            
+            /**
+             * render results json page
+             */
             header("Content-type:application/json");
             echo json_encode($results);
-            exit;
+            exit(1);
         }
         
         public function seasons(): void
@@ -102,10 +105,13 @@
             $category_id = 1;
             extract($_GET);
             $results = Season::autocomplete($st, $category_id);
-            // ----
+            
+            /**
+             * render results json page
+             */
             header("Content-type:application/json");
             echo json_encode($results);
-            exit;
+            exit(1);
         }
         
         public function units(): void
@@ -114,10 +120,13 @@
             $category_id = 1;
             extract($_GET);
             $results = Unit::autocomplete($st, $category_id);
-            // ----
+            
+            /**
+             * render results json page
+             */
             header("Content-type:application/json");
             echo json_encode($results);
-            exit;
+            exit(1);
         }
         
         public function variants(): void
@@ -126,10 +135,13 @@
             $category_id = 1;
             extract($_GET);
             $results = Variant::autocomplete($st, $category_id);
-            // ----
+            
+            /**
+             * render results json page
+             */
             header("Content-type:application/json");
             echo json_encode($results);
-            exit;
+            exit(1);
         }
         
     }

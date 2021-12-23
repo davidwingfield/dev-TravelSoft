@@ -60,7 +60,6 @@
          */
         public static function get(int $id = null): array
         {
-            $company_images = [];
             $where = "";
             try {
                 if (!is_null($id)) {
@@ -72,14 +71,11 @@
                 
                 $sql = self::$selectQuery . $where;
                 
-                // $companies = Model::$db->rawQuery($sql);
-                //foreach ($companies as $company) {
-                //Log::$debug_log->trace($company);
-                //}
-                
                 return Model::$db->rawQuery($sql);
                 
             } catch (Exception $e) {
+                Log::$debug_log->error($e);
+                
                 return [];
             }
         }

@@ -6,11 +6,19 @@
     <a id='product_edit_season_id' class='btn btn-primary dropdown-toggle m-0 season_toggle waves-effect waves-light' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
 	    <span id='product_edit_season_id_name_display'>Color Scheme Select</span>
     </a>
-    <div class='dropdown-menu'>
-    
+    <div class='dropdown-menu season_toggle_menu'>
+            <h5 class='popover-header card-title mb-1'>
+
+                Color Schemes
+            
+                <a href='javascript:void(0);' class='popup-window-button-close fas fa-times' aria-hidden='true' ></a>
+            </h5>
+        <div class='row mx-1'>
     ";
     $color_scheme = json_encode((isset($page_data, $page_data["types"], $page_data["types"]["color_scheme"])) ? $page_data["types"]["color_scheme"] : [], 1);
     if (isset($page_data["types"]["color_scheme"])) {
+        $count = 0;
+        
         for ($n = 0; $n < count($page_data["types"]["color_scheme"]); $n++) {
             $backgroundColor = $page_data["types"]["color_scheme"][$n]["background_color"];
             $name = $page_data["types"]["color_scheme"][$n]["name"];
@@ -18,8 +26,25 @@
             $textColor = $page_data["types"]["color_scheme"][$n]["text_color"];
             $borderColor = $page_data["types"]["color_scheme"][$n]["border_color"];
             $option = $n + 1;
+            if ($count % 4 == 0 && $count > 0) {
+                $season_dropdown .= "</div><div class='row mx-1'>";
+            }
+            
             $season_dropdown .= "
-                <a id='$id' class='dropdown-item season_toggle_item' data-schemeName = '$name' data-backgroundColor = '$backgroundColor' data-textColor = '$textColor' data-borderColor = '$borderColor' data-colorSchemeId = '$id'  href='javascript:void(0)'>$name</a>
+            <div class='col-3 col-sm-3 p-1'>
+                <a id='$id'
+                    class='dropdown-item season_toggle_item m-1'
+                    data-schemeName = '$name'
+                    data-backgroundColor = '$backgroundColor'
+                    data-textColor = '$textColor'
+                    data-borderColor = '$borderColor'
+                    data-colorSchemeId = '$id'
+                    href='javascript:void(0)'
+                    style='background-color:$backgroundColor; color: $textColor; /*box-sizing: border-box; box-shadow: inset 0px 0px 0px 1px $borderColor;*/outline: 1px solid $borderColor; outline-offset: -1px;margin-bottom:2px;'
+                >
+                    $name
+                </a>
+                </div>
             ";
             $swatches[] = $page_data["types"]["color_scheme"][$n]["background_color"];
             $swatchObjects[] = "
@@ -32,254 +57,257 @@
                     </div>
                 </div>
             ";
+            $count++;
         }
+        $season_dropdown .= "</div>";
     }
     
     $season_dropdown .= "</div>";
 ?>
 <section id="product_edit_season_section">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title"><span>Add/Edit Season</span></h5>
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="form-element">
+                <label for="product_edit_season_form_season_name_filter" class="d-none">Season Search:</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <input type="search" id="product_edit_season_form_season_name_filter" name="product_edit_season_form_season_name_filter" class="form-control" placeholder="Search Seasons"/>
+                    <!--
+                    <div class="input-group-append">
+                        <button type="button" id="product_edit_season_form_season_name_filter_add_new_button" name="product_edit_season_form_season_name_filter_add_new_button" class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    -->
+                </div>
+                <div id="product_edit_season_form_season_name_filter-error" class="error w-100 text-center"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card card-body" id="edit_season">
+        
+        <h5 class="card-title"><span>Add/Edit Season</span></h5>
+        <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
+        <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+        
+        <div class="row">
+            
+            <!-- Season Id -->
+            <div class="col-12 col-md-6 col-lg-2">
+                <div class="form-element">
+                    <label for="product_edit_season_form_season_id">Id:</label>
+                    <input type="text" id="product_edit_season_form_season_id" name="product_edit_season_form_season_id" class="form-control" readonly="readonly"/>
+                    <div id="product_edit_season_form_season_id-error" class="error w-100 text-center"></div>
+                </div>
+            </div>
+            <!-- /Season Id -->
+            
+            <!-- Season Name -->
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="form-element">
+                    <label for="product_edit_season_form_season_name">Name:</label>
+                    <input type="text" id="product_edit_season_form_season_name" name="product_edit_season_form_season_name" class="form-control" readonly="readonly"/>
+                    <div id="product_edit_season_form_season_name-error" class="error w-100 text-center"></div>
+                </div>
+            </div>
+            <!-- /Season Name -->
+            
+            <!-- Season Color Scheme ID -->
+            <div class="col-12 col-md-6 col-lg-3">
+                
+                <div class="form-element">
+                    <label for="product_edit_season_form_season_color_scheme_id">Color Scheme:</label>
+                    <input type="hidden" id="product_edit_season_form_season_color_scheme_id" name="product_edit_season_form_season_color_scheme_id" class="form-control dev-element" readonly="readonly"/>
+                    <div class="m-0 p-0 w-100">
+                        <?php echo $season_dropdown; ?>
+                    </div>
+                    <div id="product_edit_season_form_season_color_scheme_id-error" class="error w-100 text-center"></div>
+                
+                </div>
+            </div>
+            <!-- /Season Color Scheme ID -->
+            
+            <!-- Season Enabled -->
+            <div class="col-12 col-lg-2 d-flex align-self-end justify-content-end pb-2">
+                <div class="form-element">
+                    <div class="custom-control custom-switch">
+                        <input id="product_edit_season_form_season_enabled" name="product_edit_season_form_season_enabled" type="checkbox" value="1" class="custom-control-input" readonly="readonly">
+                        <label for="product_edit_season_form_season_enabled" class="custom-control-label p-0">Enabled</label>
+                    </div>
+                    <div id="product_edit_season_form_season_enabled-error" class="error w-100 text-center"></div>
+                </div>
+            </div>
+            <!-- /Season Enabled -->
+            
+            <div class="col-12 col-lg-2 d-flex align-self-end justify-content-end pb-2">
+                <button type="button" id="edit_season_button" class="btn btn-outline-primary btn-sm" disabled="disabled">
+                    <i class="fas fa-edit mx-2"></i>
+                    <span class="">Edit</span>
+                </button>
+            </div>
+        </div>
+        
+        <hr>
+        
+        <div class="row">
+            <div class="col-12 col-md-2">
+                <label for="">Disabled DOW:</label>
+            </div>
+            <div class="col-12 col-md-10">
+                <!-- Default inline 1-->
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="defaultInline1">
+                    <label class="custom-control-label" for="defaultInline1">Select All</label>
+                </div>
+                
+                <!-- Default inline 2-->
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="defaultInline2">
+                    <label class="custom-control-label" for="defaultInline2">Sunday</label>
+                </div>
+                
+                <!-- Default inline 3-->
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="defaultInline3">
+                    <label class="custom-control-label" for="defaultInline3">Monday</label>
+                </div>
+                
+                <!-- Default inline 4-->
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="defaultInline4">
+                    <label class="custom-control-label" for="defaultInline4">Tuesday</label>
+                </div>
+                
+                <!-- Default inline 5-->
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="defaultInline5">
+                    <label class="custom-control-label" for="defaultInline5">Wednesday</label>
+                </div>
+                
+                <!-- Default inline 6-->
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="defaultInline6">
+                    <label class="custom-control-label" for="defaultInline6">Thursday</label>
+                </div>
+                
+                <!-- Default inline 7-->
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="defaultInline7">
+                    <label class="custom-control-label" for="defaultInline7">Friday</label>
+                </div>
+                
+                <!-- Default inline 8-->
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="defaultInline8">
+                    <label class="custom-control-label" for="defaultInline8">Saturday</label>
+                </div>
+            
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-6 text-left w-100">
+                <a href="javascript:void(0);" id="button_assign_season_to_product" class="btn btn-secondary btn-sm waves-effect waves-light">Assign</a>
+            </div>
+            <div class="col-6 text-right w-100">
+                <a href="javascript:void(0);" id="button_clear_form_edit_season" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+                <a href="javascript:void(0);" id="button_submit_form_edit_season" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
+            </div>
+        </div>
+        
+        <div class="card card-body border border-primary z-depth-0" id="edit_scheme">
+            
+            <h5 class="card-title font-weight-bold">
+                <span>Color Schemes</span>
+                <a id="button_close_edit_scheme" href="javascript:void(0);" class="panel-button-close fas fa-times" aria-hidden="true"></a>
+            </h5>
             <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
             <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
             
             <div class="row">
-                <div class="col-12">
-                    <div class="form-element">
-                        <label for="product_edit_season_form_season_name_filter">Season Search:</label>
-                        <div class="input-group">
-                            <input type="search" id="product_edit_season_form_season_name_filter" name="product_edit_season_form_season_name_filter" class="form-control" placeholder="Search Seasons"/>
-                            <div class="input-group-append">
-                                <button type="button" id="product_edit_season_form_season_name_filter_add_new_button" name="product_edit_season_form_season_name_filter_add_new_button" class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div id="product_edit_season_form_season_name_filter-error" class="error w-100 text-center"></div>
-                    </div>
-                </div>
+                <?php
+                    foreach ($swatchObjects AS $k => $swatch) {
+                        echo $swatch;
+                    }
+                ?>
             </div>
             
-            <div class="card card-body">
+            <div class="card card-body border border-primary z-depth-0" id="edit_scheme_detail">
+                <form id="form_edit_scheme" class="" novalidate>
+                    
+                    <!-- Season Background Color -->
+                    <div class="row">
+                        
+                        <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <label for="form_edit_scheme_background_color">Background Color:</label>
+                        </div>
+                        
+                        <div class="col-6 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                            <div class="form-element">
+                                <input type="text" id="form_edit_scheme_background_color" name="form_edit_scheme_background_color" class="form-control"/>
+                                <div id="form_edit_scheme_background_color-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                    <!-- /Season Background Color -->
+                    
+                    <!-- Season Text Color -->
+                    <div class="row">
+                        
+                        <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <label for="form_edit_scheme_text_color">Text Color:</label>
+                        </div>
+                        
+                        <div class="col-6 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                            <div class="form-element">
+                                <input type="text" id="form_edit_scheme_text_color" name="form_edit_scheme_text_color" class="form-control"/>
+                                <div id="form_edit_scheme_text_color-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                    <!-- /Season Text Color -->
+                    
+                    <!-- Season Border Color -->
+                    <div class="row">
+                        
+                        <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <label for="form_edit_scheme_border_color">Border Color:</label>
+                        </div>
+                        
+                        <div class="col-6 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                            <div class="form-element">
+                                <input type="text" id="form_edit_scheme_border_color" name="form_edit_scheme_border_color" class="form-control"/>
+                                <div id="form_edit_scheme_border_color-error" class="error w-100 text-center"></div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                    <!-- /Season Border Color -->
                 
-                <div class="row">
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <?php echo $season_dropdown; ?>
-                    </div>
+                </form>
+                <div class="text-right w-100">
+                    <a href="javascript:void(0);" id="button_clear_form_edit_scheme" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+                    <a href="javascript:void(0);" id="button_submit_form_edit_scheme" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
                 </div>
-                
-                <div class="card card-body border border-dark z-depth-0 mb-2" id="edit_season">
-                    <div class="row">
-                        
-                        <!-- Season Id -->
-                        <div class="col-12 col-md-6 col-lg-2">
-                            <div class="form-element">
-                                <label for="product_edit_season_form_season_id">Id:</label>
-                                <input type="text" id="product_edit_season_form_season_id" name="product_edit_season_form_season_id" class="form-control" readonly="readonly"/>
-                                <div id="product_edit_season_form_season_id-error" class="error w-100 text-center"></div>
-                            </div>
-                        </div>
-                        <!-- /Season Id -->
-                        
-                        <!-- Season Name -->
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <div class="form-element">
-                                <label for="product_edit_season_form_season_name">Name:</label>
-                                <input type="text" id="product_edit_season_form_season_name" name="product_edit_season_form_season_name" class="form-control" readonly="readonly"/>
-                                <div id="product_edit_season_form_season_name-error" class="error w-100 text-center"></div>
-                            </div>
-                        </div>
-                        <!-- /Season Name -->
-                        
-                        <!-- Season Color Scheme ID -->
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <div class="form-element">
-                                <label for="product_edit_season_form_season_color_scheme_id">Color Scheme:</label>
-                                <input type="hidden" id="product_edit_season_form_season_color_scheme_id" name="product_edit_season_form_season_color_scheme_id" class="form-control dev-element" readonly="readonly"/>
-                                <div id="product_edit_season_form_season_name-error" class="error w-100 text-center"></div>
-                                <div id="color_scheme_display" class="m-0 p-1 color_scheme_block" style="background:#54cbe3;color:#000000;border:solid 1px #357f8e;cursor:pointer;" onclick="ColorSwatches.change(this)">
-                                    <span class="">color-2</span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /Season Color Scheme ID -->
-                        
-                        <!-- Season Enabled -->
-                        <div class="col-12 col-lg-2 d-flex align-self-end justify-content-end pb-2">
-                            <div class="form-element">
-                                <div class="custom-control custom-switch">
-                                    <input id="product_edit_season_form_season_enabled" name="product_edit_season_form_season_enabled" type="checkbox" value="1" class="custom-control-input" readonly="readonly">
-                                    <label for="product_edit_season_form_season_enabled" class="custom-control-label p-0">Enabled</label>
-                                </div>
-                                <div id="product_edit_season_form_season_enabled-error" class="error w-100 text-center"></div>
-                            </div>
-                        </div>
-                        <!-- /Season Enabled -->
-                        
-                        <div class="col-12 col-lg-2 d-flex align-self-end justify-content-end pb-2">
-                            <button type="button" id="edit_season_button" class="btn btn-outline-primary btn-sm" disabled="disabled">
-                                <i class="fas fa-edit mx-2"></i>
-                                <span class="">Edit</span>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <hr>
-                    
-                    <div class="row">
-                        <div class="col-12 col-md-2">
-                            <label for="">Disabled DOW:</label>
-                        </div>
-                        <div class="col-12 col-md-10">
-                            <!-- Default inline 1-->
-                            <div class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" class="custom-control-input" id="defaultInline1">
-                                <label class="custom-control-label" for="defaultInline1">Select All</label>
-                            </div>
-                            
-                            <!-- Default inline 2-->
-                            <div class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" class="custom-control-input" id="defaultInline2">
-                                <label class="custom-control-label" for="defaultInline2">Sunday</label>
-                            </div>
-                            
-                            <!-- Default inline 3-->
-                            <div class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" class="custom-control-input" id="defaultInline3">
-                                <label class="custom-control-label" for="defaultInline3">Monday</label>
-                            </div>
-                            
-                            <!-- Default inline 4-->
-                            <div class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" class="custom-control-input" id="defaultInline4">
-                                <label class="custom-control-label" for="defaultInline4">Tuesday</label>
-                            </div>
-                            
-                            <!-- Default inline 5-->
-                            <div class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" class="custom-control-input" id="defaultInline5">
-                                <label class="custom-control-label" for="defaultInline5">Wednesday</label>
-                            </div>
-                            
-                            <!-- Default inline 6-->
-                            <div class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" class="custom-control-input" id="defaultInline6">
-                                <label class="custom-control-label" for="defaultInline6">Thursday</label>
-                            </div>
-                            
-                            <!-- Default inline 7-->
-                            <div class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" class="custom-control-input" id="defaultInline7">
-                                <label class="custom-control-label" for="defaultInline7">Friday</label>
-                            </div>
-                            
-                            <!-- Default inline 8-->
-                            <div class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" class="custom-control-input" id="defaultInline8">
-                                <label class="custom-control-label" for="defaultInline8">Saturday</label>
-                            </div>
-                        
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6 text-left w-100">
-                            <a href="javascript:void(0);" id="button_assign_season_to_product" class="btn btn-secondary btn-sm waves-effect waves-light">Assign</a>
-                        </div>
-                        <div class="col-6 text-right w-100">
-                            <a href="javascript:void(0);" id="button_clear_form_edit_season" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
-                            <a href="javascript:void(0);" id="button_submit_form_edit_season" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card card-body border border-primary z-depth-0" id="edit_scheme">
-                    
-                    <h5 class="card-title font-weight-bold">
-                        <span>Color Schemes</span>
-                        <a id="button_close_edit_scheme" href="javascript:void(0);" class="panel-button-close fas fa-times" aria-hidden="true"></a>
-                    </h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
-                    <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-                    
-                    <div class="row">
-                        <?php
-                            foreach ($swatchObjects AS $k => $swatch) {
-                                echo $swatch;
-                            }
-                        ?>
-                    </div>
-                    
-                    <div class="card card-body border border-primary z-depth-0" id="edit_scheme_detail">
-                        <form id="form_edit_scheme" class="" novalidate>
-                            
-                            <!-- Season Background Color -->
-                            <div class="row">
-                                
-                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                    <label for="form_edit_scheme_background_color">Background Color:</label>
-                                </div>
-                                
-                                <div class="col-6 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                                    <div class="form-element">
-                                        <input type="text" id="form_edit_scheme_background_color" name="form_edit_scheme_background_color" class="form-control"/>
-                                        <div id="form_edit_scheme_background_color-error" class="error w-100 text-center"></div>
-                                    </div>
-                                </div>
-                            
-                            </div>
-                            <!-- /Season Background Color -->
-                            
-                            <!-- Season Text Color -->
-                            <div class="row">
-                                
-                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                    <label for="form_edit_scheme_text_color">Text Color:</label>
-                                </div>
-                                
-                                <div class="col-6 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                                    <div class="form-element">
-                                        <input type="text" id="form_edit_scheme_text_color" name="form_edit_scheme_text_color" class="form-control"/>
-                                        <div id="form_edit_scheme_text_color-error" class="error w-100 text-center"></div>
-                                    </div>
-                                </div>
-                            
-                            </div>
-                            <!-- /Season Text Color -->
-                            
-                            <!-- Season Border Color -->
-                            <div class="row">
-                                
-                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                    <label for="form_edit_scheme_border_color">Border Color:</label>
-                                </div>
-                                
-                                <div class="col-6 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                                    <div class="form-element">
-                                        <input type="text" id="form_edit_scheme_border_color" name="form_edit_scheme_border_color" class="form-control"/>
-                                        <div id="form_edit_scheme_border_color-error" class="error w-100 text-center"></div>
-                                    </div>
-                                </div>
-                            
-                            </div>
-                            <!-- /Season Border Color -->
-                        
-                        </form>
-                        <div class="text-right w-100">
-                            <a href="javascript:void(0);" id="button_clear_form_edit_scheme" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
-                            <a href="javascript:void(0);" id="button_submit_form_edit_scheme" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
-                        </div>
-                    </div>
-                </div>
-            
             </div>
-        
         </div>
+    
     </div>
     
-    <form id="product_edit_season_form" novalidate>
-    
-    </form>
+    <div class="row">
+        <div class="col-12">
+            <?php include_once(VIEWS_PATH . "/seasons/tables/product_edit_season_table.phtml"); ?>
+        </div>
+    </div>
+
 </section>
 
 <script type="text/javascript">
@@ -339,52 +367,47 @@
             ColorSwatches.all = new Map()
             if (swatches) {
                 $.each(swatches, function (k, swatch) {
-                    //Console.log("swatch", swatch)
+                    ColorSwatches.all.set(parseInt(swatch.id), swatch)
                 })
             }
         }
         
-        const val = function (scheme) {
-        
-        }
-        
         const init = function (settings) {
-            //Console.log("ColorSwatches:init(settings)", settings)
             if (settings) {
                 if (settings.swatches) {
                     load_all(settings.swatches)
                 }
             }
+            
             season_toggle_items = document.querySelectorAll(".season_toggle_item")
             season_toggle_items.forEach(el => el.addEventListener("click", event => {
-                let background_color = (el.dataset.backgroundcolor) ? el.dataset.textcolor : null
-                let border_color = (el.dataset.bordercolor) ? el.dataset.bordercolor : null
                 let color_scheme_id = parseInt(el.dataset.colorschemeid)
-                let text_color = (el.dataset.textcolor) ? el.dataset.textcolor : null
-                let scheme_name = (el.dataset.schemename) ? el.dataset.schemename : null
+                let scheme = ColorSwatches.all.get(color_scheme_id)
+                if (scheme) {
+                    load(scheme)
+                }
+            }))
+        }
+        
+        const load = function (scheme) {
+            if (scheme) {
+                let background_color = (scheme.background_color) ? scheme.background_color : null
+                let border_color = (scheme.border_color) ? scheme.border_color : null
+                let color_scheme_id = parseInt(scheme.id)
+                let text_color = (scheme.text_color) ? scheme.text_color : null
+                let scheme_name = (scheme.name) ? scheme.name : null
+                let elem = document.querySelector("#product_edit_season_id")
                 
                 $(_product_edit_season_id_name_display).text(`
                     ${scheme_name}
                 `)
                 
-                $(el).addClass("active")
-                console.log({
-                    background_color: background_color,
-                    border_color: border_color,
-                    text_color: text_color,
-                    id: color_scheme_id,
-                    name: scheme_name,
-                })
-            }))
-        }
-        const _color_scheme_display = document.getElementById("color_scheme_display")
-        
-        const load = function (scheme) {
-            console.log("scheme", scheme)
-            _color_scheme_display.style.color = scheme.text_color
-            _color_scheme_display.style.background = scheme.background_color
-            _color_scheme_display.style.borderColor = scheme.border_color
-            $(_color_scheme_display).find("span").text(scheme.name)
+                $("a.dropdown-item.season_toggle_item").removeClass("active")
+                $(`a#${color_scheme_id}`).addClass("active")
+                elem.style.setProperty("color", text_color, 'important')
+                elem.style.setProperty("background-color", background_color, 'important')
+                elem.style.setProperty("border-color", border_color, 'important')
+            }
         }
         
         const change = function (el) {

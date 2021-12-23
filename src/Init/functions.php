@@ -63,21 +63,31 @@
     
     function displayJsonOnPage(array $values = [], string $name = "Test Value")
     {
+        $date = new DateTime();
+        $id = str_replace(" ", "_", preg_replace('/[^A-Za-z0-9\-]/', '', strtolower($name))) . $date->getTimestamp();
         $json = json_encode($values, 1);
-        $title = $name;
+        $title = ucwords($name);
+        $button_id = $id . "_button";
+        $block_id = $id . "_wrapper";
         echo "
-            <div class='panel'>
-                <div class='panel-heading'>
-                    <h3 class='panel-title'>$title</h3>
-                    <div class='panel-actions panel-actions-keep'>
-                        <a class='panel-action fas fa-expand' data-toggle='panel-fullscreen' aria-hidden='true'></a>
+        <div class='col-sm-3 pre_display'>
+            <button type='button' id='$button_id' class='btn btn-primary pre_display_button waves-effect waves-light' onclick=\"$('#$block_id').show();$('#$button_id').hide();\">$title</button>
+            <div id='$block_id' class=' pre_display_el'>
+                <div class='panel w-100'>
+                    <div class='panel-heading'>
+                        <h3 class='panel-title'>$title</h3>
+                        <div class='panel-actions panel-actions-keep'>
+                            <a class='panel-action fas fa-expand' data-toggle='panel-fullscreen' aria-hidden='true'></a>
+                            <a class='panel-action fas fa-times' data-toggle='panel-hide' data-loadonhide='button.pre_display_button' aria-hidden='true'></a>
+                        </div>
+                    </div>
+                    <div class='panel-body p-2 panel-code' data-datatype='jsonp'>
+                        $json
                     </div>
                 </div>
-                <div class='panel-body p-2 panel-code' data-datatype='jsonp'>
-                    $json
-                </div>
             </div>
-    ";
+        </div>
+        ";
     }
     
     function getLetterCombo(string $name = null): string

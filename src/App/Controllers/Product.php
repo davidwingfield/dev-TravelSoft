@@ -308,12 +308,12 @@
                 return [];
             }
             $rooms = array();
-            $matrices = [];
+            $matrices = Matrix::getMatricesByProductId((int)$product['product_id']);
             $profiles = Profile::getByProductId((int)$product['product_id']);
             $seasons = Season::getSeasonsByProductId((int)$product['product_id']);
             $units = Unit::getUnitsByProductId((int)$product['product_id']);
             $variants = Variant::getVariantsByProductId((int)$product['product_id']);
-            Log::$debug_log->trace($variants);
+            //Log::$debug_log->trace($variants);
             //*
             foreach ($seasons AS $season) {
                 $season_name = $season["name"];

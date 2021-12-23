@@ -1,15 +1,15 @@
 <!-- Edit Contact Form -->
-<form id="form_edit_contact" name="form_edit_contact" class="" style="" novalidate>
+<form id="form_edit_contact" name="form_edit_contact" class="" novalidate>
 
-    <div class="row" style="">
+    <div class="row">
 
-        <div class="col-12 col-lg-5" style="">
+        <div class="col-12 col-lg-5">
 
             <?php include_once(VIEWS_PATH . "/contacts/tables/provider_edit_contact_table.phtml"); ?>
 
         </div>
 
-        <div class="col-12 col-lg-7" style="">
+        <div class="col-12 col-lg-7">
 
             <div class="card mb-2" id="card_edit_contact_form">
                 <div class="card-body">
@@ -22,34 +22,34 @@
                     <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
 
                     <div class="">
-                        <div class="row" style="">
+                        <div class="row">
 
                             <!-- Company Id -->
-                            <div class="col-12 col-md-4" style="">
-                                <div class="form-element" style="">
-                                    <label for="contact_company_id" style="">Company ID:</label>
-                                    <input type="text" id="contact_company_id" name="contact_company_id" class="form-control" style="" aria-label="Contact Company Id" placeholder="" autocomplete="off" readonly/>
-                                    <div id="contact_company_id-error" class="error w-100 text-center" style="">&nbsp;</div>
+                            <div class="col-12 col-md-4">
+                                <div class="form-element">
+                                    <label for="contact_company_id">Company ID:</label>
+                                    <input type="text" id="contact_company_id" name="contact_company_id" class="form-control" aria-label="Contact Company Id" placeholder="" autocomplete="off" readonly/>
+                                    <div id="contact_company_id-error" class="error w-100 text-center">&nbsp;</div>
                                 </div>
                             </div>
                             <!-- /Company Id -->
 
                             <!-- Contact Id -->
-                            <div class="col-12 col-md-4" style="">
-                                <div class="form-element" style="">
-                                    <label for="contact_id" style="">Contact ID:</label>
-                                    <input type="text" id="contact_id" name="contact_id" class="form-control" style="" aria-label="Contact Id" placeholder="" autocomplete="off" readonly/>
-                                    <div id="contact_id-error" class="error w-100 text-center" style="">&nbsp;</div>
+                            <div class="col-12 col-md-4">
+                                <div class="form-element">
+                                    <label for="contact_id">Contact ID:</label>
+                                    <input type="text" id="contact_id" name="contact_id" class="form-control" aria-label="Contact Id" placeholder="" autocomplete="off" readonly/>
+                                    <div id="contact_id-error" class="error w-100 text-center">&nbsp;</div>
                                 </div>
                             </div>
                             <!-- /Contact Id -->
 
                             <!-- Contact Enabled -->
-                            <div class="col-12 col-md-4 d-flex align-self-end justify-content-end pb-2" style="">
+                            <div class="col-12 col-md-4 d-flex align-self-end justify-content-end pb-2">
                                 <div class="form-element">
-                                    <div class="custom-control custom-switch" style="">
-                                        <input id="contact_enabled" name="contact_enabled" type="checkbox" value="1" class="custom-control-input" style="">
-                                        <label for="contact_enabled" class="custom-control-label p-0" style="">Enabled</label>
+                                    <div class="custom-control custom-switch">
+                                        <input id="contact_enabled" name="contact_enabled" type="checkbox" value="1" class="custom-control-input">
+                                        <label for="contact_enabled" class="custom-control-label p-0">Enabled</label>
                                     </div>
                                 </div>
                             </div>
@@ -61,47 +61,47 @@
 
                             <div class="col-12 col-md-6 col-lg-8">
 
-                                <div class="row" style="">
+                                <div class="row">
 
                                     <!-- Contact First Name -->
-                                    <div class="col-12 col-md-6" style="">
-                                        <div class="form-element" style="">
-                                            <label for="contact_name_first" style="">First Name:</label>
-                                            <input type="text" id="contact_name_first" name="contact_name_first" class="form-control" style="" aria-label="Contact Street 1" placeholder="" autocomplete="off"/>
-                                            <div id="contact_name_first-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-element">
+                                            <label for="contact_name_first">First Name:</label>
+                                            <input type="text" id="contact_name_first" name="contact_name_first" class="form-control" aria-label="Contact Street 1" placeholder="" autocomplete="off"/>
+                                            <div id="contact_name_first-error" class="error w-100 text-center">&nbsp;</div>
                                         </div>
                                     </div>
                                     <!-- /Contact First Name -->
 
                                     <!-- Contact Last Name -->
-                                    <div class="col-12 col-md-6" style="">
-                                        <div class="form-element" style="">
-                                            <label for="contact_name_last" style="">Last Name:</label>
-                                            <input type="text" id="contact_name_last" name="contact_name_last" class="form-control" style="" aria-label="Contact Street 2" placeholder="" autocomplete="off"/>
-                                            <div id="contact_name_last-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-element">
+                                            <label for="contact_name_last">Last Name:</label>
+                                            <input type="text" id="contact_name_last" name="contact_name_last" class="form-control" aria-label="Contact Street 2" placeholder="" autocomplete="off"/>
+                                            <div id="contact_name_last-error" class="error w-100 text-center">&nbsp;</div>
                                         </div>
                                     </div>
                                     <!-- /Contact Last Name -->
                                 </div>
 
-                                <div class="row" style="">
+                                <div class="row">
 
                                     <!-- Contact Phone -->
-                                    <div class="col-12 col-md-6" style="">
-                                        <div class="form-element" style="">
-                                            <label for="contact_phone" style="">Phone:</label>
-                                            <input type="tel" id="contact_phone" name="contact_phone" class="form-control" style="" aria-label="Contact Street 3" placeholder="" autocomplete="off"/>
-                                            <div id="contact_phone-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-element">
+                                            <label for="contact_phone">Phone:</label>
+                                            <input type="tel" id="contact_phone" name="contact_phone" class="form-control" aria-label="Contact Street 3" placeholder="" autocomplete="off"/>
+                                            <div id="contact_phone-error" class="error w-100 text-center">&nbsp;</div>
                                         </div>
                                     </div>
                                     <!-- /Contact Phone -->
 
                                     <!-- Contact Email -->
-                                    <div class="col-12 col-md-6" style="">
-                                        <div class="form-element" style="">
-                                            <label for="contact_email" style="">Email:</label>
-                                            <input type="email" id="contact_email" name="contact_email" class="form-control" style="" aria-label="Contact Street 3" placeholder="" autocomplete="off"/>
-                                            <div id="contact_email-error" class="error w-100 text-center" style="">&nbsp;</div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-element">
+                                            <label for="contact_email">Email:</label>
+                                            <input type="email" id="contact_email" name="contact_email" class="form-control" aria-label="Contact Street 3" placeholder="" autocomplete="off"/>
+                                            <div id="contact_email-error" class="error w-100 text-center">&nbsp;</div>
                                         </div>
                                     </div>
                                     <!-- /Contact Email -->
@@ -135,7 +135,7 @@
 
                     <div class="text-right w-100">
                         <a href="javascript:void(0);" id="button_clear_form_edit_contact" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
-                        <a href="javascript:void(0);" id="button_submit_form_edit_contact" class="btn btn-primary btn-sm waves-effect waves-light" style="">Save</a>
+                        <a href="javascript:void(0);" id="button_submit_form_edit_contact" class="btn btn-primary btn-sm waves-effect waves-light">Save</a>
                     </div>
 
                 </div>

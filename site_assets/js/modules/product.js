@@ -611,6 +611,7 @@ const Product = (function () {
     
     const set_edit_form_values = function (product) {
         Console.log("Product.set_edit_form_values(product)", product)
+        
         let provider, vendor, product_location,
           seasons, units, variants, profiles, provider_location
         
@@ -618,73 +619,57 @@ const Product = (function () {
             product_location = product.location
             Product.product_initial_location = product_location
         }
-        Console.log("Product.init(): product_location", product_location)
         
         if (product.provider) {
             provider = product.provider
         }
-        Console.log("Product.init(): provider", provider)
         
         if (provider.location) {
             provider_location = provider.location
             Product.provider_initial_location = provider_location
         }
-        Console.log("Product.init(): provider_location", provider_location)
         
         if (product.vendor) {
             vendor = product.vendor
         }
-        Console.log("Product.init(): vendor", vendor)
         
         if (product.seasons) {
             seasons = product.seasons
         }
-        Console.log("Product.init(): seasons", seasons)
         
         if (product.units) {
             units = product.units
         }
-        Console.log("Product.init(): units", units)
         
         if (product.variants) {
             variants = product.variants
         }
-        Console.log("Product.init(): variants", variants)
         
         if (product.profiles) {
             profiles = product.profiles
         }
-        Console.log("Product.init(): profiles", profiles)
         
         if (product.use_provider_location) {
             $(_use_provider_location).attr("checked", "true")
+            load_product_location(provider_location, "provider")
             Location.init(provider_location)
         } else {
             $(_use_product_location).attr("checked", "true")
+            load_product_location(product_location, "provider")
             Location.init(product_location)
         }
         
-        load_product_location(product_location)
-        load_provider_location(provider_location)
     }
     
-    const load_product_location = function (product_location) {
-        Console.log("Product.load_product_location(product_location)", product_location)
-        product_initial_location = product_location
-        let $frame = $("#map-container-product-location").find("iframe")
-        Console.log("$frame", $frame.attr("src"))
-        let url = buildMapsURL(product_location)
-        Console.log("url", url)
-        $frame.attr("src", url)
-    }
-    
-    const load_provider_location = function (provider_location) {
-        Console.log("Product.load_provider_location(provider_location)", provider_location)
-        provider_initial_location = provider_location
-        let $frame = $("#map-container-provider-location").find("iframe")
-        Console.log("$frame", $frame.attr("src"))
-        let url = buildMapsURL(provider_location)
-        Console.log("url", url)
+    const load_product_location = function (location, type) {
+        Console.log("location", location)
+        if (!type) {
+            type = "product"
+        }
+        let iFrame = `#map-container-product-location`
+        product_initial_location = location
+        let $frame = $(iFrame).find("iframe")
+        let url = buildMapsURL(location)
         $frame.attr("src", url)
     }
     
@@ -714,6 +699,7 @@ const Product = (function () {
         
         if (_product_edit_page) {
             if (settings) {
+                
                 if (settings.product_details) {
                     product_details = settings.product_details
                 }
@@ -729,8 +715,7 @@ const Product = (function () {
                 if (product_details.units) {
                     units = product_details.units
                 }
-                Console.log("seasons", seasons)
-                Console.log("units", units)
+                
                 $(document).ready(function () {
                     if (_product_edit_page) {
                         init_edit_form(product_details)

@@ -355,34 +355,34 @@
     
     <div class="row">
         
-        <!-- PROVIDER LOCATION -->
+        <!-- LOCATION -->
         <div class="col-12 col-md-6">
             <!-- Card -->
             <div class="card map-card">
                 
                 <!--Google map-->
-                <div id="map-container-provider-location" class="z-depth-1-half map-container" style="height: 500px">
-                    <iframe src="https://maps.google.com/maps?q=<?php echo strtolower($provider_city_name); ?>+<?php echo strtolower($provider_province_iso2); ?>&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" style="border:0" allowfullscreen></iframe>
+                <div id="map-container-product-location" class="z-depth-1-half map-container" style="height: 500px">
+                    <iframe src="https://maps.google.com/maps?q=<?php echo strtolower($location["city"]["name"]); ?>+<?php echo strtolower($location["province"]["iso2"]); ?>&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" style="border:0" allowfullscreen></iframe>
                 </div>
                 
                 <!-- Card content -->
                 <div class="card-body closed px-0">
                     
                     <div class="button px-2 mt-3">
-                        <a class="btn-floating btn-lg living-coral float-right"><i class="<?php echo $provider_location_type_icon; ?>"></i></a>
+                        <a class="btn-floating btn-lg living-coral float-right"><i class="<?php echo $location_type["icon"]; ?>"></i></a>
                     </div>
                     
                     <div class="white px-4 pb-4 pt-3-5" style="padding-top:1.5rem">
                         
                         <!-- Title -->
-                        <h5 class="card-title h5 living-coral-text">Provider Details</h5>
+                        <h5 class="card-title h5 living-coral-text">Location Details</h5>
                         
                         <div class="d-flex justify-content-between living-coral-text">
                             <h6 class="card-subtitle"><?php echo $provider_location_name; ?></h6>
                         </div>
                         
                         <hr>
-                        
+                        <!--
                         <div class="d-flex justify-content-between pt-2 mt-1 text-center text-uppercase living-coral-text">
                             <div>
                                 <i class="fas fa-phone fa-lg mb-3"></i>
@@ -397,7 +397,7 @@
                                 <p class="mb-0">Smile</p>
                             </div>
                         </div>
-                        
+                        -->
                         <hr>
                         
                         <table class="table table-borderless">
@@ -406,7 +406,7 @@
                                 <th scope="row" class="px-0 pb-3 pt-2">
                                     <i class="fas fa-map-marker-alt living-coral-text"></i>
                                 </th>
-                                <td class="pb-3 pt-2"><?php echo $provider_location_address; ?><!--East 64th Street, New York, NY 10021, US--></td>
+                                <td class="pb-3 pt-2"><?php echo $address_line; ?><!--East 64th Street, New York, NY 10021, US--></td>
                             </tr>
                             <tr class="mt-2">
                                 <th scope="row" class="px-0 pb-3 pt-2">
@@ -430,100 +430,13 @@
             </div>
             <!-- Card -->
         </div>
-        <!-- PROVIDER LOCATION -->
-        
-        <!-- PRODUCT LOCATION -->
-        <div class="col-12 col-md-6">
-            <!-- Card -->
-            <div class="card map-card">
-                
-                <div id="map-container-product-location" class="z-depth-1-half map-container" style="height: 500px">
-                    <div class="gmap_canvas">
-                        <iframe
-                                width="500"
-                                height="500"
-                                id="product_location_map"
-                                src="https://maps.google.com/maps?q=Viale Rinascimento, 141, 63074 San Benedetto del Tronto AP, Italy&t=&z=7&ie=UTF8&iwloc=&output=embed"
-                                frameborder="0"
-                                scrolling="no"
-                                marginheight="0"
-                                marginwidth="0">
-                        </iframe>
-                    </div>
-                </div>
-                
-                <!-- Card content -->
-                <div class="card-body closed px-0">
-                    
-                    <div class="button px-2 mt-3">
-                        <a class="btn-floating btn-lg living-coral float-right"><i class="<?php echo $product_location_type_icon; ?>"></i></a>
-                    </div>
-                    
-                    <div class="white px-4 pb-4 pt-3-5">
-                        
-                        <!-- Title -->
-                        <h5 class="card-title h5 living-coral-text">Product Details</h5>
-                        
-                        <div class="d-flex justify-content-between living-coral-text">
-                            <h6 class="card-subtitle"><?php echo $product_location_name; ?></h6>
-                        </div>
-                        
-                        <hr>
-                        
-                        <div class="d-flex justify-content-between pt-2 mt-1 text-center text-uppercase living-coral-text">
-                            <div>
-                                <i class="fas fa-phone fa-lg mb-3"></i>
-                                <p class="mb-0">Call</p>
-                            </div>
-                            <div>
-                                <i class="fas fa-cat fa-lg mb-3"></i>
-                                <p class="mb-0">Love</p>
-                            </div>
-                            <div>
-                                <i class="far fa-grin-beam-sweat fa-lg mb-3"></i>
-                                <p class="mb-0">Smile</p>
-                            </div>
-                        </div>
-                        
-                        <hr>
-                        
-                        <table class="table table-borderless">
-                            <tbody>
-                            <tr>
-                                <th scope="row" class="px-0 pb-3 pt-2">
-                                    <i class="fas fa-map-marker-alt living-coral-text"></i>
-                                </th>
-                                <td class="pb-3 pt-2"><?php echo $product_location_address; ?></td>
-                            </tr>
-                            <tr class="mt-2">
-                                <th scope="row" class="px-0 pb-3 pt-2">
-                                    <i class="far fa-clock living-coral-text"></i>
-                                </th>
-                                <td class="pb-3 pt-2"><span class="deep-purple-text mr-2"> Closed</span> Opens 10 AM</td>
-                            </tr>
-                            <tr class="mt-2">
-                                <th scope="row" class="px-0 pb-3 pt-2">
-                                    <i class="fas fa-cloud-moon living-coral-text"></i>
-                                </th>
-                                <td class="pb-3 pt-2">Sunny weather tomorrow</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    
-                    </div>
-                
-                </div>
-            
-            </div>
-            <!-- Card -->
-        </div>
-        <!-- /PRODUCT LOCATION -->
+        <!-- LOCATION -->
     
     </div>
 
 </section>
+
 <script>
-    
     $(document).ready(function () {
     
     })

@@ -36,59 +36,96 @@
     //
     
     //
-    if (isset($page_data["types"]["pricing_strategies"])) {
-        $pricing_strategies = $page_data["types"]["pricing_strategies"];
-    }
-    
-    if (isset($page_data["types"]["currency"])) {
-        $currencies = $page_data["types"]["currency"];
-    }
-    
-    if (isset($page_data["product_details"])) {
-        $product = $page_data["product_details"];
-        
-        if (isset($product["profiles"])) {
-            $profiles = $product["profiles"];
+    if (isset($page_data)) {
+        if (isset($page_data["types"])) {
+            if (isset($page_data["types"]["pricing_strategies"])) {
+                $pricing_strategies = $page_data["types"]["pricing_strategies"];
+            }
+            
+            if (isset($page_data["types"]["currency"])) {
+                $currencies = $page_data["types"]["currency"];
+            }
+            
         }
         
-        if (isset($product["provider"])) {
-            $provider = $product["provider"];
-        }
-        
-        if (isset($product["vendor"])) {
-            $vendor = $product["vendor"];
-        }
-        
-        if (isset($product["matrices"])) {
-            $matrices = $product["matrices"];
-        }
-        
-        if (isset($product["variants"])) {
-            $variants = $product["variants"];
-        }
-        
-        if (isset($product["status_type_detail"])) {
-            $status_type_detail = $product["status_type_detail"];
-        }
-        
-        if (isset($product["seasons"])) {
-            $seasons = $product["seasons"];
-        }
-        
-        if (isset($product["category"])) {
-            $categories = $product["category"];
-        }
-        
-        if (isset($product["location"])) {
-            $location = $product["location"];
-        }
-        
-        if (isset($product["units"])) {
-            $units = $product["units"];
-        }
-        
-        if (isset($product["location"]["type"])) {
-            $location_type = $product["location"]["type"];
+        if (isset($page_data["product_details"])) {
+            $product = $page_data["product_details"];
+            
+            /**
+             * PRODUCT VARIABLES
+             */
+            $product_id = ($product["id"]) ? $product["id"] : null;
+            $product_use_provider_location = $product["use_provider_location"];
+            $product_category_id = $product["category_id"];
+            $product_pricing_strategy_types_id = $product["pricing_strategy_types_id"];
+            $product_status_types_id = $product["status_types_id"];
+            $product_currency_id = $product["currency_id"];
+            $product_location_id = $product["location_id"];
+            $product_provider_id = $product["provider_id"];
+            $product_vendor_id = $product["vendor_id"];
+            $product_rating_types_id = ($product["rating_types_id"]) ? (int)$product["rating_types_id"] : 0;
+            $product_name = $product["name"];
+            $product_description_short = $product["description_short"];
+            $product_description_long = $product["description_long"];
+            $product_sku = $product["sku"];
+            $product_depart_from = $product["depart_from"];
+            $product_arrive_to = $product["arrive_to"];
+            $product_depart_time = $product["depart_time"];
+            $product_arrive_time = $product["arrive_time"];
+            $use_provider_location = $product["use_provider_location"];
+            
+            if (isset($product["profiles"])) {
+                $profiles = $product["profiles"];
+            }
+            
+            if (isset($product["provider"])) {
+                $provider = $product["provider"];
+            }
+            
+            if (isset($product["vendor"])) {
+                $vendor = $product["vendor"];
+            }
+            
+            if (isset($product["matrices"])) {
+                $matrices = $product["matrices"];
+            }
+            
+            if (isset($product["variants"])) {
+                $variants = $product["variants"];
+            }
+            
+            if (isset($product["status_type_detail"])) {
+                $status_type_detail = $product["status_type_detail"];
+            }
+            
+            if (isset($product["seasons"])) {
+                $seasons = $product["seasons"];
+            }
+            
+            if (isset($product["category"])) {
+                $categories = $product["category"];
+            }
+            
+            if ($product_use_provider_location === true) {
+                if (isset($provider["location"])) {
+                    $location = $provider["location"];
+                    if (isset($location["type"])) {
+                        $location_type = $location["type"];
+                    }
+                }
+            } else {
+                if (isset($product["location"])) {
+                    $location = $product["location"];
+                    if (isset($location["type"])) {
+                        $location_type = $location["type"];
+                    }
+                }
+            }
+            
+            if (isset($product["units"])) {
+                $units = $product["units"];
+            }
+            
         }
     }
     
@@ -99,45 +136,15 @@
     $status_id = $status_type_detail["id"];
     
     /**
-     * LOCATION VARIABLES
-     */
-    $location_city = ($location["city"]) ? $location["city"] : [];
-    $location_country = ($location["country"]) ? $location["country"] : [];
-    $location_province = ($location["province"]) ? $location["province"] : [];
-    
-    /**
-     * PRODUCT VARIABLES
-     */
-    $product_id = ($product["id"]) ? $product["id"] : null;
-    $product_use_provider_location = $product["use_provider_location"];
-    $product_category_id = $product["category_id"];
-    $product_pricing_strategy_types_id = $product["pricing_strategy_types_id"];
-    $product_status_types_id = $product["status_types_id"];
-    $product_currency_id = $product["currency_id"];
-    $product_location_id = $product["location_id"];
-    $product_provider_id = $product["provider_id"];
-    $product_vendor_id = $product["vendor_id"];
-    $product_rating_types_id = ($product["rating_types_id"]) ? (int)$product["rating_types_id"] : 0;
-    $product_name = $product["name"];
-    $product_description_short = $product["description_short"];
-    $product_description_long = $product["description_long"];
-    $product_sku = $product["sku"];
-    $product_depart_from = $product["depart_from"];
-    $product_arrive_to = $product["arrive_to"];
-    $product_depart_time = $product["depart_time"];
-    $product_arrive_time = $product["arrive_time"];
-    $use_provider_location = $product["use_provider_location"];
-    
-    /**
      * CATEGORY VARIABLES
      */
     $category_name = $product["category"]["name"];
     $category_icon = $product["category"]["icon"];
     
     $location_display = array(
-        "display_short" => ($location["display_short"]) ? $location["display_short"] : "",
-        "display_medium" => ($location["display_medium"]) ? $location["display_medium"] : "",
-        "display_long" => ($location["display_long"]) ? $location["display_long"] : "",
+        "display_short" => (isset($location["display_short"])) ? $location["display_short"] : "",
+        "display_medium" => (isset($location["display_medium"])) ? $location["display_medium"] : "",
+        "display_long" => (isset($location["display_long"])) ? $location["display_long"] : "",
     );
     
     //
@@ -150,11 +157,14 @@
     }
     
     /**
-     * Loication Variables
+     * LOCATION VARIABLES
      */
+    $location_city = (isset($location["city"])) ? $location["city"] : [];
+    $location_country = (isset($location["country"])) ? $location["country"] : [];
+    $location_province = (isset($location["province"])) ? $location["province"] : [];
     $l = $location_display["display_medium"];
-    $location_type_icon = ($location_type["icon"]) ? "<i class='" . $location_type["icon"] . " mr-2'></i>" : "";
-    $location_type_name = ($location_type["name"]) ? $location_type["name"] : "";
+    $location_type_icon = ($location_type["icon"]) ? "<i class='" . $location_type["icon"] . "'></i>" : "";
+    $location_type_name = (isset($location_type["name"])) ? $location_type["name"] : "";
     $street = array();
     $location_street_1 = ((isset($location["street_1"])) && ($location["street_1"] !== "")) ? $street[] = "<span class='mb-1'>" . $location["street_1"] . "</span>" : "";
     $location_street_2 = ((isset($location["street_2"])) && ($location["street_2"] !== "")) ? $street[] = "<span class='mb-1'>" . $location["street_2"] . "</span>" : "";
@@ -165,7 +175,7 @@
     $province_name_short = ($location_province["iso2"]) ? $location_province["iso2"] : "";
     $city_name = ($location_city["name"]) ? $location_city["name"] : "";
     $location_name = ($location["name"]) ? $location["name"] : "";
-    $address_line = "<address><i class='fas fa-map-marker-alt living-coral-text mr-3'></i>" . implode(", ", $street) . " $city_name, $province_name_short $location_zipcode, $country_name_short</address>";
+    $address_line = "<address>" . implode(", ", $street) . " $city_name, $province_name_short $location_zipcode, $country_name_short</address>";
     $location_card = "$location_type_icon $l";
     $use_provider_location = (isset($product["use_provider_location"])) ? ($product["use_provider_location"] === true) ? true : false : false;
     $provider_city_name = (isset($provider_location["city"]["name"])) ? $provider_location["city"]["name"] : null;
@@ -174,6 +184,7 @@
     $product_city_name = (isset($location["city"]["name"])) ? $location["city"]["name"] : null;
     $product_province_name = (isset($location["province"]["name"])) ? $location["province"]["name"] : null;
     $product_country_name = (isset($location["country"]["name"])) ? $location["country"]["name"] : null;
+    
     $city_name = ($use_provider_location === true) ? $provider_city_name : $product_city_name;
     $province_name = ($use_provider_location === true) ? $provider_province_name : $product_province_name;
     
@@ -286,7 +297,6 @@
      * Variant Variables
      */
     $variant_section = "";
-    
     foreach ($variants AS $variant) {
         $id = (int)$variant["id"];
         $name = $variant["name"];
@@ -374,6 +384,7 @@
     $provider_name = (isset($provider["name"])) ? $provider["name"] : "";
     $provider_code_direct_id = (isset($provider["code_direct_id"])) ? $provider["code_direct_id"] : "";
     $provider_description_long = (isset($provider["description_long"])) ? $provider["description_long"] : "";
+    
     /**
      * Vendor Variables
      */
@@ -423,7 +434,9 @@
                                     <p id="product_description_short" class="card-text">
                                         <?php echo $product_description_short; ?>
                                     </p>
+                                    
                                     <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+                                    
                                     <div class="row">
                                         <div class="col-lg-4 col-md-12 mb-4">
                                             <h5 class="mb-3 h5">Provider</h5>
@@ -450,17 +463,21 @@
                                             
                                             <p class="card-text">
                                                 <?php echo $address_line; ?>
+                                                <!--
                                                 Lorem, ipsum dolor sit amet consectetur adipisicing elit. A
                                                 nemo commodi odio veniam nisi? Cupiditate nobis doloremque
                                                 unde in ut, consequatur reprehenderit saepe iure
                                                 perspiciatis, veniam facilis asperiores deleniti at?
+                                                -->
                                             </p>
                                         
                                         </div>
                                     </div>
-                                    <div>
+                                    
+                                    <div id="">
                                         <?php echo $product_description_long; ?>
                                     </div>
+                                
                                 </div>
                             </div>
                             
@@ -581,10 +598,13 @@
                 </div>
             
             </div>
+        
         </div>
         
         <div class="col-12 col-xl-3 p-1">
+            
             <div class="card card-body">
+                
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item list-group-item d-flex justify-content-between">Status:</li>
                     <li class="list-group-item list-group-item">
@@ -631,45 +651,23 @@
                         </button>
                     </li>
                 </ul>
+            
             </div>
+        
         </div>
     
     </div>
     
     <div class="row gx-1">
-        <div class="col-12 col-md-4 p-1">
-            <?php displayJsonOnPage($seasons, "Seasons"); ?>
-        </div>
-        <div class="col-12 col-md-4 p-1">
-            <?php displayJsonOnPage($units, "Units"); ?>
-        </div>
-        <div class="col-12 col-md-4 p-1">
-            <?php displayJsonOnPage($variants, "Variants"); ?>
-        </div>
-        <div class="col-12 col-md-4 p-1">
-            <?php displayJsonOnPage($matrices, "Matrices"); ?>
-        </div>
-        <div class="col-12 col-md-4 p-1">
-            <?php displayJsonOnPage($profiles, "Profiles"); ?>
-        </div>
-        <div class="col-12 col-md-4 p-1">
-            <?php displayJsonOnPage($provider, "Provider"); ?>
-        </div>
-        <div class="col-12 col-md-4 p-1">
-            <?php displayJsonOnPage($vendor, "Vendor"); ?>
-        </div>
         
-        <div class="col-12 col-md-4 p-1">
-            <?php displayJsonOnPage($product, "Product"); ?>
-        </div>
-        
-        <div class="col-12 col-md-4 p-1">
-            <?php displayJsonOnPage($page_data["types"]["color_scheme"], "color_scheme"); ?>
-        </div>
-        
-        <div class="col-12 col-md-4 p-1">
-            <?php displayJsonOnPage($provider_location, "Provider Location"); ?>
-        </div>
+        <?php displayJsonOnPage($location_type, "Location Type"); ?>
+        <?php displayJsonOnPage($units, "Units"); ?>
+        <?php displayJsonOnPage($profiles, "Profiles"); ?>
+        <?php displayJsonOnPage($matrices, "Matrices"); ?>
+        <?php displayJsonOnPage($provider, "Provider"); ?>
+        <?php displayJsonOnPage($vendor, "Vendor"); ?>
+        <?php displayJsonOnPage($product, "Product"); ?>
+        <?php displayJsonOnPage($location, "Location"); ?>
     </div>
 
 </section>
@@ -677,10 +675,8 @@
 
 <!-- Calendar Modal -->
 <?php include_once(VIEWS_PATH . "/products/modals/product_edit_calendar.phtml"); ?>
+<!-- /Calendar Modal -->
 
-//
-
-//
 <script type="text/javascript">
     const _product_panel_link_overview = document.getElementById("product_panel_link_overview")
     const _panel_tab_product_o = document.getElementById("panel_tab_product_o")
@@ -745,50 +741,6 @@
           })
     })
     //
-    
-    document.addEventListener("DOMContentLoaded", function () {
-        const jsonPrettify = (json) => {
-            if (typeof json === "object" && json !== null) {
-                return JSON.stringify(json, undefined, '\t')
-            }
-            
-            try {
-                const obj = JSON.parse(json)
-                return jsonPrettify(obj)
-            } catch (e) {
-                return json
-            }
-        }
-        
-        let codeData = document.querySelectorAll(".panel-code")
-        codeData.forEach(el => {
-            let html = $(el).html()
-            let formattedCode = ""
-            let classValue = ""
-            $(el).empty()
-            
-            if (el.dataset.datatype === "json") {
-                formattedCode = jsonPrettify(html)
-                classValue = "json"
-            } else if (el.dataset.datatype === "jsonp") {
-                formattedCode = jsonPrettify(html)
-                classValue = "jsonp"
-            } else if (el.dataset.datatype === "json5") {
-                formattedCode = jsonPrettify(html)
-                classValue = "json5"
-            }
-            
-            let pre = document.createElement("pre")
-            let code = document.createElement("code")
-            
-            code.classList = [`language-${classValue}`]
-            code.innerHTML = formattedCode
-            
-            pre.appendChild(code)
-            el.appendChild(pre)
-        })
-        
-    })
 
 </script>
 

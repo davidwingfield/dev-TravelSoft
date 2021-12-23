@@ -10,13 +10,21 @@ document.addEventListener("DOMContentLoaded", function () {
         $.each($panelLinks, function (k, elem) {
             let dataToggle = $(elem).attr("data-toggle")
             if (dataToggle) {
-                Console.log("dataToggle", dataToggle)
+                
                 switch (dataToggle) {
                     case "panel-refresh":
+                        //Console.log("refresh")
+                        break
+                    case "panel-hide":
                         
+                        elem.addEventListener("click", function () {
+                            let dataToOpen = $(elem).attr("data-loadonhide")
+                            $(dataToOpen).show()
+                            $(elem).parents("div.pre_display").find("div.pre_display_el").hide()
+                        })
                         break
                     case "panel-collapse":
-                        Console.log("collapse")
+                        //Console.log("collapse")
                         break
                     case"panel-fullscreen":
                         elem.addEventListener("click", function () {
@@ -31,10 +39,10 @@ document.addEventListener("DOMContentLoaded", function () {
                                 $el.removeClass("is-fullscreen")
                             }
                         })
-                        Console.log("fullscreen")
+                        //Console.log("fullscreen")
                         break
                     case "panel-close":
-                        Console.log("close")
+                        //Console.log("close")
                         break
                     default:
                         break

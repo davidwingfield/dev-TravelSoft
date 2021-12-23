@@ -64,4 +64,51 @@ $(document).ready(function () {
     //toastr.success('I do not think that word means what you think it means.', 'Success!')
     //toastr.warning('I do not think that word means what you think it means.', 'Warning!')
     //toastr.error('I do not think that word means what you think it means.', 'Error!')
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const jsonPrettify = (json) => {
+            if (typeof json === "object" && json !== null) {
+                return JSON.stringify(json, undefined, '\t')
+            }
+            
+            try {
+                const obj = JSON.parse(json)
+                return jsonPrettify(obj)
+            } catch (e) {
+                return json
+            }
+        }
+        
+        let codeData = document.querySelectorAll(".panel-code")
+        codeData.forEach(el => {
+            let html = $(el).html()
+            let formattedCode = ""
+            let classValue = ""
+            $(el).empty()
+            
+            if (el.dataset.datatype === "json") {
+                formattedCode = jsonPrettify(html)
+                classValue = "json"
+            } else if (el.dataset.datatype === "jsonp") {
+                formattedCode = jsonPrettify(html)
+                classValue = "jsonp"
+            } else if (el.dataset.datatype === "json5") {
+                formattedCode = jsonPrettify(html)
+                classValue = "json5"
+            }
+            
+            let pre = document.createElement("pre")
+            let code = document.createElement("code")
+            
+            code.classList = [`language-${classValue}`]
+            code.innerHTML = formattedCode
+            
+            pre.appendChild(code)
+            el.appendChild(pre)
+        })
+        
+        $("button.pre_display_button").show()
+        $("div.pre_display_el").hide()
+    })
 })
+

@@ -512,7 +512,6 @@
                     "note" => (isset($provider["vendor_note"])) ? $provider["vendor_note"] : null,
                     "company" => array(
                         "images" => Image::getByCompanyId((int)$vendor_company_id),
-                        
                         "id" => $vendor_company_id,
                         "name" => $vendor_company_name,
                         "phone_1" => $vendor_company_phone_1,

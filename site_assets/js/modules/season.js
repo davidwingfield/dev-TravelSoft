@@ -2,12 +2,9 @@ const Season = (function () {
     "use strict"
     const _product_edit_season_form_season_name_filter = document.getElementById("product_edit_season_form_season_name_filter")
     const _category_id = document.getElementById("category_id")
-    const _product_edit_season_form_season_id = document.getElementById("product_edit_season_form_season_id")
-    const _product_edit_season_form_season_name = document.getElementById("product_edit_season_form_season_name")
     const _product_edit_season_form_season_color_scheme_id = document.getElementById("product_edit_season_form_season_color_scheme_id")
-    const _product_edit_season_form_season_enabled = document.getElementById("product_edit_season_form_season_enabled")
-    const _edit_season_button = document.getElementById("edit_season_button")
-    
+    const _edit_season = document.getElementById("edit_season")
+    const _button_assign_season_to_product = document.getElementById("button_assign_season_to_product")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let categories = new Map()
     
@@ -55,6 +52,7 @@ const Season = (function () {
                   let season = suggestion.data
                   let color_scheme = (season.color_scheme) ? season.color_scheme : {}
                   Console.log("season", season)
+                  Console.log("Season.all", Season.all)
                   _product_edit_season_form_season_id.value = season.id
                   _product_edit_season_form_season_name.value = season.name
                   _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
@@ -166,26 +164,51 @@ const Season = (function () {
             seasons = []
         }
     }
+    const _product_edit_season_form_season_id = document.getElementById("product_edit_season_form_season_id")
+    const _product_edit_season_form_season_name = document.getElementById("product_edit_season_form_season_name")
+    const _product_edit_season_id_name_display = document.getElementById("product_edit_season_id_name_display")
+    const _product_edit_season_form_season_enabled = document.getElementById("product_edit_season_form_season_enabled")
+    const _edit_season_button = document.getElementById("edit_season_button")
+    const reset_form = function () {
+        if (_edit_season) {
+            _product_edit_season_form_season_id.value = ""
+            _product_edit_season_form_season_name.value = ""
+            _product_edit_season_id_name_display.value = ""
+            _product_edit_season_form_season_enabled.checked = true
+            _edit_season_button.disabled = true
+        }
+    }
     
     const init = function (settings) {
         let seasons = []
         if (settings) {
+            seasons = settings
             if (settings.seasons) {
                 seasons = settings.seasons
                 
             }
         }
         
+        load_types(seasons)
+        
         if (_product_edit_season_form_season_name_filter) {
             init_autocomplete()
-            Console.log("seasons", settings)
+            reset_form()
+            //Console.log("seasons", settings)
         }
         
-        load_types(seasons)
+    }
+    
+    const edit = function (seasons) {
+        Console.log("Season.edit(seasons)", seasons)
     }
     
     return {
         types: new Map(),
+        all: new Map(),
+        edit: function (seasons) {
+            edit(seasons)
+        },
         loadTypes: function (seasons) {
             load_types(seasons)
         },

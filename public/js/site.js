@@ -1259,12 +1259,9 @@ const Season = (function () {
     "use strict"
     const _product_edit_season_form_season_name_filter = document.getElementById("product_edit_season_form_season_name_filter")
     const _category_id = document.getElementById("category_id")
-    const _product_edit_season_form_season_id = document.getElementById("product_edit_season_form_season_id")
-    const _product_edit_season_form_season_name = document.getElementById("product_edit_season_form_season_name")
     const _product_edit_season_form_season_color_scheme_id = document.getElementById("product_edit_season_form_season_color_scheme_id")
-    const _product_edit_season_form_season_enabled = document.getElementById("product_edit_season_form_season_enabled")
-    const _edit_season_button = document.getElementById("edit_season_button")
-    
+    const _edit_season = document.getElementById("edit_season")
+    const _button_assign_season_to_product = document.getElementById("button_assign_season_to_product")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let categories = new Map()
     
@@ -1312,6 +1309,7 @@ const Season = (function () {
                   let season = suggestion.data
                   let color_scheme = (season.color_scheme) ? season.color_scheme : {}
                   Console.log("season", season)
+                  Console.log("Season.all", Season.all)
                   _product_edit_season_form_season_id.value = season.id
                   _product_edit_season_form_season_name.value = season.name
                   _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
@@ -1423,26 +1421,51 @@ const Season = (function () {
             seasons = []
         }
     }
+    const _product_edit_season_form_season_id = document.getElementById("product_edit_season_form_season_id")
+    const _product_edit_season_form_season_name = document.getElementById("product_edit_season_form_season_name")
+    const _product_edit_season_id_name_display = document.getElementById("product_edit_season_id_name_display")
+    const _product_edit_season_form_season_enabled = document.getElementById("product_edit_season_form_season_enabled")
+    const _edit_season_button = document.getElementById("edit_season_button")
+    const reset_form = function () {
+        if (_edit_season) {
+            _product_edit_season_form_season_id.value = ""
+            _product_edit_season_form_season_name.value = ""
+            _product_edit_season_id_name_display.value = ""
+            _product_edit_season_form_season_enabled.checked = true
+            _edit_season_button.disabled = true
+        }
+    }
     
     const init = function (settings) {
         let seasons = []
         if (settings) {
+            seasons = settings
             if (settings.seasons) {
                 seasons = settings.seasons
                 
             }
         }
         
+        load_types(seasons)
+        
         if (_product_edit_season_form_season_name_filter) {
             init_autocomplete()
-            Console.log("seasons", settings)
+            reset_form()
+            //Console.log("seasons", settings)
         }
         
-        load_types(seasons)
+    }
+    
+    const edit = function (seasons) {
+        Console.log("Season.edit(seasons)", seasons)
     }
     
     return {
         types: new Map(),
+        all: new Map(),
+        edit: function (seasons) {
+            edit(seasons)
+        },
         loadTypes: function (seasons) {
             load_types(seasons)
         },
@@ -1464,13 +1487,21 @@ document.addEventListener("DOMContentLoaded", function () {
         $.each($panelLinks, function (k, elem) {
             let dataToggle = $(elem).attr("data-toggle")
             if (dataToggle) {
-                Console.log("dataToggle", dataToggle)
+                
                 switch (dataToggle) {
                     case "panel-refresh":
+                        //Console.log("refresh")
+                        break
+                    case "panel-hide":
                         
+                        elem.addEventListener("click", function () {
+                            let dataToOpen = $(elem).attr("data-loadonhide")
+                            $(dataToOpen).show()
+                            $(elem).parents("div.pre_display").find("div.pre_display_el").hide()
+                        })
                         break
                     case "panel-collapse":
-                        Console.log("collapse")
+                        //Console.log("collapse")
                         break
                     case"panel-fullscreen":
                         elem.addEventListener("click", function () {
@@ -1485,10 +1516,10 @@ document.addEventListener("DOMContentLoaded", function () {
                                 $el.removeClass("is-fullscreen")
                             }
                         })
-                        Console.log("fullscreen")
+                        //Console.log("fullscreen")
                         break
                     case "panel-close":
-                        Console.log("close")
+                        //Console.log("close")
                         break
                     default:
                         break
@@ -11728,6 +11759,7 @@ const Product = (function () {
     
     const set_edit_form_values = function (product) {
         Console.log("Product.set_edit_form_values(product)", product)
+        
         let provider, vendor, product_location,
           seasons, units, variants, profiles, provider_location
         
@@ -11735,73 +11767,57 @@ const Product = (function () {
             product_location = product.location
             Product.product_initial_location = product_location
         }
-        Console.log("Product.init(): product_location", product_location)
         
         if (product.provider) {
             provider = product.provider
         }
-        Console.log("Product.init(): provider", provider)
         
         if (provider.location) {
             provider_location = provider.location
             Product.provider_initial_location = provider_location
         }
-        Console.log("Product.init(): provider_location", provider_location)
         
         if (product.vendor) {
             vendor = product.vendor
         }
-        Console.log("Product.init(): vendor", vendor)
         
         if (product.seasons) {
             seasons = product.seasons
         }
-        Console.log("Product.init(): seasons", seasons)
         
         if (product.units) {
             units = product.units
         }
-        Console.log("Product.init(): units", units)
         
         if (product.variants) {
             variants = product.variants
         }
-        Console.log("Product.init(): variants", variants)
         
         if (product.profiles) {
             profiles = product.profiles
         }
-        Console.log("Product.init(): profiles", profiles)
         
         if (product.use_provider_location) {
             $(_use_provider_location).attr("checked", "true")
+            load_product_location(provider_location, "provider")
             Location.init(provider_location)
         } else {
             $(_use_product_location).attr("checked", "true")
+            load_product_location(product_location, "provider")
             Location.init(product_location)
         }
         
-        load_product_location(product_location)
-        load_provider_location(provider_location)
     }
     
-    const load_product_location = function (product_location) {
-        Console.log("Product.load_product_location(product_location)", product_location)
-        product_initial_location = product_location
-        let $frame = $("#map-container-product-location").find("iframe")
-        Console.log("$frame", $frame.attr("src"))
-        let url = buildMapsURL(product_location)
-        Console.log("url", url)
-        $frame.attr("src", url)
-    }
-    
-    const load_provider_location = function (provider_location) {
-        Console.log("Product.load_provider_location(provider_location)", provider_location)
-        provider_initial_location = provider_location
-        let $frame = $("#map-container-provider-location").find("iframe")
-        Console.log("$frame", $frame.attr("src"))
-        let url = buildMapsURL(provider_location)
-        Console.log("url", url)
+    const load_product_location = function (location, type) {
+        Console.log("location", location)
+        if (!type) {
+            type = "product"
+        }
+        let iFrame = `#map-container-product-location`
+        product_initial_location = location
+        let $frame = $(iFrame).find("iframe")
+        let url = buildMapsURL(location)
         $frame.attr("src", url)
     }
     
@@ -11831,6 +11847,7 @@ const Product = (function () {
         
         if (_product_edit_page) {
             if (settings) {
+                
                 if (settings.product_details) {
                     product_details = settings.product_details
                 }
@@ -11846,8 +11863,7 @@ const Product = (function () {
                 if (product_details.units) {
                     units = product_details.units
                 }
-                Console.log("seasons", seasons)
-                Console.log("units", units)
+                
                 $(document).ready(function () {
                     if (_product_edit_page) {
                         init_edit_form(product_details)
@@ -12073,4 +12089,51 @@ $(document).ready(function () {
     //toastr.success('I do not think that word means what you think it means.', 'Success!')
     //toastr.warning('I do not think that word means what you think it means.', 'Warning!')
     //toastr.error('I do not think that word means what you think it means.', 'Error!')
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const jsonPrettify = (json) => {
+            if (typeof json === "object" && json !== null) {
+                return JSON.stringify(json, undefined, '\t')
+            }
+            
+            try {
+                const obj = JSON.parse(json)
+                return jsonPrettify(obj)
+            } catch (e) {
+                return json
+            }
+        }
+        
+        let codeData = document.querySelectorAll(".panel-code")
+        codeData.forEach(el => {
+            let html = $(el).html()
+            let formattedCode = ""
+            let classValue = ""
+            $(el).empty()
+            
+            if (el.dataset.datatype === "json") {
+                formattedCode = jsonPrettify(html)
+                classValue = "json"
+            } else if (el.dataset.datatype === "jsonp") {
+                formattedCode = jsonPrettify(html)
+                classValue = "jsonp"
+            } else if (el.dataset.datatype === "json5") {
+                formattedCode = jsonPrettify(html)
+                classValue = "json5"
+            }
+            
+            let pre = document.createElement("pre")
+            let code = document.createElement("code")
+            
+            code.classList = [`language-${classValue}`]
+            code.innerHTML = formattedCode
+            
+            pre.appendChild(code)
+            el.appendChild(pre)
+        })
+        
+        $("button.pre_display_button").show()
+        $("div.pre_display_el").hide()
+    })
 })
+

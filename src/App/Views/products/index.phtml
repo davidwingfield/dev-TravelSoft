@@ -233,7 +233,7 @@
 <?php include_once(VIEWS_PATH . "/products/modals/new_product_modal.phtml"); ?>
 
 <script type="text/javascript">
-    
+    /*
     (function () {
         let textFile = null
         const makeTextFile = function (text) {
@@ -277,12 +277,13 @@
         }, false)
         
     })()
-    
+    //*/
+    /*
     $.fn.showIds = function (settings) {
         "use strict"
         let _el = this
         let $el = $(_el)
-        const Languages = /*languages_placeholder[*/{
+        const Languages = {
             "none": "Plain text",
             "plain": "Plain text",
             "plaintext": "Plain text",
@@ -530,7 +531,7 @@
             "yaml": "YAML",
             "yml": "YAML",
             "yang": "YANG",
-        }/*]*/
+        }
         
         let language, page, id, allElements
         
@@ -598,7 +599,8 @@
         }
         
     }
-    
+    //*/
+    /*
     const getAllPageIds = function (page) {
         
         console.log("Prism", Prism)
@@ -655,13 +657,13 @@
         
         init(page)
     }
-    
+    //*/
     $(function () {
-        let _product_index_page = document.getElementById("product_index_page")
-        $("#testDemo").showIds({
-            page: "product_index_page",
-            language: "javascript",
-        })
+        //let _product_index_page = document.getElementById("product_index_page")
+        //$("#testDemo").showIds({
+        //    page: "product_index_page",
+        //    language: "javascript",
+        //})
         //getAllPageIds(_product_index_page)
         /*
         var allElements = document.getElementsByTagName("*")

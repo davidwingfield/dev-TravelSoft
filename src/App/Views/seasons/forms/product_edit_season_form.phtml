@@ -151,162 +151,86 @@
                     <span class="">Edit</span>
                 </button>
             </div>
+        
         </div>
         
         <hr>
         
-        <div class="row">
-            <div class="col-12 col-md-2">
-                <label for="">Disabled DOW:</label>
+        <div class="card card-body" id="season_disabled_dow">
+            <div class="row">
+                <div class="col-12 col-md-2">
+                    <label for="">Disabled DOW:</label>
+                </div>
+                
+                <div class="col-12 col-md-10">
+                    <!-- Default inline 1-->
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input dow_select" name="dow_select" id="dow_select_all">
+                        <label class="custom-control-label" for="dow_select_all">Select All</label>
+                    </div>
+                    
+                    <!-- Default inline 2-->
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input dow_select" name="dow_select" id="dow_select_sun">
+                        <label class="custom-control-label" for="dow_select_sun">Sunday</label>
+                    </div>
+                    
+                    <!-- Default inline 3-->
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input dow_select" name="dow_select" id="dow_select_mon">
+                        <label class="custom-control-label" for="dow_select_mon">Monday</label>
+                    </div>
+                    
+                    <!-- Default inline 4-->
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input dow_select" name="dow_select" id="dow_select_tue">
+                        <label class="custom-control-label" for="dow_select_tue">Tuesday</label>
+                    </div>
+                    
+                    <!-- Default inline 5-->
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input dow_select" name="dow_select" id="dow_select_wed">
+                        <label class="custom-control-label" for="dow_select_wed">Wednesday</label>
+                    </div>
+                    
+                    <!-- Default inline 6-->
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input dow_select" name="dow_select" id="dow_select_thu">
+                        <label class="custom-control-label" for="dow_select_thu">Thursday</label>
+                    </div>
+                    
+                    <!-- Default inline 7-->
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" name="dow_select" id="dow_select_fri">
+                        <label class="custom-control-label dow_select" for="dow_select_fri">Friday</label>
+                    </div>
+                    
+                    <!-- Default inline 8-->
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input dow_select" name="dow_select" id="dow_select_sat">
+                        <label class="custom-control-label" for="dow_select_sat">Saturday</label>
+                    </div>
+                
+                </div>
             </div>
-            <div class="col-12 col-md-10">
-                <!-- Default inline 1-->
-                <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" id="defaultInline1">
-                    <label class="custom-control-label" for="defaultInline1">Select All</label>
-                </div>
-                
-                <!-- Default inline 2-->
-                <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" id="defaultInline2">
-                    <label class="custom-control-label" for="defaultInline2">Sunday</label>
-                </div>
-                
-                <!-- Default inline 3-->
-                <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" id="defaultInline3">
-                    <label class="custom-control-label" for="defaultInline3">Monday</label>
-                </div>
-                
-                <!-- Default inline 4-->
-                <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" id="defaultInline4">
-                    <label class="custom-control-label" for="defaultInline4">Tuesday</label>
-                </div>
-                
-                <!-- Default inline 5-->
-                <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" id="defaultInline5">
-                    <label class="custom-control-label" for="defaultInline5">Wednesday</label>
-                </div>
-                
-                <!-- Default inline 6-->
-                <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" id="defaultInline6">
-                    <label class="custom-control-label" for="defaultInline6">Thursday</label>
-                </div>
-                
-                <!-- Default inline 7-->
-                <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" id="defaultInline7">
-                    <label class="custom-control-label" for="defaultInline7">Friday</label>
-                </div>
-                
-                <!-- Default inline 8-->
-                <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" id="defaultInline8">
-                    <label class="custom-control-label" for="defaultInline8">Saturday</label>
-                </div>
-            
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-6 text-left w-100">
-                <a href="javascript:void(0);" id="button_assign_season_to_product" class="btn btn-secondary btn-sm waves-effect waves-light">Assign</a>
-            </div>
-            <div class="col-6 text-right w-100">
-                <a href="javascript:void(0);" id="button_clear_form_edit_season" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
-                <a href="javascript:void(0);" id="button_submit_form_edit_season" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
-            </div>
-        </div>
-        
-        <div class="card card-body border border-primary z-depth-0" id="edit_scheme">
-            
-            <h5 class="card-title font-weight-bold">
-                <span>Color Schemes</span>
-                <a id="button_close_edit_scheme" href="javascript:void(0);" class="panel-button-close fas fa-times" aria-hidden="true"></a>
-            </h5>
-            <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
-            <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
             
             <div class="row">
-                <?php
-                    foreach ($swatchObjects AS $k => $swatch) {
-                        echo $swatch;
-                    }
-                ?>
-            </div>
-            
-            <div class="card card-body border border-primary z-depth-0" id="edit_scheme_detail">
-                <form id="form_edit_scheme" class="" novalidate>
-                    
-                    <!-- Season Background Color -->
-                    <div class="row">
-                        
-                        <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <label for="form_edit_scheme_background_color">Background Color:</label>
-                        </div>
-                        
-                        <div class="col-6 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                            <div class="form-element">
-                                <input type="text" id="form_edit_scheme_background_color" name="form_edit_scheme_background_color" class="form-control"/>
-                                <div id="form_edit_scheme_background_color-error" class="error w-100 text-center"></div>
-                            </div>
-                        </div>
-                    
-                    </div>
-                    <!-- /Season Background Color -->
-                    
-                    <!-- Season Text Color -->
-                    <div class="row">
-                        
-                        <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <label for="form_edit_scheme_text_color">Text Color:</label>
-                        </div>
-                        
-                        <div class="col-6 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                            <div class="form-element">
-                                <input type="text" id="form_edit_scheme_text_color" name="form_edit_scheme_text_color" class="form-control"/>
-                                <div id="form_edit_scheme_text_color-error" class="error w-100 text-center"></div>
-                            </div>
-                        </div>
-                    
-                    </div>
-                    <!-- /Season Text Color -->
-                    
-                    <!-- Season Border Color -->
-                    <div class="row">
-                        
-                        <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <label for="form_edit_scheme_border_color">Border Color:</label>
-                        </div>
-                        
-                        <div class="col-6 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                            <div class="form-element">
-                                <input type="text" id="form_edit_scheme_border_color" name="form_edit_scheme_border_color" class="form-control"/>
-                                <div id="form_edit_scheme_border_color-error" class="error w-100 text-center"></div>
-                            </div>
-                        </div>
-                    
-                    </div>
-                    <!-- /Season Border Color -->
-                
-                </form>
-                <div class="text-right w-100">
-                    <a href="javascript:void(0);" id="button_clear_form_edit_scheme" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
-                    <a href="javascript:void(0);" id="button_submit_form_edit_scheme" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
+                <div class="col-6 text-left w-100">
+                    <a href="javascript:void(0);" id="button_assign_season_to_product" class="btn btn-secondary btn-sm waves-effect waves-light">Assign</a>
+                </div>
+                <div class="col-6 text-right w-100">
+                    <a href="javascript:void(0);" id="button_clear_form_edit_season" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+                    <a href="javascript:void(0);" id="button_submit_form_edit_season" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
                 </div>
             </div>
+        
         </div>
-    
-    </div>
-    
-    <div class="row">
-        <div class="col-12">
-            <?php include_once(VIEWS_PATH . "/seasons/tables/product_edit_season_table.phtml"); ?>
+        
+        <div class="row">
+            <div class="col-12">
+                <?php include_once(VIEWS_PATH . "/seasons/tables/product_edit_season_table.phtml"); ?>
+            </div>
         </div>
-    </div>
 
 </section>
 
@@ -444,7 +368,7 @@
         }
         
         ColorSwatches.init(settings)
-        
+        /*
         const pickrText = Pickr.create({
             el: "#form_edit_scheme_text_color",
             default: "303030",
@@ -538,6 +462,7 @@
             let c = "#" + color.toHEXA().join('')
             Console.log('Event: "swatchselect"', c)
         })
+        //*/
         
         const LightenDarkenColor = function (col, amt) {
             var usePound = false
@@ -654,42 +579,146 @@
             }
         }
         
-        const updateSwatch = function (c) {
-            
-            if (c) {
-                let background = c.replace(/#/, "")
-                let text = contrastingColor(background)
-                let border = pSBC(-0.6, c)
-                return {
-                    background: "#" + background,
-                    text: "#" + text,
-                    border: border,
-                }
-            }
-        }
-        
-        /*
-        $.each(swatches, function (k, v) {
-            let test = updateSwatch(v)
-            let backgroundColor = test.background
-            let borderColor = test.border
-            let textColor = test.text
-            $("div.page").append(`
-            <div class="col-xl-3">
-                <div style="background:${backgroundColor};height:50px;width:100px;padding:2px;margin:5px">
-                    <div style="background-color:${borderColor};height:46px;width:96px;">
-                        <p class="m-0 p-0 mb-1" style="line-height:20px;font-size:12px;text-align: center;vertical-align: middle;color:${textColor}!important;">name</p>
-                        <p class="m-0 p-0" style="line-height:20px;font-size:12px;text-align: center;vertical-align: middle;color:${textColor}!important;">${borderColor}</p>
-                    </div>
-                </div>
-            </div>
-            `)
-            //Console.log("test", test)
-        })
-        //*/
-        
     })
 
 </script>
 
+<script>
+    
+    $.fn.DisabledDOW = function (settings) {
+        "use strict"
+        Console.log("DisabledDOW", this)
+        const disabled_dow = document.querySelectorAll(".dow_select")
+        let disabled_dows = []
+        
+        disabled_dow.forEach(el => el.addEventListener("click", event => {
+            let id = (el.id) ? el.id : ""
+            let indexId, index
+            switch (id) {
+                case "dow_select_all":
+                    
+                    if (el.checked === true) {
+                        disabled_dows = [0, 1, 2, 3, 4, 5, 6]
+                    } else {
+                        disabled_dows = []
+                    }
+                    disabled_dows.sort()
+                    Console.log("dow_select_all", disabled_dows)
+                    break
+                case "dow_select_sun":
+                    indexId = 0
+                    index = disabled_dows.indexOf(indexId)
+                    if (el.checked === true) {
+                        if (!index > -1) {
+                            disabled_dows.push(indexId)
+                        }
+                    } else {
+                        if (index > -1) {
+                            disabled_dows.splice(index, 1)
+                        }
+                    }
+                    disabled_dows.sort()
+                    Console.log("dow_select_sun", disabled_dows)
+                    break
+                case "dow_select_mon":
+                    indexId = 1
+                    index = disabled_dows.indexOf(indexId)
+                    if (el.checked === true) {
+                        if (!index > -1) {
+                            disabled_dows.push(indexId)
+                        }
+                    } else {
+                        if (index > -1) {
+                            disabled_dows.splice(index, 1)
+                        }
+                    }
+                    disabled_dows.sort()
+                    Console.log("dow_select_mon", disabled_dows)
+                    break
+                case "dow_select_tue":
+                    indexId = 2
+                    index = disabled_dows.indexOf(indexId)
+                    if (el.checked === true) {
+                        if (!index > -1) {
+                            disabled_dows.push(indexId)
+                        }
+                    } else {
+                        if (index > -1) {
+                            disabled_dows.splice(index, 1)
+                        }
+                    }
+                    disabled_dows.sort()
+                    Console.log("dow_select_tue", disabled_dows)
+                    break
+                case "dow_select_wed":
+                    indexId = 3
+                    index = disabled_dows.indexOf(indexId)
+                    if (el.checked === true) {
+                        if (!index > -1) {
+                            disabled_dows.push(indexId)
+                        }
+                    } else {
+                        if (index > -1) {
+                            disabled_dows.splice(index, 1)
+                        }
+                    }
+                    disabled_dows.sort()
+                    Console.log("dow_select_wed", disabled_dows)
+                    break
+                case "dow_select_thu":
+                    indexId = 4
+                    index = disabled_dows.indexOf(indexId)
+                    if (el.checked === true) {
+                        if (!index > -1) {
+                            disabled_dows.push(indexId)
+                        }
+                    } else {
+                        if (index > -1) {
+                            disabled_dows.splice(index, 1)
+                        }
+                    }
+                    disabled_dows.sort()
+                    Console.log("dow_select_thu", disabled_dows)
+                    break
+                case "dow_select_fri":
+                    indexId = 5
+                    index = disabled_dows.indexOf(indexId)
+                    if (el.checked === true) {
+                        if (!index > -1) {
+                            disabled_dows.push(indexId)
+                        }
+                    } else {
+                        if (index > -1) {
+                            disabled_dows.splice(index, 1)
+                        }
+                    }
+                    disabled_dows.sort()
+                    Console.log("dow_select_fri", disabled_dows)
+                    break
+                case "dow_select_sat":
+                    indexId = 6
+                    index = disabled_dows.indexOf(indexId)
+                    if (el.checked === true) {
+                        if (!index > -1) {
+                            disabled_dows.push(indexId)
+                        }
+                    } else {
+                        if (index > -1) {
+                            disabled_dows.splice(index, 1)
+                        }
+                    }
+                    disabled_dows.sort()
+                    Console.log("dow_select_sat", disabled_dows)
+                    break
+                default:
+                    break
+            }
+        }))
+    }
+    
+    $(document).ready(function () {
+        $("#season_disabled_dow").DisabledDOW({})
+    })
+
+</script>
 

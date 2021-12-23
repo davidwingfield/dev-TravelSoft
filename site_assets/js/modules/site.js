@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    
+    let codeData = document.querySelectorAll(".panel-code")
     window.addEventListener("resize", debounce(function (e) {
         resize_elements("end of resizing")
     }))
@@ -65,50 +65,48 @@ $(document).ready(function () {
     //toastr.warning('I do not think that word means what you think it means.', 'Warning!')
     //toastr.error('I do not think that word means what you think it means.', 'Error!')
     
-    document.addEventListener("DOMContentLoaded", function () {
-        const jsonPrettify = (json) => {
-            if (typeof json === "object" && json !== null) {
-                return JSON.stringify(json, undefined, '\t')
-            }
-            
-            try {
-                const obj = JSON.parse(json)
-                return jsonPrettify(obj)
-            } catch (e) {
-                return json
-            }
+    const jsonPrettify = (json) => {
+        if (typeof json === "object" && json !== null) {
+            return JSON.stringify(json, undefined, '\t')
         }
         
-        let codeData = document.querySelectorAll(".panel-code")
-        codeData.forEach(el => {
-            let html = $(el).html()
-            let formattedCode = ""
-            let classValue = ""
-            $(el).empty()
-            
-            if (el.dataset.datatype === "json") {
-                formattedCode = jsonPrettify(html)
-                classValue = "json"
-            } else if (el.dataset.datatype === "jsonp") {
-                formattedCode = jsonPrettify(html)
-                classValue = "jsonp"
-            } else if (el.dataset.datatype === "json5") {
-                formattedCode = jsonPrettify(html)
-                classValue = "json5"
-            }
-            
-            let pre = document.createElement("pre")
-            let code = document.createElement("code")
-            
-            code.classList = [`language-${classValue}`]
-            code.innerHTML = formattedCode
-            
-            pre.appendChild(code)
-            el.appendChild(pre)
-        })
+        try {
+            const obj = JSON.parse(json)
+            return jsonPrettify(obj)
+        } catch (e) {
+            return json
+        }
+    }
+    
+    codeData.forEach(el => {
+        let html = $(el).html()
+        let formattedCode = ""
+        let classValue = ""
+        $(el).empty()
         
-        $("button.pre_display_button").show()
-        $("div.pre_display_el").hide()
+        if (el.dataset.datatype === "json") {
+            formattedCode = jsonPrettify(html)
+            classValue = "json"
+        } else if (el.dataset.datatype === "jsonp") {
+            formattedCode = jsonPrettify(html)
+            classValue = "jsonp"
+        } else if (el.dataset.datatype === "json5") {
+            formattedCode = jsonPrettify(html)
+            classValue = "json5"
+        }
+        
+        let pre = document.createElement("pre")
+        let code = document.createElement("code")
+        
+        code.classList = [`language-${classValue}`]
+        code.innerHTML = formattedCode
+        
+        pre.appendChild(code)
+        el.appendChild(pre)
+        Prism.highlightElement(code)
     })
+    
+    $("button.pre_display_button").show()
+    $("div.pre_display_el").hide()
 })
 

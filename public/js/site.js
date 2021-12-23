@@ -914,12 +914,10 @@ jQuery.extend({
     },
 })
 const logger = {
-    
     log: function () {
         Console.log(args)
     },
 }
-
 const infoDialog = function (message, handler) {
     
     $(`
@@ -1102,6 +1100,114 @@ const deleteDialog = function (message, handler) {
             .remove()
       })
     
+}
+const formatURL = function (param) {
+    Console.log("formatURL()", param)
+    return encodeURIComponent(param.trim())
+}
+const buildMapsURL = function (location) {
+    Console.log("buildMapsURL(location)", location)
+    let street_1, street_2, zipcode, city_name, province_name, country_name
+    
+    street_1 = (location.street_1) ? location.street_1 : null
+    street_2 = (location.street_2) ? location.street_2 : null
+    zipcode = (location.zipcode) ? location.zipcode : null
+    city_name = (location.city.name) ? location.city.name : null
+    province_name = (location.province.iso2) ? location.province.iso2 : (location.province.iso3) ? location.province.iso3 : (location.province.name) ? location.province.name : null
+    country_name = (location.province.name) ? location.country.name : (location.country.iso2) ? location.country.iso2 : (location.country.iso3) ? location.country.iso3 : null
+    
+    street_1 = (street_1 !== null) ? street_1 : null
+    street_2 = (street_2 !== null) ? street_2 : null
+    zipcode = (zipcode !== null) ? zipcode : null
+    city_name = (city_name !== null) ? city_name : null
+    province_name = (province_name !== null) ? province_name : null
+    country_name = (country_name !== null) ? country_name : null
+    
+    /*
+    
+    // Viale Rinascimento, 141, 63074 San Benedetto del Tronto AP, Italy
+    // +39 0735 615400
+    // https://www.smeraldosuitehotel.com/
+    // CITY - San Benedetto Del Tronto: 844
+    // PROVINCE - Ascoli Piceno: 186
+    // COUNTRY - Italy: 102
+    
+    Console.log("street_1", street_1)
+    Console.log("street_2", street_2)
+    Console.log("city_name", city_name)
+    Console.log("province_name", province_name)
+    Console.log("country_name", country_name)
+    Console.log("zipcode", zipcode)
+    //*/
+    
+    let tempURL = []
+    
+    if (!is_null(street_1)) {
+        tempURL.push(street_1)
+    }
+    
+    if (!is_null(street_2)) {
+        tempURL.push(street_2)
+    }
+    
+    if (!is_null(city_name)) {
+        //tempURL.push(city_name)
+    }
+    
+    let provinceLine = ""
+    
+    if (!is_null(city_name) && !is_null(province_name) && !is_null(zipcode)) {
+        provinceLine = zipcode + " " + city_name + " " + province_name
+    } else if (is_null(city_name) && !is_null(province_name) && !is_null(zipcode)) {
+        provinceLine = zipcode + " " + province_name
+    } else if (is_null(city_name) && is_null(province_name) && !is_null(zipcode)) {
+        provinceLine = zipcode
+    } else if (!is_null(city_name) && is_null(province_name) && !is_null(zipcode)) {
+        provinceLine = zipcode + " " + city_name
+    } else if (!is_null(city_name) && !is_null(province_name) && is_null(zipcode)) {
+        provinceLine = city_name + " " + province_name
+    } else {
+    
+    }
+    if (provinceLine !== "") {
+        tempURL.push(provinceLine)
+    }
+    
+    if (!is_null(country_name)) {
+        tempURL.push(country_name)
+    }
+    
+    let location_formatted = tempURL.join(", ")
+    location_formatted = formatURL(location_formatted)
+    return `https://maps.google.com/maps?q=${location_formatted}&t=&z=7&ie=UTF8&iwloc=&output=embed`
+}
+const weatherUpdate = function (city) {
+    const xhr = new XMLHttpRequest()
+    const apiKey = "2ad550b2d7e352b38c3ca9da8396aade"
+    let cityName = city
+    xhr.open(
+      "GET",
+      `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`)
+    
+    xhr.send()
+    xhr.onload = () => {
+        if (xhr.status === 404) {
+            Console.log(`${cityName} not found`)
+        } else {
+            let data = JSON.parse(xhr.response)
+            let mainWeatherCityName = data.name
+            let mainWeatherTemperature = `${Math.round(data.main.temp - 273.15)}°C`
+            let mainWeather = data.weather[0].main
+            let mainWeatherDescription = data.weather[0].description
+            let mainWeatherImage = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
+            Console.log("mainWeatherCityName", mainWeatherCityName)
+            Console.log("mainWeatherTemperature", mainWeatherTemperature)
+            Console.log("mainWeather", mainWeather)
+            Console.log("mainWeatherDescription", mainWeatherDescription)
+            Console.log("mainWeatherImage", mainWeatherImage)//100x100
+            Console.log("data", data)
+        }
+    }
 }
 
 const tinyEditor = (function () {
@@ -12024,7 +12130,7 @@ $(function () {
 })
 
 $(document).ready(function () {
-    
+    let codeData = document.querySelectorAll(".panel-code")
     window.addEventListener("resize", debounce(function (e) {
         resize_elements("end of resizing")
     }))
@@ -12090,50 +12196,48 @@ $(document).ready(function () {
     //toastr.warning('I do not think that word means what you think it means.', 'Warning!')
     //toastr.error('I do not think that word means what you think it means.', 'Error!')
     
-    document.addEventListener("DOMContentLoaded", function () {
-        const jsonPrettify = (json) => {
-            if (typeof json === "object" && json !== null) {
-                return JSON.stringify(json, undefined, '\t')
-            }
-            
-            try {
-                const obj = JSON.parse(json)
-                return jsonPrettify(obj)
-            } catch (e) {
-                return json
-            }
+    const jsonPrettify = (json) => {
+        if (typeof json === "object" && json !== null) {
+            return JSON.stringify(json, undefined, '\t')
         }
         
-        let codeData = document.querySelectorAll(".panel-code")
-        codeData.forEach(el => {
-            let html = $(el).html()
-            let formattedCode = ""
-            let classValue = ""
-            $(el).empty()
-            
-            if (el.dataset.datatype === "json") {
-                formattedCode = jsonPrettify(html)
-                classValue = "json"
-            } else if (el.dataset.datatype === "jsonp") {
-                formattedCode = jsonPrettify(html)
-                classValue = "jsonp"
-            } else if (el.dataset.datatype === "json5") {
-                formattedCode = jsonPrettify(html)
-                classValue = "json5"
-            }
-            
-            let pre = document.createElement("pre")
-            let code = document.createElement("code")
-            
-            code.classList = [`language-${classValue}`]
-            code.innerHTML = formattedCode
-            
-            pre.appendChild(code)
-            el.appendChild(pre)
-        })
+        try {
+            const obj = JSON.parse(json)
+            return jsonPrettify(obj)
+        } catch (e) {
+            return json
+        }
+    }
+    
+    codeData.forEach(el => {
+        let html = $(el).html()
+        let formattedCode = ""
+        let classValue = ""
+        $(el).empty()
         
-        $("button.pre_display_button").show()
-        $("div.pre_display_el").hide()
+        if (el.dataset.datatype === "json") {
+            formattedCode = jsonPrettify(html)
+            classValue = "json"
+        } else if (el.dataset.datatype === "jsonp") {
+            formattedCode = jsonPrettify(html)
+            classValue = "jsonp"
+        } else if (el.dataset.datatype === "json5") {
+            formattedCode = jsonPrettify(html)
+            classValue = "json5"
+        }
+        
+        let pre = document.createElement("pre")
+        let code = document.createElement("code")
+        
+        code.classList = [`language-${classValue}`]
+        code.innerHTML = formattedCode
+        
+        pre.appendChild(code)
+        el.appendChild(pre)
+        Prism.highlightElement(code)
     })
+    
+    $("button.pre_display_button").show()
+    $("div.pre_display_el").hide()
 })
 

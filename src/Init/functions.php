@@ -72,7 +72,7 @@
         echo "
         <div class='col-sm-3 pre_display'>
             <button type='button' id='$button_id' class='btn btn-primary pre_display_button waves-effect waves-light' onclick=\"$('#$block_id').show();$('#$button_id').hide();\">$title</button>
-            <div id='$block_id' class=' pre_display_el'>
+            <div id='$block_id' class='pre_display_el'>
                 <div class='panel w-100'>
                     <div class='panel-heading'>
                         <h3 class='panel-title'>$title</h3>

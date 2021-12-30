@@ -216,6 +216,14 @@ const getListOfIds = function (list) {
     return []
 }
 
+const formatListOfIds = function (list) {
+    let vals = ""
+    if (list && typeof list === "object") {
+        vals = list.join(',')
+    }
+    return vals
+}
+
 const sendGetRequest = function (url, data_to_send, callback) {
     
     let result = []

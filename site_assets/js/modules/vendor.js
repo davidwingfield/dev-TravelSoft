@@ -222,7 +222,7 @@ const Vendor = (function () {
           update()
       })
     
-    const init_autocomplete = function () {
+    const initAutoComplete = function () {
         if (_vendor_name) {
             $(_vendor_name)
               .on("change", function () {
@@ -816,7 +816,7 @@ const Vendor = (function () {
         if (_form_edit_vendor) {
             if (_vendor_name) {
                 _vendor_name.value = (settings.name) ? settings.name : ""
-                init_autocomplete()
+                initAutoComplete()
             }
             if (_vendor_id) {
                 _vendor_id.value = (settings.id) ? settings.id : ""

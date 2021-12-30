@@ -64,6 +64,7 @@
     
     $season_dropdown .= "</div>";
 ?>
+
 <section id="product_edit_season_section">
     
     <div class="row">
@@ -77,25 +78,52 @@
                         </span>
                     </div>
                     <input type="search" id="product_edit_season_form_season_name_filter" name="product_edit_season_form_season_name_filter" class="form-control" placeholder="Search Seasons"/>
-                    <!--
-                    <div class="input-group-append">
-                        <button type="button" id="product_edit_season_form_season_name_filter_add_new_button" name="product_edit_season_form_season_name_filter_add_new_button" class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    -->
                 </div>
                 <div id="product_edit_season_form_season_name_filter-error" class="error w-100 text-center"></div>
             </div>
         </div>
     </div>
     
-    <div class="card card-body" id="edit_season">
+    <div class="row">
+        <div class="col-12">
+            <?php include_once(VIEWS_PATH . "/seasons/tables/product_edit_season_table.phtml"); ?>
+        </div>
+    </div>
+    
+    <div class="card card-body mb-2" id="edit_season" style="display:none">
         
         <h5 class="card-title"><span>Add/Edit Season</span></h5>
         <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
         <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
         
+        <div class="row">
+            <div class="col-12">
+                
+                <button type="button" id="edit_season_cancel_button" class="btn btn-danger btn-sm" disabled="disabled">
+                    <i class="fas fa-edit mx-2"></i>
+                    <span class="">Cancel</span>
+                </button>
+                
+                <button type="button" id="edit_season_update_button" class="btn btn-outline-info btn-sm" disabled="disabled">
+                    <i class="fas fa-edit mx-2"></i>
+                    <span class="">Update</span>
+                </button>
+                
+                <button type="button" id="edit_season_button" class="btn btn-outline-primary btn-sm" disabled="disabled">
+                    <i class="fas fa-edit mx-2"></i>
+                    <span class="">Edit</span>
+                </button>
+            </div>
+        </div>
+    
+    </div>
+    
+    <div class="card card-body mb-2">
+        <h5 class="card-title">
+            <span>Season</span>
+        </h5>
+        <h6 class="card-subtitle mb-2 text-muted" id="display_product_season_name">Details</h6>
+        <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
         <div class="row">
             
             <!-- Season Id -->
@@ -144,94 +172,21 @@
                 </div>
             </div>
             <!-- /Season Enabled -->
-            
-            <div class="col-12 col-lg-2 d-flex align-self-end justify-content-end pb-2">
-                <button type="button" id="edit_season_button" class="btn btn-outline-primary btn-sm" disabled="disabled">
-                    <i class="fas fa-edit mx-2"></i>
-                    <span class="">Edit</span>
-                </button>
-            </div>
         
         </div>
-        
-        <hr>
-        
-        <div class="card card-body" id="season_disabled_dow">
-            <div class="row">
-                <div class="col-12 col-md-2">
-                    <label for="">Disabled DOW:</label>
-                </div>
-                
-                <div class="col-12 col-md-10">
-                    <!-- Default inline 1-->
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input dow_select" name="dow_select" id="dow_select_all">
-                        <label class="custom-control-label" for="dow_select_all">Select All</label>
-                    </div>
-                    
-                    <!-- Default inline 2-->
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input dow_select" name="dow_select" id="dow_select_sun">
-                        <label class="custom-control-label" for="dow_select_sun">Sunday</label>
-                    </div>
-                    
-                    <!-- Default inline 3-->
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input dow_select" name="dow_select" id="dow_select_mon">
-                        <label class="custom-control-label" for="dow_select_mon">Monday</label>
-                    </div>
-                    
-                    <!-- Default inline 4-->
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input dow_select" name="dow_select" id="dow_select_tue">
-                        <label class="custom-control-label" for="dow_select_tue">Tuesday</label>
-                    </div>
-                    
-                    <!-- Default inline 5-->
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input dow_select" name="dow_select" id="dow_select_wed">
-                        <label class="custom-control-label" for="dow_select_wed">Wednesday</label>
-                    </div>
-                    <!-- /Default inline 5-->
-                    
-                    <!-- Default inline 6-->
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input dow_select" name="dow_select" id="dow_select_thu">
-                        <label class="custom-control-label" for="dow_select_thu">Thursday</label>
-                    </div>
-                    
-                    <!-- Default inline 7-->
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" name="dow_select" id="dow_select_fri">
-                        <label class="custom-control-label dow_select" for="dow_select_fri">Friday</label>
-                    </div>
-                    
-                    <!-- Default inline 8-->
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input dow_select" name="dow_select" id="dow_select_sat">
-                        <label class="custom-control-label" for="dow_select_sat">Saturday</label>
-                    </div>
-                
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-6 text-left w-100">
-                    <a href="javascript:void(0);" id="button_assign_season_to_product" class="btn btn-secondary btn-sm waves-effect waves-light">Assign</a>
-                </div>
-                <div class="col-6 text-right w-100">
-                    <a href="javascript:void(0);" id="button_clear_form_edit_season" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
-                    <a href="javascript:void(0);" id="button_submit_form_edit_season" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
-                </div>
-            </div>
-        
-        </div>
+        <div id="season_disabled_dow" class=""></div>
         
         <div class="row">
-            <div class="col-12">
-                <?php include_once(VIEWS_PATH . "/seasons/tables/product_edit_season_table.phtml"); ?>
+            <div class="col-6 text-left w-100">
+                <a href="javascript:void(0);" id="button_assign_season_to_product" class="btn btn-secondary btn-sm waves-effect waves-light">Assign</a>
+            </div>
+            <div class="col-6 text-right w-100">
+                <a href="javascript:void(0);" id="button_clear_form_edit_season" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+                <a href="javascript:void(0);" id="button_submit_form_edit_season" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
             </div>
         </div>
+    
+    </div>
 
 </section>
 
@@ -251,589 +206,17 @@
      * sort_order: 14
      * text_color: "#ffffff"
      **/
-    const ColorSwatches = (function () {
-        "use strict"
-        const _product_edit_season_id = document.getElementById("product_edit_season_id")
-        const _season_id = document.getElementById("season_id")
-        const _edit_scheme = document.getElementById("edit_scheme")
-        const _form_edit_scheme = document.getElementById("form_edit_scheme")
-        const _product_edit_season_id_name_display = document.getElementById("product_edit_season_id_name_display")
-        const _button_close_edit_scheme = document.getElementById("button_close_edit_scheme")
-        let season_toggle_items
-        
-        //
-        $(_button_close_edit_scheme)
-          .on("click", function () {
-              $(_edit_scheme).hide()
-          })
-        
-        $(_season_id)
-          .on("click", function () {
-              $(_edit_scheme).show()
-          })
-        
-        //
-        const reset_form = function () {
-        
-        }
-        
-        const load_form = function (scheme) {
-            if (scheme) {
-            
-            }
-        }
-        
-        const edit = function (el) {
-            $(".color_scheme_block").removeClass("active")
-            $(el).addClass("active")
-        }
-        
-        const load_all = function (swatches) {
-            ColorSwatches.all = new Map()
-            if (swatches) {
-                $.each(swatches, function (k, swatch) {
-                    ColorSwatches.all.set(parseInt(swatch.id), swatch)
-                })
-            }
-        }
-        
-        const init = function (settings) {
-            if (settings) {
-                if (settings.swatches) {
-                    load_all(settings.swatches)
-                }
-            }
-            
-            season_toggle_items = document.querySelectorAll(".season_toggle_item")
-            season_toggle_items.forEach(el => el.addEventListener("click", event => {
-                let color_scheme_id = parseInt(el.dataset.colorschemeid)
-                let scheme = ColorSwatches.all.get(color_scheme_id)
-                if (scheme) {
-                    load(scheme)
-                }
-            }))
-        }
-        
-        const load = function (scheme) {
-            if (scheme) {
-                let background_color = (scheme.background_color) ? scheme.background_color : null
-                let border_color = (scheme.border_color) ? scheme.border_color : null
-                let color_scheme_id = parseInt(scheme.id)
-                let text_color = (scheme.text_color) ? scheme.text_color : null
-                let scheme_name = (scheme.name) ? scheme.name : null
-                let elem = document.querySelector("#product_edit_season_id")
-                
-                $(_product_edit_season_id_name_display).text(`
-                    ${scheme_name}
-                `)
-                
-                $("a.dropdown-item.season_toggle_item").removeClass("active")
-                $(`a#${color_scheme_id}`).addClass("active")
-                elem.style.setProperty("color", text_color, 'important')
-                elem.style.setProperty("background-color", background_color, 'important')
-                elem.style.setProperty("border-color", border_color, 'important')
-            }
-        }
-        
-        const change = function (el) {
-            Console.log("ColorSwatches:change(el)", el)
-        }
-        
-        return {
-            all: new Map(),
-            load: function (scheme) {
-                load(scheme)
-            },
-            edit: function (el) {
-                edit(el)
-            },
-            change: function (el) {
-                change(el)
-            },
-            init: function (settings) {
-                init(settings)
-            },
-        }
-    })()
-    
-    $(document).ready(function () {
-        
-        let swatches = <?php echo json_encode($swatches, 1);?>;
-        let settings = {
-            swatches: <?php echo $color_scheme;?>,
-            els: [
-                "#form_edit_scheme_background_color",
-                "#form_edit_scheme_text_color",
-                "#form_edit_scheme_border_color",
-            ],
-        }
-        
-        ColorSwatches.init(settings)
-        /*
-        const pickrText = Pickr.create({
-            el: "#form_edit_scheme_text_color",
-            default: "303030",
-            theme: "classic", // or 'classic', or 'monolith', or 'nano'
-            swatches: swatches,
-            components: {
-                
-                preview: true,
-                opacity: true,
-                hue: true,
-                
-                interaction: {
-                    hex: true,
-                    rgba: true,
-                    hsla: true,
-                    hsva: true,
-                    cmyk: true,
-                    input: true,
-                    clear: true,
-                    save: true,
-                },
-            },
-        })
-        
-        const pickrBackground = Pickr.create({
-            el: "#form_edit_scheme_background_color",
-            default: "303030",
-            theme: "classic", // or 'classic', or 'monolith', or 'nano'
-            swatches: swatches,
-            components: {
-                
-                preview: true,
-                opacity: true,
-                hue: true,
-                
-                interaction: {
-                    hex: true,
-                    rgba: true,
-                    hsla: true,
-                    hsva: true,
-                    cmyk: true,
-                    input: true,
-                    clear: true,
-                    save: true,
-                },
-            },
-        })
-        
-        const pickrBorder = Pickr.create({
-            el: "#form_edit_scheme_border_color",
-            default: "303030",
-            theme: "classic", // or 'classic', or 'monolith', or 'nano'
-            swatches: swatches,
-            components: {
-                
-                preview: true,
-                opacity: true,
-                hue: true,
-                
-                interaction: {
-                    hex: true,
-                    rgba: true,
-                    hsla: true,
-                    hsva: true,
-                    cmyk: true,
-                    input: true,
-                    clear: true,
-                    save: true,
-                },
-            },
-        })
-        
-        pickrText.on("init", instance => {
-            //Console.log('Event: "init"', instance)
-        }).on("hide", instance => {
-            //Console.log('Event: "hide"', instance)
-        }).on("show", (color, instance) => {
-            //Console.log('Event: "show"', color, instance)
-        }).on("save", (color, instance) => {
-            Console.log('Event: "save"', color, instance)
-        }).on("clear", instance => {
-            Console.log('Event: "clear"', instance)
-        }).on('change', (color, source, instance) => {
-            Console.log('Event: "change"', color, source, instance)
-        }).on('changestop', (source, instance) => {
-            //Console.log('Event: "changestop"', source, instance)
-        }).on('cancel', instance => {
-            Console.log('Event: "cancel"', instance)
-        }).on('swatchselect', (color, instance) => {
-            Console.log('Event: "swatchselect"', color, instance)
-            let c = "#" + color.toHEXA().join('')
-            Console.log('Event: "swatchselect"', c)
-        })
-        //*/
-        
-        const LightenDarkenColor = function (col, amt) {
-            var usePound = false
-            if (col[0] === "#") {
-                col = col.slice(1)
-                usePound = true
-            }
-            
-            var num = parseInt(col, 16)
-            
-            var r = (num >> 16) + amt
-            
-            if (r > 255) {
-                r = 255
-            } else if (r < 0) {
-                r = 0
-            }
-            
-            var b = ((num >> 8) & 0x00FF) + amt
-            
-            if (b > 255) {
-                b = 255
-            } else if (b < 0) {
-                b = 0
-            }
-            
-            var g = (num & 0x0000FF) + amt
-            
-            if (g > 255) {
-                g = 255
-            } else if (g < 0) {
-                g = 0
-            }
-            
-            return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16)
-        }
-        
-        const contrastingColor = function (color) {
-            return (luma(color) >= 165) ? "000" : "fff"
-        }
-        
-        const luma = function (color) {
-            var rgb = (typeof color === 'string') ? hexToRGBArray(color) : color
-            return (0.2126 * rgb[0]) + (0.7152 * rgb[1]) + (0.0722 * rgb[2]) // SMPTE C, Rec. 709 weightings
-        }
-        
-        const hexToRGBArray = function (color) {
-            if (color.length === 3) {
-                color = color.charAt(0) + color.charAt(0) + color.charAt(1) + color.charAt(1) + color.charAt(2) + color.charAt(2)
-            } else if (color.length !== 6) {
-                throw('Invalid hex color: ' + color)
-            }
-            var rgb = []
-            for (var i = 0; i <= 2; i++)
-                rgb[i] = parseInt(color.substr(i * 2, 2), 16)
-            return rgb
-        }
-        
-        const pSBC = (p, c0, c1, l) => {
-            let r, g, b, P, f, t, h, i = parseInt, m = Math.round, a = typeof (c1) == "string"
-            if (typeof (p) != "number" || p < -1 || p > 1 || typeof (c0) != "string" || (c0[0] != 'r' && c0[0] != '#') || (c1 && !a)) {
-                return null
-            }
-            if (!this.pSBCr) {
-                this.pSBCr = (d) => {
-                    let n = d.length, x = {}
-                    if (n > 9) {
-                        [r, g, b, a] = d = d.split(","), n = d.length
-                        if (n < 3 || n > 4) {
-                            return null
-                        }
-                        x.r = i(r[3] == "a" ? r.slice(5) : r.slice(4)), x.g = i(g), x.b = i(b), x.a = a ? parseFloat(a) : -1
-                    } else {
-                        if (n == 8 || n == 6 || n < 4) {
-                            return null
-                        }
-                        if (n < 6) {
-                            d = "#" + d[1] + d[1] + d[2] + d[2] + d[3] + d[3] + (n > 4 ? d[4] + d[4] : "")
-                        }
-                        d = i(d.slice(1), 16)
-                        if (n == 9 || n == 5) {
-                            x.r = d >> 24 & 255, x.g = d >> 16 & 255, x.b = d >> 8 & 255, x.a = m((d & 255) / 0.255) / 1000
-                        } else {
-                            x.r = d >> 16, x.g = d >> 8 & 255, x.b = d & 255, x.a = -1
-                        }
-                    }
-                    return x
-                }
-            }
-            h = c0.length > 9, h = a ? c1.length > 9 ? true : c1 == "c" ? !h : false : h, f = this.pSBCr(c0), P = p < 0, t = c1 && c1 != "c" ? this.pSBCr(c1) : P ? {
-                r: 0,
-                g: 0,
-                b: 0,
-                a: -1,
-            } : {
-                r: 255,
-                g: 255,
-                b: 255,
-                a: -1,
-            }, p = P ? p * -1 : p, P = 1 - p
-            if (!f || !t) {
-                return null
-            }
-            if (l) {
-                r = m(P * f.r + p * t.r), g = m(P * f.g + p * t.g), b = m(P * f.b + p * t.b)
-            } else {
-                r = m((P * f.r ** 2 + p * t.r ** 2) ** 0.5), g = m((P * f.g ** 2 + p * t.g ** 2) ** 0.5), b = m((P * f.b ** 2 + p * t.b ** 2) ** 0.5)
-            }
-            a = f.a, t = t.a, f = a >= 0 || t >= 0, a = f ? a < 0 ? t : t < 0 ? a : a * P + t * p : 0
-            if (h) {
-                return "rgb" + (f ? "a(" : "(") + r + "," + g + "," + b + (f ? "," + m(a * 1000) / 1000 : "") + ")"
-            } else {
-                return "#" + (4294967296 + r * 16777216 + g * 65536 + b * 256 + (f ? m(a * 255) : 0)).toString(16).slice(1, f ? undefined : -2)
-            }
-        }
-        
-    })
-
-</script>
-
-<script>
-    
-    $.fn.DisabledDOW = function (settings) {
-        "use strict"
-        let id = this.attr("id")
-        let name = id + "_dow_select"
-        
-        const _this = document.getElementById(id)
-        const $this = $(_this)
-        
-        const disabled_dow = document.querySelectorAll(".dow_select")
-        
-        $this.on("change", function () {
-            console.log("change")
-        })
-        
-        const buildCheckBox = function (id) {
-            //<input type="checkbox" class="custom-control-input dow_select" name="dow_select" id="dow_select_sun">
-            let input = document.createElement("input")
-            input.classList = "custom-control-label"
-            input.id = name + "_" + id
-            
-            return input
-        }
-        
-        const buildCheckBoxWrapper = function (id) {
-            //<div class="custom-control custom-checkbox custom-control-inline">
-        }
-        const days = new Map()
-        days.set("*", {
-            label: "All",
-            for: "dow_select_all",
-        })
-        days.set(0, {
-            label: "Sunday",
-            for: "dow_select_sun",
-        })
-        days.set(1, {
-            label: "Monday",
-            for: "dow_select_mon",
-        })
-        days.set(2, {
-            label: "Tuesday",
-            for: "dow_select_mon",
-        })
-        days.set(3, {
-            label: "Monday",
-            for: "dow_select_mon",
-        })
-        days.set(4, {
-            label: "Monday",
-            for: "dow_select_mon",
-        })
-        days.set(5, {
-            label: "Monday",
-            for: "dow_select_mon",
-        })
-        days.set(6, {
-            label: "Saturday",
-            for: "dow_select_sat",
-        })
-        const buildCheckBoxLabel = function (name) {
-            //<label class="custom-control-label" for="dow_select_sun">Sunday</label>
-            let label = document.createElement("label")
-            label.classList = "custom-control-label"
-            label.htmlFor = name
-            return label
-        }
-        
-        const buildCheckBoxColumn = function () {
-            let div = document.createElement("div")
-            div.classList = "col-12 col-md-10"
-            
-            $.each(days, function (k, day) {
-                console.log(day)
-            })
-            return div
-        }
-        
-        const buildCheckBoxColumnLabel = function () {
-            let div = document.createElement("div")
-            let label = document.createElement("label")
-            label.innerText = "Disabled DOW:"
-            
-            div.classList = "col-12 col-md-2"
-            
-            div.appendChild(label)
-            return div
-        }
-        
-        const buildCheckBoxRow = function () {
-            let div = document.createElement("div")
-            div.classList = "row"
-            return div
-        }
-        
-        const buildForm = function () {
-            $this.empty()
-            let row = buildCheckBoxRow()
-            let leadColumn = buildCheckBoxColumnLabel()
-            let column = buildCheckBoxColumn()
-            row.appendChild(leadColumn)
-            row.appendChild(column)
-            _this.appendChild(row)
-        }
-        
-        const set = function (el, val) {
-            let indexId, index
-            switch (val) {
-                case "dow_select_all":
-                    
-                    if (el.checked === true) {
-                        DisabledDOW.disabled_dows = [0, 1, 2, 3, 4, 5, 6]
-                    } else {
-                        DisabledDOW.disabled_dows = []
-                    }
-                    DisabledDOW.disabled_dows.sort()
-                    Console.log("dow_select_all", DisabledDOW.disabled_dows)
-                    break
-                case "dow_select_sun":
-                    indexId = 0
-                    index = DisabledDOW.disabled_dows.indexOf(indexId)
-                    if (el.checked === true) {
-                        if (!index > -1) {
-                            DisabledDOW.disabled_dows.push(indexId)
-                        }
-                    } else {
-                        if (index > -1) {
-                            DisabledDOW.disabled_dows.splice(index, 1)
-                        }
-                    }
-                    DisabledDOW.disabled_dows.sort()
-                    Console.log("dow_select_sun", DisabledDOW.disabled_dows)
-                    break
-                case "dow_select_mon":
-                    indexId = 1
-                    index = DisabledDOW.disabled_dows.indexOf(indexId)
-                    if (el.checked === true) {
-                        if (!index > -1) {
-                            DisabledDOW.disabled_dows.push(indexId)
-                        }
-                    } else {
-                        if (index > -1) {
-                            DisabledDOW.disabled_dows.splice(index, 1)
-                        }
-                    }
-                    DisabledDOW.disabled_dows.sort()
-                    Console.log("dow_select_mon", DisabledDOW.disabled_dows)
-                    break
-                case "dow_select_tue":
-                    indexId = 2
-                    index = DisabledDOW.disabled_dows.indexOf(indexId)
-                    if (el.checked === true) {
-                        if (!index > -1) {
-                            DisabledDOW.disabled_dows.push(indexId)
-                        }
-                    } else {
-                        if (index > -1) {
-                            DisabledDOW.disabled_dows.splice(index, 1)
-                        }
-                    }
-                    DisabledDOW.disabled_dows.sort()
-                    Console.log("dow_select_tue", DisabledDOW.disabled_dows)
-                    break
-                case "dow_select_wed":
-                    indexId = 3
-                    index = DisabledDOW.disabled_dows.indexOf(indexId)
-                    if (el.checked === true) {
-                        if (!index > -1) {
-                            DisabledDOW.disabled_dows.push(indexId)
-                        }
-                    } else {
-                        if (index > -1) {
-                            DisabledDOW.disabled_dows.splice(index, 1)
-                        }
-                    }
-                    DisabledDOW.disabled_dows.sort()
-                    Console.log("dow_select_wed", DisabledDOW.disabled_dows)
-                    break
-                case "dow_select_thu":
-                    indexId = 4
-                    index = DisabledDOW.disabled_dows.indexOf(indexId)
-                    if (el.checked === true) {
-                        if (!index > -1) {
-                            DisabledDOW.disabled_dows.push(indexId)
-                        }
-                    } else {
-                        if (index > -1) {
-                            DisabledDOW.disabled_dows.splice(index, 1)
-                        }
-                    }
-                    DisabledDOW.disabled_dows.sort()
-                    Console.log("dow_select_thu", DisabledDOW.disabled_dows)
-                    break
-                case "dow_select_fri":
-                    indexId = 5
-                    index = DisabledDOW.disabled_dows.indexOf(indexId)
-                    if (el.checked === true) {
-                        if (!index > -1) {
-                            DisabledDOW.disabled_dows.push(indexId)
-                        }
-                    } else {
-                        if (index > -1) {
-                            DisabledDOW.disabled_dows.splice(index, 1)
-                        }
-                    }
-                    DisabledDOW.disabled_dows.sort()
-                    Console.log("dow_select_fri", DisabledDOW.disabled_dows)
-                    break
-                case "dow_select_sat":
-                    indexId = 6
-                    index = DisabledDOW.disabled_dows.indexOf(indexId)
-                    if (el.checked === true) {
-                        if (!index > -1) {
-                            DisabledDOW.disabled_dows.push(indexId)
-                        }
-                    } else {
-                        if (index > -1) {
-                            DisabledDOW.disabled_dows.splice(index, 1)
-                        }
-                    }
-                    DisabledDOW.disabled_dows.sort()
-                    Console.log("dow_select_sat", DisabledDOW.disabled_dows)
-                    break
-                default:
-                    break
-            }
-        }
-        
-        disabled_dow.forEach(el => el.addEventListener("click", event => {
-            let id = (el.id) ? el.id : ""
-            set(el, id)
-        }))
-        
-        const DisabledDOW = {
-            disabled_dows: [],
-            els: [],
-        }
-        
-        buildForm()
-        return DisabledDOW
+    let settings = {
+        swatches: <?php echo $color_scheme;?>,
+        els: [
+            "#form_edit_scheme_background_color",
+            "#form_edit_scheme_text_color",
+            "#form_edit_scheme_border_color",
+        ],
     }
-    
-    $(document).ready(function () {
-        let disabledDays = $("#season_disabled_dow").DisabledDOW({
-            name: "",
-        })
+    $(function () {
+        
+        ColorScheme.init(settings)
     })
-    /*
-    
-     */
-</script>
 
+</script>

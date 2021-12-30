@@ -49,7 +49,7 @@ const Unit = (function () {
         })
     }
     
-    const init_autocomplete = function () {
+    const initAutoComplete = function () {
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         $(_product_edit_unit_form_unit_name_filter)
@@ -202,7 +202,7 @@ const Unit = (function () {
         }
         
         if (_product_edit_unit_form_unit_name_filter) {
-            init_autocomplete()
+            initAutoComplete()
             Console.log("units", units)
             load_all(units)
         }

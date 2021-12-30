@@ -15,7 +15,7 @@ const Variant = (function () {
           alert()
       })
     
-    const init_autocomplete = function () {
+    const initAutoComplete = function () {
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         $(_product_edit_variant_form_variant_name_filter)
@@ -143,7 +143,7 @@ const Variant = (function () {
     
     const load_all = function (variants) {
         Variant.all = new Map()
-        Console.log("variants", variants)
+        
         if (variants) {
             $.each(variants, function (k, variant) {
                 let detail = set(variant)
@@ -169,7 +169,7 @@ const Variant = (function () {
         load_all(variants)
         
         if (_product_edit_variant_form_variant_name_filter) {
-            init_autocomplete()
+            initAutoComplete()
         }
         
         Console.log("init", Variant.all)

@@ -4,6 +4,8 @@
     
     use Framework\App\Models\SeasonModel;
     use Framework\Core\Controller;
+    use Framework\Core\View;
+    use Framework\Logger\Log;
     
     /**
      * Short Season Description
@@ -37,6 +39,40 @@
             $seasons = [];
             
             return $seasons;
+        }
+        
+        public static function serveUpdate(array $params = []): void
+        {
+            Log::$debug_log->trace("serveUpdate");
+            $seasons = array();
+            Log::$debug_log->trace($params);
+            $results = SeasonModel::update($params);
+            foreach ($results as $result) {
+                $seasons[] = self::format($result);
+            }
+            
+            /**
+             * render season json
+             */
+            View::render_json($seasons);
+            exit(0);
+        }
+        
+        public static function getSeasonByProductSeasonId(array $params = []): void
+        {
+            $seasons = array();
+            if (isset($params["product_id"], $params["season_id"])) {
+                $results = SeasonModel::getByProductIdSeasonId((int)$params["product_id"], (int)$params["season_id"]);
+                foreach ($results as $result) {
+                    $seasons[] = self::format($result);
+                }
+            }
+            
+            /**
+             * render season json
+             */
+            View::render_json($seasons);
+            exit(0);
         }
         
         public static function getSeasonsByProductId(int $product_id = null): array

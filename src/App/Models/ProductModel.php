@@ -27,6 +27,7 @@
                 PRODUCT.currency_id AS 'product_currency_id',
                 PRODUCT.location_id AS 'product_location_id',
                 PRODUCT.provider_id AS 'product_provider_id',
+                PRODUCT.city_id AS 'product_city_id',
                 PRODUCT.vendor_id AS 'product_vendor_id',
                 PRODUCT.rating_types_id AS 'product_rating_types_id',
                 PRODUCT.name AS 'product_name',
@@ -164,6 +165,7 @@
             
             $id = Model::setInt((isset($product["id"])) ? $product["id"] : null);
             $category_id = Model::setInt((isset($product["category_id"])) ? $product["category_id"] : null);
+            $city_id = Model::setInt((isset($product["city_id"])) ? $product["city_id"] : null);
             $location_id = Model::setInt((isset($product["location_id"])) ? $product["location_id"] : 1);
             $pricing_strategy_types_id = Model::setInt((isset($product["pricing_strategy_types_id"])) ? $product["pricing_strategy_types_id"] : null);
             $status_types_id = Model::setInt((isset($product["status_types_id"])) ? $product["status_types_id"] : 1);
@@ -196,7 +198,7 @@
             $sql = "
                 INSERT INTO product (
                     id, category_id, pricing_strategy_types_id, status_types_id, currency_id,
-                    location_id, provider_id, vendor_id, rating_types_id, name,
+                    location_id, provider_id, vendor_id, rating_types_id, name, city_id,
                     description_short, description_long, keywords, sku, depart_from,
                     arrive_to, depart_time, arrive_time, provider_vendor_match, use_provider_location_id,
                     day_span, cover_image, api_id, from_api, hotel_code,
@@ -204,7 +206,7 @@
                     modified_by, note
                 ) VALUES (
                     $id, $category_id, $pricing_strategy_types_id, $status_types_id, $currency_id,
-                    $location_id, $provider_id, $vendor_id, $rating_types_id, $name,
+                    $location_id, $provider_id, $vendor_id, $rating_types_id, $name, $city_id,
                     $description_short, $description_long, $keywords, $sku, $depart_from,
                     $arrive_to, $depart_time, $arrive_time, $provider_vendor_match, $use_provider_location_id,
                     $day_span, '/public/img/placeholder.jpg', $api_id, 0, $hotel_code,
@@ -213,6 +215,7 @@
                 )
                 ON DUPLICATE KEY UPDATE
                     category_id = VALUES(category_id),
+                    city_id = VALUES(city_id),
                     pricing_strategy_types_id = VALUES(pricing_strategy_types_id),
                     status_types_id = VALUES(status_types_id),
                     currency_id = VALUES(currency_id),
@@ -242,7 +245,7 @@
                     modified_by = VALUES(modified_by),
                     date_modified = VALUES(date_modified);
             ";
-            Log::$debug_log->trace($sql);
+            
             try {
                 Model::$db->rawQuery($sql);
                 $product_id = Model::$db->getInsertId();

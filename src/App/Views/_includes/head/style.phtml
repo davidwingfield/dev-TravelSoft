@@ -1656,14 +1656,12 @@
     top: 0.95rem;
     }
   
-  .trips-skin .btn-primary.dropdown-toggle.season_toggle {
+  .trips-skin .btn-primary.dropdown-toggle.season_toggle,
+  .trips-skin .btn-primary.dropdown-toggle.season_toggle:not([disabled]):not(.disabled):active {
     white-space: nowrap !important;
-    padding-left: 5px !important;
-    padding-right: 20px !important;
-    padding-top: 9px !important;
-    padding-bottom: 9px !important;
-    width: 160px !important;
-    max-width: 160px !important;
+    padding: 9px 20px 9px 5px !important;
+    width: 200px !important;
+    max-width: 200px !important;
     font-size: .8rem !important;
     font-weight: 400 !important;
     border-radius: 0.25rem !important;
@@ -1673,6 +1671,9 @@
     box-shadow: none;
     }
   
+  .trips-skin .btn-primary.dropdown-toggle.season_toggle.disabled {
+    pointer-events: none;
+    }
   
   a.season_toggle::after {
     display: inline-flex;
@@ -1690,9 +1691,9 @@
   
   a.season_toggle span {
     display: inline-block;
-    min-width: 110px;
-    max-width: 110px;
-    width: 110px;
+    min-width: 150px;
+    max-width: 150px;
+    width: 150px;
     font-size: .85rem;
     font-weight: 400;
     -webkit-line-clamp: 1;
@@ -1764,5 +1765,149 @@
     height: 16px;
     width: 16px;
     margin-left: 0.5rem;
+    }
+  
+  
+  td.selected {
+    background: rgba(0, 0, 255, .20)
+    }
+  
+  .fc .fc-toolbar {
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+    }
+  
+  .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 0.5rem;
+    }
+  
+  .modal-fullscreen {
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+    }
+  
+  #modalHeader {
+    
+    }
+  
+  #modalFooter {
+    
+    
+    }
+  
+  #modalBody {
+    overflow: hidden
+    
+    }
+  
+  #calendar {
+    overflow: auto;
+    height: 73vh;
+    overflow-y: scroll;
+    }
+  
+  .modal-fullscreen {
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+    }
+  
+  .calendar-loader {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, .5);
+    z-index: 12;
+    top: 0;
+    color: #074f95;
+    left: 0;
+    }
+  
+  .form-element.element-sm {
+    display: -ms-flexbox !important;
+    display: flex !important;
+    -ms-flex-pack: justify !important;
+    justify-content: space-between !important;
+    margin-bottom: 0
+    }
+  
+  .form-element.element-sm input {
+    background-clip: padding-box;
+    font-weight: 400;
+    width: 60% !important;
+    height: calc(1.5em + 0.5rem + 2px);
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25;
+    border-radius: 0.2rem;
+    color: #495057;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+  
+  .matrix-season-name {
+    font-size: .9rem;
+    font-weight: 500;
+    color: #0a070d;
+    }
+  
+  .matrix-unit-name {
+    font-size: .9rem;
+    font-weight: 500;
+    color: #0a070d;
+    }
+  
+  .form-element.element-sm label {
+    width: 40%;
+    display: inline-block;
+    font-size: .85rem;
+    font-weight: 400;
+    color: #0a070d;
+    }
+  
+  
+  .w-10 {
+    width: 10% !important;
+    }
+  
+  .w-20 {
+    width: 20% !important;
+    }
+  
+  .w-30 {
+    width: 30% !important;
+    }
+  
+  .w-40 {
+    width: 40% !important;
+    }
+  
+  .w-60 {
+    width: 60% !important;
+    }
+  
+  .w-70 {
+    width: 70% !important;
+    }
+  
+  .w-80 {
+    width: 80% !important;
+    }
+  
+  .w-90 {
+    width: 90% !important;
     }
 </style>

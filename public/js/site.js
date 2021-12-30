@@ -35,6 +35,9 @@ const toastrOptions = {
     "showMethod": "fadeIn",
     "hideMethod": "fadeOut",
 }
+let dow_short = [
+    "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
+]
 const days = [
     {
         0: {
@@ -392,6 +395,14 @@ const getListOfIds = function (list) {
     }
     
     return []
+}
+
+const formatListOfIds = function (list) {
+    let vals = ""
+    if (list && typeof list === "object") {
+        vals = list.join(',')
+    }
+    return vals
 }
 
 const sendGetRequest = function (url, data_to_send, callback) {
@@ -1367,11 +1378,87 @@ const Season = (function () {
     const _category_id = document.getElementById("category_id")
     const _product_edit_season_form_season_color_scheme_id = document.getElementById("product_edit_season_form_season_color_scheme_id")
     const _edit_season = document.getElementById("edit_season")
+    const _product_edit_season_form_season_id = document.getElementById("product_edit_season_form_season_id")
+    const _product_edit_season_form_season_name = document.getElementById("product_edit_season_form_season_name")
+    const _product_edit_season_id_name_display = document.getElementById("product_edit_season_id_name_display")
+    const _product_edit_season_form_season_enabled = document.getElementById("product_edit_season_form_season_enabled")
+    const _edit_season_button = document.getElementById("edit_season_button")
+    const _table_season_product_edit = document.getElementById("table_season_product_edit")
+    const _season_disabled_dow = document.getElementById("season_disabled_dow")
+    const _button_clear_form_edit_season = document.getElementById("button_clear_form_edit_season")
     const _button_assign_season_to_product = document.getElementById("button_assign_season_to_product")
+    const _display_product_season_name = document.getElementById("display_product_season_name")
+    const _button_submit_form_edit_season = document.getElementById("button_submit_form_edit_season")
+    const _product_id = document.getElementById("product_id")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let categories = new Map()
+    let $table_season_product_edit, disabledDays
     
-    const init_autocomplete = function () {
+    $(_edit_season_button)
+      .on("click", function () {
+          ColorScheme.enable()
+      })
+    
+    $(_button_clear_form_edit_season)
+      .on("click", function () {
+          _product_edit_season_form_season_name_filter.value = ""
+          reset_form()
+          clear_product_season_form()
+          $table_season_product_edit.clearSelectedRows()
+      })
+    
+    $(_button_submit_form_edit_season)
+      .on("click", function () {
+          
+          let dataToSend = buildUpdateRecord()
+          
+          confirmDialog(`Would you like to update?`, (ans) => {
+              if (ans) {
+                  saveProductSeason(dataToSend)
+              }
+              
+          })
+      })
+    
+    const saveProductSeason = function (dataToSend) {
+        if (dataToSend) {
+            updateProductSeason(dataToSend, function (data) {
+                Console.log("data", data)
+            })
+        }
+    }
+    
+    const handleSeasonError = function (msg) {
+        toastr.error(msg)
+    }
+    
+    const updateProductSeason = function (dataToSend, callback) {
+        let url = "/api/v1.0/seasons/update"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handleSeasonError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                Console.log(e)
+            }
+        }
+    }
+    
+    const buildUpdateRecord = function () {
+        return remove_nulls({
+            product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
+            season_id: (!isNaN(parseInt(_product_edit_season_form_season_id.value))) ? parseInt(_product_edit_season_form_season_id.value) : null,
+            disabled_dow: formatListOfIds(disabledDays.disabled_dows),
+        })
+    }
+    
+    const initAutoComplete = function () {
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         $(_product_edit_season_form_season_name_filter)
@@ -1379,26 +1466,14 @@ const Season = (function () {
           
           })
           .on("search", function () {
-          
+              $table_season_product_edit.clearSelectedRows()
+              reset_form()
           })
           .on("change", function () {
-              /*
-              setTimeout(function () {
-                  let provider_name = _provider_name.value
-                  
-                  if (globalSelectedProvider === false) {
-                      if (provider_name === "") {
-                          _provider_name.value = ""
-                          _provider_company_id.value = ""
-                          globalSelectedProvider = false
-                          $(_vendor_name).val("").trigger("change")
-                          $(_provider_company_id).val("").trigger("change")
-                      } else {
-                          provider_exists(provider_name)
-                      }
-                  }
-              }, 200)
-              //*/
+              if (_product_edit_season_form_season_name_filter.value === "") {
+                  $table_season_product_edit.clearSelectedRows()
+                  reset_form()
+              }
           })
           .autocomplete({
               serviceUrl: "/api/v1.0/autocomplete/seasons",
@@ -1412,15 +1487,26 @@ const Season = (function () {
                   if (!suggestion.data) {
                       return
                   }
+                  $table_season_product_edit.clearSelectedRows()
                   let season = suggestion.data
                   let color_scheme = (season.color_scheme) ? season.color_scheme : {}
-                  Console.log("season", season)
-                  Console.log("Season.all", Season.all)
+                  
                   _product_edit_season_form_season_id.value = season.id
                   _product_edit_season_form_season_name.value = season.name
                   _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
                   _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
-                  ColorSwatches.load(color_scheme)
+                  
+                  ColorScheme.load(color_scheme)
+                  ColorScheme.disable()
+                  
+                  _product_edit_season_form_season_enabled.disabled = true
+                  _edit_season_button.disabled = false
+                  
+                  let product_season = Season.all.get(season.id)
+                  if (product_season) {
+                      load_product_season_form(product_season)
+                      $table_season_product_edit.loadRow(product_season)
+                  }
               },
           })
     }
@@ -1456,6 +1542,21 @@ const Season = (function () {
                 date_modified: formatDateMySQL(),
                 modified_by: user_id,
                 note: null,
+            },
+            product_season_detail: {
+                created_by: user_id,
+                date_created: formatDateMySQL(),
+                date_modified: formatDateMySQL(),
+                disabled_dow: null,
+                enabled: 1,
+                id: null,
+                modified_by: user_id,
+                note: null,
+                product_id: null,
+                season_id: null,
+                seasons_background: null,
+                seasons_border: null,
+                seasons_text: null,
             },
         }
     }
@@ -1522,16 +1623,93 @@ const Season = (function () {
         }
     }
     
+    const set = function (season) {
+        let detail = defaultDetail()
+        if (season) {
+            detail = season
+            
+        }
+        return detail
+    }
+    
     const load_all = function (seasons) {
+        Console.log("Season.load_all()", seasons)
+        Season.all = new Map()
+        if (_table_season_product_edit) {
+            build_product_edit_table()
+        }
+        
         if (!seasons) {
             seasons = []
         }
+        
+        $.each(seasons, function (k, season) {
+            let detail = set(season)
+            
+            if (!isNaN(parseInt(detail.id))) {
+                $table_season_product_edit.insertRow(detail)
+                Season.all.set(parseInt(detail.id), detail)
+            }
+        })
+        
+        Console.log("Season.load_all() - Season.all", Season.all)
     }
-    const _product_edit_season_form_season_id = document.getElementById("product_edit_season_form_season_id")
-    const _product_edit_season_form_season_name = document.getElementById("product_edit_season_form_season_name")
-    const _product_edit_season_id_name_display = document.getElementById("product_edit_season_id_name_display")
-    const _product_edit_season_form_season_enabled = document.getElementById("product_edit_season_form_season_enabled")
-    const _edit_season_button = document.getElementById("edit_season_button")
+    
+    const build_product_edit_table = function () {
+        $table_season_product_edit = $(_table_season_product_edit).table({
+            table_type: "display_list",
+            data: Season.all,
+            columnDefs: [
+                {
+                    title: "Id",
+                    targets: 0,
+                    data: "id",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                }, {
+                    title: "Name",
+                    targets: 1,
+                    data: "name",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                }, {
+                    title: "Color Scheme",
+                    targets: 2,
+                    data: "color_scheme",
+                    render: function (data, type, row, meta) {
+                        let background_color = data.background_color
+                        let text_color = data.text_color
+                        let border_color = data.border_color
+                        let name = data.name
+                        return `
+                            <div style="font-size:14px; line-height:1.25;padding-left:.5rem;background:${background_color};color:${text_color}; border:solid 1px ${border_color}">${name}</div>
+                        `
+                    },
+                }, {
+                    title: "Disabled DOW",
+                    targets: 3,
+                    data: "product_season_detail",
+                    render: function (data, type, row, meta) {
+                        Console.log("product_season_detail", data)
+                        let disabled_days = (data.disabled_dow) ? getListOfIds(data.disabled_dow) : []
+                        let d = []
+                        for (let n = 0; n < disabled_days.length; n++) {
+                            d.push(dow_short[disabled_days[n]])
+                        }
+                        
+                        data = d.join(', ')
+                        return `
+                            <span>${data}</span>
+                        `
+                    },
+                },
+            ],
+            rowClick: Season.edit,
+        })
+    }
+    
     const reset_form = function () {
         if (_edit_season) {
             _product_edit_season_form_season_id.value = ""
@@ -1542,28 +1720,75 @@ const Season = (function () {
         }
     }
     
+    const edit = function (season) {
+        Console.log("edit", season)
+        clear_product_season_form()
+        load_product_season_form(season)
+    }
+    
+    const clear_product_season_form = function () {
+        let detail = defaultDetail()
+        //$(_button_assign_season_to_product).addClass("disabled")
+        
+        disabledDays.init([])
+    }
+    
+    const load_product_season_form = function (season) {
+        let disabled_dow = []
+        let name = "Details"
+        if (season) {
+            Console.log("load_product_season_form", season)
+            let color_scheme = (season.color_scheme) ? season.color_scheme : {}
+            name = (season.name) ? season.name : "Detail"
+            if (season.product_season_detail && season.product_season_detail.disabled_dow) {
+                disabled_dow = getListOfIds(season.product_season_detail.disabled_dow)
+            }
+            ColorScheme.load(color_scheme)
+            ColorScheme.disable()
+            
+            _product_edit_season_form_season_id.value = season.id
+            _product_edit_season_form_season_name.value = season.name
+            _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
+            _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
+            
+            _product_edit_season_form_season_enabled.disabled = true
+            _edit_season_button.disabled = false
+        }
+        
+        $(_button_assign_season_to_product).addClass("disabled")
+        
+        _display_product_season_name.innerText = name
+        disabledDays.init(disabled_dow)
+    }
+    
     const init = function (settings) {
         let seasons = []
         if (settings) {
             seasons = settings
             if (settings.seasons) {
                 seasons = settings.seasons
-                
             }
         }
         
         load_types(seasons)
         
         if (_product_edit_season_form_season_name_filter) {
-            init_autocomplete()
+            initAutoComplete()
             reset_form()
-            //Console.log("seasons", settings)
         }
         
-    }
-    
-    const edit = function (seasons) {
-        Console.log("Season.edit(seasons)", seasons)
+        if (document.getElementById("season_disabled_dow")) {
+            _button_assign_season_to_product.disabled = true
+            disabledDays = $("#season_disabled_dow").DisabledDOW({
+                name: "season_disabled_dow",
+            })
+            load_product_season_form()
+        }
+        
+        if (document.getElementById("product_season")) {
+            $("#product_season").YearCalendar()
+        }
+        
     }
     
     return {
@@ -1577,6 +1802,9 @@ const Season = (function () {
         },
         init: function (settings) {
             init(settings)
+        },
+        load_all: function (seasons) {
+            load_all(seasons)
         },
     }
 })()
@@ -1763,8 +1991,7 @@ $.fn.table = function (settings) {
         if (row_data) {
             try {
                 let rowId = "#" + table_id + "_tr_" + row_data.id
-                let rowData = row_data
-                $dTable.row(rowId).data(rowData).draw()
+                $dTable.row(rowId).data(row_data).draw()
                 loadRow(row_data.id)
             } catch (e) {
                 Console.log(e)
@@ -1775,10 +2002,11 @@ $.fn.table = function (settings) {
     }
     
     const loadRow = function (row_data) {
+        
         if (row_data) {
             try {
-                let rowId = row_data.id
-                $dTable.page.jumpToData(rowId, 0)
+                $("#" + table_id + "_tr_" + row_data.id).addClass("selected")
+                $dTable.page.jumpToData(row_data.id, 0)
             } catch (e) {
                 Console.log(e)
             }
@@ -1826,7 +2054,7 @@ $.fn.table = function (settings) {
             if (settings.rowClick) {
                 $dTable.on("click", "tr", function () {
                     if ($(this).find("td").hasClass("dataTables_empty")) {
-                        
+                    
                     } else {
                         clear_selected_rows()
                         $(this).addClass("selected")
@@ -2214,6 +2442,9 @@ $("#image_manager_clear_button")
   .on("click", function () {
       Upload.prototype.resetForm()
   })
+
+
+
 
 $.fn.imageManager = function (options) {
     const $carouselWrapper = $(this).find("div.carousel")
@@ -2806,6 +3037,7 @@ const City = (function () {
     
     const class_name = "form-new-city"
     const form_id = "form_new_city"
+    const _modal_product_city_id = document.getElementById("modal_product_city_id")
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
@@ -2840,6 +3072,86 @@ const City = (function () {
               }
               
               Console.log("city", suggestion)
+              /*
+                  "value": "Abano Terme (Padova, Italy)",
+                  "data": {
+                      "id": 1,
+                      "country_id": 102,
+                      "province_id": 250,
+                      "sort_order": 999,
+                      "name": "Abano Terme",
+                      "enabled": 1,
+                      "date_created": "2021-08-03 14:40:07",
+                      "created_by": 4,
+                      "date_modified": "2021-08-03 14:40:07",
+                      "modified_by": 4,
+                      "note": "",
+                      "province": {
+                          "id": 250,
+                          "country_id": 102,
+                          "name": "Padova",
+                          "iso2": "PD",
+                          "iso3": "",
+                          "sort_order": 999,
+                          "enabled": 1,
+                          "date_created": "2021-12-15 10:58:47",
+                          "created_by": 4,
+                          "date_modified": "2021-12-15 10:58:47",
+                          "modified_by": 4,
+                          "note": null
+                      },
+                      "country": {
+                          "id": 102,
+                          "currency_id": 2,
+                          "sort_order": 0,
+                          "name": "Italy",
+                          "iso2": "IT",
+                          "iso3": "ITA",
+                          "enabled": 1,
+                          "date_created": "2021-08-03 13:04:10",
+                          "created_by": 4,
+                          "date_modified": "2021-08-03 15:13:45",
+                          "modified_by": 4,
+                          "note": ""
+                      }
+                  }
+              //*/
+              
+          },
+      })
+    
+    $("#modal_product_city")
+      .on("change", function () {
+          setTimeout(function () {
+          
+          }, 200)
+      })
+      .on("search", function () {
+      
+      })
+      .on("click", function (e) {
+          if ($(this).attr("readonly") === "readonly") {
+              e.preventDefault()
+          } else {
+              $(this).select()
+          }
+          
+      })
+      .autocomplete({
+          serviceUrl: "/api/v1.0/autocomplete/cities",
+          minChars: 2,
+          cache: false,
+          dataType: "json",
+          triggerSelectOnValidInput: false,
+          paramName: "st",
+          onSelect: function (suggestion) {
+              Console.log("city", suggestion)
+              if (!suggestion.data) {
+                  return
+              }
+              let city = suggestion.data
+              Console.log("city", city)
+              _modal_product_city_id.value = city.id
               /*
                   "value": "Abano Terme (Padova, Italy)",
                   "data": {
@@ -4809,7 +5121,7 @@ const Location = (function () {
           let selected_value = $("input[name='location_display']:checked").val()
           Console.log("selected_value", selected_value)
           default_display = selected_value
-          init_autocomplete()
+          initAutoComplete()
           if (Location.detail["display_" + selected_value] !== null) {
               _location_name_filter.value = Location.detail["display_" + selected_value]
           }
@@ -4844,7 +5156,7 @@ const Location = (function () {
     /**
      * initialize autocomplete functions
      */
-    const init_autocomplete = function () {
+    const initAutoComplete = function () {
         $(_location_name_filter)
           .on("click", function () {
               $(this).select()
@@ -5426,7 +5738,7 @@ const Location = (function () {
         }
         
         if (_location_name_filter) {
-            init_autocomplete()
+            initAutoComplete()
         }
         
     }
@@ -5555,7 +5867,7 @@ const Variant = (function () {
           alert()
       })
     
-    const init_autocomplete = function () {
+    const initAutoComplete = function () {
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         $(_product_edit_variant_form_variant_name_filter)
@@ -5683,7 +5995,7 @@ const Variant = (function () {
     
     const load_all = function (variants) {
         Variant.all = new Map()
-        Console.log("variants", variants)
+        
         if (variants) {
             $.each(variants, function (k, variant) {
                 let detail = set(variant)
@@ -5709,7 +6021,7 @@ const Variant = (function () {
         load_all(variants)
         
         if (_product_edit_variant_form_variant_name_filter) {
-            init_autocomplete()
+            initAutoComplete()
         }
         
         Console.log("init", Variant.all)
@@ -5781,7 +6093,7 @@ const Unit = (function () {
         })
     }
     
-    const init_autocomplete = function () {
+    const initAutoComplete = function () {
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         $(_product_edit_unit_form_unit_name_filter)
@@ -5934,7 +6246,7 @@ const Unit = (function () {
         }
         
         if (_product_edit_unit_form_unit_name_filter) {
-            init_autocomplete()
+            initAutoComplete()
             Console.log("units", units)
             load_all(units)
         }
@@ -6685,6 +6997,460 @@ const Register = (function () {
     
 })()
 
+$.fn.DisabledDOW = function (settings) {
+    "use strict"
+    let id = this.attr("id")
+    let name_prefix = id + "_"
+    if (settings) {
+        if (settings.name && settings.name !== "") {
+            name_prefix = settings.name
+        }
+    }
+    const _this = document.getElementById(id)
+    const $this = $(_this)
+    
+    $this.on("change", function () {
+        console.log("change")
+    })
+    
+    const buildCheckBox = function (day) {
+        let input = document.createElement("input")
+        input.type = "checkbox"
+        input.classList = day.class
+        input.id = day.for
+        input.name = day.for
+        input.value = day.value
+        
+        input.addEventListener("click", event => {
+            let id = (input.id) ? input.id : ""
+            set(input, id)
+        })
+        
+        return input
+    }
+    
+    const buildCheckBoxWrapper = function () {
+        let div = document.createElement("div")
+        div.classList = "custom-control custom-checkbox custom-control-inline"
+        return div
+    }
+    
+    const buildCheckBoxLabel = function (day) {
+        let label = document.createElement("label")
+        label.classList = "custom-control-label"
+        label.htmlFor = day.for
+        label.innerText = day.label
+        return label
+    }
+    
+    const buildCheckBoxColumn = function () {
+        let days = Array.from(DisabledDOW.days_of_week.values())
+        let div = document.createElement("div")
+        
+        div.classList = "col-12 col-md-10 col-xl-9"
+        
+        $.each(days, function (k, day) {
+            let wrapper = buildCheckBoxWrapper()
+            let label = buildCheckBoxLabel(day)
+            let input = buildCheckBox(day)
+            wrapper.appendChild(input)
+            wrapper.appendChild(label)
+            div.appendChild(wrapper)
+        })
+        
+        return div
+    }
+    
+    const buildCheckBoxColumnLabel = function () {
+        let div = document.createElement("div")
+        let label = document.createElement("label")
+        label.innerText = "Disabled DOW:"
+        
+        div.classList = "col-12 col-md-2 col-xl-3"
+        
+        div.appendChild(label)
+        return div
+    }
+    
+    const buildCheckBoxRow = function () {
+        let div = document.createElement("div")
+        div.classList = "row"
+        return div
+    }
+    
+    const buildForm = function () {
+        $this.empty()
+        DisabledDOW.days_of_week = new Map()
+        
+        DisabledDOW.days_of_week.set(
+          "*", {
+              label: "All",
+              for: name_prefix + "dow_select_all",
+              value: "*",
+              class: "custom-control-input dow_select",
+          })
+        DisabledDOW.days_of_week.set(
+          "0", {
+              label: "Sun",
+              for: name_prefix + "dow_select_sun",
+              value: 0,
+              class: "custom-control-input dow_select",
+          })
+        DisabledDOW.days_of_week.set(
+          "1", {
+              label: "Mon",
+              for: name_prefix + "dow_select_mon",
+              value: 1,
+              class: "custom-control-input dow_select",
+          })
+        DisabledDOW.days_of_week.set(
+          "2", {
+              label: "Tue",
+              for: name_prefix + "dow_select_tue",
+              value: 2,
+              class: "custom-control-input dow_select",
+          })
+        DisabledDOW.days_of_week.set(
+          "3", {
+              label: "Wed",
+              for: name_prefix + "dow_select_wed",
+              value: 3,
+              class: "custom-control-input dow_select",
+          })
+        DisabledDOW.days_of_week.set(
+          "4", {
+              label: "Thu",
+              for: name_prefix + "dow_select_thu",
+              value: 4,
+              class: "custom-control-input dow_select",
+          })
+        DisabledDOW.days_of_week.set(
+          "5", {
+              label: "Fri",
+              for: name_prefix + "dow_select_fri",
+              value: 5,
+              class: "custom-control-input dow_select",
+          })
+        DisabledDOW.days_of_week.set(
+          "6", {
+              label: "Sat",
+              for: name_prefix + "dow_select_sat",
+              value: 6,
+              class: "custom-control-input dow_select",
+          })
+        
+        let row = buildCheckBoxRow()
+        let leadColumn = buildCheckBoxColumnLabel()
+        let column = buildCheckBoxColumn()
+        row.appendChild(leadColumn)
+        row.appendChild(column)
+        _this.appendChild(row)
+    }
+    
+    const clear_selected = function () {
+        $.each(Array.from(DisabledDOW.days_of_week.values()), function (k, day) {
+            document.getElementById(day.for).checked = false
+        })
+    }
+    
+    const updateCheckBoxes = function () {
+        clear_selected()
+        $.each(DisabledDOW.disabled_dows, function (k, v) {
+            
+            let id = (typeof v === "number") ? v.toString() : v
+            let day = DisabledDOW.days_of_week.get(id)
+            
+            Console.log("DisabledDOW.days_of_week", DisabledDOW.days_of_week)
+            if (day) {
+                if (day.for) {
+                    document.getElementById(day.for).checked = true
+                }
+            }
+            
+        })
+        
+        if (DisabledDOW.disabled_dows.length === 7) {
+            document.getElementById(name_prefix + "dow_select_all").checked = true
+        }
+    }
+    
+    const set = function (el, val) {
+        let indexId, index
+        switch (val) {
+            case name_prefix + "dow_select_all":
+                
+                if (el.checked === true) {
+                    DisabledDOW.disabled_dows = [0, 1, 2, 3, 4, 5, 6]
+                } else {
+                    DisabledDOW.disabled_dows = []
+                }
+                DisabledDOW.disabled_dows.sort()
+                Console.log("dow_select_all", DisabledDOW.disabled_dows)
+                break
+            case name_prefix + "dow_select_sun":
+                indexId = 0
+                index = DisabledDOW.disabled_dows.indexOf(indexId)
+                if (el.checked === true) {
+                    if (!index > -1) {
+                        DisabledDOW.disabled_dows.push(indexId)
+                    }
+                } else {
+                    if (index > -1) {
+                        DisabledDOW.disabled_dows.splice(index, 1)
+                    }
+                }
+                DisabledDOW.disabled_dows.sort()
+                Console.log("dow_select_sun", DisabledDOW.disabled_dows)
+                break
+            case name_prefix + "dow_select_mon":
+                indexId = 1
+                index = DisabledDOW.disabled_dows.indexOf(indexId)
+                if (el.checked === true) {
+                    if (!index > -1) {
+                        DisabledDOW.disabled_dows.push(indexId)
+                    }
+                } else {
+                    if (index > -1) {
+                        DisabledDOW.disabled_dows.splice(index, 1)
+                    }
+                }
+                DisabledDOW.disabled_dows.sort()
+                Console.log("dow_select_mon", DisabledDOW.disabled_dows)
+                break
+            case name_prefix + "dow_select_tue":
+                indexId = 2
+                index = DisabledDOW.disabled_dows.indexOf(indexId)
+                if (el.checked === true) {
+                    if (!index > -1) {
+                        DisabledDOW.disabled_dows.push(indexId)
+                    }
+                } else {
+                    if (index > -1) {
+                        DisabledDOW.disabled_dows.splice(index, 1)
+                    }
+                }
+                DisabledDOW.disabled_dows.sort()
+                Console.log("dow_select_tue", DisabledDOW.disabled_dows)
+                break
+            case name_prefix + "dow_select_wed":
+                indexId = 3
+                index = DisabledDOW.disabled_dows.indexOf(indexId)
+                if (el.checked === true) {
+                    if (!index > -1) {
+                        DisabledDOW.disabled_dows.push(indexId)
+                    }
+                } else {
+                    if (index > -1) {
+                        DisabledDOW.disabled_dows.splice(index, 1)
+                    }
+                }
+                DisabledDOW.disabled_dows.sort()
+                Console.log("dow_select_wed", DisabledDOW.disabled_dows)
+                break
+            case name_prefix + "dow_select_thu":
+                indexId = 4
+                index = DisabledDOW.disabled_dows.indexOf(indexId)
+                if (el.checked === true) {
+                    if (!index > -1) {
+                        DisabledDOW.disabled_dows.push(indexId)
+                    }
+                } else {
+                    if (index > -1) {
+                        DisabledDOW.disabled_dows.splice(index, 1)
+                    }
+                }
+                DisabledDOW.disabled_dows.sort()
+                Console.log("dow_select_thu", DisabledDOW.disabled_dows)
+                break
+            case name_prefix + "dow_select_fri":
+                indexId = 5
+                index = DisabledDOW.disabled_dows.indexOf(indexId)
+                if (el.checked === true) {
+                    if (!index > -1) {
+                        DisabledDOW.disabled_dows.push(indexId)
+                    }
+                } else {
+                    if (index > -1) {
+                        DisabledDOW.disabled_dows.splice(index, 1)
+                    }
+                }
+                DisabledDOW.disabled_dows.sort()
+                Console.log("dow_select_fri", DisabledDOW.disabled_dows)
+                break
+            case name_prefix + "dow_select_sat":
+                indexId = 6
+                index = DisabledDOW.disabled_dows.indexOf(indexId)
+                if (el.checked === true) {
+                    if (!index > -1) {
+                        DisabledDOW.disabled_dows.push(indexId)
+                    }
+                } else {
+                    if (index > -1) {
+                        DisabledDOW.disabled_dows.splice(index, 1)
+                    }
+                }
+                DisabledDOW.disabled_dows.sort()
+                Console.log("dow_select_sat", DisabledDOW.disabled_dows)
+                break
+            default:
+                break
+        }
+        
+        updateCheckBoxes()
+    }
+    
+    const init = function (disabled_dow) {
+        let disabled_days = []
+        
+        if (disabled_dow) {
+            if (typeof disabled_dow === "string") {
+                disabled_days = getListOfIds(disabled_dow)
+            } else if (typeof disabled_dow === "object") {
+                disabled_days = disabled_dow
+            }
+            
+        }
+        
+        DisabledDOW.disabled_dows = disabled_days
+        updateCheckBoxes()
+    }
+    
+    const DisabledDOW = {
+        days_of_week: [],
+        disabled_dows: [],
+        els: [],
+        init: function (disabled_dow) {
+            init(disabled_dow)
+        },
+    }
+    
+    buildForm()
+    return DisabledDOW
+}
+//DisabledDOW.disabled_dows
+
+const ColorScheme = (function () {
+    "use strict"
+    const _product_edit_season_id = document.getElementById("product_edit_season_id")
+    const _season_id = document.getElementById("season_id")
+    const _edit_scheme = document.getElementById("edit_scheme")
+    const _form_edit_scheme = document.getElementById("form_edit_scheme")
+    const _product_edit_season_id_name_display = document.getElementById("product_edit_season_id_name_display")
+    const _button_close_edit_scheme = document.getElementById("button_close_edit_scheme")
+    let season_toggle_items
+    
+    //
+    $(_button_close_edit_scheme)
+      .on("click", function () {
+          $(_edit_scheme).hide()
+      })
+    
+    $(_season_id)
+      .on("click", function () {
+          $(_edit_scheme).show()
+      })
+    
+    //
+    const reset_form = function () {
+    
+    }
+    
+    const load_form = function (scheme) {
+        if (scheme) {
+        
+        }
+    }
+    
+    const edit = function (el) {
+        $(".color_scheme_block").removeClass("active")
+        $(el).addClass("active")
+    }
+    
+    const load_all = function (swatches) {
+        ColorScheme.all = new Map()
+        if (swatches) {
+            $.each(swatches, function (k, swatch) {
+                ColorScheme.all.set(parseInt(swatch.id), swatch)
+            })
+        }
+    }
+    
+    const init = function (settings) {
+        if (settings) {
+            if (settings.swatches) {
+                load_all(settings.swatches)
+            }
+        }
+        
+        season_toggle_items = document.querySelectorAll(".season_toggle_item")
+        season_toggle_items.forEach(el => el.addEventListener("click", event => {
+            let color_scheme_id = parseInt(el.dataset.colorschemeid)
+            let scheme = ColorScheme.all.get(color_scheme_id)
+            if (scheme) {
+                load(scheme)
+            }
+        }))
+    }
+    
+    const load = function (scheme) {
+        if (scheme) {
+            let background_color = (scheme.background_color) ? scheme.background_color : null
+            let border_color = (scheme.border_color) ? scheme.border_color : null
+            let color_scheme_id = parseInt(scheme.id)
+            let text_color = (scheme.text_color) ? scheme.text_color : null
+            let scheme_name = (scheme.name) ? scheme.name : null
+            let elem = document.querySelector("#product_edit_season_id")
+            
+            $(_product_edit_season_id_name_display).text(`
+                    ${scheme_name}
+                `)
+            
+            $("a.dropdown-item.season_toggle_item").removeClass("active")
+            $(`a#${color_scheme_id}`).addClass("active")
+            elem.style.setProperty("color", text_color, 'important')
+            elem.style.setProperty("background-color", background_color, 'important')
+            elem.style.setProperty("border-color", border_color, 'important')
+        }
+    }
+    
+    const disable = function () {
+        let elem = document.querySelector("#product_edit_season_id")
+        $(elem).addClass("disabled")
+    }
+    
+    const enable = function () {
+        let elem = document.querySelector("#product_edit_season_id")
+        $(elem).removeClass("disabled")
+    }
+    
+    const change = function (el) {
+        Console.log("ColorScheme:change(el)", el)
+    }
+    
+    return {
+        all: new Map(),
+        disable: function () {
+            disable()
+        },
+        enable: function () {
+            enable()
+        },
+        load: function (scheme) {
+            load(scheme)
+        },
+        edit: function (el) {
+            edit(el)
+        },
+        change: function (el) {
+            change(el)
+        },
+        init: function (settings) {
+            init(settings)
+            disable()
+        },
+    }
+})()
+
 $.fn.ColorScheme = function (settings) {
     Console.log("Test", Types.color_scheme)
     
@@ -6825,6 +7591,7 @@ const Category = (function () {
     const _input_category_date_modified = document.getElementById("input_category_date_modified")
     const _input_category_modified_by = document.getElementById("input_category_modified_by")
     const _input_category_note = document.getElementById("input_category_note")
+    const _modal_product_city = document.getElementById("modal_product_city")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     const handle_category_error = function (msg) {
@@ -6846,7 +7613,7 @@ const Category = (function () {
     const _modal_product_rating_types_id = document.getElementById("modal_product_rating_types_id")
     const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
     const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
-    
+    const _modal_product_city_id = document.getElementById("modal_product_city_id")
     const handle_product_change = function (category_id) {
         if (!category_id) {
             return
@@ -6872,6 +7639,7 @@ const Category = (function () {
                      * Hotels
                      */
                     _modal_product_provider_name.disabled = false
+                    _modal_product_city.disabled = false
                     _modal_product_vendor_name.disabled = false
                     _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.disabled = false
@@ -6886,6 +7654,7 @@ const Category = (function () {
                      */
                     _modal_product_pricing_strategies_types_id.value = "2"
                     _modal_product_rating_types_id.value = ""
+                    _modal_product_city.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = true
@@ -6898,6 +7667,7 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.value = "3"
                     _modal_product_rating_types_id.value = ""
                     _modal_product_name.disabled = false
+                    _modal_product_city.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = true
                     Console.log("Cars")
@@ -6909,6 +7679,7 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.value = "2"
                     _modal_product_rating_types_id.value = ""
                     _modal_product_name.disabled = false
+                    _modal_product_city.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = true
                     Console.log("Rail")
@@ -6920,6 +7691,7 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
                     _modal_product_name.disabled = false
+                    _modal_product_city.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     Console.log("Transport")
@@ -6929,6 +7701,7 @@ const Category = (function () {
                      * Tours
                      */
                     _modal_product_name.disabled = false
+                    _modal_product_city.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.value = "2"
                     _modal_product_rating_types_id.value = ""
@@ -6940,7 +7713,7 @@ const Category = (function () {
                      * Cruises
                      */
                     _modal_product_name.disabled = false
-                    
+                    _modal_product_city.disabled = false
                     _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
                     _modal_product_pricing_strategies_types_id.disabled = false
@@ -6954,6 +7727,7 @@ const Category = (function () {
                      */
                     _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
+                    _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
@@ -6964,6 +7738,7 @@ const Category = (function () {
                      * Other
                      */
                     _modal_product_name.disabled = false
+                    _modal_product_city.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
@@ -6977,6 +7752,7 @@ const Category = (function () {
                      */
                     _modal_product_name.disabled = true
                     _modal_product_sku.disabled = true
+                    _modal_product_city.disabled = true
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_currency_id.disabled = true
                     _modal_product_pricing_strategies_types_id.disabled = true
@@ -7328,7 +8104,7 @@ const Company = (function () {
                                   let detail = set_detail(company)
                                   reset_company = detail
                                   populate_form(detail)
-                                  init_autocomplete()
+                                  initAutoComplete()
                                   hide_form()
                               }
                           }
@@ -7443,7 +8219,7 @@ const Company = (function () {
     /**
      * initialize provider autocomplete
      */
-    const init_autocomplete = function () {
+    const initAutoComplete = function () {
         $(_company_name)
           .on("change", function () {
               setTimeout(function () {
@@ -7686,7 +8462,7 @@ const Company = (function () {
         if (_form_edit_company) {
             validator_init(form_rules)
             validator = $(_form_edit_company).validate()
-            init_autocomplete()
+            initAutoComplete()
             if (_form_edit_company_block) {
                 hide_form()
             }
@@ -7783,7 +8559,7 @@ const Company = (function () {
             $(_form_edit_company_block).hide()
             $(_button_cancel_edit_company_name).hide()
             $(_button_edit_company_name).show()
-            init_autocomplete()
+            initAutoComplete()
         }
         
         if (_button_save_provider) {
@@ -8694,7 +9470,7 @@ const Vendor = (function () {
           update()
       })
     
-    const init_autocomplete = function () {
+    const initAutoComplete = function () {
         if (_vendor_name) {
             $(_vendor_name)
               .on("change", function () {
@@ -9288,7 +10064,7 @@ const Vendor = (function () {
         if (_form_edit_vendor) {
             if (_vendor_name) {
                 _vendor_name.value = (settings.name) ? settings.name : ""
-                init_autocomplete()
+                initAutoComplete()
             }
             if (_vendor_id) {
                 _vendor_id.value = (settings.id) ? settings.id : ""
@@ -9548,6 +10324,140 @@ const MessageTypes = (function () {
 
 //MessageTypes.init()
 //end object
+
+const Pricing = (function () {
+    "use strict"
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    
+    const init = function (settings) {
+        Console.log("Pricing.init(settings)", settings)
+        let pricings = []
+        if (settings) {
+            if (settings.pricings) {
+                pricings = settings.pricings
+            }
+        }
+        loadAll(pricings)
+    }
+    
+    const loadAll = function (pricings) {
+        Pricing.all = new Map()
+        if (!pricings) {
+            pricings = []
+        }
+        $.each(pricings, function (k, pricing) {
+            Console.log("pricing", pricing)
+        })
+        
+        Console.log("Pricing.all", Pricing.all)
+    }
+    
+    const buildTable = function () {
+    
+    }
+    
+    const defaultDetail = function () {}
+    
+    const set = function (pricing) {
+    
+    }
+    return {
+        all: new Map(),
+        init: function (settings) {
+            init(settings)
+        },
+    }
+    
+})()
+
+const Matrix = (function () {
+    "use strict"
+    
+    const base_url = "/matrix"
+    
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    
+    const defaultDetail = function () {
+        return {
+            been_saved: 0,
+            cost: null,
+            created_by: user_id,
+            date_created: formatDateMySQL(),
+            date_modified: formatDateMySQL(),
+            enabled: 1,
+            flat_cost: null,
+            flat_margin: null,
+            flat_price: null,
+            has_pricing: null,
+            id: null,
+            margin: null,
+            modified_by: user_id,
+            note: null,
+            price: null,
+            product_id: null,
+            season_id: null,
+            unit_id: null,
+        }
+    }
+    
+    const set = function (matrix) {
+        let detail = defaultDetail()
+        if (matrix) {
+            detail.been_saved = (matrix.been_saved) ? matrix.been_saved : 0
+            detail.cost = (matrix.cost) ? matrix.cost : null
+            detail.created_by = (matrix.created_by) ? matrix.created_by : user_id
+            detail.date_created = (matrix.date_created) ? matrix.date_created : formatDateMySQL()
+            detail.date_modified = (matrix.date_modified) ? matrix.date_modified : formatDateMySQL()
+            detail.enabled = (matrix.enabled) ? matrix.enabled : 1
+            detail.flat_cost = (matrix.flat_cost) ? matrix.flat_cost : null
+            detail.flat_margin = (matrix.flat_margin) ? matrix.flat_margin : null
+            detail.flat_price = (matrix.flat_price) ? matrix.flat_price : null
+            detail.has_pricing = (matrix.has_pricing) ? matrix.has_pricing : null
+            detail.id = (matrix.id) ? matrix.id : null
+            detail.margin = (matrix.margin) ? matrix.margin : null
+            detail.modified_by = (matrix.modified_by) ? matrix.modified_by : user_id
+            detail.note = (matrix.note) ? matrix.note : null
+            detail.price = (matrix.price) ? matrix.price : null
+            detail.product_id = (matrix.product_id) ? matrix.product_id : null
+            detail.season_id = (matrix.season_id) ? matrix.season_id : null
+            detail.unit_id = (matrix.unit_id) ? matrix.unit_id : null
+        }
+        Matrix.detail = detail
+        return detail
+    }
+    
+    const loadAll = function (matrices) {
+        Matrix.all = new Map()
+        if (!matrices) {
+            matrices = []
+        }
+        
+        $.each(matrices, function (k, matrix) {
+            let detail = set(matrix)
+            Matrix.all.set(detail.id, detail)
+            
+        })
+        
+        Console.log("Matrix.all", Matrix.all)
+    }
+    const init = function (settings) {
+        let matrices = []
+        if (settings) {
+            if (settings.matrices) {
+                matrices = settings.matrices
+            }
+        }
+        loadAll(matrices)
+    }
+    return {
+        detail: {},
+        all: new Map(),
+        init: function (settings) {
+            init(settings)
+        },
+    }
+    
+})()
 
 const PricingStrategyTypes = (function () {
     "use strict"
@@ -10478,7 +11388,7 @@ const Provider = (function () {
                                 _modal_product_vendor_id.value = vendor.id
                                 _modal_product_vendor_company_id.value = company.id
                                 
-                                init_autocomplete()
+                                initAutoComplete()
                                 
                                 Product.attr2 = (provider.code_direct_id) ? provider.code_direct_id : null
                                 Product.attr3 = (vendor.sku) ? vendor.sku : null
@@ -10496,7 +11406,7 @@ const Provider = (function () {
     /**
      * initialize provider autocomplete
      */
-    const init_autocomplete = function () {
+    const initAutoComplete = function () {
         
         $(_provider_name)
           .on("change", function () {
@@ -10918,7 +11828,6 @@ const Provider = (function () {
      * @param provider
      */
     const save = function (provider) {
-        Console.log("save", provider)
         if (provider) {
             updateProvider(provider, function (data) {
                 if (data) {
@@ -11153,7 +12062,7 @@ const Provider = (function () {
         let vendor = {}
         //
         if (_form_edit_provider) {
-            init_autocomplete()
+            initAutoComplete()
             validator_init(form_rules)
             validator = $(_form_edit_provider).validate()
         }
@@ -11198,7 +12107,7 @@ const Provider = (function () {
      * @param settings
      */
     const init = function (settings) {
-        init_autocomplete()
+        initAutoComplete()
     }
     
     /**
@@ -11250,6 +12159,51 @@ const Provider = (function () {
     
 })()
 
+const Profile = (function () {
+    "use strict"
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    
+    const init = function (settings) {
+        Console.log("Profile.init(settings)", settings)
+        let profiles = []
+        if (settings) {
+            if (settings.profiles) {
+                profiles = settings.profiles
+            }
+        }
+        loadAll(profiles)
+    }
+    
+    const loadAll = function (profiles) {
+        Profile.all = new Map()
+        if (!profiles) {
+            profiles = []
+        }
+        $.each(profiles, function (k, profile) {
+            Console.log("profile", profile)
+        })
+        
+        Console.log("Profile.all", Profile.all)
+    }
+    
+    const buildTable = function () {
+    
+    }
+    
+    const defaultDetail = function () {}
+    
+    const set = function (profile) {
+    
+    }
+    return {
+        all: new Map(),
+        init: function (settings) {
+            init(settings)
+        },
+    }
+    
+})()
+
 
 
 const Product = (function () {
@@ -11275,6 +12229,26 @@ const Product = (function () {
     const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
     const _modal_product_provider_location_id = document.getElementById("modal_product_provider_location_id")
     const _modal_product_location_id = document.getElementById("modal_product_location_id")
+    const _product_panel_link_overview = document.getElementById("product_panel_link_overview")
+    const _panel_tab_product_o = document.getElementById("panel_tab_product_o")
+    const _product_panel_link_product = document.getElementById("product_panel_link_product")
+    const _panel_tab_product = document.getElementById("panel_tab_product")
+    const _product_panel_link_season = document.getElementById("product_panel_link_season")
+    const _panel_tab_season = document.getElementById("panel_tab_season")
+    const _product_panel_link_unit = document.getElementById("product_panel_link_unit")
+    const _panel_tab_unit = document.getElementById("panel_tab_unit")
+    const _product_panel_link_variant = document.getElementById("product_panel_link_variant")
+    const _panel_tab_variant = document.getElementById("panel_tab_variant")
+    const _product_panel_link_inventory = document.getElementById("product_panel_link_inventory")
+    const _panel_tab_inventory = document.getElementById("panel_tab_inventory")
+    const _product_panel_link_pricing = document.getElementById("product_panel_link_pricing")
+    const _panel_tab_pricing = document.getElementById("panel_tab_pricing")
+    const _panel_tab_location = document.getElementById("panel_tab_location")
+    const _panel_tab_product_location = document.getElementById("panel_tab_product_location")
+    const _panel_tab_product_meta = document.getElementById("panel_tab_product_meta")
+    const _panel_tab_meta = document.getElementById("panel_tab_meta")
+    const _product_panel_link_meta = document.getElementById("product_panel_link_meta")
+    const _product_panel_link_location = document.getElementById("product_panel_link_location")
     /**
      * product search: panels - hotels
      * @type {HTMLElement}
@@ -11308,9 +12282,14 @@ const Product = (function () {
     const _button_product_search_panel_hotels_clear = document.getElementById("button_product_search_panel_hotels_clear")
     const _button_product_search_panel_hotels_submit = document.getElementById("button_product_search_panel_hotels_submit")
     const base_url = "/products"
+    const _modal_product_city_id = document.getElementById("modal_product_city_id")
+    const _modal_product_city = document.getElementById("modal_product_city")
     const _product_index_page = document.getElementById("product_index_page")
     const _product_index_table = document.getElementById("product_index_table")
-    
+    const _use_provider_location = document.getElementById("use_provider_location")
+    const _use_product_location = document.getElementById("use_product_location")
+    let provider_initial_location, product_initial_location = {}
+    let radios = document.querySelectorAll('input[type=radio][name="location_to_use"]')
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $index_table, new_product_validator
     let add_modal_form_rules = {
@@ -11454,6 +12433,7 @@ const Product = (function () {
     
     const buildInsertData = function () {
         let dataToSend = {
+            city_id: (!isNaN(parseInt(_modal_product_city_id.value))) ? parseInt(_modal_product_city_id.value) : null,
             category_id: (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null,
             pricing_strategy_types_id: (!isNaN(parseInt(_modal_product_pricing_strategies_types_id.value))) ? parseInt(_modal_product_pricing_strategies_types_id.value) : null,
             status_types_id: 1,
@@ -11465,18 +12445,12 @@ const Product = (function () {
             provider_vendor_match: (((!isNaN(parseInt(_modal_product_provider_company_id.value))) ? parseInt(_modal_product_provider_company_id.value) : null) === ((!isNaN(parseInt(_modal_product_vendor_company_id.value))) ? parseInt(_modal_product_vendor_company_id.value) : null)) ? 1 : 0,
             name: _modal_product_name.value,
             sku: _modal_product_sku.value,
-            use_provider_location_id: 1,
-            //provider_company_id: (!isNaN(parseInt(_modal_product_provider_company_id.value))) ? parseInt(_modal_product_provider_company_id.value) : null,
-            //vendor_company_id: (!isNaN(parseInt(_modal_product_vendor_company_id.value))) ? parseInt(_modal_product_vendor_company_id.value) : null,
-            //vendor_name: _modal_product_vendor_name.value,
-            //provider_name: _modal_product_provider_name.value,
-            //provider_location_id: (!isNaN(parseInt(_modal_product_provider_location_id.value))) ? parseInt(_modal_product_provider_location_id.value) : null,
+            use_provider_location_id: 0,
         }
         return remove_nulls(dataToSend)
     }
     
     const save_new = function () {
-        Console.log("save_new()")
         let dataToSend = buildInsertData()
         
         Console.log("dataToSend", remove_nulls(dataToSend))
@@ -11589,6 +12563,8 @@ const Product = (function () {
         _modal_product_pricing_strategies_types_id.value = ""
         _modal_product_provider_location_id.value = ""
         _modal_product_location_id.value = ""
+        _modal_product_city.value = ""
+        _modal_product_city_id.value = ""
         Product.attr1 = null
         Product.attr2 = null
         Product.attr3 = null
@@ -11602,10 +12578,10 @@ const Product = (function () {
         _modal_product_vendor_id.value = ""
         _modal_product_provider_name.value = ""
         _modal_product_vendor_name.value = ""
-        //_modal_product_provider_name.disabled = true
-        //_modal_product_vendor_name.disabled = true
+        _modal_product_city.value = ""
         _modal_product_name.value = ""
         _modal_product_sku.value = ""
+        _modal_product_city_id.value = ""
         _modal_product_rating_types_id.value = ""
         _modal_product_currency_id.value = ""
         _modal_product_pricing_strategies_types_id.value = ""
@@ -11614,6 +12590,7 @@ const Product = (function () {
         _modal_product_rating_types_id.disabled = true
         _modal_product_currency_id.disabled = true
         _modal_product_pricing_strategies_types_id.disabled = true
+        _modal_product_city.disabled = true
     }
     
     const set_new_product_modal = function () {
@@ -11828,11 +12805,6 @@ const Product = (function () {
         }
     }
     
-    let provider_initial_location, product_initial_location = {}
-    let radios = document.querySelectorAll('input[type=radio][name="location_to_use"]')
-    const _use_provider_location = document.getElementById("use_provider_location")
-    const _use_product_location = document.getElementById("use_product_location")
-    
     const changeHandler = function (event) {
         Console.log("value", this.value)
         if (this.value === "use_provider_location") {
@@ -11844,7 +12816,7 @@ const Product = (function () {
         }
     }
     
-    const init_autocomplete = function () {
+    const initAutoComplete = function () {
         if (_modal_product_name) {
         
         }
@@ -11861,6 +12833,34 @@ const Product = (function () {
             profiles: [],
             matrix: [],
         }
+    }
+    
+    const load_product_location = function (location, type) {
+        //Console.log("location", location)
+        if (!type) {
+            type = "product"
+        }
+        let iFrame = `#map-container-product-location`
+        product_initial_location = location
+        let $frame = $(iFrame).find("iframe")
+        let url = buildMapsURL(location)
+        $frame.attr("src", url)
+    }
+    
+    const init_edit_form = function (settings) {
+        //Console.log("Product.init_edit_form(settings)", settings)
+        let product = set_default_product_details()
+        
+        if (settings) {
+            product = settings
+        }
+        //Console.log("Product.init_edit_form(): product", product)
+        
+        Array.prototype.forEach.call(radios, function (radio) {
+            radio.addEventListener("change", changeHandler)
+        })
+        
+        set_edit_form_values(product)
     }
     
     const set_edit_form_values = function (product) {
@@ -11915,37 +12915,9 @@ const Product = (function () {
         
     }
     
-    const load_product_location = function (location, type) {
-        Console.log("location", location)
-        if (!type) {
-            type = "product"
-        }
-        let iFrame = `#map-container-product-location`
-        product_initial_location = location
-        let $frame = $(iFrame).find("iframe")
-        let url = buildMapsURL(location)
-        $frame.attr("src", url)
-    }
-    
-    const init_edit_form = function (settings) {
-        Console.log("Product.init_edit_form(settings)", settings)
-        let product = set_default_product_details()
-        
-        if (settings) {
-            product = settings
-        }
-        Console.log("Product.init_edit_form(): product", product)
-        
-        Array.prototype.forEach.call(radios, function (radio) {
-            radio.addEventListener("change", changeHandler)
-        })
-        
-        set_edit_form_values(product)
-    }
-    
     const init = function (settings) {
         Console.log("Product.init()", settings)
-        let product_details, variants, seasons, units
+        let product_details, variants, seasons, units, profiles, matrices
         
         if (_modal_new_product) {
             Category.init()
@@ -11966,6 +12938,14 @@ const Product = (function () {
                     seasons = product_details.seasons
                 }
                 
+                if (product_details.matrices) {
+                    matrices = product_details.matrices
+                }
+                
+                if (product_details.profiles) {
+                    profiles = product_details.profiles
+                }
+                
                 if (product_details.units) {
                     units = product_details.units
                 }
@@ -11973,9 +12953,49 @@ const Product = (function () {
                 $(document).ready(function () {
                     if (_product_edit_page) {
                         init_edit_form(product_details)
+                        
                         Variant.init(variants)
                         Season.init(seasons)
+                        Season.load_all(seasons)
                         Unit.init(units)
+                        Profile.init({ profiles: profiles })
+                        Matrix.init({ matrices: matrices })
+                        $(_product_panel_link_overview)
+                          .on("click", function () {
+                              $(_panel_tab_product_o).tab("show")
+                          })
+                        $(_product_panel_link_location)
+                          .on("click", function () {
+                              $(_panel_tab_location).tab("show")
+                          })
+                        $(_product_panel_link_product)
+                          .on("click", function () {
+                              $(_panel_tab_product).tab("show")
+                          })
+                        $(_product_panel_link_season)
+                          .on("click", function () {
+                              $(_panel_tab_season).tab("show")
+                          })
+                        $(_product_panel_link_unit)
+                          .on("click", function () {
+                              $(_panel_tab_unit).tab("show")
+                          })
+                        $(_product_panel_link_variant)
+                          .on("click", function () {
+                              $(_panel_tab_variant).tab("show")
+                          })
+                        $(_product_panel_link_inventory)
+                          .on("click", function () {
+                              $(_panel_tab_inventory).tab("show")
+                          })
+                        $(_product_panel_link_pricing)
+                          .on("click", function () {
+                              $(_panel_tab_pricing).tab("show")
+                          })
+                        $(_product_panel_link_meta)
+                          .on("click", function () {
+                              $(_panel_tab_meta).tab("show")
+                          })
                     }
                 })
                 
@@ -12055,8 +13075,8 @@ const Product = (function () {
         get: function (params) {
             get(params)
         },
-        init_autocomplete: function () {
-            init_autocomplete()
+        initAutoComplete: function () {
+            initAutoComplete()
         },
         load_all: function (params) {
             load_all(params)
@@ -12188,6 +13208,7 @@ $(document).ready(function () {
     window.scrollTo(0, 0)
     
     resize_elements()
+    
     $(function () {
         $("[data-toggle=\"tooltip\"]").tooltip()
     })

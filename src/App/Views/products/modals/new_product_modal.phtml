@@ -131,6 +131,18 @@
                     </div>
                     
                     <div class="row gx-1 ">
+                        <div class="col-12 p-1">
+                            <div class="form-element">
+                                <label for="modal_product_city">City:</label>
+                                <input type="text" id="modal_product_city" name="modal_product_city" class="form-control"/>
+                                <div id="modal_product_city-error" class="error w-100 text-center"></div>
+                                <label for="modal_product_city_id" class="dev-element d-none">City Id:</label>
+                                <input type="hidden" id="modal_product_city_id" class="form-control dev-element" value=""/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row gx-1 ">
                         
                         <div class="col-6 p-1">
                             <div class="form-element">
@@ -198,6 +210,7 @@
                     </div>
                 
                 </form>
+            
             </div>
             
             <div class="modal-footer">
@@ -242,7 +255,7 @@
             if (stringValue) {
                 codeValue = stringValue.toUpperCase().trim()
                 myArray = codeValue.split(" ")
-                console.log("myArray", myArray)
+                //console.log("myArray", myArray)
             }
             
             if (myArray.length === 0) {
@@ -267,9 +280,9 @@
             } else {
             
             }
-            console.log("sku", categorySection + "-" + productSection)
+            //console.log("sku", categorySection + "-" + productSection)
             if (categorySection !== "" && productSection !== "" && providerSection !== "" && vendorSection !== "") {
-                console.log("sku", categorySection + "-" + productSection)
+                //console.log("sku", categorySection + "-" + productSection)
             }
             
             return codeValue

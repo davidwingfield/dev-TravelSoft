@@ -391,6 +391,7 @@
                     'modified_by' => $product['category_modified_by'],
                     'note' => $product['category_note'],
                 ),
+                'city_id' => $product["product_city_id"],
                 'currency_id' => $product['product_currency_id'],
                 'location_id' => $location_id,
                 'provider_id' => $product['product_provider_id'],
@@ -458,7 +459,6 @@
         
         public static function serveAdd(array $params = []): void
         {
-            Log::$debug_log->trace($params);
             $products = array();
             
             $results = ProductModel::addRecord($params);

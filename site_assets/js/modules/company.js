@@ -108,7 +108,7 @@ const Company = (function () {
                                   let detail = set_detail(company)
                                   reset_company = detail
                                   populate_form(detail)
-                                  init_autocomplete()
+                                  initAutoComplete()
                                   hide_form()
                               }
                           }
@@ -223,7 +223,7 @@ const Company = (function () {
     /**
      * initialize provider autocomplete
      */
-    const init_autocomplete = function () {
+    const initAutoComplete = function () {
         $(_company_name)
           .on("change", function () {
               setTimeout(function () {
@@ -466,7 +466,7 @@ const Company = (function () {
         if (_form_edit_company) {
             validator_init(form_rules)
             validator = $(_form_edit_company).validate()
-            init_autocomplete()
+            initAutoComplete()
             if (_form_edit_company_block) {
                 hide_form()
             }
@@ -563,7 +563,7 @@ const Company = (function () {
             $(_form_edit_company_block).hide()
             $(_button_cancel_edit_company_name).hide()
             $(_button_edit_company_name).show()
-            init_autocomplete()
+            initAutoComplete()
         }
         
         if (_button_save_provider) {

@@ -1,0 +1,246 @@
+<section id="product_edit_pricing_section">
+    <div class="card card-body mb-2">
+        <div class="row">
+            <div class="col-3">
+                <label for="pricing_strategy_types_id">Pricing Strategy Types:</label>
+                <select id="pricing_strategy_types_id" name="pricing_strategy_types_id" class="form-control">
+                    <option value="" readonly disabled selected>-- Pricing Strategy --</option>
+                    <option value="1">Per Unit</option>
+                    <option value="2">Per Person</option>
+                    <option value="3">Per Days Used</option>
+                </select>
+            </div>
+            
+            <div class="col-3">
+                <label for="pricing_strategy_unit_id">Unit:</label>
+                <select id="pricing_strategy_unit_id" name="pricing_strategy_unit_id" class="form-control">
+                    <option value="" readonly disabled selected>-- Unit --</option>
+                </select>
+            </div>
+            
+            <div class="col-3">
+                <label for="pricing_strategy_season_id">Season:</label>
+                <select id="pricing_strategy_season_id" name="pricing_strategy_season_id" class="form-control">
+                    <option value="" readonly disabled selected>-- Season --</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div class="pricing_container">
+        
+        <div class="card card-body mb-2">
+            <h5 class="card-title font-weight-bold">
+                <span id="pricing_strategy_unit_name" class=""></span>
+                <a href="javascript:void(0);" id="pricing_strategy_unit_name_edit" class="panel_link" aria-hidden="true">Edit</a>
+            </h5>
+            
+            <form id="product_edit_matrix" class="" novalidate="novalidate">
+                <input type="text" id="product_edit_matrix_id" name="product_edit_matrix_id" class="" value=""/>
+                <div class="row">
+                    
+                    <div class="col-4">
+                        <div class="form-element">
+                            <label for="matrix_cost">Base Cost:</label>
+                            <input id="matrix_cost" name="matrix_cost" class="form-control" value="0"/>
+                            <div id="matrix_cost-error" class="error w-100 text-center"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-4">
+                        <div class="form-element">
+                            <label for="matrix_margin">Base Margin:</label>
+                            <input id="matrix_margin" name="matrix_margin" class="form-control" value="0"/>
+                            <div id="matrix_margin-error" class="error w-100 text-center"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-4">
+                        <div class="form-element">
+                            <label for="matrix_price">Base Price:</label>
+                            <input id="matrix_price" name="matrix_price" class="form-control" value="0"/>
+                            <div id="matrix_price-error" class="error w-100 text-center"></div>
+                        </div>
+                    </div>
+                
+                </div>
+                
+                <div class="">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>
+                                <span id="matrix_unit_name" class="matrix-unit-name">Unit Name</span>
+                                <input type="hidden" id="matrix_unit_id"/>
+                            </th>
+                            <th>Sun</th>
+                            <th>Mon</th>
+                            <th>Tue</th>
+                            <th>Wed</th>
+                            <th>Thu</th>
+                            <th>Fri</th>
+                            <th>Sat</th>
+                        </tr>
+                        </thead>
+                        
+                        <tr>
+                            <th>
+                                <span id="matrix_season_name" class="matrix-season-name">Season Name</span>
+                                <input type="hidden" id="matrix_season_id"/>
+                            </th>
+                            
+                            <td>
+                                <div class="form-element element-sm">
+                                    <label for="matrix_sun_cost">Cost:</label>
+                                    <input id="matrix_sun_cost" name="matrix_sun_cost" class="form-control"/>
+                                </div>
+                                
+                                <div class="form-element element-sm">
+                                    <label for="matrix_sun_margin">Margin:</label>
+                                    <input id="matrix_sun_margin" name="matrix_sun_margin" class="form-control"/>
+                                </div>
+                                
+                                <div class="form-element element-sm">
+                                    <label for="matrix_sun_price">Price:</label>
+                                    <input id="matrix_sun_price" name="matrix_sun_price" class="form-control"/>
+                                </div>
+                            
+                            </td>
+                            
+                            <td>
+                                <div class="form-element element-sm">
+                                    <label for="matrix_mon_cost">Cost:</label>
+                                    <input id="matrix_mon_cost" name="matrix_mon_cost" class="form-control"/>
+                                </div>
+                                
+                                <div class="form-element element-sm">
+                                    <label for="matrix_mon_margin">Margin:</label>
+                                    <input id="matrix_mon_margin" name="matrix_mon_margin" class="form-control"/>
+                                </div>
+                                
+                                <div class="form-element element-sm">
+                                    <label for="matrix_mon_price">Price:</label>
+                                    <input id="matrix_mon_price" name="matrix_mon_price" class="form-control"/>
+                                </div>
+                            
+                            </td>
+                            
+                            <td>
+                                <div class="form-element element-sm">
+                                    <label for="matrix_tue_cost">Cost:</label>
+                                    <input id="matrix_tue_cost" name="matrix_tue_cost" class="form-control"/>
+                                </div>
+                                
+                                <div class="form-element element-sm">
+                                    <label for="matrix_tue_margin">Margin:</label>
+                                    <input id="matrix_tue_margin" name="matrix_tue_margin" class="form-control"/>
+                                </div>
+                                
+                                <div class="form-element element-sm">
+                                    <label for="matrix_tue_price">Price:</label>
+                                    <input id="matrix_tue_price" name="matrix_tue_price" class="form-control"/>
+                                </div>
+                            
+                            </td>
+                            
+                            <td>
+                                <div class="form-element element-sm">
+                                    <label for="matrix_wed_cost">Cost:</label>
+                                    <input id="matrix_wed_cost" name="matrix_wed_cost" class="form-control"/>
+                                </div>
+                                
+                                <div class="form-element element-sm">
+                                    <label for="matrix_wed_margin">Margin:</label>
+                                    <input id="matrix_wed_margin" name="matrix_wed_margin" class="form-control"/>
+                                </div>
+                                
+                                <div class="form-element element-sm">
+                                    <label for="matrix_wed_price">Price:</label>
+                                    <input id="matrix_wed_price" name="matrix_wed_price" class="form-control"/>
+                                </div>
+                            
+                            </td>
+                            
+                            <td>
+                                <div class="form-element element-sm">
+                                    <label for="matrix_thu_cost">Cost:</label>
+                                    <input id="matrix_thu_cost" name="matrix_thu_cost" class="form-control"/>
+                                </div>
+                                
+                                <div class="form-element element-sm">
+                                    <label for="matrix_thu_margin">Margin:</label>
+                                    <input id="matrix_thu_margin" name="matrix_thu_margin" class="form-control"/>
+                                </div>
+                                
+                                <div class="form-element element-sm">
+                                    <label for="matrix_thu_price">Price:</label>
+                                    <input id="matrix_thu_price" name="matrix_thu_price" class="form-control"/>
+                                </div>
+                            
+                            </td>
+                            
+                            <td>
+                                <div class="form-element element-sm">
+                                    <label for="matrix_fri_cost">Cost:</label>
+                                    <input id="matrix_fri_cost" name="matrix_fri_cost" class="form-control"/>
+                                </div>
+                                
+                                <div class="form-element element-sm">
+                                    <label for="matrix_fri_margin">Margin:</label>
+                                    <input id="matrix_fri_margin" name="matrix_fri_margin" class="form-control"/>
+                                </div>
+                                
+                                <div class="form-element element-sm">
+                                    <label for="matrix_fri_price">Price:</label>
+                                    <input id="matrix_fri_price" name="matrix_fri_price" class="form-control"/>
+                                </div>
+                            
+                            </td>
+                            
+                            <td>
+                                <div class="form-element element-sm">
+                                    <label for="matrix_sat_cost">Cost:</label>
+                                    <input id="matrix_sat_cost" name="matrix_sat_cost" class="form-control"/>
+                                </div>
+                                
+                                <div class="form-element element-sm">
+                                    <label for="matrix_sat_margin">Margin:</label>
+                                    <input id="matrix_sat_margin" name="matrix_sat_margin" class="form-control"/>
+                                </div>
+                                
+                                <div class="form-element element-sm">
+                                    <label for="matrix_sat_price">Price:</label>
+                                    <input id="matrix_sat_price" name="matrix_sat_price" class="form-control"/>
+                                </div>
+                            
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            
+            </form>
+        
+        </div>
+    
+    </div>
+</section>
+
+<script type="text/javascript">
+    const _pricing_strategy_types_id = document.getElementById("pricing_strategy_types_id")
+    const _pricing_strategy_unit_id = document.getElementById("pricing_strategy_unit_id")
+    const _pricing_strategy_season_id = document.getElementById("pricing_strategy_season_id")
+    const _pricing_strategy_unit_name = document.getElementById("pricing_strategy_unit_name")
+    const _pricing_container = document.getElementById("pricing_container")
+    
+    const buildPricingMatrix = function () {
+    
+    }
+    
+    $(document).ready(function () {
+        
+        $("#pricing_strategy_types_id")
+          .on("change", function () {
+              $("#pricing_container").empty()
+          })
+    })
+</script>

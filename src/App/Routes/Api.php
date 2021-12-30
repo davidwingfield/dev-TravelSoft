@@ -17,6 +17,7 @@
      * get requests
      */
     Router::get($routeLead . '/profiles/${product_id}', "Profile@getByProductId");
+    Router::get($routeLead . '/seasons/${product_id}/${season_id}', "Season@getSeasonByProductSeasonId");
     Router::get($routeLead . '/calendars/${product_id}', "Calendar@getByProductId");
     Router::get($routeLead . '/calendars', "Calendar@serveGet");
     Router::get($routeLead . '/matrices', "Matrix@serveGet");
@@ -79,6 +80,7 @@
     /**
      * update requests
      */
+    Router::post($routeLead . "/seasons/update", "Season@serveUpdate");
     Router::post($routeLead . "/products/add", "Product@serveAdd");
     Router::post($routeLead . "/users/reset_password", "User@serveResetPassword");
     Router::post($routeLead . "/contacts/update", "Contact@serveUpdate");
@@ -89,7 +91,7 @@
     Router::post($routeLead . "/addresses/update", "Address@serveUpdate");
     Router::post($routeLead . "/locations/update", "Location@serveUpdate");
     
-    Router::post($routeLead . "/seasons/update", "Province@serveUpdate");
+    Router::post($routeLead . "/provinces/update", "Province@serveUpdate");
     Router::post($routeLead . "/variants/update", "City@serveUpdate");
     Router::post($routeLead . "/profiles/update", "Province@serveUpdate");
     Router::post($routeLead . "/units/update", "City@serveUpdate");

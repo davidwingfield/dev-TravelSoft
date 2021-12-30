@@ -29,6 +29,7 @@ const Category = (function () {
     const _input_category_date_modified = document.getElementById("input_category_date_modified")
     const _input_category_modified_by = document.getElementById("input_category_modified_by")
     const _input_category_note = document.getElementById("input_category_note")
+    const _modal_product_city = document.getElementById("modal_product_city")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     const handle_category_error = function (msg) {
@@ -50,7 +51,7 @@ const Category = (function () {
     const _modal_product_rating_types_id = document.getElementById("modal_product_rating_types_id")
     const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
     const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
-    
+    const _modal_product_city_id = document.getElementById("modal_product_city_id")
     const handle_product_change = function (category_id) {
         if (!category_id) {
             return
@@ -76,6 +77,7 @@ const Category = (function () {
                      * Hotels
                      */
                     _modal_product_provider_name.disabled = false
+                    _modal_product_city.disabled = false
                     _modal_product_vendor_name.disabled = false
                     _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.disabled = false
@@ -90,6 +92,7 @@ const Category = (function () {
                      */
                     _modal_product_pricing_strategies_types_id.value = "2"
                     _modal_product_rating_types_id.value = ""
+                    _modal_product_city.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = true
@@ -102,6 +105,7 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.value = "3"
                     _modal_product_rating_types_id.value = ""
                     _modal_product_name.disabled = false
+                    _modal_product_city.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = true
                     Console.log("Cars")
@@ -113,6 +117,7 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.value = "2"
                     _modal_product_rating_types_id.value = ""
                     _modal_product_name.disabled = false
+                    _modal_product_city.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = true
                     Console.log("Rail")
@@ -124,6 +129,7 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
                     _modal_product_name.disabled = false
+                    _modal_product_city.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     Console.log("Transport")
@@ -133,6 +139,7 @@ const Category = (function () {
                      * Tours
                      */
                     _modal_product_name.disabled = false
+                    _modal_product_city.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.value = "2"
                     _modal_product_rating_types_id.value = ""
@@ -144,7 +151,7 @@ const Category = (function () {
                      * Cruises
                      */
                     _modal_product_name.disabled = false
-                    
+                    _modal_product_city.disabled = false
                     _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
                     _modal_product_pricing_strategies_types_id.disabled = false
@@ -158,6 +165,7 @@ const Category = (function () {
                      */
                     _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
+                    _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
@@ -168,6 +176,7 @@ const Category = (function () {
                      * Other
                      */
                     _modal_product_name.disabled = false
+                    _modal_product_city.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
@@ -181,6 +190,7 @@ const Category = (function () {
                      */
                     _modal_product_name.disabled = true
                     _modal_product_sku.disabled = true
+                    _modal_product_city.disabled = true
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_currency_id.disabled = true
                     _modal_product_pricing_strategies_types_id.disabled = true

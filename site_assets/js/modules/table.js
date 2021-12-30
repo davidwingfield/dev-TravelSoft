@@ -125,8 +125,7 @@ $.fn.table = function (settings) {
         if (row_data) {
             try {
                 let rowId = "#" + table_id + "_tr_" + row_data.id
-                let rowData = row_data
-                $dTable.row(rowId).data(rowData).draw()
+                $dTable.row(rowId).data(row_data).draw()
                 loadRow(row_data.id)
             } catch (e) {
                 Console.log(e)
@@ -137,10 +136,11 @@ $.fn.table = function (settings) {
     }
     
     const loadRow = function (row_data) {
+        
         if (row_data) {
             try {
-                let rowId = row_data.id
-                $dTable.page.jumpToData(rowId, 0)
+                $("#" + table_id + "_tr_" + row_data.id).addClass("selected")
+                $dTable.page.jumpToData(row_data.id, 0)
             } catch (e) {
                 Console.log(e)
             }
@@ -188,7 +188,7 @@ $.fn.table = function (settings) {
             if (settings.rowClick) {
                 $dTable.on("click", "tr", function () {
                     if ($(this).find("td").hasClass("dataTables_empty")) {
-                        
+                    
                     } else {
                         clear_selected_rows()
                         $(this).addClass("selected")

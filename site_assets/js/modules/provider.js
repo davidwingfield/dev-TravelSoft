@@ -187,7 +187,7 @@ const Provider = (function () {
                                 _modal_product_vendor_id.value = vendor.id
                                 _modal_product_vendor_company_id.value = company.id
                                 
-                                init_autocomplete()
+                                initAutoComplete()
                                 
                                 Product.attr2 = (provider.code_direct_id) ? provider.code_direct_id : null
                                 Product.attr3 = (vendor.sku) ? vendor.sku : null
@@ -205,7 +205,7 @@ const Provider = (function () {
     /**
      * initialize provider autocomplete
      */
-    const init_autocomplete = function () {
+    const initAutoComplete = function () {
         
         $(_provider_name)
           .on("change", function () {
@@ -627,7 +627,6 @@ const Provider = (function () {
      * @param provider
      */
     const save = function (provider) {
-        Console.log("save", provider)
         if (provider) {
             updateProvider(provider, function (data) {
                 if (data) {
@@ -862,7 +861,7 @@ const Provider = (function () {
         let vendor = {}
         //
         if (_form_edit_provider) {
-            init_autocomplete()
+            initAutoComplete()
             validator_init(form_rules)
             validator = $(_form_edit_provider).validate()
         }
@@ -907,7 +906,7 @@ const Provider = (function () {
      * @param settings
      */
     const init = function (settings) {
-        init_autocomplete()
+        initAutoComplete()
     }
     
     /**

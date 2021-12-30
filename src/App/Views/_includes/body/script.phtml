@@ -57,13 +57,7 @@
             },
         }
     })()
-    
     $(function () {
-        Logger.init()
-    })
-    
-    $(function () {
-        
         $(".debug_demo")
           .on("click", function () {
               let showElements = true
@@ -104,13 +98,13 @@
                   }
               }
           })
-        
     })
-    
+    $(function () {
+        //Logger.init()
+    })
     $(function () {
         $("#image_gallery").load("/public/mdb-addons/mdb-lightbox-ui.html")
     })
-    
     $(function () {
         
         /*
@@ -182,6 +176,1092 @@
         //*/
         
     })
-    
     //weatherUpdate("paris")
+    const setInt = function (val) {
+        let returnVal = null
+        if (val) {
+            if (!isNaN(parseInt(val))) {
+                returnVal = val
+            }
+        }
+        return returnVal
+    }
+    //*
+    $.fn.myCalendar = function (settings) {
+        "use strict"
+        let calendarType = "season"
+        let selectedStart, selectedEnd = null
+        let selectedDates = new Map()
+        let calendar_id = $(this).attr("id")
+        let calContainer = document.getElementById(calendar_id)
+        let calendars = []
+        let seasonEvents = new Map()
+        let activeCalendars = []
+        let events, start
+        
+        const _calendar_filter_season_id = document.getElementById("calendar_filter_season_id")
+        const _calendar_display_year = document.getElementById("calendar_display_year")
+        const _calendar_display_next_year = document.getElementById("calendar_display_next_year")
+        const _calendar_display_prev_year = document.getElementById("calendar_display_prev_year")
+        const _calendar_loader = document.getElementById("calendar_loader")
+        const _calendar_filter_ranges = document.getElementById("calendar_filter_ranges")
+        const _product_id = document.getElementById("product_id")
+        const _calendar_filter_profile_id = document.getElementById("calendar_filter_profile_id")
+        let product_id = parseInt(_product_id.value)
+        
+        //
+        $(_calendar_display_next_year)
+          .on("click", function () {
+              $(_calendar_loader).fadeIn("slow", function () {
+                  start = (parseInt(start) + 1).toString()
+                  $.each(activeCalendars, function (index, cal) {
+                      $(cal).fullCalendar("nextYear")
+                  })
+                  getTitle()
+                  endLoading()
+              })
+          })
+        
+        $(_calendar_display_prev_year)
+          .on("click", function () {
+              $(_calendar_loader).fadeIn("slow", function () {
+                  start = (parseInt(start) - 1).toString()
+                  $.each(activeCalendars, function (index, cal) {
+                      $(cal).fullCalendar("prevYear")
+                  })
+                  getTitle()
+                  endLoading()
+              })
+          })
+        
+        //
+        const pad = function (d) {
+            return (d < 10) ? '0' + d.toString() : d.toString()
+        }
+        
+        const hexToRgb = hex =>
+          hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
+            , (m, r, g, b) => "#" + r + r + g + g + b + b)
+            .substring(1).match(/.{2}/g)
+            .map(x => parseInt(x, 16))
+        
+        const rgb2hex = function (rgb) {
+            if (rgb.search("rgb") === -1) {
+                return rgb
+            } else {
+                rgb = rgb.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+))?\)$/)
+                
+                
+                function hex (x) {
+                    return ("0" + parseInt(x).toString(16)).slice(-2)
+                }
+                
+                
+                return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3])
+            }
+        }
+        
+        const buildCalendarRow = function (calendar_id) {
+            let calendarRow = document.createElement("div")
+            calendarRow.classList = "row gx-1"
+            return calendarRow
+        }
+        
+        const buildCalendarColumn = function (calendar_id) {
+            let calendarRow = document.createElement("div")
+            calendarRow.classList = "flex-fill col-4 p-1"
+            return calendarRow
+        }
+        
+        const buildCalendarElementPanel = function (calendar_id) {
+            let calendarBlock = document.createElement("div")
+            calendarBlock.classList = ["card card-block p-1 z-depth-0"]
+            
+            return calendarBlock
+        }
+        
+        const buildCalendarElement = function (calendar_id) {
+            let calendarPanel = buildCalendarElementPanel(calendar_id)
+            let calendarColumn = buildCalendarColumn(calendar_id)
+            let calendarBlock = document.createElement("div")
+            let calendarBlockId = "calendar_block_" + calendar_id
+            //
+            calendarBlock.classList = "my_calendar"
+            calendarBlock.id = calendarBlockId
+            //
+            calendarColumn.appendChild(calendarPanel)
+            calendarPanel.appendChild(calendarBlock)
+            //
+            calendars.push(calendarBlock)
+            return calendarColumn
+        }
+        
+        const buildCalendarContainer = function () {
+            let calendarBlockContainer = document.createElement("div")
+            let calendarBlockContainerId = "calendar_block_container"
+            let row = buildCalendarRow()
+            
+            calendarBlockContainer.classList = ["calendarContainer container-fluid"]
+            calendarBlockContainer.id = calendarBlockContainerId
+            
+            for (let n = 0; n < initialCalenderViewCount; n++) {
+                let id = (n + 1)
+                if (n % 3 === 0 && n > 0) {
+                    calendarBlockContainer.appendChild(row)
+                    row = buildCalendarRow(id)
+                }
+                
+                row.appendChild(buildCalendarElement(id))
+            }
+            
+            calendarBlockContainer.appendChild(row)
+            
+            return calendarBlockContainer
+        }
+        
+        const selectDates = function (_this, startDate, endDate) {
+            let start = new Date(moment(startDate).format("MM/DD/YYYY"))
+            let end = new Date(moment(endDate).format("MM/DD/YYYY"))
+            let loop = new Date(start)
+            
+            $("td.fc-day[data-date='" + moment(endDate).format("YYYY-MM-DD") + "']").removeClass("selected-day")
+            $("td.fc-day[data-date='" + moment(startDate).format("YYYY-MM-DD") + "']").removeClass("selected-day")
+            $("td.fc-day-top[data-date='" + moment(endDate).format("YYYY-MM-DD") + "']").removeClass("selected-day")
+            
+            while (loop <= end) {
+                selectDay($("td.fc-day[data-date='" + moment(loop).format("YYYY-MM-DD") + "']"), moment(loop).format("YYYY-MM-DD"))
+                let newDate = loop.setDate(loop.getDate() + 1)
+                loop = new Date(newDate)
+            }
+        }
+        
+        const selectDay = function (_this, dateClicked) {
+            if ($(_this).hasClass("selected-day")) {
+                $(_this).removeClass("selected-day")
+                $("td.fc-day-top[data-date='" + moment(dateClicked).format("YYYY-MM-DD") + "']").removeClass("selected-day")
+                selectedDates.delete(dateClicked)
+            } else {
+                $(_this).addClass("selected-day")
+                $("td.fc-day-top[data-date='" + moment(dateClicked).format("YYYY-MM-DD") + "']").addClass("selected-day")
+                selectedDates.set(dateClicked, "selected")
+                selectedStart = dateClicked
+                selectedEnd = null
+            }
+        }
+        
+        const clearSelectedDates = function () {
+            let days = $("td[season='true']")
+            days.each(function (index, element) {
+                $(this).removeClass("selected-day")
+                $(this).attr("selected", false)
+            })
+            selectedDates = new Map()
+        }
+        
+        const buildSeasonEvent = function (event) {
+            if (!event || (!event.season)) {
+                return
+            }
+            
+            let e = {}
+            let event_id = "s-"
+            
+            if (event.date) {
+                e.allDay = true
+                e.start = event.date
+                e.end = event.date
+                event_id += moment(event.date).format("YYYYMMDD")
+            }
+            
+            if (event.product_id) {
+                event_id += "-" + event.product_id
+            }
+            
+            if (event.season) {
+                e.title = event.season.name
+                event_id += "-" + event.season.id
+                if (event.season.color_scheme) {
+                    e.backgroundColor = event.season.color_scheme.background_color
+                    e.borderColor = event.season.color_scheme.border_color
+                    e.textColor = event.season.color_scheme.text_color
+                }
+            }
+            
+            /**
+             * @name id
+             * @type {string|number|null}
+             * @description Optional Uniquely identifies the given event. Different instances of repeating events should all have the same <pre><code>id</code></pre>.
+             */
+            e.id = event_id
+            e.editable = true			//true or false. Optional. Overrides the master editable option for this single event.
+            e.startEditable = false		//true or false. Optional. Overrides the master eventStartEditable option for this single event.
+            e.durationEditable = false	//true or false. Optional. Overrides the master eventDurationEditable option for this single event.
+            e.rendering = "background"			//Allows alternate rendering of the event, like background events. Can be empty, "background", or "inverse-background"
+            e.overlap = true			//true or false. Optional. Overrides the master eventOverlap option for this single event. If false, prevents this event from being dragged/resized over other events. Also prevents other events from being dragged/resized over this event.
+            
+            return e
+        }
+        
+        const buildUnitEvent = function (event, unit) {
+            let e = {}
+            let event_id = "u-"
+            if (!event || (!unit)) {
+                return
+            }
+            
+            if (event.date) {
+                e.allDay = true
+                e.start = event.date
+                e.end = event.date
+                event_id += moment(event.date).format("YYYYMMDD")
+            }
+            
+            if (event.product_id) {
+                event_id += "-" + event.product_id
+            }
+            
+            if (event.season) {
+                event_id += "-" + event.season.id
+            }
+            
+            if (unit) {
+                e.title = unit.name
+                event_id += "-" + unit.id
+            }
+            
+            /**
+             * @name id
+             * @type {string|number|null}
+             * @description Optional Uniquely identifies the given event. Different instances of repeating events should all have the same <pre><code>id</code></pre>.
+             */
+            e.id = event_id
+            e.editable = true
+            e.startEditable = false
+            e.durationEditable = false
+            e.overlap = true
+            e.backgroundColor = "#11c26d"
+            e.borderColor = "#11c26d"
+            e.textColor = "#0a070d"
+            return e
+        }
+        
+        const formatEvent = function (event) {
+            if (!event) {
+                return
+            }
+            
+            if (event.season) {
+                let seasonEvent = buildSeasonEvent(event)
+                seasonEvents.set(seasonEvent.id, seasonEvent)
+            }
+            
+            if (event.units) {
+                for (let n = 0; n < event.units.length; n++) {
+                    let unitEvent = buildUnitEvent(event, event.units[n])
+                    seasonEvents.set(unitEvent.id, unitEvent)
+                }
+            }
+        }
+        
+        const addEventToCalendars = function (event) {
+            if (!event) {
+                return
+            }
+            
+            $.each(activeCalendars, function (k, el) {
+                $(el).fullCalendar("renderEvent", event)
+            })
+        }
+        
+        const loadEvents = function (events) {
+            seasonEvents = new Map()
+            if (!events) {
+                events = []
+            }
+            
+            $.each(events, function (i, event) {
+                //formatEvent(event)
+            })
+            
+            $.each(Array.from(seasonEvents.values()), function (i, event) {
+                //addEventToCalendars(event)
+            })
+        }
+        
+        const loadSeasonDropdown = function () {
+            let seasons = (Season && Season.all) ? Array.from(Season.all.values()) : []
+            let options = "<option value='' disabled readonly selected>-- Seasons --</option>"
+            $.each(seasons, function (k, season) {
+                let name = season.name
+                let id = season.id
+                options += `<option value="${id}">${name}</option>`
+            })
+            $(_calendar_filter_season_id).empty()
+            $(_calendar_filter_season_id).html(options)
+        }
+        
+        const loadProfileDropdown = function () {
+            let profiles = (Profile && Profile.all) ? Array.from(Profile.all.values()) : []
+            let options = "<option value='' disabled readonly selected>-- Profiles --</option>"
+            $.each(profiles, function (k, profile) {
+                let name = profile.name
+                let id = profile.id
+                options += `<option value="${id}">${name}</option>`
+            })
+            $(_calendar_filter_profile_id).empty()
+            $(_calendar_filter_profile_id).html(options)
+        }
+        
+        const fetchCalendarEvents = function (dataToSend, callback) {
+            if (dataToSend) {
+                try {
+                    sendGetRequest("/api/v1.0/calendars", dataToSend, function (data, status, xhr) {
+                        Console.log("data", data)
+                        if (data) {
+                            return callback(data)
+                        } else {
+                            return callback([])
+                        }
+                    })
+                } catch (e) {
+                    Console.log(e)
+                    return callback([])
+                }
+            } else {
+                return callback([])
+            }
+        }
+        
+        const refetchCalendarEvents = function () {
+        
+        }
+        
+        const getTitle = function () {
+            _calendar_display_year.innerText = start
+        }
+        
+        const getDate = function (startYear, monthsOut) {
+            let startMonth = (0 + monthsOut) + 1
+            let startDay = 1
+            return moment(startYear + "-" + pad(startMonth) + "-" + pad(startDay)).format("YYYY-MM-DD")
+        }
+        
+        const endLoading = function () {
+            $(_calendar_loader).hide()
+        }
+        
+        const buildCalendar = function (settings) {
+            let dateToday = new Date()
+            calContainer.appendChild(buildCalendarContainer())
+            start = (settings && settings.start) ? settings.start : dateToday.getFullYear()
+            events = (settings && settings.events) ? settings.events : []
+            
+            getTitle()
+            let activeCal = $.each(calendars, function (index, cal) {
+                let displayMonth = getDate(start, index)
+                
+                $(cal).fullCalendar({
+                    selectable: false,
+                    showNonCurrentDates: false,
+                    defaultDate: displayMonth,
+                    initialView: "dayGridMonth",
+                    displayEventTime: false,
+                    eventLimit: 3,
+                    header: {
+                        left: "",
+                        center: "title",
+                        right: "",
+                    },
+                    views: {
+                        month: {
+                            titleFormat: "MMMM",
+                        },
+                    },
+                    dayRender: function (date, el) {
+                        let day = moment(date).format("YYYYMMDD")
+                        let selectedDay = moment(date).format("YYYY-MM-DD")
+                        let id = "s" + day
+                        let month = moment(date).month()
+                        let year = moment(date).year()
+                        let top = $(`td.fc-day-top[data-date='${selectedDay}']`)
+                        let topSpan = $(`td.fc-day-top[data-date='${selectedDay}']>span.fc-day-number`)
+                        if (topSpan.length) {
+                            $(top).empty()
+                            let day = topSpan.text()
+                            if (!isNaN(day)) {
+                                let e = "<div class='w-100 d-flex align-items-center justify-content-between' style=''>"
+                                  + "<span>&nbsp;</span>"
+                                  + "<span class='fc-day-number'>" + day + "</span>"
+                                  + "</div>"
+                                
+                                let titleContainer = document.createElement("div")
+                                top.append(e)
+                            }
+                            
+                        }
+                        if (!$(el).hasClass("fc-disabled-day")) {
+                            $(top).attr("season", "true")
+                            $(el).attr("season", "true")
+                            $(el).attr("data-date", selectedDay)
+                            $(el).attr("id", id)
+                            $(el).attr("day", day)
+                            $(el).attr("month", month)
+                            $(el).attr("year", year)
+                            $(el).attr("selected", "false")
+                        }
+                    },
+                    dayClick: function (event, jsEvent, view) {
+                        let day = moment(event.start).format("YYYY-MM-DD")
+                        let dateClicked = moment(event).format("YYYY-MM-DD")
+                        
+                        if (jsEvent.originalEvent.shiftKey) {
+                            if (selectedStart !== null) {
+                                selectedEnd = dateClicked
+                                //console.log("start", selectedStart)
+                                //console.log("end", selectedEnd)
+                                if (moment(selectedEnd) < moment(selectedStart)) {
+                                    let tempEnd = moment(selectedStart).format("YYYY-MM-DD")
+                                    let tempStart = moment(selectedEnd).format("YYYY-MM-DD")
+                                    let startElement = $("td.fc-day[data-date='" + tempStart + "'][season='true']")
+                                    let endElement = $("td.fc-day[data-date='" + tempEnd + "'][season='true']")
+                                    $(startElement).removeClass("is-selected")
+                                    endElement.removeClass("is-selected")
+                                    //console.log("tempStart", moment(tempStart).format("YYYY-MM-DD"))
+                                    //console.log("tempEnd", moment(tempEnd).format("YYYY-MM-DD"))
+                                    
+                                    selectDates(this, tempStart, tempEnd)
+                                    selectedStart = tempEnd
+                                    selectedEnd = tempStart
+                                } else {
+                                    selectDates(this, selectedStart, selectedEnd)
+                                }
+                                
+                                //console.log("start2 ", selectedStart)
+                                //console.log("end 2 ", selectedEnd)
+                                
+                                selectedStart = null
+                                selectedEnd = null
+                            }
+                        } else if (jsEvent.originalEvent.ctrlKey) {
+                            
+                            if (this.hasClass("selected-day")) {
+                                this.removeClass("selected-day")
+                                selectedDates.delete(dateClicked)
+                                selectedStart = null
+                                selectedEnd = null
+                            } else {
+                                selectedDates.set(dateClicked, "selected")
+                                selectedStart = dateClicked
+                                selectedEnd = null
+                                this.addClass("selected-day")
+                            }
+                        } else {
+                            clearSelectedDates()
+                            selectDay(this, dateClicked)
+                            selectedStart = dateClicked
+                            selectedEnd = dateClicked
+                            this.addClass("selected-day")
+                        }
+                    },
+                    eventRender: function (event, element, view) {
+                        $(element).attr("season", "true")
+                        let day = moment(event.start).format("YYYY-MM-DD")
+                        let el = $("td.fc-day[data-date='" + day + "'][season='true']")
+                        let myEvent = seasonEvents.get(day)
+                        let textColor = event.textColor
+                        let backgroundColor = event.backgroundColor
+                        let borderColor = event.borderColor
+                        // --
+                        //console.log("render event", event)
+                        // --
+                        if (event.rendering === "background") {
+                            if ($(element).hasClass("fc-disabled-day")) {
+                                return
+                            }
+                            //
+                            var e = ""
+                            let dayCell = document.querySelectorAll(`td.fc-day[season='true'][data-date='${day}']`)
+                            
+                            if (myEvent) {
+                                $(el).addClass("has-event")
+                                $(el).attr("seasons_types_id", event.seasons_types_id)
+                                $(el).data("season", "true")
+                            }
+                            
+                            $(dayCell).css({
+                                "background": backgroundColor,
+                                "color": textColor,
+                                "border-color": borderColor,
+                            })
+                            
+                            $(element).css({
+                                "background": "transparent",
+                                "color": textColor,
+                            })
+                            
+                            //console.log("background", event)
+                        }
+                    },
+                    eventClick: function (calEvent, jsEvent, view) {
+                        //alert('Event: ' + calEvent.title)
+                        //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY)
+                        //alert('View: ' + view.name)
+                        
+                        // change the border color just for fun
+                        //$(this).css('border-color', 'red')
+                    },
+                    events: events,
+                })
+            })
+            
+            activeCalendars.push(activeCal)
+        }
+        
+        const buildEditData = function () {
+            let data = ``
+            $.each(Array.from(selectedDates.values), function (k, date) {
+                Console.log("date", date)
+            })
+            return data
+        }
+        
+        const init = function (settings) {
+            calendars = []
+            
+            if (settings) {
+                if (settings.calendarType) {
+                    calendarType = settings.calendarType
+                }
+            }
+            
+            let dataToSend = {
+                product_id: product_id,
+            }
+            
+            fetchCalendarEvents(dataToSend, function (events) {
+                
+                if (!events) {
+                    events = []
+                }
+                
+                buildCalendar({
+                    events: events,
+                    start: 2021,
+                })
+                
+                loadSeasonDropdown()
+                loadProfileDropdown()
+                endLoading()
+                
+            })
+            
+            const edit = function () {
+                _calendar_filter_ranges.innerHTML = buildEditData()
+                //console.log("edit", selectedDates)
+            }
+            
+            $(function () {
+                $.contextMenu({
+                    selector: ".selected-day",
+                    callback: function (key, options) {
+                        var m = "clicked: " + key
+                        Console.log("callback", m)
+                        Console.log("options", options)
+                        switch (key.toLowerCase()) {
+                            case "edit":
+                                edit()
+                                break
+                            default:
+                                break
+                        }
+                    },
+                    items: {
+                        "edit": {
+                            name: "Edit",
+                            icon: "edit",
+                        },
+                        "cut": {
+                            name: "Cut",
+                            icon: "cut",
+                        },
+                        "copy": {
+                            name: "Copy",
+                            icon: "copy",
+                        },
+                        "paste": {
+                            name: "Paste",
+                            icon: "paste",
+                        },
+                        "delete": {
+                            name: "Delete",
+                            icon: "delete",
+                        },
+                        "sep1": "---------",
+                        "quit": {
+                            name: "Quit",
+                            icon: function () {
+                                return 'context-menu-icon context-menu-icon-quit'
+                            },
+                        },
+                    },
+                })
+                
+                $(".selected-day").on("click", function (e) {
+                    //console.log("clicked", this)
+                })
+            })
+            
+        }
+        
+        init(settings)
+        
+        return {
+            calendars: new Map(),
+            loadSeasonDropdown: function () {
+                loadSeasonDropdown()
+            },
+        }
+    }
+    //
+    
+    //
+    
+    //
+    
+    //*/
+    /*
+    let calendar = null
+    $(function () {
+        const editEvent = function (event) {}
+        const deleteEvent = function (event) {}
+        const saveEvent = function () {}
+        var currentYear = new Date().getFullYear()
+        
+        calendar = new Calendar('#calendar', {
+            enableContextMenu: true,
+            enableRangeSelection: true,
+            style: 'background',
+            contextMenuItems: [
+                {
+                    text: 'Update',
+                    click: editEvent,
+                },
+                {
+                    text: 'Delete',
+                    click: deleteEvent,
+                },
+            ],
+            
+            dataSource: [
+                {
+                    id: 0,
+                    name: 'Google I/O',
+                    location: 'San Francisco, CA',
+                    startDate: new Date(currentYear, 4, 28),
+                    endDate: new Date(currentYear, 4, 29),
+                },
+                {
+                    id: 1,
+                    name: 'Microsoft Convergence',
+                    location: 'New Orleans, LA',
+                    startDate: new Date(currentYear, 2, 16),
+                    endDate: new Date(currentYear, 2, 19),
+                },
+                {
+                    id: 2,
+                    name: 'Microsoft Build Developer Conference',
+                    location: 'San Francisco, CA',
+                    startDate: new Date(currentYear, 3, 29),
+                    endDate: new Date(currentYear, 4, 1),
+                },
+                {
+                    id: 3,
+                    name: 'Apple Special Event',
+                    location: 'San Francisco, CA',
+                    startDate: new Date(currentYear, 8, 1),
+                    endDate: new Date(currentYear, 8, 1),
+                },
+                {
+                    id: 4,
+                    name: 'Apple Keynote',
+                    location: 'San Francisco, CA',
+                    startDate: new Date(currentYear, 8, 9),
+                    endDate: new Date(currentYear, 8, 9),
+                },
+                {
+                    id: 5,
+                    name: 'Chrome Developer Summit',
+                    location: 'Mountain View, CA',
+                    startDate: new Date(currentYear, 10, 17),
+                    endDate: new Date(currentYear, 10, 18),
+                },
+                {
+                    id: 6,
+                    name: 'F8 2015',
+                    location: 'San Francisco, CA',
+                    startDate: new Date(currentYear, 2, 25),
+                    endDate: new Date(currentYear, 2, 26),
+                },
+                {
+                    id: 7,
+                    name: 'Yahoo Mobile Developer Conference',
+                    location: 'New York',
+                    startDate: new Date(currentYear, 7, 25),
+                    endDate: new Date(currentYear, 7, 26),
+                },
+                {
+                    id: 8,
+                    name: 'Android Developer Conference',
+                    location: 'Santa Clara, CA',
+                    startDate: new Date(currentYear, 11, 1),
+                    endDate: new Date(currentYear, 11, 4),
+                },
+                {
+                    id: 9,
+                    name: 'LA Tech Summit',
+                    location: 'Los Angeles, CA',
+                    startDate: new Date(currentYear, 10, 17),
+                    endDate: new Date(currentYear, 10, 17),
+                },
+            ],
+        })
+    })
+    //*/
+    /*
+    $.fn.YearCalendar = function (settings) {
+        "use strict"
+        let name = this.attr("id")
+        YearCalendar.load({
+            name: name,
+            el: this,
+        })
+        
+    }
+    
+    const YearCalendar = (function () {
+        "use strict"
+        let currentYear = new Date().getFullYear()
+        
+        let calendarMonths = [
+            "01", "02",
+            "03", "04",
+            "05", "06",
+            "07", "08",
+            "09", "10",
+            "11", "12",
+        ]
+        let name
+        let $el
+        
+        const build_calendar_element = function (n) {
+            let calendarStartDate = moment(currentYear + "-" + calendarMonths[n] + "-01").format("YYYY-MM-DD")
+            let div = $("<div class='' id='" + name + "_" + n + "' data-month='" + calendarMonths[n] + "' data-year='" + currentYear + "'>")
+            div.fullCalendar({
+                selectable: false,
+                showNonCurrentDates: false,
+                views: {
+                    month: {
+                        titleFormat: "MMMM-YYYY",
+                    },
+                },
+                header: {
+                    left: "",
+                    center: "title",
+                    right: "",
+                },
+                defaultDate: calendarStartDate,
+                dayRender: function (date, el) {
+                    let day = moment(date).format("YYYYMMDD")
+                    let id = name + "_" + day
+                    let month = moment(date).month()
+                    let year = moment(date).year()
+                    let dow = moment(date).day()
+                    
+                    if (!$(el).hasClass("fc-disabled-day")) {
+                        $(el).attr("data-calendartype", name)
+                        $(el).attr("id", id)
+                        $(el).attr("day", day)
+                        $(el).attr("month", month)
+                        $(el).attr("year", year)
+                        $(el).attr("data-dow", dow)
+                        $(el).attr("selected", "false")
+                    }
+                },
+                eventRender: function (event, element) {
+                    if (event.rendering === "background") {
+                    
+                    }
+                },
+                dayClick: function (event, jsEvent, view) {
+                    let date = moment(event).format("YYYY-MM-DD")
+                    
+                    if (jsEvent) {
+                        if (jsEvent.originalEvent.shiftKey) {
+                            Console.log("dateClicked: shiftKey", "Shift Click")
+                        }
+                    }
+                    
+                    get_date_range()
+                },
+            })
+            return div
+        }
+        
+        const get_date_range = function () {
+            let selected_days = $("td[data-calendartype='" + name + "'][data-selected='true']")
+            Console.log("selected_days", selected_days.length)
+        }
+        
+        const build = function () {
+            Console.log("YearCalendar.load()", {})
+            let $row = $("<div class='row'>")
+            for (let n = 0; n < 12; n++) {
+                
+                let $col = $("<div class='col-12 col-xl-4 p-1'>")
+                let $cal = build_calendar_element(n)
+                $col.append($cal)
+                $row.append($col)
+            }
+            $el.append($row)
+        }
+        
+        const load = function (settings) {
+            Console.log("YearCalendar.load()", settings)
+            if (settings) {
+                if (settings.el) {
+                    $el = $(settings.el)
+                }
+                
+                if (settings.name) {
+                    name = settings.name
+                }
+            }
+            
+            build()
+        }
+        
+        return {
+
+            load: function (settings) {
+                load(settings)
+            },
+        }
+    })()
+    
+    //*/
+    
+    $(document).ready(function () {
+        
+        /*
+        const pickrText = Pickr.create({
+            el: "#form_edit_scheme_text_color",
+            default: "303030",
+            theme: "classic", // or 'classic', or 'monolith', or 'nano'
+            swatches: swatches,
+            components: {
+                
+                preview: true,
+                opacity: true,
+                hue: true,
+                
+                interaction: {
+                    hex: true,
+                    rgba: true,
+                    hsla: true,
+                    hsva: true,
+                    cmyk: true,
+                    input: true,
+                    clear: true,
+                    save: true,
+                },
+            },
+        })
+        
+        const pickrBackground = Pickr.create({
+            el: "#form_edit_scheme_background_color",
+            default: "303030",
+            theme: "classic", // or 'classic', or 'monolith', or 'nano'
+            swatches: swatches,
+            components: {
+                
+                preview: true,
+                opacity: true,
+                hue: true,
+                
+                interaction: {
+                    hex: true,
+                    rgba: true,
+                    hsla: true,
+                    hsva: true,
+                    cmyk: true,
+                    input: true,
+                    clear: true,
+                    save: true,
+                },
+            },
+        })
+        
+        const pickrBorder = Pickr.create({
+            el: "#form_edit_scheme_border_color",
+            default: "303030",
+            theme: "classic", // or 'classic', or 'monolith', or 'nano'
+            swatches: swatches,
+            components: {
+                
+                preview: true,
+                opacity: true,
+                hue: true,
+                
+                interaction: {
+                    hex: true,
+                    rgba: true,
+                    hsla: true,
+                    hsva: true,
+                    cmyk: true,
+                    input: true,
+                    clear: true,
+                    save: true,
+                },
+            },
+        })
+        
+        pickrText.on("init", instance => {
+            //Console.log('Event: "init"', instance)
+        }).on("hide", instance => {
+            //Console.log('Event: "hide"', instance)
+        }).on("show", (color, instance) => {
+            //Console.log('Event: "show"', color, instance)
+        }).on("save", (color, instance) => {
+            Console.log('Event: "save"', color, instance)
+        }).on("clear", instance => {
+            Console.log('Event: "clear"', instance)
+        }).on('change', (color, source, instance) => {
+            Console.log('Event: "change"', color, source, instance)
+        }).on('changestop', (source, instance) => {
+            //Console.log('Event: "changestop"', source, instance)
+        }).on('cancel', instance => {
+            Console.log('Event: "cancel"', instance)
+        }).on('swatchselect', (color, instance) => {
+            Console.log('Event: "swatchselect"', color, instance)
+            let c = "#" + color.toHEXA().join('')
+            Console.log('Event: "swatchselect"', c)
+        })
+        //*/
+        
+        const LightenDarkenColor = function (col, amt) {
+            var usePound = false
+            if (col[0] === "#") {
+                col = col.slice(1)
+                usePound = true
+            }
+            
+            var num = parseInt(col, 16)
+            
+            var r = (num >> 16) + amt
+            
+            if (r > 255) {
+                r = 255
+            } else if (r < 0) {
+                r = 0
+            }
+            
+            var b = ((num >> 8) & 0x00FF) + amt
+            
+            if (b > 255) {
+                b = 255
+            } else if (b < 0) {
+                b = 0
+            }
+            
+            var g = (num & 0x0000FF) + amt
+            
+            if (g > 255) {
+                g = 255
+            } else if (g < 0) {
+                g = 0
+            }
+            
+            return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16)
+        }
+        
+        const contrastingColor = function (color) {
+            return (luma(color) >= 165) ? "000" : "fff"
+        }
+        
+        const luma = function (color) {
+            var rgb = (typeof color === 'string') ? hexToRGBArray(color) : color
+            return (0.2126 * rgb[0]) + (0.7152 * rgb[1]) + (0.0722 * rgb[2]) // SMPTE C, Rec. 709 weightings
+        }
+        
+        const hexToRGBArray = function (color) {
+            if (color.length === 3) {
+                color = color.charAt(0) + color.charAt(0) + color.charAt(1) + color.charAt(1) + color.charAt(2) + color.charAt(2)
+            } else if (color.length !== 6) {
+                throw('Invalid hex color: ' + color)
+            }
+            var rgb = []
+            for (var i = 0; i <= 2; i++)
+                rgb[i] = parseInt(color.substr(i * 2, 2), 16)
+            return rgb
+        }
+        
+        const pSBC = (p, c0, c1, l) => {
+            let r, g, b, P, f, t, h, i = parseInt, m = Math.round, a = typeof (c1) == "string"
+            if (typeof (p) != "number" || p < -1 || p > 1 || typeof (c0) != "string" || (c0[0] != 'r' && c0[0] != '#') || (c1 && !a)) {
+                return null
+            }
+            if (!this.pSBCr) {
+                this.pSBCr = (d) => {
+                    let n = d.length, x = {}
+                    if (n > 9) {
+                        [r, g, b, a] = d = d.split(","), n = d.length
+                        if (n < 3 || n > 4) {
+                            return null
+                        }
+                        x.r = i(r[3] == "a" ? r.slice(5) : r.slice(4)), x.g = i(g), x.b = i(b), x.a = a ? parseFloat(a) : -1
+                    } else {
+                        if (n == 8 || n == 6 || n < 4) {
+                            return null
+                        }
+                        if (n < 6) {
+                            d = "#" + d[1] + d[1] + d[2] + d[2] + d[3] + d[3] + (n > 4 ? d[4] + d[4] : "")
+                        }
+                        d = i(d.slice(1), 16)
+                        if (n == 9 || n == 5) {
+                            x.r = d >> 24 & 255, x.g = d >> 16 & 255, x.b = d >> 8 & 255, x.a = m((d & 255) / 0.255) / 1000
+                        } else {
+                            x.r = d >> 16, x.g = d >> 8 & 255, x.b = d & 255, x.a = -1
+                        }
+                    }
+                    return x
+                }
+            }
+            h = c0.length > 9, h = a ? c1.length > 9 ? true : c1 == "c" ? !h : false : h, f = this.pSBCr(c0), P = p < 0, t = c1 && c1 != "c" ? this.pSBCr(c1) : P ? {
+                r: 0,
+                g: 0,
+                b: 0,
+                a: -1,
+            } : {
+                r: 255,
+                g: 255,
+                b: 255,
+                a: -1,
+            }, p = P ? p * -1 : p, P = 1 - p
+            if (!f || !t) {
+                return null
+            }
+            if (l) {
+                r = m(P * f.r + p * t.r), g = m(P * f.g + p * t.g), b = m(P * f.b + p * t.b)
+            } else {
+                r = m((P * f.r ** 2 + p * t.r ** 2) ** 0.5), g = m((P * f.g ** 2 + p * t.g ** 2) ** 0.5), b = m((P * f.b ** 2 + p * t.b ** 2) ** 0.5)
+            }
+            a = f.a, t = t.a, f = a >= 0 || t >= 0, a = f ? a < 0 ? t : t < 0 ? a : a * P + t * p : 0
+            if (h) {
+                return "rgb" + (f ? "a(" : "(") + r + "," + g + "," + b + (f ? "," + m(a * 1000) / 1000 : "") + ")"
+            } else {
+                return "#" + (4294967296 + r * 16777216 + g * 65536 + b * 256 + (f ? m(a * 255) : 0)).toString(16).slice(1, f ? undefined : -2)
+            }
+        }
+        
+    })
 </script>

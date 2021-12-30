@@ -1,22 +1,22 @@
 <section>
-    <?php include_once(VIEWS_PATH . "/units/tables/product_edit_unit_table.phtml"); ?>
-    
-    <div class="card card-body mb-2">
-        <div class="row">
-            <div class="col-12">
+    <div class="row">
+        <div class="col-12">
+            <div class="form-element">
                 <label for="product_edit_unit_form_unit_name_filter" class="d-none">Unit Search:</label>
                 <div class="input-group">
-                    <input type="search" id="product_edit_unit_form_unit_name_filter" name="product_edit_unit_form_unit_name_filter" class="form-control" placeholder="Units...">
-                    <div class="input-group-append">
-                        <button type="button" id="product_edit_unit_form_unit_name_filter_add_new_button" name="product_edit_unit_form_unit_name_filter_add_new_button" class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect">
-                            <i class="fas fa-plus"></i>
-                        </button>
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </span>
                     </div>
+                    <input type="search" id="product_edit_unit_form_unit_name_filter" name="product_edit_unit_form_unit_name_filter" class="form-control" placeholder="Search Units"/>
                 </div>
                 <div id="product_edit_unit_form_unit_name_filter-error" class="error w-100 text-center"></div>
             </div>
         </div>
     </div>
+    
+    <?php include_once(VIEWS_PATH . "/units/tables/product_edit_unit_table.phtml"); ?>
     
     <div class="card card-body mb-2">
         

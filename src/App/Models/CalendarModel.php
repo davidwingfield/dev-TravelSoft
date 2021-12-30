@@ -79,9 +79,47 @@
         
         public static function getByProductId(int $product_id = null): array
         {
-            $calendar = [];
             
-            return $calendar;
+            if (is_null($product_id)) {
+                return [];
+            }
+            
+            $sql = "
+                SELECT
+                        PRODUCT_CALENDAR.date AS 'product_calendar_date',
+                        SEASON.id AS 'season_id',
+                        SEASON.name AS 'season_name',
+                        COLOR_SCHEME.id AS 'color_scheme_id',
+                        COLOR_SCHEME.name AS 'color_scheme_name',
+                        COLOR_SCHEME.background_color AS 'color_scheme_background_color',
+                        COLOR_SCHEME.border_color AS 'color_scheme_border_color',
+                        COLOR_SCHEME.text_color AS 'color_scheme_text_color',
+                        CATEGORY.id AS 'category_id',
+                        CATEGORY.pricing_strategy_types_id AS 'category_pricing_strategy_types_id',
+                        CATEGORY.attribute_id AS 'category_attribute_id',
+                        CATEGORY.name AS 'category_name',
+                        CATEGORY.icon AS 'category_icon',
+                        CATEGORY.all_day AS 'category_all_day',
+                        CATEGORY.overlap AS 'category_overlap',
+                        CATEGORY.editable AS 'category_editable',
+                        CATEGORY.duration_editable AS 'category_duration_editable',
+                        CATEGORY.start_editable AS 'category_start_editable',
+                        CATEGORY.display AS 'category_display',
+                        CATEGORY.background_color AS 'category_background_color',
+                        CATEGORY.text_color AS 'category_text_color',
+                        CATEGORY.border_color AS 'category_border_color'
+                FROM 	product_calendar PRODUCT_CALENDAR
+                JOIN 	season SEASON ON SEASON.id = PRODUCT_CALENDAR.season_id
+                JOIN 	color_scheme COLOR_SCHEME ON COLOR_SCHEME.id = SEASON.color_scheme_id
+                JOIN 	category CATEGORY ON CATEGORY.id = SEASON.category_id
+                WHERE	PRODUCT_CALENDAR.product_id = $product_id
+            ";
+            try {
+                return Model::$db->rawQuery($sql);
+            } catch (Exception $e) {
+                return [];
+            }
+            
         }
         
     }

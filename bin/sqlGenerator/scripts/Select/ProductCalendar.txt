@@ -1,0 +1,24 @@
+SELECT
+		PRODUCT_CALENDAR.date AS 'product_calendar_date',
+		PRODUCT_CALENDAR.product_id AS 'product_calendar_product_id',
+		PRODUCT_CALENDAR.season_id AS 'product_calendar_season_id',
+		PRODUCT_CALENDAR.enabled AS 'product_calendar_enabled',
+		PRODUCT_CALENDAR.date_created AS 'product_calendar_date_created',
+		PRODUCT_CALENDAR.created_by AS 'product_calendar_created_by',
+		PRODUCT_CALENDAR.date_modified AS 'product_calendar_date_modified',
+		PRODUCT_CALENDAR.modified_by AS 'product_calendar_modified_by',
+		PRODUCT_CALENDAR.note AS 'product_calendar_note'
+FROM 	product_calendar PRODUCT_CALENDAR
+-- JOIN 	product_calendar PRODUCT_CALENDAR ON PRODUCT_CALENDAR.id = {FK_TABLE}.product_calendar_id
+
+/*
+'date'=>$product_calendar['product_calendar_date'],
+'product_id'=>$product_calendar['product_calendar_product_id'],
+'season_id'=>$product_calendar['product_calendar_season_id'],
+'enabled'=>$product_calendar['product_calendar_enabled'],
+'date_created'=>$product_calendar['product_calendar_date_created'],
+'created_by'=>$product_calendar['product_calendar_created_by'],
+'date_modified'=>$product_calendar['product_calendar_date_modified'],
+'modified_by'=>$product_calendar['product_calendar_modified_by'],
+'note'=>$product_calendar['product_calendar_note']
+*/

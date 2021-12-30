@@ -336,7 +336,7 @@ const Location = (function () {
           let selected_value = $("input[name='location_display']:checked").val()
           Console.log("selected_value", selected_value)
           default_display = selected_value
-          init_autocomplete()
+          initAutoComplete()
           if (Location.detail["display_" + selected_value] !== null) {
               _location_name_filter.value = Location.detail["display_" + selected_value]
           }
@@ -371,7 +371,7 @@ const Location = (function () {
     /**
      * initialize autocomplete functions
      */
-    const init_autocomplete = function () {
+    const initAutoComplete = function () {
         $(_location_name_filter)
           .on("click", function () {
               $(this).select()
@@ -953,7 +953,7 @@ const Location = (function () {
         }
         
         if (_location_name_filter) {
-            init_autocomplete()
+            initAutoComplete()
         }
         
     }

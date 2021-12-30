@@ -35,6 +35,9 @@ const toastrOptions = {
     "showMethod": "fadeIn",
     "hideMethod": "fadeOut",
 }
+let dow_short = [
+    "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
+]
 const days = [
     {
         0: {

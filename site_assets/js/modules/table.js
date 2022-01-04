@@ -148,6 +148,18 @@ $.fn.table = function (settings) {
         }
     }
     
+    const jumpToRow = function (row_data) {
+        Console.log("table:jumpToRow(row_data)", row_data)
+        if (row_data) {
+            try {
+                $dTable.page.jumpToData(row_data.id, 0)
+            } catch (e) {
+                Console.log(e)
+            }
+            
+        }
+    }
+    
     const deleteRow = function (row_data) {
         if (row_data) {
             try {
@@ -222,6 +234,9 @@ $.fn.table = function (settings) {
         },
         updateRow (row_data) {
             updateRow(row_data)
+        },
+        jumpToRow: function (detail) {
+            jumpToRow(detail)
         },
     }
     

@@ -377,8 +377,8 @@
         public static function update($provider = null): array
         {
             if (!isset($provider["company_id"])) {
-                Log::$debug_log->error("Missing Data");
-                Log::$debug_log->trace($provider);
+                //Log::$debug_log->error("Missing Data");
+                //Log::$debug_log->trace($provider);
                 
                 return [];
             }

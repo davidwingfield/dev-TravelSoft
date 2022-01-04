@@ -3,6 +3,7 @@
     namespace Framework\App\Controllers;
     
     use Framework\App\Models\ProfileModel;
+    use Framework\App\Models\UnitModel;
     use Framework\Core\Controller;
     use Framework\Core\View;
     use Framework\Logger\Log;
@@ -31,7 +32,7 @@
             } else if (isset($params["profile_id"])) {
                 $results = ProfileModel::get((int)$params["profile_id"]);
             } else {
-                Log::$debug_log->trace("else");
+                //Log::$debug_log->trace("else");
                 $results = ProfileModel::get();
             }
             
@@ -49,6 +50,28 @@
             exit(1);
         }
         
+        /**
+         * autocomplete
+         *
+         * @param string   $st
+         * @param int|null $category_id
+         *
+         * @return array
+         */
+        public static function autocomplete(string $st = "", int $category_id = null): array
+        {
+            $results = ProfileModel::profile_ac($st);
+            
+            return self::format_ac($results);
+        }
+        
+        /**
+         * get inventory profiles by product id
+         *
+         * @param int|null $product_id
+         *
+         * @return array
+         */
         public static function getByProductId(int $product_id = null): array
         {
             $id = null;
@@ -165,6 +188,21 @@
             }
             
             return $formatted_profile;
+        }
+        
+        private static function format_ac(array $profiles = null): array
+        {
+            $data["suggestions"] = [];
+            foreach ($profiles AS $k => $profile) {
+                $l = (object)$profile;
+                $value = utf8_encode($l->profile_name);
+                array_push($data["suggestions"], [
+                    "value" => utf8_encode($value),
+                    "data" => self::format($profile),
+                ]);
+            }
+            
+            return $data;
         }
         
     }

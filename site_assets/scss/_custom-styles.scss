@@ -58,7 +58,8 @@ html, body {
 @media (min-width: $sm) {
   html, body {
     font-size: 12px;
-    line-height: 1.7;
+    --lh: 1.7rem;
+    line-height: var(--lh);
   }
   
   .debug_demo {
@@ -74,7 +75,8 @@ html, body {
 @media (min-width: $md) {
   html, body {
     font-size: 13px;
-    line-height: 1.7;
+    --lh: 1.7rem;
+    line-height: var(--lh);
   }
   
   .debug_demo {
@@ -94,7 +96,8 @@ html, body {
 @media (min-width: $lg) {
   html, body {
     font-size: 14px;
-    line-height: 1.7;
+    --lh: 1.7rem;
+    line-height: var(--lh);
   }
   
   .debug_demo {
@@ -114,7 +117,8 @@ html, body {
 @media (min-width: $xl) {
   html, body {
     font-size: 14px;
-    line-height: 1.7;
+    --lh: 1.7rem;
+    line-height: var(--lh);
   }
   
   .debug_demo {
@@ -1243,4 +1247,12 @@ button.btn.btn-pure.trips-skin.btn-default.icon:active {
 .md-pills .nav-link.active {
   background: $custom-secondary-color !important;
   color: choose-contrast-color($custom-secondary-color) !important;
+}
+
+.fc-unthemed td.fc-today {
+  background: rgb(237, 166, 0, .6) !important
+}
+
+.fc-content-skeleton td.fc-today {
+  background: rgb(0, 0, 0, .0) !important
 }

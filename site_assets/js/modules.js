@@ -1,7 +1,9 @@
 exports.modules = [
     "./site_assets/js/modules/settings.js",
     "./site_assets/js/modules/functions.js",
+    "./site_assets/js/modules/console.js",
     "./site_assets/js/modules/tiny_editor.js",
+    "./site_assets/js/modules/context_menu.js",
     "./site_assets/js/modules/season.js",
     "./site_assets/js/modules/panel.js",
     "./site_assets/js/modules/table.js",
@@ -41,8 +43,7 @@ exports.modules = [
     "./site_assets/js/modules/login.js",
     "./site_assets/js/modules/provider.js",
     "./site_assets/js/modules/profile.js",
-    "./site_assets/js/modules/product/index.js",
-    "./site_assets/js/modules/product/edit.js",
+    
     "./site_assets/js/modules/product.js",
     "./site_assets/js/modules/profile_card.js",
     "./site_assets/js/modules/site.js",

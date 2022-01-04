@@ -2,8 +2,10 @@
     
     namespace Framework\App\Controllers;
     
+    use Framework\App\Models\UnitModel;
     use Framework\App\Models\VariantModel;
     use Framework\Core\Controller;
+    use Framework\Core\View;
     use Framework\Logger\Log;
     
     /**
@@ -21,6 +23,33 @@
         public function __construct()
         {
             parent::__construct();
+        }
+        
+        /**
+         * validate name exists
+         *
+         * @param array $args
+         *
+         * @return array
+         */
+        public static function validateName(array $args = []): array
+        {
+            $variants = array();
+            $category_id = (isset($args["category_id"])) ? (int)$args["category_id"] : null;
+            $name = (isset($args["name"])) ? (string)$args["name"] : null;
+            
+            $results = VariantModel::getByName($name, $category_id);
+            
+            foreach ($results AS $k => $variant) {
+                $variants[] = self::format($variant);
+            }
+            
+            /**
+             * render variant json
+             */
+            header("Content-type:application/json");
+            View::render_json($variants);
+            exit(1);
         }
         
         /**
@@ -55,6 +84,22 @@
         public static function autocomplete(string $st = "", int $category_id = null): array
         {
             return self::format_ac(VariantModel::variant_ac($st, $category_id));
+        }
+        
+        public static function serveUpdate(array $params = []): void
+        {
+            $variants = [];
+            $results = VariantModel::updateRecord($params);
+            foreach ($results AS $variant) {
+                $variants[] = self::format($variant);
+            }
+            
+            /**
+             * render results json page
+             */
+            header("Content-type:application/json");
+            View::render_json($variants);
+            exit(0);
         }
         
         /**

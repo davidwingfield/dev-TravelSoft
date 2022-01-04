@@ -3,6 +3,7 @@
     namespace Framework\App\Models;
     
     use Exception;
+    use Framework\App\Controllers\Location;
     use Framework\Core\Model;
     use Framework\Logger\Log;
     
@@ -159,6 +160,7 @@
             }
         }
         
+        //
         public static function addRecord(array $product = null): array
         {
             $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
@@ -166,7 +168,7 @@
             $id = Model::setInt((isset($product["id"])) ? $product["id"] : null);
             $category_id = Model::setInt((isset($product["category_id"])) ? $product["category_id"] : null);
             $city_id = Model::setInt((isset($product["city_id"])) ? $product["city_id"] : null);
-            $location_id = Model::setInt((isset($product["location_id"])) ? $product["location_id"] : 1);
+            
             $pricing_strategy_types_id = Model::setInt((isset($product["pricing_strategy_types_id"])) ? $product["pricing_strategy_types_id"] : null);
             $status_types_id = Model::setInt((isset($product["status_types_id"])) ? $product["status_types_id"] : 1);
             $currency_id = Model::setInt((isset($product["currency_id"])) ? $product["currency_id"] : 5);
@@ -194,6 +196,33 @@
             $description_long = Model::setLongText((isset($product["description_long"])) ? $product["description_long"] : null);
             $description_short = Model::setLongText((isset($product["description_short"])) ? $product["description_short"] : null);
             $keywords = Model::setLongText((isset($product["keywords"])) ? $product["keywords"] : null);
+            
+            $location = [];
+            $location["name"] = (string)"City Center";
+            $location["city_id"] = (int)$city_id;
+            $location["location_types_id"] = 1;
+            
+            $location_detail = Location::getByCityId($location["city_id"], $location["name"]);
+            
+            if (count($location_detail) > 0) {
+                //Log::$debug_log->trace("Yes Location Detail");
+                //Log::$debug_log->trace($location_detail);
+                $location_detail = $location_detail;
+                
+            } else {
+                //    Log::$debug_log->trace("No Location Detail");
+                $location_detail = Location::update($location);
+                //Log::$debug_log->trace($location_detail);
+                if (count($location_detail) > 0) {
+                    $location_detail = $location_detail[0];
+                }
+            }
+            
+            //Log::$debug_log->trace($location_detail);
+            
+            $location_id = $location_detail["id"];
+            
+            //Log::$debug_log->trace($location_id);
             
             $sql = "
                 INSERT INTO product (
@@ -246,10 +275,12 @@
                     date_modified = VALUES(date_modified);
             ";
             
+            //Log::$debug_log->trace($sql);
+            
             try {
                 Model::$db->rawQuery($sql);
                 $product_id = Model::$db->getInsertId();
-                Log::$debug_log->trace($product_id);
+                //    Log::$debug_log->trace($product_id);
                 if ($product_id) {
                     return self::get($product_id);
                 }

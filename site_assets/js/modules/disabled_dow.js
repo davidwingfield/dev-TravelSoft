@@ -11,9 +11,15 @@ $.fn.DisabledDOW = function (settings) {
     const $this = $(_this)
     
     $this.on("change", function () {
-        console.log("change")
+        //console.log("change")
     })
     
+    /**
+     * buildCheckBox
+     *
+     * @param day
+     * @returns {HTMLInputElement}
+     */
     const buildCheckBox = function (day) {
         let input = document.createElement("input")
         input.type = "checkbox"

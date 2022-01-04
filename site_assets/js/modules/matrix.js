@@ -2,6 +2,7 @@ const Matrix = (function () {
     "use strict"
     
     const base_url = "/matrix"
+    let matrix_cost, matrix_margin, matrix_price
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
@@ -68,6 +69,32 @@ const Matrix = (function () {
         
         Console.log("Matrix.all", Matrix.all)
     }
+    
+    const buildMatrixForm = function () {
+        
+        matrix_cost = document.getElementsByName("matrix_cost")
+        matrix_price = document.getElementsByName("matrix_price")
+        matrix_margin = document.getElementsByName("matrix_margin")
+        matrix_cost.forEach(el => el.addEventListener("keyup", event => {
+            let matrix_id = el.dataset.matrixid
+            Console.log("matrix_cost", el.value)
+            Console.log("matrix_cost", matrix_id)
+        }))
+        
+        matrix_price.forEach(el => el.addEventListener("keyup", event => {
+            let matrix_id = el.dataset.matrixid
+            Console.log("matrix_price", el.value)
+            Console.log("matrix_price", matrix_id)
+        }))
+        
+        matrix_margin.forEach(el => el.addEventListener("keyup", event => {
+            let matrix_id = el.dataset.matrixid
+            Console.log("matrix_margin", el.value)
+            Console.log("matrix_margin", matrix_id)
+        }))
+        
+    }
+    
     const init = function (settings) {
         let matrices = []
         if (settings) {
@@ -76,12 +103,17 @@ const Matrix = (function () {
             }
         }
         loadAll(matrices)
+        buildMatrixForm()
     }
+    
     return {
         detail: {},
         all: new Map(),
         init: function (settings) {
             init(settings)
+        },
+        buildMatrixForm: function () {
+            buildMatrixForm()
         },
     }
     

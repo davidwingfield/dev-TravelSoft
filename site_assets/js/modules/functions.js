@@ -55,6 +55,12 @@ $.fn.BuildDropDown = function (settings) {
     
 }
 
+const hexToRgb = hex =>
+  hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
+    , (m, r, g, b) => "#" + r + r + g + g + b + b)
+    .substring(1).match(/.{2}/g)
+    .map(x => parseInt(x, 16))
+
 jQuery.fn.dataTable.Api.register("page.jumpToData()", function (data, column) {
     var pos = this.column(column, {
         order: "current",
@@ -178,6 +184,45 @@ const validator_init = function (settings) {
     return jQuery.validator
 }
 
+const setError = function (element, msg) {
+    let id = $(element).attr("id")
+    let el = $("#" + id + "")
+    let error_el = $("#" + id + "-error")
+    
+    if (error_el.attr("data-ref")) {
+        $("#" + error_el.attr("data-ref")).addClass("is-invalid")
+    } else {
+        el.parent().find("span.select2").addClass("is-invalid")
+        el.addClass("is-invalid")
+    }
+    
+    if (error_el) {
+        error_el.css({ "display": "block" })
+    }
+    
+    $(error_el).append(`<span id="#${id}-error" class="invalid">${msg}</span>`)
+}
+
+const clearError = function (element) {
+    let id = $(element).attr("id")
+    let el = $("#" + id + "")
+    let error_el = $("#" + id + "-error")
+    
+    if (error_el.attr("data-ref")) {
+        $("#" + error_el.attr("data-ref")).removeClass("is-invalid")
+    } else {
+        el.parent().find("span.select2").removeClass("is-invalid")
+        el.removeClass("is-invalid")
+    }
+    
+    if (error_el) {
+        $(error_el).empty()
+        error_el.css({ "display": "none" })
+        
+    }
+    
+}
+
 const toNumbers = arr => arr.map(Number)
 
 const remove_nulls = function (obj) {
@@ -262,10 +307,11 @@ const sendPostRequest = function (url, data_to_send, callback) {
     let msg, result = []
     if (url && data_to_send) {
         $.postJSON(url, data_to_send, function (data, status, xhr) {
-            //*
+            /*
             Console.log("data", data)
             Console.log("status", status)
             Console.log("xhr", xhr)
+            Console.log("typeof data.result", typeof data.result)
             //*/
             if (status === "success" && typeof data.result !== "undefined") {
                 
@@ -590,6 +636,12 @@ function decodeHtml (str) {
 }
 
 
+/**
+ * escape html chars
+ *
+ * @param text
+ * @returns {string}
+ */
 function escapeHtml (text) {
     if (!text) {
         text = ""
@@ -605,6 +657,16 @@ function escapeHtml (text) {
     return text.replace(/[&<>"']/g, function (m) { return map[m] })
 }
 
+
+const setInt = function (val) {
+    let returnVal = null
+    if (val) {
+        if (!isNaN(parseInt(val))) {
+            returnVal = val
+        }
+    }
+    return returnVal
+}
 
 const htmlEncode = function (value) {
     return $("<textarea/>").text(value).html()

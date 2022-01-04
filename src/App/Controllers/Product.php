@@ -39,7 +39,7 @@
             "new" => array(
                 "type" => "a",
                 "href" => "javascript:void(0)",
-                "classes" => "btn btn-primary ",
+                "classes" => "btn btn-sm btn-primary btn-round",
                 "icon" => "fas fa-plus mr-2",
                 "id" => "button_add_product_page_heading",
                 "text" => "New Product",
@@ -215,6 +215,11 @@
                 $product_id = (int)$params["product_id"];
                 $data = Page::getDetails(10);
                 $results = [];
+                $products = ProductModel::get($product_id);
+                if (count($products) === 0) {
+                    header('Location: /products');
+                    exit(0);
+                }
                 foreach (ProductModel::get($product_id) AS $k => $product) {
                     $results[] = self::format($product);
                 }
@@ -274,10 +279,12 @@
             exit(1);
         }
         
+        // ----
+        
         public static function serveTableUpdate(array $params = [])
         {
             $input = filter_input_array(INPUT_POST);
-            Log::$debug_log->trace($input);
+            //Log::$debug_log->trace($input);
             
             // ----
             
@@ -462,11 +469,15 @@
             $products = array();
             
             $results = ProductModel::addRecord($params);
+            //Log::$debug_log->trace($results);
             foreach ($results as $result) {
                 $products[] = self::format($result);
             }
             
-            // --
+            /**
+             * render product json
+             */
+            header("Content-type:application/json");
             View::render_json($products);
             exit(0);
         }

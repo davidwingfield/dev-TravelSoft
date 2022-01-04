@@ -1,6 +1,9 @@
 <section id="product_edit_pricing_section">
+    
     <div class="card card-body mb-2">
         <div class="row">
+            
+            <!-- Pricing Strategy Types Id -->
             <div class="col-3">
                 <label for="pricing_strategy_types_id">Pricing Strategy Types:</label>
                 <select id="pricing_strategy_types_id" name="pricing_strategy_types_id" class="form-control">
@@ -10,58 +13,75 @@
                     <option value="3">Per Days Used</option>
                 </select>
             </div>
+            <!-- /Pricing Strategy Types Id -->
             
-            <div class="col-3">
-                <label for="pricing_strategy_unit_id">Unit:</label>
-                <select id="pricing_strategy_unit_id" name="pricing_strategy_unit_id" class="form-control">
-                    <option value="" readonly disabled selected>-- Unit --</option>
-                </select>
-            </div>
-            
+            <!-- Season Id -->
             <div class="col-3">
                 <label for="pricing_strategy_season_id">Season:</label>
-                <select id="pricing_strategy_season_id" name="pricing_strategy_season_id" class="form-control">
-                    <option value="" readonly disabled selected>-- Season --</option>
-                </select>
+                <select id="pricing_strategy_season_id" name="pricing_strategy_season_id" class="form-control"></select>
             </div>
+            <!-- /Season Id -->
+            
+            <!-- Unit Id -->
+            <div class="col-3">
+                <label for="pricing_strategy_unit_id">Unit:</label>
+                <select id="pricing_strategy_unit_id" name="pricing_strategy_unit_id" class="form-control"></select>
+            </div>
+            <!-- /Unit Id -->
+            
+            <!-- Profile Id -->
+            <div class="col-3">
+                <label for="pricing_strategy_profile_id">Profile:</label>
+                <select id="pricing_strategy_profile_id" name="pricing_strategy_profile_id" class="form-control"></select>
+            </div>
+            <!-- /Profile Id -->
+        
         </div>
     </div>
     
     <div class="pricing_container">
         
-        <div class="card card-body mb-2">
+        <div class="card card-body p-1 mb-2">
+            <!--
             <h5 class="card-title font-weight-bold">
                 <span id="pricing_strategy_unit_name" class=""></span>
                 <a href="javascript:void(0);" id="pricing_strategy_unit_name_edit" class="panel_link" aria-hidden="true">Edit</a>
             </h5>
-            
+            -->
             <form id="product_edit_matrix" class="" novalidate="novalidate">
+                <label for="product_edit_matrix_id" class="d-none">matrix_id</label>
                 <input type="text" id="product_edit_matrix_id" name="product_edit_matrix_id" class="" value=""/>
                 <div class="row">
                     
+                    <!-- Base Cost -->
                     <div class="col-4">
                         <div class="form-element">
-                            <label for="matrix_cost">Base Cost:</label>
-                            <input id="matrix_cost" name="matrix_cost" class="form-control" value="0"/>
-                            <div id="matrix_cost-error" class="error w-100 text-center"></div>
+                            <label for="matrix_cost_1">Base Cost:</label>
+                            <input id="matrix_cost_1" name="matrix_cost" class="form-control" data-matrixid="1"/>
+                            <div id="matrix_cost_1-error" class="error w-100 text-center"></div>
                         </div>
                     </div>
+                    <!-- /Base Cost -->
                     
+                    <!-- Base Margin -->
                     <div class="col-4">
                         <div class="form-element">
-                            <label for="matrix_margin">Base Margin:</label>
-                            <input id="matrix_margin" name="matrix_margin" class="form-control" value="0"/>
-                            <div id="matrix_margin-error" class="error w-100 text-center"></div>
+                            <label for="matrix_margin_1">Base Margin:</label>
+                            <input id="matrix_margin_1" name="matrix_margin" class="form-control" data-matrixid="1"/>
+                            <div id="matrix_margin_1-error" class="error w-100 text-center"></div>
                         </div>
                     </div>
+                    <!-- /Base Margin -->
                     
+                    <!-- Base Price -->
                     <div class="col-4">
                         <div class="form-element">
-                            <label for="matrix_price">Base Price:</label>
-                            <input id="matrix_price" name="matrix_price" class="form-control" value="0"/>
-                            <div id="matrix_price-error" class="error w-100 text-center"></div>
+                            <label for="matrix_price_1">Base Price:</label>
+                            <input id="matrix_price_1" name="matrix_price" class="form-control" data-matrixid="1"/>
+                            <div id="matrix_price_1-error" class="error w-100 text-center"></div>
                         </div>
                     </div>
+                    <!-- /Base Price -->
                 
                 </div>
                 

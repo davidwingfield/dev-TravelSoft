@@ -237,7 +237,9 @@ const Provider = (function () {
               Vendor.reset_form()
           })
           .on("click", function () {
-              $(this).select()
+              $(this).select(function () {
+                  //$( "div" ).text( "Something was selected" ).show().fadeOut( 1000 );
+              })
           })
           .autocomplete({
               serviceUrl: "/api/v1.0/autocomplete/providers",

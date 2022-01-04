@@ -43,9 +43,9 @@
         
         public static function serveUpdate(array $params = []): void
         {
-            Log::$debug_log->trace("serveUpdate");
+            //Log::$debug_log->trace("serveUpdate");
             $seasons = array();
-            Log::$debug_log->trace($params);
+            //Log::$debug_log->trace($params);
             $results = SeasonModel::update($params);
             foreach ($results as $result) {
                 $seasons[] = self::format($result);

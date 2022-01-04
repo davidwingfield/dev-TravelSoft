@@ -253,19 +253,21 @@
         $max_pax = $unit["max_pax"];
         $min_nights = $unit["min_nights"];
         $max_nights = $unit["max_nights"];
-        $description_short = $unit["description_short"];
+        $unit_description_long = (isset($unit["description_long"]) && !is_null($unit["description_long"]) && $unit["description_long"] !== "") ? $unit["description_long"] : "&nbsp;";
+        $unit_description_short = (isset($unit["description_short"]) && !is_null($unit["description_short"]) && $unit["description_short"] !== "") ? $unit["description_short"] : "&nbsp;";
         $cover_image = $unit["cover_image"];
         $room_code = (isset($unit["room_code"])) ? $unit["room_code"] : buildCode($id, $name, "unit");
         
         $unit_profile = "
-            <div class='col-12 col-sm-12 col-md-4 px-1'>
-            <div class='card'>
-                <div class='card-body'>
-                
-                    <h5 class='card-title'>$name</h5>
+            <div class='col-12 col-sm-12 col-md-4 px-1 '>
+                <div class='card card-body mb-2'>
+                    <h5 class='card-title w-100 text-truncate'>$name</h5>
                     <h6 class='card-subtitle my-2 text-muted'>$room_code</h6>
-                    <p class='card-text'>$description_short</p>
-   
+                    <!--
+                    <p class='card-text font-weight-normal text-dark truncate-overflow'>
+                        $unit_description_short
+                    </p>
+                    -->
                     <table class='table table-sm'>
                         <thead>
                             <tr>
@@ -287,7 +289,6 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
             </div>
         </div>
         ";
@@ -363,14 +364,14 @@
         $season_profile = "
         <div class='col-12 col-sm-12 col-md-4 px-1'>
         
-            <div class='card' style='background:$color_scheme_background_color;color:$color_scheme_text_color;border-color:$color_scheme_border_color;'>
-                <div class='card-body'>
-                    <h5 class='card-title'  style='color:$color_scheme_text_color;'>$season_name</h5>
-                    <h6 class='card-subtitle' style='font-size:.75rem;color:" . adjustBrightness($color_scheme_text_color, 100) . ";'>
-                        <p class='m-0 mb-1' style='font-size:.75rem;color:$color_scheme_text_color;'>Disabled Days:</p>
-                        <p class='m-0 mb-1' style='font-size:.75rem;color:" . adjustBrightness($color_scheme_text_color, 100) . ";'>$disabled_day_line</p>
-                    </h6>
-                </div>
+            <div class='card card-body mb-2' style='background:$color_scheme_background_color;color:$color_scheme_text_color;border-color:$color_scheme_border_color;'>
+            
+                <h5 class='card-title'  style='color:$color_scheme_text_color;'>$season_name</h5>
+                <h6 class='card-subtitle' style='font-size:.75rem;color:" . adjustBrightness($color_scheme_text_color, 100) . ";'>
+                    <p class='m-0 mb-1' style='font-size:.75rem;color:$color_scheme_text_color;'>Disabled Days:</p>
+                    <p class='m-0 mb-1' style='font-size:.75rem;color:" . adjustBrightness($color_scheme_text_color, 100) . ";'>$disabled_day_line</p>
+                </h6>
+            
             </div>
         </div>
         ";
@@ -434,6 +435,9 @@
                                         <?php echo $rating_line; ?>
                                     </ul>
                                     
+                                    <p id="product_location" class="card-text">
+                                        <?php echo $location_card; ?>
+                                    </p>
                                     <p id="product_description_short" class="card-text">
                                         <?php echo $product_description_short; ?>
                                     </p>
@@ -441,7 +445,7 @@
                                     <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
                                     
                                     <div class="row">
-                                        <div class="col-lg-4 col-md-12 mb-4">
+                                        <div class="col-12 col-md-6 col-lg-4 col-xl-6 mb-2">
                                             <h5 class="mb-3 h5">Provider</h5>
                                             <p class="text-muted"><?php echo $provider_name; ?></p>
                                             <p class="">
@@ -449,36 +453,23 @@
                                             </p>
                                         </div>
                                         
-                                        <div class="col-lg-4 col-md-6 mb-4">
+                                        <div class="col-12 col-md-6 col-lg-4 col-xl-6 mb-2">
                                             <h5 class="mb-3 h5">Vendor</h5>
                                             <p class="text-muted"><?php echo $vendor_name; ?></p>
                                             <p class="card-text">
                                                 <?php echo $vendor_description_short; ?>
                                             </p>
                                         </div>
-                                        
-                                        <div class="col-lg-4 col-md-6 mb-4">
-                                            
-                                            <h5 class="mb-3 h5">Location</h5>
-                                            <p class="text-muted">
-                                                <?php echo $location_card; ?>
-                                            </p>
-                                            
-                                            <p class="card-text">
-                                                <?php echo $address_line; ?>
-                                                <!--
-                                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. A
-                                                nemo commodi odio veniam nisi? Cupiditate nobis doloremque
-                                                unde in ut, consequatur reprehenderit saepe iure
-                                                perspiciatis, veniam facilis asperiores deleniti at?
-                                                -->
-                                            </p>
-                                        
-                                        </div>
                                     </div>
                                     
-                                    <div id="">
-                                        <?php echo $product_description_long; ?>
+                                    <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+                                    
+                                    <div class="row">
+                                        <div class="col">
+                                            
+                                            <?php echo $product_description_long; ?>
+                                        
+                                        </div>
                                     </div>
                                 
                                 </div>
@@ -601,7 +592,6 @@
                 </div>
             
             </div>
-        
         </div>
         
         <div class="col-12 col-xl-3 p-1">
@@ -610,7 +600,7 @@
                 
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item list-group-item d-flex justify-content-between">Status:</li>
-                    <li class="list-group-item list-group-item">
+                    <li class="list-group-item">
                         <div class="row gx-1">
                             <div class="col-12 p-1 d-flex justify-content-between">
                                 <span>Created By:</span>
@@ -625,7 +615,7 @@
                             </div>
                         </div>
                     </li>
-                    <li class="list-group-item list-group-item">
+                    <li class="list-group-item">
                         <div class="row gx-1">
                             <div class="col-12 p-1 d-flex justify-content-between">
                                 <span>Country:</span>
@@ -647,11 +637,12 @@
                             </div>
                         </div>
                     </li>
-                    <li class="list-group-item">
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gridSystemModal">
+                    <li class="list-group-item d-flex">
+                        <!-- Button trigger seasonCalendarModal modal -->
+                        <button type="button" class="btn btn-primary flex-fill waves-effect waves-light" data-toggle="modal" data-target="#seasonCalendarModal">
                             View Calendar
                         </button>
+                        <!-- /Button trigger seasonCalendarModal modal -->
                     </li>
                 </ul>
             
@@ -661,17 +652,22 @@
     
     </div>
     
-    <div class="row gx-1">
-        
-        <?php displayJsonOnPage($location_type, "Location Type"); ?>
-        <?php displayJsonOnPage($units, "Units"); ?>
-        <?php displayJsonOnPage($profiles, "Profiles"); ?>
-        <?php displayJsonOnPage($matrices, "Matrices"); ?>
-        <?php displayJsonOnPage($provider, "Provider"); ?>
-        <?php displayJsonOnPage($vendor, "Vendor"); ?>
-        <?php displayJsonOnPage($product, "Product"); ?>
-        <?php displayJsonOnPage($location, "Location"); ?>
+    <?php /*?>
+    <!-- Test Elements -->
+    <div id="testElements">
+        <div class="row gx-1">
+            <?php displayJsonOnPage($location_type, "Location Type"); ?>
+            <?php displayJsonOnPage($units, "Units"); ?>
+            <?php displayJsonOnPage($profiles, "Profiles"); ?>
+            <?php displayJsonOnPage($matrices, "Matrices"); ?>
+            <?php displayJsonOnPage($provider, "Provider"); ?>
+            <?php displayJsonOnPage($vendor, "Vendor"); ?>
+            <?php displayJsonOnPage($product, "Product"); ?>
+            <?php displayJsonOnPage($location, "Location"); ?>
+        </div>
     </div>
+    <!-- /Test Elements -->
+    <?php //*/ ?>
 
 </section>
 <!-- /Product Edit Page -->
@@ -680,12 +676,9 @@
 <?php include_once(VIEWS_PATH . "/products/modals/product_edit_calendar.phtml"); ?>
 <!-- /Calendar Modal -->
 
-<script type="text/javascript">
-    $(function () {
-        Types.init(<?php echo TYPES;?>)
-        <?php echo $init;?>
-    })
-</script>
+<!-- New Product Modal -->
+<?php include_once(VIEWS_PATH . "/products/modals/new_product_modal.phtml"); ?>
+<!-- /New Product Modal -->
 
 <script type="text/javascript">
     const myEvents = [
@@ -938,7 +931,6 @@
             profiles: [],
         },
     ]
-    
     const seasonEvents = [
         {
             "id": 7,
@@ -6416,7 +6408,6 @@
             "textColor": "#000",
         },
     ]
-    
     const initialCalenderViewCount = 12
     const calendarSettings = {
         initialView: "dayGridMonth",
@@ -6431,26 +6422,18 @@
             },
         },
     }
-    
-    //*
     $(function () {
-        let cals = $("#calendar").myCalendar({
+        Types.init(<?php echo TYPES;?>)
+        <?php echo $init;?>
+        //*
+        let cals = $("#calendar").YearCalendar({
             displayEventTime: false,
             calendarType: "season",
-            events: seasonEvents,
+            events: [],
         })
+        //*
+        
     })
-    
-    $("#gridSystemModal")
-      .on("shown.bs.modal", function () {
-          $('html').css({ overflow: 'hidden' })
-      })
-      .on("hidden.bs.modal", function () {
-          const body = document.querySelector("body")
-          $('html').css({ overflow: 'auto' })
-      })
-    //*/
-
 </script>
 
 

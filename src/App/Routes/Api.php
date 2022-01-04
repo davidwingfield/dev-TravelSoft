@@ -17,6 +17,7 @@
      * get requests
      */
     Router::get($routeLead . '/profiles/${product_id}', "Profile@getByProductId");
+    Router::get($routeLead . '/locations/getByName', "Location@getByLocationName");
     Router::get($routeLead . '/seasons/${product_id}/${season_id}', "Season@getSeasonByProductSeasonId");
     Router::get($routeLead . '/calendars/${product_id}', "Calendar@getByProductId");
     Router::get($routeLead . '/calendars', "Calendar@serveGet");
@@ -46,6 +47,8 @@
      * autocomplete validate
      */
     Router::get($routeLead . "/locations/validate", "Location@validateName");
+    Router::get($routeLead . "/variants/validate", "Variant@validateName");
+    Router::get($routeLead . "/units/validate", "Unit@validateName");
     Router::get($routeLead . "/companies/validate", "Company@validateName");
     Router::get($routeLead . "/providers/validate", "Provider@validateName");
     Router::get($routeLead . "/vendors/validate", "Vendor@validateName");
@@ -60,9 +63,9 @@
     Router::get($routeLead . "/autocomplete/cities", "Autocomplete@cities");
     Router::get($routeLead . "/autocomplete/products", "Autocomplete@products");
     Router::get($routeLead . "/autocomplete/vendors", "Autocomplete@vendors");
-    Router::get($routeLead . "/autocomplete/seasons", "Autocomplete@seasons");
-    Router::get($routeLead . "/autocomplete/variants", "Autocomplete@variants");
-    Router::get($routeLead . "/autocomplete/units", "Autocomplete@units");
+    Router::get($routeLead . "/autocomplete/profiles", "Autocomplete@profiles");
+    //Router::get($routeLead . "/autocomplete/variants", "Autocomplete@variants");
+    //Router::get($routeLead . "/autocomplete/units", "Autocomplete@units");
     Router::get($routeLead . "/autocomplete/locations", "Autocomplete@locations");
     Router::get($routeLead . "/autocomplete/companies", "Autocomplete@companies");
     
@@ -92,9 +95,9 @@
     Router::post($routeLead . "/locations/update", "Location@serveUpdate");
     
     Router::post($routeLead . "/provinces/update", "Province@serveUpdate");
-    Router::post($routeLead . "/variants/update", "City@serveUpdate");
+    Router::post($routeLead . "/variants/update", "Variant@serveUpdate");
     Router::post($routeLead . "/profiles/update", "Province@serveUpdate");
-    Router::post($routeLead . "/units/update", "City@serveUpdate");
+    Router::post($routeLead . "/units/update", "Unit@serveUpdate");
     Router::post($routeLead . "/countries/update", "Country@serveUpdate");
     Router::post($routeLead . "/provinces/update", "Province@serveUpdate");
     Router::post($routeLead . "/cities/update", "City@serveUpdate");

@@ -13,12 +13,17 @@
      */
     class Autocomplete extends Controller
     {
-        
+        /**
+         * get constructor methods
+         */
         public function __construct()
         {
             parent::__construct();
         }
         
+        /**
+         * autocomplete  providers
+         */
         public function providers(): void
         {
             $st = "";
@@ -30,6 +35,9 @@
             exit(1);
         }
         
+        /**
+         * autocomplete cities
+         */
         public function cities(): void
         {
             $st = "";
@@ -42,6 +50,9 @@
             exit(1);
         }
         
+        /**
+         * autocomplete products
+         */
         public function products(): void
         {
             $results = [];
@@ -62,17 +73,26 @@
             exit(1);
         }
         
+        /**
+         * autocomplete companies
+         */
         public function companies(): void
         {
             $st = "";
             extract($_GET);
             $results = Company::autocomplete($st);
+            
+            /**
+             * render results json page
+             */
             header("Content-type:application/json");
-            // ----
             echo json_encode($results);
             exit(1);
         }
         
+        /**
+         * autocomplete vendors
+         */
         public function vendors(): void
         {
             $st = "";
@@ -84,6 +104,9 @@
             exit(1);
         }
         
+        /**
+         * autocomplete locations
+         */
         public function locations(): void
         {
             $st = "";
@@ -99,6 +122,9 @@
             exit(1);
         }
         
+        /**
+         * autocomplete seasons
+         */
         public function seasons(): void
         {
             $st = "";
@@ -114,6 +140,26 @@
             exit(1);
         }
         
+        /**
+         * autocomplete profiles
+         */
+        public function profiles(): void
+        {
+            $st = "";
+            extract($_GET);
+            $results = Profile::autocomplete($st);
+            
+            /**
+             * render profile json
+             */
+            header("Content-type:application/json");
+            echo json_encode($results);
+            exit(1);
+        }
+        
+        /**
+         * autocomplete units
+         */
         public function units(): void
         {
             $st = "";
@@ -121,6 +167,7 @@
             extract($_GET);
             $results = Unit::autocomplete($st, $category_id);
             
+            Log::$debug_log->trace($results);
             /**
              * render results json page
              */
@@ -129,6 +176,9 @@
             exit(1);
         }
         
+        /**
+         * autocomplete variants
+         */
         public function variants(): void
         {
             $st = "";

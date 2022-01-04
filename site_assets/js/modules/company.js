@@ -216,6 +216,9 @@ const Company = (function () {
         }
     }
     
+    /**
+     * destroy_click
+     */
     const destroy_click = function () {
         window.removeEventListener("click", on_click_outside)
     }
@@ -421,6 +424,12 @@ const Company = (function () {
         }
     }
     
+    /**
+     * fetch_company_by_name
+     *
+     * @param dataToSend
+     * @param callback
+     */
     const fetch_company_by_name = function (dataToSend, callback) {
         let url = "/api/v1.0/companies/validate"
         

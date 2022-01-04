@@ -187,10 +187,27 @@
             
             try {
                 $sql = self::$sql . $where;
-
-//                Log::$debug_log->trace($sql);
                 
                 return Model::$db->rawQuery($sql);
+            } catch (Exception $e) {
+                Log::$debug_log->error($e);
+                
+                return [];
+            }
+        }
+        
+        public static function profile_ac(string $st = ""): array
+        {
+            try {
+                $searchTerm = addslashes($st);
+                
+                $sql = self::$sql . "
+                    AND			PROFILE.name LIKE '%$searchTerm%'
+                    ORDER BY    LENGTH(PROFILE.name), CAST(PROFILE.name AS UNSIGNED), PROFILE.name ASC
+                    LIMIT 20;";
+                
+                return Model::$db->rawQuery($sql);
+                
             } catch (Exception $e) {
                 Log::$debug_log->error($e);
                 

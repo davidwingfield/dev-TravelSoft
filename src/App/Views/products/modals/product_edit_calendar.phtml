@@ -1,4 +1,4 @@
-<div id="gridSystemModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridModalLabel">
+<div id="seasonCalendarModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="seasonCalendarModalLabel">
     
     <div class="modal-dialog modal-fullscreen" role="document">
         <div class="calendar-loader" id="calendar_loader">
@@ -26,29 +26,73 @@
                         
                         <div class="flex-fill col-3 p-1">
                             
+                            <!-- Season Filter -->
                             <div class="card card-body mb-2">
                                 
-                                <label for="calendar_filter_season_id">Seasons:</label>
-                                <select class="form-control" id="calendar_filter_season_id" name="calendar_filter_season_id"></select>
-                            </div>
-                            
-                            <div class="card card-body mb-2">
+                                <div class="form-element">
+                                    <label for="calendar_filter_season_id">Seasons:</label>
+                                    <select class="form-control" id="calendar_filter_season_id" name="calendar_filter_season_id"></select>
+                                    <div id="calendar_filter_season_id-error" class="error w-100 text-center"></div>
+                                </div>
                                 
-                                <label for="calendar_filter_profile_id">Inventory Profiles:</label>
-                                <select class="form-control" id="calendar_filter_profile_id" name="calendar_filter_profile_id"></select>
-                            </div>
-                            
-                            <div class="card card-body mb-2">
-                                
-                                <div class="" id="calendar_filter_ranges">
+                                <div class="row">
+                                    
+                                    <div class="col-6 text-left">
+                                        <button type="button" id="calendar_filter_season_id_assign" name="calendar_filter_season_id_assign" class="btn btn-secondary btn-sm">Assign</button>
+                                    </div>
+                                    
+                                    <div class="col-6 text-right">
+                                        <button type="button" id="calendar_filter_season_id_clear" name="calendar_filter_season_id_clear" class="btn btn-primary btn-sm">Clear</button>
+                                    </div>
                                 
                                 </div>
+                            
                             </div>
+                            <!-- /Season Filter -->
+                            
+                            <!-- Unit Filter -->
+                            <div class="card card-body mb-2">
+                                
+                                <div class="form-element">
+                                    <label for="calendar_filter_unit_id">Units:</label>
+                                    <select class="form-control" id="calendar_filter_unit_id" name="calendar_filter_unit_id"></select>
+                                    <div id="calendar_filter_unit_id-error" class="error w-100 text-center"></div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-6 text-left">
+                                        <button type="button" id="calendar_filter_unit_id_assign" name="calendar_filter_unit_id_assign" class="btn btn-secondary btn-sm">Assign</button>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <button type="button" id="calendar_filter_unit_id_clear" name="calendar_filter_unit_id_clear" class="btn btn-primary btn-sm">Clear</button>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <!-- /Unit Filter -->
+                            
+                            <!-- Profile Filter -->
+                            <div class="card card-body mb-2">
+                                <div class="form-element">
+                                    <label for="calendar_filter_profile_id">Inventory Profiles:</label>
+                                    <select class="form-control" id="calendar_filter_profile_id" name="calendar_filter_profile_id"></select>
+                                    <div id="calendar_filter_profile_id-error" class="error w-100 text-center"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-left">
+                                        <button type="button" id="calendar_filter_profile_id_assign" name="calendar_filter_profile_id_assign" class="btn btn-secondary btn-sm">Assign</button>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <button type="button" id="calendar_filter_profile_id_clear" name="calendar_filter_profile_id_clear" class="btn btn-primary btn-sm">Clear</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Profile Filter -->
                         
                         </div>
                         
                         <div class="flex-fill col-9 p-1">
-                            <div class="card card-body mb-2">
+                            <div class="card card-body mb-2 p-1">
                                 <div class="d-flex align-items-center justify-content-between">
                                     
                                     <a type="button" class="btn btn-primary" id="calendar_display_prev_year">
@@ -80,6 +124,7 @@
                 <button type="button" class="btn btn-default waves-effect waves-light" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary waves-effect waves-light">Save changes</button>
             </div>
+        
         </div>
     </div>
 

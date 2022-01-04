@@ -1,15 +1,14 @@
 <?php
-
+    
     namespace Framework\App\Models;
-
+    
     use Exception;
     use Framework\Core\Controller;
     use Framework\Core\Model;
     use Framework\Logger\Log;
-
+    
     /**
      * Short Location Description
-     *
      * Long Location Description
      *
      * @package            Framework\App
@@ -17,17 +16,17 @@
      */
     class LocationModel extends Model
     {
-
+        
         /**
          * @var string
          */
         protected static $dbTable = "location";
-
+        
         /**
          * @var array
          */
         protected static $dbFields = Array();
-
+        
         /**
          * @var string
          */
@@ -100,50 +99,52 @@
             JOIN		city CITY ON CITY.id = LOCATION.city_id
             JOIN		province PROVINCE ON PROVINCE.id = CITY.province_id
             JOIN		country COUNTRY ON COUNTRY.id = PROVINCE.country_id";
-
+        
         /**
-         * @param string $name
-         * @param string $default_display
+         * get location by name
+         *
+         * @param string   $name
+         * @param int|null $city_id
+         * @param string   $default_display
          *
          * @return array
          */
-        public static function getByName(string $name, string $default_display = "medium"): array
+        public static function getByName(string $name, int $city_id = null, string $default_display = "medium"): array
         {
-
-            if ($name) {
-                $searchTerm = addslashes($name);
-
-                if ($default_display === "short") {
-                    $displayWhere = "CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2, ')') = '$searchTerm'";
+            if (is_null($name) || is_null($city_id)) {
+                return [];
+            }
+            
+            $searchTerm = addslashes($name);
+            
+            if ($default_display === "short") {
+                $displayWhere = "CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2, ')') = '$searchTerm'";
+            } else {
+                if ($default_display === "long") {
+                    $displayWhere = "CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', CONCAT(PROVINCE.iso2, ' - ', PROVINCE.name), ', ', CONCAT(COUNTRY.iso2, ' - ', COUNTRY.name), ')') = '$searchTerm'";
                 } else {
-                    if ($default_display === "long") {
-                        $displayWhere = "CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', CONCAT(PROVINCE.iso2, ' - ', PROVINCE.name), ', ', CONCAT(COUNTRY.iso2, ' - ', COUNTRY.name), ')') = '$searchTerm'";
-                    } else {
-                        $displayWhere = "CONCAT(	LOCATION.name,	' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') = '$searchTerm'";
-                    }
-                }
-
-                $where = "
-                    WHERE		(LOCATION.name = '$searchTerm' OR $displayWhere)";
-
-                $sql = self::$sql . "
-                    $where;
-                ";
-
-                try {
-                    $results["dataset"] = Model::$db->ObjectBuilder()->rawQuery($sql);
-
-                    return $results["dataset"];
-                } catch (Exception $e) {
-                    Controller::$debug_log->error($e);
-
-                    return [];
+                    $displayWhere = "CONCAT(	LOCATION.name,	' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') = '$searchTerm'";
                 }
             }
-
-            return [];
+            
+            $where = "
+                    WHERE		LOCATION.name = '$searchTerm' AND LOCATION.city_id = $city_id";
+            
+            $sql = self::$sql . "
+                    $where;
+                ";
+            
+            try {
+                
+                return Model::$db->rawQuery($sql);
+            } catch (Exception $e) {
+                Controller::$debug_log->error($e);
+                
+                return [];
+            }
+            
         }
-
+        
         /**
          * @param string $st
          * @param string $default_display
@@ -154,13 +155,13 @@
         {
             $searchTerm = addslashes($st);
             $orderBy = "";
-
+            
             $where = "
             WHERE		CITY.enabled = 1
                  AND		NOT ISNULL(CITY.name)
                  AND		NOT ISNULL(PROVINCE.name)
                  AND		NOT ISNULL(COUNTRY.name)";
-
+            
             if ($default_display === "short") {
                 $orderBy = "ORDER BY            CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2, ')') ASC";
                 $where .= "         AND 		CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2, ')') LIKE '%$searchTerm%'";
@@ -173,24 +174,24 @@
                     $where .= "         AND 		CONCAT(	LOCATION.name,	' ',	'(' ,CITY.name,	', ',	PROVINCE.name,')') LIKE '%$searchTerm%'";
                 }
             }
-
+            
             $sql = self::$sql . "
             $where
-            $orderBy 
+            $orderBy
             LIMIT 20;";
-
+            
             try {
                 $results["dataset"] = Model::$db->ObjectBuilder()->rawQuery($sql);
-
+                
                 return $results["dataset"];
             } catch (Exception $e) {
                 Controller::$debug_log->error($e);
-
+                
                 return [];
             }
-
+            
         }
-
+        
         /**
          * @param int|null $id
          * @param string   $default_display
@@ -210,7 +211,7 @@
                     $where .= "
                              AND 		LOCATION.id = $id";
                 }
-
+                
                 if ($default_display === "short") {
                     $orderBy = "ORDER BY    LENGTH(CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2, ')')), CAST(CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2, ')') AS UNSIGNED), CONCAT(	LOCATION.name, ' ',	'(' , CITY.name, ' ', PROVINCE.iso2, ', ', COUNTRY.iso2, ')') ASC";
                 } else {
@@ -223,13 +224,45 @@
                 $sql = self::$sql . "
             $where
             $orderBy;";
-
+                
                 return Model::$db->rawQuery($sql);
             } catch (Exception $e) {
                 return [];
             }
         }
-
+        
+        /**
+         * @param int|null $id
+         * @param string   $default_display
+         *
+         * @return array
+         */
+        public static function fetchLocationByCityIdAndName(int $city_id = null, string $name = null): array
+        {
+            
+            $where = "
+            WHERE		CITY.enabled = 1
+                 AND		NOT ISNULL(CITY.name)
+                 AND		NOT ISNULL(PROVINCE.name)
+                 AND		NOT ISNULL(COUNTRY.name)";
+            try {
+                if (!is_null($city_id)) {
+                    $where .= "
+                             AND 		LOCATION.city_id = $city_id
+                             AND 		LOCATION.name = '$name'
+                     ";
+                }
+                
+                $sql = self::$sql . "
+                    $where;
+                ";
+                
+                return Model::$db->rawQuery($sql);
+            } catch (Exception $e) {
+                return [];
+            }
+        }
+        
         /**
          * @param int|null $id
          *
@@ -241,15 +274,15 @@
                 if (!is_null($id)) {
                     Model::$db->where("id", $id);
                 }
-
+                
                 self::$db->where("enabled", 1);
-
+                
                 return self::$db->getOne(self::$dbTable);
             } catch (Exception $e) {
                 return [];
             }
         }
-
+        
         /**
          * @param array $location
          *
@@ -257,18 +290,30 @@
          */
         public static function update(array $location = []): array
         {
+            //Log::$debug_log->trace($location);
+            if (!isset($location["city_id"]) || is_null($location["city_id"])) {
+                //Log::$debug_log->trace("city_id");
+                //Log::$debug_log->trace($location["city_id"]);
+                
+                return [];
+            }
+            
+            if (!isset($location["name"]) || is_null($location["name"])) {
+                //Log::$debug_log->trace("name");
+                //Log::$debug_log->trace($location["name"]);
+                
+                return [];
+            }
+            
             $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
             $id = Model::setInt((isset($location["id"])) ? $location["id"] : null);
             $street_1 = Model::setString((isset($location["street_1"])) ? $location["street_1"] : null);
             $street_2 = Model::setString((isset($location["street_2"])) ? $location["street_2"] : null);
             $zipcode = Model::setString((isset($location["zipcode"])) ? $location["zipcode"] : null);
             $name = Model::setString((isset($location["name"])) ? $location["name"] : null);
-            $location_types_id = Model::setInt((isset($location["location_types_id"])) ? $location["location_types_id"] : null);
-            $country_id = Model::setInt((isset($location["country_id"])) ? $location["country_id"] : null);
-            $province_id = Model::setInt((isset($location["province_id"])) ? $location["province_id"] : null);
+            $location_types_id = Model::setInt((isset($location["location_types_id"])) ? $location["location_types_id"] : 1);
             $city_id = Model::setInt((isset($location["city_id"])) ? $location["city_id"] : null);
-            $status_id = Model::setInt((isset($location["status_id"])) ? $location["status_id"] : null);
-            $enabled = Model::setBool((isset($location["enabled"])) ? $location["enabled"] : null);
+            $enabled = Model::setBool((isset($location["enabled"])) ? $location["enabled"] : 1);
             $note = Model::setLongText((isset($location["note"])) ? $location["note"] : null);
             $created_by = Model::setInt($user_id);
             $modified_by = Model::setInt($user_id);
@@ -290,25 +335,28 @@
                     city_id = VALUES(city_id),
                     location_types_id = VALUES(location_types_id),
                     name = VALUES(name),
-                    street_1 = VALUES(street_1), 
-                    street_2 = VALUES(street_2), 
-                    zipcode = VALUES(zipcode), 
+                    street_1 = VALUES(street_1),
+                    street_2 = VALUES(street_2),
+                    zipcode = VALUES(zipcode),
                     enabled = VALUES(enabled),
                     modified_by = VALUES(modified_by),
                     date_modified = VALUES(date_modified);
                 ";
+                
+                //Log::$debug_log->trace($sql);
+                
                 Model::$db->rawQuery($sql);
                 $location_id = Model::$db->getInsertId();
                 if ($location_id) {
                     return self::get($location_id);
                 }
-
+                
                 return [];
             } catch (Exception $e) {
                 Log::$debug_log->error($e);
-
+                
                 return [];
             }
         }
-
+        
     }

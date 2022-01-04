@@ -171,7 +171,7 @@ const Product = (function () {
     
     $(_button_add_product_page_heading)
       .on("click", function () {
-          set_new_product_modal()
+          setNewProductModal()
       })
     
     $(_modal_new_product)
@@ -187,10 +187,10 @@ const Product = (function () {
     
     $(_modal_button_submit_add_product)
       .on("click", function () {
-          if (validate_new_form()) {
+          if (validateNewProduct()) {
               confirmDialog(`Would you like to update?`, (ans) => {
                   if (ans) {
-                      save_new()
+                      saveNewProduct()
                   }
               })
           }
@@ -242,29 +242,45 @@ const Product = (function () {
         return remove_nulls(dataToSend)
     }
     
-    const save_new = function () {
+    const saveNewProduct = function () {
         let dataToSend = buildInsertData()
         
-        Console.log("dataToSend", remove_nulls(dataToSend))
+        //Console.log("saveNewProduct() - dataToSend", dataToSend)
         
         new_product(dataToSend, function (data) {
             let product
             
             if (data) {
-                Console.log("data", data)
+                
                 product = data
                 if (data.length === 1) {
                     product = data[0]
                 }
             }
             
+            Console.log("Product.saveNewProduct() - product", product)
+            
             if (product.id) {
-                window.location.replace("/products/" + product.id)
+                toastr.success(`Product - ${product.id} was created, would you like to edit?`)
+                confirmDialog(`Would you like to update?`, (ans) => {
+                    if (ans) {
+                        window.location.replace("/products/" + product.id)
+                    } else {
+                        $(_modal_new_product).hide()
+                    }
+                })
+                
             }
         })
         
     }
     
+    /**
+     * add new product
+     *
+     * @param dataToSend
+     * @param callback
+     */
     const new_product = function (dataToSend, callback) {
         let url = "/api/v1.0/products/add"
         
@@ -274,7 +290,7 @@ const Product = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handle_product_error("Oops: 1")
+                        return handleProductError("Oops: 1")
                     }
                 })
             } catch (e) {
@@ -283,7 +299,7 @@ const Product = (function () {
         }
     }
     
-    const init_new_product_autocomplete = function () {
+    const initAutoComplete = function () {
         let category_id = (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null
         
         if (category_id !== null) {
@@ -331,18 +347,20 @@ const Product = (function () {
                   },
               })
         }
-        //Console.log("init_new_product_autocomplete()", category_id)
+        //Console.log("initAutoComplete()", category_id)
     }
     
-    const validate_new_form = function () {
-        Console.log("validate_new_form", "")
+    const validateNewProduct = function () {
+        Console.log("validateNewProduct", "")
+        
         if (_form_product_add) {
             return $(_form_product_add).valid()
         }
+        
         return false
     }
     
-    const clear_modal_form = function () {
+    const clearModalForm = function () {
         _modal_product_name.value = ""
         _modal_product_category_id.value = ""
         _modal_product_sku.value = ""
@@ -385,16 +403,16 @@ const Product = (function () {
         _modal_product_city.disabled = true
     }
     
-    const set_new_product_modal = function () {
-        clear_modal_form()
+    const setNewProductModal = function () {
+        clearModalForm()
         $(_modal_new_product).modal("show")
     }
     
-    const handle_product_error = function (msg) {
+    const handleProductError = function (msg) {
         toastr.error(msg)
     }
     
-    const _default_detail = function () {
+    const defaultDetail = function () {
         return {
             id: null,
             category_id: null,
@@ -457,7 +475,8 @@ const Product = (function () {
     }
     
     const set = function (product) {
-        let detail = _default_detail()
+        let detail = defaultDetail()
+        
         if (product) {
             detail.id = (product.id) ? product.id : null
             detail.category_id = (product.category_id) ? product.category_id : null
@@ -608,12 +627,6 @@ const Product = (function () {
         }
     }
     
-    const initAutoComplete = function () {
-        if (_modal_product_name) {
-        
-        }
-    }
-    
     const set_default_product_details = function () {
         return {
             location: {},
@@ -639,14 +652,14 @@ const Product = (function () {
         $frame.attr("src", url)
     }
     
-    const init_edit_form = function (settings) {
-        //Console.log("Product.init_edit_form(settings)", settings)
+    const initEditForm = function (settings) {
+        //Console.log("Product.initEditForm(settings)", settings)
         let product = set_default_product_details()
         
         if (settings) {
             product = settings
         }
-        //Console.log("Product.init_edit_form(): product", product)
+        //Console.log("Product.initEditForm(): product", product)
         
         Array.prototype.forEach.call(radios, function (radio) {
             radio.addEventListener("change", changeHandler)
@@ -709,7 +722,7 @@ const Product = (function () {
     
     const init = function (settings) {
         Console.log("Product.init()", settings)
-        let product_details, variants, seasons, units, profiles, matrices
+        let product_details, variants, seasons, units, profiles, matrices, pricings
         
         if (_modal_new_product) {
             Category.init()
@@ -742,16 +755,23 @@ const Product = (function () {
                     units = product_details.units
                 }
                 
+                pricings = {
+                    pricing_strategy_types_id: (!isNaN(parseInt(product_details.pricing_strategy_types_id))) ? parseInt(product_details.pricing_strategy_types_id) : null,
+                }
+                
                 $(document).ready(function () {
                     if (_product_edit_page) {
-                        init_edit_form(product_details)
+                        initAutoComplete()
+                        initEditForm(product_details)
                         
                         Variant.init(variants)
                         Season.init(seasons)
-                        Season.load_all(seasons)
-                        Unit.init(units)
+                        Season.loadAll(seasons)
+                        Unit.init({ units: units })
                         Profile.init({ profiles: profiles })
                         Matrix.init({ matrices: matrices })
+                        Pricing.init(pricings)
+                        
                         $(_product_panel_link_overview)
                           .on("click", function () {
                               $(_panel_tab_product_o).tab("show")
@@ -867,9 +887,6 @@ const Product = (function () {
         get: function (params) {
             get(params)
         },
-        initAutoComplete: function () {
-            initAutoComplete()
-        },
         load_all: function (params) {
             load_all(params)
         },
@@ -888,8 +905,8 @@ const Product = (function () {
         reset_new_product_details: function () {
             reset_new_product_details()
         },
-        init_new_product_autocomplete: function () {
-            init_new_product_autocomplete()
+        initAutoComplete: function () {
+            initAutoComplete()
         },
     }
     

@@ -165,6 +165,10 @@
             if (isset($variant["product_variant_max_age"])) {
                 $product_variant["max_age"] = (isset($variant['product_variant_max_age'])) ? $variant['product_variant_max_age'] : '<i class="fas fa-edit"></i>';
             }
+            
+            if (isset($variant["product_variant_used_in_pricing"])) {
+                $product_variant["used_in_pricing"] = $variant['product_variant_used_in_pricing'];
+            }
 
 //            Log::$debug_log->trace($product_variant);
             

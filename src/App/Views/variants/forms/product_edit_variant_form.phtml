@@ -67,10 +67,21 @@
             <div class="row">
                 
                 <div class="col-6">
+                    
                     <div class="form-element">
                         <label for="product_edit_variant_form_variant_code">Variant Code:</label>
                         <input type="text" id="product_edit_variant_form_variant_code" name="product_edit_variant_form_variant_code" class="form-control" disabled="">
                         <div id="product_edit_variant_form_variant_code-error" class="error w-100 text-center"></div>
+                    </div>
+                </div>
+                
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 d-flex align-self-end justify-content-end pb-2">
+                    <div class="form-element">
+                        <div class="custom-control custom-switch">
+                            <input id="product_edit_variant_form_variant_used_in_pricing" name="product_edit_variant_form_variant_used_in_pricing" type="checkbox" value="1" class="custom-control-input" readonly="readonly" disabled="">
+                            <label for="product_edit_variant_form_variant_used_in_pricing" class="custom-control-label p-0">Used in Pricing</label>
+                        </div>
+                        <div id="product_edit_variant_form_variant_used_in_pricing-error" class="error w-100 text-center"></div>
                     </div>
                 </div>
             </div>

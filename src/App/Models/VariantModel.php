@@ -69,7 +69,7 @@
         {
             $id = 1;
             
-            return Model::get($id);
+            return self::get($id);
         }
         
         public static function getByName(string $name = null, int $category_id = null): array
@@ -120,7 +120,7 @@
                         VARIANT.date_modified AS 'variant_date_modified',
                         VARIANT.modified_by AS 'variant_modified_by',
                         VARIANT.note AS 'variant_note',
-                       
+                        PRODUCT_VARIANT.used_in_pricing AS 'product_variant_used_in_pricing',
                         PRODUCT_VARIANT.product_id AS 'product_variant_product_id',
                         PRODUCT_VARIANT.variant_id AS 'product_variant_variant_id',
                         COALESCE(PRODUCT_VARIANT.min_age, '0') AS 'product_variant_min_age',
@@ -188,12 +188,13 @@
                         VARIANT.date_modified AS 'variant_date_modified',
                         VARIANT.modified_by AS 'variant_modified_by',
                         VARIANT.note AS 'variant_note',
-                       
+                        PRODUCT_VARIANT.used_in_pricing AS 'product_variant_used_in_pricing',
                         PRODUCT_VARIANT.product_id AS 'product_variant_product_id',
                         PRODUCT_VARIANT.variant_id AS 'product_variant_variant_id',
                         COALESCE(PRODUCT_VARIANT.min_age, '0') AS 'product_variant_min_age',
                         COALESCE(PRODUCT_VARIANT.max_age, '&#8734;') AS 'product_variant_max_age',
                         PRODUCT_VARIANT.enabled AS 'product_variant_enabled',
+                        PRODUCT_VARIANT.used_in_pricing AS 'product_variant_used_in_pricing',
                         PRODUCT_VARIANT.date_created AS 'product_variant_date_created',
                         PRODUCT_VARIANT.created_by AS 'product_variant_created_by',
                         PRODUCT_VARIANT.date_modified AS 'product_variant_date_modified',
@@ -231,6 +232,7 @@
             $code = Model::setString((isset($variant["code"])) ? $variant["code"] : null);
             
             $enabled = Model::setBool((isset($variant["enabled"])) ? $variant["enabled"] : null);
+            $used_in_pricing = Model::setBool((isset($variant["used_in_pricing"])) ? $variant["used_in_pricing"] : 1);
             
             $note = Model::setLongText((isset($variant["note"])) ? $variant["note"] : null);
             

@@ -106,6 +106,24 @@ const Matrix = (function () {
         buildMatrixForm()
     }
     
+    const loadPerUnitForm = function () {
+        Console.log("Matrix.loadPerUnitForm()", Matrix)
+        // ----
+        
+    }
+    
+    const loadPerPersonForm = function () {
+        Console.log("Matrix.loadPerPersonForm()", Matrix)
+        // ----
+        
+    }
+    
+    const loadPerDayForm = function () {
+        Console.log("Matrix.loadPerDayForm()", Matrix)
+        // ----
+        
+    }
+    
     return {
         detail: {},
         all: new Map(),
@@ -114,6 +132,15 @@ const Matrix = (function () {
         },
         buildMatrixForm: function () {
             buildMatrixForm()
+        },
+        loadPerUnitForm: function () {
+            loadPerUnitForm()
+        },
+        loadPerPersonForm: function () {
+            loadPerPersonForm()
+        },
+        loadPerDayForm: function () {
+            loadPerDayForm()
         },
     }
     

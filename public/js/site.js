@@ -3053,7 +3053,7 @@ $.fn.YearCalendar = function (settings) {
         } else {
             $(_this).addClass("selected-day")
             $("td.fc-day-top[data-date='" + moment(dateClicked).format("YYYY-MM-DD") + "']").addClass("selected-day")
-            YearCalendar.selectedDates.set(dateClicked, "selected")
+            YearCalendar.selectedDates.set(dateClicked, dateClicked)
             selectedStart = dateClicked
             selectedEnd = null
         }
@@ -3174,7 +3174,7 @@ $.fn.YearCalendar = function (settings) {
                             selectedStart = null
                             selectedEnd = null
                         } else {
-                            YearCalendar.selectedDates.set(dateClicked, "selected")
+                            YearCalendar.selectedDates.set(dateClicked, dateClicked)
                             selectedStart = dateClicked
                             selectedEnd = null
                             this.addClass("selected-day")
@@ -3408,12 +3408,11 @@ const YearCalendar = (function () {
       .on("hidden.bs.modal", function () {
           resetForm()
       })
-    
+      .on("click", function () {
+          YearCalendar.checkProgress()
+      })
     // ----
     
-    /**
-     * loadSeasonDropdown
-     */
     const loadSeasonDropdown = function () {
         let seasons = (Season && Season.all) ? Array.from(Season.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Seasons --</option>"
@@ -3426,9 +3425,6 @@ const YearCalendar = (function () {
         $(_calendar_filter_season_id).html(options)
     }
     
-    /**
-     * loadProfileDropdown
-     */
     const loadProfileDropdown = function () {
         let profiles = (Profile && Profile.all) ? Array.from(Profile.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Profiles --</option>"
@@ -3441,9 +3437,6 @@ const YearCalendar = (function () {
         $(_calendar_filter_profile_id).html(options)
     }
     
-    /**
-     * loadUnitDropdown
-     */
     const loadUnitDropdown = function () {
         let units = (Unit && Unit.all) ? Array.from(Unit.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Units --</option>"
@@ -3456,30 +3449,24 @@ const YearCalendar = (function () {
         $(_calendar_filter_unit_id).html(options)
     }
     
-    /**
-     * setCalendarFilters
-     */
     const setCalendarFilters = function () {
         clearSelectedDOW()
         _calendar_filter_season_id.value = ""
         $("html").css({ overflow: "hidden" })
     }
     
-    /**
-     * unSetCalendarFilters
-     */
     const unSetCalendarFilters = function () {
         $("html").css({ overflow: "auto" })
     }
     
-    /**
-     * buildAssignDatesRecord
-     */
     const buildAssignDatesRecord = function () {
         Console.log("YearCalendar.buildAssignDatesRecord()", this)
+        
         let product_id = parseInt(_product_id.value)
         let season_id = parseInt(_calendar_filter_season_id.value)
-        let days = YearCalendar.selectedDates
+        
+        let days = Array.from(YearCalendar.selectedDates.values())
+        
         let dataToSend = {
             season_id: season_id,
             product_id: product_id,
@@ -3499,11 +3486,6 @@ const YearCalendar = (function () {
         loadProfileDropdown()
     }
     
-    /**
-     * setDisabledDOW
-     *
-     * @param disabled_dow
-     */
     const setDisabledDOW = function (disabled_dow) {
         if (!disabled_dow) {
             disabled_dow = []
@@ -3524,9 +3506,6 @@ const YearCalendar = (function () {
         
     }
     
-    /**
-     * clearSelected
-     */
     const clearSelectedDOW = function () {
         let days = $("td[season='true']")
         
@@ -3535,9 +3514,6 @@ const YearCalendar = (function () {
         })
     }
     
-    /**
-     * clearSelected
-     */
     const clearSelected = function () {
         let days = $("td[season='true']")
         
@@ -3549,26 +3525,19 @@ const YearCalendar = (function () {
         YearCalendar.selectedDates = new Map()
     }
     
-    /**
-     * endLoading
-     */
     const endLoading = function () {
         $(_calendar_loader).hide()
     }
     
-    /**
-     * getTitle
-     */
     const getTitle = function () {
         _calendar_display_year.innerText = YearCalendar.start
     }
     
-    /**
-     * init
-     *
-     * @param settings
-     */
     const init = function (settings) {
+        //ContextMenu.init(settings)
+    }
+    
+    const checkProgress = function () {
         //ContextMenu.init(settings)
     }
     
@@ -3576,14 +3545,15 @@ const YearCalendar = (function () {
      * Global Params
      */
     return {
-        
         calendarContextMenu: null,
         calendars: new Map(),
         events: [],
         start: new Date().getFullYear(),
         selectedDates: new Map(),
         activeCalendars: [],
-        
+        checkProgress: function () {
+            checkProgress()
+        },
         endLoading: function () {
             endLoading()
         },
@@ -7036,7 +7006,7 @@ const Variant = (function () {
     const _product_edit_variant_form_submit_button = document.getElementById("product_edit_variant_form_submit_button")
     const _product_edit_variant_form_clear_button = document.getElementById("product_edit_variant_form_clear_button")
     const _product_edit_variant_form_close_button = document.getElementById("product_edit_variant_form_close_button")
-    
+    const _product_edit_variant_form_variant_used_in_pricing = document.getElementById("product_edit_variant_form_variant_used_in_pricing")
     /**
      * User Id
      *
@@ -7336,6 +7306,7 @@ const Variant = (function () {
                         return "<span style='white-space: nowrap;'>" + data + "</span>"
                     },
                 },
+            
             ],
             rowClick: Variant.edit,
         })
@@ -7355,6 +7326,7 @@ const Variant = (function () {
             created_by: user_id,
             date_modified: formatDateMySQL(),
             modified_by: user_id,
+            used_in_pricing: 1,
             note: null,
         }
     }
@@ -7375,6 +7347,7 @@ const Variant = (function () {
             detail.created_by = (variant.created_by) ? variant.created_by : user_id
             detail.date_modified = (variant.date_modified) ? variant.date_modified : formatDateMySQL()
             detail.modified_by = (variant.modified_by) ? variant.modified_by : user_id
+            detail.used_in_pricing = (variant.used_in_pricing === 1) ? 1 : 0
             detail.note = (variant.note) ? variant.note : null
         }
         
@@ -7416,6 +7389,7 @@ const Variant = (function () {
         _product_edit_variant_form_variant_code.value = ""
         _product_edit_variant_form_variant_min_age.value = 0
         _product_edit_variant_form_variant_max_age.value = ""
+        _product_edit_variant_form_variant_used_in_pricing.checked = true
     }
     
     const populateForm = function (variant) {
@@ -7423,6 +7397,7 @@ const Variant = (function () {
         // ----
         clearForm()
         if (variant) {
+            _product_edit_variant_form_variant_used_in_pricing.checked = (variant.used_in_pricing === 1)
             _display_product_variant_name.innerText = (variant.name) ? variant.name : "&nbsp;"
             _product_edit_variant_form_variant_id.value = (!isNaN(parseInt(variant.id))) ? parseInt(variant.id) : ""
             _product_edit_variant_form_variant_name.value = (variant.name) ? variant.name : "&nbsp;"
@@ -7453,6 +7428,7 @@ const Variant = (function () {
     const enableFormFields = function () {
         Console.log("Variant.enableFormFields()", Variant)
         // ----
+        _product_edit_variant_form_variant_used_in_pricing.disabled = false
         _product_edit_variant_form_variant_id.disabled = true
         _product_edit_variant_form_variant_name.disabled = true
         _product_edit_variant_form_variant_enabled.disabled = true
@@ -7465,6 +7441,7 @@ const Variant = (function () {
     const disableFormFields = function () {
         Console.log("Variant.enableFormFields()", Variant)
         // ----
+        _product_edit_variant_form_variant_used_in_pricing.disabled = true
         _product_edit_variant_form_variant_id.disabled = true
         _product_edit_variant_form_variant_name.disabled = true
         _product_edit_variant_form_variant_enabled.disabled = true
@@ -7486,6 +7463,7 @@ const Variant = (function () {
             code: (_product_edit_variant_form_variant_code && _product_edit_variant_form_variant_code.value !== "") ? _product_edit_variant_form_variant_code.value : null,
             min_age: (!isNaN(parseInt(_product_edit_variant_form_variant_min_age.value))) ? parseInt(_product_edit_variant_form_variant_min_age.value) : null,
             max_age: (!isNaN(parseInt(_product_edit_variant_form_variant_max_age.value))) ? parseInt(_product_edit_variant_form_variant_max_age.value) : null,
+            used_in_pricing: (_product_edit_variant_form_variant_used_in_pricing.checked === true) ? 1 : 0,
         }
         return remove_nulls(dataToSend)
     }
@@ -7570,6 +7548,7 @@ const Variant = (function () {
                 let detail = set(variant)
                 Variant.all.set(detail.id, detail)
                 $table_variant_product_edit.insertRow(detail)
+                Console.log("Variant - detail", detail)
             })
         }
     }
@@ -12453,7 +12432,16 @@ const Pricing = (function () {
      */
     $(_pricing_strategy_types_id)
       .on("change", function () {
-          Console.log("This", _pricing_strategy_types_id.value)
+          Console.log("Pricing.pricing_strategy_types_id:change()", _pricing_strategy_types_id.value)
+          // ----
+          let pricing_strategy_types_id = parseInt(_pricing_strategy_types_id.value)
+          if (pricing_strategy_types_id === 1) {
+          
+          } else if (pricing_strategy_types_id === 1) {
+          
+          } else {
+          
+          }
       })
     
     $(_pricing_strategy_season_id)
@@ -12699,6 +12687,24 @@ const Matrix = (function () {
         buildMatrixForm()
     }
     
+    const loadPerUnitForm = function () {
+        Console.log("Matrix.loadPerUnitForm()", Matrix)
+        // ----
+        
+    }
+    
+    const loadPerPersonForm = function () {
+        Console.log("Matrix.loadPerPersonForm()", Matrix)
+        // ----
+        
+    }
+    
+    const loadPerDayForm = function () {
+        Console.log("Matrix.loadPerDayForm()", Matrix)
+        // ----
+        
+    }
+    
     return {
         detail: {},
         all: new Map(),
@@ -12707,6 +12713,15 @@ const Matrix = (function () {
         },
         buildMatrixForm: function () {
             buildMatrixForm()
+        },
+        loadPerUnitForm: function () {
+            loadPerUnitForm()
+        },
+        loadPerPersonForm: function () {
+            loadPerPersonForm()
+        },
+        loadPerDayForm: function () {
+            loadPerDayForm()
         },
     }
     

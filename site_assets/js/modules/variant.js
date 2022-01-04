@@ -18,7 +18,7 @@ const Variant = (function () {
     const _product_edit_variant_form_submit_button = document.getElementById("product_edit_variant_form_submit_button")
     const _product_edit_variant_form_clear_button = document.getElementById("product_edit_variant_form_clear_button")
     const _product_edit_variant_form_close_button = document.getElementById("product_edit_variant_form_close_button")
-    
+    const _product_edit_variant_form_variant_used_in_pricing = document.getElementById("product_edit_variant_form_variant_used_in_pricing")
     /**
      * User Id
      *
@@ -318,6 +318,7 @@ const Variant = (function () {
                         return "<span style='white-space: nowrap;'>" + data + "</span>"
                     },
                 },
+            
             ],
             rowClick: Variant.edit,
         })
@@ -337,6 +338,7 @@ const Variant = (function () {
             created_by: user_id,
             date_modified: formatDateMySQL(),
             modified_by: user_id,
+            used_in_pricing: 1,
             note: null,
         }
     }
@@ -357,6 +359,7 @@ const Variant = (function () {
             detail.created_by = (variant.created_by) ? variant.created_by : user_id
             detail.date_modified = (variant.date_modified) ? variant.date_modified : formatDateMySQL()
             detail.modified_by = (variant.modified_by) ? variant.modified_by : user_id
+            detail.used_in_pricing = (variant.used_in_pricing === 1) ? 1 : 0
             detail.note = (variant.note) ? variant.note : null
         }
         
@@ -398,6 +401,7 @@ const Variant = (function () {
         _product_edit_variant_form_variant_code.value = ""
         _product_edit_variant_form_variant_min_age.value = 0
         _product_edit_variant_form_variant_max_age.value = ""
+        _product_edit_variant_form_variant_used_in_pricing.checked = true
     }
     
     const populateForm = function (variant) {
@@ -405,6 +409,7 @@ const Variant = (function () {
         // ----
         clearForm()
         if (variant) {
+            _product_edit_variant_form_variant_used_in_pricing.checked = (variant.used_in_pricing === 1)
             _display_product_variant_name.innerText = (variant.name) ? variant.name : "&nbsp;"
             _product_edit_variant_form_variant_id.value = (!isNaN(parseInt(variant.id))) ? parseInt(variant.id) : ""
             _product_edit_variant_form_variant_name.value = (variant.name) ? variant.name : "&nbsp;"
@@ -435,6 +440,7 @@ const Variant = (function () {
     const enableFormFields = function () {
         Console.log("Variant.enableFormFields()", Variant)
         // ----
+        _product_edit_variant_form_variant_used_in_pricing.disabled = false
         _product_edit_variant_form_variant_id.disabled = true
         _product_edit_variant_form_variant_name.disabled = true
         _product_edit_variant_form_variant_enabled.disabled = true
@@ -447,6 +453,7 @@ const Variant = (function () {
     const disableFormFields = function () {
         Console.log("Variant.enableFormFields()", Variant)
         // ----
+        _product_edit_variant_form_variant_used_in_pricing.disabled = true
         _product_edit_variant_form_variant_id.disabled = true
         _product_edit_variant_form_variant_name.disabled = true
         _product_edit_variant_form_variant_enabled.disabled = true
@@ -468,6 +475,7 @@ const Variant = (function () {
             code: (_product_edit_variant_form_variant_code && _product_edit_variant_form_variant_code.value !== "") ? _product_edit_variant_form_variant_code.value : null,
             min_age: (!isNaN(parseInt(_product_edit_variant_form_variant_min_age.value))) ? parseInt(_product_edit_variant_form_variant_min_age.value) : null,
             max_age: (!isNaN(parseInt(_product_edit_variant_form_variant_max_age.value))) ? parseInt(_product_edit_variant_form_variant_max_age.value) : null,
+            used_in_pricing: (_product_edit_variant_form_variant_used_in_pricing.checked === true) ? 1 : 0,
         }
         return remove_nulls(dataToSend)
     }
@@ -552,6 +560,7 @@ const Variant = (function () {
                 let detail = set(variant)
                 Variant.all.set(detail.id, detail)
                 $table_variant_product_edit.insertRow(detail)
+                Console.log("Variant - detail", detail)
             })
         }
     }

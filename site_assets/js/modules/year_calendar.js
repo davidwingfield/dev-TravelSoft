@@ -266,7 +266,7 @@ $.fn.YearCalendar = function (settings) {
         } else {
             $(_this).addClass("selected-day")
             $("td.fc-day-top[data-date='" + moment(dateClicked).format("YYYY-MM-DD") + "']").addClass("selected-day")
-            YearCalendar.selectedDates.set(dateClicked, "selected")
+            YearCalendar.selectedDates.set(dateClicked, dateClicked)
             selectedStart = dateClicked
             selectedEnd = null
         }
@@ -387,7 +387,7 @@ $.fn.YearCalendar = function (settings) {
                             selectedStart = null
                             selectedEnd = null
                         } else {
-                            YearCalendar.selectedDates.set(dateClicked, "selected")
+                            YearCalendar.selectedDates.set(dateClicked, dateClicked)
                             selectedStart = dateClicked
                             selectedEnd = null
                             this.addClass("selected-day")
@@ -621,12 +621,11 @@ const YearCalendar = (function () {
       .on("hidden.bs.modal", function () {
           resetForm()
       })
-    
+      .on("click", function () {
+          YearCalendar.checkProgress()
+      })
     // ----
     
-    /**
-     * loadSeasonDropdown
-     */
     const loadSeasonDropdown = function () {
         let seasons = (Season && Season.all) ? Array.from(Season.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Seasons --</option>"
@@ -639,9 +638,6 @@ const YearCalendar = (function () {
         $(_calendar_filter_season_id).html(options)
     }
     
-    /**
-     * loadProfileDropdown
-     */
     const loadProfileDropdown = function () {
         let profiles = (Profile && Profile.all) ? Array.from(Profile.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Profiles --</option>"
@@ -654,9 +650,6 @@ const YearCalendar = (function () {
         $(_calendar_filter_profile_id).html(options)
     }
     
-    /**
-     * loadUnitDropdown
-     */
     const loadUnitDropdown = function () {
         let units = (Unit && Unit.all) ? Array.from(Unit.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Units --</option>"
@@ -669,30 +662,24 @@ const YearCalendar = (function () {
         $(_calendar_filter_unit_id).html(options)
     }
     
-    /**
-     * setCalendarFilters
-     */
     const setCalendarFilters = function () {
         clearSelectedDOW()
         _calendar_filter_season_id.value = ""
         $("html").css({ overflow: "hidden" })
     }
     
-    /**
-     * unSetCalendarFilters
-     */
     const unSetCalendarFilters = function () {
         $("html").css({ overflow: "auto" })
     }
     
-    /**
-     * buildAssignDatesRecord
-     */
     const buildAssignDatesRecord = function () {
         Console.log("YearCalendar.buildAssignDatesRecord()", this)
+        
         let product_id = parseInt(_product_id.value)
         let season_id = parseInt(_calendar_filter_season_id.value)
-        let days = YearCalendar.selectedDates
+        
+        let days = Array.from(YearCalendar.selectedDates.values())
+        
         let dataToSend = {
             season_id: season_id,
             product_id: product_id,
@@ -712,11 +699,6 @@ const YearCalendar = (function () {
         loadProfileDropdown()
     }
     
-    /**
-     * setDisabledDOW
-     *
-     * @param disabled_dow
-     */
     const setDisabledDOW = function (disabled_dow) {
         if (!disabled_dow) {
             disabled_dow = []
@@ -737,9 +719,6 @@ const YearCalendar = (function () {
         
     }
     
-    /**
-     * clearSelected
-     */
     const clearSelectedDOW = function () {
         let days = $("td[season='true']")
         
@@ -748,9 +727,6 @@ const YearCalendar = (function () {
         })
     }
     
-    /**
-     * clearSelected
-     */
     const clearSelected = function () {
         let days = $("td[season='true']")
         
@@ -762,26 +738,19 @@ const YearCalendar = (function () {
         YearCalendar.selectedDates = new Map()
     }
     
-    /**
-     * endLoading
-     */
     const endLoading = function () {
         $(_calendar_loader).hide()
     }
     
-    /**
-     * getTitle
-     */
     const getTitle = function () {
         _calendar_display_year.innerText = YearCalendar.start
     }
     
-    /**
-     * init
-     *
-     * @param settings
-     */
     const init = function (settings) {
+        //ContextMenu.init(settings)
+    }
+    
+    const checkProgress = function () {
         //ContextMenu.init(settings)
     }
     
@@ -789,14 +758,15 @@ const YearCalendar = (function () {
      * Global Params
      */
     return {
-        
         calendarContextMenu: null,
         calendars: new Map(),
         events: [],
         start: new Date().getFullYear(),
         selectedDates: new Map(),
         activeCalendars: [],
-        
+        checkProgress: function () {
+            checkProgress()
+        },
         endLoading: function () {
             endLoading()
         },

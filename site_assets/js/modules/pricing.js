@@ -11,7 +11,16 @@ const Pricing = (function () {
      */
     $(_pricing_strategy_types_id)
       .on("change", function () {
-          Console.log("This", _pricing_strategy_types_id.value)
+          Console.log("Pricing.pricing_strategy_types_id:change()", _pricing_strategy_types_id.value)
+          // ----
+          let pricing_strategy_types_id = parseInt(_pricing_strategy_types_id.value)
+          if (pricing_strategy_types_id === 1) {
+          
+          } else if (pricing_strategy_types_id === 1) {
+          
+          } else {
+          
+          }
       })
     
     $(_pricing_strategy_season_id)

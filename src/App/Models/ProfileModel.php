@@ -19,16 +19,9 @@
         protected static $dbFields = Array();
         protected static $sql = "
 		SELECT
-				PRODUCT_PROFILE.product_id AS 'product_profile_product_id',
-				PRODUCT_PROFILE.profile_id AS 'product_profile_profile_id',
-				PRODUCT_PROFILE.enabled AS 'product_profile_enabled',
-				PRODUCT_PROFILE.date_created AS 'product_profile_date_created',
-				PRODUCT_PROFILE.created_by AS 'product_profile_created_by',
-				PRODUCT_PROFILE.date_modified AS 'product_profile_date_modified',
-				PRODUCT_PROFILE.modified_by AS 'product_profile_modified_by',
-				PRODUCT_PROFILE.note AS 'product_profile_note',
 				PROFILE.id AS 'profile_id',
 				PROFILE.allot_by_id AS 'profile_allot_by_id',
+		       PROFILE.product_id AS 'profile_product_id',
 				PROFILE.sales_types_id AS 'profile_sales_types_id',
 				PROFILE.name AS 'profile_name',
 				PROFILE.quantity AS 'profile_quantity',
@@ -84,8 +77,7 @@
 				SALES_TYPES_TRANSFER.date_modified AS 'sales_types_transfer_date_modified',
 				SALES_TYPES_TRANSFER.modified_by AS 'sales_types_transfer_modified_by',
 				SALES_TYPES_TRANSFER.note AS 'sales_types_transfer_note'
-		FROM 	product_profile PRODUCT_PROFILE
-		LEFT JOIN 	profile PROFILE ON PROFILE.id = PRODUCT_PROFILE.profile_id
+		FROM 	profile PROFILE
 		LEFT JOIN 	allot_by ALLOT_BY ON ALLOT_BY.id = PROFILE.allot_by_id
 		LEFT JOIN 	sales_types SALES_TYPES ON SALES_TYPES.id = PROFILE.sales_types_id
 		LEFT JOIN 	sales_types SALES_TYPES_TRANSFER ON SALES_TYPES_TRANSFER.id = PROFILE.transfer_sales_types_id
@@ -182,10 +174,11 @@
         {
             $where = "";
             if (!is_null($product_id)) {
-                $where = "WHERE	PRODUCT_PROFILE.product_id = $product_id";
+                $where = "WHERE	PROFILE.product_id = $product_id";
             }
             
             try {
+                
                 $sql = self::$sql . $where;
                 
                 return Model::$db->rawQuery($sql);

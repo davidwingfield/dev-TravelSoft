@@ -17,116 +17,16 @@
 
 <!-- Product Index Page -->
 <section id="product_index_page" class="section">
+    
     <div class="row gx-1">
-        <div class="col-12">
-            <ul class="nav md-pills nav-justified pills-secondary mb-4">
-                <li class="nav-item pl-0">
-                    <a class="nav-link active " data-toggle="tab" href="#panel_hotels" role="tab">Hotels</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#panel_flights" role="tab">Flights</a>
-                </li>
-                <li class="nav-item pr-0">
-                    <a class="nav-link" data-toggle="tab" href="#panel_cars" role="tab">Cars</a>
-                </li>
-                <li class="nav-item pr-0">
-                    <a class="nav-link" data-toggle="tab" href="#panel_rails" role="tab">Rail</a>
-                </li>
-                <li class="nav-item pr-0">
-                    <a class="nav-link" data-toggle="tab" href="#panel_transport" role="tab">Transport</a>
-                </li>
-                <li class="nav-item pr-0">
-                    <a class="nav-link" data-toggle="tab" href="#panel_tours" role="tab">Tours</a>
-                </li>
-                <li class="nav-item pr-0">
-                    <a class="nav-link" data-toggle="tab" href="#panel_cruises" role="tab">Cruises</a>
-                </li>
-                <li class="nav-item pr-0">
-                    <a class="nav-link" data-toggle="tab" href="#panel_packages" role="tab">Packages</a>
-                </li>
-                <li class="nav-item pr-0">
-                    <a class="nav-link" data-toggle="tab" href="#panel_other" role="tab">Other</a>
-                </li>
-            </ul>
+        <div class="col-12 p-1">
+            <?php include_once(VIEWS_PATH . "/products/forms/product_search.phtml"); ?>
         </div>
     </div>
+    
     <div class="row gx-1">
-        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-7 p-1">
-            <?php
-                include_once(VIEWS_PATH . "/products/forms/product_search.phtml"); ?>
-        </div>
-        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-5 p-1">
-            <!-- Section: Search Results -->
-            <section>
-                
-                <div class="card">
-                    <div class="card-body px-2">
-                        
-                        <h4 class="card-title text-center font-weight-bold mb-4">Search Results</h4>
-                        
-                        <hr>
-                        
-                        <div class="row">
-                            <div class="col-12 mb-3 mx-auto">
-                                <!-- Product Search Result -->
-                                <!--
-                                <div class="media">
-                                    
-                                    <img class="d-flex mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder1.jpg" alt="Generic placeholder image"/>
-                                    
-                                    <div class="media-body">
-                                        
-                                        <h6 class="mt-1 font-weight-bold">
-                                            <a href="#!" id="product_search_results_name">PlayStation 4</a>
-                                            <div>
-                                                <ul class="list-unstyled list-inline rating mb-1 mt-1" id="product_search_results_rating">
-                                                    <li class="list-inline-item mr-0">
-                                                        <i class="fas fa-star rating"></i>
-                                                    </li>
-                                                    <li class="list-inline-item mr-0">
-                                                        <i class="fas fa-star rating"></i>
-                                                    </li>
-                                                    <li class="list-inline-item mr-0">
-                                                        <i class="fas fa-star rating"></i>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <a>
-                                                <span id="product_search_results_price" class="badge badge-success float-right" style="line-height:.8rem">$399</span>
-                                            </a>
-                                        </h6>
-                                        
-                                        <p class="text-muted" id="product_search_results_description_short">
-                                            PlayStation 4 500GB Console (PS4)
-                                        </p>
-                                    
-                                    </div>
-                                
-                                </div>
-                                <hr>
-                                -->
-                                <!-- /Product Search Result -->
-                            
-                            </div>
-                            <!--Grid column-->
-                        
-                        </div>
-                        <!--Grid row-->
-                        
-                        <hr>
-                        
-                        <p class="text-center mt-4 mb-1"><a href="#!">Clear Search Results</a></p>
-                    
-                    </div>
-                </div>
-            
-            </section>
-            <!-- Section: Block Content -->
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <section class="panel">
+        <div class="col-12 p-1">
+            <div class="card card-body">
                 <header class="panel-heading">
                     <div class="panel-actions"></div>
                     <h3 class="panel-title">Basic</h3>
@@ -175,7 +75,7 @@
                         -->
                     </table>
                 </div>
-            </section>
+            </div>
         </div>
     </div>
 </section>

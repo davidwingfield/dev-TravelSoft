@@ -41,6 +41,7 @@
         public static function getTypes(): array
         {
             $results = array(
+                "allot_by" => StatusTypesModel::getAllotBy(),
                 "season_types" => Season::getSeasonTypes(),
                 "address_types" => AddressTypesModel::get(),
                 "airport_types" => AirportTypesModel::get(),

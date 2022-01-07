@@ -190,8 +190,7 @@ const Season = (function () {
                   $table_season_product_edit.clearSelectedRows()
                   let season = suggestion.data
                   let color_scheme = (season.color_scheme) ? season.color_scheme : {}
-                  Console.log("Season.autocomplete:select()", season)
-                  Console.log("Season.autocomplete:select()", color_scheme)
+                  
                   _product_edit_season_form_season_id.value = season.id
                   _product_edit_season_form_season_name.value = season.name
                   _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
@@ -201,11 +200,9 @@ const Season = (function () {
                   ColorScheme.disable()
                   
                   _product_edit_season_form_season_enabled.disabled = true
-                  //_edit_season_button.disabled = false
                   
                   let product_season = Season.all.get(season.id)
                   if (product_season) {
-                      Console.log("Season.autocomplete:select()", product_season)
                       loadProductSeasonForm(product_season)
                       $table_season_product_edit.loadRow(product_season)
                   } else {
@@ -547,6 +544,7 @@ const Season = (function () {
             //_button_assign_season_to_product.disabled = true
             disabledDays = $("#season_disabled_dow").DisabledDOW({
                 name: "season_disabled_dow",
+                label: "Disabled DOW",
             })
             unloadProductSeasonForm()
             loadProductSeasonForm()

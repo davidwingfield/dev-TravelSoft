@@ -4,35 +4,15 @@ const Category = (function () {
     const base_url = "/category"
     const _modal_product_category_id = document.getElementById("modal_product_category_id")
     const _modal_new_product = document.getElementById("modal_new_product")
-    
-    const _input_category_last_update = document.getElementById("input_category_last_update")
-    const _input_category_id = document.getElementById("input_category_id")
-    const _input_category_pricing_strategy_types_id = document.getElementById("input_category_pricing_strategy_types_id")
-    const _input_category_color_scheme_id = document.getElementById("input_category_color_scheme_id")
-    const _input_category_icon = document.getElementById("input_category_icon")
-    const _input_category_view_product_index = document.getElementById("input_category_view_product_index")
-    const _input_category_view_product_index_filter = document.getElementById("input_category_view_product_index_filter")
-    const _input_category_view_product_index_search = document.getElementById("input_category_view_product_index_search")
-    const _input_category_view_product_edit = document.getElementById("input_category_view_product_edit")
-    const _input_category_view_product_package_edit = document.getElementById("input_category_view_product_package_edit")
-    const _input_category_view_product_package_index = document.getElementById("input_category_view_product_package_index")
-    const _input_category_all_day = document.getElementById("input_category_all_day")
-    const _input_category_overlap = document.getElementById("input_category_overlap")
-    const _input_category_editable = document.getElementById("input_category_editable")
-    const _input_category_duration_editable = document.getElementById("input_category_duration_editable")
-    const _input_category_start_editable = document.getElementById("input_category_start_editable")
-    const _input_category_display = document.getElementById("input_category_display")
-    const _input_category_sort_order = document.getElementById("input_category_sort_order")
-    const _input_category_enabled = document.getElementById("input_category_enabled")
-    const _input_category_date_created = document.getElementById("input_category_date_created")
-    const _input_category_created_by = document.getElementById("input_category_created_by")
-    const _input_category_date_modified = document.getElementById("input_category_date_modified")
-    const _input_category_modified_by = document.getElementById("input_category_modified_by")
-    const _input_category_note = document.getElementById("input_category_note")
+    const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
+    const _modal_product_provider_location_id = document.getElementById("modal_product_provider_location_id")
+    const _modal_product_location_id = document.getElementById("modal_product_location_id")
+    const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
     const _modal_product_city = document.getElementById("modal_product_city")
+    
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
-    const handle_category_error = function (msg) {
+    const handleCategoryError = function (msg) {
         toastr.error(msg)
     }
     
@@ -60,7 +40,7 @@ const Category = (function () {
         category_id = parseInt(category_id)
         
         Product.reset_new_product_details()
-        Product.init_new_product_autocomplete(category_id)
+        Product.initAutoComplete(category_id)
         let category = Types.category.get(category_id)
         if (!category) {
             return
@@ -76,123 +56,271 @@ const Category = (function () {
                     /**
                      * Hotels
                      */
-                    _modal_product_provider_name.disabled = false
-                    _modal_product_city.disabled = false
-                    _modal_product_vendor_name.disabled = false
                     _modal_product_pricing_strategies_types_id.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_rating_types_id.value = ""
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
+                    _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
-                    Console.log("Hotels")
+                    _modal_product_sku.disabled = true
                     break
                 case 2:
                     /**
                      * Flight
                      */
                     _modal_product_pricing_strategies_types_id.value = "2"
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
+                    _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
-                    _modal_product_rating_types_id.disabled = true
-                    Console.log("Flight")
+                    _modal_product_pricing_strategies_types_id.disabled = true
+                    _modal_product_sku.disabled = true
                     break
                 case 3:
                     /**
                      * Cars
                      */
                     _modal_product_pricing_strategies_types_id.value = "3"
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_name.disabled = false
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
-                    _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = true
-                    Console.log("Cars")
+                    _modal_product_name.disabled = false
+                    _modal_product_currency_id.disabled = false
+                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_sku.disabled = true
                     break
                 case 4:
                     /**
                      * Rail
                      */
                     _modal_product_pricing_strategies_types_id.value = "2"
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_name.disabled = false
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
-                    _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = true
-                    Console.log("Rail")
+                    _modal_product_name.disabled = false
+                    _modal_product_currency_id.disabled = false
+                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_sku.disabled = true
                     break
                 case 5:
                     /**
                      * Transport
                      */
                     _modal_product_pricing_strategies_types_id.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_name.disabled = false
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
-                    _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = false
-                    Console.log("Transport")
+                    _modal_product_name.disabled = false
+                    _modal_product_currency_id.disabled = false
+                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_sku.disabled = true
                     break
                 case 6:
                     /**
                      * Tours
                      */
-                    _modal_product_name.disabled = false
-                    _modal_product_city.disabled = false
-                    _modal_product_currency_id.disabled = false
-                    _modal_product_pricing_strategies_types_id.value = "2"
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
+                    _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
-                    Console.log("Tours")
+                    _modal_product_name.disabled = false
+                    _modal_product_currency_id.disabled = false
+                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_sku.disabled = true
                     break
                 case 7:
                     /**
                      * Cruises
                      */
-                    _modal_product_name.disabled = false
-                    _modal_product_city.disabled = false
-                    _modal_product_pricing_strategies_types_id.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
+                    _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
+                    _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
-                    Console.log("Cruises")
+                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_sku.disabled = true
                     break
                 case 8:
                     /**
                      * Packages
                      */
-                    _modal_product_pricing_strategies_types_id.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
-                    Console.log("Packages")
+                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_sku.disabled = true
                     break
                 case 9:
                     /**
                      * Other
                      */
-                    _modal_product_name.disabled = false
-                    _modal_product_city.disabled = false
-                    _modal_product_currency_id.disabled = false
-                    _modal_product_rating_types_id.disabled = false
-                    _modal_product_pricing_strategies_types_id.disabled = false
-                    _modal_product_pricing_strategies_types_id.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
+                    _modal_product_city.disabled = false
+                    _modal_product_rating_types_id.disabled = false
+                    _modal_product_name.disabled = false
+                    _modal_product_currency_id.disabled = false
+                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_sku.disabled = true
                     Console.log("Other")
                     break
                 default:
                     /**
                      * default
                      */
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_rating_types_id.value = ""
+                    _modal_product_sku.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
+                    _modal_product_city.disabled = true
+                    _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = true
+                    _modal_product_currency_id.disabled = true
+                    _modal_product_pricing_strategies_types_id.disabled = true
+                    _modal_product_sku.disabled = true
+                    
                     _modal_product_sku.disabled = true
                     _modal_product_city.disabled = true
                     _modal_product_rating_types_id.disabled = true
-                    _modal_product_currency_id.disabled = true
+                    
                     _modal_product_pricing_strategies_types_id.disabled = true
                     Console.log("Default")
                     break
@@ -200,7 +328,7 @@ const Category = (function () {
         }
     }
     
-    const _default_detail = function () {
+    const defaultDetail = function () {
         return {
             category_id: 1,
             name: null,
@@ -254,7 +382,7 @@ const Category = (function () {
     
     const set = function (category) {
         //Console.log("Category.set()", category)
-        let detail = _default_detail()
+        let detail = defaultDetail()
         if (category) {
             detail.id = (category.id) ? category.id : null
             detail.name = (category.name) ? category.name : null

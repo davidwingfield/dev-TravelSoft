@@ -59,6 +59,7 @@ html, body {
   html, body {
     font-size: 12px;
     --lh: 1.7rem;
+    --fs: 12px;
     line-height: var(--lh);
   }
   
@@ -75,6 +76,7 @@ html, body {
 @media (min-width: $md) {
   html, body {
     font-size: 13px;
+    --fs: 13px;
     --lh: 1.7rem;
     line-height: var(--lh);
   }
@@ -97,6 +99,7 @@ html, body {
   html, body {
     font-size: 14px;
     --lh: 1.7rem;
+    --fs: 14px;
     line-height: var(--lh);
   }
   
@@ -117,6 +120,7 @@ html, body {
 @media (min-width: $xl) {
   html, body {
     font-size: 14px;
+    --fs: 14px;
     --lh: 1.7rem;
     line-height: var(--lh);
   }

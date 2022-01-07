@@ -128,9 +128,11 @@
                 'id' => $profile['profile_id'],
                 'allot_by_id' => $profile['profile_allot_by_id'],
                 'sales_types_id' => $profile['profile_sales_types_id'],
+                'product_id' => $profile['profile_product_id'],
                 'name' => $profile['profile_name'],
                 'quantity' => $profile['profile_quantity'],
                 'expires' => $profile['profile_expires'],
+                'days_out' => $profile['profile_days_out'],
                 'transfer_sales_types_id' => $profile['profile_transfer_sales_types_id'],
                 'release_amt' => $profile['profile_release_amt'],
                 'min_length_days' => $profile['profile_min_length_days'],
@@ -146,7 +148,6 @@
                 'advanced_booking_max' => $profile['profile_advanced_booking_max'],
                 'advanced_booking_date' => $profile['profile_advanced_booking_date'],
                 'weekday_dow' => $profile['profile_weekday_dow'],
-                'days_out' => $profile['profile_days_out'],
                 'enabled' => $profile['profile_enabled'],
                 'date_created' => $profile['profile_date_created'],
                 'created_by' => $profile['profile_created_by'],
@@ -184,7 +185,7 @@
             }
             
             if (!is_null($product_profile)) {
-                $formatted_profile["product_profile_details"] = $product_profile;
+                //$formatted_profile["product_profile_details"] = $product_profile;
             }
             
             return $formatted_profile;

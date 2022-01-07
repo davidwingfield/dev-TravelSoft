@@ -25,7 +25,6 @@ const Company = (function () {
     const _provider_name = document.getElementById("provider_name")
     const _provider_company_id = document.getElementById("provider_company_id")
     const _company_key = document.getElementById("company_keywords")
-    const _company_keywords = document.getElementById("company_keywords")
     const _company_logo = document.getElementById("company_logo")
     const _company_description_long = document.getElementById("company_description_long")
     const _company_description_short = document.getElementById("company_description_short")
@@ -130,12 +129,6 @@ const Company = (function () {
     
     // ----
     
-    /**
-     * set object default values
-     *
-     * @returns {{phone_2: null, note: null, phone_1: null, website: null, keywords: null, date_created: *, description_long: null, created_by: (number|number), enabled: number, description_short: null, status_id: number, date_modified: *, modified_by: (number|number), name: null, logo: null, cover_image: string, id: null, fax: null, email: null}}
-     * @private
-     */
     const _default_detail = function () {
         return {
             created_by: user_id,

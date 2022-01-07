@@ -53,6 +53,7 @@
                 PRODUCT.modified_by AS 'product_modified_by',
                 PRODUCT.note AS 'product_note',
                 PRODUCT.keywords AS 'product_keywords',
+                PRODUCT.amenities AS 'product_amenities',
                 STATUS_TYPES.id AS 'status_types_id',
                 STATUS_TYPES.name AS 'status_types_name',
                 STATUS_TYPES.enabled AS 'status_types_enabled',
@@ -196,7 +197,7 @@
             $description_long = Model::setLongText((isset($product["description_long"])) ? $product["description_long"] : null);
             $description_short = Model::setLongText((isset($product["description_short"])) ? $product["description_short"] : null);
             $keywords = Model::setLongText((isset($product["keywords"])) ? $product["keywords"] : null);
-            
+            $amenities = Model::setLongText((isset($product["amenities"])) ? $product["amenities"] : null);
             $location = [];
             $location["name"] = (string)"City Center";
             $location["city_id"] = (int)$city_id;
@@ -231,7 +232,7 @@
                     description_short, description_long, keywords, sku, depart_from,
                     arrive_to, depart_time, arrive_time, provider_vendor_match, use_provider_location_id,
                     day_span, cover_image, api_id, from_api, hotel_code,
-                    sort_order, enabled, date_created, created_by, date_modified,
+                    sort_order, amenities, enabled, date_created, created_by, date_modified,
                     modified_by, note
                 ) VALUES (
                     $id, $category_id, $pricing_strategy_types_id, $status_types_id, $currency_id,
@@ -239,7 +240,7 @@
                     $description_short, $description_long, $keywords, $sku, $depart_from,
                     $arrive_to, $depart_time, $arrive_time, $provider_vendor_match, $use_provider_location_id,
                     $day_span, '/public/img/placeholder.jpg', $api_id, 0, $hotel_code,
-                    999, $enabled, CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP,
+                    999, $amenities, $enabled, CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP,
                     $modified_by, $note
                 )
                 ON DUPLICATE KEY UPDATE
@@ -256,6 +257,7 @@
                     description_short = VALUES(description_short),
                     description_long = VALUES(description_long),
                     keywords = VALUES(keywords),
+                    amenities = VALUES(amenities),
                     sku = VALUES(sku),
                     depart_from = VALUES(depart_from),
                     arrive_to = VALUES(arrive_to),

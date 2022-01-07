@@ -1749,8 +1749,7 @@ const Season = (function () {
                   $table_season_product_edit.clearSelectedRows()
                   let season = suggestion.data
                   let color_scheme = (season.color_scheme) ? season.color_scheme : {}
-                  Console.log("Season.autocomplete:select()", season)
-                  Console.log("Season.autocomplete:select()", color_scheme)
+                  
                   _product_edit_season_form_season_id.value = season.id
                   _product_edit_season_form_season_name.value = season.name
                   _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
@@ -1760,11 +1759,9 @@ const Season = (function () {
                   ColorScheme.disable()
                   
                   _product_edit_season_form_season_enabled.disabled = true
-                  //_edit_season_button.disabled = false
                   
                   let product_season = Season.all.get(season.id)
                   if (product_season) {
-                      Console.log("Season.autocomplete:select()", product_season)
                       loadProductSeasonForm(product_season)
                       $table_season_product_edit.loadRow(product_season)
                   } else {
@@ -2106,6 +2103,7 @@ const Season = (function () {
             //_button_assign_season_to_product.disabled = true
             disabledDays = $("#season_disabled_dow").DisabledDOW({
                 name: "season_disabled_dow",
+                label: "Disabled DOW",
             })
             unloadProductSeasonForm()
             loadProductSeasonForm()
@@ -4174,6 +4172,8 @@ const City = (function () {
     const class_name = "form-new-city"
     const form_id = "form_new_city"
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
+    const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
+    const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
@@ -4256,6 +4256,17 @@ const City = (function () {
           },
       })
     
+    $(_modal_product_city_id)
+      .on("change", function () {
+          if (_modal_product_city_id.value === "") {
+              _modal_product_provider_name.disabled = true
+              _modal_product_vendor_name.disabled = true
+          } else {
+              _modal_product_provider_name.disabled = false
+              _modal_product_vendor_name.disabled = false
+          }
+      })
+    
     $("#modal_product_city")
       .on("change", function () {
           setTimeout(function () {
@@ -4263,7 +4274,7 @@ const City = (function () {
           }, 200)
       })
       .on("search", function () {
-      
+          $(_modal_product_city_id).val("").trigger("change")
       })
       .on("click", function (e) {
           if ($(this).attr("readonly") === "readonly") {
@@ -4286,8 +4297,8 @@ const City = (function () {
                   return
               }
               let city = suggestion.data
-              Console.log("city", city)
               _modal_product_city_id.value = city.id
+              $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
               /*
                   "value": "Abano Terme (Padova, Italy)",
                   "data": {
@@ -9079,10 +9090,15 @@ const Register = (function () {
 $.fn.DisabledDOW = function (settings) {
     "use strict"
     let id = this.attr("id")
+    let label_text = "Disabled DOW"
     let name_prefix = id + "_"
     if (settings) {
         if (settings.name && settings.name !== "") {
             name_prefix = settings.name
+        }
+        
+        if (settings && settings.label && settings.label !== "") {
+            label_text = settings.label
         }
     }
     const _this = document.getElementById(id)
@@ -9149,7 +9165,7 @@ $.fn.DisabledDOW = function (settings) {
     const buildCheckBoxColumnLabel = function () {
         let div = document.createElement("div")
         let label = document.createElement("label")
-        label.innerText = "Disabled DOW:"
+        label.innerText = label_text + ":"
         
         div.classList = "col-12 col-md-2 col-xl-3"
         
@@ -9270,7 +9286,6 @@ $.fn.DisabledDOW = function (settings) {
                     DisabledDOW.disabled_dows = []
                 }
                 DisabledDOW.disabled_dows.sort()
-                Console.log("dow_select_all", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_sun":
                 indexId = 0
@@ -9285,7 +9300,6 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                Console.log("dow_select_sun", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_mon":
                 indexId = 1
@@ -9360,7 +9374,6 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                Console.log("dow_select_fri", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_sat":
                 indexId = 6
@@ -9375,7 +9388,6 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                Console.log("dow_select_sat", DisabledDOW.disabled_dows)
                 break
             default:
                 break
@@ -9651,35 +9663,15 @@ const Category = (function () {
     const base_url = "/category"
     const _modal_product_category_id = document.getElementById("modal_product_category_id")
     const _modal_new_product = document.getElementById("modal_new_product")
-    
-    const _input_category_last_update = document.getElementById("input_category_last_update")
-    const _input_category_id = document.getElementById("input_category_id")
-    const _input_category_pricing_strategy_types_id = document.getElementById("input_category_pricing_strategy_types_id")
-    const _input_category_color_scheme_id = document.getElementById("input_category_color_scheme_id")
-    const _input_category_icon = document.getElementById("input_category_icon")
-    const _input_category_view_product_index = document.getElementById("input_category_view_product_index")
-    const _input_category_view_product_index_filter = document.getElementById("input_category_view_product_index_filter")
-    const _input_category_view_product_index_search = document.getElementById("input_category_view_product_index_search")
-    const _input_category_view_product_edit = document.getElementById("input_category_view_product_edit")
-    const _input_category_view_product_package_edit = document.getElementById("input_category_view_product_package_edit")
-    const _input_category_view_product_package_index = document.getElementById("input_category_view_product_package_index")
-    const _input_category_all_day = document.getElementById("input_category_all_day")
-    const _input_category_overlap = document.getElementById("input_category_overlap")
-    const _input_category_editable = document.getElementById("input_category_editable")
-    const _input_category_duration_editable = document.getElementById("input_category_duration_editable")
-    const _input_category_start_editable = document.getElementById("input_category_start_editable")
-    const _input_category_display = document.getElementById("input_category_display")
-    const _input_category_sort_order = document.getElementById("input_category_sort_order")
-    const _input_category_enabled = document.getElementById("input_category_enabled")
-    const _input_category_date_created = document.getElementById("input_category_date_created")
-    const _input_category_created_by = document.getElementById("input_category_created_by")
-    const _input_category_date_modified = document.getElementById("input_category_date_modified")
-    const _input_category_modified_by = document.getElementById("input_category_modified_by")
-    const _input_category_note = document.getElementById("input_category_note")
+    const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
+    const _modal_product_provider_location_id = document.getElementById("modal_product_provider_location_id")
+    const _modal_product_location_id = document.getElementById("modal_product_location_id")
+    const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
     const _modal_product_city = document.getElementById("modal_product_city")
+    
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
-    const handle_category_error = function (msg) {
+    const handleCategoryError = function (msg) {
         toastr.error(msg)
     }
     
@@ -9707,7 +9699,7 @@ const Category = (function () {
         category_id = parseInt(category_id)
         
         Product.reset_new_product_details()
-        Product.init_new_product_autocomplete(category_id)
+        Product.initAutoComplete(category_id)
         let category = Types.category.get(category_id)
         if (!category) {
             return
@@ -9723,123 +9715,271 @@ const Category = (function () {
                     /**
                      * Hotels
                      */
-                    _modal_product_provider_name.disabled = false
-                    _modal_product_city.disabled = false
-                    _modal_product_vendor_name.disabled = false
                     _modal_product_pricing_strategies_types_id.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_rating_types_id.value = ""
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
+                    _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
-                    Console.log("Hotels")
+                    _modal_product_sku.disabled = true
                     break
                 case 2:
                     /**
                      * Flight
                      */
                     _modal_product_pricing_strategies_types_id.value = "2"
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
+                    _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
-                    _modal_product_rating_types_id.disabled = true
-                    Console.log("Flight")
+                    _modal_product_pricing_strategies_types_id.disabled = true
+                    _modal_product_sku.disabled = true
                     break
                 case 3:
                     /**
                      * Cars
                      */
                     _modal_product_pricing_strategies_types_id.value = "3"
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_name.disabled = false
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
-                    _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = true
-                    Console.log("Cars")
+                    _modal_product_name.disabled = false
+                    _modal_product_currency_id.disabled = false
+                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_sku.disabled = true
                     break
                 case 4:
                     /**
                      * Rail
                      */
                     _modal_product_pricing_strategies_types_id.value = "2"
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_name.disabled = false
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
-                    _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = true
-                    Console.log("Rail")
+                    _modal_product_name.disabled = false
+                    _modal_product_currency_id.disabled = false
+                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_sku.disabled = true
                     break
                 case 5:
                     /**
                      * Transport
                      */
                     _modal_product_pricing_strategies_types_id.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_name.disabled = false
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
-                    _modal_product_currency_id.disabled = false
                     _modal_product_rating_types_id.disabled = false
-                    Console.log("Transport")
+                    _modal_product_name.disabled = false
+                    _modal_product_currency_id.disabled = false
+                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_sku.disabled = true
                     break
                 case 6:
                     /**
                      * Tours
                      */
-                    _modal_product_name.disabled = false
-                    _modal_product_city.disabled = false
-                    _modal_product_currency_id.disabled = false
-                    _modal_product_pricing_strategies_types_id.value = "2"
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
+                    _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
-                    Console.log("Tours")
+                    _modal_product_name.disabled = false
+                    _modal_product_currency_id.disabled = false
+                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_sku.disabled = true
                     break
                 case 7:
                     /**
                      * Cruises
                      */
-                    _modal_product_name.disabled = false
-                    _modal_product_city.disabled = false
-                    _modal_product_pricing_strategies_types_id.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
+                    _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
+                    _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
-                    Console.log("Cruises")
+                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_sku.disabled = true
                     break
                 case 8:
                     /**
                      * Packages
                      */
-                    _modal_product_pricing_strategies_types_id.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
-                    Console.log("Packages")
+                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_sku.disabled = true
                     break
                 case 9:
                     /**
                      * Other
                      */
-                    _modal_product_name.disabled = false
-                    _modal_product_city.disabled = false
-                    _modal_product_currency_id.disabled = false
-                    _modal_product_rating_types_id.disabled = false
-                    _modal_product_pricing_strategies_types_id.disabled = false
-                    _modal_product_pricing_strategies_types_id.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
+                    _modal_product_sku.value = ""
+                    _modal_product_currency_id.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
+                    _modal_product_city.disabled = false
+                    _modal_product_rating_types_id.disabled = false
+                    _modal_product_name.disabled = false
+                    _modal_product_currency_id.disabled = false
+                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_sku.disabled = true
                     Console.log("Other")
                     break
                 default:
                     /**
                      * default
                      */
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_city_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_location_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_rating_types_id.value = ""
+                    _modal_product_sku.value = ""
+                    
+                    _modal_product_provider_name.disabled = true
+                    _modal_product_vendor_name.disabled = true
+                    _modal_product_city.disabled = true
+                    _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = true
+                    _modal_product_currency_id.disabled = true
+                    _modal_product_pricing_strategies_types_id.disabled = true
+                    _modal_product_sku.disabled = true
+                    
                     _modal_product_sku.disabled = true
                     _modal_product_city.disabled = true
                     _modal_product_rating_types_id.disabled = true
-                    _modal_product_currency_id.disabled = true
+                    
                     _modal_product_pricing_strategies_types_id.disabled = true
                     Console.log("Default")
                     break
@@ -9847,7 +9987,7 @@ const Category = (function () {
         }
     }
     
-    const _default_detail = function () {
+    const defaultDetail = function () {
         return {
             category_id: 1,
             name: null,
@@ -9901,7 +10041,7 @@ const Category = (function () {
     
     const set = function (category) {
         //Console.log("Category.set()", category)
-        let detail = _default_detail()
+        let detail = defaultDetail()
         if (category) {
             detail.id = (category.id) ? category.id : null
             detail.name = (category.name) ? category.name : null
@@ -10106,7 +10246,6 @@ const Company = (function () {
     const _provider_name = document.getElementById("provider_name")
     const _provider_company_id = document.getElementById("provider_company_id")
     const _company_key = document.getElementById("company_keywords")
-    const _company_keywords = document.getElementById("company_keywords")
     const _company_logo = document.getElementById("company_logo")
     const _company_description_long = document.getElementById("company_description_long")
     const _company_description_short = document.getElementById("company_description_short")
@@ -10211,12 +10350,6 @@ const Company = (function () {
     
     // ----
     
-    /**
-     * set object default values
-     *
-     * @returns {{phone_2: null, note: null, phone_1: null, website: null, keywords: null, date_created: *, description_long: null, created_by: (number|number), enabled: number, description_short: null, status_id: number, date_modified: *, modified_by: (number|number), name: null, logo: null, cover_image: string, id: null, fax: null, email: null}}
-     * @private
-     */
     const _default_detail = function () {
         return {
             created_by: user_id,
@@ -13159,6 +13292,7 @@ const Types = (function () {
     
     const init = function (settings) {
         Types.address_types = new Map()
+        Types.allot_by = new Map()
         Types.airport_types = new Map()
         Types.categories_ratings_types = new Map()
         Types.category = new Map()
@@ -13232,6 +13366,14 @@ const Types = (function () {
             setType(settings.status_types, "status_types")
         }
         
+        if (settings.allot_by) {
+            setType(settings.allot_by, "allot_by")
+        }
+        
+        if (settings.countries) {
+            Country.load_all(settings.countries)
+        }
+        
         if (settings.countries) {
             Country.load_all(settings.countries)
         }
@@ -13239,6 +13381,7 @@ const Types = (function () {
     }
     
     return {
+        allot_by: new Map(),
         address_types: new Map(),
         season_types: new Map(),
         airport_types: new Map(),
@@ -14439,7 +14582,52 @@ const Profile = (function () {
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $table_profile_product_edit = $(_table_profile_product_edit)
-    
+    let form_rules = {
+        rules: {
+            product_edit_unit_form_unit_min_nights: {
+                required: true,
+                number: true,
+                min: 1,
+            },
+            product_edit_unit_form_unit_max_nights: {
+                required: true,
+                number: true,
+                min: 1,
+            },
+            product_edit_unit_form_unit_min_pax: {
+                required: true,
+                number: true,
+                min: 1,
+            },
+            product_edit_unit_form_unit_max_pax: {
+                required: true,
+                number: true,
+                min: 1,
+            },
+        },
+        messages: {
+            product_edit_unit_form_unit_min_nights: {
+                required: "Field Required",
+                number: "Field Invalid",
+                min: "Field Invalid",
+            },
+            product_edit_unit_form_unit_max_nights: {
+                required: "Field Required",
+                number: "Field Invalid",
+                min: "Field Invalid",
+            },
+            product_edit_unit_form_unit_min_pax: {
+                required: "Field Required",
+                number: "Field Invalid",
+                min: "Field Invalid",
+            },
+            product_edit_unit_form_unit_max_pax: {
+                required: "Field Required",
+                number: "Field Invalid",
+                min: "Field Invalid",
+            },
+        },
+    }
     // ----
     
     $(_button_add_product_profile)
@@ -14451,6 +14639,7 @@ const Profile = (function () {
      * build product edit profile table
      */
     const buildEditTable = function () {
+        /*
         Console.log("Profile.buildEditTable()", Profile)
         $table_profile_product_edit = $(_table_profile_product_edit).table({
             table_type: "display_list",
@@ -14513,9 +14702,11 @@ const Profile = (function () {
             ],
             rowClick: Profile.edit,
         })
+                 */
     }
     
     const initAutoComplete = function () {
+        /*
         Console.log("Profile.initAutoComplete()", Profile)
         $(_product_edit_profile_form_profile_name_filter)
           .on("click", function () {
@@ -14547,6 +14738,8 @@ const Profile = (function () {
                   Console.log("profile", profile)
               },
           })
+          
+         */
     }
     
     /**
@@ -14672,22 +14865,36 @@ const Profile = (function () {
     }
     
     const init = function (settings) {
-        Console.log("Profile.init(settings)", settings)
-        let profiles = []
+        //Console.log("Profile.init(settings)", settings)
+        //let profiles = []
+        /*
         if (settings) {
             if (settings.profiles) {
                 profiles = settings.profiles
             }
         }
+        //*/
+        /*
         if (_table_profile_product_edit) {
             buildEditTable()
         }
+         */
         
+        /*
         if (_product_edit_profile_form_profile_name_filter) {
             initAutoComplete()
         }
         
+        if (_product_edit_profile_form) {
+            initAutoComplete()
+            validator_init(form_rules)
+            Unit.validator = $(_product_edit_profile_form).validate()
+        }
+        
+        
         loadAll(profiles)
+        
+        //*/
     }
     
     const edit = function (profile) {
@@ -14749,38 +14956,25 @@ const Product = (function () {
     const _panel_tab_meta = document.getElementById("panel_tab_meta")
     const _product_panel_link_meta = document.getElementById("product_panel_link_meta")
     const _product_panel_link_location = document.getElementById("product_panel_link_location")
+    const _product_keywords = document.getElementById("product_keywords")
+    const _product_description_long = document.getElementById("product_description_long")
+    const _product_description_short = document.getElementById("_product_description_short")
+    
+    const _product_amenities = document.getElementById("product_amenities")
+    
+    let $product_keywords, $product_amenities
     /**
      * product search: panels - hotels
      * @type {HTMLElement}
      * @private
      */
-    const _panel_hotels = document.getElementById("panel_hotels")
-    const _panel_flights = document.getElementById("panel_flights")
-    const _panel_cars = document.getElementById("panel_cars")
-    const _panel_rails = document.getElementById("panel_rails")
-    const _panel_transport = document.getElementById("panel_transport")
-    const _panel_tours = document.getElementById("panel_tours")
-    const _panel_cruises = document.getElementById("panel_cruises")
-    const _panel_packages = document.getElementById("panel_packages")
-    const _panel_other = document.getElementById("panel_other")
-    const _form_product_search_panel_hotels = document.getElementById("form_product_search_panel_hotels")
-    const _form_product_search_panel_flights = document.getElementById("form_product_search_panel_flights")
-    const _form_product_search_panel_cars = document.getElementById("form_product_search_panel_cars")
-    const _form_product_search_panel_rails = document.getElementById("form_product_search_panel_rails")
-    const _form_product_search_panel_transport = document.getElementById("form_product_search_panel_transport")
-    const _form_product_search_panel_tours = document.getElementById("form_product_search_panel_tours")
-    const _form_product_search_panel_cruises = document.getElementById("form_product_search_panel_cruises")
-    const _form_product_search_panel_packages = document.getElementById("form_product_search_panel_packages")
-    const _form_product_search_panel_other = document.getElementById("form_product_search_panel_other")
+    
     /**
      * product search: panels - hotels product_name
      *
      * @type {HTMLElement}
      * @private
      */
-    const _form_product_search_hotel_product_name = document.getElementById("form_product_search_hotel_product_name")
-    const _button_product_search_panel_hotels_clear = document.getElementById("button_product_search_panel_hotels_clear")
-    const _button_product_search_panel_hotels_submit = document.getElementById("button_product_search_panel_hotels_submit")
     const base_url = "/products"
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
     const _modal_product_city = document.getElementById("modal_product_city")
@@ -15157,7 +15351,8 @@ const Product = (function () {
             date_modified: formatDateMySQL(),
             modified_by: user_id,
             note: null,
-            keywords: [],
+            amenities: "",
+            keywords: "",
             seasons: [],
             units: [],
             use_provider_location: 0,
@@ -15222,7 +15417,8 @@ const Product = (function () {
             detail.modified_by = (product.modified_by) ? product.modified_by : user_id
             detail.note = (product.note) ? product.note : null
             detail.category = (product.category) ? product.category : {}
-            detail.keywords = (product.keywords) ? product.keywords : []
+            detail.keywords = (product.keywords) ? product.keywords : ""
+            detail.amenities = (product.amenities) ? product.amenities : ""
             detail.seasons = (product.seasons) ? product.seasons : []
             detail.units = (product.units) ? product.units : []
             detail.use_provider_location = (product.use_provider_location) ? product.use_provider_location : 0
@@ -15426,6 +15622,13 @@ const Product = (function () {
             Location.init(product_location)
         }
         
+        Console.log("product.amenities", product.amenities)
+        let product_keywords = (product.keywords) ? product.keywords : ""
+        $product_keywords = $(_product_keywords).BuildKeyword(product_keywords)
+        
+        let product_amenities = (product.amenities) ? product.amenities : ""
+        $product_amenities = $(_product_amenities).BuildKeyword(product_amenities)
+        
     }
     
     const init = function (settings) {
@@ -15476,7 +15679,11 @@ const Product = (function () {
                         Season.init(seasons)
                         Season.loadAll(seasons)
                         Unit.init({ units: units })
-                        Profile.init({ profiles: profiles })
+                        //Profile.init({ profiles: profiles })
+                        
+                        InventoryProfile.init({
+                            profiles: profiles,
+                        })
                         Matrix.init({ matrices: matrices })
                         Pricing.init(pricings)
                         

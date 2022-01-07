@@ -1,10 +1,15 @@
 $.fn.DisabledDOW = function (settings) {
     "use strict"
     let id = this.attr("id")
+    let label_text = "Disabled DOW"
     let name_prefix = id + "_"
     if (settings) {
         if (settings.name && settings.name !== "") {
             name_prefix = settings.name
+        }
+        
+        if (settings && settings.label && settings.label !== "") {
+            label_text = settings.label
         }
     }
     const _this = document.getElementById(id)
@@ -71,7 +76,7 @@ $.fn.DisabledDOW = function (settings) {
     const buildCheckBoxColumnLabel = function () {
         let div = document.createElement("div")
         let label = document.createElement("label")
-        label.innerText = "Disabled DOW:"
+        label.innerText = label_text + ":"
         
         div.classList = "col-12 col-md-2 col-xl-3"
         
@@ -192,7 +197,6 @@ $.fn.DisabledDOW = function (settings) {
                     DisabledDOW.disabled_dows = []
                 }
                 DisabledDOW.disabled_dows.sort()
-                Console.log("dow_select_all", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_sun":
                 indexId = 0
@@ -207,7 +211,6 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                Console.log("dow_select_sun", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_mon":
                 indexId = 1
@@ -282,7 +285,6 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                Console.log("dow_select_fri", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_sat":
                 indexId = 6
@@ -297,7 +299,6 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                Console.log("dow_select_sat", DisabledDOW.disabled_dows)
                 break
             default:
                 break

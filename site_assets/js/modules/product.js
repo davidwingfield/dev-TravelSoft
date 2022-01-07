@@ -41,38 +41,25 @@ const Product = (function () {
     const _panel_tab_meta = document.getElementById("panel_tab_meta")
     const _product_panel_link_meta = document.getElementById("product_panel_link_meta")
     const _product_panel_link_location = document.getElementById("product_panel_link_location")
+    const _product_keywords = document.getElementById("product_keywords")
+    const _product_description_long = document.getElementById("product_description_long")
+    const _product_description_short = document.getElementById("_product_description_short")
+    
+    const _product_amenities = document.getElementById("product_amenities")
+    
+    let $product_keywords, $product_amenities
     /**
      * product search: panels - hotels
      * @type {HTMLElement}
      * @private
      */
-    const _panel_hotels = document.getElementById("panel_hotels")
-    const _panel_flights = document.getElementById("panel_flights")
-    const _panel_cars = document.getElementById("panel_cars")
-    const _panel_rails = document.getElementById("panel_rails")
-    const _panel_transport = document.getElementById("panel_transport")
-    const _panel_tours = document.getElementById("panel_tours")
-    const _panel_cruises = document.getElementById("panel_cruises")
-    const _panel_packages = document.getElementById("panel_packages")
-    const _panel_other = document.getElementById("panel_other")
-    const _form_product_search_panel_hotels = document.getElementById("form_product_search_panel_hotels")
-    const _form_product_search_panel_flights = document.getElementById("form_product_search_panel_flights")
-    const _form_product_search_panel_cars = document.getElementById("form_product_search_panel_cars")
-    const _form_product_search_panel_rails = document.getElementById("form_product_search_panel_rails")
-    const _form_product_search_panel_transport = document.getElementById("form_product_search_panel_transport")
-    const _form_product_search_panel_tours = document.getElementById("form_product_search_panel_tours")
-    const _form_product_search_panel_cruises = document.getElementById("form_product_search_panel_cruises")
-    const _form_product_search_panel_packages = document.getElementById("form_product_search_panel_packages")
-    const _form_product_search_panel_other = document.getElementById("form_product_search_panel_other")
+    
     /**
      * product search: panels - hotels product_name
      *
      * @type {HTMLElement}
      * @private
      */
-    const _form_product_search_hotel_product_name = document.getElementById("form_product_search_hotel_product_name")
-    const _button_product_search_panel_hotels_clear = document.getElementById("button_product_search_panel_hotels_clear")
-    const _button_product_search_panel_hotels_submit = document.getElementById("button_product_search_panel_hotels_submit")
     const base_url = "/products"
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
     const _modal_product_city = document.getElementById("modal_product_city")
@@ -449,7 +436,8 @@ const Product = (function () {
             date_modified: formatDateMySQL(),
             modified_by: user_id,
             note: null,
-            keywords: [],
+            amenities: "",
+            keywords: "",
             seasons: [],
             units: [],
             use_provider_location: 0,
@@ -514,7 +502,8 @@ const Product = (function () {
             detail.modified_by = (product.modified_by) ? product.modified_by : user_id
             detail.note = (product.note) ? product.note : null
             detail.category = (product.category) ? product.category : {}
-            detail.keywords = (product.keywords) ? product.keywords : []
+            detail.keywords = (product.keywords) ? product.keywords : ""
+            detail.amenities = (product.amenities) ? product.amenities : ""
             detail.seasons = (product.seasons) ? product.seasons : []
             detail.units = (product.units) ? product.units : []
             detail.use_provider_location = (product.use_provider_location) ? product.use_provider_location : 0
@@ -718,6 +707,13 @@ const Product = (function () {
             Location.init(product_location)
         }
         
+        Console.log("product.amenities", product.amenities)
+        let product_keywords = (product.keywords) ? product.keywords : ""
+        $product_keywords = $(_product_keywords).BuildKeyword(product_keywords)
+        
+        let product_amenities = (product.amenities) ? product.amenities : ""
+        $product_amenities = $(_product_amenities).BuildKeyword(product_amenities)
+        
     }
     
     const init = function (settings) {
@@ -768,7 +764,11 @@ const Product = (function () {
                         Season.init(seasons)
                         Season.loadAll(seasons)
                         Unit.init({ units: units })
-                        Profile.init({ profiles: profiles })
+                        //Profile.init({ profiles: profiles })
+                        
+                        InventoryProfile.init({
+                            profiles: profiles,
+                        })
                         Matrix.init({ matrices: matrices })
                         Pricing.init(pricings)
                         

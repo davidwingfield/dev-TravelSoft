@@ -4,6 +4,8 @@ const City = (function () {
     const class_name = "form-new-city"
     const form_id = "form_new_city"
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
+    const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
+    const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
@@ -86,6 +88,17 @@ const City = (function () {
           },
       })
     
+    $(_modal_product_city_id)
+      .on("change", function () {
+          if (_modal_product_city_id.value === "") {
+              _modal_product_provider_name.disabled = true
+              _modal_product_vendor_name.disabled = true
+          } else {
+              _modal_product_provider_name.disabled = false
+              _modal_product_vendor_name.disabled = false
+          }
+      })
+    
     $("#modal_product_city")
       .on("change", function () {
           setTimeout(function () {
@@ -93,7 +106,7 @@ const City = (function () {
           }, 200)
       })
       .on("search", function () {
-      
+          $(_modal_product_city_id).val("").trigger("change")
       })
       .on("click", function (e) {
           if ($(this).attr("readonly") === "readonly") {
@@ -116,8 +129,8 @@ const City = (function () {
                   return
               }
               let city = suggestion.data
-              Console.log("city", city)
               _modal_product_city_id.value = city.id
+              $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
               /*
                   "value": "Abano Terme (Padova, Italy)",
                   "data": {

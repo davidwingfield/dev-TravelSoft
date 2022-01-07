@@ -1,5 +1,28 @@
-<section>
+<?php
+    $sales_types = (isset($page_data, $page_data["types"], $page_data["types"]["sales_types"])) ? $page_data["types"]["sales_types"] : [];
+    $allot_by_types = (isset($page_data, $page_data["types"], $page_data["types"]["allot_by"])) ? $page_data["types"]["allot_by"] : [];
+    $sales_types_dropdown = "<option value='' disabled readonly selected>-- Sales Type --</option>";
+    $allot_by_type_dropdown = "<option value='' disabled readonly selected>-- Allot By --</option>";
+    foreach ($sales_types as $sales_type) {
+        $name = $sales_type["name"];
+        $id = $sales_type["id"];
+        
+        $sales_types_dropdown .= "<option value='$id'>$name</option>";
+        
+    }
+    foreach ($allot_by_types as $allot_by_type) {
+        $name = $allot_by_type["name"];
+        $id = $allot_by_type["id"];
+        
+        $allot_by_type_dropdown .= "<option value='$id'>$name</option>";
+        
+    }
     
+    //echo "<pre>" . var_export(TYPES, 1) . "</pre>";
+    //echo "<pre>" . var_export(TYPES, 1) . "</pre>";
+?>
+
+<section>
     <div class="row">
         <div class="col-12">
             <div class="form-element">
@@ -24,29 +47,1236 @@
     
     <?php include_once(VIEWS_PATH . "/profiles/tables/product_edit_profile_table.phtml"); ?>
     
-    <div class="card mb-2" id="edit_product_profile">
-        <div class="card-body">
-            <form id="product_edit_profile_form" name="product_edit_profile_form" novalidate>
+    <div class="card card-body mb-2" id="edit_product_profile">
+        <h5 class="card-title">
+            <span>Inventory Profile</span>
+            <a type="button" href="javascript:void(0);" id="product_edit_profile_form_close_button" class="panel-button-close fas fa-times" aria-hidden="true"></a>
+        </h5>
+        <h6 class="card-subtitle mb-2 text-muted" id="display_product_profile_name">&nbsp;</h6>
+        <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+        
+        <form id="product_edit_profile_form" novalidate="novalidate">
+            
+            <div class="card card-body z-depth-0 mb-2">
+                
                 <div class="row">
-                    <div class="col-12 col-md-6 col-lg-4">
+                    
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 mb-2">
                         <div class="form-element">
                             <label for="product_edit_profile_form_profile_id">Id:</label>
-                            <input type="text" id="product_edit_profile_form_profile_id" name="product_edit_profile_form_profile_id" class="form-control"/>
+                            <input type="text" id="product_edit_profile_form_profile_id" name="product_edit_profile_form_profile_id" class="form-control" readonly="readonly" disabled="">
                             <div id="product_edit_profile_form_profile_id-error" class="error w-100 text-center"></div>
                         </div>
                     </div>
                     
-                    <div class="col-12 col-md-6 col-lg-4">
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 mb-2">
                         <div class="form-element">
                             <label for="product_edit_profile_form_profile_name">Name:</label>
-                            <input type="text" id="product_edit_profile_form_profile_name" name="product_edit_profile_form_profile_name" class="form-control"/>
+                            <input type="text" id="product_edit_profile_form_profile_name" name="product_edit_profile_form_profile_name" class="form-control">
                             <div id="product_edit_profile_form_profile_name-error" class="error w-100 text-center"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 d-flex align-self-end justify-content-end pb-2 mb-2">
+                        <div class="form-element">
+                            <div class="custom-control custom-switch">
+                                <input id="product_edit_profile_form_profile_enabled" name="product_edit_profile_form_profile_enabled" type="checkbox" value="1" class="custom-control-input" readonly="readonly" disabled="">
+                                <label for="product_edit_profile_form_profile_enabled" class="custom-control-label p-0">Enabled</label>
+                            </div>
+                            <div id="product_edit_profile_form_profile_enabled-error" class="error w-100 text-center"></div>
                         </div>
                     </div>
                 
                 </div>
-            </form>
-        </div>
+                
+                <div class="row">
+                    
+                    <div class="col-4 mb-2">
+                        <div class="form-element">
+                            <label for="product_edit_profile_form_profile_sales_types_id">Sales Type:</label>
+                            <select id="product_edit_profile_form_profile_sales_types_id" name="product_edit_profile_form_profile_sales_types_id" class="form-control">
+                                <?php echo $sales_types_dropdown; ?>
+                            </select>
+                            <div id="product_edit_profile_form_profile_sales_types_id-error" class="error w-100 text-center"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-4 mb-2" id="product_edit_profile_form_profile_allot_by_id_block">
+                        
+                        <div class="form-element">
+                            <label for="product_edit_profile_form_profile_allot_by_id">Allot By:</label>
+                            <select id="product_edit_profile_form_profile_allot_by_id" name="product_edit_profile_form_profile_allot_by_id" class="form-control">
+                                <?php echo $allot_by_type_dropdown; ?>
+                            </select>
+                            <div id="product_edit_profile_form_profile_allot_by_id-error" class="error w-100 text-center"></div>
+                        </div>
+                    
+                    </div>
+                    
+                    <div class="col-4 mb-2" id="product_edit_profile_form_profile_expires_block">
+                        <div class="form-element">
+                            <label for="product_edit_profile_form_profile_expires" class="active">Expires:</label>
+                            <input type="text" id="product_edit_profile_form_profile_expires" name="product_edit_profile_form_profile_expires" class="form-control datepicker">
+                            <div id="product_edit_profile_form_profile_expires-error" class="error w-100 text-center"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-4 mb-2">
+                        
+                        <div class="form-element" id="product_edit_profile_form_profile_days_out_block">
+                            <label for="product_edit_profile_form_profile_days_out" class="">Days Out:</label>
+                            <input type="number" id="product_edit_profile_form_profile_days_out" name="product_edit_profile_form_profile_days_out" class="form-control">
+                            <div id="product_edit_profile_form_profile_days_out-error" class="error w-100 text-center"></div>
+                        </div>
+                    
+                    </div>
+                
+                </div>
+                
+                <div class="row">
+                    
+                    <div class="col-4 mb-2">
+                        
+                        <div class="form-element" id="product_edit_profile_form_profile_transfer_sales_types_id_block">
+                            <label for="product_edit_profile_form_profile_transfer_sales_types_id">Transfer Sales Type:</label>
+                            <select id="product_edit_profile_form_profile_transfer_sales_types_id" name="product_edit_profile_form_profile_transfer_sales_types_id" class="form-control">
+                                <?php echo $sales_types_dropdown; ?>
+                            </select>
+                            <div id="product_edit_profile_form_profile_transfer_sales_types_id-error" class="error w-100 text-center"></div>
+                        </div>
+                    
+                    </div>
+                    
+                    <div class="col-4 mb-2" id="product_edit_profile_form_profile_quantity_block">
+                        
+                        <div class="form-element" id="product_edit_profile_form_profile_quantity_block">
+                            <label for="product_edit_profile_form_profile_quantity" class="">Quantity Allotted:</label>
+                            <input type="number" id="product_edit_profile_form_profile_quantity" name="product_edit_profile_form_profile_quantity" class="form-control">
+                            <div id="product_edit_profile_form_profile_quantity-error" class="error w-100 text-center"></div>
+                        </div>
+                    
+                    </div>
+                    
+                    <div class="col-4 mb-2" id="product_edit_profile_form_profile_release_amt_block">
+                        
+                        <div class="form-element">
+                            <label for="product_edit_profile_form_profile_release_amt" class="">Amount to Release:</label>
+                            <input type="number" id="product_edit_profile_form_profile_release_amt" name="product_edit_profile_form_profile_release_amt" class="form-control">
+                            <div id="product_edit_profile_form_profile_release_amt-error" class="error w-100 text-center"></div>
+                        </div>
+                    
+                    </div>
+                
+                </div>
+                <!-- /Allotment Fields -->
+                
+                <!-- Additional Fields -->
+                <div class="card card-body border grey lighten-3 z-depth-0 mb-2 mt-2">
+                    <h5 class="card-title">
+                        <span>Additional Fields</span>
+                        <a class="panel-action panel-button-close panel-action-expand far fa-window-maximize collapsed" id="product_edit_profile_form_additional_fields_toggle"></a>
+                    </h5>
+                    
+                    <div id="product_edit_profile_form_additional_fields" class="collapse">
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <div id="product_edit_profile_form_profile_checkin_dow" class=""></div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <div id="product_edit_profile_form_profile_checkout_dow" class=""></div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <div id="product_edit_profile_form_profile_departure_dow" class=""></div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <div id="product_edit_profile_form_profile_return_dow" class=""></div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <div id="product_edit_profile_form_profile_weekday_dow" class=""></div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <div id="product_edit_profile_form_profile_inc_days_dow" class="w-100"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-3 mb-2">
+                                <div class="form-element">
+                                    <label for="product_edit_profile_form_profile_min_length_days" class="">Min Length Days:</label>
+                                    <input type="number" id="product_edit_profile_form_profile_min_length_days" name="product_edit_profile_form_profile_min_length_days" class="form-control">
+                                    <div id="product_edit_profile_form_profile_min_length_days-error" class="error w-100 text-center"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-3 mb-2">
+                                <div class="form-element">
+                                    <label for="product_edit_profile_form_profile_min_duration" class="">Minimum Duration:</label>
+                                    <input type="number" id="product_edit_profile_form_profile_min_duration" name="product_edit_profile_form_profile_min_duration" class="form-control">
+                                    <div id="product_edit_profile_form_profile_min_duration-error" class="error w-100 text-center"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-3 mb-2">
+                                <div class="form-element">
+                                    <label for="product_edit_profile_form_profile_max_duration" class="">Maximum Duration:</label>
+                                    <input type="number" id="product_edit_profile_form_profile_max_duration" name="product_edit_profile_form_profile_max_duration" class="form-control">
+                                    <div id="product_edit_profile_form_profile_max_duration-error" class="error w-100 text-center"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-3 mb-2">
+                                <div class="form-element">
+                                    <label for="product_edit_profile_form_profile_equal_duration" class="">Equals Duration:</label>
+                                    <input type="number" id="product_edit_profile_form_profile_equal_duration" name="product_edit_profile_form_profile_equal_duration" class="form-control">
+                                    <div id="product_edit_profile_form_profile_equal_duration-error" class="error w-100 text-center"></div>
+                                </div>
+                            </div>
+                        
+                        </div>
+                        
+                        <div class="row">
+                            
+                            <div class="col-4 mb-2">
+                                <div class="form-element">
+                                    <label for="product_edit_profile_form_profile_advanced_booking_date" class="">Advanced Booking Date:</label>
+                                    <input type="text" id="product_edit_profile_form_profile_advanced_booking_date" name="product_edit_profile_form_profile_advanced_booking_date" class="form-control">
+                                    <div id="product_edit_profile_form_profile_advanced_booking_date-error" class="error w-100 text-center"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-4 mb-2">
+                                <div class="form-element">
+                                    <label for="product_edit_profile_form_profile_advanced_booking_min" class="">Advanced Booking Min:</label>
+                                    <input type="number" id="product_edit_profile_form_profile_advanced_booking_min" name="product_edit_profile_form_profile_advanced_booking_min" class="form-control">
+                                    <div id="product_edit_profile_form_profile_advanced_booking_min-error" class="error w-100 text-center"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-4 mb-2">
+                                <div class="form-element">
+                                    <label for="product_edit_profile_form_profile_advanced_booking_max" class="">Advanced Booking Max:</label>
+                                    <input type="number" id="product_edit_profile_form_profile_advanced_booking_max" name="product_edit_profile_form_profile_advanced_booking_max" class="form-control">
+                                    <div id="product_edit_profile_form_profile_advanced_booking_max-error" class="error w-100 text-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+                <!-- /Additional Fields -->
+            
+            </div>
+            
+            <div class="text-right w-100">
+                <a href="javascript:void(0);" id="product_edit_profile_form_clear_button" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+                <a href="javascript:void(0);" id="product_edit_profile_form_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">Save</a>
+            </div>
+        
+        </form>
+    
     </div>
 
 </section>
+
+<div class="row">
+    <div class="col-4">
+        <div id="expiration_date" data-label="Expiration Date" data-placeholder="Select Expiration Date"></div>
+        <button id="button-test" class="btn btn-primary btn-sm">Test</button>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    
+    $.fn.dateSelect = function (opt) {
+        let element = $(this)
+        let filterMax = ""
+        let elementId = element.attr("id")
+        
+        let $element, $elementWrapper, $elementGroupWrapper, $elementGroupAppend, $buttonGroupAppend,
+          $input, $inputLabel, $errorElement, $buttonGroupAppendClear, input, picker
+        
+        let defaults = {
+            // Strings and translations
+            monthsFull: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            weekdaysFull: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+            weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            showMonthsShort: undefined,
+            showWeekdaysFull: undefined,
+            // Buttons
+            today: 'Today',
+            clear: 'Clear',
+            close: 'Close',
+            // Accessibility labels
+            labelMonthNext: 'Next month',
+            labelMonthPrev: 'Previous month',
+            labelMonthSelect: 'Select a month',
+            labelYearSelect: 'Select a year',
+            // Formats
+            format: "yyyy-mm-dd",
+            formatSubmit: "yyyy-mm-dd",
+            hiddenPrefix: undefined,
+            hiddenSuffix: '_submit',
+            hiddenName: undefined,
+            // Editable input
+            editable: undefined,
+            
+            // Dropdown selectors
+            selectYears: undefined,
+            selectMonths: undefined,
+            
+            // First day of the week
+            firstDay: undefined,
+            
+            // Date limits
+            min: undefined,
+            max: undefined,
+            
+            // Disable dates
+            disable: undefined,
+            
+            // Root picker container
+            container: undefined,
+            
+            // Hidden input container
+            containerHidden: undefined,
+            
+            // Close on a user action
+            closeOnSelect: true,
+            closeOnClear: true,
+            
+            // Events
+            onStart: undefined,
+            onRender: undefined,
+            onOpen: undefined,
+            onClose: undefined,
+            onSet: undefined,
+            onStop: undefined,
+        }
+        
+        let settings = {
+            label: "Date",
+            placeholder: "Select Date",
+        }
+        
+        const buildElements = function (element, opt) {
+            $element = element
+            $elementWrapper = $("<div>")
+              .addClass(`form-element`)
+            
+            $elementGroupWrapper = $("<div>")
+              .addClass(`input-group mb-3`)
+            
+            $elementGroupAppend = $("<div>")
+              .addClass(`input-group-append`)
+            
+            $buttonGroupAppend = $("<button>")
+              .attr("id", "button-" + elementId)
+              .addClass(`btn btn-md btn-default m-0 px-3 py-2 z-depth-0 waves-effect`)
+              .html('<i class="fas fa-calendar-alt"></i>')
+            
+            $buttonGroupAppendClear = $("<button>")
+              .attr("id", "button-clear-" + elementId)
+              .addClass(`btn btn-md btn-outline-danger m-0 px-3 py-2 z-depth-0 waves-effect`)
+              .html('<i class="fas fa-ban"></i>')
+              .on("click", function () {
+                  $input.val("").trigger("change")
+              })
+            
+            $input = $("<input>")
+              .attr("id", "input-" + elementId)
+              .attr("type", "text")
+              .attr("placeholder", settings.placeholder)
+              .addClass("form-control date-format")
+              .on("keyup", function () {
+                  toggleClearButton()
+              })
+              .on("change", function () {
+                  toggleClearButton()
+              })
+            
+            $inputLabel = $("<label>")
+              .attr("for", "input-" + elementId)
+              .html(settings.label)
+            
+            $errorElement = $("<div>")
+              .addClass("error w-100 text-center")
+              .attr("id", "input-" + elementId + "-error")
+        }
+        
+        const toggleClearButton = function () {
+            if ($input.val() !== "") {
+                $buttonGroupAppendClear.show()
+            } else {
+                $buttonGroupAppendClear.hide()
+            }
+        }
+        
+        const setWrapper = function (element, opt) {
+            buildElements(element, opt)
+            $elementGroupAppend.append($buttonGroupAppendClear, $buttonGroupAppend)
+            $elementGroupWrapper.append($input, $elementGroupAppend)
+            $elementWrapper.append($inputLabel, $elementGroupWrapper, $errorElement)
+            $element.append($elementWrapper)
+            picker = $buttonGroupAppend.pickadate("picker")
+        }
+        
+        const assignOptions = function (newOptions) {
+            if (newOptions) {
+                $.each(newOptions, function (k, v) {
+                    defaults[k] = v
+                })
+            }
+            
+        }
+        
+        const getDate = function (date) {
+            let today = new Date()
+            if (date) {
+                today = new Date(date)
+            } else {
+                return new Date()
+            }
+            
+            let dd = today.getDate()
+            let mm = today.getMonth() + 1
+            let yyyy = today.getFullYear()
+            
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+            
+            today = yyyy + '-' + mm + '-' + dd
+            
+            return new Date(today)
+        }
+        const clear = function () {
+            if (DateSelect.picker.clear()) {
+                DateSelect.picker.clear()
+                //DateSelect.picker.set("select", [2015, 3, 20])
+                DateSelect.picker.set("highlight", [2015, 3, 20])
+                
+                DateSelect.picker.render(true)
+                
+            }
+        }
+        
+        const set = function (opts) {
+            if (!opts) {
+                opts = {}
+            }
+            
+            DateSelect.picker.set(opts, { muted: true })
+            
+        }
+        
+        const value = function (date) {
+            if (date) {
+                DateSelect.picker.set('select', getDate(date))
+            } else {
+                if (DateSelect.picker.get()) {
+                    return DateSelect.picker.get()
+                }
+            }
+            return null
+        }
+        
+        const DateSelect = {
+            picker: null,
+            val: null,
+            fooListener: function (val) {},
+            registerNewListener: function (externalListenerFunction) {
+                this.fooListener = externalListenerFunction
+            },
+            
+            set: function () {
+                set()
+            },
+            value: function (dataValue) {
+                if (!dataValue) {
+                    dataValue = null
+                }
+                return value(dataValue)
+            },
+            clear: function () {
+                clear()
+            },
+            init: function (element, opt) {
+                init(element, opt)
+            },
+        }
+        
+        const init = function (element, opt) {
+            assignOptions(opt)
+            
+            settings.label = ($(element).attr("data-label")) ? $(element).attr("data-label") : "Date"
+            settings.placeholder = ($(element).attr("data-placeholder")) ? $(element).attr("data-placeholder") : "Select Date"
+            
+            setWrapper(element, opt)
+            
+            $(document).ready(function () {
+            
+            })
+            $buttonGroupAppend
+              .pickadate(defaults)
+              .on("change", function () {
+                  if ($(this).val() === "") {
+                      $input.val(filterMax)
+                  } else {
+                      $input.val($(this).val())
+                  }
+                  
+                  $input.trigger("change")
+              })
+            
+            picker = $buttonGroupAppend.pickadate("picker")
+            toggleClearButton()
+            DateSelect.picker = $buttonGroupAppend.pickadate("picker")
+            DateSelect.registerNewListener((val) => console.log(`New Value: ${val}`))
+        }
+        
+        init(element, opt)
+        return DateSelect
+    }
+    
+    $(document).ready(function () {
+        
+        let expiration_date = $("#expiration_date").dateSelect({
+            onStart: function () {},
+        })
+        expiration_date.value("2022-02-02")
+        $("#button-test").on("click", function () {
+            console.log("expiration_date", expiration_date.value())
+            expiration_date.val = "sdf"
+            expiration_date.clear()
+        })
+        
+    })
+
+</script>
+
+<script type="text/javascript">
+    const InventoryProfile = (function () {
+        'use strict'
+        const _product_edit_profile_form_additional_fields = document.getElementById("product_edit_profile_form_additional_fields")
+        const _edit_product_profile = document.getElementById("edit_product_profile")
+        const _product_edit_profile_form_profile_transfer_sales_types_id_block = document.getElementById("product_edit_profile_form_profile_transfer_sales_types_id_block")
+        const _product_edit_profile_form_profile_allot_by_id_block = document.getElementById("product_edit_profile_form_profile_allot_by_id_block")
+        const _product_edit_profile_form_profile_name_filter = document.getElementById("product_edit_profile_form_profile_name_filter")
+        const _table_profile_product_edit = document.getElementById("table_profile_product_edit")
+        const _product_edit_profile_form_profile_days_out_block = document.getElementById("product_edit_profile_form_profile_days_out_block")
+        const _product_edit_profile_form_profile_expires_block = document.getElementById("product_edit_profile_form_profile_expires_block")
+        const _product_edit_profile_form_profile_quantity_block = document.getElementById("product_edit_profile_form_profile_quantity_block")
+        const _product_edit_profile_form_profile_release_amt_block = document.getElementById("product_edit_profile_form_profile_release_amt_block")
+        const _product_edit_profile_form_additional_fields_toggle = document.getElementById("product_edit_profile_form_additional_fields_toggle")
+        const _product_edit_profile_form = document.getElementById("product_edit_profile_form")
+        
+        const _product_edit_profile_form_profile_id = document.getElementById('product_edit_profile_form_profile_id')
+        const _product_edit_profile_form_profile_name = document.getElementById('product_edit_profile_form_profile_name')
+        const _product_edit_profile_form_profile_enabled = document.getElementById('product_edit_profile_form_profile_enabled')
+        const _product_edit_profile_form_profile_sales_types_id = document.getElementById('product_edit_profile_form_profile_sales_types_id')
+        const _product_edit_profile_form_profile_allot_by_id = document.getElementById('product_edit_profile_form_profile_allot_by_id')
+        const _product_edit_profile_form_profile_transfer_sales_types_id = document.getElementById('product_edit_profile_form_profile_transfer_sales_types_id')
+        const _product_edit_profile_form_profile_expires = document.getElementById('product_edit_profile_form_profile_expires')
+        const _product_edit_profile_form_profile_days_out = document.getElementById('product_edit_profile_form_profile_days_out')
+        const _product_edit_profile_form_profile_quantity = document.getElementById('product_edit_profile_form_profile_quantity')
+        const _product_edit_profile_form_profile_release_amt = document.getElementById('product_edit_profile_form_profile_release_amt')
+        
+        const _product_edit_profile_form_profile_min_length_days = document.getElementById('product_edit_profile_form_profile_min_length_days')
+        const _product_edit_profile_form_profile_min_duration = document.getElementById('product_edit_profile_form_profile_min_duration')
+        const _product_edit_profile_form_profile_max_duration = document.getElementById('product_edit_profile_form_profile_max_duration')
+        const _product_edit_profile_form_profile_equal_duration = document.getElementById('product_edit_profile_form_profile_equal_duration')
+        const _product_edit_profile_form_profile_advanced_booking_date = document.getElementById('product_edit_profile_form_profile_advanced_booking_date')
+        const _product_edit_profile_form_profile_advanced_booking_min = document.getElementById('product_edit_profile_form_profile_advanced_booking_min')
+        const _product_edit_profile_form_profile_advanced_booking_max = document.getElementById('product_edit_profile_form_profile_advanced_booking_max')
+        const _product_edit_profile_form_profile_checkin_dow = document.getElementById('product_edit_profile_form_profile_checkin_dow')
+        const _product_edit_profile_form_profile_checkout_dow = document.getElementById('product_edit_profile_form_profile_checkout_dow')
+        const _product_edit_profile_form_profile_departure_dow = document.getElementById('product_edit_profile_form_profile_departure_dow')
+        const _product_edit_profile_form_profile_return_dow = document.getElementById('product_edit_profile_form_profile_return_dow')
+        const _product_edit_profile_form_profile_inc_days_dow = document.getElementById('product_edit_profile_form_profile_inc_days_dow')
+        const _product_edit_profile_form_profile_weekday_dow = document.getElementById('product_edit_profile_form_profile_weekday_dow')
+        
+        const _product_edit_profile_form_close_button = document.getElementById('product_edit_profile_form_close_button')
+        const _product_edit_profile_form_additional_fields_close_button = document.getElementById("product_edit_profile_form_additional_fields_close_button")
+        const _button_add_product_profile = document.getElementById("button_add_product_profile")
+        const _product_edit_profile_form_clear_button = document.getElementById('product_edit_profile_form_clear_button')
+        const _product_edit_profile_form_submit_button = document.getElementById('product_edit_profile_form_submit_button')
+        
+        let $table_profile_product_edit = $(_table_profile_product_edit)
+        let user_id = (document.getElementById('user_id')) ? (!isNaN(parseInt(document.getElementById('user_id').value))) ? parseInt(document.getElementById('user_id').value) : 4 : 4
+        let form_rules = {
+            rules: {
+                product_edit_profile_form_profile_sales_types_id: {
+                    required: true,
+                },
+                product_edit_profile_form_profile_allot_by_id: {
+                    required: function (element) {
+                        return ($(_product_edit_profile_form_profile_sales_types_id).val() !== "" && $(_product_edit_profile_form_profile_sales_types_id).val() === 1 || $(_product_edit_profile_form_profile_sales_types_id).val() === "1")
+                    },
+                },
+                product_edit_profile_form_profile_expires: {
+                    required: function (element) {
+                        return ($(_product_edit_profile_form_profile_allot_by_id).val() !== "" && $(_product_edit_profile_form_profile_allot_by_id).val() === 1 || $(_product_edit_profile_form_profile_allot_by_id).val() === "1")
+                    },
+                },
+                product_edit_profile_form_profile_days_out: {
+                    required: function (element) {
+                        return ($(_product_edit_profile_form_profile_allot_by_id).val() !== "" && $(_product_edit_profile_form_profile_allot_by_id).val() === 2 || $(_product_edit_profile_form_profile_allot_by_id).val() === "2")
+                    },
+                    number: true,
+                    min: 1,
+                },
+                product_edit_profile_form_profile_name: {
+                    required: true,
+                },
+            },
+            messages: {
+                product_edit_profile_form_profile_sales_types_id: {
+                    required: 'Field Required',
+                },
+                product_edit_profile_form_profile_allot_by_id: {
+                    required: 'Field Required',
+                },
+                product_edit_profile_form_profile_expires: {
+                    required: 'Field Required',
+                },
+                product_edit_profile_form_profile_days_out: {
+                    required: 'Field Required',
+                },
+                product_edit_profile_form_profile_name: {
+                    required: 'Field Required',
+                },
+            },
+        }
+        let checkin_dow, checkout_dow, departure_dow, return_dow, weekday_dow, inc_days_dow
+        let $input, expire_picker
+        $(_button_add_product_profile)
+          .on("click", function () {
+              //Console.log("InventoryProfile.button_add_product_profile: click()", {})
+              populateInventoryProfileForm()
+          })
+        
+        $(_product_edit_profile_form_clear_button)
+          .on("click", function () {
+              //Console.log("InventoryProfile.product_edit_profile_form_clear_button: click()", {})
+              clearInventoryProfileForm()
+          })
+        
+        $(_product_edit_profile_form_submit_button)
+          .on("click", function () {
+              //Console.log("InventoryProfile.product_edit_profile_form_submit_button: click()", {})
+              save()
+          })
+        
+        $(_product_edit_profile_form_close_button)
+          .on("click", function () {
+              //Console.log("InventoryProfile.product_edit_profile_form_close_button: click()", {})
+              clearInventoryProfileForm()
+              setFormElementDisplay()
+              hideForm()
+          })
+        
+        $(_product_edit_profile_form_profile_sales_types_id)
+          .on("change", function () {
+              //Console.log("InventoryProfile.product_edit_profile_form_profile_sales_types_id: change()", {})
+              setFormElementDisplay()
+              _product_edit_profile_form_profile_expires.value = ""
+              _product_edit_profile_form_profile_days_out.value = ""
+              _product_edit_profile_form_profile_allot_by_id.value = ""
+          })
+        
+        $(_product_edit_profile_form_profile_allot_by_id)
+          .on("change", function () {
+              //Console.log("InventoryProfile.product_edit_profile_form_profile_allot_by_id: change()", {})
+              setFormElementDisplay()
+              _product_edit_profile_form_profile_expires.value = ""
+              _product_edit_profile_form_profile_days_out.value = ""
+          })
+        
+        $(_product_edit_profile_form_profile_transfer_sales_types_id)
+          .on("change", function () {
+              //Console.log("InventoryProfile.product_edit_profile_form_profile_transfer_sales_types_id: change()", {})
+          })
+        
+        $(_product_edit_profile_form_additional_fields)
+          .on('show.bs.collapse', function () {
+              $(document.getElementById("product_edit_profile_form_additional_fields_toggle")).removeClass("fa-window-maximize")
+              $(document.getElementById("product_edit_profile_form_additional_fields_toggle")).addClass("fa-window-minimize")
+          })
+        
+        $(_product_edit_profile_form_additional_fields)
+          .on('hide.bs.collapse', function () {
+              $(document.getElementById("product_edit_profile_form_additional_fields_toggle")).addClass("fa-window-maximize")
+              $(document.getElementById("product_edit_profile_form_additional_fields_toggle")).removeClass("fa-window-minimize")
+          })
+        
+        $(_product_edit_profile_form_additional_fields_toggle)
+          .on("click", function () {
+              $(_product_edit_profile_form_additional_fields).collapse("toggle")
+          })
+        
+        const defaultDetail = function () {
+            return {
+                id: null,
+                allot_by_id: null,
+                sales_types_id: null,
+                name: null,
+                quantity: null,
+                expires: null,
+                transfer_sales_types_id: null,
+                release_amt: null,
+                min_length_days: null,
+                checkin_dow: [],
+                checkout_dow: [],
+                departure_dow: [],
+                return_dow: [],
+                inc_days_dow: [],
+                min_duration: null,
+                max_duration: null,
+                equal_duration: null,
+                advanced_booking_min: null,
+                advanced_booking_max: null,
+                advanced_booking_date: null,
+                weekday_dow: [],
+                days_out: null,
+                enabled: 1,
+                date_created: formatDateMySQL(),
+                created_by: user_id,
+                date_modified: formatDateMySQL(),
+                modified_by: user_id,
+                note: null,
+                sales_types_details: {},
+                allot_by_details: {},
+                tranfer_sales_type_details: {},
+            }
+        }
+        
+        const initAutoComplete = function () {
+            //Console.log('InventoryProfile.initAutoComplete()', InventoryProfile)
+            $(_product_edit_profile_form_profile_name_filter)
+              .on("click", function () {
+              
+              })
+              .on("search", function () {
+                  $table_profile_product_edit.clearSelectedRows()
+                  resetInventoryProfileForm()
+              })
+              .on("change", function () {
+                  if (_product_edit_profile_form_profile_name_filter.value === "") {
+                      $table_profile_product_edit.clearSelectedRows()
+                      resetInventoryProfileForm()
+                  }
+              })
+              .autocomplete({
+                  serviceUrl: "/api/v1.0/autocomplete/profiles",
+                  minChars: 2,
+                  cache: false,
+                  dataType: "json",
+                  triggerSelectOnValidInput: false,
+                  paramName: "st",
+                  onSelect: function (suggestion) {
+                      if (!suggestion.data) {
+                          return
+                      }
+                      $table_profile_product_edit.clearSelectedRows()
+                      let profile = suggestion.data
+                      //Console.log("profile", profile)
+                  },
+              })
+        }
+        
+        const buildInventoryProfileTable = function () {
+            //Console.log("InventoryProfile.buildInventoryProfileTable()", InventoryProfile)
+            $table_profile_product_edit = $(_table_profile_product_edit).table({
+                table_type: "display_list",
+                data: [],
+                columnDefs: [
+                    {
+                        title: "Name",
+                        targets: 0,
+                        data: "name",
+                        render: function (data, type, row, meta) {
+                            return "<span style='white-space: nowrap;'>" + data + "</span>"
+                        },
+                    },
+                    {
+                        title: "Sales Types",
+                        targets: 1,
+                        data: "sales_types_details",
+                        render: function (data, type, row, meta) {
+                            //Console.log("sales_types_details", data)
+                            let name = (data.name) ? data.name : "N/A"
+                            
+                            return "<span style='white-space: nowrap;'>" + name + "</span>"
+                        },
+                    },
+                    {
+                        title: "Allot By",
+                        targets: 2,
+                        data: "allot_by_id",
+                        render: function (data, type, row, meta) {
+                            let nights = "N/A"
+                            if (data === null) {
+                                nights = "N/A"
+                            } else {
+                                nights = Types.allot_by.get(data)
+                                if (nights) {
+                                    nights = nights.name
+                                } else {
+                                    nights = "N/A"
+                                }
+                            }
+                            return "<span style='white-space: nowrap;'>" + nights + "</span>"
+                        },
+                    },
+                    {
+                        title: "expires",
+                        targets: 3,
+                        data: "expires",
+                        render: function (data, type, row, meta) {
+                            let expires = "N/A"
+                            if (data === null) {
+                                expires = "N/A"
+                            } else {
+                                let year = data.substring(0, 4)
+                                let month = data.substring(4, 6)
+                                let day = data.substring(6, 8)
+                                let date = year + "-" + month + "-" + day
+                                let expiration = new Date(date + 'T00:00:00Z')
+                                let formattedDate = moment(expiration).format('YYYY-MM-DD')
+                                console.log("year", year)
+                                console.log("month", month)
+                                console.log("day", day)
+                                console.log("date", date)
+                                console.log("expiration", expiration)
+                                console.log("formattedDate", formattedDate)
+                                expires = formattedDate
+                            }
+                            return "<span style='white-space: nowrap;'>" + expires + "</span>"
+                        },
+                    },
+                    {
+                        title: "Release",
+                        targets: 4,
+                        data: "release_amt",
+                        render: function (data, type, row, meta) {
+                            let expires = "N/A"
+                            if (data) {
+                                expires = data
+                            }
+                            return "<span style='white-space: nowrap;'>" + expires + "</span>"
+                        },
+                    },
+                ],
+                rowClick: InventoryProfile.edit,
+            })
+        }
+        
+        const loadAll = function (inventory_profiles) {
+            //Console.log("InventoryProfile.loadAll(inventory_profiles)", inventory_profiles)
+            InventoryProfile.all = new Map()
+            if (!inventory_profiles) { inventory_profiles = [] }
+            $.each(inventory_profiles, function (k, inventory_profile) {
+                let detail = set(inventory_profile)
+                //Console.log('detail', detail)
+                if (!isNaN(parseInt(detail.id))) {
+                    if (_table_profile_product_edit) {
+                        $table_profile_product_edit.insertRow(detail)
+                    }
+                    InventoryProfile.all.set(parseInt(detail.id), detail)
+                }
+            })
+            
+            //Console.log('InventoryProfile.all', InventoryProfile.all)
+        }
+        
+        const buildInventoryProfileRecord = function () {
+            let isValid = validateInventoryProfileForm()
+            if (isValid) {
+                return {}
+            }
+            
+            return false
+        }
+        
+        const setFormElementDisplay = function () {
+            let sales_types_id = (!isNaN(parseInt(_product_edit_profile_form_profile_sales_types_id.value))) ? parseInt(_product_edit_profile_form_profile_sales_types_id.value) : null
+            
+            hideAllotmentFields()
+            if (sales_types_id) {
+                switch (sales_types_id) {
+                    case 1:
+                        showAllotmentFields()
+                        break
+                    case 2:
+                        break
+                    case 3:
+                        break
+                    case 4:
+                        break
+                    case 5:
+                        break
+                    default:
+                        break
+                }
+            }
+        }
+        
+        const showAllotmentFields = function () {
+            let allot_by_id = (!isNaN(parseInt(_product_edit_profile_form_profile_allot_by_id.value))) ? parseInt(_product_edit_profile_form_profile_allot_by_id.value) : null
+            if (allot_by_id) {
+                switch (allot_by_id) {
+                    case 1:
+                        $(_product_edit_profile_form_profile_days_out_block).hide()
+                        $(_product_edit_profile_form_profile_expires_block).show()
+                        break
+                    case 2:
+                        
+                        $(_product_edit_profile_form_profile_days_out_block).show()
+                        $(_product_edit_profile_form_profile_expires_block).hide()
+                        break
+                    case 3:
+                        
+                        $(_product_edit_profile_form_profile_days_out_block).hide()
+                        $(_product_edit_profile_form_profile_expires_block).hide()
+                        break
+                    default:
+                        $(_product_edit_profile_form_profile_days_out_block).hide()
+                        $(_product_edit_profile_form_profile_expires_block).hide()
+                        break
+                }
+            }
+            
+            $(_product_edit_profile_form_profile_transfer_sales_types_id_block).show()
+            $(_product_edit_profile_form_profile_quantity_block).show()
+            $(_product_edit_profile_form_profile_release_amt_block).show()
+            $(_product_edit_profile_form_profile_allot_by_id_block).show()
+        }
+        
+        const hideAllotmentFields = function () {
+            $(_product_edit_profile_form_profile_days_out_block).hide()
+            $(_product_edit_profile_form_profile_expires_block).hide()
+            $(_product_edit_profile_form_profile_allot_by_id_block).hide()
+            $(_product_edit_profile_form_profile_transfer_sales_types_id_block).hide()
+            $(_product_edit_profile_form_profile_quantity_block).hide()
+            $(_product_edit_profile_form_profile_release_amt_block).hide()
+        }
+        
+        const hideForm = function () {
+            //Console.log("InventoryProfile.hideForm()", hideForm)
+            if (_edit_product_profile) {
+                hideAllotmentFields()
+                $(_edit_product_profile).hide()
+                $(_product_edit_profile_form_additional_fields).collapse("hide")
+            }
+        }
+        
+        const showForm = function () {
+            //Console.log("InventoryProfile.showForm()", showForm)
+            if (_edit_product_profile) {
+                $(_edit_product_profile).show()
+            }
+        }
+        
+        const resetInventoryProfileForm = function () {
+            //Console.log("InventoryProfile.resetInventoryProfileForm()", {})
+            clearInventoryProfileForm()
+            disableInventoryProfileFormFields()
+        }
+        
+        const clearInventoryProfileForm = function () {
+            //Console.log("InventoryProfile.clearInventoryProfileForm()", clearInventoryProfileForm)
+            disableInventoryProfileFormFields()
+            _product_edit_profile_form_profile_id.value = ""
+            _product_edit_profile_form_profile_name.value = ""
+            _product_edit_profile_form_profile_enabled.checked = true
+            _product_edit_profile_form_profile_sales_types_id.value = ""
+            _product_edit_profile_form_profile_allot_by_id.value = ""
+            _product_edit_profile_form_profile_transfer_sales_types_id.value = ""
+            _product_edit_profile_form_profile_expires.value = ""
+            _product_edit_profile_form_profile_days_out.value = ""
+            _product_edit_profile_form_profile_quantity.value = ""
+            _product_edit_profile_form_profile_release_amt.value = ""
+            _product_edit_profile_form_profile_min_length_days.value = ""
+            _product_edit_profile_form_profile_min_duration.value = ""
+            _product_edit_profile_form_profile_max_duration.value = ""
+            _product_edit_profile_form_profile_equal_duration.value = ""
+            _product_edit_profile_form_profile_advanced_booking_date.value = ""
+            _product_edit_profile_form_profile_advanced_booking_min.value = ""
+            _product_edit_profile_form_profile_advanced_booking_max.value = ""
+            
+            InventoryProfile.checkin_dow.init([])
+            InventoryProfile.checkout_dow.init([])
+            InventoryProfile.departure_dow.init([])
+            InventoryProfile.return_dow.init([])
+            InventoryProfile.weekday_dow.init([])
+            InventoryProfile.inc_days_dow.init([])
+            
+            setFormElementDisplay()
+        }
+        
+        const validateInventoryProfileForm = function () {
+            return $(_product_edit_profile_form).valid()
+        }
+        
+        const populateInventoryProfileForm = function (inventory_profile) {
+            //Console.log("InventoryProfile.populateInventoryProfileForm(inventory_profile)", inventory_profile)
+            clearInventoryProfileForm()
+            if (inventory_profile) {
+                _product_edit_profile_form_profile_id.value = (inventory_profile.id) ? inventory_profile.id : ""
+                _product_edit_profile_form_profile_name.value = (inventory_profile.name) ? inventory_profile.name : ""
+                _product_edit_profile_form_profile_enabled.checked = (inventory_profile.enabled !== 0)
+                _product_edit_profile_form_profile_sales_types_id.value = (inventory_profile.sales_types_id) ? inventory_profile.sales_types_id : ""
+                _product_edit_profile_form_profile_allot_by_id.value = (inventory_profile.allot_by_id) ? inventory_profile.allot_by_id : ""
+                _product_edit_profile_form_profile_transfer_sales_types_id.value = (inventory_profile.transfer_sales_types_id) ? inventory_profile.transfer_sales_types_id : ""
+                _product_edit_profile_form_profile_expires.value = (inventory_profile.expires) ? inventory_profile.expires : ""
+                _product_edit_profile_form_profile_days_out.value = (inventory_profile.days_out) ? inventory_profile.days_out : ""
+                _product_edit_profile_form_profile_quantity.value = (inventory_profile.quantity) ? inventory_profile.quantity : ""
+                _product_edit_profile_form_profile_release_amt.value = (inventory_profile.release_amt) ? inventory_profile.release_amt : ""
+                _product_edit_profile_form_profile_min_length_days.value = (inventory_profile.min_length_days) ? inventory_profile.min_length_days : ""
+                _product_edit_profile_form_profile_min_duration.value = (inventory_profile.min_duration) ? inventory_profile.min_duration : ""
+                _product_edit_profile_form_profile_max_duration.value = (inventory_profile.max_duration) ? inventory_profile.max_duration : ""
+                _product_edit_profile_form_profile_equal_duration.value = (inventory_profile.equal_duration) ? inventory_profile.equal_duration : ""
+                _product_edit_profile_form_profile_advanced_booking_date.value = (inventory_profile.advanced_booking_date) ? inventory_profile.advanced_booking_date : ""
+                
+                _product_edit_profile_form_profile_advanced_booking_min.value = (inventory_profile.advanced_booking_min) ? inventory_profile.advanced_booking_min : ""
+                _product_edit_profile_form_profile_advanced_booking_max.value = (inventory_profile.advanced_booking_max) ? inventory_profile.advanced_booking_max : ""
+                
+                InventoryProfile.checkin_dow.init((inventory_profile.checkin_dow) ? formatListOfIds(inventory_profile.checkin_dow) : [])
+                InventoryProfile.checkout_dow.init((inventory_profile.checkout_dow) ? formatListOfIds(inventory_profile.checkout_dow) : [])
+                InventoryProfile.departure_dow.init((inventory_profile.departure_dow) ? formatListOfIds(inventory_profile.departure_dow) : [])
+                InventoryProfile.return_dow.init((inventory_profile.return_dow) ? formatListOfIds(inventory_profile.return_dow) : [])
+                InventoryProfile.weekday_dow.init((inventory_profile.weekday_dow) ? formatListOfIds(inventory_profile.weekday_dow) : [])
+                InventoryProfile.inc_days_dow.init((inventory_profile.inc_days_dow) ? formatListOfIds(inventory_profile.inc_days_dow) : [])
+                
+            }
+            
+            setFormElementDisplay()
+            showForm()
+        }
+        
+        const disableInventoryProfileFormFields = function () {
+            //Console.log('InventoryProfile.disableInventoryProfileFormFields()', this)
+            _product_edit_profile_form_profile_name.disabled = false
+        }
+        
+        const enableInventoryProfileFormFields = function () {
+            //Console.log('InventoryProfile.enableInventoryProfileFormFields()', this)
+            _product_edit_profile_form_profile_name.disabled = false
+        }
+        const showInventoryProfileFormAdditionalFields = function () {}
+        const hideInventoryProfileFormAdditionalFields = function () {}
+        
+        const set = function (inventory_profile) {
+            //Console.log("InventoryProfile.set(inventory_profile)", inventory_profile)
+            let detail = defaultDetail()
+            let sales_types_details, allot_by_details, tranfer_sales_type_details
+            if (inventory_profile) {
+                sales_types_details = Types.sales_types.get((!isNaN(parseInt(inventory_profile.sales_types_id))) ? parseInt(inventory_profile.sales_types_id) : null)
+                allot_by_details = Types.allot_by.get((!isNaN(parseInt(inventory_profile.allot_by_id))) ? parseInt(inventory_profile.allot_by_id) : null)
+                tranfer_sales_type_details = Types.sales_types.get((!isNaN(parseInt(inventory_profile.transfer_sales_types_id))) ? parseInt(inventory_profile.transfer_sales_types_id) : null)
+                detail.id = (!isNaN(parseInt(inventory_profile.id))) ? parseInt(inventory_profile.id) : null
+                detail.allot_by_id = (!isNaN(parseInt(inventory_profile.allot_by_id))) ? parseInt(inventory_profile.allot_by_id) : null
+                detail.sales_types_id = (!isNaN(parseInt(inventory_profile.sales_types_id))) ? parseInt(inventory_profile.sales_types_id) : null
+                detail.name = (inventory_profile.name) ? inventory_profile.name : null
+                detail.quantity = (!isNaN(parseInt(inventory_profile.quantity))) ? parseInt(inventory_profile.quantity) : null
+                detail.expires = (inventory_profile.expires) ? inventory_profile.expires : null
+                detail.transfer_sales_types_id = (!isNaN(parseInt(inventory_profile.transfer_sales_types_id))) ? parseInt(inventory_profile.transfer_sales_types_id) : null
+                detail.release_amt = (inventory_profile.release_amt) ? inventory_profile.release_amt : null
+                detail.min_length_days = (inventory_profile.min_length_days) ? inventory_profile.min_length_days : null
+                detail.min_duration = (inventory_profile.min_duration) ? inventory_profile.min_duration : null
+                detail.max_duration = (inventory_profile.max_duration) ? inventory_profile.max_duration : null
+                detail.equal_duration = (inventory_profile.equal_duration) ? inventory_profile.equal_duration : null
+                detail.advanced_booking_min = (inventory_profile.advanced_booking_min) ? inventory_profile.advanced_booking_min : null
+                detail.advanced_booking_max = (inventory_profile.advanced_booking_max) ? inventory_profile.advanced_booking_max : null
+                detail.advanced_booking_date = (inventory_profile.advanced_booking_date) ? inventory_profile.advanced_booking_date : null
+                detail.checkin_dow = (inventory_profile.checkin_dow) ? getListOfIds(inventory_profile.checkin_dow) : []
+                detail.checkout_dow = (inventory_profile.checkout_dow) ? getListOfIds(inventory_profile.checkout_dow) : []
+                detail.departure_dow = (inventory_profile.departure_dow) ? getListOfIds(inventory_profile.departure_dow) : []
+                detail.return_dow = (inventory_profile.return_dow) ? getListOfIds(inventory_profile.return_dow) : []
+                detail.inc_days_dow = (inventory_profile.inc_days_dow) ? getListOfIds(inventory_profile.inc_days_dow) : []
+                detail.weekday_dow = (inventory_profile.weekday_dow) ? getListOfIds(inventory_profile.weekday_dow) : []
+                detail.days_out = (inventory_profile.days_out) ? inventory_profile.days_out : null
+                detail.enabled = (inventory_profile.enabled) ? inventory_profile.enabled : 1
+                detail.date_created = (inventory_profile.date_created) ? inventory_profile.date_created : formatDateMySQL()
+                detail.created_by = (!isNaN(parseInt(inventory_profile.created_by))) ? parseInt(inventory_profile.created_by) : user_id
+                detail.date_modified = (inventory_profile.date_modified) ? inventory_profile.date_modified : formatDateMySQL()
+                detail.modified_by = (!isNaN(parseInt(inventory_profile.modified_by))) ? parseInt(inventory_profile.modified_by) : user_id
+                detail.note = (inventory_profile.note) ? inventory_profile.note : null
+                detail.sales_types_details = sales_types_details
+                detail.allot_by_details = allot_by_details
+                detail.tranfer_sales_type_details = tranfer_sales_type_details
+            }
+            InventoryProfile.detail = detail
+            return detail
+        }
+        
+        const edit = function (inventory_profile) {
+            //Console.log('InventoryProfile.edit(inventory_profile)', inventory_profile)
+            if (inventory_profile) {
+                populateInventoryProfileForm(inventory_profile)
+                showForm()
+            }
+            
+        }
+        
+        const save = function () {
+            //Console.log('InventoryProfile.save()', save)
+            let inv = buildInventoryProfileRecord()
+            if (inv) {
+                //Console.log("save", "YES")
+            } else {
+                //Console.log("save", "NO")
+            }
+        }
+        
+        const init = function (settings) {
+            //Console.log("InventoryProfile.init(settings)", settings)
+            
+            let inventory_profiles = []
+            if (settings) {
+                if (settings.profiles) {
+                    inventory_profiles = settings.profiles
+                }
+            }
+            
+            checkin_dow = $(_product_edit_profile_form_profile_checkin_dow).DisabledDOW({
+                name: "checkin_dow",
+                label: "Checkin DOW",
+            })
+            
+            checkout_dow = $(_product_edit_profile_form_profile_checkout_dow).DisabledDOW({
+                name: "checkout_dow",
+                label: "Checkout DOW",
+            })
+            
+            departure_dow = $(_product_edit_profile_form_profile_departure_dow).DisabledDOW({
+                name: "departure_dow",
+                label: "Departure DOW",
+            })
+            
+            return_dow = $(_product_edit_profile_form_profile_return_dow).DisabledDOW({
+                name: "return_dow",
+                label: "Return DOW",
+            })
+            
+            weekday_dow = $(_product_edit_profile_form_profile_inc_days_dow).DisabledDOW({
+                name: "inc_days_dow",
+                label: "Included Days",
+            })
+            
+            inc_days_dow = $(_product_edit_profile_form_profile_weekday_dow).DisabledDOW({
+                name: "weekday_dow",
+                label: "Weekdays",
+            })
+            
+            InventoryProfile.checkin_dow = checkin_dow
+            InventoryProfile.checkout_dow = checkout_dow
+            InventoryProfile.departure_dow = departure_dow
+            InventoryProfile.return_dow = return_dow
+            InventoryProfile.weekday_dow = weekday_dow
+            InventoryProfile.inc_days_dow = inc_days_dow
+            
+            if (_table_profile_product_edit) {
+                buildInventoryProfileTable()
+            }
+            
+            if (_product_edit_profile_form_profile_name_filter) {
+                initAutoComplete()
+            }
+            
+            if (_product_edit_profile_form) {
+                validator_init(form_rules)
+                InventoryProfile.validator = $(_product_edit_profile_form).validate()
+                resetInventoryProfileForm()
+                hideForm()
+            }
+            
+            loadAll(inventory_profiles)
+            
+            $(document).ready(function () {
+                //$input = $('#button-addon2').pickadate({
+                //    editable: true,
+                //    container: '#input-addon2',
+                //})
+                //expire_picker = $input.pickadate("picker")
+                
+                //$('.date-input').off('click focus')
+                
+            })
+        }
+        
+        /**
+         * public methods
+         */
+        return {
+            validator: null,
+            all: new Map(),
+            detail: {},
+            checkin_dow: null,
+            checkout_dow: null,
+            departure_dow: null,
+            return_dow: null,
+            weekday_dow: null,
+            inc_days_dow: null,
+            init: function (settings) { init(settings) },
+            initAutoComplete: function () { initAutoComplete() },
+            edit: function (inventory_profile) {
+                edit(inventory_profile)
+            },
+        }
+    })()
+    
+    $.fn.formFields = function (settings) {
+        "use strict"
+        let id = $(this).attr("id")
+        let form = document.getElementById(id)
+        let elements = form.elements
+        let pre = document.createElement("pre")
+        let code = document.createElement("code")
+        let data = ""
+        let vals = ""
+        
+        code.id = "constantFields"
+        code.classList = [`language-javascript`]
+        
+        pre.appendChild(code)
+        form.appendChild(pre)
+        
+        for (var n = 0; n < elements.length; n++) {
+            let el = elements[n]
+            if (el.id) {
+                let id = el.id
+                let constantField = `const _${id} = document.getElementById('${id}')\n`
+                let constantValue = `_${id}.value = ""\n`
+                data += constantField
+                vals += constantValue
+            }
+            
+        }
+        
+        $(code).attr("data-prismjs-copy", 'Copy the JavaScript snipp')
+        code.innerHTML = data + "\n" + vals
+        Prism.highlightElement(code)
+    }
+
+</script>

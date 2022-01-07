@@ -8,7 +8,52 @@ const Profile = (function () {
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $table_profile_product_edit = $(_table_profile_product_edit)
-    
+    let form_rules = {
+        rules: {
+            product_edit_unit_form_unit_min_nights: {
+                required: true,
+                number: true,
+                min: 1,
+            },
+            product_edit_unit_form_unit_max_nights: {
+                required: true,
+                number: true,
+                min: 1,
+            },
+            product_edit_unit_form_unit_min_pax: {
+                required: true,
+                number: true,
+                min: 1,
+            },
+            product_edit_unit_form_unit_max_pax: {
+                required: true,
+                number: true,
+                min: 1,
+            },
+        },
+        messages: {
+            product_edit_unit_form_unit_min_nights: {
+                required: "Field Required",
+                number: "Field Invalid",
+                min: "Field Invalid",
+            },
+            product_edit_unit_form_unit_max_nights: {
+                required: "Field Required",
+                number: "Field Invalid",
+                min: "Field Invalid",
+            },
+            product_edit_unit_form_unit_min_pax: {
+                required: "Field Required",
+                number: "Field Invalid",
+                min: "Field Invalid",
+            },
+            product_edit_unit_form_unit_max_pax: {
+                required: "Field Required",
+                number: "Field Invalid",
+                min: "Field Invalid",
+            },
+        },
+    }
     // ----
     
     $(_button_add_product_profile)
@@ -20,6 +65,7 @@ const Profile = (function () {
      * build product edit profile table
      */
     const buildEditTable = function () {
+        /*
         Console.log("Profile.buildEditTable()", Profile)
         $table_profile_product_edit = $(_table_profile_product_edit).table({
             table_type: "display_list",
@@ -82,9 +128,11 @@ const Profile = (function () {
             ],
             rowClick: Profile.edit,
         })
+                 */
     }
     
     const initAutoComplete = function () {
+        /*
         Console.log("Profile.initAutoComplete()", Profile)
         $(_product_edit_profile_form_profile_name_filter)
           .on("click", function () {
@@ -116,6 +164,8 @@ const Profile = (function () {
                   Console.log("profile", profile)
               },
           })
+          
+         */
     }
     
     /**
@@ -241,22 +291,36 @@ const Profile = (function () {
     }
     
     const init = function (settings) {
-        Console.log("Profile.init(settings)", settings)
-        let profiles = []
+        //Console.log("Profile.init(settings)", settings)
+        //let profiles = []
+        /*
         if (settings) {
             if (settings.profiles) {
                 profiles = settings.profiles
             }
         }
+        //*/
+        /*
         if (_table_profile_product_edit) {
             buildEditTable()
         }
+         */
         
+        /*
         if (_product_edit_profile_form_profile_name_filter) {
             initAutoComplete()
         }
         
+        if (_product_edit_profile_form) {
+            initAutoComplete()
+            validator_init(form_rules)
+            Unit.validator = $(_product_edit_profile_form).validate()
+        }
+        
+        
         loadAll(profiles)
+        
+        //*/
     }
     
     const edit = function (profile) {

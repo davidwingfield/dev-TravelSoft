@@ -17,6 +17,7 @@ const Types = (function () {
     
     const init = function (settings) {
         Types.address_types = new Map()
+        Types.allot_by = new Map()
         Types.airport_types = new Map()
         Types.categories_ratings_types = new Map()
         Types.category = new Map()
@@ -90,6 +91,14 @@ const Types = (function () {
             setType(settings.status_types, "status_types")
         }
         
+        if (settings.allot_by) {
+            setType(settings.allot_by, "allot_by")
+        }
+        
+        if (settings.countries) {
+            Country.load_all(settings.countries)
+        }
+        
         if (settings.countries) {
             Country.load_all(settings.countries)
         }
@@ -97,6 +106,7 @@ const Types = (function () {
     }
     
     return {
+        allot_by: new Map(),
         address_types: new Map(),
         season_types: new Map(),
         airport_types: new Map(),

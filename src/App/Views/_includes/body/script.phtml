@@ -1,9 +1,9 @@
 <script type="text/javascript">
-    
+    let showElements
     $(function () {
         $(".debug_demo")
           .on("click", function () {
-              let showElements = true
+              showElements = true
               if (!$(this).attr("data-shown")) {
                   $(this).attr("data-shown", "true")
                   showElements = true
@@ -20,6 +20,7 @@
               let els = document.getElementsByClassName("dev-element")
               
               for (var i = 0; i < els.length; i++) {
+                  
                   var element = els[i]
                   let tagName = element.tagName
                   
@@ -33,6 +34,7 @@
                           element.hidden = true
                       }
                   } else if (tagName === "label") {
+                      Console.log("showElements", showElements)
                       if (showElements === false) {
                           $(element).removeClass("d-none")
                       } else {
@@ -42,527 +44,108 @@
               }
           })
     })
-    $(function () {
-        //Logger.init()
-    })
+    
     $(function () {
         $("#image_gallery").load("/public/mdb-addons/mdb-lightbox-ui.html")
     })
-    $(function () {
-        
-        /*
-        $("#product_index_table").Tabledit({
-            url: "/api/v1.0/products/table_update",
-            buttons: {
-                edit: {
-                    class: "btn btn-sm btn-icon btn-flat btn-default",
-                    html: "<i class=\"fas fa-edit\"></i>",
-                    action: "edit",
-                },
-                delete: {
-                    class: "btn btn-sm btn-icon btn-flat btn-default",
-                    html: "<i class=\"fas fa-trash-alt\"></i>",
-                    action: "delete",
-                },
-                navigate: {
-                    class: "btn btn-sm btn-icon btn-flat btn-default",
-                    html: "<i class='fas fa-external-link-alt'></i>",
-                    action: "navigate",
-                },
-                save: {
-                    class: "btn btn-sm btn-success",
-                    html: "Save",
-                },
-                restore: {
-                    class: "btn btn-sm btn-warning",
-                    html: "Restore",
-                    action: "restore",
-                },
-                confirm: {
-                    class: "btn btn-sm btn-danger",
-                    html: "Are you sure?",
-                },
-            },
-            onDraw: function () {
-
-            },
-            onSuccess: function (data, textStatus, jqXHR) {
-                console.log("success", data)
-            },
-            onFail: function (jqXHR, textStatus, errorThrown) {
-                console.log("err", data)
-            },
-            onAlways: function () {},
-            onAjax: function (action, serialize) {},
-            columns: {
-                identifier: [0, "id"],
-                editable: [
-                    [1, "name"],
-                    [2, "sku"],
-                    [5, "location"],
-                    [6, "category_id", "{\"1\":\"Hotels\", \"2\":\"Flights\", \"3\":\"Cars\", \"4\":\"Rail\", \"5\":\"Transport\", \"6\":\"Tours\", \"7\":\"Cruises\", \"8\":\"Packages\", \"9\":\"Other\"}"],
-                ],
-            },
-        })
-        //*/
-        
-        /*
-        let table = $("#product_index_table").DataTable({})
-        $('#product_index_table tbody').on('click', 'tr', function () {
-            if ($(this).hasClass('selected')) {
-                $(this).removeClass('selected')
-            } else {
-                table.$('tr.selected').removeClass('selected')
-                $(this).addClass('selected')
-            }
-        })
-        //*/
-        
-    })
+    
     //weatherUpdate("paris")
     
-    //*
-    
-    //
-    
-    //
-    
-    //
-    
-    //*/
-    /*
-    let calendar = null
-    $(function () {
-        const editEvent = function (event) {}
-        const deleteEvent = function (event) {}
-        const saveEvent = function () {}
-        var currentYear = new Date().getFullYear()
-        
-        calendar = new Calendar('#calendar', {
-            enableContextMenu: true,
-            enableRangeSelection: true,
-            style: 'background',
-            contextMenuItems: [
-                {
-                    text: 'Update',
-                    click: editEvent,
-                },
-                {
-                    text: 'Delete',
-                    click: deleteEvent,
-                },
-            ],
-            
-            dataSource: [
-                {
-                    id: 0,
-                    name: 'Google I/O',
-                    location: 'San Francisco, CA',
-                    startDate: new Date(currentYear, 4, 28),
-                    endDate: new Date(currentYear, 4, 29),
-                },
-                {
-                    id: 1,
-                    name: 'Microsoft Convergence',
-                    location: 'New Orleans, LA',
-                    startDate: new Date(currentYear, 2, 16),
-                    endDate: new Date(currentYear, 2, 19),
-                },
-                {
-                    id: 2,
-                    name: 'Microsoft Build Developer Conference',
-                    location: 'San Francisco, CA',
-                    startDate: new Date(currentYear, 3, 29),
-                    endDate: new Date(currentYear, 4, 1),
-                },
-                {
-                    id: 3,
-                    name: 'Apple Special Event',
-                    location: 'San Francisco, CA',
-                    startDate: new Date(currentYear, 8, 1),
-                    endDate: new Date(currentYear, 8, 1),
-                },
-                {
-                    id: 4,
-                    name: 'Apple Keynote',
-                    location: 'San Francisco, CA',
-                    startDate: new Date(currentYear, 8, 9),
-                    endDate: new Date(currentYear, 8, 9),
-                },
-                {
-                    id: 5,
-                    name: 'Chrome Developer Summit',
-                    location: 'Mountain View, CA',
-                    startDate: new Date(currentYear, 10, 17),
-                    endDate: new Date(currentYear, 10, 18),
-                },
-                {
-                    id: 6,
-                    name: 'F8 2015',
-                    location: 'San Francisco, CA',
-                    startDate: new Date(currentYear, 2, 25),
-                    endDate: new Date(currentYear, 2, 26),
-                },
-                {
-                    id: 7,
-                    name: 'Yahoo Mobile Developer Conference',
-                    location: 'New York',
-                    startDate: new Date(currentYear, 7, 25),
-                    endDate: new Date(currentYear, 7, 26),
-                },
-                {
-                    id: 8,
-                    name: 'Android Developer Conference',
-                    location: 'Santa Clara, CA',
-                    startDate: new Date(currentYear, 11, 1),
-                    endDate: new Date(currentYear, 11, 4),
-                },
-                {
-                    id: 9,
-                    name: 'LA Tech Summit',
-                    location: 'Los Angeles, CA',
-                    startDate: new Date(currentYear, 10, 17),
-                    endDate: new Date(currentYear, 10, 17),
-                },
-            ],
-        })
-    })
-    //*/
-    /*
-    $.fn.YearCalendar = function (settings) {
-        "use strict"
-        let name = this.attr("id")
-        YearCalendar.load({
-            name: name,
-            el: this,
-        })
-        
-    }
-    
-    const YearCalendar = (function () {
-        "use strict"
-        let currentYear = new Date().getFullYear()
-        
-        let calendarMonths = [
-            "01", "02",
-            "03", "04",
-            "05", "06",
-            "07", "08",
-            "09", "10",
-            "11", "12",
-        ]
-        let name
-        let $el
-        
-        const build_calendar_element = function (n) {
-            let calendarStartDate = moment(currentYear + "-" + calendarMonths[n] + "-01").format("YYYY-MM-DD")
-            let div = $("<div class='' id='" + name + "_" + n + "' data-month='" + calendarMonths[n] + "' data-year='" + currentYear + "'>")
-            div.fullCalendar({
-                selectable: false,
-                showNonCurrentDates: false,
-                views: {
-                    month: {
-                        titleFormat: "MMMM-YYYY",
-                    },
-                },
-                header: {
-                    left: "",
-                    center: "title",
-                    right: "",
-                },
-                defaultDate: calendarStartDate,
-                dayRender: function (date, el) {
-                    let day = moment(date).format("YYYYMMDD")
-                    let id = name + "_" + day
-                    let month = moment(date).month()
-                    let year = moment(date).year()
-                    let dow = moment(date).day()
-                    
-                    if (!$(el).hasClass("fc-disabled-day")) {
-                        $(el).attr("data-calendartype", name)
-                        $(el).attr("id", id)
-                        $(el).attr("day", day)
-                        $(el).attr("month", month)
-                        $(el).attr("year", year)
-                        $(el).attr("data-dow", dow)
-                        $(el).attr("selected", "false")
-                    }
-                },
-                eventRender: function (event, element) {
-                    if (event.rendering === "background") {
-                    
-                    }
-                },
-                dayClick: function (event, jsEvent, view) {
-                    let date = moment(event).format("YYYY-MM-DD")
-                    
-                    if (jsEvent) {
-                        if (jsEvent.originalEvent.shiftKey) {
-                            Console.log("dateClicked: shiftKey", "Shift Click")
-                        }
-                    }
-                    
-                    get_date_range()
-                },
-            })
-            return div
-        }
-        
-        const get_date_range = function () {
-            let selected_days = $("td[data-calendartype='" + name + "'][data-selected='true']")
-            Console.log("selected_days", selected_days.length)
-        }
-        
-        const build = function () {
-            Console.log("YearCalendar.load()", {})
-            let $row = $("<div class='row'>")
-            for (let n = 0; n < 12; n++) {
-                
-                let $col = $("<div class='col-12 col-xl-4 p-1'>")
-                let $cal = build_calendar_element(n)
-                $col.append($cal)
-                $row.append($col)
-            }
-            $el.append($row)
-        }
-        
-        const load = function (settings) {
-            Console.log("YearCalendar.load()", settings)
-            if (settings) {
-                if (settings.el) {
-                    $el = $(settings.el)
-                }
-                
-                if (settings.name) {
-                    name = settings.name
-                }
-            }
-            
-            build()
-        }
-        
-        return {
-
-            load: function (settings) {
-                load(settings)
-            },
-        }
-    })()
-    
-    //*/
-    
     $(document).ready(function () {
-        
-        /*
-        const pickrText = Pickr.create({
-            el: "#form_edit_scheme_text_color",
-            default: "303030",
-            theme: "classic", // or 'classic', or 'monolith', or 'nano'
-            swatches: swatches,
-            components: {
+        //Logger.init()
+    })
+</script>
+
+<script type="text/javascript">
+    let isShift
+    let seperator = "-"
+    $(document).ready(function () {
+        (function ($) {
+            $.fn.unSetError = function () {
+                let errorElm = this.parents("div.form-element").find("div.error")
+                if (this.hasClass("time-format")) {
+                    //this.parent().find("input").removeClass("is-invalid");
+                    //this.parent().find("span.caret").removeClass("is-invalid");
+                    //errorElm = this.parent("div.input-group").parent().find("div.error")
+                }
                 
-                preview: true,
-                opacity: true,
-                hue: true,
+                if (this.hasClass("date-format")) {
+                    //this.parent().find("input").removeClass("is-invalid");
+                    //this.parent().find("span.caret").removeClass("is-invalid");
+                    //errorElm = this.parent("div.input-group").parent().find("div.error")
+                }
                 
-                interaction: {
-                    hex: true,
-                    rgba: true,
-                    hsla: true,
-                    hsva: true,
-                    cmyk: true,
-                    input: true,
-                    clear: true,
-                    save: true,
-                },
-            },
-        })
-        
-        const pickrBackground = Pickr.create({
-            el: "#form_edit_scheme_background_color",
-            default: "303030",
-            theme: "classic", // or 'classic', or 'monolith', or 'nano'
-            swatches: swatches,
-            components: {
-                
-                preview: true,
-                opacity: true,
-                hue: true,
-                
-                interaction: {
-                    hex: true,
-                    rgba: true,
-                    hsla: true,
-                    hsva: true,
-                    cmyk: true,
-                    input: true,
-                    clear: true,
-                    save: true,
-                },
-            },
-        })
-        
-        const pickrBorder = Pickr.create({
-            el: "#form_edit_scheme_border_color",
-            default: "303030",
-            theme: "classic", // or 'classic', or 'monolith', or 'nano'
-            swatches: swatches,
-            components: {
-                
-                preview: true,
-                opacity: true,
-                hue: true,
-                
-                interaction: {
-                    hex: true,
-                    rgba: true,
-                    hsla: true,
-                    hsva: true,
-                    cmyk: true,
-                    input: true,
-                    clear: true,
-                    save: true,
-                },
-            },
-        })
-        
-        pickrText.on("init", instance => {
-            //Console.log('Event: "init"', instance)
-        }).on("hide", instance => {
-            //Console.log('Event: "hide"', instance)
-        }).on("show", (color, instance) => {
-            //Console.log('Event: "show"', color, instance)
-        }).on("save", (color, instance) => {
-            Console.log('Event: "save"', color, instance)
-        }).on("clear", instance => {
-            Console.log('Event: "clear"', instance)
-        }).on('change', (color, source, instance) => {
-            Console.log('Event: "change"', color, source, instance)
-        }).on('changestop', (source, instance) => {
-            //Console.log('Event: "changestop"', source, instance)
-        }).on('cancel', instance => {
-            Console.log('Event: "cancel"', instance)
-        }).on('swatchselect', (color, instance) => {
-            Console.log('Event: "swatchselect"', color, instance)
-            let c = "#" + color.toHEXA().join('')
-            Console.log('Event: "swatchselect"', c)
-        })
-        //*/
-        
-        const LightenDarkenColor = function (col, amt) {
-            var usePound = false
-            if (col[0] === "#") {
-                col = col.slice(1)
-                usePound = true
+                errorElm.html("&nbsp;").hide()
+                return this
             }
             
-            var num = parseInt(col, 16)
-            
-            var r = (num >> 16) + amt
-            
-            if (r > 255) {
-                r = 255
-            } else if (r < 0) {
-                r = 0
+            $.fn.setError = function (msg) {
+                let errorElm = this.parents("div.form-element").find("div.error")
+                
+                if (this.hasClass("time-format")) {
+                    errorElm = this.parent("div.input-group").parent().find("div.error")
+                }
+                
+                if (this.hasClass("date-format")) {
+                    //errorElm = this.parents("div.form-element").find("div.error")
+                }
+                
+                errorElm.html(msg).show()
+                return this
             }
             
-            var b = ((num >> 8) & 0x00FF) + amt
-            
-            if (b > 255) {
-                b = 255
-            } else if (b < 0) {
-                b = 0
+        })(jQuery)
+        const IsNumeric = function (input, keyCode) {
+            if (!isNaN(parseInt(keyCode))) {
+                keyCode = parseInt(keyCode)
+            }
+            if (keyCode === 16) {
+                isShift = true
             }
             
-            var g = (num & 0x0000FF) + amt
-            
-            if (g > 255) {
-                g = 255
-            } else if (g < 0) {
-                g = 0
-            }
-            
-            return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16)
-        }
-        
-        const contrastingColor = function (color) {
-            return (luma(color) >= 165) ? "000" : "fff"
-        }
-        
-        const luma = function (color) {
-            var rgb = (typeof color === 'string') ? hexToRGBArray(color) : color
-            return (0.2126 * rgb[0]) + (0.7152 * rgb[1]) + (0.0722 * rgb[2]) // SMPTE C, Rec. 709 weightings
-        }
-        
-        const hexToRGBArray = function (color) {
-            if (color.length === 3) {
-                color = color.charAt(0) + color.charAt(0) + color.charAt(1) + color.charAt(1) + color.charAt(2) + color.charAt(2)
-            } else if (color.length !== 6) {
-                throw('Invalid hex color: ' + color)
-            }
-            var rgb = []
-            for (var i = 0; i <= 2; i++)
-                rgb[i] = parseInt(color.substr(i * 2, 2), 16)
-            return rgb
-        }
-        
-        const pSBC = (p, c0, c1, l) => {
-            let r, g, b, P, f, t, h, i = parseInt, m = Math.round, a = typeof (c1) == "string"
-            if (typeof (p) != "number" || p < -1 || p > 1 || typeof (c0) != "string" || (c0[0] != 'r' && c0[0] != '#') || (c1 && !a)) {
-                return null
-            }
-            if (!this.pSBCr) {
-                this.pSBCr = (d) => {
-                    let n = d.length, x = {}
-                    if (n > 9) {
-                        [r, g, b, a] = d = d.split(","), n = d.length
-                        if (n < 3 || n > 4) {
-                            return null
-                        }
-                        x.r = i(r[3] == "a" ? r.slice(5) : r.slice(4)), x.g = i(g), x.b = i(b), x.a = a ? parseFloat(a) : -1
-                    } else {
-                        if (n == 8 || n == 6 || n < 4) {
-                            return null
-                        }
-                        if (n < 6) {
-                            d = "#" + d[1] + d[1] + d[2] + d[2] + d[3] + d[3] + (n > 4 ? d[4] + d[4] : "")
-                        }
-                        d = i(d.slice(1), 16)
-                        if (n == 9 || n == 5) {
-                            x.r = d >> 24 & 255, x.g = d >> 16 & 255, x.b = d >> 8 & 255, x.a = m((d & 255) / 0.255) / 1000
-                        } else {
-                            x.r = d >> 16, x.g = d >> 8 & 255, x.b = d & 255, x.a = -1
-                        }
+            if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || (keyCode === 8) || (keyCode === 46)) {
+                if (keyCode !== 16) {
+                    if ((input.value.length === 4 || input.value.length === 7) && keyCode !== 8) {
+                        input.value += seperator
                     }
-                    return x
+                    return true
                 }
             }
-            h = c0.length > 9, h = a ? c1.length > 9 ? true : c1 == "c" ? !h : false : h, f = this.pSBCr(c0), P = p < 0, t = c1 && c1 != "c" ? this.pSBCr(c1) : P ? {
-                r: 0,
-                g: 0,
-                b: 0,
-                a: -1,
-            } : {
-                r: 255,
-                g: 255,
-                b: 255,
-                a: -1,
-            }, p = P ? p * -1 : p, P = 1 - p
-            if (!f || !t) {
-                return null
+            return false
+        }
+        
+        const ValidateDateFormat = function (input, keyCode) {
+            var dateString = input.value
+            
+            if (keyCode === 16) {
+                isShift = false
             }
-            if (l) {
-                r = m(P * f.r + p * t.r), g = m(P * f.g + p * t.g), b = m(P * f.b + p * t.b)
+            var regex = /(((19|20)\d\d)\-(0[1-9]|1[0-2])\-((0|1)[0-9]|2[0-9]|3[0-1]))$/
+            if (regex.test(dateString) || dateString.length === 0) {
+                $(input).unSetError()
             } else {
-                r = m((P * f.r ** 2 + p * t.r ** 2) ** 0.5), g = m((P * f.g ** 2 + p * t.g ** 2) ** 0.5), b = m((P * f.b ** 2 + p * t.b ** 2) ** 0.5)
-            }
-            a = f.a, t = t.a, f = a >= 0 || t >= 0, a = f ? a < 0 ? t : t < 0 ? a : a * P + t * p : 0
-            if (h) {
-                return "rgb" + (f ? "a(" : "(") + r + "," + g + "," + b + (f ? "," + m(a * 1000) / 1000 : "") + ")"
-            } else {
-                return "#" + (4294967296 + r * 16777216 + g * 65536 + b * 256 + (f ? m(a * 255) : 0)).toString(16).slice(1, f ? undefined : -2)
+                $(input).setError("Invalid Date. Only YYYY-MM-DD format allowed.")
             }
         }
         
+        const inputs = document.getElementsByTagName("input")
+        window.addEventListener("load", function () {
+            
+            for (let i = 0; i < inputs.length; i++) {
+                if (inputs[i].type === "text") {
+                    if (inputs[i].classList.contains("date-format")) {
+                        inputs[i].setAttribute("maxlength", "10")
+                        inputs[i].onkeydown = function (e) {
+                            console.log(e.keyCode)
+                            console.log(IsNumeric(this, e.keyCode))
+                            return IsNumeric(this, e.keyCode)
+                        }
+                        inputs[i].onkeyup = function (e) {
+                            ValidateDateFormat(this, e.keyCode)
+                        }
+                    }
+                }
+            }
+        }, false)
     })
 </script>

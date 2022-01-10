@@ -1283,6 +1283,7 @@ const weatherUpdate = function (city) {
     }
 }
 
+
 const Console = (function () {
     
     return {
@@ -1341,6 +1342,305 @@ const Console = (function () {
         },
     }
 })()
+
+$.fn.formFields = function (settings) {
+    "use strict"
+    let id = $(this).attr("id")
+    let form = document.getElementById(id)
+    let elements = form.elements
+    let pre = document.createElement("pre")
+    let code = document.createElement("code")
+    let data = ""
+    let vals = ""
+    
+    code.id = "constantFields"
+    code.classList = [`language-javascript`]
+    
+    pre.appendChild(code)
+    form.appendChild(pre)
+    
+    for (var n = 0; n < elements.length; n++) {
+        let el = elements[n]
+        if (el.id) {
+            let id = el.id
+            let constantField = `const _${id} = document.getElementById('${id}')\n`
+            let constantValue = `_${id}.value = ""\n`
+            data += constantField
+            vals += constantValue
+        }
+        
+    }
+    
+    $(code).attr("data-prismjs-copy", 'Copy the JavaScript snipp')
+    code.innerHTML = data + "\n" + vals
+    Prism.highlightElement(code)
+}
+
+jQuery(($) => {
+    
+    $.fn.dateSelect = function (opt) {
+        let element = $(this)
+        let filterMax = ""
+        let elementId = element.attr("id")
+        
+        element.attr("id", "date-selector-" + elementId)
+        
+        let $element, $elementWrapper, $elementGroupWrapper, $elementGroupAppend, $buttonGroupAppend,
+          $input, $inputLabel, $errorElement, $buttonGroupAppendClear, input, picker
+        
+        let defaults = {
+            // Strings and translations
+            monthsFull: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            weekdaysFull: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+            weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            showMonthsShort: undefined,
+            showWeekdaysFull: undefined,
+            // Buttons
+            today: 'Today',
+            clear: 'Clear',
+            close: 'Close',
+            // Accessibility labels
+            labelMonthNext: 'Next month',
+            labelMonthPrev: 'Previous month',
+            labelMonthSelect: 'Select a month',
+            labelYearSelect: 'Select a year',
+            // Formats
+            format: "yyyy-mm-dd",
+            formatSubmit: "yyyy-mm-dd",
+            hiddenPrefix: undefined,
+            hiddenSuffix: '_submit',
+            hiddenName: undefined,
+            // Editable input
+            editable: undefined,
+            
+            // Dropdown selectors
+            selectYears: undefined,
+            selectMonths: undefined,
+            
+            // First day of the week
+            firstDay: undefined,
+            
+            // Date limits
+            min: undefined,
+            max: undefined,
+            
+            // Disable dates
+            disable: undefined,
+            
+            // Root picker container
+            container: undefined,
+            
+            // Hidden input container
+            containerHidden: undefined,
+            
+            // Close on a user action
+            closeOnSelect: true,
+            closeOnClear: true,
+            
+            // Events
+            onStart: undefined,
+            onRender: undefined,
+            onOpen: undefined,
+            onClose: undefined,
+            onSet: undefined,
+            onStop: undefined,
+        }
+        
+        let settings = {
+            label: "Date",
+            placeholder: "Select Date",
+        }
+        
+        const buildElements = function (element, opt) {
+            $element = element
+            $elementWrapper = $("<div>")
+              .addClass(`form-element`)
+            
+            $elementGroupWrapper = $("<div>")
+              .addClass(`input-group mb-3`)
+            
+            $elementGroupAppend = $("<div>")
+              .addClass(`input-group-append`)
+            
+            $buttonGroupAppend = $("<button type='button'>")
+              .attr("id", "button-" + elementId)
+              .attr("type", "button")
+              .addClass(`btn btn-md btn-default m-0 px-3 py-2 z-depth-0 waves-effect waves-light`)
+              .html('<i class="fas fa-calendar-alt"></i>')
+              .on("click", function (e) {
+                  e.preventDefault()
+              })
+            
+            $buttonGroupAppendClear = $("<button type='button'>")
+              .attr("id", "button-clear-" + elementId)
+              .addClass(`btn btn-md btn-outline-danger m-0 px-3 py-2 z-depth-0 waves-effect waves-light`)
+              .html('<i class="fas fa-ban"></i>')
+              .on("click", function () {
+                  DateSelect.clear()
+                  $input.val("").trigger("change")
+              })
+            
+            $input = $("<input>")
+              .attr("id", elementId)
+              .attr("type", "text")
+              .attr("placeholder", settings.placeholder)
+              .addClass("form-control date-format")
+              .on("keydown", function (event) {
+                  //return IsNumeric(document.getElementById(elementId), event.keyCode)
+              })
+              .on("keyup", function (event) {
+                  //ValidateDateFormat(document.getElementById(elementId), event.keyCode)
+                  toggleClearButton()
+              })
+              .on("change", function () {
+                  toggleClearButton()
+              })
+            
+            $inputLabel = $("<label>")
+              .attr("for", elementId)
+              .html(settings.label)
+            
+            $errorElement = $("<div>")
+              .addClass("error w-100 text-center")
+              .attr("id", elementId + "-error")
+        }
+        
+        const toggleClearButton = function () {
+            if ($input.val() !== "") {
+                $buttonGroupAppendClear.show()
+                let id = $input.attr("id")
+                clearError(document.getElementById(id))
+            } else {
+                $buttonGroupAppendClear.hide()
+            }
+        }
+        
+        const setWrapper = function (element, opt) {
+            buildElements(element, opt)
+            $elementGroupAppend.append($buttonGroupAppendClear, $buttonGroupAppend)
+            $elementGroupWrapper.append($input, $elementGroupAppend)
+            $elementWrapper.append($inputLabel, $elementGroupWrapper, $errorElement)
+            $element.append($elementWrapper)
+            picker = $buttonGroupAppend.pickadate("picker")
+        }
+        
+        const assignOptions = function (newOptions) {
+            if (newOptions) {
+                $.each(newOptions, function (k, v) {
+                    defaults[k] = v
+                })
+            }
+            
+        }
+        
+        const getDate = function (date) {
+            let today = new Date()
+            let year = moment().year()
+            let month = "01"
+            let day = "01"
+            
+            if (date) {
+                if (typeof date == "string") {
+                    return moment(date, 'YYYY-MM-DD')
+                }
+                
+            } else {
+                let dd = today.getDate()
+                let mm = today.getMonth() + 1
+                let yyyy = today.getFullYear()
+                return moment((yyyy) ? yyyy : moment().year() + "-" + mm + "-" + (dd > 9) ? "0" + dd : dd, 'YYYY-MM-DD')
+            }
+            
+            return year + "-" + month + "-" + day
+        }
+        
+        const clear = function () {
+            
+            if (DateSelect.picker.clear()) {
+                DateSelect.picker.clear()
+                DateSelect.picker.set("select", moment().format("YYYY-MM-DD"), { format: "yyyy-mm-dd" })
+                DateSelect.picker.render()
+            }
+        }
+        
+        const set = function (opts) {
+            if (!opts) {
+                opts = {}
+            }
+            
+            DateSelect.picker.set(opts, { muted: true })
+            
+        }
+        
+        const value = function (date) {
+            
+            if (date) {
+                DateSelect.picker.set("select", date, { format: "yyyy-mm-dd" })
+                DateSelect.picker.render()
+                return null
+            } else {
+                return ($input.val() === "") ? null : $input.val()
+            }
+            
+        }
+        
+        const DateSelect = {
+            picker: null,
+            val: null,
+            fooListener: function (val) {},
+            registerNewListener: function (externalListenerFunction) {
+                this.fooListener = externalListenerFunction
+            },
+            
+            set: function () {
+                set()
+            },
+            value: function (dataValue) {
+                if (!dataValue) {
+                    dataValue = null
+                }
+                return value(dataValue)
+            },
+            clear: function () {
+                clear()
+            },
+            init: function (element, opt) {
+                init(element, opt)
+            },
+        }
+        
+        const init = function (element, opt) {
+            assignOptions(opt)
+            
+            settings.label = ($(element).attr("data-label")) ? $(element).attr("data-label") : "Date"
+            settings.placeholder = ($(element).attr("data-placeholder")) ? $(element).attr("data-placeholder") : "Select Date"
+            
+            setWrapper(element, opt)
+            
+            $buttonGroupAppend
+              .pickadate(defaults)
+              .on("change", function () {
+                  if ($(this).val() === "") {
+                      $input.val(filterMax)
+                  } else {
+                      $input.val($(this).val())
+                  }
+                  
+                  $input.trigger("change")
+              })
+            
+            picker = $buttonGroupAppend.pickadate("picker")
+            toggleClearButton()
+            DateSelect.picker = $buttonGroupAppend.pickadate("picker")
+            
+        }
+        
+        init(element, opt)
+        return DateSelect
+    }
+    
+})
 
 const tinyEditor = (function () {
     "use strict"
@@ -1732,6 +2032,8 @@ const Season = (function () {
               if (_product_edit_season_form_season_name_filter.value === "") {
                   $table_season_product_edit.clearSelectedRows()
                   resetForm()
+              } else {
+              
               }
           })
           .autocomplete({
@@ -7033,7 +7335,7 @@ const Variant = (function () {
             },
             product_edit_variant_form_variant_min_age: {
                 number: true,
-                min: 1,
+                min: 0,
             },
             product_edit_variant_form_variant_max_age: {
                 number: true,
@@ -7057,7 +7359,7 @@ const Variant = (function () {
     
     $(_button_add_product_variant)
       .on("click", function () {
-          Console.log("Variant.product_edit_variant_form_clear_button:click()", this)
+          //Console.log("Variant.product_edit_variant_form_clear_button:click()", this)
           // ----
           $table_variant_product_edit.clearSelectedRows()
           populateForm()
@@ -7065,7 +7367,7 @@ const Variant = (function () {
     
     $(_product_edit_variant_form_clear_button)
       .on("click", function () {
-          Console.log("Variant.product_edit_variant_form_clear_button:click()", this)
+          //Console.log("Variant.product_edit_variant_form_clear_button:click()", this)
           // ----
           resetForm()
           $table_variant_product_edit.clearSelectedRows()
@@ -7073,7 +7375,7 @@ const Variant = (function () {
     
     $(_product_edit_variant_form_close_button)
       .on("click", function () {
-          Console.log("Variant.product_edit_variant_form_close_button:click()", this)
+          //Console.log("Variant.product_edit_variant_form_close_button:click()", this)
           // ----
           resetForm()
           $table_variant_product_edit.clearSelectedRows()
@@ -7081,13 +7383,13 @@ const Variant = (function () {
     
     $(_product_edit_variant_form_submit_button)
       .on("click", function () {
-          Console.log("Variant.product_edit_variant_form_submit_button:click()", this)
+          //Console.log("Variant.product_edit_variant_form_submit_button:click()", this)
           // ----
           save()
       })
     
     const initAutoComplete = function () {
-        Console.log("Variant.initAutoComplete()", Variant)
+        //Console.log("Variant.initAutoComplete()", Variant)
         // ----
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
@@ -7097,7 +7399,7 @@ const Variant = (function () {
           })
           .on("search", function () {
               //*
-              Console.log("Variant._product_edit_variant_form_variant_name_filter:search()", Variant)
+              //Console.log("Variant._product_edit_variant_form_variant_name_filter:search()", Variant)
               // ----
               globalSelectedVariant = false
               resetForm()
@@ -7107,7 +7409,7 @@ const Variant = (function () {
           .on("change", function () {
               //*
               setTimeout(function () {
-                  Console.log("Variant._product_edit_variant_form_variant_name_filter:change()", _product_edit_variant_form_variant_name_filter.value)
+                  //Console.log("Variant._product_edit_variant_form_variant_name_filter:change()", _product_edit_variant_form_variant_name_filter.value)
                   // ----
                   let variant_name = _product_edit_variant_form_variant_name_filter.value
                   
@@ -7134,7 +7436,7 @@ const Variant = (function () {
               paramName: "st",
               params: { "category_id": category_id },
               onSelect: function (suggestion) {
-                  Console.log("_product_edit_variant_form_variant_name_filter:autocomplete() - suggestion", suggestion)
+                  //Console.log("_product_edit_variant_form_variant_name_filter:autocomplete() - suggestion", suggestion)
                   // ----
                   $table_variant_product_edit.clearSelectedRows()
                   
@@ -7159,13 +7461,13 @@ const Variant = (function () {
     }
     
     const handleVariantError = function (msg) {
-        Console.log("Variant.handleVariantError(msg)", msg)
+        //Console.log("Variant.handleVariantError(msg)", msg)
         // ----
         toastr.error(msg)
     }
     
     const fetchByName = function (dataToSend, callback) {
-        Console.log("Variant.fetchByName(dataToSend)", dataToSend)
+        //Console.log("Variant.fetchByName(dataToSend)", dataToSend)
         // ----
         let url = "/api/v1.0/variants/validate"
         
@@ -7179,7 +7481,7 @@ const Variant = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                //Console.log(e)
                 return handleVariantError("Error Validating Variant")
             }
         } else {
@@ -7188,7 +7490,7 @@ const Variant = (function () {
     }
     
     const nameExists = function (name) {
-        Console.log("Variant.nameExists(name)", name)
+        //Console.log("Variant.nameExists(name)", name)
         // ----
         if (name && name !== "") {
             /**
@@ -7209,7 +7511,7 @@ const Variant = (function () {
                     if (data[0]) {
                         variant = data[0]
                     }
-                    Console.log("Variant.nameExists() - variant:", variant)
+                    //Console.log("Variant.nameExists() - variant:", variant)
                     // ----
                     let detail
                     $table_variant_product_edit.clearSelectedRows()
@@ -7250,7 +7552,7 @@ const Variant = (function () {
                 if (variant) {
                     let hasVariant = Variant.all.get(parseInt(variant.id))
                     let detail
-                    Console.log("_product_edit_variant_form_variant_name_filter:autocomplete() - variant", variant)
+                    //Console.log("_product_edit_variant_form_variant_name_filter:autocomplete() - variant", variant)
                     
                     if (hasVariant) {
                         detail = set(hasVariant)
@@ -7279,7 +7581,7 @@ const Variant = (function () {
     }
     
     const buildProductEditTable = function () {
-        Console.log("Variant.buildProductEditTable()", Variant)
+        //Console.log("Variant.buildProductEditTable()", Variant)
         // ----
         $table_variant_product_edit = $(_table_variant_product_edit).table({
             table_type: "display_list",
@@ -7324,7 +7626,7 @@ const Variant = (function () {
     }
     
     const defaultDetail = function () {
-        Console.log("Variant.defaultDetail()", Variant)
+        //Console.log("Variant.defaultDetail()", Variant)
         // ----
         return {
             id: null,
@@ -7343,7 +7645,7 @@ const Variant = (function () {
     }
     
     const set = function (variant) {
-        Console.log("Variant.set(variant)", variant)
+        //Console.log("Variant.set(variant)", variant)
         // ----
         let detail = defaultDetail()
         if (variant) {
@@ -7367,7 +7669,7 @@ const Variant = (function () {
     }
     
     const resetForm = function () {
-        Console.log("Variant.resetForm()", Variant.all)
+        //Console.log("Variant.resetForm()", Variant.all)
         // ----
         clearForm()
         disableFormFields()
@@ -7375,7 +7677,7 @@ const Variant = (function () {
     }
     
     const validVariantRecord = function () {
-        Console.log("Variant.validVariantRecord()", Variant.all)
+        //Console.log("Variant.validVariantRecord()", Variant.all)
         // ----
         let valid = $(_product_edit_variant_form).valid()
         let min_age = (!isNaN(parseInt(_product_edit_variant_form_variant_min_age.value))) ? parseInt(_product_edit_variant_form_variant_min_age.value) : null
@@ -7391,8 +7693,9 @@ const Variant = (function () {
     }
     
     const clearForm = function () {
-        Console.log("Variant.clearForm()", Variant.all)
+        //Console.log("Variant.clearForm()", Variant.all)
         // ----
+        clear_validation(_product_edit_variant_form)
         _display_product_variant_name.innerText = "&nbsp;"
         _product_edit_variant_form_variant_id.value = ""
         _product_edit_variant_form_variant_name.value = ""
@@ -7404,7 +7707,7 @@ const Variant = (function () {
     }
     
     const populateForm = function (variant) {
-        Console.log("Variant.populateForm()", variant)
+        //Console.log("Variant.populateForm()", variant)
         // ----
         clearForm()
         if (variant) {
@@ -7423,21 +7726,21 @@ const Variant = (function () {
     }
     
     const hideForm = function () {
-        Console.log("Variant.hideForm()", Variant)
+        //Console.log("Variant.hideForm()", Variant)
         // ----
         _product_edit_variant_form_variant_name_filter.disabled = false
         $(_edit_product_variant).hide()
     }
     
     const loadForm = function () {
-        Console.log("Variant.loadForm()", Variant)
+        //Console.log("Variant.loadForm()", Variant)
         // ----
         _product_edit_variant_form_variant_name_filter.disabled = true
         $(_edit_product_variant).show()
     }
     
     const enableFormFields = function () {
-        Console.log("Variant.enableFormFields()", Variant)
+        //Console.log("Variant.enableFormFields()", Variant)
         // ----
         _product_edit_variant_form_variant_used_in_pricing.disabled = false
         _product_edit_variant_form_variant_id.disabled = true
@@ -7450,7 +7753,7 @@ const Variant = (function () {
     }
     
     const disableFormFields = function () {
-        Console.log("Variant.enableFormFields()", Variant)
+        //Console.log("Variant.enableFormFields()", Variant)
         // ----
         _product_edit_variant_form_variant_used_in_pricing.disabled = true
         _product_edit_variant_form_variant_id.disabled = true
@@ -7463,7 +7766,7 @@ const Variant = (function () {
     }
     
     const buildVariantRecord = function () {
-        Console.log("Variant.buildVariantRecord()", Variant)
+        //Console.log("Variant.buildVariantRecord()", Variant)
         // ----
         
         let dataToSend = {
@@ -7480,7 +7783,7 @@ const Variant = (function () {
     }
     
     const saveProductVariant = function (dataToSend, callback) {
-        Console.log("Variant.saveProductVariant()", Variant)
+        //Console.log("Variant.saveProductVariant()", Variant)
         // ----
         if (dataToSend) {
             let url = "/api/v1.0/variants/update"
@@ -7493,13 +7796,13 @@ const Variant = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                //Console.log(e)
             }
         }
     }
     
     const save = function () {
-        Console.log("Variant.save()", Variant)
+        //Console.log("Variant.save()", Variant)
         // ----
         if (validVariantRecord()) {
             
@@ -7508,7 +7811,7 @@ const Variant = (function () {
                     let dataToSend = buildVariantRecord()
                     //Console.log("Variant.save - dataToSend", dataToSend)
                     saveProductVariant(dataToSend, function (data) {
-                        Console.log("Variant.save - data", data)
+                        //Console.log("Variant.save - data", data)
                         let variant
                         if (data) {
                             variant = data
@@ -7516,9 +7819,9 @@ const Variant = (function () {
                                 variant = data[0]
                             }
                             let detail = set(variant)
-                            Console.log("detail", detail)
+                            //Console.log("detail", detail)
                             let hasVariant = Variant.all.get(detail.id)
-                            Console.log("Variant.save - hasVariant", hasVariant)
+                            //Console.log("Variant.save - hasVariant", hasVariant)
                             Variant.all.set(detail.id, detail)
                             
                             if (hasVariant) {
@@ -7527,7 +7830,7 @@ const Variant = (function () {
                                 $table_variant_product_edit.insertRow(detail)
                             }
                             
-                            Console.log("Variant.save - Variant.all", Variant.all)
+                            //Console.log("Variant.save - Variant.all", Variant.all)
                             toastr.success(`Variant: ${detail.name} - has been updated`)
                             resetForm()
                             
@@ -7550,7 +7853,7 @@ const Variant = (function () {
     }
     
     const loadAll = function (variants) {
-        Console.log("Variant.loadAll(variants)", variants)
+        //Console.log("Variant.loadAll(variants)", variants)
         // ----
         Variant.all = new Map()
         
@@ -7559,13 +7862,13 @@ const Variant = (function () {
                 let detail = set(variant)
                 Variant.all.set(detail.id, detail)
                 $table_variant_product_edit.insertRow(detail)
-                Console.log("Variant - detail", detail)
+                //Console.log("Variant - detail", detail)
             })
         }
     }
     
     const init = function (settings) {
-        Console.log("Variant.init(settings)", Variant)
+        //Console.log("Variant.init(settings)", Variant)
         // ----
         let variants = []
         if (settings) {
@@ -7592,7 +7895,7 @@ const Variant = (function () {
     }
     
     const edit = function (variant) {
-        Console.log("Variant.edit(variant)", variant)
+        //Console.log("Variant.edit(variant)", variant)
         // ----
         if (variant) {
             let detail = set(variant)
@@ -9261,7 +9564,7 @@ $.fn.DisabledDOW = function (settings) {
             let id = (typeof v === "number") ? v.toString() : v
             let day = DisabledDOW.days_of_week.get(id)
             
-            Console.log("DisabledDOW.days_of_week", DisabledDOW.days_of_week)
+            //Console.log("DisabledDOW.days_of_week", DisabledDOW.days_of_week)
             if (day) {
                 if (day.for) {
                     document.getElementById(day.for).checked = true
@@ -9314,7 +9617,7 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                Console.log("dow_select_mon", DisabledDOW.disabled_dows)
+                //Console.log("dow_select_mon", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_tue":
                 indexId = 2
@@ -9329,7 +9632,7 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                Console.log("dow_select_tue", DisabledDOW.disabled_dows)
+                //Console.log("dow_select_tue", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_wed":
                 indexId = 3
@@ -9344,7 +9647,7 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                Console.log("dow_select_wed", DisabledDOW.disabled_dows)
+                //Console.log("dow_select_wed", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_thu":
                 indexId = 4
@@ -9359,7 +9662,7 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                Console.log("dow_select_thu", DisabledDOW.disabled_dows)
+                //Console.log("dow_select_thu", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_fri":
                 indexId = 5
@@ -9396,18 +9699,34 @@ $.fn.DisabledDOW = function (settings) {
         updateCheckBoxes()
     }
     
+    const value = function (val) {
+        if (val) {
+            Console.log("val", val)
+        } else {
+        
+        }
+    }
+    
     const init = function (disabled_dow) {
+        console.log("disabled_days.init(disabled_dow)", disabled_dow)
         let disabled_days = []
         
         if (disabled_dow) {
+            if (disabled_dow === [] || disabled_dow === null || disabled_dow === "") {
+                DisabledDOW.disabled_dows = []
+                return []
+            }
+            console.log("disabled_days.init(typeof disabled_dow)", typeof disabled_dow)
             if (typeof disabled_dow === "string") {
                 disabled_days = getListOfIds(disabled_dow)
             } else if (typeof disabled_dow === "object") {
                 disabled_days = disabled_dow
+            } else {
+                disabled_days = disabled_dow
             }
             
         }
-        
+        console.log("disabled_days.init(disabled_days)", disabled_days)
         DisabledDOW.disabled_dows = disabled_days
         updateCheckBoxes()
     }
@@ -9415,6 +9734,10 @@ $.fn.DisabledDOW = function (settings) {
     const DisabledDOW = {
         days_of_week: [],
         disabled_dows: [],
+        el: null,
+        value: function (val) {
+            return value(val)
+        },
         els: [],
         init: function (disabled_dow) {
             init(disabled_dow)
@@ -9424,7 +9747,6 @@ $.fn.DisabledDOW = function (settings) {
     buildForm()
     return DisabledDOW
 }
-//DisabledDOW.disabled_dows
 
 const ColorScheme = (function () {
     "use strict"
@@ -12653,7 +12975,7 @@ const Pricing = (function () {
      * load Profile Dropdown
      */
     const loadProfileDropdown = function () {
-        let profiles = (Profile && Profile.all) ? Array.from(Profile.all.values()) : []
+        let profiles = (InventoryProfile && InventoryProfile.all) ? Array.from(InventoryProfile.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Profiles --</option>"
         $.each(profiles, function (k, profile) {
             let name = profile.name
@@ -12707,6 +13029,9 @@ const Pricing = (function () {
         },
         resetForm: function () {
             resetForm()
+        },
+        loadProfileDropdown: function () {
+            loadProfileDropdown()
         },
     }
     
@@ -15160,7 +15485,7 @@ const Product = (function () {
                 }
             }
             
-            Console.log("Product.saveNewProduct() - product", product)
+            //Console.log("Product.saveNewProduct() - product", product)
             
             if (product.id) {
                 toastr.success(`Product - ${product.id} was created, would you like to edit?`)
@@ -15196,7 +15521,7 @@ const Product = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                //Console.log(e)
             }
         }
     }
@@ -15245,7 +15570,7 @@ const Product = (function () {
                       }
                       //Console.log("suggestion.data", suggestion.data)
                       let product = suggestion.data
-                      Console.log("product", product)
+                      //Console.log("product", product)
                   },
               })
         }
@@ -15253,7 +15578,7 @@ const Product = (function () {
     }
     
     const validateNewProduct = function () {
-        Console.log("validateNewProduct", "")
+        //Console.log("validateNewProduct", "")
         
         if (_form_product_add) {
             return $(_form_product_add).valid()
@@ -15521,12 +15846,12 @@ const Product = (function () {
     }
     
     const changeHandler = function (event) {
-        Console.log("value", this.value)
+        //Console.log("value", this.value)
         if (this.value === "use_provider_location") {
-            Console.log("use_provider_location", provider_initial_location)
+            //Console.log("use_provider_location", provider_initial_location)
             Location.init(provider_initial_location)
         } else if (this.value === "use_product_location") {
-            Console.log("use_product_location", product_initial_location)
+            //Console.log("use_product_location", product_initial_location)
             Location.init(product_initial_location)
         }
     }
@@ -15573,7 +15898,7 @@ const Product = (function () {
     }
     
     const set_edit_form_values = function (product) {
-        Console.log("Product.set_edit_form_values(product)", product)
+        //Console.log("Product.set_edit_form_values(product)", product)
         
         let provider, vendor, product_location,
           seasons, units, variants, profiles, provider_location
@@ -15622,7 +15947,7 @@ const Product = (function () {
             Location.init(product_location)
         }
         
-        Console.log("product.amenities", product.amenities)
+        //Console.log("product.amenities", product.amenities)
         let product_keywords = (product.keywords) ? product.keywords : ""
         $product_keywords = $(_product_keywords).BuildKeyword(product_keywords)
         
@@ -15632,7 +15957,7 @@ const Product = (function () {
     }
     
     const init = function (settings) {
-        Console.log("Product.init()", settings)
+        //Console.log("Product.init()", settings)
         let product_details, variants, seasons, units, profiles, matrices, pricings
         
         if (_modal_new_product) {
@@ -15754,7 +16079,7 @@ const Product = (function () {
     }
     
     const setNewFormDetails = function (category_id) {
-        Console.log("setNewFormDetails()", category_id)
+        //Console.log("setNewFormDetails()", category_id)
         
     }
     
@@ -15769,15 +16094,15 @@ const Product = (function () {
         } else {
             _modal_product_sku.value = ""
             if (is_null(att1)) {
-                Console.log("att1 is null", att1)
+                //Console.log("att1 is null", att1)
             }
             
             if (is_null(att2)) {
-                Console.log("att2 is null", att2)
+                //Console.log("att2 is null", att2)
             }
             
             if (is_null(att3)) {
-                Console.log("att3 is null", att3)
+                //Console.log("att3 is null", att3)
             }
         }
         
@@ -15796,7 +16121,7 @@ const Product = (function () {
             update_product_sku()
         },
         setNewFormDetails: function (category_id) {
-            Console.log("Product.setNewFormDetails()", category_id)
+            //Console.log("Product.setNewFormDetails()", category_id)
             setNewFormDetails(category_id)
         },
         get: function (params) {
@@ -15874,6 +16199,23 @@ $(function () {
 })
 
 $(document).ready(function () {
+    const inputs = document.getElementsByTagName("input")
+    
+    window.addEventListener("load", function () {
+        /*
+        for (let i = 0; i < inputs.length; i++) {
+            if (inputs[i].classList.contains("date-format")) {
+                inputs[i].setAttribute("maxlength", 10)
+                inputs[i].onkeydown = function (e) {
+                    return IsNumeric(this, e.keyCode)
+                }
+                inputs[i].onkeyup = function (e) {
+                    ValidateDateFormat(this, e.keyCode)
+                }
+            }
+        }
+        //*/
+    }, false)
     let codeData = document.querySelectorAll(".panel-code")
     window.addEventListener("resize", debounce(function (e) {
         resize_elements("end of resizing")

@@ -245,7 +245,7 @@ const Product = (function () {
                 }
             }
             
-            Console.log("Product.saveNewProduct() - product", product)
+            //Console.log("Product.saveNewProduct() - product", product)
             
             if (product.id) {
                 toastr.success(`Product - ${product.id} was created, would you like to edit?`)
@@ -281,7 +281,7 @@ const Product = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                //Console.log(e)
             }
         }
     }
@@ -330,7 +330,7 @@ const Product = (function () {
                       }
                       //Console.log("suggestion.data", suggestion.data)
                       let product = suggestion.data
-                      Console.log("product", product)
+                      //Console.log("product", product)
                   },
               })
         }
@@ -338,7 +338,7 @@ const Product = (function () {
     }
     
     const validateNewProduct = function () {
-        Console.log("validateNewProduct", "")
+        //Console.log("validateNewProduct", "")
         
         if (_form_product_add) {
             return $(_form_product_add).valid()
@@ -606,12 +606,12 @@ const Product = (function () {
     }
     
     const changeHandler = function (event) {
-        Console.log("value", this.value)
+        //Console.log("value", this.value)
         if (this.value === "use_provider_location") {
-            Console.log("use_provider_location", provider_initial_location)
+            //Console.log("use_provider_location", provider_initial_location)
             Location.init(provider_initial_location)
         } else if (this.value === "use_product_location") {
-            Console.log("use_product_location", product_initial_location)
+            //Console.log("use_product_location", product_initial_location)
             Location.init(product_initial_location)
         }
     }
@@ -658,7 +658,7 @@ const Product = (function () {
     }
     
     const set_edit_form_values = function (product) {
-        Console.log("Product.set_edit_form_values(product)", product)
+        //Console.log("Product.set_edit_form_values(product)", product)
         
         let provider, vendor, product_location,
           seasons, units, variants, profiles, provider_location
@@ -707,7 +707,7 @@ const Product = (function () {
             Location.init(product_location)
         }
         
-        Console.log("product.amenities", product.amenities)
+        //Console.log("product.amenities", product.amenities)
         let product_keywords = (product.keywords) ? product.keywords : ""
         $product_keywords = $(_product_keywords).BuildKeyword(product_keywords)
         
@@ -717,7 +717,7 @@ const Product = (function () {
     }
     
     const init = function (settings) {
-        Console.log("Product.init()", settings)
+        //Console.log("Product.init()", settings)
         let product_details, variants, seasons, units, profiles, matrices, pricings
         
         if (_modal_new_product) {
@@ -839,7 +839,7 @@ const Product = (function () {
     }
     
     const setNewFormDetails = function (category_id) {
-        Console.log("setNewFormDetails()", category_id)
+        //Console.log("setNewFormDetails()", category_id)
         
     }
     
@@ -854,15 +854,15 @@ const Product = (function () {
         } else {
             _modal_product_sku.value = ""
             if (is_null(att1)) {
-                Console.log("att1 is null", att1)
+                //Console.log("att1 is null", att1)
             }
             
             if (is_null(att2)) {
-                Console.log("att2 is null", att2)
+                //Console.log("att2 is null", att2)
             }
             
             if (is_null(att3)) {
-                Console.log("att3 is null", att3)
+                //Console.log("att3 is null", att3)
             }
         }
         
@@ -881,7 +881,7 @@ const Product = (function () {
             update_product_sku()
         },
         setNewFormDetails: function (category_id) {
-            Console.log("Product.setNewFormDetails()", category_id)
+            //Console.log("Product.setNewFormDetails()", category_id)
             setNewFormDetails(category_id)
         },
         get: function (params) {

@@ -1,6 +1,22 @@
 <?php
-    $sales_types = (isset($page_data, $page_data["types"], $page_data["types"]["sales_types"])) ? $page_data["types"]["sales_types"] : [];
-    $allot_by_types = (isset($page_data, $page_data["types"], $page_data["types"]["allot_by"])) ? $page_data["types"]["allot_by"] : [];
+    $sales_types = (isset($page_data, $page_data["types"], $page_data["types"]["sales_types"])) ? $page_data["types"]["sales_types"] : [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+    ];
+    $allot_by_types = (isset($page_data, $page_data["types"], $page_data["types"]["allot_by"])) ? $page_data["types"]["allot_by"] : [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+    ];
     $sales_types_dropdown = "<option value='' disabled readonly selected>-- Sales Type --</option>";
     $allot_by_type_dropdown = "<option value='' disabled readonly selected>-- Allot By --</option>";
     foreach ($sales_types as $sales_type) {
@@ -114,11 +130,9 @@
                     </div>
                     
                     <div class="col-4 mb-2" id="product_edit_profile_form_profile_expires_block">
-                        <div class="form-element">
-                            <label for="product_edit_profile_form_profile_expires" class="active">Expires:</label>
-                            <input type="text" id="product_edit_profile_form_profile_expires" name="product_edit_profile_form_profile_expires" class="form-control datepicker">
-                            <div id="product_edit_profile_form_profile_expires-error" class="error w-100 text-center"></div>
-                        </div>
+                        
+                        <div id="profile_expires" data-label="Expires" data-placeholder="Select Expiration Date"></div>
+                    
                     </div>
                     
                     <div class="col-4 mb-2">
@@ -171,112 +185,206 @@
                 <!-- /Allotment Fields -->
                 
                 <!-- Additional Fields -->
-                <div class="card card-body border grey lighten-3 z-depth-0 mb-2 mt-2">
-                    <h5 class="card-title">
-                        <span>Additional Fields</span>
-                        <a class="panel-action panel-button-close panel-action-expand far fa-window-maximize collapsed" id="product_edit_profile_form_additional_fields_toggle"></a>
-                    </h5>
+                <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
                     
-                    <div id="product_edit_profile_form_additional_fields" class="collapse">
-                        <div class="row">
-                            <div class="col-12 mb-2">
-                                <div id="product_edit_profile_form_profile_checkin_dow" class=""></div>
-                            </div>
+                    <!-- Accordion card -->
+                    <div class="card card-body border grey lighten-3 z-depth-0 mb-2 ">
+                        
+                        <!-- Card header -->
+                        <div class="card-header p-0 m-0" role="tab" id="headingOne1">
+                            <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne1" aria-expanded="false" aria-controls="collapseOne1">
+                                <h5 class="mb-0">
+                                    Additional Fields <i class="fas fa-angle-down rotate-icon"></i>
+                                </h5>
+                            </a>
                         </div>
                         
-                        <div class="row">
-                            <div class="col-12 mb-2">
-                                <div id="product_edit_profile_form_profile_checkout_dow" class=""></div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-12 mb-2">
-                                <div id="product_edit_profile_form_profile_departure_dow" class=""></div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-12 mb-2">
-                                <div id="product_edit_profile_form_profile_return_dow" class=""></div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-12 mb-2">
-                                <div id="product_edit_profile_form_profile_weekday_dow" class=""></div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-12 mb-2">
-                                <div id="product_edit_profile_form_profile_inc_days_dow" class="w-100"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-3 mb-2">
-                                <div class="form-element">
-                                    <label for="product_edit_profile_form_profile_min_length_days" class="">Min Length Days:</label>
-                                    <input type="number" id="product_edit_profile_form_profile_min_length_days" name="product_edit_profile_form_profile_min_length_days" class="form-control">
-                                    <div id="product_edit_profile_form_profile_min_length_days-error" class="error w-100 text-center"></div>
+                        <!-- Card body -->
+                        <div id="collapseOne1" class="collapse" role="tabpanel" aria-labelledby="headingOne1" data-parent="#accordionEx">
+                            <hr>
+                            <div class="row">
+                                <div class="col-12 mb-2">
+                                    <div id="product_edit_profile_form_profile_checkin_dow" class="">
+                                        <div class="row">
+                                            <div class="col-12 col-md-2 col-xl-3"><label>Checkin DOW:</label></div>
+                                            <div class="col-12 col-md-10 col-xl-9">
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkin_dowdow_select_all" name="checkin_dowdow_select_all" value="*"><label class="custom-control-label" for="checkin_dowdow_select_all">All</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkin_dowdow_select_sun" name="checkin_dowdow_select_sun" value="0"><label class="custom-control-label" for="checkin_dowdow_select_sun">Sun</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkin_dowdow_select_mon" name="checkin_dowdow_select_mon" value="1"><label class="custom-control-label" for="checkin_dowdow_select_mon">Mon</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkin_dowdow_select_tue" name="checkin_dowdow_select_tue" value="2"><label class="custom-control-label" for="checkin_dowdow_select_tue">Tue</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkin_dowdow_select_wed" name="checkin_dowdow_select_wed" value="3"><label class="custom-control-label" for="checkin_dowdow_select_wed">Wed</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkin_dowdow_select_thu" name="checkin_dowdow_select_thu" value="4"><label class="custom-control-label" for="checkin_dowdow_select_thu">Thu</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkin_dowdow_select_fri" name="checkin_dowdow_select_fri" value="5"><label class="custom-control-label" for="checkin_dowdow_select_fri">Fri</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkin_dowdow_select_sat" name="checkin_dowdow_select_sat" value="6"><label class="custom-control-label" for="checkin_dowdow_select_sat">Sat</label></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             
-                            <div class="col-3 mb-2">
-                                <div class="form-element">
-                                    <label for="product_edit_profile_form_profile_min_duration" class="">Minimum Duration:</label>
-                                    <input type="number" id="product_edit_profile_form_profile_min_duration" name="product_edit_profile_form_profile_min_duration" class="form-control">
-                                    <div id="product_edit_profile_form_profile_min_duration-error" class="error w-100 text-center"></div>
+                            <div class="row">
+                                <div class="col-12 mb-2">
+                                    <div id="product_edit_profile_form_profile_checkout_dow" class="">
+                                        <div class="row">
+                                            <div class="col-12 col-md-2 col-xl-3"><label>Checkout DOW:</label></div>
+                                            <div class="col-12 col-md-10 col-xl-9">
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_all" name="checkout_dowdow_select_all" value="*"><label class="custom-control-label" for="checkout_dowdow_select_all">All</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_sun" name="checkout_dowdow_select_sun" value="0"><label class="custom-control-label" for="checkout_dowdow_select_sun">Sun</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_mon" name="checkout_dowdow_select_mon" value="1"><label class="custom-control-label" for="checkout_dowdow_select_mon">Mon</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_tue" name="checkout_dowdow_select_tue" value="2"><label class="custom-control-label" for="checkout_dowdow_select_tue">Tue</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_wed" name="checkout_dowdow_select_wed" value="3"><label class="custom-control-label" for="checkout_dowdow_select_wed">Wed</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_thu" name="checkout_dowdow_select_thu" value="4"><label class="custom-control-label" for="checkout_dowdow_select_thu">Thu</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_fri" name="checkout_dowdow_select_fri" value="5"><label class="custom-control-label" for="checkout_dowdow_select_fri">Fri</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_sat" name="checkout_dowdow_select_sat" value="6"><label class="custom-control-label" for="checkout_dowdow_select_sat">Sat</label></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             
-                            <div class="col-3 mb-2">
-                                <div class="form-element">
-                                    <label for="product_edit_profile_form_profile_max_duration" class="">Maximum Duration:</label>
-                                    <input type="number" id="product_edit_profile_form_profile_max_duration" name="product_edit_profile_form_profile_max_duration" class="form-control">
-                                    <div id="product_edit_profile_form_profile_max_duration-error" class="error w-100 text-center"></div>
+                            <div class="row">
+                                <div class="col-12 mb-2">
+                                    <div id="product_edit_profile_form_profile_departure_dow" class="">
+                                        <div class="row">
+                                            <div class="col-12 col-md-2 col-xl-3"><label>Departure DOW:</label></div>
+                                            <div class="col-12 col-md-10 col-xl-9">
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_all" name="departure_dowdow_select_all" value="*"><label class="custom-control-label" for="departure_dowdow_select_all">All</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_sun" name="departure_dowdow_select_sun" value="0"><label class="custom-control-label" for="departure_dowdow_select_sun">Sun</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_mon" name="departure_dowdow_select_mon" value="1"><label class="custom-control-label" for="departure_dowdow_select_mon">Mon</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_tue" name="departure_dowdow_select_tue" value="2"><label class="custom-control-label" for="departure_dowdow_select_tue">Tue</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_wed" name="departure_dowdow_select_wed" value="3"><label class="custom-control-label" for="departure_dowdow_select_wed">Wed</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_thu" name="departure_dowdow_select_thu" value="4"><label class="custom-control-label" for="departure_dowdow_select_thu">Thu</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_fri" name="departure_dowdow_select_fri" value="5"><label class="custom-control-label" for="departure_dowdow_select_fri">Fri</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_sat" name="departure_dowdow_select_sat" value="6"><label class="custom-control-label" for="departure_dowdow_select_sat">Sat</label></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             
-                            <div class="col-3 mb-2">
-                                <div class="form-element">
-                                    <label for="product_edit_profile_form_profile_equal_duration" class="">Equals Duration:</label>
-                                    <input type="number" id="product_edit_profile_form_profile_equal_duration" name="product_edit_profile_form_profile_equal_duration" class="form-control">
-                                    <div id="product_edit_profile_form_profile_equal_duration-error" class="error w-100 text-center"></div>
+                            <div class="row">
+                                <div class="col-12 mb-2">
+                                    <div id="product_edit_profile_form_profile_return_dow" class="">
+                                        <div class="row">
+                                            <div class="col-12 col-md-2 col-xl-3"><label>Return DOW:</label></div>
+                                            <div class="col-12 col-md-10 col-xl-9">
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_all" name="return_dowdow_select_all" value="*"><label class="custom-control-label" for="return_dowdow_select_all">All</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_sun" name="return_dowdow_select_sun" value="0"><label class="custom-control-label" for="return_dowdow_select_sun">Sun</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_mon" name="return_dowdow_select_mon" value="1"><label class="custom-control-label" for="return_dowdow_select_mon">Mon</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_tue" name="return_dowdow_select_tue" value="2"><label class="custom-control-label" for="return_dowdow_select_tue">Tue</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_wed" name="return_dowdow_select_wed" value="3"><label class="custom-control-label" for="return_dowdow_select_wed">Wed</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_thu" name="return_dowdow_select_thu" value="4"><label class="custom-control-label" for="return_dowdow_select_thu">Thu</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_fri" name="return_dowdow_select_fri" value="5"><label class="custom-control-label" for="return_dowdow_select_fri">Fri</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_sat" name="return_dowdow_select_sat" value="6"><label class="custom-control-label" for="return_dowdow_select_sat">Sat</label></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-12 mb-2">
+                                    <div id="product_edit_profile_form_profile_weekday_dow" class="">
+                                        <div class="row">
+                                            <div class="col-12 col-md-2 col-xl-3"><label>Weekdays:</label></div>
+                                            <div class="col-12 col-md-10 col-xl-9">
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_all" name="weekday_dowdow_select_all" value="*"><label class="custom-control-label" for="weekday_dowdow_select_all">All</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_sun" name="weekday_dowdow_select_sun" value="0"><label class="custom-control-label" for="weekday_dowdow_select_sun">Sun</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_mon" name="weekday_dowdow_select_mon" value="1"><label class="custom-control-label" for="weekday_dowdow_select_mon">Mon</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_tue" name="weekday_dowdow_select_tue" value="2"><label class="custom-control-label" for="weekday_dowdow_select_tue">Tue</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_wed" name="weekday_dowdow_select_wed" value="3"><label class="custom-control-label" for="weekday_dowdow_select_wed">Wed</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_thu" name="weekday_dowdow_select_thu" value="4"><label class="custom-control-label" for="weekday_dowdow_select_thu">Thu</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_fri" name="weekday_dowdow_select_fri" value="5"><label class="custom-control-label" for="weekday_dowdow_select_fri">Fri</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_sat" name="weekday_dowdow_select_sat" value="6"><label class="custom-control-label" for="weekday_dowdow_select_sat">Sat</label></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-12 mb-2">
+                                    <div id="product_edit_profile_form_profile_inc_days_dow" class="w-100">
+                                        <div class="row">
+                                            <div class="col-12 col-md-2 col-xl-3"><label>Included Days:</label></div>
+                                            <div class="col-12 col-md-10 col-xl-9">
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_all" name="inc_days_dowdow_select_all" value="*"><label class="custom-control-label" for="inc_days_dowdow_select_all">All</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_sun" name="inc_days_dowdow_select_sun" value="0"><label class="custom-control-label" for="inc_days_dowdow_select_sun">Sun</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_mon" name="inc_days_dowdow_select_mon" value="1"><label class="custom-control-label" for="inc_days_dowdow_select_mon">Mon</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_tue" name="inc_days_dowdow_select_tue" value="2"><label class="custom-control-label" for="inc_days_dowdow_select_tue">Tue</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_wed" name="inc_days_dowdow_select_wed" value="3"><label class="custom-control-label" for="inc_days_dowdow_select_wed">Wed</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_thu" name="inc_days_dowdow_select_thu" value="4"><label class="custom-control-label" for="inc_days_dowdow_select_thu">Thu</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_fri" name="inc_days_dowdow_select_fri" value="5"><label class="custom-control-label" for="inc_days_dowdow_select_fri">Fri</label></div>
+                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_sat" name="inc_days_dowdow_select_sat" value="6"><label class="custom-control-label" for="inc_days_dowdow_select_sat">Sat</label></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-3 mb-2">
+                                    <div class="form-element">
+                                        <label for="product_edit_profile_form_profile_min_length_days" class="">Min Length Days:</label>
+                                        <input type="number" id="product_edit_profile_form_profile_min_length_days" name="product_edit_profile_form_profile_min_length_days" class="form-control">
+                                        <div id="product_edit_profile_form_profile_min_length_days-error" class="error w-100 text-center"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-3 mb-2">
+                                    <div class="form-element">
+                                        <label for="product_edit_profile_form_profile_min_duration" class="">Minimum Duration:</label>
+                                        <input type="number" id="product_edit_profile_form_profile_min_duration" name="product_edit_profile_form_profile_min_duration" class="form-control">
+                                        <div id="product_edit_profile_form_profile_min_duration-error" class="error w-100 text-center"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-3 mb-2">
+                                    <div class="form-element">
+                                        <label for="product_edit_profile_form_profile_max_duration" class="">Maximum Duration:</label>
+                                        <input type="number" id="product_edit_profile_form_profile_max_duration" name="product_edit_profile_form_profile_max_duration" class="form-control">
+                                        <div id="product_edit_profile_form_profile_max_duration-error" class="error w-100 text-center"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-3 mb-2">
+                                    <div class="form-element">
+                                        <label for="product_edit_profile_form_profile_equal_duration" class="">Equals Duration:</label>
+                                        <input type="number" id="product_edit_profile_form_profile_equal_duration" name="product_edit_profile_form_profile_equal_duration" class="form-control">
+                                        <div id="product_edit_profile_form_profile_equal_duration-error" class="error w-100 text-center"></div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            
+                            <div class="row">
+                                
+                                <div class="col-4 mb-2">
+                                    <div id="profile_advanced_booking_date" data-label="Advanced Booking Date" data-placeholder="Select Date"></div>
+                                </div>
+                                
+                                <div class="col-4 mb-2">
+                                    <div class="form-element">
+                                        <label for="product_edit_profile_form_profile_advanced_booking_min" class="">Advanced Booking Min:</label>
+                                        <input type="number" id="product_edit_profile_form_profile_advanced_booking_min" name="product_edit_profile_form_profile_advanced_booking_min" class="form-control">
+                                        <div id="product_edit_profile_form_profile_advanced_booking_min-error" class="error w-100 text-center"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-4 mb-2">
+                                    <div class="form-element">
+                                        <label for="product_edit_profile_form_profile_advanced_booking_max" class="">Advanced Booking Max:</label>
+                                        <input type="number" id="product_edit_profile_form_profile_advanced_booking_max" name="product_edit_profile_form_profile_advanced_booking_max" class="form-control">
+                                        <div id="product_edit_profile_form_profile_advanced_booking_max-error" class="error w-100 text-center"></div>
+                                    </div>
                                 </div>
                             </div>
                         
-                        </div>
-                        
-                        <div class="row">
-                            
-                            <div class="col-4 mb-2">
-                                <div class="form-element">
-                                    <label for="product_edit_profile_form_profile_advanced_booking_date" class="">Advanced Booking Date:</label>
-                                    <input type="text" id="product_edit_profile_form_profile_advanced_booking_date" name="product_edit_profile_form_profile_advanced_booking_date" class="form-control">
-                                    <div id="product_edit_profile_form_profile_advanced_booking_date-error" class="error w-100 text-center"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="col-4 mb-2">
-                                <div class="form-element">
-                                    <label for="product_edit_profile_form_profile_advanced_booking_min" class="">Advanced Booking Min:</label>
-                                    <input type="number" id="product_edit_profile_form_profile_advanced_booking_min" name="product_edit_profile_form_profile_advanced_booking_min" class="form-control">
-                                    <div id="product_edit_profile_form_profile_advanced_booking_min-error" class="error w-100 text-center"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="col-4 mb-2">
-                                <div class="form-element">
-                                    <label for="product_edit_profile_form_profile_advanced_booking_max" class="">Advanced Booking Max:</label>
-                                    <input type="number" id="product_edit_profile_form_profile_advanced_booking_max" name="product_edit_profile_form_profile_advanced_booking_max" class="form-control">
-                                    <div id="product_edit_profile_form_profile_advanced_booking_max-error" class="error w-100 text-center"></div>
-                                </div>
-                            </div>
                         </div>
                     
                     </div>
+                    <!-- Accordion card -->
+                
                 </div>
                 <!-- /Additional Fields -->
             
@@ -293,291 +401,14 @@
 
 </section>
 
-<div class="row">
-    <div class="col-4">
-        <div id="expiration_date" data-label="Expiration Date" data-placeholder="Select Expiration Date"></div>
-        <button id="button-test" class="btn btn-primary btn-sm">Test</button>
-    </div>
-
-</div>
-
 <script type="text/javascript">
-    
-    $.fn.dateSelect = function (opt) {
-        let element = $(this)
-        let filterMax = ""
-        let elementId = element.attr("id")
-        
-        let $element, $elementWrapper, $elementGroupWrapper, $elementGroupAppend, $buttonGroupAppend,
-          $input, $inputLabel, $errorElement, $buttonGroupAppendClear, input, picker
-        
-        let defaults = {
-            // Strings and translations
-            monthsFull: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            weekdaysFull: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-            weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-            showMonthsShort: undefined,
-            showWeekdaysFull: undefined,
-            // Buttons
-            today: 'Today',
-            clear: 'Clear',
-            close: 'Close',
-            // Accessibility labels
-            labelMonthNext: 'Next month',
-            labelMonthPrev: 'Previous month',
-            labelMonthSelect: 'Select a month',
-            labelYearSelect: 'Select a year',
-            // Formats
-            format: "yyyy-mm-dd",
-            formatSubmit: "yyyy-mm-dd",
-            hiddenPrefix: undefined,
-            hiddenSuffix: '_submit',
-            hiddenName: undefined,
-            // Editable input
-            editable: undefined,
-            
-            // Dropdown selectors
-            selectYears: undefined,
-            selectMonths: undefined,
-            
-            // First day of the week
-            firstDay: undefined,
-            
-            // Date limits
-            min: undefined,
-            max: undefined,
-            
-            // Disable dates
-            disable: undefined,
-            
-            // Root picker container
-            container: undefined,
-            
-            // Hidden input container
-            containerHidden: undefined,
-            
-            // Close on a user action
-            closeOnSelect: true,
-            closeOnClear: true,
-            
-            // Events
-            onStart: undefined,
-            onRender: undefined,
-            onOpen: undefined,
-            onClose: undefined,
-            onSet: undefined,
-            onStop: undefined,
-        }
-        
-        let settings = {
-            label: "Date",
-            placeholder: "Select Date",
-        }
-        
-        const buildElements = function (element, opt) {
-            $element = element
-            $elementWrapper = $("<div>")
-              .addClass(`form-element`)
-            
-            $elementGroupWrapper = $("<div>")
-              .addClass(`input-group mb-3`)
-            
-            $elementGroupAppend = $("<div>")
-              .addClass(`input-group-append`)
-            
-            $buttonGroupAppend = $("<button>")
-              .attr("id", "button-" + elementId)
-              .addClass(`btn btn-md btn-default m-0 px-3 py-2 z-depth-0 waves-effect`)
-              .html('<i class="fas fa-calendar-alt"></i>')
-            
-            $buttonGroupAppendClear = $("<button>")
-              .attr("id", "button-clear-" + elementId)
-              .addClass(`btn btn-md btn-outline-danger m-0 px-3 py-2 z-depth-0 waves-effect`)
-              .html('<i class="fas fa-ban"></i>')
-              .on("click", function () {
-                  $input.val("").trigger("change")
-              })
-            
-            $input = $("<input>")
-              .attr("id", "input-" + elementId)
-              .attr("type", "text")
-              .attr("placeholder", settings.placeholder)
-              .addClass("form-control date-format")
-              .on("keyup", function () {
-                  toggleClearButton()
-              })
-              .on("change", function () {
-                  toggleClearButton()
-              })
-            
-            $inputLabel = $("<label>")
-              .attr("for", "input-" + elementId)
-              .html(settings.label)
-            
-            $errorElement = $("<div>")
-              .addClass("error w-100 text-center")
-              .attr("id", "input-" + elementId + "-error")
-        }
-        
-        const toggleClearButton = function () {
-            if ($input.val() !== "") {
-                $buttonGroupAppendClear.show()
-            } else {
-                $buttonGroupAppendClear.hide()
-            }
-        }
-        
-        const setWrapper = function (element, opt) {
-            buildElements(element, opt)
-            $elementGroupAppend.append($buttonGroupAppendClear, $buttonGroupAppend)
-            $elementGroupWrapper.append($input, $elementGroupAppend)
-            $elementWrapper.append($inputLabel, $elementGroupWrapper, $errorElement)
-            $element.append($elementWrapper)
-            picker = $buttonGroupAppend.pickadate("picker")
-        }
-        
-        const assignOptions = function (newOptions) {
-            if (newOptions) {
-                $.each(newOptions, function (k, v) {
-                    defaults[k] = v
-                })
-            }
-            
-        }
-        
-        const getDate = function (date) {
-            let today = new Date()
-            if (date) {
-                today = new Date(date)
-            } else {
-                return new Date()
-            }
-            
-            let dd = today.getDate()
-            let mm = today.getMonth() + 1
-            let yyyy = today.getFullYear()
-            
-            if (dd < 10) {
-                dd = '0' + dd
-            }
-            if (mm < 10) {
-                mm = '0' + mm
-            }
-            
-            today = yyyy + '-' + mm + '-' + dd
-            
-            return new Date(today)
-        }
-        const clear = function () {
-            if (DateSelect.picker.clear()) {
-                DateSelect.picker.clear()
-                //DateSelect.picker.set("select", [2015, 3, 20])
-                DateSelect.picker.set("highlight", [2015, 3, 20])
-                
-                DateSelect.picker.render(true)
-                
-            }
-        }
-        
-        const set = function (opts) {
-            if (!opts) {
-                opts = {}
-            }
-            
-            DateSelect.picker.set(opts, { muted: true })
-            
-        }
-        
-        const value = function (date) {
-            if (date) {
-                DateSelect.picker.set('select', getDate(date))
-            } else {
-                if (DateSelect.picker.get()) {
-                    return DateSelect.picker.get()
-                }
-            }
-            return null
-        }
-        
-        const DateSelect = {
-            picker: null,
-            val: null,
-            fooListener: function (val) {},
-            registerNewListener: function (externalListenerFunction) {
-                this.fooListener = externalListenerFunction
-            },
-            
-            set: function () {
-                set()
-            },
-            value: function (dataValue) {
-                if (!dataValue) {
-                    dataValue = null
-                }
-                return value(dataValue)
-            },
-            clear: function () {
-                clear()
-            },
-            init: function (element, opt) {
-                init(element, opt)
-            },
-        }
-        
-        const init = function (element, opt) {
-            assignOptions(opt)
-            
-            settings.label = ($(element).attr("data-label")) ? $(element).attr("data-label") : "Date"
-            settings.placeholder = ($(element).attr("data-placeholder")) ? $(element).attr("data-placeholder") : "Select Date"
-            
-            setWrapper(element, opt)
-            
-            $(document).ready(function () {
-            
-            })
-            $buttonGroupAppend
-              .pickadate(defaults)
-              .on("change", function () {
-                  if ($(this).val() === "") {
-                      $input.val(filterMax)
-                  } else {
-                      $input.val($(this).val())
-                  }
-                  
-                  $input.trigger("change")
-              })
-            
-            picker = $buttonGroupAppend.pickadate("picker")
-            toggleClearButton()
-            DateSelect.picker = $buttonGroupAppend.pickadate("picker")
-            DateSelect.registerNewListener((val) => console.log(`New Value: ${val}`))
-        }
-        
-        init(element, opt)
-        return DateSelect
-    }
-    
-    $(document).ready(function () {
-        
-        let expiration_date = $("#expiration_date").dateSelect({
-            onStart: function () {},
-        })
-        expiration_date.value("2022-02-02")
-        $("#button-test").on("click", function () {
-            console.log("expiration_date", expiration_date.value())
-            expiration_date.val = "sdf"
-            expiration_date.clear()
-        })
-        
-    })
 
 </script>
 
 <script type="text/javascript">
     const InventoryProfile = (function () {
         'use strict'
-        const _product_edit_profile_form_additional_fields = document.getElementById("product_edit_profile_form_additional_fields")
+        const _table_profile_product_edit_add_new_button = document.getElementById("table_profile_product_edit_add_new_button")
         const _edit_product_profile = document.getElementById("edit_product_profile")
         const _product_edit_profile_form_profile_transfer_sales_types_id_block = document.getElementById("product_edit_profile_form_profile_transfer_sales_types_id_block")
         const _product_edit_profile_form_profile_allot_by_id_block = document.getElementById("product_edit_profile_form_profile_allot_by_id_block")
@@ -587,25 +418,20 @@
         const _product_edit_profile_form_profile_expires_block = document.getElementById("product_edit_profile_form_profile_expires_block")
         const _product_edit_profile_form_profile_quantity_block = document.getElementById("product_edit_profile_form_profile_quantity_block")
         const _product_edit_profile_form_profile_release_amt_block = document.getElementById("product_edit_profile_form_profile_release_amt_block")
-        const _product_edit_profile_form_additional_fields_toggle = document.getElementById("product_edit_profile_form_additional_fields_toggle")
         const _product_edit_profile_form = document.getElementById("product_edit_profile_form")
-        
         const _product_edit_profile_form_profile_id = document.getElementById('product_edit_profile_form_profile_id')
         const _product_edit_profile_form_profile_name = document.getElementById('product_edit_profile_form_profile_name')
         const _product_edit_profile_form_profile_enabled = document.getElementById('product_edit_profile_form_profile_enabled')
         const _product_edit_profile_form_profile_sales_types_id = document.getElementById('product_edit_profile_form_profile_sales_types_id')
         const _product_edit_profile_form_profile_allot_by_id = document.getElementById('product_edit_profile_form_profile_allot_by_id')
         const _product_edit_profile_form_profile_transfer_sales_types_id = document.getElementById('product_edit_profile_form_profile_transfer_sales_types_id')
-        const _product_edit_profile_form_profile_expires = document.getElementById('product_edit_profile_form_profile_expires')
         const _product_edit_profile_form_profile_days_out = document.getElementById('product_edit_profile_form_profile_days_out')
         const _product_edit_profile_form_profile_quantity = document.getElementById('product_edit_profile_form_profile_quantity')
         const _product_edit_profile_form_profile_release_amt = document.getElementById('product_edit_profile_form_profile_release_amt')
-        
         const _product_edit_profile_form_profile_min_length_days = document.getElementById('product_edit_profile_form_profile_min_length_days')
         const _product_edit_profile_form_profile_min_duration = document.getElementById('product_edit_profile_form_profile_min_duration')
         const _product_edit_profile_form_profile_max_duration = document.getElementById('product_edit_profile_form_profile_max_duration')
         const _product_edit_profile_form_profile_equal_duration = document.getElementById('product_edit_profile_form_profile_equal_duration')
-        const _product_edit_profile_form_profile_advanced_booking_date = document.getElementById('product_edit_profile_form_profile_advanced_booking_date')
         const _product_edit_profile_form_profile_advanced_booking_min = document.getElementById('product_edit_profile_form_profile_advanced_booking_min')
         const _product_edit_profile_form_profile_advanced_booking_max = document.getElementById('product_edit_profile_form_profile_advanced_booking_max')
         const _product_edit_profile_form_profile_checkin_dow = document.getElementById('product_edit_profile_form_profile_checkin_dow')
@@ -614,12 +440,11 @@
         const _product_edit_profile_form_profile_return_dow = document.getElementById('product_edit_profile_form_profile_return_dow')
         const _product_edit_profile_form_profile_inc_days_dow = document.getElementById('product_edit_profile_form_profile_inc_days_dow')
         const _product_edit_profile_form_profile_weekday_dow = document.getElementById('product_edit_profile_form_profile_weekday_dow')
-        
         const _product_edit_profile_form_close_button = document.getElementById('product_edit_profile_form_close_button')
-        const _product_edit_profile_form_additional_fields_close_button = document.getElementById("product_edit_profile_form_additional_fields_close_button")
         const _button_add_product_profile = document.getElementById("button_add_product_profile")
         const _product_edit_profile_form_clear_button = document.getElementById('product_edit_profile_form_clear_button')
         const _product_edit_profile_form_submit_button = document.getElementById('product_edit_profile_form_submit_button')
+        const _product_id = document.getElementById("product_id")
         
         let $table_profile_product_edit = $(_table_profile_product_edit)
         let user_id = (document.getElementById('user_id')) ? (!isNaN(parseInt(document.getElementById('user_id').value))) ? parseInt(document.getElementById('user_id').value) : 4 : 4
@@ -633,7 +458,7 @@
                         return ($(_product_edit_profile_form_profile_sales_types_id).val() !== "" && $(_product_edit_profile_form_profile_sales_types_id).val() === 1 || $(_product_edit_profile_form_profile_sales_types_id).val() === "1")
                     },
                 },
-                product_edit_profile_form_profile_expires: {
+                profile_expires: {
                     required: function (element) {
                         return ($(_product_edit_profile_form_profile_allot_by_id).val() !== "" && $(_product_edit_profile_form_profile_allot_by_id).val() === 1 || $(_product_edit_profile_form_profile_allot_by_id).val() === "1")
                     },
@@ -656,7 +481,7 @@
                 product_edit_profile_form_profile_allot_by_id: {
                     required: 'Field Required',
                 },
-                product_edit_profile_form_profile_expires: {
+                profile_expires: {
                     required: 'Field Required',
                 },
                 product_edit_profile_form_profile_days_out: {
@@ -667,18 +492,29 @@
                 },
             },
         }
+        let globalSelectedProfile = false
         let checkin_dow, checkout_dow, departure_dow, return_dow, weekday_dow, inc_days_dow
-        let $input, expire_picker
+        
         $(_button_add_product_profile)
           .on("click", function () {
               //Console.log("InventoryProfile.button_add_product_profile: click()", {})
               populateInventoryProfileForm()
           })
         
+        $(_table_profile_product_edit_add_new_button)
+          .on("click", function () {
+              //Console.log("InventoryProfile.table_profile_product_edit_add_new_button: click()", {})
+              _product_edit_profile_form_profile_name_filter.value = ""
+              $table_profile_product_edit.clearSelectedRows()
+              populateInventoryProfileForm()
+          })
+        
         $(_product_edit_profile_form_clear_button)
           .on("click", function () {
               //Console.log("InventoryProfile.product_edit_profile_form_clear_button: click()", {})
+              $table_profile_product_edit.clearSelectedRows()
               clearInventoryProfileForm()
+              _product_edit_profile_form_profile_name_filter.value = ""
           })
         
         $(_product_edit_profile_form_submit_button)
@@ -690,16 +526,18 @@
         $(_product_edit_profile_form_close_button)
           .on("click", function () {
               //Console.log("InventoryProfile.product_edit_profile_form_close_button: click()", {})
+              $table_profile_product_edit.clearSelectedRows()
               clearInventoryProfileForm()
               setFormElementDisplay()
               hideForm()
+              _product_edit_profile_form_profile_name_filter.value = ""
           })
         
         $(_product_edit_profile_form_profile_sales_types_id)
           .on("change", function () {
               //Console.log("InventoryProfile.product_edit_profile_form_profile_sales_types_id: change()", {})
               setFormElementDisplay()
-              _product_edit_profile_form_profile_expires.value = ""
+              InventoryProfile.expiration_date.value("")
               _product_edit_profile_form_profile_days_out.value = ""
               _product_edit_profile_form_profile_allot_by_id.value = ""
           })
@@ -708,7 +546,7 @@
           .on("change", function () {
               //Console.log("InventoryProfile.product_edit_profile_form_profile_allot_by_id: change()", {})
               setFormElementDisplay()
-              _product_edit_profile_form_profile_expires.value = ""
+              InventoryProfile.expiration_date.value("")
               _product_edit_profile_form_profile_days_out.value = ""
           })
         
@@ -717,22 +555,7 @@
               //Console.log("InventoryProfile.product_edit_profile_form_profile_transfer_sales_types_id: change()", {})
           })
         
-        $(_product_edit_profile_form_additional_fields)
-          .on('show.bs.collapse', function () {
-              $(document.getElementById("product_edit_profile_form_additional_fields_toggle")).removeClass("fa-window-maximize")
-              $(document.getElementById("product_edit_profile_form_additional_fields_toggle")).addClass("fa-window-minimize")
-          })
-        
-        $(_product_edit_profile_form_additional_fields)
-          .on('hide.bs.collapse', function () {
-              $(document.getElementById("product_edit_profile_form_additional_fields_toggle")).addClass("fa-window-maximize")
-              $(document.getElementById("product_edit_profile_form_additional_fields_toggle")).removeClass("fa-window-minimize")
-          })
-        
-        $(_product_edit_profile_form_additional_fields_toggle)
-          .on("click", function () {
-              $(_product_edit_profile_form_additional_fields).collapse("toggle")
-          })
+        //
         
         const defaultDetail = function () {
             return {
@@ -745,18 +568,19 @@
                 transfer_sales_types_id: null,
                 release_amt: null,
                 min_length_days: null,
-                checkin_dow: [],
-                checkout_dow: [],
-                departure_dow: [],
-                return_dow: [],
-                inc_days_dow: [],
+                checkin_dow: [0, 1, 2, 3, 4, 5, 6],
+                checkout_dow: [0, 1, 2, 3, 4, 5, 6],
+                departure_dow: [0, 1, 2, 3, 4, 5, 6],
+                return_dow: [0, 1, 2, 3, 4, 5, 6],
+                inc_days_dow: [0, 1, 2, 3, 4, 5, 6],
+                weekday_dow: [0, 1, 2, 3, 4, 5, 6],
                 min_duration: null,
                 max_duration: null,
                 equal_duration: null,
                 advanced_booking_min: null,
                 advanced_booking_max: null,
                 advanced_booking_date: null,
-                weekday_dow: [],
+                
                 days_out: null,
                 enabled: 1,
                 date_created: formatDateMySQL(),
@@ -772,15 +596,32 @@
         
         const initAutoComplete = function () {
             //Console.log('InventoryProfile.initAutoComplete()', InventoryProfile)
+            let product_id = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
+            
             $(_product_edit_profile_form_profile_name_filter)
               .on("click", function () {
-              
+                  $(this).select()
               })
               .on("search", function () {
                   $table_profile_product_edit.clearSelectedRows()
                   resetInventoryProfileForm()
               })
               .on("change", function () {
+                  setTimeout(function () {
+                      //*
+                      let profile_name = _product_edit_profile_form_profile_name_filter.value
+                      
+                      if (globalSelectedProfile === false) {
+                          if (profile_name === "") {
+                              globalSelectedProfile = false
+                              $table_profile_product_edit.clearSelectedRows()
+                              resetInventoryProfileForm()
+                          } else {
+                              nameExists(profile_name)
+                          }
+                      }
+                      //*/
+                  }, 200)
                   if (_product_edit_profile_form_profile_name_filter.value === "") {
                       $table_profile_product_edit.clearSelectedRows()
                       resetInventoryProfileForm()
@@ -792,16 +633,88 @@
                   cache: false,
                   dataType: "json",
                   triggerSelectOnValidInput: false,
+                  params: { "product_id": product_id },
                   paramName: "st",
                   onSelect: function (suggestion) {
                       if (!suggestion.data) {
                           return
                       }
                       $table_profile_product_edit.clearSelectedRows()
-                      let profile = suggestion.data
-                      //Console.log("profile", profile)
+                      let id = (!isNaN(parseInt(suggestion.data.id))) ? parseInt(suggestion.data.id) : null
+                      let inventory_profile = InventoryProfile.all.get(id)
+                      
+                      if (inventory_profile) {
+                          $table_profile_product_edit.loadRow(inventory_profile)
+                          populateInventoryProfileForm(inventory_profile)
+                          return
+                      }
+                      
+                      populateInventoryProfileForm()
+                      _product_edit_profile_form_profile_name.value = _product_edit_profile_form_profile_name_filter.value
                   },
               })
+        }
+        
+        const nameExists = function (name) {
+            //Console.log("InventoryProfile.nameExists(profile_name)", name)
+            if (name && name !== "") {
+                /**
+                 * data to send to the server
+                 *
+                 * @type {{name}}
+                 */
+                let dataToSend = {
+                    name: name,
+                    product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
+                }
+                
+                fetchByName(dataToSend, function (data) {
+                    let profile = null
+                    
+                    if (data && data[0]) {
+                        profile = data
+                        if (data[0]) {
+                            profile = data[0]
+                        }
+                    }
+                    
+                    if (profile) {
+                        let hasProfile = InventoryProfile.all.get(parseInt(profile.id))
+                        let detail
+                        
+                        if (hasProfile) {
+                            detail = set(hasProfile)
+                            $table_profile_product_edit.loadRow(detail)
+                            populateInventoryProfileForm(detail)
+                            return
+                        }
+                        
+                        populateInventoryProfileForm()
+                        _product_edit_profile_form_profile_name.value = name
+                    }
+                })
+            }
+        }
+        
+        const fetchByName = function (dataToSend, callback) {
+            let url = "/api/v1.0/profiles/validate"
+            
+            if (dataToSend) {
+                try {
+                    sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                        if (data) {
+                            return callback(data)
+                        } else {
+                            return handleProfileError("Oops: 1")
+                        }
+                    })
+                } catch (e) {
+                    Console.log(e)
+                    return handleProfileError("Error Validating InventoryProfile")
+                }
+            } else {
+                return handleProfileError("Error Loading InventoryProfile - Missing Data")
+            }
         }
         
         const buildInventoryProfileTable = function () {
@@ -849,27 +762,16 @@
                         },
                     },
                     {
-                        title: "expires",
+                        title: "Expires",
                         targets: 3,
                         data: "expires",
                         render: function (data, type, row, meta) {
-                            let expires = "N/A"
+                            let expires
                             if (data === null) {
                                 expires = "N/A"
                             } else {
-                                let year = data.substring(0, 4)
-                                let month = data.substring(4, 6)
-                                let day = data.substring(6, 8)
-                                let date = year + "-" + month + "-" + day
-                                let expiration = new Date(date + 'T00:00:00Z')
-                                let formattedDate = moment(expiration).format('YYYY-MM-DD')
-                                console.log("year", year)
-                                console.log("month", month)
-                                console.log("day", day)
-                                console.log("date", date)
-                                console.log("expiration", expiration)
-                                console.log("formattedDate", formattedDate)
-                                expires = formattedDate
+                                let new_string = data.replace(/-|\s/g, "")
+                                expires = moment(new_string).format('YYYY-MM-DD')
                             }
                             return "<span style='white-space: nowrap;'>" + expires + "</span>"
                         },
@@ -891,11 +793,47 @@
             })
         }
         
+        const buildInventoryProfileRecord = function () {
+            let isValid = validateInventoryProfileForm()
+            if (isValid) {
+                return remove_nulls({
+                    id: (!isNaN(parseInt(_product_edit_profile_form_profile_id.value))) ? parseInt(_product_edit_profile_form_profile_id.value) : null,
+                    name: (_product_edit_profile_form_profile_name.value !== "") ? _product_edit_profile_form_profile_name.value : null,
+                    product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
+                    sales_types_id: (!isNaN(parseInt(_product_edit_profile_form_profile_sales_types_id.value))) ? parseInt(_product_edit_profile_form_profile_sales_types_id.value) : null,
+                    transfer_sales_types_id: (!isNaN(parseInt(_product_edit_profile_form_profile_transfer_sales_types_id.value))) ? parseInt(_product_edit_profile_form_profile_transfer_sales_types_id.value) : null,
+                    allot_by_id: (!isNaN(parseInt(_product_edit_profile_form_profile_allot_by_id.value))) ? parseInt(_product_edit_profile_form_profile_allot_by_id.value) : 3,
+                    enabled: (_product_edit_profile_form_profile_enabled.checked === true) ? 1 : 0,
+                    expires: InventoryProfile.expiration_date.value(),
+                    advanced_booking_date: InventoryProfile.advanced_booking_date.value(),
+                    checkin_dow: (formatListOfIds(InventoryProfile.checkin_dow.disabled_dows) === null) ? "" : formatListOfIds(InventoryProfile.checkin_dow.disabled_dows),
+                    checkout_dow: (formatListOfIds(InventoryProfile.checkout_dow.disabled_dows) === "") ? "" : formatListOfIds(InventoryProfile.checkout_dow.disabled_dows),
+                    departure_dow: (formatListOfIds(InventoryProfile.departure_dow.disabled_dows) === "") ? "" : formatListOfIds(InventoryProfile.departure_dow.disabled_dows),
+                    return_dow: (formatListOfIds(InventoryProfile.return_dow.disabled_dows) === "") ? "" : formatListOfIds(InventoryProfile.return_dow.disabled_dows),
+                    weekday_dow: (formatListOfIds(InventoryProfile.weekday_dow.disabled_dows) === "") ? "" : formatListOfIds(InventoryProfile.weekday_dow.disabled_dows),
+                    inc_days_dow: (formatListOfIds(InventoryProfile.inc_days_dow.disabled_dows) === "") ? "" : formatListOfIds(InventoryProfile.inc_days_dow.disabled_dows),
+                    days_out: (!isNaN(parseInt(_product_edit_profile_form_profile_days_out.value))) ? parseInt(_product_edit_profile_form_profile_days_out.value) : null,
+                    release_amt: (!isNaN(parseInt(_product_edit_profile_form_profile_release_amt.value))) ? parseInt(_product_edit_profile_form_profile_release_amt.value) : null,
+                    min_length_days: (!isNaN(parseInt(_product_edit_profile_form_profile_min_length_days.value))) ? parseInt(_product_edit_profile_form_profile_min_length_days.value) : "",
+                    min_duration: (!isNaN(parseInt(_product_edit_profile_form_profile_min_duration.value))) ? parseInt(_product_edit_profile_form_profile_min_duration.value) : null,
+                    max_duration: (!isNaN(parseInt(_product_edit_profile_form_profile_max_duration.value))) ? parseInt(_product_edit_profile_form_profile_max_duration.value) : null,
+                    equal_duration: (!isNaN(parseInt(_product_edit_profile_form_profile_equal_duration.value))) ? parseInt(_product_edit_profile_form_profile_equal_duration.value) : null,
+                    advanced_booking_min: (!isNaN(parseInt(_product_edit_profile_form_profile_advanced_booking_min.value))) ? parseInt(_product_edit_profile_form_profile_advanced_booking_min.value) : null,
+                    advanced_booking_max: (!isNaN(parseInt(_product_edit_profile_form_profile_advanced_booking_max.value))) ? parseInt(_product_edit_profile_form_profile_advanced_booking_max.value) : null,
+                })
+                
+            }
+            
+            return false
+        }
+        
         const loadAll = function (inventory_profiles) {
-            //Console.log("InventoryProfile.loadAll(inventory_profiles)", inventory_profiles)
+            Console.log("InventoryProfile.loadAll(inventory_profiles)", inventory_profiles)
             InventoryProfile.all = new Map()
             if (!inventory_profiles) { inventory_profiles = [] }
             $.each(inventory_profiles, function (k, inventory_profile) {
+                //Console.log("InventoryProfile.loadAll - inventory_profile", inventory_profile)
+                //Console.log("InventoryProfile.loadAll - inventory_profile", inventory_profile, checkin_dow)
                 let detail = set(inventory_profile)
                 //Console.log('detail', detail)
                 if (!isNaN(parseInt(detail.id))) {
@@ -906,16 +844,7 @@
                 }
             })
             
-            //Console.log('InventoryProfile.all', InventoryProfile.all)
-        }
-        
-        const buildInventoryProfileRecord = function () {
-            let isValid = validateInventoryProfileForm()
-            if (isValid) {
-                return {}
-            }
-            
-            return false
+            Pricing.loadProfileDropdown()
         }
         
         const setFormElementDisplay = function () {
@@ -979,6 +908,7 @@
             $(_product_edit_profile_form_profile_transfer_sales_types_id_block).hide()
             $(_product_edit_profile_form_profile_quantity_block).hide()
             $(_product_edit_profile_form_profile_release_amt_block).hide()
+            $("#accordionEx").collapse("hide")
         }
         
         const hideForm = function () {
@@ -986,13 +916,17 @@
             if (_edit_product_profile) {
                 hideAllotmentFields()
                 $(_edit_product_profile).hide()
-                $(_product_edit_profile_form_additional_fields).collapse("hide")
+                _product_edit_profile_form_profile_name_filter.disabled = false
+                
+                $("#accordionEx").collapse("hide")
+                
             }
         }
         
         const showForm = function () {
             //Console.log("InventoryProfile.showForm()", showForm)
             if (_edit_product_profile) {
+                _product_edit_profile_form_profile_name_filter.disabled = true
                 $(_edit_product_profile).show()
             }
         }
@@ -1005,6 +939,7 @@
         
         const clearInventoryProfileForm = function () {
             //Console.log("InventoryProfile.clearInventoryProfileForm()", clearInventoryProfileForm)
+            
             disableInventoryProfileFormFields()
             _product_edit_profile_form_profile_id.value = ""
             _product_edit_profile_form_profile_name.value = ""
@@ -1012,7 +947,6 @@
             _product_edit_profile_form_profile_sales_types_id.value = ""
             _product_edit_profile_form_profile_allot_by_id.value = ""
             _product_edit_profile_form_profile_transfer_sales_types_id.value = ""
-            _product_edit_profile_form_profile_expires.value = ""
             _product_edit_profile_form_profile_days_out.value = ""
             _product_edit_profile_form_profile_quantity.value = ""
             _product_edit_profile_form_profile_release_amt.value = ""
@@ -1020,22 +954,44 @@
             _product_edit_profile_form_profile_min_duration.value = ""
             _product_edit_profile_form_profile_max_duration.value = ""
             _product_edit_profile_form_profile_equal_duration.value = ""
-            _product_edit_profile_form_profile_advanced_booking_date.value = ""
             _product_edit_profile_form_profile_advanced_booking_min.value = ""
             _product_edit_profile_form_profile_advanced_booking_max.value = ""
             
-            InventoryProfile.checkin_dow.init([])
-            InventoryProfile.checkout_dow.init([])
-            InventoryProfile.departure_dow.init([])
-            InventoryProfile.return_dow.init([])
-            InventoryProfile.weekday_dow.init([])
-            InventoryProfile.inc_days_dow.init([])
+            InventoryProfile.checkin_dow.init([0, 1, 2, 3, 4, 5, 6])
+            InventoryProfile.checkout_dow.init([0, 1, 2, 3, 4, 5, 6])
+            InventoryProfile.departure_dow.init([0, 1, 2, 3, 4, 5, 6])
+            InventoryProfile.return_dow.init([0, 1, 2, 3, 4, 5, 6])
+            InventoryProfile.weekday_dow.init([0, 1, 2, 3, 4, 5, 6])
+            InventoryProfile.inc_days_dow.init([0, 1, 2, 3, 4, 5, 6])
+            
+            InventoryProfile.expiration_date.value("")
+            InventoryProfile.advanced_booking_date.value("")
             
             setFormElementDisplay()
         }
         
         const validateInventoryProfileForm = function () {
-            return $(_product_edit_profile_form).valid()
+            let isValid = $(_product_edit_profile_form).valid()
+            if (isValid) {
+                let allotById = (!isNaN(parseInt(_product_edit_profile_form_profile_allot_by_id.value))) ? parseInt(_product_edit_profile_form_profile_allot_by_id.value) : 3
+                if (allotById === 1) {
+                    let expiration_date = InventoryProfile.expiration_date.value()
+                    
+                    if (expiration_date === null || expiration_date === "") {
+                        setError(document.getElementById("profile_expires"), "Field Required")
+                        isValid = false
+                    } else {
+                        clearError(document.getElementById("profile_expires"))
+                    }
+                }
+            }
+            
+            return isValid
+        }
+        
+        const disableInventoryProfileFormFields = function () {
+            //Console.log('InventoryProfile.disableInventoryProfileFormFields()', this)
+            _product_edit_profile_form_profile_name.disabled = false
         }
         
         const populateInventoryProfileForm = function (inventory_profile) {
@@ -1048,7 +1004,6 @@
                 _product_edit_profile_form_profile_sales_types_id.value = (inventory_profile.sales_types_id) ? inventory_profile.sales_types_id : ""
                 _product_edit_profile_form_profile_allot_by_id.value = (inventory_profile.allot_by_id) ? inventory_profile.allot_by_id : ""
                 _product_edit_profile_form_profile_transfer_sales_types_id.value = (inventory_profile.transfer_sales_types_id) ? inventory_profile.transfer_sales_types_id : ""
-                _product_edit_profile_form_profile_expires.value = (inventory_profile.expires) ? inventory_profile.expires : ""
                 _product_edit_profile_form_profile_days_out.value = (inventory_profile.days_out) ? inventory_profile.days_out : ""
                 _product_edit_profile_form_profile_quantity.value = (inventory_profile.quantity) ? inventory_profile.quantity : ""
                 _product_edit_profile_form_profile_release_amt.value = (inventory_profile.release_amt) ? inventory_profile.release_amt : ""
@@ -1056,17 +1011,18 @@
                 _product_edit_profile_form_profile_min_duration.value = (inventory_profile.min_duration) ? inventory_profile.min_duration : ""
                 _product_edit_profile_form_profile_max_duration.value = (inventory_profile.max_duration) ? inventory_profile.max_duration : ""
                 _product_edit_profile_form_profile_equal_duration.value = (inventory_profile.equal_duration) ? inventory_profile.equal_duration : ""
-                _product_edit_profile_form_profile_advanced_booking_date.value = (inventory_profile.advanced_booking_date) ? inventory_profile.advanced_booking_date : ""
-                
                 _product_edit_profile_form_profile_advanced_booking_min.value = (inventory_profile.advanced_booking_min) ? inventory_profile.advanced_booking_min : ""
                 _product_edit_profile_form_profile_advanced_booking_max.value = (inventory_profile.advanced_booking_max) ? inventory_profile.advanced_booking_max : ""
                 
-                InventoryProfile.checkin_dow.init((inventory_profile.checkin_dow) ? formatListOfIds(inventory_profile.checkin_dow) : [])
-                InventoryProfile.checkout_dow.init((inventory_profile.checkout_dow) ? formatListOfIds(inventory_profile.checkout_dow) : [])
-                InventoryProfile.departure_dow.init((inventory_profile.departure_dow) ? formatListOfIds(inventory_profile.departure_dow) : [])
-                InventoryProfile.return_dow.init((inventory_profile.return_dow) ? formatListOfIds(inventory_profile.return_dow) : [])
-                InventoryProfile.weekday_dow.init((inventory_profile.weekday_dow) ? formatListOfIds(inventory_profile.weekday_dow) : [])
-                InventoryProfile.inc_days_dow.init((inventory_profile.inc_days_dow) ? formatListOfIds(inventory_profile.inc_days_dow) : [])
+                InventoryProfile.checkin_dow.init((inventory_profile.checkin_dow) ? inventory_profile.checkin_dow : [0, 1, 2, 3, 4, 5, 6])
+                InventoryProfile.checkout_dow.init((inventory_profile.checkout_dow) ? inventory_profile.checkout_dow : [0, 1, 2, 3, 4, 5, 6])
+                InventoryProfile.departure_dow.init((inventory_profile.departure_dow) ? inventory_profile.departure_dow : [0, 1, 2, 3, 4, 5, 6])
+                InventoryProfile.return_dow.init((inventory_profile.return_dow) ? inventory_profile.return_dow : [0, 1, 2, 3, 4, 5, 6])
+                InventoryProfile.weekday_dow.init((inventory_profile.weekday_dow) ? inventory_profile.weekday_dow : [0, 1, 2, 3, 4, 5, 6])
+                InventoryProfile.inc_days_dow.init((inventory_profile.inc_days_dow) ? inventory_profile.inc_days_dow : [0, 1, 2, 3, 4, 5, 6])
+                
+                InventoryProfile.expiration_date.value((inventory_profile.expires) ? inventory_profile.expires : "")
+                InventoryProfile.advanced_booking_date.value((inventory_profile.advanced_booking_date) ? inventory_profile.advanced_booking_date : "")
                 
             }
             
@@ -1074,23 +1030,19 @@
             showForm()
         }
         
-        const disableInventoryProfileFormFields = function () {
-            //Console.log('InventoryProfile.disableInventoryProfileFormFields()', this)
-            _product_edit_profile_form_profile_name.disabled = false
-        }
-        
-        const enableInventoryProfileFormFields = function () {
-            //Console.log('InventoryProfile.enableInventoryProfileFormFields()', this)
-            _product_edit_profile_form_profile_name.disabled = false
-        }
-        const showInventoryProfileFormAdditionalFields = function () {}
-        const hideInventoryProfileFormAdditionalFields = function () {}
-        
         const set = function (inventory_profile) {
-            //Console.log("InventoryProfile.set(inventory_profile)", inventory_profile)
+            Console.log("InventoryProfile.set(inventory_profile)", inventory_profile)
+            
             let detail = defaultDetail()
             let sales_types_details, allot_by_details, tranfer_sales_type_details
             if (inventory_profile) {
+                let checkinDOW = getListOfIds(inventory_profile.checkin_dow)
+                let checkoutDOW = getListOfIds(inventory_profile.checkout_dow)
+                let departureDOW = getListOfIds(inventory_profile.departure_dow)
+                let returnDOW = getListOfIds(inventory_profile.return_dow)
+                let inc_daysDOW = getListOfIds(inventory_profile.inc_days_dow)
+                let weekdayDOW = getListOfIds(inventory_profile.weekday_dow)
+                
                 sales_types_details = Types.sales_types.get((!isNaN(parseInt(inventory_profile.sales_types_id))) ? parseInt(inventory_profile.sales_types_id) : null)
                 allot_by_details = Types.allot_by.get((!isNaN(parseInt(inventory_profile.allot_by_id))) ? parseInt(inventory_profile.allot_by_id) : null)
                 tranfer_sales_type_details = Types.sales_types.get((!isNaN(parseInt(inventory_profile.transfer_sales_types_id))) ? parseInt(inventory_profile.transfer_sales_types_id) : null)
@@ -1109,12 +1061,14 @@
                 detail.advanced_booking_min = (inventory_profile.advanced_booking_min) ? inventory_profile.advanced_booking_min : null
                 detail.advanced_booking_max = (inventory_profile.advanced_booking_max) ? inventory_profile.advanced_booking_max : null
                 detail.advanced_booking_date = (inventory_profile.advanced_booking_date) ? inventory_profile.advanced_booking_date : null
-                detail.checkin_dow = (inventory_profile.checkin_dow) ? getListOfIds(inventory_profile.checkin_dow) : []
-                detail.checkout_dow = (inventory_profile.checkout_dow) ? getListOfIds(inventory_profile.checkout_dow) : []
-                detail.departure_dow = (inventory_profile.departure_dow) ? getListOfIds(inventory_profile.departure_dow) : []
-                detail.return_dow = (inventory_profile.return_dow) ? getListOfIds(inventory_profile.return_dow) : []
-                detail.inc_days_dow = (inventory_profile.inc_days_dow) ? getListOfIds(inventory_profile.inc_days_dow) : []
-                detail.weekday_dow = (inventory_profile.weekday_dow) ? getListOfIds(inventory_profile.weekday_dow) : []
+                
+                detail.checkin_dow = checkinDOW
+                detail.checkout_dow = checkoutDOW
+                detail.departure_dow = departureDOW
+                detail.return_dow = returnDOW
+                detail.inc_days_dow = inc_daysDOW
+                detail.weekday_dow = weekdayDOW
+                
                 detail.days_out = (inventory_profile.days_out) ? inventory_profile.days_out : null
                 detail.enabled = (inventory_profile.enabled) ? inventory_profile.enabled : 1
                 detail.date_created = (inventory_profile.date_created) ? inventory_profile.date_created : formatDateMySQL()
@@ -1126,6 +1080,7 @@
                 detail.allot_by_details = allot_by_details
                 detail.tranfer_sales_type_details = tranfer_sales_type_details
             }
+            
             InventoryProfile.detail = detail
             return detail
         }
@@ -1133,19 +1088,83 @@
         const edit = function (inventory_profile) {
             //Console.log('InventoryProfile.edit(inventory_profile)', inventory_profile)
             if (inventory_profile) {
-                populateInventoryProfileForm(inventory_profile)
+                $table_profile_product_edit.clearSelectedRows()
+                let detail = set(inventory_profile)
+                
                 showForm()
+                _product_edit_profile_form_profile_name_filter.value = detail.name
+                _product_edit_profile_form_profile_name_filter.disabled = true
+                $table_profile_product_edit.loadRow(detail)
+                populateInventoryProfileForm(detail)
             }
             
         }
         
         const save = function () {
             //Console.log('InventoryProfile.save()', save)
-            let inv = buildInventoryProfileRecord()
-            if (inv) {
-                //Console.log("save", "YES")
+            let dataToSend = buildInventoryProfileRecord()
+            if (dataToSend) {
+                confirmDialog(`Would you like to update?`, (ans) => {
+                    if (ans) {
+                        //Console.log("InventoryProfile.save - dataToSend", dataToSend)
+                        saveProductProfile(dataToSend, function (data) {
+                            //Console.log("InventoryProfile.save - data", data)
+                            let inventory_profile
+                            if (data) {
+                                inventory_profile = data
+                                if (data[0]) {
+                                    inventory_profile = data[0]
+                                }
+                                let detail = set(inventory_profile)
+                                Console.log("detail", detail)
+                                let hasProfile = InventoryProfile.all.get(detail.id)
+                                Console.log("InventoryProfile.save - hasProfile", hasProfile)
+                                InventoryProfile.all.set(detail.id, detail)
+                                
+                                if (hasProfile) {
+                                    $table_profile_product_edit.updateRow(detail)
+                                } else {
+                                    $table_profile_product_edit.insertRow(detail)
+                                }
+                                
+                                Console.log("InventoryProfile.save - InventoryProfile.all", InventoryProfile.all)
+                                toastr.success(`InventoryProfile: ${detail.name} - has been updated`)
+                                populateInventoryProfileForm()
+                                
+                                _product_edit_profile_form_profile_name_filter.value = ""
+                                $table_profile_product_edit.loadRow(detail)
+                                $table_profile_product_edit.jumpToRow(detail)
+                                $table_profile_product_edit.clearSelectedRows()
+                                Pricing.resetForm()
+                                YearCalendar.resetForm()
+                            }
+                        })
+                    }
+                })
+                Console.log("YES", inv)
             } else {
-                //Console.log("save", "NO")
+                Console.log("save", "NO")
+            }
+        }
+        
+        const handleProfileError = function (msg) {
+            toastr.error(msg)
+        }
+        
+        const saveProductProfile = function (dataToSend, callback) {
+            if (dataToSend) {
+                let url = "/api/v1.0/profiles/update"
+                try {
+                    sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                        if (data) {
+                            return callback(data)
+                        } else {
+                            return handleProfileError("Oops: 1")
+                        }
+                    })
+                } catch (e) {
+                    Console.log(e)
+                }
             }
         }
         
@@ -1179,12 +1198,12 @@
                 label: "Return DOW",
             })
             
-            weekday_dow = $(_product_edit_profile_form_profile_inc_days_dow).DisabledDOW({
+            inc_days_dow = $(_product_edit_profile_form_profile_inc_days_dow).DisabledDOW({
                 name: "inc_days_dow",
                 label: "Included Days",
             })
             
-            inc_days_dow = $(_product_edit_profile_form_profile_weekday_dow).DisabledDOW({
+            weekday_dow = $(_product_edit_profile_form_profile_weekday_dow).DisabledDOW({
                 name: "weekday_dow",
                 label: "Weekdays",
             })
@@ -1196,42 +1215,39 @@
             InventoryProfile.weekday_dow = weekday_dow
             InventoryProfile.inc_days_dow = inc_days_dow
             
-            if (_table_profile_product_edit) {
-                buildInventoryProfileTable()
-            }
-            
-            if (_product_edit_profile_form_profile_name_filter) {
-                initAutoComplete()
-            }
-            
-            if (_product_edit_profile_form) {
-                validator_init(form_rules)
-                InventoryProfile.validator = $(_product_edit_profile_form).validate()
-                resetInventoryProfileForm()
-                hideForm()
-            }
-            
-            loadAll(inventory_profiles)
-            
             $(document).ready(function () {
-                //$input = $('#button-addon2').pickadate({
-                //    editable: true,
-                //    container: '#input-addon2',
-                //})
-                //expire_picker = $input.pickadate("picker")
+                if (_table_profile_product_edit) {
+                    buildInventoryProfileTable()
+                }
                 
-                //$('.date-input').off('click focus')
+                if (_product_edit_profile_form_profile_name_filter) {
+                    initAutoComplete()
+                }
                 
+                if (_product_edit_profile_form) {
+                    validator_init(form_rules)
+                    InventoryProfile.expiration_date = $("#profile_expires").dateSelect({
+                        onStart: function () {},
+                    })
+                    InventoryProfile.advanced_booking_date = $("#profile_advanced_booking_date").dateSelect({
+                        onStart: function () {},
+                    })
+                    
+                    InventoryProfile.validator = $(_product_edit_profile_form).validate()
+                    resetInventoryProfileForm()
+                    hideForm()
+                }
+                
+                loadAll(inventory_profiles)
             })
         }
         
-        /**
-         * public methods
-         */
         return {
             validator: null,
             all: new Map(),
             detail: {},
+            expiration_date: null,
+            advanced_booking_date: null,
             checkin_dow: null,
             checkout_dow: null,
             departure_dow: null,
@@ -1245,38 +1261,5 @@
             },
         }
     })()
-    
-    $.fn.formFields = function (settings) {
-        "use strict"
-        let id = $(this).attr("id")
-        let form = document.getElementById(id)
-        let elements = form.elements
-        let pre = document.createElement("pre")
-        let code = document.createElement("code")
-        let data = ""
-        let vals = ""
-        
-        code.id = "constantFields"
-        code.classList = [`language-javascript`]
-        
-        pre.appendChild(code)
-        form.appendChild(pre)
-        
-        for (var n = 0; n < elements.length; n++) {
-            let el = elements[n]
-            if (el.id) {
-                let id = el.id
-                let constantField = `const _${id} = document.getElementById('${id}')\n`
-                let constantValue = `_${id}.value = ""\n`
-                data += constantField
-                vals += constantValue
-            }
-            
-        }
-        
-        $(code).attr("data-prismjs-copy", 'Copy the JavaScript snipp')
-        code.innerHTML = data + "\n" + vals
-        Prism.highlightElement(code)
-    }
-
 </script>
+

@@ -172,7 +172,7 @@ $.fn.DisabledDOW = function (settings) {
             let id = (typeof v === "number") ? v.toString() : v
             let day = DisabledDOW.days_of_week.get(id)
             
-            Console.log("DisabledDOW.days_of_week", DisabledDOW.days_of_week)
+            //Console.log("DisabledDOW.days_of_week", DisabledDOW.days_of_week)
             if (day) {
                 if (day.for) {
                     document.getElementById(day.for).checked = true
@@ -225,7 +225,7 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                Console.log("dow_select_mon", DisabledDOW.disabled_dows)
+                //Console.log("dow_select_mon", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_tue":
                 indexId = 2
@@ -240,7 +240,7 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                Console.log("dow_select_tue", DisabledDOW.disabled_dows)
+                //Console.log("dow_select_tue", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_wed":
                 indexId = 3
@@ -255,7 +255,7 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                Console.log("dow_select_wed", DisabledDOW.disabled_dows)
+                //Console.log("dow_select_wed", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_thu":
                 indexId = 4
@@ -270,7 +270,7 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                Console.log("dow_select_thu", DisabledDOW.disabled_dows)
+                //Console.log("dow_select_thu", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_fri":
                 indexId = 5
@@ -307,18 +307,34 @@ $.fn.DisabledDOW = function (settings) {
         updateCheckBoxes()
     }
     
+    const value = function (val) {
+        if (val) {
+            Console.log("val", val)
+        } else {
+        
+        }
+    }
+    
     const init = function (disabled_dow) {
+        console.log("disabled_days.init(disabled_dow)", disabled_dow)
         let disabled_days = []
         
         if (disabled_dow) {
+            if (disabled_dow === [] || disabled_dow === null || disabled_dow === "") {
+                DisabledDOW.disabled_dows = []
+                return []
+            }
+            console.log("disabled_days.init(typeof disabled_dow)", typeof disabled_dow)
             if (typeof disabled_dow === "string") {
                 disabled_days = getListOfIds(disabled_dow)
             } else if (typeof disabled_dow === "object") {
                 disabled_days = disabled_dow
+            } else {
+                disabled_days = disabled_dow
             }
             
         }
-        
+        console.log("disabled_days.init(disabled_days)", disabled_days)
         DisabledDOW.disabled_dows = disabled_days
         updateCheckBoxes()
     }
@@ -326,6 +342,10 @@ $.fn.DisabledDOW = function (settings) {
     const DisabledDOW = {
         days_of_week: [],
         disabled_dows: [],
+        el: null,
+        value: function (val) {
+            return value(val)
+        },
         els: [],
         init: function (disabled_dow) {
             init(disabled_dow)
@@ -335,4 +355,3 @@ $.fn.DisabledDOW = function (settings) {
     buildForm()
     return DisabledDOW
 }
-//DisabledDOW.disabled_dows

@@ -2,6 +2,7 @@
     
     namespace Framework\App\Controllers;
     
+    use Framework\App\Models\LocationModel;
     use Framework\App\Models\ProfileModel;
     use Framework\App\Models\UnitModel;
     use Framework\Core\Controller;
@@ -51,16 +52,64 @@
         }
         
         /**
-         * autocomplete
+         * validate name exists
          *
-         * @param string   $st
-         * @param int|null $category_id
+         * @param array $args
          *
          * @return array
          */
-        public static function autocomplete(string $st = "", int $category_id = null): array
+        public static function validateName(array $args = []): array
         {
-            $results = ProfileModel::profile_ac($st);
+            $profiles = array();
+            $name = null;
+            $product_id = null;
+            if (isset($args["product_id"])) {
+                $product_id = (int)$args["product_id"];
+            }
+            
+            if (isset($args["name"])) {
+                $name = (string)$args["name"];
+            }
+            
+            if (!is_null($product_id) && !is_null($name)) {
+                
+                $results = ProfileModel::fetchProfilesByByNameAndProductId($name, $product_id);
+                
+                foreach ($results AS $k => $unit) {
+                    $profiles[] = self::format($unit);
+                }
+            }
+            
+            /**
+             * render unit json
+             */
+            View::render_json($profiles);
+            exit(1);
+        }
+        
+        public static function serveUpdate(array $params = [])
+        {
+            $profiles = array();
+            $results = ProfileModel::updateRecord($params);
+            foreach ($results AS $location) {
+                $profiles[] = self::format($location);
+            }
+            
+            /**
+             * render location json
+             */
+            header("Content-type:application/json");
+            View::render_json($profiles);
+            exit(1);
+        }
+        
+        public static function autocomplete(string $st = "", int $product_id = null): array
+        {
+            $id = null;
+            if (!is_null($product_id)) {
+                $id = (int)$product_id;
+            }
+            $results = ProfileModel::profile_ac($st, $id);
             
             return self::format_ac($results);
         }

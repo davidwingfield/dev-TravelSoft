@@ -99,7 +99,7 @@ const Pricing = (function () {
      * load Profile Dropdown
      */
     const loadProfileDropdown = function () {
-        let profiles = (Profile && Profile.all) ? Array.from(Profile.all.values()) : []
+        let profiles = (InventoryProfile && InventoryProfile.all) ? Array.from(InventoryProfile.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Profiles --</option>"
         $.each(profiles, function (k, profile) {
             let name = profile.name
@@ -153,6 +153,9 @@ const Pricing = (function () {
         },
         resetForm: function () {
             resetForm()
+        },
+        loadProfileDropdown: function () {
+            loadProfileDropdown()
         },
     }
     

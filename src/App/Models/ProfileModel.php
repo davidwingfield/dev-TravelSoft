@@ -189,15 +189,68 @@
             }
         }
         
-        public static function profile_ac(string $st = ""): array
+        public static function fetchProfileByProfileId(int $profile_id = null): array
+        {
+            $where = "";
+            if (!is_null($profile_id)) {
+                $where = "WHERE	PROFILE.id = $profile_id";
+            } else {
+                return [];
+            }
+            
+            try {
+                
+                $sql = self::$sql . $where;
+                
+                return Model::$db->rawQuery($sql);
+            } catch (Exception $e) {
+                Log::$debug_log->error($e);
+                
+                return [];
+            }
+        }
+        
+        public static function fetchProfilesByByNameAndProductId(string $name = null, int $product_id = null): array
+        {
+            $where = [];
+            if (!is_null($name)) {
+                $where[] = "PROFILE.name = '$name'";
+            }
+            if (!is_null($product_id)) {
+                $where[] = "PROFILE.product_id = $product_id";
+            }
+            $whereExpr = "";
+            if (count($where) > 0) {
+                $whereExpr = "WHERE " . implode(" AND ", $where);
+            }
+            
+            try {
+                
+                $sql = self::$sql . $whereExpr;
+                
+                return Model::$db->rawQuery($sql);
+            } catch (Exception $e) {
+                Log::$debug_log->error($e);
+                
+                return [];
+            }
+        }
+        
+        public static function profile_ac(string $st = "", int $product_id = null): array
         {
             try {
                 $searchTerm = addslashes($st);
+                $and = "";
+                if ($product_id !== null) {
+                    $and = "	AND			PROFILE.product_id = $product_id";
+                }
                 
                 $sql = self::$sql . "
-                    AND			PROFILE.name LIKE '%$searchTerm%'
+                    WHERE			PROFILE.name LIKE '%$searchTerm%'
+                    $and
                     ORDER BY    LENGTH(PROFILE.name), CAST(PROFILE.name AS UNSIGNED), PROFILE.name ASC
                     LIMIT 20;";
+                Log::$debug_log->trace($sql);
                 
                 return Model::$db->rawQuery($sql);
                 
@@ -206,6 +259,104 @@
                 
                 return [];
             }
+        }
+        
+        public static function updateRecord(array $profile = null): array
+        {
+            $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+            $created_by = Model::setInt($user_id);
+            $modified_by = Model::setInt($user_id);
+            
+            $id = Model::setInt((isset($profile["id"])) ? $profile["id"] : null);
+            $allot_by_id = Model::setInt((isset($profile["allot_by_id"])) ? $profile["allot_by_id"] : 3);
+            $sales_types_id = Model::setInt((isset($profile["sales_types_id"])) ? $profile["sales_types_id"] : null);
+            $transfer_sales_types_id = Model::setInt((isset($profile["transfer_sales_types_id"])) ? $profile["transfer_sales_types_id"] : null);
+            $product_id = Model::setInt((isset($profile["product_id"])) ? $profile["product_id"] : null);
+            
+            $quantity = Model::setInt((isset($profile["quantity"])) ? $profile["quantity"] : null);
+            $days_out = Model::setInt((isset($profile["days_out"])) ? $profile["days_out"] : null);
+            $release_amt = Model::setInt((isset($profile["release_amt"])) ? $profile["release_amt"] : null);
+            $min_length_days = Model::setInt((isset($profile["min_length_days"])) ? $profile["min_length_days"] : 1);
+            $min_duration = Model::setInt((isset($profile["min_duration"])) ? $profile["min_duration"] : 1);
+            $max_duration = Model::setInt((isset($profile["max_duration"])) ? $profile["max_duration"] : null);
+            $equal_duration = Model::setInt((isset($profile["equal_duration"])) ? $profile["equal_duration"] : null);
+            $advanced_booking_min = Model::setInt((isset($profile["advanced_booking_min"])) ? $profile["advanced_booking_min"] : null);
+            $advanced_booking_max = Model::setInt((isset($profile["advanced_booking_max"])) ? $profile["advanced_booking_max"] : null);
+            
+            $advanced_booking_date = Model::setString((isset($profile["advanced_booking_date"])) ? $profile["advanced_booking_date"] : null);
+            $name = Model::setString((isset($profile["name"])) ? $profile["name"] : null);
+            $expires = Model::setString((isset($profile["expires"])) ? str_replace(" ", "", str_replace("-", "-", trim($profile["expires"]))) : null);
+            $checkin_dow = Model::setString((isset($profile["checkin_dow"])) ? $profile["checkin_dow"] : "0,1,2,3,4,5,6");
+            $checkout_dow = Model::setString((isset($profile["checkout_dow"])) ? $profile["checkout_dow"] : "0,1,2,3,4,5,6");
+            $departure_dow = Model::setString((isset($profile["departure_dow"])) ? $profile["departure_dow"] : "0,1,2,3,4,5,6");
+            $weekday_dow = Model::setString((isset($profile["weekday_dow"])) ? $profile["weekday_dow"] : "0,1,2,3,4,5,6");
+            $return_dow = Model::setString((isset($profile["return_dow"])) ? $profile["return_dow"] : "0,1,2,3,4,5,6");
+            $inc_days_dow = Model::setString((isset($profile["inc_days_dow"])) ? $profile["inc_days_dow"] : "0,1,2,3,4,5,6");
+            
+            $description_short = Model::setString((isset($profile["description_short"])) ? $profile["description_short"] : null);
+            $enabled = Model::setBool((isset($profile["enabled"])) ? $profile["enabled"] : null);
+            $note = Model::setLongText((isset($profile["note"])) ? $profile["note"] : null);
+            $description_long = Model::setLongText((isset($profile["description_long"])) ? $profile["description_long"] : null);
+            
+            $sql = "
+            INSERT INTO profile (
+                id, allot_by_id, sales_types_id, product_id, name, quantity,
+                expires, days_out, transfer_sales_types_id, release_amt, min_length_days, checkin_dow,
+                checkout_dow, departure_dow, return_dow, inc_days_dow, min_duration, max_duration,
+                equal_duration, advanced_booking_min, advanced_booking_max, advanced_booking_date, weekday_dow, enabled,
+                date_created, created_by, date_modified, modified_by, note
+            ) VALUES (
+                $id, $allot_by_id, $sales_types_id, $product_id, $name, $quantity,
+                $expires, $days_out, $transfer_sales_types_id, $release_amt, $min_length_days, $checkin_dow,
+                $checkout_dow, $departure_dow, $return_dow, $inc_days_dow, $min_duration, $max_duration,
+                $equal_duration, $advanced_booking_min, $advanced_booking_max, $advanced_booking_date, $weekday_dow, $enabled,
+                CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP, $modified_by, $note
+            )
+            ON DUPLICATE KEY UPDATE
+                quantity = VALUES(quantity),
+                name = VALUES(name),
+                expires = VALUES(expires),
+                days_out = VALUES(days_out),
+                transfer_sales_types_id = VALUES(transfer_sales_types_id),
+                release_amt = VALUES(release_amt),
+                min_length_days = VALUES(min_length_days),
+                checkin_dow = VALUES(checkin_dow),
+                checkout_dow = VALUES(checkout_dow),
+                departure_dow = VALUES(departure_dow),
+                return_dow = VALUES(return_dow),
+                inc_days_dow = VALUES(inc_days_dow),
+                min_duration = VALUES(min_duration),
+                max_duration = VALUES(max_duration),
+                equal_duration = VALUES(equal_duration),
+                advanced_booking_min = VALUES(advanced_booking_min),
+                advanced_booking_max = VALUES(advanced_booking_max),
+                advanced_booking_date = VALUES(advanced_booking_date),
+                weekday_dow = VALUES(weekday_dow),
+                note = VALUES(note),
+                modified_by = VALUES(modified_by),
+                date_modified = VALUES(date_modified),
+                enabled = VALUES(enabled)
+            ";
+            
+            try {
+                //Log::$debug_log->trace($sql);
+                Model::$db->rawQuery($sql);
+                $profile_id = Model::$db->getInsertId();
+                if ($profile_id) {
+                    $profile_id = (int)$profile_id;
+                    
+                    return self::fetchProfileByProfileId($profile_id);
+                } else {
+                    Log::$debug_log->error("Profile Id Not Generated");
+                    
+                    return [];
+                }
+            } catch (Exception $e) {
+                Log::$debug_log->error($e);
+                
+                return [];
+            }
+            
         }
         
     }

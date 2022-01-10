@@ -114,6 +114,8 @@
             extract($_GET);
             $results = Location::autocomplete($st, $default_display);
             
+            //Log::$debug_log->trace($results);
+            
             /**
              * render results json page
              */
@@ -132,6 +134,8 @@
             extract($_GET);
             $results = Season::autocomplete($st, $category_id);
             
+            //Log::$debug_log->trace($results);
+            
             /**
              * render results json page
              */
@@ -146,8 +150,11 @@
         public function profiles(): void
         {
             $st = "";
+            $product_id = null;
             extract($_GET);
-            $results = Profile::autocomplete($st);
+            $results = Profile::autocomplete($st, $product_id);
+            
+            //Log::$debug_log->trace($results);
             
             /**
              * render profile json
@@ -167,7 +174,8 @@
             extract($_GET);
             $results = Unit::autocomplete($st, $category_id);
             
-            Log::$debug_log->trace($results);
+            //Log::$debug_log->trace($results);
+            
             /**
              * render results json page
              */

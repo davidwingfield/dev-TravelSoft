@@ -34,7 +34,7 @@ const Variant = (function () {
             },
             product_edit_variant_form_variant_min_age: {
                 number: true,
-                min: 1,
+                min: 0,
             },
             product_edit_variant_form_variant_max_age: {
                 number: true,
@@ -58,7 +58,7 @@ const Variant = (function () {
     
     $(_button_add_product_variant)
       .on("click", function () {
-          Console.log("Variant.product_edit_variant_form_clear_button:click()", this)
+          //Console.log("Variant.product_edit_variant_form_clear_button:click()", this)
           // ----
           $table_variant_product_edit.clearSelectedRows()
           populateForm()
@@ -66,7 +66,7 @@ const Variant = (function () {
     
     $(_product_edit_variant_form_clear_button)
       .on("click", function () {
-          Console.log("Variant.product_edit_variant_form_clear_button:click()", this)
+          //Console.log("Variant.product_edit_variant_form_clear_button:click()", this)
           // ----
           resetForm()
           $table_variant_product_edit.clearSelectedRows()
@@ -74,7 +74,7 @@ const Variant = (function () {
     
     $(_product_edit_variant_form_close_button)
       .on("click", function () {
-          Console.log("Variant.product_edit_variant_form_close_button:click()", this)
+          //Console.log("Variant.product_edit_variant_form_close_button:click()", this)
           // ----
           resetForm()
           $table_variant_product_edit.clearSelectedRows()
@@ -82,13 +82,13 @@ const Variant = (function () {
     
     $(_product_edit_variant_form_submit_button)
       .on("click", function () {
-          Console.log("Variant.product_edit_variant_form_submit_button:click()", this)
+          //Console.log("Variant.product_edit_variant_form_submit_button:click()", this)
           // ----
           save()
       })
     
     const initAutoComplete = function () {
-        Console.log("Variant.initAutoComplete()", Variant)
+        //Console.log("Variant.initAutoComplete()", Variant)
         // ----
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
@@ -98,7 +98,7 @@ const Variant = (function () {
           })
           .on("search", function () {
               //*
-              Console.log("Variant._product_edit_variant_form_variant_name_filter:search()", Variant)
+              //Console.log("Variant._product_edit_variant_form_variant_name_filter:search()", Variant)
               // ----
               globalSelectedVariant = false
               resetForm()
@@ -108,7 +108,7 @@ const Variant = (function () {
           .on("change", function () {
               //*
               setTimeout(function () {
-                  Console.log("Variant._product_edit_variant_form_variant_name_filter:change()", _product_edit_variant_form_variant_name_filter.value)
+                  //Console.log("Variant._product_edit_variant_form_variant_name_filter:change()", _product_edit_variant_form_variant_name_filter.value)
                   // ----
                   let variant_name = _product_edit_variant_form_variant_name_filter.value
                   
@@ -135,7 +135,7 @@ const Variant = (function () {
               paramName: "st",
               params: { "category_id": category_id },
               onSelect: function (suggestion) {
-                  Console.log("_product_edit_variant_form_variant_name_filter:autocomplete() - suggestion", suggestion)
+                  //Console.log("_product_edit_variant_form_variant_name_filter:autocomplete() - suggestion", suggestion)
                   // ----
                   $table_variant_product_edit.clearSelectedRows()
                   
@@ -160,13 +160,13 @@ const Variant = (function () {
     }
     
     const handleVariantError = function (msg) {
-        Console.log("Variant.handleVariantError(msg)", msg)
+        //Console.log("Variant.handleVariantError(msg)", msg)
         // ----
         toastr.error(msg)
     }
     
     const fetchByName = function (dataToSend, callback) {
-        Console.log("Variant.fetchByName(dataToSend)", dataToSend)
+        //Console.log("Variant.fetchByName(dataToSend)", dataToSend)
         // ----
         let url = "/api/v1.0/variants/validate"
         
@@ -180,7 +180,7 @@ const Variant = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                //Console.log(e)
                 return handleVariantError("Error Validating Variant")
             }
         } else {
@@ -189,7 +189,7 @@ const Variant = (function () {
     }
     
     const nameExists = function (name) {
-        Console.log("Variant.nameExists(name)", name)
+        //Console.log("Variant.nameExists(name)", name)
         // ----
         if (name && name !== "") {
             /**
@@ -210,7 +210,7 @@ const Variant = (function () {
                     if (data[0]) {
                         variant = data[0]
                     }
-                    Console.log("Variant.nameExists() - variant:", variant)
+                    //Console.log("Variant.nameExists() - variant:", variant)
                     // ----
                     let detail
                     $table_variant_product_edit.clearSelectedRows()
@@ -251,7 +251,7 @@ const Variant = (function () {
                 if (variant) {
                     let hasVariant = Variant.all.get(parseInt(variant.id))
                     let detail
-                    Console.log("_product_edit_variant_form_variant_name_filter:autocomplete() - variant", variant)
+                    //Console.log("_product_edit_variant_form_variant_name_filter:autocomplete() - variant", variant)
                     
                     if (hasVariant) {
                         detail = set(hasVariant)
@@ -280,7 +280,7 @@ const Variant = (function () {
     }
     
     const buildProductEditTable = function () {
-        Console.log("Variant.buildProductEditTable()", Variant)
+        //Console.log("Variant.buildProductEditTable()", Variant)
         // ----
         $table_variant_product_edit = $(_table_variant_product_edit).table({
             table_type: "display_list",
@@ -325,7 +325,7 @@ const Variant = (function () {
     }
     
     const defaultDetail = function () {
-        Console.log("Variant.defaultDetail()", Variant)
+        //Console.log("Variant.defaultDetail()", Variant)
         // ----
         return {
             id: null,
@@ -344,7 +344,7 @@ const Variant = (function () {
     }
     
     const set = function (variant) {
-        Console.log("Variant.set(variant)", variant)
+        //Console.log("Variant.set(variant)", variant)
         // ----
         let detail = defaultDetail()
         if (variant) {
@@ -368,7 +368,7 @@ const Variant = (function () {
     }
     
     const resetForm = function () {
-        Console.log("Variant.resetForm()", Variant.all)
+        //Console.log("Variant.resetForm()", Variant.all)
         // ----
         clearForm()
         disableFormFields()
@@ -376,7 +376,7 @@ const Variant = (function () {
     }
     
     const validVariantRecord = function () {
-        Console.log("Variant.validVariantRecord()", Variant.all)
+        //Console.log("Variant.validVariantRecord()", Variant.all)
         // ----
         let valid = $(_product_edit_variant_form).valid()
         let min_age = (!isNaN(parseInt(_product_edit_variant_form_variant_min_age.value))) ? parseInt(_product_edit_variant_form_variant_min_age.value) : null
@@ -392,8 +392,9 @@ const Variant = (function () {
     }
     
     const clearForm = function () {
-        Console.log("Variant.clearForm()", Variant.all)
+        //Console.log("Variant.clearForm()", Variant.all)
         // ----
+        clear_validation(_product_edit_variant_form)
         _display_product_variant_name.innerText = "&nbsp;"
         _product_edit_variant_form_variant_id.value = ""
         _product_edit_variant_form_variant_name.value = ""
@@ -405,7 +406,7 @@ const Variant = (function () {
     }
     
     const populateForm = function (variant) {
-        Console.log("Variant.populateForm()", variant)
+        //Console.log("Variant.populateForm()", variant)
         // ----
         clearForm()
         if (variant) {
@@ -424,21 +425,21 @@ const Variant = (function () {
     }
     
     const hideForm = function () {
-        Console.log("Variant.hideForm()", Variant)
+        //Console.log("Variant.hideForm()", Variant)
         // ----
         _product_edit_variant_form_variant_name_filter.disabled = false
         $(_edit_product_variant).hide()
     }
     
     const loadForm = function () {
-        Console.log("Variant.loadForm()", Variant)
+        //Console.log("Variant.loadForm()", Variant)
         // ----
         _product_edit_variant_form_variant_name_filter.disabled = true
         $(_edit_product_variant).show()
     }
     
     const enableFormFields = function () {
-        Console.log("Variant.enableFormFields()", Variant)
+        //Console.log("Variant.enableFormFields()", Variant)
         // ----
         _product_edit_variant_form_variant_used_in_pricing.disabled = false
         _product_edit_variant_form_variant_id.disabled = true
@@ -451,7 +452,7 @@ const Variant = (function () {
     }
     
     const disableFormFields = function () {
-        Console.log("Variant.enableFormFields()", Variant)
+        //Console.log("Variant.enableFormFields()", Variant)
         // ----
         _product_edit_variant_form_variant_used_in_pricing.disabled = true
         _product_edit_variant_form_variant_id.disabled = true
@@ -464,7 +465,7 @@ const Variant = (function () {
     }
     
     const buildVariantRecord = function () {
-        Console.log("Variant.buildVariantRecord()", Variant)
+        //Console.log("Variant.buildVariantRecord()", Variant)
         // ----
         
         let dataToSend = {
@@ -481,7 +482,7 @@ const Variant = (function () {
     }
     
     const saveProductVariant = function (dataToSend, callback) {
-        Console.log("Variant.saveProductVariant()", Variant)
+        //Console.log("Variant.saveProductVariant()", Variant)
         // ----
         if (dataToSend) {
             let url = "/api/v1.0/variants/update"
@@ -494,13 +495,13 @@ const Variant = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                //Console.log(e)
             }
         }
     }
     
     const save = function () {
-        Console.log("Variant.save()", Variant)
+        //Console.log("Variant.save()", Variant)
         // ----
         if (validVariantRecord()) {
             
@@ -509,7 +510,7 @@ const Variant = (function () {
                     let dataToSend = buildVariantRecord()
                     //Console.log("Variant.save - dataToSend", dataToSend)
                     saveProductVariant(dataToSend, function (data) {
-                        Console.log("Variant.save - data", data)
+                        //Console.log("Variant.save - data", data)
                         let variant
                         if (data) {
                             variant = data
@@ -517,9 +518,9 @@ const Variant = (function () {
                                 variant = data[0]
                             }
                             let detail = set(variant)
-                            Console.log("detail", detail)
+                            //Console.log("detail", detail)
                             let hasVariant = Variant.all.get(detail.id)
-                            Console.log("Variant.save - hasVariant", hasVariant)
+                            //Console.log("Variant.save - hasVariant", hasVariant)
                             Variant.all.set(detail.id, detail)
                             
                             if (hasVariant) {
@@ -528,7 +529,7 @@ const Variant = (function () {
                                 $table_variant_product_edit.insertRow(detail)
                             }
                             
-                            Console.log("Variant.save - Variant.all", Variant.all)
+                            //Console.log("Variant.save - Variant.all", Variant.all)
                             toastr.success(`Variant: ${detail.name} - has been updated`)
                             resetForm()
                             
@@ -551,7 +552,7 @@ const Variant = (function () {
     }
     
     const loadAll = function (variants) {
-        Console.log("Variant.loadAll(variants)", variants)
+        //Console.log("Variant.loadAll(variants)", variants)
         // ----
         Variant.all = new Map()
         
@@ -560,13 +561,13 @@ const Variant = (function () {
                 let detail = set(variant)
                 Variant.all.set(detail.id, detail)
                 $table_variant_product_edit.insertRow(detail)
-                Console.log("Variant - detail", detail)
+                //Console.log("Variant - detail", detail)
             })
         }
     }
     
     const init = function (settings) {
-        Console.log("Variant.init(settings)", Variant)
+        //Console.log("Variant.init(settings)", Variant)
         // ----
         let variants = []
         if (settings) {
@@ -593,7 +594,7 @@ const Variant = (function () {
     }
     
     const edit = function (variant) {
-        Console.log("Variant.edit(variant)", variant)
+        //Console.log("Variant.edit(variant)", variant)
         // ----
         if (variant) {
             let detail = set(variant)

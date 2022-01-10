@@ -47,6 +47,7 @@
      * autocomplete validate
      */
     Router::get($routeLead . "/locations/validate", "Location@validateName");
+    Router::get($routeLead . "/profiles/validate", "Profile@validateName");
     Router::get($routeLead . "/variants/validate", "Variant@validateName");
     Router::get($routeLead . "/units/validate", "Unit@validateName");
     Router::get($routeLead . "/companies/validate", "Company@validateName");
@@ -99,6 +100,6 @@
     Router::post($routeLead . "/profiles/update", "Province@serveUpdate");
     Router::post($routeLead . "/units/update", "Unit@serveUpdate");
     Router::post($routeLead . "/countries/update", "Country@serveUpdate");
-    Router::post($routeLead . "/provinces/update", "Province@serveUpdate");
+    Router::post($routeLead . "/profiles/update", "Profile@serveUpdate");
     Router::post($routeLead . "/cities/update", "City@serveUpdate");
     Router::post($routeLead . "/products/table_update", "Product@serveTableUpdate");

@@ -1,4 +1,21 @@
 $(document).ready(function () {
+    const inputs = document.getElementsByTagName("input")
+    
+    window.addEventListener("load", function () {
+        /*
+        for (let i = 0; i < inputs.length; i++) {
+            if (inputs[i].classList.contains("date-format")) {
+                inputs[i].setAttribute("maxlength", 10)
+                inputs[i].onkeydown = function (e) {
+                    return IsNumeric(this, e.keyCode)
+                }
+                inputs[i].onkeyup = function (e) {
+                    ValidateDateFormat(this, e.keyCode)
+                }
+            }
+        }
+        //*/
+    }, false)
     let codeData = document.querySelectorAll(".panel-code")
     window.addEventListener("resize", debounce(function (e) {
         resize_elements("end of resizing")

@@ -173,6 +173,8 @@ const Season = (function () {
               if (_product_edit_season_form_season_name_filter.value === "") {
                   $table_season_product_edit.clearSelectedRows()
                   resetForm()
+              } else {
+              
               }
           })
           .autocomplete({

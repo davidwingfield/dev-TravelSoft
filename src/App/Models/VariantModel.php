@@ -273,17 +273,18 @@
                         try {
                             $product_variant_sql = "
                                 INSERT INTO product_variant (
-                                    product_id, variant_id, min_age, max_age,
+                                    product_id, variant_id, min_age, max_age, used_in_pricing,
                                     enabled, date_created, created_by, date_modified,
                                     modified_by, note
                                 ) VALUES (
-                                    $product_id, $variant_id, $min_age, $max_age,
+                                    $product_id, $variant_id, $min_age, $max_age, $used_in_pricing,
                                     $enabled, CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP,
                                     $modified_by, $note
                                 )
                                 ON DUPLICATE KEY UPDATE
                                     min_age = VALUES(min_age),
                                     max_age = VALUES(max_age),
+                                    used_in_pricing = VALUES(used_in_pricing),
                                     note = VALUES(note),
                                     modified_by = VALUES(modified_by),
                                     date_modified = VALUES(date_modified),

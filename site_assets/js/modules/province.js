@@ -215,7 +215,7 @@ const Province = (function () {
                 })
                 //*/
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 return handle_province_error("Error Validating Province")
             }
         } else {
@@ -552,7 +552,7 @@ const Province = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 handle_province_error("Error: Validating Province")
             }
         } else {

@@ -411,7 +411,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
         }
     }
@@ -500,7 +500,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 return handle_vendor_error("Error Validating Company")
             }
         } else {
@@ -620,7 +620,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
         }
     }

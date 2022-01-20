@@ -1,9 +1,7 @@
 const Unit = (function () {
     "use strict"
-    
-    /**
-     * Static Variables
-     */
+    const _panel_tab_unit = document.getElementById("panel_tab_unit")
+    const _button_remove_unit_from_product = document.getElementById("button_remove_unit_from_product")
     const _category_id = document.getElementById("category_id")
     const _product_id = document.getElementById("product_id")
     const _product_edit_unit_form = document.getElementById("product_edit_unit_form")
@@ -21,15 +19,12 @@ const Unit = (function () {
     const _product_edit_unit_form_unit_description_short = document.getElementById("product_edit_unit_form_unit_description_short")
     const _product_edit_unit_form_unit_description_long = document.getElementById("product_edit_unit_form_unit_description_long")
     const _product_edit_unit_form_unit_enabled = document.getElementById("product_edit_unit_form_unit_enabled")
-    const _button_add_product_unit = document.getElementById("button_add_product_unit")
     const _button_unit_description_long_toggle = document.getElementById("button_unit_description_long_toggle")
     const _display_product_unit_name = document.getElementById("display_product_unit_name")
     const _product_edit_unit_form_clear_button = document.getElementById("product_edit_unit_form_clear_button")
     const _product_edit_unit_form_close_button = document.getElementById("product_edit_unit_form_close_button")
+    const _table_unit_product_edit_add_new_button = document.getElementById("table_unit_product_edit_add_new_button")
     
-    /**
-     * Dynamic Variables
-     */
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $table_unit_product_edit = $(_table_unit_product_edit)
     let category_id
@@ -37,11 +32,6 @@ const Unit = (function () {
     let form_rules = {
         rules: {
             product_edit_unit_form_unit_min_nights: {
-                required: true,
-                number: true,
-                min: 1,
-            },
-            product_edit_unit_form_unit_max_nights: {
                 required: true,
                 number: true,
                 min: 1,
@@ -63,11 +53,6 @@ const Unit = (function () {
                 number: "Field Invalid",
                 min: "Field Invalid",
             },
-            product_edit_unit_form_unit_max_nights: {
-                required: "Field Required",
-                number: "Field Invalid",
-                min: "Field Invalid",
-            },
             product_edit_unit_form_unit_min_pax: {
                 required: "Field Required",
                 number: "Field Invalid",
@@ -80,6 +65,11 @@ const Unit = (function () {
             },
         },
     }
+    
+    $(_button_remove_unit_from_product)
+      .on("click", function () {
+          remove()
+      })
     
     $(_product_edit_unit_form_submit_button)
       .on("click", function () {
@@ -105,7 +95,7 @@ const Unit = (function () {
           hideForm()
       })
     
-    $(_button_add_product_unit)
+    $(_table_unit_product_edit_add_new_button)
       .on("click", function () {
           clearForm()
           $table_unit_product_edit.clearSelectedRows()
@@ -117,6 +107,77 @@ const Unit = (function () {
           enableFormFields()
           loadForm()
       })
+    
+    $(_panel_tab_unit)
+      .on("hide.bs.tab", function () {
+          resetForm()
+          $table_unit_product_edit.clearSelectedRows()
+          _product_edit_unit_form_unit_name_filter.value = ""
+          _product_edit_unit_form_unit_name_filter.disabled = false
+          _product_edit_unit_form_unit_name.disabled = true
+      })
+    
+    const removeProductUnit = function (dataToSend, callback) {
+        if (dataToSend) {
+            let url = "/api/v1.0/units/remove"
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handleUnitError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                //Console.log("error", e)
+            }
+        }
+    }
+    
+    const remove = function () {
+        confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
+            if (ans) {
+                let dataToSend = {
+                    unit_id: parseInt(_product_edit_unit_form_unit_id.value),
+                    product_id: parseInt(_product_id.value),
+                }
+                
+                removeProductUnit(dataToSend, function (data) {
+                    let unitId = dataToSend.unit_id
+                    if (data) {
+                        
+                        let unit = Unit.all.get(unitId)
+                        
+                        if (unit) {
+                            $table_unit_product_edit.deleteRow(unit)
+                        }
+                        toastr.success(`Unit: ${unit.name} - has been removed`)
+                        clearForm()
+                        hideForm()
+                        
+                        _product_edit_unit_form_unit_name_filter.value = ""
+                        _product_edit_unit_form_unit_name_filter.disabled = false
+                        $table_unit_product_edit.clearSelectedRows()
+                        Unit.all.delete(unitId)
+                        Pricing.resetForm()
+                        YearCalendar.resetForm()
+                        updateProgress()
+                    }
+                })
+            }
+        })
+    }
+    
+    const updateProgress = function () {
+        let units = Array.from(Unit.all.values())
+        if (units.length === 0) {
+            $(_panel_tab_unit).html(`Unit <span id="unitNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
+        } else {
+            $(_panel_tab_unit).html(`Unit`)
+        }
+        
+        Product.updateProgress()
+    }
     
     const initAutoComplete = function () {
         category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
@@ -167,7 +228,7 @@ const Unit = (function () {
                   let unit = suggestion.data
                   let hasUnit = Unit.all.get(parseInt(unit.id))
                   
-                  Console.log("_product_edit_unit_form_unit_name_filter:autocomplete() - unit", unit)
+                  //Console.log("_product_edit_unit_form_unit_name_filter:autocomplete() - unit", unit)
                   
                   if (hasUnit) {
                       detail = set(hasUnit)
@@ -182,7 +243,7 @@ const Unit = (function () {
     }
     
     const nameExists = function (name) {
-        Console.log("Unit.nameExists(unit_name)", name)
+        //Console.log("Unit.nameExists(unit_name)", name)
         if (name && name !== "") {
             /**
              * data to send to the server
@@ -206,7 +267,7 @@ const Unit = (function () {
                 if (unit) {
                     let hasUnit = Unit.all.get(parseInt(unit.id))
                     let detail
-                    Console.log("_product_edit_unit_form_unit_name_filter:autocomplete() - unit", unit)
+                    //Console.log("_product_edit_unit_form_unit_name_filter:autocomplete() - unit", unit)
                     
                     if (hasUnit) {
                         detail = set(hasUnit)
@@ -257,7 +318,7 @@ const Unit = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                //Console.log("error", e)
                 return handleUnitError("Error Validating Unit")
             }
         } else {
@@ -266,32 +327,6 @@ const Unit = (function () {
     }
     
     const defaultDetail = function () {
-        Console.log("Unit:defaultDetail()", Unit)
-        /**
-         * api_id: null
-         * blurb: null
-         * category_id: 1
-         * cover_image: null
-         * created_by: 4
-         * date_created: "2021-12-21 16:32:23"
-         * date_modified: "2021-12-21 16:32:23"
-         * description_long: "<div class=\"card-block \">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.</div>"
-         * description_short: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu."
-         * enabled: 1
-         * end_time: null
-         * id: 204
-         * max_nights: 7
-         * max_pax: 4
-         * meeting_point: null
-         * min_nights: 1
-         * min_pax: 1
-         * modified_by: 4
-         * name: "Suite"
-         * note: null
-         * room_code: "UN-00000000204-SUIT"
-         * start_time: null
-         * time_notes: nul
-         */
         return {
             api_id: null,
             blurb: null,
@@ -320,7 +355,6 @@ const Unit = (function () {
     }
     
     const set = function (unit) {
-        Console.log("Unit:set()", unit)
         let detail = defaultDetail()
         
         if (unit) {
@@ -353,10 +387,8 @@ const Unit = (function () {
     }
     
     const save = function () {
-        Console.log("Unit.save()", Unit)
-        // ----
         if (validUnitRecord()) {
-            confirmDialog(`Would you like to update?`, (ans) => {
+            confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
                 if (ans) {
                     let dataToSend = buildUnitRecord()
                     //Console.log("Unit.save - dataToSend", dataToSend)
@@ -369,9 +401,7 @@ const Unit = (function () {
                                 unit = data[0]
                             }
                             let detail = set(unit)
-                            Console.log("detail", detail)
                             let hasUnit = Unit.all.get(detail.id)
-                            Console.log("Unit.save - hasUnit", hasUnit)
                             Unit.all.set(detail.id, detail)
                             
                             if (hasUnit) {
@@ -379,8 +409,6 @@ const Unit = (function () {
                             } else {
                                 $table_unit_product_edit.insertRow(detail)
                             }
-                            
-                            Console.log("Unit.save - Unit.all", Unit.all)
                             toastr.success(`Unit: ${detail.name} - has been updated`)
                             clearForm()
                             hideForm()
@@ -399,7 +427,7 @@ const Unit = (function () {
     }
     
     const validUnitRecord = function () {
-        Console.log("Unit.validUnitRecord()", Unit)
+        //Console.log("Unit.validUnitRecord()", Unit)
         // ----
         let valid = $(_product_edit_unit_form).valid()
         let min_pax = (!isNaN(parseInt(_product_edit_unit_form_unit_min_pax.value))) ? parseInt(_product_edit_unit_form_unit_min_pax.value) : null
@@ -429,7 +457,7 @@ const Unit = (function () {
     }
     
     const buildUnitRecord = function () {
-        Console.log("Unit.buildUnitRecord()", Unit)
+        //Console.log("Unit.buildUnitRecord()", Unit)
         let dataToSend = {
             id: (!isNaN(parseInt(_product_edit_unit_form_unit_id.value))) ? parseInt(_product_edit_unit_form_unit_id.value) : null,
             product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
@@ -467,16 +495,13 @@ const Unit = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                //Console.log("error", e)
             }
         }
     }
     
-    /**
-     * clearForm
-     */
     const clearForm = function () {
-        Console.log("Unit:clearForm()", Unit)
+        //Console.log("Unit:clearForm()", Unit)
         _product_edit_unit_form_unit_id.value = ""
         _product_edit_unit_form_unit_name.value = ""
         _product_edit_unit_form_unit_room_code.value = ""
@@ -489,19 +514,13 @@ const Unit = (function () {
         _product_edit_unit_form_unit_enabled.checked = true
     }
     
-    /**
-     * loadForm
-     */
     const loadForm = function () {
-        Console.log("Unit:loadForm()", Unit)
         if (_edit_product_unit) {
             $(_edit_product_unit).show()
+            _product_edit_unit_form_unit_name_filter.disabled = true
         }
     }
     
-    /**
-     * disable unit form fields
-     */
     const disableFormFields = function () {
         _product_edit_unit_form_unit_id.disabled = true
         _product_edit_unit_form_unit_name.disabled = true
@@ -515,9 +534,6 @@ const Unit = (function () {
         _product_edit_unit_form_unit_enabled.disabled = true
     }
     
-    /**
-     * enable form fields
-     */
     const enableFormFields = function () {
         disableFormFields()
         _product_edit_unit_form_unit_id.disabled = true
@@ -534,13 +550,11 @@ const Unit = (function () {
         
     }
     
-    /**
-     * hideForm
-     */
     const hideForm = function () {
-        Console.log("Unit:hideForm()", Unit)
         if (_edit_product_unit) {
             $(_edit_product_unit).hide()
+            _product_edit_unit_form_unit_name_filter.disabled = false
+            updateProgress()
         }
     }
     
@@ -549,23 +563,17 @@ const Unit = (function () {
         hideForm()
     }
     
-    /**
-     * populateForm
-     *
-     * @param unit
-     */
     const populateForm = function (unit) {
         clearForm()
         if (unit) {
-            Console.log("Unit:populateForm()", unit)
             _product_edit_unit_form_unit_name_filter.value = (unit.name) ? unit.name : ""
             _product_edit_unit_form_unit_id.value = (unit.id) ? unit.id : ""
             _product_edit_unit_form_unit_name.value = (unit.name) ? unit.name : ""
             _product_edit_unit_form_unit_room_code.value = (unit.room_code) ? unit.room_code : ""
             _product_edit_unit_form_unit_min_nights.value = (unit.min_nights) ? unit.min_nights : 1
-            _product_edit_unit_form_unit_max_nights.value = (unit.max_nights) ? unit.max_nights : ""
+            _product_edit_unit_form_unit_max_nights.value = (unit.max_nights) ? unit.max_nights : null
             _product_edit_unit_form_unit_min_pax.value = (unit.min_pax) ? unit.min_pax : 1
-            _product_edit_unit_form_unit_max_pax.value = (unit.max_pax) ? unit.max_pax : ""
+            _product_edit_unit_form_unit_max_pax.value = (unit.max_pax) ? unit.max_pax : null
             _product_edit_unit_form_unit_description_short.value = (unit.description_short) ? unit.description_short : ""
             _product_edit_unit_form_unit_description_long.value = (unit.description_long) ? unit.description_long : ""
             _product_edit_unit_form_unit_enabled.checked = true
@@ -575,11 +583,6 @@ const Unit = (function () {
         loadForm()
     }
     
-    /**
-     * loadAll()
-     *
-     * @param units
-     */
     const loadAll = function (units) {
         Unit.all = new Map()
         
@@ -587,23 +590,17 @@ const Unit = (function () {
             units = []
         }
         
-        Console.log("Unit.loadAll(units)", units)
-        
         $.each(units, function (k, unit) {
             let detail = set(unit)
-            Console.log("detail", detail)
+            //Console.log("detail", detail)
             Unit.all.set(detail.id, detail)
             $table_unit_product_edit.insertRow(detail)
         })
         
-        Console.log("Unit.loadAll - Unit.all", Unit.all)
+        updateProgress()
     }
     
-    /**
-     * buildProductEditTable
-     */
     const buildProductEditTable = function () {
-        Console.log("Unit.buildProductEditTable()", Unit.all)
         category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         if (category_id === 1) {
@@ -655,7 +652,7 @@ const Unit = (function () {
                     render: function (data, type, row, meta) {
                         let nights = 1
                         if (data === null) {
-                            nights = "null"
+                            nights = "&infin;"
                         } else {
                             nights = data
                         }
@@ -683,11 +680,6 @@ const Unit = (function () {
         })
     }
     
-    /**
-     * init
-     *
-     * @param settings
-     */
     const init = function (settings) {
         let units = []
         
@@ -711,24 +703,17 @@ const Unit = (function () {
         
         if (_edit_product_unit) {
             hideForm()
+            updateProgress()
         }
         
     }
     
-    /**
-     * edit
-     *
-     * @param unit
-     */
     const edit = function (unit) {
         populateForm(unit)
         enableFormFields()
-        Console.log("Unit.edit(unit)", unit)
+        //Console.log("Unit.edit(unit)", unit)
     }
     
-    /**
-     * shared methods
-     */
     return {
         all: new Map(),
         byValue: "Night",

@@ -1,24 +1,24 @@
 <?php
-    
-    namespace Framework\App\Models;
-    
-    use Exception;
-    use Framework\Core\Model;
-    use Framework\Logger\Log;
-    
-    /**
-     * Short Unit Description
-     * Long Unit Description
-     *
-     * @package            Framework\App
-     * @subpackage         Models
-     */
-    class UnitModel extends Model
-    {
-        
-        protected static $dbTable = "unit";
-        protected static $dbFields = Array();
-        protected static $selectQuery = "
+	
+	namespace Framework\App\Models;
+	
+	use Exception;
+	use Framework\Core\Model;
+	use Framework\Logger\Log;
+	
+	/**
+	 * Short Unit Description
+	 * Long Unit Description
+	 *
+	 * @package            Framework\App
+	 * @subpackage         Models
+	 */
+	class UnitModel extends Model
+	{
+		
+		protected static $dbTable = "unit";
+		protected static $dbFields = Array();
+		protected static $selectQuery = "
             SELECT
                     UNIT.id AS 'unit_id',
                     UNIT.category_id AS 'unit_category_id',
@@ -34,60 +34,52 @@
             FROM 	unit UNIT
             WHERE   UNIT.enabled = 1
         ";
-        
-        public static function get(int $id = null): array
-        {
-            
-            try {
-                if (!is_null($id)) {
-                    Model::$db->where("id", $id);
-                }
-                
-                self::$db->where("enabled", 1);
-                
-                return self::$db->get(self::$dbTable);
-            } catch (Exception $e) {
-                return [];
-            }
-        }
-        
-        public static function getOne(int $id = null): array
-        {
-            try {
-                if (!is_null($id)) {
-                    Model::$db->where("id", $id);
-                }
-                
-                self::$db->where("enabled", 1);
-                
-                return self::$db->getOne(self::$dbTable);
-            } catch (Exception $e) {
-                return [];
-            }
-        }
-        
-        public static function update(array $params = []): array
-        {
-            $id = 1;
-            
-            return Model::get($id);
-        }
-        
-        /**
-         * get unit by product and unit id
-         *
-         * @param int|null $unit_id
-         * @param int|null $product_id
-         *
-         * @return array
-         */
-        public static function getByUnitIdAndProductId(int $unit_id = null, int $product_id = null): array
-        {
-            if (is_null($product_id) || is_null($unit_id)) {
-                return [];
-            }
-            
-            $sql = "
+		
+		public static function get(int $id = null): array
+		{
+			
+			try {
+				if (!is_null($id)) {
+					Model::$db->where("id", $id);
+				}
+				
+				self::$db->where("enabled", 1);
+				
+				return self::$db->get(self::$dbTable);
+			} catch (Exception $e) {
+				return [];
+			}
+		}
+		
+		public static function getOne(int $id = null): array
+		{
+			try {
+				if (!is_null($id)) {
+					Model::$db->where("id", $id);
+				}
+				
+				self::$db->where("enabled", 1);
+				
+				return self::$db->getOne(self::$dbTable);
+			} catch (Exception $e) {
+				return [];
+			}
+		}
+		
+		public static function update(array $params = []): array
+		{
+			$id = 1;
+			
+			return Model::get($id);
+		}
+		
+		public static function getByUnitIdAndProductId(int $unit_id = null, int $product_id = null): array
+		{
+			if (is_null($product_id) || is_null($unit_id)) {
+				return [];
+			}
+			
+			$sql = "
                 SELECT
                         UNIT.id AS 'unit_id',
                         UNIT.category_id AS 'unit_category_id',
@@ -124,31 +116,24 @@
                 JOIN 	product_unit PRODUCT_UNIT ON PRODUCT_UNIT.unit_id = UNIT.id
                 WHERE   PRODUCT_UNIT.product_id = $product_id
                     AND PRODUCT_UNIT.unit_id = $unit_id";
-            try {
-                //Log::$debug_log->trace($sql);
-                
-                return Model::$db->rawQuery($sql);
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-        }
-        
-        /**
-         * get units by product id
-         *
-         * @param int|null $product_id
-         *
-         * @return array
-         */
-        public static function getByProductId(int $product_id = null): array
-        {
-            if (is_null($product_id)) {
-                return [];
-            }
-            
-            $sql = "
+			try {
+				//Log::$debug_log->trace($sql);
+				
+				return Model::$db->rawQuery($sql);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		public static function getByProductId(int $product_id = null): array
+		{
+			if (is_null($product_id)) {
+				return [];
+			}
+			
+			$sql = "
                 SELECT
                         UNIT.id AS 'unit_id',
                         UNIT.category_id AS 'unit_category_id',
@@ -185,29 +170,50 @@
                 JOIN 	product_unit PRODUCT_UNIT ON PRODUCT_UNIT.unit_id = UNIT.id
                 WHERE   PRODUCT_UNIT.product_id = $product_id
             ";
-            try {
-                return Model::$db->rawQuery($sql);
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-        }
-        
-        /**
-         * get units by name for validation
-         *
-         * @param string|null $name
-         *
-         * @return array
-         */
-        public static function getByName(string $name = null): array
-        {
-            if (is_null($name)) {
-                return [];
-            }
-            
-            $sql = "
+			try {
+				return Model::$db->rawQuery($sql);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		public static function deleteProductUnit(array $params = []): array
+		{
+			$unit_id = Model::setInt((isset($params["unit_id"])) ? $params["unit_id"] : null);
+			$product_id = Model::setInt((isset($params["product_id"])) ? $params["product_id"] : null);
+			
+			if (!is_null($unit_id) && !is_null($product_id)) {
+				$sql = "
+		            DELETE FROM product_unit
+					WHERE 		product_id = $product_id
+						AND		unit_id = $unit_id;";
+				try {
+					Model::$db->rawQuery($sql);
+					
+					return array("unit_id" => $unit_id);
+				} catch (Exception $e) {
+					Log::$debug_log->error($e);
+					
+					return [];
+				}
+			} else {
+				Log::$debug_log->error("Missing Fields");
+				Log::$debug_log->trace("Season ID $unit_id");
+				Log::$debug_log->trace("Product ID $product_id");
+				
+				return [];
+			}
+		}
+		
+		public static function getByName(string $name = null): array
+		{
+			if (is_null($name)) {
+				return [];
+			}
+			
+			$sql = "
                 SELECT
                         UNIT.id AS 'unit_id',
                         UNIT.category_id AS 'unit_category_id',
@@ -235,79 +241,71 @@
                 FROM 	unit UNIT
                 WHERE   UNIT.name = '$name'
             ";
-            try {
-                return Model::$db->rawQuery($sql);
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-        }
-        
-        /**
-         * autocomplete units
-         *
-         * @param string   $st
-         * @param int|null $category_id
-         *
-         * @return array
-         */
-        public static function unit_ac(string $st = "", int $category_id = null): array
-        {
-            if (is_null($category_id)) {
-                return [];
-            }
-            
-            try {
-                $searchTerm = addslashes($st);
-                
-                $sql = self::$selectQuery . "
+			try {
+				return Model::$db->rawQuery($sql);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		public static function unit_ac(string $st = "", int $category_id = null): array
+		{
+			if (is_null($category_id)) {
+				return [];
+			}
+			
+			try {
+				$searchTerm = addslashes($st);
+				
+				$sql = self::$selectQuery . "
                     AND			UNIT.name LIKE '%$searchTerm%'
                     AND         UNIT.category_id = $category_id
                     ORDER BY    LENGTH(UNIT.name), CAST(UNIT.name AS UNSIGNED), UNIT.name ASC
                     LIMIT 20;";
-                
-                return Model::$db->rawQuery($sql);
-                
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-        }
-        
-        public static function updateRecord(array $unit = null): array
-        {
-            $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
-            $created_by = Model::setInt($user_id);
-            $modified_by = Model::setInt($user_id);
-            
-            $id = Model::setInt((isset($unit["id"])) ? $unit["id"] : null);
-            $category_id = Model::setInt((isset($unit["category_id"])) ? $unit["category_id"] : null);
-            $product_id = Model::setInt((isset($unit["product_id"])) ? $unit["product_id"] : null);
-            
-            $min_pax = Model::setInt((isset($unit["min_pax"])) ? $unit["min_pax"] : 1);
-            $max_pax = Model::setInt((isset($unit["max_pax"])) ? $unit["max_pax"] : 1);
-            $min_nights = Model::setInt((isset($unit["min_nights"])) ? $unit["min_nights"] : 1);
-            $max_nights = Model::setInt((isset($unit["max_nights"])) ? $unit["max_nights"] : 1);
-            
-            $api_id = Model::setInt((isset($unit["api_id"])) ? $unit["api_id"] : null);
-            
-            $name = Model::setString((isset($unit["name"])) ? $unit["name"] : null);
-            $room_code = Model::setString((isset($unit["room_code"])) ? $unit["room_code"] : null);
-            $blurb = Model::setString((isset($unit["blurb"])) ? $unit["blurb"] : null);
-            $cover_image = Model::setString((isset($unit["cover_image"])) ? $unit["cover_image"] : "/public/img/unit_cover_placeholder.jpg");
-            $meeting_point = Model::setString((isset($unit["meeting_point"])) ? $unit["meeting_point"] : null);
-            $description_short = Model::setString((isset($unit["description_short"])) ? $unit["description_short"] : null);
-            $time_notes = Model::setString((isset($unit["time_notes"])) ? $unit["time_notes"] : null);
-            $start_time = Model::setString((isset($unit["start_time"])) ? $unit["start_time"] : null);
-            $end_time = Model::setString((isset($unit["end_time"])) ? $unit["end_time"] : null);
-            
-            $enabled = Model::setBool((isset($unit["enabled"])) ? $unit["enabled"] : null);
-            
-            $note = Model::setLongText((isset($unit["note"])) ? $unit["note"] : null);
-            $description_long = Model::setLongText((isset($unit["description_long"])) ? $unit["description_long"] : null);
-            $sql = "
+				
+				return Model::$db->rawQuery($sql);
+				
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		public static function updateRecord(array $unit = null): array
+		{
+			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+			$created_by = Model::setInt($user_id);
+			$modified_by = Model::setInt($user_id);
+			
+			$id = Model::setInt((isset($unit["id"])) ? $unit["id"] : null);
+			$category_id = Model::setInt((isset($unit["category_id"])) ? $unit["category_id"] : null);
+			$product_id = Model::setInt((isset($unit["product_id"])) ? $unit["product_id"] : null);
+			
+			$min_pax = Model::setInt((isset($unit["min_pax"])) ? $unit["min_pax"] : 1);
+			$max_pax = Model::setInt((isset($unit["max_pax"])) ? $unit["max_pax"] : 1);
+			$min_nights = Model::setInt((isset($unit["min_nights"])) ? $unit["min_nights"] : 1);
+			$max_nights = Model::setInt((isset($unit["max_nights"])) ? $unit["max_nights"] : null);
+			
+			$api_id = Model::setInt((isset($unit["api_id"])) ? $unit["api_id"] : null);
+			
+			$name = Model::setString((isset($unit["name"])) ? $unit["name"] : null);
+			$room_code = Model::setString((isset($unit["room_code"])) ? $unit["room_code"] : null);
+			$blurb = Model::setString((isset($unit["blurb"])) ? $unit["blurb"] : null);
+			$cover_image = Model::setString((isset($unit["cover_image"])) ? $unit["cover_image"] : "/public/img/unit_cover_placeholder.jpg");
+			$meeting_point = Model::setString((isset($unit["meeting_point"])) ? $unit["meeting_point"] : null);
+			$description_short = Model::setString((isset($unit["description_short"])) ? $unit["description_short"] : null);
+			$time_notes = Model::setString((isset($unit["time_notes"])) ? $unit["time_notes"] : null);
+			$start_time = Model::setString((isset($unit["start_time"])) ? $unit["start_time"] : null);
+			$end_time = Model::setString((isset($unit["end_time"])) ? $unit["end_time"] : null);
+			
+			$enabled = Model::setBool((isset($unit["enabled"])) ? $unit["enabled"] : null);
+			
+			$note = Model::setLongText((isset($unit["note"])) ? $unit["note"] : null);
+			$description_long = Model::setLongText((isset($unit["description_long"])) ? $unit["description_long"] : null);
+			$sql = "
             INSERT INTO unit (
                 id, category_id,
                 api_id, name, room_code,
@@ -329,24 +327,24 @@
                 date_modified = VALUES(date_modified),
                 enabled = VALUES(enabled)
             ";
-            
-            try {
-                //Log::$debug_log->trace($sql);
-                Model::$db->rawQuery($sql);
-                $unit_id = Model::$db->getInsertId();
-                if ($unit_id) {
-                    $unit_id = (int)$unit_id;
-                    $roomCode = addslashes(buildCode($unit_id, $name, "unit"));
-                    
-                    $update = "
+			
+			try {
+				//Log::$debug_log->trace($sql);
+				Model::$db->rawQuery($sql);
+				$unit_id = Model::$db->getInsertId();
+				if ($unit_id) {
+					$unit_id = (int)$unit_id;
+					$roomCode = addslashes(buildCode($unit_id, $name, "unit"));
+					
+					$update = "
                         UPDATE      unit
                         SET         room_code = '$roomCode'
                         WHERE       id = $unit_id;";
-                    try {
-                        Model::$db->rawQuery($update);
-                        
-                        try {
-                            $product_unit_sql = "
+					try {
+						Model::$db->rawQuery($update);
+						
+						try {
+							$product_unit_sql = "
                                 INSERT INTO product_unit (
                                     product_id, unit_id, min_pax, max_pax, min_nights,
                                     max_nights, description_long, description_short, blurb, cover_image,
@@ -376,34 +374,34 @@
                                     date_modified = VALUES(date_modified),
                                     enabled = VALUES(enabled)
                                 ";
-                            
-                            Model::$db->rawQuery($product_unit_sql);
-                            
-                            return self::getByUnitIdAndProductId($unit_id, $product_id);
-                        } catch (Exception $ex) {
-                            Log::$debug_log->error($ex);
-                            
-                            return [];
-                            
-                        }
-                        
-                    } catch (Exception $ex) {
-                        Log::$debug_log->error($ex);
-                        
-                        return [];
-                    }
-                    
-                } else {
-                    Log::$debug_log->error("Unit Id Not Generated");
-                    
-                    return [];
-                }
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-            
-        }
-        
-    }
+							
+							Model::$db->rawQuery($product_unit_sql);
+							
+							return self::getByUnitIdAndProductId($unit_id, $product_id);
+						} catch (Exception $ex) {
+							Log::$debug_log->error($ex);
+							
+							return [];
+							
+						}
+						
+					} catch (Exception $ex) {
+						Log::$debug_log->error($ex);
+						
+						return [];
+					}
+					
+				} else {
+					Log::$debug_log->error("Unit Id Not Generated");
+					
+					return [];
+				}
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+			
+		}
+		
+	}

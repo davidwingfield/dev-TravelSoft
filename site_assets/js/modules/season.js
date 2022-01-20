@@ -6,27 +6,36 @@ const Season = (function () {
     const _product_edit_season_form_season_name_filter = document.getElementById("product_edit_season_form_season_name_filter")
     const _category_id = document.getElementById("category_id")
     const _product_edit_season_form_season_color_scheme_id = document.getElementById("product_edit_season_form_season_color_scheme_id")
-    const _edit_season = document.getElementById("edit_season")
     const _product_edit_season_form_season_id = document.getElementById("product_edit_season_form_season_id")
     const _product_edit_season_form_season_name = document.getElementById("product_edit_season_form_season_name")
     const _product_edit_season_id_name_display = document.getElementById("product_edit_season_id_name_display")
     const _product_edit_season_form_season_enabled = document.getElementById("product_edit_season_form_season_enabled")
     const _edit_season_button = document.getElementById("edit_season_button")
     const _table_season_product_edit = document.getElementById("table_season_product_edit")
-    const _season_disabled_dow = document.getElementById("season_disabled_dow")
     const _button_clear_form_edit_season = document.getElementById("button_clear_form_edit_season")
-    const _button_assign_season_to_product = document.getElementById("button_assign_season_to_product")
     const _display_product_season_name = document.getElementById("display_product_season_name")
     const _button_submit_form_edit_season = document.getElementById("button_submit_form_edit_season")
     const _product_id = document.getElementById("product_id")
-    
-    // ----
-    
+    const _panel_tab_season = document.getElementById("panel_tab_season")
+    const _button_remove_season_from_product = document.getElementById("button_remove_season_from_product")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let categories = new Map()
     let $table_season_product_edit, disabledDays
     
-    // ----
+    $(_button_remove_season_from_product)
+      .on("click", function () {
+          
+          let dataToSend = {
+              product_id: parseInt(_product_id.value),
+              season_id: parseInt(_product_edit_season_form_season_id.value),
+          }
+          
+          confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
+              if (ans) {
+                  removeProductSeason(dataToSend)
+              }
+          })
+      })
     
     $(_product_edit_season_form_edit_season_link)
       .on("click", function () {
@@ -51,21 +60,32 @@ const Season = (function () {
           
           let dataToSend = buildUpdateRecord()
           
-          confirmDialog(`Would you like to update?`, (ans) => {
+          confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
               if (ans) {
                   saveProductSeason(dataToSend)
               }
-              
           })
       })
     
-    // ----
+    $(_panel_tab_season)
+      .on("hide.bs.tab", function () {
+          //clear_validation(_form_product_add)
+          _product_edit_season_form_season_name_filter.value = ""
+          resetForm()
+          clearProductSeasonForm()
+          $table_season_product_edit.clearSelectedRows()
+      })
     
-    /**
-     * saveProductSeason
-     *
-     * @param dataToSend
-     */
+    const updateProgress = function () {
+        let seasons = Array.from(Season.all.values())
+        if (seasons.length === 0) {
+            $(_panel_tab_season).html(`Season <span id="seasonNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
+        } else {
+            $(_panel_tab_season).html(`Season`)
+        }
+        Product.updateProgress()
+    }
+    
     const saveProductSeason = function (dataToSend) {
         if (dataToSend) {
             updateProductSeason(dataToSend, function (data) {
@@ -78,16 +98,62 @@ const Season = (function () {
                     }
                     
                     addProductSeasonTableRow(season)
+                    PricingWorksheet.buildPricingWorksheet()
                 }
             })
         }
     }
     
-    /**
-     * addProductSeasonTableRow
-     *
-     * @param season
-     */
+    const deleteProductSeason = function (dataToSend, callback) {
+        let url = "/api/v1.0/seasons/remove"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handleSeasonError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                //Console.log("error", e)
+            }
+        }
+    }
+    
+    const removeProductSeason = function (dataToSend) {
+        if (dataToSend) {
+            deleteProductSeason(dataToSend, function (data) {
+                if (data) {
+                    deleteProductSeasonTableRow(dataToSend.season_id)
+                    PricingWorksheet.buildPricingWorksheet()
+                }
+            })
+        }
+    }
+    
+    const deleteProductSeasonTableRow = function (season_id) {
+        if (season_id) {
+            let hasSeason = Season.all.get(season_id)
+            if (hasSeason) {
+                $table_season_product_edit.deleteRow(hasSeason)
+                Season.all.delete(season_id)
+                _product_edit_season_form_season_name_filter.value = ""
+                resetForm()
+                clearProductSeasonForm()
+                $table_season_product_edit.clearSelectedRows()
+                
+                Pricing.resetForm()
+                YearCalendar.resetForm()
+                PricingWorksheet.buildPricingWorksheet()
+                YearCalendar.loadSeasonDropdown()
+                toastr.success("Season Deleted")
+            }
+        }
+        
+    }
+    
     const addProductSeasonTableRow = function (season) {
         if (season) {
             let detail = set(season)
@@ -96,11 +162,17 @@ const Season = (function () {
                 Season.all.set(detail.id, detail)
                 $table_season_product_edit.updateRow(detail)
                 toastr.success("Season Updated")
+                
             } else {
                 Season.all.set(detail.id, detail)
                 $table_season_product_edit.insertRow(detail)
                 toastr.success("Season Added")
             }
+            
+            _product_edit_season_form_season_name_filter.value = ""
+            resetForm()
+            clearProductSeasonForm()
+            $table_season_product_edit.clearSelectedRows()
             
             Pricing.resetForm()
             YearCalendar.resetForm()
@@ -109,21 +181,10 @@ const Season = (function () {
         YearCalendar.loadSeasonDropdown()
     }
     
-    /**
-     * handleSeasonError
-     *
-     * @param msg
-     */
     const handleSeasonError = function (msg) {
         toastr.error(msg)
     }
     
-    /**
-     * updateProductSeason
-     *
-     * @param dataToSend
-     * @param callback
-     */
     const updateProductSeason = function (dataToSend, callback) {
         let url = "/api/v1.0/seasons/update"
         
@@ -137,16 +198,11 @@ const Season = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                //Console.log("error", e)
             }
         }
     }
     
-    /**
-     * buildUpdateRecord
-     *
-     * @returns {{}|*}
-     */
     const buildUpdateRecord = function () {
         return remove_nulls({
             product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
@@ -155,9 +211,6 @@ const Season = (function () {
         })
     }
     
-    /**
-     * initAutoComplete
-     */
     const initAutoComplete = function () {
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
@@ -214,11 +267,6 @@ const Season = (function () {
           })
     }
     
-    /**
-     * defaultDetail
-     *
-     * @returns {{note: null, product_season_detail: {note: null, seasons_background: null, date_created: *, season_id: null, seasons_text: null, created_by: (number|number), enabled: number, disabled_dow: null, date_modified: *, product_id: null, modified_by: (number|number), seasons_border: null, id: null}, view_product_index_search: number, view_product_index_filter: number, date_created: *, view_product_package_edit: number, created_by: (number|number), enabled: number, view_product_edit: number, view_product_package_index: number, color_scheme_id: null, date_modified: *, category_id: null, name: null, view_product_index: number, modified_by: (number|number), color_scheme: {note: null, background_color: null, date_modified: *, date_created: *, name: null, modified_by: (number|number), id: null, border_color: null, text_color: null, sort_order: number, created_by: (number|number), enabled: number}, id: null}}
-     */
     const defaultDetail = function () {
         return {
             id: null,
@@ -269,12 +317,6 @@ const Season = (function () {
         }
     }
     
-    /**
-     * format season type record
-     *
-     * @param season
-     * @returns {{note: null, product_season_detail: {note: null, seasons_background: null, date_created: *, season_id: null, seasons_text: null, created_by: number, enabled: number, disabled_dow: null, date_modified: *, product_id: null, modified_by: number, seasons_border: null, id: null}, view_product_index_search: number, view_product_index_filter: number, date_created: *, view_product_package_edit: number, created_by: number, enabled: number, view_product_edit: number, view_product_package_index: number, color_scheme_id: null, date_modified: *, category_id: null, name: null, view_product_index: number, modified_by: number, color_scheme: {note: null, background_color: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, border_color: null, text_color: null, sort_order: number, created_by: number, enabled: number}, id: null}}
-     */
     const formatSeasonType = function (season) {
         
         let detail = defaultDetail()
@@ -327,11 +369,6 @@ const Season = (function () {
         return detail
     }
     
-    /**
-     * load season types
-     *
-     * @param seasons
-     */
     const loadTypes = function (seasons) {
         categories = new Map()
         if (seasons) {
@@ -342,28 +379,7 @@ const Season = (function () {
         }
     }
     
-    /**
-     * set season record values
-     *
-     * @param season
-     * @returns {{note: null, product_season_detail: {note: null, seasons_background: null, date_created: *, season_id: null, seasons_text: null, created_by: number, enabled: number, disabled_dow: null, date_modified: *, product_id: null, modified_by: number, seasons_border: null, id: null}, view_product_index_search: number, view_product_index_filter: number, date_created: *, view_product_package_edit: number, created_by: number, enabled: number, view_product_edit: number, view_product_package_index: number, color_scheme_id: null, date_modified: *, category_id: null, name: null, view_product_index: number, modified_by: number, color_scheme: {note: null, background_color: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, border_color: null, text_color: null, sort_order: number, created_by: number, enabled: number}, id: null}}
-     */
-    const set = function (season) {
-        let detail = defaultDetail()
-        if (season) {
-            detail = season
-            
-        }
-        return detail
-    }
-    
-    /**
-     * load all product seasons
-     *
-     * @param seasons
-     */
     const loadAll = function (seasons) {
-        Console.log("Season.loadAll()", seasons)
         Season.all = new Map()
         if (_table_season_product_edit) {
             buildProductEditTable()
@@ -382,12 +398,17 @@ const Season = (function () {
             }
         })
         
-        Console.log("Season.loadAll() - Season.all", Season.all)
+        updateProgress()
     }
     
-    /**
-     * build product edit table
-     */
+    const set = function (season) {
+        let detail = defaultDetail()
+        if (season) {
+            detail = season
+        }
+        return detail
+    }
+    
     const buildProductEditTable = function () {
         $table_season_product_edit = $(_table_season_product_edit).table({
             table_type: "display_list",
@@ -425,7 +446,7 @@ const Season = (function () {
                     targets: 3,
                     data: "product_season_detail",
                     render: function (data, type, row, meta) {
-                        Console.log("product_season_detail", data)
+                        //Console.log("product_season_detail", data)
                         let disabled_days = (data.disabled_dow) ? getListOfIds(data.disabled_dow) : []
                         let d = []
                         for (let n = 0; n < disabled_days.length; n++) {
@@ -443,18 +464,13 @@ const Season = (function () {
         })
     }
     
-    /**
-     * resetForm
-     */
     const resetForm = function () {
-        //if (_edit_season) {
         _product_edit_season_form_season_id.value = ""
         _product_edit_season_form_season_name.value = ""
         _product_edit_season_id_name_display.value = ""
         _product_edit_season_form_season_enabled.checked = true
-        //_edit_season_button.disabled = true
+        updateProgress()
         ColorScheme.load()
-        //}
     }
     
     const loadEditSeasonForm = function () {
@@ -466,24 +482,15 @@ const Season = (function () {
     }
     
     const edit = function (season) {
-        Console.log("Season.edit(season)", season)
         clearProductSeasonForm()
         loadProductSeasonForm(season)
     }
     
-    /**
-     * clearProductSeasonForm
-     */
     const clearProductSeasonForm = function () {
         disabledDays.init([])
         unloadProductSeasonForm()
     }
     
-    /**
-     * loadProductSeasonForm
-     *
-     * @param season
-     */
     const loadProductSeasonForm = function (season) {
         let disabled_dow = []
         let name = "Details"
@@ -501,31 +508,21 @@ const Season = (function () {
             _product_edit_season_form_season_name.value = season.name
             _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
             _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
-            
             _product_edit_season_form_season_enabled.disabled = true
-            //_edit_season_button.disabled = false
+            _product_edit_season_form_season_name_filter.disabled = true
             
             $(_edit_product_season).show()
         }
-        
-        //$(_button_assign_season_to_product).addClass("disabled")
         
         _display_product_season_name.innerText = name
         disabledDays.init(disabled_dow)
     }
     
-    /**
-     * unloadProductSeasonForm
-     */
     const unloadProductSeasonForm = function () {
+        _product_edit_season_form_season_name_filter.disabled = false
         $(_edit_product_season).hide()
     }
     
-    /**
-     * init
-     *
-     * @param settings
-     */
     const init = function (settings) {
         let seasons = []
         if (settings) {
@@ -543,7 +540,6 @@ const Season = (function () {
         }
         
         if (document.getElementById("season_disabled_dow")) {
-            //_button_assign_season_to_product.disabled = true
             disabledDays = $("#season_disabled_dow").DisabledDOW({
                 name: "season_disabled_dow",
                 label: "Disabled DOW",
@@ -554,7 +550,6 @@ const Season = (function () {
         
         if (_product_season) {
             unLoadEditSeasonForm()
-            
         }
         
     }

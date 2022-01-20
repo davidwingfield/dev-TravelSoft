@@ -1,17 +1,17 @@
 <?php
-    if (!isset($page_data)) {
-        $page_data = [];
-    }
-    
-    $settings = json_encode($page_data["products"], 1);
-    $init = "Product.init($settings);";
-    if (!defined("COUNTRIES")) {
-        define("COUNTRIES", $page_data["types"]["countries"]);
-    }
-    $currency = [];
-    if (isset($page_data["types"]["currency"])) {
-        $currency = $page_data["types"]["currency"];
-    }
+	if (!isset($page_data)) {
+		$page_data = [];
+	}
+	
+	$settings = json_encode($page_data["products"], 1);
+	$init = "Product.init($settings);";
+	if (!defined("COUNTRIES")) {
+		define("COUNTRIES", $page_data["types"]["countries"]);
+	}
+	$currency = [];
+	if (isset($page_data["types"]["currency"])) {
+		$currency = $page_data["types"]["currency"];
+	}
 
 ?>
 
@@ -20,7 +20,7 @@
     
     <div class="row gx-1">
         <div class="col-12 p-1">
-            <?php include_once(VIEWS_PATH . "/products/forms/product_search.phtml"); ?>
+			<?php include_once(VIEWS_PATH . "/products/forms/product_search.phtml"); ?>
         </div>
     </div>
     
@@ -48,29 +48,29 @@
 
                         <tbody>
                         <?php
-                            foreach ($page_data["products"] AS $product) {
-                                $id = $product["id"];
-                                $name = $product["name"];
-                                $sku = $product["sku"];
-                                $provider = $product["provider"]["name"];
-                                $vendor = $product["vendor"]["name"];
-                                $location = $product["location"]["display_medium"];
-                                $category = $product["category"]["name"];
-                                /*
-                                echo "
-                                    <tr>
-                                        <td>$id</td>
-                                        <td>$name</td>
-                                        <td>$sku</td>
-                                        <td>$provider</td>
-                                        <td>$vendor</td>
-                                        <td>$location</td>
-                                        <td>$category</td>
-                                    </tr>
-                                ";
-                                //*/
-                            }
-                        ?>
+							foreach ($page_data["products"] AS $product) {
+								$id = $product["id"];
+								$name = $product["name"];
+								$sku = $product["sku"];
+								$provider = $product["provider"]["name"];
+								$vendor = $product["vendor"]["name"];
+								$location = $product["location"]["display_medium"];
+								$category = $product["category"]["name"];
+								/*
+								echo "
+									<tr>
+										<td>$id</td>
+										<td>$name</td>
+										<td>$sku</td>
+										<td>$provider</td>
+										<td>$vendor</td>
+										<td>$location</td>
+										<td>$category</td>
+									</tr>
+								";
+								//*/
+							}
+						?>
                         </tbody>
                         -->
                     </table>
@@ -78,6 +78,7 @@
             </div>
         </div>
     </div>
+
 </section>
 <!-- /Product Index Page -->
 
@@ -88,6 +89,6 @@
 <script type="text/javascript">
     $(function () {
         Types.init(<?php echo TYPES;?>)
-        <?php echo $init;?>
+		<?php echo $init;?>
     })
 </script>

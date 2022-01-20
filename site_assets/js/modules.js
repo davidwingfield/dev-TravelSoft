@@ -1,7 +1,7 @@
 exports.modules = [
     "./site_assets/js/modules/settings.js",
     "./site_assets/js/modules/functions.js",
-    "./site_assets/js/modules/console.js",
+    "./site_assets/js/modules/Console.js",
     "./site_assets/js/modules/form_fields.js",
     "./site_assets/js/modules/date_select.js",
     "./site_assets/js/modules/tiny_editor.js",
@@ -10,6 +10,8 @@ exports.modules = [
     "./site_assets/js/modules/panel.js",
     "./site_assets/js/modules/table.js",
     "./site_assets/js/modules/keywords.js",
+    "./site_assets/js/modules/inventory_profile.js",
+    "./site_assets/js/modules/pricing_worksheet.js",
     "./site_assets/js/modules/upload.js",
     "./site_assets/js/modules/year_calendar.js",
     "./site_assets/js/modules/full_calendar.js",

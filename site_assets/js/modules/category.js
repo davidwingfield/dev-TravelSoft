@@ -32,6 +32,7 @@ const Category = (function () {
     const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
     const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
+    
     const handle_product_change = function (category_id) {
         if (!category_id) {
             return
@@ -39,7 +40,7 @@ const Category = (function () {
         
         category_id = parseInt(category_id)
         
-        Product.reset_new_product_details()
+        Product.resetNewProductDetails()
         Product.initAutoComplete(category_id)
         let category = Types.category.get(category_id)
         if (!category) {
@@ -48,7 +49,7 @@ const Category = (function () {
         Product.attr1 = category.attribute_id
         Product.attr2 = null
         Product.attr3 = null
-        Product.update_product_sku()
+        Product.updateProductSKU()
         if (category_id && !isNaN(parseInt(category_id))) {
             
             switch (parseInt(category_id)) {
@@ -290,7 +291,7 @@ const Category = (function () {
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
-                    Console.log("Other")
+                    Console.log("Other", 9)
                     break
                 default:
                     /**
@@ -322,7 +323,7 @@ const Category = (function () {
                     _modal_product_rating_types_id.disabled = true
                     
                     _modal_product_pricing_strategies_types_id.disabled = true
-                    Console.log("Default")
+                    Console.log("Default", null)
                     break
             }
         }

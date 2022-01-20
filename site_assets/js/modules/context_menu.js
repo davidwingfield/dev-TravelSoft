@@ -51,7 +51,7 @@ const ContextMenu = (function () {
         })
         
         $(".selected-day").on("click", function (e) {
-            //console.log("clicked", this)
+            //Console.log("clicked", this)
         })
     }
     

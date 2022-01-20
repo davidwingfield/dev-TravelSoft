@@ -14,13 +14,6 @@
                     </div>
                     
                     <input type="search" id="product_edit_unit_form_unit_name_filter" name="product_edit_unit_form_unit_name_filter" class="form-control" placeholder="Search Units"/>
-                    
-                    <div class="input-group-append">
-                        <button type="button" class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect" id="button_add_product_unit">
-                            <i class="fas fa-plus" aria-hidden="true"></i>
-                        </button>
-                    
-                    </div>
                 
                 </div>
                 
@@ -29,8 +22,8 @@
             </div>
         </div>
     </div>
-    
-    <?php include_once(VIEWS_PATH . "/units/tables/product_edit_unit_table.phtml"); ?>
+	
+	<?php include_once(VIEWS_PATH . "/units/tables/product_edit_unit_table.phtml"); ?>
     
     <div class="card card-body mb-2" id="edit_product_unit">
         <h5 class="card-title">
@@ -44,7 +37,8 @@
             
             <div class="row">
                 
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4">
+                <!-- Id -->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 mb-2">
                     <div class="form-element">
                         <label for="product_edit_unit_form_unit_id">Id:</label>
                         <input type="text" id="product_edit_unit_form_unit_id" name="product_edit_unit_form_unit_id" class="form-control" readonly="readonly"/>
@@ -52,7 +46,8 @@
                     </div>
                 </div>
                 
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4">
+                <!-- Name -->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 mb-2">
                     <div class="form-element">
                         <label for="product_edit_unit_form_unit_name">Name:</label>
                         <input type="text" id="product_edit_unit_form_unit_name" name="product_edit_unit_form_unit_name" class="form-control"/>
@@ -60,7 +55,8 @@
                     </div>
                 </div>
                 
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 d-flex align-self-end justify-content-end pb-2">
+                <!-- Enabled -->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 d-flex align-self-end justify-content-end pb-2 mb-2">
                     <div class="form-element">
                         <div class="custom-control custom-switch">
                             <input id="product_edit_unit_form_unit_enabled" name="product_edit_unit_form_unit_enabled" type="checkbox" value="1" class="custom-control-input" readonly="readonly">
@@ -74,19 +70,22 @@
             
             <div class="row">
                 
-                <div class="col-6">
+                <!-- Room Code -->
+                <div class="col-12 col-md-6 mb-2">
                     <div class="form-element">
                         <label for="product_edit_unit_form_unit_room_code">Room Code:</label>
                         <input type="text" id="product_edit_unit_form_unit_room_code" name="product_edit_unit_form_unit_room_code" class="form-control"/>
                         <div id="product_edit_unit_form_unit_room_code-error" class="error w-100 text-center"></div>
                     </div>
                 </div>
+                <!-- /Room Code -->
+            
             </div>
             
             <div class="row">
                 
                 <!-- Minimum Nights -->
-                <div class="col-6">
+                <div class="col-12 col-md-6 mb-2">
                     <div class="form-element">
                         <label for="product_edit_unit_form_unit_min_nights">Minimum Nights:</label>
                         <input type="number" id="product_edit_unit_form_unit_min_nights" name="product_edit_unit_form_unit_min_nights" class="form-control"/>
@@ -96,7 +95,7 @@
                 <!-- /Minimum Nights -->
                 
                 <!-- Maximum Nights -->
-                <div class="col-6">
+                <div class="col-12 col-md-6 mb-2">
                     <div class="form-element">
                         <label for="product_edit_unit_form_unit_max_nights">Maximum Nights:</label>
                         <input type="number" id="product_edit_unit_form_unit_max_nights" name="product_edit_unit_form_unit_max_nights" class="form-control"/>
@@ -109,55 +108,67 @@
             
             <div class="row">
                 
-                <div class="col-6">
+                <!-- Minimum Pax -->
+                <div class="col-12 col-md-6 mb-2">
                     <div class="form-element">
                         <label for="product_edit_unit_form_unit_min_pax">Minimum Pax:</label>
                         <input type="number" id="product_edit_unit_form_unit_min_pax" name="product_edit_unit_form_unit_min_pax" min="1" class="form-control"/>
                         <div id="product_edit_unit_form_unit_min_pax-error" class="error w-100 text-center"></div>
                     </div>
                 </div>
+                <!-- /Minimum Pax -->
                 
-                <div class="col-6">
+                <!-- Maximum Pax -->
+                <div class="col-12 col-md-6 mb-2">
                     <div class="form-element">
                         <label for="product_edit_unit_form_unit_max_pax">Maximum Pax:</label>
                         <input type="number" id="product_edit_unit_form_unit_max_pax" name="product_edit_unit_form_unit_max_pax" min="1" class="form-control"/>
                         <div id="product_edit_unit_form_unit_max_pax-error" class="error w-100 text-center"></div>
                     </div>
                 </div>
+                <!-- /Maximum Pax -->
+            
             </div>
             
             <div class="row">
                 
                 <!-- Unit Short Description -->
-                <div class="col-12 col-md-6">
-                    <div class="form-element">
-                        <label for="product_edit_unit_form_unit_description_short">Short Description</label>
-                        <textarea id="product_edit_unit_form_unit_description_short" name="product_edit_unit_form_unit_description_short" class="md-textarea form-control" rows="4"></textarea>
-                        <div id="product_edit_unit_form_unit_description_short-error" class="error w-100 text-center">&nbsp;</div>
+                <div class="col-12 col-md-6 mb-2">
+                    <div class="card card-body mb-2">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Brief Description:</h5>
+                        </div>
+                        <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-element">
+                                    <label for="product_edit_unit_form_unit_description_short" class="d-none">Short Description</label>
+                                    <textarea id="product_edit_unit_form_unit_description_short" name="product_edit_unit_form_unit_description_short" class="md-textarea short-description form-control" rows="4" maxlength="250"></textarea>
+                                    <div id="product_edit_unit_form_unit_description_short-error" class="error w-100 text-center">&nbsp;</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- /Unit Short Description -->
                 
                 <!-- Unit Long Description -->
-                <div class="col-12 col-md-6">
-                    <div class="card mb-2">
-                        <div class="card-body">
-                            <!-- Social shares button -->
-                            <a id="button_unit_description_long_toggle" class="activator but_toggle waves-effect waves-light mr-4" data-texted="provider_description_long">
+                <div class="col-12 col-md-6 mb-2">
+                    <div class="card card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Detailed Description:</h5>
+                            <a id="button_unit_description_long_toggle" class="but_toggle waves-effect waves-light" data-texted="product_edit_unit_form_unit_description_long">
                                 <i class="fas fa-sliders-h"></i>
                             </a>
-                            <!-- Title -->
-                            <h4 class="card-title">Detailed Description</h4>
-                            <hr>
-                            <!-- Text -->
-                            
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-element">
-                                        <label for="product_edit_unit_form_unit_description_long" style="display:none">Cover Image:</label>
-                                        <textarea id="product_edit_unit_form_unit_description_long" name="product_edit_unit_form_unit_description_long" class="md-textarea tmceEl form-control" rows="4"></textarea>
-                                        <div id="product_edit_unit_form_unit_description_long-error" class="error w-100 text-center">&nbsp;</div>
-                                    </div>
+                        </div>
+                        <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-element">
+                                    <label for="product_edit_unit_form_unit_description_long" class="d-none">Long Description:</label>
+                                    <textarea id="product_edit_unit_form_unit_description_long" name="product_edit_unit_form_unit_description_long" class="md-textarea tmceEl form-control" rows="4"></textarea>
+                                    <div id="product_edit_unit_form_unit_description_long-error" class="error w-100 text-center">&nbsp;</div>
                                 </div>
                             </div>
                         </div>
@@ -167,9 +178,14 @@
             
             </div>
             
-            <div class="w-100 text-right">
-                <a href="javascript:void(0);" id="product_edit_unit_form_clear_button" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
-                <a href="javascript:void(0);" id="product_edit_unit_form_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">Save</a>
+            <div class="row">
+                <div class="col-6 text-left w-100 mb-2">
+                    <a href="javascript:void(0);" id="button_remove_unit_from_product" class="btn btn-danger btn-sm waves-effect waves-light">Remove</a>
+                </div>
+                <div class="col-6 text-right w-100 mb-2">
+                    <a href="javascript:void(0);" id="product_edit_unit_form_clear_button" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+                    <a href="javascript:void(0);" id="product_edit_unit_form_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">Save</a>
+                </div>
             </div>
         
         </form>

@@ -44,22 +44,6 @@ const Product = (function () {
     const _product_keywords = document.getElementById("product_keywords")
     const _product_description_long = document.getElementById("product_description_long")
     const _product_description_short = document.getElementById("_product_description_short")
-    
-    const _product_amenities = document.getElementById("product_amenities")
-    
-    let $product_keywords, $product_amenities
-    /**
-     * product search: panels - hotels
-     * @type {HTMLElement}
-     * @private
-     */
-    
-    /**
-     * product search: panels - hotels product_name
-     *
-     * @type {HTMLElement}
-     * @private
-     */
     const base_url = "/products"
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
     const _modal_product_city = document.getElementById("modal_product_city")
@@ -67,17 +51,14 @@ const Product = (function () {
     const _product_index_table = document.getElementById("product_index_table")
     const _use_provider_location = document.getElementById("use_provider_location")
     const _use_product_location = document.getElementById("use_product_location")
+    const _product_amenities = document.getElementById("product_amenities")
+    
+    let $product_keywords, $product_amenities
     let provider_initial_location, product_initial_location = {}
     let radios = document.querySelectorAll('input[type=radio][name="location_to_use"]')
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    let $index_table, new_product_validator
+    let $index_table, newProduct_validator
     let add_modal_form_rules = {
-        /*
-        groups: {
-            providerNameGroup: "modal_product_provider_id modal_product_provider_name modal_product_provider_company_id",
-            vendorNameGroup: "modal_product_vendor_id modal_product_vendor_name modal_product_vendor_company_id",
-        },
-        //*/
         rules: {
             modal_product_sku: {
                 required: true,
@@ -210,6 +191,27 @@ const Product = (function () {
           }
       })
     
+    $("#page")
+      .on("change", function () {
+          updateProgress()
+      })
+    
+    const updateProgress = function () {
+        let variants = Array.from(Variant.all.values())
+        let units = Array.from(Unit.all.values())
+        let seasons = Array.from(Season.all.values())
+        //Console.log("updateProgress", variants.length)
+        //Console.log("updateProgress", units.length)
+        //Console.log("updateProgress", seasons.length)
+        if (variants.length === 0 || units.length === 0 || seasons.length === 0) {
+            $(_panel_tab_pricing).addClass(`disabled`)
+            $(_panel_tab_inventory).addClass(`disabled`)
+        } else {
+            $(_panel_tab_pricing).removeClass(`disabled`)
+            $(_panel_tab_inventory).removeClass(`disabled`)
+        }
+    }
+    
     const buildInsertData = function () {
         let dataToSend = {
             city_id: (!isNaN(parseInt(_modal_product_city_id.value))) ? parseInt(_modal_product_city_id.value) : null,
@@ -234,7 +236,7 @@ const Product = (function () {
         
         //Console.log("saveNewProduct() - dataToSend", dataToSend)
         
-        new_product(dataToSend, function (data) {
+        newProduct(dataToSend, function (data) {
             let product
             
             if (data) {
@@ -245,30 +247,19 @@ const Product = (function () {
                 }
             }
             
-            //Console.log("Product.saveNewProduct() - product", product)
+            Console.log("Product.saveNewProduct() - product", product)
             
             if (product.id) {
                 toastr.success(`Product - ${product.id} was created, would you like to edit?`)
-                confirmDialog(`Would you like to update?`, (ans) => {
-                    if (ans) {
-                        window.location.replace("/products/" + product.id)
-                    } else {
-                        $(_modal_new_product).hide()
-                    }
-                })
+                
+                window.location.replace("/products/" + product.id)
                 
             }
         })
         
     }
     
-    /**
-     * add new product
-     *
-     * @param dataToSend
-     * @param callback
-     */
-    const new_product = function (dataToSend, callback) {
+    const newProduct = function (dataToSend, callback) {
         let url = "/api/v1.0/products/add"
         
         if (dataToSend) {
@@ -281,7 +272,7 @@ const Product = (function () {
                     }
                 })
             } catch (e) {
-                //Console.log(e)
+                //Console.log("error", e)
             }
         }
     }
@@ -365,12 +356,12 @@ const Product = (function () {
         Product.attr1 = null
         Product.attr2 = null
         Product.attr3 = null
-        Product.update_product_sku()
-        Product.reset_new_product_details()
+        Product.updateProductSKU()
+        Product.resetNewProductDetails()
         clear_validation(_form_product_add)
     }
     
-    const reset_new_product_details = function () {
+    const resetNewProductDetails = function () {
         _modal_product_provider_id.value = ""
         _modal_product_vendor_id.value = ""
         _modal_product_provider_name.value = ""
@@ -391,7 +382,9 @@ const Product = (function () {
     }
     
     const setNewProductModal = function () {
+        
         clearModalForm()
+        Console.log("setNewProductModal")
         $(_modal_new_product).modal("show")
     }
     
@@ -517,7 +510,7 @@ const Product = (function () {
         return detail
     }
     
-    const load_all = function (products) {
+    const loadAll = function (products) {
         Product.all = new Map()
         
         if (!products) {
@@ -531,7 +524,7 @@ const Product = (function () {
         })
     }
     
-    const build_index_table = function () {
+    const buildIndexTable = function () {
         
         $index_table = $(_product_index_table).table({
             table_type: "display_list",
@@ -616,7 +609,7 @@ const Product = (function () {
         }
     }
     
-    const set_default_product_details = function () {
+    const setDefaultProductDetails = function () {
         return {
             location: {},
             provider: {},
@@ -629,7 +622,7 @@ const Product = (function () {
         }
     }
     
-    const load_product_location = function (location, type) {
+    const loadProductLocation = function (location, type) {
         //Console.log("location", location)
         if (!type) {
             type = "product"
@@ -643,7 +636,7 @@ const Product = (function () {
     
     const initEditForm = function (settings) {
         //Console.log("Product.initEditForm(settings)", settings)
-        let product = set_default_product_details()
+        let product = setDefaultProductDetails()
         
         if (settings) {
             product = settings
@@ -654,11 +647,11 @@ const Product = (function () {
             radio.addEventListener("change", changeHandler)
         })
         
-        set_edit_form_values(product)
+        setEditFormValues(product)
     }
     
-    const set_edit_form_values = function (product) {
-        //Console.log("Product.set_edit_form_values(product)", product)
+    const setEditFormValues = function (product) {
+        //Console.log("Product.setEditFormValues(product)", product)
         
         let provider, vendor, product_location,
           seasons, units, variants, profiles, provider_location
@@ -699,11 +692,11 @@ const Product = (function () {
         
         if (product.use_provider_location) {
             $(_use_provider_location).attr("checked", "true")
-            load_product_location(provider_location, "provider")
+            loadProductLocation(provider_location, "provider")
             Location.init(provider_location)
         } else {
             $(_use_product_location).attr("checked", "true")
-            load_product_location(product_location, "provider")
+            loadProductLocation(product_location, "provider")
             Location.init(product_location)
         }
         
@@ -751,7 +744,11 @@ const Product = (function () {
                     units = product_details.units
                 }
                 
-                pricings = {
+                if (product_details.pricings) {
+                    pricings = product_details.pricings
+                }
+                
+                let pricing_strategy = {
                     pricing_strategy_types_id: (!isNaN(parseInt(product_details.pricing_strategy_types_id))) ? parseInt(product_details.pricing_strategy_types_id) : null,
                 }
                 
@@ -764,13 +761,16 @@ const Product = (function () {
                         Season.init(seasons)
                         Season.loadAll(seasons)
                         Unit.init({ units: units })
-                        //Profile.init({ profiles: profiles })
+                        Matrix.init({ matrices: matrices })
+                        Pricing.init({ pricings: pricings })
+                        PricingStrategy.init({
+                            pricing_strategy: pricing_strategy,
+                            pricings: pricings,
+                        })
                         
                         InventoryProfile.init({
                             profiles: profiles,
                         })
-                        Matrix.init({ matrices: matrices })
-                        Pricing.init(pricings)
                         
                         $(_product_panel_link_overview)
                           .on("click", function () {
@@ -808,6 +808,8 @@ const Product = (function () {
                           .on("click", function () {
                               $(_panel_tab_meta).tab("show")
                           })
+                        
+                        updateProgress()
                     }
                 })
                 
@@ -821,7 +823,7 @@ const Product = (function () {
             Product.index(settings)
             if (_form_product_add) {
                 validator_init(add_modal_form_rules)
-                new_product_validator = $(_form_product_add).validate()
+                newProduct_validator = $(_form_product_add).validate()
             }
             return true
         }
@@ -830,10 +832,10 @@ const Product = (function () {
     const index = function (settings) {
         
         if (_product_index_table) {
-            build_index_table()
+            buildIndexTable()
             
             if (settings) {
-                load_all(settings)
+                loadAll(settings)
             }
         }
     }
@@ -843,7 +845,7 @@ const Product = (function () {
         
     }
     
-    const update_product_sku = function () {
+    const updateProductSKU = function () {
         let att1 = Product.attr1
         let att2 = Product.attr2
         let att3 = Product.attr3
@@ -870,6 +872,9 @@ const Product = (function () {
     
     return {
         validator: null,
+        updateProgress: function () {
+            updateProgress()
+        },
         product_initial_location: null,
         provider_initial_location: null,
         detail: {},
@@ -877,8 +882,8 @@ const Product = (function () {
         attr1: null,
         attr2: null,
         attr3: null,
-        update_product_sku: function () {
-            update_product_sku()
+        updateProductSKU: function () {
+            updateProductSKU()
         },
         setNewFormDetails: function (category_id) {
             //Console.log("Product.setNewFormDetails()", category_id)
@@ -887,8 +892,8 @@ const Product = (function () {
         get: function (params) {
             get(params)
         },
-        load_all: function (params) {
-            load_all(params)
+        loadAll: function (params) {
+            loadAll(params)
         },
         save: function (params) {
             save(params)
@@ -902,8 +907,8 @@ const Product = (function () {
         navigate: function (product) {
             navigate(product)
         },
-        reset_new_product_details: function () {
-            reset_new_product_details()
+        resetNewProductDetails: function () {
+            resetNewProductDetails()
         },
         initAutoComplete: function () {
             initAutoComplete()

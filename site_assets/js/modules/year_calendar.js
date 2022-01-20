@@ -240,7 +240,7 @@ $.fn.YearCalendar = function (settings) {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 return callback([])
             }
         } else {
@@ -414,7 +414,7 @@ $.fn.YearCalendar = function (settings) {
                     let bgColor = "rgba(" + bgRGBA.join(', ') + ")"
                     
                     // --
-                    //console.log("render event", event)
+                    //Console.log("render event", event)
                     // --
                     if (event.rendering === "background") {
                         if ($(element).hasClass("fc-disabled-day")) {
@@ -443,7 +443,7 @@ $.fn.YearCalendar = function (settings) {
                             "color": textColor,
                         })
                         
-                        //console.log("background", event)
+                        //Console.log("background", event)
                     }
                 },
                 eventClick: function (calEvent, jsEvent, view) {
@@ -503,7 +503,7 @@ $.fn.YearCalendar = function (settings) {
         
         const edit = function () {
             _calendar_filter_ranges.innerHTML = buildEditData()
-            //console.log("edit", YearCalendar.selectedDates)
+            //Console.log("edit", YearCalendar.selectedDates)
         }
         
         $(function () {
@@ -629,10 +629,12 @@ const YearCalendar = (function () {
     const loadSeasonDropdown = function () {
         let seasons = (Season && Season.all) ? Array.from(Season.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Seasons --</option>"
+        let options2 = ""
         $.each(seasons, function (k, season) {
             let name = season.name
             let id = season.id
             options += `<option value="${id}">${name}</option>`
+            options2 += `<option value="${id}">${name}</option>`
         })
         $(_calendar_filter_season_id).empty()
         $(_calendar_filter_season_id).html(options)

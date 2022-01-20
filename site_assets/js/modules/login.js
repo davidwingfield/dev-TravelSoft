@@ -77,7 +77,7 @@ const Login = (function () {
                         }
                     })
                 } catch (e) {
-                    console.error("Error", e)
+                    Console.error("Error", e)
                     return handle_login_error("Error: 2")
                 }
             } else {
@@ -176,7 +176,7 @@ const Login = (function () {
                         }
                     })
                 } catch (e) {
-                    console.error("Error", e)
+                    Console.error("Error", e)
                     return handle_login_error("Error: 2")
                 }
             } else {

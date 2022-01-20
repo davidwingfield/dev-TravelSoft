@@ -1,227 +1,232 @@
 <?php
-    
-    use Framework\Logger\Log;
-    
-    if (!isset($page_data)) {
-        $page_data = [];
-    }
-    $days = array(
-        "sun",
-        "mon",
-        "tue",
-        "wed",
-        "thu",
-        "fri",
-        "sat",
-    );
-    
-    $settings = json_encode($page_data, 1);
-    $init = "Product.init($settings)";
-    $units = [];
-    $matrices = [];
-    $variants = [];
-    $provider = [];
-    $vendor = [];
-    $status_type_detail = [];
-    $rating_line = "";
-    $currencies = [];
-    $pricing_strategies = [];
-    $product = [];
-    $location = [];
-    $provider_location = [];
-    $location_type = [];
-    $categories = [];
-    $profiles = [];
-    $seasons = [];
-    //
-    
-    //
-    if (isset($page_data)) {
-        if (isset($page_data["types"])) {
-            if (isset($page_data["types"]["pricing_strategies"])) {
-                $pricing_strategies = $page_data["types"]["pricing_strategies"];
-            }
-            
-            if (isset($page_data["types"]["currency"])) {
-                $currencies = $page_data["types"]["currency"];
-            }
-            
-        }
-        
-        if (isset($page_data["product_details"])) {
-            $product = $page_data["product_details"];
-            
-            /**
-             * PRODUCT VARIABLES
-             */
-            $product_id = ($product["id"]) ? $product["id"] : null;
-            $product_use_provider_location = $product["use_provider_location"];
-            $product_category_id = $product["category_id"];
-            $product_pricing_strategy_types_id = $product["pricing_strategy_types_id"];
-            $product_status_types_id = $product["status_types_id"];
-            $product_currency_id = $product["currency_id"];
-            $product_location_id = $product["location_id"];
-            $product_provider_id = $product["provider_id"];
-            $product_vendor_id = $product["vendor_id"];
-            $product_rating_types_id = ($product["rating_types_id"]) ? (int)$product["rating_types_id"] : 0;
-            $product_name = $product["name"];
-            $product_description_short = $product["description_short"];
-            $product_description_long = $product["description_long"];
-            $product_sku = $product["sku"];
-            $product_depart_from = $product["depart_from"];
-            $product_arrive_to = $product["arrive_to"];
-            $product_depart_time = $product["depart_time"];
-            $product_arrive_time = $product["arrive_time"];
-            
-            $use_provider_location = $product["use_provider_location"];
-            
-            if (isset($product["profiles"])) {
-                $profiles = $product["profiles"];
-            }
-            
-            if (isset($product["provider"])) {
-                $provider = $product["provider"];
-            }
-            
-            if (isset($product["vendor"])) {
-                $vendor = $product["vendor"];
-            }
-            
-            if (isset($product["matrices"])) {
-                $matrices = $product["matrices"];
-            }
-            
-            if (isset($product["variants"])) {
-                $variants = $product["variants"];
-            }
-            
-            if (isset($product["status_type_detail"])) {
-                $status_type_detail = $product["status_type_detail"];
-            }
-            
-            if (isset($product["seasons"])) {
-                $seasons = $product["seasons"];
-            }
-            
-            if (isset($product["category"])) {
-                $categories = $product["category"];
-            }
-            
-            if ($product_use_provider_location === true) {
-                if (isset($provider["location"])) {
-                    $location = $provider["location"];
-                    if (isset($location["type"])) {
-                        $location_type = $location["type"];
-                    }
-                }
-            } else {
-                if (isset($product["location"])) {
-                    $location = $product["location"];
-                    if (isset($location["type"])) {
-                        $location_type = $location["type"];
-                    }
-                }
-            }
-            
-            if (isset($product["units"])) {
-                $units = $product["units"];
-            }
-            
-        }
-    }
-    
-    /**
-     * STATUS DETAIL
-     */
-    $status_name = (isset($status_type_detail["name"])) ? $status_type_detail["name"] : "fyf";
-    $status_id = $status_type_detail["id"];
-    
-    /**
-     * CATEGORY VARIABLES
-     */
-    $category_name = $product["category"]["name"];
-    $category_icon = $product["category"]["icon"];
-    
-    $location_display = array(
-        "display_short" => (isset($location["display_short"])) ? $location["display_short"] : "",
-        "display_medium" => (isset($location["display_medium"])) ? $location["display_medium"] : "",
-        "display_long" => (isset($location["display_long"])) ? $location["display_long"] : "",
-    );
-    
-    //
-    for ($n = 0; $n < $product_rating_types_id; $n++) {
-        $rating_line .= "
+	
+	use Framework\Logger\Log;
+	
+	if (!isset($page_data)) {
+		$page_data = [];
+	}
+	$days = array(
+		"sun",
+		"mon",
+		"tue",
+		"wed",
+		"thu",
+		"fri",
+		"sat",
+	);
+	
+	$settings = json_encode($page_data, 1);
+	$init = "Product.init($settings)";
+	$units = [];
+	$pricings = [];
+	$matrices = [];
+	$variants = [];
+	$provider = [];
+	$vendor = [];
+	$status_type_detail = [];
+	$rating_line = "";
+	$currencies = [];
+	$pricing_strategies = [];
+	$product = [];
+	$location = [];
+	$provider_location = [];
+	$location_type = [];
+	$categories = [];
+	$profiles = [];
+	$seasons = [];
+	//
+	
+	//
+	if (isset($page_data)) {
+		if (isset($page_data["types"])) {
+			if (isset($page_data["types"]["pricing_strategies"])) {
+				$pricing_strategies = $page_data["types"]["pricing_strategies"];
+			}
+			
+			if (isset($page_data["types"]["currency"])) {
+				$currencies = $page_data["types"]["currency"];
+			}
+			
+		}
+		
+		if (isset($page_data["product_details"])) {
+			$product = $page_data["product_details"];
+			
+			/**
+			 * PRODUCT VARIABLES
+			 */
+			$product_id = ($product["id"]) ? $product["id"] : null;
+			$product_use_provider_location = $product["use_provider_location"];
+			$product_category_id = $product["category_id"];
+			$product_pricing_strategy_types_id = $product["pricing_strategy_types_id"];
+			$product_status_types_id = $product["status_types_id"];
+			$product_currency_id = $product["currency_id"];
+			$product_location_id = $product["location_id"];
+			$product_provider_id = $product["provider_id"];
+			$product_vendor_id = $product["vendor_id"];
+			$product_rating_types_id = ($product["rating_types_id"]) ? (int)$product["rating_types_id"] : 0;
+			$product_name = $product["name"];
+			$product_description_short = $product["description_short"];
+			$product_description_long = $product["description_long"];
+			$product_sku = $product["sku"];
+			$product_depart_from = $product["depart_from"];
+			$product_arrive_to = $product["arrive_to"];
+			$product_depart_time = $product["depart_time"];
+			$product_arrive_time = $product["arrive_time"];
+			
+			$use_provider_location = $product["use_provider_location"];
+			
+			if (isset($product["profiles"])) {
+				$profiles = $product["profiles"];
+			}
+			
+			if (isset($product["provider"])) {
+				$provider = $product["provider"];
+			}
+			
+			if (isset($product["vendor"])) {
+				$vendor = $product["vendor"];
+			}
+			
+			if (isset($product["matrices"])) {
+				$matrices = $product["matrices"];
+			}
+			
+			if (isset($product["variants"])) {
+				$variants = $product["variants"];
+			}
+			
+			if (isset($product["status_type_detail"])) {
+				$status_type_detail = $product["status_type_detail"];
+			}
+			
+			if (isset($product["seasons"])) {
+				$seasons = $product["seasons"];
+			}
+			
+			if (isset($product["pricings"])) {
+				$pricings = $product["pricings"];
+			}
+			
+			if (isset($product["category"])) {
+				$categories = $product["category"];
+			}
+			
+			if ($product_use_provider_location === true) {
+				if (isset($provider["location"])) {
+					$location = $provider["location"];
+					if (isset($location["type"])) {
+						$location_type = $location["type"];
+					}
+				}
+			} else {
+				if (isset($product["location"])) {
+					$location = $product["location"];
+					if (isset($location["type"])) {
+						$location_type = $location["type"];
+					}
+				}
+			}
+			
+			if (isset($product["units"])) {
+				$units = $product["units"];
+			}
+			
+		}
+	}
+	
+	/**
+	 * STATUS DETAIL
+	 */
+	$status_name = (isset($status_type_detail["name"])) ? $status_type_detail["name"] : "fyf";
+	$status_id = $status_type_detail["id"];
+	
+	/**
+	 * CATEGORY VARIABLES
+	 */
+	$category_name = $product["category"]["name"];
+	$category_icon = $product["category"]["icon"];
+	
+	$location_display = array(
+		"display_short" => (isset($location["display_short"])) ? $location["display_short"] : "",
+		"display_medium" => (isset($location["display_medium"])) ? $location["display_medium"] : "",
+		"display_long" => (isset($location["display_long"])) ? $location["display_long"] : "",
+	);
+	
+	//
+	for ($n = 0; $n < $product_rating_types_id; $n++) {
+		$rating_line .= "
         <li class='list-inline-item mr-0'>
             <i class='fas fa-star'></i>
         </li>
         ";
-    }
-    
-    /**
-     * LOCATION VARIABLES
-     */
-    $location_city = (isset($location["city"])) ? $location["city"] : [];
-    $location_country = (isset($location["country"])) ? $location["country"] : [];
-    $location_province = (isset($location["province"])) ? $location["province"] : [];
-    $l = $location_display["display_medium"];
-    $location_type_icon = ($location_type["icon"]) ? "<i class='" . $location_type["icon"] . "'></i>" : "";
-    $location_type_name = (isset($location_type["name"])) ? $location_type["name"] : "";
-    $street = array();
-    $location_street_1 = ((isset($location["street_1"])) && ($location["street_1"] !== "")) ? $street[] = "<span class='mb-1'>" . $location["street_1"] . "</span>" : "";
-    $location_street_2 = ((isset($location["street_2"])) && ($location["street_2"] !== "")) ? $street[] = "<span class='mb-1'>" . $location["street_2"] . "</span>" : "";
-    $location_zipcode = ((isset($location["zipcode"])) && ($location["zipcode"] !== "")) ? "<span class='mb-1'>" . $location["zipcode"] . "</span>" : "";
-    $country_name = ($location_country["name"]) ? $location_country["name"] : "";
-    $country_name_short = ($location_country["iso2"]) ? $location_country["iso2"] : "";
-    $province_name = ($location_province["name"]) ? $location_province["name"] : "";
-    $province_name_short = ($location_province["iso2"]) ? $location_province["iso2"] : "";
-    $city_name = ($location_city["name"]) ? $location_city["name"] : "";
-    $location_name = ($location["name"]) ? $location["name"] : "";
-    $address_line = "<address>" . implode(", ", $street) . " $city_name, $province_name_short $location_zipcode, $country_name_short</address>";
-    $location_card = "$location_type_icon $l";
-    $use_provider_location = (isset($product["use_provider_location"])) ? ($product["use_provider_location"] === true) ? true : false : false;
-    $provider_city_name = (isset($provider_location["city"]["name"])) ? $provider_location["city"]["name"] : null;
-    $provider_province_name = (isset($provider_location["province"]["name"])) ? $provider_location["province"]["name"] : null;
-    $provider_country_name = (isset($provider_location["country"]["name"])) ? $provider_location["country"]["name"] : null;
-    $product_city_name = (isset($location["city"]["name"])) ? $location["city"]["name"] : null;
-    $product_province_name = (isset($location["province"]["name"])) ? $location["province"]["name"] : null;
-    $product_country_name = (isset($location["country"]["name"])) ? $location["country"]["name"] : null;
-    
-    $city_name = ($use_provider_location === true) ? $provider_city_name : $product_city_name;
-    $province_name = ($use_provider_location === true) ? $provider_province_name : $product_province_name;
-    
-    /**
-     * Inventory Variables
-     */
-    $inventory_section = "";
-    foreach ($profiles AS $profile) {
-        $allot_by_details = (isset($profile["allot_by_details"])) ? $profile["allot_by_details"] : [];
-        $sales_types_details = (isset($profile["sales_types_details"])) ? $profile["sales_types_details"] : [];
-        $transfer_sales_types_details = (isset($profile["transfer_sales_types_details"])) ? $profile["transfer_sales_types_details"] : [];
-        
-        $expires = (isset($profile["expires"])) ? $profile["expires"] : null;
-        $expire_date = (!is_null($expires)) ? "<tr><td class='bolder p-1'>Expire Date:</td><td class='p-1'>" . date("Y-m-d", strtotime($expires)) . "</td></tr>" : "";
-        $days_out = (isset($profile["days_out"])) ? $profile["days_out"] : null;
-        $days_out_row = (!is_null($days_out)) ? "<tr><td class='bolder p-1'>Days Out:</td><td class='p-1'>$days_out</td></tr>" : "";
-        $allot_by_name = (isset($allot_by_details["name"])) ? $allot_by_details["name"] : null;
-        $profile_name = (isset($profile["name"])) ? $profile["name"] : null;
-        $sales_type_name = (isset($sales_types_details["name"])) ? $sales_types_details["name"] : null;
-        $quantity = (isset($profile["quantity"])) ? $profile["quantity"] : null;
-        $quantity_row = (!is_null($quantity)) ? "<tr><td class='bolder p-1'>Quantity:</td><td class='p-1'>$quantity</td></tr>" : "";
-        
-        $class_name = (isset($sales_types_details["class"])) ? $sales_types_details["class"] : null;
-        if (is_null($quantity)) {
-            if ((int)$profile["sales_types_id"] === 2) {
-                $quantity_row = "<tr><td class='bolder p-1'>Quantity:</td><td class='p-1'>Unlimited</td></tr>";
-            } else if ((int)$profile["sales_types_id"] === 3) {
-                $quantity_row = "<tr><td class='bolder p-1'>Quantity:</td><td class='p-1'>On Request</td></tr>";
-            } else if ((int)$profile["sales_types_id"] === 4) {
-                $quantity_row = "<tr><td class='bolder p-1'>Quantity:</td><td class='p-1'>Not Available</td></tr>";
-            } else {
-                $quantity_row = "<tr><td class='bolder p-1'>Quantity:</td><td class='p-1'>Blackout</td></tr>";
-            }
-        }
-        
-        $inventory_profile = "
+	}
+	
+	/**
+	 * LOCATION VARIABLES
+	 */
+	$location_city = (isset($location["city"])) ? $location["city"] : [];
+	$location_country = (isset($location["country"])) ? $location["country"] : [];
+	$location_province = (isset($location["province"])) ? $location["province"] : [];
+	$l = $location_display["display_medium"];
+	$location_type_icon = ($location_type["icon"]) ? "<i class='" . $location_type["icon"] . "'></i>" : "";
+	$location_type_name = (isset($location_type["name"])) ? $location_type["name"] : "";
+	$street = array();
+	$location_street_1 = ((isset($location["street_1"])) && ($location["street_1"] !== "")) ? $street[] = "<span class='mb-1'>" . $location["street_1"] . "</span>" : "";
+	$location_street_2 = ((isset($location["street_2"])) && ($location["street_2"] !== "")) ? $street[] = "<span class='mb-1'>" . $location["street_2"] . "</span>" : "";
+	$location_zipcode = ((isset($location["zipcode"])) && ($location["zipcode"] !== "")) ? "<span class='mb-1'>" . $location["zipcode"] . "</span>" : "";
+	$country_name = ($location_country["name"]) ? $location_country["name"] : "";
+	$country_name_short = ($location_country["iso2"]) ? $location_country["iso2"] : "";
+	$province_name = ($location_province["name"]) ? $location_province["name"] : "";
+	$province_name_short = ($location_province["iso2"]) ? $location_province["iso2"] : "";
+	$city_name = ($location_city["name"]) ? $location_city["name"] : "";
+	$location_name = ($location["name"]) ? $location["name"] : "";
+	$address_line = "<address>" . implode(", ", $street) . " $city_name, $province_name_short $location_zipcode, $country_name_short</address>";
+	$location_card = "$location_type_icon $l";
+	$use_provider_location = (isset($product["use_provider_location"])) ? ($product["use_provider_location"] === true) ? true : false : false;
+	$provider_city_name = (isset($provider_location["city"]["name"])) ? $provider_location["city"]["name"] : null;
+	$provider_province_name = (isset($provider_location["province"]["name"])) ? $provider_location["province"]["name"] : null;
+	$provider_country_name = (isset($provider_location["country"]["name"])) ? $provider_location["country"]["name"] : null;
+	$product_city_name = (isset($location["city"]["name"])) ? $location["city"]["name"] : null;
+	$product_province_name = (isset($location["province"]["name"])) ? $location["province"]["name"] : null;
+	$product_country_name = (isset($location["country"]["name"])) ? $location["country"]["name"] : null;
+	
+	$city_name = ($use_provider_location === true) ? $provider_city_name : $product_city_name;
+	$province_name = ($use_provider_location === true) ? $provider_province_name : $product_province_name;
+	
+	/**
+	 * Inventory Variables
+	 */
+	$inventory_section = "";
+	foreach ($profiles AS $profile) {
+		$allot_by_details = (isset($profile["allot_by_details"])) ? $profile["allot_by_details"] : [];
+		$sales_types_details = (isset($profile["sales_types_details"])) ? $profile["sales_types_details"] : [];
+		$transfer_sales_types_details = (isset($profile["transfer_sales_types_details"])) ? $profile["transfer_sales_types_details"] : [];
+		
+		$expires = (isset($profile["expires"])) ? $profile["expires"] : null;
+		$expire_date = (!is_null($expires)) ? "<tr><td class='bolder p-1'>Expire Date:</td><td class='p-1'>" . date("Y-m-d", strtotime($expires)) . "</td></tr>" : "";
+		$days_out = (isset($profile["days_out"])) ? $profile["days_out"] : null;
+		$days_out_row = (!is_null($days_out)) ? "<tr><td class='bolder p-1'>Days Out:</td><td class='p-1'>$days_out</td></tr>" : "";
+		$allot_by_name = (isset($allot_by_details["name"])) ? $allot_by_details["name"] : null;
+		$profile_name = (isset($profile["name"])) ? $profile["name"] : null;
+		$sales_type_name = (isset($sales_types_details["name"])) ? $sales_types_details["name"] : null;
+		$quantity = (isset($profile["quantity"])) ? $profile["quantity"] : null;
+		$quantity_row = (!is_null($quantity)) ? "<tr><td class='bolder p-1'>Quantity:</td><td class='p-1'>$quantity</td></tr>" : "";
+		
+		$class_name = (isset($sales_types_details["class"])) ? $sales_types_details["class"] : null;
+		if (is_null($quantity)) {
+			if ((int)$profile["sales_types_id"] === 2) {
+				$quantity_row = "<tr><td class='bolder p-1'>Quantity:</td><td class='p-1'>Unlimited</td></tr>";
+			} else if ((int)$profile["sales_types_id"] === 3) {
+				$quantity_row = "<tr><td class='bolder p-1'>Quantity:</td><td class='p-1'>On Request</td></tr>";
+			} else if ((int)$profile["sales_types_id"] === 4) {
+				$quantity_row = "<tr><td class='bolder p-1'>Quantity:</td><td class='p-1'>Not Available</td></tr>";
+			} else {
+				$quantity_row = "<tr><td class='bolder p-1'>Quantity:</td><td class='p-1'>Blackout</td></tr>";
+			}
+		}
+		
+		$inventory_profile = "
             <div class='col-12 col-sm-12 col-md-4 px-1'>
             <div class='card profile-card $class_name'>
                 <div class='card-body'>
@@ -239,26 +244,26 @@
             </div>
         </div>
         ";
-        $inventory_section .= $inventory_profile;
-    }
-    
-    /**
-     * Units Variables
-     */
-    $unit_section = "";
-    foreach ($units AS $unit) {
-        $name = $unit["name"];
-        $id = (int)$unit["id"];
-        $min_pax = $unit["min_pax"];
-        $max_pax = $unit["max_pax"];
-        $min_nights = $unit["min_nights"];
-        $max_nights = $unit["max_nights"];
-        $unit_description_long = (isset($unit["description_long"]) && !is_null($unit["description_long"]) && $unit["description_long"] !== "") ? $unit["description_long"] : "&nbsp;";
-        $unit_description_short = (isset($unit["description_short"]) && !is_null($unit["description_short"]) && $unit["description_short"] !== "") ? $unit["description_short"] : "&nbsp;";
-        $cover_image = $unit["cover_image"];
-        $room_code = (isset($unit["room_code"])) ? $unit["room_code"] : buildCode($id, $name, "unit");
-        
-        $unit_profile = "
+		$inventory_section .= $inventory_profile;
+	}
+	
+	/**
+	 * Units Variables
+	 */
+	$unit_section = "";
+	foreach ($units AS $unit) {
+		$name = $unit["name"];
+		$id = (int)$unit["id"];
+		$min_pax = $unit["min_pax"];
+		$max_pax = $unit["max_pax"];
+		$min_nights = $unit["min_nights"];
+		$max_nights = $unit["max_nights"];
+		$unit_description_long = (isset($unit["description_long"]) && !is_null($unit["description_long"]) && $unit["description_long"] !== "") ? $unit["description_long"] : "&nbsp;";
+		$unit_description_short = (isset($unit["description_short"]) && !is_null($unit["description_short"]) && $unit["description_short"] !== "") ? $unit["description_short"] : "&nbsp;";
+		$cover_image = $unit["cover_image"];
+		$room_code = (isset($unit["room_code"])) ? $unit["room_code"] : buildCode($id, $name, "unit");
+		
+		$unit_profile = "
             <div class='col-12 col-sm-12 col-md-4 px-1 '>
                 <div class='card card-body mb-2'>
                     <h5 class='card-title w-100 text-truncate'>$name</h5>
@@ -292,20 +297,20 @@
             </div>
         </div>
         ";
-        $unit_section .= $unit_profile;
-    }
-    
-    /**
-     * Variant Variables
-     */
-    $variant_section = "";
-    foreach ($variants AS $variant) {
-        $id = (int)$variant["id"];
-        $name = $variant["name"];
-        $min_age = (isset($variant["min_age"]) && !is_null($variant["min_age"])) ? $variant["min_age"] : "0";
-        $max_age = (isset($variant["max_age"]) && !is_null($variant["max_age"])) ? $variant["max_age"] : "And Up";
-        $str = buildCode($id, $name, "variant");
-        $variant_profile = "
+		$unit_section .= $unit_profile;
+	}
+	
+	/**
+	 * Variant Variables
+	 */
+	$variant_section = "";
+	foreach ($variants AS $variant) {
+		$id = (int)$variant["id"];
+		$name = $variant["name"];
+		$min_age = (isset($variant["min_age"]) && !is_null($variant["min_age"])) ? $variant["min_age"] : "0";
+		$max_age = (isset($variant["max_age"]) && !is_null($variant["max_age"])) ? $variant["max_age"] : "And Up";
+		$str = buildCode($id, $name, "variant");
+		$variant_profile = "
             <div class='col-12 col-sm-12 col-md-4 px-1'>
             <div class='card'>
                 <div class='card-body'>
@@ -334,34 +339,34 @@
             </div>
         </div>
         ";
-        $variant_section .= $variant_profile;
-    }
-    
-    /**
-     * Season Variables
-     */
-    $season_section = "";
-    foreach ($seasons AS $season) {
-        $color_scheme = (isset($season["color_scheme"])) ? $season["color_scheme"] : [];
-        $product_season_detail = (isset($season["product_season_detail"])) ? $season["product_season_detail"] : [];
-        
-        $disabled_dow = (isset($product_season_detail["disabled_dow"])) ? $product_season_detail["disabled_dow"] : "";
-        $disabled_dow = preg_replace('/\s+/', '', trim($disabled_dow));
-        $disabled_dow_list = explode(",", $disabled_dow);
-        $day_temp = [];
-        foreach ($disabled_dow_list AS $disabled_day) {
-            $day_temp[] = $days[(int)$disabled_day];
-        }
-        $disabled_day_line = implode(", ", $day_temp);
-        $color_scheme_background_color = $color_scheme["background_color"];
-        $color_scheme_border_color = $color_scheme["border_color"];
-        $color_scheme_text_color = $color_scheme["text_color"];
-        
-        $season_name = (isset($season["name"])) ? $season["name"] : "";
-        
-        $season_id = (isset($season["id"])) ? $season["id"] : "";
-        
-        $season_profile = "
+		$variant_section .= $variant_profile;
+	}
+	
+	/**
+	 * Season Variables
+	 */
+	$season_section = "";
+	foreach ($seasons AS $season) {
+		$color_scheme = (isset($season["color_scheme"])) ? $season["color_scheme"] : [];
+		$product_season_detail = (isset($season["product_season_detail"])) ? $season["product_season_detail"] : [];
+		
+		$disabled_dow = (isset($product_season_detail["disabled_dow"])) ? $product_season_detail["disabled_dow"] : "";
+		$disabled_dow = preg_replace('/\s+/', '', trim($disabled_dow));
+		$disabled_dow_list = explode(",", $disabled_dow);
+		$day_temp = [];
+		foreach ($disabled_dow_list AS $disabled_day) {
+			$day_temp[] = $days[(int)$disabled_day];
+		}
+		$disabled_day_line = implode(", ", $day_temp);
+		$color_scheme_background_color = $color_scheme["background_color"];
+		$color_scheme_border_color = $color_scheme["border_color"];
+		$color_scheme_text_color = $color_scheme["text_color"];
+		
+		$season_name = (isset($season["name"])) ? $season["name"] : "";
+		
+		$season_id = (isset($season["id"])) ? $season["id"] : "";
+		
+		$season_profile = "
         <div class='col-12 col-sm-12 col-md-4 px-1'>
         
             <div class='card card-body mb-2' style='background:$color_scheme_background_color;color:$color_scheme_text_color;border-color:$color_scheme_border_color;'>
@@ -375,26 +380,26 @@
             </div>
         </div>
         ";
-        $season_section .= $season_profile;
-    }
-    
-    /**
-     * Provider Variables
-     */
-    $provider_images = [];
-    $provider_description_short = (isset($provider["description_short"])) ? $provider["description_short"] : "";
-    $provider_name = (isset($provider["name"])) ? $provider["name"] : "";
-    $provider_code_direct_id = (isset($provider["code_direct_id"])) ? $provider["code_direct_id"] : "";
-    $provider_description_long = (isset($provider["description_long"])) ? $provider["description_long"] : "";
-    
-    /**
-     * Vendor Variables
-     */
-    $vendor_images = [];
-    $vendor_description_short = (isset($vendor["description_short"])) ? $provider["description_short"] : "";
-    $vendor_name = (isset($provider["name"])) ? $provider["name"] : "";
-    $vendor_sku = (isset($provider["sku"])) ? $provider["sku"] : "";
-    $vendor_description_long = (isset($provider["description_long"])) ? $provider["description_long"] : "";
+		$season_section .= $season_profile;
+	}
+	
+	/**
+	 * Provider Variables
+	 */
+	$provider_images = [];
+	$provider_description_short = (isset($provider["description_short"])) ? $provider["description_short"] : "";
+	$provider_name = (isset($provider["name"])) ? $provider["name"] : "";
+	$provider_code_direct_id = (isset($provider["code_direct_id"])) ? $provider["code_direct_id"] : "";
+	$provider_description_long = (isset($provider["description_long"])) ? $provider["description_long"] : "";
+	
+	/**
+	 * Vendor Variables
+	 */
+	$vendor_images = [];
+	$vendor_description_short = (isset($vendor["description_short"])) ? $provider["description_short"] : "";
+	$vendor_name = (isset($provider["name"])) ? $provider["name"] : "";
+	$vendor_sku = (isset($provider["sku"])) ? $provider["sku"] : "";
+	$vendor_description_long = (isset($provider["description_long"])) ? $provider["description_long"] : "";
 ?>
 <!-- Product Edit Page -->
 <section id="product_edit_page" class="section">
@@ -412,7 +417,7 @@
     
     <div class="row gx-1">
         
-        <div class="col-12 col-xl-9 p-1">
+        <div class="col-12 col-xl-10 p-1">
             <div class="tab-content p-1">
                 
                 <div class="tab-pane active" id="panel_tab_product_overview" role="tabpanel">
@@ -432,14 +437,14 @@
                                     </h6>
                                     
                                     <ul class="list-unstyled list-inline rating">
-                                        <?php echo $rating_line; ?>
+										<?php echo $rating_line; ?>
                                     </ul>
                                     
                                     <p id="product_location" class="card-text">
-                                        <?php echo $location_card; ?>
+										<?php echo $location_card; ?>
                                     </p>
                                     <p id="product_description_short" class="card-text">
-                                        <?php echo $product_description_short; ?>
+										<?php echo $product_description_short; ?>
                                     </p>
                                     
                                     <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
@@ -449,7 +454,7 @@
                                             <h5 class="mb-3 h5">Provider</h5>
                                             <p class="text-muted"><?php echo $provider_name; ?></p>
                                             <p class="">
-                                                <?php echo $provider_description_short; ?>
+												<?php echo $provider_description_short; ?>
                                             </p>
                                         </div>
                                         
@@ -457,7 +462,7 @@
                                             <h5 class="mb-3 h5">Vendor</h5>
                                             <p class="text-muted"><?php echo $vendor_name; ?></p>
                                             <p class="card-text">
-                                                <?php echo $vendor_description_short; ?>
+												<?php echo $vendor_description_short; ?>
                                             </p>
                                         </div>
                                     </div>
@@ -466,8 +471,8 @@
                                     
                                     <div class="row">
                                         <div class="col">
-                                            
-                                            <?php echo $product_description_long; ?>
+											
+											<?php echo $product_description_long; ?>
                                         
                                         </div>
                                     </div>
@@ -485,7 +490,7 @@
                                     <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
                                     
                                     <div class="row">
-                                        <?php echo $season_section; ?>
+										<?php echo $season_section; ?>
                                     </div>
                                 </div>
                             </div>
@@ -499,7 +504,7 @@
                                     <!--<h6 class="card-subtitle mb-2 text-muted"><span>Category</span></h6>-->
                                     <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
                                     <div class="row">
-                                        <?php echo $unit_section; ?>
+										<?php echo $unit_section; ?>
                                     </div>
                                 </div>
                             </div>
@@ -513,7 +518,7 @@
                                     <!--<h6 class="card-subtitle mb-2 text-muted"><span>Category</span></h6>-->
                                     <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
                                     <div class="row">
-                                        <?php echo $variant_section; ?>
+										<?php echo $variant_section; ?>
                                     </div>
                                 </div>
                             </div>
@@ -528,7 +533,7 @@
                                     <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
                                     
                                     <div class="row">
-                                        <?php echo $inventory_section; ?>
+										<?php echo $inventory_section; ?>
                                     </div>
                                 </div>
                             </div>
@@ -560,47 +565,47 @@
                 </div>
                 
                 <div class="tab-pane" id="panel_tab_product_detail" role="tabpanel">
-                    <?php include_once(VIEWS_PATH . "/products/forms/product_edit_details_form.phtml"); ?>
+					<?php include_once(VIEWS_PATH . "/products/forms/product_edit_details_form.phtml"); ?>
                 </div>
                 
                 <div class="tab-pane" id="panel_tab_product_location" role="tabpanel">
-                    <?php include_once(VIEWS_PATH . "/locations/forms/product_edit_location_form.phtml"); ?>
+					<?php include_once(VIEWS_PATH . "/locations/forms/product_edit_location_form.phtml"); ?>
                 </div>
                 
                 <div class="tab-pane" id="panel_tab_product_season" role="tabpanel">
-                    <?php include_once(VIEWS_PATH . "/seasons/forms/product_edit_season_form.phtml"); ?>
+					<?php include_once(VIEWS_PATH . "/seasons/forms/product_edit_season_form.phtml"); ?>
                 </div>
                 
                 <div class="tab-pane" id="panel_tab_product_unit" role="tabpanel">
-                    <?php include_once(VIEWS_PATH . "/units/forms/product_edit_unit_form.phtml"); ?>
+					<?php include_once(VIEWS_PATH . "/units/forms/product_edit_unit_form.phtml"); ?>
                 </div>
                 
                 <div class="tab-pane" id="panel_tab_product_variant" role="tabpanel">
-                    <?php include_once(VIEWS_PATH . "/variants/forms/product_edit_variant_form.phtml"); ?>
+					<?php include_once(VIEWS_PATH . "/variants/forms/product_edit_variant_form.phtml"); ?>
                 </div>
                 
                 <div class="tab-pane" id="panel_tab_product_inventory" role="tabpanel">
-                    <?php include_once(VIEWS_PATH . "/profiles/forms/product_edit_profile_form.phtml"); ?>
+					<?php include_once(VIEWS_PATH . "/profiles/forms/product_edit_profile_form.phtml"); ?>
                 </div>
                 
                 <div class="tab-pane" id="panel_tab_product_pricing" role="tabpanel">
-                    <?php include_once(VIEWS_PATH . "/pricings/forms/product_edit_pricing_form.phtml"); ?>
+					<?php include_once(VIEWS_PATH . "/pricings/forms/product_edit_pricing_form.phtml"); ?>
                 </div>
                 
                 <div class="tab-pane" id="panel_tab_product_meta" role="tabpanel">
-                    <?php include_once(VIEWS_PATH . "/products/forms/product_edit_meta_form.phtml"); ?>
+					<?php include_once(VIEWS_PATH . "/products/forms/product_edit_meta_form.phtml"); ?>
                 </div>
             
             </div>
         </div>
         
-        <div class="col-12 col-xl-3 p-1">
+        <div class="col-12 col-xl-2 p-1">
             
             <div class="card card-body mb-2">
                 
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item list-group-item d-flex justify-content-between">Status:</li>
-                    <li class="list-group-item">
+                    <li class="list-group-item p-1 d-flex justify-content-between">Status:</li>
+                    <li class="list-group-item p-1">
                         <div class="row gx-1">
                             <div class="col-12 p-1 d-flex justify-content-between">
                                 <span>Created By:</span>
@@ -615,7 +620,7 @@
                             </div>
                         </div>
                     </li>
-                    <li class="list-group-item">
+                    <li class="list-group-item p-1">
                         <div class="row gx-1">
                             <div class="col-12 p-1 d-flex justify-content-between">
                                 <span>Country:</span>
@@ -637,9 +642,9 @@
                             </div>
                         </div>
                     </li>
-                    <li class="list-group-item d-flex">
+                    <li class="list-group-item p-1">
                         <!-- Button trigger seasonCalendarModal modal -->
-                        <button type="button" class="btn btn-primary flex-fill waves-effect waves-light" data-toggle="modal" data-target="#seasonCalendarModal">
+                        <button type="button" class="btn btn-primary btn-sm flex-fill waves-effect waves-light" data-toggle="modal" data-target="#seasonCalendarModal">
                             View Calendar
                         </button>
                         <!-- /Button trigger seasonCalendarModal modal -->
@@ -651,23 +656,22 @@
         </div>
     
     </div>
-    
-    <?php //*?>
+	
+	<?php //*?>
     <!-- Test Elements -->
     <div id="testElements">
         <div class="row gx-1">
-            <?php displayJsonOnPage($variants, "Variants"); ?>
-            <?php displayJsonOnPage($units, "Units"); ?>
-            <?php displayJsonOnPage($profiles, "Profiles"); ?>
-            <?php displayJsonOnPage($matrices, "Matrices"); ?>
-            <?php displayJsonOnPage($provider, "Provider"); ?>
-            <?php displayJsonOnPage($vendor, "Vendor"); ?>
-            <?php displayJsonOnPage($product, "Product"); ?>
-            <?php displayJsonOnPage($location, "Location"); ?>
+			<?php displayJsonOnPage($variants, "Variants"); ?>
+			<?php displayJsonOnPage($profiles, "Profiles"); ?>
+			<?php displayJsonOnPage($matrices, "Matrices"); ?>
+			<?php displayJsonOnPage($pricings, "Pricings"); ?>
+			<?php displayJsonOnPage($vendor, "Vendor"); ?>
+			<?php displayJsonOnPage($product, "Product"); ?>
+			<?php displayJsonOnPage($location, "Location"); ?>
         </div>
     </div>
     <!-- /Test Elements -->
-    <?php //*/ ?>
+	<?php //*/ ?>
 
 </section>
 <!-- /Product Edit Page -->
@@ -6424,7 +6428,7 @@
     }
     $(function () {
         Types.init(<?php echo TYPES;?>)
-        <?php echo $init;?>
+		<?php echo $init;?>
         //*
         let cals = $("#calendar").YearCalendar({
             displayEventTime: false,

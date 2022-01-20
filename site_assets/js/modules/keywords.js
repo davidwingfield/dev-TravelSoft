@@ -6,7 +6,7 @@ $.fn.BuildKeyword = function (keywords) {
     
     const chip_id = $(this).attr("id")
     const _chips = document.getElementById(chip_id)
-    
+    let editMode = null
     let tags = new Map()
     let $chipsEl = $(_chips)
     let $submitButton = $(`#${chip_id} > div > div > button`)
@@ -49,7 +49,6 @@ $.fn.BuildKeyword = function (keywords) {
           editMode = null
       })
     
-    let editMode = null
     const formatTag = function (data) {
         counter += 1
         if (data) {
@@ -146,6 +145,7 @@ $.fn.BuildKeyword = function (keywords) {
     }
     
     const add = function (data) {
+        Console.log("add(data)", data)
         if (!data) {
             data = $input.val()
         }

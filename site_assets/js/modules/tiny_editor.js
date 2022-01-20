@@ -16,7 +16,6 @@ const tinyEditor = (function () {
                 } else {
                     editor.val(decodeHtml(editor.val()))
                     cardBlock.addClass("is-fullscreen")
-                    console.dir(cardBlock)
                     addTinyMCE(editorId)
                 }
             }
@@ -33,7 +32,7 @@ const tinyEditor = (function () {
                 "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap",
                 "/public/css/bootstrap.min.css",
                 "/public/css/style.css",
-                "/public/css/variant.css",
+                "/public/css/variant.min.css",
             ],
             body_class: "p-2",
             font_formats: "Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Open Sans=Open Sans;Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats",
@@ -144,7 +143,11 @@ const tinyEditor = (function () {
         },
     }
 })()
-$(function () {
-    tinyEditor.init()
+
+$(document).ready(function () {
+    $(function () {
+        tinyEditor.init()
+    })
 })
+
 

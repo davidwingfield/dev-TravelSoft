@@ -1,16 +1,16 @@
 <?php
-    $categories = (isset($page_data, $page_data["types"], $page_data["types"]["category"])) ? $page_data["types"]["category"] : [];
-    $categoryDropDown = "<div class='dropdown-menu'>";
-    foreach ($categories as $category) {
-        $name = $category["name"];
-        $id = $category["id"];
-        $icon = $category["icon"];
-        
-        $categoryDropDown .= "<a id='$id' data-categoryid='$id' data-categoryicon='$icon' data-categoryname='$name' class='dropdown-item category-dropdown-item' href='javascript:void(0);'>$name</a>";
-        
-    }
-    $categoryDropDown .= "</div>";
-    //echo "<pre>" . var_export($categories, 1) . "</pre>";
+	$categories = (isset($page_data, $page_data["types"], $page_data["types"]["category"])) ? $page_data["types"]["category"] : [];
+	$categoryDropDown = "<div class='dropdown-menu'>";
+	foreach ($categories as $category) {
+		$name = $category["name"];
+		$id = $category["id"];
+		$icon = $category["icon"];
+		
+		$categoryDropDown .= "<a id='$id' data-categoryid='$id' data-categoryicon='$icon' data-categoryname='$name' class='dropdown-item category-dropdown-item' href='javascript:void(0);'>$name</a>";
+		
+	}
+	$categoryDropDown .= "</div>";
+	//echo "<pre>" . var_export($categories, 1) . "</pre>";
 ?>
 
 <div class="card card-body p-1 mb-2">
@@ -42,7 +42,7 @@
                                     </span>
                                 </span>
                     </button>
-                    <?php echo $categoryDropDown; ?>
+					<?php echo $categoryDropDown; ?>
                 
                 </div>
                 <!-- /Category Dropdown -->
@@ -164,54 +164,52 @@
     </section>
     
     <section>
-        
         <form id="form_product_search" class="search-form mb-2" novalidate>
-            
             <!-- HIDDEN FIELDS -->
             <div class="row mx-0">
                 <div class="col-sm-3 p-1">
                     <label for="form_product_search_hotel_product_city_id" class="dev-element d-none">City Id:</label>
-                    <input type="text" id="form_product_search_hotel_product_city_id" name="form_product_search_hotel_product_city_id" class="form-control dev-element" value="" readonly="readonly"/>
+                    <input type="hidden" id="form_product_search_hotel_product_city_id" name="form_product_search_hotel_product_city_id" class="form-control dev-element" value="" readonly="readonly"/>
                 </div>
                 
                 <div class="col-sm-3 p-1">
                     <label for="form_product_search_hotel_product_category_id" class="dev-element d-none">Category Id:</label>
-                    <input type="text" id="form_product_search_hotel_product_category_id" name="form_product_search_hotel_product_category_id" class="form-control dev-element" value="" readonly="readonly"/>
+                    <input type="hidden" id="form_product_search_hotel_product_category_id" name="form_product_search_hotel_product_category_id" class="form-control dev-element" value="" readonly="readonly"/>
                 </div>
                 
                 <div class="col-sm-3 p-1">
                     <label for="form_product_search_hotel_product_product_id" class="dev-element d-none">Product Id:</label>
-                    <input type="text" id="form_product_search_hotel_product_product_id" name="form_product_search_hotel_product_product_id" class="form-control dev-element" value="" readonly="readonly"/>
+                    <input type="hidden" id="form_product_search_hotel_product_product_id" name="form_product_search_hotel_product_product_id" class="form-control dev-element" value="" readonly="readonly"/>
                 </div>
                 
                 <div class="col-sm-3 p-1">
                     <label for="form_product_search_hotel_product_name" class="dev-element d-none">Name:</label>
-                    <input type="text" id="form_product_search_hotel_product_name" name="form_product_search_hotel_product_name" class="form-control dev-element" value="" readonly="readonly"/>
+                    <input type="hidden" id="form_product_search_hotel_product_name" name="form_product_search_hotel_product_name" class="form-control dev-element" value="" readonly="readonly"/>
                 </div>
                 
                 <div class="col-sm-3 p-1">
                     <label for="form_product_search_hotel_product_arrive_date" class="dev-element d-none">Arrive:</label>
-                    <input type="text" id="form_product_search_hotel_product_arrive_date" name="form_product_search_hotel_product_arrive_date" class="form-control dev-element" value="" readonly="readonly"/>
+                    <input type="hidden" id="form_product_search_hotel_product_arrive_date" name="form_product_search_hotel_product_arrive_date" class="form-control dev-element" value="" readonly="readonly"/>
                 </div>
                 
                 <div class="col-sm-3 p-1">
                     <label for="form_product_search_hotel_product_number_of_children" class="dev-element d-none">Children:</label>
-                    <input type="text" id="form_product_search_hotel_product_number_of_children" name="form_product_search_hotel_product_number_of_children" min="0" class="form-control dev-element" value="0" readonly="readonly"/>
+                    <input type="hidden" id="form_product_search_hotel_product_number_of_children" name="form_product_search_hotel_product_number_of_children" min="0" class="form-control dev-element" value="0" readonly="readonly"/>
                 </div>
                 
                 <div class="col-sm-3 p-1">
                     <label for="form_product_search_hotel_product_number_of_adults" class="dev-element d-none">Adults:</label>
-                    <input type="text" id="form_product_search_hotel_product_number_of_adults" name="form_product_search_hotel_product_number_of_adults" min="1" class="form-control dev-element" value="1" readonly="readonly"/>
+                    <input type="hidden" id="form_product_search_hotel_product_number_of_adults" name="form_product_search_hotel_product_number_of_adults" min="1" class="form-control dev-element" value="1" readonly="readonly"/>
                 </div>
                 
                 <div class="col-sm-3 p-1">
                     <label for="form_product_search_hotel_product_number_of_rooms" class="dev-element d-none">Rooms:</label>
-                    <input type="text" id="form_product_search_hotel_product_number_of_rooms" name="form_product_search_hotel_product_number_of_rooms" min="1" class="form-control dev-element" value="1" readonly="readonly"/>
+                    <input type="hidden" id="form_product_search_hotel_product_number_of_rooms" name="form_product_search_hotel_product_number_of_rooms" min="1" class="form-control dev-element" value="1" readonly="readonly"/>
                 </div>
                 
                 <div class="col-sm-3 p-1">
                     <label for="form_product_search_hotel_product_depart_date" class="dev-element d-none">Depart:</label>
-                    <input type="text" id="form_product_search_hotel_product_depart_date" name="form_product_search_hotel_product_depart_date" class="form-control dev-element" placeholder="" readonly="readonly"/>
+                    <input type="hidden" id="form_product_search_hotel_product_depart_date" name="form_product_search_hotel_product_depart_date" class="form-control dev-element" placeholder="" readonly="readonly"/>
                 </div>
             
             </div>
@@ -225,7 +223,6 @@
     </section>
     
     <section>
-        
         <div class="card card-body px-2 z-depth-0 border mb-2">
             
             <h4 class="card-title text-center font-weight-bold mb-4">Search Results</h4>
@@ -286,7 +283,6 @@
             </p>
         
         </div>
-    
     </section>
 
 </div>
@@ -550,7 +546,7 @@
         
     }
     
-    const ProductSearch = function () {
+    const ProductSearch = function (settings) {
         "use strict"
         let popupGuestTitle, popupGuestContent, popupNameTitle, popupNameContent, popupCityTitle, popupCityContent, category_id, categoryItem
         // ----
@@ -1071,7 +1067,7 @@
             resetForm()
         }
         
-        init()
+        init(settings)
         
         return {
             init: function (settings) {
@@ -1090,7 +1086,6 @@
     }
     
     $(function () {
-        
         let productSearch = ProductSearch()
     })
 

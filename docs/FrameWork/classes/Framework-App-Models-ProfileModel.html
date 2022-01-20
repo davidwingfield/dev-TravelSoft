@@ -224,6 +224,20 @@ Long ProfileModel Description</p>
 <dd></dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-ProfileModel.html#method_fetchProfileByProfileId">fetchProfileByProfileId()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-ProfileModel.html#method_fetchProfilesByByNameAndProductId">fetchProfilesByByNameAndProductId()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-ProfileModel.html#method_fetchProfilesByProductId">fetchProfilesByProductId()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
@@ -276,6 +290,13 @@ Long ProfileModel Description</p>
     <a href="classes/Framework-Core-Model.html#method_setString">setString()</a>
     <span>
                         &nbsp;: string    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-ProfileModel.html#method_updateRecord">updateRecord()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
 <dd></dd>
 
@@ -339,7 +360,7 @@ Long ProfileModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProfileModel.php"><a href="files/app-models-profilemodel.html"><abbr title="App/Models/ProfileModel.php">ProfileModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">94</span>
+    <span class="phpdocumentor-element-found-in__line">86</span>
 
     </aside>
 
@@ -518,16 +539,9 @@ Long ProfileModel Description</p>
     <span class="phpdocumentor-signature__name">$sql</span>
      = <span class="phpdocumentor-signature__default-value">&quot;
 		SELECT
-				PRODUCT_PROFILE.product_id AS &#039;product_profile_product_id&#039;,
-				PRODUCT_PROFILE.profile_id AS &#039;product_profile_profile_id&#039;,
-				PRODUCT_PROFILE.enabled AS &#039;product_profile_enabled&#039;,
-				PRODUCT_PROFILE.date_created AS &#039;product_profile_date_created&#039;,
-				PRODUCT_PROFILE.created_by AS &#039;product_profile_created_by&#039;,
-				PRODUCT_PROFILE.date_modified AS &#039;product_profile_date_modified&#039;,
-				PRODUCT_PROFILE.modified_by AS &#039;product_profile_modified_by&#039;,
-				PRODUCT_PROFILE.note AS &#039;product_profile_note&#039;,
 				PROFILE.id AS &#039;profile_id&#039;,
 				PROFILE.allot_by_id AS &#039;profile_allot_by_id&#039;,
+		       PROFILE.product_id AS &#039;profile_product_id&#039;,
 				PROFILE.sales_types_id AS &#039;profile_sales_types_id&#039;,
 				PROFILE.name AS &#039;profile_name&#039;,
 				PROFILE.quantity AS &#039;profile_quantity&#039;,
@@ -583,8 +597,7 @@ Long ProfileModel Description</p>
 				SALES_TYPES_TRANSFER.date_modified AS &#039;sales_types_transfer_date_modified&#039;,
 				SALES_TYPES_TRANSFER.modified_by AS &#039;sales_types_transfer_modified_by&#039;,
 				SALES_TYPES_TRANSFER.note AS &#039;sales_types_transfer_note&#039;
-		FROM 	product_profile PRODUCT_PROFILE
-		LEFT JOIN 	profile PROFILE ON PROFILE.id = PRODUCT_PROFILE.profile_id
+		FROM 	profile PROFILE
 		LEFT JOIN 	allot_by ALLOT_BY ON ALLOT_BY.id = PROFILE.allot_by_id
 		LEFT JOIN 	sales_types SALES_TYPES ON SALES_TYPES.id = PROFILE.sales_types_id
 		LEFT JOIN 	sales_types SALES_TYPES_TRANSFER ON SALES_TYPES_TRANSFER.id = PROFILE.transfer_sales_types_id
@@ -610,6 +623,102 @@ Long ProfileModel Description</p>
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_fetchProfileByProfileId">
+        fetchProfileByProfileId()
+        <a href="classes/Framework-App-Models-ProfileModel.html#method_fetchProfileByProfileId" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProfileModel.php"><a href="files/app-models-profilemodel.html"><abbr title="App/Models/ProfileModel.php">ProfileModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">192</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fetchProfileByProfileId</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$profile_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$profile_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fetchProfilesByByNameAndProductId">
+        fetchProfilesByByNameAndProductId()
+        <a href="classes/Framework-App-Models-ProfileModel.html#method_fetchProfilesByByNameAndProductId" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProfileModel.php"><a href="files/app-models-profilemodel.html"><abbr title="App/Models/ProfileModel.php">ProfileModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">213</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fetchProfilesByByNameAndProductId</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$product_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$product_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_fetchProfilesByProductId">
         fetchProfilesByProductId()
         <a href="classes/Framework-App-Models-ProfileModel.html#method_fetchProfilesByProductId" class="headerlink"><i class="fas fa-link"></i></a>
@@ -617,7 +726,7 @@ Long ProfileModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProfileModel.php"><a href="files/app-models-profilemodel.html"><abbr title="App/Models/ProfileModel.php">ProfileModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">181</span>
+    <span class="phpdocumentor-element-found-in__line">173</span>
 
     </aside>
 
@@ -661,7 +770,7 @@ Long ProfileModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProfileModel.php"><a href="files/app-models-profilemodel.html"><abbr title="App/Models/ProfileModel.php">ProfileModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">162</span>
+    <span class="phpdocumentor-element-found-in__line">154</span>
 
     </aside>
 
@@ -738,14 +847,14 @@ Long ProfileModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProfileModel.php"><a href="files/app-models-profilemodel.html"><abbr title="App/Models/ProfileModel.php">ProfileModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">199</span>
+    <span class="phpdocumentor-element-found-in__line">239</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">profile_ac</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$st</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">profile_ac</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$st</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$product_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -755,6 +864,14 @@ Long ProfileModel Description</p>
                 <span class="phpdocumentor-signature__argument__name">$st</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$product_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
 
@@ -940,6 +1057,50 @@ Long ProfileModel Description</p>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_updateRecord">
+        updateRecord()
+        <a href="classes/Framework-App-Models-ProfileModel.html#method_updateRecord" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProfileModel.php"><a href="files/app-models-profilemodel.html"><abbr title="App/Models/ProfileModel.php">ProfileModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">264</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">updateRecord</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$profile</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$profile</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
             &mdash;
         
     

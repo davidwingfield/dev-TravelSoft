@@ -1,24 +1,24 @@
 <?php
-    
-    namespace Framework\App\Models;
-    
-    use Exception;
-    use Framework\Core\Model;
-    use Framework\Logger\Log;
-    
-    /**
-     * Short Variant Description
-     * Long Variant Description
-     *
-     * @package            Framework\App
-     * @subpackage         Models
-     */
-    class VariantModel extends Model
-    {
-        
-        protected static $dbTable = "variant";
-        protected static $dbFields = Array();
-        protected static $selectQuery = "
+	
+	namespace Framework\App\Models;
+	
+	use Exception;
+	use Framework\Core\Model;
+	use Framework\Logger\Log;
+	
+	/**
+	 * Short Variant Description
+	 * Long Variant Description
+	 *
+	 * @package            Framework\App
+	 * @subpackage         Models
+	 */
+	class VariantModel extends Model
+	{
+		
+		protected static $dbTable = "variant";
+		protected static $dbFields = Array();
+		protected static $selectQuery = "
                 SELECT
                         VARIANT.id AS 'variant_id',
                         VARIANT.category_id AS 'variant_category_id',
@@ -33,82 +33,82 @@
                 FROM 	variant VARIANT
                 WHERE   VARIANT.enabled = 1
         ";
-        
-        public static function get(int $id = null): array
-        {
-            
-            try {
-                if (!is_null($id)) {
-                    Model::$db->where("id", $id);
-                }
-                
-                self::$db->where("enabled", 1);
-                
-                return self::$db->get(self::$dbTable);
-            } catch (Exception $e) {
-                return [];
-            }
-        }
-        
-        public static function getOne(int $id = null): array
-        {
-            try {
-                if (!is_null($id)) {
-                    Model::$db->where("id", $id);
-                }
-                
-                self::$db->where("enabled", 1);
-                
-                return self::$db->getOne(self::$dbTable);
-            } catch (Exception $e) {
-                return [];
-            }
-        }
-        
-        public static function update(array $params = []): array
-        {
-            $id = 1;
-            
-            return self::get($id);
-        }
-        
-        public static function getByName(string $name = null, int $category_id = null): array
-        {
-            if (is_null($name)) {
-                Log::$debug_log->error("Missing Name");
-                
-                return [];
-            }
-            
-            if (is_null($category_id)) {
-                Log::$debug_log->error("Missing Category Id");
-                
-                return [];
-            }
-            
-            $sql = self::$selectQuery . "
+		
+		public static function get(int $id = null): array
+		{
+			
+			try {
+				if (!is_null($id)) {
+					Model::$db->where("id", $id);
+				}
+				
+				self::$db->where("enabled", 1);
+				
+				return self::$db->get(self::$dbTable);
+			} catch (Exception $e) {
+				return [];
+			}
+		}
+		
+		public static function getOne(int $id = null): array
+		{
+			try {
+				if (!is_null($id)) {
+					Model::$db->where("id", $id);
+				}
+				
+				self::$db->where("enabled", 1);
+				
+				return self::$db->getOne(self::$dbTable);
+			} catch (Exception $e) {
+				return [];
+			}
+		}
+		
+		public static function update(array $params = []): array
+		{
+			$id = 1;
+			
+			return self::get($id);
+		}
+		
+		public static function getByName(string $name = null, int $category_id = null): array
+		{
+			if (is_null($name)) {
+				Log::$debug_log->error("Missing Name");
+				
+				return [];
+			}
+			
+			if (is_null($category_id)) {
+				Log::$debug_log->error("Missing Category Id");
+				
+				return [];
+			}
+			
+			$sql = self::$selectQuery . "
                     AND			VARIANT.name = '$name'
                     AND         VARIANT.category_id = $category_id
                     ORDER BY    LENGTH(VARIANT.name), CAST(VARIANT.name AS UNSIGNED), VARIANT.name ASC
                     LIMIT 20;";
-            try {
-                
-                return Model::$db->rawQuery($sql);
-                
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-        }
-        
-        public static function getByProductId(int $product_id = null): array
-        {
-            if (is_null($product_id)) {
-                return [];
-            }
-            
-            $sql = "
+			try {
+				
+				return Model::$db->rawQuery($sql);
+				
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		public static function getByProductId(int $product_id = null): array
+		{
+			if (is_null($product_id)) {
+				return [];
+			}
+			
+			$sql = "
                 SELECT
                         VARIANT.id AS 'variant_id',
                         VARIANT.category_id AS 'variant_category_id',
@@ -135,48 +135,48 @@
                 JOIN 	product_variant PRODUCT_VARIANT ON PRODUCT_VARIANT.variant_id = VARIANT.id
                 WHERE   PRODUCT_VARIANT.product_id = $product_id
             ";
-            try {
-                
-                return Model::$db->rawQuery($sql);
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-        }
-        
-        public static function variant_ac(string $st = "", int $category_id = null): array
-        {
-            if (is_null($category_id)) {
-                return [];
-            }
-            
-            try {
-                $searchTerm = addslashes($st);
-                
-                $sql = self::$selectQuery . "
+			try {
+				
+				return Model::$db->rawQuery($sql);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		public static function variant_ac(string $st = "", int $category_id = null): array
+		{
+			if (is_null($category_id)) {
+				return [];
+			}
+			
+			try {
+				$searchTerm = addslashes($st);
+				
+				$sql = self::$selectQuery . "
                     AND			VARIANT.name LIKE '%$searchTerm%'
                     AND         VARIANT.category_id = $category_id
                     ORDER BY    LENGTH(VARIANT.name), CAST(VARIANT.name AS UNSIGNED), VARIANT.name ASC
                     LIMIT 20;";
-                
-                //Log::$debug_log->trace($sql);
-                
-                return Model::$db->rawQuery($sql);
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-        }
-        
-        public static function getByVariantIdAndProductId(int $variant_id = null, int $product_id = null): array
-        {
-            if (is_null($product_id) || is_null($variant_id)) {
-                return [];
-            }
-            
-            $sql = "
+				
+				//Log::$debug_log->trace($sql);
+				
+				return Model::$db->rawQuery($sql);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		public static function getByVariantIdAndProductId(int $variant_id = null, int $product_id = null): array
+		{
+			if (is_null($product_id) || is_null($variant_id)) {
+				return [];
+			}
+			
+			$sql = "
                 SELECT
                         VARIANT.id AS 'variant_id',
                         VARIANT.category_id AS 'variant_category_id',
@@ -204,39 +204,39 @@
                 JOIN 	product_variant PRODUCT_VARIANT ON PRODUCT_VARIANT.variant_id = VARIANT.id
                 WHERE   PRODUCT_VARIANT.product_id = $product_id
                     AND PRODUCT_VARIANT.variant_id = $variant_id";
-            try {
-                //Log::$debug_log->trace($sql);
-                
-                return Model::$db->rawQuery($sql);
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-        }
-        
-        public static function updateRecord(array $variant = null): array
-        {
-            $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
-            $created_by = Model::setInt($user_id);
-            $modified_by = Model::setInt($user_id);
-            
-            $id = Model::setInt((isset($variant["id"])) ? $variant["id"] : null);
-            $category_id = Model::setInt((isset($variant["category_id"])) ? $variant["category_id"] : null);
-            $product_id = Model::setInt((isset($variant["product_id"])) ? $variant["product_id"] : null);
-            
-            $min_age = Model::setInt((isset($variant["min_age"])) ? $variant["min_age"] : null);
-            $max_age = Model::setInt((isset($variant["max_age"])) ? $variant["max_age"] : null);
-            
-            $name = Model::setString((isset($variant["name"])) ? $variant["name"] : null);
-            $code = Model::setString((isset($variant["code"])) ? $variant["code"] : null);
-            
-            $enabled = Model::setBool((isset($variant["enabled"])) ? $variant["enabled"] : null);
-            $used_in_pricing = Model::setBool((isset($variant["used_in_pricing"])) ? $variant["used_in_pricing"] : 1);
-            
-            $note = Model::setLongText((isset($variant["note"])) ? $variant["note"] : null);
-            
-            $sql = "
+			try {
+				//Log::$debug_log->trace($sql);
+				
+				return Model::$db->rawQuery($sql);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		public static function updateRecord(array $variant = null): array
+		{
+			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+			$created_by = Model::setInt($user_id);
+			$modified_by = Model::setInt($user_id);
+			
+			$id = Model::setInt((isset($variant["id"])) ? $variant["id"] : null);
+			$category_id = Model::setInt((isset($variant["category_id"])) ? $variant["category_id"] : null);
+			$product_id = Model::setInt((isset($variant["product_id"])) ? $variant["product_id"] : null);
+			
+			$min_age = Model::setInt((isset($variant["min_age"])) ? $variant["min_age"] : null);
+			$max_age = Model::setInt((isset($variant["max_age"])) ? $variant["max_age"] : null);
+			
+			$name = Model::setString((isset($variant["name"])) ? $variant["name"] : null);
+			$code = Model::setString((isset($variant["code"])) ? $variant["code"] : null);
+			
+			$enabled = Model::setBool((isset($variant["enabled"])) ? $variant["enabled"] : null);
+			$used_in_pricing = Model::setBool((isset($variant["used_in_pricing"])) ? $variant["used_in_pricing"] : 1);
+			
+			$note = Model::setLongText((isset($variant["note"])) ? $variant["note"] : null);
+			
+			$sql = "
                 INSERT INTO variant (
                     id, category_id, code, name,
                     enabled, date_created, created_by, date_modified,
@@ -254,24 +254,24 @@
                     date_modified = VALUES(date_modified),
                     enabled = VALUES(enabled)
             ";
-            
-            try {
-                //Log::$debug_log->trace($sql);
-                Model::$db->rawQuery($sql);
-                $variant_id = Model::$db->getInsertId();
-                if ($variant_id) {
-                    $variant_id = (int)$variant_id;
-                    $variantCode = addslashes(buildCode($variant_id, $name, "variant"));
-                    
-                    $update = "
+			
+			try {
+				//Log::$debug_log->trace($sql);
+				Model::$db->rawQuery($sql);
+				$variant_id = Model::$db->getInsertId();
+				if ($variant_id) {
+					$variant_id = (int)$variant_id;
+					$variantCode = addslashes(buildCode($variant_id, $name, "variant"));
+					
+					$update = "
                         UPDATE      variant
                         SET         code = '$variantCode'
                         WHERE       id = $variant_id;";
-                    try {
-                        Model::$db->rawQuery($update);
-                        
-                        try {
-                            $product_variant_sql = "
+					try {
+						Model::$db->rawQuery($update);
+						
+						try {
+							$product_variant_sql = "
                                 INSERT INTO product_variant (
                                     product_id, variant_id, min_age, max_age, used_in_pricing,
                                     enabled, date_created, created_by, date_modified,
@@ -290,34 +290,62 @@
                                     date_modified = VALUES(date_modified),
                                     enabled = VALUES(enabled)
                                 ";
-                            
-                            Model::$db->rawQuery($product_variant_sql);
-                            
-                            return self::getByVariantIdAndProductId($variant_id, $product_id);
-                        } catch (Exception $ex) {
-                            Log::$debug_log->error($ex);
-                            
-                            return [];
-                            
-                        }
-                        
-                    } catch (Exception $ex) {
-                        Log::$debug_log->error($ex);
-                        
-                        return [];
-                    }
-                    
-                } else {
-                    Log::$debug_log->error("Unit Id Not Generated");
-                    
-                    return [];
-                }
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-            
-        }
-        
-    }
+							
+							Model::$db->rawQuery($product_variant_sql);
+							
+							return self::getByVariantIdAndProductId($variant_id, $product_id);
+						} catch (Exception $ex) {
+							Log::$debug_log->error($ex);
+							
+							return [];
+							
+						}
+						
+					} catch (Exception $ex) {
+						Log::$debug_log->error($ex);
+						
+						return [];
+					}
+					
+				} else {
+					Log::$debug_log->error("Variant Id Not Generated");
+					
+					return [];
+				}
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+			
+		}
+		
+		public static function deleteProductVariant(array $params = []): array
+		{
+			$product_id = Model::setInt((isset($params["product_id"])) ? $params["product_id"] : null);
+			$variant_id = Model::setInt((isset($params["variant_id"])) ? $params["variant_id"] : null);
+			
+			if (!is_null($variant_id) && !is_null($product_id)) {
+				$sql = "
+		            DELETE FROM product_variant
+					WHERE 		product_id = $product_id
+						AND		variant_id = $variant_id;";
+				try {
+					Model::$db->rawQuery($sql);
+					
+					return array("variant_id" => $variant_id);
+				} catch (Exception $e) {
+					Log::$debug_log->error($e);
+					
+					return [];
+				}
+			} else {
+				Log::$debug_log->error("Missing Fields");
+				Log::$debug_log->trace("VAriant ID $variant_id");
+				Log::$debug_log->trace("Product ID $product_id");
+				
+				return [];
+			}
+		}
+		
+	}

@@ -2,8 +2,8 @@ const Profile = (function () {
     "use strict"
     const _table_profile_product_edit = document.getElementById("table_profile_product_edit")
     const _product_edit_profile_form_profile_name_filter = document.getElementById("product_edit_profile_form_profile_name_filter")
-    const _button_add_product_profile = document.getElementById("button_add_product_profile")
     const _product_edit_profile_form = document.getElementById("product_edit_profile_form")
+    
     // ----
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
@@ -54,12 +54,6 @@ const Profile = (function () {
             },
         },
     }
-    // ----
-    
-    $(_button_add_product_profile)
-      .on("click", function () {
-      
-      })
     
     /**
      * build product edit profile table

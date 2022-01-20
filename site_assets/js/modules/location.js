@@ -125,7 +125,7 @@ const Location = (function () {
     })
     
     const clear_product_location_form = function () {
-        Console.log("Location.clear_product_location_form()")
+        //Console.log("Location.clear_product_location_form()")
         _location_id.value = ""
         _location_types_id.value = ""
         _location_name.value = ""
@@ -149,7 +149,7 @@ const Location = (function () {
     }
     
     const populate_product_location_form = function (location) {
-        Console.log("Location.populate_product_location_form(location)", location)
+        //Console.log("Location.populate_product_location_form(location)", location)
         clear_product_location_form()
         let country = {}
         let province = {}
@@ -205,7 +205,7 @@ const Location = (function () {
     }
     
     const load_product_location_form = function (location) {
-        Console.log("Location.load_product_location_form(location)", location)
+        //Console.log("Location.load_product_location_form(location)", location)
         clear_product_location_form()
         populate_product_location_form(location)
         $(_card_product_edit_location).show()
@@ -246,7 +246,7 @@ const Location = (function () {
           globalSelectedLocation = false
           setTimeout(function () {
               let location_name = _location_name_filter.value
-              Console.log("location_name", location_name)
+              //Console.log("location_name", location_name)
           }, 200)
       })
       .on("search", function () {
@@ -264,7 +264,7 @@ const Location = (function () {
           onSelect: function (suggestion) {
               if (suggestion && suggestion.data) {
                   globalSelectedLocation = true
-                  Console.log("suggestion", suggestion)
+                  //Console.log("suggestion", suggestion)
               }
           },
           onSearchComplete: function (query, suggestions) {
@@ -334,7 +334,7 @@ const Location = (function () {
       .on("change", function () {
           
           let selected_value = $("input[name='location_display']:checked").val()
-          Console.log("selected_value", selected_value)
+          //Console.log("selected_value", selected_value)
           default_display = selected_value
           initAutoComplete()
           if (Location.detail["display_" + selected_value] !== null) {
@@ -585,7 +585,7 @@ const Location = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                //Console.log("error", e)
                 return handle_location_error("Error Validating Location")
             }
         } else {
@@ -1052,7 +1052,7 @@ const Location = (function () {
             populate_form(location)
         },
         set_detail: function (location) {
-            Console.log("location", location)
+            //Console.log("location", location)
             set_detail(location)
         },
         build: function () {

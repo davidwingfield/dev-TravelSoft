@@ -5,37 +5,29 @@ const Pricing = (function () {
     const _pricing_strategy_season_id = document.getElementById("pricing_strategy_season_id")
     const _pricing_strategy_profile_id = document.getElementById("pricing_strategy_profile_id")
     const _pricing_strategy_types_id = document.getElementById("pricing_strategy_types_id")
+    const _calendar_filter_profile_id = document.getElementById("calendar_filter_profile_id")
     
     /**
      * pricing strategy types id
      */
     $(_pricing_strategy_types_id)
       .on("change", function () {
-          Console.log("Pricing.pricing_strategy_types_id:change()", _pricing_strategy_types_id.value)
-          // ----
-          let pricing_strategy_types_id = parseInt(_pricing_strategy_types_id.value)
-          if (pricing_strategy_types_id === 1) {
-          
-          } else if (pricing_strategy_types_id === 1) {
-          
-          } else {
-          
-          }
+          //Console.log("Pricing.pricing_strategy_types_id:change()", _pricing_strategy_types_id.value)
       })
     
     $(_pricing_strategy_season_id)
       .on("change", function () {
-          Console.log("This", _pricing_strategy_season_id.value)
+          //Console.log("This", _pricing_strategy_season_id.value)
       })
     
     $(_pricing_strategy_unit_id)
       .on("change", function () {
-          Console.log("This", _pricing_strategy_unit_id.value)
+          //Console.log("This", _pricing_strategy_unit_id.value)
       })
     
     $(_pricing_strategy_profile_id)
       .on("change", function () {
-          Console.log("This", _pricing_strategy_profile_id.value)
+          //Console.log("This", _pricing_strategy_profile_id.value)
       })
     
     /**
@@ -44,7 +36,7 @@ const Pricing = (function () {
      * @param settings
      */
     const init = function (settings) {
-        Console.log("Pricing.init(settings)", settings)
+        //Console.log("Pricing.init(settings)", settings)
         resetForm()
         let pricings = []
         let pricing_detail
@@ -57,7 +49,6 @@ const Pricing = (function () {
         
         if (pricing_detail.pricing_strategy_types_id) {
             _pricing_strategy_types_id.value = pricing_detail.pricing_strategy_types_id
-            
         }
         loadAll(pricings)
     }
@@ -65,19 +56,49 @@ const Pricing = (function () {
     /**
      * load all pricing templates
      *
-     * @param pricings
+     * @param pricing_details
      */
-    const loadAll = function (pricings) {
+    const loadAll = function (pricing_details) {
+        //Console.log("Pricing.loadAll()", pricing_details)
         Pricing.all = new Map()
-        if (!pricings) {
-            pricings = []
+        if (!pricing_details) {
+            pricing_details = []
         }
         
-        $.each(pricings, function (k, pricing) {
-            Console.log("pricing", pricing)
+        $.each(pricing_details, function (k, matrix) {
+            //Console.log("matrix", matrix)
+            // ----
+            let pricings = matrix.pricings
+            let pricingCode = matrix.pricing_code
+            let matrixCode = matrix.matrix_code
+            let matrixDetails = Matrix.all.get(matrixCode)
+            let detail = set(matrix)
+            Pricing.all.set(pricingCode, detail)
+            /*
+            $.each(pricings, function (k, pricing) {
+                //Console.log("pricing", pricing)
+                // ----
+                
+                let pricing_code = (pricing.code) ? pricing.code : null
+                
+                if (pricing_code) {
+                    Pricing.all.set(pricing_code, pricing)
+                    let details = set(pricing)
+                    //Console.log("details", details)
+                    if (matrixDetails) {
+                        if (!matrixDetails["pricings"]) {
+                            matrixDetails["pricings"] = new Map()
+                        }
+                        
+                        matrixDetails["pricings"].set(pricing_code, pricing)
+                    }
+                }
+                
+            })
+            //*/
         })
         
-        Console.log("Pricing.all", Pricing.all)
+        //Console.log("Pricings.all", Pricing.all)
     }
     
     /**
@@ -85,7 +106,7 @@ const Pricing = (function () {
      */
     const loadSeasonDropdown = function () {
         let seasons = (Season && Season.all) ? Array.from(Season.all.values()) : []
-        let options = "<option value='' disabled readonly selected>-- Seasons --</option>"
+        let options = ""
         $.each(seasons, function (k, season) {
             let name = season.name
             let id = season.id
@@ -106,8 +127,12 @@ const Pricing = (function () {
             let id = profile.id
             options += `<option value="${id}">${name}</option>`
         })
+        /*
         $(_pricing_strategy_profile_id).empty()
         $(_pricing_strategy_profile_id).html(options)
+        //*/
+        $(_calendar_filter_profile_id).empty()
+        $(_calendar_filter_profile_id).html(options)
     }
     
     /**
@@ -115,7 +140,7 @@ const Pricing = (function () {
      */
     const loadUnitDropdown = function () {
         let units = (Unit && Unit.all) ? Array.from(Unit.all.values()) : []
-        let options = "<option value='' disabled readonly selected>-- Units --</option>"
+        let options = ""
         $.each(units, function (k, unit) {
             let name = unit.name
             let id = unit.id
@@ -129,27 +154,105 @@ const Pricing = (function () {
      * reset form
      */
     const resetForm = function () {
-        Console.log("Pricing.resetForm()", Variant.all)
+        //Console.log("Pricing.resetForm()", Variant.all)
         
         loadSeasonDropdown()
         loadUnitDropdown()
         loadProfileDropdown()
     }
     
-    const buildTable = function () {
-    
+    const defaultDetail = function () {
+        //Console.log("Pricing.defaultDetail()", Pricing)
+        
+        return {
+            pricing_code: null,
+            matrix_code: null,
+            code: null,
+            id: null,
+            product_id: null,
+            season_id: null,
+            unit_id: null,
+            matrix_id: null,
+            variant_id: 0,
+            name: null,
+            mon: null,
+            tue: null,
+            wed: null,
+            thu: null,
+            fri: null,
+            sat: null,
+            sun: null,
+            monMargin: null,
+            tueMargin: null,
+            wedMargin: null,
+            thuMargin: null,
+            friMargin: null,
+            satMargin: null,
+            sunMargin: null,
+            count: 1,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
+        }
     }
     
-    const defaultDetail = function () {}
-    
+    /**
+     * sets objects values
+     *
+     * @param pricing
+     * @returns {{thu: null, note: null, friMargin: null, code: null, tue: null, matrix_id: null, mon: null, sun: null, enabled: number, variant_id: number, price: null, product_id: null, wed: null, id: null, fri: null, sunMargin: null, unit_id: null, tueMargin: null, satMargin: null, wedMargin: null, margin: null, cost: null, date_created: *, sat: null, thuMargin: null, count: number, season_id: null, created_by: number, date_modified: *, name: null, modified_by: number, monMargin: null}}
+     */
     const set = function (pricing) {
-    
+        let detail = defaultDetail()
+        if (pricing) {
+            //Console.log(pricing)
+            detail.pricing_code = (pricing.pricing_code) ? pricing.pricing_code : null
+            detail.matrix_code = (pricing.matrix_code) ? pricing.matrix_code : null
+            detail.code = (pricing.code) ? pricing.code : null
+            detail.id = (pricing.id) ? pricing.id : null
+            detail.product_id = (pricing.product_id) ? pricing.id : null
+            detail.season_id = (pricing.season_id) ? pricing.id : null
+            detail.unit_id = (pricing.unit_id) ? pricing.id : null
+            detail.matrix_id = (pricing.matrix_id) ? pricing.matrix_id : null
+            detail.variant_id = (pricing.variant_id) ? pricing.variant_id : null
+            detail.name = (pricing.name) ? pricing.name : null
+            detail.mon = (pricing.mon) ? pricing.mon : null
+            detail.tue = (pricing.tue) ? pricing.tue : null
+            detail.wed = (pricing.wed) ? pricing.wed : null
+            detail.thu = (pricing.thu) ? pricing.thu : null
+            detail.fri = (pricing.fri) ? pricing.fri : null
+            detail.sat = (pricing.sat) ? pricing.sat : null
+            detail.sun = (pricing.sun) ? pricing.sun : null
+            detail.monMargin = (pricing.monMargin) ? pricing.monMargin : null
+            detail.tueMargin = (pricing.tueMargin) ? pricing.tueMargin : null
+            detail.wedMargin = (pricing.wedMargin) ? pricing.wedMargin : null
+            detail.thuMargin = (pricing.thuMargin) ? pricing.thuMargin : null
+            detail.friMargin = (pricing.friMargin) ? pricing.friMargin : null
+            detail.satMargin = (pricing.satMargin) ? pricing.satMargin : null
+            detail.sunMargin = (pricing.sunMargin) ? pricing.sunMargin : null
+            detail.count = (pricing.count) ? pricing.count : null
+            detail.enabled = (pricing.enabled) ? pricing.enabled : 1
+            detail.date_created = (pricing.date_created) ? pricing.date_created : formatDateMySQL()
+            detail.created_by = (pricing.created_by) ? pricing.created_by : user_id
+            detail.date_modified = (pricing.date_modified) ? pricing.date_modified : formatDateMySQL()
+            detail.modified_by = (pricing.modified_by) ? pricing.modified_by : user_id
+            detail.note = (pricing.note) ? pricing.note : null
+        }
+        //Console.log("   detail", detail)
+        Pricing.detail = detail
+        return detail
     }
     
     return {
         all: new Map(),
         init: function (settings) {
             init(settings)
+        },
+        set: function (pricing) {
+            return set(pricing)
         },
         resetForm: function () {
             resetForm()

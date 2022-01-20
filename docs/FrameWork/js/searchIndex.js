@@ -2036,6 +2036,11 @@ Search.appendIndex(
             "summary": "update\u0020record",
             "url": "classes/Framework-App-Models-ProviderModel.html#method_updateRecord"
         },                {
+            "fqsen": "\\Framework\\App\\Models\\ProviderModel\u003A\u003AupdateLocation\u0028\u0029",
+            "name": "updateLocation",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ProviderModel.html#method_updateLocation"
+        },                {
             "fqsen": "\\Framework\\App\\Models\\ProviderModel\u003A\u003Aupdate\u0028\u0029",
             "name": "update",
             "summary": "update\u0020provider\u0020record",
@@ -2263,13 +2268,18 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\StatusTypesModel",
             "name": "StatusTypesModel",
-            "summary": "Short\u0020StatusTypes\u0020Description",
+            "summary": "Short\u0020StatusTypes\u0020Description\nLong\u0020StatusTypes\u0020Description",
             "url": "classes/Framework-App-Models-StatusTypesModel.html"
         },                {
             "fqsen": "\\Framework\\App\\Models\\StatusTypesModel\u003A\u003Aget\u0028\u0029",
             "name": "get",
             "summary": "",
             "url": "classes/Framework-App-Models-StatusTypesModel.html#method_get"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\StatusTypesModel\u003A\u003AgetAllotBy\u0028\u0029",
+            "name": "getAllotBy",
+            "summary": "",
+            "url": "classes/Framework-App-Models-StatusTypesModel.html#method_getAllotBy"
         },                {
             "fqsen": "\\Framework\\App\\Models\\StatusTypesModel\u003A\u003AgetOne\u0028\u0029",
             "name": "getOne",
@@ -3621,9 +3631,19 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Profile.html#method_serveGet"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Profile\u003A\u003AvalidateName\u0028\u0029",
+            "name": "validateName",
+            "summary": "validate\u0020name\u0020exists",
+            "url": "classes/Framework-App-Controllers-Profile.html#method_validateName"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Profile\u003A\u003AserveUpdate\u0028\u0029",
+            "name": "serveUpdate",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Profile.html#method_serveUpdate"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Profile\u003A\u003Aautocomplete\u0028\u0029",
             "name": "autocomplete",
-            "summary": "autocomplete",
+            "summary": "",
             "url": "classes/Framework-App-Controllers-Profile.html#method_autocomplete"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Profile\u003A\u003AgetByProductId\u0028\u0029",
@@ -3681,10 +3701,25 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Models-ProfileModel.html#method_fetchProfilesByProductId"
         },                {
+            "fqsen": "\\Framework\\App\\Models\\ProfileModel\u003A\u003AfetchProfileByProfileId\u0028\u0029",
+            "name": "fetchProfileByProfileId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ProfileModel.html#method_fetchProfileByProfileId"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ProfileModel\u003A\u003AfetchProfilesByByNameAndProductId\u0028\u0029",
+            "name": "fetchProfilesByByNameAndProductId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ProfileModel.html#method_fetchProfilesByByNameAndProductId"
+        },                {
             "fqsen": "\\Framework\\App\\Models\\ProfileModel\u003A\u003Aprofile_ac\u0028\u0029",
             "name": "profile_ac",
             "summary": "",
             "url": "classes/Framework-App-Models-ProfileModel.html#method_profile_ac"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ProfileModel\u003A\u003AupdateRecord\u0028\u0029",
+            "name": "updateRecord",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ProfileModel.html#method_updateRecord"
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProfileModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
@@ -3760,6 +3795,76 @@ Search.appendIndex(
             "name": "selectQuery",
             "summary": "",
             "url": "classes/Framework-App-Models-MatrixModel.html#property_selectQuery"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Pricing",
+            "name": "Pricing",
+            "summary": "Pricing",
+            "url": "classes/Framework-App-Controllers-Pricing.html"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Pricing\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "get\u0020constructor\u0020methods",
+            "url": "classes/Framework-App-Controllers-Pricing.html#method___construct"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Pricing\u003A\u003AserveGetByMatrixId\u0028\u0029",
+            "name": "serveGetByMatrixId",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Pricing.html#method_serveGetByMatrixId"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Pricing\u003A\u003AserveGetByProductId\u0028\u0029",
+            "name": "serveGetByProductId",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Pricing.html#method_serveGetByProductId"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Pricing\u003A\u003AgetPricingsByMatrixId\u0028\u0029",
+            "name": "getPricingsByMatrixId",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Pricing.html#method_getPricingsByMatrixId"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Pricing\u003A\u003AgetPricingsByProductId\u0028\u0029",
+            "name": "getPricingsByProductId",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Pricing.html#method_getPricingsByProductId"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Pricing\u003A\u003AformatPricing\u0028\u0029",
+            "name": "formatPricing",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Pricing.html#method_formatPricing"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Pricing\u003A\u003Aformat\u0028\u0029",
+            "name": "format",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Pricing.html#method_format"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PricingModel",
+            "name": "PricingModel",
+            "summary": "Short\u0020PricingModel\u0020Description\nLong\u0020PricingModel\u0020Description",
+            "url": "classes/Framework-App-Models-PricingModel.html"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PricingModel\u003A\u003AfetchByMatrixId\u0028\u0029",
+            "name": "fetchByMatrixId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PricingModel.html#method_fetchByMatrixId"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PricingModel\u003A\u003AfetchByProductId\u0028\u0029",
+            "name": "fetchByProductId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PricingModel.html#method_fetchByProductId"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PricingModel\u003A\u003A\u0024dbTable",
+            "name": "dbTable",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PricingModel.html#property_dbTable"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PricingModel\u003A\u003A\u0024dbFields",
+            "name": "dbFields",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PricingModel.html#property_dbFields"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PricingModel\u003A\u003A\u0024selectQuery",
+            "name": "selectQuery",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PricingModel.html#property_selectQuery"
         },                {
             "fqsen": "\\",
             "name": "\\",

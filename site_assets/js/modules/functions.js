@@ -1,4 +1,5 @@
 let mdbPreloader = document.getElementById("mdb-preloader")
+let showElements
 
 $.fn.BuildDropDown = function (settings) {
     if (!settings || !settings.text_field || !settings.id_field) {
@@ -74,6 +75,10 @@ jQuery.fn.dataTable.Api.register("page.jumpToData()", function (data, column) {
     return this
 })
 
+const isOdd = function (num) {
+    return num % 2
+}
+
 const clear_validation = function (formElement) {
     $(".autocomplete-suggestions").hide()
     
@@ -88,7 +93,7 @@ const clear_validation = function (formElement) {
 
 const get_errors = function (validator) {
     var submitErrorsList = {}
-    //console.dir(validator)
+    //Console.dir(validator)
     //for (var i = 0; i < validator.errorList.length; i++) {
     //    submitErrorsList[validator.errorList[i].element.name] = validator.errorList[i].message
     //}
@@ -183,7 +188,18 @@ const validator_init = function (settings) {
     
     return jQuery.validator
 }
-
+const jsonPrettify = (json) => {
+    if (typeof json === "object" && json !== null) {
+        return JSON.stringify(json, undefined, '\t')
+    }
+    
+    try {
+        const obj = JSON.parse(json)
+        return jsonPrettify(obj)
+    } catch (e) {
+        return json
+    }
+}
 const setError = function (element, msg) {
     let id = $(element).attr("id")
     let el = $("#" + id + "")
@@ -283,7 +299,7 @@ const sendGetRequest = function (url, data_to_send, callback) {
                 //Console.log("getError:2")
                 return handleError("failed")
             } else if (status === "success" && typeof data.error !== "undefined") {
-                Console.log(data.error)
+                Console.log("data.error", data.error)
                 //Console.log("getError:3")
                 return handleError(data.error)
             } else {
@@ -488,6 +504,17 @@ const populateMultiSelect = function (arr, elem) {
         }
         
     }
+}
+
+const findObjectByKey = function (array, key, value) {
+    let results = []
+    for (var i = 0; i < array.length; i++) {
+        if (array[i][key] === value) {
+            results.push(array[i])
+        }
+    }
+    
+    return results
 }
 
 const addTinyMCE = function (el) {
@@ -734,9 +761,9 @@ jQuery.extend({
             Console.log('http://dev.travelsoft.com/error')
             //*/
             if (typeof textStatus !== "undefined") {
-                console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
+                Console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
             } else {
-                console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
+                Console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
             }
             
             if ($.isFunction(callback)) {
@@ -1084,7 +1111,7 @@ const weatherUpdate = function (city) {
     xhr.send()
     xhr.onload = () => {
         if (xhr.status === 404) {
-            Console.log(`${cityName} not found`)
+            //Console.log(`${cityName} not found`)
         } else {
             let data = JSON.parse(xhr.response)
             let mainWeatherCityName = data.name
@@ -1092,13 +1119,70 @@ const weatherUpdate = function (city) {
             let mainWeather = data.weather[0].main
             let mainWeatherDescription = data.weather[0].description
             let mainWeatherImage = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
-            Console.log("mainWeatherCityName", mainWeatherCityName)
-            Console.log("mainWeatherTemperature", mainWeatherTemperature)
-            Console.log("mainWeather", mainWeather)
-            Console.log("mainWeatherDescription", mainWeatherDescription)
-            Console.log("mainWeatherImage", mainWeatherImage)//100x100
-            Console.log("data", data)
+            //Console.log("mainWeatherCityName", mainWeatherCityName)
+            //Console.log("mainWeatherTemperature", mainWeatherTemperature)
+            //Console.log("mainWeather", mainWeather)
+            //Console.log("mainWeatherDescription", mainWeatherDescription)
+            //Console.log("mainWeatherImage", mainWeatherImage)//100x100
+            //Console.log("data", data)
         }
     }
 }
+const ucwords = function (str) {
+    str = str.toLowerCase()
+    return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
+      function (s) {
+          return s.toUpperCase()
+      })
+}
+String.prototype.ucwords = function () {
+    str = this.toLowerCase()
+    return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
+      function (s) {
+          return s.toUpperCase()
+      })
+}
 
+$(function () {
+    $(".debug_demo")
+      .on("click", function () {
+          showElements = true
+          if (!$(this).attr("data-shown")) {
+              $(this).attr("data-shown", "true")
+              showElements = true
+          }
+          
+          if ($(this).attr("data-shown") === "false") {
+              $(this).attr("data-shown", "true")
+              showElements = true
+          } else {
+              showElements = false
+              $(this).attr("data-shown", "false")
+          }
+          
+          let els = document.getElementsByClassName("dev-element")
+          
+          for (let i = 0; i < els.length; i++) {
+              
+              let element = els[i]
+              let tagName = element.tagName
+              
+              if (tagName.toLowerCase() === "input") {
+                  
+                  if (showElements === false) {
+                      element.hidden = false
+                      element.type = "text"
+                  } else {
+                      element.hidden = true
+                      element.type = "hidden"
+                  }
+              } else if (tagName.toLowerCase() === "label") {
+                  if (showElements === false) {
+                      $(element).removeClass("d-none")
+                  } else {
+                      $(element).addClass("d-none")
+                  }
+              }
+          }
+      })
+})

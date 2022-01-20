@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         //Console.log("refresh")
                         break
                     case "panel-hide":
-                        
                         elem.addEventListener("click", function () {
                             let dataToOpen = $(elem).attr("data-loadonhide")
                             $(dataToOpen).show()
@@ -28,7 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         break
                     case"panel-fullscreen":
                         elem.addEventListener("click", function () {
-                            
                             if ($(elem).hasClass("fa-expand")) {
                                 $(elem).removeClass("fa-expand")
                                 $(elem).addClass("fa-compress")

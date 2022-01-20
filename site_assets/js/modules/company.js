@@ -58,6 +58,8 @@ const Company = (function () {
         },
         
     }
+    
+    let reset_company = {}
     let $company_key
     let temp_company = {}
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
@@ -127,98 +129,6 @@ const Company = (function () {
           set_progress()
       })
     
-    // ----
-    
-    const _default_detail = function () {
-        return {
-            created_by: user_id,
-            date_created: formatDateMySQL(),
-            date_modified: formatDateMySQL(),
-            email: null,
-            cover_image: "/public/img/placeholder.jpg",
-            enabled: 1,
-            fax: null,
-            id: null,
-            modified_by: user_id,
-            name: null,
-            note: null,
-            phone_1: null,
-            phone_2: null,
-            status_id: 10,
-            website: null,
-            description_short: null,
-            description_long: null,
-            keywords: null,
-            logo: null,
-        }
-    }
-    
-    /**
-     * fill in form data
-     *
-     * @param company
-     */
-    const populate_form = function (company) {
-        let company_logo_image = $("#company_logo").dropify()
-        $(_company_id).val((company.id) ? company.id : "").trigger("change")
-        _company_name.value = (company.name) ? company.name : ""
-        _company_phone_1.value = (company.phone_1) ? company.phone_1 : ""
-        _company_phone_2.value = (company.phone_2) ? company.phone_2 : ""
-        _company_fax.value = (company.fax) ? company.fax : ""
-        _company_email.value = (company.email) ? company.email : ""
-        _company_website.value = (company.website) ? company.website : ""
-        _company_description_long.value = (company.description_long) ? company.description_long : ""
-        _company_description_short.value = (company.description_short) ? company.description_short : ""
-        let company_keywords = (company.keywords) ? company.keywords : ""
-        $company_key = $(_company_key).BuildKeyword(company_keywords)
-        if (_provider_name) {
-            $(_provider_name).val((company.name) ? company.name : "").trigger("change")
-        }
-        
-        if (_vendor_name) {
-            _vendor_name.value = (company.name) ? company.name : null
-        }
-        
-        if (_provider_company_id) {
-            _provider_company_id.value = (company.id) ? company.id : null
-        }
-        
-        if (_vendor_company_id) {
-            _vendor_company_id.value = (company.id) ? company.id : null
-        }
-        
-        if (_contact_company_id) {
-            _contact_company_id.value = (company.id) ? company.id : null
-        }
-        
-        if (_address_company_id) {
-            _address_company_id.value = (company.id) ? company.id : null
-        }
-        
-    }
-    
-    const on_click_outside = (e) => {
-        let tar = $(e.target).parents("div.form_element")
-        if (!tar[0] && !e.target.className.includes("company_name")) {
-            if (_company_name.value === "") {
-                populate_form(temp_company)
-            }
-            
-            temp_company = {}
-            destroy_click()
-        }
-    }
-    
-    /**
-     * destroy_click
-     */
-    const destroy_click = function () {
-        window.removeEventListener("click", on_click_outside)
-    }
-    
-    /**
-     * initialize provider autocomplete
-     */
     const initAutoComplete = function () {
         $(_company_name)
           .on("change", function () {
@@ -337,12 +247,87 @@ const Company = (function () {
           })
     }
     
-    /**
-     * handle company object errors
-     *
-     * @param msg
-     */
-    const handle_company_error = function (msg) {
+    const defaultDetail = function () {
+        return {
+            created_by: user_id,
+            date_created: formatDateMySQL(),
+            date_modified: formatDateMySQL(),
+            email: null,
+            cover_image: "/public/img/placeholder.jpg",
+            enabled: 1,
+            fax: null,
+            id: null,
+            modified_by: user_id,
+            name: null,
+            note: null,
+            phone_1: null,
+            phone_2: null,
+            status_id: 10,
+            website: null,
+            description_short: null,
+            description_long: null,
+            keywords: null,
+            logo: null,
+        }
+    }
+    
+    const populate_form = function (company) {
+        let company_logo_image = $("#company_logo").dropify()
+        let company_keywords = (company.keywords) ? company.keywords : ""
+        $(_company_id).val((company.id) ? company.id : "").trigger("change")
+        _company_name.value = (company.name) ? company.name : ""
+        _company_phone_1.value = (company.phone_1) ? company.phone_1 : ""
+        _company_phone_2.value = (company.phone_2) ? company.phone_2 : ""
+        _company_fax.value = (company.fax) ? company.fax : ""
+        _company_email.value = (company.email) ? company.email : ""
+        _company_website.value = (company.website) ? company.website : ""
+        _company_description_long.value = (company.description_long) ? company.description_long : ""
+        _company_description_short.value = (company.description_short) ? company.description_short : ""
+        
+        $company_key = $(_company_key).BuildKeyword(company_keywords)
+        if (_provider_name) {
+            $(_provider_name).val((company.name) ? company.name : "").trigger("change")
+        }
+        
+        if (_vendor_name) {
+            _vendor_name.value = (company.name) ? company.name : null
+        }
+        
+        if (_provider_company_id) {
+            _provider_company_id.value = (company.id) ? company.id : null
+        }
+        
+        if (_vendor_company_id) {
+            _vendor_company_id.value = (company.id) ? company.id : null
+        }
+        
+        if (_contact_company_id) {
+            _contact_company_id.value = (company.id) ? company.id : null
+        }
+        
+        if (_address_company_id) {
+            _address_company_id.value = (company.id) ? company.id : null
+        }
+        
+    }
+    
+    const on_click_outside = (e) => {
+        let tar = $(e.target).parents("div.form_element")
+        if (!tar[0] && !e.target.className.includes("company_name")) {
+            if (_company_name.value === "") {
+                populate_form(temp_company)
+            }
+            
+            temp_company = {}
+            destroy_click()
+        }
+    }
+    
+    const destroy_click = function () {
+        window.removeEventListener("click", on_click_outside)
+    }
+    
+    const handleCompanyError = function (msg) {
         toastr.error(msg)
     }
     
@@ -417,12 +402,6 @@ const Company = (function () {
         }
     }
     
-    /**
-     * fetch_company_by_name
-     *
-     * @param dataToSend
-     * @param callback
-     */
     const fetch_company_by_name = function (dataToSend, callback) {
         let url = "/api/v1.0/companies/validate"
         
@@ -432,15 +411,15 @@ const Company = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handle_company_error("Oops: 1")
+                        return handleCompanyError("Oops: 1")
                     }
                 })
             } catch (e) {
-                Console.log(e)
-                return handle_company_error("Error Validating Company")
+                Console.log("error", e)
+                return handleCompanyError("Error Validating Company")
             }
         } else {
-            return handle_company_error("Error Loading Company- Missing Data")
+            return handleCompanyError("Error Loading Company- Missing Data")
         }
     }
     
@@ -451,7 +430,7 @@ const Company = (function () {
                 if (data) {
                     return callback(data)
                 } else {
-                    return handle_company_error("Oops: 1")
+                    return handleCompanyError("Oops: 1")
                 }
             })
         }
@@ -504,16 +483,8 @@ const Company = (function () {
         }
     }
     
-    let reset_company = {}
-    
-    /**
-     * set detail from data
-     *
-     * @param company
-     * @returns {{phone_2: null, note: null, phone_1: null, website: null, keywords: null, date_created: *, description_long: null, created_by: number, enabled: number, description_short: null, status_id: number, date_modified: *, modified_by: number, name: null, logo: null, cover_image: string, id: null, fax: null, email: null}}
-     */
     const set_detail = function (company) {
-        let detail = _default_detail()
+        let detail = defaultDetail()
         
         if (company) {
             detail.created_by = (company.created_by) ? company.created_by : user_id

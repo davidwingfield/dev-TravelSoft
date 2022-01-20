@@ -16,7 +16,7 @@ $.fn.DisabledDOW = function (settings) {
     const $this = $(_this)
     
     $this.on("change", function () {
-        //console.log("change")
+        //Console.log("change")
     })
     
     /**
@@ -225,7 +225,7 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                //Console.log("dow_select_mon", DisabledDOW.disabled_dows)
+                
                 break
             case name_prefix + "dow_select_tue":
                 indexId = 2
@@ -309,14 +309,13 @@ $.fn.DisabledDOW = function (settings) {
     
     const value = function (val) {
         if (val) {
-            Console.log("val", val)
+            //Console.log("val", val)
         } else {
         
         }
     }
     
     const init = function (disabled_dow) {
-        console.log("disabled_days.init(disabled_dow)", disabled_dow)
         let disabled_days = []
         
         if (disabled_dow) {
@@ -324,9 +323,9 @@ $.fn.DisabledDOW = function (settings) {
                 DisabledDOW.disabled_dows = []
                 return []
             }
-            console.log("disabled_days.init(typeof disabled_dow)", typeof disabled_dow)
+            
             if (typeof disabled_dow === "string") {
-                disabled_days = getListOfIds(disabled_dow)
+                disabled_days = getListOfIds(disabled_dow.replace(/\s/g, ''))
             } else if (typeof disabled_dow === "object") {
                 disabled_days = disabled_dow
             } else {
@@ -334,7 +333,7 @@ $.fn.DisabledDOW = function (settings) {
             }
             
         }
-        console.log("disabled_days.init(disabled_days)", disabled_days)
+        
         DisabledDOW.disabled_dows = disabled_days
         updateCheckBoxes()
     }

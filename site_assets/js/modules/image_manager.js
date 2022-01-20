@@ -85,7 +85,7 @@ $.fn.imageManager = function (options) {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
         }
     }

@@ -1,7 +1,11 @@
 $(document).ready(function () {
+    
     const inputs = document.getElementsByTagName("input")
     
     window.addEventListener("load", function () {
+        if (mdbPreloader) {
+            $(mdbPreloader).delay(1000).fadeOut(300)
+        }
         /*
         for (let i = 0; i < inputs.length; i++) {
             if (inputs[i].classList.contains("date-format")) {
@@ -16,22 +20,16 @@ $(document).ready(function () {
         }
         //*/
     }, false)
-    let codeData = document.querySelectorAll(".panel-code")
+    
     window.addEventListener("resize", debounce(function (e) {
         resize_elements("end of resizing")
     }))
     
-    if (mdbPreloader) {
-        //$("#mdb-preloader").fadeOut(500)
-    } else {
-        Console.log("no preloader")
-    }
+    let codeData = document.querySelectorAll(".panel-code")
     
     new WOW().init()
     
     $(this).scrollTop(0)
-    
-    toastr.options = toastrOptions
     
     $("body").scrollTop()
     
@@ -83,19 +81,6 @@ $(document).ready(function () {
     //toastr.warning('I do not think that word means what you think it means.', 'Warning!')
     //toastr.error('I do not think that word means what you think it means.', 'Error!')
     
-    const jsonPrettify = (json) => {
-        if (typeof json === "object" && json !== null) {
-            return JSON.stringify(json, undefined, '\t')
-        }
-        
-        try {
-            const obj = JSON.parse(json)
-            return jsonPrettify(obj)
-        } catch (e) {
-            return json
-        }
-    }
-    
     codeData.forEach(el => {
         let html = $(el).html()
         let formattedCode = ""
@@ -126,5 +111,19 @@ $(document).ready(function () {
     
     $("button.pre_display_button").show()
     $("div.pre_display_el").hide()
+    
+    $(function () {
+        $("textarea.short-description").maxlength({
+            alwaysShow: true,
+            threshold: 10,
+            warningClass: "badge badge-warning",
+            limitReachedClass: "badge badge-danger",
+            //placement: 'top',
+            //preText: 'used ',
+            //separator: ' of ',
+            //postText: ' chars.',
+        })
+        
+    })
 })
 

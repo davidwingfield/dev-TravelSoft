@@ -428,7 +428,7 @@ const Contact = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 return handleContactError("Error Validating Company")
             }
         } else {

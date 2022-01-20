@@ -116,7 +116,7 @@ $.fn.table = function (settings) {
                 $dTable.page.jumpToData(row_data.id, 0)
                 formatTable()
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
         }
     }
@@ -128,7 +128,7 @@ $.fn.table = function (settings) {
                 $dTable.row(rowId).data(row_data).draw()
                 loadRow(row_data.id)
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
         }
         
@@ -142,7 +142,7 @@ $.fn.table = function (settings) {
                 $("#" + table_id + "_tr_" + row_data.id).addClass("selected")
                 $dTable.page.jumpToData(row_data.id, 0)
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
             
         }
@@ -154,7 +154,7 @@ $.fn.table = function (settings) {
             try {
                 $dTable.page.jumpToData(row_data.id, 0)
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
             
         }
@@ -170,7 +170,7 @@ $.fn.table = function (settings) {
                   .remove()
                   .draw()
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
         }
     }
@@ -214,7 +214,7 @@ $.fn.table = function (settings) {
             formatTable()
             
         } catch (e) {
-            Console.log(e)
+            Console.log("error", e)
         }
         
     }

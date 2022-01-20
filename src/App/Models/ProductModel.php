@@ -1,25 +1,25 @@
 <?php
-    
-    namespace Framework\App\Models;
-    
-    use Exception;
-    use Framework\App\Controllers\Location;
-    use Framework\Core\Model;
-    use Framework\Logger\Log;
-    
-    /**
-     * Short ProductModel Description
-     * Long ProductModel Description
-     *
-     * @package            Framework\App
-     * @subpackage         Models
-     */
-    class ProductModel extends Model
-    {
-        
-        protected static $dbTable = "product";
-        protected static $dbFields = Array();
-        protected static $sql = "
+	
+	namespace Framework\App\Models;
+	
+	use Exception;
+	use Framework\App\Controllers\Location;
+	use Framework\Core\Model;
+	use Framework\Logger\Log;
+	
+	/**
+	 * Short ProductModel Description
+	 * Long ProductModel Description
+	 *
+	 * @package            Framework\App
+	 * @subpackage         Models
+	 */
+	class ProductModel extends Model
+	{
+		
+		protected static $dbTable = "product";
+		protected static $dbFields = Array();
+		protected static $sql = "
             SELECT
                 PRODUCT.id AS 'product_id',
                 PRODUCT.category_id AS 'product_category_id',
@@ -96,136 +96,132 @@
             JOIN 	status_types STATUS_TYPES ON STATUS_TYPES.id = PRODUCT.status_types_id
             WHERE   PRODUCT.enabled = 1
             ";
-        
-        public static function get(int $id = null): array
-        {
-            $where = "";
-            if (!is_null($id)) {
-                $where = "AND   PRODUCT.id = $id";
-            }
-            
-            try {
-                $sql = self::$sql . $where;
-                
-                return Model::$db->rawQuery($sql);
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-        }
-        
-        public static function getOne(int $id = null): array
-        {
-            try {
-                if (!is_null($id)) {
-                    Model::$db->where("id", $id);
-                }
-                
-                Model::$db->where("enabled", 1);
-                
-                return Model::$db->getOne(self::$dbTable);
-            } catch (Exception $e) {
-                return [];
-            }
-        }
-        
-        public static function update(array $params = []): array
-        {
-            $id = 1;
-            
-            return self::get($id);
-        }
-        
-        public static function product_ac(string $st = "", int $category_id = null): array
-        {
-            if (is_null($category_id)) {
-                return [];
-            }
-            
-            try {
-                $searchTerm = addslashes($st);
-                $sql = self::$sql . "
+		
+		public static function get(int $id = null): array
+		{
+			$where = "";
+			if (!is_null($id)) {
+				$where = "AND   PRODUCT.id = $id";
+			}
+			
+			try {
+				$sql = self::$sql . $where;
+
+//				Log::$debug_log->trace($sql);
+				
+				return Model::$db->rawQuery($sql);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		public static function getOne(int $id = null): array
+		{
+			try {
+				if (!is_null($id)) {
+					Model::$db->where("id", $id);
+				}
+				
+				Model::$db->where("enabled", 1);
+				
+				return Model::$db->getOne(self::$dbTable);
+			} catch (Exception $e) {
+				return [];
+			}
+		}
+		
+		public static function update(array $params = []): array
+		{
+			$id = 1;
+			
+			return self::get($id);
+		}
+		
+		public static function product_ac(string $st = "", int $category_id = null): array
+		{
+			if (is_null($category_id)) {
+				return [];
+			}
+			
+			try {
+				$searchTerm = addslashes($st);
+				$sql = self::$sql . "
                     AND			PRODUCT.name LIKE '%$searchTerm%'
                     AND         PRODUCT.category_id = $category_id
                     ORDER BY    LENGTH(PRODUCT.name), CAST(PRODUCT.name AS UNSIGNED), PRODUCT.name ASC
                     LIMIT 20;";
-                
-                //Log::$debug_log->trace($sql);
-                
-                return Model::$db->rawQuery($sql);
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-        }
-        
-        //
-        public static function addRecord(array $product = null): array
-        {
-            $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
-            
-            $id = Model::setInt((isset($product["id"])) ? $product["id"] : null);
-            $category_id = Model::setInt((isset($product["category_id"])) ? $product["category_id"] : null);
-            $city_id = Model::setInt((isset($product["city_id"])) ? $product["city_id"] : null);
-            
-            $pricing_strategy_types_id = Model::setInt((isset($product["pricing_strategy_types_id"])) ? $product["pricing_strategy_types_id"] : null);
-            $status_types_id = Model::setInt((isset($product["status_types_id"])) ? $product["status_types_id"] : 1);
-            $currency_id = Model::setInt((isset($product["currency_id"])) ? $product["currency_id"] : 5);
-            $provider_id = Model::setInt((isset($product["provider_id"])) ? $product["provider_id"] : null);
-            $vendor_id = Model::setInt((isset($product["vendor_id"])) ? $product["vendor_id"] : null);
-            $rating_types_id = Model::setInt((isset($product["rating_types_id"])) ? $product["rating_types_id"] : 5);
-            $api_id = Model::setInt((isset($product["api_id"])) ? $product["api_id"] : null);
-            $created_by = Model::setInt($user_id);
-            $modified_by = Model::setInt($user_id);
-            $day_span = Model::setInt((isset($product["day_span"])) ? $product["day_span"] : 1);
-            
-            $provider_vendor_match = Model::setBool((isset($product["provider_vendor_match"])) ? $product["provider_vendor_match"] : 0);
-            $enabled = Model::setBool((isset($product["enabled"])) ? $product["enabled"] : 1);
-            $use_provider_location_id = Model::setBool((isset($product["use_provider_location_id"])) ? $product["use_provider_location_id"] : 0);
-            
-            $sku = Model::setString((isset($product["sku"])) ? $product["sku"] : null);
-            $name = Model::setString((isset($product["name"])) ? $product["name"] : null);
-            $depart_from = Model::setString((isset($product["depart_from"])) ? $product["depart_from"] : null);
-            $arrive_to = Model::setString((isset($product["arrive_to"])) ? $product["arrive_to"] : null);
-            $depart_time = Model::setString((isset($product["depart_time"])) ? $product["depart_time"] : null);
-            $arrive_time = Model::setString((isset($product["arrive_time"])) ? $product["arrive_time"] : null);
-            $hotel_code = Model::setString((isset($product["hotel_code"])) ? $product["hotel_code"] : null);
-            
-            $note = Model::setLongText((isset($product["note"])) ? $product["note"] : null);
-            $description_long = Model::setLongText((isset($product["description_long"])) ? $product["description_long"] : null);
-            $description_short = Model::setLongText((isset($product["description_short"])) ? $product["description_short"] : null);
-            $keywords = Model::setLongText((isset($product["keywords"])) ? $product["keywords"] : null);
-            $amenities = Model::setLongText((isset($product["amenities"])) ? $product["amenities"] : null);
-            $location = [];
-            $location["name"] = (string)"City Center";
-            $location["city_id"] = (int)$city_id;
-            $location["location_types_id"] = 1;
-            
-            $location_detail = Location::getByCityId($location["city_id"], $location["name"]);
-            
-            if (count($location_detail) > 0) {
-                //Log::$debug_log->trace("Yes Location Detail");
-                //Log::$debug_log->trace($location_detail);
-                $location_detail = $location_detail;
-                
-            } else {
-                //    Log::$debug_log->trace("No Location Detail");
-                $location_detail = Location::update($location);
-                //Log::$debug_log->trace($location_detail);
-                if (count($location_detail) > 0) {
-                    $location_detail = $location_detail[0];
-                }
-            }
-            
-            //Log::$debug_log->trace($location_detail);
-            
-            $location_id = $location_detail["id"];
-            
-            //Log::$debug_log->trace($location_id);
-            
-            $sql = "
+				
+				//Log::$debug_log->trace($sql);
+				
+				return Model::$db->rawQuery($sql);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		//
+		public static function addRecord(array $product = null): array
+		{
+			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+			
+			$id = Model::setInt((isset($product["id"])) ? $product["id"] : null);
+			$category_id = Model::setInt((isset($product["category_id"])) ? $product["category_id"] : null);
+			$city_id = Model::setInt((isset($product["city_id"])) ? $product["city_id"] : null);
+			
+			$pricing_strategy_types_id = Model::setInt((isset($product["pricing_strategy_types_id"])) ? $product["pricing_strategy_types_id"] : null);
+			$status_types_id = Model::setInt((isset($product["status_types_id"])) ? $product["status_types_id"] : 1);
+			$currency_id = Model::setInt((isset($product["currency_id"])) ? $product["currency_id"] : 5);
+			$provider_id = Model::setInt((isset($product["provider_id"])) ? $product["provider_id"] : null);
+			$vendor_id = Model::setInt((isset($product["vendor_id"])) ? $product["vendor_id"] : null);
+			$rating_types_id = Model::setInt((isset($product["rating_types_id"])) ? $product["rating_types_id"] : 5);
+			$api_id = Model::setInt((isset($product["api_id"])) ? $product["api_id"] : null);
+			$created_by = Model::setInt($user_id);
+			$modified_by = Model::setInt($user_id);
+			$day_span = Model::setInt((isset($product["day_span"])) ? $product["day_span"] : 1);
+			
+			$provider_vendor_match = Model::setBool((isset($product["provider_vendor_match"])) ? $product["provider_vendor_match"] : 0);
+			$enabled = Model::setBool((isset($product["enabled"])) ? $product["enabled"] : 1);
+			$use_provider_location_id = Model::setBool((isset($product["use_provider_location_id"])) ? $product["use_provider_location_id"] : 0);
+			
+			$sku = Model::setString((isset($product["sku"])) ? $product["sku"] : null);
+			$name = Model::setString((isset($product["name"])) ? $product["name"] : null);
+			$depart_from = Model::setString((isset($product["depart_from"])) ? $product["depart_from"] : null);
+			$arrive_to = Model::setString((isset($product["arrive_to"])) ? $product["arrive_to"] : null);
+			$depart_time = Model::setString((isset($product["depart_time"])) ? $product["depart_time"] : null);
+			$arrive_time = Model::setString((isset($product["arrive_time"])) ? $product["arrive_time"] : null);
+			$hotel_code = Model::setString((isset($product["hotel_code"])) ? $product["hotel_code"] : null);
+			
+			$note = Model::setLongText((isset($product["note"])) ? $product["note"] : null);
+			$description_long = Model::setLongText((isset($product["description_long"])) ? $product["description_long"] : null);
+			$description_short = Model::setLongText((isset($product["description_short"])) ? $product["description_short"] : null);
+			$keywords = Model::setLongText((isset($product["keywords"])) ? $product["keywords"] : null);
+			$amenities = Model::setLongText((isset($product["amenities"])) ? $product["amenities"] : null);
+			
+			$location = [];
+			$location["name"] = (string)"City Center";
+			$location["city_id"] = (int)$city_id;
+			$location["location_types_id"] = 1;
+			
+			$location_detail = Location::getByCityId($location["city_id"], $location["name"]);
+			
+			if (count($location_detail) <= 0) {
+				$location_detail = Location::update($location);
+				if (count($location_detail) > 0) {
+					$location_detail = $location_detail[0];
+				}
+			}
+			
+			//Log::$debug_log->trace($location_detail);
+			
+			$location_id = (int)$location_detail["id"];
+			
+			//Log::$debug_log->trace($location_id);
+			
+			$sql = "
                 INSERT INTO product (
                     id, category_id, pricing_strategy_types_id, status_types_id, currency_id,
                     location_id, provider_id, vendor_id, rating_types_id, name, city_id,
@@ -276,24 +272,26 @@
                     modified_by = VALUES(modified_by),
                     date_modified = VALUES(date_modified);
             ";
-            
-            //Log::$debug_log->trace($sql);
-            
-            try {
-                Model::$db->rawQuery($sql);
-                $product_id = Model::$db->getInsertId();
-                //    Log::$debug_log->trace($product_id);
-                if ($product_id) {
-                    return self::get($product_id);
-                }
-                
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-            
-            return [];
-        }
-        
-    }
+			
+			//Log::$debug_log->trace($sql);
+			
+			try {
+				Model::$db->rawQuery($sql);
+				$product_id = Model::$db->getInsertId();
+				
+				if ($product_id) {
+					return array("id" => $product_id);
+				} else {
+					Log::$debug_log->error("missing product id");
+				}
+				
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+			
+			return [];
+		}
+		
+	}

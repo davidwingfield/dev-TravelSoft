@@ -1,44 +1,44 @@
 <?php
-    
-    namespace Framework\App\Models;
-    
-    use Exception;
-    use Framework\App\Controllers\Provider;
-    use Framework\Core\Model;
-    use Framework\Logger\Log;
-    use PhpParser\Node\Expr\AssignOp\Mod;
-    
-    /**
-     * ProviderModel
-     *
-     * @package            Framework\App
-     * @subpackage         Models
-     */
-    class ProviderModel extends Model
-    {
-        /**
-         * @var array[] $data Table Data
-         */
-        protected static $data = [
-            "id" => array(),
-            "company_id" => array(),
-            "location_id" => array(),
-            "code_direct_id" => array(),
-            "provider_vendor" => array(),
-            "enabled" => array(),
-            "created_by" => array(),
-            "date_created" => array(),
-            "modified_by" => array(),
-            "date_modified" => array(),
-            "note" => array(),
-        ];
-        
-        /**
-         * base select query
-         *
-         * @var string
-         */
-        protected static $selectQuery = "
+	
+	namespace Framework\App\Models;
+	
+	use Exception;
+	use Framework\App\Controllers\Provider;
+	use Framework\Core\Model;
+	use Framework\Logger\Log;
+	use PhpParser\Node\Expr\AssignOp\Mod;
+	
+	/**
+	 * ProviderModel
+	 *
+	 * @package            Framework\App
+	 * @subpackage         Models
+	 */
+	class ProviderModel extends Model
+	{
+		/**
+		 * @var array[] $data Table Data
+		 */
+		protected static $data = [
+			"id" => array(),
+			"company_id" => array(),
+			"location_id" => array(),
+			"code_direct_id" => array(),
+			"provider_vendor" => array(),
+			"enabled" => array(),
+			"created_by" => array(),
+			"date_created" => array(),
+			"modified_by" => array(),
+			"date_modified" => array(),
+			"note" => array(),
+		];
+		
+		/**
+		 * base select query
+		 *
+		 * @var string
+		 */
+		protected static $selectQuery = "
             SELECT
                             PROVIDER.id AS 'provider_id',
                             PROVIDER.company_id AS 'provider_company_id',
@@ -175,153 +175,153 @@
             LEFT JOIN		company VENDORCOMPANY ON VENDORCOMPANY.id = VENDOR.company_id
             WHERE			PROVIDER.enabled = 1
             ";
-        
-        /**
-         * Gets provider(s) by id
-         * If id is passed then we search by it otherwise get all enabled
-         *
-         * @param int|null $id Provider Id
-         *
-         * @return array
-         */
-        public static function get(int $id = null): array
-        {
-            $where = "";
-            try {
-                
-                if (!is_null($id)) {
-                    $where = "AND		PROVIDER.id = $id";
-                }
-                $sql = self::$selectQuery . $where;
-                $ret = Model::$db->rawQuery($sql);
-                
-                return $ret;
-            } catch (Exception $e) {
-                Log::$debug_log->error($e->getMessage());
-                
-                return [];
-            }
-        }
-        
-        /**
-         * fetch provider by name
-         *
-         * @param string $name
-         *
-         * @return array
-         */
-        public static function getByName(string $name): array
-        {
-            $searchTerm = addslashes($name);
-            
-            try {
-                $where = "
+		
+		/**
+		 * Gets provider(s) by id
+		 * If id is passed then we search by it otherwise get all enabled
+		 *
+		 * @param int|null $id Provider Id
+		 *
+		 * @return array
+		 */
+		public static function get(int $id = null): array
+		{
+			$where = "";
+			try {
+				
+				if (!is_null($id)) {
+					$where = "AND		PROVIDER.id = $id";
+				}
+				$sql = self::$selectQuery . $where;
+				$ret = Model::$db->rawQuery($sql);
+				
+				return $ret;
+			} catch (Exception $e) {
+				Log::$debug_log->error($e->getMessage());
+				
+				return [];
+			}
+		}
+		
+		/**
+		 * fetch provider by name
+		 *
+		 * @param string $name
+		 *
+		 * @return array
+		 */
+		public static function getByName(string $name): array
+		{
+			$searchTerm = addslashes($name);
+			
+			try {
+				$where = "
                     AND			COMPANY.name LIKE '$searchTerm'
                     ORDER BY    COMPANY.name ASC
                     ";
-                $sql = self::$selectQuery . " " . $where;
-                
-                return Model::$db->rawQuery($sql);
-            } catch (Exception $e) {
-                Log::$debug_log->trace($e);
-                
-                return [];
-            }
-            
-        }
-        
-        /**
-         * fetch single object
-         *
-         * @param int|null $id
-         *
-         * @return array
-         */
-        public static function getOne(int $id = null): array
-        {
-            try {
-                if (!is_null($id)) {
-                    Model::$db->where("id", $id);
-                }
-                Model::$db->where("enabled", 1);
-                
-                return Model::$db->get("provider");
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-        }
-        
-        /**
-         * autocomplete query
-         *
-         * @param string $st
-         *
-         * @return array
-         */
-        public static function provider_ac(string $st = ""): array
-        {
-            try {
-                $searchTerm = addslashes($st);
-                $sql = self::$selectQuery . "
+				$sql = self::$selectQuery . " " . $where;
+				
+				return Model::$db->rawQuery($sql);
+			} catch (Exception $e) {
+				Log::$debug_log->trace($e);
+				
+				return [];
+			}
+			
+		}
+		
+		/**
+		 * fetch single object
+		 *
+		 * @param int|null $id
+		 *
+		 * @return array
+		 */
+		public static function getOne(int $id = null): array
+		{
+			try {
+				if (!is_null($id)) {
+					Model::$db->where("id", $id);
+				}
+				Model::$db->where("enabled", 1);
+				
+				return Model::$db->get("provider");
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		/**
+		 * autocomplete query
+		 *
+		 * @param string $st
+		 *
+		 * @return array
+		 */
+		public static function provider_ac(string $st = ""): array
+		{
+			try {
+				$searchTerm = addslashes($st);
+				$sql = self::$selectQuery . "
                     AND			COMPANY.name LIKE '%$searchTerm%'
                     ORDER BY    LENGTH(COMPANY.name), CAST(COMPANY.name AS UNSIGNED), COMPANY.name ASC
                     LIMIT 20;";
-                
-                //Log::$debug_log->trace($sql);
-                
-                return Model::$db->rawQuery($sql);
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-        }
-        
-        /**
-         * update record
-         *
-         * @param array $provider
-         *
-         * @return array|string[]
-         */
-        public static function updateRecord(array $provider): array
-        {
-            if (!isset($provider) || !isset($provider["location_id"])) {
-                return [];
-            }
-            
-            $company = array();
-            $vendor = array();
-            $location = array();
-            
-            if (isset($provider["company_detail"])) {
-                $company = CompanyModel::updateRecord($provider["company_detail"]);
-                Log::$debug_log->trace($provider["company_detail"]);
-            }
-            
-            if (isset($provider["vendor_detail"])) {
-                $vendor = VendorModel::updateRecord($provider["vendor_detail"]);
-                //Log::$debug_log->trace($company);
-            }
-            
-            if (isset($provider["location_detail"])) {
-                //$location = $provider["location_detail"];
-            }
-            $name = Model::setInt((isset($provider["name"])) ? $provider["name"] : null);
-            $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
-            $id = Model::setInt((isset($provider["id"])) ? $provider["id"] : null);
-            $company_id = Model::setInt((isset($provider["company_id"])) ? $provider["company_id"] : null);
-            $location_id = Model::setInt((isset($provider["location_id"])) ? $provider["location_id"] : null);
-            $code_direct_id = Model::setString((isset($provider["code_direct_id"])) ? $provider["code_direct_id"] : null);
-            $provider_vendor = Model::setBool((isset($provider["provider_vendor"])) ? $provider["provider_vendor"] : null);
-            $enabled = Model::setBool((isset($provider["enabled"])) ? $provider["enabled"] : null);
-            $note = Model::setLongText((isset($provider["note"])) ? $provider["note"] : null);
-            $created_by = Model::setInt($user_id);
-            $modified_by = Model::setInt($user_id);
-            
-            $sql = "
+				
+				//Log::$debug_log->trace($sql);
+				
+				return Model::$db->rawQuery($sql);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		/**
+		 * update record
+		 *
+		 * @param array $provider
+		 *
+		 * @return array|string[]
+		 */
+		public static function updateRecord(array $provider): array
+		{
+			if (!isset($provider) || !isset($provider["location_id"])) {
+				return [];
+			}
+			
+			$company = array();
+			$vendor = array();
+			$location = array();
+			
+			if (isset($provider["company_detail"])) {
+				$company = CompanyModel::updateRecord($provider["company_detail"]);
+				Log::$debug_log->trace($provider["company_detail"]);
+			}
+			
+			if (isset($provider["vendor_detail"])) {
+				$vendor = VendorModel::updateRecord($provider["vendor_detail"]);
+				//Log::$debug_log->trace($company);
+			}
+			
+			if (isset($provider["location_detail"])) {
+				//$location = $provider["location_detail"];
+			}
+			$name = Model::setInt((isset($provider["name"])) ? $provider["name"] : null);
+			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+			$id = Model::setInt((isset($provider["id"])) ? $provider["id"] : null);
+			$company_id = Model::setInt((isset($provider["company_id"])) ? $provider["company_id"] : null);
+			$location_id = Model::setInt((isset($provider["location_id"])) ? $provider["location_id"] : null);
+			$code_direct_id = Model::setString((isset($provider["code_direct_id"])) ? $provider["code_direct_id"] : null);
+			$provider_vendor = Model::setBool((isset($provider["provider_vendor"])) ? $provider["provider_vendor"] : null);
+			$enabled = Model::setBool((isset($provider["enabled"])) ? $provider["enabled"] : null);
+			$note = Model::setLongText((isset($provider["note"])) ? $provider["note"] : null);
+			$created_by = Model::setInt($user_id);
+			$modified_by = Model::setInt($user_id);
+			
+			$sql = "
                 INSERT INTO provider (
                     id, company_id, location_id, code_direct_id,
                     provider_vendor, enabled, date_created, created_by,
@@ -339,65 +339,73 @@
                     date_modified = VALUES(date_modified),
                     note = VALUES(note)
             ";
-            
-            try {
-                Model::$db->rawQuery($sql);
-                $provider_id = Model::$db->getInsertId();
-                if ($provider_id) {
-                    if (is_null($id)) {
-                        $code_direct_id = Provider::generateCodeDirectId(array(
-                            "company_name" => $name,
-                            "provider_id" => $provider_id,
-                        ));
-                        Log::$debug_log->trace("-------------------------");
-                        Log::$debug_log->trace($code_direct_id);
-                        Log::$debug_log->trace("-------------------------");
-                    }
-                    
-                    return self::get($provider_id);
-                }
-                
-                Log::$debug_log->error("No Company Id");
-                
-                return [];
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-        }
-        
-        /**
-         * update provider record
-         *
-         * @param null $provider
-         *
-         * @return array
-         */
-        public static function update($provider = null): array
-        {
-            if (!isset($provider["company_id"])) {
-                //Log::$debug_log->error("Missing Data");
-                //Log::$debug_log->trace($provider);
-                
-                return [];
-            }
-            
-            $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
-            $enabled = Model::setBool((isset($provider["enabled"])) ? $provider["enabled"] : null);
-            $note = Model::setLongText((isset($provider["note"])) ? $provider["note"] : null);
-            $created_by = Model::setInt($user_id);
-            $modified_by = Model::setInt($user_id);
-            $id = Model::setInt((isset($provider["id"])) ? $provider["id"] : null);
-            $company_id = Model::setInt((isset($provider["company_id"])) ? $provider["company_id"] : null);
-            $location_id = Model::setInt((isset($provider["location_id"])) ? $provider["location_id"] : null);
-            $provider_vendor = Model::setBool((isset($provider["provider_vendor"])) ? $provider["provider_vendor"] : null);
-            $code_direct_id = Model::setString((isset($provider["code_direct_id"])) ? $provider["code_direct_id"] : null);
-            $description_long = Model::setLongText((isset($provider["description_long"])) ? $provider["description_long"] : null);
-            $description_short = Model::setLongText((isset($provider["description_short"])) ? $provider["description_short"] : null);
-            $keywords = Model::setLongText((isset($provider["keywords"])) ? $provider["keywords"] : null);
-            
-            $sql = "
+			
+			try {
+				Model::$db->rawQuery($sql);
+				$provider_id = Model::$db->getInsertId();
+				if ($provider_id) {
+					if (is_null($id)) {
+						$code_direct_id = Provider::generateCodeDirectId(array(
+							"company_name" => $name,
+							"provider_id" => $provider_id,
+						));
+						Log::$debug_log->trace("-------------------------");
+						Log::$debug_log->trace($code_direct_id);
+						Log::$debug_log->trace("-------------------------");
+					}
+					
+					return self::get($provider_id);
+				}
+				
+				Log::$debug_log->error("No Company Id");
+				
+				return [];
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		public static function updateLocation(int $provider_id = null, array $location = []): array
+		{
+			if (!is_null($provider_id) || !is_null($location)) {
+				return [];
+			}
+			
+		}
+		
+		/**
+		 * update provider record
+		 *
+		 * @param null $provider
+		 *
+		 * @return array
+		 */
+		public static function update($provider = null): array
+		{
+			if (!isset($provider["company_id"])) {
+				//Log::$debug_log->error("Missing Data");
+				//Log::$debug_log->trace($provider);
+				
+				return [];
+			}
+			
+			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+			$enabled = Model::setBool((isset($provider["enabled"])) ? $provider["enabled"] : null);
+			$note = Model::setLongText((isset($provider["note"])) ? $provider["note"] : null);
+			$created_by = Model::setInt($user_id);
+			$modified_by = Model::setInt($user_id);
+			$id = Model::setInt((isset($provider["id"])) ? $provider["id"] : null);
+			$company_id = Model::setInt((isset($provider["company_id"])) ? $provider["company_id"] : null);
+			$location_id = Model::setInt((isset($provider["location_id"])) ? $provider["location_id"] : null);
+			$provider_vendor = Model::setBool((isset($provider["provider_vendor"])) ? $provider["provider_vendor"] : null);
+			$code_direct_id = Model::setString((isset($provider["code_direct_id"])) ? $provider["code_direct_id"] : null);
+			$description_long = Model::setLongText((isset($provider["description_long"])) ? $provider["description_long"] : null);
+			$description_short = Model::setLongText((isset($provider["description_short"])) ? $provider["description_short"] : null);
+			$keywords = Model::setLongText((isset($provider["keywords"])) ? $provider["keywords"] : null);
+			
+			$sql = "
                 INSERT INTO provider (
                     id, company_id, location_id, code_direct_id,
                     provider_vendor, enabled, date_created, created_by,
@@ -420,42 +428,42 @@
                     date_modified = VALUES(date_modified);
             ";
 //            Log::$debug_log->trace($sql);
-            try {
-                Model::$db->rawQuery($sql);
-                $provider_id = Model::$db->getInsertId();
-                
-                if ($provider_id) {
+			try {
+				Model::$db->rawQuery($sql);
+				$provider_id = Model::$db->getInsertId();
+				
+				if ($provider_id) {
 //                    Log::$debug_log->trace($provider_id);
-                    $update = "
+					$update = "
                         UPDATE      provider
                         SET         code_direct_id = generateCodeDirectId($provider_id)
                         WHERE       id = $provider_id;";
 //                    Log::$debug_log->trace($update);
-                    try {
-                        Model::$db->rawQuery($update);
+					try {
+						Model::$db->rawQuery($update);
 
 //                        Log::$debug_log->trace(self::get((int)$provider_id));
-                        
-                        return self::get((int)$provider_id);
-                        
-                    } catch (Exception $ex) {
-                        Log::$debug_log->error($ex);
-                        
-                        return [];
-                    }
-                } else {
-                    Log::$debug_log->info("hh");
-                }
-                
-                return [];
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-            
-        }
-        
-    }
+						
+						return self::get((int)$provider_id);
+						
+					} catch (Exception $ex) {
+						Log::$debug_log->error($ex);
+						
+						return [];
+					}
+				} else {
+					Log::$debug_log->info("hh");
+				}
+				
+				return [];
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+			
+		}
+		
+	}
 
 

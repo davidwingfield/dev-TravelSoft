@@ -163,7 +163,7 @@ const Country = (function () {
                 })
                 //*/
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 return handle_country_error("Error Validating Country")
             }
         } else {
@@ -191,7 +191,7 @@ const Country = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 handle_country_error("Error: Validating Country")
             }
             

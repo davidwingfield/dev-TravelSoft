@@ -190,7 +190,7 @@ const City = (function () {
     
     const handle_city_error = function (msg) {
         toastr.error(msg)
-        Console.log(msg)
+        Console.log("msg", msg)
     }
     
     const on_click_outside = (e) => {
@@ -271,7 +271,7 @@ const City = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 return handle_city_error("Error Validating City")
             }
         } else {
@@ -303,7 +303,7 @@ const City = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 handle_city_error("Error: Validating City")
             }
         } else {

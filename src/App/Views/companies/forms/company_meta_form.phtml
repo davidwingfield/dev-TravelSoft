@@ -192,11 +192,13 @@
                     
                     <div class="row">
                         <div class="col-12">
+                            
                             <div class="form-element">
                                 <label for="company_description_short" style="display:none">&nbsp;</label>
                                 <textarea id="company_description_short" name="company_description_short" class="md-textarea short-description form-control" rows="4" maxlength="250"></textarea>
                                 <div id="company_description_short-error" class="error w-100 text-center">&nbsp;</div>
                             </div>
+                        
                         </div>
                     </div>
                 </div>
@@ -219,11 +221,13 @@
                     
                     <div class="row">
                         <div class="col-12">
+                            
                             <div class="form-element">
                                 <label for="company_description_long" style="display:none">Cover Image:</label>
                                 <textarea id="company_description_long" name="company_description_long" class="md-textarea tmceEl form-control" rows="4"></textarea>
                                 <div id="company_description_long-error" class="error w-100 text-center">&nbsp;</div>
                             </div>
+                        
                         </div>
                     </div>
                 </div>
@@ -249,20 +253,5 @@
     </div>
 
 </section>
-<script>
-    $(function () {
-        $('textarea.short-description').maxlength({
-            alwaysShow: true,
-            threshold: 10,
-            warningClass: "badge badge-warning",
-            limitReachedClass: "badge badge-danger",
-            //placement: 'top',
-            //preText: 'used ',
-            //separator: ' of ',
-            //postText: ' chars.',
-        })
-        
-    })
-</script>
 
 

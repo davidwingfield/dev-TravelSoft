@@ -180,6 +180,7 @@ const default_address_view = "medium"
 let DEBUGMODE = true
 
 let mdbPreloader = document.getElementById("mdb-preloader")
+let showElements
 
 $.fn.BuildDropDown = function (settings) {
     if (!settings || !settings.text_field || !settings.id_field) {
@@ -255,6 +256,10 @@ jQuery.fn.dataTable.Api.register("page.jumpToData()", function (data, column) {
     return this
 })
 
+const isOdd = function (num) {
+    return num % 2
+}
+
 const clear_validation = function (formElement) {
     $(".autocomplete-suggestions").hide()
     
@@ -269,7 +274,7 @@ const clear_validation = function (formElement) {
 
 const get_errors = function (validator) {
     var submitErrorsList = {}
-    //console.dir(validator)
+    //Console.dir(validator)
     //for (var i = 0; i < validator.errorList.length; i++) {
     //    submitErrorsList[validator.errorList[i].element.name] = validator.errorList[i].message
     //}
@@ -364,7 +369,18 @@ const validator_init = function (settings) {
     
     return jQuery.validator
 }
-
+const jsonPrettify = (json) => {
+    if (typeof json === "object" && json !== null) {
+        return JSON.stringify(json, undefined, '\t')
+    }
+    
+    try {
+        const obj = JSON.parse(json)
+        return jsonPrettify(obj)
+    } catch (e) {
+        return json
+    }
+}
 const setError = function (element, msg) {
     let id = $(element).attr("id")
     let el = $("#" + id + "")
@@ -464,7 +480,7 @@ const sendGetRequest = function (url, data_to_send, callback) {
                 //Console.log("getError:2")
                 return handleError("failed")
             } else if (status === "success" && typeof data.error !== "undefined") {
-                Console.log(data.error)
+                Console.log("data.error", data.error)
                 //Console.log("getError:3")
                 return handleError(data.error)
             } else {
@@ -669,6 +685,17 @@ const populateMultiSelect = function (arr, elem) {
         }
         
     }
+}
+
+const findObjectByKey = function (array, key, value) {
+    let results = []
+    for (var i = 0; i < array.length; i++) {
+        if (array[i][key] === value) {
+            results.push(array[i])
+        }
+    }
+    
+    return results
 }
 
 const addTinyMCE = function (el) {
@@ -915,9 +942,9 @@ jQuery.extend({
             Console.log('http://dev.travelsoft.com/error')
             //*/
             if (typeof textStatus !== "undefined") {
-                console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
+                Console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
             } else {
-                console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
+                Console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
             }
             
             if ($.isFunction(callback)) {
@@ -1265,7 +1292,7 @@ const weatherUpdate = function (city) {
     xhr.send()
     xhr.onload = () => {
         if (xhr.status === 404) {
-            Console.log(`${cityName} not found`)
+            //Console.log(`${cityName} not found`)
         } else {
             let data = JSON.parse(xhr.response)
             let mainWeatherCityName = data.name
@@ -1273,16 +1300,73 @@ const weatherUpdate = function (city) {
             let mainWeather = data.weather[0].main
             let mainWeatherDescription = data.weather[0].description
             let mainWeatherImage = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
-            Console.log("mainWeatherCityName", mainWeatherCityName)
-            Console.log("mainWeatherTemperature", mainWeatherTemperature)
-            Console.log("mainWeather", mainWeather)
-            Console.log("mainWeatherDescription", mainWeatherDescription)
-            Console.log("mainWeatherImage", mainWeatherImage)//100x100
-            Console.log("data", data)
+            //Console.log("mainWeatherCityName", mainWeatherCityName)
+            //Console.log("mainWeatherTemperature", mainWeatherTemperature)
+            //Console.log("mainWeather", mainWeather)
+            //Console.log("mainWeatherDescription", mainWeatherDescription)
+            //Console.log("mainWeatherImage", mainWeatherImage)//100x100
+            //Console.log("data", data)
         }
     }
 }
+const ucwords = function (str) {
+    str = str.toLowerCase()
+    return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
+      function (s) {
+          return s.toUpperCase()
+      })
+}
+String.prototype.ucwords = function () {
+    str = this.toLowerCase()
+    return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
+      function (s) {
+          return s.toUpperCase()
+      })
+}
 
+$(function () {
+    $(".debug_demo")
+      .on("click", function () {
+          showElements = true
+          if (!$(this).attr("data-shown")) {
+              $(this).attr("data-shown", "true")
+              showElements = true
+          }
+          
+          if ($(this).attr("data-shown") === "false") {
+              $(this).attr("data-shown", "true")
+              showElements = true
+          } else {
+              showElements = false
+              $(this).attr("data-shown", "false")
+          }
+          
+          let els = document.getElementsByClassName("dev-element")
+          
+          for (let i = 0; i < els.length; i++) {
+              
+              let element = els[i]
+              let tagName = element.tagName
+              
+              if (tagName.toLowerCase() === "input") {
+                  
+                  if (showElements === false) {
+                      element.hidden = false
+                      element.type = "text"
+                  } else {
+                      element.hidden = true
+                      element.type = "hidden"
+                  }
+              } else if (tagName.toLowerCase() === "label") {
+                  if (showElements === false) {
+                      $(element).removeClass("d-none")
+                  } else {
+                      $(element).addClass("d-none")
+                  }
+              }
+          }
+      })
+})
 
 const Console = (function () {
     
@@ -1660,7 +1744,6 @@ const tinyEditor = (function () {
                 } else {
                     editor.val(decodeHtml(editor.val()))
                     cardBlock.addClass("is-fullscreen")
-                    console.dir(cardBlock)
                     addTinyMCE(editorId)
                 }
             }
@@ -1677,7 +1760,7 @@ const tinyEditor = (function () {
                 "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap",
                 "/public/css/bootstrap.min.css",
                 "/public/css/style.css",
-                "/public/css/variant.css",
+                "/public/css/variant.min.css",
             ],
             body_class: "p-2",
             font_formats: "Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Open Sans=Open Sans;Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats",
@@ -1788,9 +1871,13 @@ const tinyEditor = (function () {
         },
     }
 })()
-$(function () {
-    tinyEditor.init()
+
+$(document).ready(function () {
+    $(function () {
+        tinyEditor.init()
+    })
 })
+
 
 
 const ContextMenu = (function () {
@@ -1846,7 +1933,7 @@ const ContextMenu = (function () {
         })
         
         $(".selected-day").on("click", function (e) {
-            //console.log("clicked", this)
+            //Console.log("clicked", this)
         })
     }
     
@@ -1865,27 +1952,36 @@ const Season = (function () {
     const _product_edit_season_form_season_name_filter = document.getElementById("product_edit_season_form_season_name_filter")
     const _category_id = document.getElementById("category_id")
     const _product_edit_season_form_season_color_scheme_id = document.getElementById("product_edit_season_form_season_color_scheme_id")
-    const _edit_season = document.getElementById("edit_season")
     const _product_edit_season_form_season_id = document.getElementById("product_edit_season_form_season_id")
     const _product_edit_season_form_season_name = document.getElementById("product_edit_season_form_season_name")
     const _product_edit_season_id_name_display = document.getElementById("product_edit_season_id_name_display")
     const _product_edit_season_form_season_enabled = document.getElementById("product_edit_season_form_season_enabled")
     const _edit_season_button = document.getElementById("edit_season_button")
     const _table_season_product_edit = document.getElementById("table_season_product_edit")
-    const _season_disabled_dow = document.getElementById("season_disabled_dow")
     const _button_clear_form_edit_season = document.getElementById("button_clear_form_edit_season")
-    const _button_assign_season_to_product = document.getElementById("button_assign_season_to_product")
     const _display_product_season_name = document.getElementById("display_product_season_name")
     const _button_submit_form_edit_season = document.getElementById("button_submit_form_edit_season")
     const _product_id = document.getElementById("product_id")
-    
-    // ----
-    
+    const _panel_tab_season = document.getElementById("panel_tab_season")
+    const _button_remove_season_from_product = document.getElementById("button_remove_season_from_product")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let categories = new Map()
     let $table_season_product_edit, disabledDays
     
-    // ----
+    $(_button_remove_season_from_product)
+      .on("click", function () {
+          
+          let dataToSend = {
+              product_id: parseInt(_product_id.value),
+              season_id: parseInt(_product_edit_season_form_season_id.value),
+          }
+          
+          confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
+              if (ans) {
+                  removeProductSeason(dataToSend)
+              }
+          })
+      })
     
     $(_product_edit_season_form_edit_season_link)
       .on("click", function () {
@@ -1910,21 +2006,32 @@ const Season = (function () {
           
           let dataToSend = buildUpdateRecord()
           
-          confirmDialog(`Would you like to update?`, (ans) => {
+          confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
               if (ans) {
                   saveProductSeason(dataToSend)
               }
-              
           })
       })
     
-    // ----
+    $(_panel_tab_season)
+      .on("hide.bs.tab", function () {
+          //clear_validation(_form_product_add)
+          _product_edit_season_form_season_name_filter.value = ""
+          resetForm()
+          clearProductSeasonForm()
+          $table_season_product_edit.clearSelectedRows()
+      })
     
-    /**
-     * saveProductSeason
-     *
-     * @param dataToSend
-     */
+    const updateProgress = function () {
+        let seasons = Array.from(Season.all.values())
+        if (seasons.length === 0) {
+            $(_panel_tab_season).html(`Season <span id="seasonNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
+        } else {
+            $(_panel_tab_season).html(`Season`)
+        }
+        Product.updateProgress()
+    }
+    
     const saveProductSeason = function (dataToSend) {
         if (dataToSend) {
             updateProductSeason(dataToSend, function (data) {
@@ -1937,16 +2044,62 @@ const Season = (function () {
                     }
                     
                     addProductSeasonTableRow(season)
+                    PricingWorksheet.buildPricingWorksheet()
                 }
             })
         }
     }
     
-    /**
-     * addProductSeasonTableRow
-     *
-     * @param season
-     */
+    const deleteProductSeason = function (dataToSend, callback) {
+        let url = "/api/v1.0/seasons/remove"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handleSeasonError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                //Console.log("error", e)
+            }
+        }
+    }
+    
+    const removeProductSeason = function (dataToSend) {
+        if (dataToSend) {
+            deleteProductSeason(dataToSend, function (data) {
+                if (data) {
+                    deleteProductSeasonTableRow(dataToSend.season_id)
+                    PricingWorksheet.buildPricingWorksheet()
+                }
+            })
+        }
+    }
+    
+    const deleteProductSeasonTableRow = function (season_id) {
+        if (season_id) {
+            let hasSeason = Season.all.get(season_id)
+            if (hasSeason) {
+                $table_season_product_edit.deleteRow(hasSeason)
+                Season.all.delete(season_id)
+                _product_edit_season_form_season_name_filter.value = ""
+                resetForm()
+                clearProductSeasonForm()
+                $table_season_product_edit.clearSelectedRows()
+                
+                Pricing.resetForm()
+                YearCalendar.resetForm()
+                PricingWorksheet.buildPricingWorksheet()
+                YearCalendar.loadSeasonDropdown()
+                toastr.success("Season Deleted")
+            }
+        }
+        
+    }
+    
     const addProductSeasonTableRow = function (season) {
         if (season) {
             let detail = set(season)
@@ -1955,11 +2108,17 @@ const Season = (function () {
                 Season.all.set(detail.id, detail)
                 $table_season_product_edit.updateRow(detail)
                 toastr.success("Season Updated")
+                
             } else {
                 Season.all.set(detail.id, detail)
                 $table_season_product_edit.insertRow(detail)
                 toastr.success("Season Added")
             }
+            
+            _product_edit_season_form_season_name_filter.value = ""
+            resetForm()
+            clearProductSeasonForm()
+            $table_season_product_edit.clearSelectedRows()
             
             Pricing.resetForm()
             YearCalendar.resetForm()
@@ -1968,21 +2127,10 @@ const Season = (function () {
         YearCalendar.loadSeasonDropdown()
     }
     
-    /**
-     * handleSeasonError
-     *
-     * @param msg
-     */
     const handleSeasonError = function (msg) {
         toastr.error(msg)
     }
     
-    /**
-     * updateProductSeason
-     *
-     * @param dataToSend
-     * @param callback
-     */
     const updateProductSeason = function (dataToSend, callback) {
         let url = "/api/v1.0/seasons/update"
         
@@ -1996,16 +2144,11 @@ const Season = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                //Console.log("error", e)
             }
         }
     }
     
-    /**
-     * buildUpdateRecord
-     *
-     * @returns {{}|*}
-     */
     const buildUpdateRecord = function () {
         return remove_nulls({
             product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
@@ -2014,9 +2157,6 @@ const Season = (function () {
         })
     }
     
-    /**
-     * initAutoComplete
-     */
     const initAutoComplete = function () {
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
@@ -2073,11 +2213,6 @@ const Season = (function () {
           })
     }
     
-    /**
-     * defaultDetail
-     *
-     * @returns {{note: null, product_season_detail: {note: null, seasons_background: null, date_created: *, season_id: null, seasons_text: null, created_by: (number|number), enabled: number, disabled_dow: null, date_modified: *, product_id: null, modified_by: (number|number), seasons_border: null, id: null}, view_product_index_search: number, view_product_index_filter: number, date_created: *, view_product_package_edit: number, created_by: (number|number), enabled: number, view_product_edit: number, view_product_package_index: number, color_scheme_id: null, date_modified: *, category_id: null, name: null, view_product_index: number, modified_by: (number|number), color_scheme: {note: null, background_color: null, date_modified: *, date_created: *, name: null, modified_by: (number|number), id: null, border_color: null, text_color: null, sort_order: number, created_by: (number|number), enabled: number}, id: null}}
-     */
     const defaultDetail = function () {
         return {
             id: null,
@@ -2128,12 +2263,6 @@ const Season = (function () {
         }
     }
     
-    /**
-     * format season type record
-     *
-     * @param season
-     * @returns {{note: null, product_season_detail: {note: null, seasons_background: null, date_created: *, season_id: null, seasons_text: null, created_by: number, enabled: number, disabled_dow: null, date_modified: *, product_id: null, modified_by: number, seasons_border: null, id: null}, view_product_index_search: number, view_product_index_filter: number, date_created: *, view_product_package_edit: number, created_by: number, enabled: number, view_product_edit: number, view_product_package_index: number, color_scheme_id: null, date_modified: *, category_id: null, name: null, view_product_index: number, modified_by: number, color_scheme: {note: null, background_color: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, border_color: null, text_color: null, sort_order: number, created_by: number, enabled: number}, id: null}}
-     */
     const formatSeasonType = function (season) {
         
         let detail = defaultDetail()
@@ -2186,11 +2315,6 @@ const Season = (function () {
         return detail
     }
     
-    /**
-     * load season types
-     *
-     * @param seasons
-     */
     const loadTypes = function (seasons) {
         categories = new Map()
         if (seasons) {
@@ -2201,28 +2325,7 @@ const Season = (function () {
         }
     }
     
-    /**
-     * set season record values
-     *
-     * @param season
-     * @returns {{note: null, product_season_detail: {note: null, seasons_background: null, date_created: *, season_id: null, seasons_text: null, created_by: number, enabled: number, disabled_dow: null, date_modified: *, product_id: null, modified_by: number, seasons_border: null, id: null}, view_product_index_search: number, view_product_index_filter: number, date_created: *, view_product_package_edit: number, created_by: number, enabled: number, view_product_edit: number, view_product_package_index: number, color_scheme_id: null, date_modified: *, category_id: null, name: null, view_product_index: number, modified_by: number, color_scheme: {note: null, background_color: null, date_modified: *, date_created: *, name: null, modified_by: number, id: null, border_color: null, text_color: null, sort_order: number, created_by: number, enabled: number}, id: null}}
-     */
-    const set = function (season) {
-        let detail = defaultDetail()
-        if (season) {
-            detail = season
-            
-        }
-        return detail
-    }
-    
-    /**
-     * load all product seasons
-     *
-     * @param seasons
-     */
     const loadAll = function (seasons) {
-        Console.log("Season.loadAll()", seasons)
         Season.all = new Map()
         if (_table_season_product_edit) {
             buildProductEditTable()
@@ -2241,12 +2344,17 @@ const Season = (function () {
             }
         })
         
-        Console.log("Season.loadAll() - Season.all", Season.all)
+        updateProgress()
     }
     
-    /**
-     * build product edit table
-     */
+    const set = function (season) {
+        let detail = defaultDetail()
+        if (season) {
+            detail = season
+        }
+        return detail
+    }
+    
     const buildProductEditTable = function () {
         $table_season_product_edit = $(_table_season_product_edit).table({
             table_type: "display_list",
@@ -2284,7 +2392,7 @@ const Season = (function () {
                     targets: 3,
                     data: "product_season_detail",
                     render: function (data, type, row, meta) {
-                        Console.log("product_season_detail", data)
+                        //Console.log("product_season_detail", data)
                         let disabled_days = (data.disabled_dow) ? getListOfIds(data.disabled_dow) : []
                         let d = []
                         for (let n = 0; n < disabled_days.length; n++) {
@@ -2302,18 +2410,13 @@ const Season = (function () {
         })
     }
     
-    /**
-     * resetForm
-     */
     const resetForm = function () {
-        //if (_edit_season) {
         _product_edit_season_form_season_id.value = ""
         _product_edit_season_form_season_name.value = ""
         _product_edit_season_id_name_display.value = ""
         _product_edit_season_form_season_enabled.checked = true
-        //_edit_season_button.disabled = true
+        updateProgress()
         ColorScheme.load()
-        //}
     }
     
     const loadEditSeasonForm = function () {
@@ -2325,24 +2428,15 @@ const Season = (function () {
     }
     
     const edit = function (season) {
-        Console.log("Season.edit(season)", season)
         clearProductSeasonForm()
         loadProductSeasonForm(season)
     }
     
-    /**
-     * clearProductSeasonForm
-     */
     const clearProductSeasonForm = function () {
         disabledDays.init([])
         unloadProductSeasonForm()
     }
     
-    /**
-     * loadProductSeasonForm
-     *
-     * @param season
-     */
     const loadProductSeasonForm = function (season) {
         let disabled_dow = []
         let name = "Details"
@@ -2360,31 +2454,21 @@ const Season = (function () {
             _product_edit_season_form_season_name.value = season.name
             _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
             _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
-            
             _product_edit_season_form_season_enabled.disabled = true
-            //_edit_season_button.disabled = false
+            _product_edit_season_form_season_name_filter.disabled = true
             
             $(_edit_product_season).show()
         }
-        
-        //$(_button_assign_season_to_product).addClass("disabled")
         
         _display_product_season_name.innerText = name
         disabledDays.init(disabled_dow)
     }
     
-    /**
-     * unloadProductSeasonForm
-     */
     const unloadProductSeasonForm = function () {
+        _product_edit_season_form_season_name_filter.disabled = false
         $(_edit_product_season).hide()
     }
     
-    /**
-     * init
-     *
-     * @param settings
-     */
     const init = function (settings) {
         let seasons = []
         if (settings) {
@@ -2402,7 +2486,6 @@ const Season = (function () {
         }
         
         if (document.getElementById("season_disabled_dow")) {
-            //_button_assign_season_to_product.disabled = true
             disabledDays = $("#season_disabled_dow").DisabledDOW({
                 name: "season_disabled_dow",
                 label: "Disabled DOW",
@@ -2413,7 +2496,6 @@ const Season = (function () {
         
         if (_product_season) {
             unLoadEditSeasonForm()
-            
         }
         
     }
@@ -2454,7 +2536,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         //Console.log("refresh")
                         break
                     case "panel-hide":
-                        
                         elem.addEventListener("click", function () {
                             let dataToOpen = $(elem).attr("data-loadonhide")
                             $(dataToOpen).show()
@@ -2466,7 +2547,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         break
                     case"panel-fullscreen":
                         elem.addEventListener("click", function () {
-                            
                             if ($(elem).hasClass("fa-expand")) {
                                 $(elem).removeClass("fa-expand")
                                 $(elem).addClass("fa-compress")
@@ -2609,7 +2689,7 @@ $.fn.table = function (settings) {
                 $dTable.page.jumpToData(row_data.id, 0)
                 formatTable()
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
         }
     }
@@ -2621,7 +2701,7 @@ $.fn.table = function (settings) {
                 $dTable.row(rowId).data(row_data).draw()
                 loadRow(row_data.id)
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
         }
         
@@ -2635,7 +2715,7 @@ $.fn.table = function (settings) {
                 $("#" + table_id + "_tr_" + row_data.id).addClass("selected")
                 $dTable.page.jumpToData(row_data.id, 0)
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
             
         }
@@ -2647,7 +2727,7 @@ $.fn.table = function (settings) {
             try {
                 $dTable.page.jumpToData(row_data.id, 0)
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
             
         }
@@ -2663,7 +2743,7 @@ $.fn.table = function (settings) {
                   .remove()
                   .draw()
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
         }
     }
@@ -2707,7 +2787,7 @@ $.fn.table = function (settings) {
             formatTable()
             
         } catch (e) {
-            Console.log(e)
+            Console.log("error", e)
         }
         
     }
@@ -2743,7 +2823,7 @@ $.fn.BuildKeyword = function (keywords) {
     
     const chip_id = $(this).attr("id")
     const _chips = document.getElementById(chip_id)
-    
+    let editMode = null
     let tags = new Map()
     let $chipsEl = $(_chips)
     let $submitButton = $(`#${chip_id} > div > div > button`)
@@ -2786,7 +2866,6 @@ $.fn.BuildKeyword = function (keywords) {
           editMode = null
       })
     
-    let editMode = null
     const formatTag = function (data) {
         counter += 1
         if (data) {
@@ -2883,6 +2962,7 @@ $.fn.BuildKeyword = function (keywords) {
     }
     
     const add = function (data) {
+        Console.log("add(data)", data)
         if (!data) {
             data = $input.val()
         }
@@ -2917,6 +2997,920 @@ $.fn.BuildKeyword = function (keywords) {
         },
     }
 }
+
+const InventoryProfile = (function () {
+    "use strict"
+    
+    const _panel_tab_inventory = document.getElementById("panel_tab_inventory")
+    const _table_profile_product_edit_add_new_button = document.getElementById("table_profile_product_edit_add_new_button")
+    const _edit_product_profile = document.getElementById("edit_product_profile")
+    const _product_edit_profile_form_profile_transfer_sales_types_id_block = document.getElementById("product_edit_profile_form_profile_transfer_sales_types_id_block")
+    const _product_edit_profile_form_profile_allot_by_id_block = document.getElementById("product_edit_profile_form_profile_allot_by_id_block")
+    const _product_edit_profile_form_profile_name_filter = document.getElementById("product_edit_profile_form_profile_name_filter")
+    const _table_profile_product_edit = document.getElementById("table_profile_product_edit")
+    const _product_edit_profile_form_profile_days_out_block = document.getElementById("product_edit_profile_form_profile_days_out_block")
+    const _product_edit_profile_form_profile_expires_block = document.getElementById("product_edit_profile_form_profile_expires_block")
+    const _product_edit_profile_form_profile_quantity_block = document.getElementById("product_edit_profile_form_profile_quantity_block")
+    const _product_edit_profile_form_profile_release_amt_block = document.getElementById("product_edit_profile_form_profile_release_amt_block")
+    const _product_edit_profile_form = document.getElementById("product_edit_profile_form")
+    const _product_edit_profile_form_profile_id = document.getElementById('product_edit_profile_form_profile_id')
+    const _product_edit_profile_form_profile_name = document.getElementById('product_edit_profile_form_profile_name')
+    const _product_edit_profile_form_profile_enabled = document.getElementById('product_edit_profile_form_profile_enabled')
+    const _product_edit_profile_form_profile_sales_types_id = document.getElementById('product_edit_profile_form_profile_sales_types_id')
+    const _product_edit_profile_form_profile_allot_by_id = document.getElementById('product_edit_profile_form_profile_allot_by_id')
+    const _product_edit_profile_form_profile_transfer_sales_types_id = document.getElementById('product_edit_profile_form_profile_transfer_sales_types_id')
+    const _product_edit_profile_form_profile_days_out = document.getElementById('product_edit_profile_form_profile_days_out')
+    const _product_edit_profile_form_profile_quantity = document.getElementById('product_edit_profile_form_profile_quantity')
+    const _product_edit_profile_form_profile_release_amt = document.getElementById('product_edit_profile_form_profile_release_amt')
+    const _product_edit_profile_form_profile_min_length_days = document.getElementById('product_edit_profile_form_profile_min_length_days')
+    const _product_edit_profile_form_profile_min_duration = document.getElementById('product_edit_profile_form_profile_min_duration')
+    const _product_edit_profile_form_profile_max_duration = document.getElementById('product_edit_profile_form_profile_max_duration')
+    const _product_edit_profile_form_profile_equal_duration = document.getElementById('product_edit_profile_form_profile_equal_duration')
+    const _product_edit_profile_form_profile_advanced_booking_min = document.getElementById('product_edit_profile_form_profile_advanced_booking_min')
+    const _product_edit_profile_form_profile_advanced_booking_max = document.getElementById('product_edit_profile_form_profile_advanced_booking_max')
+    const _product_edit_profile_form_profile_checkin_dow = document.getElementById('product_edit_profile_form_profile_checkin_dow')
+    const _product_edit_profile_form_profile_checkout_dow = document.getElementById('product_edit_profile_form_profile_checkout_dow')
+    const _product_edit_profile_form_profile_departure_dow = document.getElementById('product_edit_profile_form_profile_departure_dow')
+    const _product_edit_profile_form_profile_return_dow = document.getElementById('product_edit_profile_form_profile_return_dow')
+    const _product_edit_profile_form_profile_inc_days_dow = document.getElementById('product_edit_profile_form_profile_inc_days_dow')
+    const _product_edit_profile_form_profile_weekday_dow = document.getElementById('product_edit_profile_form_profile_weekday_dow')
+    const _product_edit_profile_form_close_button = document.getElementById('product_edit_profile_form_close_button')
+    const _button_add_product_profile = document.getElementById("button_add_product_profile")
+    const _product_edit_profile_form_clear_button = document.getElementById('product_edit_profile_form_clear_button')
+    const _product_edit_profile_form_submit_button = document.getElementById('product_edit_profile_form_submit_button')
+    const _product_id = document.getElementById("product_id")
+    const _button_remove_profile_from_product = document.getElementById("button_remove_profile_from_product")
+    
+    let $table_profile_product_edit = $(_table_profile_product_edit)
+    let user_id = (document.getElementById('user_id')) ? (!isNaN(parseInt(document.getElementById('user_id').value))) ? parseInt(document.getElementById('user_id').value) : 4 : 4
+    let form_rules = {
+        rules: {
+            product_edit_profile_form_profile_sales_types_id: {
+                required: true,
+            },
+            product_edit_profile_form_profile_allot_by_id: {
+                required: function (element) {
+                    return ($(_product_edit_profile_form_profile_sales_types_id).val() !== "" && $(_product_edit_profile_form_profile_sales_types_id).val() === 1 || $(_product_edit_profile_form_profile_sales_types_id).val() === "1")
+                },
+            },
+            profile_expires: {
+                required: function (element) {
+                    return ($(_product_edit_profile_form_profile_allot_by_id).val() !== "" && $(_product_edit_profile_form_profile_allot_by_id).val() === 1 || $(_product_edit_profile_form_profile_allot_by_id).val() === "1")
+                },
+            },
+            product_edit_profile_form_profile_days_out: {
+                required: function (element) {
+                    return ($(_product_edit_profile_form_profile_allot_by_id).val() !== "" && $(_product_edit_profile_form_profile_allot_by_id).val() === 2 || $(_product_edit_profile_form_profile_allot_by_id).val() === "2")
+                },
+                number: true,
+                min: 1,
+            },
+            product_edit_profile_form_profile_name: {
+                required: true,
+            },
+        },
+        messages: {
+            product_edit_profile_form_profile_sales_types_id: {
+                required: 'Field Required',
+            },
+            product_edit_profile_form_profile_allot_by_id: {
+                required: 'Field Required',
+            },
+            profile_expires: {
+                required: 'Field Required',
+            },
+            product_edit_profile_form_profile_days_out: {
+                required: 'Field Required',
+            },
+            product_edit_profile_form_profile_name: {
+                required: 'Field Required',
+            },
+        },
+    }
+    let globalSelectedProfile = false
+    let checkin_dow, checkout_dow, departure_dow, return_dow, weekday_dow, inc_days_dow
+    
+    $(_button_add_product_profile)
+      .on("click", function () {
+          //Console.log("InventoryProfile.button_add_product_profile: click()", {})
+          populateInventoryProfileForm()
+      })
+    
+    $(_table_profile_product_edit_add_new_button)
+      .on("click", function () {
+          //Console.log("InventoryProfile.table_profile_product_edit_add_new_button: click()", {})
+          _product_edit_profile_form_profile_name_filter.value = ""
+          $table_profile_product_edit.clearSelectedRows()
+          populateInventoryProfileForm()
+      })
+    
+    $(_product_edit_profile_form_clear_button)
+      .on("click", function () {
+          //Console.log("InventoryProfile.product_edit_profile_form_clear_button: click()", {})
+          $table_profile_product_edit.clearSelectedRows()
+          clearInventoryProfileForm()
+          _product_edit_profile_form_profile_name_filter.value = ""
+      })
+    
+    $(_product_edit_profile_form_submit_button)
+      .on("click", function () {
+          //Console.log("InventoryProfile.product_edit_profile_form_submit_button: click()", {})
+          save()
+      })
+    
+    $(_product_edit_profile_form_close_button)
+      .on("click", function () {
+          //Console.log("InventoryProfile.product_edit_profile_form_close_button: click()", {})
+          $table_profile_product_edit.clearSelectedRows()
+          clearInventoryProfileForm()
+          setFormElementDisplay()
+          hideForm()
+          _product_edit_profile_form_profile_name_filter.value = ""
+      })
+    
+    $(_product_edit_profile_form_profile_sales_types_id)
+      .on("change", function () {
+          //Console.log("InventoryProfile.product_edit_profile_form_profile_sales_types_id: change()", {})
+          setFormElementDisplay()
+          InventoryProfile.expiration_date.value("")
+          _product_edit_profile_form_profile_days_out.value = ""
+          _product_edit_profile_form_profile_allot_by_id.value = ""
+      })
+    
+    $(_product_edit_profile_form_profile_allot_by_id)
+      .on("change", function () {
+          //Console.log("InventoryProfile.product_edit_profile_form_profile_allot_by_id: change()", {})
+          setFormElementDisplay()
+          InventoryProfile.expiration_date.value("")
+          _product_edit_profile_form_profile_days_out.value = ""
+      })
+    
+    $(_product_edit_profile_form_profile_transfer_sales_types_id)
+      .on("change", function () {
+          //Console.log("InventoryProfile.product_edit_profile_form_profile_transfer_sales_types_id: change()", {})
+      })
+    
+    $(_button_remove_profile_from_product)
+      .on("click", function () {
+          remove()
+      })
+    
+    const updateProgress = function () {
+        let profiles = Array.from(InventoryProfile.all.values())
+        
+        if (profiles.length === 0) {
+            $(_panel_tab_inventory).html(`Inventory <span id="profileNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
+        } else {
+            $(_panel_tab_inventory).html(`Inventory`)
+        }
+        
+        Product.updateProgress()
+    }
+    
+    const removeProductProfile = function (dataToSend, callback) {
+        if (dataToSend) {
+            let url = "/api/v1.0/profiles/remove"
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handleProfileError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                Console.log("error", e)
+            }
+        }
+    }
+    
+    const remove = function () {
+        let dataToSend = {
+            product_id: parseInt(_product_id.value),
+            profile_id: parseInt(_product_edit_profile_form_profile_id.value),
+        }
+        if (dataToSend) {
+            confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
+                if (ans) {
+                    Console.log(dataToSend)
+                    removeProductProfile(dataToSend, function (data) {
+                        if (data) {
+                            let detail = set(InventoryProfile.all.get(dataToSend.profile_id))
+                            InventoryProfile.all.delete(detail.id)
+                            $table_profile_product_edit.deleteRow(detail)
+                            populateInventoryProfileForm()
+                            _product_edit_profile_form_profile_name_filter.value = ""
+                            $table_profile_product_edit.clearSelectedRows()
+                            hideForm()
+                            Pricing.resetForm()
+                            YearCalendar.resetForm()
+                            toastr.success(`InventoryProfile: ${detail.name} - has been removed`)
+                        }
+                    })
+                }
+            })
+        }
+    }
+    
+    const defaultDetail = function () {
+        return {
+            id: null,
+            allot_by_id: null,
+            sales_types_id: null,
+            name: null,
+            quantity: null,
+            expires: null,
+            transfer_sales_types_id: null,
+            release_amt: null,
+            min_length_days: null,
+            checkin_dow: [0, 1, 2, 3, 4, 5, 6],
+            checkout_dow: [0, 1, 2, 3, 4, 5, 6],
+            departure_dow: [0, 1, 2, 3, 4, 5, 6],
+            return_dow: [0, 1, 2, 3, 4, 5, 6],
+            inc_days_dow: [0, 1, 2, 3, 4, 5, 6],
+            weekday_dow: [0, 1, 2, 3, 4, 5, 6],
+            min_duration: null,
+            max_duration: null,
+            equal_duration: null,
+            advanced_booking_min: null,
+            advanced_booking_max: null,
+            advanced_booking_date: null,
+            
+            days_out: null,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
+            sales_types_details: {},
+            allot_by_details: {},
+            tranfer_sales_type_details: {},
+        }
+    }
+    
+    const initAutoComplete = function () {
+        //Console.log('InventoryProfile.initAutoComplete()', InventoryProfile)
+        let product_id = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
+        
+        $(_product_edit_profile_form_profile_name_filter)
+          .on("click", function () {
+              $(this).select()
+          })
+          .on("search", function () {
+              $table_profile_product_edit.clearSelectedRows()
+              resetInventoryProfileForm()
+          })
+          .on("change", function () {
+              setTimeout(function () {
+                  //*
+                  let profile_name = _product_edit_profile_form_profile_name_filter.value
+                  
+                  if (globalSelectedProfile === false) {
+                      if (profile_name === "") {
+                          globalSelectedProfile = false
+                          $table_profile_product_edit.clearSelectedRows()
+                          resetInventoryProfileForm()
+                      } else {
+                          nameExists(profile_name)
+                      }
+                  }
+                  //*/
+              }, 200)
+              if (_product_edit_profile_form_profile_name_filter.value === "") {
+                  $table_profile_product_edit.clearSelectedRows()
+                  resetInventoryProfileForm()
+              }
+          })
+          .autocomplete({
+              serviceUrl: "/api/v1.0/autocomplete/profiles",
+              minChars: 2,
+              cache: false,
+              dataType: "json",
+              triggerSelectOnValidInput: false,
+              params: { "product_id": product_id },
+              paramName: "st",
+              onSelect: function (suggestion) {
+                  if (!suggestion.data) {
+                      return
+                  }
+                  $table_profile_product_edit.clearSelectedRows()
+                  let id = (!isNaN(parseInt(suggestion.data.id))) ? parseInt(suggestion.data.id) : null
+                  let inventory_profile = InventoryProfile.all.get(id)
+                  
+                  if (inventory_profile) {
+                      $table_profile_product_edit.loadRow(inventory_profile)
+                      populateInventoryProfileForm(inventory_profile)
+                      return
+                  }
+                  
+                  populateInventoryProfileForm()
+                  _product_edit_profile_form_profile_name.value = _product_edit_profile_form_profile_name_filter.value
+              },
+          })
+    }
+    
+    const nameExists = function (name) {
+        //Console.log("InventoryProfile.nameExists(profile_name)", name)
+        if (name && name !== "") {
+            /**
+             * data to send to the server
+             *
+             * @type {{name}}
+             */
+            let dataToSend = {
+                name: name,
+                product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
+            }
+            
+            fetchByName(dataToSend, function (data) {
+                let profile = null
+                
+                if (data && data[0]) {
+                    profile = data
+                    if (data[0]) {
+                        profile = data[0]
+                    }
+                }
+                
+                if (profile) {
+                    let hasProfile = InventoryProfile.all.get(parseInt(profile.id))
+                    let detail
+                    
+                    if (hasProfile) {
+                        detail = set(hasProfile)
+                        $table_profile_product_edit.loadRow(detail)
+                        populateInventoryProfileForm(detail)
+                        return
+                    }
+                    
+                    populateInventoryProfileForm()
+                    _product_edit_profile_form_profile_name.value = name
+                }
+            })
+        }
+    }
+    
+    const fetchByName = function (dataToSend, callback) {
+        let url = "/api/v1.0/profiles/validate"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handleProfileError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                //Console.log("error", e)
+                return handleProfileError("Error Validating InventoryProfile")
+            }
+        } else {
+            return handleProfileError("Error Loading InventoryProfile - Missing Data")
+        }
+    }
+    
+    const buildInventoryProfileTable = function () {
+        //Console.log("InventoryProfile.buildInventoryProfileTable()", InventoryProfile)
+        $table_profile_product_edit = $(_table_profile_product_edit).table({
+            table_type: "display_list",
+            data: [],
+            columnDefs: [
+                {
+                    title: "Name",
+                    targets: 0,
+                    data: "name",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "Sales Types",
+                    targets: 1,
+                    data: "sales_types_details",
+                    render: function (data, type, row, meta) {
+                        //Console.log("sales_types_details", data)
+                        let name = (data.name) ? data.name : "N/A"
+                        
+                        return "<span style='white-space: nowrap;'>" + name + "</span>"
+                    },
+                },
+                {
+                    title: "Allot By",
+                    targets: 2,
+                    data: "allot_by_id",
+                    render: function (data, type, row, meta) {
+                        let nights = "N/A"
+                        if (data === null) {
+                            nights = "N/A"
+                        } else {
+                            nights = Types.allot_by.get(data)
+                            if (nights) {
+                                nights = nights.name
+                            } else {
+                                nights = "N/A"
+                            }
+                        }
+                        return "<span style='white-space: nowrap;'>" + nights + "</span>"
+                    },
+                },
+                {
+                    title: "Expires",
+                    targets: 3,
+                    data: "expires",
+                    render: function (data, type, row, meta) {
+                        let expires
+                        if (data === null) {
+                            expires = "N/A"
+                        } else {
+                            let new_string = data.replace(/-|\s/g, "")
+                            expires = moment(new_string).format('YYYY-MM-DD')
+                        }
+                        return "<span style='white-space: nowrap;'>" + expires + "</span>"
+                    },
+                },
+                {
+                    title: "Release",
+                    targets: 4,
+                    data: "release_amt",
+                    render: function (data, type, row, meta) {
+                        let expires = "N/A"
+                        if (data) {
+                            expires = data
+                        }
+                        return "<span style='white-space: nowrap;'>" + expires + "</span>"
+                    },
+                },
+            ],
+            rowClick: InventoryProfile.edit,
+        })
+    }
+    
+    const buildInventoryProfileRecord = function () {
+        let isValid = validateInventoryProfileForm()
+        if (isValid) {
+            return remove_nulls({
+                id: (!isNaN(parseInt(_product_edit_profile_form_profile_id.value))) ? parseInt(_product_edit_profile_form_profile_id.value) : null,
+                name: (_product_edit_profile_form_profile_name.value !== "") ? _product_edit_profile_form_profile_name.value : null,
+                product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
+                sales_types_id: (!isNaN(parseInt(_product_edit_profile_form_profile_sales_types_id.value))) ? parseInt(_product_edit_profile_form_profile_sales_types_id.value) : null,
+                transfer_sales_types_id: (!isNaN(parseInt(_product_edit_profile_form_profile_transfer_sales_types_id.value))) ? parseInt(_product_edit_profile_form_profile_transfer_sales_types_id.value) : null,
+                allot_by_id: (!isNaN(parseInt(_product_edit_profile_form_profile_allot_by_id.value))) ? parseInt(_product_edit_profile_form_profile_allot_by_id.value) : 3,
+                enabled: (_product_edit_profile_form_profile_enabled.checked === true) ? 1 : 0,
+                expires: InventoryProfile.expiration_date.value(),
+                advanced_booking_date: InventoryProfile.advanced_booking_date.value(),
+                checkin_dow: (formatListOfIds(InventoryProfile.checkin_dow.disabled_dows) === null) ? "" : formatListOfIds(InventoryProfile.checkin_dow.disabled_dows),
+                checkout_dow: (formatListOfIds(InventoryProfile.checkout_dow.disabled_dows) === "") ? "" : formatListOfIds(InventoryProfile.checkout_dow.disabled_dows),
+                departure_dow: (formatListOfIds(InventoryProfile.departure_dow.disabled_dows) === "") ? "" : formatListOfIds(InventoryProfile.departure_dow.disabled_dows),
+                return_dow: (formatListOfIds(InventoryProfile.return_dow.disabled_dows) === "") ? "" : formatListOfIds(InventoryProfile.return_dow.disabled_dows),
+                weekday_dow: (formatListOfIds(InventoryProfile.weekday_dow.disabled_dows) === "") ? "" : formatListOfIds(InventoryProfile.weekday_dow.disabled_dows),
+                inc_days_dow: (formatListOfIds(InventoryProfile.inc_days_dow.disabled_dows) === "") ? "" : formatListOfIds(InventoryProfile.inc_days_dow.disabled_dows),
+                days_out: (!isNaN(parseInt(_product_edit_profile_form_profile_days_out.value))) ? parseInt(_product_edit_profile_form_profile_days_out.value) : null,
+                release_amt: (!isNaN(parseInt(_product_edit_profile_form_profile_release_amt.value))) ? parseInt(_product_edit_profile_form_profile_release_amt.value) : null,
+                min_length_days: (!isNaN(parseInt(_product_edit_profile_form_profile_min_length_days.value))) ? parseInt(_product_edit_profile_form_profile_min_length_days.value) : "",
+                min_duration: (!isNaN(parseInt(_product_edit_profile_form_profile_min_duration.value))) ? parseInt(_product_edit_profile_form_profile_min_duration.value) : null,
+                max_duration: (!isNaN(parseInt(_product_edit_profile_form_profile_max_duration.value))) ? parseInt(_product_edit_profile_form_profile_max_duration.value) : null,
+                equal_duration: (!isNaN(parseInt(_product_edit_profile_form_profile_equal_duration.value))) ? parseInt(_product_edit_profile_form_profile_equal_duration.value) : null,
+                advanced_booking_min: (!isNaN(parseInt(_product_edit_profile_form_profile_advanced_booking_min.value))) ? parseInt(_product_edit_profile_form_profile_advanced_booking_min.value) : null,
+                advanced_booking_max: (!isNaN(parseInt(_product_edit_profile_form_profile_advanced_booking_max.value))) ? parseInt(_product_edit_profile_form_profile_advanced_booking_max.value) : null,
+            })
+            
+        }
+        
+        return false
+    }
+    
+    const loadAll = function (inventory_profiles) {
+        InventoryProfile.all = new Map()
+        if (!inventory_profiles) { inventory_profiles = [] }
+        
+        $.each(inventory_profiles, function (k, inventory_profile) {
+            //Console.log("InventoryProfile.loadAll - inventory_profile", inventory_profile)
+            //Console.log("InventoryProfile.loadAll - inventory_profile", inventory_profile, checkin_dow)
+            let detail = set(inventory_profile)
+            //Console.log('detail', detail)
+            if (!isNaN(parseInt(detail.id))) {
+                if (_table_profile_product_edit) {
+                    $table_profile_product_edit.insertRow(detail)
+                }
+                InventoryProfile.all.set(parseInt(detail.id), detail)
+            }
+        })
+        
+        Pricing.loadProfileDropdown()
+        updateProgress()
+    }
+    
+    const setFormElementDisplay = function () {
+        let sales_types_id = (!isNaN(parseInt(_product_edit_profile_form_profile_sales_types_id.value))) ? parseInt(_product_edit_profile_form_profile_sales_types_id.value) : null
+        
+        hideAllotmentFields()
+        if (sales_types_id) {
+            switch (sales_types_id) {
+                case 1:
+                    showAllotmentFields()
+                    break
+                case 2:
+                    break
+                case 3:
+                    break
+                case 4:
+                    break
+                case 5:
+                    break
+                default:
+                    break
+            }
+        }
+    }
+    
+    const showAllotmentFields = function () {
+        let allot_by_id = (!isNaN(parseInt(_product_edit_profile_form_profile_allot_by_id.value))) ? parseInt(_product_edit_profile_form_profile_allot_by_id.value) : null
+        if (allot_by_id) {
+            switch (allot_by_id) {
+                case 1:
+                    $(_product_edit_profile_form_profile_days_out_block).hide()
+                    $(_product_edit_profile_form_profile_expires_block).show()
+                    break
+                case 2:
+                    
+                    $(_product_edit_profile_form_profile_days_out_block).show()
+                    $(_product_edit_profile_form_profile_expires_block).hide()
+                    break
+                case 3:
+                    
+                    $(_product_edit_profile_form_profile_days_out_block).hide()
+                    $(_product_edit_profile_form_profile_expires_block).hide()
+                    break
+                default:
+                    $(_product_edit_profile_form_profile_days_out_block).hide()
+                    $(_product_edit_profile_form_profile_expires_block).hide()
+                    break
+            }
+        }
+        
+        $(_product_edit_profile_form_profile_transfer_sales_types_id_block).show()
+        $(_product_edit_profile_form_profile_quantity_block).show()
+        $(_product_edit_profile_form_profile_release_amt_block).show()
+        $(_product_edit_profile_form_profile_allot_by_id_block).show()
+    }
+    
+    const hideAllotmentFields = function () {
+        $(_product_edit_profile_form_profile_days_out_block).hide()
+        $(_product_edit_profile_form_profile_expires_block).hide()
+        $(_product_edit_profile_form_profile_allot_by_id_block).hide()
+        $(_product_edit_profile_form_profile_transfer_sales_types_id_block).hide()
+        $(_product_edit_profile_form_profile_quantity_block).hide()
+        $(_product_edit_profile_form_profile_release_amt_block).hide()
+        $("#accordionEx").collapse("hide")
+    }
+    
+    const hideForm = function () {
+        if (_edit_product_profile) {
+            hideAllotmentFields()
+            $(_edit_product_profile).hide()
+            _product_edit_profile_form_profile_name_filter.disabled = false
+            
+            $("#accordionEx").collapse("hide")
+            updateProgress()
+        }
+    }
+    
+    const showForm = function () {
+        //Console.log("InventoryProfile.showForm()", showForm)
+        if (_edit_product_profile) {
+            _product_edit_profile_form_profile_name_filter.disabled = true
+            $(_edit_product_profile).show()
+        }
+    }
+    
+    const resetInventoryProfileForm = function () {
+        //Console.log("InventoryProfile.resetInventoryProfileForm()", {})
+        clearInventoryProfileForm()
+        disableInventoryProfileFormFields()
+    }
+    
+    const clearInventoryProfileForm = function () {
+        //Console.log("InventoryProfile.clearInventoryProfileForm()", clearInventoryProfileForm)
+        
+        disableInventoryProfileFormFields()
+        _product_edit_profile_form_profile_id.value = ""
+        _product_edit_profile_form_profile_name.value = ""
+        _product_edit_profile_form_profile_enabled.checked = true
+        _product_edit_profile_form_profile_sales_types_id.value = ""
+        _product_edit_profile_form_profile_allot_by_id.value = ""
+        _product_edit_profile_form_profile_transfer_sales_types_id.value = ""
+        _product_edit_profile_form_profile_days_out.value = ""
+        _product_edit_profile_form_profile_quantity.value = ""
+        _product_edit_profile_form_profile_release_amt.value = ""
+        _product_edit_profile_form_profile_min_length_days.value = ""
+        _product_edit_profile_form_profile_min_duration.value = ""
+        _product_edit_profile_form_profile_max_duration.value = ""
+        _product_edit_profile_form_profile_equal_duration.value = ""
+        _product_edit_profile_form_profile_advanced_booking_min.value = ""
+        _product_edit_profile_form_profile_advanced_booking_max.value = ""
+        
+        InventoryProfile.checkin_dow.init([0, 1, 2, 3, 4, 5, 6])
+        InventoryProfile.checkout_dow.init([0, 1, 2, 3, 4, 5, 6])
+        InventoryProfile.departure_dow.init([0, 1, 2, 3, 4, 5, 6])
+        InventoryProfile.return_dow.init([0, 1, 2, 3, 4, 5, 6])
+        InventoryProfile.weekday_dow.init([0, 1, 2, 3, 4, 5, 6])
+        InventoryProfile.inc_days_dow.init([0, 1, 2, 3, 4, 5, 6])
+        
+        InventoryProfile.expiration_date.value("")
+        InventoryProfile.advanced_booking_date.value("")
+        
+        setFormElementDisplay()
+    }
+    
+    const validateInventoryProfileForm = function () {
+        let isValid = $(_product_edit_profile_form).valid()
+        if (isValid) {
+            let allotById = (!isNaN(parseInt(_product_edit_profile_form_profile_allot_by_id.value))) ? parseInt(_product_edit_profile_form_profile_allot_by_id.value) : 3
+            if (allotById === 1) {
+                let expiration_date = InventoryProfile.expiration_date.value()
+                
+                if (expiration_date === null || expiration_date === "") {
+                    setError(document.getElementById("profile_expires"), "Field Required")
+                    isValid = false
+                } else {
+                    clearError(document.getElementById("profile_expires"))
+                }
+            }
+        }
+        
+        return isValid
+    }
+    
+    const disableInventoryProfileFormFields = function () {
+        //Console.log('InventoryProfile.disableInventoryProfileFormFields()', this)
+        _product_edit_profile_form_profile_name.disabled = false
+    }
+    
+    const populateInventoryProfileForm = function (inventory_profile) {
+        //Console.log("InventoryProfile.populateInventoryProfileForm(inventory_profile)", inventory_profile)
+        clearInventoryProfileForm()
+        if (inventory_profile) {
+            _product_edit_profile_form_profile_id.value = (inventory_profile.id) ? inventory_profile.id : ""
+            _product_edit_profile_form_profile_name.value = (inventory_profile.name) ? inventory_profile.name : ""
+            _product_edit_profile_form_profile_enabled.checked = (inventory_profile.enabled !== 0)
+            _product_edit_profile_form_profile_sales_types_id.value = (inventory_profile.sales_types_id) ? inventory_profile.sales_types_id : ""
+            _product_edit_profile_form_profile_allot_by_id.value = (inventory_profile.allot_by_id) ? inventory_profile.allot_by_id : ""
+            _product_edit_profile_form_profile_transfer_sales_types_id.value = (inventory_profile.transfer_sales_types_id) ? inventory_profile.transfer_sales_types_id : ""
+            _product_edit_profile_form_profile_days_out.value = (inventory_profile.days_out) ? inventory_profile.days_out : ""
+            _product_edit_profile_form_profile_quantity.value = (inventory_profile.quantity) ? inventory_profile.quantity : ""
+            _product_edit_profile_form_profile_release_amt.value = (inventory_profile.release_amt) ? inventory_profile.release_amt : ""
+            _product_edit_profile_form_profile_min_length_days.value = (inventory_profile.min_length_days) ? inventory_profile.min_length_days : ""
+            _product_edit_profile_form_profile_min_duration.value = (inventory_profile.min_duration) ? inventory_profile.min_duration : ""
+            _product_edit_profile_form_profile_max_duration.value = (inventory_profile.max_duration) ? inventory_profile.max_duration : ""
+            _product_edit_profile_form_profile_equal_duration.value = (inventory_profile.equal_duration) ? inventory_profile.equal_duration : ""
+            _product_edit_profile_form_profile_advanced_booking_min.value = (inventory_profile.advanced_booking_min) ? inventory_profile.advanced_booking_min : ""
+            _product_edit_profile_form_profile_advanced_booking_max.value = (inventory_profile.advanced_booking_max) ? inventory_profile.advanced_booking_max : ""
+            
+            InventoryProfile.checkin_dow.init((inventory_profile.checkin_dow) ? inventory_profile.checkin_dow : [0, 1, 2, 3, 4, 5, 6])
+            InventoryProfile.checkout_dow.init((inventory_profile.checkout_dow) ? inventory_profile.checkout_dow : [0, 1, 2, 3, 4, 5, 6])
+            InventoryProfile.departure_dow.init((inventory_profile.departure_dow) ? inventory_profile.departure_dow : [0, 1, 2, 3, 4, 5, 6])
+            InventoryProfile.return_dow.init((inventory_profile.return_dow) ? inventory_profile.return_dow : [0, 1, 2, 3, 4, 5, 6])
+            InventoryProfile.weekday_dow.init((inventory_profile.weekday_dow) ? inventory_profile.weekday_dow : [0, 1, 2, 3, 4, 5, 6])
+            InventoryProfile.inc_days_dow.init((inventory_profile.inc_days_dow) ? inventory_profile.inc_days_dow : [0, 1, 2, 3, 4, 5, 6])
+            
+            InventoryProfile.expiration_date.value((inventory_profile.expires) ? inventory_profile.expires : "")
+            InventoryProfile.advanced_booking_date.value((inventory_profile.advanced_booking_date) ? inventory_profile.advanced_booking_date : "")
+            
+        }
+        
+        setFormElementDisplay()
+        showForm()
+    }
+    
+    const set = function (inventory_profile) {
+        //Console.log("InventoryProfile.set(inventory_profile)", inventory_profile)
+        
+        let detail = defaultDetail()
+        let sales_types_details, allot_by_details, tranfer_sales_type_details
+        if (inventory_profile) {
+            let checkinDOW = getListOfIds(inventory_profile.checkin_dow)
+            let checkoutDOW = getListOfIds(inventory_profile.checkout_dow)
+            let departureDOW = getListOfIds(inventory_profile.departure_dow)
+            let returnDOW = getListOfIds(inventory_profile.return_dow)
+            let inc_daysDOW = getListOfIds(inventory_profile.inc_days_dow)
+            let weekdayDOW = getListOfIds(inventory_profile.weekday_dow)
+            
+            sales_types_details = Types.sales_types.get((!isNaN(parseInt(inventory_profile.sales_types_id))) ? parseInt(inventory_profile.sales_types_id) : null)
+            allot_by_details = Types.allot_by.get((!isNaN(parseInt(inventory_profile.allot_by_id))) ? parseInt(inventory_profile.allot_by_id) : null)
+            tranfer_sales_type_details = Types.sales_types.get((!isNaN(parseInt(inventory_profile.transfer_sales_types_id))) ? parseInt(inventory_profile.transfer_sales_types_id) : null)
+            detail.id = (!isNaN(parseInt(inventory_profile.id))) ? parseInt(inventory_profile.id) : null
+            detail.allot_by_id = (!isNaN(parseInt(inventory_profile.allot_by_id))) ? parseInt(inventory_profile.allot_by_id) : null
+            detail.sales_types_id = (!isNaN(parseInt(inventory_profile.sales_types_id))) ? parseInt(inventory_profile.sales_types_id) : null
+            detail.name = (inventory_profile.name) ? inventory_profile.name : null
+            detail.quantity = (!isNaN(parseInt(inventory_profile.quantity))) ? parseInt(inventory_profile.quantity) : null
+            detail.expires = (inventory_profile.expires) ? inventory_profile.expires : null
+            detail.transfer_sales_types_id = (!isNaN(parseInt(inventory_profile.transfer_sales_types_id))) ? parseInt(inventory_profile.transfer_sales_types_id) : null
+            detail.release_amt = (inventory_profile.release_amt) ? inventory_profile.release_amt : null
+            detail.min_length_days = (inventory_profile.min_length_days) ? inventory_profile.min_length_days : null
+            detail.min_duration = (inventory_profile.min_duration) ? inventory_profile.min_duration : null
+            detail.max_duration = (inventory_profile.max_duration) ? inventory_profile.max_duration : null
+            detail.equal_duration = (inventory_profile.equal_duration) ? inventory_profile.equal_duration : null
+            detail.advanced_booking_min = (inventory_profile.advanced_booking_min) ? inventory_profile.advanced_booking_min : null
+            detail.advanced_booking_max = (inventory_profile.advanced_booking_max) ? inventory_profile.advanced_booking_max : null
+            detail.advanced_booking_date = (inventory_profile.advanced_booking_date) ? inventory_profile.advanced_booking_date : null
+            
+            detail.checkin_dow = checkinDOW
+            detail.checkout_dow = checkoutDOW
+            detail.departure_dow = departureDOW
+            detail.return_dow = returnDOW
+            detail.inc_days_dow = inc_daysDOW
+            detail.weekday_dow = weekdayDOW
+            
+            detail.days_out = (inventory_profile.days_out) ? inventory_profile.days_out : null
+            detail.enabled = (inventory_profile.enabled) ? inventory_profile.enabled : 1
+            detail.date_created = (inventory_profile.date_created) ? inventory_profile.date_created : formatDateMySQL()
+            detail.created_by = (!isNaN(parseInt(inventory_profile.created_by))) ? parseInt(inventory_profile.created_by) : user_id
+            detail.date_modified = (inventory_profile.date_modified) ? inventory_profile.date_modified : formatDateMySQL()
+            detail.modified_by = (!isNaN(parseInt(inventory_profile.modified_by))) ? parseInt(inventory_profile.modified_by) : user_id
+            detail.note = (inventory_profile.note) ? inventory_profile.note : null
+            detail.sales_types_details = sales_types_details
+            detail.allot_by_details = allot_by_details
+            detail.tranfer_sales_type_details = tranfer_sales_type_details
+        }
+        
+        InventoryProfile.detail = detail
+        return detail
+    }
+    
+    const edit = function (inventory_profile) {
+        //Console.log('InventoryProfile.edit(inventory_profile)', inventory_profile)
+        if (inventory_profile) {
+            $table_profile_product_edit.clearSelectedRows()
+            let detail = set(inventory_profile)
+            
+            showForm()
+            _product_edit_profile_form_profile_name_filter.value = detail.name
+            _product_edit_profile_form_profile_name_filter.disabled = true
+            $table_profile_product_edit.loadRow(detail)
+            populateInventoryProfileForm(detail)
+        }
+        
+    }
+    
+    const save = function () {
+        let dataToSend = buildInventoryProfileRecord()
+        if (dataToSend) {
+            confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
+                if (ans) {
+                    saveProductProfile(dataToSend, function (data) {
+                        let inventory_profile
+                        if (data) {
+                            inventory_profile = data
+                            if (data[0]) {
+                                inventory_profile = data[0]
+                            }
+                            let detail = set(inventory_profile)
+                            
+                            let hasProfile = InventoryProfile.all.get(detail.id)
+                            
+                            InventoryProfile.all.set(detail.id, detail)
+                            
+                            if (hasProfile) {
+                                $table_profile_product_edit.updateRow(detail)
+                            } else {
+                                $table_profile_product_edit.insertRow(detail)
+                            }
+                            
+                            toastr.success(`InventoryProfile: ${detail.name} - has been updated`)
+                            populateInventoryProfileForm()
+                            
+                            _product_edit_profile_form_profile_name_filter.value = ""
+                            $table_profile_product_edit.loadRow(detail)
+                            $table_profile_product_edit.jumpToRow(detail)
+                            $table_profile_product_edit.clearSelectedRows()
+                            Pricing.resetForm()
+                            YearCalendar.resetForm()
+                            updateProgress()
+                        }
+                    })
+                }
+            })
+        }
+    }
+    
+    const handleProfileError = function (msg) {
+        toastr.error(msg)
+    }
+    
+    const saveProductProfile = function (dataToSend, callback) {
+        if (dataToSend) {
+            let url = "/api/v1.0/profiles/update"
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handleProfileError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                Console.log("error", e)
+            }
+        }
+    }
+    
+    const init = function (settings) {
+        //Console.log("InventoryProfile.init(settings)", settings)
+        
+        let inventory_profiles = []
+        if (settings) {
+            if (settings.profiles) {
+                inventory_profiles = settings.profiles
+            }
+        }
+        
+        checkin_dow = $(_product_edit_profile_form_profile_checkin_dow).DisabledDOW({
+            name: "checkin_dow",
+            label: "Checkin DOW",
+        })
+        
+        checkout_dow = $(_product_edit_profile_form_profile_checkout_dow).DisabledDOW({
+            name: "checkout_dow",
+            label: "Checkout DOW",
+        })
+        
+        departure_dow = $(_product_edit_profile_form_profile_departure_dow).DisabledDOW({
+            name: "departure_dow",
+            label: "Departure DOW",
+        })
+        
+        return_dow = $(_product_edit_profile_form_profile_return_dow).DisabledDOW({
+            name: "return_dow",
+            label: "Return DOW",
+        })
+        
+        inc_days_dow = $(_product_edit_profile_form_profile_inc_days_dow).DisabledDOW({
+            name: "inc_days_dow",
+            label: "Included Days",
+        })
+        
+        weekday_dow = $(_product_edit_profile_form_profile_weekday_dow).DisabledDOW({
+            name: "weekday_dow",
+            label: "Weekdays",
+        })
+        
+        InventoryProfile.checkin_dow = checkin_dow
+        InventoryProfile.checkout_dow = checkout_dow
+        InventoryProfile.departure_dow = departure_dow
+        InventoryProfile.return_dow = return_dow
+        InventoryProfile.weekday_dow = weekday_dow
+        InventoryProfile.inc_days_dow = inc_days_dow
+        
+        $(document).ready(function () {
+            if (_table_profile_product_edit) {
+                buildInventoryProfileTable()
+            }
+            
+            if (_product_edit_profile_form_profile_name_filter) {
+                initAutoComplete()
+            }
+            
+            if (_product_edit_profile_form) {
+                validator_init(form_rules)
+                InventoryProfile.expiration_date = $("#profile_expires").dateSelect({
+                    onStart: function () {},
+                })
+                InventoryProfile.advanced_booking_date = $("#profile_advanced_booking_date").dateSelect({
+                    onStart: function () {},
+                })
+                
+                InventoryProfile.validator = $(_product_edit_profile_form).validate()
+                resetInventoryProfileForm()
+                hideForm()
+            }
+            
+            loadAll(inventory_profiles)
+        })
+    }
+    
+    return {
+        validator: null,
+        all: new Map(),
+        detail: {},
+        expiration_date: null,
+        advanced_booking_date: null,
+        checkin_dow: null,
+        checkout_dow: null,
+        departure_dow: null,
+        return_dow: null,
+        weekday_dow: null,
+        inc_days_dow: null,
+        init: function (settings) { init(settings) },
+        initAutoComplete: function () { initAutoComplete() },
+        edit: function (inventory_profile) {
+            edit(inventory_profile)
+        },
+    }
+})()
+
 
 const Upload = function (file) {
     this.file = file
@@ -3327,7 +4321,7 @@ $.fn.YearCalendar = function (settings) {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 return callback([])
             }
         } else {
@@ -3501,7 +4495,7 @@ $.fn.YearCalendar = function (settings) {
                     let bgColor = "rgba(" + bgRGBA.join(', ') + ")"
                     
                     // --
-                    //console.log("render event", event)
+                    //Console.log("render event", event)
                     // --
                     if (event.rendering === "background") {
                         if ($(element).hasClass("fc-disabled-day")) {
@@ -3530,7 +4524,7 @@ $.fn.YearCalendar = function (settings) {
                             "color": textColor,
                         })
                         
-                        //console.log("background", event)
+                        //Console.log("background", event)
                     }
                 },
                 eventClick: function (calEvent, jsEvent, view) {
@@ -3590,7 +4584,7 @@ $.fn.YearCalendar = function (settings) {
         
         const edit = function () {
             _calendar_filter_ranges.innerHTML = buildEditData()
-            //console.log("edit", YearCalendar.selectedDates)
+            //Console.log("edit", YearCalendar.selectedDates)
         }
         
         $(function () {
@@ -3716,10 +4710,12 @@ const YearCalendar = (function () {
     const loadSeasonDropdown = function () {
         let seasons = (Season && Season.all) ? Array.from(Season.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Seasons --</option>"
+        let options2 = ""
         $.each(seasons, function (k, season) {
             let name = season.name
             let id = season.id
             options += `<option value="${id}">${name}</option>`
+            options2 += `<option value="${id}">${name}</option>`
         })
         $(_calendar_filter_season_id).empty()
         $(_calendar_filter_season_id).html(options)
@@ -3969,7 +4965,7 @@ $.fn.imageManager = function (options) {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
         }
     }
@@ -4660,7 +5656,7 @@ const City = (function () {
     
     const handle_city_error = function (msg) {
         toastr.error(msg)
-        Console.log(msg)
+        Console.log("msg", msg)
     }
     
     const on_click_outside = (e) => {
@@ -4741,7 +5737,7 @@ const City = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 return handle_city_error("Error Validating City")
             }
         } else {
@@ -4773,7 +5769,7 @@ const City = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 handle_city_error("Error: Validating City")
             }
         } else {
@@ -5300,7 +6296,7 @@ const Province = (function () {
                 })
                 //*/
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 return handle_province_error("Error Validating Province")
             }
         } else {
@@ -5637,7 +6633,7 @@ const Province = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 handle_province_error("Error: Validating Province")
             }
         } else {
@@ -5848,7 +6844,7 @@ const Country = (function () {
                 })
                 //*/
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 return handle_country_error("Error Validating Country")
             }
         } else {
@@ -5876,7 +6872,7 @@ const Country = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 handle_country_error("Error: Validating Country")
             }
             
@@ -6359,7 +7355,7 @@ const Location = (function () {
     })
     
     const clear_product_location_form = function () {
-        Console.log("Location.clear_product_location_form()")
+        //Console.log("Location.clear_product_location_form()")
         _location_id.value = ""
         _location_types_id.value = ""
         _location_name.value = ""
@@ -6383,7 +7379,7 @@ const Location = (function () {
     }
     
     const populate_product_location_form = function (location) {
-        Console.log("Location.populate_product_location_form(location)", location)
+        //Console.log("Location.populate_product_location_form(location)", location)
         clear_product_location_form()
         let country = {}
         let province = {}
@@ -6439,7 +7435,7 @@ const Location = (function () {
     }
     
     const load_product_location_form = function (location) {
-        Console.log("Location.load_product_location_form(location)", location)
+        //Console.log("Location.load_product_location_form(location)", location)
         clear_product_location_form()
         populate_product_location_form(location)
         $(_card_product_edit_location).show()
@@ -6480,7 +7476,7 @@ const Location = (function () {
           globalSelectedLocation = false
           setTimeout(function () {
               let location_name = _location_name_filter.value
-              Console.log("location_name", location_name)
+              //Console.log("location_name", location_name)
           }, 200)
       })
       .on("search", function () {
@@ -6498,7 +7494,7 @@ const Location = (function () {
           onSelect: function (suggestion) {
               if (suggestion && suggestion.data) {
                   globalSelectedLocation = true
-                  Console.log("suggestion", suggestion)
+                  //Console.log("suggestion", suggestion)
               }
           },
           onSearchComplete: function (query, suggestions) {
@@ -6568,7 +7564,7 @@ const Location = (function () {
       .on("change", function () {
           
           let selected_value = $("input[name='location_display']:checked").val()
-          Console.log("selected_value", selected_value)
+          //Console.log("selected_value", selected_value)
           default_display = selected_value
           initAutoComplete()
           if (Location.detail["display_" + selected_value] !== null) {
@@ -6819,7 +7815,7 @@ const Location = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                //Console.log("error", e)
                 return handle_location_error("Error Validating Location")
             }
         } else {
@@ -7286,7 +8282,7 @@ const Location = (function () {
             populate_form(location)
         },
         set_detail: function (location) {
-            Console.log("location", location)
+            //Console.log("location", location)
             set_detail(location)
         },
         build: function () {
@@ -7302,10 +8298,12 @@ const Location = (function () {
 const Variant = (function () {
     "use strict"
     
+    const _button_remove_variant_from_product = document.getElementById("button_remove_variant_from_product")
+    const _product_edit_variant_section = document.getElementById("product_edit_variant_section")
+    const _panel_tab_variant = document.getElementById("panel_tab_variant")
     const _category_id = document.getElementById("category_id")
     const _product_id = document.getElementById("product_id")
     const _product_edit_variant_form_variant_name_filter = document.getElementById("product_edit_variant_form_variant_name_filter")
-    const _button_add_product_variant = document.getElementById("button_add_product_variant")
     const _table_variant_product_edit = document.getElementById("table_variant_product_edit")
     const _product_edit_variant_form = document.getElementById("product_edit_variant_form")
     const _edit_product_variant = document.getElementById("edit_product_variant")
@@ -7320,11 +8318,8 @@ const Variant = (function () {
     const _product_edit_variant_form_clear_button = document.getElementById("product_edit_variant_form_clear_button")
     const _product_edit_variant_form_close_button = document.getElementById("product_edit_variant_form_close_button")
     const _product_edit_variant_form_variant_used_in_pricing = document.getElementById("product_edit_variant_form_variant_used_in_pricing")
-    /**
-     * User Id
-     *
-     * @type {number|number}
-     */
+    const _table_variant_product_edit_add_new_button = document.getElementById("table_variant_product_edit_add_new_button")
+    
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $table_variant_product_edit = $(_table_variant_product_edit)
     let globalSelectedVariant = false
@@ -7357,10 +8352,21 @@ const Variant = (function () {
         },
     }
     
-    $(_button_add_product_variant)
+    $(_button_remove_variant_from_product)
       .on("click", function () {
-          //Console.log("Variant.product_edit_variant_form_clear_button:click()", this)
+          remove()
+      })
+    
+    $(_product_edit_variant_section)
+      .on("change", function () {
+          updateProgress()
+      })
+    
+    $(_table_variant_product_edit_add_new_button)
+      .on("click", function () {
+          //Console.log("Variant.table_variant_product_edit_add_new_button:click()", this)
           // ----
+          
           $table_variant_product_edit.clearSelectedRows()
           populateForm()
       })
@@ -7387,6 +8393,81 @@ const Variant = (function () {
           // ----
           save()
       })
+    
+    $(_panel_tab_variant)
+      .on("hide.bs.tab", function () {
+          resetForm()
+          $table_variant_product_edit.clearSelectedRows()
+          _product_edit_variant_form_variant_name_filter.value = ""
+          _product_edit_variant_form_variant_name_filter.disabled = false
+      })
+    
+    const remove = function () {
+        confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
+            if (ans) {
+                let dataToSend = {
+                    variant_id: parseInt(_product_edit_variant_form_variant_id.value),
+                    product_id: parseInt(_product_id.value),
+                }
+                
+                removeProductVariant(dataToSend, function (data) {
+                    if (data) {
+                        let detail = set(Variant.all.get(dataToSend.variant_id))
+                        Variant.all.delete(dataToSend.variant_id)
+                        _product_edit_variant_form_variant_name_filter.value = ""
+                        $table_variant_product_edit.deleteRow(detail)
+                        $table_variant_product_edit.clearSelectedRows()
+                        
+                        Pricing.resetForm()
+                        YearCalendar.resetForm()
+                        
+                        toastr.success(`Variant: ${detail.name} - has been updated`)
+                        resetForm()
+                    }
+                })
+            } else {
+                resetForm()
+                $table_variant_product_edit.clearSelectedRows()
+                _product_edit_variant_form_variant_name_filter.value = ""
+                _product_edit_variant_form_variant_name_filter.disabled = false
+            }
+        })
+    }
+    
+    const removeProductVariant = function (dataToSend, callback) {
+        if (dataToSend) {
+            let url = "/api/v1.0/variants/remove"
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handleVariantError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                //Console.log("error", e)
+            }
+        }
+    }
+    
+    const updateProgress = function () {
+        let variants = Array.from(Variant.all.values())
+        
+        if (variants.length === 0) {
+            let warningNotice = $("<span/>", {
+                "class": "badge badge-danger  ml-2",
+                "text": "!",
+                "id": "variantNeedsAttention",
+            })
+            
+            $(_panel_tab_variant).html(`Variant<span id="variantNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
+        } else {
+            $(_panel_tab_variant).html(`Variant`)
+        }
+        
+        Product.updateProgress()
+    }
     
     const initAutoComplete = function () {
         //Console.log("Variant.initAutoComplete()", Variant)
@@ -7452,6 +8533,7 @@ const Variant = (function () {
                       $table_variant_product_edit.loadRow(detail)
                   } else {
                       detail = set(variant)
+                      detail.used_in_pricing = 1
                   }
                   
                   populateForm(detail)
@@ -7481,7 +8563,7 @@ const Variant = (function () {
                     }
                 })
             } catch (e) {
-                //Console.log(e)
+                //Console.log("error", e)
                 return handleVariantError("Error Validating Variant")
             }
         } else {
@@ -7644,33 +8726,7 @@ const Variant = (function () {
         }
     }
     
-    const set = function (variant) {
-        //Console.log("Variant.set(variant)", variant)
-        // ----
-        let detail = defaultDetail()
-        if (variant) {
-            detail.id = (variant.id) ? variant.id : null
-            detail.category_id = (variant.category_id) ? variant.category_id : null
-            detail.name = (variant.name) ? variant.name : null
-            detail.code = (variant.code) ? variant.code : null
-            detail.min_age = (variant.min_age) ? variant.min_age.toString() : null
-            detail.max_age = (variant.max_age) ? variant.max_age : null
-            detail.enabled = (variant.enabled) ? variant.enabled : 1
-            detail.date_created = (variant.date_created) ? variant.date_created : formatDateMySQL()
-            detail.created_by = (variant.created_by) ? variant.created_by : user_id
-            detail.date_modified = (variant.date_modified) ? variant.date_modified : formatDateMySQL()
-            detail.modified_by = (variant.modified_by) ? variant.modified_by : user_id
-            detail.used_in_pricing = (variant.used_in_pricing === 1) ? 1 : 0
-            detail.note = (variant.note) ? variant.note : null
-        }
-        
-        Product.detail = detail
-        return detail
-    }
-    
     const resetForm = function () {
-        //Console.log("Variant.resetForm()", Variant.all)
-        // ----
         clearForm()
         disableFormFields()
         hideForm()
@@ -7726,8 +8782,7 @@ const Variant = (function () {
     }
     
     const hideForm = function () {
-        //Console.log("Variant.hideForm()", Variant)
-        // ----
+        updateProgress()
         _product_edit_variant_form_variant_name_filter.disabled = false
         $(_edit_product_variant).hide()
     }
@@ -7796,20 +8851,17 @@ const Variant = (function () {
                     }
                 })
             } catch (e) {
-                //Console.log(e)
+                //Console.log("error", e)
             }
         }
     }
     
     const save = function () {
-        //Console.log("Variant.save()", Variant)
-        // ----
         if (validVariantRecord()) {
-            
-            confirmDialog(`Would you like to update?`, (ans) => {
+            confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
                 if (ans) {
                     let dataToSend = buildVariantRecord()
-                    //Console.log("Variant.save - dataToSend", dataToSend)
+                    Console.log("Variant.save()", dataToSend)
                     saveProductVariant(dataToSend, function (data) {
                         //Console.log("Variant.save - data", data)
                         let variant
@@ -7891,6 +8943,7 @@ const Variant = (function () {
             validator_init(form_rules)
             Variant.validator = $(_product_edit_variant_form).validate()
             resetForm()
+            updateProgress()
         }
     }
     
@@ -7904,9 +8957,34 @@ const Variant = (function () {
         
     }
     
+    const set = function (variant) {
+        let detail = defaultDetail()
+        if (variant) {
+            detail.id = (variant.id) ? variant.id : null
+            detail.category_id = (variant.category_id) ? variant.category_id : null
+            detail.name = (variant.name) ? variant.name : null
+            detail.code = (variant.code) ? variant.code : null
+            detail.min_age = (variant.min_age) ? variant.min_age.toString() : null
+            detail.max_age = (variant.max_age) ? variant.max_age : null
+            detail.enabled = (variant.enabled) ? variant.enabled : 1
+            detail.date_created = (variant.date_created) ? variant.date_created : formatDateMySQL()
+            detail.created_by = (variant.created_by) ? variant.created_by : user_id
+            detail.date_modified = (variant.date_modified) ? variant.date_modified : formatDateMySQL()
+            detail.modified_by = (variant.modified_by) ? variant.modified_by : user_id
+            detail.used_in_pricing = (variant.used_in_pricing === 1) ? 1 : 0
+            detail.note = (variant.note) ? variant.note : null
+        }
+        
+        Product.detail = detail
+        return detail
+    }
+    
     return {
         validator: null,
         all: new Map(),
+        set: function (variant) {
+            return set(variant)
+        },
         edit: function (variant) {
             edit(variant)
         },
@@ -7918,10 +8996,8 @@ const Variant = (function () {
 
 const Unit = (function () {
     "use strict"
-    
-    /**
-     * Static Variables
-     */
+    const _panel_tab_unit = document.getElementById("panel_tab_unit")
+    const _button_remove_unit_from_product = document.getElementById("button_remove_unit_from_product")
     const _category_id = document.getElementById("category_id")
     const _product_id = document.getElementById("product_id")
     const _product_edit_unit_form = document.getElementById("product_edit_unit_form")
@@ -7939,15 +9015,12 @@ const Unit = (function () {
     const _product_edit_unit_form_unit_description_short = document.getElementById("product_edit_unit_form_unit_description_short")
     const _product_edit_unit_form_unit_description_long = document.getElementById("product_edit_unit_form_unit_description_long")
     const _product_edit_unit_form_unit_enabled = document.getElementById("product_edit_unit_form_unit_enabled")
-    const _button_add_product_unit = document.getElementById("button_add_product_unit")
     const _button_unit_description_long_toggle = document.getElementById("button_unit_description_long_toggle")
     const _display_product_unit_name = document.getElementById("display_product_unit_name")
     const _product_edit_unit_form_clear_button = document.getElementById("product_edit_unit_form_clear_button")
     const _product_edit_unit_form_close_button = document.getElementById("product_edit_unit_form_close_button")
+    const _table_unit_product_edit_add_new_button = document.getElementById("table_unit_product_edit_add_new_button")
     
-    /**
-     * Dynamic Variables
-     */
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $table_unit_product_edit = $(_table_unit_product_edit)
     let category_id
@@ -7955,11 +9028,6 @@ const Unit = (function () {
     let form_rules = {
         rules: {
             product_edit_unit_form_unit_min_nights: {
-                required: true,
-                number: true,
-                min: 1,
-            },
-            product_edit_unit_form_unit_max_nights: {
                 required: true,
                 number: true,
                 min: 1,
@@ -7981,11 +9049,6 @@ const Unit = (function () {
                 number: "Field Invalid",
                 min: "Field Invalid",
             },
-            product_edit_unit_form_unit_max_nights: {
-                required: "Field Required",
-                number: "Field Invalid",
-                min: "Field Invalid",
-            },
             product_edit_unit_form_unit_min_pax: {
                 required: "Field Required",
                 number: "Field Invalid",
@@ -7998,6 +9061,11 @@ const Unit = (function () {
             },
         },
     }
+    
+    $(_button_remove_unit_from_product)
+      .on("click", function () {
+          remove()
+      })
     
     $(_product_edit_unit_form_submit_button)
       .on("click", function () {
@@ -8023,7 +9091,7 @@ const Unit = (function () {
           hideForm()
       })
     
-    $(_button_add_product_unit)
+    $(_table_unit_product_edit_add_new_button)
       .on("click", function () {
           clearForm()
           $table_unit_product_edit.clearSelectedRows()
@@ -8035,6 +9103,77 @@ const Unit = (function () {
           enableFormFields()
           loadForm()
       })
+    
+    $(_panel_tab_unit)
+      .on("hide.bs.tab", function () {
+          resetForm()
+          $table_unit_product_edit.clearSelectedRows()
+          _product_edit_unit_form_unit_name_filter.value = ""
+          _product_edit_unit_form_unit_name_filter.disabled = false
+          _product_edit_unit_form_unit_name.disabled = true
+      })
+    
+    const removeProductUnit = function (dataToSend, callback) {
+        if (dataToSend) {
+            let url = "/api/v1.0/units/remove"
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handleUnitError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                //Console.log("error", e)
+            }
+        }
+    }
+    
+    const remove = function () {
+        confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
+            if (ans) {
+                let dataToSend = {
+                    unit_id: parseInt(_product_edit_unit_form_unit_id.value),
+                    product_id: parseInt(_product_id.value),
+                }
+                
+                removeProductUnit(dataToSend, function (data) {
+                    let unitId = dataToSend.unit_id
+                    if (data) {
+                        
+                        let unit = Unit.all.get(unitId)
+                        
+                        if (unit) {
+                            $table_unit_product_edit.deleteRow(unit)
+                        }
+                        toastr.success(`Unit: ${unit.name} - has been removed`)
+                        clearForm()
+                        hideForm()
+                        
+                        _product_edit_unit_form_unit_name_filter.value = ""
+                        _product_edit_unit_form_unit_name_filter.disabled = false
+                        $table_unit_product_edit.clearSelectedRows()
+                        Unit.all.delete(unitId)
+                        Pricing.resetForm()
+                        YearCalendar.resetForm()
+                        updateProgress()
+                    }
+                })
+            }
+        })
+    }
+    
+    const updateProgress = function () {
+        let units = Array.from(Unit.all.values())
+        if (units.length === 0) {
+            $(_panel_tab_unit).html(`Unit <span id="unitNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
+        } else {
+            $(_panel_tab_unit).html(`Unit`)
+        }
+        
+        Product.updateProgress()
+    }
     
     const initAutoComplete = function () {
         category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
@@ -8085,7 +9224,7 @@ const Unit = (function () {
                   let unit = suggestion.data
                   let hasUnit = Unit.all.get(parseInt(unit.id))
                   
-                  Console.log("_product_edit_unit_form_unit_name_filter:autocomplete() - unit", unit)
+                  //Console.log("_product_edit_unit_form_unit_name_filter:autocomplete() - unit", unit)
                   
                   if (hasUnit) {
                       detail = set(hasUnit)
@@ -8100,7 +9239,7 @@ const Unit = (function () {
     }
     
     const nameExists = function (name) {
-        Console.log("Unit.nameExists(unit_name)", name)
+        //Console.log("Unit.nameExists(unit_name)", name)
         if (name && name !== "") {
             /**
              * data to send to the server
@@ -8124,7 +9263,7 @@ const Unit = (function () {
                 if (unit) {
                     let hasUnit = Unit.all.get(parseInt(unit.id))
                     let detail
-                    Console.log("_product_edit_unit_form_unit_name_filter:autocomplete() - unit", unit)
+                    //Console.log("_product_edit_unit_form_unit_name_filter:autocomplete() - unit", unit)
                     
                     if (hasUnit) {
                         detail = set(hasUnit)
@@ -8175,7 +9314,7 @@ const Unit = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                //Console.log("error", e)
                 return handleUnitError("Error Validating Unit")
             }
         } else {
@@ -8184,32 +9323,6 @@ const Unit = (function () {
     }
     
     const defaultDetail = function () {
-        Console.log("Unit:defaultDetail()", Unit)
-        /**
-         * api_id: null
-         * blurb: null
-         * category_id: 1
-         * cover_image: null
-         * created_by: 4
-         * date_created: "2021-12-21 16:32:23"
-         * date_modified: "2021-12-21 16:32:23"
-         * description_long: "<div class=\"card-block \">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.</div>"
-         * description_short: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu."
-         * enabled: 1
-         * end_time: null
-         * id: 204
-         * max_nights: 7
-         * max_pax: 4
-         * meeting_point: null
-         * min_nights: 1
-         * min_pax: 1
-         * modified_by: 4
-         * name: "Suite"
-         * note: null
-         * room_code: "UN-00000000204-SUIT"
-         * start_time: null
-         * time_notes: nul
-         */
         return {
             api_id: null,
             blurb: null,
@@ -8238,7 +9351,6 @@ const Unit = (function () {
     }
     
     const set = function (unit) {
-        Console.log("Unit:set()", unit)
         let detail = defaultDetail()
         
         if (unit) {
@@ -8271,10 +9383,8 @@ const Unit = (function () {
     }
     
     const save = function () {
-        Console.log("Unit.save()", Unit)
-        // ----
         if (validUnitRecord()) {
-            confirmDialog(`Would you like to update?`, (ans) => {
+            confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
                 if (ans) {
                     let dataToSend = buildUnitRecord()
                     //Console.log("Unit.save - dataToSend", dataToSend)
@@ -8287,9 +9397,7 @@ const Unit = (function () {
                                 unit = data[0]
                             }
                             let detail = set(unit)
-                            Console.log("detail", detail)
                             let hasUnit = Unit.all.get(detail.id)
-                            Console.log("Unit.save - hasUnit", hasUnit)
                             Unit.all.set(detail.id, detail)
                             
                             if (hasUnit) {
@@ -8297,8 +9405,6 @@ const Unit = (function () {
                             } else {
                                 $table_unit_product_edit.insertRow(detail)
                             }
-                            
-                            Console.log("Unit.save - Unit.all", Unit.all)
                             toastr.success(`Unit: ${detail.name} - has been updated`)
                             clearForm()
                             hideForm()
@@ -8317,7 +9423,7 @@ const Unit = (function () {
     }
     
     const validUnitRecord = function () {
-        Console.log("Unit.validUnitRecord()", Unit)
+        //Console.log("Unit.validUnitRecord()", Unit)
         // ----
         let valid = $(_product_edit_unit_form).valid()
         let min_pax = (!isNaN(parseInt(_product_edit_unit_form_unit_min_pax.value))) ? parseInt(_product_edit_unit_form_unit_min_pax.value) : null
@@ -8347,7 +9453,7 @@ const Unit = (function () {
     }
     
     const buildUnitRecord = function () {
-        Console.log("Unit.buildUnitRecord()", Unit)
+        //Console.log("Unit.buildUnitRecord()", Unit)
         let dataToSend = {
             id: (!isNaN(parseInt(_product_edit_unit_form_unit_id.value))) ? parseInt(_product_edit_unit_form_unit_id.value) : null,
             product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
@@ -8385,16 +9491,13 @@ const Unit = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                //Console.log("error", e)
             }
         }
     }
     
-    /**
-     * clearForm
-     */
     const clearForm = function () {
-        Console.log("Unit:clearForm()", Unit)
+        //Console.log("Unit:clearForm()", Unit)
         _product_edit_unit_form_unit_id.value = ""
         _product_edit_unit_form_unit_name.value = ""
         _product_edit_unit_form_unit_room_code.value = ""
@@ -8407,19 +9510,13 @@ const Unit = (function () {
         _product_edit_unit_form_unit_enabled.checked = true
     }
     
-    /**
-     * loadForm
-     */
     const loadForm = function () {
-        Console.log("Unit:loadForm()", Unit)
         if (_edit_product_unit) {
             $(_edit_product_unit).show()
+            _product_edit_unit_form_unit_name_filter.disabled = true
         }
     }
     
-    /**
-     * disable unit form fields
-     */
     const disableFormFields = function () {
         _product_edit_unit_form_unit_id.disabled = true
         _product_edit_unit_form_unit_name.disabled = true
@@ -8433,9 +9530,6 @@ const Unit = (function () {
         _product_edit_unit_form_unit_enabled.disabled = true
     }
     
-    /**
-     * enable form fields
-     */
     const enableFormFields = function () {
         disableFormFields()
         _product_edit_unit_form_unit_id.disabled = true
@@ -8452,13 +9546,11 @@ const Unit = (function () {
         
     }
     
-    /**
-     * hideForm
-     */
     const hideForm = function () {
-        Console.log("Unit:hideForm()", Unit)
         if (_edit_product_unit) {
             $(_edit_product_unit).hide()
+            _product_edit_unit_form_unit_name_filter.disabled = false
+            updateProgress()
         }
     }
     
@@ -8467,23 +9559,17 @@ const Unit = (function () {
         hideForm()
     }
     
-    /**
-     * populateForm
-     *
-     * @param unit
-     */
     const populateForm = function (unit) {
         clearForm()
         if (unit) {
-            Console.log("Unit:populateForm()", unit)
             _product_edit_unit_form_unit_name_filter.value = (unit.name) ? unit.name : ""
             _product_edit_unit_form_unit_id.value = (unit.id) ? unit.id : ""
             _product_edit_unit_form_unit_name.value = (unit.name) ? unit.name : ""
             _product_edit_unit_form_unit_room_code.value = (unit.room_code) ? unit.room_code : ""
             _product_edit_unit_form_unit_min_nights.value = (unit.min_nights) ? unit.min_nights : 1
-            _product_edit_unit_form_unit_max_nights.value = (unit.max_nights) ? unit.max_nights : ""
+            _product_edit_unit_form_unit_max_nights.value = (unit.max_nights) ? unit.max_nights : null
             _product_edit_unit_form_unit_min_pax.value = (unit.min_pax) ? unit.min_pax : 1
-            _product_edit_unit_form_unit_max_pax.value = (unit.max_pax) ? unit.max_pax : ""
+            _product_edit_unit_form_unit_max_pax.value = (unit.max_pax) ? unit.max_pax : null
             _product_edit_unit_form_unit_description_short.value = (unit.description_short) ? unit.description_short : ""
             _product_edit_unit_form_unit_description_long.value = (unit.description_long) ? unit.description_long : ""
             _product_edit_unit_form_unit_enabled.checked = true
@@ -8493,11 +9579,6 @@ const Unit = (function () {
         loadForm()
     }
     
-    /**
-     * loadAll()
-     *
-     * @param units
-     */
     const loadAll = function (units) {
         Unit.all = new Map()
         
@@ -8505,23 +9586,17 @@ const Unit = (function () {
             units = []
         }
         
-        Console.log("Unit.loadAll(units)", units)
-        
         $.each(units, function (k, unit) {
             let detail = set(unit)
-            Console.log("detail", detail)
+            //Console.log("detail", detail)
             Unit.all.set(detail.id, detail)
             $table_unit_product_edit.insertRow(detail)
         })
         
-        Console.log("Unit.loadAll - Unit.all", Unit.all)
+        updateProgress()
     }
     
-    /**
-     * buildProductEditTable
-     */
     const buildProductEditTable = function () {
-        Console.log("Unit.buildProductEditTable()", Unit.all)
         category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         if (category_id === 1) {
@@ -8573,7 +9648,7 @@ const Unit = (function () {
                     render: function (data, type, row, meta) {
                         let nights = 1
                         if (data === null) {
-                            nights = "null"
+                            nights = "&infin;"
                         } else {
                             nights = data
                         }
@@ -8601,11 +9676,6 @@ const Unit = (function () {
         })
     }
     
-    /**
-     * init
-     *
-     * @param settings
-     */
     const init = function (settings) {
         let units = []
         
@@ -8629,24 +9699,17 @@ const Unit = (function () {
         
         if (_edit_product_unit) {
             hideForm()
+            updateProgress()
         }
         
     }
     
-    /**
-     * edit
-     *
-     * @param unit
-     */
     const edit = function (unit) {
         populateForm(unit)
         enableFormFields()
-        Console.log("Unit.edit(unit)", unit)
+        //Console.log("Unit.edit(unit)", unit)
     }
     
-    /**
-     * shared methods
-     */
     return {
         all: new Map(),
         byValue: "Night",
@@ -9317,7 +10380,7 @@ const Address = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 return handle_address_error("Error Validating Company")
             }
         } else {
@@ -9408,7 +10471,7 @@ $.fn.DisabledDOW = function (settings) {
     const $this = $(_this)
     
     $this.on("change", function () {
-        //console.log("change")
+        //Console.log("change")
     })
     
     /**
@@ -9617,7 +10680,7 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                //Console.log("dow_select_mon", DisabledDOW.disabled_dows)
+                
                 break
             case name_prefix + "dow_select_tue":
                 indexId = 2
@@ -9701,14 +10764,13 @@ $.fn.DisabledDOW = function (settings) {
     
     const value = function (val) {
         if (val) {
-            Console.log("val", val)
+            //Console.log("val", val)
         } else {
         
         }
     }
     
     const init = function (disabled_dow) {
-        console.log("disabled_days.init(disabled_dow)", disabled_dow)
         let disabled_days = []
         
         if (disabled_dow) {
@@ -9716,9 +10778,9 @@ $.fn.DisabledDOW = function (settings) {
                 DisabledDOW.disabled_dows = []
                 return []
             }
-            console.log("disabled_days.init(typeof disabled_dow)", typeof disabled_dow)
+            
             if (typeof disabled_dow === "string") {
-                disabled_days = getListOfIds(disabled_dow)
+                disabled_days = getListOfIds(disabled_dow.replace(/\s/g, ''))
             } else if (typeof disabled_dow === "object") {
                 disabled_days = disabled_dow
             } else {
@@ -9726,7 +10788,7 @@ $.fn.DisabledDOW = function (settings) {
             }
             
         }
-        console.log("disabled_days.init(disabled_days)", disabled_days)
+        
         DisabledDOW.disabled_dows = disabled_days
         updateCheckBoxes()
     }
@@ -10013,6 +11075,7 @@ const Category = (function () {
     const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
     const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
+    
     const handle_product_change = function (category_id) {
         if (!category_id) {
             return
@@ -10020,7 +11083,7 @@ const Category = (function () {
         
         category_id = parseInt(category_id)
         
-        Product.reset_new_product_details()
+        Product.resetNewProductDetails()
         Product.initAutoComplete(category_id)
         let category = Types.category.get(category_id)
         if (!category) {
@@ -10029,7 +11092,7 @@ const Category = (function () {
         Product.attr1 = category.attribute_id
         Product.attr2 = null
         Product.attr3 = null
-        Product.update_product_sku()
+        Product.updateProductSKU()
         if (category_id && !isNaN(parseInt(category_id))) {
             
             switch (parseInt(category_id)) {
@@ -10271,7 +11334,7 @@ const Category = (function () {
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
-                    Console.log("Other")
+                    Console.log("Other", 9)
                     break
                 default:
                     /**
@@ -10303,7 +11366,7 @@ const Category = (function () {
                     _modal_product_rating_types_id.disabled = true
                     
                     _modal_product_pricing_strategies_types_id.disabled = true
-                    Console.log("Default")
+                    Console.log("Default", null)
                     break
             }
         }
@@ -10601,6 +11664,8 @@ const Company = (function () {
         },
         
     }
+    
+    let reset_company = {}
     let $company_key
     let temp_company = {}
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
@@ -10670,98 +11735,6 @@ const Company = (function () {
           set_progress()
       })
     
-    // ----
-    
-    const _default_detail = function () {
-        return {
-            created_by: user_id,
-            date_created: formatDateMySQL(),
-            date_modified: formatDateMySQL(),
-            email: null,
-            cover_image: "/public/img/placeholder.jpg",
-            enabled: 1,
-            fax: null,
-            id: null,
-            modified_by: user_id,
-            name: null,
-            note: null,
-            phone_1: null,
-            phone_2: null,
-            status_id: 10,
-            website: null,
-            description_short: null,
-            description_long: null,
-            keywords: null,
-            logo: null,
-        }
-    }
-    
-    /**
-     * fill in form data
-     *
-     * @param company
-     */
-    const populate_form = function (company) {
-        let company_logo_image = $("#company_logo").dropify()
-        $(_company_id).val((company.id) ? company.id : "").trigger("change")
-        _company_name.value = (company.name) ? company.name : ""
-        _company_phone_1.value = (company.phone_1) ? company.phone_1 : ""
-        _company_phone_2.value = (company.phone_2) ? company.phone_2 : ""
-        _company_fax.value = (company.fax) ? company.fax : ""
-        _company_email.value = (company.email) ? company.email : ""
-        _company_website.value = (company.website) ? company.website : ""
-        _company_description_long.value = (company.description_long) ? company.description_long : ""
-        _company_description_short.value = (company.description_short) ? company.description_short : ""
-        let company_keywords = (company.keywords) ? company.keywords : ""
-        $company_key = $(_company_key).BuildKeyword(company_keywords)
-        if (_provider_name) {
-            $(_provider_name).val((company.name) ? company.name : "").trigger("change")
-        }
-        
-        if (_vendor_name) {
-            _vendor_name.value = (company.name) ? company.name : null
-        }
-        
-        if (_provider_company_id) {
-            _provider_company_id.value = (company.id) ? company.id : null
-        }
-        
-        if (_vendor_company_id) {
-            _vendor_company_id.value = (company.id) ? company.id : null
-        }
-        
-        if (_contact_company_id) {
-            _contact_company_id.value = (company.id) ? company.id : null
-        }
-        
-        if (_address_company_id) {
-            _address_company_id.value = (company.id) ? company.id : null
-        }
-        
-    }
-    
-    const on_click_outside = (e) => {
-        let tar = $(e.target).parents("div.form_element")
-        if (!tar[0] && !e.target.className.includes("company_name")) {
-            if (_company_name.value === "") {
-                populate_form(temp_company)
-            }
-            
-            temp_company = {}
-            destroy_click()
-        }
-    }
-    
-    /**
-     * destroy_click
-     */
-    const destroy_click = function () {
-        window.removeEventListener("click", on_click_outside)
-    }
-    
-    /**
-     * initialize provider autocomplete
-     */
     const initAutoComplete = function () {
         $(_company_name)
           .on("change", function () {
@@ -10880,12 +11853,87 @@ const Company = (function () {
           })
     }
     
-    /**
-     * handle company object errors
-     *
-     * @param msg
-     */
-    const handle_company_error = function (msg) {
+    const defaultDetail = function () {
+        return {
+            created_by: user_id,
+            date_created: formatDateMySQL(),
+            date_modified: formatDateMySQL(),
+            email: null,
+            cover_image: "/public/img/placeholder.jpg",
+            enabled: 1,
+            fax: null,
+            id: null,
+            modified_by: user_id,
+            name: null,
+            note: null,
+            phone_1: null,
+            phone_2: null,
+            status_id: 10,
+            website: null,
+            description_short: null,
+            description_long: null,
+            keywords: null,
+            logo: null,
+        }
+    }
+    
+    const populate_form = function (company) {
+        let company_logo_image = $("#company_logo").dropify()
+        let company_keywords = (company.keywords) ? company.keywords : ""
+        $(_company_id).val((company.id) ? company.id : "").trigger("change")
+        _company_name.value = (company.name) ? company.name : ""
+        _company_phone_1.value = (company.phone_1) ? company.phone_1 : ""
+        _company_phone_2.value = (company.phone_2) ? company.phone_2 : ""
+        _company_fax.value = (company.fax) ? company.fax : ""
+        _company_email.value = (company.email) ? company.email : ""
+        _company_website.value = (company.website) ? company.website : ""
+        _company_description_long.value = (company.description_long) ? company.description_long : ""
+        _company_description_short.value = (company.description_short) ? company.description_short : ""
+        
+        $company_key = $(_company_key).BuildKeyword(company_keywords)
+        if (_provider_name) {
+            $(_provider_name).val((company.name) ? company.name : "").trigger("change")
+        }
+        
+        if (_vendor_name) {
+            _vendor_name.value = (company.name) ? company.name : null
+        }
+        
+        if (_provider_company_id) {
+            _provider_company_id.value = (company.id) ? company.id : null
+        }
+        
+        if (_vendor_company_id) {
+            _vendor_company_id.value = (company.id) ? company.id : null
+        }
+        
+        if (_contact_company_id) {
+            _contact_company_id.value = (company.id) ? company.id : null
+        }
+        
+        if (_address_company_id) {
+            _address_company_id.value = (company.id) ? company.id : null
+        }
+        
+    }
+    
+    const on_click_outside = (e) => {
+        let tar = $(e.target).parents("div.form_element")
+        if (!tar[0] && !e.target.className.includes("company_name")) {
+            if (_company_name.value === "") {
+                populate_form(temp_company)
+            }
+            
+            temp_company = {}
+            destroy_click()
+        }
+    }
+    
+    const destroy_click = function () {
+        window.removeEventListener("click", on_click_outside)
+    }
+    
+    const handleCompanyError = function (msg) {
         toastr.error(msg)
     }
     
@@ -10960,12 +12008,6 @@ const Company = (function () {
         }
     }
     
-    /**
-     * fetch_company_by_name
-     *
-     * @param dataToSend
-     * @param callback
-     */
     const fetch_company_by_name = function (dataToSend, callback) {
         let url = "/api/v1.0/companies/validate"
         
@@ -10975,15 +12017,15 @@ const Company = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handle_company_error("Oops: 1")
+                        return handleCompanyError("Oops: 1")
                     }
                 })
             } catch (e) {
-                Console.log(e)
-                return handle_company_error("Error Validating Company")
+                Console.log("error", e)
+                return handleCompanyError("Error Validating Company")
             }
         } else {
-            return handle_company_error("Error Loading Company- Missing Data")
+            return handleCompanyError("Error Loading Company- Missing Data")
         }
     }
     
@@ -10994,7 +12036,7 @@ const Company = (function () {
                 if (data) {
                     return callback(data)
                 } else {
-                    return handle_company_error("Oops: 1")
+                    return handleCompanyError("Oops: 1")
                 }
             })
         }
@@ -11047,16 +12089,8 @@ const Company = (function () {
         }
     }
     
-    let reset_company = {}
-    
-    /**
-     * set detail from data
-     *
-     * @param company
-     * @returns {{phone_2: null, note: null, phone_1: null, website: null, keywords: null, date_created: *, description_long: null, created_by: number, enabled: number, description_short: null, status_id: number, date_modified: *, modified_by: number, name: null, logo: null, cover_image: string, id: null, fax: null, email: null}}
-     */
     const set_detail = function (company) {
-        let detail = _default_detail()
+        let detail = defaultDetail()
         
         if (company) {
             detail.created_by = (company.created_by) ? company.created_by : user_id
@@ -11608,7 +12642,7 @@ const Contact = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 return handleContactError("Error Validating Company")
             }
         } else {
@@ -12208,7 +13242,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
         }
     }
@@ -12297,7 +13331,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 return handle_vendor_error("Error Validating Company")
             }
         } else {
@@ -12417,7 +13451,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
         }
     }
@@ -12881,37 +13915,29 @@ const Pricing = (function () {
     const _pricing_strategy_season_id = document.getElementById("pricing_strategy_season_id")
     const _pricing_strategy_profile_id = document.getElementById("pricing_strategy_profile_id")
     const _pricing_strategy_types_id = document.getElementById("pricing_strategy_types_id")
+    const _calendar_filter_profile_id = document.getElementById("calendar_filter_profile_id")
     
     /**
      * pricing strategy types id
      */
     $(_pricing_strategy_types_id)
       .on("change", function () {
-          Console.log("Pricing.pricing_strategy_types_id:change()", _pricing_strategy_types_id.value)
-          // ----
-          let pricing_strategy_types_id = parseInt(_pricing_strategy_types_id.value)
-          if (pricing_strategy_types_id === 1) {
-          
-          } else if (pricing_strategy_types_id === 1) {
-          
-          } else {
-          
-          }
+          //Console.log("Pricing.pricing_strategy_types_id:change()", _pricing_strategy_types_id.value)
       })
     
     $(_pricing_strategy_season_id)
       .on("change", function () {
-          Console.log("This", _pricing_strategy_season_id.value)
+          //Console.log("This", _pricing_strategy_season_id.value)
       })
     
     $(_pricing_strategy_unit_id)
       .on("change", function () {
-          Console.log("This", _pricing_strategy_unit_id.value)
+          //Console.log("This", _pricing_strategy_unit_id.value)
       })
     
     $(_pricing_strategy_profile_id)
       .on("change", function () {
-          Console.log("This", _pricing_strategy_profile_id.value)
+          //Console.log("This", _pricing_strategy_profile_id.value)
       })
     
     /**
@@ -12920,7 +13946,7 @@ const Pricing = (function () {
      * @param settings
      */
     const init = function (settings) {
-        Console.log("Pricing.init(settings)", settings)
+        //Console.log("Pricing.init(settings)", settings)
         resetForm()
         let pricings = []
         let pricing_detail
@@ -12933,7 +13959,6 @@ const Pricing = (function () {
         
         if (pricing_detail.pricing_strategy_types_id) {
             _pricing_strategy_types_id.value = pricing_detail.pricing_strategy_types_id
-            
         }
         loadAll(pricings)
     }
@@ -12941,19 +13966,49 @@ const Pricing = (function () {
     /**
      * load all pricing templates
      *
-     * @param pricings
+     * @param pricing_details
      */
-    const loadAll = function (pricings) {
+    const loadAll = function (pricing_details) {
+        //Console.log("Pricing.loadAll()", pricing_details)
         Pricing.all = new Map()
-        if (!pricings) {
-            pricings = []
+        if (!pricing_details) {
+            pricing_details = []
         }
         
-        $.each(pricings, function (k, pricing) {
-            Console.log("pricing", pricing)
+        $.each(pricing_details, function (k, matrix) {
+            //Console.log("matrix", matrix)
+            // ----
+            let pricings = matrix.pricings
+            let pricingCode = matrix.pricing_code
+            let matrixCode = matrix.matrix_code
+            let matrixDetails = Matrix.all.get(matrixCode)
+            let detail = set(matrix)
+            Pricing.all.set(pricingCode, detail)
+            /*
+            $.each(pricings, function (k, pricing) {
+                //Console.log("pricing", pricing)
+                // ----
+                
+                let pricing_code = (pricing.code) ? pricing.code : null
+                
+                if (pricing_code) {
+                    Pricing.all.set(pricing_code, pricing)
+                    let details = set(pricing)
+                    //Console.log("details", details)
+                    if (matrixDetails) {
+                        if (!matrixDetails["pricings"]) {
+                            matrixDetails["pricings"] = new Map()
+                        }
+                        
+                        matrixDetails["pricings"].set(pricing_code, pricing)
+                    }
+                }
+                
+            })
+            //*/
         })
         
-        Console.log("Pricing.all", Pricing.all)
+        //Console.log("Pricings.all", Pricing.all)
     }
     
     /**
@@ -12961,7 +14016,7 @@ const Pricing = (function () {
      */
     const loadSeasonDropdown = function () {
         let seasons = (Season && Season.all) ? Array.from(Season.all.values()) : []
-        let options = "<option value='' disabled readonly selected>-- Seasons --</option>"
+        let options = ""
         $.each(seasons, function (k, season) {
             let name = season.name
             let id = season.id
@@ -12982,8 +14037,12 @@ const Pricing = (function () {
             let id = profile.id
             options += `<option value="${id}">${name}</option>`
         })
+        /*
         $(_pricing_strategy_profile_id).empty()
         $(_pricing_strategy_profile_id).html(options)
+        //*/
+        $(_calendar_filter_profile_id).empty()
+        $(_calendar_filter_profile_id).html(options)
     }
     
     /**
@@ -12991,7 +14050,7 @@ const Pricing = (function () {
      */
     const loadUnitDropdown = function () {
         let units = (Unit && Unit.all) ? Array.from(Unit.all.values()) : []
-        let options = "<option value='' disabled readonly selected>-- Units --</option>"
+        let options = ""
         $.each(units, function (k, unit) {
             let name = unit.name
             let id = unit.id
@@ -13005,27 +14064,105 @@ const Pricing = (function () {
      * reset form
      */
     const resetForm = function () {
-        Console.log("Pricing.resetForm()", Variant.all)
+        //Console.log("Pricing.resetForm()", Variant.all)
         
         loadSeasonDropdown()
         loadUnitDropdown()
         loadProfileDropdown()
     }
     
-    const buildTable = function () {
-    
+    const defaultDetail = function () {
+        //Console.log("Pricing.defaultDetail()", Pricing)
+        
+        return {
+            pricing_code: null,
+            matrix_code: null,
+            code: null,
+            id: null,
+            product_id: null,
+            season_id: null,
+            unit_id: null,
+            matrix_id: null,
+            variant_id: 0,
+            name: null,
+            mon: null,
+            tue: null,
+            wed: null,
+            thu: null,
+            fri: null,
+            sat: null,
+            sun: null,
+            monMargin: null,
+            tueMargin: null,
+            wedMargin: null,
+            thuMargin: null,
+            friMargin: null,
+            satMargin: null,
+            sunMargin: null,
+            count: 1,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
+        }
     }
     
-    const defaultDetail = function () {}
-    
+    /**
+     * sets objects values
+     *
+     * @param pricing
+     * @returns {{thu: null, note: null, friMargin: null, code: null, tue: null, matrix_id: null, mon: null, sun: null, enabled: number, variant_id: number, price: null, product_id: null, wed: null, id: null, fri: null, sunMargin: null, unit_id: null, tueMargin: null, satMargin: null, wedMargin: null, margin: null, cost: null, date_created: *, sat: null, thuMargin: null, count: number, season_id: null, created_by: number, date_modified: *, name: null, modified_by: number, monMargin: null}}
+     */
     const set = function (pricing) {
-    
+        let detail = defaultDetail()
+        if (pricing) {
+            //Console.log(pricing)
+            detail.pricing_code = (pricing.pricing_code) ? pricing.pricing_code : null
+            detail.matrix_code = (pricing.matrix_code) ? pricing.matrix_code : null
+            detail.code = (pricing.code) ? pricing.code : null
+            detail.id = (pricing.id) ? pricing.id : null
+            detail.product_id = (pricing.product_id) ? pricing.id : null
+            detail.season_id = (pricing.season_id) ? pricing.id : null
+            detail.unit_id = (pricing.unit_id) ? pricing.id : null
+            detail.matrix_id = (pricing.matrix_id) ? pricing.matrix_id : null
+            detail.variant_id = (pricing.variant_id) ? pricing.variant_id : null
+            detail.name = (pricing.name) ? pricing.name : null
+            detail.mon = (pricing.mon) ? pricing.mon : null
+            detail.tue = (pricing.tue) ? pricing.tue : null
+            detail.wed = (pricing.wed) ? pricing.wed : null
+            detail.thu = (pricing.thu) ? pricing.thu : null
+            detail.fri = (pricing.fri) ? pricing.fri : null
+            detail.sat = (pricing.sat) ? pricing.sat : null
+            detail.sun = (pricing.sun) ? pricing.sun : null
+            detail.monMargin = (pricing.monMargin) ? pricing.monMargin : null
+            detail.tueMargin = (pricing.tueMargin) ? pricing.tueMargin : null
+            detail.wedMargin = (pricing.wedMargin) ? pricing.wedMargin : null
+            detail.thuMargin = (pricing.thuMargin) ? pricing.thuMargin : null
+            detail.friMargin = (pricing.friMargin) ? pricing.friMargin : null
+            detail.satMargin = (pricing.satMargin) ? pricing.satMargin : null
+            detail.sunMargin = (pricing.sunMargin) ? pricing.sunMargin : null
+            detail.count = (pricing.count) ? pricing.count : null
+            detail.enabled = (pricing.enabled) ? pricing.enabled : 1
+            detail.date_created = (pricing.date_created) ? pricing.date_created : formatDateMySQL()
+            detail.created_by = (pricing.created_by) ? pricing.created_by : user_id
+            detail.date_modified = (pricing.date_modified) ? pricing.date_modified : formatDateMySQL()
+            detail.modified_by = (pricing.modified_by) ? pricing.modified_by : user_id
+            detail.note = (pricing.note) ? pricing.note : null
+        }
+        //Console.log("   detail", detail)
+        Pricing.detail = detail
+        return detail
     }
     
     return {
         all: new Map(),
         init: function (settings) {
             init(settings)
+        },
+        set: function (pricing) {
+            return set(pricing)
         },
         resetForm: function () {
             resetForm()
@@ -13040,28 +14177,25 @@ const Pricing = (function () {
 const Matrix = (function () {
     "use strict"
     
-    const base_url = "/matrix"
     let matrix_cost, matrix_margin, matrix_price
-    
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     const defaultDetail = function () {
         return {
             been_saved: 0,
-            cost: null,
+            cost: 0,
             created_by: user_id,
             date_created: formatDateMySQL(),
             date_modified: formatDateMySQL(),
             enabled: 1,
-            flat_cost: null,
-            flat_margin: null,
-            flat_price: null,
-            has_pricing: null,
+            has_pricing: 0,
             id: null,
-            margin: null,
+            margin: 0,
+            code: null,
             modified_by: user_id,
             note: null,
-            price: null,
+            price: 0,
+            pricings: new Map(),
             product_id: null,
             season_id: null,
             unit_id: null,
@@ -13069,6 +14203,8 @@ const Matrix = (function () {
     }
     
     const set = function (matrix) {
+        
+        let matrixPricings
         let detail = defaultDetail()
         if (matrix) {
             detail.been_saved = (matrix.been_saved) ? matrix.been_saved : 0
@@ -13077,60 +14213,100 @@ const Matrix = (function () {
             detail.date_created = (matrix.date_created) ? matrix.date_created : formatDateMySQL()
             detail.date_modified = (matrix.date_modified) ? matrix.date_modified : formatDateMySQL()
             detail.enabled = (matrix.enabled) ? matrix.enabled : 1
-            detail.flat_cost = (matrix.flat_cost) ? matrix.flat_cost : null
-            detail.flat_margin = (matrix.flat_margin) ? matrix.flat_margin : null
-            detail.flat_price = (matrix.flat_price) ? matrix.flat_price : null
             detail.has_pricing = (matrix.has_pricing) ? matrix.has_pricing : null
             detail.id = (matrix.id) ? matrix.id : null
             detail.margin = (matrix.margin) ? matrix.margin : null
+            detail.code = (matrix.code) ? matrix.code : null
             detail.modified_by = (matrix.modified_by) ? matrix.modified_by : user_id
             detail.note = (matrix.note) ? matrix.note : null
             detail.price = (matrix.price) ? matrix.price : null
             detail.product_id = (matrix.product_id) ? matrix.product_id : null
             detail.season_id = (matrix.season_id) ? matrix.season_id : null
             detail.unit_id = (matrix.unit_id) ? matrix.unit_id : null
+            /*
+            //Console.log("matrix.pricings", matrix.pricings)
+            if (matrix.pricings && typeof matrix.pricings == "object") {
+                let pricings = (matrix.pricings && typeof matrix.pricings == "object") ? matrix.pricings : []
+                //Console.log("pricings", pricings)
+                matrixPricings = new Map()
+                $.each(pricings, function (k, pricing) {
+                    //Console.log("pricing", pricing)
+                    let formattedPricing = {
+                        code: pricing.pricing_code,
+                        pricing_code: pricing.pricing_code,
+                        matrix_code: pricing.matrix_code,
+                        product_id: pricing.product_id,
+                        season_id: pricing.season_id,
+                        unit_id: pricing.unit_id,
+                        matrix_id: pricing.matrix_id,
+                        variant_id: pricing.variant_id,
+                        name: pricing.name,
+                        mon: pricing.mon,
+                        tue: pricing.tue,
+                        wed: pricing.wed,
+                        thu: pricing.thu,
+                        fri: pricing.fri,
+                        sat: pricing.sat,
+                        sun: pricing.sun,
+                        monMargin: pricing.monMargin,
+                        tueMargin: pricing.tueMargin,
+                        wedMargin: pricing.wedMargin,
+                        thuMargin: pricing.thuMargin,
+                        friMargin: pricing.friMargin,
+                        satMargin: pricing.satMargin,
+                        sunMargin: pricing.sunMargin,
+                        count: pricing.count,
+                        enabled: pricing.enabled,
+                        date_created: pricing.date_created,
+                        created_by: pricing.created_by,
+                        date_modified: pricing.date_modified,
+                        modified_by: pricing.modified_by,
+                        note: pricing.note,
+                    }
+                    
+                    let pricingDetail = Pricing.set(formattedPricing)
+                    
+                    matrixPricings.set(pricingDetail.pricing_code, pricingDetail)
+                })
+                
+                detail.pricings = matrixPricings
+            }
+            //*/
         }
         Matrix.detail = detail
         return detail
     }
     
     const loadAll = function (matrices) {
+        //Console.log("Matrix.loadAll(matrices)", matrices)
+        // ----
+        
         Matrix.all = new Map()
         if (!matrices) {
             matrices = []
         }
         
+        //Pricing.all = new Map()
         $.each(matrices, function (k, matrix) {
+            //Console.log("matrix", matrix)
             let detail = set(matrix)
-            Matrix.all.set(detail.id, detail)
+            let id = matrix.code
             
+            /*
+            let pricingsMap = new Map()
+            if (matrix.pricings) {
+                let pricings = matrix.pricings
+                $.each(pricings, function (k, pricing) {
+                    let pricingDetail = Pricing.set(pricing)
+                    let pricingCode = (pricing.pricing_code) ? pricing.pricing_code : null
+                    pricingsMap.set(pricingCode, pricingDetail)
+                    Pricing.all.set(pricingCode, pricingDetail)
+                })
+            }
+            detail.pricings = pricingsMap
+            //*/
+            Matrix.all.set(id, detail)
         })
-        
-        Console.log("Matrix.all", Matrix.all)
-    }
-    
-    const buildMatrixForm = function () {
-        
-        matrix_cost = document.getElementsByName("matrix_cost")
-        matrix_price = document.getElementsByName("matrix_price")
-        matrix_margin = document.getElementsByName("matrix_margin")
-        matrix_cost.forEach(el => el.addEventListener("keyup", event => {
-            let matrix_id = el.dataset.matrixid
-            Console.log("matrix_cost", el.value)
-            Console.log("matrix_cost", matrix_id)
-        }))
-        
-        matrix_price.forEach(el => el.addEventListener("keyup", event => {
-            let matrix_id = el.dataset.matrixid
-            Console.log("matrix_price", el.value)
-            Console.log("matrix_price", matrix_id)
-        }))
-        
-        matrix_margin.forEach(el => el.addEventListener("keyup", event => {
-            let matrix_id = el.dataset.matrixid
-            Console.log("matrix_margin", el.value)
-            Console.log("matrix_margin", matrix_id)
-        }))
         
     }
     
@@ -13145,20 +14321,45 @@ const Matrix = (function () {
         buildMatrixForm()
     }
     
+    const buildMatrixForm = function () {
+        
+        matrix_cost = document.getElementsByName("matrix_cost")
+        matrix_price = document.getElementsByName("matrix_price")
+        matrix_margin = document.getElementsByName("matrix_margin")
+        matrix_cost.forEach(el => el.addEventListener("keyup", event => {
+            let matrix_id = el.dataset.matrixid
+            //Console.log("matrix_cost", el.value)
+            //Console.log("matrix_cost", matrix_id)
+        }))
+        
+        matrix_price.forEach(el => el.addEventListener("keyup", event => {
+            let matrix_id = el.dataset.matrixid
+            //Console.log("matrix_price", el.value)
+            //Console.log("matrix_price", matrix_id)
+        }))
+        
+        matrix_margin.forEach(el => el.addEventListener("keyup", event => {
+            let matrix_id = el.dataset.matrixid
+            //Console.log("matrix_margin", el.value)
+            //Console.log("matrix_margin", matrix_id)
+        }))
+        
+    }
+    
     const loadPerUnitForm = function () {
-        Console.log("Matrix.loadPerUnitForm()", Matrix)
+        //Console.log("Matrix.loadPerUnitForm()", Matrix)
         // ----
         
     }
     
     const loadPerPersonForm = function () {
-        Console.log("Matrix.loadPerPersonForm()", Matrix)
+        //Console.log("Matrix.loadPerPersonForm()", Matrix)
         // ----
         
     }
     
     const loadPerDayForm = function () {
-        Console.log("Matrix.loadPerDayForm()", Matrix)
+        //Console.log("Matrix.loadPerDayForm()", Matrix)
         // ----
         
     }
@@ -13166,6 +14367,9 @@ const Matrix = (function () {
     return {
         detail: {},
         all: new Map(),
+        set: function (matrix) {
+            return set(matrix)
+        },
         init: function (settings) {
             init(settings)
         },
@@ -13810,7 +15014,7 @@ const Login = (function () {
                         }
                     })
                 } catch (e) {
-                    console.error("Error", e)
+                    Console.error("Error", e)
                     return handle_login_error("Error: 2")
                 }
             } else {
@@ -13909,7 +15113,7 @@ const Login = (function () {
                         }
                     })
                 } catch (e) {
-                    console.error("Error", e)
+                    Console.error("Error", e)
                     return handle_login_error("Error: 2")
                 }
             } else {
@@ -14612,7 +15816,7 @@ const Provider = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
         }
     }
@@ -14778,7 +15982,7 @@ const Provider = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 return handle_provider_error("Error Validating Company")
             }
         } else {
@@ -14901,8 +16105,8 @@ const Profile = (function () {
     "use strict"
     const _table_profile_product_edit = document.getElementById("table_profile_product_edit")
     const _product_edit_profile_form_profile_name_filter = document.getElementById("product_edit_profile_form_profile_name_filter")
-    const _button_add_product_profile = document.getElementById("button_add_product_profile")
     const _product_edit_profile_form = document.getElementById("product_edit_profile_form")
+    
     // ----
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
@@ -14953,12 +16157,6 @@ const Profile = (function () {
             },
         },
     }
-    // ----
-    
-    $(_button_add_product_profile)
-      .on("click", function () {
-      
-      })
     
     /**
      * build product edit profile table
@@ -15284,22 +16482,6 @@ const Product = (function () {
     const _product_keywords = document.getElementById("product_keywords")
     const _product_description_long = document.getElementById("product_description_long")
     const _product_description_short = document.getElementById("_product_description_short")
-    
-    const _product_amenities = document.getElementById("product_amenities")
-    
-    let $product_keywords, $product_amenities
-    /**
-     * product search: panels - hotels
-     * @type {HTMLElement}
-     * @private
-     */
-    
-    /**
-     * product search: panels - hotels product_name
-     *
-     * @type {HTMLElement}
-     * @private
-     */
     const base_url = "/products"
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
     const _modal_product_city = document.getElementById("modal_product_city")
@@ -15307,17 +16489,14 @@ const Product = (function () {
     const _product_index_table = document.getElementById("product_index_table")
     const _use_provider_location = document.getElementById("use_provider_location")
     const _use_product_location = document.getElementById("use_product_location")
+    const _product_amenities = document.getElementById("product_amenities")
+    
+    let $product_keywords, $product_amenities
     let provider_initial_location, product_initial_location = {}
     let radios = document.querySelectorAll('input[type=radio][name="location_to_use"]')
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    let $index_table, new_product_validator
+    let $index_table, newProduct_validator
     let add_modal_form_rules = {
-        /*
-        groups: {
-            providerNameGroup: "modal_product_provider_id modal_product_provider_name modal_product_provider_company_id",
-            vendorNameGroup: "modal_product_vendor_id modal_product_vendor_name modal_product_vendor_company_id",
-        },
-        //*/
         rules: {
             modal_product_sku: {
                 required: true,
@@ -15450,6 +16629,27 @@ const Product = (function () {
           }
       })
     
+    $("#page")
+      .on("change", function () {
+          updateProgress()
+      })
+    
+    const updateProgress = function () {
+        let variants = Array.from(Variant.all.values())
+        let units = Array.from(Unit.all.values())
+        let seasons = Array.from(Season.all.values())
+        //Console.log("updateProgress", variants.length)
+        //Console.log("updateProgress", units.length)
+        //Console.log("updateProgress", seasons.length)
+        if (variants.length === 0 || units.length === 0 || seasons.length === 0) {
+            $(_panel_tab_pricing).addClass(`disabled`)
+            $(_panel_tab_inventory).addClass(`disabled`)
+        } else {
+            $(_panel_tab_pricing).removeClass(`disabled`)
+            $(_panel_tab_inventory).removeClass(`disabled`)
+        }
+    }
+    
     const buildInsertData = function () {
         let dataToSend = {
             city_id: (!isNaN(parseInt(_modal_product_city_id.value))) ? parseInt(_modal_product_city_id.value) : null,
@@ -15474,7 +16674,7 @@ const Product = (function () {
         
         //Console.log("saveNewProduct() - dataToSend", dataToSend)
         
-        new_product(dataToSend, function (data) {
+        newProduct(dataToSend, function (data) {
             let product
             
             if (data) {
@@ -15485,30 +16685,19 @@ const Product = (function () {
                 }
             }
             
-            //Console.log("Product.saveNewProduct() - product", product)
+            Console.log("Product.saveNewProduct() - product", product)
             
             if (product.id) {
                 toastr.success(`Product - ${product.id} was created, would you like to edit?`)
-                confirmDialog(`Would you like to update?`, (ans) => {
-                    if (ans) {
-                        window.location.replace("/products/" + product.id)
-                    } else {
-                        $(_modal_new_product).hide()
-                    }
-                })
+                
+                window.location.replace("/products/" + product.id)
                 
             }
         })
         
     }
     
-    /**
-     * add new product
-     *
-     * @param dataToSend
-     * @param callback
-     */
-    const new_product = function (dataToSend, callback) {
+    const newProduct = function (dataToSend, callback) {
         let url = "/api/v1.0/products/add"
         
         if (dataToSend) {
@@ -15521,7 +16710,7 @@ const Product = (function () {
                     }
                 })
             } catch (e) {
-                //Console.log(e)
+                //Console.log("error", e)
             }
         }
     }
@@ -15605,12 +16794,12 @@ const Product = (function () {
         Product.attr1 = null
         Product.attr2 = null
         Product.attr3 = null
-        Product.update_product_sku()
-        Product.reset_new_product_details()
+        Product.updateProductSKU()
+        Product.resetNewProductDetails()
         clear_validation(_form_product_add)
     }
     
-    const reset_new_product_details = function () {
+    const resetNewProductDetails = function () {
         _modal_product_provider_id.value = ""
         _modal_product_vendor_id.value = ""
         _modal_product_provider_name.value = ""
@@ -15631,7 +16820,9 @@ const Product = (function () {
     }
     
     const setNewProductModal = function () {
+        
         clearModalForm()
+        Console.log("setNewProductModal")
         $(_modal_new_product).modal("show")
     }
     
@@ -15757,7 +16948,7 @@ const Product = (function () {
         return detail
     }
     
-    const load_all = function (products) {
+    const loadAll = function (products) {
         Product.all = new Map()
         
         if (!products) {
@@ -15771,7 +16962,7 @@ const Product = (function () {
         })
     }
     
-    const build_index_table = function () {
+    const buildIndexTable = function () {
         
         $index_table = $(_product_index_table).table({
             table_type: "display_list",
@@ -15856,7 +17047,7 @@ const Product = (function () {
         }
     }
     
-    const set_default_product_details = function () {
+    const setDefaultProductDetails = function () {
         return {
             location: {},
             provider: {},
@@ -15869,7 +17060,7 @@ const Product = (function () {
         }
     }
     
-    const load_product_location = function (location, type) {
+    const loadProductLocation = function (location, type) {
         //Console.log("location", location)
         if (!type) {
             type = "product"
@@ -15883,7 +17074,7 @@ const Product = (function () {
     
     const initEditForm = function (settings) {
         //Console.log("Product.initEditForm(settings)", settings)
-        let product = set_default_product_details()
+        let product = setDefaultProductDetails()
         
         if (settings) {
             product = settings
@@ -15894,11 +17085,11 @@ const Product = (function () {
             radio.addEventListener("change", changeHandler)
         })
         
-        set_edit_form_values(product)
+        setEditFormValues(product)
     }
     
-    const set_edit_form_values = function (product) {
-        //Console.log("Product.set_edit_form_values(product)", product)
+    const setEditFormValues = function (product) {
+        //Console.log("Product.setEditFormValues(product)", product)
         
         let provider, vendor, product_location,
           seasons, units, variants, profiles, provider_location
@@ -15939,11 +17130,11 @@ const Product = (function () {
         
         if (product.use_provider_location) {
             $(_use_provider_location).attr("checked", "true")
-            load_product_location(provider_location, "provider")
+            loadProductLocation(provider_location, "provider")
             Location.init(provider_location)
         } else {
             $(_use_product_location).attr("checked", "true")
-            load_product_location(product_location, "provider")
+            loadProductLocation(product_location, "provider")
             Location.init(product_location)
         }
         
@@ -15991,7 +17182,11 @@ const Product = (function () {
                     units = product_details.units
                 }
                 
-                pricings = {
+                if (product_details.pricings) {
+                    pricings = product_details.pricings
+                }
+                
+                let pricing_strategy = {
                     pricing_strategy_types_id: (!isNaN(parseInt(product_details.pricing_strategy_types_id))) ? parseInt(product_details.pricing_strategy_types_id) : null,
                 }
                 
@@ -16004,13 +17199,16 @@ const Product = (function () {
                         Season.init(seasons)
                         Season.loadAll(seasons)
                         Unit.init({ units: units })
-                        //Profile.init({ profiles: profiles })
+                        Matrix.init({ matrices: matrices })
+                        Pricing.init({ pricings: pricings })
+                        PricingStrategy.init({
+                            pricing_strategy: pricing_strategy,
+                            pricings: pricings,
+                        })
                         
                         InventoryProfile.init({
                             profiles: profiles,
                         })
-                        Matrix.init({ matrices: matrices })
-                        Pricing.init(pricings)
                         
                         $(_product_panel_link_overview)
                           .on("click", function () {
@@ -16048,6 +17246,8 @@ const Product = (function () {
                           .on("click", function () {
                               $(_panel_tab_meta).tab("show")
                           })
+                        
+                        updateProgress()
                     }
                 })
                 
@@ -16061,7 +17261,7 @@ const Product = (function () {
             Product.index(settings)
             if (_form_product_add) {
                 validator_init(add_modal_form_rules)
-                new_product_validator = $(_form_product_add).validate()
+                newProduct_validator = $(_form_product_add).validate()
             }
             return true
         }
@@ -16070,10 +17270,10 @@ const Product = (function () {
     const index = function (settings) {
         
         if (_product_index_table) {
-            build_index_table()
+            buildIndexTable()
             
             if (settings) {
-                load_all(settings)
+                loadAll(settings)
             }
         }
     }
@@ -16083,7 +17283,7 @@ const Product = (function () {
         
     }
     
-    const update_product_sku = function () {
+    const updateProductSKU = function () {
         let att1 = Product.attr1
         let att2 = Product.attr2
         let att3 = Product.attr3
@@ -16110,6 +17310,9 @@ const Product = (function () {
     
     return {
         validator: null,
+        updateProgress: function () {
+            updateProgress()
+        },
         product_initial_location: null,
         provider_initial_location: null,
         detail: {},
@@ -16117,8 +17320,8 @@ const Product = (function () {
         attr1: null,
         attr2: null,
         attr3: null,
-        update_product_sku: function () {
-            update_product_sku()
+        updateProductSKU: function () {
+            updateProductSKU()
         },
         setNewFormDetails: function (category_id) {
             //Console.log("Product.setNewFormDetails()", category_id)
@@ -16127,8 +17330,8 @@ const Product = (function () {
         get: function (params) {
             get(params)
         },
-        load_all: function (params) {
-            load_all(params)
+        loadAll: function (params) {
+            loadAll(params)
         },
         save: function (params) {
             save(params)
@@ -16142,8 +17345,8 @@ const Product = (function () {
         navigate: function (product) {
             navigate(product)
         },
-        reset_new_product_details: function () {
-            reset_new_product_details()
+        resetNewProductDetails: function () {
+            resetNewProductDetails()
         },
         initAutoComplete: function () {
             initAutoComplete()
@@ -16199,9 +17402,13 @@ $(function () {
 })
 
 $(document).ready(function () {
+    
     const inputs = document.getElementsByTagName("input")
     
     window.addEventListener("load", function () {
+        if (mdbPreloader) {
+            $(mdbPreloader).delay(1000).fadeOut(300)
+        }
         /*
         for (let i = 0; i < inputs.length; i++) {
             if (inputs[i].classList.contains("date-format")) {
@@ -16216,22 +17423,16 @@ $(document).ready(function () {
         }
         //*/
     }, false)
-    let codeData = document.querySelectorAll(".panel-code")
+    
     window.addEventListener("resize", debounce(function (e) {
         resize_elements("end of resizing")
     }))
     
-    if (mdbPreloader) {
-        //$("#mdb-preloader").fadeOut(500)
-    } else {
-        Console.log("no preloader")
-    }
+    let codeData = document.querySelectorAll(".panel-code")
     
     new WOW().init()
     
     $(this).scrollTop(0)
-    
-    toastr.options = toastrOptions
     
     $("body").scrollTop()
     
@@ -16283,19 +17484,6 @@ $(document).ready(function () {
     //toastr.warning('I do not think that word means what you think it means.', 'Warning!')
     //toastr.error('I do not think that word means what you think it means.', 'Error!')
     
-    const jsonPrettify = (json) => {
-        if (typeof json === "object" && json !== null) {
-            return JSON.stringify(json, undefined, '\t')
-        }
-        
-        try {
-            const obj = JSON.parse(json)
-            return jsonPrettify(obj)
-        } catch (e) {
-            return json
-        }
-    }
-    
     codeData.forEach(el => {
         let html = $(el).html()
         let formattedCode = ""
@@ -16326,5 +17514,19 @@ $(document).ready(function () {
     
     $("button.pre_display_button").show()
     $("div.pre_display_el").hide()
+    
+    $(function () {
+        $("textarea.short-description").maxlength({
+            alwaysShow: true,
+            threshold: 10,
+            warningClass: "badge badge-warning",
+            limitReachedClass: "badge badge-danger",
+            //placement: 'top',
+            //preText: 'used ',
+            //separator: ' of ',
+            //postText: ' chars.',
+        })
+        
+    })
 })
 

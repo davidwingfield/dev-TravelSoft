@@ -675,7 +675,7 @@ const Provider = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
             }
         }
     }
@@ -841,7 +841,7 @@ const Provider = (function () {
                     }
                 })
             } catch (e) {
-                Console.log(e)
+                Console.log("error", e)
                 return handle_provider_error("Error Validating Company")
             }
         } else {

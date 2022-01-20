@@ -224,6 +224,13 @@ Long Season Description</p>
 <dd></dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-SeasonModel.html#method_deleteProductSeason">deleteProductSeason()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-SeasonModel.html#method_get">get()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
@@ -270,7 +277,7 @@ Long Season Description</p>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>database method to fetch autocomplete search results</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-Core-Model.html#method_setBool">setBool()</a>
@@ -445,37 +452,37 @@ Long Season Description</p>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">$seasonTypesSQL</span>
      = <span class="phpdocumentor-signature__default-value">&quot;
-        SELECT
-                SEASON.id AS &#039;season_id&#039;,
-                SEASON.color_scheme_id AS &#039;season_color_scheme_id&#039;,
-                SEASON.name AS &#039;season_name&#039;,
-                SEASON.view_product_index AS &#039;season_view_product_index&#039;,
-                SEASON.view_product_index_filter AS &#039;season_view_product_index_filter&#039;,
-                SEASON.view_product_index_search AS &#039;season_view_product_index_search&#039;,
-                SEASON.view_product_edit AS &#039;season_view_product_edit&#039;,
-                SEASON.view_product_package_edit AS &#039;season_view_product_package_edit&#039;,
-                SEASON.view_product_package_index AS &#039;season_view_product_package_index&#039;,
-                SEASON.enabled AS &#039;season_enabled&#039;,
-                SEASON.date_created AS &#039;season_date_created&#039;,
-                SEASON.created_by AS &#039;season_created_by&#039;,
-                SEASON.date_modified AS &#039;season_date_modified&#039;,
-                SEASON.modified_by AS &#039;season_modified_by&#039;,
-                SEASON.note AS &#039;season_note&#039;,
-                SEASON.category_id AS &#039;season_category_id&#039;,
-                COLOR_SCHEME.id AS &#039;color_scheme_id&#039;,
-                COLOR_SCHEME.name AS &#039;color_scheme_name&#039;,
-                COLOR_SCHEME.background_color AS &#039;color_scheme_background_color&#039;,
-                COLOR_SCHEME.border_color AS &#039;color_scheme_border_color&#039;,
-                COLOR_SCHEME.text_color AS &#039;color_scheme_text_color&#039;,
-                COLOR_SCHEME.sort_order AS &#039;color_scheme_sort_order&#039;,
-                COLOR_SCHEME.enabled AS &#039;color_scheme_enabled&#039;,
-                COLOR_SCHEME.date_created AS &#039;color_scheme_date_created&#039;,
-                COLOR_SCHEME.created_by AS &#039;color_scheme_created_by&#039;,
-                COLOR_SCHEME.date_modified AS &#039;color_scheme_date_modified&#039;,
-                COLOR_SCHEME.modified_by AS &#039;color_scheme_modified_by&#039;,
-                COLOR_SCHEME.note AS &#039;color_scheme_note&#039;
-        FROM 	season SEASON
-        JOIN 	color_scheme COLOR_SCHEME ON COLOR_SCHEME.id = SEASON.color_scheme_id&quot;</span></code>
+	        SELECT
+	                SEASON.id AS &#039;season_id&#039;,
+	                SEASON.color_scheme_id AS &#039;season_color_scheme_id&#039;,
+	                SEASON.name AS &#039;season_name&#039;,
+	                SEASON.view_product_index AS &#039;season_view_product_index&#039;,
+	                SEASON.view_product_index_filter AS &#039;season_view_product_index_filter&#039;,
+	                SEASON.view_product_index_search AS &#039;season_view_product_index_search&#039;,
+	                SEASON.view_product_edit AS &#039;season_view_product_edit&#039;,
+	                SEASON.view_product_package_edit AS &#039;season_view_product_package_edit&#039;,
+	                SEASON.view_product_package_index AS &#039;season_view_product_package_index&#039;,
+	                SEASON.enabled AS &#039;season_enabled&#039;,
+	                SEASON.date_created AS &#039;season_date_created&#039;,
+	                SEASON.created_by AS &#039;season_created_by&#039;,
+	                SEASON.date_modified AS &#039;season_date_modified&#039;,
+	                SEASON.modified_by AS &#039;season_modified_by&#039;,
+	                SEASON.note AS &#039;season_note&#039;,
+	                SEASON.category_id AS &#039;season_category_id&#039;,
+	                COLOR_SCHEME.id AS &#039;color_scheme_id&#039;,
+	                COLOR_SCHEME.name AS &#039;color_scheme_name&#039;,
+	                COLOR_SCHEME.background_color AS &#039;color_scheme_background_color&#039;,
+	                COLOR_SCHEME.border_color AS &#039;color_scheme_border_color&#039;,
+	                COLOR_SCHEME.text_color AS &#039;color_scheme_text_color&#039;,
+	                COLOR_SCHEME.sort_order AS &#039;color_scheme_sort_order&#039;,
+	                COLOR_SCHEME.enabled AS &#039;color_scheme_enabled&#039;,
+	                COLOR_SCHEME.date_created AS &#039;color_scheme_date_created&#039;,
+	                COLOR_SCHEME.created_by AS &#039;color_scheme_created_by&#039;,
+	                COLOR_SCHEME.date_modified AS &#039;color_scheme_date_modified&#039;,
+	                COLOR_SCHEME.modified_by AS &#039;color_scheme_modified_by&#039;,
+	                COLOR_SCHEME.note AS &#039;color_scheme_note&#039;
+	        FROM 	season SEASON
+	        JOIN 	color_scheme COLOR_SCHEME ON COLOR_SCHEME.id = SEASON.color_scheme_id&quot;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -510,37 +517,37 @@ Long Season Description</p>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">$selectQuery</span>
      = <span class="phpdocumentor-signature__default-value">&quot;
-        SELECT
-                SEASON.id AS &#039;season_id&#039;,
-                SEASON.color_scheme_id AS &#039;season_color_scheme_id&#039;,
-                SEASON.name AS &#039;season_name&#039;,
-                SEASON.view_product_index AS &#039;season_view_product_index&#039;,
-                SEASON.view_product_index_filter AS &#039;season_view_product_index_filter&#039;,
-                SEASON.view_product_index_search AS &#039;season_view_product_index_search&#039;,
-                SEASON.view_product_edit AS &#039;season_view_product_edit&#039;,
-                SEASON.view_product_package_edit AS &#039;season_view_product_package_edit&#039;,
-                SEASON.view_product_package_index AS &#039;season_view_product_package_index&#039;,
-                SEASON.enabled AS &#039;season_enabled&#039;,
-                SEASON.date_created AS &#039;season_date_created&#039;,
-                SEASON.created_by AS &#039;season_created_by&#039;,
-                SEASON.date_modified AS &#039;season_date_modified&#039;,
-                SEASON.modified_by AS &#039;season_modified_by&#039;,
-                SEASON.note AS &#039;season_note&#039;,
-                SEASON.category_id AS &#039;season_category_id&#039;,
-                COLOR_SCHEME.id AS &#039;color_scheme_id&#039;,
-                COLOR_SCHEME.name AS &#039;color_scheme_name&#039;,
-                COLOR_SCHEME.background_color AS &#039;color_scheme_background_color&#039;,
-                COLOR_SCHEME.border_color AS &#039;color_scheme_border_color&#039;,
-                COLOR_SCHEME.text_color AS &#039;color_scheme_text_color&#039;,
-                COLOR_SCHEME.sort_order AS &#039;color_scheme_sort_order&#039;,
-                COLOR_SCHEME.enabled AS &#039;color_scheme_enabled&#039;,
-                COLOR_SCHEME.date_created AS &#039;color_scheme_date_created&#039;,
-                COLOR_SCHEME.created_by AS &#039;color_scheme_created_by&#039;,
-                COLOR_SCHEME.date_modified AS &#039;color_scheme_date_modified&#039;,
-                COLOR_SCHEME.modified_by AS &#039;color_scheme_modified_by&#039;,
-                COLOR_SCHEME.note AS &#039;color_scheme_note&#039;
-        FROM 	season SEASON
-        JOIN 	color_scheme COLOR_SCHEME ON COLOR_SCHEME.id = SEASON.color_scheme_id&quot;</span></code>
+	        SELECT
+	                SEASON.id AS &#039;season_id&#039;,
+	                SEASON.color_scheme_id AS &#039;season_color_scheme_id&#039;,
+	                SEASON.name AS &#039;season_name&#039;,
+	                SEASON.view_product_index AS &#039;season_view_product_index&#039;,
+	                SEASON.view_product_index_filter AS &#039;season_view_product_index_filter&#039;,
+	                SEASON.view_product_index_search AS &#039;season_view_product_index_search&#039;,
+	                SEASON.view_product_edit AS &#039;season_view_product_edit&#039;,
+	                SEASON.view_product_package_edit AS &#039;season_view_product_package_edit&#039;,
+	                SEASON.view_product_package_index AS &#039;season_view_product_package_index&#039;,
+	                SEASON.enabled AS &#039;season_enabled&#039;,
+	                SEASON.date_created AS &#039;season_date_created&#039;,
+	                SEASON.created_by AS &#039;season_created_by&#039;,
+	                SEASON.date_modified AS &#039;season_date_modified&#039;,
+	                SEASON.modified_by AS &#039;season_modified_by&#039;,
+	                SEASON.note AS &#039;season_note&#039;,
+	                SEASON.category_id AS &#039;season_category_id&#039;,
+	                COLOR_SCHEME.id AS &#039;color_scheme_id&#039;,
+	                COLOR_SCHEME.name AS &#039;color_scheme_name&#039;,
+	                COLOR_SCHEME.background_color AS &#039;color_scheme_background_color&#039;,
+	                COLOR_SCHEME.border_color AS &#039;color_scheme_border_color&#039;,
+	                COLOR_SCHEME.text_color AS &#039;color_scheme_text_color&#039;,
+	                COLOR_SCHEME.sort_order AS &#039;color_scheme_sort_order&#039;,
+	                COLOR_SCHEME.enabled AS &#039;color_scheme_enabled&#039;,
+	                COLOR_SCHEME.date_created AS &#039;color_scheme_date_created&#039;,
+	                COLOR_SCHEME.created_by AS &#039;color_scheme_created_by&#039;,
+	                COLOR_SCHEME.date_modified AS &#039;color_scheme_date_modified&#039;,
+	                COLOR_SCHEME.modified_by AS &#039;color_scheme_modified_by&#039;,
+	                COLOR_SCHEME.note AS &#039;color_scheme_note&#039;
+	        FROM 	season SEASON
+	        JOIN 	color_scheme COLOR_SCHEME ON COLOR_SCHEME.id = SEASON.color_scheme_id&quot;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -556,6 +563,50 @@ Long Season Description</p>
             Methods
             <a href="classes/Framework-App-Models-SeasonModel.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_deleteProductSeason">
+        deleteProductSeason()
+        <a href="classes/Framework-App-Models-SeasonModel.html#method_deleteProductSeason" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/SeasonModel.php"><a href="files/app-models-seasonmodel.html"><abbr title="App/Models/SeasonModel.php">SeasonModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">197</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">deleteProductSeason</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
                     <article
         class="phpdocumentor-element
             -method
@@ -613,7 +664,7 @@ Long Season Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/SeasonModel.php"><a href="files/app-models-seasonmodel.html"><abbr title="App/Models/SeasonModel.php">SeasonModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">197</span>
+    <span class="phpdocumentor-element-found-in__line">225</span>
 
     </aside>
 
@@ -657,7 +708,7 @@ Long Season Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/SeasonModel.php"><a href="files/app-models-seasonmodel.html"><abbr title="App/Models/SeasonModel.php">SeasonModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">259</span>
+    <span class="phpdocumentor-element-found-in__line">283</span>
 
     </aside>
 
@@ -838,17 +889,17 @@ Long Season Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/SeasonModel.php"><a href="files/app-models-seasonmodel.html"><abbr title="App/Models/SeasonModel.php">SeasonModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">333</span>
+    <span class="phpdocumentor-element-found-in__line">349</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">database method to fetch autocomplete search results</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">season_ac</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$st</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$category_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">season_ac</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$st</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$category_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -856,14 +907,16 @@ Long Season Description</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$category_id</span>
-                : <span class="phpdocumentor-signature__argument__return-type">int|null</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 

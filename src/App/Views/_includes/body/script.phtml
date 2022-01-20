@@ -1,5 +1,5 @@
+<!-- PricingWorksheet -->
 <script type="text/javascript">
-    
     const PricingWorksheet = (function () {
         "use strict"
         
@@ -13,10 +13,8 @@
         const _button_collapse_seasons = document.getElementById("button_collapse_seasons")
         const _button_collapse_units = document.getElementById("button_collapse_units")
         
-        let matrixToDo = []
         let completed = '<span class="badge badge-pill badge-success">Completed</span>'
         let incomplete = '<span class="badge badge-pill badge-danger">Incomplete</span>'
-        
         let seasonList, unitList, variantList = []
         let variantCombinations = []
         let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
@@ -231,6 +229,11 @@
             })
         }
         
+        const showAllFilterIncompletePricings = function () {
+            $("[data-pricingcomplete='false']").show()
+            $("[data-pricingcomplete='true']").hide()
+        }
+        
         const hideAllFilterUnits = function () {
             let units = Array.from(Unit.all.values())
             $.each(units, function (i, unit) {
@@ -299,12 +302,6 @@
                 showAllFilterSeasons()
             }
             
-        }
-        
-        const pricingWorksheet = function () {
-            variantCombinations = []
-            $(_product_edit_matrix_form).empty().append(buildPricingTables(PricingWorksheet.buildPricingWorksheet()))
-            Console.log("PricingWorksheet.incompletePricings", PricingWorksheet.incompletePricings)
         }
         
         const getVariantCombinations = function (depth, baseString, arrLetters) {
@@ -655,8 +652,10 @@
                 })
                 
                 if (variantPricing.been_saved === 1) {
+                    TR.attr("data-pricingcomplete", "true")
                     BADGE = completed
                 } else {
+                    TR.attr("data-pricingcomplete", "false")
                     PricingWorksheet.incompletePricings.set(variantPricing.pricing_code, variantPricing)
                 }
                 
@@ -1565,12 +1564,17 @@
             return worksheet
         }
         
+        const pricingWorksheet = function () {
+            variantCombinations = []
+            $(_product_edit_matrix_form).empty().append(buildPricingTables(PricingWorksheet.buildPricingWorksheet()))
+            //Console.log("PricingWorksheet.incompletePricings", PricingWorksheet.incompletePricings)
+            showAllFilterIncompletePricings()
+        }
+        
         const init = function () {
             $(document).ready(function () {
                 let worksheet = buildPricingWorksheet()
-                Console.log("PricingWorksheet.incompletePricings", PricingWorksheet.incompletePricings)
                 return worksheet
-                
             })
         }
         
@@ -1585,8 +1589,8 @@
             },
         }
     })()
-
 </script>
+<!-- /PricingWorksheet -->
 
 <script type="text/javascript">
     

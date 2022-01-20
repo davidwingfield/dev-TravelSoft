@@ -406,7 +406,7 @@ Long PricingModel Description</p>
                 SELECT
 						PRICING.id AS &#039;pricing_id&#039;,
 						PRICING.matrix_id AS &#039;pricing_matrix_id&#039;,
-						COALESCE(PRICING.variant_id, 0) AS &#039;pricing_variant_id&#039;,
+						COALESCE(PRICING.variant_id, 36) AS &#039;pricing_variant_id&#039;,
 						IF(PRICING.variant_id IS NULL, CONCAT(VARIANT.name, &#039; &#039;, COALESCE(PRICING.count, &#039;&#039;)), CONCAT(VARIANT.name, &#039; &#039;, COALESCE(PRICING.count, &#039;&#039;))) AS &#039;pricing_name&#039;,
 						COALESCE(PRICING.mon, 0) AS &#039;pricing_mon&#039;,
 						COALESCE(PRICING.tue, 0) AS &#039;pricing_tue&#039;,
@@ -415,8 +415,7 @@ Long PricingModel Description</p>
 						COALESCE(PRICING.fri, 0) AS &#039;pricing_fri&#039;,
 						COALESCE(PRICING.sat, 0) AS &#039;pricing_sat&#039;,
 						COALESCE(PRICING.sun, 0) AS &#039;pricing_sun&#039;,
-                        CONCAT(PRODUCT.id, &#039;-&#039;, MATRIX.unit_id, &#039;-&#039;, MATRIX.season_id) AS &#039;matrix_code&#039;,
-                        CONCAT(PRODUCT.id, &#039;-&#039;, MATRIX.unit_id, &#039;-&#039;, MATRIX.season_id, &#039;-&#039;, COALESCE(PRICING.variant_id, 0), &#039;-&#039;, COALESCE(PRICING.count, 0)) AS &#039;pricing_code&#039;,
+                       	PRICING.code AS &#039;pricing_code&#039;,
 						COALESCE(PRICING.monMargin, 0) AS &#039;pricing_monMargin&#039;,
 						COALESCE(PRICING.tueMargin, 0) AS &#039;pricing_tueMargin&#039;,
 						COALESCE(PRICING.wedMargin, 0) AS &#039;pricing_wedMargin&#039;,
@@ -432,6 +431,8 @@ Long PricingModel Description</p>
 						PRICING.modified_by AS &#039;pricing_modified_by&#039;,
 						COALESCE(PRICING.note, &#039;pulled from database&#039;) AS &#039;pricing_note&#039;,
                         MATRIX.id AS &#039;matrix_id&#039;,
+                       	MATRIX.name AS &#039;matrix_name&#039;,
+                       	MATRIX.code AS &#039;matrix_code&#039;,
                         MATRIX.product_id AS &#039;matrix_product_id&#039;,
                         MATRIX.season_id AS &#039;matrix_season_id&#039;,
                         MATRIX.unit_id AS &#039;matrix_unit_id&#039;,
@@ -479,7 +480,7 @@ Long PricingModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/PricingModel.php"><a href="files/app-models-pricingmodel.html"><abbr title="App/Models/PricingModel.php">PricingModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">71</span>
+    <span class="phpdocumentor-element-found-in__line">72</span>
 
     </aside>
 
@@ -523,7 +524,7 @@ Long PricingModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/PricingModel.php"><a href="files/app-models-pricingmodel.html"><abbr title="App/Models/PricingModel.php">PricingModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">89</span>
+    <span class="phpdocumentor-element-found-in__line">90</span>
 
     </aside>
 

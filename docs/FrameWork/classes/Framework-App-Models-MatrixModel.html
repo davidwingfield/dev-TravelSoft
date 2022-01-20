@@ -408,7 +408,8 @@ Long MatrixModel Description</p>
                     MATRIX.product_id AS &#039;matrix_product_id&#039;,
                     MATRIX.season_id AS &#039;matrix_season_id&#039;,
                     MATRIX.unit_id AS &#039;matrix_unit_id&#039;,
-                   	CONCAT(MATRIX.product_id, &#039;-&#039;, MATRIX.unit_id, &#039;-&#039;, MATRIX.season_id) AS &#039;matrix_code&#039;,
+                   	MATRIX.code AS &#039;matrix_code&#039;,
+                   	MATRIX.name AS &#039;matrix_name&#039;,
                     MATRIX.cost AS &#039;matrix_cost&#039;,
                     MATRIX.margin AS &#039;matrix_margin&#039;,
                     MATRIX.price AS &#039;matrix_price&#039;,
@@ -452,7 +453,7 @@ Long MatrixModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/MatrixModel.php"><a href="files/app-models-matrixmodel.html"><abbr title="App/Models/MatrixModel.php">MatrixModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">64</span>
+    <span class="phpdocumentor-element-found-in__line">65</span>
 
     </aside>
 
@@ -496,7 +497,7 @@ Long MatrixModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/MatrixModel.php"><a href="files/app-models-matrixmodel.html"><abbr title="App/Models/MatrixModel.php">MatrixModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">44</span>
+    <span class="phpdocumentor-element-found-in__line">45</span>
 
     </aside>
 

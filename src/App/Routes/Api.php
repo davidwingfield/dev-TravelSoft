@@ -87,6 +87,8 @@
 	/**
 	 * update requests
 	 */
+	Router::post($routeLead . "/matrices/update", "Matrix@serveUpdate");
+	Router::post($routeLead . "/pricings/update", "Pricing@serveUpdate");
 	Router::post($routeLead . "/seasons/update", "Season@serveUpdate");
 	Router::post($routeLead . "/seasons/remove", "Season@serveDelete");
 	Router::post($routeLead . "/variants/remove", "Variant@serveDelete");

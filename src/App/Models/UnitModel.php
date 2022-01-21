@@ -329,9 +329,13 @@
             ";
 			
 			try {
-				//Log::$debug_log->trace($sql);
 				Model::$db->rawQuery($sql);
-				$unit_id = Model::$db->getInsertId();
+				if ((!$id)) {
+					$unit_id = Model::$db->getInsertId();
+				} else {
+					$unit_id = $id;
+				}
+				
 				if ($unit_id) {
 					$unit_id = (int)$unit_id;
 					$roomCode = addslashes(buildCode($unit_id, $name, "unit"));

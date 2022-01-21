@@ -200,15 +200,22 @@ const Product = (function () {
         let variants = Array.from(Variant.all.values())
         let units = Array.from(Unit.all.values())
         let seasons = Array.from(Season.all.values())
-        //Console.log("updateProgress", variants.length)
-        //Console.log("updateProgress", units.length)
-        //Console.log("updateProgress", seasons.length)
+        
         if (variants.length === 0 || units.length === 0 || seasons.length === 0) {
             $(_panel_tab_pricing).addClass(`disabled`)
             $(_panel_tab_inventory).addClass(`disabled`)
         } else {
             $(_panel_tab_pricing).removeClass(`disabled`)
             $(_panel_tab_inventory).removeClass(`disabled`)
+        }
+        
+        let pricingWorksheet = PricingWorksheet.status()
+        if (pricingWorksheet === "incomplete") {
+            $("#panel_tab_pricing")
+              .html("Pricing<span class='badge rounded-pill badge-notification bg-danger tab-badge' style='color:#fff!important'>!</span>")
+        } else {
+            $("#panel_tab_pricing")
+              .html("Pricing")
         }
     }
     
@@ -635,13 +642,11 @@ const Product = (function () {
     }
     
     const initEditForm = function (settings) {
-        //Console.log("Product.initEditForm(settings)", settings)
         let product = setDefaultProductDetails()
         
         if (settings) {
             product = settings
         }
-        //Console.log("Product.initEditForm(): product", product)
         
         Array.prototype.forEach.call(radios, function (radio) {
             radio.addEventListener("change", changeHandler)
@@ -651,8 +656,6 @@ const Product = (function () {
     }
     
     const setEditFormValues = function (product) {
-        //Console.log("Product.setEditFormValues(product)", product)
-        
         let provider, vendor, product_location,
           seasons, units, variants, profiles, provider_location
         
@@ -700,7 +703,6 @@ const Product = (function () {
             Location.init(product_location)
         }
         
-        //Console.log("product.amenities", product.amenities)
         let product_keywords = (product.keywords) ? product.keywords : ""
         $product_keywords = $(_product_keywords).BuildKeyword(product_keywords)
         
@@ -710,7 +712,6 @@ const Product = (function () {
     }
     
     const init = function (settings) {
-        //Console.log("Product.init()", settings)
         let product_details, variants, seasons, units, profiles, matrices, pricings
         
         if (_modal_new_product) {
@@ -763,13 +764,12 @@ const Product = (function () {
                         Unit.init({ units: units })
                         Matrix.init({ matrices: matrices })
                         Pricing.init({ pricings: pricings })
-                        PricingStrategy.init({
-                            pricing_strategy: pricing_strategy,
-                            pricings: pricings,
-                        })
-                        
                         InventoryProfile.init({
                             profiles: profiles,
+                        })
+                        PricingWorksheet.init({
+                            pricing_strategy: pricing_strategy,
+                            pricings: pricings,
                         })
                         
                         $(_product_panel_link_overview)

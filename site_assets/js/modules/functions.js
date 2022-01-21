@@ -57,10 +57,10 @@ $.fn.BuildDropDown = function (settings) {
 }
 
 const hexToRgb = hex =>
-  hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
-    , (m, r, g, b) => "#" + r + r + g + g + b + b)
-    .substring(1).match(/.{2}/g)
-    .map(x => parseInt(x, 16))
+    hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
+            , (m, r, g, b) => "#" + r + r + g + g + b + b)
+        .substring(1).match(/.{2}/g)
+        .map(x => parseInt(x, 16))
 
 jQuery.fn.dataTable.Api.register("page.jumpToData()", function (data, column) {
     var pos = this.column(column, {
@@ -177,17 +177,18 @@ const validator_init = function (settings) {
     jQuery.validator.addMethod("phoneUS", function (phone_number, element) {
         phone_number = phone_number.replace(/\s+/g, "")
         return this.optional(element) || phone_number.length > 9 &&
-          phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/)
+            phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/)
     }, "Please specify a valid phone number")
     
     jQuery.validator.addMethod("phoneIT", function (phone_number, element) {
         phone_number = phone_number.replace(/\s+/g, "")
         return this.optional(element) || phone_number.length > 9 &&
-          phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/)
+            phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/)
     }, "Please specify a valid phone number")
     
     return jQuery.validator
 }
+
 const jsonPrettify = (json) => {
     if (typeof json === "object" && json !== null) {
         return JSON.stringify(json, undefined, '\t')
@@ -200,6 +201,7 @@ const jsonPrettify = (json) => {
         return json
     }
 }
+
 const setError = function (element, msg) {
     let id = $(element).attr("id")
     let el = $("#" + id + "")
@@ -652,13 +654,13 @@ function decodeHtml (str) {
         str = ""
     }
     var map =
-      {
-          "&amp;": "&",
-          "&lt;": "<",
-          "&gt;": ">",
-          "&quot;": "\"",
-          "&#039;": "'",
-      }
+        {
+            "&amp;": "&",
+            "&lt;": "<",
+            "&gt;": ">",
+            "&quot;": "\"",
+            "&#039;": "'",
+        }
     return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function (m) {return map[m]})
 }
 
@@ -709,10 +711,8 @@ const generateCodeDirectId = function (provider) {
     if (!provider) {
         return ""
     }
-    let fu = paddy(14, 11)
-    let codeDirectId = "D" + fu
     
-    return codeDirectId
+    return "D" + paddy(14, 11)
 }
 
 const getDate = function (element) {
@@ -838,7 +838,6 @@ const logger = {
     },
 }
 const infoDialog = function (message, handler) {
-    
     $(`
         <!--Modal: modalConfirm-->
         <div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirmationLabel" aria-hidden="true">
@@ -865,41 +864,45 @@ const infoDialog = function (message, handler) {
 	</div>
 </div>
         <!--Modal: modalConfirm-->
-    `)
-      .appendTo("body")
-    //Trigger the modal
-    $("#modalConfirm")
-      .modal({
-          backdrop: "static",
-          keyboard: false,
-      })
+    `).appendTo("body")
     
-    //Pass true to a callback function
-    $(".btn-yes")
-      .click(function () {
-          handler(true)
-          $("#modalConfirm")
-            .modal("hide")
-      })
+    const modal = document.getElementById("modalConfirm")
     
-    //Pass false to callback function
-    $(".btn-no")
-      .click(function () {
-          handler(false)
-          $("#modalConfirm")
-            .modal("hide")
-      })
-    
-    //Remove the modal once it is closed.
-    $("#modalConfirm")
-      .on("hidden.bs.modal", function () {
-          $("#modalConfirm")
-            .remove()
-      })
+    if (modal) {
+        const $modal = $(modal)
+        //Trigger the modal
+        $modal
+            .modal({
+                backdrop: "static",
+                keyboard: false,
+            })
+        
+        //Pass true to a callback function
+        $(".btn-yes")
+            .click(function () {
+                handler(true)
+                $modal
+                    .modal("hide")
+            })
+        
+        //Pass false to callback function
+        $(".btn-no")
+            .click(function () {
+                handler(false)
+                $modal
+                    .modal("hide")
+            })
+        
+        //Remove the modal once it is closed.
+        $modal
+            .on("hidden.bs.modal", function () {
+                $modal
+                    .remove()
+            })
+    }
     
 }
 const confirmDialog = function (message, handler) {
-    
     $(`
         <!--Modal: modalConfirm-->
         <div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirmationLabel" aria-hidden="true">
@@ -927,36 +930,48 @@ const confirmDialog = function (message, handler) {
         </div>
         <!--Modal: modalConfirm-->
     `)
-      .appendTo("body")
-    //Trigger the modal
-    $("#modalConfirm")
-      .modal({
-          backdrop: "static",
-          keyboard: false,
-      })
+        .appendTo("body")
     
-    //Pass true to a callback function
-    $(".btn-yes")
-      .click(function () {
-          handler(true)
-          $("#modalConfirm")
-            .modal("hide")
-      })
+    const modal = document.getElementById("modalConfirm")
     
-    //Pass false to callback function
-    $(".btn-no")
-      .click(function () {
-          handler(false)
-          $("#modalConfirm")
-            .modal("hide")
-      })
-    
-    //Remove the modal once it is closed.
-    $("#modalConfirm")
-      .on("hidden.bs.modal", function () {
-          $("#modalConfirm")
-            .remove()
-      })
+    if (modal) {
+        
+        const $modal = $(modal)
+        
+        $modal
+            .modal({
+                backdrop: "static",
+                keyboard: false,
+            })
+        
+        //Pass true to a callback function
+        $(".btn-yes")
+            .on("click", function () {
+                handler(true)
+                $modal
+                    .modal("hide")
+            })
+        
+        //Pass false to callback function
+        $(".btn-no")
+            .click(function () {
+                handler(false)
+                $("#modalConfirm")
+                    .modal("hide")
+            })
+            .on("click", function () {
+                handler(false)
+                $modal
+                    .modal("hide")
+            })
+        
+        //Remove the modal once it is closed.
+        $modal
+            .on("hidden.bs.modal", function () {
+                $("#modalConfirm")
+                    .remove()
+            })
+    }
     
 }
 const deleteDialog = function (message, handler) {
@@ -988,36 +1003,36 @@ const deleteDialog = function (message, handler) {
 </div>
         <!--Modal: modalConfirm-->
     `)
-      .appendTo("body")
+        .appendTo("body")
     //Trigger the modal
     $("#modalConfirm")
-      .modal({
-          backdrop: "static",
-          keyboard: false,
-      })
+        .modal({
+            backdrop: "static",
+            keyboard: false,
+        })
     
     //Pass true to a callback function
     $(".btn-yes")
-      .click(function () {
-          handler(true)
-          $("#modalConfirm")
-            .modal("hide")
-      })
+        .click(function () {
+            handler(true)
+            $("#modalConfirm")
+                .modal("hide")
+        })
     
     //Pass false to callback function
     $(".btn-no")
-      .click(function () {
-          handler(false)
-          $("#modalConfirm")
-            .modal("hide")
-      })
+        .click(function () {
+            handler(false)
+            $("#modalConfirm")
+                .modal("hide")
+        })
     
     //Remove the modal once it is closed.
     $("#modalConfirm")
-      .on("hidden.bs.modal", function () {
-          $("#modalConfirm")
-            .remove()
-      })
+        .on("hidden.bs.modal", function () {
+            $("#modalConfirm")
+                .remove()
+        })
     
 }
 const formatURL = function (param) {
@@ -1105,8 +1120,8 @@ const weatherUpdate = function (city) {
     const apiKey = "2ad550b2d7e352b38c3ca9da8396aade"
     let cityName = city
     xhr.open(
-      "GET",
-      `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`)
+        "GET",
+        `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`)
     
     xhr.send()
     xhr.onload = () => {
@@ -1131,58 +1146,58 @@ const weatherUpdate = function (city) {
 const ucwords = function (str) {
     str = str.toLowerCase()
     return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
-      function (s) {
-          return s.toUpperCase()
-      })
+        function (s) {
+            return s.toUpperCase()
+        })
 }
 String.prototype.ucwords = function () {
     str = this.toLowerCase()
     return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
-      function (s) {
-          return s.toUpperCase()
-      })
+        function (s) {
+            return s.toUpperCase()
+        })
 }
 
 $(function () {
     $(".debug_demo")
-      .on("click", function () {
-          showElements = true
-          if (!$(this).attr("data-shown")) {
-              $(this).attr("data-shown", "true")
-              showElements = true
-          }
-          
-          if ($(this).attr("data-shown") === "false") {
-              $(this).attr("data-shown", "true")
-              showElements = true
-          } else {
-              showElements = false
-              $(this).attr("data-shown", "false")
-          }
-          
-          let els = document.getElementsByClassName("dev-element")
-          
-          for (let i = 0; i < els.length; i++) {
-              
-              let element = els[i]
-              let tagName = element.tagName
-              
-              if (tagName.toLowerCase() === "input") {
-                  
-                  if (showElements === false) {
-                      element.hidden = false
-                      element.type = "text"
-                  } else {
-                      element.hidden = true
-                      element.type = "hidden"
-                  }
-              } else if (tagName.toLowerCase() === "label") {
-                  if (showElements === false) {
-                      $(element).removeClass("d-none")
-                  } else {
-                      $(element).addClass("d-none")
-                  }
-              }
-          }
-      })
+        .on("click", function () {
+            showElements = true
+            if (!$(this).attr("data-shown")) {
+                $(this).attr("data-shown", "true")
+                showElements = true
+            }
+            
+            if ($(this).attr("data-shown") === "false") {
+                $(this).attr("data-shown", "true")
+                showElements = true
+            } else {
+                showElements = false
+                $(this).attr("data-shown", "false")
+            }
+            
+            let els = document.getElementsByClassName("dev-element")
+            
+            for (let i = 0; i < els.length; i++) {
+                
+                let element = els[i]
+                let tagName = element.tagName
+                
+                if (tagName.toLowerCase() === "input") {
+                    
+                    if (showElements === false) {
+                        element.hidden = false
+                        element.type = "text"
+                    } else {
+                        element.hidden = true
+                        element.type = "hidden"
+                    }
+                } else if (tagName.toLowerCase() === "label") {
+                    if (showElements === false) {
+                        $(element).removeClass("d-none")
+                    } else {
+                        $(element).addClass("d-none")
+                    }
+                }
+            }
+        })
 })

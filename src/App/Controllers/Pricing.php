@@ -89,46 +89,62 @@
 			return $pricings;
 		}
 		
+		public static function update(array $params = null): array
+		{
+			$pricings = [];
+			
+			$results = PricingModel::updateRecord($params);
+			foreach ($results AS $k => $pricing) {
+				$pricings[] = self::formatPricing($pricing);
+			}
+			
+			return $pricings;
+		}
+		
+		public static function serveUpdate(array $params = null): void
+		{
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			View::render_json(self::update($params));
+			exit(0);
+		}
+		
 		private static function formatPricing(array $pricing = null): array
 		{
 			if (is_null($pricing)) {
 				return [];
 			}
 			
-			$formatted_result = array(
-				'id' => $pricing['pricing_id'],
-				'code' => $pricing['pricing_code'],
-				'matrix_code' => $pricing['matrix_code'],
-				'matrix_id' => (int)$pricing['matrix_id'],
-				'variant_id' => (int)$pricing['variant_id'],
-				'product_id' => (int)$pricing['product_id'],
-				'season_id' => (int)$pricing['season_id'],
-				'unit_id' => (int)$pricing['unit_id'],
-				'name' => trim($pricing['name']),
-				'mon' => (int)$pricing['mon'],
-				'tue' => (int)$pricing['tue'],
-				'wed' => (int)$pricing['wed'],
-				'thu' => (int)$pricing['thu'],
-				'fri' => (int)$pricing['fri'],
-				'sat' => (int)$pricing['sat'],
-				'sun' => (int)$pricing['sun'],
-				'monMargin' => (int)$pricing['monMargin'],
-				'tueMargin' => (int)$pricing['tueMargin'],
-				'wedMargin' => (int)$pricing['wedMargin'],
-				'thuMargin' => (int)$pricing['thuMargin'],
-				'friMargin' => (int)$pricing['friMargin'],
-				'satMargin' => (int)$pricing['satMargin'],
-				'sunMargin' => (int)$pricing['sunMargin'],
-				'count' => (int)$pricing['count'],
-				'enabled' => (int)$pricing['enabled'],
-				'date_created' => $pricing['date_created'],
-				'created_by' => (int)$pricing['created_by'],
-				'date_modified' => $pricing['date_modified'],
-				'modified_by' => (int)$pricing['modified_by'],
-				'note' => $pricing['note'],
+			return array(
+				'id' => (int)$pricing['pricing_id'],
+				'name' => $pricing['pricing_name'],
+				'matrix_id' => (!is_null($pricing['pricing_matrix_id'])) ? (int)$pricing['pricing_matrix_id'] : null,
+				'variant_id' => $pricing['pricing_variant_id'],
+				'code' => (!is_null($pricing['pricing_code'])) ? $pricing['pricing_code'] : null,
+				'count' => (!is_null($pricing['pricing_count'])) ? (int)$pricing['pricing_count'] : 1,
+				'mon' => (!is_null($pricing['pricing_mon'])) ? (int)$pricing['pricing_mon'] : null,
+				'tue' => (!is_null($pricing['pricing_tue'])) ? (int)$pricing['pricing_tue'] : null,
+				'wed' => (!is_null($pricing['pricing_wed'])) ? (int)$pricing['pricing_wed'] : null,
+				'thu' => (!is_null($pricing['pricing_thu'])) ? (int)$pricing['pricing_thu'] : null,
+				'fri' => (!is_null($pricing['pricing_fri'])) ? (int)$pricing['pricing_fri'] : null,
+				'sat' => (!is_null($pricing['pricing_sat'])) ? (int)$pricing['pricing_sat'] : null,
+				'sun' => (!is_null($pricing['pricing_sun'])) ? (int)$pricing['pricing_sun'] : null,
+				'monMargin' => (!is_null($pricing['pricing_monMargin'])) ? (int)$pricing['pricing_monMargin'] : null,
+				'tueMargin' => (!is_null($pricing['pricing_tueMargin'])) ? (int)$pricing['pricing_tueMargin'] : null,
+				'wedMargin' => (!is_null($pricing['pricing_wedMargin'])) ? (int)$pricing['pricing_wedMargin'] : null,
+				'thuMargin' => (!is_null($pricing['pricing_thuMargin'])) ? (int)$pricing['pricing_thuMargin'] : null,
+				'friMargin' => (!is_null($pricing['pricing_friMargin'])) ? (int)$pricing['pricing_friMargin'] : null,
+				'satMargin' => (!is_null($pricing['pricing_satMargin'])) ? (int)$pricing['pricing_satMargin'] : null,
+				'sunMargin' => (!is_null($pricing['pricing_sunMargin'])) ? (int)$pricing['pricing_sunMargin'] : null,
+				'enabled' => $pricing['pricing_enabled'],
+				'date_created' => $pricing['pricing_date_created'],
+				'created_by' => $pricing['pricing_created_by'],
+				'date_modified' => $pricing['pricing_date_modified'],
+				'modified_by' => $pricing['pricing_modified_by'],
+				'note' => $pricing['pricing_note'],
 			);
-			
-			return $formatted_result;
 		}
 		
 		private static function format(array $pricing = null): array

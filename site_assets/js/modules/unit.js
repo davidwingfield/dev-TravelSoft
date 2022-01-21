@@ -391,9 +391,8 @@ const Unit = (function () {
             confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
                 if (ans) {
                     let dataToSend = buildUnitRecord()
-                    //Console.log("Unit.save - dataToSend", dataToSend)
+                    
                     saveProductUnit(dataToSend, function (data) {
-                        //Console.log("Unit.save - data", data)
                         let unit
                         if (data) {
                             unit = data
@@ -495,7 +494,7 @@ const Unit = (function () {
                     }
                 })
             } catch (e) {
-                //Console.log("error", e)
+                Console.log("error", e)
             }
         }
     }

@@ -18,6 +18,7 @@ const Season = (function () {
     const _product_id = document.getElementById("product_id")
     const _panel_tab_season = document.getElementById("panel_tab_season")
     const _button_remove_season_from_product = document.getElementById("button_remove_season_from_product")
+    
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let categories = new Map()
     let $table_season_product_edit, disabledDays
@@ -57,7 +58,6 @@ const Season = (function () {
     
     $(_button_submit_form_edit_season)
       .on("click", function () {
-          
           let dataToSend = buildUpdateRecord()
           
           confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
@@ -94,7 +94,6 @@ const Season = (function () {
                     season = data
                     if (data[0]) {
                         season = set(data[0])
-                        
                     }
                     
                     addProductSeasonTableRow(season)

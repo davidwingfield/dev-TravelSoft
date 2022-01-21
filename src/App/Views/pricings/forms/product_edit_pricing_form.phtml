@@ -61,20 +61,27 @@
         
         <div class="row">
             
-            <!-- Pricing Strategy Types Id -->
-            <div class="col-3">
-            
+            <div class="col-3 mb-2">
+                <div class="row">
+                    <div class="col-12 mb-1">
+                        <button type="button" id="button_toggle_completed_pricings" class="btn btn-primary btn-sm btn-block waves-effect waves-light" data-shown="true">Hide Completed Pricings</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <button type="button" id="button_toggle_completed_matrices" class="btn btn-primary btn-sm btn-block waves-effect waves-light" data-shown="true">Hide Completed Matrices</button>
+                    </div>
+                </div>
             </div>
-            <!-- /Pricing Strategy Types Id -->
             
             <!-- Unit Id -->
-            <div class="col-3">
+            <div class="col-3 mb-2">
                 <button type="button" id="button_collapse_units" class="btn btn-primary btn-sm btn-block waves-effect waves-light">Collapse Units</button>
             </div>
             <!-- /Unit Id -->
             
             <!-- Season Id -->
-            <div class="col-3">
+            <div class="col-3 mb-2">
                 <button type="button" id="button_collapse_seasons" class="btn btn-primary btn-sm btn-block waves-effect waves-light">Collapse Seasons</button>
             </div>
             <!-- /Season Id -->
@@ -84,7 +91,8 @@
         <div class="row">
             <!-- Reset Button -->
             <div class="col-12 text-right">
-                <button type="button" id="product_edit_pricing_section_reset_filters" class="btn btn-primary btn-sm waves-effect waves-light">Reset</button>
+                <button type="button" id="product_edit_pricing_section_reload_worksheet" class="btn btn-outline-primary btn-sm waves-effect waves-light">Reload Worksheet</button>
+                <button type="button" id="product_edit_pricing_section_reset_filters" class="btn btn-primary btn-sm waves-effect waves-light">Reset Filters</button>
             </div>
             <!-- /Reset Button -->
         </div>

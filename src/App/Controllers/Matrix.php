@@ -2,8 +2,10 @@
 	
 	namespace Framework\App\Controllers;
 	
+	use Framework\App\Models\CompanyModel;
 	use Framework\App\Models\MatrixModel;
 	use Framework\Core\Controller;
+	use Framework\Core\View;
 	use Framework\Logger\Log;
 	
 	/**
@@ -62,6 +64,24 @@
 			return $matrices;
 		}
 		
+		public static function serveUpdate(array $params = [])
+		{
+			$matrices = [];
+			Log::$debug_log->trace($params);
+			$results = MatrixModel::updateRecord($params);
+			
+			foreach ($results AS $matrix) {
+				$matrices[] = self::format($matrix);
+			}
+			
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			View::render_json($matrices);
+			exit(0);
+		}
+		
 		private static function format(array $matrix = null): array
 		{
 			if (is_null($matrix)) {
@@ -70,7 +90,7 @@
 			
 			$pricings = Pricing::getPricingsByMatrixId((int)$matrix["matrix_id"]);
 			
-			$formatted_result = array(
+			return array(
 				"id" => (int)$matrix["matrix_id"],
 				"code" => $matrix["matrix_code"],
 				"name" => $matrix["matrix_name"],
@@ -91,7 +111,6 @@
 				"pricings" => $pricings,
 			);
 			
-			return $formatted_result;
 		}
 		
 	}

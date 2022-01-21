@@ -333,8 +333,8 @@
 			$units = Unit::getUnitsByProductId((int)$product['product_id']);
 			$variants = Variant::getVariantsByProductId((int)$product['product_id']);
 			$pricings = Pricing::getPricingsByProductId((int)$product['product_id']);
-			//Log::$debug_log->trace($variants);
-			//*
+			Log::$debug_log->trace($matrices);
+			
 			foreach ($seasons AS $season) {
 				$season_name = $season["name"];
 				if (!isset($rooms[$season_name])) {
@@ -348,7 +348,6 @@
 				}
 			}
 			
-			//*/
 			$provider = Provider::getByProviderId((int)$product['product_provider_id']);
 			$provider = (isset($provider[0])) ? $provider[0] : [];
 			

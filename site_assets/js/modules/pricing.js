@@ -12,22 +12,8 @@ const Pricing = (function () {
      */
     $(_pricing_strategy_types_id)
       .on("change", function () {
+          PricingWorksheet.pricingWorksheet()
           //Console.log("Pricing.pricing_strategy_types_id:change()", _pricing_strategy_types_id.value)
-      })
-    
-    $(_pricing_strategy_season_id)
-      .on("change", function () {
-          //Console.log("This", _pricing_strategy_season_id.value)
-      })
-    
-    $(_pricing_strategy_unit_id)
-      .on("change", function () {
-          //Console.log("This", _pricing_strategy_unit_id.value)
-      })
-    
-    $(_pricing_strategy_profile_id)
-      .on("change", function () {
-          //Console.log("This", _pricing_strategy_profile_id.value)
       })
     
     /**
@@ -36,7 +22,6 @@ const Pricing = (function () {
      * @param settings
      */
     const init = function (settings) {
-        //Console.log("Pricing.init(settings)", settings)
         resetForm()
         let pricings = []
         let pricing_detail
@@ -49,6 +34,7 @@ const Pricing = (function () {
         
         if (pricing_detail.pricing_strategy_types_id) {
             _pricing_strategy_types_id.value = pricing_detail.pricing_strategy_types_id
+            PricingWorksheet.pricingStrategyId = parseInt(pricing_detail.pricing_strategy_types_id)
         }
         loadAll(pricings)
     }
@@ -150,12 +136,7 @@ const Pricing = (function () {
         $(_pricing_strategy_unit_id).html(options)
     }
     
-    /**
-     * reset form
-     */
     const resetForm = function () {
-        //Console.log("Pricing.resetForm()", Variant.all)
-        
         loadSeasonDropdown()
         loadUnitDropdown()
         loadProfileDropdown()
@@ -199,12 +180,6 @@ const Pricing = (function () {
         }
     }
     
-    /**
-     * sets objects values
-     *
-     * @param pricing
-     * @returns {{thu: null, note: null, friMargin: null, code: null, tue: null, matrix_id: null, mon: null, sun: null, enabled: number, variant_id: number, price: null, product_id: null, wed: null, id: null, fri: null, sunMargin: null, unit_id: null, tueMargin: null, satMargin: null, wedMargin: null, margin: null, cost: null, date_created: *, sat: null, thuMargin: null, count: number, season_id: null, created_by: number, date_modified: *, name: null, modified_by: number, monMargin: null}}
-     */
     const set = function (pricing) {
         let detail = defaultDetail()
         if (pricing) {

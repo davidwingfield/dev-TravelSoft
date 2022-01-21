@@ -18,18 +18,11 @@
 	class Company extends Controller
 	{
 		
-		/**
-		 * construct object from Controller
-		 */
 		public function __construct()
 		{
 			parent::__construct();
 		}
 		
-		/**
-		 * autocomplete
-		 * Autocomplete json
-		 */
 		public static function autocomplete(string $st = ""): array
 		{
 			return self::format_ac(CompanyModel::company_ac($st));
@@ -94,13 +87,6 @@
 			return $companies;
 		}
 		
-		/**
-		 * format autocomplete results
-		 *
-		 * @param array $providers
-		 *
-		 * @return array
-		 */
 		private static function format_ac(array $companies = []): array
 		{
 			$data["suggestions"] = [];

@@ -91,69 +91,77 @@ const InventoryProfile = (function () {
     let checkin_dow, checkout_dow, departure_dow, return_dow, weekday_dow, inc_days_dow
     
     $(_button_add_product_profile)
-      .on("click", function () {
-          //Console.log("InventoryProfile.button_add_product_profile: click()", {})
-          populateInventoryProfileForm()
-      })
+        .on("click", function () {
+            //Console.log("InventoryProfile.button_add_product_profile: click()", {})
+            populateInventoryProfileForm()
+        })
     
     $(_table_profile_product_edit_add_new_button)
-      .on("click", function () {
-          //Console.log("InventoryProfile.table_profile_product_edit_add_new_button: click()", {})
-          _product_edit_profile_form_profile_name_filter.value = ""
-          $table_profile_product_edit.clearSelectedRows()
-          populateInventoryProfileForm()
-      })
+        .on("click", function () {
+            //Console.log("InventoryProfile.table_profile_product_edit_add_new_button: click()", {})
+            _product_edit_profile_form_profile_name_filter.value = ""
+            $table_profile_product_edit.clearSelectedRows()
+            populateInventoryProfileForm()
+        })
     
     $(_product_edit_profile_form_clear_button)
-      .on("click", function () {
-          //Console.log("InventoryProfile.product_edit_profile_form_clear_button: click()", {})
-          $table_profile_product_edit.clearSelectedRows()
-          clearInventoryProfileForm()
-          _product_edit_profile_form_profile_name_filter.value = ""
-      })
+        .on("click", function () {
+            //Console.log("InventoryProfile.product_edit_profile_form_clear_button: click()", {})
+            $table_profile_product_edit.clearSelectedRows()
+            clearInventoryProfileForm()
+            _product_edit_profile_form_profile_name_filter.value = ""
+        })
     
     $(_product_edit_profile_form_submit_button)
-      .on("click", function () {
-          //Console.log("InventoryProfile.product_edit_profile_form_submit_button: click()", {})
-          save()
-      })
+        .on("click", function () {
+            //Console.log("InventoryProfile.product_edit_profile_form_submit_button: click()", {})
+            save()
+        })
     
     $(_product_edit_profile_form_close_button)
-      .on("click", function () {
-          //Console.log("InventoryProfile.product_edit_profile_form_close_button: click()", {})
-          $table_profile_product_edit.clearSelectedRows()
-          clearInventoryProfileForm()
-          setFormElementDisplay()
-          hideForm()
-          _product_edit_profile_form_profile_name_filter.value = ""
-      })
+        .on("click", function () {
+            $table_profile_product_edit.clearSelectedRows()
+            clearInventoryProfileForm()
+            setFormElementDisplay()
+            hideForm()
+            _product_edit_profile_form_profile_name_filter.value = ""
+        })
     
     $(_product_edit_profile_form_profile_sales_types_id)
-      .on("change", function () {
-          //Console.log("InventoryProfile.product_edit_profile_form_profile_sales_types_id: change()", {})
-          setFormElementDisplay()
-          InventoryProfile.expiration_date.value("")
-          _product_edit_profile_form_profile_days_out.value = ""
-          _product_edit_profile_form_profile_allot_by_id.value = ""
-      })
+        .on("change", function () {
+            //Console.log("InventoryProfile.product_edit_profile_form_profile_sales_types_id: change()", {})
+            setFormElementDisplay()
+            InventoryProfile.expiration_date.value("")
+            _product_edit_profile_form_profile_days_out.value = ""
+            _product_edit_profile_form_profile_allot_by_id.value = ""
+        })
     
     $(_product_edit_profile_form_profile_allot_by_id)
-      .on("change", function () {
-          //Console.log("InventoryProfile.product_edit_profile_form_profile_allot_by_id: change()", {})
-          setFormElementDisplay()
-          InventoryProfile.expiration_date.value("")
-          _product_edit_profile_form_profile_days_out.value = ""
-      })
+        .on("change", function () {
+            //Console.log("InventoryProfile.product_edit_profile_form_profile_allot_by_id: change()", {})
+            setFormElementDisplay()
+            InventoryProfile.expiration_date.value("")
+            _product_edit_profile_form_profile_days_out.value = ""
+        })
     
     $(_product_edit_profile_form_profile_transfer_sales_types_id)
-      .on("change", function () {
-          //Console.log("InventoryProfile.product_edit_profile_form_profile_transfer_sales_types_id: change()", {})
-      })
+        .on("change", function () {
+            //Console.log("InventoryProfile.product_edit_profile_form_profile_transfer_sales_types_id: change()", {})
+        })
     
     $(_button_remove_profile_from_product)
-      .on("click", function () {
-          remove()
-      })
+        .on("click", function () {
+            remove()
+        })
+    
+    $(_panel_tab_inventory)
+        .on("hide.bs.tab", function () {
+            $table_profile_product_edit.clearSelectedRows()
+            clearInventoryProfileForm()
+            setFormElementDisplay()
+            hideForm()
+            _product_edit_profile_form_profile_name_filter.value = ""
+        })
     
     const updateProgress = function () {
         let profiles = Array.from(InventoryProfile.all.values())
@@ -254,60 +262,60 @@ const InventoryProfile = (function () {
         let product_id = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
         
         $(_product_edit_profile_form_profile_name_filter)
-          .on("click", function () {
-              $(this).select()
-          })
-          .on("search", function () {
-              $table_profile_product_edit.clearSelectedRows()
-              resetInventoryProfileForm()
-          })
-          .on("change", function () {
-              setTimeout(function () {
-                  //*
-                  let profile_name = _product_edit_profile_form_profile_name_filter.value
-                  
-                  if (globalSelectedProfile === false) {
-                      if (profile_name === "") {
-                          globalSelectedProfile = false
-                          $table_profile_product_edit.clearSelectedRows()
-                          resetInventoryProfileForm()
-                      } else {
-                          nameExists(profile_name)
-                      }
-                  }
-                  //*/
-              }, 200)
-              if (_product_edit_profile_form_profile_name_filter.value === "") {
-                  $table_profile_product_edit.clearSelectedRows()
-                  resetInventoryProfileForm()
-              }
-          })
-          .autocomplete({
-              serviceUrl: "/api/v1.0/autocomplete/profiles",
-              minChars: 2,
-              cache: false,
-              dataType: "json",
-              triggerSelectOnValidInput: false,
-              params: { "product_id": product_id },
-              paramName: "st",
-              onSelect: function (suggestion) {
-                  if (!suggestion.data) {
-                      return
-                  }
-                  $table_profile_product_edit.clearSelectedRows()
-                  let id = (!isNaN(parseInt(suggestion.data.id))) ? parseInt(suggestion.data.id) : null
-                  let inventory_profile = InventoryProfile.all.get(id)
-                  
-                  if (inventory_profile) {
-                      $table_profile_product_edit.loadRow(inventory_profile)
-                      populateInventoryProfileForm(inventory_profile)
-                      return
-                  }
-                  
-                  populateInventoryProfileForm()
-                  _product_edit_profile_form_profile_name.value = _product_edit_profile_form_profile_name_filter.value
-              },
-          })
+            .on("click", function () {
+                $(this).select()
+            })
+            .on("search", function () {
+                $table_profile_product_edit.clearSelectedRows()
+                resetInventoryProfileForm()
+            })
+            .on("change", function () {
+                setTimeout(function () {
+                    //*
+                    let profile_name = _product_edit_profile_form_profile_name_filter.value
+                    
+                    if (globalSelectedProfile === false) {
+                        if (profile_name === "") {
+                            globalSelectedProfile = false
+                            $table_profile_product_edit.clearSelectedRows()
+                            resetInventoryProfileForm()
+                        } else {
+                            nameExists(profile_name)
+                        }
+                    }
+                    //*/
+                }, 200)
+                if (_product_edit_profile_form_profile_name_filter.value === "") {
+                    $table_profile_product_edit.clearSelectedRows()
+                    resetInventoryProfileForm()
+                }
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/profiles",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                params: { "product_id": product_id },
+                paramName: "st",
+                onSelect: function (suggestion) {
+                    if (!suggestion.data) {
+                        return
+                    }
+                    $table_profile_product_edit.clearSelectedRows()
+                    let id = (!isNaN(parseInt(suggestion.data.id))) ? parseInt(suggestion.data.id) : null
+                    let inventory_profile = InventoryProfile.all.get(id)
+                    
+                    if (inventory_profile) {
+                        $table_profile_product_edit.loadRow(inventory_profile)
+                        populateInventoryProfileForm(inventory_profile)
+                        return
+                    }
+                    
+                    populateInventoryProfileForm()
+                    _product_edit_profile_form_profile_name.value = _product_edit_profile_form_profile_name_filter.value
+                },
+            })
     }
     
     const nameExists = function (name) {

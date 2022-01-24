@@ -52,11 +52,6 @@
 			
 		}
 		
-		/**
-		 * API get request
-		 *
-		 * @param array $args
-		 */
 		public static function serveGet(array $args = []): void
 		{
 			$country_id = null;

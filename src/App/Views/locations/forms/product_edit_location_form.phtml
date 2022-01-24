@@ -1,124 +1,126 @@
 <?php
-    $product_address = [];
-    $product_location = [];
-    $provider_address = [];
-    $provider_location = [];
-    
-    if (isset($product["location"])) {
-        $product_location = $product["location"];
-        $product_city_name = (isset($product_location["city"]["name"])) ? $product_location["city"]["name"] : null;
-        $product_country_iso2 = (isset($product_location["country"]["iso2"])) ? $product_location["country"]["iso2"] : null;
-        $product_country_iso3 = (isset($product_location["country"]["iso3"])) ? $product_location["country"]["iso3"] : null;
-        $product_country_name = (isset($product_location["country"]["name"])) ? $product_location["country"]["name"] : null;
-        $product_province_iso2 = (isset($product_location["province"]["iso2"])) ? $product_location["province"]["iso2"] : null;
-        $product_province_iso3 = (isset($product_location["province"]["iso3"])) ? $product_location["province"]["iso3"] : null;
-        $product_province_name = (isset($product_location["province"]["name"])) ? $product_location["province"]["name"] : null;
-        $product_city_name = (isset($product_location["city"]["name"])) ? $product_location["city"]["name"] : null;
-        $product_location_type_icon = (isset($product_location["type"]["icon"])) ? $product_location["type"]["icon"] : "";
-        $product_location_name = (isset($product_location["display_short"])) ? $product_location["display_short"] : "";
-        $product_location_street_1 = (isset($product_location["street_1"])) ? $product_location["street_1"] : null;
-        $product_location_street_2 = (isset($product_location["street_2"])) ? $product_location["street_2"] : null;
-        $product_location_zipcode = (isset($product_location["zipcode"])) ? $product_location["zipcode"] : null;
-        
-        if (!is_null($product_location_street_1)) {
-            $product_address[] = $product_location_street_1;
-        }
-        
-        if (!is_null($product_location_street_2)) {
-            $product_address[] = $product_location_street_2;
-        }
-        
-        if (!is_null($product_city_name)) {
-            $product_address[] = $product_city_name;
-        }
-        
-        if (is_null($product_location_zipcode)) {
-            $product_location_zipcode = "";
-        }
-        
-        if (!is_null($product_province_iso2)) {
-            $product_address[] = $product_province_iso2 . " " . $product_location_zipcode;
-        } else if (!is_null($product_province_iso3)) {
-            $product_address[] = $product_province_iso3 . " " . $product_location_zipcode;
-        } else if (!is_null($product_province_name)) {
-            $product_address[] = $product_province_name . " " . $product_location_zipcode;
-        }
-        
-        if (!is_null($product_country_iso3)) {
-            $product_address[] = $product_country_iso3;
-        } else if (!is_null($product_country_iso2)) {
-            $product_address[] = $product_country_iso2;
-        } else if (!is_null($product_country_name)) {
-            $product_address[] = $product_country_name;
-        }
-        
-        $product_location_address = implode(", ", $product_address);
-    }
-    if (isset($product["provider"]["location"])) {
-        $provider_location = $product["provider"]["location"];
-        $provider_city_name = (isset($provider_location["city"]["name"])) ? $provider_location["city"]["name"] : null;
-        $provider_country_iso2 = (isset($provider_location["country"]["iso2"])) ? $provider_location["country"]["iso2"] : null;
-        $provider_country_iso3 = (isset($provider_location["country"]["iso3"])) ? $provider_location["country"]["iso3"] : null;
-        $provider_country_name = (isset($provider_location["country"]["name"])) ? $provider_location["country"]["name"] : null;
-        $provider_province_iso2 = (isset($provider_location["province"]["iso2"])) ? $provider_location["province"]["iso2"] : null;
-        $provider_province_iso3 = (isset($provider_location["province"]["iso3"])) ? $provider_location["province"]["iso3"] : null;
-        $provider_province_name = (isset($provider_location["province"]["name"])) ? $provider_location["province"]["name"] : null;
-        $provider_city_name = (isset($provider_location["city"]["name"])) ? $provider_location["city"]["name"] : null;
-        $provider_location_type_icon = (isset($provider_location["type"]["icon"])) ? $provider_location["type"]["icon"] : "";
-        $provider_location_name = (isset($provider_location["display_short"])) ? $provider_location["display_short"] : "";
-        $provider_location_street_1 = (isset($provider_location["street_1"])) ? $provider_location["street_1"] : null;
-        $provider_location_street_2 = (isset($provider_location["street_2"])) ? $provider_location["street_2"] : null;
-        $provider_location_zipcode = (isset($provider_location["zipcode"])) ? $provider_location["zipcode"] : null;
-        
-        if (!is_null($provider_location_street_1)) {
-            $provider_address[] = $provider_location_street_1;
-        }
-        
-        if (!is_null($provider_location_street_2)) {
-            $provider_address[] = $provider_location_street_2;
-        }
-        
-        if (!is_null($provider_city_name)) {
-            $provider_address[] = $provider_city_name;
-        }
-        
-        if (is_null($provider_location_zipcode)) {
-            $provider_location_zipcode = "";
-        }
-        
-        if (!is_null($provider_province_iso2)) {
-            $provider_address[] = $provider_province_iso2 . " " . $provider_location_zipcode;
-        } else if (!is_null($provider_province_iso3)) {
-            $provider_address[] = $provider_province_iso3 . " " . $provider_location_zipcode;
-        } else if (!is_null($provider_province_name)) {
-            $provider_address[] = $provider_province_name . " " . $provider_location_zipcode;
-        }
-        
-        if (!is_null($provider_country_iso3)) {
-            $provider_address[] = $provider_country_iso3;
-        } else if (!is_null($provider_country_iso2)) {
-            $provider_address[] = $provider_country_iso2;
-        } else if (!is_null($provider_country_name)) {
-            $provider_address[] = $provider_country_name;
-        }
-        
-        $provider_location_address = implode(", ", $provider_address);
-    }
-    
-    //
-    
-    if ($product["use_provider_location"]) {
-        $display_location = $product_location["name"];
-    } else {
-        $display_location = $provider_location["name"];
-    }
-    
-    $location_types = [];
-    if (isset($data["types"]["location_types"])) {
-        $location_types = $data["types"]["location_types"];
-    }
+	/*
+	$product_address = [];
+	$product_location = [];
+	$provider_address = [];
+	$provider_location = [];
+	
+	if (isset($product["location"])) {
+		$product_location = $product["location"];
+		$product_city_name = (isset($product_location["city"]["name"])) ? $product_location["city"]["name"] : null;
+		$product_country_iso2 = (isset($product_location["country"]["iso2"])) ? $product_location["country"]["iso2"] : null;
+		$product_country_iso3 = (isset($product_location["country"]["iso3"])) ? $product_location["country"]["iso3"] : null;
+		$product_country_name = (isset($product_location["country"]["name"])) ? $product_location["country"]["name"] : null;
+		$product_province_iso2 = (isset($product_location["province"]["iso2"])) ? $product_location["province"]["iso2"] : null;
+		$product_province_iso3 = (isset($product_location["province"]["iso3"])) ? $product_location["province"]["iso3"] : null;
+		$product_province_name = (isset($product_location["province"]["name"])) ? $product_location["province"]["name"] : null;
+		$product_city_name = (isset($product_location["city"]["name"])) ? $product_location["city"]["name"] : null;
+		$product_location_type_icon = (isset($product_location["type"]["icon"])) ? $product_location["type"]["icon"] : "";
+		$product_location_name = (isset($product_location["display_short"])) ? $product_location["display_short"] : "";
+		$product_location_street_1 = (isset($product_location["street_1"])) ? $product_location["street_1"] : null;
+		$product_location_street_2 = (isset($product_location["street_2"])) ? $product_location["street_2"] : null;
+		$product_location_zipcode = (isset($product_location["zipcode"])) ? $product_location["zipcode"] : null;
+		
+		if (!is_null($product_location_street_1)) {
+			$product_address[] = $product_location_street_1;
+		}
+		
+		if (!is_null($product_location_street_2)) {
+			$product_address[] = $product_location_street_2;
+		}
+		
+		if (!is_null($product_city_name)) {
+			$product_address[] = $product_city_name;
+		}
+		
+		if (is_null($product_location_zipcode)) {
+			$product_location_zipcode = "";
+		}
+		
+		if (!is_null($product_province_iso2)) {
+			$product_address[] = $product_province_iso2 . " " . $product_location_zipcode;
+		} else if (!is_null($product_province_iso3)) {
+			$product_address[] = $product_province_iso3 . " " . $product_location_zipcode;
+		} else if (!is_null($product_province_name)) {
+			$product_address[] = $product_province_name . " " . $product_location_zipcode;
+		}
+		
+		if (!is_null($product_country_iso3)) {
+			$product_address[] = $product_country_iso3;
+		} else if (!is_null($product_country_iso2)) {
+			$product_address[] = $product_country_iso2;
+		} else if (!is_null($product_country_name)) {
+			$product_address[] = $product_country_name;
+		}
+		
+		$product_location_address = implode(", ", $product_address);
+	}
+	if (isset($product["provider"]["location"])) {
+		$provider_location = $product["provider"]["location"];
+		$provider_city_name = (isset($provider_location["city"]["name"])) ? $provider_location["city"]["name"] : null;
+		$provider_country_iso2 = (isset($provider_location["country"]["iso2"])) ? $provider_location["country"]["iso2"] : null;
+		$provider_country_iso3 = (isset($provider_location["country"]["iso3"])) ? $provider_location["country"]["iso3"] : null;
+		$provider_country_name = (isset($provider_location["country"]["name"])) ? $provider_location["country"]["name"] : null;
+		$provider_province_iso2 = (isset($provider_location["province"]["iso2"])) ? $provider_location["province"]["iso2"] : null;
+		$provider_province_iso3 = (isset($provider_location["province"]["iso3"])) ? $provider_location["province"]["iso3"] : null;
+		$provider_province_name = (isset($provider_location["province"]["name"])) ? $provider_location["province"]["name"] : null;
+		$provider_city_name = (isset($provider_location["city"]["name"])) ? $provider_location["city"]["name"] : null;
+		$provider_location_type_icon = (isset($provider_location["type"]["icon"])) ? $provider_location["type"]["icon"] : "";
+		$provider_location_name = (isset($provider_location["display_short"])) ? $provider_location["display_short"] : "";
+		$provider_location_street_1 = (isset($provider_location["street_1"])) ? $provider_location["street_1"] : null;
+		$provider_location_street_2 = (isset($provider_location["street_2"])) ? $provider_location["street_2"] : null;
+		$provider_location_zipcode = (isset($provider_location["zipcode"])) ? $provider_location["zipcode"] : null;
+		
+		if (!is_null($provider_location_street_1)) {
+			$provider_address[] = $provider_location_street_1;
+		}
+		
+		if (!is_null($provider_location_street_2)) {
+			$provider_address[] = $provider_location_street_2;
+		}
+		
+		if (!is_null($provider_city_name)) {
+			$provider_address[] = $provider_city_name;
+		}
+		
+		if (is_null($provider_location_zipcode)) {
+			$provider_location_zipcode = "";
+		}
+		
+		if (!is_null($provider_province_iso2)) {
+			$provider_address[] = $provider_province_iso2 . " " . $provider_location_zipcode;
+		} else if (!is_null($provider_province_iso3)) {
+			$provider_address[] = $provider_province_iso3 . " " . $provider_location_zipcode;
+		} else if (!is_null($provider_province_name)) {
+			$provider_address[] = $provider_province_name . " " . $provider_location_zipcode;
+		}
+		
+		if (!is_null($provider_country_iso3)) {
+			$provider_address[] = $provider_country_iso3;
+		} else if (!is_null($provider_country_iso2)) {
+			$provider_address[] = $provider_country_iso2;
+		} else if (!is_null($provider_country_name)) {
+			$provider_address[] = $provider_country_name;
+		}
+		
+		$provider_location_address = implode(", ", $provider_address);
+	}
+
+	if ($product["use_provider_location"]) {
+		$display_location = $product_location["name"];
+	} else {
+		$display_location = $provider_location["name"];
+	}
+	
+	$location_types = [];
+	if (isset($data["types"]["location_types"])) {
+		$location_types = $data["types"]["location_types"];
+	}
+	//*/
 ?>
-<section class="">
+<!-- Pricing Section -->
+<section id="product_edit_location_section" class="section">
+    <!-- HIDDEN FIELDS -->
     <div class="row gx-1 my-0">
         <div class="col-12 col-md-3 p-1">
             <label for="product_edit_location_id" class="dev-element d-none">Product Location:</label>
@@ -223,14 +225,14 @@
                         <div class="form-element">
                             <label for="location_types_id" class="">Location Type:</label>
                             <select id="location_types_id" name="location_types_id" class="form-control" aria-label="Location Type">
-                                <?php
-                                    echo "<option  value='' disabled selected>-- Location Types --</option>";
-                                    foreach ($location_types AS $k => $v) {
-                                        $val = $v["id"];
-                                        $text = $v["name"];
-                                        echo "<option value='$val'>$text</option>";
-                                    }
-                                ?>
+								<?php
+									echo "<option  value='' disabled selected>-- Location Types --</option>";
+									foreach ($location_types AS $k => $v) {
+										$val = $v["id"];
+										$text = $v["name"];
+										echo "<option value='$val'>$text</option>";
+									}
+								?>
                             </select>
                             <div id="location_types_id-error" class="error w-100 text-center"></div>
                         </div>
@@ -435,9 +437,3 @@
     </div>
 
 </section>
-
-<script>
-    $(document).ready(function () {
-    
-    })
-</script>

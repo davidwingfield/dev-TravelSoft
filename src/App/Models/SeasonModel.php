@@ -166,13 +166,11 @@
 			
 			$sql = "
             INSERT INTO product_season (
-                product_id, season_id, disabled_dow, seasons_border,
-                seasons_text, seasons_background, id, enabled,
+                product_id, season_id, disabled_dow, enabled,
                 date_created, created_by, date_modified, modified_by,
                 note
             ) VALUES (
-                $product_id, $season_id, $disabled_dow, $seasons_border,
-                $seasons_text, $seasons_background, $id, $enabled,
+                $product_id, $season_id, $disabled_dow, $enabled,
                 CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP, $modified_by,
                 $note
             )
@@ -309,10 +307,6 @@
                         PRODUCT_SEASON.product_id AS 'product_season_product_id',
                         PRODUCT_SEASON.season_id AS 'product_season_season_id',
                         COALESCE(PRODUCT_SEASON.disabled_dow, '') AS 'product_season_disabled_dow',
-                        PRODUCT_SEASON.seasons_border AS 'product_season_seasons_border',
-                        PRODUCT_SEASON.seasons_text AS 'product_season_seasons_text',
-                        PRODUCT_SEASON.seasons_background AS 'product_season_seasons_background',
-                        PRODUCT_SEASON.id AS 'product_season_id',
                         PRODUCT_SEASON.enabled AS 'product_season_enabled',
                         PRODUCT_SEASON.date_created AS 'product_season_date_created',
                         PRODUCT_SEASON.created_by AS 'product_season_created_by',

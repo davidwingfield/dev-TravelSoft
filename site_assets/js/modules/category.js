@@ -17,10 +17,10 @@ const Category = (function () {
     }
     
     $(_modal_product_category_id)
-      .on("change", function () {
-          let category_id = $(this).val()
-          handle_product_change(category_id)
-      })
+        .on("change", function () {
+            let category_id = $(this).val()
+            handle_product_change(category_id)
+        })
     
     const _modal_product_name = document.getElementById("modal_product_name")
     const _modal_product_sku = document.getElementById("modal_product_sku")
@@ -34,6 +34,7 @@ const Category = (function () {
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
     
     const handle_product_change = function (category_id) {
+        $("div[data-categoryid]").hide()
         if (!category_id) {
             return
         }
@@ -42,14 +43,17 @@ const Category = (function () {
         
         Product.resetNewProductDetails()
         Product.initAutoComplete(category_id)
+        
         let category = Types.category.get(category_id)
         if (!category) {
             return
         }
+        
         Product.attr1 = category.attribute_id
         Product.attr2 = null
         Product.attr3 = null
         Product.updateProductSKU()
+        
         if (category_id && !isNaN(parseInt(category_id))) {
             
             switch (parseInt(category_id)) {
@@ -71,14 +75,17 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //.disabled = true
+                    //_modal_product_vendor_name.disabled = true
+                    
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
+                    
+                    $("div[data-categoryid='1']").show()
                     break
                 case 2:
                     /**
@@ -98,14 +105,17 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
+                    
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = true
                     _modal_product_sku.disabled = true
+                    
+                    $("div[data-categoryid='2']").show()
                     break
                 case 3:
                     /**
@@ -125,14 +135,17 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
+                    
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
+                    
+                    $("div[data-categoryid='3']").show()
                     break
                 case 4:
                     /**
@@ -152,14 +165,17 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
+                    
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
+                    
+                    $("div[data-categoryid='4']").show()
                     break
                 case 5:
                     /**
@@ -179,14 +195,16 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
+                    
+                    $("div[data-categoryid='5']").show()
                     break
                 case 6:
                     /**
@@ -205,14 +223,16 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
+                    
+                    $("div[data-categoryid='6']").show()
                     break
                 case 7:
                     /**
@@ -231,14 +251,16 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
+                    
+                    $("div[data-categoryid='7']").show()
                     break
                 case 8:
                     /**
@@ -257,14 +279,16 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
+                    
+                    $("div[data-categoryid='8']").show()
                     break
                 case 9:
                     /**
@@ -283,15 +307,15 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
-                    Console.log("Other", 9)
+                    $("div[data-categoryid='9']").show()
                     break
                 default:
                     /**
@@ -309,8 +333,8 @@ const Category = (function () {
                     _modal_product_rating_types_id.value = ""
                     _modal_product_sku.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = true
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = true
@@ -323,7 +347,7 @@ const Category = (function () {
                     _modal_product_rating_types_id.disabled = true
                     
                     _modal_product_pricing_strategies_types_id.disabled = true
-                    Console.log("Default", null)
+                    
                     break
             }
         }

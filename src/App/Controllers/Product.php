@@ -327,25 +327,30 @@
 				return [];
 			}
 			$rooms = array();
+			
 			$matrices = Matrix::getMatricesByProductId((int)$product['product_id']);
 			$profiles = Profile::getByProductId((int)$product['product_id']);
 			$seasons = Season::getSeasonsByProductId((int)$product['product_id']);
 			$units = Unit::getUnitsByProductId((int)$product['product_id']);
 			$variants = Variant::getVariantsByProductId((int)$product['product_id']);
 			$pricings = Pricing::getPricingsByProductId((int)$product['product_id']);
-			Log::$debug_log->trace($matrices);
 			
 			foreach ($seasons AS $season) {
 				$season_name = $season["name"];
+				
 				if (!isset($rooms[$season_name])) {
 					$rooms[$season_name] = $season;
 					$rooms[$season_name]["units"] = array();
+					
 					foreach ($units AS $unit) {
 						$unit_name = $unit["name"];
 						$rooms[$season_name]["units"][$unit_name] = $unit;
 						$rooms[$season_name]["units"][$unit_name]["variants"] = $variants;
+						
 					}
+					
 				}
+				
 			}
 			
 			$provider = Provider::getByProviderId((int)$product['product_provider_id']);
@@ -353,7 +358,12 @@
 			
 			$vendor = Vendor::getByVendorId((int)$product['product_vendor_id']);
 			$vendor = (isset($vendor[0])) ? $vendor[0] : [];
+			
 			$use_provider_location = false;
+			$location = Location::getByLocationId((int)$product['product_location_id']);
+			$location_id = (int)$product['product_location_id'];
+			
+			/*
 			if (!isset($product['product_location_id'])) {
 				$use_provider_location = true;
 				$location = $provider["location"];
@@ -363,6 +373,7 @@
 				$location = Location::getByLocationId((int)$product['product_location_id']);
 				$location_id = (int)$product['product_location_id'];
 			}
+			//*/
 			
 			return array(
 				'id' => $product['product_id'],
@@ -399,6 +410,10 @@
 				'date_modified' => $product['product_date_modified'],
 				'modified_by' => $product['product_modified_by'],
 				'note' => $product['product_note'],
+				'street_1' => ($product['product_street_1']) ? $product['product_street_1'] : null,
+				'street_2' => ($product['product_street_2']) ? $product['product_street_2'] : null,
+				'postal_code' => ($product['product_postal_code']) ? $product['product_postal_code'] : null,
+				
 				'status_type_detail' => array(
 					'id' => $product['status_types_id'],
 					'name' => $product['status_types_name'],

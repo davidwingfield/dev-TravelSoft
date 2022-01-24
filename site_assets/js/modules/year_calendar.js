@@ -541,89 +541,89 @@ const YearCalendar = (function () {
     const _calendar_filter_season_id_clear = document.getElementById("calendar_filter_season_id_clear")
     
     $(_calendar_display_next_year)
-      .on("click", function () {
-          //*
-          $(_calendar_loader).fadeIn("slow", function () {
-              YearCalendar.start = (parseInt(YearCalendar.start) + 1).toString()
-              $.each(YearCalendar.activeCalendars, function (index, cal) {
-                  $(cal).fullCalendar("nextYear")
-              })
-              getTitle()
-              YearCalendar.endLoading()
-          })
-          //*/
-      })
+        .on("click", function () {
+            //*
+            $(_calendar_loader).fadeIn("slow", function () {
+                YearCalendar.start = (parseInt(YearCalendar.start) + 1).toString()
+                $.each(YearCalendar.activeCalendars, function (index, cal) {
+                    $(cal).fullCalendar("nextYear")
+                })
+                getTitle()
+                YearCalendar.endLoading()
+            })
+            //*/
+        })
     
     $(_calendar_display_prev_year)
-      .on("click", function () {
-          //*
-          $(_calendar_loader).fadeIn("slow", function () {
-              YearCalendar.start = (parseInt(YearCalendar.start) - 1).toString()
-              $.each(YearCalendar.activeCalendars, function (index, cal) {
-                  $(cal).fullCalendar("prevYear")
-              })
-              YearCalendar.getTitle()
-              YearCalendar.endLoading()
-          })
-          //*/
-      })
+        .on("click", function () {
+            //*
+            $(_calendar_loader).fadeIn("slow", function () {
+                YearCalendar.start = (parseInt(YearCalendar.start) - 1).toString()
+                $.each(YearCalendar.activeCalendars, function (index, cal) {
+                    $(cal).fullCalendar("prevYear")
+                })
+                YearCalendar.getTitle()
+                YearCalendar.endLoading()
+            })
+            //*/
+        })
     
     $(_calendar_filter_season_id)
-      .on("change", function () {
-          let season_id = (!isNaN(parseInt(_calendar_filter_season_id.value))) ? parseInt(_calendar_filter_season_id.value) : null
-          if (!is_null(season_id)) {
-              _calendar_filter_profile_id.value = ""
-              _calendar_filter_unit_id.value = ""
-          }
-          let product_season_detail, season, disabled_dow
-          if (!is_null(season_id)) {
-              season = Season.all.get(season_id)
-              if (season) {
-                  if (season.product_season_detail) {
-                      product_season_detail = season.product_season_detail
-                  }
-              }
-              
-              if (product_season_detail.disabled_dow) {
-                  disabled_dow = getListOfIds(product_season_detail.disabled_dow)
-                  //Console.log("disabled_dow", disabled_dow)
-              }
-              
-          }
-          setDisabledDOW(disabled_dow)
-          //Console.log("_calendar_filter_season_id:click()", disabled_dow)
-      })
+        .on("change", function () {
+            let season_id = (!isNaN(parseInt(_calendar_filter_season_id.value))) ? parseInt(_calendar_filter_season_id.value) : null
+            if (!is_null(season_id)) {
+                _calendar_filter_profile_id.value = ""
+                _calendar_filter_unit_id.value = ""
+            }
+            let product_season_detail, season, disabled_dow
+            if (!is_null(season_id)) {
+                season = Season.all.get(season_id)
+                if (season) {
+                    if (season.product_season_detail) {
+                        product_season_detail = season.product_season_detail
+                    }
+                }
+                
+                if (product_season_detail.disabled_dow) {
+                    disabled_dow = getListOfIds(product_season_detail.disabled_dow)
+                    //Console.log("disabled_dow", disabled_dow)
+                }
+                
+            }
+            setDisabledDOW(disabled_dow)
+            //Console.log("_calendar_filter_season_id:click()", disabled_dow)
+        })
     
     $(_calendar_filter_season_id_assign)
-      .on("click", function () {
-          buildAssignDatesRecord()
-      })
+        .on("click", function () {
+            buildAssignDatesRecord()
+        })
     
     $(_calendar_filter_season_id_clear)
-      .on("click", function () {
-          setCalendarFilters()
-      })
+        .on("click", function () {
+            setCalendarFilters()
+        })
     
     $(_calendar_filter_unit_id_clear)
-      .on("click", function () {
-          setCalendarFilters()
-      })
+        .on("click", function () {
+            setCalendarFilters()
+        })
     
     $(_calendar_filter_profile_id_clear)
-      .on("click", function () {
-          setCalendarFilters()
-      })
+        .on("click", function () {
+            setCalendarFilters()
+        })
     
     $(_seasonCalendarModal)
-      .on("shown.bs.modal", function () {
-          setCalendarFilters()
-      })
-      .on("hidden.bs.modal", function () {
-          resetForm()
-      })
-      .on("click", function () {
-          YearCalendar.checkProgress()
-      })
+        .on("shown.bs.modal", function () {
+            setCalendarFilters()
+        })
+        .on("hidden.bs.modal", function () {
+            resetForm()
+        })
+        .on("click", function () {
+            YearCalendar.checkProgress()
+        })
     // ----
     
     const loadSeasonDropdown = function () {
@@ -749,7 +749,7 @@ const YearCalendar = (function () {
     }
     
     const init = function (settings) {
-        //ContextMenu.init(settings)
+        ContextMenu.init(settings)
     }
     
     const checkProgress = function () {

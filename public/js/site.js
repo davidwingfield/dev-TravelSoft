@@ -1985,57 +1985,57 @@ const Season = (function () {
     let $table_season_product_edit, disabledDays
     
     $(_button_remove_season_from_product)
-      .on("click", function () {
-          
-          let dataToSend = {
-              product_id: parseInt(_product_id.value),
-              season_id: parseInt(_product_edit_season_form_season_id.value),
-          }
-          
-          confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
-              if (ans) {
-                  removeProductSeason(dataToSend)
-              }
-          })
-      })
+        .on("click", function () {
+            
+            let dataToSend = {
+                product_id: parseInt(_product_id.value),
+                season_id: parseInt(_product_edit_season_form_season_id.value),
+            }
+            
+            confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
+                if (ans) {
+                    removeProductSeason(dataToSend)
+                }
+            })
+        })
     
     $(_product_edit_season_form_edit_season_link)
-      .on("click", function () {
-          loadEditSeasonForm()
-      })
+        .on("click", function () {
+            loadEditSeasonForm()
+        })
     
     $(_edit_season_button)
-      .on("click", function () {
-          ColorScheme.enable()
-      })
+        .on("click", function () {
+            ColorScheme.enable()
+        })
     
     $(_button_clear_form_edit_season)
-      .on("click", function () {
-          _product_edit_season_form_season_name_filter.value = ""
-          resetForm()
-          clearProductSeasonForm()
-          $table_season_product_edit.clearSelectedRows()
-      })
+        .on("click", function () {
+            _product_edit_season_form_season_name_filter.value = ""
+            resetForm()
+            clearProductSeasonForm()
+            $table_season_product_edit.clearSelectedRows()
+        })
     
     $(_button_submit_form_edit_season)
-      .on("click", function () {
-          let dataToSend = buildUpdateRecord()
-          
-          confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
-              if (ans) {
-                  saveProductSeason(dataToSend)
-              }
-          })
-      })
+        .on("click", function () {
+            let dataToSend = buildUpdateRecord()
+            
+            confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
+                if (ans) {
+                    saveProductSeason(dataToSend)
+                }
+            })
+        })
     
     $(_panel_tab_season)
-      .on("hide.bs.tab", function () {
-          //clear_validation(_form_product_add)
-          _product_edit_season_form_season_name_filter.value = ""
-          resetForm()
-          clearProductSeasonForm()
-          $table_season_product_edit.clearSelectedRows()
-      })
+        .on("hide.bs.tab", function () {
+            //clear_validation(_form_product_add)
+            _product_edit_season_form_season_name_filter.value = ""
+            resetForm()
+            clearProductSeasonForm()
+            $table_season_product_edit.clearSelectedRows()
+        })
     
     const updateProgress = function () {
         let seasons = Array.from(Season.all.values())
@@ -2057,10 +2057,31 @@ const Season = (function () {
                         season = set(data[0])
                     }
                     
+                    Console.log("season", season)
+                    
                     addProductSeasonTableRow(season)
                     PricingWorksheet.buildPricingWorksheet()
                 }
             })
+        }
+    }
+    
+    const updateProductSeason = function (dataToSend, callback) {
+        let url = "/api/v1.0/seasons/update"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handleSeasonError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                Console.log("error", e)
+                return handleSeasonError(data)
+            }
         }
     }
     
@@ -2093,74 +2114,8 @@ const Season = (function () {
         }
     }
     
-    const deleteProductSeasonTableRow = function (season_id) {
-        if (season_id) {
-            let hasSeason = Season.all.get(season_id)
-            if (hasSeason) {
-                $table_season_product_edit.deleteRow(hasSeason)
-                Season.all.delete(season_id)
-                _product_edit_season_form_season_name_filter.value = ""
-                resetForm()
-                clearProductSeasonForm()
-                $table_season_product_edit.clearSelectedRows()
-                
-                Pricing.resetForm()
-                YearCalendar.resetForm()
-                PricingWorksheet.buildPricingWorksheet()
-                YearCalendar.loadSeasonDropdown()
-                toastr.success("Season Deleted")
-            }
-        }
-        
-    }
-    
-    const addProductSeasonTableRow = function (season) {
-        if (season) {
-            let detail = set(season)
-            let hasSeason = Season.all.get(detail.id)
-            if (hasSeason) {
-                Season.all.set(detail.id, detail)
-                $table_season_product_edit.updateRow(detail)
-                toastr.success("Season Updated")
-                
-            } else {
-                Season.all.set(detail.id, detail)
-                $table_season_product_edit.insertRow(detail)
-                toastr.success("Season Added")
-            }
-            
-            _product_edit_season_form_season_name_filter.value = ""
-            resetForm()
-            clearProductSeasonForm()
-            $table_season_product_edit.clearSelectedRows()
-            
-            Pricing.resetForm()
-            YearCalendar.resetForm()
-        }
-        
-        YearCalendar.loadSeasonDropdown()
-    }
-    
     const handleSeasonError = function (msg) {
         toastr.error(msg)
-    }
-    
-    const updateProductSeason = function (dataToSend, callback) {
-        let url = "/api/v1.0/seasons/update"
-        
-        if (dataToSend) {
-            try {
-                sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    } else {
-                        return handleSeasonError("Oops: 1")
-                    }
-                })
-            } catch (e) {
-                //Console.log("error", e)
-            }
-        }
     }
     
     const buildUpdateRecord = function () {
@@ -2175,56 +2130,56 @@ const Season = (function () {
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         $(_product_edit_season_form_season_name_filter)
-          .on("click", function () {
-              $(this).select()
-          })
-          .on("search", function () {
-              $table_season_product_edit.clearSelectedRows()
-              resetForm()
-          })
-          .on("change", function () {
-              if (_product_edit_season_form_season_name_filter.value === "") {
-                  $table_season_product_edit.clearSelectedRows()
-                  resetForm()
-              } else {
-              
-              }
-          })
-          .autocomplete({
-              serviceUrl: "/api/v1.0/autocomplete/seasons",
-              minChars: 2,
-              cache: false,
-              dataType: "json",
-              triggerSelectOnValidInput: false,
-              paramName: "st",
-              params: { "category_id": category_id },
-              onSelect: function (suggestion) {
-                  if (!suggestion.data) {
-                      return
-                  }
-                  $table_season_product_edit.clearSelectedRows()
-                  let season = suggestion.data
-                  let color_scheme = (season.color_scheme) ? season.color_scheme : {}
-                  
-                  _product_edit_season_form_season_id.value = season.id
-                  _product_edit_season_form_season_name.value = season.name
-                  _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
-                  _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
-                  
-                  ColorScheme.load(color_scheme)
-                  ColorScheme.disable()
-                  
-                  _product_edit_season_form_season_enabled.disabled = true
-                  
-                  let product_season = Season.all.get(season.id)
-                  if (product_season) {
-                      loadProductSeasonForm(product_season)
-                      $table_season_product_edit.loadRow(product_season)
-                  } else {
-                      loadProductSeasonForm(season)
-                  }
-              },
-          })
+            .on("click", function () {
+                $(this).select()
+            })
+            .on("search", function () {
+                $table_season_product_edit.clearSelectedRows()
+                resetForm()
+            })
+            .on("change", function () {
+                if (_product_edit_season_form_season_name_filter.value === "") {
+                    $table_season_product_edit.clearSelectedRows()
+                    resetForm()
+                } else {
+                
+                }
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/seasons",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                paramName: "st",
+                params: { "category_id": category_id },
+                onSelect: function (suggestion) {
+                    if (!suggestion.data) {
+                        return
+                    }
+                    $table_season_product_edit.clearSelectedRows()
+                    let season = suggestion.data
+                    let color_scheme = (season.color_scheme) ? season.color_scheme : {}
+                    
+                    _product_edit_season_form_season_id.value = season.id
+                    _product_edit_season_form_season_name.value = season.name
+                    _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
+                    _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
+                    
+                    ColorScheme.load(color_scheme)
+                    ColorScheme.disable()
+                    
+                    _product_edit_season_form_season_enabled.disabled = true
+                    
+                    let product_season = Season.all.get(season.id)
+                    if (product_season) {
+                        loadProductSeasonForm(product_season)
+                        $table_season_product_edit.loadRow(product_season)
+                    } else {
+                        loadProductSeasonForm(season)
+                    }
+                },
+            })
     }
     
     const defaultDetail = function () {
@@ -2369,6 +2324,20 @@ const Season = (function () {
         return detail
     }
     
+    const edit = function (season) {
+        if (season) {
+            if (season.id) {
+                let seasonId = season.id
+                Console.log("seasonId", seasonId)
+                let loadedSeasonId = (!_product_edit_season_form_season_id) ? null : (!isNaN(parseInt(_product_edit_season_form_season_id.value))) ? parseInt(_product_edit_season_form_season_id.value) : null
+                Console.log("loadedSeasonId", loadedSeasonId)
+            }
+        }
+        
+        clearProductSeasonForm()
+        loadProductSeasonForm(season)
+    }
+    
     const buildProductEditTable = function () {
         $table_season_product_edit = $(_table_season_product_edit).table({
             table_type: "display_list",
@@ -2424,6 +2393,54 @@ const Season = (function () {
         })
     }
     
+    const deleteProductSeasonTableRow = function (season_id) {
+        if (season_id) {
+            let hasSeason = Season.all.get(season_id)
+            if (hasSeason) {
+                $table_season_product_edit.deleteRow(hasSeason)
+                Season.all.delete(season_id)
+                _product_edit_season_form_season_name_filter.value = ""
+                resetForm()
+                clearProductSeasonForm()
+                $table_season_product_edit.clearSelectedRows()
+                
+                Pricing.resetForm()
+                YearCalendar.resetForm()
+                PricingWorksheet.buildPricingWorksheet()
+                YearCalendar.loadSeasonDropdown()
+                toastr.success("Season Deleted")
+            }
+        }
+        
+    }
+    
+    const addProductSeasonTableRow = function (season) {
+        if (season) {
+            let detail = set(season)
+            let hasSeason = Season.all.get(detail.id)
+            if (hasSeason) {
+                Season.all.set(detail.id, detail)
+                $table_season_product_edit.updateRow(detail)
+                toastr.success("Season Updated")
+                
+            } else {
+                Season.all.set(detail.id, detail)
+                $table_season_product_edit.insertRow(detail)
+                toastr.success("Season Added")
+            }
+            
+            _product_edit_season_form_season_name_filter.value = ""
+            resetForm()
+            clearProductSeasonForm()
+            $table_season_product_edit.clearSelectedRows()
+            
+            Pricing.resetForm()
+            YearCalendar.resetForm()
+        }
+        
+        YearCalendar.loadSeasonDropdown()
+    }
+    
     const resetForm = function () {
         _product_edit_season_form_season_id.value = ""
         _product_edit_season_form_season_name.value = ""
@@ -2439,11 +2456,6 @@ const Season = (function () {
     
     const unLoadEditSeasonForm = function () {
         //$(_edit_season).hide()
-    }
-    
-    const edit = function (season) {
-        clearProductSeasonForm()
-        loadProductSeasonForm(season)
     }
     
     const clearProductSeasonForm = function () {
@@ -3105,69 +3117,77 @@ const InventoryProfile = (function () {
     let checkin_dow, checkout_dow, departure_dow, return_dow, weekday_dow, inc_days_dow
     
     $(_button_add_product_profile)
-      .on("click", function () {
-          //Console.log("InventoryProfile.button_add_product_profile: click()", {})
-          populateInventoryProfileForm()
-      })
+        .on("click", function () {
+            //Console.log("InventoryProfile.button_add_product_profile: click()", {})
+            populateInventoryProfileForm()
+        })
     
     $(_table_profile_product_edit_add_new_button)
-      .on("click", function () {
-          //Console.log("InventoryProfile.table_profile_product_edit_add_new_button: click()", {})
-          _product_edit_profile_form_profile_name_filter.value = ""
-          $table_profile_product_edit.clearSelectedRows()
-          populateInventoryProfileForm()
-      })
+        .on("click", function () {
+            //Console.log("InventoryProfile.table_profile_product_edit_add_new_button: click()", {})
+            _product_edit_profile_form_profile_name_filter.value = ""
+            $table_profile_product_edit.clearSelectedRows()
+            populateInventoryProfileForm()
+        })
     
     $(_product_edit_profile_form_clear_button)
-      .on("click", function () {
-          //Console.log("InventoryProfile.product_edit_profile_form_clear_button: click()", {})
-          $table_profile_product_edit.clearSelectedRows()
-          clearInventoryProfileForm()
-          _product_edit_profile_form_profile_name_filter.value = ""
-      })
+        .on("click", function () {
+            //Console.log("InventoryProfile.product_edit_profile_form_clear_button: click()", {})
+            $table_profile_product_edit.clearSelectedRows()
+            clearInventoryProfileForm()
+            _product_edit_profile_form_profile_name_filter.value = ""
+        })
     
     $(_product_edit_profile_form_submit_button)
-      .on("click", function () {
-          //Console.log("InventoryProfile.product_edit_profile_form_submit_button: click()", {})
-          save()
-      })
+        .on("click", function () {
+            //Console.log("InventoryProfile.product_edit_profile_form_submit_button: click()", {})
+            save()
+        })
     
     $(_product_edit_profile_form_close_button)
-      .on("click", function () {
-          //Console.log("InventoryProfile.product_edit_profile_form_close_button: click()", {})
-          $table_profile_product_edit.clearSelectedRows()
-          clearInventoryProfileForm()
-          setFormElementDisplay()
-          hideForm()
-          _product_edit_profile_form_profile_name_filter.value = ""
-      })
+        .on("click", function () {
+            $table_profile_product_edit.clearSelectedRows()
+            clearInventoryProfileForm()
+            setFormElementDisplay()
+            hideForm()
+            _product_edit_profile_form_profile_name_filter.value = ""
+        })
     
     $(_product_edit_profile_form_profile_sales_types_id)
-      .on("change", function () {
-          //Console.log("InventoryProfile.product_edit_profile_form_profile_sales_types_id: change()", {})
-          setFormElementDisplay()
-          InventoryProfile.expiration_date.value("")
-          _product_edit_profile_form_profile_days_out.value = ""
-          _product_edit_profile_form_profile_allot_by_id.value = ""
-      })
+        .on("change", function () {
+            //Console.log("InventoryProfile.product_edit_profile_form_profile_sales_types_id: change()", {})
+            setFormElementDisplay()
+            InventoryProfile.expiration_date.value("")
+            _product_edit_profile_form_profile_days_out.value = ""
+            _product_edit_profile_form_profile_allot_by_id.value = ""
+        })
     
     $(_product_edit_profile_form_profile_allot_by_id)
-      .on("change", function () {
-          //Console.log("InventoryProfile.product_edit_profile_form_profile_allot_by_id: change()", {})
-          setFormElementDisplay()
-          InventoryProfile.expiration_date.value("")
-          _product_edit_profile_form_profile_days_out.value = ""
-      })
+        .on("change", function () {
+            //Console.log("InventoryProfile.product_edit_profile_form_profile_allot_by_id: change()", {})
+            setFormElementDisplay()
+            InventoryProfile.expiration_date.value("")
+            _product_edit_profile_form_profile_days_out.value = ""
+        })
     
     $(_product_edit_profile_form_profile_transfer_sales_types_id)
-      .on("change", function () {
-          //Console.log("InventoryProfile.product_edit_profile_form_profile_transfer_sales_types_id: change()", {})
-      })
+        .on("change", function () {
+            //Console.log("InventoryProfile.product_edit_profile_form_profile_transfer_sales_types_id: change()", {})
+        })
     
     $(_button_remove_profile_from_product)
-      .on("click", function () {
-          remove()
-      })
+        .on("click", function () {
+            remove()
+        })
+    
+    $(_panel_tab_inventory)
+        .on("hide.bs.tab", function () {
+            $table_profile_product_edit.clearSelectedRows()
+            clearInventoryProfileForm()
+            setFormElementDisplay()
+            hideForm()
+            _product_edit_profile_form_profile_name_filter.value = ""
+        })
     
     const updateProgress = function () {
         let profiles = Array.from(InventoryProfile.all.values())
@@ -3268,60 +3288,60 @@ const InventoryProfile = (function () {
         let product_id = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
         
         $(_product_edit_profile_form_profile_name_filter)
-          .on("click", function () {
-              $(this).select()
-          })
-          .on("search", function () {
-              $table_profile_product_edit.clearSelectedRows()
-              resetInventoryProfileForm()
-          })
-          .on("change", function () {
-              setTimeout(function () {
-                  //*
-                  let profile_name = _product_edit_profile_form_profile_name_filter.value
-                  
-                  if (globalSelectedProfile === false) {
-                      if (profile_name === "") {
-                          globalSelectedProfile = false
-                          $table_profile_product_edit.clearSelectedRows()
-                          resetInventoryProfileForm()
-                      } else {
-                          nameExists(profile_name)
-                      }
-                  }
-                  //*/
-              }, 200)
-              if (_product_edit_profile_form_profile_name_filter.value === "") {
-                  $table_profile_product_edit.clearSelectedRows()
-                  resetInventoryProfileForm()
-              }
-          })
-          .autocomplete({
-              serviceUrl: "/api/v1.0/autocomplete/profiles",
-              minChars: 2,
-              cache: false,
-              dataType: "json",
-              triggerSelectOnValidInput: false,
-              params: { "product_id": product_id },
-              paramName: "st",
-              onSelect: function (suggestion) {
-                  if (!suggestion.data) {
-                      return
-                  }
-                  $table_profile_product_edit.clearSelectedRows()
-                  let id = (!isNaN(parseInt(suggestion.data.id))) ? parseInt(suggestion.data.id) : null
-                  let inventory_profile = InventoryProfile.all.get(id)
-                  
-                  if (inventory_profile) {
-                      $table_profile_product_edit.loadRow(inventory_profile)
-                      populateInventoryProfileForm(inventory_profile)
-                      return
-                  }
-                  
-                  populateInventoryProfileForm()
-                  _product_edit_profile_form_profile_name.value = _product_edit_profile_form_profile_name_filter.value
-              },
-          })
+            .on("click", function () {
+                $(this).select()
+            })
+            .on("search", function () {
+                $table_profile_product_edit.clearSelectedRows()
+                resetInventoryProfileForm()
+            })
+            .on("change", function () {
+                setTimeout(function () {
+                    //*
+                    let profile_name = _product_edit_profile_form_profile_name_filter.value
+                    
+                    if (globalSelectedProfile === false) {
+                        if (profile_name === "") {
+                            globalSelectedProfile = false
+                            $table_profile_product_edit.clearSelectedRows()
+                            resetInventoryProfileForm()
+                        } else {
+                            nameExists(profile_name)
+                        }
+                    }
+                    //*/
+                }, 200)
+                if (_product_edit_profile_form_profile_name_filter.value === "") {
+                    $table_profile_product_edit.clearSelectedRows()
+                    resetInventoryProfileForm()
+                }
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/profiles",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                params: { "product_id": product_id },
+                paramName: "st",
+                onSelect: function (suggestion) {
+                    if (!suggestion.data) {
+                        return
+                    }
+                    $table_profile_product_edit.clearSelectedRows()
+                    let id = (!isNaN(parseInt(suggestion.data.id))) ? parseInt(suggestion.data.id) : null
+                    let inventory_profile = InventoryProfile.all.get(id)
+                    
+                    if (inventory_profile) {
+                        $table_profile_product_edit.loadRow(inventory_profile)
+                        populateInventoryProfileForm(inventory_profile)
+                        return
+                    }
+                    
+                    populateInventoryProfileForm()
+                    _product_edit_profile_form_profile_name.value = _product_edit_profile_form_profile_name_filter.value
+                },
+            })
     }
     
     const nameExists = function (name) {
@@ -3925,6 +3945,2052 @@ const InventoryProfile = (function () {
     }
 })()
 
+const PricingWorksheet = (function () {
+    "use strict"
+    
+    const _product_edit_matrix_form = document.getElementById("product_edit_matrix_form")
+    const daysOfTheWeek = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"]
+    const _product_edit_pricing_section_reset_filters = document.getElementById("product_edit_pricing_section_reset_filters")
+    const _pricing_strategy_types_id = document.getElementById("pricing_strategy_types_id")
+    const _product_id = document.getElementById("product_id")
+    const _pricing_strategy_unit_id = document.getElementById("pricing_strategy_unit_id")
+    const _pricing_strategy_season_id = document.getElementById("pricing_strategy_season_id")
+    const _button_collapse_seasons = document.getElementById("button_collapse_seasons")
+    const _button_collapse_units = document.getElementById("button_collapse_units")
+    const _button_toggle_completed_pricings = document.getElementById("button_toggle_completed_pricings")
+    const _button_toggle_completed_matrices = document.getElementById("button_toggle_completed_matrices")
+    const _product_edit_pricing_section_reload_worksheet = document.getElementById("product_edit_pricing_section_reload_worksheet")
+    
+    let completed = '<span class="badge badge-pill badge-success">Completed</span>'
+    let incomplete = '<span class="badge badge-pill badge-danger">Incomplete</span>'
+    let seasonList, unitList, variantList = []
+    let variantCombinations = []
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    
+    $(_product_edit_pricing_section_reload_worksheet)
+        .on("click", function () {
+            $(_pricing_strategy_types_id).val(PricingWorksheet.pricingStrategyId).trigger("change")
+        })
+    
+    $(_product_edit_pricing_section_reset_filters)
+        .on("click", function () {
+            resetFilters()
+        })
+    
+    $(_pricing_strategy_types_id)
+        .on("change", function () {
+            //pricingWorksheet()
+        })
+    
+    $(_pricing_strategy_unit_id)
+        .on("change", function () {
+            filterUnits()
+        })
+    
+    $(_pricing_strategy_season_id)
+        .on("change", function () {
+            filterSeasons()
+        })
+    
+    $(_product_edit_pricing_section_reset_filters)
+        .on("click", function () {
+            resetFilters()
+        })
+    
+    $(_button_toggle_completed_pricings)
+        .on("click", function () {
+            toggleCompletedPricings()
+        })
+    
+    $(_button_toggle_completed_matrices)
+        .on("click", function () {
+            toggleCompletedMatrices()
+        })
+    
+    $(_button_collapse_seasons)
+        .on("click", function () {
+            toggleSeasonFilter()
+        })
+    
+    $(_button_collapse_units)
+        .on("click", function () {
+            toggleUnitFilter()
+        })
+    
+    const status = function () {
+        let hasIssues = false
+        let status = "complete"
+        let incompletePricings = Array.from(PricingWorksheet.incompletePricings.values())
+        let incompleteMatrices = Array.from(PricingWorksheet.incompleteMatrices.values())
+        
+        if (incompletePricings.length > 0 || incompleteMatrices.length > 0) {
+            hasIssues = true
+        }
+        
+        $("<span>", {
+            class: "badge rounded-pill badge-notification bg-danger tab-badge",
+            alt: "Notification",
+            css: { "color": "rgb(255, 255, 255) !important" },
+            text: '!',
+        })
+        if (hasIssues === true) {
+            status = "incomplete"
+            $("#panel_tab_pricing")
+                .html("Pricing<span class='badge rounded-pill badge-notification bg-danger tab-badge' style='color:#fff!important'>!</span>")
+        } else {
+            status = "complete"
+            $("#panel_tab_pricing")
+                .html("Pricing")
+        }
+        
+        return status
+    }
+    
+    const isDisabled = function (day, season_id) {
+        let season, dow
+        let dowIndex = -1
+        let disabled_dow = []
+        let product_season_detail = {}
+        
+        if (season_id && day) {
+            season = Season.all.get(season_id)
+            if (season) {
+                product_season_detail = (season.product_season_detail) ? season.product_season_detail : {}
+                disabled_dow = getListOfIds(product_season_detail.disabled_dow.trim())
+                dow = daysOfTheWeek.indexOf(day)
+                dowIndex = disabled_dow.indexOf(dow)
+            }
+        }
+        
+        return dowIndex >= 0
+    }
+    
+    const tableDOW = function (pricing) {
+        let DOWHEADINGROW = $("<tr/>")
+        let DOWHEADINGACTIONCOLUMN = $("<th/>", {
+            html: "&nbsp;",
+        })
+        
+        let DOWHEADINGTITLECOLUMN = $("<th/>", {
+            css: { "width": "120px" },
+        })
+        DOWHEADINGROW.attr("data-dowrow", "true")
+        DOWHEADINGROW.append(DOWHEADINGTITLECOLUMN)
+        
+        if (pricing) {
+            let beenSaved = false
+            let matrix = Matrix.all.get(pricing.pricing_code)
+            if (matrix) {
+                beenSaved = !!(matrix.been_saved && matrix.been_saved === 1)
+            }
+            
+            for (let n = 0; n < daysOfTheWeek.length; n++) {
+                let disabled = ""
+                let headingText = ucwords(daysOfTheWeek[n])
+                let disabledDay = isDisabled(n, pricing.season_id)
+                if (disabledDay) {
+                    disabled = "disabled"
+                    headingText = ucwords(daysOfTheWeek[n]) + " (disabled)"
+                }
+                
+                let tableHeadRowColumn = $("<th/>", {
+                    class: "" + disabled,
+                    text: headingText,
+                })
+                
+                DOWHEADINGROW.append(tableHeadRowColumn)
+            }
+            DOWHEADINGROW.append(DOWHEADINGACTIONCOLUMN)
+        }
+        
+        return DOWHEADINGROW
+    }
+    
+    const buildSeasonWrapper = function (season, matrixId, count) {
+        return $("<div/>", {
+            class: "accordion md-accordion",
+            id: "accordionEx" + matrixId + "-" + count,
+            role: "tablist",
+            "aria-multiselectable": "true",
+        })
+            .attr("data-sectiontype", "season-" + season.season_id)
+    }
+    
+    const buildUnitWrapper = function (unit, count) {
+        let id = unit.id + "-" + count
+        return $("<div/>", {
+            class: "accordion md-accordion card card-body p-1 mb-2",
+            id: "accordionUnit-" + id,
+            role: "tablist",
+            "aria-multiselectable": "true",
+            
+        })
+            .attr("data-sectiontype", "unit-" + unit.id)
+    }
+    
+    const buildPricingButtonRow = function (pricing) {
+        let matrixCode = pricing.matrix_code
+        
+        let ROW = $("<div/>", {
+            class: "row",
+            //css: { "border-top": "solid 1px #dee2e6" },
+        })
+        
+        let COL_6_1 = $("<div/>", {
+            class: "col-12 col-md-6 mb-2 text-left",
+        })
+        
+        let COL_6_2 = $("<div/>", {
+            class: "col-12 col-md-6 mb-2 text-right",
+        })
+        
+        let UPDATEBUTTON = $("<button/>", {
+            class: "btn btn-primary btn-sm submit-pricing-matrix-form waves-effect waves-light",
+            text: "Update",
+            type: "button",
+            id: "submitPricingMatrixForm-" + matrixCode,
+            attr: { "data-targetform": "pricingMatrixForm-" + matrixCode },
+        })
+            .on("click", function () {
+                updateMatrix(this)
+            })
+        
+        COL_6_2.append(UPDATEBUTTON)
+        
+        return ROW.append(COL_6_1, COL_6_2)
+    }
+    
+    const toggleCompletedMatrices = function (toggle) {
+        let showElements = true
+        if (toggle) {
+            showElements = toggle
+        }
+        
+        if (!$(_button_toggle_completed_matrices).attr("data-shown")) {
+            $(_button_toggle_completed_matrices).attr("data-shown", (showElements === true) ? "true" : "false")
+        }
+        
+        if ($(_button_toggle_completed_matrices).attr("data-shown") === "false") {
+            $(_button_toggle_completed_matrices).attr("data-shown", "true")
+            $(_button_toggle_completed_matrices).text("Hide Completed Matrices")
+            showElements = true
+        } else {
+            $(_button_toggle_completed_matrices).attr("data-shown", "false")
+            $(_button_toggle_completed_matrices).text("Show Completed Matrices")
+            showElements = false
+        }
+        
+        if (showElements) {
+            $("[data-matrixcomplete='true']").show()
+        } else {
+            $("[data-matrixcomplete='true']").hide()
+        }
+        
+    }
+    
+    const toggleCompletedPricings = function () {
+        let showElements = true
+        
+        if (!$(_button_toggle_completed_pricings).attr("data-shown")) {
+            $(_button_toggle_completed_pricings).attr("data-shown", (showElements === true) ? "true" : "false")
+        }
+        
+        if ($(_button_toggle_completed_pricings).attr("data-shown") === "false") {
+            $(_button_toggle_completed_pricings).attr("data-shown", "true")
+            $(_button_toggle_completed_pricings).text("Hide Completed Pricings")
+            showElements = true
+        } else {
+            $(_button_toggle_completed_pricings).attr("data-shown", "false")
+            $(_button_toggle_completed_pricings).text("Show Completed Pricings")
+            showElements = false
+        }
+        
+        if (showElements) {
+            $("[data-pricingcomplete='true']").show()
+        } else {
+            $("[data-pricingcomplete='true']").hide()
+        }
+        
+    }
+    
+    const toggleUnitFilter = function () {
+        let elements = document.querySelectorAll(`[data-type='unit']`)
+        let showElements
+        
+        if (!$(_button_collapse_units).attr("data-shown")) {
+            $(_button_collapse_units).attr("data-shown", "true")
+            showElements = true
+        }
+        
+        if ($(_button_collapse_units).attr("data-shown") === "false") {
+            $(_button_collapse_units).attr("data-shown", "true")
+            $(_button_collapse_units).text("Collapse Units")
+            showElements = true
+        } else {
+            $(_button_collapse_units).attr("data-shown", "false")
+            $(_button_collapse_units).text("Expand Units")
+            showElements = false
+        }
+        
+        for (let i = 0; i < elements.length; i++) {
+            let element = elements[i]
+            let id = $(element).attr("id")
+            $("#" + id).collapse((showElements === true) ? "show" : "hide")
+        }
+    }
+    
+    const toggleSeasonFilter = function () {
+        let elements = document.querySelectorAll(`[data-type='season']`)
+        let showElements = true
+        
+        if (!$(_button_collapse_seasons).attr("data-shown")) {
+            $(_button_collapse_seasons).attr("data-shown", "true")
+        }
+        
+        if ($(_button_collapse_seasons).attr("data-shown") === "false") {
+            $(_button_collapse_seasons).attr("data-shown", "true")
+            $(_button_collapse_seasons).text("Collapse Seasons")
+            showElements = true
+        } else {
+            $(_button_collapse_seasons).attr("data-shown", "false")
+            $(_button_collapse_seasons).text("Expand Seasons")
+            showElements = false
+        }
+        
+        for (let i = 0; i < elements.length; i++) {
+            let element = elements[i]
+            let id = $(element).attr("id")
+            $("#" + id).collapse((showElements === true) ? "show" : "hide")
+        }
+    }
+    
+    const filtersReset = function (callback) {
+        $("[data-matrixcomplete='true']").show()
+        $(_button_toggle_completed_matrices).attr("data-shown", "true")
+        $(_button_toggle_completed_matrices).text("Hide Completed Matrices")
+        
+        $("[data-pricingcomplete='true']").show()
+        $(_button_toggle_completed_pricings).attr("data-shown", "true")
+        $(_button_toggle_completed_pricings).text("Hide Completed Pricings")
+        
+        $(_pricing_strategy_season_id).val([]).trigger("change")
+        $(_pricing_strategy_unit_id).val([]).trigger("change")
+        
+        $(_button_collapse_units).attr("data-shown", "false")
+        $(_button_collapse_units).text("Expand Units")
+        toggleUnitFilter()
+        
+        $(_button_collapse_seasons).attr("data-shown", "false")
+        $(_button_collapse_seasons).text("Expand Seasons")
+        toggleSeasonFilter()
+        
+        return callback(1)
+    }
+    
+    const resetFilters = function () {
+        $(_product_edit_pricing_section_reset_filters)
+            .html("<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span> Loading...")
+        filtersReset(function (data) {
+            if (data) {
+                $(_product_edit_pricing_section_reset_filters).html("Reset Filters")
+            }
+        })
+    }
+    
+    const showAllFilterUnits = function () {
+        let units = Array.from(Unit.all.values())
+        $.each(units, function (i, unit) {
+            let unitId = unit.id
+            let dataVal = "unit-" + unitId
+            let elements = document.querySelectorAll(`[data-sectiontype='${dataVal}']`)
+            $.each(elements, function (i, el) {
+                $(el).show()
+            })
+        })
+    }
+    
+    const hideAllFilterUnits = function () {
+        let units = Array.from(Unit.all.values())
+        $.each(units, function (i, unit) {
+            let unitId = unit.id
+            let dataVal = "unit-" + unitId
+            let elements = document.querySelectorAll(`[data-sectiontype='${dataVal}']`)
+            $.each(elements, function (i, el) {
+                $(el).hide()
+            })
+        })
+    }
+    
+    const showAllFilterSeasons = function () {
+        let seasons = Array.from(Season.all.values())
+        $.each(seasons, function (i, season) {
+            let seasonId = season.id
+            let dataVal = "season-" + seasonId
+            let elements = document.querySelectorAll(`[data-sectiontype='${dataVal}']`)
+            $.each(elements, function (i, el) {
+                $(el).show()
+            })
+        })
+    }
+    
+    const hideAllFilterSeasons = function () {
+        let seasons = Array.from(Season.all.values())
+        $.each(seasons, function (i, season) {
+            let seasonId = season.id
+            let dataVal = "season-" + seasonId
+            let elements = document.querySelectorAll(`[data-sectiontype='${dataVal}']`)
+            $.each(elements, function (i, el) {
+                $(el).hide()
+            })
+        })
+    }
+    
+    const filterUnits = function () {
+        hideAllFilterUnits()
+        let unitIds = getListOfIds($(_pricing_strategy_unit_id).val())
+        if (unitIds.length) {
+            $.each(unitIds, function (i, unitId) {
+                let dataVal = "unit-" + unitId
+                let units = document.querySelectorAll(`[data-sectiontype='${dataVal}']`)
+                $.each(units, function (i, el) {
+                    $(el).show()
+                })
+            })
+        } else {
+            showAllFilterUnits()
+        }
+        
+    }
+    
+    const filterSeasons = function () {
+        hideAllFilterSeasons()
+        let seasonIds = getListOfIds($(_pricing_strategy_season_id).val())
+        if (seasonIds.length) {
+            $.each(seasonIds, function (i, seasonId) {
+                let dataVal = "season-" + seasonId
+                let units = document.querySelectorAll(`[data-sectiontype='${dataVal}']`)
+                $.each(units, function (i, el) {
+                    $(el).show()
+                })
+            })
+        } else {
+            showAllFilterSeasons()
+        }
+        
+    }
+    
+    const emptyPricingMatrix = function () {
+        PricingWorksheet.incompletePricings = new Map()
+        PricingWorksheet.incompleteMatrices = new Map()
+        $(_product_edit_matrix_form).empty()
+        $(_product_edit_matrix_form).html(`
+                <div style="top:0;left:0;width:100%;height:500px;background:rgba(0,0,0,.25);" class="flex-center">
+                    <div class="preloader-wrapper active">
+                        <div class="spinner-layer spinner-blue-only">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `)
+    }
+    
+    const buildTableVariantHeadingBaseInputs = function (pricing) {
+        let CONTAINER = $("<div/>", {
+            class: "p-2",
+        })
+        let ROW = $("<div/>", {
+            class: "row",
+        })
+        
+        if (pricing) {
+            let matrixCode = pricing.matrix_code
+            let matrix = Matrix.all.get(matrixCode)
+            let matrixId = ""
+            let matrixName = (pricing.name) ? pricing.name : ""
+            let beenSaved = false
+            let cost, margin = null
+            
+            if (matrix) {
+                matrixId = (matrix.id) ? matrix.id : null
+                margin = (matrix.margin) ? matrix.margin : null
+                cost = (matrix.cost) ? matrix.cost : null
+                beenSaved = (pricing.been_saved === 1)
+            }
+            
+            let COL_3_1 = $("<div/>", {
+                class: "col-12 col-md-3 mb-2 px-4",
+            })
+            
+            let COL_3_2 = $("<div/>", {
+                class: "col-12 col-md-3 mb-2 px-4",
+            })
+            
+            let COL_3_3 = $("<div/>", {
+                class: "col-12 col-md-3 mb-2 px-4",
+            })
+            
+            let COL_3_4 = $("<div/>", {
+                class: "col-12 col-md-3 mb-2 px-4",
+            })
+            
+            let LABELCOST = $("<label/>", {
+                class: "",
+                for: "base_cost_" + matrixCode,
+                text: "Cost",
+            })
+            
+            let LABELMARGIN = $("<label/>", {
+                class: "",
+                for: "base_margin_" + matrixCode,
+                text: "Margin",
+            })
+            
+            let LABELMATRIXID = $("<label/>", {
+                class: "dev-element d-none",
+                for: "base_matrix_id_" + matrixCode,
+                text: "Matrix Id:",
+            })
+            
+            let WRAPPERMATRIXNAME = $("<div/>", {
+                class: "form-element",
+            })
+            
+            let LABELMATRIXNAME = $("<label/>", {
+                class: "dev-element d-none",
+                for: "base_matrix_name_" + matrixCode,
+                text: "Matrix Name:",
+            })
+            
+            let INPUTMATRIXNAME = $("<input/>", {
+                class: "form-control dev-element",
+                type: "hidden",
+                name: "baseMatrixName",
+                readonly: "readonly",
+                disabled: "disabled",
+                id: "base_matrix_name_" + matrixCode,
+            })
+                .val(matrixName)
+            
+            let INPUTMATRIXID = $("<input/>", {
+                class: "form-control dev-element",
+                type: "hidden",
+                name: "baseMatrixId",
+                readonly: "readonly",
+                disabled: "disabled",
+                id: "base_matrix_id_" + matrixCode,
+            })
+                .val(matrixId)
+            
+            let INPUTCOST = $("<input/>", {
+                class: "form-control",
+                id: "base_cost_" + matrixCode,
+                name: "baseCost",
+                attr: {
+                    "data-targetform": "pricingMatrixForm-" + matrixCode,
+                },
+            })
+                .on("keyup", function () {
+                    let form = document.getElementById($(this).attr("data-targetform"))
+                    let val = this.value
+                    let costInputs = form.querySelectorAll(".cost")
+                    costInputs.forEach(el => {
+                        if (!el.disabled) {
+                            $(el).val(this.value)
+                            if (this.value !== "") {
+                                $(el).parent("div").find("label").addClass("active")
+                            } else {
+                                $(el).parent("div").find("label").removeClass("active")
+                            }
+                        }
+                    })
+                })
+                .on("click", function () {
+                    $(this).select()
+                })
+                .val(cost)
+            
+            let INPUTMARGIN = $("<input/>", {
+                class: "form-control",
+                id: "base_margin_" + matrixCode,
+                name: "baseMargin",
+                attr: {
+                    "data-targetform": "pricingMatrixForm-" + matrixCode,
+                },
+            })
+                .on("keyup", function () {
+                    let form = document.getElementById($(this).attr("data-targetform"))
+                    let costInputs = form.querySelectorAll(".margin")
+                    costInputs.forEach(el => {
+                        if (!el.disabled) {
+                            $(el).val(this.value)
+                            if (this.value !== "") {
+                                $(el).parent("div").find("label").addClass("active")
+                            } else {
+                                $(el).parent("div").find("label").removeClass("active")
+                            }
+                        }
+                    })
+                })
+                .on("click", function () {
+                    $(this).select()
+                })
+                .val(margin)
+            
+            let WRAPPERCOST = $("<div/>", {
+                class: "form-element",
+            })
+            
+            let WRAPPERMATRIXID = $("<div/>", {
+                class: "form-element",
+            })
+            
+            let WRAPPERMATRIXCODE = $("<div/>", {
+                class: "form-element",
+            })
+            
+            let LABELMATRIXCODE = $("<label/>", {
+                class: "dev-element d-none",
+                for: "base_matrix_code_" + matrixCode,
+                text: "Matrix Code:",
+            })
+            
+            let INPUTMATRIXCODE = $("<input/>", {
+                class: "form-control dev-element",
+                type: "hidden",
+                name: "baseMatrixCode",
+                readonly: "readonly",
+                disabled: "disabled",
+                id: "base_matrix_code_" + matrixCode,
+            })
+                .val(matrixCode)
+            
+            let WRAPPERMARGIN = $("<div/>", {
+                class: "form-element",
+            })
+            
+            let ERRORCOST = $("<div/>", {
+                class: "error w-100 text-center",
+            })
+            
+            let ERRORMARGIN = $("<div/>", {
+                class: "error w-100 text-center",
+            })
+            
+            WRAPPERMATRIXID.append(LABELMATRIXID, INPUTMATRIXID)
+            WRAPPERCOST.append(LABELCOST, INPUTCOST, ERRORCOST)
+            WRAPPERMARGIN.append(LABELMARGIN, INPUTMARGIN, ERRORMARGIN)
+            WRAPPERMATRIXCODE.append(LABELMATRIXCODE, INPUTMATRIXCODE)
+            WRAPPERMATRIXNAME.append(LABELMATRIXNAME, INPUTMATRIXNAME)
+            
+            COL_3_1.append(WRAPPERCOST)
+            COL_3_2.append(WRAPPERMARGIN)
+            COL_3_3.append(WRAPPERMATRIXID)
+            COL_3_4.append(WRAPPERMATRIXCODE, WRAPPERMATRIXNAME)
+            ROW.append(COL_3_1, COL_3_2, COL_3_3, COL_3_4)
+            CONTAINER.append(ROW)
+        }
+        
+        return CONTAINER
+    }
+    
+    const getRowValues = function (row) {
+        let pricingId, variantId, pricingCode, matrixId, pricingCount = null, inputs = [],
+            vals = {
+                monCost: null,
+                tueCost: null,
+                wedCost: null,
+                thuCost: null,
+                friCost: null,
+                satCost: null,
+                sunCost: null,
+                monMargin: null,
+                tueMargin: null,
+                wedMargin: null,
+                thuMargin: null,
+                friMargin: null,
+                satMargin: null,
+                sunMargin: null,
+            }
+        
+        if ($(row).attr("data-dowrow") !== "true") {
+            matrixId = ($(row).attr("data-matrixid")) ? (!isNaN(parseInt($(row).attr("data-matrixid")))) ? parseInt($(row).attr("data-matrixid")) : null : null
+            pricingId = ($(row).attr("data-pricingid")) ? (!isNaN(parseInt($(row).attr("data-pricingid")))) ? parseInt($(row).attr("data-pricingid")) : null : null
+            variantId = ($(row).attr("data-variantid")) ? (!isNaN(parseInt($(row).attr("data-variantid")))) ? parseInt($(row).attr("data-variantid")) : null : null
+            pricingCode = ($(row).attr("data-pricingcode")) ? $(row).attr("data-pricingcode") : null
+            pricingCount = ($(row).attr("data-pricingcount")) ? (!isNaN(parseInt($(row).attr("data-pricingcount")))) ? parseInt($(row).attr("data-pricingcount")) : null : null
+            inputs = row.getElementsByTagName("input")
+            
+            $.each(inputs, function (k, el) {
+                let name = (el.name) ? el.name : null
+                let disabled = (el.disabled) ? el.disabled : false
+                let value = (el.value) ? el.value : null
+                if (!is_null(name) && !is_null(disabled) && !disabled) {
+                    vals[name] = (!isNaN(parseInt(value))) ? parseInt(value) : null
+                }
+            })
+            
+            return remove_nulls(
+                {
+                    id: pricingId,
+                    matrix_id: matrixId,
+                    variant_id: variantId,
+                    code: pricingCode,
+                    count: pricingCount,
+                    mon: vals.monCost,
+                    tue: vals.tueCost,
+                    wed: vals.wedCost,
+                    thu: vals.thuCost,
+                    fri: vals.friCost,
+                    sat: vals.satCost,
+                    sun: vals.sunCost,
+                    monMargin: vals.monMargin,
+                    tueMargin: vals.tueMargin,
+                    wedMargin: vals.wedMargin,
+                    thuMargin: vals.thuMargin,
+                    friMargin: vals.friMargin,
+                    satMargin: vals.satMargin,
+                    sunMargin: vals.sunMargin,
+                    enabled: 1,
+                    note: null,
+                },
+            )
+        }
+    }
+    
+    const buildPricingData = function (table, matrix) {
+        let pricings = []
+        let productId = $(table).attr("data-productid")
+        let seasonId = $(table).attr("data-seasonid")
+        let unitId = $(table).attr("data-unitid")
+        let matrixCode = ($(table).attr("data-matrixid"))
+        
+        for (let row of table.rows) {
+            let rowVals = getRowValues(row)
+            let pricingId, variantId, pricingCode, pricingCount = null, inputs = [],
+                vals = {
+                    monCost: null,
+                    tueCost: null,
+                    wedCost: null,
+                    thuCost: null,
+                    friCost: null,
+                    satCost: null,
+                    sunCost: null,
+                    monMargin: null,
+                    tueMargin: null,
+                    wedMargin: null,
+                    thuMargin: null,
+                    friMargin: null,
+                    satMargin: null,
+                    sunMargin: null,
+                }
+            if ($(row).attr("data-dowrow") !== "true") {
+                pricingId = ($(row).attr("data-pricingid")) ? (!isNaN(parseInt($(row).attr("data-pricingid")))) ? parseInt($(row).attr("data-pricingid")) : null : null
+                variantId = ($(row).attr("data-variantid")) ? (!isNaN(parseInt($(row).attr("data-variantid")))) ? parseInt($(row).attr("data-variantid")) : null : null
+                pricingCode = ($(row).attr("data-pricingcode")) ? $(row).attr("data-pricingcode") : null
+                pricingCount = ($(row).attr("data-pricingcount")) ? (!isNaN(parseInt($(row).attr("data-pricingcount")))) ? parseInt($(row).attr("data-pricingcount")) : null : null
+                inputs = row.getElementsByTagName("input")
+                
+                $.each(inputs, function (k, el) {
+                    let name = (el.name) ? el.name : null
+                    let disabled = (el.disabled) ? el.disabled : false
+                    let value = (el.value) ? el.value : null
+                    if (!is_null(name) && !is_null(disabled) && !disabled) {
+                        vals[name] = (!isNaN(parseInt(value))) ? parseInt(value) : null
+                    }
+                })
+                
+                pricings.push(remove_nulls(
+                    {
+                        id: pricingId,
+                        matrix_id: matrix.id,
+                        variant_id: variantId,
+                        code: pricingCode,
+                        count: pricingCount,
+                        mon: vals.monCost,
+                        tue: vals.tueCost,
+                        wed: vals.wedCost,
+                        thu: vals.thuCost,
+                        fri: vals.friCost,
+                        sat: vals.satCost,
+                        sun: vals.sunCost,
+                        monMargin: vals.monMargin,
+                        tueMargin: vals.tueMargin,
+                        wedMargin: vals.wedMargin,
+                        thuMargin: vals.thuMargin,
+                        friMargin: vals.friMargin,
+                        satMargin: vals.satMargin,
+                        sunMargin: vals.sunMargin,
+                        enabled: 1,
+                        note: null,
+                    },
+                ))
+            }
+        }
+        
+        return pricings
+    }
+    
+    const getFormValues = function (form) {
+        if (!form) {
+            return
+        }
+        let id = form.id
+        let table = document.getElementById(id + "-table")
+        let productId = $(table).attr("data-productid")
+        let seasonId = $(table).attr("data-seasonid")
+        let unitId = $(table).attr("data-unitid")
+        let matrixCode = ($(table).attr("data-matrixid"))
+        
+        let matrix = {
+            id: null,
+            code: (form.elements["baseMatrixCode"].value !== "") ? form.elements["baseMatrixCode"].value : "",
+            product_id: (!isNaN(parseInt(productId))) ? parseInt(productId) : null,
+            season_id: (!isNaN(parseInt(seasonId))) ? parseInt(seasonId) : null,
+            unit_id: (!isNaN(parseInt(unitId))) ? parseInt(unitId) : null,
+            name: (form.elements["baseMatrixName"].value !== "") ? form.elements["baseMatrixName"].value : "",
+            cost: (form.elements["baseCost"].value !== "") ? parseInt(form.elements["baseCost"].value) : null,
+            margin: (form.elements["baseMargin"].value !== "") ? parseInt(form.elements["baseMargin"].value) : null,
+            has_pricing: 1,
+            been_saved: 1,
+            enabled: 1,
+            pricings: [],
+        }
+        matrix.price = null
+        matrix.id = ($(table).attr("data-matrixid")) ? parseInt(($(table).attr("data-matrixid"))) : null
+        matrix.pricings = buildPricingData(table, matrix)
+        
+        return remove_nulls(matrix)
+    }
+    
+    const handlePricingWorksheetError = function (msg) {
+        toastr.error(msg)
+    }
+    
+    const update = function (dataToSend) {
+        if (dataToSend) {
+            sendUpdateRequest(dataToSend, function (data) {
+                let matrix
+                if (data) {
+                    matrix = data
+                    if (data[0]) {
+                        matrix = data[0]
+                    }
+                    let pricings = (matrix.pricings) ? matrix.pricings : []
+                    let pricingHold = new Map()
+                    //Console.log("matrix", matrix)
+                    //Console.log("pricings", pricings)
+                    
+                    Matrix.all.set(matrix.code, matrix)
+                    
+                    $.each(pricings, function (k, pricing) {
+                        Pricing.all.set(pricing.code, pricing)
+                    })
+                    
+                    PricingWorksheet.pricingWorksheet()
+                    toastr.success(`Matrix: ${matrix.name} - has been updated`)
+                }
+            })
+        }
+    }
+    
+    const pricingUpdate = function (dataToSend) {
+        if (dataToSend) {
+            sendUpdateRequestPricing(dataToSend, function (data) {
+                let pricing
+                if (data) {
+                    pricing = data
+                    if (data[0]) {
+                        pricing = data[0]
+                    }
+                    Pricing.all.set(pricing.code, pricing)
+                    
+                    PricingWorksheet.pricingWorksheet()
+                    toastr.success(`Pricing: ${pricing.name} - has been updated`)
+                }
+            })
+        }
+    }
+    
+    const sendUpdateRequest = function (dataToSend, callback) {
+        let url = "/api/v1.0/matrices/update"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handlePricingWorksheetError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                Console.log("error", e)
+            }
+        }
+    }
+    
+    const sendUpdateRequestPricing = function (dataToSend, callback) {
+        let url = "/api/v1.0/pricings/update"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handlePricingWorksheetError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                Console.log("error", e)
+            }
+        }
+    }
+    
+    const updateMatrix = function (_this) {
+        let dataToSend = getFormValues(document.getElementById($(_this).attr("data-targetform")))
+        
+        confirmDialog(`Would you like to update?`, (ans) => {
+            if (ans) {
+                update(dataToSend)
+            }
+        })
+    }
+    
+    const updatePricing = function (_this, row) {
+        let dataToSend = getRowValues(row)
+        
+        confirmDialog(`Would you like to update?`, (ans) => {
+            if (ans) {
+                pricingUpdate(dataToSend)
+            }
+        })
+    }
+    
+    const buildMatrixWrapper = function () {
+        return $("<div/>", {})
+    }
+    
+    const tableVariantHeading = function (pricing) {
+        let matrix
+        let H5 = $("<h5/>", {
+            class: "card-title d-flex justify-content-between m-2",
+        })
+        
+        if (pricing) {
+            matrix = Matrix.all.get(pricing.pricing_code)
+            if (!matrix) {
+                matrix = Matrix.set()
+            }
+        }
+        
+        let name = (pricing.name) ? pricing.name : "Pricing"
+        
+        if (parseInt(_pricing_strategy_types_id.value) === 1) {
+            name = "Unit Pricing"
+        } else if (parseInt(_pricing_strategy_types_id.value) === 3) {
+            name = "Daily Pricing"
+        }
+        
+        let SPAN = $("<span/>", {
+            class: "",
+            text: (name) ? name : "Pricing Variant",
+        })
+        
+        if (pricing && pricing.been_saved && pricing.been_saved === 1) {
+            H5.append(SPAN, completed)
+        } else {
+            H5.append(SPAN, incomplete)
+        }
+        
+        return H5
+    }
+    
+    const buildPricingRow = function (pricing) {
+        let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
+        let matrixCode = pricing.matrix_code
+        
+        let FORM = $("<form/>", {
+            id: "pricingMatrixForm-" + matrixCode,
+            class: "card card-body border border-dark rounded-lg mb-2 mt-2 p-0 ",
+            attr: { "novalidate": "novalidate" },
+        })
+        
+        if (pricing && pricing.been_saved && pricing.been_saved === 1) {
+            FORM.attr("data-matrixcomplete", "true")
+            
+            if (PricingWorksheet.incompleteMatrices.get(matrixCode)) {
+                PricingWorksheet.incompleteMatrices.delete(matrixCode)
+            }
+            
+        } else {
+            PricingWorksheet.incompleteMatrices.set(matrixCode, pricing)
+            FORM.attr("data-matrixcomplete", "false")
+        }
+        
+        let TABLECONTAINER = $("<div/>", {
+            class: "pl-1 pr-1",
+        })
+        
+        let TABLECONTAINERROW = $("<div/>", {
+            class: "row",
+        })
+        
+        let TABLECONTAINERCELL = $("<div/>", {
+            class: "col-12",
+        })
+        
+        let BASEELEMENTS = buildTableVariantHeadingBaseInputs(pricing)
+        
+        let BUTTONROW = buildPricingButtonRow(pricing)
+        
+        let TABLE = $("<table/>", {
+            class: "table table-bordered table-sm",
+            id: "pricingMatrixForm-" + matrixCode + "-table",
+            attr: {
+                "data-matrixcode": matrixCode,
+                "data-productid": productId,
+                "data-unitid": pricing.unit_id,
+                "data-seasonid": pricing.season_id,
+                "data-name": pricing.name,
+            },
+        })
+        
+        if (pricing.id) {
+            TABLE.attr("data-matrixid", pricing.id)
+        }
+        
+        let TBODY = $("<tbody/>", {})
+        let THEAD = $("<thead/>", {})
+            .append(tableDOW(pricing))
+        
+        for (let n = 0; n < pricing.variants.length; n++) {
+            let variantPricing = pricing.variants[n]
+            let BADGE = incomplete
+            
+            variantPricing.matrix_code = matrixCode
+            
+            let TR = $("<tr/>")
+            let I = $("<i/>", {
+                class: "far fa-edit",
+            })
+            
+            TR.attr({
+                "id": "tr-" + variantPricing.code,
+                "data-variantid": (variantPricing.variant_id) ? variantPricing.variant_id : null,
+                "data-pricingid": (variantPricing.id) ? variantPricing.id : null,
+                "data-pricingcode": (variantPricing.code) ? variantPricing.code : null,
+                "data-matrixcode": (variantPricing.matrix_code) ? variantPricing.matrix_code : null,
+                "data-pricingcount": (variantPricing.count) ? variantPricing.count : null,
+                "data-productid": productId,
+                "data-targetform": "pricingMatrixForm-" + variantPricing.matrix_code,
+                "data-seasonid": (variantPricing.season_id) ? variantPricing.season_id : null,
+                "data-name": (variantPricing.name) ? variantPricing.name : null,
+            })
+            if (variantPricing.been_saved === 1) {
+                TR.attr("data-pricingcomplete", "true")
+                BADGE = completed
+            } else {
+                TR.attr("data-pricingcomplete", "false")
+                PricingWorksheet.incompletePricings.set(variantPricing.pricing_code, variantPricing)
+            }
+            
+            let HEADINGSPANCOLUMN = $(`
+                        <td style="padding:0;">
+                            <div class="d-flex flex-column">
+                                <div class="p-1">
+                                    ${BADGE}
+                                </div>
+                                <div class="p-1">
+                                    <span class="table-variant-title">${pricing.name}</span>
+                                </div>
+                               
+                            </div>
+                        </td>
+                    `)
+            
+            TR.append(HEADINGSPANCOLUMN)
+            
+            let UPDATEBUTTON = $("<button/>", {
+                class: "btn btn-sm editRow btn-sm btn-teal waves-effect waves-light",
+                type: "button",
+                attr: {
+                    "data-variantid": (variantPricing.variant_id) ? variantPricing.variant_id : null,
+                    "data-pricingid": (variantPricing.id) ? variantPricing.id : null,
+                    "data-pricingcode": (variantPricing.code) ? variantPricing.code : null,
+                    "data-matrixcode": (variantPricing.matrix_code) ? variantPricing.matrix_code : null,
+                    "data-pricingcount": (variantPricing.count) ? variantPricing.count : null,
+                    "data-productid": productId,
+                    "data-targetform": "pricingMatrixForm-" + variantPricing.matrix_code,
+                    "data-seasonid": (variantPricing.season_id) ? variantPricing.season_id : null,
+                    "data-name": (variantPricing.name) ? variantPricing.name : null,
+                },
+            })
+                .append(I)
+            
+            if (variantPricing.matrix_id) {
+                UPDATEBUTTON.attr("data-matrixid", variantPricing.matrix_id)
+            }
+            
+            UPDATEBUTTON.on("click", function () {
+                let row = document.getElementById("tr-" + variantPricing.code)
+                
+                if (row) {
+                    updatePricing(this, row)
+                }
+            })
+            
+            for (let n = 0; n < daysOfTheWeek.length; n++) {
+                let TD = $("<td/>")
+                TD.append(buildCostElement(variantPricing, daysOfTheWeek[n]), buildMarginElement(variantPricing, daysOfTheWeek[n]))
+                TR.append(TD)
+            }
+            
+            let BUTTONCOLUMN = $("<td/>", {
+                class: "text-center td-editor",
+            })
+                .append(UPDATEBUTTON)
+            
+            TR.append(BUTTONCOLUMN)
+            
+            TBODY.append(TR)
+            
+        }
+        
+        TABLE.append(THEAD, TBODY)
+        TABLECONTAINER.append(TABLE)
+        TABLECONTAINERCELL.append(TABLECONTAINER)
+        TABLECONTAINERROW.append(TABLECONTAINERCELL)
+        
+        let HEADING = tableVariantHeading(pricing)
+        let HR = $("<hr/>", {
+            class: "ml-3 mr-3 mt-1 mb-3 color-dark",
+        })
+        return FORM.append(HEADING, HR, BASEELEMENTS, TABLECONTAINERROW, BUTTONROW)
+    }
+    
+    const buildMarginElement = function (variantPricing, day) {
+        let matrixCode = variantPricing.matrix_code
+        let pricingCode = matrixCode + "-" + variantPricing.variant_id + "-" + variantPricing.count
+        let pricing = Pricing.all.get(pricingCode)
+        
+        if (!pricing) {
+            pricing = Pricing.set()
+            pricing.note = "generated form"
+        }
+        
+        pricing.product_id = variantPricing.product_id
+        pricing.season_id = variantPricing.product_id
+        pricing.unit_id = variantPricing.product_id
+        pricing.variant_id = variantPricing.variant_id
+        pricing.matrix_code = matrixCode
+        pricing.pricing_code = pricingCode
+        pricing.name = variantPricing.name
+        pricing.code = pricingCode
+        
+        if (day) {
+            let dayDisabled = isDisabled(day, variantPricing.season_id)
+            let marginDay = day + "Margin"
+            let margin = (pricing[marginDay]) ? pricing[marginDay] : null
+            
+            let INPUT = $("<input/>", {
+                type: "text",
+                id: "cm-" + pricingCode + "-" + day,
+                name: marginDay,
+                class: "form-control margin m-0",
+            })
+                .attr("data-element", "margin")
+            
+            let FORMELEMENT = $("<div/>", {
+                class: "md-form md-outline form-sm input-with-post-icon mb-2 mt-3",
+            })
+            
+            let LABEL = $("<label/>", {
+                text: "Margin",
+                for: "cm-" + pricingCode + "-" + day,
+            })
+            
+            let I = $("<i/>", {
+                class: "fas fa-percentage input-prefix",
+            })
+            
+            if (isDisabled(day, variantPricing.season_id)) {
+                INPUT.attr("disabled", "disabled")
+                INPUT.val("")
+                LABEL.removeClass("active")
+                FORMELEMENT.addClass("disabled")
+            } else {
+                FORMELEMENT.removeClass("disabled")
+                if (margin > 0) {
+                    INPUT.val(margin)
+                    LABEL.addClass("active")
+                }
+            }
+            
+            FORMELEMENT.append(I, INPUT, LABEL)
+            
+            return FORMELEMENT
+        }
+    }
+    
+    const buildCostElement = function (variantPricing, day) {
+        let matrixCode = variantPricing.matrix_code
+        let pricingCode = matrixCode + "-" + variantPricing.variant_id + "-" + variantPricing.count
+        let pricing = Pricing.all.get(pricingCode)
+        
+        if (!pricing) {
+            pricing = Pricing.set()
+            pricing.note = "generated form"
+        }
+        
+        pricing.product_id = variantPricing.product_id
+        pricing.season_id = variantPricing.product_id
+        pricing.unit_id = variantPricing.product_id
+        pricing.variant_id = variantPricing.variant_id
+        pricing.matrix_code = matrixCode
+        pricing.pricing_code = pricingCode
+        pricing.name = variantPricing.name
+        pricing.code = pricingCode
+        
+        if (day) {
+            let costDayName = day + "Cost"
+            let cost = (pricing[day]) ? pricing[day] : 0
+            let INPUT = $("<input/>", {
+                type: "text",
+                name: costDayName,
+                id: "ce-" + pricingCode + "-" + day,
+                class: "form-control cost m-0",
+            })
+                .attr("data-element", "cost")
+            
+            let FORMELEMENT = $("<div/>", {
+                class: "md-form md-outline form-sm input-with-pre-icon mt-2 mb-3",
+            })
+            
+            let LABEL = $("<label/>", {
+                text: "Cost",
+                for: "ce-" + pricingCode + "-" + day,
+            })
+            
+            let I = $("<i/>", {
+                class: "fas fa-dollar-sign input-prefix",
+            })
+            
+            if (isDisabled(day, variantPricing.season_id)) {
+                INPUT.attr("disabled", "disabled")
+                INPUT.val("")
+                LABEL.removeClass("active")
+                FORMELEMENT.addClass("disabled")
+            } else {
+                FORMELEMENT.removeClass("disabled")
+                if (cost > 0) {
+                    INPUT.val(cost)
+                    LABEL.addClass("active")
+                }
+            }
+            
+            FORMELEMENT.append(I, INPUT, LABEL)
+            
+            return FORMELEMENT
+        }
+    }
+    
+    const buildSeasonHeading = function (season, matrixId, count) {
+        let seasonBackgroundColor, seasonTextColor, seasonBorderColor
+        if (season) {
+            let seasonName = (season.season_name) ? season.season_name : null
+            let seasonId = (season.season_id) ? season.season_id : null
+            let hasSeason = Season.all.get(seasonId)
+            
+            if (hasSeason) {
+                seasonBackgroundColor = (hasSeason.color_scheme.background_color) ? hasSeason.color_scheme.background_color : null
+                seasonTextColor = (hasSeason.color_scheme.text_color) ? hasSeason.color_scheme.text_color : null
+                seasonBorderColor = (hasSeason.color_scheme.border_color) ? hasSeason.color_scheme.border_color : null
+            }
+            
+            let SEASONHEADINGWRAPPER = $("<div/>", {
+                class: "card-header p-0",
+                role: "tab",
+                id: "seasonHeading" + matrixId + "-" + count,
+            })
+            
+            let I = $("<i/>", {
+                class: "fas fa-angle-down rotate-icon",
+            })
+            
+            let A = $("<a/>", {
+                href: "#collapse" + matrixId + "-" + count,
+                "aria-controls": "collapse" + matrixId + "-" + count,
+                "data-toggle": "collapse",
+                "aria-expanded": "true",
+            })
+            
+            let SPAN = $("<span/>", {
+                text: seasonName,
+            })
+            
+            let HEADING = $("<h5/>", {
+                class: "mb-0 w-100 d-flex align-items-center justify-content-between p-1",
+                css: {
+                    "background-color": `${seasonBackgroundColor}`,
+                    "border": `solid 1px ${seasonBorderColor}`,
+                    "color": `${seasonTextColor}`,
+                },
+            })
+            
+            SEASONHEADINGWRAPPER.append(A.append(HEADING.append(SPAN, I)))
+            
+            return SEASONHEADINGWRAPPER
+        }
+    }
+    
+    const buildUnitHeading = function (unit, count) {
+        let id = unit.id + "-" + count
+        let unitName = (unit.name) ? unit.name : null
+        let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+        let hasUnit = Unit.all.get(unitId)
+        if (hasUnit) {
+            let UNITHEADINGWRAPPER = $("<div/>", {
+                class: "card-header p-0",
+                role: "tab",
+                id: "unitHeading-" + id,
+            })
+            
+            let I = $("<i/>", {
+                class: "fas fa-angle-down rotate-icon",
+            })
+            
+            let A = $("<a/>", {
+                href: "#unitCollapse-" + id,
+                "aria-controls": "unitCollapse-" + id,
+                "data-toggle": "collapse",
+                "aria-expanded": "true",
+            })
+            
+            let SPAN = $("<span/>", {
+                text: unitName,
+            })
+            
+            let HEADING = $("<h5/>", {
+                class: "mb-0 w-100 d-flex align-items-center justify-content-between p-1",
+            })
+            
+            UNITHEADINGWRAPPER.append(A.append(HEADING.append(SPAN, I)))
+            
+            return UNITHEADINGWRAPPER
+        }
+    }
+    
+    const buildPricingTables = function (matrices) {
+        
+        let $ACCORDIONWRAPPER = buildMatrixWrapper()
+        
+        if (matrices) {
+            if (matrices.units) {
+                let unitCount = 0
+                $.each(matrices.units, function (index, unit) {
+                    let seasons = unit.seasons
+                    let UNITWRAPPER = buildUnitWrapper(unit, unitCount)
+                    let UNITHEADING = buildUnitHeading(unit, unitCount)
+                    let UNITCONTAINER = $("<div/>", {
+                        class: "card border border-0",
+                    })
+                    let UNITCOLLAPSE = $("<div/>", {
+                        class: "collapse show",
+                        role: "tabpanel",
+                        "data-parent": "#accordionUnit-" + unit.id + "-" + unitCount,
+                        id: "unitCollapse-" + unit.id + "-" + unitCount,
+                        "aria-labelledby": "unitHeading-" + unit.id + "-" + unitCount,
+                    })
+                        .attr("data-type", "unit")
+                    
+                    let UNITCARDBODY = $("<div/>", {
+                        class: "card-body px-1",
+                    })
+                    
+                    let count = 0
+                    $.each(seasons, function (i, season) {
+                        let seasonBackgroundColor, seasonTextColor, seasonBorderColor
+                        let matrixId = _product_id.value + "-" + unit.id + "-" + season.season_id
+                        let pricings = season.pricings
+                        let seasonId = (season.season_id) ? season.season_id : null
+                        let hasSeason = Season.all.get(seasonId)
+                        
+                        let SEASONWRAPPER = buildSeasonWrapper(season, matrixId, count)
+                        let SEASONHEADING = buildSeasonHeading(season, matrixId, count)
+                        let SEASONCONTAINER = $("<div/>", {
+                            class: "card",
+                        })
+                        let SEASONCOLLAPSE = $("<div/>", {
+                            class: "collapse show",
+                            role: "tabpanel",
+                            "data-parent": "#accordionEx" + matrixId + "-" + count,
+                            id: "collapse" + matrixId + "-" + count,
+                            "aria-labelledby": "seasonHeading" + matrixId + "-" + count,
+                        })
+                            .attr("data-type", "season")
+                        
+                        if (hasSeason) {
+                            seasonBackgroundColor = hexToRgb(hasSeason.color_scheme.background_color)
+                            seasonTextColor = hasSeason.color_scheme.text_color
+                            seasonBorderColor = hasSeason.color_scheme.border_color
+                        }
+                        
+                        let SEASONCARDBODY = $("<div/>", {
+                            class: "card-body p-1",
+                            css: {
+                                "background": `rgba(${seasonBackgroundColor.join(",")}, .15)`,
+                                "color": seasonTextColor,
+                            },
+                        })
+                        
+                        $.each(pricings, function (ind, pricing) {
+                            
+                            SEASONCARDBODY.append(buildPricingRow(pricing))
+                            SEASONCOLLAPSE.append(SEASONCARDBODY)
+                        })
+                        
+                        SEASONCONTAINER.append(SEASONHEADING, SEASONCOLLAPSE)
+                        SEASONWRAPPER.append(SEASONCONTAINER)
+                        UNITCARDBODY.append(SEASONWRAPPER)
+                        UNITCOLLAPSE.append(UNITCARDBODY)
+                        count = count + 1
+                    })
+                    
+                    UNITCONTAINER.append(UNITHEADING, UNITCOLLAPSE)
+                    UNITWRAPPER.append(UNITCONTAINER)
+                    $ACCORDIONWRAPPER.append(UNITWRAPPER)
+                    unitCount += 1
+                })
+            }
+        }
+        
+        return $ACCORDIONWRAPPER
+    }
+    
+    const getVariants = function () {
+        let variantsUsed = []
+        let pricingStrategyType = (!isNaN(parseInt(_pricing_strategy_types_id.value))) ? parseInt(_pricing_strategy_types_id.value) : null
+        switch (pricingStrategyType) {
+            case 1:
+                variantsUsed = [36]
+                break
+            case 2:
+                let variantList = Array.from(Variant.all.values())
+                for (let n = 0; n < variantList.length; n++) {
+                    if (variantList[n].used_in_pricing) {
+                        variantsUsed.push(variantList[n].id)
+                    }
+                }
+                break
+            default:
+                variantsUsed = [36]
+                break
+        }
+        
+        return variantsUsed
+    }
+    
+    const getSeasons = function () {
+        var seasonsUsed = []
+        var seasonList = Array.from(Season.all.values())
+        for (let n = 0; n < seasonList.length; n++) {
+            seasonsUsed.push(seasonList[n])
+        }
+        
+        return seasonsUsed
+    }
+    
+    const getUnits = function () {
+        var unitsUsed = []
+        var unitList = Array.from(Unit.all.values())
+        for (let n = 0; n < unitList.length; n++) {
+            unitsUsed.push(unitList[n])
+        }
+        
+        return unitsUsed
+    }
+    
+    const getVariantDetails = function (variantId) {
+        let name = ""
+        if (parseInt(_pricing_strategy_types_id.value) === 1) {
+            name = "Unit Pricing"
+        } else if (parseInt(_pricing_strategy_types_id.value) === 3) {
+            name = "Daily Pricing"
+        }
+        
+        let details = {
+            category_id: 1,
+            code: "VA-00000000036-OTHR",
+            created_by: user_id,
+            date_created: formatDateMySQL(),
+            date_modified: formatDateMySQL(),
+            enabled: 1,
+            id: 36,
+            max_age: null,
+            min_age: null,
+            modified_by: user_id,
+            name: name,
+            note: null,
+            used_in_pricing: 1,
+        }
+        let variant = Variant.all.get(variantId)
+        if (variant) {
+            details = Variant.set(variant)
+        }
+        
+        return details
+    }
+    
+    const addVariantList = function (unit, season, matrixCode, variantComboId) {
+        let variants = variantComboId.trim().split("-").map(Number)
+        let seasonId = parseInt(season.id)
+        let unitId = parseInt(unit.id)
+        let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
+        
+        let tempHold = new Map()
+        
+        $.each(variants, function (key, variantId) {
+            //let variant = Variant.all.get(variantId)
+            let variant = getVariantDetails(variantId)
+            
+            if (variant) {
+                
+                let hasTempHold = tempHold.get(variantId)
+                
+                if (hasTempHold) {
+                    let count = hasTempHold.count
+                    count = count + 1
+                    hasTempHold.count = count
+                    hasTempHold.name = count + " " + pluralize(variant.name)
+                    let pricingCode = matrixCode.toString() + "-" + variantId + "-" + count
+                    let pricing = Pricing.all.get(pricingCode)
+                    
+                    if (!pricing) {
+                        pricing = {
+                            aaa: "ok here 2",
+                            been_saved: 0,
+                            has_pricing: 0,
+                            code: matrixCode.toString() + "-" + variantId.toString() + "-" + count.toString(),
+                            count: count,
+                            created_by: user_id,
+                            date_created: formatDateMySQL(),
+                            date_modified: formatDateMySQL(),
+                            enabled: 1,
+                            fri: null,
+                            friMargin: null,
+                            id: null,
+                            matrix_code: matrixCode.toString(),
+                            matrix_id: null,
+                            modified_by: user_id,
+                            mon: null,
+                            monMargin: null,
+                            name: variant.name + " " + count,
+                            note: "generated form",
+                            pricing_code: pricingCode,
+                            product_id: productId,
+                            sat: null,
+                            satMargin: null,
+                            season_id: seasonId,
+                            sun: null,
+                            sunMargin: null,
+                            thu: null,
+                            thuMargin: null,
+                            tue: null,
+                            tueMargin: null,
+                            unit_id: unitId,
+                            variant_id: variantId,
+                            wed: null,
+                            wedMargin: null,
+                        }
+                    } else {
+                        pricing.aaa = 1
+                        pricing.has_pricing = 1
+                        pricing.been_saved = 1
+                    }
+                    
+                    hasTempHold.variants.push({
+                        aaa: "ok here",
+                        matrix_code: matrixCode.toString(),
+                        been_saved: 5,
+                        has_pricing: (pricing.has_pricing) ? pricing.has_pricing : 0,
+                        code: matrixCode.toString() + "-" + variantId.toString() + "-" + count.toString(),
+                        count: count,
+                        created_by: (pricing.created_by) ? pricing.created_by : user_id,
+                        date_created: formatDateMySQL(),
+                        date_modified: formatDateMySQL(),
+                        enabled: (pricing.enabled) ? pricing.enabled : 1,
+                        fri: (pricing.fri) ? pricing.fri : null,
+                        friMargin: (pricing.friMargin) ? pricing.friMargin : null,
+                        id: (pricing.id) ? pricing.id : null,
+                        matrix_id: (pricing.matrix_id) ? pricing.matrix_id : null,
+                        modified_by: (pricing.modified_by) ? pricing.matrix_id : user_id,
+                        mon: (pricing.mon) ? pricing.mon : null,
+                        monMargin: (pricing.monMargin) ? pricing.monMargin : null,
+                        name: variant.name + " " + count,
+                        note: "generated form",
+                        pricing_code: matrixCode.toString() + "-" + variantId.toString() + "-" + count.toString(),
+                        product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
+                        sat: (pricing.sat) ? pricing.sat : null,
+                        satMargin: (pricing.satMargin) ? pricing.satMargin : null,
+                        season_id: parseInt(season.id),
+                        sun: (pricing.sun) ? pricing.sun : null,
+                        sunMargin: (pricing.sunMargin) ? pricing.sunMargin : null,
+                        thu: (pricing.thu) ? pricing.thu : null,
+                        thuMargin: (pricing.thuMargin) ? pricing.thuMargin : null,
+                        tue: (pricing.tue) ? pricing.tue : null,
+                        tueMargin: (pricing.tueMargin) ? pricing.tueMargin : null,
+                        unit_id: unit.id,
+                        variant_id: variantId,
+                        wed: (pricing.wed) ? pricing.wed : null,
+                        wedMargin: (pricing.wedMargin) ? pricing.wedMargin : null,
+                    })
+                    
+                } else {
+                    let count = 1
+                    let pricingCode = matrixCode.toString() + "-" + variantId + "-" + count
+                    let pricing = Pricing.all.get(pricingCode)
+                    
+                    if (!pricing) {
+                        
+                        pricing = {
+                            aaa: "ok here 1",
+                            has_pricing: 0,
+                            been_saved: 0,
+                            code: pricingCode,
+                            count: count,
+                            created_by: user_id,
+                            date_created: formatDateMySQL(),
+                            date_modified: formatDateMySQL(),
+                            enabled: 1,
+                            fri: null,
+                            friMargin: null,
+                            id: null,
+                            matrix_code: matrixCode,
+                            pricing_code: pricingCode,
+                            matrix_id: null,
+                            modified_by: user_id,
+                            mon: null,
+                            monMargin: null,
+                            name: variant.name + " " + count,
+                            note: "generated form",
+                            product_id: productId,
+                            sat: null,
+                            satMargin: null,
+                            season_id: seasonId,
+                            sun: null,
+                            sunMargin: null,
+                            thu: null,
+                            thuMargin: null,
+                            tue: null,
+                            tueMargin: null,
+                            unit_id: unitId,
+                            variant_id: variant.id,
+                            wed: null,
+                            wedMargin: null,
+                        }
+                    } else {
+                        pricing.aaa = "hasPricing"
+                        pricing.been_saved = 1
+                        pricing.has_pricing = 1
+                    }
+                    
+                    hasTempHold = {
+                        name: count + " " + variant.name,
+                        variant_combo_id: variantComboId.trim(),
+                        count: count,
+                        variants: [
+                            {
+                                aaa: (pricing.aaa) ? pricing.aaa : "ghg",
+                                code: pricingCode,
+                                has_pricing: (pricing.has_pricing) ? pricing.has_pricing : 0,
+                                variant_id: variantId,
+                                name: variant.name + " " + count,
+                                count: count,
+                                created_by: pricing.created_by,
+                                date_created: (pricing.date_created) ? pricing.date_created : formatDateMySQL(),
+                                date_modified: (pricing.date_modified) ? pricing.date_modified : formatDateMySQL(),
+                                enabled: (pricing.enabled) ? pricing.enabled : 1,
+                                fri: null,
+                                friMargin: null,
+                                id: (pricing.id) ? pricing.id : null,
+                                matrix_code: matrixCode,
+                                matrix_id: (pricing.matrix_id) ? parseInt((pricing.matrix_id)) : null,
+                                modified_by: (pricing.modified_by) ? parseInt((pricing.modified_by)) : user_id,
+                                mon: (pricing.mon) ? parseInt((pricing.mon)) : null,
+                                monMargin: null,
+                                note: "fff",
+                                pricing_code: matrixCode + "-" + variantId + "-" + count,
+                                product_id: null,
+                                sat: null,
+                                satMargin: null,
+                                season_id: null,
+                                sun: null,
+                                sunMargin: null,
+                                thu: null,
+                                thuMargin: null,
+                                tue: null,
+                                tueMargin: null,
+                                unit_id: unit.id,
+                                wed: null,
+                                wedMargin: null,
+                            },
+                        ],
+                    }
+                }
+                
+                tempHold.set(variantId, hasTempHold)
+                
+            } else {
+                if (parseInt(variantId) === 36) {
+                    variant = {
+                        category_id: 1,
+                        code: "VA-00000000036-OTHR",
+                        created_by: 4,
+                        date_created: "2022-01-18 08:08:22",
+                        date_modified: "2022-01-18 12:02:26",
+                        enabled: 1,
+                        id: 36,
+                        max_age: null,
+                        min_age: null,
+                        modified_by: 4,
+                        name: "Other",
+                        note: null,
+                        used_in_pricing: 1,
+                    }
+                }
+            }
+            
+        })
+        
+        let beenSaved, pricingBeenSaved = 0
+        let myVariants = []
+        let name = []
+        let pricingCode, mCode
+        let matrixId, pricingId = null
+        
+        $.each(Array.from(tempHold.values()), function (key, variantValues) {
+            name.push(variantValues.name)
+            
+            if (variantValues.variants) {
+                $.each(variantValues.variants, function (k, v) {
+                    pricingCode = matrixCode + "-" + v.variant_id + "-" + v.count
+                    mCode = matrixCode
+                    //let variant = Variant.all.get(v.variant_id)
+                    let variant = getVariantDetails(v.variant_id)
+                    let matrix = Matrix.all.get(mCode)
+                    let pricing = Pricing.all.get(pricingCode)
+                    let season = Season.all.get(seasonId)
+                    let matrix_code = mCode
+                    let sun = null
+                    let mon = null
+                    let tue = null
+                    let wed = null
+                    let thu = null
+                    let fri = null
+                    let sat = null
+                    let sunMargin = null
+                    let monMargin = null
+                    let tueMargin = null
+                    let wedMargin = null
+                    let thuMargin = null
+                    let friMargin = null
+                    let satMargin = null
+                    let enabled = 1
+                    let note = null
+                    let date_created = formatDateMySQL()
+                    let date_modified = formatDateMySQL()
+                    let created_by = user_id
+                    let modified_by = user_id
+                    
+                    if (matrix) {
+                        matrixId = matrix.id
+                        beenSaved = 1
+                    }
+                    
+                    if (pricing) {
+                        pricingId = pricing.id
+                        pricingBeenSaved = 1
+                        sun = pricing.sun
+                        mon = pricing.mon
+                        tue = pricing.tue
+                        wed = pricing.wed
+                        thu = pricing.thu
+                        fri = pricing.fri
+                        sat = pricing.sat
+                        sunMargin = pricing.sunMargin
+                        monMargin = pricing.monMargin
+                        tueMargin = pricing.tueMargin
+                        wedMargin = pricing.wedMargin
+                        thuMargin = pricing.thuMargin
+                        friMargin = pricing.friMargin
+                        satMargin = pricing.satMargin
+                        enabled = pricing.enabled
+                        note = pricing.note
+                        date_created = pricing.date_created
+                        date_modified = pricing.date_modified
+                        created_by = pricing.created_by
+                        modified_by = pricing.modified_by
+                    }
+                    
+                    let tempV = {
+                        count: v.count,
+                        been_saved: pricingBeenSaved,
+                        code: pricingCode,
+                        pricing_code: pricingCode,
+                        product_id: productId,
+                        unit_id: unitId,
+                        season_id: seasonId,
+                        variant_id: v.variant_id,
+                        matrix_id: matrixId,
+                        name: variant.name + " " + v.count,
+                        id: pricingId,
+                        sun: sun,
+                        mon: mon,
+                        tue: tue,
+                        wed: wed,
+                        thu: thu,
+                        fri: fri,
+                        sat: sat,
+                        sunMargin: sunMargin,
+                        monMargin: monMargin,
+                        tueMargin: tueMargin,
+                        wedMargin: wedMargin,
+                        thuMargin: thuMargin,
+                        friMargin: friMargin,
+                        satMargin: satMargin,
+                        enable: enabled,
+                        note: note,
+                        date_created: date_created,
+                        date_modified: date_modified,
+                        created_by: created_by,
+                        modified_by: modified_by,
+                    }
+                    
+                    tempV["matrix_code"] = "H"
+                    myVariants.push(tempV)
+                })
+            }
+            
+        })
+        
+        name = name.join(" - ")
+        let been_saved = 0
+        let cost = null
+        let margin = null
+        let m = Matrix.all.get(matrixCode)
+        
+        if (m) {
+            been_saved = 1
+            cost = m.cost
+            margin = m.margin
+        }
+        
+        return {
+            name: name,
+            cost: cost,
+            margin: margin,
+            season_id: seasonId,
+            unit_id: unitId,
+            product_id: productId,
+            been_saved: been_saved,
+            matrix_code: matrixCode,
+            id: (matrixId) ? matrixId : null,
+            variants: myVariants,
+        }
+    }
+    
+    const getVariantCombinations = function (depth, baseString, arrLetters) {
+        for (let i = 0; i < arrLetters.length; i++) {
+            if (depth === 1) {
+                let variantComboId = baseString + arrLetters[i]
+                
+                let combos = variantComboId.split('-').map(function (item) {
+                    return parseInt(item, 10)
+                })
+                
+                combos = combos.sort().join("-")
+                
+                let hasVariantComboIndex = variantCombinations.indexOf(variantComboId)
+                if (hasVariantComboIndex < 0) {
+                    variantCombinations.push(combos)
+                }
+                
+            } else {
+                let id = arrLetters[i]
+                getVariantCombinations(depth - 1, baseString + arrLetters[i] + "-", arrLetters)
+            }
+        }
+    }
+    
+    /** This is a description of the buildPricingWorksheet function. */
+    const buildPricingWorksheet = function () {
+        let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
+        let worksheet = {
+            id: null,
+            units: [],
+        }
+        
+        variantList = getVariants()
+        seasonList = getSeasons()
+        unitList = getUnits()
+        
+        //loop through units
+        for (let m = 0; m < unitList.length; m++) {
+            variantCombinations = []
+            let unit = unitList[m]
+            let unitId = parseInt(unit.id)
+            let max_pax = (unit.max_pax) ? parseInt(unit.max_pax) : 5
+            let min_pax = (unit.min_pax) ? parseInt(unit.min_pax) : 1
+            
+            let pricingStrategyType = (!isNaN(parseInt(_pricing_strategy_types_id.value))) ? parseInt(_pricing_strategy_types_id.value) : null
+            switch (pricingStrategyType) {
+                case 1:
+                    min_pax = 1
+                    max_pax = 1
+                    break
+                case 2:
+                    if (min_pax > max_pax) {
+                        let temp = max_pax
+                        max_pax = min_pax
+                        min_pax = temp
+                    }
+                    break
+                default:
+                    min_pax = 1
+                    max_pax = 1
+                    break
+            }
+            
+            for (let n = min_pax; n <= max_pax; n++) {
+                getVariantCombinations(n, "", getVariants())
+            }
+            
+            let variantCombinationList = variantCombinations
+            
+            let unitSection = {
+                id: unit.id,
+                name: unit.name,
+                seasons: [],
+            }
+            
+            //loop through seasons
+            for (let n = 0; n < seasonList.length; n++) {
+                let season = seasonList[n]
+                let seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
+                let matrixCode = productId + "-" + unitId + "-" + seasonId
+                let matrix = Matrix.all.get(matrixCode)
+                
+                if (matrix) {
+                    matrix.pricings = []
+                } else {
+                    matrix = {
+                        been_saved: 0,
+                        code: matrixCode,
+                        cost: 0,
+                        created_by: 4,
+                        date_created: "2022-01-14 09:00:39",
+                        date_modified: "2022-01-14 09:00:39",
+                        enabled: 1,
+                        has_pricing: 1,
+                        id: null,
+                        margin: 0,
+                        modified_by: 4,
+                        note: null,
+                        price: 201,
+                        pricings: [],
+                    }
+                }
+                
+                let seasonSection = {
+                    been_saved: matrix.been_saved,
+                    code: matrix.code,
+                    cost: matrix.cost,
+                    created_by: matrix.created_by,
+                    date_created: matrix.date_created,
+                    date_modified: matrix.date_modified,
+                    enabled: matrix.enabled,
+                    has_pricing: matrix.has_pricing,
+                    id: matrix.id,
+                    margin: matrix.margin,
+                    modified_by: matrix.modified_by,
+                    note: matrix.note,
+                    price: matrix.price,
+                    season_id: season.id,
+                    season_name: season.name,
+                    matrix_code: matrixCode,
+                    pricings: [],
+                }
+                
+                //loop through variants
+                $.each(variantCombinationList, function (key, variantComboId) {
+                    seasonSection.matrix_code = matrixCode + "-" + variantComboId
+                    seasonSection.pricings.push(addVariantList(unit, season, matrixCode + "-" + variantComboId, variantComboId))
+                })
+                
+                unitSection.seasons.push(seasonSection)
+            }
+            
+            worksheet.units.push(unitSection)
+        }
+        
+        return worksheet
+    }
+    
+    const pricingWorksheet = function () {
+        resetFilters()
+        emptyPricingMatrix()
+        variantCombinations = []
+        $(_product_edit_matrix_form).empty().append(buildPricingTables(PricingWorksheet.buildPricingWorksheet()))
+    }
+    
+    const init = function (settings) {
+        let pricingStrategyTypesId = null
+        if (settings) {
+            if (settings.pricing_strategy) {
+                if (settings.pricing_strategy.pricing_strategy_types_id) {
+                    pricingStrategyTypesId = (!isNaN(parseInt(settings.pricing_strategy.pricing_strategy_types_id))) ? parseInt(settings.pricing_strategy.pricing_strategy_types_id) : null
+                }
+            }
+            
+        }
+        
+        $(document).ready(function () {
+            PricingWorksheet.pricingStrategyId = pricingStrategyTypesId
+            if (_pricing_strategy_types_id) {
+                $(_pricing_strategy_types_id)
+                    .val(PricingWorksheet.pricingStrategyId)
+                    .trigger("change")
+            }
+        })
+    }
+    
+    return {
+        pricingStrategyId: null,
+        incompleteMatrices: new Map(),
+        incompletePricings: new Map(),
+        init: function (settings) {
+            init(settings)
+        },
+        pricingWorksheet: function () {
+            pricingWorksheet()
+        },
+        buildPricingWorksheet: function () {
+            return buildPricingWorksheet()
+        },
+        status: function () {
+            return status()
+        },
+    }
+})()
 
 const Upload = function (file) {
     this.file = file
@@ -4636,89 +6702,89 @@ const YearCalendar = (function () {
     const _calendar_filter_season_id_clear = document.getElementById("calendar_filter_season_id_clear")
     
     $(_calendar_display_next_year)
-      .on("click", function () {
-          //*
-          $(_calendar_loader).fadeIn("slow", function () {
-              YearCalendar.start = (parseInt(YearCalendar.start) + 1).toString()
-              $.each(YearCalendar.activeCalendars, function (index, cal) {
-                  $(cal).fullCalendar("nextYear")
-              })
-              getTitle()
-              YearCalendar.endLoading()
-          })
-          //*/
-      })
+        .on("click", function () {
+            //*
+            $(_calendar_loader).fadeIn("slow", function () {
+                YearCalendar.start = (parseInt(YearCalendar.start) + 1).toString()
+                $.each(YearCalendar.activeCalendars, function (index, cal) {
+                    $(cal).fullCalendar("nextYear")
+                })
+                getTitle()
+                YearCalendar.endLoading()
+            })
+            //*/
+        })
     
     $(_calendar_display_prev_year)
-      .on("click", function () {
-          //*
-          $(_calendar_loader).fadeIn("slow", function () {
-              YearCalendar.start = (parseInt(YearCalendar.start) - 1).toString()
-              $.each(YearCalendar.activeCalendars, function (index, cal) {
-                  $(cal).fullCalendar("prevYear")
-              })
-              YearCalendar.getTitle()
-              YearCalendar.endLoading()
-          })
-          //*/
-      })
+        .on("click", function () {
+            //*
+            $(_calendar_loader).fadeIn("slow", function () {
+                YearCalendar.start = (parseInt(YearCalendar.start) - 1).toString()
+                $.each(YearCalendar.activeCalendars, function (index, cal) {
+                    $(cal).fullCalendar("prevYear")
+                })
+                YearCalendar.getTitle()
+                YearCalendar.endLoading()
+            })
+            //*/
+        })
     
     $(_calendar_filter_season_id)
-      .on("change", function () {
-          let season_id = (!isNaN(parseInt(_calendar_filter_season_id.value))) ? parseInt(_calendar_filter_season_id.value) : null
-          if (!is_null(season_id)) {
-              _calendar_filter_profile_id.value = ""
-              _calendar_filter_unit_id.value = ""
-          }
-          let product_season_detail, season, disabled_dow
-          if (!is_null(season_id)) {
-              season = Season.all.get(season_id)
-              if (season) {
-                  if (season.product_season_detail) {
-                      product_season_detail = season.product_season_detail
-                  }
-              }
-              
-              if (product_season_detail.disabled_dow) {
-                  disabled_dow = getListOfIds(product_season_detail.disabled_dow)
-                  //Console.log("disabled_dow", disabled_dow)
-              }
-              
-          }
-          setDisabledDOW(disabled_dow)
-          //Console.log("_calendar_filter_season_id:click()", disabled_dow)
-      })
+        .on("change", function () {
+            let season_id = (!isNaN(parseInt(_calendar_filter_season_id.value))) ? parseInt(_calendar_filter_season_id.value) : null
+            if (!is_null(season_id)) {
+                _calendar_filter_profile_id.value = ""
+                _calendar_filter_unit_id.value = ""
+            }
+            let product_season_detail, season, disabled_dow
+            if (!is_null(season_id)) {
+                season = Season.all.get(season_id)
+                if (season) {
+                    if (season.product_season_detail) {
+                        product_season_detail = season.product_season_detail
+                    }
+                }
+                
+                if (product_season_detail.disabled_dow) {
+                    disabled_dow = getListOfIds(product_season_detail.disabled_dow)
+                    //Console.log("disabled_dow", disabled_dow)
+                }
+                
+            }
+            setDisabledDOW(disabled_dow)
+            //Console.log("_calendar_filter_season_id:click()", disabled_dow)
+        })
     
     $(_calendar_filter_season_id_assign)
-      .on("click", function () {
-          buildAssignDatesRecord()
-      })
+        .on("click", function () {
+            buildAssignDatesRecord()
+        })
     
     $(_calendar_filter_season_id_clear)
-      .on("click", function () {
-          setCalendarFilters()
-      })
+        .on("click", function () {
+            setCalendarFilters()
+        })
     
     $(_calendar_filter_unit_id_clear)
-      .on("click", function () {
-          setCalendarFilters()
-      })
+        .on("click", function () {
+            setCalendarFilters()
+        })
     
     $(_calendar_filter_profile_id_clear)
-      .on("click", function () {
-          setCalendarFilters()
-      })
+        .on("click", function () {
+            setCalendarFilters()
+        })
     
     $(_seasonCalendarModal)
-      .on("shown.bs.modal", function () {
-          setCalendarFilters()
-      })
-      .on("hidden.bs.modal", function () {
-          resetForm()
-      })
-      .on("click", function () {
-          YearCalendar.checkProgress()
-      })
+        .on("shown.bs.modal", function () {
+            setCalendarFilters()
+        })
+        .on("hidden.bs.modal", function () {
+            resetForm()
+        })
+        .on("click", function () {
+            YearCalendar.checkProgress()
+        })
     // ----
     
     const loadSeasonDropdown = function () {
@@ -4844,7 +6910,7 @@ const YearCalendar = (function () {
     }
     
     const init = function (settings) {
-        //ContextMenu.init(settings)
+        ContextMenu.init(settings)
     }
     
     const checkProgress = function () {
@@ -11073,10 +13139,10 @@ const Category = (function () {
     }
     
     $(_modal_product_category_id)
-      .on("change", function () {
-          let category_id = $(this).val()
-          handle_product_change(category_id)
-      })
+        .on("change", function () {
+            let category_id = $(this).val()
+            handle_product_change(category_id)
+        })
     
     const _modal_product_name = document.getElementById("modal_product_name")
     const _modal_product_sku = document.getElementById("modal_product_sku")
@@ -11090,6 +13156,7 @@ const Category = (function () {
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
     
     const handle_product_change = function (category_id) {
+        $("div[data-categoryid]").hide()
         if (!category_id) {
             return
         }
@@ -11098,14 +13165,17 @@ const Category = (function () {
         
         Product.resetNewProductDetails()
         Product.initAutoComplete(category_id)
+        
         let category = Types.category.get(category_id)
         if (!category) {
             return
         }
+        
         Product.attr1 = category.attribute_id
         Product.attr2 = null
         Product.attr3 = null
         Product.updateProductSKU()
+        
         if (category_id && !isNaN(parseInt(category_id))) {
             
             switch (parseInt(category_id)) {
@@ -11127,14 +13197,17 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //.disabled = true
+                    //_modal_product_vendor_name.disabled = true
+                    
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
+                    
+                    $("div[data-categoryid='1']").show()
                     break
                 case 2:
                     /**
@@ -11154,14 +13227,17 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
+                    
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = true
                     _modal_product_sku.disabled = true
+                    
+                    $("div[data-categoryid='2']").show()
                     break
                 case 3:
                     /**
@@ -11181,14 +13257,17 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
+                    
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
+                    
+                    $("div[data-categoryid='3']").show()
                     break
                 case 4:
                     /**
@@ -11208,14 +13287,17 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
+                    
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
+                    
+                    $("div[data-categoryid='4']").show()
                     break
                 case 5:
                     /**
@@ -11235,14 +13317,16 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
+                    
+                    $("div[data-categoryid='5']").show()
                     break
                 case 6:
                     /**
@@ -11261,14 +13345,16 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
+                    
+                    $("div[data-categoryid='6']").show()
                     break
                 case 7:
                     /**
@@ -11287,14 +13373,16 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
+                    
+                    $("div[data-categoryid='7']").show()
                     break
                 case 8:
                     /**
@@ -11313,14 +13401,16 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
+                    
+                    $("div[data-categoryid='8']").show()
                     break
                 case 9:
                     /**
@@ -11339,15 +13429,15 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
-                    Console.log("Other", 9)
+                    $("div[data-categoryid='9']").show()
                     break
                 default:
                     /**
@@ -11365,8 +13455,8 @@ const Category = (function () {
                     _modal_product_rating_types_id.value = ""
                     _modal_product_sku.value = ""
                     
-                    _modal_product_provider_name.disabled = true
-                    _modal_product_vendor_name.disabled = true
+                    //_modal_product_provider_name.disabled = true
+                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = true
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = true
@@ -11379,7 +13469,7 @@ const Category = (function () {
                     _modal_product_rating_types_id.disabled = true
                     
                     _modal_product_pricing_strategies_types_id.disabled = true
-                    Console.log("Default", null)
+                    
                     break
             }
         }
@@ -12912,204 +15002,204 @@ const Vendor = (function () {
     // ----
     
     $(_button_save_vendor)
-      .on("click", function () {
-          let company = Company.build()
-          Console.log("_button_save_vendor", company)
-          update()
-      })
+        .on("click", function () {
+            let company = Company.build()
+            Console.log("_button_save_vendor", company)
+            update()
+        })
     
     $(_button_add_vendor_page_heading)
-      .on("click", function () {
-          load_new_modal()
-      })
+        .on("click", function () {
+            load_new_modal()
+        })
     
     $(_vendor_index_table_add_button)
-      .on("click", function () {
-          load_new_modal()
-      })
+        .on("click", function () {
+            load_new_modal()
+        })
     
     $(_modal_button_cancel_add_vendor)
-      .on("click", function () {
-          hide_new_modal()
-      })
+        .on("click", function () {
+            hide_new_modal()
+        })
     
     $(_modal_button_submit_add_vendor)
-      .on("click", function () {
-          if (validate_new_modal_form()) {
-              let dataToSend = {
-                  name: _vendor_modal_vendor_name.value,
-              }
-              confirmDialog(`Vendor: ${name} will be added`, (ans) => {
-                  if (ans) {
-                      add(dataToSend)
-                  }
-              })
-          }
-      })
+        .on("click", function () {
+            if (validate_new_modal_form()) {
+                let dataToSend = {
+                    name: _vendor_modal_vendor_name.value,
+                }
+                confirmDialog(`Vendor: ${name} will be added`, (ans) => {
+                    if (ans) {
+                        add(dataToSend)
+                    }
+                })
+            }
+        })
     
     $(_vendor_modal_vendor_name)
-      .on("change", function () {
-          setTimeout(function () {
-              let vendor_name = _vendor_modal_vendor_name.value
-              
-              if (globalSelectedVendor === false) {
-                  if (vendor_name === "") {
-                      _vendor_modal_vendor_name.value = ""
-                      globalSelectedVendor = false
-                  } else {
-                      vendor_exists(vendor_name)
-                  }
-              }
-          }, 200)
-      })
-      .on("search", function () {
-      
-      })
-      .on("click", function (e) {
-          if ($(this).attr("readonly") === "readonly") {
-              e.preventDefault()
-          } else {
-              $(this).select()
-          }
-      })
-      .autocomplete({
-          serviceUrl: "/api/v1.0/autocomplete/vendors",
-          minChars: 2,
-          cache: false,
-          dataType: "json",
-          triggerSelectOnValidInput: false,
-          paramName: "st",
-          onSelect: function (suggestion) {
-              if (!suggestion.data) {
-                  return
-              }
-              let vendor = suggestion.data
-              confirmDialog(`Vendor ${vendor.name} ALREADY exists. Would you like to load this record to edit?`, (ans) => {
-                  if (ans) {
-                      window.location.replace(base_url + "/" + vendor.id)
-                  } else {
-                      reset_modal()
-                  }
-              })
-          },
-      })
+        .on("change", function () {
+            setTimeout(function () {
+                let vendor_name = _vendor_modal_vendor_name.value
+                
+                if (globalSelectedVendor === false) {
+                    if (vendor_name === "") {
+                        _vendor_modal_vendor_name.value = ""
+                        globalSelectedVendor = false
+                    } else {
+                        vendor_exists(vendor_name)
+                    }
+                }
+            }, 200)
+        })
+        .on("search", function () {
+        
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/vendors",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let vendor = suggestion.data
+                confirmDialog(`Vendor ${vendor.name} ALREADY exists. Would you like to load this record to edit?`, (ans) => {
+                    if (ans) {
+                        window.location.replace(base_url + "/" + vendor.id)
+                    } else {
+                        reset_modal()
+                    }
+                })
+            },
+        })
     
     $(_modal_product_vendor_name)
-      .on("change", function () {
-          setTimeout(function () {
-              let vendor_name = _modal_product_vendor_name.value
-              globalSelectedVendor = false
-              
-              if (vendor_name === "") {
-                  _modal_product_vendor_id.value = ""
-                  _modal_product_vendor_name.value = ""
-                  _modal_product_vendor_company_id.value = ""
-                  Product.attr3 = null
-                  Product.update_product_sku()
-                  globalSelectedVendor = false
-              } else {
-                  vendor_exists(vendor_name)
-              }
-              
-          }, 200)
-      })
-      .on("search", function () {
-          _modal_product_vendor_id.value = ""
-          _modal_product_vendor_name.value = ""
-          _modal_product_vendor_company_id.value = ""
-          _modal_product_provider_vendor_match.checked = false
-          Product.attr3 = null
-          Product.update_product_sku()
-          globalSelectedVendor = false
-      })
-      .on("click", function (e) {
-          if ($(this).attr("readonly") === "readonly") {
-              e.preventDefault()
-          } else {
-              $(this).select()
-          }
-      })
-      .autocomplete({
-          serviceUrl: "/api/v1.0/autocomplete/vendors",
-          minChars: 2,
-          cache: false,
-          dataType: "json",
-          triggerSelectOnValidInput: false,
-          paramName: "st",
-          onSelect: function (suggestion) {
-              if (!suggestion || !suggestion.data) {
-                  return
-              }
-              Console.log("suggestion.data", suggestion.data)
-              let vendor = suggestion.data
-              if (_form_product_add) {
-                  let provider_company_id = (isNaN(parseInt(_modal_product_provider_company_id.value))) ? null : parseInt(_modal_product_provider_company_id.value)
-                  _modal_product_vendor_id.value = suggestion.data.id
-                  _modal_product_vendor_name.value = suggestion.data.name
-                  _modal_product_vendor_company_id.value = suggestion.data.company_id
-                  Product.attr3 = suggestion.data.sku
-                  Product.update_product_sku()
-                  _modal_product_provider_vendor_match.checked = parseInt(suggestion.data.company_id) === provider_company_id
-              }
-              globalSelectedVendor = true
-              
-          },
-      })
+        .on("change", function () {
+            setTimeout(function () {
+                let vendor_name = _modal_product_vendor_name.value
+                globalSelectedVendor = false
+                
+                if (vendor_name === "") {
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_vendor_company_id.value = ""
+                    Product.attr3 = null
+                    Product.updateProductSKU()
+                    globalSelectedVendor = false
+                } else {
+                    vendor_exists(vendor_name)
+                }
+                
+            }, 200)
+        })
+        .on("search", function () {
+            _modal_product_vendor_id.value = ""
+            _modal_product_vendor_name.value = ""
+            _modal_product_vendor_company_id.value = ""
+            _modal_product_provider_vendor_match.checked = false
+            Product.attr3 = null
+            Product.updateProductSKU()
+            globalSelectedVendor = false
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/vendors",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion || !suggestion.data) {
+                    return
+                }
+                Console.log("suggestion.data", suggestion.data)
+                let vendor = suggestion.data
+                if (_form_product_add) {
+                    let provider_company_id = (isNaN(parseInt(_modal_product_provider_company_id.value))) ? null : parseInt(_modal_product_provider_company_id.value)
+                    _modal_product_vendor_id.value = suggestion.data.id
+                    _modal_product_vendor_name.value = suggestion.data.name
+                    _modal_product_vendor_company_id.value = suggestion.data.company_id
+                    Product.attr3 = suggestion.data.sku
+                    Product.updateProductSKU()
+                    _modal_product_provider_vendor_match.checked = parseInt(suggestion.data.company_id) === provider_company_id
+                }
+                globalSelectedVendor = true
+                
+            },
+        })
     
     $(_company_id)
-      .on("change", function () {
-          $(_vendor_company_id).val(_company_id.value)
-      })
+        .on("change", function () {
+            $(_vendor_company_id).val(_company_id.value)
+        })
     
     $(_button_submit_form_edit_vendor)
-      .on("click", function () {
-          update()
-      })
+        .on("click", function () {
+            update()
+        })
     
     const initAutoComplete = function () {
         if (_vendor_name) {
             $(_vendor_name)
-              .on("change", function () {
-                  setTimeout(function () {
-                      let vendor_name = _vendor_name.value
-                      globalSelectedVendor = false
-                      if (vendor_name === "") {
-                          _vendor_name.value = ""
-                          _vendor_company_id.value = ""
-                          
-                      } else {
-                          vendor_exists(vendor_name)
-                      }
-                      
-                  }, 200)
-              })
-              .on("click", function () {
-                  $(this).select()
-              })
-              .autocomplete({
-                  serviceUrl: "/api/v1.0/autocomplete/vendors",
-                  minChars: 2,
-                  cache: false,
-                  dataType: "json",
-                  triggerSelectOnValidInput: false,
-                  paramName: "st",
-                  onSelect: function (suggestion) {
-                      if (!suggestion.data) {
-                          return
-                      }
-                      //let vendor = (suggestion.data.vendor_detail) ? suggestion.data.vendor_detail : {}
-                      //let company = (suggestion.data.company_detail) ? suggestion.data.company_detail : {}
-                      //let contacts = []
-                      //let addresses = []
-                      //log("vendor", vendor)
-                      // --
-                      //log("Provider.suggestion", suggestion.data)
-                      //globalSelectedProvider = true
-                      //_provider_company_id.value = suggestion.data.company_id
-                      //_provider_id.value = suggestion.data.provider_id
-                      //_provider_name.value = suggestion.data.company_name
-                  },
-              })
+                .on("change", function () {
+                    setTimeout(function () {
+                        let vendor_name = _vendor_name.value
+                        globalSelectedVendor = false
+                        if (vendor_name === "") {
+                            _vendor_name.value = ""
+                            _vendor_company_id.value = ""
+                            
+                        } else {
+                            vendor_exists(vendor_name)
+                        }
+                        
+                    }, 200)
+                })
+                .on("click", function () {
+                    $(this).select()
+                })
+                .autocomplete({
+                    serviceUrl: "/api/v1.0/autocomplete/vendors",
+                    minChars: 2,
+                    cache: false,
+                    dataType: "json",
+                    triggerSelectOnValidInput: false,
+                    paramName: "st",
+                    onSelect: function (suggestion) {
+                        if (!suggestion.data) {
+                            return
+                        }
+                        //let vendor = (suggestion.data.vendor_detail) ? suggestion.data.vendor_detail : {}
+                        //let company = (suggestion.data.company_detail) ? suggestion.data.company_detail : {}
+                        //let contacts = []
+                        //let addresses = []
+                        //log("vendor", vendor)
+                        // --
+                        //log("Provider.suggestion", suggestion.data)
+                        //globalSelectedProvider = true
+                        //_provider_company_id.value = suggestion.data.company_id
+                        //_provider_id.value = suggestion.data.provider_id
+                        //_provider_name.value = suggestion.data.company_name
+                    },
+                })
         }
     }
     
@@ -13142,7 +15232,7 @@ const Vendor = (function () {
                     _modal_product_vendor_company_id.value = ""
                     
                     Product.attr3 = null
-                    Product.update_product_sku()
+                    Product.updateProductSKU()
                     
                     let name = _modal_product_vendor_name.value
                     if (name !== "") {
@@ -13174,7 +15264,7 @@ const Vendor = (function () {
                         _modal_product_vendor_id.value = (vendor.id) ? vendor.id : ""
                         _modal_product_vendor_company_id.value = (vendor.company_id) ? vendor.company_id : ""
                         Product.attr3 = (vendor.sku) ? vendor.sku : null
-                        Product.update_product_sku()
+                        Product.updateProductSKU()
                     }
                     
                 }
@@ -13217,7 +15307,7 @@ const Vendor = (function () {
                                 _modal_product_vendor_id.value = (details.id) ? details.id : ""
                                 _modal_product_provider_vendor_match.checked = (_modal_product_vendor_company_id.value === _modal_product_provider_company_id.value)
                                 Product.attr3 = (details.sku) ? details.sku : null
-                                Product.update_product_sku()
+                                Product.updateProductSKU()
                             }
                             
                             if (_form_vendor_add) {
@@ -15188,81 +17278,81 @@ const Provider = (function () {
     }
     
     $(_button_save_provider)
-      .on("click", function () {
-          let tabs = $("#provider_edit_tabs > li.nav-item > a.nav-link")
-          let panels = $("div.tab-pane")
-          let company_detail = Company.build()
-          let provider_detail = Provider.build()
-          let location_detail = Location.build()
-          let vendor_detail = Vendor.build()
-          let addresses = Array.from(Address.all.values())
-          let contacts = Array.from(Contact.all.values())
-          /*
-          Console.log("company_detail", company_detail)
-          Console.log("provider_detail", provider_detail)
-          Console.log("location_detail", location_detail)
-          Console.log("vendor_detail", vendor_detail)
-          Console.log("addresses", addresses)
-          Console.log("contacts", contacts)
-          //*/
-          if (!company_detail || !provider_detail || !location_detail || !vendor_detail || !addresses || !contacts) {
-              $.each(panels, function (index, item) {
-                  if ($(this).find(".is-invalid").length > 0) {
-                      let nav_tab = $("body").find("[aria-controls='" + $(this).attr("id") + "']")
-                      tabs.removeClass("active")
-                      panels.removeClass("active")
-                      $(this).addClass("active")
-                      nav_tab.addClass("active")
-                      return false
-                  }
-              })
-              return
-          }
-          
-          provider_detail.location_id = (location_detail.id) ? location_detail.id : null
-          vendor_detail.is_provider = (_form_edit_provider) ? 1 : 0
-          
-          // ----
-          
-          confirmDialog(`Would you like to update?`, (ans) => {
-              if (ans) {
-                  save({
-                      "company_detail": company_detail,
-                      "provider_detail": provider_detail,
-                      "location_detail": location_detail,
-                      "vendor_detail": vendor_detail,
-                      "addresses": addresses,
-                      "contacts": contacts,
-                  })
-              }
-              
-          })
-      })
+        .on("click", function () {
+            let tabs = $("#provider_edit_tabs > li.nav-item > a.nav-link")
+            let panels = $("div.tab-pane")
+            let company_detail = Company.build()
+            let provider_detail = Provider.build()
+            let location_detail = Location.build()
+            let vendor_detail = Vendor.build()
+            let addresses = Array.from(Address.all.values())
+            let contacts = Array.from(Contact.all.values())
+            /*
+            Console.log("company_detail", company_detail)
+            Console.log("provider_detail", provider_detail)
+            Console.log("location_detail", location_detail)
+            Console.log("vendor_detail", vendor_detail)
+            Console.log("addresses", addresses)
+            Console.log("contacts", contacts)
+            //*/
+            if (!company_detail || !provider_detail || !location_detail || !vendor_detail || !addresses || !contacts) {
+                $.each(panels, function (index, item) {
+                    if ($(this).find(".is-invalid").length > 0) {
+                        let nav_tab = $("body").find("[aria-controls='" + $(this).attr("id") + "']")
+                        tabs.removeClass("active")
+                        panels.removeClass("active")
+                        $(this).addClass("active")
+                        nav_tab.addClass("active")
+                        return false
+                    }
+                })
+                return
+            }
+            
+            provider_detail.location_id = (location_detail.id) ? location_detail.id : null
+            vendor_detail.is_provider = (_form_edit_provider) ? 1 : 0
+            
+            // ----
+            
+            confirmDialog(`Would you like to update?`, (ans) => {
+                if (ans) {
+                    save({
+                        "company_detail": company_detail,
+                        "provider_detail": provider_detail,
+                        "location_detail": location_detail,
+                        "vendor_detail": vendor_detail,
+                        "addresses": addresses,
+                        "contacts": contacts,
+                    })
+                }
+                
+            })
+        })
     
     $("#provider_edit")
-      .on("change", function () {
-          set_progress()
-      })
+        .on("change", function () {
+            set_progress()
+        })
     
     $(_provider_company_id)
-      .on("change", function () {
-          $(_vendor_company_id).val($(this).val())
-      })
+        .on("change", function () {
+            $(_vendor_company_id).val($(this).val())
+        })
     
     $(_button_add_provider_page_heading)
-      .on("click", function () {
-          //Console.log("test")
-      })
+        .on("click", function () {
+            //Console.log("test")
+        })
     
     $(_button_edit_provider_name)
-      .on("click", function () {
-          enable_form_fields()
-      })
+        .on("click", function () {
+            enable_form_fields()
+        })
     
     $(_company_id)
-      .on("change", function () {
-          $(_provider_company_id).val(_company_id.value)
-      })
+        .on("change", function () {
+            $(_provider_company_id).val(_company_id.value)
+        })
     
     /**
      * add provider
@@ -15320,7 +17410,7 @@ const Provider = (function () {
                                 
                                 Product.attr2 = (provider.code_direct_id) ? provider.code_direct_id : null
                                 Product.attr3 = (vendor.sku) ? vendor.sku : null
-                                Product.update_product_sku()
+                                Product.updateProductSKU()
                                 
                             }
                         }
@@ -15337,158 +17427,158 @@ const Provider = (function () {
     const initAutoComplete = function () {
         
         $(_provider_name)
-          .on("change", function () {
-              /*
-              setTimeout(function () {
-                  let provider_name = _provider_name.value
-                  
-                  if (globalSelectedProvider === false) {
-                      if (provider_name === "") {
-                          _provider_name.value = ""
-                          _provider_company_id.value = ""
-                          globalSelectedProvider = false
-                          $(_vendor_name).val("").trigger("change")
-                          $(_provider_company_id).val("").trigger("change")
-                      } else {
-                          provider_exists(provider_name)
-                      }
-                  }
-              }, 200)
-              //*/
-          })
-          .on("search", function () {
-              //_provider_id.value = ""
-              //_provider_company_id.value = ""
-              
-              //$(_vendor_name).val("").trigger("change")
-              //$(_provider_company_id).val("").trigger("change")
-              Provider.reset_form()
-              Vendor.reset_form()
-          })
-          .on("click", function () {
-              $(this).select(function () {
-                  //$( "div" ).text( "Something was selected" ).show().fadeOut( 1000 );
-              })
-          })
-          .autocomplete({
-              serviceUrl: "/api/v1.0/autocomplete/providers",
-              minChars: 2,
-              cache: false,
-              dataType: "json",
-              triggerSelectOnValidInput: false,
-              paramName: "st",
-              onSelect: function (suggestion) {
-                  if (!suggestion.data) {
-                      return
-                  }
-                  Console.log("suggestion.data", suggestion.data)
-                  let provider = suggestion.data
-                  let company = (provider.company) ? provider.company : {}
-                  let addresses = (provider.addresses) ? provider.addresses : {}
-                  let contacts = (provider.contacts) ? provider.contacts : {}
-                  let location = (provider.location) ? provider.location : {}
-                  let vendor = (provider.vendor) ? provider.vendor : {}
-                  
-                  //
-                  
-                  let provider_id = provider.id
-                  let company_name = provider.company.name
-                  let provider_company_id = provider.company.id
-                  //
-                  if (_form_edit_provider) {
-                      $(_provider_company_id).val(provider_company_id)
-                      $(_provider_id).val(provider_id)
-                      confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
-                          if (ans) {
-                              window.location.replace("/providers/" + provider_id)
-                              populate_form(provider)
-                              Company.populate_form(company)
-                              Location.populate_form(location)
-                              $(_vendor_company_id).val(provider_company_id)
-                              $(_vendor_name).val(company_name).trigger("change")
-                          } else {
-                              Provider.reset_form()
-                              Vendor.reset_form()
-                          }
-                      })
-                  }
-              },
-          })
+            .on("change", function () {
+                /*
+                setTimeout(function () {
+                    let provider_name = _provider_name.value
+                    
+                    if (globalSelectedProvider === false) {
+                        if (provider_name === "") {
+                            _provider_name.value = ""
+                            _provider_company_id.value = ""
+                            globalSelectedProvider = false
+                            $(_vendor_name).val("").trigger("change")
+                            $(_provider_company_id).val("").trigger("change")
+                        } else {
+                            provider_exists(provider_name)
+                        }
+                    }
+                }, 200)
+                //*/
+            })
+            .on("search", function () {
+                //_provider_id.value = ""
+                //_provider_company_id.value = ""
+                
+                //$(_vendor_name).val("").trigger("change")
+                //$(_provider_company_id).val("").trigger("change")
+                Provider.reset_form()
+                Vendor.reset_form()
+            })
+            .on("click", function () {
+                $(this).select(function () {
+                    //$( "div" ).text( "Something was selected" ).show().fadeOut( 1000 );
+                })
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/providers",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                paramName: "st",
+                onSelect: function (suggestion) {
+                    if (!suggestion.data) {
+                        return
+                    }
+                    Console.log("suggestion.data", suggestion.data)
+                    let provider = suggestion.data
+                    let company = (provider.company) ? provider.company : {}
+                    let addresses = (provider.addresses) ? provider.addresses : {}
+                    let contacts = (provider.contacts) ? provider.contacts : {}
+                    let location = (provider.location) ? provider.location : {}
+                    let vendor = (provider.vendor) ? provider.vendor : {}
+                    
+                    //
+                    
+                    let provider_id = provider.id
+                    let company_name = provider.company.name
+                    let provider_company_id = provider.company.id
+                    //
+                    if (_form_edit_provider) {
+                        $(_provider_company_id).val(provider_company_id)
+                        $(_provider_id).val(provider_id)
+                        confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
+                            if (ans) {
+                                window.location.replace("/providers/" + provider_id)
+                                populate_form(provider)
+                                Company.populate_form(company)
+                                Location.populate_form(location)
+                                $(_vendor_company_id).val(provider_company_id)
+                                $(_vendor_name).val(company_name).trigger("change")
+                            } else {
+                                Provider.reset_form()
+                                Vendor.reset_form()
+                            }
+                        })
+                    }
+                },
+            })
         
         $(_modal_product_provider_name)
-          .on("change", function () {
-              setTimeout(function () {
-                  let provider_name = _modal_product_provider_name.value
-                  
-                  if (globalSelectedProvider === false) {
-                      if (provider_name === "") {
-                          _modal_product_vendor_id.value = ""
-                          _modal_product_provider_id.value = ""
-                          _modal_product_vendor_name.value = ""
-                          _modal_product_provider_name.value = ""
-                          _modal_product_vendor_company_id.value = ""
-                          _modal_product_provider_company_id.value = ""
-                          _modal_product_provider_location_id.value = ""
-                          _modal_product_vendor_name.disabled = true
-                          Product.attr2 = null
-                          Product.attr3 = null
-                          Product.update_product_sku()
-                          globalSelectedProvider = false
-                      } else {
-                          provider_exists(provider_name)
-                      }
-                  }
-              }, 200)
-          })
-          .on("search", function () {
-              _modal_product_vendor_id.value = ""
-              _modal_product_provider_id.value = ""
-              _modal_product_vendor_name.value = ""
-              _modal_product_provider_name.value = ""
-              _modal_product_vendor_company_id.value = ""
-              _modal_product_provider_company_id.value = ""
-              _modal_product_provider_location_id.value = ""
-              Product.attr2 = null
-              Product.attr3 = null
-              Product.update_product_sku()
-              _modal_product_vendor_name.disabled = true
-          })
-          .on("click", function () {
-              $(this).select()
-          })
-          .autocomplete({
-              serviceUrl: "/api/v1.0/autocomplete/providers",
-              minChars: 2,
-              cache: false,
-              dataType: "json",
-              triggerSelectOnValidInput: false,
-              paramName: "st",
-              onSelect: function (suggestion) {
-                  if (!suggestion || !suggestion.data) {
-                      return
-                  }
-                  Console.log("suggestion.data", suggestion.data)
-                  let provider = set(suggestion.data)
-                  let vendor = provider.vendor
-                  let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
-                  let sku = (vendor.sku) ? vendor.sku : null
-                  
-                  _modal_product_vendor_id.value = parseInt(suggestion.data.vendor.id)
-                  _modal_product_provider_id.value = suggestion.data.id
-                  _modal_product_vendor_name.value = suggestion.data.name
-                  _modal_product_vendor_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
-                  _modal_product_provider_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
-                  _modal_product_provider_vendor_match.checked = true
-                  _modal_product_vendor_name.disabled = false
-                  _modal_product_provider_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
-                  
-                  Product.attr2 = code_direct
-                  Product.attr3 = sku
-                  Product.update_product_sku()
-                  
-                  //$(_modal_product_vendor_name).trigger("change")
-              },
-          })
+            .on("change", function () {
+                setTimeout(function () {
+                    let provider_name = _modal_product_provider_name.value
+                    
+                    if (globalSelectedProvider === false) {
+                        if (provider_name === "") {
+                            _modal_product_vendor_id.value = ""
+                            _modal_product_provider_id.value = ""
+                            _modal_product_vendor_name.value = ""
+                            _modal_product_provider_name.value = ""
+                            _modal_product_vendor_company_id.value = ""
+                            _modal_product_provider_company_id.value = ""
+                            _modal_product_provider_location_id.value = ""
+                            _modal_product_vendor_name.disabled = true
+                            Product.attr2 = null
+                            Product.attr3 = null
+                            Product.updateProductSKU()
+                            globalSelectedProvider = false
+                        } else {
+                            provider_exists(provider_name)
+                        }
+                    }
+                }, 200)
+            })
+            .on("search", function () {
+                _modal_product_vendor_id.value = ""
+                _modal_product_provider_id.value = ""
+                _modal_product_vendor_name.value = ""
+                _modal_product_provider_name.value = ""
+                _modal_product_vendor_company_id.value = ""
+                _modal_product_provider_company_id.value = ""
+                _modal_product_provider_location_id.value = ""
+                Product.attr2 = null
+                Product.attr3 = null
+                Product.updateProductSKU()
+                _modal_product_vendor_name.disabled = true
+            })
+            .on("click", function () {
+                $(this).select()
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/providers",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                paramName: "st",
+                onSelect: function (suggestion) {
+                    if (!suggestion || !suggestion.data) {
+                        return
+                    }
+                    Console.log("suggestion.data", suggestion.data)
+                    let provider = set(suggestion.data)
+                    let vendor = provider.vendor
+                    let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
+                    let sku = (vendor.sku) ? vendor.sku : null
+                    
+                    _modal_product_vendor_id.value = parseInt(suggestion.data.vendor.id)
+                    _modal_product_provider_id.value = suggestion.data.id
+                    _modal_product_vendor_name.value = suggestion.data.name
+                    _modal_product_vendor_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
+                    _modal_product_provider_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
+                    _modal_product_provider_vendor_match.checked = true
+                    _modal_product_vendor_name.disabled = false
+                    _modal_product_provider_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
+                    
+                    Product.attr2 = code_direct
+                    Product.attr3 = sku
+                    Product.updateProductSKU()
+                    
+                    //$(_modal_product_vendor_name).trigger("change")
+                },
+            })
         
     }
     
@@ -15571,7 +17661,7 @@ const Provider = (function () {
                         _modal_product_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
                         Product.attr2 = code_direct
                         Product.attr3 = sku
-                        Product.update_product_sku()
+                        Product.updateProductSKU()
                         
                         /*
                         
@@ -15582,7 +17672,7 @@ const Provider = (function () {
     
                         Product.attr2 = code_direct
                         Product.attr3 = sku
-                        Product.update_product_sku()
+                        Product.updateProductSKU()
                         //*/
                     }
                 }
@@ -16424,924 +18514,6 @@ const Profile = (function () {
     
 })()
 
-const Product = (function () {
-    "use strict"
-    const _form_product_add = document.getElementById("form_product_add")
-    const _product_edit_page = document.getElementById("product_edit_page")
-    const _button_add_product_page_heading = document.getElementById("button_add_product_page_heading")
-    const _modal_button_cancel_add_product = document.getElementById("modal_button_cancel_add_product")
-    const _modal_button_submit_add_product = document.getElementById("modal_button_submit_add_product")
-    const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
-    const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
-    const _modal_product_provider_id = document.getElementById("modal_product_provider_id")
-    const _modal_product_vendor_id = document.getElementById("modal_product_vendor_id")
-    const _modal_new_product = document.getElementById("modal_new_product")
-    const _modal_product_name = document.getElementById("modal_product_name")
-    const _modal_product_category_id = document.getElementById("modal_product_category_id")
-    const _modal_product_sku = document.getElementById("modal_product_sku")
-    const _modal_product_rating_types_id = document.getElementById("modal_product_rating_types_id")
-    const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
-    const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
-    const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
-    const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
-    const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
-    const _modal_product_provider_location_id = document.getElementById("modal_product_provider_location_id")
-    const _modal_product_location_id = document.getElementById("modal_product_location_id")
-    const _product_panel_link_overview = document.getElementById("product_panel_link_overview")
-    const _panel_tab_product_o = document.getElementById("panel_tab_product_o")
-    const _product_panel_link_product = document.getElementById("product_panel_link_product")
-    const _panel_tab_product = document.getElementById("panel_tab_product")
-    const _product_panel_link_season = document.getElementById("product_panel_link_season")
-    const _panel_tab_season = document.getElementById("panel_tab_season")
-    const _product_panel_link_unit = document.getElementById("product_panel_link_unit")
-    const _panel_tab_unit = document.getElementById("panel_tab_unit")
-    const _product_panel_link_variant = document.getElementById("product_panel_link_variant")
-    const _panel_tab_variant = document.getElementById("panel_tab_variant")
-    const _product_panel_link_inventory = document.getElementById("product_panel_link_inventory")
-    const _panel_tab_inventory = document.getElementById("panel_tab_inventory")
-    const _product_panel_link_pricing = document.getElementById("product_panel_link_pricing")
-    const _panel_tab_pricing = document.getElementById("panel_tab_pricing")
-    const _panel_tab_location = document.getElementById("panel_tab_location")
-    const _panel_tab_product_location = document.getElementById("panel_tab_product_location")
-    const _panel_tab_product_meta = document.getElementById("panel_tab_product_meta")
-    const _panel_tab_meta = document.getElementById("panel_tab_meta")
-    const _product_panel_link_meta = document.getElementById("product_panel_link_meta")
-    const _product_panel_link_location = document.getElementById("product_panel_link_location")
-    const _product_keywords = document.getElementById("product_keywords")
-    const _product_description_long = document.getElementById("product_description_long")
-    const _product_description_short = document.getElementById("_product_description_short")
-    const base_url = "/products"
-    const _modal_product_city_id = document.getElementById("modal_product_city_id")
-    const _modal_product_city = document.getElementById("modal_product_city")
-    const _product_index_page = document.getElementById("product_index_page")
-    const _product_index_table = document.getElementById("product_index_table")
-    const _use_provider_location = document.getElementById("use_provider_location")
-    const _use_product_location = document.getElementById("use_product_location")
-    const _product_amenities = document.getElementById("product_amenities")
-    
-    let $product_keywords, $product_amenities
-    let provider_initial_location, product_initial_location = {}
-    let radios = document.querySelectorAll('input[type=radio][name="location_to_use"]')
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    let $index_table, newProduct_validator
-    let add_modal_form_rules = {
-        rules: {
-            modal_product_sku: {
-                required: true,
-            },
-            modal_product_rating_types_id: {
-                required: true,
-            },
-            modal_product_currency_id: {
-                required: true,
-            },
-            modal_product_pricing_strategies_types_id: {
-                required: true,
-            },
-            modal_product_name: {
-                required: true,
-            },
-            modal_product_category_id: {
-                required: true,
-            },
-            modal_product_provider_name: {
-                required: true,
-            },
-            modal_product_provider_id: {
-                required: true,
-            },
-            modal_product_provider_company_id: {
-                required: true,
-            },
-            modal_product_vendor_name: {
-                required: true,
-            },
-            modal_product_vendor_id: {
-                required: true,
-            },
-            modal_product_vendor_company_id: {
-                required: true,
-            },
-        },
-        messages: {
-            modal_product_sku: {
-                required: "Field Required",
-            },
-            modal_product_rating_types_id: {
-                required: "Field Required",
-            },
-            modal_product_currency_id: {
-                required: "Field Required",
-            },
-            modal_product_pricing_strategies_types_id: {
-                required: "Field Required",
-            },
-            modal_product_name: {
-                required: "Field Required",
-            },
-            modal_product_provider_id: {
-                required: "Field Required",
-            },
-            modal_product_category_id: {
-                required: "Field Required",
-            },
-            modal_product_provider_name: {
-                required: "Field Required",
-            },
-            modal_product_vendor_name: {
-                required: "Field Required",
-            },
-            modal_product_provider_company_id: {
-                required: "Field Required",
-            },
-            modal_product_vendor_id: {
-                required: "Field Required",
-            },
-            modal_product_vendor_company_id: {
-                required: "Field Required",
-            },
-        },
-    }
-    
-    $(_button_add_product_page_heading)
-      .on("click", function () {
-          setNewProductModal()
-      })
-    
-    $(_modal_new_product)
-      .on("hide.bs.modal", function () {
-          clear_validation(_form_product_add)
-      })
-    
-    $(_modal_button_cancel_add_product)
-      .on("click", function () {
-          clear_validation(_form_product_add)
-          $(_modal_new_product).modal("hide")
-      })
-    
-    $(_modal_button_submit_add_product)
-      .on("click", function () {
-          if (validateNewProduct()) {
-              confirmDialog(`Would you like to update?`, (ans) => {
-                  if (ans) {
-                      saveNewProduct()
-                  }
-              })
-          }
-      })
-    
-    $(_modal_product_provider_vendor_match)
-      .on("change", function () {
-          let provider_company_id = (isNaN(parseInt(_modal_product_provider_company_id.value))) ? null : parseInt(_modal_product_provider_company_id.value)
-          
-          if (provider_company_id !== null) {
-              
-              if (_modal_product_provider_vendor_match.checked) {
-                  _modal_product_vendor_company_id.value = _modal_product_provider_company_id.value
-                  
-                  if (Provider.detail !== null) {
-                      _modal_product_vendor_company_id.value = Provider.detail.vendor.company_id
-                      _modal_product_vendor_id.value = Provider.detail.vendor.id
-                      _modal_product_vendor_name.value = Provider.detail.vendor.name
-                  } else {
-                      _modal_product_vendor_company_id.value = ""
-                      _modal_product_vendor_id.value = ""
-                      _modal_product_vendor_name.value = ""
-                  }
-                  
-              } else {
-                  _modal_product_vendor_company_id.value = ""
-                  _modal_product_vendor_id.value = ""
-                  _modal_product_vendor_name.value = ""
-              }
-          }
-      })
-    
-    $("#page")
-      .on("change", function () {
-          updateProgress()
-      })
-    
-    const updateProgress = function () {
-        let variants = Array.from(Variant.all.values())
-        let units = Array.from(Unit.all.values())
-        let seasons = Array.from(Season.all.values())
-        
-        if (variants.length === 0 || units.length === 0 || seasons.length === 0) {
-            $(_panel_tab_pricing).addClass(`disabled`)
-            $(_panel_tab_inventory).addClass(`disabled`)
-        } else {
-            $(_panel_tab_pricing).removeClass(`disabled`)
-            $(_panel_tab_inventory).removeClass(`disabled`)
-        }
-        
-        let pricingWorksheet = PricingWorksheet.status()
-        if (pricingWorksheet === "incomplete") {
-            $("#panel_tab_pricing")
-              .html("Pricing<span class='badge rounded-pill badge-notification bg-danger tab-badge' style='color:#fff!important'>!</span>")
-        } else {
-            $("#panel_tab_pricing")
-              .html("Pricing")
-        }
-    }
-    
-    const buildInsertData = function () {
-        let dataToSend = {
-            city_id: (!isNaN(parseInt(_modal_product_city_id.value))) ? parseInt(_modal_product_city_id.value) : null,
-            category_id: (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null,
-            pricing_strategy_types_id: (!isNaN(parseInt(_modal_product_pricing_strategies_types_id.value))) ? parseInt(_modal_product_pricing_strategies_types_id.value) : null,
-            status_types_id: 1,
-            currency_id: (!isNaN(parseInt(_modal_product_currency_id.value))) ? parseInt(_modal_product_currency_id.value) : null,
-            location_id: (!isNaN(parseInt(_modal_product_location_id.value))) ? parseInt(_modal_product_location_id.value) : null,
-            rating_types_id: (!isNaN(parseInt(_modal_product_rating_types_id.value))) ? parseInt(_modal_product_rating_types_id.value) : null,
-            provider_id: (!isNaN(parseInt(_modal_product_provider_id.value))) ? parseInt(_modal_product_provider_id.value) : null,
-            vendor_id: (!isNaN(parseInt(_modal_product_vendor_id.value))) ? parseInt(_modal_product_vendor_id.value) : null,
-            provider_vendor_match: (((!isNaN(parseInt(_modal_product_provider_company_id.value))) ? parseInt(_modal_product_provider_company_id.value) : null) === ((!isNaN(parseInt(_modal_product_vendor_company_id.value))) ? parseInt(_modal_product_vendor_company_id.value) : null)) ? 1 : 0,
-            name: _modal_product_name.value,
-            sku: _modal_product_sku.value,
-            use_provider_location_id: 0,
-        }
-        return remove_nulls(dataToSend)
-    }
-    
-    const saveNewProduct = function () {
-        let dataToSend = buildInsertData()
-        
-        //Console.log("saveNewProduct() - dataToSend", dataToSend)
-        
-        newProduct(dataToSend, function (data) {
-            let product
-            
-            if (data) {
-                
-                product = data
-                if (data.length === 1) {
-                    product = data[0]
-                }
-            }
-            
-            Console.log("Product.saveNewProduct() - product", product)
-            
-            if (product.id) {
-                toastr.success(`Product - ${product.id} was created, would you like to edit?`)
-                
-                window.location.replace("/products/" + product.id)
-                
-            }
-        })
-        
-    }
-    
-    const newProduct = function (dataToSend, callback) {
-        let url = "/api/v1.0/products/add"
-        
-        if (dataToSend) {
-            try {
-                sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    } else {
-                        return handleProductError("Oops: 1")
-                    }
-                })
-            } catch (e) {
-                //Console.log("error", e)
-            }
-        }
-    }
-    
-    const initAutoComplete = function () {
-        let category_id = (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null
-        
-        if (category_id !== null) {
-            $(_modal_product_name)
-              .on("change", function () {
-                  /*
-                  setTimeout(function () {
-                      let provider_name = _provider_name.value
-                      
-                      if (globalSelectedProvider === false) {
-                          if (provider_name === "") {
-                              _provider_name.value = ""
-                              _provider_company_id.value = ""
-                              globalSelectedProvider = false
-                              $(_vendor_name).val("").trigger("change")
-                              $(_provider_company_id).val("").trigger("change")
-                          } else {
-                              provider_exists(provider_name)
-                          }
-                      }
-                  }, 200)
-                  //*/
-              })
-              .on("search", function () {
-              
-              })
-              .on("click", function () {
-                  $(this).select()
-              })
-              .autocomplete({
-                  serviceUrl: "/api/v1.0/autocomplete/products",
-                  minChars: 2,
-                  params: { "category_id": category_id },
-                  cache: false,
-                  dataType: "json",
-                  triggerSelectOnValidInput: false,
-                  paramName: "st",
-                  onSelect: function (suggestion) {
-                      if (!suggestion || !suggestion.data) {
-                          return
-                      }
-                      //Console.log("suggestion.data", suggestion.data)
-                      let product = suggestion.data
-                      //Console.log("product", product)
-                  },
-              })
-        }
-        //Console.log("initAutoComplete()", category_id)
-    }
-    
-    const validateNewProduct = function () {
-        //Console.log("validateNewProduct", "")
-        
-        if (_form_product_add) {
-            return $(_form_product_add).valid()
-        }
-        
-        return false
-    }
-    
-    const clearModalForm = function () {
-        _modal_product_name.value = ""
-        _modal_product_category_id.value = ""
-        _modal_product_sku.value = ""
-        _modal_product_rating_types_id.value = ""
-        _modal_product_currency_id.value = ""
-        _modal_product_provider_company_id.value = ""
-        _modal_product_vendor_company_id.value = ""
-        _modal_product_vendor_name.disabled = true
-        _modal_product_provider_name.disabled = true
-        _modal_product_pricing_strategies_types_id.value = ""
-        _modal_product_provider_location_id.value = ""
-        _modal_product_location_id.value = ""
-        _modal_product_city.value = ""
-        _modal_product_city_id.value = ""
-        Product.attr1 = null
-        Product.attr2 = null
-        Product.attr3 = null
-        Product.updateProductSKU()
-        Product.resetNewProductDetails()
-        clear_validation(_form_product_add)
-    }
-    
-    const resetNewProductDetails = function () {
-        _modal_product_provider_id.value = ""
-        _modal_product_vendor_id.value = ""
-        _modal_product_provider_name.value = ""
-        _modal_product_vendor_name.value = ""
-        _modal_product_city.value = ""
-        _modal_product_name.value = ""
-        _modal_product_sku.value = ""
-        _modal_product_city_id.value = ""
-        _modal_product_rating_types_id.value = ""
-        _modal_product_currency_id.value = ""
-        _modal_product_pricing_strategies_types_id.value = ""
-        _modal_product_name.disabled = true
-        _modal_product_sku.disabled = true
-        _modal_product_rating_types_id.disabled = true
-        _modal_product_currency_id.disabled = true
-        _modal_product_pricing_strategies_types_id.disabled = true
-        _modal_product_city.disabled = true
-    }
-    
-    const setNewProductModal = function () {
-        
-        clearModalForm()
-        Console.log("setNewProductModal")
-        $(_modal_new_product).modal("show")
-    }
-    
-    const handleProductError = function (msg) {
-        toastr.error(msg)
-    }
-    
-    const defaultDetail = function () {
-        return {
-            id: null,
-            category_id: null,
-            pricing_strategy_types_id: null,
-            status_types_id: null,
-            product_status_types_id: null,
-            currency_id: null,
-            location_id: null,
-            city_id: null,
-            vendor_id: null,
-            provider_id: null,
-            name: null,
-            provider_vendor_match: 1,
-            description_short: null,
-            description_long: null,
-            rating: null,
-            sku: null,
-            phone: null,
-            infant: null,
-            child: null,
-            teen: null,
-            depart_from: null,
-            arrive_to: null,
-            depart_time: null,
-            arrive_time: null,
-            day_span: null,
-            cover_image: null,
-            api_id: null,
-            from_api: 1,
-            hotel_code: null,
-            enabled: 1,
-            date_created: formatDateMySQL(),
-            created_by: user_id,
-            date_modified: formatDateMySQL(),
-            modified_by: user_id,
-            note: null,
-            amenities: "",
-            keywords: "",
-            seasons: [],
-            units: [],
-            use_provider_location: 0,
-            variants: [],
-            category: {},
-            location: {},
-            vendor: {},
-            profiles: [],
-            provider: {},
-        }
-    }
-    
-    const save = function (params) {
-    
-    }
-    
-    const get = function (id) {
-        let data_to_send = {}
-        if (id) {
-            data_to_send.id = id
-        }
-        
-    }
-    
-    const set = function (product) {
-        let detail = defaultDetail()
-        
-        if (product) {
-            detail.id = (product.id) ? product.id : null
-            detail.category_id = (product.category_id) ? product.category_id : null
-            detail.pricing_strategy_types_id = (product.pricing_strategy_types_id) ? product.pricing_strategy_types_id : null
-            detail.status_types_id = (product.status_types_id) ? product.status_types_id : null
-            detail.product_status_types_id = (product.product_status_types_id) ? product.product_status_types_id : null
-            detail.currency_id = (product.currency_id) ? product.currency_id : null
-            detail.location_id = (product.location_id) ? product.location_id : null
-            detail.city_id = (product.city_id) ? product.city_id : null
-            detail.vendor_id = (product.vendor_id) ? product.vendor_id : null
-            detail.provider_id = (product.provider_id) ? product.provider_id : null
-            detail.name = (product.name) ? product.name : null
-            detail.provider_vendor_match = (product.provider_vendor_match) ? product.provider_vendor_match : 1
-            detail.description_short = (product.description_short) ? product.description_short : null
-            detail.description_long = (product.description_long) ? product.description_long : null
-            detail.rating = (product.rating) ? product.rating : null
-            detail.sku = (product.sku) ? product.sku : null
-            detail.phone = (product.phone) ? product.phone : null
-            detail.infant = (product.infant) ? product.infant : null
-            detail.child = (product.child) ? product.child : null
-            detail.teen = (product.teen) ? product.teen : null
-            detail.depart_from = (product.depart_from) ? product.depart_from : null
-            detail.arrive_to = (product.arrive_to) ? product.arrive_to : null
-            detail.depart_time = (product.depart_time) ? product.depart_time : null
-            detail.arrive_time = (product.arrive_time) ? product.arrive_time : null
-            detail.day_span = (product.day_span) ? product.day_span : null
-            detail.cover_image = (product.cover_image) ? product.cover_image : null
-            detail.api_id = (product.api_id) ? product.api_id : null
-            detail.from_api = (product.from_api) ? product.from_api : 1
-            detail.hotel_code = (product.hotel_code) ? product.hotel_code : null
-            detail.enabled = (product.enabled) ? product.enabled : 1
-            detail.date_created = (product.date_created) ? product.date_created : formatDateMySQL()
-            detail.created_by = (product.created_by) ? product.created_by : user_id
-            detail.date_modified = (product.date_modified) ? product.date_modified : formatDateMySQL()
-            detail.modified_by = (product.modified_by) ? product.modified_by : user_id
-            detail.note = (product.note) ? product.note : null
-            detail.category = (product.category) ? product.category : {}
-            detail.keywords = (product.keywords) ? product.keywords : ""
-            detail.amenities = (product.amenities) ? product.amenities : ""
-            detail.seasons = (product.seasons) ? product.seasons : []
-            detail.units = (product.units) ? product.units : []
-            detail.use_provider_location = (product.use_provider_location) ? product.use_provider_location : 0
-            detail.variants = (product.variants) ? product.variants : []
-            detail.location = (product.location) ? product.location : {}
-            detail.vendor = (product.vendor) ? product.vendor : {}
-            detail.provider = (product.provider) ? product.provider : {}
-        }
-        
-        Product.detail = detail
-        return detail
-    }
-    
-    const loadAll = function (products) {
-        Product.all = new Map()
-        
-        if (!products) {
-            return
-        }
-        
-        $.each(products, function (i, product) {
-            let detail = set(product)
-            $index_table.insertRow(detail)
-            Product.all.set("id", detail)
-        })
-    }
-    
-    const buildIndexTable = function () {
-        
-        $index_table = $(_product_index_table).table({
-            table_type: "display_list",
-            data: [],
-            columnDefs: [
-                {
-                    title: "Name",
-                    targets: 0,
-                    data: "name",
-                    render: function (data, type, row, meta) {
-                        return "<span style='white-space: nowrap;'>" + data + "</span>"
-                    },
-                },
-                {
-                    title: "SKU",
-                    targets: 1,
-                    data: "sku",
-                    render: function (data, type, row, meta) {
-                        return "<span style='white-space: nowrap;'>" + data + "</span>"
-                    },
-                },
-                {
-                    title: "Provider",
-                    targets: 2,
-                    data: "provider",
-                    render: function (data, type, row, meta) {
-                        return "<span style='white-space: nowrap;'>" + data.name + "</span>"
-                    },
-                },
-                {
-                    title: "Vendor",
-                    targets: 3,
-                    data: "vendor",
-                    render: function (data, type, row, meta) {
-                        return "<span style='white-space: nowrap;'>" + data.name + "</span>"
-                    },
-                },
-                {
-                    title: "Location",
-                    targets: 4,
-                    data: "location",
-                    render: function (data, type, row, meta) {
-                        let displayLocation = ""
-                        if (defaultLocationDisplayFormat === "short") {
-                            displayLocation = data.display_short
-                        } else if (defaultLocationDisplayFormat === "long") {
-                            displayLocation = data.display_long
-                        } else {
-                            displayLocation = data.display_medium
-                        }
-                        
-                        return "<span style='white-space: nowrap;'>" + displayLocation + "</span>"
-                    },
-                },
-                {
-                    title: "Category",
-                    targets: 5,
-                    data: "category",
-                    render: function (data, type, row, meta) {
-                        return "<span style='white-space: nowrap;'>" + data.name + "</span>"
-                    },
-                },
-            ],
-            rowClick: Product.navigate,
-        })
-    }
-    
-    const navigate = function (product) {
-        if (product && product.id) {
-            window.location.replace(base_url + "/" + product.id)
-        }
-    }
-    
-    const changeHandler = function (event) {
-        //Console.log("value", this.value)
-        if (this.value === "use_provider_location") {
-            //Console.log("use_provider_location", provider_initial_location)
-            Location.init(provider_initial_location)
-        } else if (this.value === "use_product_location") {
-            //Console.log("use_product_location", product_initial_location)
-            Location.init(product_initial_location)
-        }
-    }
-    
-    const setDefaultProductDetails = function () {
-        return {
-            location: {},
-            provider: {},
-            vendor: {},
-            seasons: [],
-            units: [],
-            variants: [],
-            profiles: [],
-            matrix: [],
-        }
-    }
-    
-    const loadProductLocation = function (location, type) {
-        //Console.log("location", location)
-        if (!type) {
-            type = "product"
-        }
-        let iFrame = `#map-container-product-location`
-        product_initial_location = location
-        let $frame = $(iFrame).find("iframe")
-        let url = buildMapsURL(location)
-        $frame.attr("src", url)
-    }
-    
-    const initEditForm = function (settings) {
-        let product = setDefaultProductDetails()
-        
-        if (settings) {
-            product = settings
-        }
-        
-        Array.prototype.forEach.call(radios, function (radio) {
-            radio.addEventListener("change", changeHandler)
-        })
-        
-        setEditFormValues(product)
-    }
-    
-    const setEditFormValues = function (product) {
-        let provider, vendor, product_location,
-          seasons, units, variants, profiles, provider_location
-        
-        if (product.location) {
-            product_location = product.location
-            Product.product_initial_location = product_location
-        }
-        
-        if (product.provider) {
-            provider = product.provider
-        }
-        
-        if (provider.location) {
-            provider_location = provider.location
-            Product.provider_initial_location = provider_location
-        }
-        
-        if (product.vendor) {
-            vendor = product.vendor
-        }
-        
-        if (product.seasons) {
-            seasons = product.seasons
-        }
-        
-        if (product.units) {
-            units = product.units
-        }
-        
-        if (product.variants) {
-            variants = product.variants
-        }
-        
-        if (product.profiles) {
-            profiles = product.profiles
-        }
-        
-        if (product.use_provider_location) {
-            $(_use_provider_location).attr("checked", "true")
-            loadProductLocation(provider_location, "provider")
-            Location.init(provider_location)
-        } else {
-            $(_use_product_location).attr("checked", "true")
-            loadProductLocation(product_location, "provider")
-            Location.init(product_location)
-        }
-        
-        let product_keywords = (product.keywords) ? product.keywords : ""
-        $product_keywords = $(_product_keywords).BuildKeyword(product_keywords)
-        
-        let product_amenities = (product.amenities) ? product.amenities : ""
-        $product_amenities = $(_product_amenities).BuildKeyword(product_amenities)
-        
-    }
-    
-    const init = function (settings) {
-        let product_details, variants, seasons, units, profiles, matrices, pricings
-        
-        if (_modal_new_product) {
-            Category.init()
-        }
-        
-        if (_product_edit_page) {
-            if (settings) {
-                
-                if (settings.product_details) {
-                    product_details = settings.product_details
-                }
-                
-                if (product_details.variants) {
-                    variants = product_details.variants
-                }
-                
-                if (product_details.seasons) {
-                    seasons = product_details.seasons
-                }
-                
-                if (product_details.matrices) {
-                    matrices = product_details.matrices
-                }
-                
-                if (product_details.profiles) {
-                    profiles = product_details.profiles
-                }
-                
-                if (product_details.units) {
-                    units = product_details.units
-                }
-                
-                if (product_details.pricings) {
-                    pricings = product_details.pricings
-                }
-                
-                let pricing_strategy = {
-                    pricing_strategy_types_id: (!isNaN(parseInt(product_details.pricing_strategy_types_id))) ? parseInt(product_details.pricing_strategy_types_id) : null,
-                }
-                
-                $(document).ready(function () {
-                    if (_product_edit_page) {
-                        initAutoComplete()
-                        initEditForm(product_details)
-                        
-                        Variant.init(variants)
-                        Season.init(seasons)
-                        Season.loadAll(seasons)
-                        Unit.init({ units: units })
-                        Matrix.init({ matrices: matrices })
-                        Pricing.init({ pricings: pricings })
-                        InventoryProfile.init({
-                            profiles: profiles,
-                        })
-                        PricingWorksheet.init({
-                            pricing_strategy: pricing_strategy,
-                            pricings: pricings,
-                        })
-                        
-                        $(_product_panel_link_overview)
-                          .on("click", function () {
-                              $(_panel_tab_product_o).tab("show")
-                          })
-                        $(_product_panel_link_location)
-                          .on("click", function () {
-                              $(_panel_tab_location).tab("show")
-                          })
-                        $(_product_panel_link_product)
-                          .on("click", function () {
-                              $(_panel_tab_product).tab("show")
-                          })
-                        $(_product_panel_link_season)
-                          .on("click", function () {
-                              $(_panel_tab_season).tab("show")
-                          })
-                        $(_product_panel_link_unit)
-                          .on("click", function () {
-                              $(_panel_tab_unit).tab("show")
-                          })
-                        $(_product_panel_link_variant)
-                          .on("click", function () {
-                              $(_panel_tab_variant).tab("show")
-                          })
-                        $(_product_panel_link_inventory)
-                          .on("click", function () {
-                              $(_panel_tab_inventory).tab("show")
-                          })
-                        $(_product_panel_link_pricing)
-                          .on("click", function () {
-                              $(_panel_tab_pricing).tab("show")
-                          })
-                        $(_product_panel_link_meta)
-                          .on("click", function () {
-                              $(_panel_tab_meta).tab("show")
-                          })
-                        
-                        updateProgress()
-                    }
-                })
-                
-            }
-            
-            return true
-        }
-        
-        if (_product_index_page) {
-            Provider.init()
-            Product.index(settings)
-            if (_form_product_add) {
-                validator_init(add_modal_form_rules)
-                newProduct_validator = $(_form_product_add).validate()
-            }
-            return true
-        }
-    }
-    
-    const index = function (settings) {
-        
-        if (_product_index_table) {
-            buildIndexTable()
-            
-            if (settings) {
-                loadAll(settings)
-            }
-        }
-    }
-    
-    const setNewFormDetails = function (category_id) {
-        //Console.log("setNewFormDetails()", category_id)
-        
-    }
-    
-    const updateProductSKU = function () {
-        let att1 = Product.attr1
-        let att2 = Product.attr2
-        let att3 = Product.attr3
-        let sku = ""
-        if (!is_null(att1) && !is_null(att2) && !is_null(att3)) {
-            sku = att1.replace(/-/g, "") + "-" + att2.replace(/-/g, "") + "-" + att3.replace(/-/g, "")
-            _modal_product_sku.value = sku
-        } else {
-            _modal_product_sku.value = ""
-            if (is_null(att1)) {
-                //Console.log("att1 is null", att1)
-            }
-            
-            if (is_null(att2)) {
-                //Console.log("att2 is null", att2)
-            }
-            
-            if (is_null(att3)) {
-                //Console.log("att3 is null", att3)
-            }
-        }
-        
-    }
-    
-    return {
-        validator: null,
-        updateProgress: function () {
-            updateProgress()
-        },
-        product_initial_location: null,
-        provider_initial_location: null,
-        detail: {},
-        all: new Map(),
-        attr1: null,
-        attr2: null,
-        attr3: null,
-        updateProductSKU: function () {
-            updateProductSKU()
-        },
-        setNewFormDetails: function (category_id) {
-            //Console.log("Product.setNewFormDetails()", category_id)
-            setNewFormDetails(category_id)
-        },
-        get: function (params) {
-            get(params)
-        },
-        loadAll: function (params) {
-            loadAll(params)
-        },
-        save: function (params) {
-            save(params)
-        },
-        init: function (settings) {
-            init(settings)
-        },
-        index: function (settings) {
-            index(settings)
-        },
-        navigate: function (product) {
-            navigate(product)
-        },
-        resetNewProductDetails: function () {
-            resetNewProductDetails()
-        },
-        initAutoComplete: function () {
-            initAutoComplete()
-        },
-    }
-    
-})()
 
 $(function () {
     const _profile_card = document.getElementById("profile_card")

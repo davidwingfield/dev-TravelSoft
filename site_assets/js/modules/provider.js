@@ -59,81 +59,81 @@ const Provider = (function () {
     }
     
     $(_button_save_provider)
-      .on("click", function () {
-          let tabs = $("#provider_edit_tabs > li.nav-item > a.nav-link")
-          let panels = $("div.tab-pane")
-          let company_detail = Company.build()
-          let provider_detail = Provider.build()
-          let location_detail = Location.build()
-          let vendor_detail = Vendor.build()
-          let addresses = Array.from(Address.all.values())
-          let contacts = Array.from(Contact.all.values())
-          /*
-          Console.log("company_detail", company_detail)
-          Console.log("provider_detail", provider_detail)
-          Console.log("location_detail", location_detail)
-          Console.log("vendor_detail", vendor_detail)
-          Console.log("addresses", addresses)
-          Console.log("contacts", contacts)
-          //*/
-          if (!company_detail || !provider_detail || !location_detail || !vendor_detail || !addresses || !contacts) {
-              $.each(panels, function (index, item) {
-                  if ($(this).find(".is-invalid").length > 0) {
-                      let nav_tab = $("body").find("[aria-controls='" + $(this).attr("id") + "']")
-                      tabs.removeClass("active")
-                      panels.removeClass("active")
-                      $(this).addClass("active")
-                      nav_tab.addClass("active")
-                      return false
-                  }
-              })
-              return
-          }
-          
-          provider_detail.location_id = (location_detail.id) ? location_detail.id : null
-          vendor_detail.is_provider = (_form_edit_provider) ? 1 : 0
-          
-          // ----
-          
-          confirmDialog(`Would you like to update?`, (ans) => {
-              if (ans) {
-                  save({
-                      "company_detail": company_detail,
-                      "provider_detail": provider_detail,
-                      "location_detail": location_detail,
-                      "vendor_detail": vendor_detail,
-                      "addresses": addresses,
-                      "contacts": contacts,
-                  })
-              }
-              
-          })
-      })
+        .on("click", function () {
+            let tabs = $("#provider_edit_tabs > li.nav-item > a.nav-link")
+            let panels = $("div.tab-pane")
+            let company_detail = Company.build()
+            let provider_detail = Provider.build()
+            let location_detail = Location.build()
+            let vendor_detail = Vendor.build()
+            let addresses = Array.from(Address.all.values())
+            let contacts = Array.from(Contact.all.values())
+            /*
+            Console.log("company_detail", company_detail)
+            Console.log("provider_detail", provider_detail)
+            Console.log("location_detail", location_detail)
+            Console.log("vendor_detail", vendor_detail)
+            Console.log("addresses", addresses)
+            Console.log("contacts", contacts)
+            //*/
+            if (!company_detail || !provider_detail || !location_detail || !vendor_detail || !addresses || !contacts) {
+                $.each(panels, function (index, item) {
+                    if ($(this).find(".is-invalid").length > 0) {
+                        let nav_tab = $("body").find("[aria-controls='" + $(this).attr("id") + "']")
+                        tabs.removeClass("active")
+                        panels.removeClass("active")
+                        $(this).addClass("active")
+                        nav_tab.addClass("active")
+                        return false
+                    }
+                })
+                return
+            }
+            
+            provider_detail.location_id = (location_detail.id) ? location_detail.id : null
+            vendor_detail.is_provider = (_form_edit_provider) ? 1 : 0
+            
+            // ----
+            
+            confirmDialog(`Would you like to update?`, (ans) => {
+                if (ans) {
+                    save({
+                        "company_detail": company_detail,
+                        "provider_detail": provider_detail,
+                        "location_detail": location_detail,
+                        "vendor_detail": vendor_detail,
+                        "addresses": addresses,
+                        "contacts": contacts,
+                    })
+                }
+                
+            })
+        })
     
     $("#provider_edit")
-      .on("change", function () {
-          set_progress()
-      })
+        .on("change", function () {
+            set_progress()
+        })
     
     $(_provider_company_id)
-      .on("change", function () {
-          $(_vendor_company_id).val($(this).val())
-      })
+        .on("change", function () {
+            $(_vendor_company_id).val($(this).val())
+        })
     
     $(_button_add_provider_page_heading)
-      .on("click", function () {
-          //Console.log("test")
-      })
+        .on("click", function () {
+            //Console.log("test")
+        })
     
     $(_button_edit_provider_name)
-      .on("click", function () {
-          enable_form_fields()
-      })
+        .on("click", function () {
+            enable_form_fields()
+        })
     
     $(_company_id)
-      .on("change", function () {
-          $(_provider_company_id).val(_company_id.value)
-      })
+        .on("change", function () {
+            $(_provider_company_id).val(_company_id.value)
+        })
     
     /**
      * add provider
@@ -191,7 +191,7 @@ const Provider = (function () {
                                 
                                 Product.attr2 = (provider.code_direct_id) ? provider.code_direct_id : null
                                 Product.attr3 = (vendor.sku) ? vendor.sku : null
-                                Product.update_product_sku()
+                                Product.updateProductSKU()
                                 
                             }
                         }
@@ -208,158 +208,158 @@ const Provider = (function () {
     const initAutoComplete = function () {
         
         $(_provider_name)
-          .on("change", function () {
-              /*
-              setTimeout(function () {
-                  let provider_name = _provider_name.value
-                  
-                  if (globalSelectedProvider === false) {
-                      if (provider_name === "") {
-                          _provider_name.value = ""
-                          _provider_company_id.value = ""
-                          globalSelectedProvider = false
-                          $(_vendor_name).val("").trigger("change")
-                          $(_provider_company_id).val("").trigger("change")
-                      } else {
-                          provider_exists(provider_name)
-                      }
-                  }
-              }, 200)
-              //*/
-          })
-          .on("search", function () {
-              //_provider_id.value = ""
-              //_provider_company_id.value = ""
-              
-              //$(_vendor_name).val("").trigger("change")
-              //$(_provider_company_id).val("").trigger("change")
-              Provider.reset_form()
-              Vendor.reset_form()
-          })
-          .on("click", function () {
-              $(this).select(function () {
-                  //$( "div" ).text( "Something was selected" ).show().fadeOut( 1000 );
-              })
-          })
-          .autocomplete({
-              serviceUrl: "/api/v1.0/autocomplete/providers",
-              minChars: 2,
-              cache: false,
-              dataType: "json",
-              triggerSelectOnValidInput: false,
-              paramName: "st",
-              onSelect: function (suggestion) {
-                  if (!suggestion.data) {
-                      return
-                  }
-                  Console.log("suggestion.data", suggestion.data)
-                  let provider = suggestion.data
-                  let company = (provider.company) ? provider.company : {}
-                  let addresses = (provider.addresses) ? provider.addresses : {}
-                  let contacts = (provider.contacts) ? provider.contacts : {}
-                  let location = (provider.location) ? provider.location : {}
-                  let vendor = (provider.vendor) ? provider.vendor : {}
-                  
-                  //
-                  
-                  let provider_id = provider.id
-                  let company_name = provider.company.name
-                  let provider_company_id = provider.company.id
-                  //
-                  if (_form_edit_provider) {
-                      $(_provider_company_id).val(provider_company_id)
-                      $(_provider_id).val(provider_id)
-                      confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
-                          if (ans) {
-                              window.location.replace("/providers/" + provider_id)
-                              populate_form(provider)
-                              Company.populate_form(company)
-                              Location.populate_form(location)
-                              $(_vendor_company_id).val(provider_company_id)
-                              $(_vendor_name).val(company_name).trigger("change")
-                          } else {
-                              Provider.reset_form()
-                              Vendor.reset_form()
-                          }
-                      })
-                  }
-              },
-          })
+            .on("change", function () {
+                /*
+                setTimeout(function () {
+                    let provider_name = _provider_name.value
+                    
+                    if (globalSelectedProvider === false) {
+                        if (provider_name === "") {
+                            _provider_name.value = ""
+                            _provider_company_id.value = ""
+                            globalSelectedProvider = false
+                            $(_vendor_name).val("").trigger("change")
+                            $(_provider_company_id).val("").trigger("change")
+                        } else {
+                            provider_exists(provider_name)
+                        }
+                    }
+                }, 200)
+                //*/
+            })
+            .on("search", function () {
+                //_provider_id.value = ""
+                //_provider_company_id.value = ""
+                
+                //$(_vendor_name).val("").trigger("change")
+                //$(_provider_company_id).val("").trigger("change")
+                Provider.reset_form()
+                Vendor.reset_form()
+            })
+            .on("click", function () {
+                $(this).select(function () {
+                    //$( "div" ).text( "Something was selected" ).show().fadeOut( 1000 );
+                })
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/providers",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                paramName: "st",
+                onSelect: function (suggestion) {
+                    if (!suggestion.data) {
+                        return
+                    }
+                    Console.log("suggestion.data", suggestion.data)
+                    let provider = suggestion.data
+                    let company = (provider.company) ? provider.company : {}
+                    let addresses = (provider.addresses) ? provider.addresses : {}
+                    let contacts = (provider.contacts) ? provider.contacts : {}
+                    let location = (provider.location) ? provider.location : {}
+                    let vendor = (provider.vendor) ? provider.vendor : {}
+                    
+                    //
+                    
+                    let provider_id = provider.id
+                    let company_name = provider.company.name
+                    let provider_company_id = provider.company.id
+                    //
+                    if (_form_edit_provider) {
+                        $(_provider_company_id).val(provider_company_id)
+                        $(_provider_id).val(provider_id)
+                        confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
+                            if (ans) {
+                                window.location.replace("/providers/" + provider_id)
+                                populate_form(provider)
+                                Company.populate_form(company)
+                                Location.populate_form(location)
+                                $(_vendor_company_id).val(provider_company_id)
+                                $(_vendor_name).val(company_name).trigger("change")
+                            } else {
+                                Provider.reset_form()
+                                Vendor.reset_form()
+                            }
+                        })
+                    }
+                },
+            })
         
         $(_modal_product_provider_name)
-          .on("change", function () {
-              setTimeout(function () {
-                  let provider_name = _modal_product_provider_name.value
-                  
-                  if (globalSelectedProvider === false) {
-                      if (provider_name === "") {
-                          _modal_product_vendor_id.value = ""
-                          _modal_product_provider_id.value = ""
-                          _modal_product_vendor_name.value = ""
-                          _modal_product_provider_name.value = ""
-                          _modal_product_vendor_company_id.value = ""
-                          _modal_product_provider_company_id.value = ""
-                          _modal_product_provider_location_id.value = ""
-                          _modal_product_vendor_name.disabled = true
-                          Product.attr2 = null
-                          Product.attr3 = null
-                          Product.update_product_sku()
-                          globalSelectedProvider = false
-                      } else {
-                          provider_exists(provider_name)
-                      }
-                  }
-              }, 200)
-          })
-          .on("search", function () {
-              _modal_product_vendor_id.value = ""
-              _modal_product_provider_id.value = ""
-              _modal_product_vendor_name.value = ""
-              _modal_product_provider_name.value = ""
-              _modal_product_vendor_company_id.value = ""
-              _modal_product_provider_company_id.value = ""
-              _modal_product_provider_location_id.value = ""
-              Product.attr2 = null
-              Product.attr3 = null
-              Product.update_product_sku()
-              _modal_product_vendor_name.disabled = true
-          })
-          .on("click", function () {
-              $(this).select()
-          })
-          .autocomplete({
-              serviceUrl: "/api/v1.0/autocomplete/providers",
-              minChars: 2,
-              cache: false,
-              dataType: "json",
-              triggerSelectOnValidInput: false,
-              paramName: "st",
-              onSelect: function (suggestion) {
-                  if (!suggestion || !suggestion.data) {
-                      return
-                  }
-                  Console.log("suggestion.data", suggestion.data)
-                  let provider = set(suggestion.data)
-                  let vendor = provider.vendor
-                  let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
-                  let sku = (vendor.sku) ? vendor.sku : null
-                  
-                  _modal_product_vendor_id.value = parseInt(suggestion.data.vendor.id)
-                  _modal_product_provider_id.value = suggestion.data.id
-                  _modal_product_vendor_name.value = suggestion.data.name
-                  _modal_product_vendor_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
-                  _modal_product_provider_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
-                  _modal_product_provider_vendor_match.checked = true
-                  _modal_product_vendor_name.disabled = false
-                  _modal_product_provider_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
-                  
-                  Product.attr2 = code_direct
-                  Product.attr3 = sku
-                  Product.update_product_sku()
-                  
-                  //$(_modal_product_vendor_name).trigger("change")
-              },
-          })
+            .on("change", function () {
+                setTimeout(function () {
+                    let provider_name = _modal_product_provider_name.value
+                    
+                    if (globalSelectedProvider === false) {
+                        if (provider_name === "") {
+                            _modal_product_vendor_id.value = ""
+                            _modal_product_provider_id.value = ""
+                            _modal_product_vendor_name.value = ""
+                            _modal_product_provider_name.value = ""
+                            _modal_product_vendor_company_id.value = ""
+                            _modal_product_provider_company_id.value = ""
+                            _modal_product_provider_location_id.value = ""
+                            _modal_product_vendor_name.disabled = true
+                            Product.attr2 = null
+                            Product.attr3 = null
+                            Product.updateProductSKU()
+                            globalSelectedProvider = false
+                        } else {
+                            provider_exists(provider_name)
+                        }
+                    }
+                }, 200)
+            })
+            .on("search", function () {
+                _modal_product_vendor_id.value = ""
+                _modal_product_provider_id.value = ""
+                _modal_product_vendor_name.value = ""
+                _modal_product_provider_name.value = ""
+                _modal_product_vendor_company_id.value = ""
+                _modal_product_provider_company_id.value = ""
+                _modal_product_provider_location_id.value = ""
+                Product.attr2 = null
+                Product.attr3 = null
+                Product.updateProductSKU()
+                _modal_product_vendor_name.disabled = true
+            })
+            .on("click", function () {
+                $(this).select()
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/providers",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                paramName: "st",
+                onSelect: function (suggestion) {
+                    if (!suggestion || !suggestion.data) {
+                        return
+                    }
+                    Console.log("suggestion.data", suggestion.data)
+                    let provider = set(suggestion.data)
+                    let vendor = provider.vendor
+                    let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
+                    let sku = (vendor.sku) ? vendor.sku : null
+                    
+                    _modal_product_vendor_id.value = parseInt(suggestion.data.vendor.id)
+                    _modal_product_provider_id.value = suggestion.data.id
+                    _modal_product_vendor_name.value = suggestion.data.name
+                    _modal_product_vendor_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
+                    _modal_product_provider_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
+                    _modal_product_provider_vendor_match.checked = true
+                    _modal_product_vendor_name.disabled = false
+                    _modal_product_provider_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
+                    
+                    Product.attr2 = code_direct
+                    Product.attr3 = sku
+                    Product.updateProductSKU()
+                    
+                    //$(_modal_product_vendor_name).trigger("change")
+                },
+            })
         
     }
     
@@ -442,7 +442,7 @@ const Provider = (function () {
                         _modal_product_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
                         Product.attr2 = code_direct
                         Product.attr3 = sku
-                        Product.update_product_sku()
+                        Product.updateProductSKU()
                         
                         /*
                         
@@ -453,7 +453,7 @@ const Provider = (function () {
     
                         Product.attr2 = code_direct
                         Product.attr3 = sku
-                        Product.update_product_sku()
+                        Product.updateProductSKU()
                         //*/
                     }
                 }

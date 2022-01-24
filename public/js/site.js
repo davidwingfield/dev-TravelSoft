@@ -1918,7 +1918,7 @@ const ContextMenu = (function () {
             },
             items: {
                 "edit": {
-                    name: "Edit",
+                    name: "Assign Season To Days",
                     icon: "edit",
                 },
                 "cut": {
@@ -3961,6 +3961,7 @@ const PricingWorksheet = (function () {
     const _button_toggle_completed_matrices = document.getElementById("button_toggle_completed_matrices")
     const _product_edit_pricing_section_reload_worksheet = document.getElementById("product_edit_pricing_section_reload_worksheet")
     
+    let pricingsHidden, matricesHidden, unitsCollapsed, seasonsCollapsed = false
     let completed = '<span class="badge badge-pill badge-success">Completed</span>'
     let incomplete = '<span class="badge badge-pill badge-danger">Incomplete</span>'
     let seasonList, unitList, variantList = []
@@ -4182,7 +4183,9 @@ const PricingWorksheet = (function () {
         
         if (showElements) {
             $("[data-matrixcomplete='true']").show()
+            matricesHidden = false
         } else {
+            matricesHidden = true
             $("[data-matrixcomplete='true']").hide()
         }
         
@@ -4207,8 +4210,10 @@ const PricingWorksheet = (function () {
         
         if (showElements) {
             $("[data-pricingcomplete='true']").show()
+            pricingsHidden = false
         } else {
             $("[data-pricingcomplete='true']").hide()
+            pricingsHidden = true
         }
         
     }
@@ -4236,6 +4241,8 @@ const PricingWorksheet = (function () {
             let element = elements[i]
             let id = $(element).attr("id")
             $("#" + id).collapse((showElements === true) ? "show" : "hide")
+            unitsCollapsed = (showElements === true)
+            //pricingsHidden, matricesHidden, unitsCollapsed, seasonsCollapsed = false
         }
     }
     
@@ -4261,6 +4268,7 @@ const PricingWorksheet = (function () {
             let element = elements[i]
             let id = $(element).attr("id")
             $("#" + id).collapse((showElements === true) ? "show" : "hide")
+            seasonsCollapsed = (showElements === true)
         }
     }
     
@@ -4813,6 +4821,36 @@ const PricingWorksheet = (function () {
                     Pricing.all.set(pricing.code, pricing)
                     
                     PricingWorksheet.pricingWorksheet()
+                    
+                    Console.log("pricingsHidden", pricingsHidden)
+                    Console.log("matricesHidden", matricesHidden)
+                    Console.log("unitsCollapsed", unitsCollapsed)
+                    Console.log("seasonsCollapsed", seasonsCollapsed)
+                    
+                    if (seasonsCollapsed) {
+                        $(_button_collapse_seasons).attr("data-shown", "false")
+                        $(_button_collapse_seasons).text("Expand Seasons")
+                        toggleSeasonFilter()
+                    }
+                    
+                    if (unitsCollapsed) {
+                        $(_button_collapse_units).attr("data-shown", "false")
+                        $(_button_collapse_units).text("Expand Units")
+                        toggleUnitFilter()
+                    }
+                    
+                    if (matricesHidden) {
+                        $("[data-matrixcomplete='true']").show()
+                        $(_button_toggle_completed_matrices).attr("data-shown", "true")
+                        $(_button_toggle_completed_matrices).text("Hide Completed Matrices")
+                    }
+                    
+                    if (pricingsHidden) {
+                        $("[data-pricingcomplete='true']").show()
+                        $(_button_toggle_completed_pricings).attr("data-shown", "true")
+                        $(_button_toggle_completed_pricings).text("Hide Completed Pricings")
+                    }
+                    
                     toastr.success(`Pricing: ${pricing.name} - has been updated`)
                 }
             })
@@ -6161,25 +6199,46 @@ $("#image_manager_clear_button")
 
 $.fn.YearCalendar = function (settings) {
     "use strict"
+    
+    const _calendar_filter_ranges = document.getElementById("calendar_filter_ranges")
+    const _product_id = document.getElementById("product_id")
+    const _calendar_display_select_all_days = document.getElementById("calendar_display_select_all_days")
+    const _calendar_display_clear_selected_days = document.getElementById("calendar_display_clear_selected_days")
+    
     let calendarType = "season"
     let selectedStart, selectedEnd = null
     let calendar_id = $(this).attr("id")
     let calContainer = document.getElementById(calendar_id)
     let calendars = []
     let seasonEvents = new Map()
-    
-    const _calendar_filter_ranges = document.getElementById("calendar_filter_ranges")
-    const _product_id = document.getElementById("product_id")
-    
     let product_id = parseInt(_product_id.value)
+    
+    $(_calendar_display_select_all_days)
+        .on("click", function () {
+            selectAllDays()
+        })
+    
+    $(_calendar_display_clear_selected_days)
+        .on("click", function () {
+            clearSelectedDates()
+        })
+    
+    const selectAllDays = function () {
+        clearSelectedDates()
+        const start = new Date(new Date().getFullYear(), 0, 1)
+        const end = new Date(new Date().getFullYear(), 11, 31)
+        
+        let startDate = moment(start).format("YYYY-MM-DD")
+        let endDate = moment(end).format("YYYY-MM-DD")
+        
+        selectDates(this, startDate, endDate)
+        
+    }
     
     const pad = function (d) {
         return (d < 10) ? '0' + d.toString() : d.toString()
     }
     
-    // ----
-    
-    // ----
     const buildCalendarRow = function (calendar_id) {
         let calendarRow = document.createElement("div")
         calendarRow.classList = "row gx-1"
@@ -6237,9 +6296,6 @@ $.fn.YearCalendar = function (settings) {
         
         return calendarBlockContainer
     }
-    // ----
-    
-    // ----
     
     const clearDisabledDates = function () {
         let days = $("td[season='true']")
@@ -6700,7 +6756,7 @@ const YearCalendar = (function () {
     const _calendar_filter_unit_id_clear = document.getElementById("calendar_filter_unit_id_clear")
     const _calendar_filter_season_id_assign = document.getElementById("calendar_filter_season_id_assign")
     const _calendar_filter_season_id_clear = document.getElementById("calendar_filter_season_id_clear")
-    
+    const _calendar_display_refresh = document.getElementById("calendar_display_refresh")
     $(_calendar_display_next_year)
         .on("click", function () {
             //*
@@ -6713,6 +6769,14 @@ const YearCalendar = (function () {
                 YearCalendar.endLoading()
             })
             //*/
+        })
+    
+    $(_calendar_display_refresh)
+        .on("click", function () {
+            $(_calendar_loader).fadeIn("slow", function () {
+                
+                YearCalendar.endLoading()
+            })
         })
     
     $(_calendar_display_prev_year)
@@ -6747,12 +6811,10 @@ const YearCalendar = (function () {
                 
                 if (product_season_detail.disabled_dow) {
                     disabled_dow = getListOfIds(product_season_detail.disabled_dow)
-                    //Console.log("disabled_dow", disabled_dow)
                 }
                 
             }
             setDisabledDOW(disabled_dow)
-            //Console.log("_calendar_filter_season_id:click()", disabled_dow)
         })
     
     $(_calendar_filter_season_id_assign)
@@ -6835,21 +6897,85 @@ const YearCalendar = (function () {
         $("html").css({ overflow: "auto" })
     }
     
-    const buildAssignDatesRecord = function () {
-        Console.log("YearCalendar.buildAssignDatesRecord()", this)
+    const removeDisabledDOW = function (disabled_dow) {
+        if (!disabled_dow) {
+            disabled_dow = []
+        }
         
+        clearSelectedDOW()
+        
+        $.each(disabled_dow, function (k, dow) {
+            let dataDOW = dow.toString()
+            let days = $(`td[season='true'][dow='${dataDOW}']`)
+            
+            days.each(function (index, element) {
+                $(element).removeClass("selected-day")
+                $(element).addClass("disabled-dow")
+                $(element).attr("selected", "false")
+            })
+        })
+        
+    }
+    
+    const buildAssignDatesRecord = function () {
         let product_id = parseInt(_product_id.value)
         let season_id = parseInt(_calendar_filter_season_id.value)
-        
-        let days = Array.from(YearCalendar.selectedDates.values())
-        
+        let season = Season.all.get(season_id)
+        let disabledDOW = []
         let dataToSend = {
             season_id: season_id,
             product_id: product_id,
-            days: days,
+            days: [],
+        }
+        let days = Array.from(YearCalendar.selectedDates.values())
+        
+        if (season) {
+            if (season.product_season_detail) {
+                disabledDOW = getListOfIds(season.product_season_detail.disabled_dow)
+            }
         }
         
-        Console.log("YearCalendar.buildAssignDatesRecord() - dataToSend", dataToSend)
+        $.each(days, function (i, day) {
+            const date = moment(day)
+            const dow = date.day()
+            
+            let index = disabledDOW.indexOf(dow)
+            
+            if (index < 0) {
+                dataToSend.days.push(day)
+            }
+        })
+        
+        console.log("YearCalendar.buildAssignDatesRecord() - dataToSend", dataToSend)
+        
+        //*
+        assignSeasonToProduct(dataToSend, function (data) {
+            console.log(data)
+        })
+        //*/
+    }
+    
+    const handleCalendarError = function (msg) {
+        toastr.error(msg)
+    }
+    
+    const assignSeasonToProduct = function (dataToSend, callback) {
+        let url = "/api/v1.0/products/assign_seasons"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handleCalendarError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                Console.log("error", e)
+                return handleCalendarError("Oops: 1")
+            }
+        }
     }
     
     const resetForm = function () {
@@ -6874,9 +7000,9 @@ const YearCalendar = (function () {
             let days = $(`td[season='true'][dow='${dataDOW}']`)
             
             days.each(function (index, element) {
-                $(element).removeClass("selected-day")
+                //$(element).removeClass("selected-day")
                 $(element).addClass("disabled-dow")
-                $(element).attr("selected", "false")
+                //$(element).attr("selected", "false")
             })
         })
         
@@ -7556,174 +7682,174 @@ const City = (function () {
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     $("#form_product_search_hotel_product_location")
-      .on("change", function () {
-          setTimeout(function () {
-          
-          }, 200)
-      })
-      .on("search", function () {
-      
-      })
-      .on("click", function (e) {
-          if ($(this).attr("readonly") === "readonly") {
-              e.preventDefault()
-          } else {
-              $(this).select()
-          }
-          
-      })
-      .autocomplete({
-          serviceUrl: "/api/v1.0/autocomplete/cities",
-          minChars: 2,
-          cache: false,
-          dataType: "json",
-          triggerSelectOnValidInput: false,
-          paramName: "st",
-          onSelect: function (suggestion) {
-              Console.log("city", suggestion)
-              if (!suggestion.data) {
-                  return
-              }
-              
-              Console.log("city", suggestion)
-              /*
-                  "value": "Abano Terme (Padova, Italy)",
-                  "data": {
-                      "id": 1,
-                      "country_id": 102,
-                      "province_id": 250,
-                      "sort_order": 999,
-                      "name": "Abano Terme",
-                      "enabled": 1,
-                      "date_created": "2021-08-03 14:40:07",
-                      "created_by": 4,
-                      "date_modified": "2021-08-03 14:40:07",
-                      "modified_by": 4,
-                      "note": "",
-                      "province": {
-                          "id": 250,
-                          "country_id": 102,
-                          "name": "Padova",
-                          "iso2": "PD",
-                          "iso3": "",
-                          "sort_order": 999,
-                          "enabled": 1,
-                          "date_created": "2021-12-15 10:58:47",
-                          "created_by": 4,
-                          "date_modified": "2021-12-15 10:58:47",
-                          "modified_by": 4,
-                          "note": null
-                      },
-                      "country": {
-                          "id": 102,
-                          "currency_id": 2,
-                          "sort_order": 0,
-                          "name": "Italy",
-                          "iso2": "IT",
-                          "iso3": "ITA",
-                          "enabled": 1,
-                          "date_created": "2021-08-03 13:04:10",
-                          "created_by": 4,
-                          "date_modified": "2021-08-03 15:13:45",
-                          "modified_by": 4,
-                          "note": ""
-                      }
-                  }
-              //*/
-              
-          },
-      })
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+        
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+            
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                Console.log("city", suggestion)
+                if (!suggestion.data) {
+                    return
+                }
+                
+                Console.log("city", suggestion)
+                /*
+                    "value": "Abano Terme (Padova, Italy)",
+                    "data": {
+                        "id": 1,
+                        "country_id": 102,
+                        "province_id": 250,
+                        "sort_order": 999,
+                        "name": "Abano Terme",
+                        "enabled": 1,
+                        "date_created": "2021-08-03 14:40:07",
+                        "created_by": 4,
+                        "date_modified": "2021-08-03 14:40:07",
+                        "modified_by": 4,
+                        "note": "",
+                        "province": {
+                            "id": 250,
+                            "country_id": 102,
+                            "name": "Padova",
+                            "iso2": "PD",
+                            "iso3": "",
+                            "sort_order": 999,
+                            "enabled": 1,
+                            "date_created": "2021-12-15 10:58:47",
+                            "created_by": 4,
+                            "date_modified": "2021-12-15 10:58:47",
+                            "modified_by": 4,
+                            "note": null
+                        },
+                        "country": {
+                            "id": 102,
+                            "currency_id": 2,
+                            "sort_order": 0,
+                            "name": "Italy",
+                            "iso2": "IT",
+                            "iso3": "ITA",
+                            "enabled": 1,
+                            "date_created": "2021-08-03 13:04:10",
+                            "created_by": 4,
+                            "date_modified": "2021-08-03 15:13:45",
+                            "modified_by": 4,
+                            "note": ""
+                        }
+                    }
+                //*/
+                
+            },
+        })
     
     $(_modal_product_city_id)
-      .on("change", function () {
-          if (_modal_product_city_id.value === "") {
-              _modal_product_provider_name.disabled = true
-              _modal_product_vendor_name.disabled = true
-          } else {
-              _modal_product_provider_name.disabled = false
-              _modal_product_vendor_name.disabled = false
-          }
-      })
+        .on("change", function () {
+            if (_modal_product_city_id.value === "") {
+                _modal_product_provider_name.disabled = true
+                _modal_product_vendor_name.disabled = true
+            } else {
+                _modal_product_provider_name.disabled = false
+                _modal_product_vendor_name.disabled = false
+            }
+        })
     
     $("#modal_product_city")
-      .on("change", function () {
-          setTimeout(function () {
-          
-          }, 200)
-      })
-      .on("search", function () {
-          $(_modal_product_city_id).val("").trigger("change")
-      })
-      .on("click", function (e) {
-          if ($(this).attr("readonly") === "readonly") {
-              e.preventDefault()
-          } else {
-              $(this).select()
-          }
-          
-      })
-      .autocomplete({
-          serviceUrl: "/api/v1.0/autocomplete/cities",
-          minChars: 2,
-          cache: false,
-          dataType: "json",
-          triggerSelectOnValidInput: false,
-          paramName: "st",
-          onSelect: function (suggestion) {
-              Console.log("city", suggestion)
-              if (!suggestion.data) {
-                  return
-              }
-              let city = suggestion.data
-              _modal_product_city_id.value = city.id
-              $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
-              /*
-                  "value": "Abano Terme (Padova, Italy)",
-                  "data": {
-                      "id": 1,
-                      "country_id": 102,
-                      "province_id": 250,
-                      "sort_order": 999,
-                      "name": "Abano Terme",
-                      "enabled": 1,
-                      "date_created": "2021-08-03 14:40:07",
-                      "created_by": 4,
-                      "date_modified": "2021-08-03 14:40:07",
-                      "modified_by": 4,
-                      "note": "",
-                      "province": {
-                          "id": 250,
-                          "country_id": 102,
-                          "name": "Padova",
-                          "iso2": "PD",
-                          "iso3": "",
-                          "sort_order": 999,
-                          "enabled": 1,
-                          "date_created": "2021-12-15 10:58:47",
-                          "created_by": 4,
-                          "date_modified": "2021-12-15 10:58:47",
-                          "modified_by": 4,
-                          "note": null
-                      },
-                      "country": {
-                          "id": 102,
-                          "currency_id": 2,
-                          "sort_order": 0,
-                          "name": "Italy",
-                          "iso2": "IT",
-                          "iso3": "ITA",
-                          "enabled": 1,
-                          "date_created": "2021-08-03 13:04:10",
-                          "created_by": 4,
-                          "date_modified": "2021-08-03 15:13:45",
-                          "modified_by": 4,
-                          "note": ""
-                      }
-                  }
-              //*/
-              
-          },
-      })
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            $(_modal_product_city_id).val("").trigger("change")
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+            
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                Console.log("city", suggestion)
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                _modal_product_city_id.value = city.id
+                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+                /*
+                    "value": "Abano Terme (Padova, Italy)",
+                    "data": {
+                        "id": 1,
+                        "country_id": 102,
+                        "province_id": 250,
+                        "sort_order": 999,
+                        "name": "Abano Terme",
+                        "enabled": 1,
+                        "date_created": "2021-08-03 14:40:07",
+                        "created_by": 4,
+                        "date_modified": "2021-08-03 14:40:07",
+                        "modified_by": 4,
+                        "note": "",
+                        "province": {
+                            "id": 250,
+                            "country_id": 102,
+                            "name": "Padova",
+                            "iso2": "PD",
+                            "iso3": "",
+                            "sort_order": 999,
+                            "enabled": 1,
+                            "date_created": "2021-12-15 10:58:47",
+                            "created_by": 4,
+                            "date_modified": "2021-12-15 10:58:47",
+                            "modified_by": 4,
+                            "note": null
+                        },
+                        "country": {
+                            "id": 102,
+                            "currency_id": 2,
+                            "sort_order": 0,
+                            "name": "Italy",
+                            "iso2": "IT",
+                            "iso3": "ITA",
+                            "enabled": 1,
+                            "date_created": "2021-08-03 13:04:10",
+                            "created_by": 4,
+                            "date_modified": "2021-08-03 15:13:45",
+                            "modified_by": 4,
+                            "note": ""
+                        }
+                    }
+                //*/
+                
+            },
+        })
     
     const form_rules = {
         rules: {
@@ -7755,51 +7881,51 @@ const City = (function () {
                     
                     if (element) {
                         $(element)
-                          .select2({
-                              
-                              "language": {
-                                  "searching": function () {
-                                  },
-                              },
-                              "escapeMarkup": function (markup) {
-                                  return markup
-                              },
-                              
-                          })
-                          .on("select2:open", function (e) {
-                              let x = document.querySelectorAll("[aria-controls='select2-" + dropdown_id + "-results']")
-                              if (x[0]) {
-                                  let _filterCitySearch = x[0]
-                                  $(_filterCitySearch).attr("id", "" + dropdown_id + "_search")
-                                  if (!document.getElementById("filter_city_add_icon")) {
-                                      let i = document.createElement("i")
-                                      i.classList = "select-add-option fas fa-plus filter_city_add"
-                                      i.id = "filter_city_add_icon"
-                                      i.addEventListener("click", event => {
-                                          let val = _filterCitySearch.value
-                                          $(element).select2("close")
-                                          City.add(this, val, dropdown_id)
-                                      })
-                                      _filterCitySearch.after(i)
-                                  }
-                                  $(".filter_city_add").hide()
-                                  if (_filterCitySearch) {
-                                      _filterCitySearch.addEventListener("keyup", event => {
-                                          if (_filterCitySearch.value !== "") {
-                                              $(".filter_city_add").show()
-                                          } else {
-                                              $(".filter_city_add").hide()
-                                          }
-                                      })
-                                  }
-                              }
-                              
-                          })
-                          .on("change", function () {
-                              let id = $(this)
-                                .attr("id")
-                                .replace("city", "city")
-                          })
+                            .select2({
+                                
+                                "language": {
+                                    "searching": function () {
+                                    },
+                                },
+                                "escapeMarkup": function (markup) {
+                                    return markup
+                                },
+                                
+                            })
+                            .on("select2:open", function (e) {
+                                let x = document.querySelectorAll("[aria-controls='select2-" + dropdown_id + "-results']")
+                                if (x[0]) {
+                                    let _filterCitySearch = x[0]
+                                    $(_filterCitySearch).attr("id", "" + dropdown_id + "_search")
+                                    if (!document.getElementById("filter_city_add_icon")) {
+                                        let i = document.createElement("i")
+                                        i.classList = "select-add-option fas fa-plus filter_city_add"
+                                        i.id = "filter_city_add_icon"
+                                        i.addEventListener("click", event => {
+                                            let val = _filterCitySearch.value
+                                            $(element).select2("close")
+                                            City.add(this, val, dropdown_id)
+                                        })
+                                        _filterCitySearch.after(i)
+                                    }
+                                    $(".filter_city_add").hide()
+                                    if (_filterCitySearch) {
+                                        _filterCitySearch.addEventListener("keyup", event => {
+                                            if (_filterCitySearch.value !== "") {
+                                                $(".filter_city_add").show()
+                                            } else {
+                                                $(".filter_city_add").hide()
+                                            }
+                                        })
+                                    }
+                                }
+                                
+                            })
+                            .on("change", function () {
+                                let id = $(this)
+                                    .attr("id")
+                                    .replace("city", "city")
+                            })
                     }
                 })
             }
@@ -9459,7 +9585,6 @@ const Location = (function () {
     }
     
     const populate_product_location_form = function (location) {
-        //Console.log("Location.populate_product_location_form(location)", location)
         clear_product_location_form()
         let country = {}
         let province = {}
@@ -9522,218 +9647,204 @@ const Location = (function () {
     }
     
     $(_button_submit_form_edit_product_location)
-      .on("click", function () {
-          load_product_location_form()
-      })
+        .on("click", function () {
+            load_product_location_form()
+        })
     
     $(_button_edit_product_location)
-      .on("click", function () {
-          if (Location.detail) {
-              load_product_location_form(Location.detail)
-          }
-      })
+        .on("click", function () {
+            if (Location.detail) {
+                load_product_location_form(Location.detail)
+            }
+        })
     
     $(_button_submit_form_edit_product_location)
-      .on("click", function () {
-      
-      })
+        .on("click", function () {
+        
+        })
     
     $(_button_clear_form_edit_product_location)
-      .on("click", function () {
-          unload_product_location_form()
-      })
+        .on("click", function () {
+            unload_product_location_form()
+        })
     
     $(_button_close_edit_product_location_form)
-      .on("click", function () {
-          unload_product_location_form()
-      })
+        .on("click", function () {
+            unload_product_location_form()
+        })
     
     $(_product_location_search)
-      .on("click", function () {
-          $(this).select()
-      })
-      .on("change", function () {
-          globalSelectedLocation = false
-          setTimeout(function () {
-              let location_name = _location_name_filter.value
-              //Console.log("location_name", location_name)
-          }, 200)
-      })
-      .on("search", function () {
-          globalSelectedLocation = false
-          
-      })
-      .autocomplete({
-          serviceUrl: "/api/v1.0/autocomplete/locations",
-          minChars: 2,
-          cache: false,
-          dataType: "json",
-          triggerSelectOnValidInput: false,
-          paramName: "st",
-          params: { "default_display": default_display },
-          onSelect: function (suggestion) {
-              if (suggestion && suggestion.data) {
-                  globalSelectedLocation = true
-                  //Console.log("suggestion", suggestion)
-              }
-          },
-          onSearchComplete: function (query, suggestions) {
-          },
-      })
+        .on("click", function () {
+            $(this).select()
+        })
+        .on("change", function () {
+            globalSelectedLocation = false
+            setTimeout(function () {
+                let location_name = _product_location_search.value
+                
+            }, 200)
+        })
+        .on("search", function () {
+            globalSelectedLocation = false
+            
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/locations",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            params: { "default_display": default_display },
+            onSelect: function (suggestion) {
+                if (suggestion && suggestion.data) {
+                    globalSelectedLocation = true
+                    //Console.log("suggestion", suggestion)
+                }
+            },
+            onSearchComplete: function (query, suggestions) {
+            },
+        })
     
     /**
      * _button_close_edit_location_form
      */
     $(_button_close_edit_location_form)
-      .on("click", function () {
-          reset_form()
-          populate_form(temp_location)
-          
-          switch (defaultLocationDisplayFormat) {
-              case "short":
-                  _location_name_filter.value = temp_location.display_short
-                  break
-              case "medium":
-                  _location_name_filter.value = temp_location.display_medium
-                  break
-              default:
-                  _location_name_filter.value = temp_location.display_long
-          }
-          $(_location_id).val(temp_location.id).trigger("change")
-          
-          hide_form()
-      })
+        .on("click", function () {
+            reset_form()
+            populate_form(temp_location)
+            
+            switch (defaultLocationDisplayFormat) {
+                case "short":
+                    _location_name_filter.value = temp_location.display_short
+                    break
+                case "medium":
+                    _location_name_filter.value = temp_location.display_medium
+                    break
+                default:
+                    _location_name_filter.value = temp_location.display_long
+            }
+            $(_location_id).val(temp_location.id).trigger("change")
+            
+            hide_form()
+        })
     
     /**
      * _button_clear_form_edit_location
      */
     $(_button_clear_form_edit_location)
-      .on("click", function () {
-          reset_form()
-          populate_form()
-      })
+        .on("click", function () {
+            reset_form()
+            populate_form()
+        })
     
     /**
      * _button_submit_form_edit_location
      */
     $(_button_submit_form_edit_location)
-      .on("click", function () {
-          save()
-      })
+        .on("click", function () {
+            save()
+        })
     
     /**
      * _button_edit_location
      */
     $(_button_edit_location)
-      .on("click", function () {
-          if (_location_id.value === "") {
-              //set_detail()
-              //reset_form()
-              //populate_form()
-          } else {
-          
-          }
-          
-          show_form()
-      })
+        .on("click", function () {
+            if (_location_id.value === "") {
+                //set_detail()
+                //reset_form()
+                //populate_form()
+            } else {
+            
+            }
+            
+            show_form()
+        })
     
-    /**
-     * input[name='location_display']
-     */
     $("input[name='location_display']")
-      .on("change", function () {
-          
-          let selected_value = $("input[name='location_display']:checked").val()
-          //Console.log("selected_value", selected_value)
-          default_display = selected_value
-          initAutoComplete()
-          if (Location.detail["display_" + selected_value] !== null) {
-              _location_name_filter.value = Location.detail["display_" + selected_value]
-          }
-      })
+        .on("change", function () {
+            
+            let selected_value = $("input[name='location_display']:checked").val()
+            //Console.log("selected_value", selected_value)
+            default_display = selected_value
+            initAutoComplete()
+            if (Location.detail["display_" + selected_value] !== null) {
+                _location_name_filter.value = Location.detail["display_" + selected_value]
+            }
+        })
     
-    /**
-     * _location_name
-     */
     $(_location_name)
-      .on("change", function () {
-          setTimeout(function () {
-              let location_name = _location_name.value
-              location_name_exists(location_name)
-          }, 200)
-      })
+        .on("change", function () {
+            setTimeout(function () {
+                let location_name = _location_name.value
+                location_name_exists(location_name)
+            }, 200)
+        })
     
     $(_location_id)
-      .on("change", function () {
-          $(_location_name_filter_id)
-            .val($(_location_id).val())
-      })
+        .on("change", function () {
+            $(_location_name_filter_id)
+                .val($(_location_id).val())
+        })
     
-    /**
-     * validate location form
-     *
-     * @returns {*|jQuery}
-     */
     const validate_form = function () {
         return $(_form_edit_location).valid()
     }
     
-    /**
-     * initialize autocomplete functions
-     */
     const initAutoComplete = function () {
         $(_location_name_filter)
-          .on("click", function () {
-              $(this).select()
-          })
-          .on("change", function () {
-              setTimeout(function () {
-                  let location_name = _location_name_filter.value
-                  if (globalSelectedLocation === false) {
-                      if (_location_name_filter.value === "") {
-                          _location_name_filter.value = ""
-                          $(_location_id).val("").trigger("change")
-                          reset_form()
-                      } else {
-                          location_exists(location_name)
-                      }
-                  }
-              }, 200)
-          })
-          .on("search", function () {
-              globalSelectedLocation = false
-              $(_location_id).val("").trigger("change")
-              _location_name_filter.value = ""
-              new_filter = true
-              set_detail()
-              reset_form()
-              populate_form()
-          })
-          .autocomplete({
-              serviceUrl: "/api/v1.0/autocomplete/locations",
-              minChars: 2,
-              cache: false,
-              dataType: "json",
-              triggerSelectOnValidInput: false,
-              paramName: "st",
-              params: { "default_display": default_display },
-              onSelect: function (suggestion) {
-                  if (suggestion && suggestion.data && suggestion.data.country && suggestion.data.province && suggestion.data.city) {
-                      globalSelectedLocation = true
-                      reset_form()
-                      let location = suggestion.data
-                      Location.detail = location
-                      temp_location = location
-                      populate_form(location)
-                  }
-                  
-                  if (_form_edit_location) {
-                      clear_validation(_form_edit_location)
-                  }
-              },
-              onSearchComplete: function (query, suggestions) {
-              },
-          })
+            .on("click", function () {
+                $(this).select()
+            })
+            .on("change", function () {
+                setTimeout(function () {
+                    let location_name = _location_name_filter.value
+                    if (globalSelectedLocation === false) {
+                        if (_location_name_filter.value === "") {
+                            _location_name_filter.value = ""
+                            $(_location_id).val("").trigger("change")
+                            reset_form()
+                        } else {
+                            location_exists(location_name)
+                        }
+                    }
+                }, 200)
+            })
+            .on("search", function () {
+                globalSelectedLocation = false
+                $(_location_id).val("").trigger("change")
+                _location_name_filter.value = ""
+                new_filter = true
+                set_detail()
+                reset_form()
+                populate_form()
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/locations",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                paramName: "st",
+                params: { "default_display": default_display },
+                onSelect: function (suggestion) {
+                    if (suggestion && suggestion.data && suggestion.data.country && suggestion.data.province && suggestion.data.city) {
+                        globalSelectedLocation = true
+                        reset_form()
+                        let location = suggestion.data
+                        Location.detail = location
+                        temp_location = location
+                        populate_form(location)
+                    }
+                    
+                    if (_form_edit_location) {
+                        clear_validation(_form_edit_location)
+                    }
+                },
+                onSearchComplete: function (query, suggestions) {
+                },
+            })
     }
     
     const _default_detail = function () {

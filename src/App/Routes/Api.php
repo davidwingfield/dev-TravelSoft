@@ -87,6 +87,13 @@
 	/**
 	 * update requests
 	 */
+	/**
+	 * @see Product::assignSeason()
+	 */
+	Router::post($routeLead . "/products/assign_seasons", "Product@assignSeason");
+	/**
+	 * @see Matrix::serveUpdate()
+	 */
 	Router::post($routeLead . "/matrices/update", "Matrix@serveUpdate");
 	Router::post($routeLead . "/pricings/update", "Pricing@serveUpdate");
 	Router::post($routeLead . "/seasons/update", "Season@serveUpdate");

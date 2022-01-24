@@ -14,6 +14,7 @@ const PricingWorksheet = (function () {
     const _button_toggle_completed_matrices = document.getElementById("button_toggle_completed_matrices")
     const _product_edit_pricing_section_reload_worksheet = document.getElementById("product_edit_pricing_section_reload_worksheet")
     
+    let pricingsHidden, matricesHidden, unitsCollapsed, seasonsCollapsed = false
     let completed = '<span class="badge badge-pill badge-success">Completed</span>'
     let incomplete = '<span class="badge badge-pill badge-danger">Incomplete</span>'
     let seasonList, unitList, variantList = []
@@ -235,7 +236,9 @@ const PricingWorksheet = (function () {
         
         if (showElements) {
             $("[data-matrixcomplete='true']").show()
+            matricesHidden = false
         } else {
+            matricesHidden = true
             $("[data-matrixcomplete='true']").hide()
         }
         
@@ -260,8 +263,10 @@ const PricingWorksheet = (function () {
         
         if (showElements) {
             $("[data-pricingcomplete='true']").show()
+            pricingsHidden = false
         } else {
             $("[data-pricingcomplete='true']").hide()
+            pricingsHidden = true
         }
         
     }
@@ -289,6 +294,8 @@ const PricingWorksheet = (function () {
             let element = elements[i]
             let id = $(element).attr("id")
             $("#" + id).collapse((showElements === true) ? "show" : "hide")
+            unitsCollapsed = (showElements === true)
+            //pricingsHidden, matricesHidden, unitsCollapsed, seasonsCollapsed = false
         }
     }
     
@@ -314,6 +321,7 @@ const PricingWorksheet = (function () {
             let element = elements[i]
             let id = $(element).attr("id")
             $("#" + id).collapse((showElements === true) ? "show" : "hide")
+            seasonsCollapsed = (showElements === true)
         }
     }
     
@@ -866,6 +874,36 @@ const PricingWorksheet = (function () {
                     Pricing.all.set(pricing.code, pricing)
                     
                     PricingWorksheet.pricingWorksheet()
+                    
+                    Console.log("pricingsHidden", pricingsHidden)
+                    Console.log("matricesHidden", matricesHidden)
+                    Console.log("unitsCollapsed", unitsCollapsed)
+                    Console.log("seasonsCollapsed", seasonsCollapsed)
+                    
+                    if (seasonsCollapsed) {
+                        $(_button_collapse_seasons).attr("data-shown", "false")
+                        $(_button_collapse_seasons).text("Expand Seasons")
+                        toggleSeasonFilter()
+                    }
+                    
+                    if (unitsCollapsed) {
+                        $(_button_collapse_units).attr("data-shown", "false")
+                        $(_button_collapse_units).text("Expand Units")
+                        toggleUnitFilter()
+                    }
+                    
+                    if (matricesHidden) {
+                        $("[data-matrixcomplete='true']").show()
+                        $(_button_toggle_completed_matrices).attr("data-shown", "true")
+                        $(_button_toggle_completed_matrices).text("Hide Completed Matrices")
+                    }
+                    
+                    if (pricingsHidden) {
+                        $("[data-pricingcomplete='true']").show()
+                        $(_button_toggle_completed_pricings).attr("data-shown", "true")
+                        $(_button_toggle_completed_pricings).text("Hide Completed Pricings")
+                    }
+                    
                     toastr.success(`Pricing: ${pricing.name} - has been updated`)
                 }
             })

@@ -149,7 +149,6 @@ const Location = (function () {
     }
     
     const populate_product_location_form = function (location) {
-        //Console.log("Location.populate_product_location_form(location)", location)
         clear_product_location_form()
         let country = {}
         let province = {}
@@ -212,218 +211,204 @@ const Location = (function () {
     }
     
     $(_button_submit_form_edit_product_location)
-      .on("click", function () {
-          load_product_location_form()
-      })
+        .on("click", function () {
+            load_product_location_form()
+        })
     
     $(_button_edit_product_location)
-      .on("click", function () {
-          if (Location.detail) {
-              load_product_location_form(Location.detail)
-          }
-      })
+        .on("click", function () {
+            if (Location.detail) {
+                load_product_location_form(Location.detail)
+            }
+        })
     
     $(_button_submit_form_edit_product_location)
-      .on("click", function () {
-      
-      })
+        .on("click", function () {
+        
+        })
     
     $(_button_clear_form_edit_product_location)
-      .on("click", function () {
-          unload_product_location_form()
-      })
+        .on("click", function () {
+            unload_product_location_form()
+        })
     
     $(_button_close_edit_product_location_form)
-      .on("click", function () {
-          unload_product_location_form()
-      })
+        .on("click", function () {
+            unload_product_location_form()
+        })
     
     $(_product_location_search)
-      .on("click", function () {
-          $(this).select()
-      })
-      .on("change", function () {
-          globalSelectedLocation = false
-          setTimeout(function () {
-              let location_name = _location_name_filter.value
-              //Console.log("location_name", location_name)
-          }, 200)
-      })
-      .on("search", function () {
-          globalSelectedLocation = false
-          
-      })
-      .autocomplete({
-          serviceUrl: "/api/v1.0/autocomplete/locations",
-          minChars: 2,
-          cache: false,
-          dataType: "json",
-          triggerSelectOnValidInput: false,
-          paramName: "st",
-          params: { "default_display": default_display },
-          onSelect: function (suggestion) {
-              if (suggestion && suggestion.data) {
-                  globalSelectedLocation = true
-                  //Console.log("suggestion", suggestion)
-              }
-          },
-          onSearchComplete: function (query, suggestions) {
-          },
-      })
+        .on("click", function () {
+            $(this).select()
+        })
+        .on("change", function () {
+            globalSelectedLocation = false
+            setTimeout(function () {
+                let location_name = _product_location_search.value
+                
+            }, 200)
+        })
+        .on("search", function () {
+            globalSelectedLocation = false
+            
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/locations",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            params: { "default_display": default_display },
+            onSelect: function (suggestion) {
+                if (suggestion && suggestion.data) {
+                    globalSelectedLocation = true
+                    //Console.log("suggestion", suggestion)
+                }
+            },
+            onSearchComplete: function (query, suggestions) {
+            },
+        })
     
     /**
      * _button_close_edit_location_form
      */
     $(_button_close_edit_location_form)
-      .on("click", function () {
-          reset_form()
-          populate_form(temp_location)
-          
-          switch (defaultLocationDisplayFormat) {
-              case "short":
-                  _location_name_filter.value = temp_location.display_short
-                  break
-              case "medium":
-                  _location_name_filter.value = temp_location.display_medium
-                  break
-              default:
-                  _location_name_filter.value = temp_location.display_long
-          }
-          $(_location_id).val(temp_location.id).trigger("change")
-          
-          hide_form()
-      })
+        .on("click", function () {
+            reset_form()
+            populate_form(temp_location)
+            
+            switch (defaultLocationDisplayFormat) {
+                case "short":
+                    _location_name_filter.value = temp_location.display_short
+                    break
+                case "medium":
+                    _location_name_filter.value = temp_location.display_medium
+                    break
+                default:
+                    _location_name_filter.value = temp_location.display_long
+            }
+            $(_location_id).val(temp_location.id).trigger("change")
+            
+            hide_form()
+        })
     
     /**
      * _button_clear_form_edit_location
      */
     $(_button_clear_form_edit_location)
-      .on("click", function () {
-          reset_form()
-          populate_form()
-      })
+        .on("click", function () {
+            reset_form()
+            populate_form()
+        })
     
     /**
      * _button_submit_form_edit_location
      */
     $(_button_submit_form_edit_location)
-      .on("click", function () {
-          save()
-      })
+        .on("click", function () {
+            save()
+        })
     
     /**
      * _button_edit_location
      */
     $(_button_edit_location)
-      .on("click", function () {
-          if (_location_id.value === "") {
-              //set_detail()
-              //reset_form()
-              //populate_form()
-          } else {
-          
-          }
-          
-          show_form()
-      })
+        .on("click", function () {
+            if (_location_id.value === "") {
+                //set_detail()
+                //reset_form()
+                //populate_form()
+            } else {
+            
+            }
+            
+            show_form()
+        })
     
-    /**
-     * input[name='location_display']
-     */
     $("input[name='location_display']")
-      .on("change", function () {
-          
-          let selected_value = $("input[name='location_display']:checked").val()
-          //Console.log("selected_value", selected_value)
-          default_display = selected_value
-          initAutoComplete()
-          if (Location.detail["display_" + selected_value] !== null) {
-              _location_name_filter.value = Location.detail["display_" + selected_value]
-          }
-      })
+        .on("change", function () {
+            
+            let selected_value = $("input[name='location_display']:checked").val()
+            //Console.log("selected_value", selected_value)
+            default_display = selected_value
+            initAutoComplete()
+            if (Location.detail["display_" + selected_value] !== null) {
+                _location_name_filter.value = Location.detail["display_" + selected_value]
+            }
+        })
     
-    /**
-     * _location_name
-     */
     $(_location_name)
-      .on("change", function () {
-          setTimeout(function () {
-              let location_name = _location_name.value
-              location_name_exists(location_name)
-          }, 200)
-      })
+        .on("change", function () {
+            setTimeout(function () {
+                let location_name = _location_name.value
+                location_name_exists(location_name)
+            }, 200)
+        })
     
     $(_location_id)
-      .on("change", function () {
-          $(_location_name_filter_id)
-            .val($(_location_id).val())
-      })
+        .on("change", function () {
+            $(_location_name_filter_id)
+                .val($(_location_id).val())
+        })
     
-    /**
-     * validate location form
-     *
-     * @returns {*|jQuery}
-     */
     const validate_form = function () {
         return $(_form_edit_location).valid()
     }
     
-    /**
-     * initialize autocomplete functions
-     */
     const initAutoComplete = function () {
         $(_location_name_filter)
-          .on("click", function () {
-              $(this).select()
-          })
-          .on("change", function () {
-              setTimeout(function () {
-                  let location_name = _location_name_filter.value
-                  if (globalSelectedLocation === false) {
-                      if (_location_name_filter.value === "") {
-                          _location_name_filter.value = ""
-                          $(_location_id).val("").trigger("change")
-                          reset_form()
-                      } else {
-                          location_exists(location_name)
-                      }
-                  }
-              }, 200)
-          })
-          .on("search", function () {
-              globalSelectedLocation = false
-              $(_location_id).val("").trigger("change")
-              _location_name_filter.value = ""
-              new_filter = true
-              set_detail()
-              reset_form()
-              populate_form()
-          })
-          .autocomplete({
-              serviceUrl: "/api/v1.0/autocomplete/locations",
-              minChars: 2,
-              cache: false,
-              dataType: "json",
-              triggerSelectOnValidInput: false,
-              paramName: "st",
-              params: { "default_display": default_display },
-              onSelect: function (suggestion) {
-                  if (suggestion && suggestion.data && suggestion.data.country && suggestion.data.province && suggestion.data.city) {
-                      globalSelectedLocation = true
-                      reset_form()
-                      let location = suggestion.data
-                      Location.detail = location
-                      temp_location = location
-                      populate_form(location)
-                  }
-                  
-                  if (_form_edit_location) {
-                      clear_validation(_form_edit_location)
-                  }
-              },
-              onSearchComplete: function (query, suggestions) {
-              },
-          })
+            .on("click", function () {
+                $(this).select()
+            })
+            .on("change", function () {
+                setTimeout(function () {
+                    let location_name = _location_name_filter.value
+                    if (globalSelectedLocation === false) {
+                        if (_location_name_filter.value === "") {
+                            _location_name_filter.value = ""
+                            $(_location_id).val("").trigger("change")
+                            reset_form()
+                        } else {
+                            location_exists(location_name)
+                        }
+                    }
+                }, 200)
+            })
+            .on("search", function () {
+                globalSelectedLocation = false
+                $(_location_id).val("").trigger("change")
+                _location_name_filter.value = ""
+                new_filter = true
+                set_detail()
+                reset_form()
+                populate_form()
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/locations",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                paramName: "st",
+                params: { "default_display": default_display },
+                onSelect: function (suggestion) {
+                    if (suggestion && suggestion.data && suggestion.data.country && suggestion.data.province && suggestion.data.city) {
+                        globalSelectedLocation = true
+                        reset_form()
+                        let location = suggestion.data
+                        Location.detail = location
+                        temp_location = location
+                        populate_form(location)
+                    }
+                    
+                    if (_form_edit_location) {
+                        clear_validation(_form_edit_location)
+                    }
+                },
+                onSearchComplete: function (query, suggestions) {
+                },
+            })
     }
     
     const _default_detail = function () {

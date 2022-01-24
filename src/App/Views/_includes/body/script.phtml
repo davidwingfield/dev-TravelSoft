@@ -1,232 +1,232 @@
 <script type="text/javascript">
-    
-    const Product = (function () {
-        "use strict"
-        const base_url = "/products"
-        
-        const _form_product_add = document.getElementById("form_product_add")
-        const _product_edit_page = document.getElementById("product_edit_page")
-        const _button_add_product_page_heading = document.getElementById("button_add_product_page_heading")
-        
-        /**
-         * MODAL ELEMENTS
-         */
-        /**
-         *
-         * @type {HTMLElement}
-         * @private
-         */
-        const _modal_product_depart_from_airport = document.getElementById("modal_button_cancel_add_product")
-        const _modal_product_arrive_to_airport = document.getElementById("modal_button_cancel_add_product")
-        const _modal_product_depart_from_station = document.getElementById("modal_product_depart_from_station")
-        const _modal_product_arrive_to_station = document.getElementById("modal_product_arrive_to_station")
-        const _modal_product_depart_from_airport_id = document.getElementById("modal_product_depart_from_airport_id")
-        const _modal_product_arrive_to_airport_id = document.getElementById("modal_product_arrive_to_airport_id")
-        const _modal_product_depart_from_station_id = document.getElementById("modal_product_depart_from_station_id")
-        const _modal_product_arrive_to_station_id = document.getElementById("modal_product_arrive_to_station_id")
-        const _modal_button_cancel_add_product = document.getElementById("modal_button_cancel_add_product")
-        const _modal_button_submit_add_product = document.getElementById("modal_button_submit_add_product")
-        const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
-        const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
-        const _modal_product_provider_id = document.getElementById("modal_product_provider_id")
-        const _modal_product_vendor_id = document.getElementById("modal_product_vendor_id")
-        const _modal_new_product = document.getElementById("modal_new_product")
-        const _modal_product_name = document.getElementById("modal_product_name")
-        const _modal_product_category_id = document.getElementById("modal_product_category_id")
-        const _modal_product_sku = document.getElementById("modal_product_sku")
-        const _modal_product_rating_types_id = document.getElementById("modal_product_rating_types_id")
-        const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
-        const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
-        const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
-        const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
-        const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
-        const _modal_product_provider_location_id = document.getElementById("modal_product_provider_location_id")
-        const _modal_product_location_id = document.getElementById("modal_product_location_id")
-        const _modal_product_street_1 = document.getElementById("modal_product_street_1")
-        const _modal_product_street_2 = document.getElementById("modal_product_street_2")
-        const _modal_product_postal_code = document.getElementById("modal_product_postal_code")
-        
-        const _product_panel_link_overview = document.getElementById("product_panel_link_overview")
-        const _panel_tab_product_o = document.getElementById("panel_tab_product_o")
-        const _product_panel_link_product = document.getElementById("product_panel_link_product")
-        const _panel_tab_product = document.getElementById("panel_tab_product")
-        const _product_panel_link_season = document.getElementById("product_panel_link_season")
-        const _panel_tab_season = document.getElementById("panel_tab_season")
-        const _product_panel_link_unit = document.getElementById("product_panel_link_unit")
-        const _panel_tab_unit = document.getElementById("panel_tab_unit")
-        const _product_panel_link_variant = document.getElementById("product_panel_link_variant")
-        const _panel_tab_variant = document.getElementById("panel_tab_variant")
-        const _product_panel_link_inventory = document.getElementById("product_panel_link_inventory")
-        const _panel_tab_inventory = document.getElementById("panel_tab_inventory")
-        const _product_panel_link_pricing = document.getElementById("product_panel_link_pricing")
-        const _panel_tab_pricing = document.getElementById("panel_tab_pricing")
-        const _panel_tab_location = document.getElementById("panel_tab_location")
-        const _panel_tab_product_location = document.getElementById("panel_tab_product_location")
-        const _panel_tab_product_meta = document.getElementById("panel_tab_product_meta")
-        const _panel_tab_meta = document.getElementById("panel_tab_meta")
-        const _product_panel_link_meta = document.getElementById("product_panel_link_meta")
-        const _product_panel_link_location = document.getElementById("product_panel_link_location")
-        const _product_keywords = document.getElementById("product_keywords")
-        const _product_description_long = document.getElementById("product_description_long")
-        const _product_description_short = document.getElementById("_product_description_short")
-        const _modal_product_city_id = document.getElementById("modal_product_city_id")
-        const _modal_product_city = document.getElementById("modal_product_city")
-        const _product_index_page = document.getElementById("product_index_page")
-        const _product_index_table = document.getElementById("product_index_table")
-        const _use_provider_location = document.getElementById("use_provider_location")
-        const _use_product_location = document.getElementById("use_product_location")
-        const _product_amenities = document.getElementById("product_amenities")
-        
-        let $product_keywords, $product_amenities
-        let provider_initial_location, product_initial_location = {}
-        let radios = document.querySelectorAll('input[type=radio][name="location_to_use"]')
-        let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-        let $index_table, newProduct_validator
-        let add_modal_form_rules = {
-            rules: {
-                modal_product_sku: {
-                    required: true,
-                },
-                modal_product_rating_types_id: {
-                    required: true,
-                },
-                modal_product_currency_id: {
-                    required: true,
-                },
-                modal_product_pricing_strategies_types_id: {
-                    required: true,
-                },
-                modal_product_name: {
-                    required: true,
-                },
-                modal_product_category_id: {
-                    required: true,
-                },
-                modal_product_provider_name: {
-                    required: true,
-                },
-                modal_product_provider_id: {
-                    required: true,
-                },
-                modal_product_provider_company_id: {
-                    required: true,
-                },
-                modal_product_vendor_name: {
-                    required: true,
-                },
-                modal_product_vendor_id: {
-                    required: true,
-                },
-                modal_product_vendor_company_id: {
-                    required: true,
-                },
-            },
-            messages: {
-                modal_product_sku: {
-                    required: "Field Required",
-                },
-                modal_product_rating_types_id: {
-                    required: "Field Required",
-                },
-                modal_product_currency_id: {
-                    required: "Field Required",
-                },
-                modal_product_pricing_strategies_types_id: {
-                    required: "Field Required",
-                },
-                modal_product_name: {
-                    required: "Field Required",
-                },
-                modal_product_provider_id: {
-                    required: "Field Required",
-                },
-                modal_product_category_id: {
-                    required: "Field Required",
-                },
-                modal_product_provider_name: {
-                    required: "Field Required",
-                },
-                modal_product_vendor_name: {
-                    required: "Field Required",
-                },
-                modal_product_provider_company_id: {
-                    required: "Field Required",
-                },
-                modal_product_vendor_id: {
-                    required: "Field Required",
-                },
-                modal_product_vendor_company_id: {
-                    required: "Field Required",
-                },
-            },
-        }
-        
-        $(_button_add_product_page_heading)
-            .on("click", function () {
-                setNewProductModal()
-            })
-        
-        $(_modal_new_product)
-            .on("hide.bs.modal", function () {
-                clear_validation(_form_product_add)
-            })
-        
-        $(_modal_button_cancel_add_product)
-            .on("click", function () {
-                clear_validation(_form_product_add)
-                $(_modal_new_product).modal("hide")
-            })
-        
-        $(_modal_button_submit_add_product)
-            .on("click", function () {
-                if (validateNewProduct()) {
-                    confirmDialog(`Would you like to update?`, (ans) => {
-                        if (ans) {
-                            saveNewProduct()
-                        }
-                    })
-                }
-            })
-        
-        $(_modal_product_provider_vendor_match)
-            .on("change", function () {
-                let provider_company_id = (isNaN(parseInt(_modal_product_provider_company_id.value))) ? null : parseInt(_modal_product_provider_company_id.value)
-                
-                if (provider_company_id !== null) {
-                    
-                    if (_modal_product_provider_vendor_match.checked) {
-                        _modal_product_vendor_company_id.value = _modal_product_provider_company_id.value
-                        
-                        if (Provider.detail !== null) {
-                            _modal_product_vendor_company_id.value = Provider.detail.vendor.company_id
-                            _modal_product_vendor_id.value = Provider.detail.vendor.id
-                            _modal_product_vendor_name.value = Provider.detail.vendor.name
-                        } else {
-                            _modal_product_vendor_company_id.value = ""
-                            _modal_product_vendor_id.value = ""
-                            _modal_product_vendor_name.value = ""
-                        }
-                        
-                    } else {
-                        _modal_product_vendor_company_id.value = ""
-                        _modal_product_vendor_id.value = ""
-                        _modal_product_vendor_name.value = ""
-                    }
-                }
-            })
-        
-        $("#page")
-            .on("change", function () {
-                updateProgress()
-            })
-        
-        const initAutoComplete = function () {
-            let category_id = (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null
-            
-            if (category_id !== null) {
-                $(_modal_product_name)
-                    .on("change", function () {
-                        /*
+	
+	const Product = (function () {
+		"use strict"
+		const base_url = "/products"
+		
+		const _form_product_add = document.getElementById("form_product_add")
+		const _product_edit_page = document.getElementById("product_edit_page")
+		const _button_add_product_page_heading = document.getElementById("button_add_product_page_heading")
+		
+		/**
+		 * MODAL ELEMENTS
+		 */
+		/**
+		 *
+		 * @type {HTMLElement}
+		 * @private
+		 */
+		const _modal_product_depart_from_airport = document.getElementById("modal_button_cancel_add_product")
+		const _modal_product_arrive_to_airport = document.getElementById("modal_button_cancel_add_product")
+		const _modal_product_depart_from_station = document.getElementById("modal_product_depart_from_station")
+		const _modal_product_arrive_to_station = document.getElementById("modal_product_arrive_to_station")
+		const _modal_product_depart_from_airport_id = document.getElementById("modal_product_depart_from_airport_id")
+		const _modal_product_arrive_to_airport_id = document.getElementById("modal_product_arrive_to_airport_id")
+		const _modal_product_depart_from_station_id = document.getElementById("modal_product_depart_from_station_id")
+		const _modal_product_arrive_to_station_id = document.getElementById("modal_product_arrive_to_station_id")
+		const _modal_button_cancel_add_product = document.getElementById("modal_button_cancel_add_product")
+		const _modal_button_submit_add_product = document.getElementById("modal_button_submit_add_product")
+		const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
+		const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
+		const _modal_product_provider_id = document.getElementById("modal_product_provider_id")
+		const _modal_product_vendor_id = document.getElementById("modal_product_vendor_id")
+		const _modal_new_product = document.getElementById("modal_new_product")
+		const _modal_product_name = document.getElementById("modal_product_name")
+		const _modal_product_category_id = document.getElementById("modal_product_category_id")
+		const _modal_product_sku = document.getElementById("modal_product_sku")
+		const _modal_product_rating_types_id = document.getElementById("modal_product_rating_types_id")
+		const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
+		const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
+		const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
+		const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
+		const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
+		const _modal_product_provider_location_id = document.getElementById("modal_product_provider_location_id")
+		const _modal_product_location_id = document.getElementById("modal_product_location_id")
+		const _modal_product_street_1 = document.getElementById("modal_product_street_1")
+		const _modal_product_street_2 = document.getElementById("modal_product_street_2")
+		const _modal_product_postal_code = document.getElementById("modal_product_postal_code")
+		
+		const _product_panel_link_overview = document.getElementById("product_panel_link_overview")
+		const _panel_tab_product_o = document.getElementById("panel_tab_product_o")
+		const _product_panel_link_product = document.getElementById("product_panel_link_product")
+		const _panel_tab_product = document.getElementById("panel_tab_product")
+		const _product_panel_link_season = document.getElementById("product_panel_link_season")
+		const _panel_tab_season = document.getElementById("panel_tab_season")
+		const _product_panel_link_unit = document.getElementById("product_panel_link_unit")
+		const _panel_tab_unit = document.getElementById("panel_tab_unit")
+		const _product_panel_link_variant = document.getElementById("product_panel_link_variant")
+		const _panel_tab_variant = document.getElementById("panel_tab_variant")
+		const _product_panel_link_inventory = document.getElementById("product_panel_link_inventory")
+		const _panel_tab_inventory = document.getElementById("panel_tab_inventory")
+		const _product_panel_link_pricing = document.getElementById("product_panel_link_pricing")
+		const _panel_tab_pricing = document.getElementById("panel_tab_pricing")
+		const _panel_tab_location = document.getElementById("panel_tab_location")
+		const _panel_tab_product_location = document.getElementById("panel_tab_product_location")
+		const _panel_tab_product_meta = document.getElementById("panel_tab_product_meta")
+		const _panel_tab_meta = document.getElementById("panel_tab_meta")
+		const _product_panel_link_meta = document.getElementById("product_panel_link_meta")
+		const _product_panel_link_location = document.getElementById("product_panel_link_location")
+		const _product_keywords = document.getElementById("product_keywords")
+		const _product_description_long = document.getElementById("product_description_long")
+		const _product_description_short = document.getElementById("_product_description_short")
+		const _modal_product_city_id = document.getElementById("modal_product_city_id")
+		const _modal_product_city = document.getElementById("modal_product_city")
+		const _product_index_page = document.getElementById("product_index_page")
+		const _product_index_table = document.getElementById("product_index_table")
+		const _use_provider_location = document.getElementById("use_provider_location")
+		const _use_product_location = document.getElementById("use_product_location")
+		const _product_amenities = document.getElementById("product_amenities")
+		
+		let $product_keywords, $product_amenities
+		let provider_initial_location, product_initial_location = {}
+		let radios = document.querySelectorAll('input[type=radio][name="location_to_use"]')
+		let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+		let $index_table, newProduct_validator
+		let add_modal_form_rules = {
+			rules: {
+				modal_product_sku: {
+					required: true,
+				},
+				modal_product_rating_types_id: {
+					required: true,
+				},
+				modal_product_currency_id: {
+					required: true,
+				},
+				modal_product_pricing_strategies_types_id: {
+					required: true,
+				},
+				modal_product_name: {
+					required: true,
+				},
+				modal_product_category_id: {
+					required: true,
+				},
+				modal_product_provider_name: {
+					required: true,
+				},
+				modal_product_provider_id: {
+					required: true,
+				},
+				modal_product_provider_company_id: {
+					required: true,
+				},
+				modal_product_vendor_name: {
+					required: true,
+				},
+				modal_product_vendor_id: {
+					required: true,
+				},
+				modal_product_vendor_company_id: {
+					required: true,
+				},
+			},
+			messages: {
+				modal_product_sku: {
+					required: "Field Required",
+				},
+				modal_product_rating_types_id: {
+					required: "Field Required",
+				},
+				modal_product_currency_id: {
+					required: "Field Required",
+				},
+				modal_product_pricing_strategies_types_id: {
+					required: "Field Required",
+				},
+				modal_product_name: {
+					required: "Field Required",
+				},
+				modal_product_provider_id: {
+					required: "Field Required",
+				},
+				modal_product_category_id: {
+					required: "Field Required",
+				},
+				modal_product_provider_name: {
+					required: "Field Required",
+				},
+				modal_product_vendor_name: {
+					required: "Field Required",
+				},
+				modal_product_provider_company_id: {
+					required: "Field Required",
+				},
+				modal_product_vendor_id: {
+					required: "Field Required",
+				},
+				modal_product_vendor_company_id: {
+					required: "Field Required",
+				},
+			},
+		}
+		
+		$(_button_add_product_page_heading)
+			.on("click", function () {
+				setNewProductModal()
+			})
+		
+		$(_modal_new_product)
+			.on("hide.bs.modal", function () {
+				clear_validation(_form_product_add)
+			})
+		
+		$(_modal_button_cancel_add_product)
+			.on("click", function () {
+				clear_validation(_form_product_add)
+				$(_modal_new_product).modal("hide")
+			})
+		
+		$(_modal_button_submit_add_product)
+			.on("click", function () {
+				if (validateNewProduct()) {
+					confirmDialog(`Would you like to update?`, (ans) => {
+						if (ans) {
+							saveNewProduct()
+						}
+					})
+				}
+			})
+		
+		$(_modal_product_provider_vendor_match)
+			.on("change", function () {
+				let provider_company_id = (isNaN(parseInt(_modal_product_provider_company_id.value))) ? null : parseInt(_modal_product_provider_company_id.value)
+				
+				if (provider_company_id !== null) {
+					
+					if (_modal_product_provider_vendor_match.checked) {
+						_modal_product_vendor_company_id.value = _modal_product_provider_company_id.value
+						
+						if (Provider.detail !== null) {
+							_modal_product_vendor_company_id.value = Provider.detail.vendor.company_id
+							_modal_product_vendor_id.value = Provider.detail.vendor.id
+							_modal_product_vendor_name.value = Provider.detail.vendor.name
+						} else {
+							_modal_product_vendor_company_id.value = ""
+							_modal_product_vendor_id.value = ""
+							_modal_product_vendor_name.value = ""
+						}
+						
+					} else {
+						_modal_product_vendor_company_id.value = ""
+						_modal_product_vendor_id.value = ""
+						_modal_product_vendor_name.value = ""
+					}
+				}
+			})
+		
+		$("#page")
+			.on("change", function () {
+				updateProgress()
+			})
+		
+		const initAutoComplete = function () {
+			let category_id = (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null
+			
+			if (category_id !== null) {
+				$(_modal_product_name)
+					.on("change", function () {
+						/*
 						setTimeout(function () {
 							let provider_name = _provider_name.value
 							
@@ -243,724 +243,727 @@
 							}
 						}, 200)
 						//*/
-                    })
-                    .on("search", function () {
-                    
-                    })
-                    .on("click", function () {
-                        $(this).select()
-                    })
-                    .autocomplete({
-                        serviceUrl: "/api/v1.0/autocomplete/products",
-                        minChars: 2,
-                        params: { "category_id": category_id },
-                        cache: false,
-                        dataType: "json",
-                        triggerSelectOnValidInput: false,
-                        paramName: "st",
-                        onSelect: function (suggestion) {
-                            if (!suggestion || !suggestion.data) {
-                                return
-                            }
-                            //Console.log("suggestion.data", suggestion.data)
-                            let product = suggestion.data
-                            //Console.log("product", product)
-                        },
-                    })
-            }
-            //Console.log("initAutoComplete()", category_id)
-        }
-        
-        const updateProgress = function () {
-            let variants = Array.from(Variant.all.values())
-            let units = Array.from(Unit.all.values())
-            let seasons = Array.from(Season.all.values())
-            
-            if (variants.length === 0 || units.length === 0 || seasons.length === 0) {
-                $(_panel_tab_pricing).addClass(`disabled`)
-                $(_panel_tab_inventory).addClass(`disabled`)
-            } else {
-                $(_panel_tab_pricing).removeClass(`disabled`)
-                $(_panel_tab_inventory).removeClass(`disabled`)
-            }
-            
-            let pricingWorksheet = PricingWorksheet.status()
-            if (pricingWorksheet === "incomplete") {
-                $("#panel_tab_pricing")
-                    .html("Pricing<span class='badge rounded-pill badge-notification bg-danger tab-badge' style='color:#fff!important'>!</span>")
-            } else {
-                $("#panel_tab_pricing")
-                    .html("Pricing")
-            }
-        }
-        
-        const buildInsertData = function () {
-            let dataToSend = {
-                city_id: (!isNaN(parseInt(_modal_product_city_id.value))) ? parseInt(_modal_product_city_id.value) : null,
-                depart_from: (!isNaN(parseInt(_modal_product_city_id.value))) ? parseInt(_modal_product_city_id.value) : null,
-                arrive_to: (!isNaN(parseInt(_modal_product_city_id.value))) ? parseInt(_modal_product_city_id.value) : null,
-                street_1: (_modal_product_street_1.value !== "") ? _modal_product_street_1.value : null,
-                street_2: (_modal_product_street_2.value !== "") ? _modal_product_street_2.value : null,
-                postal_code: (_modal_product_postal_code.value !== "") ? _modal_product_postal_code.value : null,
-                category_id: (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null,
-                pricing_strategy_types_id: (!isNaN(parseInt(_modal_product_pricing_strategies_types_id.value))) ? parseInt(_modal_product_pricing_strategies_types_id.value) : null,
-                status_types_id: 1,
-                currency_id: (!isNaN(parseInt(_modal_product_currency_id.value))) ? parseInt(_modal_product_currency_id.value) : null,
-                location_id: (!isNaN(parseInt(_modal_product_location_id.value))) ? parseInt(_modal_product_location_id.value) : null,
-                rating_types_id: (!isNaN(parseInt(_modal_product_rating_types_id.value))) ? parseInt(_modal_product_rating_types_id.value) : null,
-                provider_id: (!isNaN(parseInt(_modal_product_provider_id.value))) ? parseInt(_modal_product_provider_id.value) : null,
-                vendor_id: (!isNaN(parseInt(_modal_product_vendor_id.value))) ? parseInt(_modal_product_vendor_id.value) : null,
-                provider_vendor_match: (((!isNaN(parseInt(_modal_product_provider_company_id.value))) ? parseInt(_modal_product_provider_company_id.value) : null) === ((!isNaN(parseInt(_modal_product_vendor_company_id.value))) ? parseInt(_modal_product_vendor_company_id.value) : null)) ? 1 : 0,
-                name: _modal_product_name.value,
-                sku: _modal_product_sku.value,
-                use_provider_location_id: 0,
-            }
-            return remove_nulls(dataToSend)
-        }
-        
-        const saveNewProduct = function () {
-            let dataToSend = buildInsertData()
-            let product
-            Console.log("dataToSend", dataToSend)
-            
-            newProduct(dataToSend, function (data) {
-                if (data) {
-                    product = data
-                    if (data.length === 1) {
-                        product = data[0]
-                    }
-                    Console.log("Product.saveNewProduct() - product", product)
-                    if (product.id) {
-                        toastr.success(`Product - ${product.id} was created, would you like to edit?`)
-                        //window.location.replace("/products/" + product.id)
-                        
-                    }
-                }
-                
-            })
-        }
-        
-        const newProduct = function (dataToSend, callback) {
-            let url = "/api/v1.0/products/add"
-            
-            if (dataToSend) {
-                try {
-                    sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                        if (data) {
-                            return callback(data)
-                        } else {
-                            return handleProductError("Oops: 1")
-                        }
-                    })
-                } catch (e) {
-                    Console.log("error", e)
-                    return handleProductError("Oops: 1")
-                }
-            }
-        }
-        
-        const validateNewProduct = function () {
-            //Console.log("validateNewProduct", "")
-            
-            if (_form_product_add) {
-                return $(_form_product_add).valid()
-            }
-            
-            return false
-        }
-        
-        const clearModalForm = function () {
-            _modal_product_name.value = ""
-            
-            _modal_product_street_1.value = ""
-            _modal_product_street_2.value = ""
-            _modal_product_postal_code.value = ""
-            
-            //
-            _modal_product_depart_from_airport.value = ""
-            _modal_product_arrive_to_airport.value = ""
-            _modal_product_depart_from_station.value = ""
-            _modal_product_arrive_to_station.value = ""
-            _modal_product_depart_from_airport_id.value = ""
-            _modal_product_arrive_to_airport_id.value = ""
-            _modal_product_depart_from_station_id.value = ""
-            _modal_product_arrive_to_station_id.value = ""
-            
-            _modal_product_category_id.value = ""
-            _modal_product_sku.value = ""
-            _modal_product_rating_types_id.value = ""
-            _modal_product_currency_id.value = ""
-            _modal_product_provider_company_id.value = ""
-            _modal_product_vendor_company_id.value = ""
-            /*
-            _modal_product_vendor_name.disabled = true
-            _modal_product_provider_name.disabled = true
-            //*/
-            _modal_product_pricing_strategies_types_id.value = ""
-            _modal_product_provider_location_id.value = ""
-            _modal_product_location_id.value = ""
-            _modal_product_city.value = ""
-            _modal_product_city_id.value = ""
-            Product.attr1 = null
-            Product.attr2 = null
-            Product.attr3 = null
-            Product.updateProductSKU()
-            
-            $("div[data-categoryid]").hide()
-            
-            Product.resetNewProductDetails()
-            clear_validation(_form_product_add)
-        }
-        
-        const resetNewProductDetails = function () {
-            _modal_product_provider_id.value = ""
-            _modal_product_vendor_id.value = ""
-            _modal_product_provider_name.value = ""
-            _modal_product_vendor_name.value = ""
-            _modal_product_city.value = ""
-            _modal_product_name.value = ""
-            _modal_product_sku.value = ""
-            _modal_product_city_id.value = ""
-            _modal_product_rating_types_id.value = ""
-            _modal_product_currency_id.value = ""
-            _modal_product_pricing_strategies_types_id.value = ""
-            _modal_product_name.disabled = true
-            _modal_product_sku.disabled = true
-            _modal_product_rating_types_id.disabled = true
-            _modal_product_currency_id.disabled = true
-            _modal_product_pricing_strategies_types_id.disabled = true
-            _modal_product_city.disabled = true
-        }
-        
-        const setNewProductModal = function () {
-            
-            clearModalForm()
-            Console.log("setNewProductModal")
-            $(_modal_new_product).modal("show")
-        }
-        
-        //
-        
-        const defaultDetail = function () {
-            return {
-                id: null,
-                category_id: null,
-                pricing_strategy_types_id: null,
-                status_types_id: null,
-                product_status_types_id: null,
-                currency_id: null,
-                location_id: null,
-                city_id: null,
-                vendor_id: null,
-                provider_id: null,
-                name: null,
-                provider_vendor_match: 1,
-                description_short: null,
-                description_long: null,
-                rating: null,
-                sku: null,
-                phone: null,
-                infant: null,
-                child: null,
-                teen: null,
-                depart_from: null,
-                arrive_to: null,
-                depart_time: null,
-                arrive_time: null,
-                day_span: null,
-                cover_image: null,
-                api_id: null,
-                from_api: 1,
-                hotel_code: null,
-                enabled: 1,
-                date_created: formatDateMySQL(),
-                created_by: user_id,
-                date_modified: formatDateMySQL(),
-                modified_by: user_id,
-                note: null,
-                amenities: "",
-                keywords: "",
-                seasons: [],
-                units: [],
-                use_provider_location: 0,
-                variants: [],
-                category: {},
-                location: {},
-                vendor: {},
-                profiles: [],
-                provider: {},
-            }
-        }
-        
-        const save = function (params) {
-        
-        }
-        
-        const navigate = function (product) {
-            if (product && product.id) {
-                window.location.replace(base_url + "/" + product.id)
-            }
-        }
-        
-        const get = function (id) {
-            let data_to_send = {}
-            if (id) {
-                data_to_send.id = id
-            }
-            
-        }
-        
-        const set = function (product) {
-            let detail = defaultDetail()
-            
-            if (product) {
-                detail.id = (product.id) ? product.id : null
-                detail.category_id = (product.category_id) ? product.category_id : null
-                detail.pricing_strategy_types_id = (product.pricing_strategy_types_id) ? product.pricing_strategy_types_id : null
-                detail.status_types_id = (product.status_types_id) ? product.status_types_id : null
-                detail.product_status_types_id = (product.product_status_types_id) ? product.product_status_types_id : null
-                detail.currency_id = (product.currency_id) ? product.currency_id : null
-                detail.location_id = (product.location_id) ? product.location_id : null
-                detail.city_id = (product.city_id) ? product.city_id : null
-                detail.vendor_id = (product.vendor_id) ? product.vendor_id : null
-                detail.provider_id = (product.provider_id) ? product.provider_id : null
-                detail.name = (product.name) ? product.name : null
-                detail.provider_vendor_match = (product.provider_vendor_match) ? product.provider_vendor_match : 1
-                detail.description_short = (product.description_short) ? product.description_short : null
-                detail.description_long = (product.description_long) ? product.description_long : null
-                detail.rating = (product.rating) ? product.rating : null
-                detail.sku = (product.sku) ? product.sku : null
-                detail.phone = (product.phone) ? product.phone : null
-                detail.infant = (product.infant) ? product.infant : null
-                detail.child = (product.child) ? product.child : null
-                detail.teen = (product.teen) ? product.teen : null
-                detail.depart_from = (product.depart_from) ? product.depart_from : null
-                detail.arrive_to = (product.arrive_to) ? product.arrive_to : null
-                detail.depart_time = (product.depart_time) ? product.depart_time : null
-                detail.arrive_time = (product.arrive_time) ? product.arrive_time : null
-                detail.day_span = (product.day_span) ? product.day_span : null
-                detail.cover_image = (product.cover_image) ? product.cover_image : null
-                detail.api_id = (product.api_id) ? product.api_id : null
-                detail.from_api = (product.from_api) ? product.from_api : 1
-                detail.hotel_code = (product.hotel_code) ? product.hotel_code : null
-                detail.enabled = (product.enabled) ? product.enabled : 1
-                detail.date_created = (product.date_created) ? product.date_created : formatDateMySQL()
-                detail.created_by = (product.created_by) ? product.created_by : user_id
-                detail.date_modified = (product.date_modified) ? product.date_modified : formatDateMySQL()
-                detail.modified_by = (product.modified_by) ? product.modified_by : user_id
-                detail.note = (product.note) ? product.note : null
-                detail.category = (product.category) ? product.category : {}
-                detail.keywords = (product.keywords) ? product.keywords : ""
-                detail.amenities = (product.amenities) ? product.amenities : ""
-                detail.seasons = (product.seasons) ? product.seasons : []
-                detail.units = (product.units) ? product.units : []
-                detail.use_provider_location = (product.use_provider_location) ? product.use_provider_location : 0
-                detail.variants = (product.variants) ? product.variants : []
-                detail.location = (product.location) ? product.location : {}
-                detail.vendor = (product.vendor) ? product.vendor : {}
-                detail.provider = (product.provider) ? product.provider : {}
-            }
-            
-            Product.detail = detail
-            return detail
-        }
-        
-        const loadAll = function (products) {
-            Product.all = new Map()
-            
-            if (!products) {
-                return
-            }
-            
-            $.each(products, function (i, product) {
-                let detail = set(product)
-                $index_table.insertRow(detail)
-                Product.all.set("id", detail)
-            })
-        }
-        
-        const buildIndexTable = function () {
-            
-            $index_table = $(_product_index_table).table({
-                table_type: "display_list",
-                data: [],
-                columnDefs: [
-                    {
-                        title: "Name",
-                        targets: 0,
-                        data: "name",
-                        render: function (data, type, row, meta) {
-                            return "<span style='white-space: nowrap;'>" + data + "</span>"
-                        },
-                    },
-                    {
-                        title: "SKU",
-                        targets: 1,
-                        data: "sku",
-                        render: function (data, type, row, meta) {
-                            return "<span style='white-space: nowrap;'>" + data + "</span>"
-                        },
-                    },
-                    {
-                        title: "Provider",
-                        targets: 2,
-                        data: "provider",
-                        render: function (data, type, row, meta) {
-                            return "<span style='white-space: nowrap;'>" + data.name + "</span>"
-                        },
-                    },
-                    {
-                        title: "Vendor",
-                        targets: 3,
-                        data: "vendor",
-                        render: function (data, type, row, meta) {
-                            return "<span style='white-space: nowrap;'>" + data.name + "</span>"
-                        },
-                    },
-                    {
-                        title: "Location",
-                        targets: 4,
-                        data: "location",
-                        render: function (data, type, row, meta) {
-                            let displayLocation = ""
-                            if (defaultLocationDisplayFormat === "short") {
-                                displayLocation = data.display_short
-                            } else if (defaultLocationDisplayFormat === "long") {
-                                displayLocation = data.display_long
-                            } else {
-                                displayLocation = data.display_medium
-                            }
-                            
-                            return "<span style='white-space: nowrap;'>" + displayLocation + "</span>"
-                        },
-                    },
-                    {
-                        title: "Category",
-                        targets: 5,
-                        data: "category",
-                        render: function (data, type, row, meta) {
-                            return "<span style='white-space: nowrap;'>" + data.name + "</span>"
-                        },
-                    },
-                ],
-                rowClick: Product.navigate,
-            })
-        }
-        
-        const changeHandler = function (event) {
-            //Console.log("value", this.value)
-            if (this.value === "use_provider_location") {
-                //Console.log("use_provider_location", provider_initial_location)
-                Location.init(provider_initial_location)
-            } else if (this.value === "use_product_location") {
-                //Console.log("use_product_location", product_initial_location)
-                Location.init(product_initial_location)
-            }
-        }
-        
-        const setDefaultProductDetails = function () {
-            return {
-                location: {},
-                provider: {},
-                vendor: {},
-                seasons: [],
-                units: [],
-                variants: [],
-                profiles: [],
-                matrix: [],
-            }
-        }
-        
-        const loadProductLocation = function (location, type) {
-            //Console.log("location", location)
-            if (!type) {
-                type = "product"
-            }
-            let iFrame = `#map-container-product-location`
-            product_initial_location = location
-            let $frame = $(iFrame).find("iframe")
-            let url = buildMapsURL(location)
-            $frame.attr("src", url)
-        }
-        
-        const initEditForm = function (settings) {
-            let product = setDefaultProductDetails()
-            
-            if (settings) {
-                product = settings
-            }
-            
-            Array.prototype.forEach.call(radios, function (radio) {
-                radio.addEventListener("change", changeHandler)
-            })
-            
-            setEditFormValues(product)
-        }
-        
-        const setEditFormValues = function (product) {
-            let provider, vendor, product_location,
-                seasons, units, variants, profiles, provider_location
-            
-            if (product.location) {
-                product_location = product.location
-                Product.product_initial_location = product_location
-            }
-            
-            if (product.provider) {
-                provider = product.provider
-            }
-            
-            if (provider.location) {
-                provider_location = provider.location
-                Product.provider_initial_location = provider_location
-            }
-            
-            if (product.vendor) {
-                vendor = product.vendor
-            }
-            
-            if (product.seasons) {
-                seasons = product.seasons
-            }
-            
-            if (product.units) {
-                units = product.units
-            }
-            
-            if (product.variants) {
-                variants = product.variants
-            }
-            
-            if (product.profiles) {
-                profiles = product.profiles
-            }
-            
-            if (product.use_provider_location) {
-                $(_use_provider_location).attr("checked", "true")
-                loadProductLocation(provider_location, "provider")
-                Location.init(provider_location)
-            } else {
-                $(_use_product_location).attr("checked", "true")
-                loadProductLocation(product_location, "provider")
-                Location.init(product_location)
-            }
-            
-            let product_keywords = (product.keywords) ? product.keywords : ""
-            $product_keywords = $(_product_keywords).BuildKeyword(product_keywords)
-            
-            let product_amenities = (product.amenities) ? product.amenities : ""
-            $product_amenities = $(_product_amenities).BuildKeyword(product_amenities)
-            
-        }
-        
-        const init = function (settings) {
-            let product_details, variants, seasons, units, profiles, matrices, pricings
-            
-            if (_modal_new_product) {
-                Category.init()
-            }
-            
-            if (_product_edit_page) {
-                if (settings) {
-                    
-                    if (settings.product_details) {
-                        product_details = settings.product_details
-                    }
-                    
-                    if (product_details.variants) {
-                        variants = product_details.variants
-                    }
-                    
-                    if (product_details.seasons) {
-                        seasons = product_details.seasons
-                    }
-                    
-                    if (product_details.matrices) {
-                        matrices = product_details.matrices
-                    }
-                    
-                    if (product_details.profiles) {
-                        profiles = product_details.profiles
-                    }
-                    
-                    if (product_details.units) {
-                        units = product_details.units
-                    }
-                    
-                    if (product_details.pricings) {
-                        pricings = product_details.pricings
-                    }
-                    
-                    let pricing_strategy = {
-                        pricing_strategy_types_id: (!isNaN(parseInt(product_details.pricing_strategy_types_id))) ? parseInt(product_details.pricing_strategy_types_id) : null,
-                    }
-                    
-                    $(document).ready(function () {
-                        if (_product_edit_page) {
-                            initAutoComplete()
-                            initEditForm(product_details)
-                            
-                            Variant.init(variants)
-                            Season.init(seasons)
-                            Season.loadAll(seasons)
-                            Unit.init({ units: units })
-                            Matrix.init({ matrices: matrices })
-                            Pricing.init({ pricings: pricings })
-                            InventoryProfile.init({
-                                profiles: profiles,
-                            })
-                            PricingWorksheet.init({
-                                pricing_strategy: pricing_strategy,
-                                pricings: pricings,
-                            })
-                            
-                            $(_product_panel_link_overview)
-                                .on("click", function () {
-                                    $(_panel_tab_product_o).tab("show")
-                                })
-                            $(_product_panel_link_location)
-                                .on("click", function () {
-                                    $(_panel_tab_location).tab("show")
-                                })
-                            $(_product_panel_link_product)
-                                .on("click", function () {
-                                    $(_panel_tab_product).tab("show")
-                                })
-                            $(_product_panel_link_season)
-                                .on("click", function () {
-                                    $(_panel_tab_season).tab("show")
-                                })
-                            $(_product_panel_link_unit)
-                                .on("click", function () {
-                                    $(_panel_tab_unit).tab("show")
-                                })
-                            $(_product_panel_link_variant)
-                                .on("click", function () {
-                                    $(_panel_tab_variant).tab("show")
-                                })
-                            $(_product_panel_link_inventory)
-                                .on("click", function () {
-                                    $(_panel_tab_inventory).tab("show")
-                                })
-                            $(_product_panel_link_pricing)
-                                .on("click", function () {
-                                    $(_panel_tab_pricing).tab("show")
-                                })
-                            $(_product_panel_link_meta)
-                                .on("click", function () {
-                                    $(_panel_tab_meta).tab("show")
-                                })
-                            
-                            updateProgress()
-                        }
-                    })
-                    
-                }
-                
-                return true
-            }
-            
-            if (_product_index_page) {
-                Provider.init()
-                Product.index(settings)
-                if (_form_product_add) {
-                    validator_init(add_modal_form_rules)
-                    newProduct_validator = $(_form_product_add).validate()
-                }
-                return true
-            }
-        }
-        
-        const index = function (settings) {
-            
-            if (_product_index_table) {
-                buildIndexTable()
-                
-                if (settings) {
-                    loadAll(settings)
-                }
-            }
-        }
-        
-        const setNewFormDetails = function (category_id) {
-            Console.log("setNewFormDetails()", category_id)
-            
-        }
-        
-        const updateProductSKU = function () {
-            let att1 = Product.attr1
-            let att2 = Product.attr2
-            let att3 = Product.attr3
-            let sku = ""
-            if (!is_null(att1) && !is_null(att2) && !is_null(att3)) {
-                sku = att1.replace(/-/g, "") + "-" + att2.replace(/-/g, "") + "-" + att3.replace(/-/g, "")
-                _modal_product_sku.value = sku
-            } else {
-                _modal_product_sku.value = ""
-                if (is_null(att1)) {
-                    //Console.log("att1 is null", att1)
-                }
-                
-                if (is_null(att2)) {
-                    //Console.log("att2 is null", att2)
-                }
-                
-                if (is_null(att3)) {
-                    //Console.log("att3 is null", att3)
-                }
-            }
-            
-        }
-        
-        const handleProductError = function (msg) {
-            toastr.error(msg)
-        }
-        
-        return {
-            validator: null,
-            updateProgress: function () {
-                updateProgress()
-            },
-            product_initial_location: null,
-            provider_initial_location: null,
-            detail: {},
-            all: new Map(),
-            attr1: null,
-            attr2: null,
-            attr3: null,
-            updateProductSKU: function () {
-                updateProductSKU()
-            },
-            setNewFormDetails: function (category_id) {
-                setNewFormDetails(category_id)
-            },
-            get: function (params) {
-                get(params)
-            },
-            loadAll: function (params) {
-                loadAll(params)
-            },
-            save: function (params) {
-                save(params)
-            },
-            init: function (settings) {
-                init(settings)
-            },
-            index: function (settings) {
-                index(settings)
-            },
-            navigate: function (product) {
-                navigate(product)
-            },
-            resetNewProductDetails: function () {
-                resetNewProductDetails()
-            },
-            initAutoComplete: function () {
-                initAutoComplete()
-            },
-        }
-        
-    })()
+					})
+					.on("search", function () {
+					
+					})
+					.on("click", function () {
+						$(this).select()
+					})
+					.autocomplete({
+						serviceUrl: "/api/v1.0/autocomplete/products",
+						minChars: 2,
+						params: { "category_id": category_id },
+						cache: false,
+						dataType: "json",
+						triggerSelectOnValidInput: false,
+						paramName: "st",
+						onSelect: function (suggestion) {
+							if (!suggestion || !suggestion.data) {
+								return
+							}
+							//Console.log("suggestion.data", suggestion.data)
+							let product = suggestion.data
+							//Console.log("product", product)
+						},
+					})
+			}
+		}
+		
+		const updateProgress = function () {
+			let variants = Array.from(Variant.all.values())
+			let units = Array.from(Unit.all.values())
+			let seasons = Array.from(Season.all.values())
+			
+			if (variants.length === 0 || units.length === 0 || seasons.length === 0) {
+				$(_panel_tab_pricing).addClass(`disabled`)
+				$(_panel_tab_inventory).addClass(`disabled`)
+			} else {
+				$(_panel_tab_pricing).removeClass(`disabled`)
+				$(_panel_tab_inventory).removeClass(`disabled`)
+			}
+			
+			let pricingWorksheet = PricingWorksheet.status()
+			if (pricingWorksheet === "incomplete") {
+				$("#panel_tab_pricing")
+					.html("Pricing <span class='badge rounded-pill badge-notification bg-danger tab-badge' style='color:#fff!important'>!</span>")
+			} else {
+				$("#panel_tab_pricing")
+					.html("Pricing")
+			}
+		}
+		
+		const buildInsertData = function () {
+			let dataToSend = {
+				city_id: (!isNaN(parseInt(_modal_product_city_id.value))) ? parseInt(_modal_product_city_id.value) : null,
+				depart_from: (!isNaN(parseInt(_modal_product_city_id.value))) ? parseInt(_modal_product_city_id.value) : null,
+				arrive_to: (!isNaN(parseInt(_modal_product_city_id.value))) ? parseInt(_modal_product_city_id.value) : null,
+				street_1: (_modal_product_street_1.value !== "") ? _modal_product_street_1.value : null,
+				street_2: (_modal_product_street_2.value !== "") ? _modal_product_street_2.value : null,
+				postal_code: (_modal_product_postal_code.value !== "") ? _modal_product_postal_code.value : null,
+				category_id: (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null,
+				pricing_strategy_types_id: (!isNaN(parseInt(_modal_product_pricing_strategies_types_id.value))) ? parseInt(_modal_product_pricing_strategies_types_id.value) : null,
+				status_types_id: 1,
+				currency_id: (!isNaN(parseInt(_modal_product_currency_id.value))) ? parseInt(_modal_product_currency_id.value) : null,
+				location_id: (!isNaN(parseInt(_modal_product_location_id.value))) ? parseInt(_modal_product_location_id.value) : null,
+				rating_types_id: (!isNaN(parseInt(_modal_product_rating_types_id.value))) ? parseInt(_modal_product_rating_types_id.value) : null,
+				provider_id: (!isNaN(parseInt(_modal_product_provider_id.value))) ? parseInt(_modal_product_provider_id.value) : null,
+				vendor_id: (!isNaN(parseInt(_modal_product_vendor_id.value))) ? parseInt(_modal_product_vendor_id.value) : null,
+				provider_vendor_match: (((!isNaN(parseInt(_modal_product_provider_company_id.value))) ? parseInt(_modal_product_provider_company_id.value) : null) === ((!isNaN(parseInt(_modal_product_vendor_company_id.value))) ? parseInt(_modal_product_vendor_company_id.value) : null)) ? 1 : 0,
+				name: _modal_product_name.value,
+				sku: _modal_product_sku.value,
+				use_provider_location_id: 0,
+			}
+			return remove_nulls(dataToSend)
+		}
+		
+		const saveNewProduct = function () {
+			let dataToSend = buildInsertData()
+			let product
+			
+			newProduct(dataToSend, function (data) {
+				if (data) {
+					product = data
+					if (data.length === 1) {
+						product = data[0]
+					}
+					Console.log("Product.saveNewProduct() - product", product)
+					if (product.id) {
+						toastr.success(`Product - ${product.id} was created, would you like to edit?`)
+						//window.location.replace("/products/" + product.id)
+						
+					}
+				}
+				
+			})
+		}
+		
+		const newProduct = function (dataToSend, callback) {
+			let url = "/api/v1.0/products/add"
+			
+			if (dataToSend) {
+				try {
+					sendPostRequest(url, dataToSend, function (data, status, xhr) {
+						if (data) {
+							return callback(data)
+						} else {
+							return handleProductError("Oops: 1")
+						}
+					})
+				} catch (e) {
+					Console.log("error", e)
+					return handleProductError("Oops: 1")
+				}
+			}
+		}
+		
+		const validateNewProduct = function () {
+			//Console.log("validateNewProduct", "")
+			
+			if (_form_product_add) {
+				return $(_form_product_add).valid()
+			}
+			
+			return false
+		}
+		
+		const clearModalForm = function () {
+			_modal_product_name.value = ""
+			
+			_modal_product_street_1.value = ""
+			_modal_product_street_2.value = ""
+			_modal_product_postal_code.value = ""
+			
+			//
+			_modal_product_depart_from_airport.value = ""
+			_modal_product_arrive_to_airport.value = ""
+			_modal_product_depart_from_station.value = ""
+			_modal_product_arrive_to_station.value = ""
+			_modal_product_depart_from_airport_id.value = ""
+			_modal_product_arrive_to_airport_id.value = ""
+			_modal_product_depart_from_station_id.value = ""
+			_modal_product_arrive_to_station_id.value = ""
+			
+			_modal_product_category_id.value = ""
+			_modal_product_sku.value = ""
+			_modal_product_rating_types_id.value = ""
+			_modal_product_currency_id.value = ""
+			_modal_product_provider_company_id.value = ""
+			_modal_product_vendor_company_id.value = ""
+			/*
+			_modal_product_vendor_name.disabled = true
+			_modal_product_provider_name.disabled = true
+			//*/
+			_modal_product_pricing_strategies_types_id.value = ""
+			_modal_product_provider_location_id.value = ""
+			_modal_product_location_id.value = ""
+			_modal_product_city.value = ""
+			_modal_product_city_id.value = ""
+			Product.attr1 = null
+			Product.attr2 = null
+			Product.attr3 = null
+			Product.updateProductSKU()
+			
+			$("div[data-categoryid]").hide()
+			
+			Product.resetNewProductDetails()
+			clear_validation(_form_product_add)
+		}
+		
+		const resetNewProductDetails = function () {
+			_modal_product_provider_id.value = ""
+			_modal_product_vendor_id.value = ""
+			_modal_product_provider_name.value = ""
+			_modal_product_vendor_name.value = ""
+			_modal_product_city.value = ""
+			_modal_product_name.value = ""
+			_modal_product_sku.value = ""
+			_modal_product_city_id.value = ""
+			_modal_product_rating_types_id.value = ""
+			_modal_product_currency_id.value = ""
+			_modal_product_pricing_strategies_types_id.value = ""
+			_modal_product_name.disabled = true
+			_modal_product_sku.disabled = true
+			_modal_product_rating_types_id.disabled = true
+			_modal_product_currency_id.disabled = true
+			_modal_product_pricing_strategies_types_id.disabled = true
+			_modal_product_city.disabled = true
+		}
+		
+		const setNewProductModal = function () {
+			
+			clearModalForm()
+			Console.log("setNewProductModal")
+			$(_modal_new_product).modal("show")
+		}
+		
+		const defaultDetail = function () {
+			return {
+				id: null,
+				category_id: null,
+				pricing_strategy_types_id: null,
+				status_types_id: null,
+				product_status_types_id: null,
+				currency_id: null,
+				location_id: null,
+				city_id: null,
+				vendor_id: null,
+				provider_id: null,
+				name: null,
+				provider_vendor_match: 1,
+				description_short: null,
+				description_long: null,
+				rating: null,
+				sku: null,
+				phone: null,
+				infant: null,
+				child: null,
+				teen: null,
+				depart_from: null,
+				arrive_to: null,
+				depart_time: null,
+				arrive_time: null,
+				day_span: null,
+				cover_image: null,
+				api_id: null,
+				from_api: 1,
+				hotel_code: null,
+				enabled: 1,
+				date_created: formatDateMySQL(),
+				created_by: user_id,
+				date_modified: formatDateMySQL(),
+				modified_by: user_id,
+				note: null,
+				amenities: "",
+				keywords: "",
+				seasons: [],
+				units: [],
+				use_provider_location: 0,
+				variants: [],
+				category: {},
+				location: {},
+				vendor: {},
+				profiles: [],
+				provider: {},
+			}
+		}
+		
+		const save = function (params) {
+		
+		}
+		
+		const navigate = function (product) {
+			if (product && product.id) {
+				window.location.replace(base_url + "/" + product.id)
+			}
+		}
+		
+		const get = function (id) {
+			let data_to_send = {}
+			if (id) {
+				data_to_send.id = id
+			}
+			
+		}
+		
+		const set = function (product) {
+			let detail = defaultDetail()
+			
+			if (product) {
+				detail.id = (product.id) ? product.id : null
+				detail.category_id = (product.category_id) ? product.category_id : null
+				detail.pricing_strategy_types_id = (product.pricing_strategy_types_id) ? product.pricing_strategy_types_id : null
+				detail.status_types_id = (product.status_types_id) ? product.status_types_id : null
+				detail.product_status_types_id = (product.product_status_types_id) ? product.product_status_types_id : null
+				detail.currency_id = (product.currency_id) ? product.currency_id : null
+				detail.location_id = (product.location_id) ? product.location_id : null
+				detail.city_id = (product.city_id) ? product.city_id : null
+				detail.vendor_id = (product.vendor_id) ? product.vendor_id : null
+				detail.provider_id = (product.provider_id) ? product.provider_id : null
+				detail.name = (product.name) ? product.name : null
+				detail.provider_vendor_match = (product.provider_vendor_match) ? product.provider_vendor_match : 1
+				detail.description_short = (product.description_short) ? product.description_short : null
+				detail.description_long = (product.description_long) ? product.description_long : null
+				detail.rating = (product.rating) ? product.rating : null
+				detail.sku = (product.sku) ? product.sku : null
+				detail.phone = (product.phone) ? product.phone : null
+				detail.infant = (product.infant) ? product.infant : null
+				detail.child = (product.child) ? product.child : null
+				detail.teen = (product.teen) ? product.teen : null
+				detail.depart_from = (product.depart_from) ? product.depart_from : null
+				detail.arrive_to = (product.arrive_to) ? product.arrive_to : null
+				detail.depart_time = (product.depart_time) ? product.depart_time : null
+				detail.arrive_time = (product.arrive_time) ? product.arrive_time : null
+				detail.day_span = (product.day_span) ? product.day_span : null
+				detail.cover_image = (product.cover_image) ? product.cover_image : null
+				detail.api_id = (product.api_id) ? product.api_id : null
+				detail.from_api = (product.from_api) ? product.from_api : 1
+				detail.hotel_code = (product.hotel_code) ? product.hotel_code : null
+				detail.enabled = (product.enabled) ? product.enabled : 1
+				detail.date_created = (product.date_created) ? product.date_created : formatDateMySQL()
+				detail.created_by = (product.created_by) ? product.created_by : user_id
+				detail.date_modified = (product.date_modified) ? product.date_modified : formatDateMySQL()
+				detail.modified_by = (product.modified_by) ? product.modified_by : user_id
+				detail.note = (product.note) ? product.note : null
+				detail.category = (product.category) ? product.category : {}
+				detail.keywords = (product.keywords) ? product.keywords : ""
+				detail.amenities = (product.amenities) ? product.amenities : ""
+				detail.seasons = (product.seasons) ? product.seasons : []
+				detail.units = (product.units) ? product.units : []
+				detail.use_provider_location = (product.use_provider_location) ? product.use_provider_location : 0
+				detail.variants = (product.variants) ? product.variants : []
+				detail.location = (product.location) ? product.location : {}
+				detail.vendor = (product.vendor) ? product.vendor : {}
+				detail.provider = (product.provider) ? product.provider : {}
+			}
+			
+			Product.detail = detail
+			return detail
+		}
+		
+		const loadAll = function (products) {
+			Product.all = new Map()
+			
+			if (!products) {
+				return
+			}
+			
+			$.each(products, function (i, product) {
+				let detail = set(product)
+				$index_table.insertRow(detail)
+				Product.all.set("id", detail)
+			})
+		}
+		
+		const buildIndexTable = function () {
+			
+			$index_table = $(_product_index_table).table({
+				table_type: "display_list",
+				data: [],
+				columnDefs: [
+					{
+						title: "Name",
+						targets: 0,
+						data: "name",
+						render: function (data, type, row, meta) {
+							return "<span style='white-space: nowrap;'>" + data + "</span>"
+						},
+					},
+					{
+						title: "SKU",
+						targets: 1,
+						data: "sku",
+						render: function (data, type, row, meta) {
+							return "<span style='white-space: nowrap;'>" + data + "</span>"
+						},
+					},
+					{
+						title: "Provider",
+						targets: 2,
+						data: "provider",
+						render: function (data, type, row, meta) {
+							return "<span style='white-space: nowrap;'>" + data.name + "</span>"
+						},
+					},
+					{
+						title: "Vendor",
+						targets: 3,
+						data: "vendor",
+						render: function (data, type, row, meta) {
+							return "<span style='white-space: nowrap;'>" + data.name + "</span>"
+						},
+					},
+					{
+						title: "Location",
+						targets: 4,
+						data: "location",
+						render: function (data, type, row, meta) {
+							let displayLocation = ""
+							if (defaultLocationDisplayFormat === "short") {
+								displayLocation = data.display_short
+							} else if (defaultLocationDisplayFormat === "long") {
+								displayLocation = data.display_long
+							} else {
+								displayLocation = data.display_medium
+							}
+							
+							return "<span style='white-space: nowrap;'>" + displayLocation + "</span>"
+						},
+					},
+					{
+						title: "Category",
+						targets: 5,
+						data: "category",
+						render: function (data, type, row, meta) {
+							return "<span style='white-space: nowrap;'>" + data.name + "</span>"
+						},
+					},
+				],
+				rowClick: Product.navigate,
+			})
+		}
+		
+		const changeHandler = function (event) {
+			//Console.log("value", this.value)
+			if (this.value === "use_provider_location") {
+				//Console.log("use_provider_location", provider_initial_location)
+				Location.init(provider_initial_location)
+			} else if (this.value === "use_product_location") {
+				//Console.log("use_product_location", product_initial_location)
+				Location.init(product_initial_location)
+			}
+		}
+		
+		const setDefaultProductDetails = function () {
+			return {
+				location: {},
+				provider: {},
+				vendor: {},
+				seasons: [],
+				units: [],
+				variants: [],
+				profiles: [],
+				matrix: [],
+			}
+		}
+		
+		const loadProductLocation = function (location, type) {
+			//Console.log("location", location)
+			if (!type) {
+				type = "product"
+			}
+			let iFrame = `#map-container-product-location`
+			product_initial_location = location
+			let $frame = $(iFrame).find("iframe")
+			let url = buildMapsURL(location)
+			$frame.attr("src", url)
+		}
+		
+		const initEditForm = function (settings) {
+			let product = setDefaultProductDetails()
+			
+			if (settings) {
+				product = settings
+			}
+			
+			Array.prototype.forEach.call(radios, function (radio) {
+				radio.addEventListener("change", changeHandler)
+			})
+			
+			setEditFormValues(product)
+		}
+		
+		const setEditFormValues = function (product) {
+			let provider, vendor, product_location,
+				seasons, units, variants, profiles, provider_location
+			
+			if (product.location) {
+				product_location = product.location
+				Product.product_initial_location = product_location
+			}
+			
+			if (product.provider) {
+				provider = product.provider
+			}
+			
+			if (provider.location) {
+				provider_location = provider.location
+				Product.provider_initial_location = provider_location
+			}
+			
+			if (product.vendor) {
+				vendor = product.vendor
+			}
+			
+			if (product.seasons) {
+				seasons = product.seasons
+			}
+			
+			if (product.units) {
+				units = product.units
+			}
+			
+			if (product.variants) {
+				variants = product.variants
+			}
+			
+			if (product.profiles) {
+				profiles = product.profiles
+			}
+			
+			/*
+			if (product.use_provider_location) {
+				$(_use_provider_location).attr("checked", "true")
+				loadProductLocation(provider_location, "provider")
+				Location.init(provider_location)
+			} else {
+				$(_use_product_location).attr("checked", "true")
+				loadProductLocation(product_location, "provider")
+				Location.init(product_location)
+			}
+			//*/
+			
+			ProductLocation.init({
+				product_location: product_location,
+				provider_location: provider_location,
+			})
+			
+			let product_keywords = (product.keywords) ? product.keywords : ""
+			$product_keywords = $(_product_keywords).BuildKeyword(product_keywords)
+			
+			let product_amenities = (product.amenities) ? product.amenities : ""
+			$product_amenities = $(_product_amenities).BuildKeyword(product_amenities)
+			
+		}
+		
+		const init = function (settings) {
+			let product_details, variants, seasons, units, profiles, matrices, pricings
+			
+			if (_modal_new_product) {
+				Category.init()
+			}
+			
+			if (_product_edit_page) {
+				if (settings) {
+					
+					if (settings.product_details) {
+						product_details = settings.product_details
+					}
+					
+					if (product_details.variants) {
+						variants = product_details.variants
+					}
+					
+					if (product_details.seasons) {
+						seasons = product_details.seasons
+					}
+					
+					if (product_details.matrices) {
+						matrices = product_details.matrices
+					}
+					
+					if (product_details.profiles) {
+						profiles = product_details.profiles
+					}
+					
+					if (product_details.units) {
+						units = product_details.units
+					}
+					
+					if (product_details.pricings) {
+						pricings = product_details.pricings
+					}
+					
+					let pricing_strategy = {
+						pricing_strategy_types_id: (!isNaN(parseInt(product_details.pricing_strategy_types_id))) ? parseInt(product_details.pricing_strategy_types_id) : null,
+					}
+					
+					$(document).ready(function () {
+						if (_product_edit_page) {
+							initAutoComplete()
+							initEditForm(product_details)
+							
+							Variant.init(variants)
+							Season.init(seasons)
+							Season.loadAll(seasons)
+							Unit.init({ units: units })
+							Matrix.init({ matrices: matrices })
+							Pricing.init({ pricings: pricings })
+							InventoryProfile.init({
+								profiles: profiles,
+							})
+							PricingWorksheet.init({
+								pricing_strategy: pricing_strategy,
+								pricings: pricings,
+							})
+							
+							$(_product_panel_link_overview)
+								.on("click", function () {
+									$(_panel_tab_product_o).tab("show")
+								})
+							$(_product_panel_link_location)
+								.on("click", function () {
+									$(_panel_tab_location).tab("show")
+								})
+							$(_product_panel_link_product)
+								.on("click", function () {
+									$(_panel_tab_product).tab("show")
+								})
+							$(_product_panel_link_season)
+								.on("click", function () {
+									$(_panel_tab_season).tab("show")
+								})
+							$(_product_panel_link_unit)
+								.on("click", function () {
+									$(_panel_tab_unit).tab("show")
+								})
+							$(_product_panel_link_variant)
+								.on("click", function () {
+									$(_panel_tab_variant).tab("show")
+								})
+							$(_product_panel_link_inventory)
+								.on("click", function () {
+									$(_panel_tab_inventory).tab("show")
+								})
+							$(_product_panel_link_pricing)
+								.on("click", function () {
+									$(_panel_tab_pricing).tab("show")
+								})
+							$(_product_panel_link_meta)
+								.on("click", function () {
+									$(_panel_tab_meta).tab("show")
+								})
+							
+							updateProgress()
+						}
+					})
+					
+				}
+				
+				return true
+			}
+			
+			if (_product_index_page) {
+				Provider.init()
+				Product.index(settings)
+				if (_form_product_add) {
+					validator_init(add_modal_form_rules)
+					newProduct_validator = $(_form_product_add).validate()
+				}
+				return true
+			}
+		}
+		
+		const index = function (settings) {
+			
+			if (_product_index_table) {
+				buildIndexTable()
+				
+				if (settings) {
+					loadAll(settings)
+				}
+			}
+		}
+		
+		const setNewFormDetails = function (category_id) {
+			Console.log("setNewFormDetails()", category_id)
+			
+		}
+		
+		const updateProductSKU = function () {
+			let att1 = Product.attr1
+			let att2 = Product.attr2
+			let att3 = Product.attr3
+			let sku = ""
+			if (!is_null(att1) && !is_null(att2) && !is_null(att3)) {
+				sku = att1.replace(/-/g, "") + "-" + att2.replace(/-/g, "") + "-" + att3.replace(/-/g, "")
+				_modal_product_sku.value = sku
+			} else {
+				_modal_product_sku.value = ""
+				if (is_null(att1)) {
+					//Console.log("att1 is null", att1)
+				}
+				
+				if (is_null(att2)) {
+					//Console.log("att2 is null", att2)
+				}
+				
+				if (is_null(att3)) {
+					//Console.log("att3 is null", att3)
+				}
+			}
+			
+		}
+		
+		const handleProductError = function (msg) {
+			toastr.error(msg)
+		}
+		
+		return {
+			validator: null,
+			updateProgress: function () {
+				updateProgress()
+			},
+			product_initial_location: null,
+			provider_initial_location: null,
+			detail: {},
+			all: new Map(),
+			attr1: null,
+			attr2: null,
+			attr3: null,
+			updateProductSKU: function () {
+				updateProductSKU()
+			},
+			setNewFormDetails: function (category_id) {
+				setNewFormDetails(category_id)
+			},
+			get: function (params) {
+				get(params)
+			},
+			loadAll: function (params) {
+				loadAll(params)
+			},
+			save: function (params) {
+				save(params)
+			},
+			init: function (settings) {
+				init(settings)
+			},
+			index: function (settings) {
+				index(settings)
+			},
+			navigate: function (product) {
+				navigate(product)
+			},
+			resetNewProductDetails: function () {
+				resetNewProductDetails()
+			},
+			initAutoComplete: function () {
+				initAutoComplete()
+			},
+		}
+		
+	})()
 
 </script>
 
@@ -971,1130 +974,1130 @@
 <!-- -->
 
 <script type="text/javascript">
-    let isShift
-    let separator = "-"
-    
-    const IsNumeric = function (input, keyCode) {
-        if (!isNaN(parseInt(keyCode))) {
-            keyCode = parseInt(keyCode)
-        }
-        if (keyCode === 16) {
-            isShift = true
-        }
-        
-        if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || (keyCode === 8) || (keyCode === 46)) {
-            if (keyCode !== 16) {
-                if ((input.value.length === 4 || input.value.length === 7) && keyCode !== 8) {
-                    input.value += separator
-                }
-                return true
-            }
-        }
-        return false
-    }
-    
-    const ValidateDateFormat = function (input, keyCode) {
-        var dateString = input.value
-        
-        if (keyCode === 16) {
-            isShift = false
-        }
-        var regex = /(((19|20)\d\d)\-(0[1-9]|1[0-2])\-((0|1)[0-9]|2[0-9]|3[0-1]))$/
-        if (regex.test(dateString) || dateString.length === 0) {
-            $(input).unSetError()
-        } else {
-            $(input).setError("Invalid Date. Only YYYY-MM-DD format allowed.")
-        }
-    }
-    
-    $(document).ready(function () {
-        (function ($) {
-            
-            $.fn.unSetError = function () {
-                let errorElm = this.parents("div.form-element").find("div.error")
-                if (this.hasClass("time-format")) {
-                    //this.parent().find("input").removeClass("is-invalid");
-                    //this.parent().find("span.caret").removeClass("is-invalid");
-                    //errorElm = this.parent("div.input-group").parent().find("div.error")
-                }
-                
-                if (this.hasClass("date-format")) {
-                    //this.parent().find("input").removeClass("is-invalid");
-                    //this.parent().find("span.caret").removeClass("is-invalid");
-                    //errorElm = this.parent("div.input-group").parent().find("div.error")
-                }
-                
-                errorElm.html("&nbsp;").hide()
-                return this
-            }
-            
-            $.fn.setError = function (msg) {
-                let errorElm = this.parents("div.form-element").find("div.error")
-                
-                if (this.hasClass("time-format")) {
-                    errorElm = this.parent("div.input-group").parent().find("div.error")
-                }
-                
-                if (this.hasClass("date-format")) {
-                    //errorElm = this.parents("div.form-element").find("div.error")
-                }
-                
-                errorElm.html(msg).show()
-                return this
-            }
-            
-        })(jQuery)
-    })
-    
-    window.addEventListener("load", function () {
-        const inputs = document.getElementsByTagName("input")
-        for (let i = 0; i < inputs.length; i++) {
-            if (inputs[i].type === "text") {
-                if (inputs[i].classList.contains("date-format")) {
-                    inputs[i].setAttribute("maxlength", "10")
-                    inputs[i].onkeydown = function (event) {
-                        return IsNumeric(this, event.keyCode)
-                    }
-                    inputs[i].onkeyup = function (event) {
-                        ValidateDateFormat(this, event.keyCode)
-                    }
-                }
-            }
-        }
-    }, false)
+	let isShift
+	let separator = "-"
+	
+	const IsNumeric = function (input, keyCode) {
+		if (!isNaN(parseInt(keyCode))) {
+			keyCode = parseInt(keyCode)
+		}
+		if (keyCode === 16) {
+			isShift = true
+		}
+		
+		if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || (keyCode === 8) || (keyCode === 46)) {
+			if (keyCode !== 16) {
+				if ((input.value.length === 4 || input.value.length === 7) && keyCode !== 8) {
+					input.value += separator
+				}
+				return true
+			}
+		}
+		return false
+	}
+	
+	const ValidateDateFormat = function (input, keyCode) {
+		var dateString = input.value
+		
+		if (keyCode === 16) {
+			isShift = false
+		}
+		var regex = /(((19|20)\d\d)\-(0[1-9]|1[0-2])\-((0|1)[0-9]|2[0-9]|3[0-1]))$/
+		if (regex.test(dateString) || dateString.length === 0) {
+			$(input).unSetError()
+		} else {
+			$(input).setError("Invalid Date. Only YYYY-MM-DD format allowed.")
+		}
+	}
+	
+	$(document).ready(function () {
+		(function ($) {
+			
+			$.fn.unSetError = function () {
+				let errorElm = this.parents("div.form-element").find("div.error")
+				if (this.hasClass("time-format")) {
+					//this.parent().find("input").removeClass("is-invalid");
+					//this.parent().find("span.caret").removeClass("is-invalid");
+					//errorElm = this.parent("div.input-group").parent().find("div.error")
+				}
+				
+				if (this.hasClass("date-format")) {
+					//this.parent().find("input").removeClass("is-invalid");
+					//this.parent().find("span.caret").removeClass("is-invalid");
+					//errorElm = this.parent("div.input-group").parent().find("div.error")
+				}
+				
+				errorElm.html("&nbsp;").hide()
+				return this
+			}
+			
+			$.fn.setError = function (msg) {
+				let errorElm = this.parents("div.form-element").find("div.error")
+				
+				if (this.hasClass("time-format")) {
+					errorElm = this.parent("div.input-group").parent().find("div.error")
+				}
+				
+				if (this.hasClass("date-format")) {
+					//errorElm = this.parents("div.form-element").find("div.error")
+				}
+				
+				errorElm.html(msg).show()
+				return this
+			}
+			
+		})(jQuery)
+	})
+	
+	window.addEventListener("load", function () {
+		const inputs = document.getElementsByTagName("input")
+		for (let i = 0; i < inputs.length; i++) {
+			if (inputs[i].type === "text") {
+				if (inputs[i].classList.contains("date-format")) {
+					inputs[i].setAttribute("maxlength", "10")
+					inputs[i].onkeydown = function (event) {
+						return IsNumeric(this, event.keyCode)
+					}
+					inputs[i].onkeyup = function (event) {
+						ValidateDateFormat(this, event.keyCode)
+					}
+				}
+			}
+		}
+	}, false)
 
 </script>
 
 <script type="text/javascript">
-    const PricingStrategy = (function () {
-        "use strict"
-        
-        /**
-         * Static Variable Decloration
-         */
-        const daysOfTheWeek = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"]
-        const _product_id = document.getElementById("product_id")
-        const _pricing_strategy_types_id = document.getElementById("pricing_strategy_types_id")
-        const _pricing_strategy_unit_id = document.getElementById("pricing_strategy_unit_id")
-        const _pricing_strategy_season_id = document.getElementById("pricing_strategy_season_id")
-        const _pricing_container = document.getElementById("pricing_container")
-        const panel_tab_pricing = document.getElementById("panel_tab_pricing")
-        
-        /**
-         * Dynamic Variable Decloration
-         */
-        let variantCombinations = []
-        let variant_id, variant_count, variant_name
-        let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-        
-        /**
-         * Element Event Handlers
-         */
-        $(_pricing_strategy_types_id)
-            .on("change", function () {
-                //variantCombinations = []
-                //let pricingWorksheet = PricingWorksheet.init()
-                //Console.log(pricingWorksheet)
-            })
-        
-        $(_pricing_strategy_season_id)
-            .on("change", function () {
-                //season_id = (!isNaN(parseInt(_pricing_strategy_season_id.value))) ? parseInt(_pricing_strategy_season_id.value) : null
-                //emptyPricingMatrix()
-                //buildPricingMatrix()
-            })
-        
-        $(_pricing_strategy_unit_id)
-            .on("change", function () {
-                //unit_id = (!isNaN(parseInt(_pricing_strategy_unit_id.value))) ? parseInt(_pricing_strategy_unit_id.value) : null
-                
-            })
-        
-        /**
-         * buildPricingMatrix
-         */
-        const buildPricingMatrix = function () {
-            let pricingStrategyForm
-            let pricingStrategyTypesId = (!isNaN(parseInt(_pricing_strategy_types_id.value))) ? parseInt(_pricing_strategy_types_id.value) : null
-            let CONTAINER = $("<div/>")
-            
-            const tableDOW = function () {
-                let tableHeadRow = $("<tr/>")
-                let tableHeadRowColumn0 = $("<th/>", {
-                    class: "p-1",
-                })
-                let tableHeadRowColumn0Span = $("<span/>", {
-                    class: "p-1",
-                    html: '&nbsp;',
-                })
-                tableHeadRowColumn0.append(tableHeadRowColumn0Span)
-                tableHeadRow.append(tableHeadRowColumn0)
-                for (let n = 0; n < daysOfTheWeek.length; n++) {
-                    let tableHeadRowColumn = $("<th/>", {
-                        class: "p-1",
-                        text: `${ucwords(daysOfTheWeek[n])}`,
-                    })
-                    
-                    tableHeadRow.append(tableHeadRowColumn)
-                }
-                
-                let tableHeadRowColumnSave = $("<th/>", {
-                    class: "p-1",
-                    html: '&nbsp;',
-                })
-                
-                tableHeadRow.append(tableHeadRowColumnSave)
-                return tableHeadRow
-            }
-            
-            const closeAllToggles = function () {
-                let els = document.getElementsByClassName("collapse-toggle")
-                
-                $.each(els, function (k, element) {
-                    collapseWindow(element)
-                })
-            }
-            
-            const openAllToggles = function () {
-                let els = document.getElementsByClassName("collapse-toggle")
-                
-                $.each(els, function (k, element) {
-                    expandWindow(element)
-                })
-            }
-            
-            const seasonForm = function (unit, season) {
-                
-                const getMatrix = function (unit, season) {
-                    let pricingMatrix = [], seasonId, unitId, productId, matrixId
-                    
-                    const getVariantCombinations = function (depth, baseString, arrLetters) {
-                        for (let i = 0; i < arrLetters.length; i++) {
-                            if (depth === 1) {
-                                let variantComboId = baseString + arrLetters[i]
-                                
-                                let combos = variantComboId.split('-').map(function (item) {
-                                    return parseInt(item, 10)
-                                })
-                                
-                                combos = combos.sort().join("-")
-                                
-                                let hasVariantComboIndex = variantCombinations.indexOf(variantComboId)
-                                if (hasVariantComboIndex < 0) {
-                                    variantCombinations.push(combos)
-                                }
-                                
-                            } else {
-                                let id = arrLetters[i]
-                                getVariantCombinations(depth - 1, baseString + arrLetters[i] + "-", arrLetters)
-                            }
-                        }
-                    }
-                    
-                    const buildVariantListCombinations = function (unit, season) {
-                        //Console.log("PricingStrategy.buildVariantListCombinations(unit, season)", unit)
-                        
-                        let variants = getVariantsUsed()
-                        let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                        variantCombinations = []
-                        
-                        if (unitId) {
-                            let unit = Unit.all.get(unitId)
-                            if (unit) {
-                                let min = (!isNaN(parseInt(unit.min_pax))) ? parseInt(unit.min_pax) : 1
-                                let max = (!isNaN(parseInt(unit.max_pax))) ? parseInt(unit.max_pax) : 1
-                                if (min > max) {
-                                    let temp = max
-                                    max = min
-                                    min = temp
-                                }
-                                
-                                for (let n = min; n <= max; n++) {
-                                    getVariantCombinations(n, "", variants)
-                                }
-                            }
-                        }
-                        
-                        return variantCombinations
-                    }
-                    
-                    const formatCombos = function (variantList) {
-                        let worksheet = Array.from(variantList.values())
-                        let pricingWorksheet = new Map()
-                        
-                        let sectionName = []
-                        let myPricings = []
-                        let hasWorksheet, code
-                        $.each(worksheet, function (index, variantComboList) {
-                            let name = variantComboList.name
-                            let count = variantComboList.count
-                            code = variantComboList.code
-                            let pricings = variantComboList.pricings
-                            hasWorksheet = pricingWorksheet.get(code)
-                            
-                            if (!hasWorksheet) {
-                                hasWorksheet = {
-                                    name: null,
-                                    pricings: [],
-                                }
-                            }
-                            
-                            sectionName.push(count + " " + pluralize(name, count))
-                            myPricings.push(pricings)
-                            
-                        })
-                        
-                        let wPricing = []
-                        let pricingGroupName = sectionName.join(", ")
-                        for (let m = 0; m < myPricings.length; m++) {
-                            for (let n = 0; n < myPricings[m].length; n++) {
-                                let priceLine = myPricings[m][n]
-                                
-                                let priceLineCode = priceLine.code
-                                let pricing = Pricing.all.get(priceLineCode)
-                                if (pricing) {
-                                    //console.log("pricing", pricing)
-                                } else {
-                                    pricing = Pricing.set()
-                                }
-                                
-                                pricing.code = priceLine.code
-                                pricing.count = priceLine.count
-                                pricing.name = priceLine.name
-                                pricing.product_id = productId
-                                pricing.season_id = seasonId
-                                pricing.unit_id = unitId
-                                pricing.variant_id = priceLine.variant_id
-                                wPricing.push(pricing)
-                            }
-                        }
-                        
-                        let matrix = Matrix.all.get(code)
-                        if (!matrix) {
-                            matrix = Matrix.set()
-                            matrix.code = code
-                            matrix.product_id = productId
-                            matrix.season_id = seasonId
-                            matrix.unit_id = unitId
-                        }
-                        
-                        pricingWorksheet.set(code, {
-                            been_saved: matrix.been_saved,
-                            code: matrix.code,
-                            cost: matrix.cost,
-                            created_by: matrix.created_by,
-                            date_created: matrix.date_created,
-                            date_modified: matrix.date_modified,
-                            enabled: matrix.enabled,
-                            has_pricing: matrix.has_pricing,
-                            id: matrix.id,
-                            margin: matrix.margin,
-                            modified_by: matrix.modified_by,
-                            note: matrix.note,
-                            price: matrix.price,
-                            product_id: matrix.product_id,
-                            season_id: matrix.season_id,
-                            unit_id: matrix.unit_id,
-                            name: pricingGroupName,
-                            pricings: wPricing,
-                        })
-                        
-                        //console.log("pricingWorksheet", pricingWorksheet)
-                        return pricingWorksheet
-                    }
-                    
-                    const buildPricingMatrixCombinations = function (combos, unit, season) {
-                        
-                        let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
-                        let seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
-                        let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                        let matrixCode = productId + "-" + unitId + "-" + seasonId
-                        
-                        $.each(combos, function (k, variantComboId) {
-                            let variants = variantComboId.split("-").map(Number)
-                            let variantList = new Map()
-                            
-                            $.each(variants, function (k, variantId) {
-                                let variant = Variant.all.get(variantId)
-                                let hasVariant = variantList.get(variantId)
-                                
-                                if (hasVariant) {
-                                    let variantCount = parseInt(hasVariant.count) + 1
-                                    let count = variantCount
-                                    hasVariant.count = variantCount
-                                    hasVariant.pricings.push({
-                                        code: matrixId + "-" + variantId + "-" + count,
-                                        count: count,
-                                        name: variant.name + " " + count,
-                                        product_id: productId,
-                                        season_id: seasonId,
-                                        unit_id: unitId,
-                                        variant_id: parseInt(variantId),
-                                        mon: null,
-                                        tue: null,
-                                        wed: null,
-                                        thu: null,
-                                        fri: null,
-                                        sat: null,
-                                        sun: null,
-                                        monMargin: null,
-                                        tueMargin: null,
-                                        wedMargin: null,
-                                        thuMargin: null,
-                                        friMargin: null,
-                                        satMargin: null,
-                                        sunMargin: null,
-                                        enabled: 1,
-                                        date_created: formatDateMySQL(),
-                                        created_by: user_id,
-                                        date_modified: formatDateMySQL(),
-                                        modified_by: user_id,
-                                        note: null,
-                                    })
-                                    variantList.set(variantId, hasVariant)
-                                } else {
-                                    let variantCount = 0
-                                    let count = variantCount + 1
-                                    
-                                    variantList.set(variantId, {
-                                        count: count,
-                                        name: variant.name,
-                                        code: matrixCode,
-                                        product_id: productId,
-                                        season_id: seasonId,
-                                        unit_id: unitId,
-                                        cost: 0,
-                                        enabled: 1,
-                                        has_pricing: 0,
-                                        id: null,
-                                        margin: 0,
-                                        price: 0,
-                                        modified_by: user_id,
-                                        note: null,
-                                        created_by: user_id,
-                                        date_created: formatDateMySQL(),
-                                        date_modified: formatDateMySQL(),
-                                        pricings: [
-                                            {
-                                                code: matrixCode + "-" + variantId + "-" + count,
-                                                count: count,
-                                                name: variant.name + " " + count,
-                                                product_id: productId,
-                                                season_id: seasonId,
-                                                unit_id: unitId,
-                                                matrix_id: null,
-                                                variant_id: parseInt(variantId),
-                                                mon: 0,
-                                                tue: 0,
-                                                wed: 0,
-                                                thu: 0,
-                                                fri: 0,
-                                                sat: 0,
-                                                sun: 0,
-                                                monMargin: 0,
-                                                tueMargin: 0,
-                                                wedMargin: 0,
-                                                thuMargin: 0,
-                                                friMargin: 0,
-                                                satMargin: 0,
-                                                sunMargin: 0,
-                                                enabled: 1,
-                                                date_created: formatDateMySQL(),
-                                                created_by: user_id,
-                                                date_modified: formatDateMySQL(),
-                                                modified_by: user_id,
-                                                note: null,
-                                            },
-                                        ],
-                                    })
-                                }
-                                
-                            })
-                            
-                            let matrixLine = formatCombos(variantList)
-                            console.log(Array.from(matrixLine.values()))
-                            pricingMatrix.push(Array.from(matrixLine.values()))
-                            
-                        })
-                        
-                        return pricingMatrix
-                    }
-                    
-                    let comboMatrix
-                    
-                    if (unit && season) {
-                        productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
-                        if (productId) {
-                            unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                            seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
-                            
-                            if (unitId && seasonId) {
-                                matrixId = productId + "-" + unitId + "-" + seasonId
-                                let matrix = Matrix.all.get(matrixId)
-                                comboMatrix = buildPricingMatrixCombinations(buildVariantListCombinations(unit, season), unit, season)
-                                
-                                let variantCombinations = buildVariantListCombinations(unit, season)
-                                // ----
-                                
-                                //Console.log("comboMatrix", comboMatrix)
-                                //Console.log("variantCombinations", variantCombinations)
-                                
-                                // ----
-                                
-                                if (!matrix) {
-                                    matrix = Matrix.set()
-                                } else {
-                                    if (matrix.pricings) {
-                                    
-                                    }
-                                }
-                                //Console.log("matrix", matrix)
-                                //pricingMatrix = (Matrix.all.get(matrixId)) ? Matrix.all.get(matrixId) : buildPricingMatrixCombinations(buildVariantListCombinations(unit, season), unit, season)
-                            }
-                        }
-                    }
-                    
-                    return comboMatrix
-                }
-                
-                const seasonWrapper = function (unit, season) {
-                    //Console.log("PricingStrategy.seasonWrapper(season)", season)
-                    
-                    let seasonWrapperId
-                    if (season) {
-                        let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                        let seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
-                        if (unitId && seasonId) {
-                            seasonWrapperId = "seasonForm_container_" + unitId + "_" + seasonId
-                        }
-                        
-                        return $("<div/>", {
-                            id: seasonWrapperId,
-                        })
-                    }
-                    
-                    return null
-                    
-                }
-                
-                const seasonCollapse = function (unit, season) {
-                    //Console.log("PricingStrategy.seasonCollapse(season)", season)
-                    let seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
-                    let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                    
-                    return $("<section/>", {
-                        id: "seasonFormContainer_" + unitId + "_" + seasonId,
-                    })
-                }
-                
-                const seasonHeader = function (unit, season) {
-                    //Console.log("PricingStrategy.seasonHeader(season)", season)
-                    
-                    let TR, HEADING, SPAN, A, HEADINGWRAPPER, TD, colorScheme, backgroundColor, borderColor, textColor,
-                        seasonId, seasonName
-                    
-                    if (season) {
-                        colorScheme = season.color_scheme
-                        backgroundColor = (colorScheme.background_color) ? colorScheme.background_color : "#fff"
-                        borderColor = (colorScheme.border_color) ? colorScheme.border_color : "#fff"
-                        textColor = (colorScheme.text_color) ? colorScheme.text_color : "#fff"
-                        seasonName = season.name
-                        seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
-                        
-                        SPAN = $("<span/>", {
-                            class: "",
-                            text: seasonName,
-                        })
-                        
-                        A = $("<a/>", {
-                            href: "javascript:void(0)",
-                            class: "panel_link",
-                            css: {
-                                "color": textColor,
-                            },
-                            html: "<i class='fas fa-angle-down'></i>",
-                        })
-                        
-                        HEADING = $("<h6/>", {
-                            class: "h6-responsive m-0 py-1 px-2",
-                            css: {
-                                "color": textColor,
-                            },
-                        })
-                            .attr("aria-expanded", "true")
-                            .attr("aria-target", "#seasonForm_container_" + unit.id + "_" + seasonId)
-                            .on("click", function () {
-                                let isExpanded = ($(this).attr("aria-expanded") === "true")
-                                if (isExpanded) {
-                                    collapseWindow(this)
-                                } else {
-                                    expandWindow(this)
-                                }
-                            })
-                            .append(SPAN, A)
-                        
-                        HEADINGWRAPPER = $("<div/>", {
-                            id: "seasonForm_" + unit.id + "_" + seasonId,
-                            class: "p-0 collapse-toggle",
-                            css: {
-                                "background": backgroundColor,
-                                "color": textColor,
-                                "border": "solid 1px " + borderColor,
-                                "cursor": "pointer",
-                            },
-                        })
-                            .append(HEADING)
-                    }
-                    
-                    return HEADINGWRAPPER
-                }
-                
-                const buildMatrixForm = function (unit, season) {
-                    let matrix = getMatrix(unit, season)
-                    let pricings = (matrix.pricings) ? Array.from(matrix.pricings.values()) : []
-                    
-                    let WRAPPER = []
-                    
-                    $.each(pricings, function (index, pricing) {
-                        let matrixId = parseInt(pricing.matrix_id)
-                        let TBODY = $("<tbody/>")
-                            .attr("matrixid", matrixId)
-                        
-                        let TROW = matrixRow(pricing)
-                        
-                        TBODY.append(TROW)
-                        WRAPPER.push(TBODY)
-                    })
-                    
-                    return WRAPPER
-                }
-                
-                const matrixRow = function (pricing) {
-                    return $("<tr/>")
-                }
-                
-                let TABLE = $("<table class='table table-bordered'/>")
-                let TABLEHEAD = $("<thead/>")
-                let SEASONHEADER = seasonHeader(unit, season)
-                let SEASONBLOCK = seasonWrapper(unit, season)
-                let DOWROW = tableDOW()
-                
-                let SEASONROW = buildMatrixForm(unit, season)
-                let SEASONCOLLAPSE = seasonCollapse(unit, season)
-                
-                TABLEHEAD.append(DOWROW)
-                TABLE.append(TABLEHEAD)
-                
-                $.each(SEASONROW, function (index, row) {
-                    TABLE.append(row)
-                })
-                
-                SEASONBLOCK.append(TABLE)
-                SEASONCOLLAPSE.append(SEASONHEADER, SEASONBLOCK)
-                
-                return SEASONCOLLAPSE
-                
-            }
-            
-            const unitForm = function (units) {
-                let UNITFORM, MATRIXFORM, TABLEBODY
-                
-                const unitFormHiddenFields = function (unit) {
-                    
-                    if (unit) {
-                        if (unit.id) {
-                            let unitId = (unit && unit.id && !isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                            
-                            return $("<div/>", {
-                                class: "row",
-                            })
-                                .append(
-                                    /**
-                                     * columnWrapperMatrixId
-                                     */
-                                    $("<div/>", {
-                                        class: "col-3",
-                                    })
-                                        .append(
-                                            /**
-                                             * inputWrapperMatrixId
-                                             */
-                                            $("<div/>", {
-                                                class: "form-element",
-                                            })
-                                                .append(
-                                                    $("<label>", {
-                                                        class: "d-none",
-                                                        for: "product_edit_matrix_id_" + unitId,
-                                                        text: "product_edit_matrix_id_" + unitId,
-                                                    }),
-                                                    $("<input/>", {
-                                                        type: "text",
-                                                        placeholder: "product_edit_matrix_id_" + unitId,
-                                                        disabled: "disabled",
-                                                        name: "product_edit_matrix_id_" + unitId,
-                                                        class: "form-control dev-element",
-                                                        id: "product_edit_matrix_id_" + unitId,
-                                                    }),
-                                                ),
-                                        ),
-                                )
-                        }
-                    }
-                    
-                    return null
-                }
-                
-                const unitFormBaseFields = function (unit) {
-                    let unitId = unit.id
-                    
-                    let columnWrapperMatrixEnabled = $("<div/>",
-                        {
-                            class: "col-3 d-flex align-self-end justify-content-end pb-2 mb-2",
-                        })
-                        .append(
-                            $("<div/>", { class: "custom-control custom-switch" })
-                                .append(
-                                    $("<div/>", { class: "form-element" })
-                                        .append(
-                                            $("<input/>",
-                                                {
-                                                    type: "checkbox",
-                                                    name: "matrix_enabled_" + unitId,
-                                                    class: "custom-control-input",
-                                                    id: "matrix_enabled_" + unitId,
-                                                },
-                                            ),
-                                            
-                                            $("<label/>",
-                                                {
-                                                    class: "custom-control-label p-0",
-                                                    for: "matrix_enabled_" + unitId,
-                                                    text: "Enabled:",
-                                                },
-                                            ),
-                                        ),
-                                ),
-                        )
-                    
-                    let columnWrapperMatrixBaseCost = $("<div/>",
-                        {
-                            class: "col-3",
-                        })
-                        .append(
-                            $("<div/>", { class: "form-element" })
-                                .append(
-                                    $("<label>",
-                                        {
-                                            class: "",
-                                            for: "matrix_cost_" + unitId,
-                                            text: "Base Cost:",
-                                        },
-                                    ),
-                                    
-                                    $("<input/>",
-                                        {
-                                            type: "text",
-                                            placeholder: "Base Cost",
-                                            name: "matrix_cost_" + unitId,
-                                            class: "form-control",
-                                            id: "matrix_cost_" + unitId,
-                                        },
-                                    )
-                                        .attr("data-type", "cost")
-                                        .attr("data-form", `product_edit_matrix_form_${unitId}`)
-                                        .on("keyup", function (e) {
-                                            let val = $(this).val()
-                                            let form = document.getElementById($(this).attr("data-form"))
-                                            // ----
-                                            
-                                            if (form) {
-                                                let inputs = document.getElementById($(this).attr("data-form")).querySelectorAll("[name='cost']")
-                                                for (let i = 0; i < inputs.length; i++) {
-                                                    if (!inputs[i].disabled) {
-                                                        inputs[i].value = val
-                                                        $(inputs[i]).parent("div").find("label").addClass("active")
-                                                    } else {
-                                                        inputs[i].value = ""
-                                                        $(inputs[i]).parent("div").find("label").removeClass("active")
-                                                    }
-                                                }
-                                            }
-                                        }),
-                                ),
-                        )
-                    
-                    let columnWrapperMatrixBaseMargin = $("<div/>",
-                        {
-                            class: "col-3",
-                        })
-                        .append(
-                            $("<div/>",
-                                {
-                                    class: "form-element",
-                                })
-                                .append(
-                                    $("<label>",
-                                        {
-                                            class: "",
-                                            for: "matrix_margin_" + unitId,
-                                            text: "Base Margin:",
-                                        },
-                                    ),
-                                    
-                                    $("<input/>",
-                                        {
-                                            type: "text",
-                                            placeholder: "Base Margin",
-                                            name: "matrix_margin_" + unitId,
-                                            class: "form-control",
-                                            id: "matrix_margin_" + unitId,
-                                        },
-                                    )
-                                        .attr("data-type", "margin")
-                                        .attr("data-form", `product_edit_matrix_form_${unitId}`)
-                                        .on("keyup", function (e) {
-                                            let val = $(this).val()
-                                            let form = document.getElementById($(this).attr("data-form"))
-                                            // ----
-                                            
-                                            if (form) {
-                                                let inputs = document.getElementById($(this).attr("data-form")).querySelectorAll("[name='margin']")
-                                                for (let i = 0; i < inputs.length; i++) {
-                                                    if (!inputs[i].disabled) {
-                                                        inputs[i].value = val
-                                                        $(inputs[i]).parent("div").find("label").addClass("active")
-                                                    } else {
-                                                        inputs[i].value = ""
-                                                        $(inputs[i]).parent("div").find("label").removeClass("active")
-                                                    }
-                                                }
-                                            }
-                                        }),
-                                ),
-                        )
-                    
-                    return $("<div/>", { class: "row" })
-                        .append(columnWrapperMatrixBaseCost, columnWrapperMatrixBaseMargin, columnWrapperMatrixEnabled)
-                }
-                
-                const unitFormContainer = function (unit) {
-                    let TABLE = $("<div class=''/>")
-                    const tableBody = function (unit) {
-                        let TABLEBODY = $("<div/>")
-                        // ----
-                        
-                        $.each(Array.from(Season.all.values()), function (x, season) {
-                            if (unit && season) {
-                                TABLEBODY.append(seasonForm(unit, season))
-                            }
-                        })
-                        
-                        return TABLEBODY
-                    }
-                    
-                    TABLE.append(tableBody(unit))
-                    
-                    return TABLE
-                }
-                
-                const unitFormButtons = function (unit) {
-                    
-                    let BUTTONROW = $("<div/>", {
-                        class: "w-100 text-right w-100",
-                    })
-                    let BUTTONROWCLEAR = $("<a/>", {
-                        href: "javascript:void(0);",
-                        class: "btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light",
-                        text: "Reset",
-                    })
-                    let BUTTONROWSUBMIT = $("<a/>", {
-                        href: "javascript:void(0);",
-                        class: "btn btn-primary btn-sm waves-effect waves-light",
-                        text: "Update",
-                    })
-                    
-                    return BUTTONROW.append(BUTTONROWCLEAR, BUTTONROWSUBMIT)
-                }
-                
-                const unitFormHeading = function (unit) {
-                    let SPAN, I, A, HEADING, HEADINGWRAPPER
-                    
-                    let headingText = "Test Heading Text"
-                    let unitId = null
-                    if (unit) {
-                        unitId = unit.id
-                        headingText = unit.name
-                    }
-                    
-                    let elementId = "unitForm_" + unitId
-                    
-                    let wrapper = $("<div/>", {
-                        class: "card-header mb-2 collapse-toggle",
-                        css: {
-                            "cursor": "pointer",
-                            "background": "initial",
-                        },
-                        id: elementId,
-                    })
-                        .on("click", function () {
-                            let isExpanded = ($(this).attr("aria-expanded") === "true")
-                            if (isExpanded) {
-                                collapseWindow(this)
-                            } else {
-                                expandWindow(this)
-                            }
-                        })
-                    wrapper.attr("aria-expanded", "true")
-                    wrapper.attr("aria-target", "#unitForm_container_" + unitId)
-                    
-                    let heading = $("<h5/>", {
-                        class: "mb-0 w-100 d-flex align-items-center justify-content-between p-1",
-                    })
-                    
-                    SPAN = $("<span/>", {
-                        text: headingText,
-                    })
-                    
-                    I = $("<i/>", {
-                        class: "fas fa-angle-down",
-                    })
-                    
-                    A = $("<a />", {
-                        href: "javascript:void(0);",
-                        class: "panel_link",
-                    })
-                    A.attr("aria-hidden", "true")
-                    A.append(I)
-                    
-                    wrapper.append(heading.append(SPAN, A))
-                    return wrapper
-                }
-                
-                const buildUnitFormCollapse = function (unit) {
-                    if (unit) {
-                        let HIDDENFIELDS, BUTTONS, BASEFIELDS, UNITCONTAINER
-                        let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                        HIDDENFIELDS = unitFormHiddenFields(unit)
-                        BUTTONS = unitFormButtons(unit)
-                        BASEFIELDS = unitFormBaseFields(unit)
-                        UNITCONTAINER = unitFormContainer(unit)
-                        
-                        return $("<div/>",
-                            {
-                                id: "unitForm_container_" + unitId,
-                                class: "",
-                            })
-                            .attr("id", "unitForm_container_" + unitId)
-                            .append(HIDDENFIELDS, BASEFIELDS, UNITCONTAINER, BUTTONS)
-                    }
-                    
-                    return null
-                }
-                
-                const buildUnitForm = function (unit) {
-                    
-                    let UNITFORM = $("<div/>", {
-                        class: "",
-                    })
-                    
-                    if (unit) {
-                        if (unit.id) {
-                            let unitId = (unit && unit.id && !isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                            UNITFORM.attr("id", unitId)
-                        }
-                    }
-                    
-                    if (unit) {
-                        let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                        
-                        let UNITHEADING = unitFormHeading(unit)
-                        let UNITCOLLAPSE = buildUnitFormCollapse(unit)
-                        // ----
-                        if (unitId) {
-                            
-                            UNITFORM
-                                .attr("id", "unitForm_" + unitId)
-                                .append(UNITHEADING, UNITCOLLAPSE)
-                        }
-                        
-                        return UNITFORM
-                    }
-                    
-                    return null
-                }
-                
-                $.each(units, function (k, unit) {
-                    if (unit.id) {
-                        let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                        
-                        MATRIXFORM = $("<div/>", {
-                            id: "product_edit_matrix_form_" + unitId,
-                            class: "",
-                        })
-                        
-                        UNITFORM = buildUnitForm(unit)
-                        MATRIXFORM.append(UNITFORM)
-                        CONTAINER.append(MATRIXFORM)
-                    }
-                })
-                
-                return CONTAINER
-            }
-            
-            const matrixForm = function (units) {
-                unitForm(units)
-                $(_pricing_container).append(unitForm(units))
-            }
-            
-            const buildPricingMatrix = function (units) {
-                matrixForm(units)
-            }
-            
-            if (pricingStrategyTypesId !== null) {
-                switch (pricingStrategyTypesId) {
-                    case 1:
-                        //Per Unit
-                        //Console.log("Per Unit")
-                        variant_id = 0
-                        variant_count = 0
-                        variant_name = "Other"
-                        //buildPricingMatrix(Array.from(PricingStrategy.unitSeasons.values()))
-                        closeAllToggles()
-                        break
-                    case 2:
-                        //Per Person
-                        //Console.log("Per Person")
-                        
-                        //buildPricingMatrix(Array.from(PricingStrategy.unitSeasons.values()))
-                        break
-                    case 3:
-                        //Per Days
-                        //Console.log("Per Days")
-                        variant_id = 0
-                        variant_count = 0
-                        variant_name = "Other"
-                        
-                        //buildPricingMatrix(Array.from(PricingStrategy.unitSeasons.values()))
-                        openAllToggles()
-                        break
-                    default:
-                        return
-                }
-            }
-        }
-        
-        const updatePricingStrategyTypesId = function (pricing_strategy_types_id) {
-            if (pricing_strategy_types_id) {
-                pricing_strategy_types_id = (!isNaN(parseInt(_pricing_strategy_types_id.value))) ? parseInt(_pricing_strategy_types_id.value) : null
-                //emptyPricingMatrix()
-                //buildPricingMatrix()
-            }
-        }
-        
-        const getVariantsUsed = function () {
-            let results = []
-            
-            let variantsUsed = findObjectByKey(Array.from(Variant.all.values()), 'used_in_pricing', 1)
-            $.each(variantsUsed, function (k, variant) {
-                let id = (!isNaN(parseInt(variant.id))) ? parseInt(variant.id) : null
-                if (!is_null(id)) {
-                    results.push(id)
-                }
-            })
-            
-            return results.sort()
-            
-        }
-        
-        const collapseWindow = function (_this) {
-            let targetElement = $(_this).attr("aria-target")
-            let icon = $(_this).find("i")
-            icon.removeClass("fa-angle-down").addClass("fa-angle-up")
-            $(_this).attr("aria-expanded", "false")
-            $(targetElement).slideUp()
-        }
-        
-        const expandWindow = function (_this) {
-            let icon = $(_this).find("i")
-            let targetElement = $(_this).attr("aria-target")
-            icon.removeClass("fa-angle-up").addClass("fa-angle-down")
-            $(_this).attr("aria-expanded", "true")
-            $(targetElement).slideDown()
-        }
-        
-        const buildUnitSeasonValues = function () {
-            PricingStrategy.unitSeasons = new Map()
-            
-            $.each(Array.from(Unit.all.values()), function (k, unit) {
-                PricingStrategy.unitSeasons.set(unit.id, {
-                    id: unit.id,
-                    name: unit.name,
-                    seasons: Season.all,
-                })
-            })
-        }
-        
-        const clearUnitSelection = function () {
-            $(_pricing_strategy_unit_id).val([]).trigger("change")
-        }
-        
-        const clearSeasonSelection = function () {
-            $(_pricing_strategy_season_id).val([]).trigger("change")
-        }
-        
-        const updatePrice = function (el) {
-            let costEl = document.getElementById(el)
-            let marginEl = document.getElementById(el.replace('cost', 'margin'))
-            let priceEl = document.getElementById(el.replace('cost', 'price'))
-            // ----
-            //let cost = (!isNaN(parseInt(costEl.value))) ? parseInt(costEl.value) : 0
-            //let margin = ((!isNaN(parseInt(marginEl.value))) ? parseInt(marginEl.value) : 0) / 100
-            
-            priceEl.value = parseInt(((!isNaN(parseInt(costEl.value))) ? parseInt(costEl.value) : 0 / 100) + (!isNaN(parseInt(costEl.value))) ? parseInt(costEl.value) : 0)
-            
-        }
-        
-        const updateStatus = function () {
-            let test = 4
-            if (test === 0) {
-                $(panel_tab_pricing).append($("<span>", {
-                    class: "badge rounded-pill badge-notification bg-danger tab-badge",
-                    alt: "Notification",
-                    css: { "color": "rgb(255, 255, 255) !important" },
-                    text: '!',
-                }))
-            } else {
-                $(panel_tab_pricing).find("span").remove()
-            }
-        }
-        
-        const init = function (pricing_strategies) {
-        
-        }
-        
-        return {
-            all: new Map(),
-            unitSeasons: new Map(),
-            updateStatus: function () {
-                updateStatus()
-            },
-            init: function (pricing_strategies) {
-                init(pricing_strategies)
-            },
-            updatePrice: function (el) {
-                updatePrice(el)
-            },
-            clearUnitSelection: function () {
-                clearUnitSelection()
-            },
-            clearSeasonSelection: function () {
-                clearSeasonSelection()
-            },
-            buildUnitSeasonValues: function () {
-                buildUnitSeasonValues()
-            },
-        }
-        
-    })()
+	const PricingStrategy = (function () {
+		"use strict"
+		
+		/**
+		 * Static Variable Decloration
+		 */
+		const daysOfTheWeek = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"]
+		const _product_id = document.getElementById("product_id")
+		const _pricing_strategy_types_id = document.getElementById("pricing_strategy_types_id")
+		const _pricing_strategy_unit_id = document.getElementById("pricing_strategy_unit_id")
+		const _pricing_strategy_season_id = document.getElementById("pricing_strategy_season_id")
+		const _pricing_container = document.getElementById("pricing_container")
+		const panel_tab_pricing = document.getElementById("panel_tab_pricing")
+		
+		/**
+		 * Dynamic Variable Decloration
+		 */
+		let variantCombinations = []
+		let variant_id, variant_count, variant_name
+		let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+		
+		/**
+		 * Element Event Handlers
+		 */
+		$(_pricing_strategy_types_id)
+			.on("change", function () {
+				//variantCombinations = []
+				//let pricingWorksheet = PricingWorksheet.init()
+				//Console.log(pricingWorksheet)
+			})
+		
+		$(_pricing_strategy_season_id)
+			.on("change", function () {
+				//season_id = (!isNaN(parseInt(_pricing_strategy_season_id.value))) ? parseInt(_pricing_strategy_season_id.value) : null
+				//emptyPricingMatrix()
+				//buildPricingMatrix()
+			})
+		
+		$(_pricing_strategy_unit_id)
+			.on("change", function () {
+				//unit_id = (!isNaN(parseInt(_pricing_strategy_unit_id.value))) ? parseInt(_pricing_strategy_unit_id.value) : null
+				
+			})
+		
+		/**
+		 * buildPricingMatrix
+		 */
+		const buildPricingMatrix = function () {
+			let pricingStrategyForm
+			let pricingStrategyTypesId = (!isNaN(parseInt(_pricing_strategy_types_id.value))) ? parseInt(_pricing_strategy_types_id.value) : null
+			let CONTAINER = $("<div/>")
+			
+			const tableDOW = function () {
+				let tableHeadRow = $("<tr/>")
+				let tableHeadRowColumn0 = $("<th/>", {
+					class: "p-1",
+				})
+				let tableHeadRowColumn0Span = $("<span/>", {
+					class: "p-1",
+					html: '&nbsp;',
+				})
+				tableHeadRowColumn0.append(tableHeadRowColumn0Span)
+				tableHeadRow.append(tableHeadRowColumn0)
+				for (let n = 0; n < daysOfTheWeek.length; n++) {
+					let tableHeadRowColumn = $("<th/>", {
+						class: "p-1",
+						text: `${ucwords(daysOfTheWeek[n])}`,
+					})
+					
+					tableHeadRow.append(tableHeadRowColumn)
+				}
+				
+				let tableHeadRowColumnSave = $("<th/>", {
+					class: "p-1",
+					html: '&nbsp;',
+				})
+				
+				tableHeadRow.append(tableHeadRowColumnSave)
+				return tableHeadRow
+			}
+			
+			const closeAllToggles = function () {
+				let els = document.getElementsByClassName("collapse-toggle")
+				
+				$.each(els, function (k, element) {
+					collapseWindow(element)
+				})
+			}
+			
+			const openAllToggles = function () {
+				let els = document.getElementsByClassName("collapse-toggle")
+				
+				$.each(els, function (k, element) {
+					expandWindow(element)
+				})
+			}
+			
+			const seasonForm = function (unit, season) {
+				
+				const getMatrix = function (unit, season) {
+					let pricingMatrix = [], seasonId, unitId, productId, matrixId
+					
+					const getVariantCombinations = function (depth, baseString, arrLetters) {
+						for (let i = 0; i < arrLetters.length; i++) {
+							if (depth === 1) {
+								let variantComboId = baseString + arrLetters[i]
+								
+								let combos = variantComboId.split('-').map(function (item) {
+									return parseInt(item, 10)
+								})
+								
+								combos = combos.sort().join("-")
+								
+								let hasVariantComboIndex = variantCombinations.indexOf(variantComboId)
+								if (hasVariantComboIndex < 0) {
+									variantCombinations.push(combos)
+								}
+								
+							} else {
+								let id = arrLetters[i]
+								getVariantCombinations(depth - 1, baseString + arrLetters[i] + "-", arrLetters)
+							}
+						}
+					}
+					
+					const buildVariantListCombinations = function (unit, season) {
+						//Console.log("PricingStrategy.buildVariantListCombinations(unit, season)", unit)
+						
+						let variants = getVariantsUsed()
+						let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+						variantCombinations = []
+						
+						if (unitId) {
+							let unit = Unit.all.get(unitId)
+							if (unit) {
+								let min = (!isNaN(parseInt(unit.min_pax))) ? parseInt(unit.min_pax) : 1
+								let max = (!isNaN(parseInt(unit.max_pax))) ? parseInt(unit.max_pax) : 1
+								if (min > max) {
+									let temp = max
+									max = min
+									min = temp
+								}
+								
+								for (let n = min; n <= max; n++) {
+									getVariantCombinations(n, "", variants)
+								}
+							}
+						}
+						
+						return variantCombinations
+					}
+					
+					const formatCombos = function (variantList) {
+						let worksheet = Array.from(variantList.values())
+						let pricingWorksheet = new Map()
+						
+						let sectionName = []
+						let myPricings = []
+						let hasWorksheet, code
+						$.each(worksheet, function (index, variantComboList) {
+							let name = variantComboList.name
+							let count = variantComboList.count
+							code = variantComboList.code
+							let pricings = variantComboList.pricings
+							hasWorksheet = pricingWorksheet.get(code)
+							
+							if (!hasWorksheet) {
+								hasWorksheet = {
+									name: null,
+									pricings: [],
+								}
+							}
+							
+							sectionName.push(count + " " + pluralize(name, count))
+							myPricings.push(pricings)
+							
+						})
+						
+						let wPricing = []
+						let pricingGroupName = sectionName.join(", ")
+						for (let m = 0; m < myPricings.length; m++) {
+							for (let n = 0; n < myPricings[m].length; n++) {
+								let priceLine = myPricings[m][n]
+								
+								let priceLineCode = priceLine.code
+								let pricing = Pricing.all.get(priceLineCode)
+								if (pricing) {
+									//console.log("pricing", pricing)
+								} else {
+									pricing = Pricing.set()
+								}
+								
+								pricing.code = priceLine.code
+								pricing.count = priceLine.count
+								pricing.name = priceLine.name
+								pricing.product_id = productId
+								pricing.season_id = seasonId
+								pricing.unit_id = unitId
+								pricing.variant_id = priceLine.variant_id
+								wPricing.push(pricing)
+							}
+						}
+						
+						let matrix = Matrix.all.get(code)
+						if (!matrix) {
+							matrix = Matrix.set()
+							matrix.code = code
+							matrix.product_id = productId
+							matrix.season_id = seasonId
+							matrix.unit_id = unitId
+						}
+						
+						pricingWorksheet.set(code, {
+							been_saved: matrix.been_saved,
+							code: matrix.code,
+							cost: matrix.cost,
+							created_by: matrix.created_by,
+							date_created: matrix.date_created,
+							date_modified: matrix.date_modified,
+							enabled: matrix.enabled,
+							has_pricing: matrix.has_pricing,
+							id: matrix.id,
+							margin: matrix.margin,
+							modified_by: matrix.modified_by,
+							note: matrix.note,
+							price: matrix.price,
+							product_id: matrix.product_id,
+							season_id: matrix.season_id,
+							unit_id: matrix.unit_id,
+							name: pricingGroupName,
+							pricings: wPricing,
+						})
+						
+						//console.log("pricingWorksheet", pricingWorksheet)
+						return pricingWorksheet
+					}
+					
+					const buildPricingMatrixCombinations = function (combos, unit, season) {
+						
+						let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
+						let seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
+						let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+						let matrixCode = productId + "-" + unitId + "-" + seasonId
+						
+						$.each(combos, function (k, variantComboId) {
+							let variants = variantComboId.split("-").map(Number)
+							let variantList = new Map()
+							
+							$.each(variants, function (k, variantId) {
+								let variant = Variant.all.get(variantId)
+								let hasVariant = variantList.get(variantId)
+								
+								if (hasVariant) {
+									let variantCount = parseInt(hasVariant.count) + 1
+									let count = variantCount
+									hasVariant.count = variantCount
+									hasVariant.pricings.push({
+										code: matrixId + "-" + variantId + "-" + count,
+										count: count,
+										name: variant.name + " " + count,
+										product_id: productId,
+										season_id: seasonId,
+										unit_id: unitId,
+										variant_id: parseInt(variantId),
+										mon: null,
+										tue: null,
+										wed: null,
+										thu: null,
+										fri: null,
+										sat: null,
+										sun: null,
+										monMargin: null,
+										tueMargin: null,
+										wedMargin: null,
+										thuMargin: null,
+										friMargin: null,
+										satMargin: null,
+										sunMargin: null,
+										enabled: 1,
+										date_created: formatDateMySQL(),
+										created_by: user_id,
+										date_modified: formatDateMySQL(),
+										modified_by: user_id,
+										note: null,
+									})
+									variantList.set(variantId, hasVariant)
+								} else {
+									let variantCount = 0
+									let count = variantCount + 1
+									
+									variantList.set(variantId, {
+										count: count,
+										name: variant.name,
+										code: matrixCode,
+										product_id: productId,
+										season_id: seasonId,
+										unit_id: unitId,
+										cost: 0,
+										enabled: 1,
+										has_pricing: 0,
+										id: null,
+										margin: 0,
+										price: 0,
+										modified_by: user_id,
+										note: null,
+										created_by: user_id,
+										date_created: formatDateMySQL(),
+										date_modified: formatDateMySQL(),
+										pricings: [
+											{
+												code: matrixCode + "-" + variantId + "-" + count,
+												count: count,
+												name: variant.name + " " + count,
+												product_id: productId,
+												season_id: seasonId,
+												unit_id: unitId,
+												matrix_id: null,
+												variant_id: parseInt(variantId),
+												mon: 0,
+												tue: 0,
+												wed: 0,
+												thu: 0,
+												fri: 0,
+												sat: 0,
+												sun: 0,
+												monMargin: 0,
+												tueMargin: 0,
+												wedMargin: 0,
+												thuMargin: 0,
+												friMargin: 0,
+												satMargin: 0,
+												sunMargin: 0,
+												enabled: 1,
+												date_created: formatDateMySQL(),
+												created_by: user_id,
+												date_modified: formatDateMySQL(),
+												modified_by: user_id,
+												note: null,
+											},
+										],
+									})
+								}
+								
+							})
+							
+							let matrixLine = formatCombos(variantList)
+							console.log(Array.from(matrixLine.values()))
+							pricingMatrix.push(Array.from(matrixLine.values()))
+							
+						})
+						
+						return pricingMatrix
+					}
+					
+					let comboMatrix
+					
+					if (unit && season) {
+						productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
+						if (productId) {
+							unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+							seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
+							
+							if (unitId && seasonId) {
+								matrixId = productId + "-" + unitId + "-" + seasonId
+								let matrix = Matrix.all.get(matrixId)
+								comboMatrix = buildPricingMatrixCombinations(buildVariantListCombinations(unit, season), unit, season)
+								
+								let variantCombinations = buildVariantListCombinations(unit, season)
+								// ----
+								
+								//Console.log("comboMatrix", comboMatrix)
+								//Console.log("variantCombinations", variantCombinations)
+								
+								// ----
+								
+								if (!matrix) {
+									matrix = Matrix.set()
+								} else {
+									if (matrix.pricings) {
+									
+									}
+								}
+								//Console.log("matrix", matrix)
+								//pricingMatrix = (Matrix.all.get(matrixId)) ? Matrix.all.get(matrixId) : buildPricingMatrixCombinations(buildVariantListCombinations(unit, season), unit, season)
+							}
+						}
+					}
+					
+					return comboMatrix
+				}
+				
+				const seasonWrapper = function (unit, season) {
+					//Console.log("PricingStrategy.seasonWrapper(season)", season)
+					
+					let seasonWrapperId
+					if (season) {
+						let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+						let seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
+						if (unitId && seasonId) {
+							seasonWrapperId = "seasonForm_container_" + unitId + "_" + seasonId
+						}
+						
+						return $("<div/>", {
+							id: seasonWrapperId,
+						})
+					}
+					
+					return null
+					
+				}
+				
+				const seasonCollapse = function (unit, season) {
+					//Console.log("PricingStrategy.seasonCollapse(season)", season)
+					let seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
+					let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+					
+					return $("<section/>", {
+						id: "seasonFormContainer_" + unitId + "_" + seasonId,
+					})
+				}
+				
+				const seasonHeader = function (unit, season) {
+					//Console.log("PricingStrategy.seasonHeader(season)", season)
+					
+					let TR, HEADING, SPAN, A, HEADINGWRAPPER, TD, colorScheme, backgroundColor, borderColor, textColor,
+						seasonId, seasonName
+					
+					if (season) {
+						colorScheme = season.color_scheme
+						backgroundColor = (colorScheme.background_color) ? colorScheme.background_color : "#fff"
+						borderColor = (colorScheme.border_color) ? colorScheme.border_color : "#fff"
+						textColor = (colorScheme.text_color) ? colorScheme.text_color : "#fff"
+						seasonName = season.name
+						seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
+						
+						SPAN = $("<span/>", {
+							class: "",
+							text: seasonName,
+						})
+						
+						A = $("<a/>", {
+							href: "javascript:void(0)",
+							class: "panel_link",
+							css: {
+								"color": textColor,
+							},
+							html: "<i class='fas fa-angle-down'></i>",
+						})
+						
+						HEADING = $("<h6/>", {
+							class: "h6-responsive m-0 py-1 px-2",
+							css: {
+								"color": textColor,
+							},
+						})
+							.attr("aria-expanded", "true")
+							.attr("aria-target", "#seasonForm_container_" + unit.id + "_" + seasonId)
+							.on("click", function () {
+								let isExpanded = ($(this).attr("aria-expanded") === "true")
+								if (isExpanded) {
+									collapseWindow(this)
+								} else {
+									expandWindow(this)
+								}
+							})
+							.append(SPAN, A)
+						
+						HEADINGWRAPPER = $("<div/>", {
+							id: "seasonForm_" + unit.id + "_" + seasonId,
+							class: "p-0 collapse-toggle",
+							css: {
+								"background": backgroundColor,
+								"color": textColor,
+								"border": "solid 1px " + borderColor,
+								"cursor": "pointer",
+							},
+						})
+							.append(HEADING)
+					}
+					
+					return HEADINGWRAPPER
+				}
+				
+				const buildMatrixForm = function (unit, season) {
+					let matrix = getMatrix(unit, season)
+					let pricings = (matrix.pricings) ? Array.from(matrix.pricings.values()) : []
+					
+					let WRAPPER = []
+					
+					$.each(pricings, function (index, pricing) {
+						let matrixId = parseInt(pricing.matrix_id)
+						let TBODY = $("<tbody/>")
+							.attr("matrixid", matrixId)
+						
+						let TROW = matrixRow(pricing)
+						
+						TBODY.append(TROW)
+						WRAPPER.push(TBODY)
+					})
+					
+					return WRAPPER
+				}
+				
+				const matrixRow = function (pricing) {
+					return $("<tr/>")
+				}
+				
+				let TABLE = $("<table class='table table-bordered'/>")
+				let TABLEHEAD = $("<thead/>")
+				let SEASONHEADER = seasonHeader(unit, season)
+				let SEASONBLOCK = seasonWrapper(unit, season)
+				let DOWROW = tableDOW()
+				
+				let SEASONROW = buildMatrixForm(unit, season)
+				let SEASONCOLLAPSE = seasonCollapse(unit, season)
+				
+				TABLEHEAD.append(DOWROW)
+				TABLE.append(TABLEHEAD)
+				
+				$.each(SEASONROW, function (index, row) {
+					TABLE.append(row)
+				})
+				
+				SEASONBLOCK.append(TABLE)
+				SEASONCOLLAPSE.append(SEASONHEADER, SEASONBLOCK)
+				
+				return SEASONCOLLAPSE
+				
+			}
+			
+			const unitForm = function (units) {
+				let UNITFORM, MATRIXFORM, TABLEBODY
+				
+				const unitFormHiddenFields = function (unit) {
+					
+					if (unit) {
+						if (unit.id) {
+							let unitId = (unit && unit.id && !isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+							
+							return $("<div/>", {
+								class: "row",
+							})
+								.append(
+									/**
+									 * columnWrapperMatrixId
+									 */
+									$("<div/>", {
+										class: "col-3",
+									})
+										.append(
+											/**
+											 * inputWrapperMatrixId
+											 */
+											$("<div/>", {
+												class: "form-element",
+											})
+												.append(
+													$("<label>", {
+														class: "d-none",
+														for: "product_edit_matrix_id_" + unitId,
+														text: "product_edit_matrix_id_" + unitId,
+													}),
+													$("<input/>", {
+														type: "text",
+														placeholder: "product_edit_matrix_id_" + unitId,
+														disabled: "disabled",
+														name: "product_edit_matrix_id_" + unitId,
+														class: "form-control dev-element",
+														id: "product_edit_matrix_id_" + unitId,
+													}),
+												),
+										),
+								)
+						}
+					}
+					
+					return null
+				}
+				
+				const unitFormBaseFields = function (unit) {
+					let unitId = unit.id
+					
+					let columnWrapperMatrixEnabled = $("<div/>",
+						{
+							class: "col-3 d-flex align-self-end justify-content-end pb-2 mb-2",
+						})
+						.append(
+							$("<div/>", { class: "custom-control custom-switch" })
+								.append(
+									$("<div/>", { class: "form-element" })
+										.append(
+											$("<input/>",
+												{
+													type: "checkbox",
+													name: "matrix_enabled_" + unitId,
+													class: "custom-control-input",
+													id: "matrix_enabled_" + unitId,
+												},
+											),
+											
+											$("<label/>",
+												{
+													class: "custom-control-label p-0",
+													for: "matrix_enabled_" + unitId,
+													text: "Enabled:",
+												},
+											),
+										),
+								),
+						)
+					
+					let columnWrapperMatrixBaseCost = $("<div/>",
+						{
+							class: "col-3",
+						})
+						.append(
+							$("<div/>", { class: "form-element" })
+								.append(
+									$("<label>",
+										{
+											class: "",
+											for: "matrix_cost_" + unitId,
+											text: "Base Cost:",
+										},
+									),
+									
+									$("<input/>",
+										{
+											type: "text",
+											placeholder: "Base Cost",
+											name: "matrix_cost_" + unitId,
+											class: "form-control",
+											id: "matrix_cost_" + unitId,
+										},
+									)
+										.attr("data-type", "cost")
+										.attr("data-form", `product_edit_matrix_form_${unitId}`)
+										.on("keyup", function (e) {
+											let val = $(this).val()
+											let form = document.getElementById($(this).attr("data-form"))
+											// ----
+											
+											if (form) {
+												let inputs = document.getElementById($(this).attr("data-form")).querySelectorAll("[name='cost']")
+												for (let i = 0; i < inputs.length; i++) {
+													if (!inputs[i].disabled) {
+														inputs[i].value = val
+														$(inputs[i]).parent("div").find("label").addClass("active")
+													} else {
+														inputs[i].value = ""
+														$(inputs[i]).parent("div").find("label").removeClass("active")
+													}
+												}
+											}
+										}),
+								),
+						)
+					
+					let columnWrapperMatrixBaseMargin = $("<div/>",
+						{
+							class: "col-3",
+						})
+						.append(
+							$("<div/>",
+								{
+									class: "form-element",
+								})
+								.append(
+									$("<label>",
+										{
+											class: "",
+											for: "matrix_margin_" + unitId,
+											text: "Base Margin:",
+										},
+									),
+									
+									$("<input/>",
+										{
+											type: "text",
+											placeholder: "Base Margin",
+											name: "matrix_margin_" + unitId,
+											class: "form-control",
+											id: "matrix_margin_" + unitId,
+										},
+									)
+										.attr("data-type", "margin")
+										.attr("data-form", `product_edit_matrix_form_${unitId}`)
+										.on("keyup", function (e) {
+											let val = $(this).val()
+											let form = document.getElementById($(this).attr("data-form"))
+											// ----
+											
+											if (form) {
+												let inputs = document.getElementById($(this).attr("data-form")).querySelectorAll("[name='margin']")
+												for (let i = 0; i < inputs.length; i++) {
+													if (!inputs[i].disabled) {
+														inputs[i].value = val
+														$(inputs[i]).parent("div").find("label").addClass("active")
+													} else {
+														inputs[i].value = ""
+														$(inputs[i]).parent("div").find("label").removeClass("active")
+													}
+												}
+											}
+										}),
+								),
+						)
+					
+					return $("<div/>", { class: "row" })
+						.append(columnWrapperMatrixBaseCost, columnWrapperMatrixBaseMargin, columnWrapperMatrixEnabled)
+				}
+				
+				const unitFormContainer = function (unit) {
+					let TABLE = $("<div class=''/>")
+					const tableBody = function (unit) {
+						let TABLEBODY = $("<div/>")
+						// ----
+						
+						$.each(Array.from(Season.all.values()), function (x, season) {
+							if (unit && season) {
+								TABLEBODY.append(seasonForm(unit, season))
+							}
+						})
+						
+						return TABLEBODY
+					}
+					
+					TABLE.append(tableBody(unit))
+					
+					return TABLE
+				}
+				
+				const unitFormButtons = function (unit) {
+					
+					let BUTTONROW = $("<div/>", {
+						class: "w-100 text-right w-100",
+					})
+					let BUTTONROWCLEAR = $("<a/>", {
+						href: "javascript:void(0);",
+						class: "btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light",
+						text: "Reset",
+					})
+					let BUTTONROWSUBMIT = $("<a/>", {
+						href: "javascript:void(0);",
+						class: "btn btn-primary btn-sm waves-effect waves-light",
+						text: "Update",
+					})
+					
+					return BUTTONROW.append(BUTTONROWCLEAR, BUTTONROWSUBMIT)
+				}
+				
+				const unitFormHeading = function (unit) {
+					let SPAN, I, A, HEADING, HEADINGWRAPPER
+					
+					let headingText = "Test Heading Text"
+					let unitId = null
+					if (unit) {
+						unitId = unit.id
+						headingText = unit.name
+					}
+					
+					let elementId = "unitForm_" + unitId
+					
+					let wrapper = $("<div/>", {
+						class: "card-header mb-2 collapse-toggle",
+						css: {
+							"cursor": "pointer",
+							"background": "initial",
+						},
+						id: elementId,
+					})
+						.on("click", function () {
+							let isExpanded = ($(this).attr("aria-expanded") === "true")
+							if (isExpanded) {
+								collapseWindow(this)
+							} else {
+								expandWindow(this)
+							}
+						})
+					wrapper.attr("aria-expanded", "true")
+					wrapper.attr("aria-target", "#unitForm_container_" + unitId)
+					
+					let heading = $("<h5/>", {
+						class: "mb-0 w-100 d-flex align-items-center justify-content-between p-1",
+					})
+					
+					SPAN = $("<span/>", {
+						text: headingText,
+					})
+					
+					I = $("<i/>", {
+						class: "fas fa-angle-down",
+					})
+					
+					A = $("<a />", {
+						href: "javascript:void(0);",
+						class: "panel_link",
+					})
+					A.attr("aria-hidden", "true")
+					A.append(I)
+					
+					wrapper.append(heading.append(SPAN, A))
+					return wrapper
+				}
+				
+				const buildUnitFormCollapse = function (unit) {
+					if (unit) {
+						let HIDDENFIELDS, BUTTONS, BASEFIELDS, UNITCONTAINER
+						let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+						HIDDENFIELDS = unitFormHiddenFields(unit)
+						BUTTONS = unitFormButtons(unit)
+						BASEFIELDS = unitFormBaseFields(unit)
+						UNITCONTAINER = unitFormContainer(unit)
+						
+						return $("<div/>",
+							{
+								id: "unitForm_container_" + unitId,
+								class: "",
+							})
+							.attr("id", "unitForm_container_" + unitId)
+							.append(HIDDENFIELDS, BASEFIELDS, UNITCONTAINER, BUTTONS)
+					}
+					
+					return null
+				}
+				
+				const buildUnitForm = function (unit) {
+					
+					let UNITFORM = $("<div/>", {
+						class: "",
+					})
+					
+					if (unit) {
+						if (unit.id) {
+							let unitId = (unit && unit.id && !isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+							UNITFORM.attr("id", unitId)
+						}
+					}
+					
+					if (unit) {
+						let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+						
+						let UNITHEADING = unitFormHeading(unit)
+						let UNITCOLLAPSE = buildUnitFormCollapse(unit)
+						// ----
+						if (unitId) {
+							
+							UNITFORM
+								.attr("id", "unitForm_" + unitId)
+								.append(UNITHEADING, UNITCOLLAPSE)
+						}
+						
+						return UNITFORM
+					}
+					
+					return null
+				}
+				
+				$.each(units, function (k, unit) {
+					if (unit.id) {
+						let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+						
+						MATRIXFORM = $("<div/>", {
+							id: "product_edit_matrix_form_" + unitId,
+							class: "",
+						})
+						
+						UNITFORM = buildUnitForm(unit)
+						MATRIXFORM.append(UNITFORM)
+						CONTAINER.append(MATRIXFORM)
+					}
+				})
+				
+				return CONTAINER
+			}
+			
+			const matrixForm = function (units) {
+				unitForm(units)
+				$(_pricing_container).append(unitForm(units))
+			}
+			
+			const buildPricingMatrix = function (units) {
+				matrixForm(units)
+			}
+			
+			if (pricingStrategyTypesId !== null) {
+				switch (pricingStrategyTypesId) {
+					case 1:
+						//Per Unit
+						//Console.log("Per Unit")
+						variant_id = 0
+						variant_count = 0
+						variant_name = "Other"
+						//buildPricingMatrix(Array.from(PricingStrategy.unitSeasons.values()))
+						closeAllToggles()
+						break
+					case 2:
+						//Per Person
+						//Console.log("Per Person")
+						
+						//buildPricingMatrix(Array.from(PricingStrategy.unitSeasons.values()))
+						break
+					case 3:
+						//Per Days
+						//Console.log("Per Days")
+						variant_id = 0
+						variant_count = 0
+						variant_name = "Other"
+						
+						//buildPricingMatrix(Array.from(PricingStrategy.unitSeasons.values()))
+						openAllToggles()
+						break
+					default:
+						return
+				}
+			}
+		}
+		
+		const updatePricingStrategyTypesId = function (pricing_strategy_types_id) {
+			if (pricing_strategy_types_id) {
+				pricing_strategy_types_id = (!isNaN(parseInt(_pricing_strategy_types_id.value))) ? parseInt(_pricing_strategy_types_id.value) : null
+				//emptyPricingMatrix()
+				//buildPricingMatrix()
+			}
+		}
+		
+		const getVariantsUsed = function () {
+			let results = []
+			
+			let variantsUsed = findObjectByKey(Array.from(Variant.all.values()), 'used_in_pricing', 1)
+			$.each(variantsUsed, function (k, variant) {
+				let id = (!isNaN(parseInt(variant.id))) ? parseInt(variant.id) : null
+				if (!is_null(id)) {
+					results.push(id)
+				}
+			})
+			
+			return results.sort()
+			
+		}
+		
+		const collapseWindow = function (_this) {
+			let targetElement = $(_this).attr("aria-target")
+			let icon = $(_this).find("i")
+			icon.removeClass("fa-angle-down").addClass("fa-angle-up")
+			$(_this).attr("aria-expanded", "false")
+			$(targetElement).slideUp()
+		}
+		
+		const expandWindow = function (_this) {
+			let icon = $(_this).find("i")
+			let targetElement = $(_this).attr("aria-target")
+			icon.removeClass("fa-angle-up").addClass("fa-angle-down")
+			$(_this).attr("aria-expanded", "true")
+			$(targetElement).slideDown()
+		}
+		
+		const buildUnitSeasonValues = function () {
+			PricingStrategy.unitSeasons = new Map()
+			
+			$.each(Array.from(Unit.all.values()), function (k, unit) {
+				PricingStrategy.unitSeasons.set(unit.id, {
+					id: unit.id,
+					name: unit.name,
+					seasons: Season.all,
+				})
+			})
+		}
+		
+		const clearUnitSelection = function () {
+			$(_pricing_strategy_unit_id).val([]).trigger("change")
+		}
+		
+		const clearSeasonSelection = function () {
+			$(_pricing_strategy_season_id).val([]).trigger("change")
+		}
+		
+		const updatePrice = function (el) {
+			let costEl = document.getElementById(el)
+			let marginEl = document.getElementById(el.replace('cost', 'margin'))
+			let priceEl = document.getElementById(el.replace('cost', 'price'))
+			// ----
+			//let cost = (!isNaN(parseInt(costEl.value))) ? parseInt(costEl.value) : 0
+			//let margin = ((!isNaN(parseInt(marginEl.value))) ? parseInt(marginEl.value) : 0) / 100
+			
+			priceEl.value = parseInt(((!isNaN(parseInt(costEl.value))) ? parseInt(costEl.value) : 0 / 100) + (!isNaN(parseInt(costEl.value))) ? parseInt(costEl.value) : 0)
+			
+		}
+		
+		const updateStatus = function () {
+			let test = 4
+			if (test === 0) {
+				$(panel_tab_pricing).append($("<span>", {
+					class: "badge rounded-pill badge-notification bg-danger tab-badge",
+					alt: "Notification",
+					css: { "color": "rgb(255, 255, 255) !important" },
+					text: '!',
+				}))
+			} else {
+				$(panel_tab_pricing).find("span").remove()
+			}
+		}
+		
+		const init = function (pricing_strategies) {
+		
+		}
+		
+		return {
+			all: new Map(),
+			unitSeasons: new Map(),
+			updateStatus: function () {
+				updateStatus()
+			},
+			init: function (pricing_strategies) {
+				init(pricing_strategies)
+			},
+			updatePrice: function (el) {
+				updatePrice(el)
+			},
+			clearUnitSelection: function () {
+				clearUnitSelection()
+			},
+			clearSeasonSelection: function () {
+				clearSeasonSelection()
+			},
+			buildUnitSeasonValues: function () {
+				buildUnitSeasonValues()
+			},
+		}
+		
+	})()
 </script>

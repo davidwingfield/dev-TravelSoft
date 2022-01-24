@@ -16,11 +16,7 @@
 	 */
 	class Product extends Controller
 	{
-		/**
-		 * Buttons
-		 *
-		 * @var array
-		 */
+		
 		protected static $buttons = array(
 			"save" => array(
 				"type" => "a",
@@ -51,9 +47,6 @@
 			),
 		);
 		
-		/**
-		 * Tabs
-		 */
 		protected static $tabs = array(
 			"id" => "product_edit_tabs",
 			"role" => "tablist",
@@ -93,6 +86,26 @@
 					"data" => array(),
 				),
 				
+				"Provider" => array(
+					"controls" => "panel_tab_product_provider",
+					"href" => "panel_tab_product_provider",
+					"id" => "panel_tab_provider",
+					"active" => false,
+					"aria" => array(
+						"expanded" => "false",
+					),
+					"data" => array(),
+				),
+				"Vendor" => array(
+					"controls" => "panel_tab_product_vendor",
+					"href" => "panel_tab_product_vendor",
+					"id" => "panel_tab_vendor",
+					"active" => false,
+					"aria" => array(
+						"expanded" => "false",
+					),
+					"data" => array(),
+				),
 				"Season" => array(
 					"controls" => "panel_tab_product_season",
 					"href" => "panel_tab_product_season",
@@ -103,7 +116,6 @@
 					),
 					"data" => array(),
 				),
-				
 				"Unit" => array(
 					"controls" => "panel_tab_product_unit",
 					"href" => "panel_tab_product_unit",
@@ -114,7 +126,6 @@
 					),
 					"data" => array(),
 				),
-				
 				"Variant" => array(
 					"controls" => "panel_tab_product_variant",
 					"href" => "panel_tab_product_variant",
@@ -125,7 +136,6 @@
 					),
 					"data" => array(),
 				),
-				
 				"Inventory" => array(
 					"controls" => "panel_tab_product_inventory",
 					"href" => "panel_tab_product_inventory",
@@ -136,7 +146,6 @@
 					),
 					"data" => array(),
 				),
-				
 				"Pricing" => array(
 					"controls" => "panel_tab_product_pricing",
 					"href" => "panel_tab_product_pricing",
@@ -147,7 +156,6 @@
 					),
 					"data" => array(),
 				),
-				
 				"Meta" => array(
 					"controls" => "panel_tab_product_meta",
 					"href" => "panel_tab_product_meta",
@@ -158,7 +166,6 @@
 					),
 					"data" => array(),
 				),
-			
 			),
 		);
 		
@@ -209,9 +216,6 @@
 			exit(0);
 		}
 		
-		/**
-		 * @param array $params
-		 */
 		public static function edit(array $params = [])
 		{
 			if (isset($params["product_id"])) {
@@ -293,7 +297,20 @@
 		
 		// ----
 		
-		public static function serveTableUpdate(array $params = [])
+		public static function assignSeason(array $params = []): void
+		{
+			$results = ProductModel::updateAssignSeasons($params);
+			
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			
+			View::render_json($results);
+			exit(0);
+		}
+		
+		public static function serveTableUpdate(array $params = []): void
 		{
 			$input = filter_input_array(INPUT_POST);
 			//Log::$debug_log->trace($input);
@@ -303,7 +320,7 @@
 			View::render_json($input);
 		}
 		
-		public static function serveGet(array $params = [])
+		public static function serveGet(array $params = []): void
 		{
 			$product_id = null;
 			$products = [];
@@ -315,8 +332,10 @@
 				$products[] = self::format($product);
 			}
 			
-			//
-			
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
 			View::render_json($products);
 			exit(0);
 		}

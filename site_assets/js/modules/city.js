@@ -10,174 +10,174 @@ const City = (function () {
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     $("#form_product_search_hotel_product_location")
-      .on("change", function () {
-          setTimeout(function () {
-          
-          }, 200)
-      })
-      .on("search", function () {
-      
-      })
-      .on("click", function (e) {
-          if ($(this).attr("readonly") === "readonly") {
-              e.preventDefault()
-          } else {
-              $(this).select()
-          }
-          
-      })
-      .autocomplete({
-          serviceUrl: "/api/v1.0/autocomplete/cities",
-          minChars: 2,
-          cache: false,
-          dataType: "json",
-          triggerSelectOnValidInput: false,
-          paramName: "st",
-          onSelect: function (suggestion) {
-              Console.log("city", suggestion)
-              if (!suggestion.data) {
-                  return
-              }
-              
-              Console.log("city", suggestion)
-              /*
-                  "value": "Abano Terme (Padova, Italy)",
-                  "data": {
-                      "id": 1,
-                      "country_id": 102,
-                      "province_id": 250,
-                      "sort_order": 999,
-                      "name": "Abano Terme",
-                      "enabled": 1,
-                      "date_created": "2021-08-03 14:40:07",
-                      "created_by": 4,
-                      "date_modified": "2021-08-03 14:40:07",
-                      "modified_by": 4,
-                      "note": "",
-                      "province": {
-                          "id": 250,
-                          "country_id": 102,
-                          "name": "Padova",
-                          "iso2": "PD",
-                          "iso3": "",
-                          "sort_order": 999,
-                          "enabled": 1,
-                          "date_created": "2021-12-15 10:58:47",
-                          "created_by": 4,
-                          "date_modified": "2021-12-15 10:58:47",
-                          "modified_by": 4,
-                          "note": null
-                      },
-                      "country": {
-                          "id": 102,
-                          "currency_id": 2,
-                          "sort_order": 0,
-                          "name": "Italy",
-                          "iso2": "IT",
-                          "iso3": "ITA",
-                          "enabled": 1,
-                          "date_created": "2021-08-03 13:04:10",
-                          "created_by": 4,
-                          "date_modified": "2021-08-03 15:13:45",
-                          "modified_by": 4,
-                          "note": ""
-                      }
-                  }
-              //*/
-              
-          },
-      })
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+        
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+            
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                Console.log("city", suggestion)
+                if (!suggestion.data) {
+                    return
+                }
+                
+                Console.log("city", suggestion)
+                /*
+                    "value": "Abano Terme (Padova, Italy)",
+                    "data": {
+                        "id": 1,
+                        "country_id": 102,
+                        "province_id": 250,
+                        "sort_order": 999,
+                        "name": "Abano Terme",
+                        "enabled": 1,
+                        "date_created": "2021-08-03 14:40:07",
+                        "created_by": 4,
+                        "date_modified": "2021-08-03 14:40:07",
+                        "modified_by": 4,
+                        "note": "",
+                        "province": {
+                            "id": 250,
+                            "country_id": 102,
+                            "name": "Padova",
+                            "iso2": "PD",
+                            "iso3": "",
+                            "sort_order": 999,
+                            "enabled": 1,
+                            "date_created": "2021-12-15 10:58:47",
+                            "created_by": 4,
+                            "date_modified": "2021-12-15 10:58:47",
+                            "modified_by": 4,
+                            "note": null
+                        },
+                        "country": {
+                            "id": 102,
+                            "currency_id": 2,
+                            "sort_order": 0,
+                            "name": "Italy",
+                            "iso2": "IT",
+                            "iso3": "ITA",
+                            "enabled": 1,
+                            "date_created": "2021-08-03 13:04:10",
+                            "created_by": 4,
+                            "date_modified": "2021-08-03 15:13:45",
+                            "modified_by": 4,
+                            "note": ""
+                        }
+                    }
+                //*/
+                
+            },
+        })
     
     $(_modal_product_city_id)
-      .on("change", function () {
-          if (_modal_product_city_id.value === "") {
-              _modal_product_provider_name.disabled = true
-              _modal_product_vendor_name.disabled = true
-          } else {
-              _modal_product_provider_name.disabled = false
-              _modal_product_vendor_name.disabled = false
-          }
-      })
+        .on("change", function () {
+            if (_modal_product_city_id.value === "") {
+                _modal_product_provider_name.disabled = true
+                _modal_product_vendor_name.disabled = true
+            } else {
+                _modal_product_provider_name.disabled = false
+                _modal_product_vendor_name.disabled = false
+            }
+        })
     
     $("#modal_product_city")
-      .on("change", function () {
-          setTimeout(function () {
-          
-          }, 200)
-      })
-      .on("search", function () {
-          $(_modal_product_city_id).val("").trigger("change")
-      })
-      .on("click", function (e) {
-          if ($(this).attr("readonly") === "readonly") {
-              e.preventDefault()
-          } else {
-              $(this).select()
-          }
-          
-      })
-      .autocomplete({
-          serviceUrl: "/api/v1.0/autocomplete/cities",
-          minChars: 2,
-          cache: false,
-          dataType: "json",
-          triggerSelectOnValidInput: false,
-          paramName: "st",
-          onSelect: function (suggestion) {
-              Console.log("city", suggestion)
-              if (!suggestion.data) {
-                  return
-              }
-              let city = suggestion.data
-              _modal_product_city_id.value = city.id
-              $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
-              /*
-                  "value": "Abano Terme (Padova, Italy)",
-                  "data": {
-                      "id": 1,
-                      "country_id": 102,
-                      "province_id": 250,
-                      "sort_order": 999,
-                      "name": "Abano Terme",
-                      "enabled": 1,
-                      "date_created": "2021-08-03 14:40:07",
-                      "created_by": 4,
-                      "date_modified": "2021-08-03 14:40:07",
-                      "modified_by": 4,
-                      "note": "",
-                      "province": {
-                          "id": 250,
-                          "country_id": 102,
-                          "name": "Padova",
-                          "iso2": "PD",
-                          "iso3": "",
-                          "sort_order": 999,
-                          "enabled": 1,
-                          "date_created": "2021-12-15 10:58:47",
-                          "created_by": 4,
-                          "date_modified": "2021-12-15 10:58:47",
-                          "modified_by": 4,
-                          "note": null
-                      },
-                      "country": {
-                          "id": 102,
-                          "currency_id": 2,
-                          "sort_order": 0,
-                          "name": "Italy",
-                          "iso2": "IT",
-                          "iso3": "ITA",
-                          "enabled": 1,
-                          "date_created": "2021-08-03 13:04:10",
-                          "created_by": 4,
-                          "date_modified": "2021-08-03 15:13:45",
-                          "modified_by": 4,
-                          "note": ""
-                      }
-                  }
-              //*/
-              
-          },
-      })
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            $(_modal_product_city_id).val("").trigger("change")
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+            
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                Console.log("city", suggestion)
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                _modal_product_city_id.value = city.id
+                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+                /*
+                    "value": "Abano Terme (Padova, Italy)",
+                    "data": {
+                        "id": 1,
+                        "country_id": 102,
+                        "province_id": 250,
+                        "sort_order": 999,
+                        "name": "Abano Terme",
+                        "enabled": 1,
+                        "date_created": "2021-08-03 14:40:07",
+                        "created_by": 4,
+                        "date_modified": "2021-08-03 14:40:07",
+                        "modified_by": 4,
+                        "note": "",
+                        "province": {
+                            "id": 250,
+                            "country_id": 102,
+                            "name": "Padova",
+                            "iso2": "PD",
+                            "iso3": "",
+                            "sort_order": 999,
+                            "enabled": 1,
+                            "date_created": "2021-12-15 10:58:47",
+                            "created_by": 4,
+                            "date_modified": "2021-12-15 10:58:47",
+                            "modified_by": 4,
+                            "note": null
+                        },
+                        "country": {
+                            "id": 102,
+                            "currency_id": 2,
+                            "sort_order": 0,
+                            "name": "Italy",
+                            "iso2": "IT",
+                            "iso3": "ITA",
+                            "enabled": 1,
+                            "date_created": "2021-08-03 13:04:10",
+                            "created_by": 4,
+                            "date_modified": "2021-08-03 15:13:45",
+                            "modified_by": 4,
+                            "note": ""
+                        }
+                    }
+                //*/
+                
+            },
+        })
     
     const form_rules = {
         rules: {
@@ -209,51 +209,51 @@ const City = (function () {
                     
                     if (element) {
                         $(element)
-                          .select2({
-                              
-                              "language": {
-                                  "searching": function () {
-                                  },
-                              },
-                              "escapeMarkup": function (markup) {
-                                  return markup
-                              },
-                              
-                          })
-                          .on("select2:open", function (e) {
-                              let x = document.querySelectorAll("[aria-controls='select2-" + dropdown_id + "-results']")
-                              if (x[0]) {
-                                  let _filterCitySearch = x[0]
-                                  $(_filterCitySearch).attr("id", "" + dropdown_id + "_search")
-                                  if (!document.getElementById("filter_city_add_icon")) {
-                                      let i = document.createElement("i")
-                                      i.classList = "select-add-option fas fa-plus filter_city_add"
-                                      i.id = "filter_city_add_icon"
-                                      i.addEventListener("click", event => {
-                                          let val = _filterCitySearch.value
-                                          $(element).select2("close")
-                                          City.add(this, val, dropdown_id)
-                                      })
-                                      _filterCitySearch.after(i)
-                                  }
-                                  $(".filter_city_add").hide()
-                                  if (_filterCitySearch) {
-                                      _filterCitySearch.addEventListener("keyup", event => {
-                                          if (_filterCitySearch.value !== "") {
-                                              $(".filter_city_add").show()
-                                          } else {
-                                              $(".filter_city_add").hide()
-                                          }
-                                      })
-                                  }
-                              }
-                              
-                          })
-                          .on("change", function () {
-                              let id = $(this)
-                                .attr("id")
-                                .replace("city", "city")
-                          })
+                            .select2({
+                                
+                                "language": {
+                                    "searching": function () {
+                                    },
+                                },
+                                "escapeMarkup": function (markup) {
+                                    return markup
+                                },
+                                
+                            })
+                            .on("select2:open", function (e) {
+                                let x = document.querySelectorAll("[aria-controls='select2-" + dropdown_id + "-results']")
+                                if (x[0]) {
+                                    let _filterCitySearch = x[0]
+                                    $(_filterCitySearch).attr("id", "" + dropdown_id + "_search")
+                                    if (!document.getElementById("filter_city_add_icon")) {
+                                        let i = document.createElement("i")
+                                        i.classList = "select-add-option fas fa-plus filter_city_add"
+                                        i.id = "filter_city_add_icon"
+                                        i.addEventListener("click", event => {
+                                            let val = _filterCitySearch.value
+                                            $(element).select2("close")
+                                            City.add(this, val, dropdown_id)
+                                        })
+                                        _filterCitySearch.after(i)
+                                    }
+                                    $(".filter_city_add").hide()
+                                    if (_filterCitySearch) {
+                                        _filterCitySearch.addEventListener("keyup", event => {
+                                            if (_filterCitySearch.value !== "") {
+                                                $(".filter_city_add").show()
+                                            } else {
+                                                $(".filter_city_add").hide()
+                                            }
+                                        })
+                                    }
+                                }
+                                
+                            })
+                            .on("change", function () {
+                                let id = $(this)
+                                    .attr("id")
+                                    .replace("city", "city")
+                            })
                     }
                 })
             }

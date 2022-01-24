@@ -21,7 +21,7 @@ const ContextMenu = (function () {
             },
             items: {
                 "edit": {
-                    name: "Edit",
+                    name: "Assign Season To Days",
                     icon: "edit",
                 },
                 "cut": {

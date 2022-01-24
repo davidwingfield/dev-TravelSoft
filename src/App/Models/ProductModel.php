@@ -143,6 +143,55 @@
 			return self::get($id);
 		}
 		
+		public static function updateAssignSeasons(array $product = []): array
+		{
+			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+			$created_by = Model::setInt($user_id);
+			$modified_by = Model::setInt($user_id);
+			
+			$product_id = Model::setInt((isset($product["product_id"])) ? $product["product_id"] : null);
+			$season_id = Model::setInt((isset($product["season_id"])) ? $product["season_id"] : null);
+			$days = (isset($product["days"])) ? $product["days"] : [];
+			$note = Model::setLongText((isset($product["note"])) ? $product["note"] : null);
+			$enabled = Model::setBool((isset($matrix["enabled"])) ? $matrix["enabled"] : 1);
+			
+			$dateFields = [];
+			
+			foreach ($days AS $k => $date) {
+				array_push($dateFields, "('$date', $product_id, $season_id, $enabled, CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP, $modified_by, $note)");
+			}
+			
+			$dateValues = implode(", ", $dateFields);
+			
+			try {
+				$sql = "
+					INSERT INTO product_calendar (
+						date, product_id, season_id, enabled, date_created,
+						created_by, date_modified, modified_by, note
+					)
+					VALUES
+						$dateValues
+					ON DUPLICATE KEY UPDATE
+						season_id = VALUES(season_id),
+						note = VALUES(note),
+						enabled = VALUES(enabled),
+						modified_by = VALUES(modified_by),
+						date_modified = VALUES(date_modified);
+				";
+				Model::$db->rawQuery($sql);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+			
+			return array(
+				"product_id" => $product_id,
+				"season_id" => $season_id,
+				"days" => implode(", ", $dateFields),
+			);
+		}
+		
 		public static function product_ac(string $st = "", int $category_id = null): array
 		{
 			if (is_null($category_id)) {
@@ -212,7 +261,7 @@
 			$location = [];
 			$location["name"] = (string)"City Center";
 			$location["city_id"] = (int)$city_id;
-			$location["location_types_id"] = 1;
+			$location["location_types_id"] = (int)1;
 			
 			$location_detail = Location::getByCityId($location["city_id"], $location["name"]);
 			
@@ -223,11 +272,7 @@
 				}
 			}
 			
-			//Log::$debug_log->trace($location_detail);
-			
 			$location_id = (int)$location_detail["id"];
-			
-			//Log::$debug_log->trace($location_id);
 			
 			$sql = "
                 INSERT INTO product (

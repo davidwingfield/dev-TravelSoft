@@ -1,11 +1,12 @@
 <?php
-	/*
+	
 	$product_address = [];
 	$product_location = [];
 	$provider_address = [];
 	$provider_location = [];
 	
 	if (isset($product["location"])) {
+		
 		$product_location = $product["location"];
 		$product_city_name = (isset($product_location["city"]["name"])) ? $product_location["city"]["name"] : null;
 		$product_country_iso2 = (isset($product_location["country"]["iso2"])) ? $product_location["country"]["iso2"] : null;
@@ -54,7 +55,23 @@
 		}
 		
 		$product_location_address = implode(", ", $product_address);
+		$display_location = $product_location["name"] . " ($product_city_name, $product_province_name)";
 	}
+	
+	$location_types = [];
+	$selectLocationTypes = "<option value='' disabled='disabled' readonly='readonly' selected>-- Select Location Type --</option>";
+	
+	if (isset($data["types"]["location_types"])) {
+		$location_types = $data["types"]["location_types"];
+	}
+	
+	foreach ($location_types AS $h => $locationType) {
+		$val = $locationType["id"];
+		$text = $locationType["name"];
+		$selectLocationTypes .= "<option value='$val'>$text</option>";
+	}
+	
+	/*
 	if (isset($product["provider"]["location"])) {
 		$provider_location = $product["provider"]["location"];
 		$provider_city_name = (isset($provider_location["city"]["name"])) ? $provider_location["city"]["name"] : null;
@@ -120,320 +137,436 @@
 ?>
 <!-- Pricing Section -->
 <section id="product_edit_location_section" class="section">
-    <!-- HIDDEN FIELDS -->
-    <div class="row gx-1 my-0">
-        <div class="col-12 col-md-3 p-1">
-            <label for="product_edit_location_id" class="dev-element d-none">Product Location:</label>
-            <input type="hidden" id="product_edit_location_id" name="product_edit_location_id" class="form-control mb-1 dev-element" readonly="readonly"/>
-        </div>
-    </div>
-    
-    <div class="row">
-        
-        <div class="col-12 col-sm-12">
-            
-            <div class="form-element">
-                
-                <div class="input-group form-sm form-1 pl-0">
-                    
-                    <div class="input-group-prepend">
-                        
-                        <span class="input-group-text">
-                            <i class="fas fa-search" aria-hidden="true"></i>
-                        </span>
-                    
-                    </div>
-                    
-                    <input type="search" id="product_location_search" name="product_location_search" class="form-control my-0 py-1" placeholder="Search" aria-label="Search" value="<?php echo ($display_location) ? $display_location : ''; ?>"/>
-                    
-                    <div class="input-group-append">
-                        
-                        <button type="button" class="btn btn-md btn-primary m-0 px-3 py-2 z-depth-0 waves-effect" id="button_edit_product_location">
-                            <i class="fas fa-edit" aria-hidden="true"></i>
-                        </button>
-                    
-                    </div>
-                
-                </div>
-            
-            </div>
-        
-        </div>
-    
-    </div>
-    
-    <div class="row">
-        <div class="col-12 col-md-9 mb-2 d-flex align-items-center">
-            <div class="px-3">
-                <!-- USE PROVIDER LOCATION -->
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="use_provider_location" name="location_to_use" class="custom-control-input" value="use_provider_location">
-                    <label class="custom-control-label" for="use_provider_location">Use Provider Location</label>
-                </div>
-                <!-- /USE PROVIDER LOCATION -->
-                
-                <!-- USE PRODUCT LOCATION -->
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="use_product_location" name="location_to_use" class="custom-control-input" value="use_product_location">
-                    <label class="custom-control-label" for="use_product_location">Use Product Location</label>
-                </div>
-                <!-- /USE PRODUCT LOCATION -->
-            </div>
-        </div>
-        
-        <div class="col-12 col-md-3 mb-2 d-flex justify-content-end">
-            <button type="button" id="button_change_product_location" name="button_change_product_location" class="btn btn-primary btn-sm waves-effect waves-light">Update</button>
-        </div>
-    </div>
-    
-    <div class="card mb-2" id="card_product_edit_location" style="display:none">
-        <div class="card-body">
-            
-            <h4 class="card-title">
-                <span>Edit Location</span>
-                <a type="button" id="button_close_edit_product_location_form" href="javascript:void(0);" class="panel-button-close fas fa-times" aria-hidden="true"></a>
-            </h4>
-            <h6 class="card-subtitle mb-2 text-muted">Panel subtitle</h6>
-            <hr class="">
-            
-            <form id="form_product_edit_location" name="form_edit_location" class="" novalidate>
-                
-                <div class="row">
-                    
-                    <!-- LOCATION ID -->
-                    <div class="col-12 col-md-3">
-                        <div class="form-element">
-                            <label for="location_id" class="">Location Id:</label>
-                            <input type="text" id="location_id" name="location_id" class="form-control" aria-label="Location id" placeholder="" autocomplete="off"/>
-                            <div class="error w-100 text-center" id="location_id-error"></div>
-                        </div>
-                    </div>
-                    <!-- /LOCATION ID -->
-                    
-                    <!-- LOCATION NAME -->
-                    <div class="col-5">
-                        <div class="form-element">
-                            <label for="location_name" class="">Location Name:</label>
-                            <input type="text" id="location_name" name="location_name" class="form-control" aria-label="Location name" placeholder="" autocomplete="off"/>
-                            <div id="location_name-error" class="error w-100 text-center"></div>
-                        </div>
-                    </div>
-                    <!-- /LOCATION NAME -->
-                    
-                    <!-- LOCATION TYPES ID -->
-                    <div class="col-12 col-md-4">
-                        <div class="form-element">
-                            <label for="location_types_id" class="">Location Type:</label>
-                            <select id="location_types_id" name="location_types_id" class="form-control" aria-label="Location Type">
-								<?php
-									echo "<option  value='' disabled selected>-- Location Types --</option>";
-									foreach ($location_types AS $k => $v) {
-										$val = $v["id"];
-										$text = $v["name"];
-										echo "<option value='$val'>$text</option>";
-									}
-								?>
-                            </select>
-                            <div id="location_types_id-error" class="error w-100 text-center"></div>
-                        </div>
-                    </div>
-                    <!-- /LOCATION TYPES ID -->
-                
-                </div>
-                
-                <div class="row">
-                    
-                    <div class="col-12 col-md-8">
-                        
-                        <div class="row">
-                            
-                            <!-- STREET 1 -->
-                            <div class="col-12">
-                                <div class="form-element">
-                                    <label for="location_street_1" class="">Street 1:</label>
-                                    <input type="text" id="location_street_1" name="location_street_1" class="form-control" aria-label="Location name" placeholder="" autocomplete="off"/>
-                                    <div id="location_street_1-error" class="error w-100 text-center"></div>
-                                </div>
-                            </div>
-                            <!-- /STREET 1 -->
-                        
-                        </div>
-                        
-                        <div class="row">
-                            
-                            <!-- STREET 2 -->
-                            <div class="col-12">
-                                <div class="form-element">
-                                    <label for="location_street_2" class="">Street 2:</label>
-                                    <input type="text" id="location_street_2" name="location_street_2" class="form-control" aria-label="Location name" placeholder="" autocomplete="off"/>
-                                    <div id="location_street_2-error" class="error w-100 text-center"></div>
-                                </div>
-                            </div>
-                            <!-- /STREET 2 -->
-                        
-                        </div>
-                        
-                        <div class="row">
-                            
-                            <!-- COUNTRY ID -->
-                            <div class="col-12 col-md-4">
-                                
-                                <div class="form-element">
-                                    
-                                    <label for="location_country_id">Country:</label>
-                                    <select class="form-control" name="location_country_id" id="location_country_id" data-type="country" style="width:100%;" required>
-                                    
-                                    </select>
-                                    <div class="error w-100 text-center" id="location_country_id-error"></div>
-                                
-                                </div>
-                            
-                            </div>
-                            <!-- /COUNTRY ID -->
-                            
-                            <!-- PROVINCE ID -->
-                            <div class="col-12 col-md-4">
-                                
-                                <div class="form-element">
-                                    
-                                    <label for="location_province_id">Province:</label>
-                                    <select class="form-control" name="location_province_id" id="location_province_id" data-type="province" style="width:100%;" required></select>
-                                    <div class="error w-100 text-center" id="location_province_id-error"></div>
-                                
-                                </div>
-                            
-                            </div>
-                            <!-- /PROVINCE ID -->
-                            
-                            <!-- CITY ID -->
-                            <div class="col-12 col-md-4">
-                                
-                                <div class="form-element">
-                                    
-                                    <label for="location_city_id">City:</label>
-                                    <select class="form-control" name="location_city_id" id="location_city_id" data-type="city" style="width:100%;" required></select>
-                                    <div class="error w-100 text-center" id="location_city_id-error"></div>
-                                
-                                </div>
-                            
-                            </div>
-                            <!-- /CITY ID -->
-                        
-                        </div>
-                        
-                        <div class="row">
-                            
-                            <div class="col-lg-12">
-                                
-                                <div class="form-element">
-                                    
-                                    <label for="location_zipcode">Postal Code:</label>
-                                    <input type="text" id="location_zipcode" name="location_zipcode" class="form-control"/>
-                                    <div class="error w-100 text-center" id="location_zipcode-error"></div>
-                                
-                                </div>
-                            
-                            </div>
-                        
-                        </div>
-                    
-                    </div>
-                    
-                    <div class="col-12 col-md-4">
-                    
-                    </div>
-                
-                </div>
-                
-                <div class="text-right w-100">
-                    <a href="javascript:void(0);" id="button_clear_form_edit_product_location" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
-                    <a href="javascript:void(0);" id="button_submit_form_edit_product_location" class="btn btn-primary btn-sm waves-effect waves-light">Save</a>
-                </div>
-            
-            </form>
-        
-        </div>
-    </div>
-    
-    <div class="row">
-        
-        <!-- LOCATION -->
-        <div class="col-12 col-md-6">
-            <!-- Card -->
-            <div class="card map-card">
-                
-                <!--Google map-->
-                <div id="map-container-product-location" class="z-depth-1-half map-container" style="height: 500px">
-                    <iframe src="https://maps.google.com/maps?q=<?php echo strtolower($location["city"]["name"]); ?>+<?php echo strtolower($location["province"]["iso2"]); ?>&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" style="border:0" allowfullscreen></iframe>
-                </div>
-                
-                <!-- Card content -->
-                <div class="card-body closed px-0">
-                    
-                    <div class="button px-2 mt-3">
-                        <a class="btn-floating btn-lg living-coral float-right"><i class="<?php echo $location_type["icon"]; ?>"></i></a>
-                    </div>
-                    
-                    <div class="white px-4 pb-4 pt-3-5" style="padding-top:1.5rem">
-                        
-                        <!-- Title -->
-                        <h5 class="card-title h5 living-coral-text">Location Details</h5>
-                        
-                        <div class="d-flex justify-content-between living-coral-text">
-                            <h6 class="card-subtitle"><?php echo $provider_location_name; ?></h6>
-                        </div>
-                        
-                        <hr>
-                        <!--
-                        <div class="d-flex justify-content-between pt-2 mt-1 text-center text-uppercase living-coral-text">
-                            <div>
-                                <i class="fas fa-phone fa-lg mb-3"></i>
-                                <p class="mb-0">Call</p>
-                            </div>
-                            <div>
-                                <i class="fas fa-cat fa-lg mb-3"></i>
-                                <p class="mb-0">Love</p>
-                            </div>
-                            <div>
-                                <i class="far fa-grin-beam-sweat fa-lg mb-3"></i>
-                                <p class="mb-0">Smile</p>
-                            </div>
-                        </div>
-                        -->
-                        <hr>
-                        
-                        <table class="table table-borderless">
-                            <tbody>
-                            <tr>
-                                <th scope="row" class="px-0 pb-3 pt-2">
-                                    <i class="fas fa-map-marker-alt living-coral-text"></i>
-                                </th>
-                                <td class="pb-3 pt-2"><?php echo $address_line; ?><!--East 64th Street, New York, NY 10021, US--></td>
-                            </tr>
-                            <tr class="mt-2">
-                                <th scope="row" class="px-0 pb-3 pt-2">
-                                    <i class="far fa-clock living-coral-text"></i>
-                                </th>
-                                <td class="pb-3 pt-2"><span class="deep-purple-text mr-2"> Closed</span> Opens 10 AM</td>
-                            </tr>
-                            <tr class="mt-2">
-                                <th scope="row" class="px-0 pb-3 pt-2">
-                                    <i class="fas fa-cloud-moon living-coral-text"></i>
-                                </th>
-                                <td class="pb-3 pt-2">Sunny weather tomorrow</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    
-                    </div>
-                
-                </div>
-            
-            </div>
-            <!-- Card -->
-        </div>
-        <!-- LOCATION -->
-    
-    </div>
+	
+	<div class="row">
+		
+		<div class="col-12 col-md-8 mb-2">
+			
+			<div class="row">
+				
+				<div class="col-12 mb-2">
+					
+					<div class="form-element">
+						
+						<div class="input-group form-sm form-1 pl-0">
+							
+							<div class="input-group-prepend">
+		                        <span class="input-group-text">
+		                            <i class="fas fa-search" aria-hidden="true"></i>
+		                        </span>
+							</div>
+							
+							<input type="search" id="product_location_search" name="product_location_search" class="form-control my-0 py-1" placeholder="Search" aria-label="Search" value="<?php echo ($display_location) ? $display_location : ''; ?>"/>
+						
+						</div>
+					
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				
+				<div class="col-12 mb-2">
+					
+					<form id="product_edit_location_form" name="product_edit_location_form" class="card card-body" novalidate="novalidate">
+						<h5 class="card-title">
+							<span>Location</span>
+							<a type="button" href="javascript:void(0);" id="product_edit_location_form_close_button" class="panel-button-close fas fa-times" aria-hidden="true"></a>
+						</h5>
+						<h6 class="card-subtitle mb-2 text-muted">&nbsp;</h6>
+						<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+						
+						<div class="row">
+							
+							<div class="col-12 col-md-8 mb-2">
+								
+								<div class="row">
+									
+									<div class="col-12 mb-2">
+										
+										<div class="form-element">
+											<label for="product_edit_location_street_1">Street 1:</label>
+											<input type="text" id="product_edit_location_street_1" name="product_edit_location_street_1" class="form-control"/>
+											<div id="product_edit_location_street_1-error" class="error w-100">&nbsp;</div>
+										</div>
+									
+									</div>
+								
+								</div>
+								
+								<div class="row">
+									
+									<div class="col-12 mb-2">
+										
+										<div class="form-element">
+											<label for="product_edit_location_street_2">Street 2:</label>
+											<input type="text" id="product_edit_location_street_2" name="product_edit_location_street_2" class="form-control"/>
+											<div id="product_edit_location_street_2-error" class="error w-100">&nbsp;</div>
+										</div>
+									
+									</div>
+								
+								</div>
+								
+								<div class="row">
+									
+									<div class="col-12 col-md-8 mb-2">
+										
+										<div class="form-element">
+											<label for="product_edit_location_city" class="">City / Province / Country:</label>
+											<input type="search" id="product_edit_location_city" name="product_edit_location_city" class="form-control">
+											<div id="product_edit_location_city-error" class="error w-100 text-center">&nbsp;</div>
+										</div>
+									
+									</div>
+									
+									<div class="col-12 col-md-4 mb-2">
+										
+										<div class="form-element">
+											<label for="product_edit_location_zipcode" class="">Postal Code:</label>
+											<input type="text" id="product_edit_location_zipcode" name="product_edit_location_zipcode" class="form-control">
+											<div id="product_edit_location_zipcode-error" class="error w-100 text-center">&nbsp;</div>
+										</div>
+									
+									</div>
+								
+								</div>
+								
+								<div id="product_edit_location_city_edit" class="card card-body border border-dark d-block">
+									
+									<div class="row">
+										
+										<div class="col-12 col-md-4 pl-1 pr-0">
+											<div class="form-element">
+												<label for="location_country_id">Country:</label>
+												<select class="form-control" name="location_country_id" id="location_country_id" data-type="country" style="width:100%;"></select>
+												<div class="error w-100 text-center" id="location_country_id-error"></div>
+											</div>
+										</div>
+										
+										<div class="col-12 col-md-4 pl-1 pr-0">
+											
+											<div class="form-element">
+												
+												<label for="location_province_id">Province:</label>
+												<select class="form-control" name="location_province_id" id="location_province_id" data-type="province" style="width:100%;" required></select>
+												<div class="error w-100 text-center" id="location_province_id-error"></div>
+											
+											</div>
+										
+										</div>
+										
+										<div class="col-12 col-md-4 pl-1 pr-1">
+											
+											<div class="form-element">
+												
+												<label for="location_city_id">City:</label>
+												<select class="form-control" name="location_city_id" id="location_city_id" data-type="city" style="width:100%;" required></select>
+												<div class="error w-100 text-center" id="location_city_id-error"></div>
+											
+											</div>
+										
+										</div>
+									
+									</div>
+								
+								</div>
+							
+							</div>
+							
+							<div class="col-12 col-md-4 mb-2">
+								
+								<div class="row">
+									
+									<div class="col-12 mb-2">
+										<label for="product_edit_location_name" class="">Location Name:</label>
+										<input type="text" id="product_edit_location_name" name="product_edit_location_name" class="form-control">
+										<div id="product_edit_location_name-error" class="error w-100 text-center">&nbsp;</div>
+									</div>
+								
+								</div>
+								
+								<div class="row">
+									
+									<div class="col-12 mb-2">
+										
+										<div class="form-element">
+											<label for="product_edit_location_location_types_id">Location Type:</label>
+											<select id="product_edit_location_location_types_id" name="product_edit_location_location_types_id" class="form-control">
+												<?php echo $selectLocationTypes; ?>
+											</select>
+											<div id="product_edit_location_location_types_id-error" class="error w-100">&nbsp;</div>
+										</div>
+									
+									</div>
+								
+								</div>
+							
+							</div>
+						
+						</div>
+						
+						<div class="row">
+							
+							<div class="col-6 text-left w-100 mb-2">
+							
+							</div>
+							
+							<div class="col-6 text-right w-100 mb-2">
+								<a href="javascript:void(0);" id="button_clear_form_product_edit_location" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+								<a href="javascript:void(0);" id="button_submit_form_product_edit_location" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
+							</div>
+						
+						</div>
+						
+						<!-- HIDDEN FIELDS -->
+						<div class="row">
+							<div class="col-12 col-md-3 p-1 mb-1">
+								<label for="product_edit_location_id" class="dev-element d-none">Product Location:</label>
+								<input type="hidden" id="product_edit_location_id" name="product_edit_location_id" class="form-control mb-1 dev-element" readonly="readonly"/>
+							</div>
+							
+							<div class="col-12 col-md-3 p-1 mb-1">
+								<label for="product_edit_location_city_id" class="dev-element d-none">Product City Id:</label>
+								<input type="hidden" id="product_edit_location_city_id" name="product_edit_location_city_id" class="form-control mb-1 dev-element" readonly="readonly"/>
+							</div>
+						</div>
+						<!-- /HIDDEN FIELDS -->
+					
+					</form>
+				
+				</div>
+			
+			</div>
+		
+		</div>
+		
+		<div class="col-12 col-md-4 mb-2">
+			<ul class="list-group">
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					Cras justo odio
+					<span class="badge badge-primary badge-pill">14</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					Dapibus ac facilisis in
+					<span class="badge badge-primary badge-pill">2</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					Morbi leo risus
+					<span class="badge badge-primary badge-pill">1</span>
+				</li>
+			</ul>
+		</div>
+	
+	</div>
 
 </section>
+
+<script type="text/javascript">
+	const ProductLocation = (function () {
+		"use strict"
+		
+		const _product_edit_location_city_id = document.getElementById("product_edit_location_city_id")
+		const _product_edit_location_city = document.getElementById("product_edit_location_city")
+		const _product_edit_location_street_1 = document.getElementById("product_edit_location_street_1")
+		const _product_edit_location_street_2 = document.getElementById("product_edit_location_street_2")
+		const _product_edit_location_zipcode = document.getElementById("product_edit_location_zipcode")
+		const _product_edit_location_location_types_id = document.getElementById("product_edit_location_location_types_id")
+		const _product_edit_location_name = document.getElementById("product_edit_location_name")
+		const _button_submit_form_product_edit_location = document.getElementById("button_submit_form_product_edit_location")
+		const _button_clear_form_product_edit_location = document.getElementById("button_clear_form_product_edit_location")
+		const _product_edit_location_form_close_button = document.getElementById("product_edit_location_form_close_button")
+		const _product_edit_location_city_edit = document.getElementById("product_edit_location_city_edit")
+		const _location_country_id = document.getElementById("location_country_id")
+		const _location_province_id = document.getElementById("location_province_id")
+		const _location_city_id = document.getElementById("location_city_id")
+		const _category_id = document.getElementById("category_id")
+		
+		let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+		let category_id
+		
+		$(_button_clear_form_product_edit_location)
+			.on("click", function () {
+				resetForm()
+				
+			})
+		
+		$(_product_edit_location_city)
+			.on("change", function () {
+				Console.log($(this).val())
+			})
+		
+		const init = function (settings) {
+			Console.log("init(settings)", settings)
+			let location
+			
+			if (settings) {
+				if (settings.product_location) {
+					location = settings.product_location
+					
+				}
+			}
+			
+			$(_location_country_id).BuildDropDown({
+				data: Array.from(Country.all.values()),
+				title: "Country",
+				id_field: "id",
+				text_field: "name",
+				first_selectable: false,
+			})
+			
+			$(_location_province_id).BuildDropDown({
+				data: Array.from(Province.all.values()),
+				title: "Province",
+				id_field: "id",
+				text_field: "name",
+				first_selectable: false,
+			})
+			
+			$(_location_city_id).BuildDropDown({
+				data: Array.from(City.all.values()),
+				title: "City",
+				id_field: "id",
+				text_field: "name",
+				first_selectable: false,
+			})
+			
+			Country.init({
+				dropdowns: [
+					"location_country_id",
+				],
+			})
+			
+			Province.init({
+				dropdowns: [
+					"location_province_id",
+				],
+			})
+			
+			City.init({
+				dropdowns: [
+					"location_city_id",
+				],
+			})
+			
+			initAutoComplete()
+			
+			if (location) {
+				Location.init(location)
+				populateForm(location)
+			}
+			
+		}
+		
+		const initAutoComplete = function () {
+			
+			$(_product_edit_location_city)
+				.on("change", function () {
+					setTimeout(function () {
+					
+					}, 200)
+				})
+				.on("search", function () {
+				
+				})
+				.on("click", function (e) {
+					if ($(this).attr("readonly") === "readonly") {
+						e.preventDefault()
+					} else {
+						$(this).select()
+					}
+					
+				})
+				.autocomplete({
+					serviceUrl: "/api/v1.0/autocomplete/cities",
+					minChars: 2,
+					cache: false,
+					dataType: "json",
+					triggerSelectOnValidInput: false,
+					paramName: "st",
+					onSelect: function (suggestion) {
+						if (!suggestion.data) {
+							return
+						}
+						let city = suggestion.data
+						
+						_product_edit_location_city_id.value = city.id
+						
+						Console.log("city", city)
+					},
+				})
+		}
+		
+		const resetForm = function () {
+			_product_edit_location_street_1.value = ""
+			_product_edit_location_street_2.value = ""
+			_product_edit_location_zipcode.value = ""
+			_product_edit_location_city.value = ""
+			_product_edit_location_name.value = ""
+			_product_edit_location_location_types_id.value = ""
+			$(_location_country_id).val("").trigger("change")
+		}
+		
+		const populateForm = function (product_location) {
+			Console.log("ProductLocation.populateForm(product_location)", product_location)
+			let country, province, city = {}
+			resetForm()
+			
+			ProductLocation.display_long = product_location.display_long //"City Center (Houston TX - Texas, US - United States)"
+			ProductLocation.display_medium = product_location.display_medium // "City Center (Houston, Texas)"
+			ProductLocation.display_short = product_location.display_short //"City Center (Houston TX, US)"
+			
+			// "Houston (Texas, US - United States)"
+			// "Houston (Texas, United States)"
+			let citySearchDisplay = ""
+			
+			// "Houston (Houston TX, US)"
+			
+			Console.log("ProductLocation.populateForm(product_location)", product_location.type.id.toString())
+			
+			let zipcode = (product_location.zipcode) ? product_location.zipcode : ""
+			let street_1 = (product_location.street_1) ? product_location.street_1 : ""
+			let street_2 = (product_location.street_2) ? product_location.street_2 : ""
+			
+			_product_edit_location_street_1.value = street_1
+			_product_edit_location_street_2.value = street_2
+			_product_edit_location_zipcode.value = zipcode
+			_product_edit_location_city.value = ""
+			_product_edit_location_name.value = product_location.name
+			
+			$(_product_edit_location_location_types_id).val(product_location.type.id.toString())
+			
+			if (product_location.country) {
+				country = product_location.country
+				Country.set_detail(country)
+				Country.id = (country.id) ? country.id.toString() : null
+			}
+			
+			if (product_location.province) {
+				province = product_location.province
+				Province.set_detail(province)
+				Province.id = (province.id) ? province.id.toString() : null
+			}
+			
+			if (product_location.city) {
+				city = product_location.city
+				City.set_detail(city)
+				City.id = (city.id) ? city.id.toString() : null
+			}
+			
+			citySearchDisplay = city.name + " (" + province.name + ", " + country.name + ")"
+			_product_edit_location_city.value = citySearchDisplay
+			$(_location_country_id).val((country.id) ? country.id : "").trigger("change")
+			
+		}
+		
+		return {
+			display_long: null,
+			display_medium: null,
+			display_short: null,
+			init: function (settings) {
+				init(settings)
+			},
+		}
+	})()
+</script>

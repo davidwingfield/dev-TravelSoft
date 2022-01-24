@@ -1,24 +1,45 @@
 $.fn.YearCalendar = function (settings) {
     "use strict"
+    
+    const _calendar_filter_ranges = document.getElementById("calendar_filter_ranges")
+    const _product_id = document.getElementById("product_id")
+    const _calendar_display_select_all_days = document.getElementById("calendar_display_select_all_days")
+    const _calendar_display_clear_selected_days = document.getElementById("calendar_display_clear_selected_days")
+    
     let calendarType = "season"
     let selectedStart, selectedEnd = null
     let calendar_id = $(this).attr("id")
     let calContainer = document.getElementById(calendar_id)
     let calendars = []
     let seasonEvents = new Map()
-    
-    const _calendar_filter_ranges = document.getElementById("calendar_filter_ranges")
-    const _product_id = document.getElementById("product_id")
-    
     let product_id = parseInt(_product_id.value)
+    
+    $(_calendar_display_select_all_days)
+        .on("click", function () {
+            selectAllDays()
+        })
+    
+    $(_calendar_display_clear_selected_days)
+        .on("click", function () {
+            clearSelectedDates()
+        })
+    
+    const selectAllDays = function () {
+        clearSelectedDates()
+        const start = new Date(new Date().getFullYear(), 0, 1)
+        const end = new Date(new Date().getFullYear(), 11, 31)
+        
+        let startDate = moment(start).format("YYYY-MM-DD")
+        let endDate = moment(end).format("YYYY-MM-DD")
+        
+        selectDates(this, startDate, endDate)
+        
+    }
     
     const pad = function (d) {
         return (d < 10) ? '0' + d.toString() : d.toString()
     }
     
-    // ----
-    
-    // ----
     const buildCalendarRow = function (calendar_id) {
         let calendarRow = document.createElement("div")
         calendarRow.classList = "row gx-1"
@@ -76,9 +97,6 @@ $.fn.YearCalendar = function (settings) {
         
         return calendarBlockContainer
     }
-    // ----
-    
-    // ----
     
     const clearDisabledDates = function () {
         let days = $("td[season='true']")
@@ -539,7 +557,7 @@ const YearCalendar = (function () {
     const _calendar_filter_unit_id_clear = document.getElementById("calendar_filter_unit_id_clear")
     const _calendar_filter_season_id_assign = document.getElementById("calendar_filter_season_id_assign")
     const _calendar_filter_season_id_clear = document.getElementById("calendar_filter_season_id_clear")
-    
+    const _calendar_display_refresh = document.getElementById("calendar_display_refresh")
     $(_calendar_display_next_year)
         .on("click", function () {
             //*
@@ -552,6 +570,14 @@ const YearCalendar = (function () {
                 YearCalendar.endLoading()
             })
             //*/
+        })
+    
+    $(_calendar_display_refresh)
+        .on("click", function () {
+            $(_calendar_loader).fadeIn("slow", function () {
+                
+                YearCalendar.endLoading()
+            })
         })
     
     $(_calendar_display_prev_year)
@@ -586,12 +612,10 @@ const YearCalendar = (function () {
                 
                 if (product_season_detail.disabled_dow) {
                     disabled_dow = getListOfIds(product_season_detail.disabled_dow)
-                    //Console.log("disabled_dow", disabled_dow)
                 }
                 
             }
             setDisabledDOW(disabled_dow)
-            //Console.log("_calendar_filter_season_id:click()", disabled_dow)
         })
     
     $(_calendar_filter_season_id_assign)
@@ -674,21 +698,85 @@ const YearCalendar = (function () {
         $("html").css({ overflow: "auto" })
     }
     
-    const buildAssignDatesRecord = function () {
-        Console.log("YearCalendar.buildAssignDatesRecord()", this)
+    const removeDisabledDOW = function (disabled_dow) {
+        if (!disabled_dow) {
+            disabled_dow = []
+        }
         
+        clearSelectedDOW()
+        
+        $.each(disabled_dow, function (k, dow) {
+            let dataDOW = dow.toString()
+            let days = $(`td[season='true'][dow='${dataDOW}']`)
+            
+            days.each(function (index, element) {
+                $(element).removeClass("selected-day")
+                $(element).addClass("disabled-dow")
+                $(element).attr("selected", "false")
+            })
+        })
+        
+    }
+    
+    const buildAssignDatesRecord = function () {
         let product_id = parseInt(_product_id.value)
         let season_id = parseInt(_calendar_filter_season_id.value)
-        
-        let days = Array.from(YearCalendar.selectedDates.values())
-        
+        let season = Season.all.get(season_id)
+        let disabledDOW = []
         let dataToSend = {
             season_id: season_id,
             product_id: product_id,
-            days: days,
+            days: [],
+        }
+        let days = Array.from(YearCalendar.selectedDates.values())
+        
+        if (season) {
+            if (season.product_season_detail) {
+                disabledDOW = getListOfIds(season.product_season_detail.disabled_dow)
+            }
         }
         
-        Console.log("YearCalendar.buildAssignDatesRecord() - dataToSend", dataToSend)
+        $.each(days, function (i, day) {
+            const date = moment(day)
+            const dow = date.day()
+            
+            let index = disabledDOW.indexOf(dow)
+            
+            if (index < 0) {
+                dataToSend.days.push(day)
+            }
+        })
+        
+        console.log("YearCalendar.buildAssignDatesRecord() - dataToSend", dataToSend)
+        
+        //*
+        assignSeasonToProduct(dataToSend, function (data) {
+            console.log(data)
+        })
+        //*/
+    }
+    
+    const handleCalendarError = function (msg) {
+        toastr.error(msg)
+    }
+    
+    const assignSeasonToProduct = function (dataToSend, callback) {
+        let url = "/api/v1.0/products/assign_seasons"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handleCalendarError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                Console.log("error", e)
+                return handleCalendarError("Oops: 1")
+            }
+        }
     }
     
     const resetForm = function () {
@@ -713,9 +801,9 @@ const YearCalendar = (function () {
             let days = $(`td[season='true'][dow='${dataDOW}']`)
             
             days.each(function (index, element) {
-                $(element).removeClass("selected-day")
+                //$(element).removeClass("selected-day")
                 $(element).addClass("disabled-dow")
-                $(element).attr("selected", "false")
+                //$(element).attr("selected", "false")
             })
         })
         

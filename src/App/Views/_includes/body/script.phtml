@@ -76,6 +76,7 @@
 		const _use_provider_location = document.getElementById("use_provider_location")
 		const _use_product_location = document.getElementById("use_product_location")
 		const _product_amenities = document.getElementById("product_amenities")
+		const _button_save_product = document.getElementById("button_save_product")
 		
 		let $product_keywords, $product_amenities
 		let provider_initial_location, product_initial_location = {}
@@ -279,7 +280,7 @@
 				calendarButtons.forEach(el => {
 					el.disabled = true
 				})
-				
+				_button_save_product.disabled = true
 				$(_panel_tab_pricing).addClass(`disabled`)
 				$(_panel_tab_inventory).addClass(`disabled`)
 				$("#panel_tab_pricing")
@@ -293,9 +294,11 @@
 				
 				let pricingWorksheet = PricingWorksheet.status()
 				if (pricingWorksheet === "incomplete") {
+					_button_save_product.disabled = true
 					$("#panel_tab_pricing")
 						.html("Pricing <span class='badge rounded-pill badge-notification bg-danger tab-badge' style='color:#fff!important'>!</span>")
 				} else {
+					_button_save_product.disabled = false
 					$("#panel_tab_pricing")
 						.html("Pricing")
 				}

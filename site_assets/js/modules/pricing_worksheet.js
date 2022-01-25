@@ -846,8 +846,8 @@ const PricingWorksheet = (function () {
                     }
                     let pricings = (matrix.pricings) ? matrix.pricings : []
                     let pricingHold = new Map()
-                    //Console.log("matrix", matrix)
-                    //Console.log("pricings", pricings)
+                    //console.log("matrix", matrix)
+                    //console.log("pricings", pricings)
                     
                     Matrix.all.set(matrix.code, matrix)
                     
@@ -875,10 +875,10 @@ const PricingWorksheet = (function () {
                     
                     PricingWorksheet.pricingWorksheet()
                     
-                    Console.log("pricingsHidden", pricingsHidden)
-                    Console.log("matricesHidden", matricesHidden)
-                    Console.log("unitsCollapsed", unitsCollapsed)
-                    Console.log("seasonsCollapsed", seasonsCollapsed)
+                    console.log("pricingsHidden", pricingsHidden)
+                    console.log("matricesHidden", matricesHidden)
+                    console.log("unitsCollapsed", unitsCollapsed)
+                    console.log("seasonsCollapsed", seasonsCollapsed)
                     
                     if (seasonsCollapsed) {
                         $(_button_collapse_seasons).attr("data-shown", "false")
@@ -923,7 +923,7 @@ const PricingWorksheet = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
         }
     }
@@ -941,7 +941,7 @@ const PricingWorksheet = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
         }
     }
@@ -1922,7 +1922,6 @@ const PricingWorksheet = (function () {
         }
     }
     
-    /** This is a description of the buildPricingWorksheet function. */
     const buildPricingWorksheet = function () {
         let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
         let worksheet = {

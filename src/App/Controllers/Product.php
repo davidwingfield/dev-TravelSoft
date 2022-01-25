@@ -382,18 +382,6 @@
 			$location = Location::getByLocationId((int)$product['product_location_id']);
 			$location_id = (int)$product['product_location_id'];
 			
-			/*
-			if (!isset($product['product_location_id'])) {
-				$use_provider_location = true;
-				$location = $provider["location"];
-				$location_id = (int)$provider["location"];
-			} else {
-				$use_provider_location = false;
-				$location = Location::getByLocationId((int)$product['product_location_id']);
-				$location_id = (int)$product['product_location_id'];
-			}
-			//*/
-			
 			return array(
 				'id' => $product['product_id'],
 				'use_provider_location' => $use_provider_location,

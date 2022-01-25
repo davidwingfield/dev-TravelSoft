@@ -96,10 +96,10 @@ const Season = (function () {
                         season = set(data[0])
                     }
                     
-                    Console.log("season", season)
-                    
                     addProductSeasonTableRow(season)
-                    PricingWorksheet.buildPricingWorksheet()
+                    PricingWorksheet.pricingWorksheet()
+                    Pricing.resetForm()
+                    YearCalendar.resetForm()
                 }
             })
         }
@@ -118,7 +118,7 @@ const Season = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
                 return handleSeasonError(data)
             }
         }
@@ -137,7 +137,7 @@ const Season = (function () {
                     }
                 })
             } catch (e) {
-                //Console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -148,6 +148,7 @@ const Season = (function () {
                 if (data) {
                     deleteProductSeasonTableRow(dataToSend.season_id)
                     PricingWorksheet.buildPricingWorksheet()
+                    YearCalendar.refresh()
                 }
             })
         }
@@ -317,9 +318,9 @@ const Season = (function () {
         
         let category = categories.get(category_id)
         let category_seasons = (category.seasons) ? category.seasons : []
-        //Console.log(categories.get(category_id).seasons)
-        //Console.log("category", category)
-        //Console.log(detail)
+        //console.log(categories.get(category_id).seasons)
+        //console.log("category", category)
+        //console.log(detail)
         return detail
     }
     
@@ -367,9 +368,9 @@ const Season = (function () {
         if (season) {
             if (season.id) {
                 let seasonId = season.id
-                Console.log("seasonId", seasonId)
+                console.log("seasonId", seasonId)
                 let loadedSeasonId = (!_product_edit_season_form_season_id) ? null : (!isNaN(parseInt(_product_edit_season_form_season_id.value))) ? parseInt(_product_edit_season_form_season_id.value) : null
-                Console.log("loadedSeasonId", loadedSeasonId)
+                console.log("loadedSeasonId", loadedSeasonId)
             }
         }
         
@@ -414,7 +415,7 @@ const Season = (function () {
                     targets: 3,
                     data: "product_season_detail",
                     render: function (data, type, row, meta) {
-                        //Console.log("product_season_detail", data)
+                        //console.log("product_season_detail", data)
                         let disabled_days = (data.disabled_dow) ? getListOfIds(data.disabled_dow) : []
                         let d = []
                         for (let n = 0; n < disabled_days.length; n++) {

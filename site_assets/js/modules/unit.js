@@ -67,55 +67,55 @@ const Unit = (function () {
     }
     
     $(_button_remove_unit_from_product)
-      .on("click", function () {
-          remove()
-      })
+        .on("click", function () {
+            remove()
+        })
     
     $(_product_edit_unit_form_submit_button)
-      .on("click", function () {
-          save()
-      })
+        .on("click", function () {
+            save()
+        })
     
     $(_product_edit_unit_form_clear_button)
-      .on("click", function () {
-          resetForm()
-          $table_unit_product_edit.clearSelectedRows()
-          _product_edit_unit_form_unit_name_filter.value = ""
-          _product_edit_unit_form_unit_name_filter.disabled = false
-          _product_edit_unit_form_unit_name.disabled = true
-      })
+        .on("click", function () {
+            resetForm()
+            $table_unit_product_edit.clearSelectedRows()
+            _product_edit_unit_form_unit_name_filter.value = ""
+            _product_edit_unit_form_unit_name_filter.disabled = false
+            _product_edit_unit_form_unit_name.disabled = true
+        })
     
     $(_product_edit_unit_form_close_button)
-      .on("click", function () {
-          resetForm()
-          $table_unit_product_edit.clearSelectedRows()
-          _product_edit_unit_form_unit_name_filter.value = ""
-          _product_edit_unit_form_unit_name_filter.disabled = false
-          _product_edit_unit_form_unit_name.disabled = true
-          hideForm()
-      })
+        .on("click", function () {
+            resetForm()
+            $table_unit_product_edit.clearSelectedRows()
+            _product_edit_unit_form_unit_name_filter.value = ""
+            _product_edit_unit_form_unit_name_filter.disabled = false
+            _product_edit_unit_form_unit_name.disabled = true
+            hideForm()
+        })
     
     $(_table_unit_product_edit_add_new_button)
-      .on("click", function () {
-          clearForm()
-          $table_unit_product_edit.clearSelectedRows()
-          disableFormFields()
-          _product_edit_unit_form_unit_name_filter.value = ""
-          _product_edit_unit_form_unit_name.value = ""
-          _product_edit_unit_form_unit_name_filter.disabled = true
-          _product_edit_unit_form_unit_name.disabled = false
-          enableFormFields()
-          loadForm()
-      })
+        .on("click", function () {
+            clearForm()
+            $table_unit_product_edit.clearSelectedRows()
+            disableFormFields()
+            _product_edit_unit_form_unit_name_filter.value = ""
+            _product_edit_unit_form_unit_name.value = ""
+            _product_edit_unit_form_unit_name_filter.disabled = true
+            _product_edit_unit_form_unit_name.disabled = false
+            enableFormFields()
+            loadForm()
+        })
     
     $(_panel_tab_unit)
-      .on("hide.bs.tab", function () {
-          resetForm()
-          $table_unit_product_edit.clearSelectedRows()
-          _product_edit_unit_form_unit_name_filter.value = ""
-          _product_edit_unit_form_unit_name_filter.disabled = false
-          _product_edit_unit_form_unit_name.disabled = true
-      })
+        .on("hide.bs.tab", function () {
+            resetForm()
+            $table_unit_product_edit.clearSelectedRows()
+            _product_edit_unit_form_unit_name_filter.value = ""
+            _product_edit_unit_form_unit_name_filter.disabled = false
+            _product_edit_unit_form_unit_name.disabled = true
+        })
     
     const removeProductUnit = function (dataToSend, callback) {
         if (dataToSend) {
@@ -129,7 +129,7 @@ const Unit = (function () {
                     }
                 })
             } catch (e) {
-                //Console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -183,67 +183,65 @@ const Unit = (function () {
         category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         $(_product_edit_unit_form_unit_name_filter)
-          .on("click", function () {
-              $(this).select()
-          })
-          .on("search", function () {
-              //*
-              globalSelectedUnit = false
-              clearForm()
-              hideForm()
-              //*/
-          })
-          .on("change", function () {
-              setTimeout(function () {
-                  //*
-                  let unit_name = _product_edit_unit_form_unit_name_filter.value
-                  
-                  if (globalSelectedUnit === false) {
-                      if (unit_name === "") {
-                          globalSelectedUnit = false
-                          clearForm()
-                          hideForm()
-                      } else {
-                          nameExists(unit_name)
-                      }
-                  }
-                  //*/
-              }, 200)
-          })
-          .autocomplete({
-              serviceUrl: "/api/v1.0/autocomplete/units",
-              minChars: 2,
-              cache: false,
-              dataType: "json",
-              triggerSelectOnValidInput: false,
-              paramName: "st",
-              params: { "category_id": category_id },
-              onSelect: function (suggestion) {
-                  $table_unit_product_edit.clearSelectedRows()
-                  
-                  if (!suggestion || !suggestion.data) {
-                      return
-                  }
-                  let detail
-                  let unit = suggestion.data
-                  let hasUnit = Unit.all.get(parseInt(unit.id))
-                  
-                  //Console.log("_product_edit_unit_form_unit_name_filter:autocomplete() - unit", unit)
-                  
-                  if (hasUnit) {
-                      detail = set(hasUnit)
-                      $table_unit_product_edit.loadRow(detail)
-                  } else {
-                      detail = set(unit)
-                  }
-                  
-                  populateForm(detail)
-              },
-          })
+            .on("click", function () {
+                $(this).select()
+            })
+            .on("search", function () {
+                globalSelectedUnit = false
+                clearForm()
+                hideForm()
+            })
+            .on("change", function () {
+                setTimeout(function () {
+                    //*
+                    let unit_name = _product_edit_unit_form_unit_name_filter.value
+                    
+                    if (globalSelectedUnit === false) {
+                        if (unit_name === "") {
+                            globalSelectedUnit = false
+                            clearForm()
+                            hideForm()
+                        } else {
+                            nameExists(unit_name)
+                        }
+                    }
+                    //*/
+                }, 200)
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/units",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                paramName: "st",
+                params: { "category_id": category_id },
+                onSelect: function (suggestion) {
+                    $table_unit_product_edit.clearSelectedRows()
+                    
+                    if (!suggestion || !suggestion.data) {
+                        return
+                    }
+                    let detail
+                    let unit = suggestion.data
+                    let hasUnit = Unit.all.get(parseInt(unit.id))
+                    
+                    //console.log("_product_edit_unit_form_unit_name_filter:autocomplete() - unit", unit)
+                    
+                    if (hasUnit) {
+                        detail = set(hasUnit)
+                        $table_unit_product_edit.loadRow(detail)
+                    } else {
+                        detail = set(unit)
+                    }
+                    
+                    populateForm(detail)
+                },
+            })
     }
     
     const nameExists = function (name) {
-        //Console.log("Unit.nameExists(unit_name)", name)
+        //console.log("Unit.nameExists(unit_name)", name)
         if (name && name !== "") {
             /**
              * data to send to the server
@@ -267,7 +265,7 @@ const Unit = (function () {
                 if (unit) {
                     let hasUnit = Unit.all.get(parseInt(unit.id))
                     let detail
-                    //Console.log("_product_edit_unit_form_unit_name_filter:autocomplete() - unit", unit)
+                    //console.log("_product_edit_unit_form_unit_name_filter:autocomplete() - unit", unit)
                     
                     if (hasUnit) {
                         detail = set(hasUnit)
@@ -318,7 +316,7 @@ const Unit = (function () {
                     }
                 })
             } catch (e) {
-                //Console.log("error", e)
+                //console.log("error", e)
                 return handleUnitError("Error Validating Unit")
             }
         } else {
@@ -416,6 +414,7 @@ const Unit = (function () {
                             $table_unit_product_edit.loadRow(detail)
                             $table_unit_product_edit.jumpToRow(detail)
                             $table_unit_product_edit.clearSelectedRows()
+                            PricingWorksheet.pricingWorksheet()
                             Pricing.resetForm()
                             YearCalendar.resetForm()
                         }
@@ -426,7 +425,7 @@ const Unit = (function () {
     }
     
     const validUnitRecord = function () {
-        //Console.log("Unit.validUnitRecord()", Unit)
+        //console.log("Unit.validUnitRecord()", Unit)
         // ----
         let valid = $(_product_edit_unit_form).valid()
         let min_pax = (!isNaN(parseInt(_product_edit_unit_form_unit_min_pax.value))) ? parseInt(_product_edit_unit_form_unit_min_pax.value) : null
@@ -456,7 +455,7 @@ const Unit = (function () {
     }
     
     const buildUnitRecord = function () {
-        //Console.log("Unit.buildUnitRecord()", Unit)
+        //console.log("Unit.buildUnitRecord()", Unit)
         let dataToSend = {
             id: (!isNaN(parseInt(_product_edit_unit_form_unit_id.value))) ? parseInt(_product_edit_unit_form_unit_id.value) : null,
             product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
@@ -494,13 +493,13 @@ const Unit = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
         }
     }
     
     const clearForm = function () {
-        //Console.log("Unit:clearForm()", Unit)
+        //console.log("Unit:clearForm()", Unit)
         _product_edit_unit_form_unit_id.value = ""
         _product_edit_unit_form_unit_name.value = ""
         _product_edit_unit_form_unit_room_code.value = ""
@@ -591,7 +590,7 @@ const Unit = (function () {
         
         $.each(units, function (k, unit) {
             let detail = set(unit)
-            //Console.log("detail", detail)
+            //console.log("detail", detail)
             Unit.all.set(detail.id, detail)
             $table_unit_product_edit.insertRow(detail)
         })
@@ -710,7 +709,7 @@ const Unit = (function () {
     const edit = function (unit) {
         populateForm(unit)
         enableFormFields()
-        //Console.log("Unit.edit(unit)", unit)
+        //console.log("Unit.edit(unit)", unit)
     }
     
     return {

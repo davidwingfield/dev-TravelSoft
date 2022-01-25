@@ -114,7 +114,7 @@ const Location = (function () {
     let validated = false
     let globalSelectedLocation = false
     let suggestionsTempLocation = []
-    let default_display = default_address_view
+    let default_display = defaultAddressView
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     // ----
     

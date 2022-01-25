@@ -4,10 +4,11 @@ const ContextMenu = (function () {
     let $contextMenu
     
     const assignSeasonToDays = function () {
-        Console.log("ContextMenu:assignSeasonToDays()", ContextMenu)
+        console.log("ContextMenu:assignSeasonToDays()", ContextMenu)
     }
     
     const init = function (settings) {
+        
         $contextMenu = $.contextMenu({
             selector: ".selected-day",
             callback: function (key, options) {
@@ -51,7 +52,7 @@ const ContextMenu = (function () {
         })
         
         $(".selected-day").on("click", function (e) {
-            //Console.log("clicked", this)
+            //console.log("clicked", this)
         })
     }
     

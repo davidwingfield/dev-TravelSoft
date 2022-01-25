@@ -176,5 +176,5 @@ colorScheme.set(15, {
     textColor: "#fff",
 })
 const tableCellMaxChars = 10
-const default_address_view = "medium"
+const defaultAddressView = "medium"
 let DEBUGMODE = true

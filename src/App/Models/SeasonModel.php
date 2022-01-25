@@ -204,6 +204,8 @@
 						AND		season_id = $season_id;";
 				try {
 					Model::$db->rawQuery($sql);
+					Log::$debug_log->trace("DELETE FROM product_calendar WHERE product_id = $product_id AND	season_id = $season_id;");
+					Model::$db->rawQuery("DELETE FROM product_calendar WHERE product_id = $product_id AND	season_id = $season_id;");
 					
 					return [];
 				} catch (Exception $e) {

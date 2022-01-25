@@ -11,10 +11,10 @@ const Pricing = (function () {
      * pricing strategy types id
      */
     $(_pricing_strategy_types_id)
-      .on("change", function () {
-          PricingWorksheet.pricingWorksheet()
-          //Console.log("Pricing.pricing_strategy_types_id:change()", _pricing_strategy_types_id.value)
-      })
+        .on("change", function () {
+            PricingWorksheet.pricingWorksheet()
+            //console.log("Pricing.pricing_strategy_types_id:change()", _pricing_strategy_types_id.value)
+        })
     
     /**
      * initialize pricing object
@@ -45,14 +45,14 @@ const Pricing = (function () {
      * @param pricing_details
      */
     const loadAll = function (pricing_details) {
-        //Console.log("Pricing.loadAll()", pricing_details)
+        //console.log("Pricing.loadAll()", pricing_details)
         Pricing.all = new Map()
         if (!pricing_details) {
             pricing_details = []
         }
         
         $.each(pricing_details, function (k, matrix) {
-            //Console.log("matrix", matrix)
+            //console.log("matrix", matrix)
             // ----
             let pricings = matrix.pricings
             let pricingCode = matrix.pricing_code
@@ -62,7 +62,7 @@ const Pricing = (function () {
             Pricing.all.set(pricingCode, detail)
             /*
             $.each(pricings, function (k, pricing) {
-                //Console.log("pricing", pricing)
+                //console.log("pricing", pricing)
                 // ----
                 
                 let pricing_code = (pricing.code) ? pricing.code : null
@@ -70,7 +70,7 @@ const Pricing = (function () {
                 if (pricing_code) {
                     Pricing.all.set(pricing_code, pricing)
                     let details = set(pricing)
-                    //Console.log("details", details)
+                    //console.log("details", details)
                     if (matrixDetails) {
                         if (!matrixDetails["pricings"]) {
                             matrixDetails["pricings"] = new Map()
@@ -84,7 +84,7 @@ const Pricing = (function () {
             //*/
         })
         
-        //Console.log("Pricings.all", Pricing.all)
+        //console.log("Pricings.all", Pricing.all)
     }
     
     /**
@@ -143,7 +143,7 @@ const Pricing = (function () {
     }
     
     const defaultDetail = function () {
-        //Console.log("Pricing.defaultDetail()", Pricing)
+        //console.log("Pricing.defaultDetail()", Pricing)
         
         return {
             pricing_code: null,
@@ -183,7 +183,7 @@ const Pricing = (function () {
     const set = function (pricing) {
         let detail = defaultDetail()
         if (pricing) {
-            //Console.log(pricing)
+            //console.log(pricing)
             detail.pricing_code = (pricing.pricing_code) ? pricing.pricing_code : null
             detail.matrix_code = (pricing.matrix_code) ? pricing.matrix_code : null
             detail.code = (pricing.code) ? pricing.code : null
@@ -216,7 +216,7 @@ const Pricing = (function () {
             detail.modified_by = (pricing.modified_by) ? pricing.modified_by : user_id
             detail.note = (pricing.note) ? pricing.note : null
         }
-        //Console.log("   detail", detail)
+        //console.log("   detail", detail)
         Pricing.detail = detail
         return detail
     }

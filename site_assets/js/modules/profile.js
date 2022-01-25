@@ -286,7 +286,13 @@ const Profile = (function () {
     
     const init = function (settings) {
         //Console.log("Profile.init(settings)", settings)
-        //let profiles = []
+        let profiles = []
+        if (settings) {
+            if (settings.profiles) {
+                profiles = settings.profiles
+            }
+        }
+        loadAll(profiles)
         /*
         if (settings) {
             if (settings.profiles) {
@@ -312,7 +318,7 @@ const Profile = (function () {
         }
         
         
-        loadAll(profiles)
+        
         
         //*/
     }

@@ -5,57 +5,60 @@
 	$provider_address = [];
 	$provider_location = [];
 	
-	if (isset($product["location"])) {
+	if (isset($product)) {
+		$product_location_street_1 = (isset($product["street_1"])) ? $product["street_1"] : null;
+		$product_location_street_2 = (isset($product["street_2"])) ? $product["street_2"] : null;
+		$product_location_zipcode = (isset($product["postal_code"])) ? $product["postal_code"] : null;
 		
-		$product_location = $product["location"];
-		$product_city_name = (isset($product_location["city"]["name"])) ? $product_location["city"]["name"] : null;
-		$product_country_iso2 = (isset($product_location["country"]["iso2"])) ? $product_location["country"]["iso2"] : null;
-		$product_country_iso3 = (isset($product_location["country"]["iso3"])) ? $product_location["country"]["iso3"] : null;
-		$product_country_name = (isset($product_location["country"]["name"])) ? $product_location["country"]["name"] : null;
-		$product_province_iso2 = (isset($product_location["province"]["iso2"])) ? $product_location["province"]["iso2"] : null;
-		$product_province_iso3 = (isset($product_location["province"]["iso3"])) ? $product_location["province"]["iso3"] : null;
-		$product_province_name = (isset($product_location["province"]["name"])) ? $product_location["province"]["name"] : null;
-		$product_city_name = (isset($product_location["city"]["name"])) ? $product_location["city"]["name"] : null;
-		$product_location_type_icon = (isset($product_location["type"]["icon"])) ? $product_location["type"]["icon"] : "";
-		$product_location_name = (isset($product_location["display_short"])) ? $product_location["display_short"] : "";
-		$product_location_street_1 = (isset($product_location["street_1"])) ? $product_location["street_1"] : null;
-		$product_location_street_2 = (isset($product_location["street_2"])) ? $product_location["street_2"] : null;
-		$product_location_zipcode = (isset($product_location["zipcode"])) ? $product_location["zipcode"] : null;
-		
-		if (!is_null($product_location_street_1)) {
-			$product_address[] = $product_location_street_1;
+		if (isset($product["location"])) {
+			
+			$product_location = $product["location"];
+			$product_city_name = (isset($product_location["city"]["name"])) ? $product_location["city"]["name"] : null;
+			$product_country_iso2 = (isset($product_location["country"]["iso2"])) ? $product_location["country"]["iso2"] : null;
+			$product_country_iso3 = (isset($product_location["country"]["iso3"])) ? $product_location["country"]["iso3"] : null;
+			$product_country_name = (isset($product_location["country"]["name"])) ? $product_location["country"]["name"] : null;
+			$product_province_iso2 = (isset($product_location["province"]["iso2"])) ? $product_location["province"]["iso2"] : null;
+			$product_province_iso3 = (isset($product_location["province"]["iso3"])) ? $product_location["province"]["iso3"] : null;
+			$product_province_name = (isset($product_location["province"]["name"])) ? $product_location["province"]["name"] : null;
+			$product_city_name = (isset($product_location["city"]["name"])) ? $product_location["city"]["name"] : null;
+			$product_location_type_icon = (isset($product_location["type"]["icon"])) ? $product_location["type"]["icon"] : "";
+			$product_location_name = (isset($product_location["display_short"])) ? $product_location["display_short"] : "";
+			
+			if (!is_null($product_location_street_1)) {
+				$product_address[] = $product_location_street_1;
+			}
+			
+			if (!is_null($product_location_street_2)) {
+				$product_address[] = $product_location_street_2;
+			}
+			
+			if (!is_null($product_city_name)) {
+				$product_address[] = $product_city_name;
+			}
+			
+			if (is_null($product_location_zipcode)) {
+				$product_location_zipcode = "";
+			}
+			
+			if (!is_null($product_province_iso2)) {
+				$product_address[] = $product_province_iso2 . " " . $product_location_zipcode;
+			} else if (!is_null($product_province_iso3)) {
+				$product_address[] = $product_province_iso3 . " " . $product_location_zipcode;
+			} else if (!is_null($product_province_name)) {
+				$product_address[] = $product_province_name . " " . $product_location_zipcode;
+			}
+			
+			if (!is_null($product_country_iso3)) {
+				$product_address[] = $product_country_iso3;
+			} else if (!is_null($product_country_iso2)) {
+				$product_address[] = $product_country_iso2;
+			} else if (!is_null($product_country_name)) {
+				$product_address[] = $product_country_name;
+			}
+			
+			$product_location_address = implode(", ", $product_address);
+			$display_location = $product_location["name"] . " ($product_city_name, $product_province_name)";
 		}
-		
-		if (!is_null($product_location_street_2)) {
-			$product_address[] = $product_location_street_2;
-		}
-		
-		if (!is_null($product_city_name)) {
-			$product_address[] = $product_city_name;
-		}
-		
-		if (is_null($product_location_zipcode)) {
-			$product_location_zipcode = "";
-		}
-		
-		if (!is_null($product_province_iso2)) {
-			$product_address[] = $product_province_iso2 . " " . $product_location_zipcode;
-		} else if (!is_null($product_province_iso3)) {
-			$product_address[] = $product_province_iso3 . " " . $product_location_zipcode;
-		} else if (!is_null($product_province_name)) {
-			$product_address[] = $product_province_name . " " . $product_location_zipcode;
-		}
-		
-		if (!is_null($product_country_iso3)) {
-			$product_address[] = $product_country_iso3;
-		} else if (!is_null($product_country_iso2)) {
-			$product_address[] = $product_country_iso2;
-		} else if (!is_null($product_country_name)) {
-			$product_address[] = $product_country_name;
-		}
-		
-		$product_location_address = implode(", ", $product_address);
-		$display_location = $product_location["name"] . " ($product_city_name, $product_province_name)";
 	}
 	
 	$location_types = [];
@@ -214,7 +217,7 @@
 										
 										<div class="form-element">
 											<label for="product_edit_location_city" class="">City / Province / Country:</label>
-											<input type="search" id="product_edit_location_city" name="product_edit_location_city" class="form-control">
+											<input type="search" id="product_edit_location_city" name="product_edit_location_city" class="form-control"/>
 											<div id="product_edit_location_city-error" class="error w-100 text-center">&nbsp;</div>
 										</div>
 									
@@ -224,7 +227,7 @@
 										
 										<div class="form-element">
 											<label for="product_edit_location_zipcode" class="">Postal Code:</label>
-											<input type="text" id="product_edit_location_zipcode" name="product_edit_location_zipcode" class="form-control">
+											<input type="text" id="product_edit_location_zipcode" name="product_edit_location_zipcode" class="form-control"/>
 											<div id="product_edit_location_zipcode-error" class="error w-100 text-center">&nbsp;</div>
 										</div>
 									
@@ -352,10 +355,12 @@
 					<span class="badge badge-primary badge-pill">2</span>
 				</li>
 				<li class="list-group-item d-flex justify-content-between align-items-center">
-					Morbi leo risus
+					dfg
 					<span class="badge badge-primary badge-pill">1</span>
 				</li>
 			</ul>
+			
+			<div id="locationMap" class="z-depth-1-half map-container-9"></div>
 		</div>
 	
 	</div>
@@ -363,6 +368,7 @@
 </section>
 
 <script type="text/javascript">
+	
 	const ProductLocation = (function () {
 		"use strict"
 		
@@ -393,16 +399,63 @@
 		
 		$(_product_edit_location_city)
 			.on("change", function () {
-				Console.log($(this).val())
+				console.log($(this).val())
 			})
 		
 		const init = function (settings) {
-			Console.log("init(settings)", settings)
+			console.log("init(settings)", settings)
+			let mapsURL = "https://maps.google.com/maps"
+			let mapsParams = []
 			let location
 			
 			if (settings) {
 				if (settings.product_location) {
 					location = settings.product_location
+					let locationStreet1 = (settings.product.street_1) ? settings.product.street_1 : null
+					let locationStreet2 = (settings.product.street_2) ? settings.product.street_2 : null
+					let locationPostalCode = (settings.product.postal_code) ? settings.product.postal_code : null
+					let locationCity = (settings.product_location.city.name) ? settings.product_location.city.name : null
+					let locationProvince = (settings.product_location.province.name) ? settings.product_location.province.name : null
+					let locationCountry = (settings.product_location.country.iso2) ? settings.product_location.country.iso2 : null
+					if (locationStreet1) {
+						if (locationStreet2) {
+							mapsParams.push((locationStreet1) + "+" + (locationStreet2))
+						} else {
+							mapsParams.push((locationStreet1))
+						}
+					} else {
+						if (locationStreet2) {
+							mapsParams.push((locationStreet2))
+						}
+					}
+					
+					if (locationCity) {
+						mapsParams.push((locationCity))
+					}
+					
+					if (locationProvince) {
+						mapsParams.push((locationProvince))
+					}
+					
+					if (locationCountry) {
+						mapsParams.push((locationCountry))
+					}
+					
+					if (locationPostalCode) {
+						mapsParams.push((locationPostalCode))
+					}
+					
+					let mapAddress = mapsParams.join(",")
+					mapAddress = mapAddress.replace(/\s+/g, '+').toLowerCase()
+					
+					let iFrame = $("<iframe/>", {
+						class: "w-100 h-auto",
+						src: `https://maps.google.com/maps?q=${mapAddress}&t=&z=13&ie=UTF8&iwloc=&output=embed`,
+						frameborder: "0",
+						allowfullscreen: "allowfullscreen",
+					})
+					
+					$("#locationMap").append(iFrame)
 					
 				}
 			}
@@ -492,7 +545,7 @@
 						
 						_product_edit_location_city_id.value = city.id
 						
-						Console.log("city", city)
+						console.log("city", city)
 					},
 				})
 		}
@@ -508,7 +561,7 @@
 		}
 		
 		const populateForm = function (product_location) {
-			Console.log("ProductLocation.populateForm(product_location)", product_location)
+			console.log("ProductLocation.populateForm(product_location)", product_location)
 			let country, province, city = {}
 			resetForm()
 			
@@ -522,15 +575,13 @@
 			
 			// "Houston (Houston TX, US)"
 			
-			Console.log("ProductLocation.populateForm(product_location)", product_location.type.id.toString())
-			
-			let zipcode = (product_location.zipcode) ? product_location.zipcode : ""
+			let postal_code = (product_location.postal_code) ? product_location.postal_code : ""
 			let street_1 = (product_location.street_1) ? product_location.street_1 : ""
 			let street_2 = (product_location.street_2) ? product_location.street_2 : ""
 			
 			_product_edit_location_street_1.value = street_1
 			_product_edit_location_street_2.value = street_2
-			_product_edit_location_zipcode.value = zipcode
+			_product_edit_location_zipcode.value = postal_code
 			_product_edit_location_city.value = ""
 			_product_edit_location_name.value = product_location.name
 			

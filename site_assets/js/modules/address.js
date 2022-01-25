@@ -23,7 +23,7 @@ const Address = (function () {
     /**
      * Defaults
      */
-    let default_display = default_address_view
+    let default_display = defaultAddressView
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $address_table = $(_table_address)
     let temp_address = {}
@@ -73,54 +73,54 @@ const Address = (function () {
      * add new address
      */
     $(_button_add_address_table)
-      .on("click", function () {
-          $address_table.clearSelectedRows()
-          clear_form()
-          load_form()
-      })
+        .on("click", function () {
+            $address_table.clearSelectedRows()
+            clear_form()
+            load_form()
+        })
     
     /**
      * clear address form button
      */
     $(_button_clear_form_edit_address)
-      .on("click", function () {
-          $address_table.clearSelectedRows()
-          clear_form()
-      })
+        .on("click", function () {
+            $address_table.clearSelectedRows()
+            clear_form()
+        })
     
     /**
      * submit button save address
      */
     $(_button_submit_form_edit_address)
-      .on("click", function () {
-          let dataToSend = build()
-          if (!dataToSend) {
-              return
-          }
-          confirmDialog(`Would you like to update?`, (ans) => {
-              if (ans) {
-                  save(dataToSend)
-              }
-          })
-      })
+        .on("click", function () {
+            let dataToSend = build()
+            if (!dataToSend) {
+                return
+            }
+            confirmDialog(`Would you like to update?`, (ans) => {
+                if (ans) {
+                    save(dataToSend)
+                }
+            })
+        })
     
     /**
      * close address form
      */
     $(_button_close_edit_address_form)
-      .on("click", function () {
-          $address_table.clearSelectedRows()
-          clear_form()
-          unload_form()
-      })
+        .on("click", function () {
+            $address_table.clearSelectedRows()
+            clear_form()
+            unload_form()
+        })
     
     /**
      * clear address table button
      */
     $(_clear_address_table)
-      .on("click", function () {
-          Address.clearTable()
-      })
+        .on("click", function () {
+            Address.clearTable()
+        })
     
     /**
      * save address form data

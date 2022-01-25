@@ -274,23 +274,33 @@
 			let variants = Array.from(Variant.all.values())
 			let units = Array.from(Unit.all.values())
 			let seasons = Array.from(Season.all.values())
-			
+			let calendarButtons = document.querySelectorAll("button[data-target='#seasonCalendarModal']")
 			if (variants.length === 0 || units.length === 0 || seasons.length === 0) {
+				calendarButtons.forEach(el => {
+					el.disabled = true
+				})
+				
 				$(_panel_tab_pricing).addClass(`disabled`)
 				$(_panel_tab_inventory).addClass(`disabled`)
-			} else {
-				$(_panel_tab_pricing).removeClass(`disabled`)
-				$(_panel_tab_inventory).removeClass(`disabled`)
-			}
-			
-			let pricingWorksheet = PricingWorksheet.status()
-			if (pricingWorksheet === "incomplete") {
 				$("#panel_tab_pricing")
 					.html("Pricing <span class='badge rounded-pill badge-notification bg-danger tab-badge' style='color:#fff!important'>!</span>")
 			} else {
-				$("#panel_tab_pricing")
-					.html("Pricing")
+				calendarButtons.forEach(el => {
+					el.disabled = false
+				})
+				$(_panel_tab_pricing).removeClass(`disabled`)
+				$(_panel_tab_inventory).removeClass(`disabled`)
+				
+				let pricingWorksheet = PricingWorksheet.status()
+				if (pricingWorksheet === "incomplete") {
+					$("#panel_tab_pricing")
+						.html("Pricing <span class='badge rounded-pill badge-notification bg-danger tab-badge' style='color:#fff!important'>!</span>")
+				} else {
+					$("#panel_tab_pricing")
+						.html("Pricing")
+				}
 			}
+			
 		}
 		
 		const buildInsertData = function () {
@@ -679,6 +689,51 @@
 			$frame.attr("src", url)
 		}
 		
+		const index = function (settings) {
+			
+			if (_product_index_table) {
+				buildIndexTable()
+				
+				if (settings) {
+					loadAll(settings)
+				}
+			}
+		}
+		
+		const setNewFormDetails = function (category_id) {
+			Console.log("setNewFormDetails()", category_id)
+			
+		}
+		
+		const updateProductSKU = function () {
+			let att1 = Product.attr1
+			let att2 = Product.attr2
+			let att3 = Product.attr3
+			let sku = ""
+			if (!is_null(att1) && !is_null(att2) && !is_null(att3)) {
+				sku = att1.replace(/-/g, "") + "-" + att2.replace(/-/g, "") + "-" + att3.replace(/-/g, "")
+				_modal_product_sku.value = sku
+			} else {
+				_modal_product_sku.value = ""
+				if (is_null(att1)) {
+					//Console.log("att1 is null", att1)
+				}
+				
+				if (is_null(att2)) {
+					//Console.log("att2 is null", att2)
+				}
+				
+				if (is_null(att3)) {
+					//Console.log("att3 is null", att3)
+				}
+			}
+			
+		}
+		
+		const handleProductError = function (msg) {
+			toastr.error(msg)
+		}
+		
 		const initEditForm = function (settings) {
 			let product = setDefaultProductDetails()
 			
@@ -731,21 +786,14 @@
 				profiles = product.profiles
 			}
 			
-			/*
-			if (product.use_provider_location) {
-				$(_use_provider_location).attr("checked", "true")
-				loadProductLocation(provider_location, "provider")
-				Location.init(provider_location)
-			} else {
-				$(_use_product_location).attr("checked", "true")
-				loadProductLocation(product_location, "provider")
-				Location.init(product_location)
-			}
-			//*/
+			product_location.street_1 = (product.street_1) ? product.street_1 : null
+			product_location.street_2 = (product.street_2) ? product.street_2 : null
+			product_location.postal_code = (product.postal_code) ? product.postal_code : null
 			
 			ProductLocation.init({
 				product_location: product_location,
 				provider_location: provider_location,
+				product: product,
 			})
 			
 			let product_keywords = (product.keywords) ? product.keywords : ""
@@ -817,6 +865,12 @@
 								pricings: pricings,
 							})
 							
+							Product.calendar = $("#calendar").YearCalendar({
+								displayEventTime: false,
+								calendarType: "season",
+								events: [],
+							})
+							
 							$(_product_panel_link_overview)
 								.on("click", function () {
 									$(_panel_tab_product_o).tab("show")
@@ -874,56 +928,9 @@
 			}
 		}
 		
-		const index = function (settings) {
-			
-			if (_product_index_table) {
-				buildIndexTable()
-				
-				if (settings) {
-					loadAll(settings)
-				}
-			}
-		}
-		
-		const setNewFormDetails = function (category_id) {
-			Console.log("setNewFormDetails()", category_id)
-			
-		}
-		
-		const updateProductSKU = function () {
-			let att1 = Product.attr1
-			let att2 = Product.attr2
-			let att3 = Product.attr3
-			let sku = ""
-			if (!is_null(att1) && !is_null(att2) && !is_null(att3)) {
-				sku = att1.replace(/-/g, "") + "-" + att2.replace(/-/g, "") + "-" + att3.replace(/-/g, "")
-				_modal_product_sku.value = sku
-			} else {
-				_modal_product_sku.value = ""
-				if (is_null(att1)) {
-					//Console.log("att1 is null", att1)
-				}
-				
-				if (is_null(att2)) {
-					//Console.log("att2 is null", att2)
-				}
-				
-				if (is_null(att3)) {
-					//Console.log("att3 is null", att3)
-				}
-			}
-			
-		}
-		
-		const handleProductError = function (msg) {
-			toastr.error(msg)
-		}
-		
 		return {
 			validator: null,
-			updateProgress: function () {
-				updateProgress()
-			},
+			calendars: null,
 			product_initial_location: null,
 			provider_initial_location: null,
 			detail: {},
@@ -931,6 +938,9 @@
 			attr1: null,
 			attr2: null,
 			attr3: null,
+			updateProgress: function () {
+				updateProgress()
+			},
 			updateProductSKU: function () {
 				updateProductSKU()
 			},

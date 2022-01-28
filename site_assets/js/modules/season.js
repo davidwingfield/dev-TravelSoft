@@ -18,6 +18,7 @@ const Season = (function () {
     const _product_id = document.getElementById("product_id")
     const _panel_tab_season = document.getElementById("panel_tab_season")
     const _button_remove_season_from_product = document.getElementById("button_remove_season_from_product")
+    const _calendar_loader = document.getElementById("calendar_loader")
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let categories = new Map()
@@ -88,19 +89,15 @@ const Season = (function () {
     
     const saveProductSeason = function (dataToSend) {
         if (dataToSend) {
-            updateProductSeason(dataToSend, function (data) {
-                let season
-                if (data) {
-                    season = data
-                    if (data[0]) {
-                        season = set(data[0])
+            $(_calendar_loader).fadeIn("fast", function () {
+                updateProductSeason(dataToSend, function (data) {
+                    if (data) {
+                        let season = (data[0]) ? data[0] : data
+                        addProductSeasonTableRow(season)
+                    } else {
+                        YearCalendar.endLoading()
                     }
-                    
-                    addProductSeasonTableRow(season)
-                    PricingWorksheet.pricingWorksheet()
-                    Pricing.resetForm()
-                    YearCalendar.resetForm()
-                }
+                })
             })
         }
     }
@@ -119,7 +116,6 @@ const Season = (function () {
                 })
             } catch (e) {
                 console.log("error", e)
-                return handleSeasonError(data)
             }
         }
     }
@@ -137,19 +133,21 @@ const Season = (function () {
                     }
                 })
             } catch (e) {
-                //console.log("error", e)
+                console.log("error", e)
             }
         }
     }
     
     const removeProductSeason = function (dataToSend) {
         if (dataToSend) {
-            deleteProductSeason(dataToSend, function (data) {
-                if (data) {
-                    deleteProductSeasonTableRow(dataToSend.season_id)
-                    PricingWorksheet.buildPricingWorksheet()
-                    YearCalendar.refresh()
-                }
+            $(_calendar_loader).fadeIn("fast", function () {
+                deleteProductSeason(dataToSend, function (data) {
+                    if (data) {
+                        deleteProductSeasonTableRow(dataToSend.season_id)
+                    } else {
+                        YearCalendar.endLoading()
+                    }
+                })
             })
         }
     }
@@ -436,19 +434,25 @@ const Season = (function () {
     const deleteProductSeasonTableRow = function (season_id) {
         if (season_id) {
             let hasSeason = Season.all.get(season_id)
+            
             if (hasSeason) {
-                $table_season_product_edit.deleteRow(hasSeason)
                 Season.all.delete(season_id)
-                _product_edit_season_form_season_name_filter.value = ""
-                resetForm()
-                clearProductSeasonForm()
+                
+                $table_season_product_edit.deleteRow(hasSeason)
                 $table_season_product_edit.clearSelectedRows()
                 
+                _product_edit_season_form_season_name_filter.value = ""
+                
+                PricingWorksheet.pricingWorksheet()
                 Pricing.resetForm()
-                YearCalendar.resetForm()
-                PricingWorksheet.buildPricingWorksheet()
-                YearCalendar.loadSeasonDropdown()
-                toastr.success("Season Deleted")
+                YearCalendar.refresh()
+                
+                updateProgress()
+                resetForm()
+                clearProductSeasonForm()
+                
+                toastr.success(`Season: ${hasSeason.name} - has been deleted`)
+                YearCalendar.endLoading()
             }
         }
         
@@ -458,27 +462,32 @@ const Season = (function () {
         if (season) {
             let detail = set(season)
             let hasSeason = Season.all.get(detail.id)
+            
             if (hasSeason) {
-                Season.all.set(detail.id, detail)
                 $table_season_product_edit.updateRow(detail)
-                toastr.success("Season Updated")
-                
             } else {
-                Season.all.set(detail.id, detail)
                 $table_season_product_edit.insertRow(detail)
-                toastr.success("Season Added")
             }
             
-            _product_edit_season_form_season_name_filter.value = ""
-            resetForm()
-            clearProductSeasonForm()
+            Season.all.set(detail.id, detail)
+            
+            $table_season_product_edit.loadRow(detail)
+            $table_season_product_edit.jumpToRow(detail)
             $table_season_product_edit.clearSelectedRows()
             
+            _product_edit_season_form_season_name_filter.value = ""
+            
+            PricingWorksheet.pricingWorksheet()
             Pricing.resetForm()
-            YearCalendar.resetForm()
+            YearCalendar.refresh()
+            
+            updateProgress()
+            resetForm()
+            clearProductSeasonForm()
+            
+            toastr.success(`Season: ${detail.name} - has been updated`)
+            YearCalendar.endLoading()
         }
-        
-        YearCalendar.loadSeasonDropdown()
     }
     
     const resetForm = function () {

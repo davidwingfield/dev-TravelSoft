@@ -326,14 +326,22 @@
 			$variant_id = Model::setInt((isset($params["variant_id"])) ? $params["variant_id"] : null);
 			
 			if (!is_null($variant_id) && !is_null($product_id)) {
-				$sql = "
-		            DELETE FROM product_variant
-					WHERE 		product_id = $product_id
-						AND		variant_id = $variant_id;";
+				$sql = "DELETE FROM product_variant WHERE product_id = $product_id AND variant_id = $variant_id;";
 				try {
-					Model::$db->rawQuery($sql);
+					$matrixList = Model::$db->rawQuery("SELECT matrix_id FROM pricing WHERE variant_id=$variant_id AND variant_id != 36 AND matrix_id IN (SELECT id FROM matrix WHERE product_id = $product_id)");
+					$list = [];
+					foreach ($matrixList AS $k => $v) {
+						$list[] = (int)$v["matrix_id"];
+					}
+					$matrixList = implode(",", $list);
+					Model::$db->rawQuery("DELETE FROM pricing WHERE matrix_id IN ($matrixList);");
+					Model::$db->rawQuery("DELETE FROM matrix WHERE product_id = $product_id AND id  IN ($matrixList);");
+					Model::$db->rawQuery("DELETE FROM product_variant WHERE product_id = $product_id AND variant_id = $variant_id;");
 					
-					return array("variant_id" => $variant_id);
+					return array(
+						"matrix_list" => "(" . implode(",", $list) . ")",
+						"variant_id" => $variant_id,
+					);
 				} catch (Exception $e) {
 					Log::$debug_log->error($e);
 					

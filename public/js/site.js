@@ -274,11 +274,11 @@ const clear_validation = function (formElement) {
 
 const get_errors = function (validator) {
     var submitErrorsList = {}
-    //Console.dir(validator)
+    //console.dir(validator)
     //for (var i = 0; i < validator.errorList.length; i++) {
     //    submitErrorsList[validator.errorList[i].element.name] = validator.errorList[i].message
     //}
-    //Console.log("Submit Errors", submitErrorsList)
+    //console.log("Submit Errors", submitErrorsList)
 }
 
 const validator_init = function (settings) {
@@ -479,14 +479,14 @@ const sendGetRequest = function (url, data_to_send, callback) {
                 result = data.result
                 return callback(result)
             } else if (status === "failed" && typeof data.error === "undefined") {
-                //Console.log("getError:2")
+                //console.log("getError:2")
                 return handleError("failed")
             } else if (status === "success" && typeof data.error !== "undefined") {
-                Console.log("data.error", data.error)
-                //Console.log("getError:3")
+                console.log("data.error", data.error)
+                //console.log("getError:3")
                 return handleError(data.error)
             } else {
-                //Console.log("getError:4")
+                //console.log("getError:4")
             }
         })
     } else {
@@ -507,10 +507,10 @@ const sendPostRequest = function (url, data_to_send, callback) {
     if (url && data_to_send) {
         $.postJSON(url, data_to_send, function (data, status, xhr) {
             /*
-            Console.log("data", data)
-            Console.log("status", status)
-            Console.log("xhr", xhr)
-            Console.log("typeof data.result", typeof data.result)
+            console.log("data", data)
+            console.log("status", status)
+            console.log("xhr", xhr)
+            console.log("typeof data.result", typeof data.result)
             //*/
             if (status === "success" && typeof data.result !== "undefined") {
                 
@@ -550,7 +550,7 @@ const _display_ajax_error = function (jqXHR, exception, uri) {
         status: "",
         uri: uri,
     }
-    Console.log("jqXHR", jqXHR.responseText)
+    console.log("jqXHR", jqXHR.responseText)
     if (jqXHR.status === 0) {
         msg = "Not connected, verify Network."
     } else if (jqXHR.status === 404) {
@@ -682,7 +682,7 @@ const populateMultiSelect = function (arr, elem) {
         o = elem.options[i]
         
         if (arr.indexOf(o.value) !== -1) {
-            //Console.log("ggg")
+            //console.log("ggg")
             o.selected = true
         }
         
@@ -934,17 +934,17 @@ jQuery.extend({
             }
             //*/
             /*
-            Console.log("jqXHR", jqXHR)
-            Console.log("jqXHR", jqXHR.responseText)
-            Console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
-            Console.log("textStatus", textStatus)
-            Console.log("msg", msg)
-            Console.log('http://dev.travelsoft.com/error')
+            console.log("jqXHR", jqXHR)
+            console.log("jqXHR", jqXHR.responseText)
+            console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
+            console.log("textStatus", textStatus)
+            console.log("msg", msg)
+            console.log('http://dev.travelsoft.com/error')
             //*/
             if (typeof textStatus !== "undefined") {
-                Console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
+                console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
             } else {
-                Console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
+                console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
             }
             
             if ($.isFunction(callback)) {
@@ -975,11 +975,11 @@ jQuery.extend({
             if (typeof textStatus !== "undefined") {
                 let err = _display_ajax_error(jqXHR, textStatus, url)
                 handleError(err.message)
-                Console.log(err)
+                console.log(err)
             } else {
                 let err = _display_ajax_error(jqXHR, textStatus, url)
                 handleError(err.message)
-                Console.log(err)
+                console.log(err)
             }
             if ($.isFunction(callback)) {
                 callback(msg, "failed")
@@ -1001,11 +1001,11 @@ jQuery.extend({
         })
         getRequest.fail(function (jqXHR, textStatus, msg) {
             if (typeof textStatus !== "undefined") {
-                Console.log("Request failed")
-                Console.log(_display_ajax_error(jqXHR, textStatus, url))
+                console.log("Request failed")
+                console.log(_display_ajax_error(jqXHR, textStatus, url))
             } else {
-                Console.log("Request failed")
-                Console.log(_display_ajax_error(jqXHR, textStatus, url))
+                console.log("Request failed")
+                console.log(_display_ajax_error(jqXHR, textStatus, url))
             }
             if ($.isFunction(callback)) {
                 callback(msg, "failed")
@@ -1013,11 +1013,13 @@ jQuery.extend({
         })
     },
 })
+
 const logger = {
     log: function () {
-        Console.log(args)
+        console.log(args)
     },
 }
+
 const infoDialog = function (message, handler) {
     $(`
         <!--Modal: modalConfirm-->
@@ -1217,11 +1219,11 @@ const deleteDialog = function (message, handler) {
     
 }
 const formatURL = function (param) {
-    Console.log("formatURL()", param)
+    console.log("formatURL()", param)
     return encodeURIComponent(param.trim())
 }
 const buildMapsURL = function (location) {
-    Console.log("buildMapsURL(location)", location)
+    console.log("buildMapsURL(location)", location)
     let street_1, street_2, zipcode, city_name, province_name, country_name
     
     street_1 = (location.street_1) ? location.street_1 : null
@@ -1247,12 +1249,12 @@ const buildMapsURL = function (location) {
     // PROVINCE - Ascoli Piceno: 186
     // COUNTRY - Italy: 102
     
-    Console.log("street_1", street_1)
-    Console.log("street_2", street_2)
-    Console.log("city_name", city_name)
-    Console.log("province_name", province_name)
-    Console.log("country_name", country_name)
-    Console.log("zipcode", zipcode)
+    console.log("street_1", street_1)
+    console.log("street_2", street_2)
+    console.log("city_name", city_name)
+    console.log("province_name", province_name)
+    console.log("country_name", country_name)
+    console.log("zipcode", zipcode)
     //*/
     
     let tempURL = []
@@ -1307,7 +1309,7 @@ const weatherUpdate = function (city) {
     xhr.send()
     xhr.onload = () => {
         if (xhr.status === 404) {
-            //Console.log(`${cityName} not found`)
+            //console.log(`${cityName} not found`)
         } else {
             let data = JSON.parse(xhr.response)
             let mainWeatherCityName = data.name
@@ -1315,12 +1317,12 @@ const weatherUpdate = function (city) {
             let mainWeather = data.weather[0].main
             let mainWeatherDescription = data.weather[0].description
             let mainWeatherImage = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
-            //Console.log("mainWeatherCityName", mainWeatherCityName)
-            //Console.log("mainWeatherTemperature", mainWeatherTemperature)
-            //Console.log("mainWeather", mainWeather)
-            //Console.log("mainWeatherDescription", mainWeatherDescription)
-            //Console.log("mainWeatherImage", mainWeatherImage)//100x100
-            //Console.log("data", data)
+            //console.log("mainWeatherCityName", mainWeatherCityName)
+            //console.log("mainWeatherTemperature", mainWeatherTemperature)
+            //console.log("mainWeather", mainWeather)
+            //console.log("mainWeatherDescription", mainWeatherDescription)
+            //console.log("mainWeatherImage", mainWeatherImage)//100x100
+            //console.log("data", data)
         }
     }
 }
@@ -1980,6 +1982,7 @@ const Season = (function () {
     const _product_id = document.getElementById("product_id")
     const _panel_tab_season = document.getElementById("panel_tab_season")
     const _button_remove_season_from_product = document.getElementById("button_remove_season_from_product")
+    const _calendar_loader = document.getElementById("calendar_loader")
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let categories = new Map()
@@ -2050,19 +2053,15 @@ const Season = (function () {
     
     const saveProductSeason = function (dataToSend) {
         if (dataToSend) {
-            updateProductSeason(dataToSend, function (data) {
-                let season
-                if (data) {
-                    season = data
-                    if (data[0]) {
-                        season = set(data[0])
+            $(_calendar_loader).fadeIn("fast", function () {
+                updateProductSeason(dataToSend, function (data) {
+                    if (data) {
+                        let season = (data[0]) ? data[0] : data
+                        addProductSeasonTableRow(season)
+                    } else {
+                        YearCalendar.endLoading()
                     }
-                    
-                    addProductSeasonTableRow(season)
-                    PricingWorksheet.pricingWorksheet()
-                    Pricing.resetForm()
-                    YearCalendar.resetForm()
-                }
+                })
             })
         }
     }
@@ -2081,7 +2080,6 @@ const Season = (function () {
                 })
             } catch (e) {
                 console.log("error", e)
-                return handleSeasonError(data)
             }
         }
     }
@@ -2099,19 +2097,21 @@ const Season = (function () {
                     }
                 })
             } catch (e) {
-                //console.log("error", e)
+                console.log("error", e)
             }
         }
     }
     
     const removeProductSeason = function (dataToSend) {
         if (dataToSend) {
-            deleteProductSeason(dataToSend, function (data) {
-                if (data) {
-                    deleteProductSeasonTableRow(dataToSend.season_id)
-                    PricingWorksheet.buildPricingWorksheet()
-                    YearCalendar.refresh()
-                }
+            $(_calendar_loader).fadeIn("fast", function () {
+                deleteProductSeason(dataToSend, function (data) {
+                    if (data) {
+                        deleteProductSeasonTableRow(dataToSend.season_id)
+                    } else {
+                        YearCalendar.endLoading()
+                    }
+                })
             })
         }
     }
@@ -2398,19 +2398,25 @@ const Season = (function () {
     const deleteProductSeasonTableRow = function (season_id) {
         if (season_id) {
             let hasSeason = Season.all.get(season_id)
+            
             if (hasSeason) {
-                $table_season_product_edit.deleteRow(hasSeason)
                 Season.all.delete(season_id)
-                _product_edit_season_form_season_name_filter.value = ""
-                resetForm()
-                clearProductSeasonForm()
+                
+                $table_season_product_edit.deleteRow(hasSeason)
                 $table_season_product_edit.clearSelectedRows()
                 
+                _product_edit_season_form_season_name_filter.value = ""
+                
+                PricingWorksheet.pricingWorksheet()
                 Pricing.resetForm()
-                YearCalendar.resetForm()
-                PricingWorksheet.buildPricingWorksheet()
-                YearCalendar.loadSeasonDropdown()
-                toastr.success("Season Deleted")
+                YearCalendar.refresh()
+                
+                updateProgress()
+                resetForm()
+                clearProductSeasonForm()
+                
+                toastr.success(`Season: ${hasSeason.name} - has been deleted`)
+                YearCalendar.endLoading()
             }
         }
         
@@ -2420,27 +2426,32 @@ const Season = (function () {
         if (season) {
             let detail = set(season)
             let hasSeason = Season.all.get(detail.id)
+            
             if (hasSeason) {
-                Season.all.set(detail.id, detail)
                 $table_season_product_edit.updateRow(detail)
-                toastr.success("Season Updated")
-                
             } else {
-                Season.all.set(detail.id, detail)
                 $table_season_product_edit.insertRow(detail)
-                toastr.success("Season Added")
             }
             
-            _product_edit_season_form_season_name_filter.value = ""
-            resetForm()
-            clearProductSeasonForm()
+            Season.all.set(detail.id, detail)
+            
+            $table_season_product_edit.loadRow(detail)
+            $table_season_product_edit.jumpToRow(detail)
             $table_season_product_edit.clearSelectedRows()
             
+            _product_edit_season_form_season_name_filter.value = ""
+            
+            PricingWorksheet.pricingWorksheet()
             Pricing.resetForm()
-            YearCalendar.resetForm()
+            YearCalendar.refresh()
+            
+            updateProgress()
+            resetForm()
+            clearProductSeasonForm()
+            
+            toastr.success(`Season: ${detail.name} - has been updated`)
+            YearCalendar.endLoading()
         }
-        
-        YearCalendar.loadSeasonDropdown()
     }
     
     const resetForm = function () {
@@ -3028,7 +3039,7 @@ $.fn.BuildKeyword = function (keywords) {
 
 const InventoryProfile = (function () {
     "use strict"
-    
+    const _calendar_loader = document.getElementById("calendar_loader")
     const _panel_tab_inventory = document.getElementById("panel_tab_inventory")
     const _table_profile_product_edit_add_new_button = document.getElementById("table_profile_product_edit_add_new_button")
     const _edit_product_profile = document.getElementById("edit_product_profile")
@@ -3120,13 +3131,13 @@ const InventoryProfile = (function () {
     
     $(_button_add_product_profile)
         .on("click", function () {
-            //Console.log("InventoryProfile.button_add_product_profile: click()", {})
+            //console.log("InventoryProfile.button_add_product_profile: click()", {})
             populateInventoryProfileForm()
         })
     
     $(_table_profile_product_edit_add_new_button)
         .on("click", function () {
-            //Console.log("InventoryProfile.table_profile_product_edit_add_new_button: click()", {})
+            //console.log("InventoryProfile.table_profile_product_edit_add_new_button: click()", {})
             _product_edit_profile_form_profile_name_filter.value = ""
             $table_profile_product_edit.clearSelectedRows()
             populateInventoryProfileForm()
@@ -3134,7 +3145,7 @@ const InventoryProfile = (function () {
     
     $(_product_edit_profile_form_clear_button)
         .on("click", function () {
-            //Console.log("InventoryProfile.product_edit_profile_form_clear_button: click()", {})
+            //console.log("InventoryProfile.product_edit_profile_form_clear_button: click()", {})
             $table_profile_product_edit.clearSelectedRows()
             clearInventoryProfileForm()
             _product_edit_profile_form_profile_name_filter.value = ""
@@ -3142,7 +3153,7 @@ const InventoryProfile = (function () {
     
     $(_product_edit_profile_form_submit_button)
         .on("click", function () {
-            //Console.log("InventoryProfile.product_edit_profile_form_submit_button: click()", {})
+            //console.log("InventoryProfile.product_edit_profile_form_submit_button: click()", {})
             save()
         })
     
@@ -3157,7 +3168,7 @@ const InventoryProfile = (function () {
     
     $(_product_edit_profile_form_profile_sales_types_id)
         .on("change", function () {
-            //Console.log("InventoryProfile.product_edit_profile_form_profile_sales_types_id: change()", {})
+            //console.log("InventoryProfile.product_edit_profile_form_profile_sales_types_id: change()", {})
             setFormElementDisplay()
             InventoryProfile.expiration_date.value("")
             _product_edit_profile_form_profile_days_out.value = ""
@@ -3166,7 +3177,7 @@ const InventoryProfile = (function () {
     
     $(_product_edit_profile_form_profile_allot_by_id)
         .on("change", function () {
-            //Console.log("InventoryProfile.product_edit_profile_form_profile_allot_by_id: change()", {})
+            //console.log("InventoryProfile.product_edit_profile_form_profile_allot_by_id: change()", {})
             setFormElementDisplay()
             InventoryProfile.expiration_date.value("")
             _product_edit_profile_form_profile_days_out.value = ""
@@ -3174,7 +3185,7 @@ const InventoryProfile = (function () {
     
     $(_product_edit_profile_form_profile_transfer_sales_types_id)
         .on("change", function () {
-            //Console.log("InventoryProfile.product_edit_profile_form_profile_transfer_sales_types_id: change()", {})
+            //console.log("InventoryProfile.product_edit_profile_form_profile_transfer_sales_types_id: change()", {})
         })
     
     $(_button_remove_profile_from_product)
@@ -3215,7 +3226,7 @@ const InventoryProfile = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
         }
     }
@@ -3228,19 +3239,29 @@ const InventoryProfile = (function () {
         if (dataToSend) {
             confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
                 if (ans) {
-                    Console.log(dataToSend)
                     removeProductProfile(dataToSend, function (data) {
                         if (data) {
                             let detail = set(InventoryProfile.all.get(dataToSend.profile_id))
+                            
                             InventoryProfile.all.delete(detail.id)
+                            
                             $table_profile_product_edit.deleteRow(detail)
-                            populateInventoryProfileForm()
-                            _product_edit_profile_form_profile_name_filter.value = ""
                             $table_profile_product_edit.clearSelectedRows()
-                            hideForm()
+                            
+                            _product_edit_profile_form_profile_name_filter.value = ""
+                            
+                            PricingWorksheet.pricingWorksheet()
                             Pricing.resetForm()
                             YearCalendar.resetForm()
+                            PricingWorksheet.status()
+                            //YearCalendar.refresh()
+                            
+                            updateProgress()
+                            populateInventoryProfileForm()
+                            hideForm()
+                            
                             toastr.success(`InventoryProfile: ${detail.name} - has been removed`)
+                            YearCalendar.endLoading()
                         }
                     })
                 }
@@ -3286,7 +3307,7 @@ const InventoryProfile = (function () {
     }
     
     const initAutoComplete = function () {
-        //Console.log('InventoryProfile.initAutoComplete()', InventoryProfile)
+        //console.log('InventoryProfile.initAutoComplete()', InventoryProfile)
         let product_id = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
         
         $(_product_edit_profile_form_profile_name_filter)
@@ -3347,7 +3368,7 @@ const InventoryProfile = (function () {
     }
     
     const nameExists = function (name) {
-        //Console.log("InventoryProfile.nameExists(profile_name)", name)
+        //console.log("InventoryProfile.nameExists(profile_name)", name)
         if (name && name !== "") {
             /**
              * data to send to the server
@@ -3400,7 +3421,7 @@ const InventoryProfile = (function () {
                     }
                 })
             } catch (e) {
-                //Console.log("error", e)
+                //console.log("error", e)
                 return handleProfileError("Error Validating InventoryProfile")
             }
         } else {
@@ -3409,7 +3430,7 @@ const InventoryProfile = (function () {
     }
     
     const buildInventoryProfileTable = function () {
-        //Console.log("InventoryProfile.buildInventoryProfileTable()", InventoryProfile)
+        //console.log("InventoryProfile.buildInventoryProfileTable()", InventoryProfile)
         $table_profile_product_edit = $(_table_profile_product_edit).table({
             table_type: "display_list",
             data: [],
@@ -3427,7 +3448,7 @@ const InventoryProfile = (function () {
                     targets: 1,
                     data: "sales_types_details",
                     render: function (data, type, row, meta) {
-                        //Console.log("sales_types_details", data)
+                        //console.log("sales_types_details", data)
                         let name = (data.name) ? data.name : "N/A"
                         
                         return "<span style='white-space: nowrap;'>" + name + "</span>"
@@ -3523,10 +3544,10 @@ const InventoryProfile = (function () {
         if (!inventory_profiles) { inventory_profiles = [] }
         
         $.each(inventory_profiles, function (k, inventory_profile) {
-            //Console.log("InventoryProfile.loadAll - inventory_profile", inventory_profile)
-            //Console.log("InventoryProfile.loadAll - inventory_profile", inventory_profile, checkin_dow)
+            //console.log("InventoryProfile.loadAll - inventory_profile", inventory_profile)
+            //console.log("InventoryProfile.loadAll - inventory_profile", inventory_profile, checkin_dow)
             let detail = set(inventory_profile)
-            //Console.log('detail', detail)
+            //console.log('detail', detail)
             if (!isNaN(parseInt(detail.id))) {
                 if (_table_profile_product_edit) {
                     $table_profile_product_edit.insertRow(detail)
@@ -3615,7 +3636,7 @@ const InventoryProfile = (function () {
     }
     
     const showForm = function () {
-        //Console.log("InventoryProfile.showForm()", showForm)
+        //console.log("InventoryProfile.showForm()", showForm)
         if (_edit_product_profile) {
             _product_edit_profile_form_profile_name_filter.disabled = true
             $(_edit_product_profile).show()
@@ -3623,13 +3644,13 @@ const InventoryProfile = (function () {
     }
     
     const resetInventoryProfileForm = function () {
-        //Console.log("InventoryProfile.resetInventoryProfileForm()", {})
+        //console.log("InventoryProfile.resetInventoryProfileForm()", {})
         clearInventoryProfileForm()
         disableInventoryProfileFormFields()
     }
     
     const clearInventoryProfileForm = function () {
-        //Console.log("InventoryProfile.clearInventoryProfileForm()", clearInventoryProfileForm)
+        //console.log("InventoryProfile.clearInventoryProfileForm()", clearInventoryProfileForm)
         
         disableInventoryProfileFormFields()
         _product_edit_profile_form_profile_id.value = ""
@@ -3681,12 +3702,12 @@ const InventoryProfile = (function () {
     }
     
     const disableInventoryProfileFormFields = function () {
-        //Console.log('InventoryProfile.disableInventoryProfileFormFields()', this)
+        //console.log('InventoryProfile.disableInventoryProfileFormFields()', this)
         _product_edit_profile_form_profile_name.disabled = false
     }
     
     const populateInventoryProfileForm = function (inventory_profile) {
-        //Console.log("InventoryProfile.populateInventoryProfileForm(inventory_profile)", inventory_profile)
+        //console.log("InventoryProfile.populateInventoryProfileForm(inventory_profile)", inventory_profile)
         clearInventoryProfileForm()
         if (inventory_profile) {
             _product_edit_profile_form_profile_id.value = (inventory_profile.id) ? inventory_profile.id : ""
@@ -3722,7 +3743,7 @@ const InventoryProfile = (function () {
     }
     
     const set = function (inventory_profile) {
-        //Console.log("InventoryProfile.set(inventory_profile)", inventory_profile)
+        //console.log("InventoryProfile.set(inventory_profile)", inventory_profile)
         
         let detail = defaultDetail()
         let sales_types_details, allot_by_details, tranfer_sales_type_details
@@ -3777,7 +3798,6 @@ const InventoryProfile = (function () {
     }
     
     const edit = function (inventory_profile) {
-        //Console.log('InventoryProfile.edit(inventory_profile)', inventory_profile)
         if (inventory_profile) {
             $table_profile_product_edit.clearSelectedRows()
             let detail = set(inventory_profile)
@@ -3788,7 +3808,6 @@ const InventoryProfile = (function () {
             $table_profile_product_edit.loadRow(detail)
             populateInventoryProfileForm(detail)
         }
-        
     }
     
     const save = function () {
@@ -3797,17 +3816,10 @@ const InventoryProfile = (function () {
             confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
                 if (ans) {
                     saveProductProfile(dataToSend, function (data) {
-                        let inventory_profile
                         if (data) {
-                            inventory_profile = data
-                            if (data[0]) {
-                                inventory_profile = data[0]
-                            }
-                            let detail = set(inventory_profile)
                             
+                            let detail = set((data[0]) ? data[0] : data)
                             let hasProfile = InventoryProfile.all.get(detail.id)
-                            
-                            InventoryProfile.all.set(detail.id, detail)
                             
                             if (hasProfile) {
                                 $table_profile_product_edit.updateRow(detail)
@@ -3815,16 +3827,24 @@ const InventoryProfile = (function () {
                                 $table_profile_product_edit.insertRow(detail)
                             }
                             
-                            toastr.success(`InventoryProfile: ${detail.name} - has been updated`)
-                            populateInventoryProfileForm()
+                            InventoryProfile.all.set(detail.id, detail)
                             
-                            _product_edit_profile_form_profile_name_filter.value = ""
                             $table_profile_product_edit.loadRow(detail)
                             $table_profile_product_edit.jumpToRow(detail)
                             $table_profile_product_edit.clearSelectedRows()
+                            
+                            _product_edit_profile_form_profile_name_filter.value = ""
+                            
+                            PricingWorksheet.pricingWorksheet()
                             Pricing.resetForm()
-                            YearCalendar.resetForm()
+                            YearCalendar.refresh()
+                            
                             updateProgress()
+                            populateInventoryProfileForm()
+                            hideForm()
+                            
+                            toastr.success(`InventoryProfile: ${detail.name} - has been updated`)
+                            YearCalendar.endLoading()
                         }
                     })
                 }
@@ -3848,13 +3868,13 @@ const InventoryProfile = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
         }
     }
     
     const init = function (settings) {
-        //Console.log("InventoryProfile.init(settings)", settings)
+        //console.log("InventoryProfile.init(settings)", settings)
         
         let inventory_profiles = []
         if (settings) {
@@ -5379,6 +5399,7 @@ const PricingWorksheet = (function () {
                             .attr("data-type", "season")
                         
                         if (hasSeason) {
+                            console.log("hasSeaosn", hasSeason)
                             seasonBackgroundColor = hexToRgb(hasSeason.color_scheme.background_color)
                             seasonTextColor = hasSeason.color_scheme.text_color
                             seasonBorderColor = hasSeason.color_scheme.border_color
@@ -5989,6 +6010,7 @@ const PricingWorksheet = (function () {
         emptyPricingMatrix()
         variantCombinations = []
         $(_product_edit_matrix_form).empty().append(buildPricingTables(PricingWorksheet.buildPricingWorksheet()))
+        status()
     }
     
     const init = function (settings) {
@@ -6248,7 +6270,7 @@ $.fn.YearCalendar = function (settings) {
     
     const buildCalendarColumn = function (calendar_id) {
         let calendarRow = document.createElement("div")
-        calendarRow.classList = "flex-fill col-4 p-1"
+        calendarRow.classList = "flex-fill col-6 p-1"
         return calendarRow
     }
     
@@ -6264,13 +6286,13 @@ $.fn.YearCalendar = function (settings) {
         let calendarColumn = buildCalendarColumn(calendar_id)
         let calendarBlock = document.createElement("div")
         let calendarBlockId = "calendar_block_" + calendar_id
-        //
+        
         calendarBlock.classList = "my_calendar"
         calendarBlock.id = calendarBlockId
-        //
+        
         calendarColumn.appendChild(calendarPanel)
         calendarPanel.appendChild(calendarBlock)
-        //
+        
         calendars.push(calendarBlock)
         return calendarColumn
     }
@@ -6285,7 +6307,7 @@ $.fn.YearCalendar = function (settings) {
         
         for (let n = 0; n < initialCalenderViewCount; n++) {
             let id = (n + 1)
-            if (n % 3 === 0 && n > 0) {
+            if (n % 2 === 0 && n > 0) {
                 calendarBlockContainer.appendChild(row)
                 row = buildCalendarRow(id)
             }
@@ -6363,22 +6385,11 @@ $.fn.YearCalendar = function (settings) {
         }
     }
     
-    const getEventFromDate = function (calendar, date) {
-        let allEvents = []
-        allEvents = $('#calendarRoomUnavailable').fullCalendar('clientEvents')
-        var event = $.grep(allEvents, function (v) {
-            return +v.start === +date
-        })
-        if (event.length > 0) {
-            return event[0]
-        } else {
-            return null
-        }
-    }
-    
     const buildCalendar = function (settings) {
+        YearCalendar.season_events = new Map()
         let dateToday = new Date()
         calContainer.appendChild(buildCalendarContainer())
+        
         YearCalendar.start = (settings && settings.start) ? settings.start : dateToday.getFullYear()
         YearCalendar.events = (settings && settings.events) ? settings.events : []
         YearCalendar.getTitle()
@@ -6392,9 +6403,7 @@ $.fn.YearCalendar = function (settings) {
                 defaultDate: displayMonth,
                 initialView: "dayGridMonth",
                 displayEventTime: false,
-                height: 361,
-                contentHeight: 323,
-                eventLimit: 1,
+                eventLimit: 3,
                 header: {
                     left: "",
                     center: "title",
@@ -6500,9 +6509,6 @@ $.fn.YearCalendar = function (settings) {
                     }
                 },
                 eventRender: function (event, element, view) {
-                    //console.log("render event", event)
-                    // --
-                    
                     $(element).attr("season", "true")
                     let day = moment(event.start).format("YYYY-MM-DD")
                     let top = $("td.fc-day-top[data-date='" + day + "']")
@@ -6516,12 +6522,12 @@ $.fn.YearCalendar = function (settings) {
                     bgRGBA.push(.6)
                     let bgColor = "rgba(" + bgRGBA.join(', ') + ")"
                     
-                    // --
-                    
                     if (event.rendering === "background") {
                         if ($(element).hasClass("fc-disabled-day")) {
                             return
                         }
+                        
+                        YearCalendar.season_events.set(day, "true")
                         
                         top
                             .addClass("background_event")
@@ -6569,6 +6575,13 @@ $.fn.YearCalendar = function (settings) {
             })
             
             YearCalendar.activeCalendars.push(activeCal)
+            
+            let calendarWidth = (!isNaN(parseInt($(document.getElementById("calendar_block_1")).actual("width")))) ? parseInt($(document.getElementById("calendar_block_1")).actual("width")) : 600
+            
+            $.each(YearCalendar.activeCalendars, function (index, cal) {
+                $(cal).fullCalendar("option", "contentHeight", calendarWidth)
+            })
+            
         })
         
     }
@@ -6587,7 +6600,6 @@ $.fn.YearCalendar = function (settings) {
         }
         
         fetchCalendarEvents(dataToSend, function (events) {
-            
             if (!events) {
                 events = []
             }
@@ -6642,6 +6654,7 @@ const YearCalendar = (function () {
         .on("click", function () {
             $(_calendar_loader).fadeIn("slow", function () {
                 YearCalendar.remove()
+                setCalendarFilters()
             })
         })
     
@@ -6649,6 +6662,7 @@ const YearCalendar = (function () {
         .on("click", function () {
             $(_calendar_loader).fadeIn("slow", function () {
                 YearCalendar.refresh()
+                setCalendarFilters()
             })
         })
     
@@ -6739,7 +6753,7 @@ const YearCalendar = (function () {
     
     $(_calendar_filter_unit_id_assign)
         .on("click", function () {
-            buildAssignProfilesRecord()
+            assignProfileToProduct()
         })
     
     $(_calendar_filter_season_id_clear)
@@ -6763,9 +6777,11 @@ const YearCalendar = (function () {
     $(_seasonCalendarModal)
         .on("shown.bs.modal", function () {
             setCalendarFilters()
+            $("html").css({ overflow: "hidden" })
         })
         .on("hidden.bs.modal", function () {
             resetForm()
+            $("html").css({ overflow: "auto" })
         })
         .on("click", function () {
             YearCalendar.checkProgress()
@@ -6775,19 +6791,23 @@ const YearCalendar = (function () {
         let seasons = (Season && Season.all) ? Array.from(Season.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Seasons --</option>"
         let options2 = ""
+        
         $.each(seasons, function (k, season) {
             let name = season.name
             let id = season.id
             options += `<option value="${id}">${name}</option>`
             options2 += `<option value="${id}">${name}</option>`
         })
+        
         $(_calendar_filter_season_id).empty()
         $(_calendar_filter_season_id).html(options)
+        $(_calendar_filter_season_id).val("").trigger("change")
     }
     
     const loadProfileDropdown = function () {
         let profiles = (InventoryProfile && InventoryProfile.all) ? Array.from(InventoryProfile.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Profiles --</option>"
+        
         $.each(profiles, function (k, profile) {
             let name = profile.name
             let id = profile.id
@@ -6796,29 +6816,27 @@ const YearCalendar = (function () {
         
         $(_calendar_filter_profile_id).empty()
         $(_calendar_filter_profile_id).html(options)
+        $(_calendar_filter_profile_id).val("").trigger("change")
     }
     
     const loadUnitDropdown = function () {
         let units = (Unit && Unit.all) ? Array.from(Unit.all.values()) : []
         let options = ""
+        
         $.each(units, function (k, unit) {
             let name = unit.name
             let id = unit.id
             options += `<option value="${id}">${name}</option>`
         })
+        
         $(_calendar_filter_unit_id).empty()
         $(_calendar_filter_unit_id).html(options)
+        $(_calendar_filter_unit_id).val([]).trigger("change")
+        
     }
     
     const setCalendarFilters = function () {
         clearSelectedDOW()
-        
-        $("html").css({ overflow: "hidden" })
-        
-    }
-    
-    const unSetCalendarFilters = function () {
-        $("html").css({ overflow: "auto" })
     }
     
     const buildAssignDatesRecord = function () {
@@ -6852,11 +6870,17 @@ const YearCalendar = (function () {
         
         confirmDialog(`Would you like to assign? This change may affect your Pricing Worksheets.`, (ans) => {
             if (ans) {
-                assignSeasonToProduct(dataToSend, function (data) {
-                    clearSelected()
-                    clearSelectedDOW()
-                    refresh()
-                    toastr.success(`Dates Assigned.`)
+                $(_calendar_loader).fadeIn("slow", function () {
+                    assignSeasonToProduct(dataToSend, function (data) {
+                        if (data) {
+                            clearSelected()
+                            clearSelectedDOW()
+                            refresh()
+                            toastr.success(`Dates Assigned.`)
+                        }
+                        
+                        endLoading()
+                    })
                 })
             }
         })
@@ -6868,28 +6892,94 @@ const YearCalendar = (function () {
     }
     
     const buildAssignProfilesRecord = function () {
-        let profile_id = (!is_null(parseInt(_calendar_filter_profile_id.value))) ? parseInt(_calendar_filter_profile_id.value) : null
-        let unit_ids = $(_calendar_filter_unit_id).val().map(Number)
-        console.log(unit_ids)
-        let dataToSend = {}
+        let profile_id = (_calendar_filter_profile_id && !is_null(parseInt(_calendar_filter_profile_id.value))) ? parseInt(_calendar_filter_profile_id.value) : null
+        let product_id = (_product_id && !isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
+        let units = (_calendar_filter_unit_id) ? $(_calendar_filter_unit_id).val().map(Number) : []
+        let profile
+        let dataToSend = []
+        let days = Array.from(YearCalendar.selectedDates.values())
+        
+        if (product_id && profile_id) {
+            profile = InventoryProfile.all.get(profile_id)
+            
+            if (profile) {
+                $.each(units, function (index, unit) {
+                    
+                    let unitData = {
+                        product_id: product_id,
+                        profile_id: profile_id,
+                        unit_id: unit,
+                        quantity_released: 0,
+                        quantity_used: 0,
+                        days: [],
+                    }
+                    
+                    $.each(days, function (i, day) {
+                        let hasSeason = YearCalendar.season_events.get(day)
+                        if (hasSeason) {
+                            unitData.days.push(day)
+                        }
+                    })
+                    
+                    if (unitData.days.length > 0) {
+                        dataToSend.push(unitData)
+                    }
+                    
+                })
+            }
+        }
+        
+        if (dataToSend.length > 0) {
+            return dataToSend
+        }
         
     }
     
-    const assignProfileToProduct = function (dataToSend, callback) {
-        let url = "/api/v1.0/products/assign_profiles"
+    const assignProfileToProduct = function () {
+        let dataToSend = buildAssignProfilesRecord()
         
         if (dataToSend) {
+            
+            confirmDialog(`Would you like to assign? This change may affect your Pricing Worksheets.`, (ans) => {
+                if (ans) {
+                    $(_calendar_loader).fadeIn("slow", function () {
+                        updateProductProfileCalendar(dataToSend, function (data) {
+                            if (data) {
+                                clearSelected()
+                                clearSelectedDOW()
+                                refresh()
+                                toastr["success"](`Dates Assigned.`, `Inventory Profile`)
+                            }
+                            
+                            endLoading()
+                        })
+                    })
+                }
+            })
+            
+        } else {
+            toastr["warning"](`No Profiles to update.`, `Inventory Profile`)
+            endLoading()
+        }
+        
+    }
+    
+    const updateProductProfileCalendar = function (dataToSend, callback) {
+        let url = "/api/v1.0/products/assign_profiles"
+        if (dataToSend) {
             try {
-                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                sendPostRequest(url, { params: dataToSend }, function (data, status, xhr) {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleCalendarError("Oops: 1")
+                        handleCalendarError("Oops: 1")
+                        endLoading()
                     }
                 })
             } catch (e) {
                 console.log("error", e)
-                return handleCalendarError("Oops: 1")
+                handleCalendarError("Oops: 2")
+                endLoading()
             }
         }
     }
@@ -6914,7 +7004,6 @@ const YearCalendar = (function () {
     }
     
     const resetForm = function () {
-        unSetCalendarFilters()
         clearSelected()
         clearSelectedDOW()
         loadSeasonDropdown()
@@ -6931,14 +7020,14 @@ const YearCalendar = (function () {
         
         $.each(disabled_dow, function (k, dow) {
             let dataDOW = dow.toString()
-            //let days = $(`td[season='true'][dow='${dataDOW}']`)
             let days = $(`td[season='true'][dow='${dataDOW}']`)
+            
             days.each(function (index, element) {
                 let day = $(element).attr("data-date")
-                console.log(day)
                 $("td[data-date='" + day + "']").addClass("disabled-dow")
                 $(element).addClass("disabled-dow")
             })
+            
         })
         
     }
@@ -6963,6 +7052,7 @@ const YearCalendar = (function () {
     }
     
     const endLoading = function () {
+        setCalendarFilters()
         $(_calendar_loader).hide()
     }
     
@@ -6978,7 +7068,7 @@ const YearCalendar = (function () {
         loadProfileDropdown()
         loadSeasonDropdown()
         
-        ContextMenu.init(settings)
+        //ContextMenu.init(settings)
     }
     
     const checkProgress = function () {
@@ -6989,7 +7079,6 @@ const YearCalendar = (function () {
         if (dataToSend) {
             try {
                 sendGetRequest("/api/v1.0/calendars", dataToSend, function (data, status, xhr) {
-                    //console.log("data", data)
                     if (data) {
                         return callback(data)
                     } else {
@@ -6998,10 +7087,7 @@ const YearCalendar = (function () {
                 })
             } catch (e) {
                 console.log("error", e)
-                return callback([])
             }
-        } else {
-            return callback([])
         }
     }
     
@@ -7028,26 +7114,30 @@ const YearCalendar = (function () {
         YearCalendar.endLoading()
     }
     
-    const refresh = function () {
-        let product_id = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
-        
-        if (product_id) {
-            YearCalendar.events = []
+    const refreshCalendar = function () {
+        $(_calendar_loader).fadeIn("slow", function () {
+            let product_id = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
+            clearSelected()
+            clearSelectedDOW()
             removeAllEvents()
             reFetchCalendarEvents({ product_id: product_id }, function (data) {
                 YearCalendar.events = data
                 
                 $.each(YearCalendar.activeCalendars, function (index, cal) {
+                    $(cal).fullCalendar("removeEvents")
                     $(cal).fullCalendar("addEventSource", YearCalendar.events)
                     $(cal).fullCalendar("rerenderEvents")
                 })
                 
                 YearCalendar.endLoading()
             })
-        } else {
-            YearCalendar.endLoading()
-        }
+        })
         
+    }
+    
+    const refresh = function () {
+        resetForm()
+        refreshCalendar()
     }
     
     return {
@@ -7057,9 +7147,8 @@ const YearCalendar = (function () {
         start: new Date().getFullYear(),
         selectedDates: new Map(),
         activeCalendars: [],
+        season_events: [],
         refresh: function () {
-            clearSelected()
-            clearSelectedDOW()
             refresh()
         },
         remove: function () {
@@ -10503,6 +10592,7 @@ const Location = (function () {
 const Variant = (function () {
     "use strict"
     
+    const _calendar_loader = document.getElementById("calendar_loader")
     const _button_remove_variant_from_product = document.getElementById("button_remove_variant_from_product")
     const _product_edit_variant_section = document.getElementById("product_edit_variant_section")
     const _panel_tab_variant = document.getElementById("panel_tab_variant")
@@ -10586,8 +10676,6 @@ const Variant = (function () {
     
     $(_product_edit_variant_form_close_button)
         .on("click", function () {
-            //console.log("Variant.product_edit_variant_form_close_button:click()", this)
-            // ----
             resetForm()
             $table_variant_product_edit.clearSelectedRows()
         })
@@ -10618,18 +10706,23 @@ const Variant = (function () {
                 removeProductVariant(dataToSend, function (data) {
                     if (data) {
                         let detail = set(Variant.all.get(dataToSend.variant_id))
+                        
                         Variant.all.delete(dataToSend.variant_id)
-                        _product_edit_variant_form_variant_name_filter.value = ""
+                        
                         $table_variant_product_edit.deleteRow(detail)
                         $table_variant_product_edit.clearSelectedRows()
                         
-                        Pricing.resetForm()
-                        YearCalendar.resetForm()
+                        _product_edit_variant_form_variant_name_filter.value = ""
                         
-                        toastr.success(`Variant: ${detail.name} - has been updated`)
                         PricingWorksheet.pricingWorksheet()
                         Pricing.resetForm()
-                        YearCalendar.resetForm()
+                        YearCalendar.refresh()
+                        
+                        updateProgress()
+                        resetForm()
+                        
+                        toastr.success(`Variant: ${detail.name} - has been updated`)
+                        YearCalendar.endLoading()
                     }
                 })
             } else {
@@ -10653,7 +10746,7 @@ const Variant = (function () {
                     }
                 })
             } catch (e) {
-                //console.log("error", e)
+                console.log("error", e)
             }
         }
     }
@@ -11045,8 +11138,6 @@ const Variant = (function () {
     }
     
     const saveProductVariant = function (dataToSend, callback) {
-        //console.log("Variant.saveProductVariant()", Variant)
-        // ----
         if (dataToSend) {
             let url = "/api/v1.0/variants/update"
             try {
@@ -11058,7 +11149,7 @@ const Variant = (function () {
                     }
                 })
             } catch (e) {
-                //console.log("error", e)
+                console.log("error", e)
             }
         }
     }
@@ -11068,20 +11159,10 @@ const Variant = (function () {
             confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
                 if (ans) {
                     let dataToSend = buildVariantRecord()
-                    console.log("Variant.save()", dataToSend)
                     saveProductVariant(dataToSend, function (data) {
-                        //console.log("Variant.save - data", data)
-                        let variant
                         if (data) {
-                            variant = data
-                            if (data[0]) {
-                                variant = data[0]
-                            }
-                            let detail = set(variant)
-                            //console.log("detail", detail)
+                            let detail = set((data[0]) ? data[0] : data)
                             let hasVariant = Variant.all.get(detail.id)
-                            //console.log("Variant.save - hasVariant", hasVariant)
-                            Variant.all.set(detail.id, detail)
                             
                             if (hasVariant) {
                                 $table_variant_product_edit.updateRow(detail)
@@ -11089,17 +11170,24 @@ const Variant = (function () {
                                 $table_variant_product_edit.insertRow(detail)
                             }
                             
-                            //console.log("Variant.save - Variant.all", Variant.all)
-                            toastr.success(`Variant: ${detail.name} - has been updated`)
-                            resetForm()
+                            Variant.all.set(detail.id, detail)
                             
-                            _product_edit_variant_form_variant_name_filter.value = ""
                             $table_variant_product_edit.loadRow(detail)
                             $table_variant_product_edit.jumpToRow(detail)
                             $table_variant_product_edit.clearSelectedRows()
+                            
+                            _product_edit_variant_form_variant_name_filter.disabled = false
+                            _product_edit_variant_form_variant_name_filter.value = ""
+                            
                             PricingWorksheet.pricingWorksheet()
                             Pricing.resetForm()
-                            YearCalendar.resetForm()
+                            YearCalendar.refresh()
+                            
+                            updateProgress()
+                            resetForm()
+                            
+                            toastr.success(`Variant: ${detail.name} - has been updated`)
+                            YearCalendar.endLoading()
                         }
                     })
                 } else {
@@ -11223,7 +11311,7 @@ const Unit = (function () {
     const _product_edit_unit_form_unit_description_short = document.getElementById("product_edit_unit_form_unit_description_short")
     const _product_edit_unit_form_unit_description_long = document.getElementById("product_edit_unit_form_unit_description_long")
     const _product_edit_unit_form_unit_enabled = document.getElementById("product_edit_unit_form_unit_enabled")
-    const _button_unit_description_long_toggle = document.getElementById("button_unit_description_long_toggle")
+    const _calendar_loader = document.getElementById("calendar_loader")
     const _display_product_unit_name = document.getElementById("display_product_unit_name")
     const _product_edit_unit_form_clear_button = document.getElementById("product_edit_unit_form_clear_button")
     const _product_edit_unit_form_close_button = document.getElementById("product_edit_unit_form_close_button")
@@ -11333,7 +11421,7 @@ const Unit = (function () {
                     }
                 })
             } catch (e) {
-                //console.log("error", e)
+                console.log("error", e)
             }
         }
     }
@@ -11355,17 +11443,24 @@ const Unit = (function () {
                         if (unit) {
                             $table_unit_product_edit.deleteRow(unit)
                         }
-                        toastr.success(`Unit: ${unit.name} - has been removed`)
-                        clearForm()
-                        hideForm()
+                        
+                        Unit.all.delete(unitId)
+                        
+                        $table_unit_product_edit.clearSelectedRows()
                         
                         _product_edit_unit_form_unit_name_filter.value = ""
                         _product_edit_unit_form_unit_name_filter.disabled = false
-                        $table_unit_product_edit.clearSelectedRows()
-                        Unit.all.delete(unitId)
+                        
+                        PricingWorksheet.pricingWorksheet()
                         Pricing.resetForm()
-                        YearCalendar.resetForm()
+                        YearCalendar.refresh()
+                        
                         updateProgress()
+                        clearForm()
+                        hideForm()
+                        
+                        toastr.success(`Unit: ${unit.name} - has been removed`)
+                        YearCalendar.endLoading()
                     }
                 })
             }
@@ -11520,7 +11615,7 @@ const Unit = (function () {
                     }
                 })
             } catch (e) {
-                //console.log("error", e)
+                console.log("error", e)
                 return handleUnitError("Error Validating Unit")
             }
         } else {
@@ -11595,32 +11690,34 @@ const Unit = (function () {
                     let dataToSend = buildUnitRecord()
                     
                     saveProductUnit(dataToSend, function (data) {
-                        let unit
                         if (data) {
-                            unit = data
-                            if (data[0]) {
-                                unit = data[0]
-                            }
-                            let detail = set(unit)
+                            let detail = set((data[0]) ? data[0] : data)
                             let hasUnit = Unit.all.get(detail.id)
-                            Unit.all.set(detail.id, detail)
                             
                             if (hasUnit) {
                                 $table_unit_product_edit.updateRow(detail)
                             } else {
                                 $table_unit_product_edit.insertRow(detail)
                             }
-                            toastr.success(`Unit: ${detail.name} - has been updated`)
-                            clearForm()
-                            hideForm()
                             
-                            _product_edit_unit_form_unit_name_filter.value = ""
+                            Unit.all.set(detail.id, detail)
+                            
                             $table_unit_product_edit.loadRow(detail)
                             $table_unit_product_edit.jumpToRow(detail)
                             $table_unit_product_edit.clearSelectedRows()
+                            
+                            _product_edit_unit_form_unit_name_filter.value = ""
+                            
                             PricingWorksheet.pricingWorksheet()
                             Pricing.resetForm()
-                            YearCalendar.resetForm()
+                            YearCalendar.refresh()
+                            
+                            updateProgress()
+                            clearForm()
+                            hideForm()
+                            
+                            toastr.success(`Unit: ${detail.name} - has been updated`)
+                            YearCalendar.endLoading()
                         }
                     })
                 }
@@ -11692,8 +11789,6 @@ const Unit = (function () {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
                     if (data) {
                         return callback(data)
-                    } else {
-                        return handleUnitError("Oops: 1")
                     }
                 })
             } catch (e) {
@@ -16151,10 +16246,10 @@ const Pricing = (function () {
      * pricing strategy types id
      */
     $(_pricing_strategy_types_id)
-      .on("change", function () {
-          PricingWorksheet.pricingWorksheet()
-          //Console.log("Pricing.pricing_strategy_types_id:change()", _pricing_strategy_types_id.value)
-      })
+        .on("change", function () {
+            PricingWorksheet.pricingWorksheet()
+            //console.log("Pricing.pricing_strategy_types_id:change()", _pricing_strategy_types_id.value)
+        })
     
     /**
      * initialize pricing object
@@ -16185,14 +16280,14 @@ const Pricing = (function () {
      * @param pricing_details
      */
     const loadAll = function (pricing_details) {
-        //Console.log("Pricing.loadAll()", pricing_details)
+        //console.log("Pricing.loadAll()", pricing_details)
         Pricing.all = new Map()
         if (!pricing_details) {
             pricing_details = []
         }
         
         $.each(pricing_details, function (k, matrix) {
-            //Console.log("matrix", matrix)
+            //console.log("matrix", matrix)
             // ----
             let pricings = matrix.pricings
             let pricingCode = matrix.pricing_code
@@ -16202,7 +16297,7 @@ const Pricing = (function () {
             Pricing.all.set(pricingCode, detail)
             /*
             $.each(pricings, function (k, pricing) {
-                //Console.log("pricing", pricing)
+                //console.log("pricing", pricing)
                 // ----
                 
                 let pricing_code = (pricing.code) ? pricing.code : null
@@ -16210,7 +16305,7 @@ const Pricing = (function () {
                 if (pricing_code) {
                     Pricing.all.set(pricing_code, pricing)
                     let details = set(pricing)
-                    //Console.log("details", details)
+                    //console.log("details", details)
                     if (matrixDetails) {
                         if (!matrixDetails["pricings"]) {
                             matrixDetails["pricings"] = new Map()
@@ -16224,7 +16319,7 @@ const Pricing = (function () {
             //*/
         })
         
-        //Console.log("Pricings.all", Pricing.all)
+        //console.log("Pricings.all", Pricing.all)
     }
     
     /**
@@ -16233,11 +16328,13 @@ const Pricing = (function () {
     const loadSeasonDropdown = function () {
         let seasons = (Season && Season.all) ? Array.from(Season.all.values()) : []
         let options = ""
+        
         $.each(seasons, function (k, season) {
             let name = season.name
             let id = season.id
             options += `<option value="${id}">${name}</option>`
         })
+        
         $(_pricing_strategy_season_id).empty()
         $(_pricing_strategy_season_id).html(options)
     }
@@ -16248,15 +16345,13 @@ const Pricing = (function () {
     const loadProfileDropdown = function () {
         let profiles = (InventoryProfile && InventoryProfile.all) ? Array.from(InventoryProfile.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Profiles --</option>"
+        
         $.each(profiles, function (k, profile) {
             let name = profile.name
             let id = profile.id
             options += `<option value="${id}">${name}</option>`
         })
-        /*
-        $(_pricing_strategy_profile_id).empty()
-        $(_pricing_strategy_profile_id).html(options)
-        //*/
+        
         $(_calendar_filter_profile_id).empty()
         $(_calendar_filter_profile_id).html(options)
     }
@@ -16267,23 +16362,27 @@ const Pricing = (function () {
     const loadUnitDropdown = function () {
         let units = (Unit && Unit.all) ? Array.from(Unit.all.values()) : []
         let options = ""
+        
         $.each(units, function (k, unit) {
             let name = unit.name
             let id = unit.id
             options += `<option value="${id}">${name}</option>`
         })
+        
         $(_pricing_strategy_unit_id).empty()
         $(_pricing_strategy_unit_id).html(options)
     }
     
     const resetForm = function () {
+        //*
         loadSeasonDropdown()
         loadUnitDropdown()
         loadProfileDropdown()
+        //*/
     }
     
     const defaultDetail = function () {
-        //Console.log("Pricing.defaultDetail()", Pricing)
+        //console.log("Pricing.defaultDetail()", Pricing)
         
         return {
             pricing_code: null,
@@ -16323,7 +16422,7 @@ const Pricing = (function () {
     const set = function (pricing) {
         let detail = defaultDetail()
         if (pricing) {
-            //Console.log(pricing)
+            //console.log(pricing)
             detail.pricing_code = (pricing.pricing_code) ? pricing.pricing_code : null
             detail.matrix_code = (pricing.matrix_code) ? pricing.matrix_code : null
             detail.code = (pricing.code) ? pricing.code : null
@@ -16356,7 +16455,7 @@ const Pricing = (function () {
             detail.modified_by = (pricing.modified_by) ? pricing.modified_by : user_id
             detail.note = (pricing.note) ? pricing.note : null
         }
-        //Console.log("   detail", detail)
+        //console.log("   detail", detail)
         Pricing.detail = detail
         return detail
     }
@@ -18730,33 +18829,33 @@ $(document).ready(function () {
     $("body").scrollTop()
     
     $.fn.dataTableExt.afnFiltering.push(
-      function (oSettings, aData, iDataIndex) {
-          if (oSettings.nTable.id === "dates_table") {
-              var iFini = document.getElementById("min").value
-              var iFfin = document.getElementById("max").value
-              var iStartDateCol = 1
-              var iEndDateCol = 1
-              
-              iFini = iFini.substring(6, 10) + iFini.substring(3, 5) + iFini.substring(0, 2)
-              iFfin = iFfin.substring(6, 10) + iFfin.substring(3, 5) + iFfin.substring(0, 2)
-              
-              var datofini = aData[iStartDateCol].substring(6, 10) + aData[iStartDateCol].substring(3, 5) + aData[iStartDateCol].substring(0, 2)
-              var datoffin = aData[iEndDateCol].substring(6, 10) + aData[iEndDateCol].substring(3, 5) + aData[iEndDateCol].substring(0, 2)
-              
-              if (iFini === "" && iFfin === "") {
-                  return true
-              } else if (iFini <= datofini && iFfin === "") {
-                  return true
-              } else if (iFfin >= datoffin && iFini === "") {
-                  return true
-              } else if (iFini <= datofini && iFfin >= datoffin) {
-                  return true
-              }
-              return false
-          } else {
-              return true
-          }
-      },
+        function (oSettings, aData, iDataIndex) {
+            if (oSettings.nTable.id === "dates_table") {
+                var iFini = document.getElementById("min").value
+                var iFfin = document.getElementById("max").value
+                var iStartDateCol = 1
+                var iEndDateCol = 1
+                
+                iFini = iFini.substring(6, 10) + iFini.substring(3, 5) + iFini.substring(0, 2)
+                iFfin = iFfin.substring(6, 10) + iFfin.substring(3, 5) + iFfin.substring(0, 2)
+                
+                var datofini = aData[iStartDateCol].substring(6, 10) + aData[iStartDateCol].substring(3, 5) + aData[iStartDateCol].substring(0, 2)
+                var datoffin = aData[iEndDateCol].substring(6, 10) + aData[iEndDateCol].substring(3, 5) + aData[iEndDateCol].substring(0, 2)
+                
+                if (iFini === "" && iFfin === "") {
+                    return true
+                } else if (iFini <= datofini && iFfin === "") {
+                    return true
+                } else if (iFfin >= datoffin && iFini === "") {
+                    return true
+                } else if (iFini <= datofini && iFfin >= datoffin) {
+                    return true
+                }
+                return false
+            } else {
+                return true
+            }
+        },
     )
     
     if ("scrollRestoration" in history) {
@@ -18772,6 +18871,7 @@ $(document).ready(function () {
     $(function () {
         $("[data-toggle=\"tooltip\"]").tooltip()
     })
+    
     //toastr.info('I do not think that word means what you think it means.', 'Info!')
     //toastr.success('I do not think that word means what you think it means.', 'Success!')
     //toastr.warning('I do not think that word means what you think it means.', 'Warning!')
@@ -18819,7 +18919,27 @@ $(document).ready(function () {
             //separator: ' of ',
             //postText: ' chars.',
         })
+    })
+    
+    $(function () {
+        toastr.options = {
+            "closeButton": true,
+            "debug": true,
+            "newestOnTop": true,
+            "progressBar": false,
+            "positionClass": "md-toast-bottom-right",
+            "preventDuplicates": true,
+            "showDuration": 300,
+            "hideDuration": 1000,
+            "timeOut": 5000,
+            "extendedTimeOut": 1000,
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut",
+        }
         
+        //toastr["warning"]("asd", "asd")
     })
 })
 

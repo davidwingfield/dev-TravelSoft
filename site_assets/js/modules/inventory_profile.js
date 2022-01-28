@@ -1,6 +1,6 @@
 const InventoryProfile = (function () {
     "use strict"
-    
+    const _calendar_loader = document.getElementById("calendar_loader")
     const _panel_tab_inventory = document.getElementById("panel_tab_inventory")
     const _table_profile_product_edit_add_new_button = document.getElementById("table_profile_product_edit_add_new_button")
     const _edit_product_profile = document.getElementById("edit_product_profile")
@@ -92,13 +92,13 @@ const InventoryProfile = (function () {
     
     $(_button_add_product_profile)
         .on("click", function () {
-            //Console.log("InventoryProfile.button_add_product_profile: click()", {})
+            //console.log("InventoryProfile.button_add_product_profile: click()", {})
             populateInventoryProfileForm()
         })
     
     $(_table_profile_product_edit_add_new_button)
         .on("click", function () {
-            //Console.log("InventoryProfile.table_profile_product_edit_add_new_button: click()", {})
+            //console.log("InventoryProfile.table_profile_product_edit_add_new_button: click()", {})
             _product_edit_profile_form_profile_name_filter.value = ""
             $table_profile_product_edit.clearSelectedRows()
             populateInventoryProfileForm()
@@ -106,7 +106,7 @@ const InventoryProfile = (function () {
     
     $(_product_edit_profile_form_clear_button)
         .on("click", function () {
-            //Console.log("InventoryProfile.product_edit_profile_form_clear_button: click()", {})
+            //console.log("InventoryProfile.product_edit_profile_form_clear_button: click()", {})
             $table_profile_product_edit.clearSelectedRows()
             clearInventoryProfileForm()
             _product_edit_profile_form_profile_name_filter.value = ""
@@ -114,7 +114,7 @@ const InventoryProfile = (function () {
     
     $(_product_edit_profile_form_submit_button)
         .on("click", function () {
-            //Console.log("InventoryProfile.product_edit_profile_form_submit_button: click()", {})
+            //console.log("InventoryProfile.product_edit_profile_form_submit_button: click()", {})
             save()
         })
     
@@ -129,7 +129,7 @@ const InventoryProfile = (function () {
     
     $(_product_edit_profile_form_profile_sales_types_id)
         .on("change", function () {
-            //Console.log("InventoryProfile.product_edit_profile_form_profile_sales_types_id: change()", {})
+            //console.log("InventoryProfile.product_edit_profile_form_profile_sales_types_id: change()", {})
             setFormElementDisplay()
             InventoryProfile.expiration_date.value("")
             _product_edit_profile_form_profile_days_out.value = ""
@@ -138,7 +138,7 @@ const InventoryProfile = (function () {
     
     $(_product_edit_profile_form_profile_allot_by_id)
         .on("change", function () {
-            //Console.log("InventoryProfile.product_edit_profile_form_profile_allot_by_id: change()", {})
+            //console.log("InventoryProfile.product_edit_profile_form_profile_allot_by_id: change()", {})
             setFormElementDisplay()
             InventoryProfile.expiration_date.value("")
             _product_edit_profile_form_profile_days_out.value = ""
@@ -146,7 +146,7 @@ const InventoryProfile = (function () {
     
     $(_product_edit_profile_form_profile_transfer_sales_types_id)
         .on("change", function () {
-            //Console.log("InventoryProfile.product_edit_profile_form_profile_transfer_sales_types_id: change()", {})
+            //console.log("InventoryProfile.product_edit_profile_form_profile_transfer_sales_types_id: change()", {})
         })
     
     $(_button_remove_profile_from_product)
@@ -187,7 +187,7 @@ const InventoryProfile = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
         }
     }
@@ -200,19 +200,29 @@ const InventoryProfile = (function () {
         if (dataToSend) {
             confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
                 if (ans) {
-                    Console.log(dataToSend)
                     removeProductProfile(dataToSend, function (data) {
                         if (data) {
                             let detail = set(InventoryProfile.all.get(dataToSend.profile_id))
+                            
                             InventoryProfile.all.delete(detail.id)
+                            
                             $table_profile_product_edit.deleteRow(detail)
-                            populateInventoryProfileForm()
-                            _product_edit_profile_form_profile_name_filter.value = ""
                             $table_profile_product_edit.clearSelectedRows()
-                            hideForm()
+                            
+                            _product_edit_profile_form_profile_name_filter.value = ""
+                            
+                            PricingWorksheet.pricingWorksheet()
                             Pricing.resetForm()
                             YearCalendar.resetForm()
+                            PricingWorksheet.status()
+                            //YearCalendar.refresh()
+                            
+                            updateProgress()
+                            populateInventoryProfileForm()
+                            hideForm()
+                            
                             toastr.success(`InventoryProfile: ${detail.name} - has been removed`)
+                            YearCalendar.endLoading()
                         }
                     })
                 }
@@ -258,7 +268,7 @@ const InventoryProfile = (function () {
     }
     
     const initAutoComplete = function () {
-        //Console.log('InventoryProfile.initAutoComplete()', InventoryProfile)
+        //console.log('InventoryProfile.initAutoComplete()', InventoryProfile)
         let product_id = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
         
         $(_product_edit_profile_form_profile_name_filter)
@@ -319,7 +329,7 @@ const InventoryProfile = (function () {
     }
     
     const nameExists = function (name) {
-        //Console.log("InventoryProfile.nameExists(profile_name)", name)
+        //console.log("InventoryProfile.nameExists(profile_name)", name)
         if (name && name !== "") {
             /**
              * data to send to the server
@@ -372,7 +382,7 @@ const InventoryProfile = (function () {
                     }
                 })
             } catch (e) {
-                //Console.log("error", e)
+                //console.log("error", e)
                 return handleProfileError("Error Validating InventoryProfile")
             }
         } else {
@@ -381,7 +391,7 @@ const InventoryProfile = (function () {
     }
     
     const buildInventoryProfileTable = function () {
-        //Console.log("InventoryProfile.buildInventoryProfileTable()", InventoryProfile)
+        //console.log("InventoryProfile.buildInventoryProfileTable()", InventoryProfile)
         $table_profile_product_edit = $(_table_profile_product_edit).table({
             table_type: "display_list",
             data: [],
@@ -399,7 +409,7 @@ const InventoryProfile = (function () {
                     targets: 1,
                     data: "sales_types_details",
                     render: function (data, type, row, meta) {
-                        //Console.log("sales_types_details", data)
+                        //console.log("sales_types_details", data)
                         let name = (data.name) ? data.name : "N/A"
                         
                         return "<span style='white-space: nowrap;'>" + name + "</span>"
@@ -495,10 +505,10 @@ const InventoryProfile = (function () {
         if (!inventory_profiles) { inventory_profiles = [] }
         
         $.each(inventory_profiles, function (k, inventory_profile) {
-            //Console.log("InventoryProfile.loadAll - inventory_profile", inventory_profile)
-            //Console.log("InventoryProfile.loadAll - inventory_profile", inventory_profile, checkin_dow)
+            //console.log("InventoryProfile.loadAll - inventory_profile", inventory_profile)
+            //console.log("InventoryProfile.loadAll - inventory_profile", inventory_profile, checkin_dow)
             let detail = set(inventory_profile)
-            //Console.log('detail', detail)
+            //console.log('detail', detail)
             if (!isNaN(parseInt(detail.id))) {
                 if (_table_profile_product_edit) {
                     $table_profile_product_edit.insertRow(detail)
@@ -587,7 +597,7 @@ const InventoryProfile = (function () {
     }
     
     const showForm = function () {
-        //Console.log("InventoryProfile.showForm()", showForm)
+        //console.log("InventoryProfile.showForm()", showForm)
         if (_edit_product_profile) {
             _product_edit_profile_form_profile_name_filter.disabled = true
             $(_edit_product_profile).show()
@@ -595,13 +605,13 @@ const InventoryProfile = (function () {
     }
     
     const resetInventoryProfileForm = function () {
-        //Console.log("InventoryProfile.resetInventoryProfileForm()", {})
+        //console.log("InventoryProfile.resetInventoryProfileForm()", {})
         clearInventoryProfileForm()
         disableInventoryProfileFormFields()
     }
     
     const clearInventoryProfileForm = function () {
-        //Console.log("InventoryProfile.clearInventoryProfileForm()", clearInventoryProfileForm)
+        //console.log("InventoryProfile.clearInventoryProfileForm()", clearInventoryProfileForm)
         
         disableInventoryProfileFormFields()
         _product_edit_profile_form_profile_id.value = ""
@@ -653,12 +663,12 @@ const InventoryProfile = (function () {
     }
     
     const disableInventoryProfileFormFields = function () {
-        //Console.log('InventoryProfile.disableInventoryProfileFormFields()', this)
+        //console.log('InventoryProfile.disableInventoryProfileFormFields()', this)
         _product_edit_profile_form_profile_name.disabled = false
     }
     
     const populateInventoryProfileForm = function (inventory_profile) {
-        //Console.log("InventoryProfile.populateInventoryProfileForm(inventory_profile)", inventory_profile)
+        //console.log("InventoryProfile.populateInventoryProfileForm(inventory_profile)", inventory_profile)
         clearInventoryProfileForm()
         if (inventory_profile) {
             _product_edit_profile_form_profile_id.value = (inventory_profile.id) ? inventory_profile.id : ""
@@ -694,7 +704,7 @@ const InventoryProfile = (function () {
     }
     
     const set = function (inventory_profile) {
-        //Console.log("InventoryProfile.set(inventory_profile)", inventory_profile)
+        //console.log("InventoryProfile.set(inventory_profile)", inventory_profile)
         
         let detail = defaultDetail()
         let sales_types_details, allot_by_details, tranfer_sales_type_details
@@ -749,7 +759,6 @@ const InventoryProfile = (function () {
     }
     
     const edit = function (inventory_profile) {
-        //Console.log('InventoryProfile.edit(inventory_profile)', inventory_profile)
         if (inventory_profile) {
             $table_profile_product_edit.clearSelectedRows()
             let detail = set(inventory_profile)
@@ -760,7 +769,6 @@ const InventoryProfile = (function () {
             $table_profile_product_edit.loadRow(detail)
             populateInventoryProfileForm(detail)
         }
-        
     }
     
     const save = function () {
@@ -769,17 +777,10 @@ const InventoryProfile = (function () {
             confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
                 if (ans) {
                     saveProductProfile(dataToSend, function (data) {
-                        let inventory_profile
                         if (data) {
-                            inventory_profile = data
-                            if (data[0]) {
-                                inventory_profile = data[0]
-                            }
-                            let detail = set(inventory_profile)
                             
+                            let detail = set((data[0]) ? data[0] : data)
                             let hasProfile = InventoryProfile.all.get(detail.id)
-                            
-                            InventoryProfile.all.set(detail.id, detail)
                             
                             if (hasProfile) {
                                 $table_profile_product_edit.updateRow(detail)
@@ -787,16 +788,24 @@ const InventoryProfile = (function () {
                                 $table_profile_product_edit.insertRow(detail)
                             }
                             
-                            toastr.success(`InventoryProfile: ${detail.name} - has been updated`)
-                            populateInventoryProfileForm()
+                            InventoryProfile.all.set(detail.id, detail)
                             
-                            _product_edit_profile_form_profile_name_filter.value = ""
                             $table_profile_product_edit.loadRow(detail)
                             $table_profile_product_edit.jumpToRow(detail)
                             $table_profile_product_edit.clearSelectedRows()
+                            
+                            _product_edit_profile_form_profile_name_filter.value = ""
+                            
+                            PricingWorksheet.pricingWorksheet()
                             Pricing.resetForm()
-                            YearCalendar.resetForm()
+                            YearCalendar.refresh()
+                            
                             updateProgress()
+                            populateInventoryProfileForm()
+                            hideForm()
+                            
+                            toastr.success(`InventoryProfile: ${detail.name} - has been updated`)
+                            YearCalendar.endLoading()
                         }
                     })
                 }
@@ -820,13 +829,13 @@ const InventoryProfile = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
         }
     }
     
     const init = function (settings) {
-        //Console.log("InventoryProfile.init(settings)", settings)
+        //console.log("InventoryProfile.init(settings)", settings)
         
         let inventory_profiles = []
         if (settings) {

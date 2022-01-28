@@ -148,7 +148,6 @@
 			<div class="row">
 				
 				<div class="col-12 mb-2">
-					
 					<div class="form-element">
 						
 						<div class="input-group form-sm form-1 pl-0">
@@ -165,12 +164,18 @@
 					
 					</div>
 				</div>
+			
+			</div>
+			
+			<div class="row">
+				<div class="col-12 mb-2">
+					<div id="locationMap" class="w-100"></div>
+				</div>
 			</div>
 			
 			<div class="row">
 				
 				<div class="col-12 mb-2">
-					
 					<form id="product_edit_location_form" name="product_edit_location_form" class="card card-body" novalidate="novalidate">
 						<h5 class="card-title">
 							<span>Location</span>
@@ -282,6 +287,18 @@
 								<div class="row">
 									
 									<div class="col-12 mb-2">
+										<div class="form-element">
+											<label for="product_edit_location_id" class="">Location Id:</label>
+											<input type="text" id="product_edit_location_id" name="product_edit_location_id" class="form-control" readonly="readonly">
+											<div id="product_edit_location_id-error" class="error w-100 text-center">&nbsp;</div>
+										</div>
+									</div>
+								
+								</div>
+								
+								<div class="row">
+									
+									<div class="col-12 mb-2">
 										<label for="product_edit_location_name" class="">Location Name:</label>
 										<input type="text" id="product_edit_location_name" name="product_edit_location_name" class="form-control">
 										<div id="product_edit_location_name-error" class="error w-100 text-center">&nbsp;</div>
@@ -337,7 +354,6 @@
 						<!-- /HIDDEN FIELDS -->
 					
 					</form>
-				
 				</div>
 			
 			</div>
@@ -359,8 +375,7 @@
 					<span class="badge badge-primary badge-pill">1</span>
 				</li>
 			</ul>
-			
-			<div id="locationMap" class="z-depth-1-half map-container-9"></div>
+		
 		</div>
 	
 	</div>
@@ -368,10 +383,9 @@
 </section>
 
 <script type="text/javascript">
-	
 	const ProductLocation = (function () {
 		"use strict"
-		
+		const _product_location_search = document.getElementById("product_location_search")
 		const _product_edit_location_city_id = document.getElementById("product_edit_location_city_id")
 		const _product_edit_location_city = document.getElementById("product_edit_location_city")
 		const _product_edit_location_street_1 = document.getElementById("product_edit_location_street_1")
@@ -394,17 +408,34 @@
 		$(_button_clear_form_product_edit_location)
 			.on("click", function () {
 				resetForm()
-				
 			})
 		
-		$(_product_edit_location_city)
+		$(_location_city_id)
 			.on("change", function () {
-				console.log($(this).val())
+				let cityLine = ""
+				let country_id = (!isNaN(parseInt(_location_country_id.value))) ? parseInt(_location_country_id.value) : null
+				let province_id = (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null
+				let city_id = (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null
+				
+				let country = Country.all.get(country_id)
+				let province = Province.all.get(province_id)
+				let city = City.all.get(city_id)
+				
+				if (country && province && city) {
+					let cityName = city.name
+					let provinceName = province.name
+					let countryName = country.name
+					_product_edit_location_city_id.value = city.id
+					cityLine = `${cityName} (${provinceName}, ${countryName})`
+				} else {
+					cityLine = ``
+					_product_edit_location_city_id.value = ``
+				}
+				
+				_product_edit_location_city.value = cityLine
 			})
 		
 		const init = function (settings) {
-			console.log("init(settings)", settings)
-			let mapsURL = "https://maps.google.com/maps"
 			let mapsParams = []
 			let location
 			
@@ -455,7 +486,7 @@
 						allowfullscreen: "allowfullscreen",
 					})
 					
-					$("#locationMap").append(iFrame)
+					//$("#locationMap").append(iFrame)
 					
 				}
 			}
@@ -511,16 +542,38 @@
 			
 		}
 		
+		const resetCityForm = function () {
+			_product_edit_location_zipcode.value = ""
+			_product_edit_location_city_id.value = ""
+			$(_location_country_id).val("").trigger("change")
+			hideCityForm()
+		}
+		
+		const showCityForm = function () {
+			if (_product_edit_location_city_edit) {
+				$(_product_edit_location_city_edit).show()
+			}
+		}
+		
+		const hideCityForm = function () {
+			if (_product_edit_location_city_edit) {
+				$(_product_edit_location_city_edit).hide()
+			}
+		}
+		
 		const initAutoComplete = function () {
 			
 			$(_product_edit_location_city)
 				.on("change", function () {
 					setTimeout(function () {
-					
+						let cityName = _product_edit_location_city.value
+						if (cityName === "") {
+							resetCityForm()
+						}
 					}, 200)
 				})
 				.on("search", function () {
-				
+					resetCityForm()
 				})
 				.on("click", function (e) {
 					if ($(this).attr("readonly") === "readonly") {
@@ -541,11 +594,42 @@
 						if (!suggestion.data) {
 							return
 						}
-						let city = suggestion.data
+						let country, province, city, city_name, country_name, province_name = null
 						
-						_product_edit_location_city_id.value = city.id
+						let product_location = suggestion.data
 						
-						console.log("city", city)
+						if (product_location.country) {
+							country = product_location.country
+							Country.set_detail(country)
+							Country.id = (country.id) ? country.id.toString() : null
+						}
+						
+						if (product_location.province) {
+							province = product_location.province
+							Province.set_detail(province)
+							province_name = province.name
+							Province.id = (province.id) ? province.id.toString() : null
+						}
+						
+						if (product_location.city) {
+							city = product_location.city
+							city_name = city.name
+							City.set_detail(city)
+							City.id = (city.id) ? city.id.toString() : null
+						}
+						
+						$(_location_country_id).val((product_location.city.country_id) ? product_location.city.country_id : "").trigger("change")
+						
+						_product_location_search.value = `City Center (${city_name}, ${province_name})`
+						
+						let zipcode = (_product_edit_location_zipcode && _product_edit_location_zipcode.value !== "") ? _product_edit_location_zipcode.value : null
+						let street_1 = (_product_edit_location_street_1 && _product_edit_location_street_1.value !== "") ? _product_edit_location_street_1.value : null
+						let street_2 = (_product_edit_location_street_2 && _product_edit_location_street_2.value !== "") ? _product_edit_location_street_2.value : null
+						
+						product_location.street_1 = street_1
+						product_location.street_2 = street_2
+						product_location.zipcode = null
+						renderMap(product_location)
 					},
 				})
 		}
@@ -557,11 +641,45 @@
 			_product_edit_location_city.value = ""
 			_product_edit_location_name.value = ""
 			_product_edit_location_location_types_id.value = ""
-			$(_location_country_id).val("").trigger("change")
+			resetCityForm()
+		}
+		
+		const renderMap = function (location) {
+			if (!location) {
+				return
+			}
+			let url = buildMapsURL(location)
+			let elementWidth, elementHeight = null
+			let _locationMap = document.getElementById("locationMap")
+			
+			if (_locationMap) {
+				$(_locationMap)
+					.empty()
+					.append(
+						$("<iframe/>", {
+							id: "locationMapContainer",
+							allowfullscreen: "allowfullscreen",
+							frameborder: "0",
+							src: url,
+						}),
+					)
+				
+				elementWidth = (!isNaN(parseInt($(_locationMap).actual("width")))) ? parseInt($(_locationMap).actual("width")) : null
+				
+				if (elementWidth) {
+					elementHeight = elementWidth / 2
+					
+					$("#locationMapContainer")
+						.css({
+							"height": elementHeight + "px",
+							"width": elementWidth + "px",
+						})
+				}
+			}
+			
 		}
 		
 		const populateForm = function (product_location) {
-			console.log("ProductLocation.populateForm(product_location)", product_location)
 			let country, province, city = {}
 			resetForm()
 			
@@ -569,12 +687,7 @@
 			ProductLocation.display_medium = product_location.display_medium // "City Center (Houston, Texas)"
 			ProductLocation.display_short = product_location.display_short //"City Center (Houston TX, US)"
 			
-			// "Houston (Texas, US - United States)"
-			// "Houston (Texas, United States)"
 			let citySearchDisplay = ""
-			
-			// "Houston (Houston TX, US)"
-			
 			let postal_code = (product_location.postal_code) ? product_location.postal_code : ""
 			let street_1 = (product_location.street_1) ? product_location.street_1 : ""
 			let street_2 = (product_location.street_2) ? product_location.street_2 : ""
@@ -609,6 +722,7 @@
 			_product_edit_location_city.value = citySearchDisplay
 			$(_location_country_id).val((country.id) ? country.id : "").trigger("change")
 			
+			renderMap(product_location)
 		}
 		
 		return {

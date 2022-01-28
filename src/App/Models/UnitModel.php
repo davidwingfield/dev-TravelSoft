@@ -185,11 +185,12 @@
 			$product_id = Model::setInt((isset($params["product_id"])) ? $params["product_id"] : null);
 			
 			if (!is_null($unit_id) && !is_null($product_id)) {
-				$sql = "
-		            DELETE FROM product_unit
-					WHERE 		product_id = $product_id
-						AND		unit_id = $unit_id;";
+				$sql = "DELETE FROM product_unit WHERE product_id = $product_id AND unit_id = $unit_id;";
 				try {
+					Model::$db->rawQuery("DELETE FROM pricing WHERE matrix_id IN (SELECT id FROM matrix WHERE product_id = $product_id AND unit_id = $unit_id);");
+					Model::$db->rawQuery("DELETE FROM matrix WHERE product_id = $product_id AND unit_id = $unit_id;");
+					Model::$db->rawQuery("DELETE FROM inventory WHERE product_id = $product_id AND unit_id = $unit_id;");
+					Model::$db->rawQuery("DELETE FROM product_unit WHERE product_id = $product_id AND unit_id = $unit_id;");
 					Model::$db->rawQuery($sql);
 					
 					return array("unit_id" => $unit_id);

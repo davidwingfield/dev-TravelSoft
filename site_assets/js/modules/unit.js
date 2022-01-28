@@ -19,7 +19,7 @@ const Unit = (function () {
     const _product_edit_unit_form_unit_description_short = document.getElementById("product_edit_unit_form_unit_description_short")
     const _product_edit_unit_form_unit_description_long = document.getElementById("product_edit_unit_form_unit_description_long")
     const _product_edit_unit_form_unit_enabled = document.getElementById("product_edit_unit_form_unit_enabled")
-    const _button_unit_description_long_toggle = document.getElementById("button_unit_description_long_toggle")
+    const _calendar_loader = document.getElementById("calendar_loader")
     const _display_product_unit_name = document.getElementById("display_product_unit_name")
     const _product_edit_unit_form_clear_button = document.getElementById("product_edit_unit_form_clear_button")
     const _product_edit_unit_form_close_button = document.getElementById("product_edit_unit_form_close_button")
@@ -129,7 +129,7 @@ const Unit = (function () {
                     }
                 })
             } catch (e) {
-                //console.log("error", e)
+                console.log("error", e)
             }
         }
     }
@@ -151,17 +151,24 @@ const Unit = (function () {
                         if (unit) {
                             $table_unit_product_edit.deleteRow(unit)
                         }
-                        toastr.success(`Unit: ${unit.name} - has been removed`)
-                        clearForm()
-                        hideForm()
+                        
+                        Unit.all.delete(unitId)
+                        
+                        $table_unit_product_edit.clearSelectedRows()
                         
                         _product_edit_unit_form_unit_name_filter.value = ""
                         _product_edit_unit_form_unit_name_filter.disabled = false
-                        $table_unit_product_edit.clearSelectedRows()
-                        Unit.all.delete(unitId)
+                        
+                        PricingWorksheet.pricingWorksheet()
                         Pricing.resetForm()
-                        YearCalendar.resetForm()
+                        YearCalendar.refresh()
+                        
                         updateProgress()
+                        clearForm()
+                        hideForm()
+                        
+                        toastr.success(`Unit: ${unit.name} - has been removed`)
+                        YearCalendar.endLoading()
                     }
                 })
             }
@@ -316,7 +323,7 @@ const Unit = (function () {
                     }
                 })
             } catch (e) {
-                //console.log("error", e)
+                console.log("error", e)
                 return handleUnitError("Error Validating Unit")
             }
         } else {
@@ -391,32 +398,34 @@ const Unit = (function () {
                     let dataToSend = buildUnitRecord()
                     
                     saveProductUnit(dataToSend, function (data) {
-                        let unit
                         if (data) {
-                            unit = data
-                            if (data[0]) {
-                                unit = data[0]
-                            }
-                            let detail = set(unit)
+                            let detail = set((data[0]) ? data[0] : data)
                             let hasUnit = Unit.all.get(detail.id)
-                            Unit.all.set(detail.id, detail)
                             
                             if (hasUnit) {
                                 $table_unit_product_edit.updateRow(detail)
                             } else {
                                 $table_unit_product_edit.insertRow(detail)
                             }
-                            toastr.success(`Unit: ${detail.name} - has been updated`)
-                            clearForm()
-                            hideForm()
                             
-                            _product_edit_unit_form_unit_name_filter.value = ""
+                            Unit.all.set(detail.id, detail)
+                            
                             $table_unit_product_edit.loadRow(detail)
                             $table_unit_product_edit.jumpToRow(detail)
                             $table_unit_product_edit.clearSelectedRows()
+                            
+                            _product_edit_unit_form_unit_name_filter.value = ""
+                            
                             PricingWorksheet.pricingWorksheet()
                             Pricing.resetForm()
-                            YearCalendar.resetForm()
+                            YearCalendar.refresh()
+                            
+                            updateProgress()
+                            clearForm()
+                            hideForm()
+                            
+                            toastr.success(`Unit: ${detail.name} - has been updated`)
+                            YearCalendar.endLoading()
                         }
                     })
                 }
@@ -488,8 +497,6 @@ const Unit = (function () {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
                     if (data) {
                         return callback(data)
-                    } else {
-                        return handleUnitError("Oops: 1")
                     }
                 })
             } catch (e) {

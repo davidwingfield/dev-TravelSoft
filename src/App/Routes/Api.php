@@ -16,6 +16,14 @@
 	/**
 	 * get requests
 	 */
+	/**
+	 * @see Search::product()
+	 */
+	Router::get($routeLead . '/search/products', "Search@product");
+	/**
+	 * @see Search::hotels()
+	 */
+	Router::get($routeLead . '/search/hotels', "Search@hotels");
 	Router::get($routeLead . '/pricings/${matrix_id}', "Pricing@serveGetByMatrixId");
 	Router::get($routeLead . '/pricings/product', "Pricing@serveGetByProductId");
 	Router::get($routeLead . '/profiles/${product_id}', "Profile@getByProductId");
@@ -85,12 +93,14 @@
 	Router::post($routeLead . "/images/update", "Image@serveUpdate");
 	
 	/**
-	 * update requests
-	 */
-	/**
 	 * @see Product::assignSeason()
 	 */
 	Router::post($routeLead . "/products/assign_seasons", "Product@assignSeason");
+	/**
+	 * @see Product::assignProfile()
+	 */
+	Router::post($routeLead . "/products/assign_profiles", "Product@assignProfile");
+	
 	/**
 	 * @see Matrix::serveUpdate()
 	 */

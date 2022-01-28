@@ -365,11 +365,10 @@
 			$product_id = Model::setInt((isset($params["product_id"])) ? $params["product_id"] : null);
 			
 			if (!is_null($profile_id) && !is_null($product_id)) {
-				$sql = "
-		            DELETE FROM profile
-					WHERE 		id=$profile_id;";
 				try {
-					Model::$db->rawQuery($sql);
+					Model::$db->rawQuery("DELETE FROM inventory WHERE product_id = $product_id AND profile_id = $profile_id;");
+					Model::$db->rawQuery("DELETE FROM product_profile WHERE product_id = $product_id AND profile_id = $profile_id;");
+					Model::$db->rawQuery("DELETE FROM profile WHERE id=$profile_id;");
 					
 					return array("profile_id" => $profile_id);
 				} catch (Exception $e) {

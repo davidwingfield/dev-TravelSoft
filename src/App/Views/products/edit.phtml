@@ -406,7 +406,7 @@
 	
 	<div class="row gx-1">
 		
-		<div class="col-12 p-1">
+		<div class="col-12 p-1 mb-2">
 			<div class="tab-content p-1">
 				
 				<div class="tab-pane active" id="panel_tab_product_overview" role="tabpanel">
@@ -561,6 +561,16 @@
 					<?php include_once(VIEWS_PATH . "/locations/forms/product_edit_location_form.phtml"); ?>
 				</div>
 				
+				<div class="tab-pane" id="panel_tab_product_provider" role="tabpanel">
+					Provider
+					<?php //include_once(VIEWS_PATH . "/seasons/forms/product_edit_season_form.phtml"); ?>
+				</div>
+				
+				<div class="tab-pane" id="panel_tab_product_vendor" role="tabpanel">
+					Vendor
+					<?php //include_once(VIEWS_PATH . "/seasons/forms/product_edit_season_form.phtml"); ?>
+				</div>
+				
 				<div class="tab-pane" id="panel_tab_product_season" role="tabpanel">
 					<?php include_once(VIEWS_PATH . "/seasons/forms/product_edit_season_form.phtml"); ?>
 				</div>
@@ -587,62 +597,6 @@
 			
 			</div>
 		</div>
-		
-		<div class="col-12 p-1 mb-1">
-			
-			<div class="card card-body mb-2">
-				
-				<ul class="list-group list-group-flush">
-					<li class="list-group-item p-1 d-flex justify-content-between">Status:</li>
-					<li class="list-group-item p-1">
-						<div class="row gx-1">
-							<div class="col-12 p-1 d-flex justify-content-between">
-								<span>Created By:</span>
-								<span id="product_edit_detail_created_by">David Wingfield</span>
-							</div>
-						</div>
-						<div class="row gx-1">
-							<div class="col-12 p-1 d-flex justify-content-between">
-								<span>Status:</span>
-								<span id="product_edit_detail_status"><?php echo $status_name; ?></span>
-								<input type="hidden" id="product_status_id" class="form-control dev-element" value="<?php echo $status_name; ?>"/>
-							</div>
-						</div>
-					</li>
-					<li class="list-group-item p-1">
-						<div class="row gx-1">
-							<div class="col-12 p-1 d-flex justify-content-between">
-								<span>Country:</span>
-								<span id="product_edit_detail_location_city"><?php echo $country_name; ?></span>
-							</div>
-						</div>
-						
-						<div class="row gx-1">
-							<div class="col-12 p-1 d-flex justify-content-between">
-								<span>Province:</span>
-								<span id="product_edit_detail_location_province"><?php echo $province_name; ?></span>
-							</div>
-						</div>
-						
-						<div class="row gx-1">
-							<div class="col-12 p-1 d-flex justify-content-between">
-								<span>City:</span>
-								<span id="product_edit_detail_location_country"><?php echo $city_name; ?></span>
-							</div>
-						</div>
-					</li>
-					<li class="list-group-item p-1">
-						<!-- Button trigger seasonCalendarModal modal -->
-						<button type="button" class="btn btn-primary btn-sm flex-fill waves-effect waves-light" data-toggle="modal" data-target="#seasonCalendarModal">
-							View Calendar
-						</button>
-						<!-- /Button trigger seasonCalendarModal modal -->
-					</li>
-				</ul>
-			
-			</div>
-		
-		</div>
 	
 	</div>
 	
@@ -657,7 +611,7 @@
 	</div>
 	<!-- /Hidden Elements -->
 	
-	<?php //*?>
+	<?php /*?>
 	<!-- Test Elements -->
 	<div id="testElements">
 		<div class="row gx-1">

@@ -48,7 +48,7 @@ $.fn.YearCalendar = function (settings) {
     
     const buildCalendarColumn = function (calendar_id) {
         let calendarRow = document.createElement("div")
-        calendarRow.classList = "flex-fill col-4 p-1"
+        calendarRow.classList = "flex-fill col-6 p-1"
         return calendarRow
     }
     
@@ -64,13 +64,13 @@ $.fn.YearCalendar = function (settings) {
         let calendarColumn = buildCalendarColumn(calendar_id)
         let calendarBlock = document.createElement("div")
         let calendarBlockId = "calendar_block_" + calendar_id
-        //
+        
         calendarBlock.classList = "my_calendar"
         calendarBlock.id = calendarBlockId
-        //
+        
         calendarColumn.appendChild(calendarPanel)
         calendarPanel.appendChild(calendarBlock)
-        //
+        
         calendars.push(calendarBlock)
         return calendarColumn
     }
@@ -85,7 +85,7 @@ $.fn.YearCalendar = function (settings) {
         
         for (let n = 0; n < initialCalenderViewCount; n++) {
             let id = (n + 1)
-            if (n % 3 === 0 && n > 0) {
+            if (n % 2 === 0 && n > 0) {
                 calendarBlockContainer.appendChild(row)
                 row = buildCalendarRow(id)
             }
@@ -163,22 +163,11 @@ $.fn.YearCalendar = function (settings) {
         }
     }
     
-    const getEventFromDate = function (calendar, date) {
-        let allEvents = []
-        allEvents = $('#calendarRoomUnavailable').fullCalendar('clientEvents')
-        var event = $.grep(allEvents, function (v) {
-            return +v.start === +date
-        })
-        if (event.length > 0) {
-            return event[0]
-        } else {
-            return null
-        }
-    }
-    
     const buildCalendar = function (settings) {
+        YearCalendar.season_events = new Map()
         let dateToday = new Date()
         calContainer.appendChild(buildCalendarContainer())
+        
         YearCalendar.start = (settings && settings.start) ? settings.start : dateToday.getFullYear()
         YearCalendar.events = (settings && settings.events) ? settings.events : []
         YearCalendar.getTitle()
@@ -192,9 +181,7 @@ $.fn.YearCalendar = function (settings) {
                 defaultDate: displayMonth,
                 initialView: "dayGridMonth",
                 displayEventTime: false,
-                height: 361,
-                contentHeight: 323,
-                eventLimit: 1,
+                eventLimit: 3,
                 header: {
                     left: "",
                     center: "title",
@@ -300,9 +287,6 @@ $.fn.YearCalendar = function (settings) {
                     }
                 },
                 eventRender: function (event, element, view) {
-                    //console.log("render event", event)
-                    // --
-                    
                     $(element).attr("season", "true")
                     let day = moment(event.start).format("YYYY-MM-DD")
                     let top = $("td.fc-day-top[data-date='" + day + "']")
@@ -316,12 +300,12 @@ $.fn.YearCalendar = function (settings) {
                     bgRGBA.push(.6)
                     let bgColor = "rgba(" + bgRGBA.join(', ') + ")"
                     
-                    // --
-                    
                     if (event.rendering === "background") {
                         if ($(element).hasClass("fc-disabled-day")) {
                             return
                         }
+                        
+                        YearCalendar.season_events.set(day, "true")
                         
                         top
                             .addClass("background_event")
@@ -369,6 +353,13 @@ $.fn.YearCalendar = function (settings) {
             })
             
             YearCalendar.activeCalendars.push(activeCal)
+            
+            let calendarWidth = (!isNaN(parseInt($(document.getElementById("calendar_block_1")).actual("width")))) ? parseInt($(document.getElementById("calendar_block_1")).actual("width")) : 600
+            
+            $.each(YearCalendar.activeCalendars, function (index, cal) {
+                $(cal).fullCalendar("option", "contentHeight", calendarWidth)
+            })
+            
         })
         
     }
@@ -387,7 +378,6 @@ $.fn.YearCalendar = function (settings) {
         }
         
         fetchCalendarEvents(dataToSend, function (events) {
-            
             if (!events) {
                 events = []
             }
@@ -442,6 +432,7 @@ const YearCalendar = (function () {
         .on("click", function () {
             $(_calendar_loader).fadeIn("slow", function () {
                 YearCalendar.remove()
+                setCalendarFilters()
             })
         })
     
@@ -449,6 +440,7 @@ const YearCalendar = (function () {
         .on("click", function () {
             $(_calendar_loader).fadeIn("slow", function () {
                 YearCalendar.refresh()
+                setCalendarFilters()
             })
         })
     
@@ -539,7 +531,7 @@ const YearCalendar = (function () {
     
     $(_calendar_filter_unit_id_assign)
         .on("click", function () {
-            buildAssignProfilesRecord()
+            assignProfileToProduct()
         })
     
     $(_calendar_filter_season_id_clear)
@@ -563,9 +555,11 @@ const YearCalendar = (function () {
     $(_seasonCalendarModal)
         .on("shown.bs.modal", function () {
             setCalendarFilters()
+            $("html").css({ overflow: "hidden" })
         })
         .on("hidden.bs.modal", function () {
             resetForm()
+            $("html").css({ overflow: "auto" })
         })
         .on("click", function () {
             YearCalendar.checkProgress()
@@ -575,19 +569,23 @@ const YearCalendar = (function () {
         let seasons = (Season && Season.all) ? Array.from(Season.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Seasons --</option>"
         let options2 = ""
+        
         $.each(seasons, function (k, season) {
             let name = season.name
             let id = season.id
             options += `<option value="${id}">${name}</option>`
             options2 += `<option value="${id}">${name}</option>`
         })
+        
         $(_calendar_filter_season_id).empty()
         $(_calendar_filter_season_id).html(options)
+        $(_calendar_filter_season_id).val("").trigger("change")
     }
     
     const loadProfileDropdown = function () {
         let profiles = (InventoryProfile && InventoryProfile.all) ? Array.from(InventoryProfile.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Profiles --</option>"
+        
         $.each(profiles, function (k, profile) {
             let name = profile.name
             let id = profile.id
@@ -596,29 +594,27 @@ const YearCalendar = (function () {
         
         $(_calendar_filter_profile_id).empty()
         $(_calendar_filter_profile_id).html(options)
+        $(_calendar_filter_profile_id).val("").trigger("change")
     }
     
     const loadUnitDropdown = function () {
         let units = (Unit && Unit.all) ? Array.from(Unit.all.values()) : []
         let options = ""
+        
         $.each(units, function (k, unit) {
             let name = unit.name
             let id = unit.id
             options += `<option value="${id}">${name}</option>`
         })
+        
         $(_calendar_filter_unit_id).empty()
         $(_calendar_filter_unit_id).html(options)
+        $(_calendar_filter_unit_id).val([]).trigger("change")
+        
     }
     
     const setCalendarFilters = function () {
         clearSelectedDOW()
-        
-        $("html").css({ overflow: "hidden" })
-        
-    }
-    
-    const unSetCalendarFilters = function () {
-        $("html").css({ overflow: "auto" })
     }
     
     const buildAssignDatesRecord = function () {
@@ -652,11 +648,17 @@ const YearCalendar = (function () {
         
         confirmDialog(`Would you like to assign? This change may affect your Pricing Worksheets.`, (ans) => {
             if (ans) {
-                assignSeasonToProduct(dataToSend, function (data) {
-                    clearSelected()
-                    clearSelectedDOW()
-                    refresh()
-                    toastr.success(`Dates Assigned.`)
+                $(_calendar_loader).fadeIn("slow", function () {
+                    assignSeasonToProduct(dataToSend, function (data) {
+                        if (data) {
+                            clearSelected()
+                            clearSelectedDOW()
+                            refresh()
+                            toastr.success(`Dates Assigned.`)
+                        }
+                        
+                        endLoading()
+                    })
                 })
             }
         })
@@ -668,28 +670,94 @@ const YearCalendar = (function () {
     }
     
     const buildAssignProfilesRecord = function () {
-        let profile_id = (!is_null(parseInt(_calendar_filter_profile_id.value))) ? parseInt(_calendar_filter_profile_id.value) : null
-        let unit_ids = $(_calendar_filter_unit_id).val().map(Number)
-        console.log(unit_ids)
-        let dataToSend = {}
+        let profile_id = (_calendar_filter_profile_id && !is_null(parseInt(_calendar_filter_profile_id.value))) ? parseInt(_calendar_filter_profile_id.value) : null
+        let product_id = (_product_id && !isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
+        let units = (_calendar_filter_unit_id) ? $(_calendar_filter_unit_id).val().map(Number) : []
+        let profile
+        let dataToSend = []
+        let days = Array.from(YearCalendar.selectedDates.values())
+        
+        if (product_id && profile_id) {
+            profile = InventoryProfile.all.get(profile_id)
+            
+            if (profile) {
+                $.each(units, function (index, unit) {
+                    
+                    let unitData = {
+                        product_id: product_id,
+                        profile_id: profile_id,
+                        unit_id: unit,
+                        quantity_released: 0,
+                        quantity_used: 0,
+                        days: [],
+                    }
+                    
+                    $.each(days, function (i, day) {
+                        let hasSeason = YearCalendar.season_events.get(day)
+                        if (hasSeason) {
+                            unitData.days.push(day)
+                        }
+                    })
+                    
+                    if (unitData.days.length > 0) {
+                        dataToSend.push(unitData)
+                    }
+                    
+                })
+            }
+        }
+        
+        if (dataToSend.length > 0) {
+            return dataToSend
+        }
         
     }
     
-    const assignProfileToProduct = function (dataToSend, callback) {
-        let url = "/api/v1.0/products/assign_profiles"
+    const assignProfileToProduct = function () {
+        let dataToSend = buildAssignProfilesRecord()
         
         if (dataToSend) {
+            
+            confirmDialog(`Would you like to assign? This change may affect your Pricing Worksheets.`, (ans) => {
+                if (ans) {
+                    $(_calendar_loader).fadeIn("slow", function () {
+                        updateProductProfileCalendar(dataToSend, function (data) {
+                            if (data) {
+                                clearSelected()
+                                clearSelectedDOW()
+                                refresh()
+                                toastr["success"](`Dates Assigned.`, `Inventory Profile`)
+                            }
+                            
+                            endLoading()
+                        })
+                    })
+                }
+            })
+            
+        } else {
+            toastr["warning"](`No Profiles to update.`, `Inventory Profile`)
+            endLoading()
+        }
+        
+    }
+    
+    const updateProductProfileCalendar = function (dataToSend, callback) {
+        let url = "/api/v1.0/products/assign_profiles"
+        if (dataToSend) {
             try {
-                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                sendPostRequest(url, { params: dataToSend }, function (data, status, xhr) {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleCalendarError("Oops: 1")
+                        handleCalendarError("Oops: 1")
+                        endLoading()
                     }
                 })
             } catch (e) {
                 console.log("error", e)
-                return handleCalendarError("Oops: 1")
+                handleCalendarError("Oops: 2")
+                endLoading()
             }
         }
     }
@@ -714,7 +782,6 @@ const YearCalendar = (function () {
     }
     
     const resetForm = function () {
-        unSetCalendarFilters()
         clearSelected()
         clearSelectedDOW()
         loadSeasonDropdown()
@@ -731,14 +798,14 @@ const YearCalendar = (function () {
         
         $.each(disabled_dow, function (k, dow) {
             let dataDOW = dow.toString()
-            //let days = $(`td[season='true'][dow='${dataDOW}']`)
             let days = $(`td[season='true'][dow='${dataDOW}']`)
+            
             days.each(function (index, element) {
                 let day = $(element).attr("data-date")
-                console.log(day)
                 $("td[data-date='" + day + "']").addClass("disabled-dow")
                 $(element).addClass("disabled-dow")
             })
+            
         })
         
     }
@@ -763,6 +830,7 @@ const YearCalendar = (function () {
     }
     
     const endLoading = function () {
+        setCalendarFilters()
         $(_calendar_loader).hide()
     }
     
@@ -778,7 +846,7 @@ const YearCalendar = (function () {
         loadProfileDropdown()
         loadSeasonDropdown()
         
-        ContextMenu.init(settings)
+        //ContextMenu.init(settings)
     }
     
     const checkProgress = function () {
@@ -789,7 +857,6 @@ const YearCalendar = (function () {
         if (dataToSend) {
             try {
                 sendGetRequest("/api/v1.0/calendars", dataToSend, function (data, status, xhr) {
-                    //console.log("data", data)
                     if (data) {
                         return callback(data)
                     } else {
@@ -798,10 +865,7 @@ const YearCalendar = (function () {
                 })
             } catch (e) {
                 console.log("error", e)
-                return callback([])
             }
-        } else {
-            return callback([])
         }
     }
     
@@ -828,26 +892,30 @@ const YearCalendar = (function () {
         YearCalendar.endLoading()
     }
     
-    const refresh = function () {
-        let product_id = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
-        
-        if (product_id) {
-            YearCalendar.events = []
+    const refreshCalendar = function () {
+        $(_calendar_loader).fadeIn("slow", function () {
+            let product_id = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
+            clearSelected()
+            clearSelectedDOW()
             removeAllEvents()
             reFetchCalendarEvents({ product_id: product_id }, function (data) {
                 YearCalendar.events = data
                 
                 $.each(YearCalendar.activeCalendars, function (index, cal) {
+                    $(cal).fullCalendar("removeEvents")
                     $(cal).fullCalendar("addEventSource", YearCalendar.events)
                     $(cal).fullCalendar("rerenderEvents")
                 })
                 
                 YearCalendar.endLoading()
             })
-        } else {
-            YearCalendar.endLoading()
-        }
+        })
         
+    }
+    
+    const refresh = function () {
+        resetForm()
+        refreshCalendar()
     }
     
     return {
@@ -857,9 +925,8 @@ const YearCalendar = (function () {
         start: new Date().getFullYear(),
         selectedDates: new Map(),
         activeCalendars: [],
+        season_events: [],
         refresh: function () {
-            clearSelected()
-            clearSelectedDOW()
             refresh()
         },
         remove: function () {

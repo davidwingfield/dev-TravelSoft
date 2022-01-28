@@ -93,11 +93,11 @@ const clear_validation = function (formElement) {
 
 const get_errors = function (validator) {
     var submitErrorsList = {}
-    //Console.dir(validator)
+    //console.dir(validator)
     //for (var i = 0; i < validator.errorList.length; i++) {
     //    submitErrorsList[validator.errorList[i].element.name] = validator.errorList[i].message
     //}
-    //Console.log("Submit Errors", submitErrorsList)
+    //console.log("Submit Errors", submitErrorsList)
 }
 
 const validator_init = function (settings) {
@@ -298,14 +298,14 @@ const sendGetRequest = function (url, data_to_send, callback) {
                 result = data.result
                 return callback(result)
             } else if (status === "failed" && typeof data.error === "undefined") {
-                //Console.log("getError:2")
+                //console.log("getError:2")
                 return handleError("failed")
             } else if (status === "success" && typeof data.error !== "undefined") {
-                Console.log("data.error", data.error)
-                //Console.log("getError:3")
+                console.log("data.error", data.error)
+                //console.log("getError:3")
                 return handleError(data.error)
             } else {
-                //Console.log("getError:4")
+                //console.log("getError:4")
             }
         })
     } else {
@@ -326,10 +326,10 @@ const sendPostRequest = function (url, data_to_send, callback) {
     if (url && data_to_send) {
         $.postJSON(url, data_to_send, function (data, status, xhr) {
             /*
-            Console.log("data", data)
-            Console.log("status", status)
-            Console.log("xhr", xhr)
-            Console.log("typeof data.result", typeof data.result)
+            console.log("data", data)
+            console.log("status", status)
+            console.log("xhr", xhr)
+            console.log("typeof data.result", typeof data.result)
             //*/
             if (status === "success" && typeof data.result !== "undefined") {
                 
@@ -369,7 +369,7 @@ const _display_ajax_error = function (jqXHR, exception, uri) {
         status: "",
         uri: uri,
     }
-    Console.log("jqXHR", jqXHR.responseText)
+    console.log("jqXHR", jqXHR.responseText)
     if (jqXHR.status === 0) {
         msg = "Not connected, verify Network."
     } else if (jqXHR.status === 404) {
@@ -501,7 +501,7 @@ const populateMultiSelect = function (arr, elem) {
         o = elem.options[i]
         
         if (arr.indexOf(o.value) !== -1) {
-            //Console.log("ggg")
+            //console.log("ggg")
             o.selected = true
         }
         
@@ -753,17 +753,17 @@ jQuery.extend({
             }
             //*/
             /*
-            Console.log("jqXHR", jqXHR)
-            Console.log("jqXHR", jqXHR.responseText)
-            Console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
-            Console.log("textStatus", textStatus)
-            Console.log("msg", msg)
-            Console.log('http://dev.travelsoft.com/error')
+            console.log("jqXHR", jqXHR)
+            console.log("jqXHR", jqXHR.responseText)
+            console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
+            console.log("textStatus", textStatus)
+            console.log("msg", msg)
+            console.log('http://dev.travelsoft.com/error')
             //*/
             if (typeof textStatus !== "undefined") {
-                Console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
+                console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
             } else {
-                Console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
+                console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
             }
             
             if ($.isFunction(callback)) {
@@ -794,11 +794,11 @@ jQuery.extend({
             if (typeof textStatus !== "undefined") {
                 let err = _display_ajax_error(jqXHR, textStatus, url)
                 handleError(err.message)
-                Console.log(err)
+                console.log(err)
             } else {
                 let err = _display_ajax_error(jqXHR, textStatus, url)
                 handleError(err.message)
-                Console.log(err)
+                console.log(err)
             }
             if ($.isFunction(callback)) {
                 callback(msg, "failed")
@@ -820,11 +820,11 @@ jQuery.extend({
         })
         getRequest.fail(function (jqXHR, textStatus, msg) {
             if (typeof textStatus !== "undefined") {
-                Console.log("Request failed")
-                Console.log(_display_ajax_error(jqXHR, textStatus, url))
+                console.log("Request failed")
+                console.log(_display_ajax_error(jqXHR, textStatus, url))
             } else {
-                Console.log("Request failed")
-                Console.log(_display_ajax_error(jqXHR, textStatus, url))
+                console.log("Request failed")
+                console.log(_display_ajax_error(jqXHR, textStatus, url))
             }
             if ($.isFunction(callback)) {
                 callback(msg, "failed")
@@ -832,11 +832,13 @@ jQuery.extend({
         })
     },
 })
+
 const logger = {
     log: function () {
-        Console.log(args)
+        console.log(args)
     },
 }
+
 const infoDialog = function (message, handler) {
     $(`
         <!--Modal: modalConfirm-->
@@ -1036,11 +1038,11 @@ const deleteDialog = function (message, handler) {
     
 }
 const formatURL = function (param) {
-    Console.log("formatURL()", param)
+    console.log("formatURL()", param)
     return encodeURIComponent(param.trim())
 }
 const buildMapsURL = function (location) {
-    Console.log("buildMapsURL(location)", location)
+    console.log("buildMapsURL(location)", location)
     let street_1, street_2, zipcode, city_name, province_name, country_name
     
     street_1 = (location.street_1) ? location.street_1 : null
@@ -1066,12 +1068,12 @@ const buildMapsURL = function (location) {
     // PROVINCE - Ascoli Piceno: 186
     // COUNTRY - Italy: 102
     
-    Console.log("street_1", street_1)
-    Console.log("street_2", street_2)
-    Console.log("city_name", city_name)
-    Console.log("province_name", province_name)
-    Console.log("country_name", country_name)
-    Console.log("zipcode", zipcode)
+    console.log("street_1", street_1)
+    console.log("street_2", street_2)
+    console.log("city_name", city_name)
+    console.log("province_name", province_name)
+    console.log("country_name", country_name)
+    console.log("zipcode", zipcode)
     //*/
     
     let tempURL = []
@@ -1126,7 +1128,7 @@ const weatherUpdate = function (city) {
     xhr.send()
     xhr.onload = () => {
         if (xhr.status === 404) {
-            //Console.log(`${cityName} not found`)
+            //console.log(`${cityName} not found`)
         } else {
             let data = JSON.parse(xhr.response)
             let mainWeatherCityName = data.name
@@ -1134,12 +1136,12 @@ const weatherUpdate = function (city) {
             let mainWeather = data.weather[0].main
             let mainWeatherDescription = data.weather[0].description
             let mainWeatherImage = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
-            //Console.log("mainWeatherCityName", mainWeatherCityName)
-            //Console.log("mainWeatherTemperature", mainWeatherTemperature)
-            //Console.log("mainWeather", mainWeather)
-            //Console.log("mainWeatherDescription", mainWeatherDescription)
-            //Console.log("mainWeatherImage", mainWeatherImage)//100x100
-            //Console.log("data", data)
+            //console.log("mainWeatherCityName", mainWeatherCityName)
+            //console.log("mainWeatherTemperature", mainWeatherTemperature)
+            //console.log("mainWeather", mainWeather)
+            //console.log("mainWeatherDescription", mainWeatherDescription)
+            //console.log("mainWeatherImage", mainWeatherImage)//100x100
+            //console.log("data", data)
         }
     }
 }

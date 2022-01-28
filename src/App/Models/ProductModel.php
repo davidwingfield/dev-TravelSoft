@@ -192,6 +192,71 @@
 			);
 		}
 		
+		public static function updateAssignProfiles(array $product = []): array
+		{
+			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+			$created_by = Model::setInt($user_id);
+			$modified_by = Model::setInt($user_id);
+			
+			$product_id = Model::setInt((isset($product["product_id"])) ? $product["product_id"] : null);
+			$unit_id = Model::setInt((isset($product["unit_id"])) ? $product["unit_id"] : null);
+			$profile_id = Model::setInt((isset($product["profile_id"])) ? $product["profile_id"] : null);
+			
+			$quantity_used = Model::setInt((isset($product["quantity_used"])) ? $product["quantity_used"] : 0);
+			$quantity_released = Model::setInt((isset($product["quantity_released"])) ? $product["quantity_released"] : 0);
+			
+			$days = (isset($product["days"])) ? $product["days"] : [];
+			$note = Model::setLongText((isset($product["note"])) ? $product["note"] : null);
+			$description = Model::setLongText((isset($product["description"])) ? $product["description"] : null);
+			$enabled = Model::setBool((isset($matrix["enabled"])) ? $matrix["enabled"] : 1);
+			
+			$dateFields = [];
+			
+			foreach ($days AS $k => $date) {
+				array_push($dateFields, "('$date', $product_id, $unit_id, $profile_id, $description,
+					$quantity_used, $quantity_released, $enabled, CURRENT_TIMESTAMP, $created_by,
+					CURRENT_TIMESTAMP, $modified_by, $note)"
+				);
+			}
+			
+			if (count($dateFields) > 0) {
+				$dateValues = implode(", ", $dateFields);
+				
+				try {
+					$sql = "
+					INSERT INTO inventory (
+						date, product_id, unit_id, profile_id, description,
+						quantity_used, quantity_released, enabled, date_created, created_by,
+						date_modified, modified_by, note
+					)
+					VALUES
+						$dateValues
+					ON DUPLICATE KEY UPDATE
+						description = VALUES(description),
+						quantity_released = VALUES(quantity_released),
+					    quantity_used = VALUES(quantity_used),
+						note = VALUES(note),
+						enabled = VALUES(enabled),
+						modified_by = VALUES(modified_by),
+						date_modified = VALUES(date_modified);
+				";
+					
+					Model::$db->rawQuery($sql);
+					
+					return $product;
+				} catch (Exception $e) {
+					Log::$debug_log->error($e);
+					
+					return [];
+				}
+			} else {
+				Log::$debug_log->error("No Date");
+				Log::$debug_log->trace($product);
+				
+				return [];
+			}
+		}
+		
 		public static function product_ac(string $st = "", int $category_id = null): array
 		{
 			if (is_null($category_id)) {

@@ -11,22 +11,63 @@
 		
 		<div class="modal-content">
 			
-			<div class="modal-header" id="modalHeader">
+			<div class="modal-header px-4 py-2" id="modalHeader">
 				<h4 class="modal-title" id="gridModalLabel">Product Calendar</h4>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">×</span>
 				</button>
 			</div>
 			
-			<div class="modal-body" id="modalBody">
+			<div class="modal-body p-0 h-100" id="modalBody">
 				
-				<div class="container-fluid">
+				<div class="container-fluid h-100">
 					
-					<div class="row">
+					<div class="row h-100">
 						
-						<div class="flex-fill col-3 p-1">
+						<div class="col-2 p-2 border-right border-light">
+							<div class="card card-body p-2 mb-2">
+								
+								<div class="row">
+									
+									<!-- Profile Filter -->
+									<div class="col-12 mb-2">
+										<div class="form-element">
+											<label for="calendar_filter_profile_id" class="d-flex justify-content-between">
+												<span>Inventory Profiles:</span>
+												<a href="javascript:void(0);" id="calendar_filter_profile_id_clear" name="calendar_filter_profile_id_clear" class="text-primary" style="text-transform: uppercase">
+													<small>clear</small>
+												</a>
+											</label>
+											<select class="form-control" id="calendar_filter_profile_id" name="calendar_filter_profile_id"></select>
+											<div id="calendar_filter_profile_id-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									<!-- /Profile Filter -->
+									
+									<!-- Unit Filter -->
+									<div class="col-12 mb-2">
+										<div class="form-element">
+											<label for="calendar_filter_unit_id" class="d-flex justify-content-between">
+												<span>Units:</span>
+												<a href="javascript:void(0);" id="calendar_filter_unit_id_clear" name="calendar_filter_unit_id_clear" class="text-primary" style="text-transform: uppercase">
+													<small>clear</small>
+												</a>
+											</label>
+											<select class="form-control" id="calendar_filter_unit_id" name="calendar_filter_unit_id" multiple></select>
+											<div id="calendar_filter_unit_id-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									<!-- /Unit Filter -->
+								
+								</div>
+								
+								<div class="w-100 text-right mb-2">
+									<button type="button" id="calendar_filter_unit_id_assign" name="calendar_filter_unit_id_assign" class="btn btn-secondary btn-sm">Assign</button>
+								</div>
 							
-							<div class="card card-body mb-2">
+							</div>
+							
+							<div class="card card-body p-2 mb-2">
 								<div class="row">
 									<div class="col-12">
 										
@@ -56,67 +97,18 @@
 								</div>
 							
 							</div>
-							
-							<div class="card card-body mb-2">
-								
-								<div class="row">
-									
-									<!-- Profile Filter -->
-									<div class="col-12">
-										<div class="form-element">
-											<label for="calendar_filter_profile_id" class="d-flex justify-content-between">
-												<span>Inventory Profiles:</span>
-												<a href="javascript:void(0);" id="calendar_filter_profile_id_clear" name="calendar_filter_profile_id_clear" class="text-primary" style="text-transform: uppercase">
-													<small>clear</small>
-												</a>
-											</label>
-											<select class="form-control" id="calendar_filter_profile_id" name="calendar_filter_profile_id"></select>
-											<div id="calendar_filter_profile_id-error" class="error w-100 text-center"></div>
-										</div>
-									</div>
-									<!-- /Profile Filter -->
-								
-								</div>
-								
-								<div class="row">
-									
-									<!-- Unit Filter -->
-									<div class="col-12">
-										<div class="form-element">
-											<label for="calendar_filter_unit_id" class="d-flex justify-content-between">
-												<span>Units:</span>
-												<a href="javascript:void(0);" id="calendar_filter_unit_id_clear" name="calendar_filter_unit_id_clear" class="text-primary" style="text-transform: uppercase">
-													<small>clear</small>
-												</a>
-											</label>
-											<select class="form-control" id="calendar_filter_unit_id" name="calendar_filter_unit_id" multiple></select>
-											<div id="calendar_filter_unit_id-error" class="error w-100 text-center"></div>
-										</div>
-									</div>
-									<!-- /Unit Filter -->
-								
-								</div>
-								
-								<div class="row">
-									
-									<div class="col-12 text-right">
-										<button type="button" id="calendar_filter_unit_id_assign" name="calendar_filter_unit_id_assign" class="btn btn-secondary btn-sm">Assign</button>
-									</div>
-								
-								</div>
-							
-							</div>
 						
 						</div>
 						
-						<div class="flex-fill col-9 p-1">
-							<div class="card card-body mb-2 p-1">
+						<div class="flex-fill col-10 p-0">
+							
+							<div class="card card-body mb-2 p-1 z-depth-0 border-top-0 border-right-0 border-left-0 border-bottom border-light">
 								
 								<div class="row">
 									<div class="col-12 col-md-12 mb-2">
 										<div class="d-flex align-items-center justify-content-between">
 											
-											<a type="button" class="btn btn-primary" id="calendar_display_prev_year">
+											<a type="button" id="calendar_display_prev_year" class="btn btn-primary btn-sm">
 												<i class="fas fa-angle-left"></i>
 											</a>
 											
@@ -124,7 +116,7 @@
 												2021
 											</h3>
 											
-											<a type="button" class="btn btn-primary" id="calendar_display_next_year">
+											<a type="button" id="calendar_display_next_year" class="btn btn-primary btn-sm">
 												<i class="fas fa-angle-right"></i>
 											</a>
 										
@@ -134,16 +126,16 @@
 								
 								<div class="row">
 									<div class="col-12 col-md-3 mb-1">
-										<button type="button" id="calendar_display_clear_selected_days" class="btn btn-primary btn-sm btn-block waves-effect waves-light">Clear Selected</button>
+										<button type="button" id="calendar_display_clear_selected_days" class="btn btn-info btn-sm btn-block waves-effect waves-light">Clear Selected</button>
 									</div>
 									<div class="col-12 col-md-3 mb-1">
-										<button type="button" id="calendar_display_select_all_days" class="btn btn-primary btn-sm btn-block waves-effect waves-light">Select All</button>
+										<button type="button" id="calendar_display_select_all_days" class="btn btn-info btn-sm btn-block waves-effect waves-light">Select All</button>
 									</div>
 									<div class="col-12 col-md-3 mb-1">
-										<button type="button" id="calendar_display_refresh" class="btn btn-primary btn-sm btn-block waves-effect waves-light">Refresh</button>
+										<button type="button" id="calendar_display_refresh" class="btn btn-info btn-sm btn-block waves-effect waves-light">Refresh</button>
 									</div>
 									<div class="col-12 col-md-3 mb-1">
-										<button type="button" id="calendar_display_remove" class="btn btn-primary btn-sm btn-block waves-effect waves-light">Remove</button>
+										<button type="button" id="calendar_display_remove" class="btn btn-info btn-sm btn-block waves-effect waves-light">Remove</button>
 									</div>
 								</div>
 							
@@ -160,8 +152,8 @@
 			</div>
 			
 			<div class="modal-footer" id="modalFooter">
-				<button type="button" class="btn btn-outline-default waves-effect waves-light" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary waves-effect waves-light">Save changes</button>
+				<button type="button" class="btn btn-outline-primary btn-sm waves-effect waves-light" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary btn-sm waves-effect waves-light">Save changes</button>
 			</div>
 		
 		</div>

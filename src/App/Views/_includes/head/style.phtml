@@ -1,4 +1,33 @@
 <style>
+	td.fc-more-cell {
+		
+		}
+	
+	.modal-header .close {
+		order: 2;
+		padding: 0;
+		margin: .3rem -1rem -1rem auto;
+		cursor: pointer;
+		background: 0 0;
+		border: 0;
+		-webkit-appearance: none;
+		float: right;
+		font-size: 1.5rem;
+		font-weight: 500;
+		line-height: 1;
+		color: #37474f;
+		text-shadow: none;
+		opacity: .5;
+		}
+	
+	#modalHeader {
+		border-bottom: solid 1px #ddd;
+		}
+	
+	.md-form.md-outline.form-sm input.cost {
+		padding-left: 1.2rem !important;
+		}
+	
 	.select2-container--default .select2-selection--single {
 		background-color: #fff;
 		border: 1px solid #ced4da;
@@ -6,12 +35,10 @@
 		color: #495057;
 		}
 	
+	section.card.card-body,
 	form.card.card-body {
 		border: 1px solid rgba(0, 0, 0, 0.125);
-		border-top-left-radius: 0.125rem;
-		border-top-right-radius: 0.125rem;
-		border-bottom-left-radius: 0.125rem;
-		border-bottom-right-radius: 0.125rem;
+		border-radius: 0.125rem;
 		box-shadow: none;
 		}
 	
@@ -2376,5 +2403,9 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		}
-
+	
+	div.datepicker-days table td.disabled {
+		background-color: initial !important;
+		opacity: initial;
+		}
 </style>

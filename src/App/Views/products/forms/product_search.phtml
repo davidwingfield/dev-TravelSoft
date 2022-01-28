@@ -10,30 +10,25 @@
 		
 	}
 	$categoryDropDown .= "</div>";
-	//echo "<pre>" . var_export($categories, 1) . "</pre>";
 ?>
 
-<div class="card card-body p-1 mb-2">
-    <div class="p-2">
-        <!-- Title -->
-        <h5 class="card-title">
-            <span>Product Search</span>
-        </h5>
-        <h6 class="card-subtitle mb-2 text-muted" id="product_search_subtitle">&nbsp;</h6>
-    </div>
-    <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-    <!-- /Title -->
-    
-    <section class="row mx-0">
-        
-        <div class="col-9 col-xl-10 p-0">
-            <div class="row mx-0">
-                <!-- Category Dropdown -->
-                <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1">
-                    
-                    <button id="buttonProductSearchCategory" name="buttonProductSearchCategory" class="btn btn-category-picker dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-tag btn-guest-picker-icon"></i>
-                        <span class="btn-guest-picker-details">
+<form class="card card-body p-1 mb-2" novalidate="novalidate">
+	
+	<div class="p-2">
+		<h5 class="card-title font-weight-bold">
+			<span>Product Search</span>
+		</h5>
+		<h6 class="card-subtitle my-2 text-muted" id="product_search_subtitle">&nbsp;</h6>
+	</div>
+	<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+	
+	<div class="row mx-0">
+		<!-- Category Dropdown -->
+		<div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mb-2">
+			
+			<button id="buttonProductSearchCategory" name="buttonProductSearchCategory" class="btn btn-category-picker dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<i class="fas fa-tag btn-guest-picker-icon"></i>
+				<span class="btn-guest-picker-details">
                                     <span class="btn-guest-picker-details-title">Category</span>
                                     <span class="btn-guest-picker-details-info">
                                         <span class="btn-guest-picker-details-info-wrapper">
@@ -41,17 +36,17 @@
                                         </span>
                                     </span>
                                 </span>
-                    </button>
-					<?php echo $categoryDropDown; ?>
-                
-                </div>
-                <!-- /Category Dropdown -->
-                
-                <!-- Product Name -->
-                <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1">
-                    <button type="button" id="buttonProductSearchName" name="buttonProductSearchName" class="btn btn-name-picker" data-placement="bottom" data-toggle="popover" data-container="body" data-html="true">
-                        <i id="product_search_name_icon_display" class="fas fa-hotel btn-guest-picker-icon"></i>
-                        <span class="btn-guest-picker-details">
+			</button>
+			<?php echo $categoryDropDown; ?>
+		
+		</div>
+		<!-- /Category Dropdown -->
+		
+		<!-- Product Name -->
+		<div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mb-2">
+			<button type="button" id="buttonProductSearchName" name="buttonProductSearchName" class="btn btn-name-picker" data-placement="bottom" data-toggle="popover" data-container="body" data-html="true">
+				<i id="product_search_name_icon_display" class="fas fa-hotel btn-guest-picker-icon"></i>
+				<span class="btn-guest-picker-details">
                             <span class="btn-guest-picker-details-title">Name</span>
                             <span class="btn-guest-picker-details-info">
                                 <span class="btn-guest-picker-details-info-wrapper">
@@ -59,15 +54,15 @@
                                 </span>
                             </span>
                         </span>
-                    </button>
-                </div>
-                <!-- /Product Name -->
-                
-                <!-- Product City -->
-                <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1">
-                    <button type="button" id="buttonProductSearchCity" name="buttonProductSearchCity" class="btn btn-city-picker" data-placement="bottom" data-toggle="popover" data-container="body" data-html="true">
-                        <i class="fas fa-map-marker-alt btn-guest-picker-icon"></i>
-                        <span class="btn-guest-picker-details">
+			</button>
+		</div>
+		<!-- /Product Name -->
+		
+		<!-- Product City -->
+		<div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mb-2" data-hotel="true">
+			<button type="button" id="buttonProductSearchCity" name="buttonProductSearchCity" class="btn btn-city-picker" data-placement="bottom" data-toggle="popover" data-container="body" data-html="true">
+				<i class="fas fa-map-marker-alt btn-guest-picker-icon"></i>
+				<span class="btn-guest-picker-details">
                             <span class="btn-guest-picker-details-title">City</span>
                             <span class="btn-guest-picker-details-info">
                                 <span class="btn-guest-picker-details-info-wrapper">
@@ -75,16 +70,16 @@
                                 </span>
                             </span>
                         </span>
-                    </button>
-                </div>
-                <!-- /Product City -->
-                
-                <!-- Product Check In -->
-                <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1">
-                    <button type="button" id="buttonProductSearchCheckIn" name="buttonProductSearchCheckIn"
-                            class="btn btn-check-in-picker">
-                        <i class="fas fa-calendar btn-guest-picker-icon"></i>
-                        <span class="btn-guest-picker-details">
+			</button>
+		</div>
+		<!-- /Product City -->
+		
+		<!-- Product Check In -->
+		<div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mb-2" data-hotel="true">
+			<button type="button" id="buttonProductSearchCheckIn" name="buttonProductSearchCheckIn"
+			        class="btn btn-check-in-picker">
+				<i class="fas fa-calendar btn-guest-picker-icon"></i>
+				<span class="btn-guest-picker-details">
                             <span class="btn-guest-picker-details-title">Check in</span>
                             <span class="btn-guest-picker-details-info">
                                 <span class="btn-guest-picker-details-info-wrapper">
@@ -92,15 +87,15 @@
                                 </span>
                             </span>
                         </span>
-                    </button>
-                </div>
-                <!-- /Product Check In -->
-                
-                <!-- Product Check Out -->
-                <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1">
-                    <button type="button" id="buttonProductSearchCheckOut" name="buttonProductSearchCheckOut" class="btn btn-check-out-picker" data-date="2021-12-05">
-                        <i class="fas fa-calendar btn-guest-picker-icon"></i>
-                        <span class="btn-guest-picker-details">
+			</button>
+		</div>
+		<!-- /Product Check In -->
+		
+		<!-- Product Check Out -->
+		<div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mb-2" data-hotel="true">
+			<button type="button" id="buttonProductSearchCheckOut" name="buttonProductSearchCheckOut" class="btn btn-check-out-picker" data-date="2021-12-05">
+				<i class="fas fa-calendar btn-guest-picker-icon"></i>
+				<span class="btn-guest-picker-details">
                             <span class="btn-guest-picker-details-title">Check out</span>
                             <span class="btn-guest-picker-details-info">
                                 <span class="btn-guest-picker-details-info-wrapper">
@@ -112,19 +107,19 @@
                             </span>
                             
                         </span>
-                    
-                    </button>
-                
-                </div>
-                <!-- /Product Check Out -->
-                
-                <!-- Product Guests -->
-                <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1" id="product_search_hotel_fields">
-                    <button type="button" id="buttonProductSearchGuest" name="buttonProductSearchGuest" class="btn btn-guest-picker" data-placement="bottom" data-toggle="popover" data-container="body" data-html="true">
-                        
-                        <i class="fas fa-bed btn-guest-picker-icon"></i>
-                        
-                        <span class="btn-guest-picker-details">
+			
+			</button>
+		
+		</div>
+		<!-- /Product Check Out -->
+		
+		<!-- Product Guests -->
+		<div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mb-2" data-hotel="true">
+			<button type="button" id="buttonProductSearchGuest" name="buttonProductSearchGuest" class="btn btn-guest-picker" data-placement="bottom" data-toggle="popover" data-container="body" data-html="true">
+				
+				<i class="fas fa-bed btn-guest-picker-icon"></i>
+				
+				<span class="btn-guest-picker-details">
                             
                             <span class="btn-guest-picker-details-title">Guests</span>
                             
@@ -142,279 +137,215 @@
                             </span>
                             
                         </span>
-                    
-                    </button>
-                </div>
-                <!-- /Product Guests -->
-            </div>
-        </div>
-        
-        <!-- Product Buttons -->
-        <div class="col-3 col-xl-2 px-1 d-flex align-items-center justify-content-end">
-            <a href="javascript:void(0);" id="button_product_search_panel_hotels_clear" class="btn btn-outline-primary btn-small waves-effect waves-light">
-                <i class="fas fa-ban"></i>
-                <span class="sm-button-span d-none d-md-inline-block">Clear</span>
-            </a>
-            <a href="javascript:void(0);" id="button_product_search_panel_hotels_submit" class="btn btn-primary btn-small waves-effect waves-light">
-                <i class="fas fa-search"></i>
-                <span class="sm-button-span d-none d-md-inline-block">Search</span>
-            </a>
-        </div>
-        <!-- /Product Buttons -->
-    </section>
-    
-    <section>
-        <form id="form_product_search" class="search-form mb-2" novalidate>
-            <!-- HIDDEN FIELDS -->
-            <div class="row mx-0">
-                <div class="col-sm-3 p-1">
-                    <label for="form_product_search_hotel_product_city_id" class="dev-element d-none">City Id:</label>
-                    <input type="hidden" id="form_product_search_hotel_product_city_id" name="form_product_search_hotel_product_city_id" class="form-control dev-element" value="" readonly="readonly"/>
-                </div>
-                
-                <div class="col-sm-3 p-1">
-                    <label for="form_product_search_hotel_product_category_id" class="dev-element d-none">Category Id:</label>
-                    <input type="hidden" id="form_product_search_hotel_product_category_id" name="form_product_search_hotel_product_category_id" class="form-control dev-element" value="" readonly="readonly"/>
-                </div>
-                
-                <div class="col-sm-3 p-1">
-                    <label for="form_product_search_hotel_product_product_id" class="dev-element d-none">Product Id:</label>
-                    <input type="hidden" id="form_product_search_hotel_product_product_id" name="form_product_search_hotel_product_product_id" class="form-control dev-element" value="" readonly="readonly"/>
-                </div>
-                
-                <div class="col-sm-3 p-1">
-                    <label for="form_product_search_hotel_product_name" class="dev-element d-none">Name:</label>
-                    <input type="hidden" id="form_product_search_hotel_product_name" name="form_product_search_hotel_product_name" class="form-control dev-element" value="" readonly="readonly"/>
-                </div>
-                
-                <div class="col-sm-3 p-1">
-                    <label for="form_product_search_hotel_product_arrive_date" class="dev-element d-none">Arrive:</label>
-                    <input type="hidden" id="form_product_search_hotel_product_arrive_date" name="form_product_search_hotel_product_arrive_date" class="form-control dev-element" value="" readonly="readonly"/>
-                </div>
-                
-                <div class="col-sm-3 p-1">
-                    <label for="form_product_search_hotel_product_number_of_children" class="dev-element d-none">Children:</label>
-                    <input type="hidden" id="form_product_search_hotel_product_number_of_children" name="form_product_search_hotel_product_number_of_children" min="0" class="form-control dev-element" value="0" readonly="readonly"/>
-                </div>
-                
-                <div class="col-sm-3 p-1">
-                    <label for="form_product_search_hotel_product_number_of_adults" class="dev-element d-none">Adults:</label>
-                    <input type="hidden" id="form_product_search_hotel_product_number_of_adults" name="form_product_search_hotel_product_number_of_adults" min="1" class="form-control dev-element" value="1" readonly="readonly"/>
-                </div>
-                
-                <div class="col-sm-3 p-1">
-                    <label for="form_product_search_hotel_product_number_of_rooms" class="dev-element d-none">Rooms:</label>
-                    <input type="hidden" id="form_product_search_hotel_product_number_of_rooms" name="form_product_search_hotel_product_number_of_rooms" min="1" class="form-control dev-element" value="1" readonly="readonly"/>
-                </div>
-                
-                <div class="col-sm-3 p-1">
-                    <label for="form_product_search_hotel_product_depart_date" class="dev-element d-none">Depart:</label>
-                    <input type="hidden" id="form_product_search_hotel_product_depart_date" name="form_product_search_hotel_product_depart_date" class="form-control dev-element" placeholder="" readonly="readonly"/>
-                </div>
-            
-            </div>
-            <!-- /HIDDEN FIELDS -->
-            
-            <div class="text-right w-100">
-            
-            </div>
-        
-        </form>
-    </section>
-    
-    <section>
-        <div class="card card-body px-2 z-depth-0 border mb-2">
-            
-            <h4 class="card-title text-center font-weight-bold mb-4">Search Results</h4>
-            
-            <hr>
-            
-            <div class="row">
-                <div class="col-12 mb-3 mx-auto">
-                    <!-- Product Search Result -->
-                    <!--
-                    <div class="media">
-                        
-                        <img class="d-flex mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder1.jpg" alt="Generic placeholder image"/>
-                        
-                        <div class="media-body">
-                            
-                            <h6 class="mt-1 font-weight-bold">
-                                <a href="#!" id="product_search_results_name">PlayStation 4</a>
-                                <div>
-                                    <ul class="list-unstyled list-inline rating mb-1 mt-1" id="product_search_results_rating">
-                                        <li class="list-inline-item mr-0">
-                                            <i class="fas fa-star rating"></i>
-                                        </li>
-                                        <li class="list-inline-item mr-0">
-                                            <i class="fas fa-star rating"></i>
-                                        </li>
-                                        <li class="list-inline-item mr-0">
-                                            <i class="fas fa-star rating"></i>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <a>
-                                    <span id="product_search_results_price" class="badge badge-success float-right" style="line-height:.8rem">$399</span>
-                                </a>
-                            </h6>
-                            
-                            <p class="text-muted" id="product_search_results_description_short">
-                                PlayStation 4 500GB Console (PS4)
-                            </p>
-                        
-                        </div>
-                    
-                    </div>
-                    <hr>
-                    -->
-                    <!-- /Product Search Result -->
-                
-                </div>
-                <!--Grid column-->
-            
-            </div>
-            <!--Grid row-->
-            
-            <hr>
-            
-            <p class="text-center mt-4 mb-1">
-                <a href="javascript:void(0);">Clear Search Results</a>
-            </p>
-        
-        </div>
-    </section>
+			
+			</button>
+		</div>
+		<!-- /Product Guests -->
+	
+	</div>
+	
+	<div class="text-right w-100">
+		<a href="javascript:void(0);" id="button_product_search_panel_hotels_clear" class="btn btn-outline-primary btn-small waves-effect waves-light">
+			<i class="fas fa-ban"></i>
+			<span class="sm-button-span d-none d-md-inline-block">Clear</span>
+		</a>
+		<a href="javascript:void(0);" id="button_product_search_panel_hotels_submit" class="btn btn-primary btn-small waves-effect waves-light">
+			<i class="fas fa-search"></i>
+			<span class="sm-button-span d-none d-md-inline-block">Search</span>
+		</a>
+	</div>
+	
+	<div id="form_product_search" class="search-form mb-2">
+		<!--<form id="form_product_search" class="search-form mb-2" novalidate="novalidate">-->
+		<!-- HIDDEN FIELDS -->
+		<div class="row mx-0">
+			
+			<div class="col-sm-3 p-1">
+				<label for="form_product_search_hotel_product_city_id" class="dev-element d-none">City Id:</label>
+				<input type="hidden" id="form_product_search_hotel_product_city_id" name="form_product_search_hotel_product_city_id" class="form-control dev-element" value="" readonly="readonly"/>
+			</div>
+			
+			<div class="col-sm-3 p-1">
+				<label for="form_product_search_hotel_product_category_id" class="dev-element d-none">Category Id:</label>
+				<input type="hidden" id="form_product_search_hotel_product_category_id" name="form_product_search_hotel_product_category_id" class="form-control dev-element" value="" readonly="readonly"/>
+			</div>
+			
+			<div class="col-sm-3 p-1">
+				<label for="form_product_search_hotel_product_product_id" class="dev-element d-none">Product Id:</label>
+				<input type="hidden" id="form_product_search_hotel_product_product_id" name="form_product_search_hotel_product_product_id" class="form-control dev-element" value="" readonly="readonly"/>
+			</div>
+			
+			<div class="col-sm-3 p-1">
+				<label for="form_product_search_hotel_product_name" class="dev-element d-none">Name:</label>
+				<input type="hidden" id="form_product_search_hotel_product_name" name="form_product_search_hotel_product_name" class="form-control dev-element" value="" readonly="readonly"/>
+			</div>
+			
+			<div class="col-sm-3 p-1">
+				<label for="form_product_search_hotel_product_arrive_date" class="dev-element d-none">Arrive:</label>
+				<input type="hidden" id="form_product_search_hotel_product_arrive_date" name="form_product_search_hotel_product_arrive_date" class="form-control dev-element" value="" readonly="readonly"/>
+			</div>
+			
+			<div class="col-sm-3 p-1">
+				<label for="form_product_search_hotel_product_number_of_children" class="dev-element d-none">Children:</label>
+				<input type="hidden" id="form_product_search_hotel_product_number_of_children" name="form_product_search_hotel_product_number_of_children" min="0" class="form-control dev-element" value="0" readonly="readonly"/>
+			</div>
+			
+			<div class="col-sm-3 p-1">
+				<label for="form_product_search_hotel_product_number_of_adults" class="dev-element d-none">Adults:</label>
+				<input type="hidden" id="form_product_search_hotel_product_number_of_adults" name="form_product_search_hotel_product_number_of_adults" min="1" class="form-control dev-element" value="1" readonly="readonly"/>
+			</div>
+			
+			<div class="col-sm-3 p-1">
+				<label for="form_product_search_hotel_product_number_of_rooms" class="dev-element d-none">Rooms:</label>
+				<input type="hidden" id="form_product_search_hotel_product_number_of_rooms" name="form_product_search_hotel_product_number_of_rooms" min="1" class="form-control dev-element" value="1" readonly="readonly"/>
+			</div>
+			
+			<div class="col-sm-3 p-1">
+				<label for="form_product_search_hotel_product_depart_date" class="dev-element d-none">Depart:</label>
+				<input type="hidden" id="form_product_search_hotel_product_depart_date" name="form_product_search_hotel_product_depart_date" class="form-control dev-element" placeholder="" readonly="readonly"/>
+			</div>
+		
+		</div>
+		<!-- /HIDDEN FIELDS -->
+		
+		<!--</form>-->
+	</div>
 
-</div>
+</form>
+
+<section class="card card-body p-1 mb-2" id="product_search_results">
+
+</section>
 
 <!-- Popover Name -->
 <div id="popoverNameForm" class="d-none name-popover">
-    <div class="popover-head">
-        <h5 class="card-title mb-1">
-            <span class="cPZwQ">&nbsp;</span>
-            <a href="javascript:void(0);" id="formProductSearchNameClose" name="formProductSearchNAmeClose" class="popup-window-button-close fas fa-times" aria-hidden="true"></a>
-        </h5>
-    </div>
-    
-    <div class="popover-body">
-        
-        <form id="product_search_hotel_product_name_form" class="form-inline" role="form" novalidate="novalidate">
-            
-            <div class="w-100">
-                
-                <div class="row mb-2">
-                    
-                    <div class="col-3">
-                        <label for="formProductSearchName" class="form-label-popover d-flex justify-content-start">
-                            <i id="formProductSearchIcon" class="fas fa-hotel mr-3"></i> Name
-                        </label>
-                    </div>
-                    
-                    <div class="col-9">
-                        <div class="form-element">
-                            <input type="search" id="formProductSearchName" name="formProductSearchName" class="form-control w-100"/>
-                            <input type="hidden" id="formProductSearchNameId" name="formProductSearchNameId" class="form-control w-100"/>
-                        </div>
-                    </div>
-                
-                </div>
-                
-                <div class="row mb-2">
-                    
-                    <div class="col">
-                        <button type="button" id="formProductSearchNameSubmit" name="formProductSearchNameSubmit" class="btn btn-primary btn-sm btn-block">Update</button>
-                    </div>
-                </div>
-            
-            </div>
-        </form>
-    
-    </div>
+	<div class="popover-head">
+		<h5 class="card-title mb-1">
+			<span class="cPZwQ">&nbsp;</span>
+			<a href="javascript:void(0);" id="formProductSearchNameClose" name="formProductSearchNAmeClose" class="popup-window-button-close fas fa-times" aria-hidden="true"></a>
+		</h5>
+	</div>
+	
+	<div class="popover-body">
+		
+		<form id="product_search_hotel_product_name_form" class="form-inline" role="form" novalidate="novalidate">
+			
+			<div class="w-100">
+				
+				<div class="row mb-2">
+					
+					<div class="col-3">
+						<label for="formProductSearchName" class="form-label-popover d-flex justify-content-start">
+							<i id="formProductSearchIcon" class="fas fa-hotel mr-3"></i> Name
+						</label>
+					</div>
+					
+					<div class="col-9">
+						<div class="form-element">
+							<input type="search" id="formProductSearchName" name="formProductSearchName" class="form-control w-100"/>
+							<input type="hidden" id="formProductSearchNameId" name="formProductSearchNameId" class="form-control w-100"/>
+						</div>
+					</div>
+				
+				</div>
+				
+				<div class="row mb-2">
+					
+					<div class="col">
+						<button type="button" id="formProductSearchNameSubmit" name="formProductSearchNameSubmit" class="btn btn-primary btn-sm btn-block">Update</button>
+					</div>
+				</div>
+			
+			</div>
+		</form>
+	
+	</div>
 
 </div>
 <!-- /Popover Name -->
 
 <!-- Popover City -->
 <div id="popoverCityForm" class="d-none city-popover">
-    <div class="popover-head">
-        <h5 class="card-title mb-1">
-            <span class="cPZwQ">&nbsp;</span>
-            <a href="javascript:void(0);" id="formProductSearchCityClose" name="formProductSearchCitylose" class="popup-window-button-close city-popover-close fas fa-times" aria-hidden="true"></a>
-        </h5>
-    </div>
-    
-    <div class="popover-body">
-        
-        <form id="product_search_hotel_product_city_form" class="form-inline" role="form" novalidate="novalidate">
-            <div class="w-100">
-                
-                <div class="row mb-2">
-                    
-                    <div class="col-3">
-                        <label for="formProductSearchCity" class="form-label-popover d-flex justify-content-start">
-                            <i class="fas fa-map-marker-alt mr-3"></i> City
-                        </label>
-                    </div>
-                    
-                    <div class="col-9">
-                        <div class="form-element">
-                            <input type="search" id="formProductSearchCity" name="formProductSearchCity" class="form-control w-100"/>
-                            <label for="formProductSearchCityId" class="d-none">
-                                City Id
-                            </label>
-                            <input type="hidden" id="formProductSearchCityId" name="formProductSearchCityId"/>
-                        </div>
-                    </div>
-                
-                </div>
-                
-                <div class="row mb-2">
-                    
-                    <div class="col">
-                        
-                        <button type="button" id="formProductSearchCitySubmit" name="formProductSearchCitySubmit" class="btn btn-primary btn-sm btn-block city-popover-submit">Update</button>
-                    
-                    </div>
-                
-                </div>
-            
-            </div>
-        
-        </form>
-    
-    </div>
+	<div class="popover-head">
+		<h5 class="card-title mb-1">
+			<span class="cPZwQ">&nbsp;</span>
+			<a href="javascript:void(0);" id="formProductSearchCityClose" name="formProductSearchCitylose" class="popup-window-button-close city-popover-close fas fa-times" aria-hidden="true"></a>
+		</h5>
+	</div>
+	
+	<div class="popover-body">
+		
+		<form id="product_search_hotel_product_city_form" class="form-inline" role="form" novalidate="novalidate">
+			<div class="w-100">
+				
+				<div class="row mb-2">
+					
+					<div class="col-3">
+						<label for="formProductSearchCity" class="form-label-popover d-flex justify-content-start">
+							<i class="fas fa-map-marker-alt mr-3"></i> City
+						</label>
+					</div>
+					
+					<div class="col-9">
+						<div class="form-element">
+							<input type="search" id="formProductSearchCity" name="formProductSearchCity" class="form-control w-100"/>
+							<label for="formProductSearchCityId" class="d-none">
+								City Id
+							</label>
+							<input type="hidden" id="formProductSearchCityId" name="formProductSearchCityId"/>
+						</div>
+					</div>
+				
+				</div>
+				
+				<div class="row mb-2">
+					
+					<div class="col">
+						
+						<button type="button" id="formProductSearchCitySubmit" name="formProductSearchCitySubmit" class="btn btn-primary btn-sm btn-block city-popover-submit">Update</button>
+					
+					</div>
+				
+				</div>
+			
+			</div>
+		
+		</form>
+	
+	</div>
 
 </div>
 <!-- /Popover City -->
 
 <!-- Popover Guest -->
 <div id="popoverGuestForm" class="d-none guest-popover">
-    <div class="popover-head">
-        <h5 class="card-title mb-1">
-            <span class="cPZwQ">&nbsp;</span>
-            <a href="javascript:void(0);" id="formProductSearchGuestClose" name="formProductSearchGuestClose" class="popup-window-button-close fas fa-times" aria-hidden="true"></a>
-        </h5>
-    </div>
-    
-    <div class="popover-body">
-        
-        <form id="myForm" class="form-inline" role="form">
-            
-            <div class="w-100">
-                
-                <div class="row mb-2">
-                    
-                    <div class="col-3">
-                        <label for="product_search_room_quantity" class="form-label-popover d-flex justify-content-start">
-                            <i class="fas fa-bed mr-3"></i> Rooms
-                        </label>
-                    </div>
-                    
-                    <div class="col-9">
-                        
-                        <div class="input-group d-flex justify-content-end number-input">
-                            
-                            <div class="input-group-prepend" onclick="
+	
+	<div class="popover-head">
+		<h5 class="card-title mb-1">
+			<span class="cPZwQ">&nbsp;</span>
+			<a href="javascript:void(0);" id="formProductSearchGuestClose" name="formProductSearchGuestClose" class="popup-window-button-close fas fa-times" aria-hidden="true"></a>
+		</h5>
+	</div>
+	
+	<div class="popover-body">
+		
+		<form id="myForm" class="form-inline" role="form">
+			
+			<div class="w-100">
+				
+				<div class="row mb-2">
+					
+					<div class="col-3">
+						<label for="product_search_room_quantity" class="form-label-popover d-flex justify-content-start">
+							<i class="fas fa-bed mr-3"></i> Rooms
+						</label>
+					</div>
+					
+					<div class="col-9">
+						
+						<div class="input-group d-flex justify-content-end number-input">
+							
+							<div class="input-group-prepend" onclick="
                             let input = this.parentNode.querySelector('input[type=number]');
                             input.stepDown();
                             let min = (input.min)?parseInt(input.min):0;
@@ -429,13 +360,13 @@
                                 <span class="input-group-text">
                                     <i class="fas fa-minus"></i>
                                 </span>
-                            </div>
-                            
-                            <div class="form-element mb-0">
-                                <input type="number" id="product_search_room_quantity" name="product_search_room_quantity" class="form-control rounded-0 m-0 quantity" min="1" value="1" onclick="this.select()" onchange="let min = (this.min)?parseInt(this.min):0; if(parseInt(this.value)<min){this.value = 1}" placeholder="">
-                            </div>
-                            
-                            <div class="input-group-append" onclick="
+							</div>
+							
+							<div class="form-element mb-0">
+								<input type="number" id="product_search_room_quantity" name="product_search_room_quantity" class="form-control rounded-0 m-0 quantity" min="1" value="1" onclick="this.select()" onchange="let min = (this.min)?parseInt(this.min):0; if(parseInt(this.value)<min){this.value = 1}" placeholder="">
+							</div>
+							
+							<div class="input-group-append" onclick="
                                 let input = this.parentNode.querySelector('input[type=number]');
                                 input.stepUp();
                                 let min = (input.min)?parseInt(input.min):0;
@@ -445,648 +376,738 @@
                                     <span class="input-group-text">
                                         <i class="fas fa-plus"></i>
                                     </span>
-                            </div>
-                        
-                        </div>
-                    
-                    </div>
-                
-                </div>
-                
-                <div class="row mb-2">
-                    
-                    <div class="col-3">
-                        <label for="product_search_adult_quantity" class="form-label-popover d-flex justify-content-start">
-                            <i class="fas fa-user-friends mr-3"></i> Adults
-                        </label>
-                    </div>
-                    
-                    <div class="col-9">
-                        
-                        <div class="input-group d-flex justify-content-end number-input">
-                            
-                            <div class="input-group-prepend" onclick="let input = this.parentNode.querySelector('input[type=number]'); input.stepDown()">
+							</div>
+						
+						</div>
+					
+					</div>
+				
+				</div>
+				
+				<div class="row mb-2">
+					
+					<div class="col-3">
+						<label for="product_search_adult_quantity" class="form-label-popover d-flex justify-content-start">
+							<i class="fas fa-user-friends mr-3"></i> Adults
+						</label>
+					</div>
+					
+					<div class="col-9">
+						
+						<div class="input-group d-flex justify-content-end number-input">
+							
+							<div class="input-group-prepend" onclick="let input = this.parentNode.querySelector('input[type=number]'); input.stepDown()">
                                 <span class="input-group-text">
                                     <i class="fas fa-minus"></i>
                                 </span>
-                            </div>
-                            
-                            <div class="form-element mb-0">
-                                <input type="number" id="product_search_adult_quantity" name="product_search_adult_quantity" class="form-control rounded-0 m-0 quantity" min="1" value="1" onclick="this.select()" onchange="let min = (this.min)?parseInt(this.min):0;if(parseInt(this.value)<min){this.value = 1}" placeholder="">
-                            </div>
-                            
-                            <div class="input-group-append" onclick="let input = this.parentNode.querySelector('input[type=number]');input.stepUp()">
+							</div>
+							
+							<div class="form-element mb-0">
+								<input type="number" id="product_search_adult_quantity" name="product_search_adult_quantity" class="form-control rounded-0 m-0 quantity" min="1" value="1" onclick="this.select()" onchange="let min = (this.min)?parseInt(this.min):0;if(parseInt(this.value)<min){this.value = 1}" placeholder="">
+							</div>
+							
+							<div class="input-group-append" onclick="let input = this.parentNode.querySelector('input[type=number]');input.stepUp()">
                                 <span class="input-group-text">
                                     <i class="fas fa-plus"></i>
                                 </span>
-                            </div>
-                        
-                        </div>
-                    
-                    </div>
-                
-                </div>
-                
-                <div class="row mb-2">
-                    
-                    <div class="col-3">
-                        <label for="product_search_clild_quantity" class="form-label-popover d-flex justify-content-start">
-                            <i class="fas fa-child mr-3"></i> Children
-                        </label>
-                    </div>
-                    
-                    <div class="col-9">
-                        
-                        <div class="input-group d-flex justify-content-end number-input">
-                            
-                            <div class="input-group-prepend" onclick="let input = this.parentNode.querySelector('input[type=number]'); input.stepDown()">
+							</div>
+						
+						</div>
+					
+					</div>
+				
+				</div>
+				
+				<div class="row mb-2">
+					
+					<div class="col-3">
+						<label for="product_search_clild_quantity" class="form-label-popover d-flex justify-content-start">
+							<i class="fas fa-child mr-3"></i> Children
+						</label>
+					</div>
+					
+					<div class="col-9">
+						
+						<div class="input-group d-flex justify-content-end number-input">
+							
+							<div class="input-group-prepend" onclick="let input = this.parentNode.querySelector('input[type=number]'); input.stepDown()">
                                 <span class="input-group-text">
                                     <i class="fas fa-minus"></i>
                                 </span>
-                            </div>
-                            
-                            <div class="form-element mb-0">
-                                <input type="number" id="product_search_clild_quantity" name="product_search_clild_quantity" class="form-control rounded-0 m-0 quantity" min="0" value="0" onclick="this.select()" onchange="let min = (this.min)?parseInt(this.min):0;if(parseInt(this.value)<min){this.value = 1}" placeholder="">
-                            </div>
-                            
-                            <div class="input-group-append" onclick="let input = this.parentNode.querySelector('input[type=number]');input.stepUp()">
+							</div>
+							
+							<div class="form-element mb-0">
+								<input type="number" id="product_search_clild_quantity" name="product_search_clild_quantity" class="form-control rounded-0 m-0 quantity" min="0" value="0" onclick="this.select()" onchange="let min = (this.min)?parseInt(this.min):0;if(parseInt(this.value)<min){this.value = 1}" placeholder="">
+							</div>
+							
+							<div class="input-group-append" onclick="let input = this.parentNode.querySelector('input[type=number]');input.stepUp()">
                                 <span class="input-group-text">
                                     <i class="fas fa-plus"></i>
                                 </span>
-                            </div>
-                        
-                        </div>
-                    
-                    </div>
-                
-                </div>
-                
-                <div class="row mb-2">
-                    
-                    <div class="col">
-                        <button type="button" id="formProductSearchGuestSubmit" name="formProductSearchGuestSubmit" class="btn btn-primary btn-sm btn-block">Update</button>
-                    </div>
-                </div>
-            
-            </div>
-        </form>
-    
-    </div>
+							</div>
+						
+						</div>
+					
+					</div>
+				
+				</div>
+				
+				<div class="row mb-2">
+					
+					<div class="col">
+						<button type="button" id="formProductSearchGuestSubmit" name="formProductSearchGuestSubmit" class="btn btn-primary btn-sm btn-block">Update</button>
+					</div>
+				</div>
+			
+			</div>
+		</form>
+	
+	</div>
 
 </div>
 <!-- /Popover Guest -->
 
 <script type="text/javascript">
-    let today = new Date()
-    let today_year = today.getFullYear()
-    let today_month = today.getMonth()
-    let today_date = today.getDate()
-    $.fn.productSearch = function (settings) {
-        "use strict"
-        
-    }
-    
-    const ProductSearch = function (settings) {
-        "use strict"
-        let popupGuestTitle, popupGuestContent, popupNameTitle, popupNameContent, popupCityTitle, popupCityContent, category_id, categoryItem
-        // ----
-        const _product_search_hotel_fields = document.getElementById("product_search_hotel_fields")
-        const _form_product_search = document.getElementById("form_product_search")
-        const _formProductSearchCitySubmit = document.getElementById('formProductSearchCitySubmit')
-        const _formProductSearchNameSubmit = document.getElementById('formProductSearchNameSubmit')
-        const _formProductSearchGuestSubmit = document.getElementById('formProductSearchGuestSubmit')
-        const _formProductSearchName = document.getElementById('formProductSearchName')
-        const _product_search_name_display = document.getElementById('product_search_name_display')
-        const _form_product_search_hotel_product_name = document.getElementById('form_product_search_hotel_product_name')
-        const _buttonProductSearchName = document.getElementById("buttonProductSearchName")
-        const roomNumber = document.getElementById('product_search_room_quantity')
-        const adultNumber = document.getElementById('product_search_adult_quantity')
-        const childNumber = document.getElementById('product_search_clild_quantity')
-        const _form_product_search_hotel_product_number_of_rooms = document.getElementById('form_product_search_hotel_product_number_of_rooms')
-        const _form_product_search_hotel_product_number_of_adults = document.getElementById('form_product_search_hotel_product_number_of_adults')
-        const _form_product_search_hotel_product_number_of_children = document.getElementById('form_product_search_hotel_product_number_of_children')
-        const _buttonProductSearchGuest = document.getElementById('buttonProductSearchGuest')
-        const roomDisplay = document.getElementById('product_search_room_quantity_display')
-        const adultDisplay = document.getElementById('product_search_adult_quantity_display')
-        const childDisplay = document.getElementById('product_search_children_quantity_display')
-        const _buttonProductSearchCity = document.getElementById('buttonProductSearchCity')
-        const _formProductSearchCity = document.getElementById("formProductSearchCity")
-        const _product_search_city_display = document.getElementById('product_search_city_display')
-        const _form_product_search_hotel_product_city_id = document.getElementById('form_product_search_hotel_product_city_id')
-        const _formProductSearchCityId = document.getElementById("formProductSearchCityId")
-        const _buttonProductSearchCheckOut = document.getElementById("buttonProductSearchCheckOut")
-        const _buttonProductSearchCheckIn = document.getElementById("buttonProductSearchCheckIn")
-        const _form_product_search_hotel_product_arrive_date = document.getElementById("form_product_search_hotel_product_arrive_date")
-        const _form_product_search_hotel_product_depart_date = document.getElementById("form_product_search_hotel_product_depart_date")
-        const _product_search_category_display = document.getElementById("product_search_category_display")
-        const _product_search_name_icon_display = document.getElementById("product_search_name_icon_display")
-        const _formProductSearchIcon = document.getElementById("formProductSearchIcon")
-        const _formProductSearchGuestClose = document.getElementById("formProductSearchGuestClose")
-        const _formProductSearchCityClose = document.getElementById("formProductSearchCityClose")
-        const _formProductSearchNameClose = document.getElementById("formProductSearchNameClose")
-        const _form_product_search_hotel_product_category_id = document.getElementById("form_product_search_hotel_product_category_id")
-        const _buttonProductSearchCategory = document.getElementById("buttonProductSearchCategory")
-        const _formProductSearchNameId = document.getElementById("formProductSearchNameId")
-        const _product_search_subtitle = document.getElementById("product_search_subtitle")
-        const _button_product_search_panel_hotels_clear = document.getElementById("button_product_search_panel_hotels_clear")
-        const _product_search_check_in_display = document.getElementById("product_search_check_in_display")
-        const _product_search_check_out_display = document.getElementById("product_search_check_out_display")
-        const _form_product_search_hotel_product_product_id = document.getElementById("form_product_search_hotel_product_product_id")
-        const _button_product_search_panel_hotels_submit = document.getElementById("button_product_search_panel_hotels_submit")
-        
-        const _product_search_room_quantity_display = document.getElementById("product_search_room_quantity_display")
-        const _product_search_adult_quantity_display = document.getElementById("product_search_adult_quantity_display")
-        const _product_search_children_quantity_display = document.getElementById("product_search_children_quantity_display")
-        
-        $(_form_product_search)
-          .on("change", function () {
-          
-          })
-        
-        $(_button_product_search_panel_hotels_submit)
-          .on("click", function () {
-              Console.log("_button_product_search_panel_hotels_submit", {})
-          })
-        
-        $(_button_product_search_panel_hotels_clear)
-          .on("click", function () {
-              resetForm()
-          })
-        
-        $(_form_product_search_hotel_product_category_id)
-          .on("change", function () {
-              if (_form_product_search_hotel_product_category_id.dataset.categoryid) {
-                  categoryChanged()
-                  let categoryId = parseInt(_form_product_search_hotel_product_category_id.dataset.categoryid)
-                  let categoryName = _form_product_search_hotel_product_category_id.dataset.categoryname
-                  let categoryIcon = _form_product_search_hotel_product_category_id.dataset.categoryicon
-                  _form_product_search_hotel_product_category_id.value = categoryId
-                  _product_search_name_icon_display.classList = categoryIcon + " btn-guest-picker-icon"
-                  _product_search_category_display.innerText = categoryName
-                  switch (categoryId) {
-                      case 1:
-                          enableHotelFormFields()
-                          break
-                      default:
-                          break
-                      
-                  }
-              }
-          })
-        
-        $(_buttonProductSearchCategory)
-          .on("change", function () {
-          
-          })
-        
-        $(_buttonProductSearchCheckIn)
-          .datepicker({
-              startDate: '-1d',
-              autoclose: true,
-              numberOfMonths: 2,
-              title: function () {
-                  return "<div class='popover-header'><span class='cPZwQ'>Select a date to continue</span></div>"
-              },
-              clearBtn: true,
-              todayHighlight: true,
-              todayBtn: true,
-              format: "yyyy-mm-dd",
-              orientation: "bottom auto",
-              showOnFocus: "false",
-          })
-          .on("changeDate", function (selected) {
-              const _buttonProductSearchCheckIn = document.getElementById("buttonProductSearchCheckIn")
-              const roomDisplay = document.getElementById('buttonProductSearchCheckIn')
-              
-              let formattedDate = $(_buttonProductSearchCheckIn).datepicker("getFormattedDate")
-              
-              $(_buttonProductSearchCheckOut).datepicker("getFormattedDate")
-              _form_product_search_hotel_product_arrive_date.value = formattedDate
-              
-              if (roomDisplay) {
-                  $(roomDisplay).find("span#product_search_check_in_display").text((formattedDate === "") ? " — / — / — " : formattedDate)
-              }
-              
-              $(_buttonProductSearchCheckOut)
-                .val('')
-                .datepicker('update')
-                .datepicker('setStartDate', (formattedDate !== "") ? formattedDate : null)
-                .trigger("changeDate")
-          })
-        
-        $(_buttonProductSearchCheckOut)
-          .datepicker({
-              startDate: '-1d',
-              autoclose: true,
-              todayBtn: "linked",
-              numberOfMonths: 2,
-              title: function () {
-                  return "<div class='popover-header'><span class='cPZwQ'>Select a date to continue</span></div>"
-              },
-              clearBtn: true,
-              todayHighlight: true,
-              maxViewMode: 2,
-              format: "yyyy-mm-dd",
-              orientation: "bottom auto",
-              showOnFocus: "false",
-              beforeShowMonth: function (date) {
-                  //console.log(date)
-              },
-              datesDisabled: ['12/06/2021', '12/21/2021'],
-              toggleActive: true,
-              defaultViewDate: {
-                  year: today_year,
-                  month: today_month,
-                  day: today_date,
-              },
-          })
-          .on("changeDate", function (e) {
-              const roomDisplay = document.getElementById('buttonProductSearchCheckOut')
-              let formattedDate = $(_buttonProductSearchCheckOut).datepicker("getFormattedDate")
-              
-              _form_product_search_hotel_product_depart_date.value = formattedDate
-              
-              if (roomDisplay) {
-                  $(roomDisplay).find("span#product_search_check_out_display").text((formattedDate === "") ? " — / — / — " : formattedDate)
-              }
-              
-          })
-        
-        $(_formProductSearchNameClose)
-          .on("click", function () {
-              closeProductNameSearch()
-          })
-        
-        $(_formProductSearchCityClose)
-          .on("click", function () {
-              closeProductCitySearch()
-          })
-        
-        $(_formProductSearchGuestClose)
-          .on("click", function () {
-              closeProductGuestSearch()
-          })
-        
-        $(_formProductSearchCitySubmit)
-          .on("click", function () {
-              updateProductCitySearch()
-              closeProductGuestSearch()
-          })
-        
-        $(_formProductSearchNameSubmit)
-          .on("click", function () {
-              updateProductNameSearch()
-              closeProductNameSearch()
-          })
-        
-        $(_formProductSearchGuestSubmit)
-          .on("click", function () {
-              updateProductGuestSearch()
-              closeProductGuestSearch()
-          })
-        
-        $(_buttonProductSearchCity)
-          .on("show.bs.popover", function () {
-              initProductCitySearch()
-              
-          })
-          .on("shown.bs.popover", function () {
-              //_formProductSearchCity.focus()
-          })
-          .on("hidden.bs.popover", function () {
-              window.removeEventListener("click", clickOutsideProductNameSearch)
-          })
-        
-        $(_buttonProductSearchGuest)
-          .on("show.bs.popover", function () {
-              initProductGuestSearch()
-              
-          })
-          .on("shown.bs.popover", function () {
-              //_formProductSearchName.focus()
-          })
-          .on("hidden.bs.popover", function () {
-              window.removeEventListener("click", clickOutsideProductGuestSearch)
-          })
-        
-        $(_buttonProductSearchName)
-          .on("show.bs.popover", function () {
-              initProductNameSearch()
-              
-          })
-          .on("shown.bs.popover", function () {
-              //_formProductSearchName.focus()
-          })
-          
-          .on("hidden.bs.popover", function () {
-              window.removeEventListener("click", clickOutsideProductNameSearch)
-          })
-        
-        const resetForm = function () {
-            $(_product_search_hotel_fields).hide()
-            
-            closeProductGuestSearch()
-            closeProductNameSearch()
-            closeProductCitySearch()
-            
-            updateProductGuestSearch()
-            updateProductNameSearch()
-            updateProductCitySearch()
-            
-            _product_search_category_display.innerText = "** Select **"
-            _product_search_name_display.innerText = "any"
-            _product_search_city_display.innerText = "city name"
-            _product_search_check_in_display.innerText = "— / — / —"
-            _product_search_check_out_display.innerText = "— / — / —"
-            
-            roomNumber.value = 1
-            adultNumber.value = 1
-            childNumber.value = 0
-            let roomCount = (!isNaN(parseInt(roomNumber.value))) ? parseInt(roomNumber.value) : 1
-            let adultCount = (!isNaN(parseInt(adultNumber.value))) ? parseInt(adultNumber.value) : 1
-            let childCount = (!isNaN(parseInt(childNumber.value))) ? parseInt(childNumber.value) : 0
-            
-            roomDisplay.innerText = (roomCount > 1) ? roomCount + ' rooms, ' : roomCount + ' room, '
-            adultDisplay.innerText = (adultCount > 1) ? adultCount + ' adults, ' : adultCount + ' adult, '
-            childDisplay.innerText = (childCount > 1) ? childCount + ' children' : childCount + ' child'
-            
-            _product_search_name_icon_display.classList = "fas fa-pencil-alt btn-guest-picker-icon"
-            
-            _form_product_search_hotel_product_city_id.value = ""
-            _form_product_search_hotel_product_category_id.value = ""
-            _form_product_search_hotel_product_product_id.value = ""
-            _form_product_search_hotel_product_name.value = ""
-            _form_product_search_hotel_product_arrive_date.value = ""
-            _form_product_search_hotel_product_number_of_children.value = "0"
-            _form_product_search_hotel_product_number_of_adults.value = "1"
-            _form_product_search_hotel_product_number_of_rooms.value = "1"
-            _form_product_search_hotel_product_depart_date.value = ""
-            disableFormFields()
-        }
-        
-        const enableHotelFormFields = function () {
-            _buttonProductSearchName.disabled = false
-            _buttonProductSearchCity.disabled = false
-            _buttonProductSearchCheckIn.disabled = false
-            _buttonProductSearchCheckOut.disabled = false
-            _buttonProductSearchGuest.disabled = false
-            $(_product_search_hotel_fields).show()
-        }
-        
-        const disableFormFields = function () {
-            _buttonProductSearchName.disabled = true
-            _buttonProductSearchCity.disabled = true
-            _buttonProductSearchCheckIn.disabled = true
-            _buttonProductSearchCheckOut.disabled = true
-            _buttonProductSearchGuest.disabled = true
-        }
-        
-        const initAutocomplete = function (category_id) {
-            
-            $(_formProductSearchCity)
-              .on("search", function () {
-                  _formProductSearchCity.value = ""
-                  _formProductSearchCityId.value = ""
-                  updateProductCitySearch()
-              })
-              .on("click", function (e) {
-                  $(this).select()
-              })
-              .autocomplete({
-                  serviceUrl: "/api/v1.0/autocomplete/cities",
-                  minChars: 2,
-                  cache: false,
-                  dataType: "json",
-                  triggerSelectOnValidInput: false,
-                  paramName: "st",
-                  onSelect: function (suggestion) {
-                      if (!suggestion.data) {
-                          return
-                      }
-                      let city = suggestion.data
-                      
-                      _formProductSearchCityId.value = city.id
-                  },
-              })
-            
-            $(_formProductSearchName)
-              .on("search", function () {
-                  _formProductSearchName.value = ""
-                  _formProductSearchNameId.value = ""
-                  updateProductCitySearch()
-              })
-              .on("click", function (e) {
-                  $(this).select()
-              })
-              .autocomplete({
-                  serviceUrl: "/api/v1.0/autocomplete/products",
-                  minChars: 2,
-                  cache: false,
-                  dataType: "json",
-                  triggerSelectOnValidInput: false,
-                  params: { "category_id": category_id },
-                  paramName: "st",
-                  onSelect: function (suggestion) {
-                      if (!suggestion.data) {
-                          return
-                      }
-                      let product = suggestion.data
-                      _form_product_search_hotel_product_product_id.value = product.id
-                      _formProductSearchNameId.value = product.id
-                  },
-              })
-        }
-        const categoryChanged = function () {
-            resetForm()
-            disableFormFields()
-        }
-        
-        const updateProductNameSearch = function () {
-            
-            if (_formProductSearchName) {
-                let name = (_formProductSearchName.value !== '') ? _formProductSearchName.value : 'any'
-                
-                _product_search_name_display.innerText = name
-                _form_product_search_hotel_product_name.value = name
-                
-                if (_buttonProductSearchName) {
-                    $(_buttonProductSearchName).popover("hide")
-                }
-            }
-        }
-        const updateProductGuestSearch = function () {
-            
-            if (
-              roomNumber && adultNumber && childNumber
-              && _form_product_search_hotel_product_number_of_rooms && _form_product_search_hotel_product_number_of_adults && _form_product_search_hotel_product_number_of_children
-              && roomDisplay && adultDisplay && childDisplay
-            ) {
-                let roomCount = (!isNaN(parseInt(roomNumber.value))) ? parseInt(roomNumber.value) : 1
-                let adultCount = (!isNaN(parseInt(adultNumber.value))) ? parseInt(adultNumber.value) : 1
-                let childCount = (!isNaN(parseInt(childNumber.value))) ? parseInt(childNumber.value) : 0
-                
-                roomDisplay.innerText = (roomCount > 1) ? roomCount + ' rooms, ' : roomCount + ' room, '
-                adultDisplay.innerText = (adultCount > 1) ? adultCount + ' adults, ' : adultCount + ' adult, '
-                childDisplay.innerText = (childCount > 1) ? childCount + ' children' : childCount + ' child'
-                
-                _form_product_search_hotel_product_number_of_rooms.value = (roomCount > 1) ? roomCount : 1
-                _form_product_search_hotel_product_number_of_adults.value = (adultCount > 1) ? adultCount : 1
-                _form_product_search_hotel_product_number_of_children.value = (childCount > 0) ? childCount : 0
-                
-                if (_buttonProductSearchGuest) {
-                    $(_buttonProductSearchGuest).popover("hide")
-                }
-            }
-        }
-        const updateProductCitySearch = function () {
-            if (_formProductSearchCity) {
-                _product_search_city_display.innerText = (_formProductSearchCity.value !== '') ? _formProductSearchCity.value : 'city name'
-                _form_product_search_hotel_product_city_id.value = _formProductSearchCityId.value
-                $(_form_product_search_hotel_product_city_id).trigger("change")
-            }
-        }
-        
-        const closeProductNameSearch = function () {
-            if (_buttonProductSearchName) {
-                $(_buttonProductSearchName).popover("hide")
-            }
-            
-            window.removeEventListener("click", clickOutsideProductNameSearch)
-        }
-        const closeProductCitySearch = function () {
-            if (_buttonProductSearchCity) {
-                $(_buttonProductSearchCity).popover("hide")
-            }
-            window.removeEventListener("click", clickOutsideProductCitySearch)
-        }
-        const closeProductGuestSearch = function () {
-            if (_buttonProductSearchGuest) {
-                $(_buttonProductSearchGuest).popover("hide")
-            }
-            
-            window.removeEventListener("click", clickOutsideProductGuestSearch)
-        }
-        
-        const clickOutsideProductNameSearch = (e) => {
-            let class_name = "btn-name-picker"
-            let tar = $(e.target).parents("div.popover")
-            
-            if (!tar[0] && !e.target.className.includes(class_name)) {
-                updateProductNameSearch()
-                closeProductNameSearch()
-            }
-        }
-        const clickOutsideProductGuestSearch = (e) => {
-            let class_name = "btn-guest-picker"
-            let tar = $(e.target).parents("div.popover")
-            
-            if (!tar[0] && !e.target.className.includes(class_name)) {
-                updateProductGuestSearch()
-                closeProductGuestSearch()
-            }
-        }
-        const clickOutsideProductCitySearch = (e) => {
-            let class_name = "btn-city-picker"
-            let tar = $(e.target).parents("div.popover")
-            
-            if (!tar[0] && !e.target.className.includes(class_name)) {
-                updateProductCitySearch()
-                closeProductCitySearch()
-            }
-        }
-        
-        const initProductNameSearch = function () {
-            window.addEventListener("click", clickOutsideProductNameSearch)
-        }
-        const initProductGuestSearch = function () {
-            window.addEventListener("click", clickOutsideProductGuestSearch)
-        }
-        const initProductCitySearch = function () {
-            window.addEventListener("click", clickOutsideProductCitySearch)
-        }
-        
-        const init = function (settings) {
-            categoryItem = document.querySelectorAll(".category-dropdown-item")
-            categoryItem.forEach(el => el.addEventListener("click", event => {
-                _formProductSearchIcon.classList = " " + el.dataset.categoryicon + " mr-3 "
-                _product_search_name_icon_display.classList = " " + el.dataset.categoryicon + " btn-guest-picker-icon"
-                _product_search_category_display.innerText = el.dataset.categoryname
-                category_id = parseInt(el.dataset.categoryid)
-                initAutocomplete(category_id)
-                _form_product_search_hotel_product_category_id.value = category_id
-                _form_product_search_hotel_product_category_id.dataset.categoryid = category_id
-                _form_product_search_hotel_product_category_id.dataset.categoryname = el.dataset.categoryname
-                _form_product_search_hotel_product_category_id.dataset.categoryicon = el.dataset.categoryicon
-                _product_search_subtitle.innerText = el.dataset.categoryname
-                $(_form_product_search_hotel_product_category_id).trigger("change")
-                $(_buttonProductSearchCategory).trigger("change")
-            }))
-            
-            if (_buttonProductSearchName) {
-                popupNameTitle = $("#popoverNameForm .popover-head h5")
-                popupNameContent = $("#popoverNameForm .popover-body form")
-                
-                $(_buttonProductSearchName).popover({
-                    placement: "bottom",
-                    title: () => popupNameTitle,//$("#popoverGuestForm .popover-head h5"),
-                    html: true,
-                    container: "body",
-                    content: () => popupNameContent,//$("#popoverGuestForm .popover-body form"),
-                    
-                })
-            }
-            
-            if (_buttonProductSearchCity) {
-                popupCityTitle = $("#popoverCityForm .popover-head h5")
-                popupCityContent = $("#popoverCityForm .popover-body form")
-                
-                $(_buttonProductSearchCity).popover({
-                    placement: "bottom",
-                    title: () => popupCityTitle,
-                    html: true,
-                    container: "body",
-                    content: () => popupCityContent,
-                    
-                })
-            }
-            
-            if (_buttonProductSearchGuest) {
-                popupGuestTitle = $("#popoverGuestForm .popover-head h5")
-                popupGuestContent = $("#popoverGuestForm .popover-body form")
-                
-                $(_buttonProductSearchGuest).popover({
-                    placement: "bottom",
-                    title: () => popupGuestTitle,//$("#popoverGuestForm .popover-head h5"),
-                    html: true,
-                    container: "body",
-                    content: () => popupGuestContent,//$("#popoverGuestForm .popover-body form"),
-                    
-                })
-            }
-            
-            resetForm()
-        }
-        
-        init(settings)
-        
-        return {
-            init: function (settings) {
-                init(settings)
-            },
-            updateProductCitySearch: function () {
-                updateProductCitySearch()
-            },
-            updateProductNameSearch: function () {
-                updateProductNameSearch()
-            },
-            closeProductGuestSearch: function () {
-                closeProductGuestSearch()
-            },
-        }
-    }
-    
-    $(function () {
-        let productSearch = ProductSearch()
-    })
+	let today = new Date()
+	let today_year = today.getFullYear()
+	let today_month = today.getMonth()
+	let today_date = today.getDate()
+	$.fn.productSearch = function (settings) {
+		"use strict"
+		
+	}
+	
+	const ProductSearch = function (settings) {
+		"use strict"
+		let popupGuestTitle, popupGuestContent, popupNameTitle, popupNameContent, popupCityTitle, popupCityContent, category_id, categoryItem
+		// ----
+		const _product_search_hotel_fields = document.getElementById("product_search_hotel_fields")
+		const _form_product_search = document.getElementById("form_product_search")
+		const _formProductSearchCitySubmit = document.getElementById('formProductSearchCitySubmit')
+		const _formProductSearchNameSubmit = document.getElementById('formProductSearchNameSubmit')
+		const _formProductSearchGuestSubmit = document.getElementById('formProductSearchGuestSubmit')
+		const _formProductSearchName = document.getElementById('formProductSearchName')
+		const _product_search_name_display = document.getElementById('product_search_name_display')
+		const _form_product_search_hotel_product_name = document.getElementById('form_product_search_hotel_product_name')
+		const _buttonProductSearchName = document.getElementById("buttonProductSearchName")
+		const roomNumber = document.getElementById('product_search_room_quantity')
+		const adultNumber = document.getElementById('product_search_adult_quantity')
+		const childNumber = document.getElementById('product_search_clild_quantity')
+		const _form_product_search_hotel_product_number_of_rooms = document.getElementById('form_product_search_hotel_product_number_of_rooms')
+		const _form_product_search_hotel_product_number_of_adults = document.getElementById('form_product_search_hotel_product_number_of_adults')
+		const _form_product_search_hotel_product_number_of_children = document.getElementById('form_product_search_hotel_product_number_of_children')
+		const _buttonProductSearchGuest = document.getElementById('buttonProductSearchGuest')
+		const roomDisplay = document.getElementById('product_search_room_quantity_display')
+		const adultDisplay = document.getElementById('product_search_adult_quantity_display')
+		const childDisplay = document.getElementById('product_search_children_quantity_display')
+		const _buttonProductSearchCity = document.getElementById('buttonProductSearchCity')
+		const _formProductSearchCity = document.getElementById("formProductSearchCity")
+		const _product_search_city_display = document.getElementById('product_search_city_display')
+		const _form_product_search_hotel_product_city_id = document.getElementById('form_product_search_hotel_product_city_id')
+		const _formProductSearchCityId = document.getElementById("formProductSearchCityId")
+		const _buttonProductSearchCheckOut = document.getElementById("buttonProductSearchCheckOut")
+		const _buttonProductSearchCheckIn = document.getElementById("buttonProductSearchCheckIn")
+		const _form_product_search_hotel_product_arrive_date = document.getElementById("form_product_search_hotel_product_arrive_date")
+		const _form_product_search_hotel_product_depart_date = document.getElementById("form_product_search_hotel_product_depart_date")
+		const _product_search_category_display = document.getElementById("product_search_category_display")
+		const _product_search_name_icon_display = document.getElementById("product_search_name_icon_display")
+		const _formProductSearchIcon = document.getElementById("formProductSearchIcon")
+		const _formProductSearchGuestClose = document.getElementById("formProductSearchGuestClose")
+		const _formProductSearchCityClose = document.getElementById("formProductSearchCityClose")
+		const _formProductSearchNameClose = document.getElementById("formProductSearchNameClose")
+		const _form_product_search_hotel_product_category_id = document.getElementById("form_product_search_hotel_product_category_id")
+		const _buttonProductSearchCategory = document.getElementById("buttonProductSearchCategory")
+		const _formProductSearchNameId = document.getElementById("formProductSearchNameId")
+		const _product_search_subtitle = document.getElementById("product_search_subtitle")
+		const _button_product_search_panel_hotels_clear = document.getElementById("button_product_search_panel_hotels_clear")
+		const _product_search_check_in_display = document.getElementById("product_search_check_in_display")
+		const _product_search_check_out_display = document.getElementById("product_search_check_out_display")
+		const _form_product_search_hotel_product_product_id = document.getElementById("form_product_search_hotel_product_product_id")
+		const _button_product_search_panel_hotels_submit = document.getElementById("button_product_search_panel_hotels_submit")
+		
+		$(_form_product_search)
+			.on("change", function () {
+			
+			})
+		
+		$(_button_product_search_panel_hotels_submit)
+			.on("click", function () {
+				buildSearcParameters()
+			})
+		
+		const clearSearchResults = function () {
+		
+		}
+		
+		const submitHotel = function (params, callback) {
+			let url = "/api/v1.0/search/hotels"
+			
+			if (params) {
+				try {
+					sendGetRequest(url, params, function (data, status, xhr) {
+						if (data) {
+							return callback(data)
+						}
+					})
+				} catch (e) {
+					console.log("error", e)
+				}
+			}
+		}
+		
+		const hotelSearch = function (data) {
+			clearSearchResults()
+			submitHotel(data, function (results) {
+				if (results) {
+					console.log("results", results)
+				}
+			})
+		}
+		
+		const buildSearcParameters = function () {
+			let categoryId = (!isNaN(parseInt(_form_product_search_hotel_product_category_id.value))) ? parseInt(_form_product_search_hotel_product_category_id.value) : null
+			
+			if (!categoryId) {
+				return
+			}
+			let data = {}
+			
+			switch (categoryId) {
+				case 1:
+					let adults = (!isNaN(parseInt(_form_product_search_hotel_product_number_of_adults.value))) ? parseInt(_form_product_search_hotel_product_number_of_adults.value) : 1
+					let children = (!isNaN(parseInt(_form_product_search_hotel_product_number_of_children.value))) ? parseInt(_form_product_search_hotel_product_number_of_children.value) : 0
+					let cityId = (!isNaN(parseInt(_form_product_search_hotel_product_city_id.value))) ? parseInt(_form_product_search_hotel_product_city_id.value) : null
+					let guestCount = (adults + children)
+					let fromDate = (_form_product_search_hotel_product_arrive_date.value !== "") ? _form_product_search_hotel_product_arrive_date.value : null
+					let toDate = (_form_product_search_hotel_product_depart_date.value !== "") ? _form_product_search_hotel_product_depart_date.value : null
+					
+					if (cityId && fromDate && toDate) {
+						data.category_id = categoryId
+						data.city_id = cityId
+						data.from_date = fromDate
+						data.to_date = toDate
+						data.pax = guestCount
+						
+						hotelSearch(data)
+					}
+					
+					break
+				default:
+					return
+			}
+		}
+		
+		$(_button_product_search_panel_hotels_clear)
+			.on("click", function () {
+				resetForm()
+			})
+		
+		$(_form_product_search_hotel_product_category_id)
+			.on("change", function () {
+				if (_form_product_search_hotel_product_category_id.dataset.categoryid) {
+					categoryChanged()
+					let categoryId = parseInt(_form_product_search_hotel_product_category_id.dataset.categoryid)
+					let categoryName = _form_product_search_hotel_product_category_id.dataset.categoryname
+					let categoryIcon = _form_product_search_hotel_product_category_id.dataset.categoryicon
+					_form_product_search_hotel_product_category_id.value = categoryId
+					_product_search_name_icon_display.classList = categoryIcon + " btn-guest-picker-icon"
+					_product_search_category_display.innerText = categoryName
+					switch (categoryId) {
+						case 1:
+							enableHotelFormFields()
+							console.log("Hotels")
+							break
+						case 2:
+							enableFlightFormFields()
+							console.log("Flights")
+							break
+						case 3:
+							console.log("Cars")
+							break
+						case 4:
+							console.log("Rail")
+							break
+						case 5:
+							console.log("Transport")
+							break
+						case 6:
+							console.log("Tours")
+							break
+						case 7:
+							console.log("Cruises")
+							break
+						case 8:
+							console.log("Packages")
+							break
+						case 9:
+							console.log("Other")
+							break
+						default:
+							console.log("Default")
+							break
+					}
+				}
+			})
+		
+		$(_buttonProductSearchCheckIn)
+			.datepicker({
+				startDate: '-1d',
+				autoclose: true,
+				numberOfMonths: 2,
+				title: function () {
+					return "<div class='popover-header'><span class='cPZwQ'>Select a date to continue</span></div>"
+				},
+				clearBtn: true,
+				todayHighlight: true,
+				todayBtn: true,
+				format: "yyyy-mm-dd",
+				orientation: "bottom auto",
+				showOnFocus: "false",
+			})
+			.on("changeDate", function (selected) {
+				const _buttonProductSearchCheckIn = document.getElementById("buttonProductSearchCheckIn")
+				const roomDisplay = document.getElementById('buttonProductSearchCheckIn')
+				
+				let formattedDate = $(_buttonProductSearchCheckIn).datepicker("getFormattedDate")
+				
+				$(_buttonProductSearchCheckOut).datepicker("getFormattedDate")
+				_form_product_search_hotel_product_arrive_date.value = formattedDate
+				
+				if (roomDisplay) {
+					$(roomDisplay).find("span#product_search_check_in_display").text((formattedDate === "") ? " — / — / — " : formattedDate)
+				}
+				
+				$(_buttonProductSearchCheckOut)
+					.val('')
+					.datepicker('update')
+					.datepicker('setStartDate', (formattedDate !== "") ? formattedDate : null)
+					.trigger("changeDate")
+			})
+		
+		$(_buttonProductSearchCheckOut)
+			.datepicker({
+				startDate: '-1d',
+				autoclose: true,
+				todayBtn: "linked",
+				numberOfMonths: 2,
+				title: function () {
+					return "<div class='popover-header'><span class='cPZwQ'>Select a date to continue</span></div>"
+				},
+				clearBtn: true,
+				todayHighlight: true,
+				maxViewMode: 2,
+				format: "yyyy-mm-dd",
+				orientation: "bottom auto",
+				showOnFocus: "false",
+				beforeShowMonth: function (date) {
+					//console.log(date)
+				},
+				datesDisabled: ['12/06/2021', '12/21/2021'],
+				toggleActive: true,
+				defaultViewDate: {
+					year: today_year,
+					month: today_month,
+					day: today_date,
+				},
+			})
+			.on("changeDate", function (e) {
+				const roomDisplay = document.getElementById('buttonProductSearchCheckOut')
+				let formattedDate = $(_buttonProductSearchCheckOut).datepicker("getFormattedDate")
+				
+				_form_product_search_hotel_product_depart_date.value = formattedDate
+				
+				if (roomDisplay) {
+					$(roomDisplay).find("span#product_search_check_out_display").text((formattedDate === "") ? " — / — / — " : formattedDate)
+				}
+				
+			})
+		
+		$(_formProductSearchNameClose)
+			.on("click", function () {
+				closeProductNameSearch()
+			})
+		
+		$(_formProductSearchCityClose)
+			.on("click", function () {
+				closeProductCitySearch()
+			})
+		
+		$(_formProductSearchGuestClose)
+			.on("click", function () {
+				closeProductGuestSearch()
+			})
+		
+		$(_formProductSearchCitySubmit)
+			.on("click", function () {
+				updateProductCitySearch()
+				closeProductGuestSearch()
+			})
+		
+		$(_formProductSearchNameSubmit)
+			.on("click", function () {
+				updateProductNameSearch()
+				closeProductNameSearch()
+			})
+		
+		$(_formProductSearchGuestSubmit)
+			.on("click", function () {
+				updateProductGuestSearch()
+				closeProductGuestSearch()
+			})
+		
+		$(_buttonProductSearchCity)
+			.on("show.bs.popover", function () {
+				initProductCitySearch()
+				
+			})
+			.on("shown.bs.popover", function () {
+				//_formProductSearchCity.focus()
+			})
+			.on("hidden.bs.popover", function () {
+				window.removeEventListener("click", clickOutsideProductNameSearch)
+			})
+		
+		$(_buttonProductSearchGuest)
+			.on("show.bs.popover", function () {
+				initProductGuestSearch()
+				
+			})
+			.on("shown.bs.popover", function () {
+				//_formProductSearchName.focus()
+			})
+			.on("hidden.bs.popover", function () {
+				window.removeEventListener("click", clickOutsideProductGuestSearch)
+			})
+		
+		$(_buttonProductSearchName)
+			.on("show.bs.popover", function () {
+				initProductNameSearch()
+				
+			})
+			.on("shown.bs.popover", function () {
+				//_formProductSearchName.focus()
+			})
+			.on("hidden.bs.popover", function () {
+				window.removeEventListener("click", clickOutsideProductNameSearch)
+			})
+		
+		const resetForm = function () {
+			$("div[data-hotel='true'").hide()
+			$("div[data-flight='true'").hide()
+			
+			closeProductGuestSearch()
+			closeProductNameSearch()
+			closeProductCitySearch()
+			
+			updateProductGuestSearch()
+			updateProductNameSearch()
+			updateProductCitySearch()
+			
+			_product_search_category_display.innerText = "** Select **"
+			_product_search_name_display.innerText = "any"
+			_product_search_city_display.innerText = "city name"
+			_product_search_check_in_display.innerText = "— / — / —"
+			_product_search_check_out_display.innerText = "— / — / —"
+			
+			roomNumber.value = 1
+			adultNumber.value = 1
+			childNumber.value = 0
+			let roomCount = (!isNaN(parseInt(roomNumber.value))) ? parseInt(roomNumber.value) : 1
+			let adultCount = (!isNaN(parseInt(adultNumber.value))) ? parseInt(adultNumber.value) : 1
+			let childCount = (!isNaN(parseInt(childNumber.value))) ? parseInt(childNumber.value) : 0
+			
+			roomDisplay.innerText = (roomCount > 1) ? roomCount + ' rooms, ' : roomCount + ' room, '
+			adultDisplay.innerText = (adultCount > 1) ? adultCount + ' adults, ' : adultCount + ' adult, '
+			childDisplay.innerText = (childCount > 1) ? childCount + ' children' : childCount + ' child'
+			
+			_product_search_name_icon_display.classList = "fas fa-pencil-alt btn-guest-picker-icon"
+			
+			_form_product_search_hotel_product_city_id.value = ""
+			_form_product_search_hotel_product_category_id.value = ""
+			_form_product_search_hotel_product_product_id.value = ""
+			_form_product_search_hotel_product_name.value = ""
+			_form_product_search_hotel_product_arrive_date.value = ""
+			_form_product_search_hotel_product_number_of_children.value = "0"
+			_form_product_search_hotel_product_number_of_adults.value = "1"
+			_form_product_search_hotel_product_number_of_rooms.value = "1"
+			_form_product_search_hotel_product_depart_date.value = ""
+			disableFormFields()
+		}
+		
+		const enableHotelFormFields = function () {
+			_buttonProductSearchName.disabled = false
+			_buttonProductSearchCity.disabled = false
+			_buttonProductSearchCheckIn.disabled = false
+			_buttonProductSearchCheckOut.disabled = false
+			_buttonProductSearchGuest.disabled = false
+			$("div[data-hotel='true'").show()
+		}
+		
+		const enableFlightFormFields = function () {
+			_buttonProductSearchName.disabled = false
+			_buttonProductSearchCity.disabled = false
+			_buttonProductSearchCheckIn.disabled = false
+			_buttonProductSearchCheckOut.disabled = false
+			_buttonProductSearchGuest.disabled = false
+			$("div[data-flight='true'").show()
+		}
+		
+		const disableFormFields = function () {
+			_buttonProductSearchName.disabled = true
+			_buttonProductSearchCity.disabled = true
+			_buttonProductSearchCheckIn.disabled = true
+			_buttonProductSearchCheckOut.disabled = true
+			_buttonProductSearchGuest.disabled = true
+		}
+		
+		const initAutocomplete = function (category_id) {
+			
+			$(_formProductSearchCity)
+				.on("search", function () {
+					_formProductSearchCity.value = ""
+					_formProductSearchCityId.value = ""
+					updateProductCitySearch()
+				})
+				.on("click", function (e) {
+					$(this).select()
+				})
+				.autocomplete({
+					serviceUrl: "/api/v1.0/autocomplete/cities",
+					minChars: 2,
+					cache: false,
+					dataType: "json",
+					triggerSelectOnValidInput: false,
+					paramName: "st",
+					onSelect: function (suggestion) {
+						if (!suggestion.data) {
+							return
+						}
+						let city = suggestion.data
+						
+						_formProductSearchCityId.value = city.id
+					},
+				})
+			
+			$(_formProductSearchName)
+				.on("search", function () {
+					_formProductSearchName.value = ""
+					_formProductSearchNameId.value = ""
+					updateProductCitySearch()
+				})
+				.on("click", function (e) {
+					$(this).select()
+				})
+				.autocomplete({
+					serviceUrl: "/api/v1.0/autocomplete/products",
+					minChars: 2,
+					cache: false,
+					dataType: "json",
+					triggerSelectOnValidInput: false,
+					params: { "category_id": category_id },
+					paramName: "st",
+					onSelect: function (suggestion) {
+						if (!suggestion.data) {
+							return
+						}
+						let product = suggestion.data
+						_form_product_search_hotel_product_product_id.value = product.id
+						_formProductSearchNameId.value = product.id
+					},
+				})
+		}
+		
+		const categoryChanged = function () {
+			resetForm()
+			
+		}
+		
+		const updateProductNameSearch = function () {
+			
+			if (_formProductSearchName) {
+				let name = (_formProductSearchName.value !== '') ? _formProductSearchName.value : 'any'
+				
+				_product_search_name_display.innerText = name
+				_form_product_search_hotel_product_name.value = name
+				
+				if (_buttonProductSearchName) {
+					$(_buttonProductSearchName).popover("hide")
+				}
+			}
+		}
+		const updateProductGuestSearch = function () {
+			
+			if (
+				roomNumber && adultNumber && childNumber
+				&& _form_product_search_hotel_product_number_of_rooms && _form_product_search_hotel_product_number_of_adults && _form_product_search_hotel_product_number_of_children
+				&& roomDisplay && adultDisplay && childDisplay
+			) {
+				let roomCount = (!isNaN(parseInt(roomNumber.value))) ? parseInt(roomNumber.value) : 1
+				let adultCount = (!isNaN(parseInt(adultNumber.value))) ? parseInt(adultNumber.value) : 1
+				let childCount = (!isNaN(parseInt(childNumber.value))) ? parseInt(childNumber.value) : 0
+				
+				roomDisplay.innerText = (roomCount > 1) ? roomCount + ' rooms, ' : roomCount + ' room, '
+				adultDisplay.innerText = (adultCount > 1) ? adultCount + ' adults, ' : adultCount + ' adult, '
+				childDisplay.innerText = (childCount > 1) ? childCount + ' children' : childCount + ' child'
+				
+				_form_product_search_hotel_product_number_of_rooms.value = (roomCount > 1) ? roomCount : 1
+				_form_product_search_hotel_product_number_of_adults.value = (adultCount > 1) ? adultCount : 1
+				_form_product_search_hotel_product_number_of_children.value = (childCount > 0) ? childCount : 0
+				
+				if (_buttonProductSearchGuest) {
+					$(_buttonProductSearchGuest).popover("hide")
+				}
+			}
+		}
+		const updateProductCitySearch = function () {
+			if (_formProductSearchCity) {
+				_product_search_city_display.innerText = (_formProductSearchCity.value !== '') ? _formProductSearchCity.value : 'city name'
+				_form_product_search_hotel_product_city_id.value = _formProductSearchCityId.value
+				$(_form_product_search_hotel_product_city_id).trigger("change")
+			}
+		}
+		
+		const closeProductNameSearch = function () {
+			if (_buttonProductSearchName) {
+				$(_buttonProductSearchName).popover("hide")
+			}
+			
+			window.removeEventListener("click", clickOutsideProductNameSearch)
+		}
+		const closeProductCitySearch = function () {
+			if (_buttonProductSearchCity) {
+				$(_buttonProductSearchCity).popover("hide")
+			}
+			window.removeEventListener("click", clickOutsideProductCitySearch)
+		}
+		const closeProductGuestSearch = function () {
+			if (_buttonProductSearchGuest) {
+				$(_buttonProductSearchGuest).popover("hide")
+			}
+			
+			window.removeEventListener("click", clickOutsideProductGuestSearch)
+		}
+		
+		const clickOutsideProductNameSearch = (e) => {
+			let class_name = "btn-name-picker"
+			let tar = $(e.target).parents("div.popover")
+			
+			if (!tar[0] && !e.target.className.includes(class_name)) {
+				updateProductNameSearch()
+				closeProductNameSearch()
+			}
+		}
+		const clickOutsideProductGuestSearch = (e) => {
+			let class_name = "btn-guest-picker"
+			let tar = $(e.target).parents("div.popover")
+			
+			if ((!tar[0] && !e.target.className.includes(class_name))) {
+				updateProductGuestSearch()
+				closeProductGuestSearch()
+			}
+		}
+		const clickOutsideProductCitySearch = (e) => {
+			let class_name = "btn-city-picker"
+			let tar = $(e.target).parents("div.popover")
+			
+			if (!tar[0] && !e.target.className.includes(class_name)) {
+				updateProductCitySearch()
+				closeProductCitySearch()
+			}
+		}
+		
+		const initProductNameSearch = function () {
+			window.addEventListener("click", clickOutsideProductNameSearch)
+		}
+		const initProductGuestSearch = function () {
+			window.addEventListener("click", clickOutsideProductGuestSearch)
+		}
+		const initProductCitySearch = function () {
+			window.addEventListener("click", clickOutsideProductCitySearch)
+		}
+		
+		const init = function (settings) {
+			categoryItem = document.querySelectorAll(".category-dropdown-item")
+			categoryItem.forEach(el => el.addEventListener("click", event => {
+				_formProductSearchIcon.classList = " " + el.dataset.categoryicon + " mr-3 "
+				_product_search_name_icon_display.classList = " " + el.dataset.categoryicon + " btn-guest-picker-icon"
+				_product_search_category_display.innerText = el.dataset.categoryname
+				category_id = parseInt(el.dataset.categoryid)
+				initAutocomplete(category_id)
+				_form_product_search_hotel_product_category_id.value = category_id
+				_form_product_search_hotel_product_category_id.dataset.categoryid = category_id
+				_form_product_search_hotel_product_category_id.dataset.categoryname = el.dataset.categoryname
+				_form_product_search_hotel_product_category_id.dataset.categoryicon = el.dataset.categoryicon
+				_product_search_subtitle.innerText = el.dataset.categoryname
+				$(_form_product_search_hotel_product_category_id).trigger("change")
+				$(_buttonProductSearchCategory).trigger("change")
+			}))
+			
+			if (_buttonProductSearchName) {
+				popupNameTitle = $("#popoverNameForm .popover-head h5")
+				popupNameContent = $("#popoverNameForm .popover-body form")
+				
+				$(_buttonProductSearchName).popover({
+					placement: "bottom",
+					title: () => popupNameTitle,//$("#popoverGuestForm .popover-head h5"),
+					html: true,
+					container: "body",
+					content: () => popupNameContent,//$("#popoverGuestForm .popover-body form"),
+					
+				})
+			}
+			
+			if (_buttonProductSearchCity) {
+				popupCityTitle = $("#popoverCityForm .popover-head h5")
+				popupCityContent = $("#popoverCityForm .popover-body form")
+				
+				$(_buttonProductSearchCity).popover({
+					placement: "bottom",
+					title: () => popupCityTitle,
+					html: true,
+					container: "body",
+					content: () => popupCityContent,
+					
+				})
+			}
+			
+			if (_buttonProductSearchGuest) {
+				popupGuestTitle = $("#popoverGuestForm .popover-head h5")
+				popupGuestContent = $("#popoverGuestForm .popover-body form")
+				
+				$(_buttonProductSearchGuest).popover({
+					placement: "bottom",
+					title: () => popupGuestTitle,//$("#popoverGuestForm .popover-head h5"),
+					html: true,
+					container: "body",
+					content: () => popupGuestContent,//$("#popoverGuestForm .popover-body form"),
+					
+				})
+			}
+			
+			resetForm()
+		}
+		
+		init(settings)
+		
+		return {
+			init: function (settings) {
+				init(settings)
+			},
+			
+			updateProductCitySearch: function () {
+				updateProductCitySearch()
+			},
+			updateProductNameSearch: function () {
+				updateProductNameSearch()
+			},
+			closeProductGuestSearch: function () {
+				closeProductGuestSearch()
+			},
+		}
+	}
+	
+	$(function () {
+		let productSearch = ProductSearch()
+	})
 
 </script>

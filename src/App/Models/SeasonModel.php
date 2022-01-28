@@ -158,10 +158,6 @@
 			
 			$disabled_dow = Model::setString((isset($season["disabled_dow"])) ? $season["disabled_dow"] : null);
 			
-			$seasons_text = Model::setString((isset($season["seasons_text"])) ? $season["seasons_text"] : null);
-			$seasons_background = Model::setString((isset($season["seasons_background"])) ? $season["seasons_background"] : null);
-			$seasons_border = Model::setString((isset($season["seasons_border"])) ? $season["seasons_border"] : null);
-			
 			$note = Model::setLongText((isset($season["note"])) ? $season["note"] : null);
 			
 			$sql = "
@@ -184,6 +180,43 @@
 			try {
 				Model::$db->rawQuery($sql);
 				
+				$sql2 = "
+					SELECT 			PRODUCT_CALENDAR.date AS 'product_calendar_date'
+					FROM 			product_calendar PRODUCT_CALENDAR
+					JOIN 			product_season PRODUCT_SEASON ON (
+					    				PRODUCT_SEASON.product_id = PRODUCT_CALENDAR.product_id
+				                        AND 	PRODUCT_SEASON.season_id = PRODUCT_CALENDAR.season_id
+					    			)
+					WHERE	PRODUCT_CALENDAR.product_id = $product_id
+						AND PRODUCT_CALENDAR.season_id = $season_id
+					  	AND FIND_IN_SET((DAYOFWEEK(PRODUCT_CALENDAR.date)-1), PRODUCT_SEASON.disabled_dow)
+				";
+				
+				try {
+					$in = [];
+					$dates = Model::$db->rawQuery($sql2);
+					foreach ($dates AS $k => $date) {
+						$in[] = Model::setString($date["product_calendar_date"]);
+					}
+					
+					if (count($in) > 0) {
+						$inCondition = implode(",", $in);
+						
+						$sql3 = "
+							DELETE FROM product_calendar
+							WHERE (product_id = $product_id)
+								AND (season_id = $season_id)
+							  	AND (date IN ($inCondition));
+					    ";
+						
+						Model::$db->rawQuery("DELETE FROM inventory WHERE product_id = $product_id AND date NOT IN (SELECT date FROM product_calendar WHERE product_id = inventory.product_id);");
+						Model::$db->rawQuery($sql3);
+					}
+					
+				} catch (Exception $e) {
+					Log::$debug_log->error($e);
+				}
+				
 				return self::getByProductIdSeasonId($product_id, $season_id);
 			} catch (Exception $e) {
 				Log::$debug_log->error($e);
@@ -198,14 +231,11 @@
 			$product_id = Model::setInt((isset($params["product_id"])) ? $params["product_id"] : null);
 			
 			if (!is_null($season_id) && !is_null($season_id)) {
-				$sql = "
-		            DELETE FROM product_season
-					WHERE 		product_id = $product_id
-						AND		season_id = $season_id;";
 				try {
-					Model::$db->rawQuery($sql);
-					Log::$debug_log->trace("DELETE FROM product_calendar WHERE product_id = $product_id AND	season_id = $season_id;");
+					Model::$db->rawQuery("DELETE FROM pricing WHERE matrix_id IN (SELECT id FROM matrix WHERE product_id = $product_id AND season_id = $season_id);");
+					Model::$db->rawQuery("DELETE FROM matrix WHERE product_id = $product_id AND season_id = $season_id;");
 					Model::$db->rawQuery("DELETE FROM product_calendar WHERE product_id = $product_id AND	season_id = $season_id;");
+					Model::$db->rawQuery("DELETE FROM product_season WHERE product_id = $product_id AND season_id = $season_id;");
 					
 					return [];
 				} catch (Exception $e) {

@@ -93,11 +93,13 @@ const Pricing = (function () {
     const loadSeasonDropdown = function () {
         let seasons = (Season && Season.all) ? Array.from(Season.all.values()) : []
         let options = ""
+        
         $.each(seasons, function (k, season) {
             let name = season.name
             let id = season.id
             options += `<option value="${id}">${name}</option>`
         })
+        
         $(_pricing_strategy_season_id).empty()
         $(_pricing_strategy_season_id).html(options)
     }
@@ -108,15 +110,13 @@ const Pricing = (function () {
     const loadProfileDropdown = function () {
         let profiles = (InventoryProfile && InventoryProfile.all) ? Array.from(InventoryProfile.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Profiles --</option>"
+        
         $.each(profiles, function (k, profile) {
             let name = profile.name
             let id = profile.id
             options += `<option value="${id}">${name}</option>`
         })
-        /*
-        $(_pricing_strategy_profile_id).empty()
-        $(_pricing_strategy_profile_id).html(options)
-        //*/
+        
         $(_calendar_filter_profile_id).empty()
         $(_calendar_filter_profile_id).html(options)
     }
@@ -127,19 +127,23 @@ const Pricing = (function () {
     const loadUnitDropdown = function () {
         let units = (Unit && Unit.all) ? Array.from(Unit.all.values()) : []
         let options = ""
+        
         $.each(units, function (k, unit) {
             let name = unit.name
             let id = unit.id
             options += `<option value="${id}">${name}</option>`
         })
+        
         $(_pricing_strategy_unit_id).empty()
         $(_pricing_strategy_unit_id).html(options)
     }
     
     const resetForm = function () {
+        //*
         loadSeasonDropdown()
         loadUnitDropdown()
         loadProfileDropdown()
+        //*/
     }
     
     const defaultDetail = function () {

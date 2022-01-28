@@ -67,8 +67,8 @@
 		const _product_panel_link_meta = document.getElementById("product_panel_link_meta")
 		const _product_panel_link_location = document.getElementById("product_panel_link_location")
 		const _product_keywords = document.getElementById("product_keywords")
-		const _product_description_long = document.getElementById("product_description_long")
-		const _product_description_short = document.getElementById("_product_description_short")
+		const _product_edit_meta_description_long = document.getElementById("product_edit_meta_description_long")
+		const _product_edit_meta_description_short = document.getElementById("product_edit_meta_description_short")
 		const _modal_product_city_id = document.getElementById("modal_product_city_id")
 		const _modal_product_city = document.getElementById("modal_product_city")
 		const _product_index_page = document.getElementById("product_index_page")
@@ -272,38 +272,41 @@
 		}
 		
 		const updateProgress = function () {
-			let variants = Array.from(Variant.all.values())
-			let units = Array.from(Unit.all.values())
-			let seasons = Array.from(Season.all.values())
-			let calendarButtons = document.querySelectorAll("button[data-target='#seasonCalendarModal']")
-			if (variants.length === 0 || units.length === 0 || seasons.length === 0) {
-				calendarButtons.forEach(el => {
-					el.disabled = true
-				})
-				_button_save_product.disabled = true
-				$(_panel_tab_pricing).addClass(`disabled`)
-				$(_panel_tab_inventory).addClass(`disabled`)
-				$("#panel_tab_pricing")
-					.html("Pricing <span class='badge rounded-pill badge-notification bg-danger tab-badge' style='color:#fff!important'>!</span>")
-			} else {
-				calendarButtons.forEach(el => {
-					el.disabled = false
-				})
-				$(_panel_tab_pricing).removeClass(`disabled`)
-				$(_panel_tab_inventory).removeClass(`disabled`)
-				
-				let pricingWorksheet = PricingWorksheet.status()
-				if (pricingWorksheet === "incomplete") {
+			if (_product_edit_page) {
+				let variants = Array.from(Variant.all.values())
+				let units = Array.from(Unit.all.values())
+				let seasons = Array.from(Season.all.values())
+				let calendarButtons = document.querySelectorAll("button[data-target='#seasonCalendarModal']")
+				if (variants.length === 0 || units.length === 0 || seasons.length === 0) {
+					calendarButtons.forEach(el => {
+						el.disabled = true
+					})
+					
 					_button_save_product.disabled = true
+					
+					$(_panel_tab_pricing).addClass(`disabled`)
+					$(_panel_tab_inventory).addClass(`disabled`)
 					$("#panel_tab_pricing")
 						.html("Pricing <span class='badge rounded-pill badge-notification bg-danger tab-badge' style='color:#fff!important'>!</span>")
 				} else {
-					_button_save_product.disabled = false
-					$("#panel_tab_pricing")
-						.html("Pricing")
+					calendarButtons.forEach(el => {
+						el.disabled = false
+					})
+					$(_panel_tab_pricing).removeClass(`disabled`)
+					$(_panel_tab_inventory).removeClass(`disabled`)
+					
+					let pricingWorksheet = PricingWorksheet.status()
+					if (pricingWorksheet === "incomplete") {
+						_button_save_product.disabled = true
+						$("#panel_tab_pricing")
+							.html("Pricing <span class='badge rounded-pill badge-notification bg-danger tab-badge' style='color:#fff!important'>!</span>")
+					} else {
+						_button_save_product.disabled = false
+						$("#panel_tab_pricing")
+							.html("Pricing")
+					}
 				}
 			}
-			
 		}
 		
 		const buildInsertData = function () {
@@ -680,18 +683,6 @@
 			}
 		}
 		
-		const loadProductLocation = function (location, type) {
-			//Console.log("location", location)
-			if (!type) {
-				type = "product"
-			}
-			let iFrame = `#map-container-product-location`
-			product_initial_location = location
-			let $frame = $(iFrame).find("iframe")
-			let url = buildMapsURL(location)
-			$frame.attr("src", url)
-		}
-		
 		const index = function (settings) {
 			
 			if (_product_index_table) {
@@ -789,22 +780,28 @@
 				profiles = product.profiles
 			}
 			
-			product_location.street_1 = (product.street_1) ? product.street_1 : null
-			product_location.street_2 = (product.street_2) ? product.street_2 : null
-			product_location.postal_code = (product.postal_code) ? product.postal_code : null
+			if (product.category_id === 1) {
+				product_location.street_1 = (product.street_1) ? product.street_1 : null
+				product_location.street_2 = (product.street_2) ? product.street_2 : null
+				product_location.postal_code = (product.postal_code) ? product.postal_code : null
+				
+				ProductLocation.init({
+					product_location: product_location,
+					provider_location: provider_location,
+					product: product,
+				})
+			}
 			
-			ProductLocation.init({
-				product_location: product_location,
-				provider_location: provider_location,
-				product: product,
-			})
-			
-			let product_keywords = (product.keywords) ? product.keywords : ""
+			let description_long = (product.description_long) ? product.description_long : ""
+			let description_short = (product.description_short) ? product.description_short : ""
+			let product_keywords = (product.keywords) ? product.keywords : []
 			$product_keywords = $(_product_keywords).BuildKeyword(product_keywords)
 			
-			let product_amenities = (product.amenities) ? product.amenities : ""
+			let product_amenities = (product.amenities) ? product.amenities : []
 			$product_amenities = $(_product_amenities).BuildKeyword(product_amenities)
 			
+			_product_edit_meta_description_short.value = description_short
+			_product_edit_meta_description_long.value = description_long
 		}
 		
 		const init = function (settings) {
@@ -943,6 +940,7 @@
 			attr3: null,
 			updateProgress: function () {
 				updateProgress()
+				$("html").css({ overflow: "auto" })
 			},
 			updateProductSKU: function () {
 				updateProductSKU()
@@ -1024,6 +1022,7 @@
 	}
 	
 	$(document).ready(function () {
+		
 		(function ($) {
 			
 			$.fn.unSetError = function () {
@@ -1077,6 +1076,7 @@
 				}
 			}
 		}
+		
 	}, false)
 
 </script>

@@ -1,6 +1,7 @@
 const Variant = (function () {
     "use strict"
     
+    const _calendar_loader = document.getElementById("calendar_loader")
     const _button_remove_variant_from_product = document.getElementById("button_remove_variant_from_product")
     const _product_edit_variant_section = document.getElementById("product_edit_variant_section")
     const _panel_tab_variant = document.getElementById("panel_tab_variant")
@@ -84,8 +85,6 @@ const Variant = (function () {
     
     $(_product_edit_variant_form_close_button)
         .on("click", function () {
-            //console.log("Variant.product_edit_variant_form_close_button:click()", this)
-            // ----
             resetForm()
             $table_variant_product_edit.clearSelectedRows()
         })
@@ -116,18 +115,23 @@ const Variant = (function () {
                 removeProductVariant(dataToSend, function (data) {
                     if (data) {
                         let detail = set(Variant.all.get(dataToSend.variant_id))
+                        
                         Variant.all.delete(dataToSend.variant_id)
-                        _product_edit_variant_form_variant_name_filter.value = ""
+                        
                         $table_variant_product_edit.deleteRow(detail)
                         $table_variant_product_edit.clearSelectedRows()
                         
-                        Pricing.resetForm()
-                        YearCalendar.resetForm()
+                        _product_edit_variant_form_variant_name_filter.value = ""
                         
-                        toastr.success(`Variant: ${detail.name} - has been updated`)
                         PricingWorksheet.pricingWorksheet()
                         Pricing.resetForm()
-                        YearCalendar.resetForm()
+                        YearCalendar.refresh()
+                        
+                        updateProgress()
+                        resetForm()
+                        
+                        toastr.success(`Variant: ${detail.name} - has been updated`)
+                        YearCalendar.endLoading()
                     }
                 })
             } else {
@@ -151,7 +155,7 @@ const Variant = (function () {
                     }
                 })
             } catch (e) {
-                //console.log("error", e)
+                console.log("error", e)
             }
         }
     }
@@ -543,8 +547,6 @@ const Variant = (function () {
     }
     
     const saveProductVariant = function (dataToSend, callback) {
-        //console.log("Variant.saveProductVariant()", Variant)
-        // ----
         if (dataToSend) {
             let url = "/api/v1.0/variants/update"
             try {
@@ -556,7 +558,7 @@ const Variant = (function () {
                     }
                 })
             } catch (e) {
-                //console.log("error", e)
+                console.log("error", e)
             }
         }
     }
@@ -566,20 +568,10 @@ const Variant = (function () {
             confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
                 if (ans) {
                     let dataToSend = buildVariantRecord()
-                    console.log("Variant.save()", dataToSend)
                     saveProductVariant(dataToSend, function (data) {
-                        //console.log("Variant.save - data", data)
-                        let variant
                         if (data) {
-                            variant = data
-                            if (data[0]) {
-                                variant = data[0]
-                            }
-                            let detail = set(variant)
-                            //console.log("detail", detail)
+                            let detail = set((data[0]) ? data[0] : data)
                             let hasVariant = Variant.all.get(detail.id)
-                            //console.log("Variant.save - hasVariant", hasVariant)
-                            Variant.all.set(detail.id, detail)
                             
                             if (hasVariant) {
                                 $table_variant_product_edit.updateRow(detail)
@@ -587,17 +579,24 @@ const Variant = (function () {
                                 $table_variant_product_edit.insertRow(detail)
                             }
                             
-                            //console.log("Variant.save - Variant.all", Variant.all)
-                            toastr.success(`Variant: ${detail.name} - has been updated`)
-                            resetForm()
+                            Variant.all.set(detail.id, detail)
                             
-                            _product_edit_variant_form_variant_name_filter.value = ""
                             $table_variant_product_edit.loadRow(detail)
                             $table_variant_product_edit.jumpToRow(detail)
                             $table_variant_product_edit.clearSelectedRows()
+                            
+                            _product_edit_variant_form_variant_name_filter.disabled = false
+                            _product_edit_variant_form_variant_name_filter.value = ""
+                            
                             PricingWorksheet.pricingWorksheet()
                             Pricing.resetForm()
-                            YearCalendar.resetForm()
+                            YearCalendar.refresh()
+                            
+                            updateProgress()
+                            resetForm()
+                            
+                            toastr.success(`Variant: ${detail.name} - has been updated`)
+                            YearCalendar.endLoading()
                         }
                     })
                 } else {

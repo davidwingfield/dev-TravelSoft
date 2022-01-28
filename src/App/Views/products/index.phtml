@@ -17,23 +17,21 @@
 
 <!-- Product Index Page -->
 <section id="product_index_page" class="section">
-    
-    <div class="row gx-1">
-        <div class="col-12 p-1">
+	
+	<div class="row gx-1">
+		<div class="col-12 p-1">
 			<?php include_once(VIEWS_PATH . "/products/forms/product_search.phtml"); ?>
-        </div>
-    </div>
-    
-    <div class="row gx-1">
-        <div class="col-12 p-1">
-            <div class="card card-body">
-                <header class="panel-heading">
-                    <div class="panel-actions"></div>
-                    <h3 class="panel-title">Basic</h3>
-                </header>
-                <div class="panel-body mx-4 my-4">
-                    <table id="product_index_table" class="table table-hover dataTable table-striped w-full dtr-inline">
-                        <!--
+		</div>
+	</div>
+	
+	<div class="card card-body mb-2">
+		<h5 class="card-title font-weight-bold">
+			<span>Products</span>
+			<a href="javascript:void(0);" id="product_panel_link_product" class="panel_link" aria-hidden="true">Edit</a>
+		</h5>
+		
+		<table id="product_index_table" class="table table-hover dataTable table-striped w-full dtr-inline">
+			<!--
                         <thead>
                         <tr>
                             <th>#</th>
@@ -48,36 +46,34 @@
 
                         <tbody>
                         <?php
-							foreach ($page_data["products"] AS $product) {
-								$id = $product["id"];
-								$name = $product["name"];
-								$sku = $product["sku"];
-								$provider = $product["provider"]["name"];
-								$vendor = $product["vendor"]["name"];
-								$location = $product["location"]["display_medium"];
-								$category = $product["category"]["name"];
-								/*
-								echo "
-									<tr>
-										<td>$id</td>
-										<td>$name</td>
-										<td>$sku</td>
-										<td>$provider</td>
-										<td>$vendor</td>
-										<td>$location</td>
-										<td>$category</td>
-									</tr>
-								";
-								//*/
-							}
-						?>
+				foreach ($page_data["products"] AS $product) {
+					$id = $product["id"];
+					$name = $product["name"];
+					$sku = $product["sku"];
+					$provider = $product["provider"]["name"];
+					$vendor = $product["vendor"]["name"];
+					$location = $product["location"]["display_medium"];
+					$category = $product["category"]["name"];
+					/*
+					echo "
+						<tr>
+							<td>$id</td>
+							<td>$name</td>
+							<td>$sku</td>
+							<td>$provider</td>
+							<td>$vendor</td>
+							<td>$location</td>
+							<td>$category</td>
+						</tr>
+					";
+					//*/
+				}
+			?>
                         </tbody>
                         -->
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+		</table>
+	
+	</div>
 
 </section>
 <!-- /Product Index Page -->
@@ -87,8 +83,8 @@
 <!-- /New Product Modal -->
 
 <script type="text/javascript">
-    $(function () {
-        Types.init(<?php echo TYPES;?>)
+	$(function () {
+		Types.init(<?php echo TYPES;?>)
 		<?php echo $init;?>
-    })
+	})
 </script>

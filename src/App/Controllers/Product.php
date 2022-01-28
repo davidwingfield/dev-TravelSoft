@@ -45,6 +45,18 @@
 					"placement" => "top",
 				),
 			),
+			
+			"calendar" => array(
+				"type" => "button",
+				"href" => "button",
+				"classes" => "btn btn-sm btn-primary btn-round flex-fill waves-effect waves-light",
+				"text" => "Calendar",
+				"icon" => "fas fa-calendar mr-2",
+				"data" => array(
+					"toggle" => "modal",
+					"target" => "#seasonCalendarModal",
+				),
+			),
 		);
 		
 		protected static $tabs = array(
@@ -254,6 +266,7 @@
 				$tabs = self::$tabs;
 				
 				$data["buttons"] = array(
+					self::$buttons["calendar"],
 					self::$buttons["save"],
 					self::$buttons["new"],
 				);
@@ -300,6 +313,42 @@
 		public static function assignSeason(array $params = []): void
 		{
 			$results = ProductModel::updateAssignSeasons($params);
+			
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			
+			View::render_json($results);
+			exit(0);
+		}
+		
+		public static function assignProfile(array $params = []): void
+		{
+			$results = [];
+			
+			if (isset($params["params"])) {
+				$params = $params["params"];
+			}
+			
+			foreach ($params AS $key => $profile) {
+				
+				$data = array(
+					"product_id" => (int)$profile["product_id"],
+					"profile_id" => (int)$profile["profile_id"],
+					"unit_id" => (int)$profile["unit_id"],
+					"description" => (isset($profile["description"])) ? (string)$profile["description"] : null,
+					"note" => (isset($profile["note"])) ? (string)$profile["note"] : null,
+					"enabled" => (isset($profile["enabled"])) ? (int)$profile["enabled"] : 1,
+					"quantity_released" => (isset($profile["quantity_released"])) ? (int)$profile["quantity_released"] : 0,
+					"quantity_used" => (isset($profile["quantity_used"])) ? (int)$profile["quantity_used"] : 0,
+					"days" => $profile["days"],
+				);
+				
+				$results[] = ProductModel::updateAssignProfiles($data);
+			}
+			
+			//$results[] = ProductModel::updateAssignProfiles($params);
 			
 			/**
 			 * render results json page

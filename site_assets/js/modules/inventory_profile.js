@@ -835,9 +835,8 @@ const InventoryProfile = (function () {
     }
     
     const init = function (settings) {
-        //console.log("InventoryProfile.init(settings)", settings)
-        
         let inventory_profiles = []
+        
         if (settings) {
             if (settings.profiles) {
                 inventory_profiles = settings.profiles
@@ -892,9 +891,11 @@ const InventoryProfile = (function () {
             
             if (_product_edit_profile_form) {
                 validator_init(form_rules)
+                
                 InventoryProfile.expiration_date = $("#profile_expires").dateSelect({
                     onStart: function () {},
                 })
+                
                 InventoryProfile.advanced_booking_date = $("#profile_advanced_booking_date").dateSelect({
                     onStart: function () {},
                 })

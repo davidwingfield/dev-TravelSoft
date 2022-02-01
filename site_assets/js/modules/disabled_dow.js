@@ -16,7 +16,7 @@ $.fn.DisabledDOW = function (settings) {
     const $this = $(_this)
     
     $this.on("change", function () {
-        //Console.log("change")
+        //console.log("change")
     })
     
     /**
@@ -95,61 +95,61 @@ $.fn.DisabledDOW = function (settings) {
         DisabledDOW.days_of_week = new Map()
         
         DisabledDOW.days_of_week.set(
-          "*", {
-              label: "All",
-              for: name_prefix + "dow_select_all",
-              value: "*",
-              class: "custom-control-input dow_select",
-          })
+            "*", {
+                label: "All",
+                for: name_prefix + "dow_select_all",
+                value: "*",
+                class: "custom-control-input dow_select",
+            })
         DisabledDOW.days_of_week.set(
-          "0", {
-              label: "Sun",
-              for: name_prefix + "dow_select_sun",
-              value: 0,
-              class: "custom-control-input dow_select",
-          })
+            "0", {
+                label: "Sun",
+                for: name_prefix + "dow_select_sun",
+                value: 0,
+                class: "custom-control-input dow_select",
+            })
         DisabledDOW.days_of_week.set(
-          "1", {
-              label: "Mon",
-              for: name_prefix + "dow_select_mon",
-              value: 1,
-              class: "custom-control-input dow_select",
-          })
+            "1", {
+                label: "Mon",
+                for: name_prefix + "dow_select_mon",
+                value: 1,
+                class: "custom-control-input dow_select",
+            })
         DisabledDOW.days_of_week.set(
-          "2", {
-              label: "Tue",
-              for: name_prefix + "dow_select_tue",
-              value: 2,
-              class: "custom-control-input dow_select",
-          })
+            "2", {
+                label: "Tue",
+                for: name_prefix + "dow_select_tue",
+                value: 2,
+                class: "custom-control-input dow_select",
+            })
         DisabledDOW.days_of_week.set(
-          "3", {
-              label: "Wed",
-              for: name_prefix + "dow_select_wed",
-              value: 3,
-              class: "custom-control-input dow_select",
-          })
+            "3", {
+                label: "Wed",
+                for: name_prefix + "dow_select_wed",
+                value: 3,
+                class: "custom-control-input dow_select",
+            })
         DisabledDOW.days_of_week.set(
-          "4", {
-              label: "Thu",
-              for: name_prefix + "dow_select_thu",
-              value: 4,
-              class: "custom-control-input dow_select",
-          })
+            "4", {
+                label: "Thu",
+                for: name_prefix + "dow_select_thu",
+                value: 4,
+                class: "custom-control-input dow_select",
+            })
         DisabledDOW.days_of_week.set(
-          "5", {
-              label: "Fri",
-              for: name_prefix + "dow_select_fri",
-              value: 5,
-              class: "custom-control-input dow_select",
-          })
+            "5", {
+                label: "Fri",
+                for: name_prefix + "dow_select_fri",
+                value: 5,
+                class: "custom-control-input dow_select",
+            })
         DisabledDOW.days_of_week.set(
-          "6", {
-              label: "Sat",
-              for: name_prefix + "dow_select_sat",
-              value: 6,
-              class: "custom-control-input dow_select",
-          })
+            "6", {
+                label: "Sat",
+                for: name_prefix + "dow_select_sat",
+                value: 6,
+                class: "custom-control-input dow_select",
+            })
         
         let row = buildCheckBoxRow()
         let leadColumn = buildCheckBoxColumnLabel()
@@ -172,7 +172,7 @@ $.fn.DisabledDOW = function (settings) {
             let id = (typeof v === "number") ? v.toString() : v
             let day = DisabledDOW.days_of_week.get(id)
             
-            //Console.log("DisabledDOW.days_of_week", DisabledDOW.days_of_week)
+            //console.log("DisabledDOW.days_of_week", DisabledDOW.days_of_week)
             if (day) {
                 if (day.for) {
                     document.getElementById(day.for).checked = true
@@ -240,7 +240,7 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                //Console.log("dow_select_tue", DisabledDOW.disabled_dows)
+                //console.log("dow_select_tue", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_wed":
                 indexId = 3
@@ -255,7 +255,7 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                //Console.log("dow_select_wed", DisabledDOW.disabled_dows)
+                //console.log("dow_select_wed", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_thu":
                 indexId = 4
@@ -270,7 +270,7 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                //Console.log("dow_select_thu", DisabledDOW.disabled_dows)
+                //console.log("dow_select_thu", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_fri":
                 indexId = 5
@@ -309,7 +309,7 @@ $.fn.DisabledDOW = function (settings) {
     
     const value = function (val) {
         if (val) {
-            //Console.log("val", val)
+            //console.log("val", val)
         } else {
         
         }

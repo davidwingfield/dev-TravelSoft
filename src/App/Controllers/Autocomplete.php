@@ -202,4 +202,40 @@
 			exit(0);
 		}
 		
+		/**
+		 * autocomplete airports
+		 */
+		public function airports(): void
+		{
+			$st = "";
+			
+			extract($_GET);
+			$results = Airport::autocomplete($st);
+			
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			echo json_encode($results);
+			exit(0);
+		}
+		
+		/**
+		 * autocomplete airports
+		 */
+		public function stations(): void
+		{
+			$st = "";
+			
+			extract($_GET);
+			$results = Station::autocomplete($st);
+			
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			echo json_encode($results);
+			exit(0);
+		}
+		
 	}

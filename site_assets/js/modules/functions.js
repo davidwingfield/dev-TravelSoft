@@ -1,6 +1,77 @@
 let mdbPreloader = document.getElementById("mdb-preloader")
+/*
 let showElements
+let isShiftTime
+let separator = "-"
+let separatorTime = ":"
 
+const IsNumericTime = function (input, keyCode) {
+    if (!isNaN(parseInt(keyCode))) {
+        keyCode = parseInt(keyCode)
+    }
+    
+    if (keyCode === 16) {
+        isShiftTime = true
+    }
+    
+    if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || (keyCode === 8) || (keyCode === 46)) {
+        if (keyCode !== 16) {
+            if ((input.value.length === 2) && keyCode !== 8) {
+                input.value += separatorTime
+            }
+            
+            return true
+        }
+    }
+    
+    return false
+}
+
+const validateTimeFormat = function (input, keyCode) {
+    let timeString = input.value
+    let regex = /^\d{2,}:(?:[0-5]\d):(?:[0-5]\d)$/i
+    
+    if (keyCode === 16) {
+        isShift = false
+    }
+    
+    if (regex.test(timeString) || timeString.length === 0) {
+        $(input).unSetError()
+    } else {
+        $(input).setError("Invalid Time. Only HH-MM format allowed.")
+    }
+}
+
+$.fn.unSetError = function () {
+    let errorElm = this.parents("div.form-element").find("div.error")
+    
+    if (this.hasClass("time-format")) {
+    
+    }
+    
+    if (this.hasClass("date-format")) {
+    
+    }
+    
+    errorElm.html("&nbsp;").hide()
+    return this
+}
+
+$.fn.setError = function (msg) {
+    let errorElm = this.parents("div.form-element").find("div.error")
+    
+    if (this.hasClass("time-format")) {
+        errorElm = this.parent("div.input-group").parent().find("div.error")
+    }
+    
+    if (this.hasClass("date-format")) {
+        errorElm = this.parents("div.form-element").find("div.error")
+    }
+    
+    errorElm.html(msg).show()
+    return this
+}
+//*/
 $.fn.BuildDropDown = function (settings) {
     if (!settings || !settings.text_field || !settings.id_field) {
         return
@@ -56,6 +127,29 @@ $.fn.BuildDropDown = function (settings) {
     
 }
 
+const clearAllValidation = function () {
+    $("div.error").html(`&nbsp;`).hide()
+    $(".is-invalid").removeClass("is-invalid")
+}
+
+$.fn.showError = function (msg) {
+    let $element = this
+    let $errorElement = $element.parents("div.form-element").find("div.error")
+    
+    $element.addClass("is-invalid")
+    $errorElement.html(msg).show()
+    return this
+}
+
+$.fn.hideError = function () {
+    let $element = this
+    let $errorElement = $element.parents("div.form-element").find("div.error")
+    
+    $element.removeClass("is-invalid")
+    $errorElement.html(`&nbsp;`).hide()
+    return this
+}
+
 const hexToRgb = hex =>
     hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
             , (m, r, g, b) => "#" + r + r + g + g + b + b)
@@ -79,14 +173,20 @@ const isOdd = function (num) {
     return num % 2
 }
 
-const clear_validation = function (formElement) {
+const clearValidation = function (formElement) {
     $(".autocomplete-suggestions").hide()
-    
     var validator = $(formElement).validate()
+    
     $("[name]", formElement).each(function () {
         validator.successList.push(this)
         validator.showErrors()
     })
+    
+    $(".is-invalid").each(function () {
+        validator.successList.push(this)
+        validator.showErrors()
+    })
+    
     validator.resetForm()
     validator.reset()
 }
@@ -244,6 +344,19 @@ const clearError = function (element) {
 const toNumbers = arr => arr.map(Number)
 
 const remove_nulls = function (obj) {
+    let cleanedObject = {}
+    $.each(obj, function (i, v) {
+        if (v === null) {
+        
+        } else {
+            cleanedObject[i] = v
+        }
+    })
+    
+    return cleanedObject
+}
+
+const removeNulls = function (obj) {
     let cleanedObject = {}
     $.each(obj, function (i, v) {
         if (v === null) {
@@ -642,7 +755,6 @@ const is_null = function (val) {
     return val === null || val === undefined
 }
 
-
 /**
  * converts HTML entities in the string to their corresponding characters.
  *
@@ -664,7 +776,6 @@ function decodeHtml (str) {
     return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function (m) {return map[m]})
 }
 
-
 /**
  * escape html chars
  *
@@ -685,7 +796,6 @@ function escapeHtml (text) {
     
     return text.replace(/[&<>"']/g, function (m) { return map[m] })
 }
-
 
 const setInt = function (val) {
     let returnVal = null
@@ -833,12 +943,6 @@ jQuery.extend({
     },
 })
 
-const logger = {
-    log: function () {
-        console.log(args)
-    },
-}
-
 const infoDialog = function (message, handler) {
     $(`
         <!--Modal: modalConfirm-->
@@ -904,6 +1008,7 @@ const infoDialog = function (message, handler) {
     }
     
 }
+
 const confirmDialog = function (message, handler) {
     $(`
         <!--Modal: modalConfirm-->
@@ -915,18 +1020,24 @@ const confirmDialog = function (message, handler) {
                     <div class="modal-header d-flex justify-content-center">
                         <p class="heading">${message}</p>
                     </div>
-        
+                    <!--/.Header-->
+                    
                     <!--Body-->
                     <div class="modal-body">
                         <i class="fas fa-check fa-4x mb-3 animated rotateIn"></i>
                     </div>
+                    <!--/.Body-->
+                   
         
                     <!--Footer-->
                     <div class="modal-footer flex-center">
-                        <a class="btn btn-outline-info btn-yes">yes</a>
-                        <a type="button" class="btn btn-info waves-effect btn-no">no</a>
+                        <a type="button" class="btn btn-outline-info btn-sm waves-effect btn-no">no</a>
+                        <a class="btn btn-info btn-sm btn-yes">yes</a>
                     </div>
+                    <!--/.Footer-->
+                    
                 </div>
+                
                 <!--/.Content-->
 	        </div>
         </div>
@@ -976,6 +1087,7 @@ const confirmDialog = function (message, handler) {
     }
     
 }
+
 const deleteDialog = function (message, handler) {
     
     $(`
@@ -1037,10 +1149,12 @@ const deleteDialog = function (message, handler) {
         })
     
 }
+
 const formatURL = function (param) {
     console.log("formatURL()", param)
     return encodeURIComponent(param.trim())
 }
+
 const buildMapsURL = function (location) {
     console.log("buildMapsURL(location)", location)
     let street_1, street_2, zipcode, city_name, province_name, country_name
@@ -1117,6 +1231,7 @@ const buildMapsURL = function (location) {
     location_formatted = formatURL(location_formatted)
     return `https://maps.google.com/maps?q=${location_formatted}&t=&z=7&ie=UTF8&iwloc=&output=embed`
 }
+
 const weatherUpdate = function (city) {
     const xhr = new XMLHttpRequest()
     const apiKey = "2ad550b2d7e352b38c3ca9da8396aade"
@@ -1145,6 +1260,7 @@ const weatherUpdate = function (city) {
         }
     }
 }
+
 const ucwords = function (str) {
     str = str.toLowerCase()
     return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
@@ -1152,6 +1268,7 @@ const ucwords = function (str) {
             return s.toUpperCase()
         })
 }
+
 String.prototype.ucwords = function () {
     str = this.toLowerCase()
     return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
@@ -1160,7 +1277,54 @@ String.prototype.ucwords = function () {
         })
 }
 
+//
+
+/**
+ * DEBUG
+ */
 $(function () {
+    $(".debug")
+        .on("click", function () {
+            showElements = true
+            if (!$(this).attr("data-shown")) {
+                $(this).attr("data-shown", "true")
+                showElements = true
+            }
+            
+            if ($(this).attr("data-shown") === "false") {
+                $(this).attr("data-shown", "true")
+                showElements = true
+            } else {
+                showElements = false
+                $(this).attr("data-shown", "false")
+            }
+            
+            let els = document.getElementsByClassName("dev-element")
+            
+            for (let i = 0; i < els.length; i++) {
+                
+                let element = els[i]
+                let tagName = element.tagName
+                
+                if (tagName.toLowerCase() === "input") {
+                    
+                    if (showElements === false) {
+                        element.hidden = false
+                        element.type = "text"
+                    } else {
+                        element.hidden = true
+                        element.type = "hidden"
+                    }
+                } else if (tagName.toLowerCase() === "label") {
+                    if (showElements === false) {
+                        $(element).removeClass("d-none")
+                    } else {
+                        $(element).addClass("d-none")
+                    }
+                }
+            }
+        })
+    
     $(".debug_demo")
         .on("click", function () {
             showElements = true

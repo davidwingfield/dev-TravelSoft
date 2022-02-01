@@ -85,6 +85,7 @@ const short_dexcription_max = 250
 const colorScheme = new Map()
 const toggleAJAXResponse = false
 const debugMode = true
+
 colorScheme.set(1, {
     name: "Color - 1",
     backGround: "#bdbdbd",
@@ -179,9 +180,83 @@ const tableCellMaxChars = 10
 const defaultAddressView = "medium"
 let DEBUGMODE = true
 
-let mdbPreloader = document.getElementById("mdb-preloader")
-let showElements
+const initialCalenderViewCount = 12
 
+
+let mdbPreloader = document.getElementById("mdb-preloader")
+/*
+let showElements
+let isShiftTime
+let separator = "-"
+let separatorTime = ":"
+
+const IsNumericTime = function (input, keyCode) {
+    if (!isNaN(parseInt(keyCode))) {
+        keyCode = parseInt(keyCode)
+    }
+    
+    if (keyCode === 16) {
+        isShiftTime = true
+    }
+    
+    if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || (keyCode === 8) || (keyCode === 46)) {
+        if (keyCode !== 16) {
+            if ((input.value.length === 2) && keyCode !== 8) {
+                input.value += separatorTime
+            }
+            
+            return true
+        }
+    }
+    
+    return false
+}
+
+const validateTimeFormat = function (input, keyCode) {
+    let timeString = input.value
+    let regex = /^\d{2,}:(?:[0-5]\d):(?:[0-5]\d)$/i
+    
+    if (keyCode === 16) {
+        isShift = false
+    }
+    
+    if (regex.test(timeString) || timeString.length === 0) {
+        $(input).unSetError()
+    } else {
+        $(input).setError("Invalid Time. Only HH-MM format allowed.")
+    }
+}
+
+$.fn.unSetError = function () {
+    let errorElm = this.parents("div.form-element").find("div.error")
+    
+    if (this.hasClass("time-format")) {
+    
+    }
+    
+    if (this.hasClass("date-format")) {
+    
+    }
+    
+    errorElm.html("&nbsp;").hide()
+    return this
+}
+
+$.fn.setError = function (msg) {
+    let errorElm = this.parents("div.form-element").find("div.error")
+    
+    if (this.hasClass("time-format")) {
+        errorElm = this.parent("div.input-group").parent().find("div.error")
+    }
+    
+    if (this.hasClass("date-format")) {
+        errorElm = this.parents("div.form-element").find("div.error")
+    }
+    
+    errorElm.html(msg).show()
+    return this
+}
+//*/
 $.fn.BuildDropDown = function (settings) {
     if (!settings || !settings.text_field || !settings.id_field) {
         return
@@ -237,6 +312,29 @@ $.fn.BuildDropDown = function (settings) {
     
 }
 
+const clearAllValidation = function () {
+    $("div.error").html(`&nbsp;`).hide()
+    $(".is-invalid").removeClass("is-invalid")
+}
+
+$.fn.showError = function (msg) {
+    let $element = this
+    let $errorElement = $element.parents("div.form-element").find("div.error")
+    
+    $element.addClass("is-invalid")
+    $errorElement.html(msg).show()
+    return this
+}
+
+$.fn.hideError = function () {
+    let $element = this
+    let $errorElement = $element.parents("div.form-element").find("div.error")
+    
+    $element.removeClass("is-invalid")
+    $errorElement.html(`&nbsp;`).hide()
+    return this
+}
+
 const hexToRgb = hex =>
     hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
             , (m, r, g, b) => "#" + r + r + g + g + b + b)
@@ -260,14 +358,20 @@ const isOdd = function (num) {
     return num % 2
 }
 
-const clear_validation = function (formElement) {
+const clearValidation = function (formElement) {
     $(".autocomplete-suggestions").hide()
-    
     var validator = $(formElement).validate()
+    
     $("[name]", formElement).each(function () {
         validator.successList.push(this)
         validator.showErrors()
     })
+    
+    $(".is-invalid").each(function () {
+        validator.successList.push(this)
+        validator.showErrors()
+    })
+    
     validator.resetForm()
     validator.reset()
 }
@@ -425,6 +529,19 @@ const clearError = function (element) {
 const toNumbers = arr => arr.map(Number)
 
 const remove_nulls = function (obj) {
+    let cleanedObject = {}
+    $.each(obj, function (i, v) {
+        if (v === null) {
+        
+        } else {
+            cleanedObject[i] = v
+        }
+    })
+    
+    return cleanedObject
+}
+
+const removeNulls = function (obj) {
     let cleanedObject = {}
     $.each(obj, function (i, v) {
         if (v === null) {
@@ -823,7 +940,6 @@ const is_null = function (val) {
     return val === null || val === undefined
 }
 
-
 /**
  * converts HTML entities in the string to their corresponding characters.
  *
@@ -845,7 +961,6 @@ function decodeHtml (str) {
     return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function (m) {return map[m]})
 }
 
-
 /**
  * escape html chars
  *
@@ -866,7 +981,6 @@ function escapeHtml (text) {
     
     return text.replace(/[&<>"']/g, function (m) { return map[m] })
 }
-
 
 const setInt = function (val) {
     let returnVal = null
@@ -1014,12 +1128,6 @@ jQuery.extend({
     },
 })
 
-const logger = {
-    log: function () {
-        console.log(args)
-    },
-}
-
 const infoDialog = function (message, handler) {
     $(`
         <!--Modal: modalConfirm-->
@@ -1085,6 +1193,7 @@ const infoDialog = function (message, handler) {
     }
     
 }
+
 const confirmDialog = function (message, handler) {
     $(`
         <!--Modal: modalConfirm-->
@@ -1096,18 +1205,24 @@ const confirmDialog = function (message, handler) {
                     <div class="modal-header d-flex justify-content-center">
                         <p class="heading">${message}</p>
                     </div>
-        
+                    <!--/.Header-->
+                    
                     <!--Body-->
                     <div class="modal-body">
                         <i class="fas fa-check fa-4x mb-3 animated rotateIn"></i>
                     </div>
+                    <!--/.Body-->
+                   
         
                     <!--Footer-->
                     <div class="modal-footer flex-center">
-                        <a class="btn btn-outline-info btn-yes">yes</a>
-                        <a type="button" class="btn btn-info waves-effect btn-no">no</a>
+                        <a type="button" class="btn btn-outline-info btn-sm waves-effect btn-no">no</a>
+                        <a class="btn btn-info btn-sm btn-yes">yes</a>
                     </div>
+                    <!--/.Footer-->
+                    
                 </div>
+                
                 <!--/.Content-->
 	        </div>
         </div>
@@ -1157,6 +1272,7 @@ const confirmDialog = function (message, handler) {
     }
     
 }
+
 const deleteDialog = function (message, handler) {
     
     $(`
@@ -1218,10 +1334,12 @@ const deleteDialog = function (message, handler) {
         })
     
 }
+
 const formatURL = function (param) {
     console.log("formatURL()", param)
     return encodeURIComponent(param.trim())
 }
+
 const buildMapsURL = function (location) {
     console.log("buildMapsURL(location)", location)
     let street_1, street_2, zipcode, city_name, province_name, country_name
@@ -1298,6 +1416,7 @@ const buildMapsURL = function (location) {
     location_formatted = formatURL(location_formatted)
     return `https://maps.google.com/maps?q=${location_formatted}&t=&z=7&ie=UTF8&iwloc=&output=embed`
 }
+
 const weatherUpdate = function (city) {
     const xhr = new XMLHttpRequest()
     const apiKey = "2ad550b2d7e352b38c3ca9da8396aade"
@@ -1326,6 +1445,7 @@ const weatherUpdate = function (city) {
         }
     }
 }
+
 const ucwords = function (str) {
     str = str.toLowerCase()
     return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
@@ -1333,6 +1453,7 @@ const ucwords = function (str) {
             return s.toUpperCase()
         })
 }
+
 String.prototype.ucwords = function () {
     str = this.toLowerCase()
     return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
@@ -1341,7 +1462,54 @@ String.prototype.ucwords = function () {
         })
 }
 
+//
+
+/**
+ * DEBUG
+ */
 $(function () {
+    $(".debug")
+        .on("click", function () {
+            showElements = true
+            if (!$(this).attr("data-shown")) {
+                $(this).attr("data-shown", "true")
+                showElements = true
+            }
+            
+            if ($(this).attr("data-shown") === "false") {
+                $(this).attr("data-shown", "true")
+                showElements = true
+            } else {
+                showElements = false
+                $(this).attr("data-shown", "false")
+            }
+            
+            let els = document.getElementsByClassName("dev-element")
+            
+            for (let i = 0; i < els.length; i++) {
+                
+                let element = els[i]
+                let tagName = element.tagName
+                
+                if (tagName.toLowerCase() === "input") {
+                    
+                    if (showElements === false) {
+                        element.hidden = false
+                        element.type = "text"
+                    } else {
+                        element.hidden = true
+                        element.type = "hidden"
+                    }
+                } else if (tagName.toLowerCase() === "label") {
+                    if (showElements === false) {
+                        $(element).removeClass("d-none")
+                    } else {
+                        $(element).addClass("d-none")
+                    }
+                }
+            }
+        })
+    
     $(".debug_demo")
         .on("click", function () {
             showElements = true
@@ -1478,18 +1646,18 @@ $.fn.formFields = function (settings) {
 }
 
 jQuery(($) => {
-    
     $.fn.dateSelect = function (opt) {
         let element = $(this)
-        let filterMax = ""
         let elementId = element.attr("id")
+        let separatorDate = "-"
         
         element.attr("id", "date-selector-" + elementId)
         
         let $element, $elementWrapper, $elementGroupWrapper, $elementGroupAppend, $buttonGroupAppend,
-          $input, $inputLabel, $errorElement, $buttonGroupAppendClear, input, picker
+            $input, $inputLabel, $errorElement, $buttonGroupAppendClear, input, picker
         
         let defaults = {
+            
             // Strings and translations
             monthsFull: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -1497,21 +1665,25 @@ jQuery(($) => {
             weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
             showMonthsShort: undefined,
             showWeekdaysFull: undefined,
+            
             // Buttons
             today: 'Today',
             clear: 'Clear',
             close: 'Close',
+            
             // Accessibility labels
             labelMonthNext: 'Next month',
             labelMonthPrev: 'Previous month',
             labelMonthSelect: 'Select a month',
             labelYearSelect: 'Select a year',
+            
             // Formats
             format: "yyyy-mm-dd",
             formatSubmit: "yyyy-mm-dd",
             hiddenPrefix: undefined,
             hiddenSuffix: '_submit',
             hiddenName: undefined,
+            
             // Editable input
             editable: undefined,
             
@@ -1553,58 +1725,112 @@ jQuery(($) => {
             placeholder: "Select Date",
         }
         
+        const isNumeric = function (input, keyCode) {
+            if (!isNaN(parseInt(keyCode))) {
+                keyCode = parseInt(keyCode)
+            }
+            
+            if (keyCode === 16) {
+                isShift = true
+            }
+            
+            if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || (keyCode === 8) || (keyCode === 46)) {
+                
+                if (keyCode !== 16) {
+                    if ((input.value.length === 4 || input.value.length === 7) && keyCode !== 8) {
+                        input.value += separatorDate
+                    }
+                    
+                    return true
+                }
+                
+            }
+            
+            return false
+        }
+        
+        const loadError = function (input) {
+            let $errorElement = $(input).parents("div.form-element").find("div.error")
+            
+            $errorElement.html("Invalid Date. Only YYYY-MM-DD format allowed.").show()
+        }
+        
+        const unSetDateError = function (input) {
+            let $errorElement = $(input).parents("div.form-element").find("div.error")
+            
+            $errorElement.html("").hide()
+        }
+        
+        const validateDateFormat = function (input, keyCode) {
+            let dateString = input.value
+            let regex = /(((19|20)\d\d)\-(0[1-9]|1[0-2])\-((0|1)[0-9]|2[0-9]|3[0-1]))$/
+            
+            if (keyCode === 16) {
+                isShift = true
+            }
+            
+            if (regex.test(dateString) || dateString.length === 0) {
+                unSetDateError(input)
+                DateSelect.picker.set("select", dateString, { format: "yyyy-mm-dd" })
+                DateSelect.picker.render()
+            } else {
+                loadError(input)
+            }
+        }
+        
         const buildElements = function (element, opt) {
             $element = element
             $elementWrapper = $("<div>")
-              .addClass(`form-element`)
+                .addClass(`form-element`)
             
             $elementGroupWrapper = $("<div>")
-              .addClass(`input-group mb-3`)
+                .addClass(`input-group`)
             
             $elementGroupAppend = $("<div>")
-              .addClass(`input-group-append`)
+                .addClass(`input-group-append`)
             
             $buttonGroupAppend = $("<button type='button'>")
-              .attr("id", "button-" + elementId)
-              .attr("type", "button")
-              .addClass(`btn btn-md btn-default m-0 px-3 py-2 z-depth-0 waves-effect waves-light`)
-              .html('<i class="fas fa-calendar-alt"></i>')
-              .on("click", function (e) {
-                  e.preventDefault()
-              })
+                .attr("id", "button-" + elementId)
+                .attr("type", "button")
+                .addClass(`btn btn-md btn-secondary m-0 px-3 py-2 z-depth-0 waves-effect waves-light`)
+                .html('<i class="fas fa-calendar-alt"></i>')
+                .on("click", function (e) {
+                    e.preventDefault()
+                })
             
             $buttonGroupAppendClear = $("<button type='button'>")
-              .attr("id", "button-clear-" + elementId)
-              .addClass(`btn btn-md btn-outline-danger m-0 px-3 py-2 z-depth-0 waves-effect waves-light`)
-              .html('<i class="fas fa-ban"></i>')
-              .on("click", function () {
-                  DateSelect.clear()
-                  $input.val("").trigger("change")
-              })
+                .attr("id", "button-clear-" + elementId)
+                .addClass(`btn btn-md btn-outline-danger m-0 px-3 py-2 z-depth-0 waves-effect waves-light`)
+                .html('<i class="fas fa-ban"></i>')
+                .on("click", function () {
+                    DateSelect.clear()
+                    $input.val("").trigger("change")
+                    unSetDateError($input[0])
+                })
             
             $input = $("<input>")
-              .attr("id", elementId)
-              .attr("type", "text")
-              .attr("placeholder", settings.placeholder)
-              .addClass("form-control date-format")
-              .on("keydown", function (event) {
-                  //return IsNumeric(document.getElementById(elementId), event.keyCode)
-              })
-              .on("keyup", function (event) {
-                  //ValidateDateFormat(document.getElementById(elementId), event.keyCode)
-                  toggleClearButton()
-              })
-              .on("change", function () {
-                  toggleClearButton()
-              })
+                .addClass("form-control date-format")
+                .attr("id", elementId)
+                .attr("type", "text")
+                .attr("placeholder", settings.placeholder)
+                .attr("maxlength", "10")
+                .on("keydown", function (event) {
+                    return isNumeric(this, event.keyCode)
+                })
+                .on("keyup", function (event) {
+                    validateDateFormat(this, event.keyCode)
+                    toggleClearButton()
+                })
+                .on("change", function () {
+                    toggleClearButton()
+                })
             
             $inputLabel = $("<label>")
-              .attr("for", elementId)
-              .html(settings.label)
+                .attr("for", elementId)
+                .html(settings.label)
             
             $errorElement = $("<div>")
-              .addClass("error w-100 text-center")
-              .attr("id", elementId + "-error")
+                .addClass("error w-100 text-center")
         }
         
         const toggleClearButton = function () {
@@ -1635,33 +1861,13 @@ jQuery(($) => {
             
         }
         
-        const getDate = function (date) {
-            let today = new Date()
-            let year = moment().year()
-            let month = "01"
-            let day = "01"
-            
-            if (date) {
-                if (typeof date == "string") {
-                    return moment(date, 'YYYY-MM-DD')
-                }
-                
-            } else {
-                let dd = today.getDate()
-                let mm = today.getMonth() + 1
-                let yyyy = today.getFullYear()
-                return moment((yyyy) ? yyyy : moment().year() + "-" + mm + "-" + (dd > 9) ? "0" + dd : dd, 'YYYY-MM-DD')
-            }
-            
-            return year + "-" + month + "-" + day
-        }
-        
         const clear = function () {
             
             if (DateSelect.picker.clear()) {
                 DateSelect.picker.clear()
                 DateSelect.picker.set("select", moment().format("YYYY-MM-DD"), { format: "yyyy-mm-dd" })
                 DateSelect.picker.render()
+                unSetDateError($input[0])
             }
         }
         
@@ -1693,7 +1899,6 @@ jQuery(($) => {
             registerNewListener: function (externalListenerFunction) {
                 this.fooListener = externalListenerFunction
             },
-            
             set: function () {
                 set()
             },
@@ -1720,28 +1925,27 @@ jQuery(($) => {
             setWrapper(element, opt)
             
             $buttonGroupAppend
-              .pickadate(defaults)
-              .on("change", function () {
-                  if ($(this).val() === "") {
-                      $input.val(filterMax)
-                  } else {
-                      $input.val($(this).val())
-                  }
-                  
-                  $input.trigger("change")
-              })
+                .pickadate(defaults)
+                .on("change", function () {
+                    if ($(this).val() === "") {
+                        $input.val("")
+                    } else {
+                        $input.val($(this).val())
+                    }
+                    
+                    $input.trigger("change")
+                })
             
             picker = $buttonGroupAppend.pickadate("picker")
             toggleClearButton()
             DateSelect.picker = $buttonGroupAppend.pickadate("picker")
-            
         }
         
         init(element, opt)
         return DateSelect
     }
-    
 })
+
 
 const tinyEditor = (function () {
     "use strict"
@@ -1983,10 +2187,22 @@ const Season = (function () {
     const _panel_tab_season = document.getElementById("panel_tab_season")
     const _button_remove_season_from_product = document.getElementById("button_remove_season_from_product")
     const _calendar_loader = document.getElementById("calendar_loader")
+    const _table_season_product_edit_add_new_button = document.getElementById("table_season_product_edit_add_new_button")
+    const _product_edit_season_section = document.getElementById("product_edit_season_section")
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let categories = new Map()
     let $table_season_product_edit, disabledDays
+    let globalSelectedSeason = false
+    
+    $(_table_season_product_edit_add_new_button)
+        .on("click", function () {
+            loadProductSeasonForm()
+            _product_edit_season_form_season_name.disabled = false
+            _product_edit_season_form_season_name.readonly = false
+            
+            ColorScheme.enable()
+        })
     
     $(_button_remove_season_from_product)
         .on("click", function () {
@@ -2034,7 +2250,6 @@ const Season = (function () {
     
     $(_panel_tab_season)
         .on("hide.bs.tab", function () {
-            //clear_validation(_form_product_add)
             _product_edit_season_form_season_name_filter.value = ""
             resetForm()
             clearProductSeasonForm()
@@ -2126,62 +2341,6 @@ const Season = (function () {
             season_id: (!isNaN(parseInt(_product_edit_season_form_season_id.value))) ? parseInt(_product_edit_season_form_season_id.value) : null,
             disabled_dow: formatListOfIds(disabledDays.disabled_dows),
         })
-    }
-    
-    const initAutoComplete = function () {
-        let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
-        
-        $(_product_edit_season_form_season_name_filter)
-            .on("click", function () {
-                $(this).select()
-            })
-            .on("search", function () {
-                $table_season_product_edit.clearSelectedRows()
-                resetForm()
-            })
-            .on("change", function () {
-                if (_product_edit_season_form_season_name_filter.value === "") {
-                    $table_season_product_edit.clearSelectedRows()
-                    resetForm()
-                } else {
-                
-                }
-            })
-            .autocomplete({
-                serviceUrl: "/api/v1.0/autocomplete/seasons",
-                minChars: 2,
-                cache: false,
-                dataType: "json",
-                triggerSelectOnValidInput: false,
-                paramName: "st",
-                params: { "category_id": category_id },
-                onSelect: function (suggestion) {
-                    if (!suggestion.data) {
-                        return
-                    }
-                    $table_season_product_edit.clearSelectedRows()
-                    let season = suggestion.data
-                    let color_scheme = (season.color_scheme) ? season.color_scheme : {}
-                    
-                    _product_edit_season_form_season_id.value = season.id
-                    _product_edit_season_form_season_name.value = season.name
-                    _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
-                    _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
-                    
-                    ColorScheme.load(color_scheme)
-                    ColorScheme.disable()
-                    
-                    _product_edit_season_form_season_enabled.disabled = true
-                    
-                    let product_season = Season.all.get(season.id)
-                    if (product_season) {
-                        loadProductSeasonForm(product_season)
-                        $table_season_product_edit.loadRow(product_season)
-                    } else {
-                        loadProductSeasonForm(season)
-                    }
-                },
-            })
     }
     
     const defaultDetail = function () {
@@ -2495,17 +2654,211 @@ const Season = (function () {
             _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
             _product_edit_season_form_season_enabled.disabled = true
             _product_edit_season_form_season_name_filter.disabled = true
-            
-            $(_edit_product_season).show()
         }
-        
+        _product_edit_season_form_season_name_filter.disabled = true
         _display_product_season_name.innerText = name
         disabledDays.init(disabled_dow)
+        $(_edit_product_season).show()
     }
     
     const unloadProductSeasonForm = function () {
+        console.log("unloadProductSeasonForm()")
         _product_edit_season_form_season_name_filter.disabled = false
+        _product_edit_season_form_season_name.disabled = true
         $(_edit_product_season).hide()
+    }
+    
+    const seasonExists = function (name) {
+        let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+        if (name && name !== "" && category_id) {
+            let dataToSend = {
+                name: name,
+                category_id: category_id,
+            }
+            
+            fetchByName(dataToSend, function (data) {
+                let season = null
+                
+                if (data) {
+                    season = data
+                    if (data[0]) {
+                        season = data[0]
+                    }
+                }
+                
+                if (season && season.id) {
+                    globalSelectedSeason = true
+                    let color_scheme = (season.color_scheme) ? season.color_scheme : {}
+                    let product_season = Season.all.get(season.id)
+                    
+                    $table_season_product_edit.clearSelectedRows()
+                    
+                    _product_edit_season_form_season_id.value = season.id
+                    _product_edit_season_form_season_name.value = season.name
+                    _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
+                    _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
+                    
+                    _product_edit_season_form_season_enabled.disabled = true
+                    
+                    ColorScheme.load(color_scheme)
+                    ColorScheme.disable()
+                    
+                    if (product_season) {
+                        loadProductSeasonForm(product_season)
+                        $table_season_product_edit.loadRow(product_season)
+                    } else {
+                        loadProductSeasonForm(season)
+                    }
+                } else {
+                    confirmDialog(`The season: ${name} does not exist exists. Would you like to create it?`, (ans) => {
+                        if (ans) {
+                            addSeason(dataToSend, function (data) {
+                                let season = null
+                                
+                                if (data) {
+                                    season = data
+                                    if (data[0]) {
+                                        season = data[0]
+                                    }
+                                }
+                                
+                                if (season && season.id) {
+                                    let color_scheme = (season.color_scheme) ? season.color_scheme : {}
+                                    let product_season = Season.all.get(season.id)
+                                    
+                                    $table_season_product_edit.clearSelectedRows()
+                                    
+                                    _product_edit_season_form_season_id.value = season.id
+                                    _product_edit_season_form_season_name.value = season.name
+                                    _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
+                                    _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
+                                    
+                                    _product_edit_season_form_season_enabled.disabled = true
+                                    
+                                    ColorScheme.load(color_scheme)
+                                    ColorScheme.disable()
+                                    
+                                    if (product_season) {
+                                        loadProductSeasonForm(product_season)
+                                        $table_season_product_edit.loadRow(product_season)
+                                    } else {
+                                        loadProductSeasonForm(season)
+                                    }
+                                }
+                            })
+                        } else {
+                            $table_season_product_edit.clearSelectedRows()
+                            resetForm()
+                        }
+                    })
+                }
+            })
+        }
+    }
+    
+    const addSeason = function (dataToSend, callback) {
+        let url = "/api/v1.0/seasons/add"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        handleSeasonError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log("error", e)
+                handleSeasonError("Error Validating Airport")
+            }
+        } else {
+            handleSeasonError("Error Loading Airport - Missing Data")
+        }
+    }
+    
+    const fetchByName = function (dataToSend, callback) {
+        let url = "/api/v1.0/seasons/validate"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        handleSeasonError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log("error", e)
+                handleSeasonError("Error Validating Airport")
+            }
+        } else {
+            handleSeasonError("Error Loading Airport - Missing Data")
+        }
+    }
+    
+    const initAutoComplete = function () {
+        let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+        
+        $(_product_edit_season_form_season_name_filter)
+            .on("click", function () {
+                if ($(this).attr("readonly") === "readonly") {
+                    e.preventDefault()
+                } else {
+                    $(this).select()
+                }
+            })
+            .on("search", function () {
+                $table_season_product_edit.clearSelectedRows()
+                resetForm()
+            })
+            .on("change", function () {
+                setTimeout(function () {
+                    if (_product_edit_season_form_season_name_filter.value === "") {
+                        $table_season_product_edit.clearSelectedRows()
+                        resetForm()
+                    } else {
+                        seasonExists(_product_edit_season_form_season_name_filter.value)
+                    }
+                }, 200)
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/seasons",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                paramName: "st",
+                params: { "category_id": category_id },
+                onSelect: function (suggestion) {
+                    if (!suggestion.data) {
+                        return
+                    }
+                    let season = suggestion.data
+                    let color_scheme = (season.color_scheme) ? season.color_scheme : {}
+                    let product_season = Season.all.get(season.id)
+                    
+                    $table_season_product_edit.clearSelectedRows()
+                    
+                    _product_edit_season_form_season_id.value = season.id
+                    _product_edit_season_form_season_name.value = season.name
+                    _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
+                    _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
+                    
+                    _product_edit_season_form_season_enabled.disabled = true
+                    
+                    ColorScheme.load(color_scheme)
+                    ColorScheme.disable()
+                    
+                    if (product_season) {
+                        loadProductSeasonForm(product_season)
+                        $table_season_product_edit.loadRow(product_season)
+                    } else {
+                        loadProductSeasonForm(season)
+                    }
+                },
+            })
     }
     
     const init = function (settings) {
@@ -2529,12 +2882,11 @@ const Season = (function () {
                 name: "season_disabled_dow",
                 label: "Disabled DOW",
             })
-            unloadProductSeasonForm()
-            loadProductSeasonForm()
+            
         }
         
-        if (_product_season) {
-            unLoadEditSeasonForm()
+        if (_edit_product_season) {
+            unloadProductSeasonForm()
         }
         
     }
@@ -3874,9 +4226,8 @@ const InventoryProfile = (function () {
     }
     
     const init = function (settings) {
-        //console.log("InventoryProfile.init(settings)", settings)
-        
         let inventory_profiles = []
+        
         if (settings) {
             if (settings.profiles) {
                 inventory_profiles = settings.profiles
@@ -3931,9 +4282,11 @@ const InventoryProfile = (function () {
             
             if (_product_edit_profile_form) {
                 validator_init(form_rules)
+                
                 InventoryProfile.expiration_date = $("#profile_expires").dateSelect({
                     onStart: function () {},
                 })
+                
                 InventoryProfile.advanced_booking_date = $("#profile_advanced_booking_date").dateSelect({
                     onStart: function () {},
                 })
@@ -7750,7 +8103,7 @@ const AddressTypes = (function () {
             AddressTypes.all.set("id", detail)
         })
         
-        Console.log(" AddressTypes.all", AddressTypes.all)
+        console.log(" AddressTypes.all", AddressTypes.all)
     }
     
     return {
@@ -7778,9 +8131,30 @@ const City = (function () {
     
     const class_name = "form-new-city"
     const form_id = "form_new_city"
+    
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
     const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
     const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
+    
+    const _modal_product_arrive_to_airport_city = document.getElementById("modal_product_arrive_to_airport_city")
+    const _modal_product_arrive_to_airport_country_id = document.getElementById("modal_product_arrive_to_airport_country_id")
+    const _modal_product_arrive_to_airport_province_id = document.getElementById("modal_product_arrive_to_airport_province_id")
+    const _modal_product_arrive_to_airport_city_id = document.getElementById("modal_product_arrive_to_airport_city_id")
+    
+    const _modal_product_depart_from_airport_city = document.getElementById("modal_product_depart_from_airport_city")
+    const _modal_product_depart_from_airport_country_id = document.getElementById("modal_product_depart_from_airport_country_id")
+    const _modal_product_depart_from_airport_province_id = document.getElementById("modal_product_depart_from_airport_province_id")
+    const _modal_product_depart_from_airport_city_id = document.getElementById("modal_product_depart_from_airport_city_id")
+    
+    const _modal_product_arrive_to_station_city = document.getElementById("modal_product_arrive_to_station_city")
+    const _modal_product_arrive_to_station_country_id = document.getElementById("modal_product_arrive_to_station_country_id")
+    const _modal_product_arrive_to_station_province_id = document.getElementById("modal_product_arrive_to_station_province_id")
+    const _modal_product_arrive_to_station_city_id = document.getElementById("modal_product_arrive_to_station_city_id")
+    
+    const _modal_product_depart_from_station_city = document.getElementById("modal_product_depart_from_station_city")
+    const _modal_product_depart_from_station_country_id = document.getElementById("modal_product_depart_from_station_country_id")
+    const _modal_product_depart_from_station_province_id = document.getElementById("modal_product_depart_from_station_province_id")
+    const _modal_product_depart_from_station_city_id = document.getElementById("modal_product_depart_from_station_city_id")
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
@@ -7809,12 +8183,12 @@ const City = (function () {
             triggerSelectOnValidInput: false,
             paramName: "st",
             onSelect: function (suggestion) {
-                Console.log("city", suggestion)
+                console.log("city", suggestion)
                 if (!suggestion.data) {
                     return
                 }
                 
-                Console.log("city", suggestion)
+                console.log("city", suggestion)
                 /*
                     "value": "Abano Terme (Padova, Italy)",
                     "data": {
@@ -7874,6 +8248,195 @@ const City = (function () {
             }
         })
     
+    $("#modal_product_depart_from_airport_city")
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            $(_modal_product_depart_from_airport_city).val("").trigger("change")
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                _modal_product_city_id.value = city.id
+                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+                
+                _modal_product_depart_from_airport_country_id.value = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
+                _modal_product_depart_from_airport_province_id.value = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
+                _modal_product_depart_from_airport_city_id.value = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+            },
+        })
+    
+    $("#modal_product_arrive_to_airport_city")
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            $(_modal_product_arrive_to_airport_city).val("").trigger("change")
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                //_modal_product_city_id.value = city.id
+                //$(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+                _modal_product_arrive_to_airport_country_id.value = (city.country.id) ? city.country.id : null
+                _modal_product_arrive_to_airport_province_id.value = (city.province.id) ? city.province.id : null
+                _modal_product_arrive_to_airport_city_id.value = (city.id) ? city.id : null
+                /*
+                    "value": "Abano Terme (Padova, Italy)",
+                    "data": {
+                        "id": 1,
+                        "country_id": 102,
+                        "province_id": 250,
+                        "sort_order": 999,
+                        "name": "Abano Terme",
+                        "enabled": 1,
+                        "date_created": "2021-08-03 14:40:07",
+                        "created_by": 4,
+                        "date_modified": "2021-08-03 14:40:07",
+                        "modified_by": 4,
+                        "note": "",
+                        "province": {
+                            "id": 250,
+                            "country_id": 102,
+                            "name": "Padova",
+                            "iso2": "PD",
+                            "iso3": "",
+                            "sort_order": 999,
+                            "enabled": 1,
+                            "date_created": "2021-12-15 10:58:47",
+                            "created_by": 4,
+                            "date_modified": "2021-12-15 10:58:47",
+                            "modified_by": 4,
+                            "note": null
+                        },
+                        "country": {
+                            "id": 102,
+                            "currency_id": 2,
+                            "sort_order": 0,
+                            "name": "Italy",
+                            "iso2": "IT",
+                            "iso3": "ITA",
+                            "enabled": 1,
+                            "date_created": "2021-08-03 13:04:10",
+                            "created_by": 4,
+                            "date_modified": "2021-08-03 15:13:45",
+                            "modified_by": 4,
+                            "note": ""
+                        }
+                    }
+                //*/
+            },
+        })
+    
+    $("#modal_product_depart_from_station_city")
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            $(_modal_product_city_id).val("").trigger("change")
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                _modal_product_city_id.value = city.id
+                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+                
+                _modal_product_depart_from_station_country_id.value = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
+                _modal_product_depart_from_station_province_id.value = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
+                _modal_product_depart_from_station_city_id.value = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+            },
+        })
+    
+    $("#modal_product_arrive_to_station_city")
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            $(_modal_product_city_id).val("").trigger("change")
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                
+                _modal_product_arrive_to_station_country_id.value = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
+                _modal_product_arrive_to_station_province_id.value = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
+                _modal_product_arrive_to_station_city_id.value = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+            },
+        })
+    
     $("#modal_product_city")
         .on("change", function () {
             setTimeout(function () {
@@ -7899,7 +8462,7 @@ const City = (function () {
             triggerSelectOnValidInput: false,
             paramName: "st",
             onSelect: function (suggestion) {
-                Console.log("city", suggestion)
+                console.log("city", suggestion)
                 if (!suggestion.data) {
                     return
                 }
@@ -7954,6 +8517,41 @@ const City = (function () {
             },
         })
     
+    $("#modal_product_city_cars")
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            $(_modal_product_city_id).val("").trigger("change")
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+            
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                _modal_product_city_id.value = city.id
+                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+                
+            },
+        })
+    
     const form_rules = {
         rules: {
             city_name: "required",
@@ -7965,7 +8563,7 @@ const City = (function () {
     
     const handle_city_error = function (msg) {
         toastr.error(msg)
-        Console.log("msg", msg)
+        console.log("msg", msg)
     }
     
     const on_click_outside = (e) => {
@@ -8046,7 +8644,7 @@ const City = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
                 return handle_city_error("Error Validating City")
             }
         } else {
@@ -8078,11 +8676,11 @@ const City = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
                 handle_city_error("Error: Validating City")
             }
         } else {
-            Console.log("Error: Missing Data")
+            console.log("Error: Missing Data")
             handle_city_error("Error: Missing Data")
         }
     }
@@ -8299,8 +8897,8 @@ const City = (function () {
                 })
                 
                 if (city_id !== "" && city_id !== null) {
-                    //Console.log($(el).attr("id"))
-                    //Console.log("city_id", city_id)
+                    //console.log($(el).attr("id"))
+                    //console.log("city_id", city_id)
                     $(el).val(city_id).trigger("change")
                 }
             }
@@ -9029,7 +9627,7 @@ const Country = (function () {
     
     const handle_country_error = function (msg) {
         toastr.error(msg)
-        Console.log(msg)
+        console.log(msg)
     }
     
     const on_click_outside = (e) => {
@@ -9049,71 +9647,71 @@ const Country = (function () {
                     let element = document.getElementById(dropdown_id)
                     if (element) {
                         $(element)
-                          .select2({
-                              "language": {
-                                  "searching": function () {
-                                  },
-                              },
-                              "escapeMarkup": function (markup) {
-                                  return markup
-                              },
-                          })
-                          .on("select2:open", function (e) {
-                              let x = document.querySelectorAll("[aria-controls='select2-" + dropdown_id + "-results']")
-                              if (x[0]) {
-                                  let _filterCountrySearch = x[0]
-                                  
-                                  $(_filterCountrySearch).attr("id", "" + dropdown_id + "_search")
-                                  
-                                  if (!document.getElementById("filter_country_add_icon")) {
-                                      let i = document.createElement("i")
-                                      i.classList = "select-add-option fas fa-plus filter_country_add"
-                                      i.id = "filter_country_add_icon"
-                                      i.addEventListener("click", event => {
-                                          let val = _filterCountrySearch.value
-                                          $(element).select2("close")
-                                          Country.add(this, val)
-                                          
-                                      })
-                                      _filterCountrySearch.after(i)
-                                  }
-                                  
-                                  $(".filter_country_add").hide()
-                                  
-                                  if (_filterCountrySearch) {
-                                      _filterCountrySearch.addEventListener("keyup", event => {
-                                          
-                                          if (_filterCountrySearch.value !== "") {
-                                              $(".filter_country_add").show()
-                                          } else {
-                                              $(".filter_country_add").hide()
-                                          }
-                                          
-                                      })
-                                  }
-                              }
-                              
-                          })
-                          .on("change", function () {
-                              let country_id = (!isNaN(parseInt($(this).val()))) ? parseInt($(this).val()) : null
-                              let province_el_id = $(this)
-                                .attr("id")
-                                .replace("country", "province")
-                              let province_element = document.getElementById(province_el_id)
-                              let city_el_id = $(this)
-                                .attr("id")
-                                .replace("country", "city")
-                              let city_element = document.getElementById(city_el_id)
-                              // ----
-                              if (!isNaN(parseInt($(this).val()))) {
-                                  if (province_element) {
-                                      Province.get(parseInt($(this).val()), province_element)
-                                      //City.get(null, null, city_element)
-                                  }
-                              } else {
-                                  Province.get(null, province_element)
-                              }
-                          })
+                            .select2({
+                                "language": {
+                                    "searching": function () {
+                                    },
+                                },
+                                "escapeMarkup": function (markup) {
+                                    return markup
+                                },
+                            })
+                            .on("select2:open", function (e) {
+                                let x = document.querySelectorAll("[aria-controls='select2-" + dropdown_id + "-results']")
+                                if (x[0]) {
+                                    let _filterCountrySearch = x[0]
+                                    
+                                    $(_filterCountrySearch).attr("id", "" + dropdown_id + "_search")
+                                    
+                                    if (!document.getElementById("filter_country_add_icon")) {
+                                        let i = document.createElement("i")
+                                        i.classList = "select-add-option fas fa-plus filter_country_add"
+                                        i.id = "filter_country_add_icon"
+                                        i.addEventListener("click", event => {
+                                            let val = _filterCountrySearch.value
+                                            $(element).select2("close")
+                                            Country.add(this, val)
+                                            
+                                        })
+                                        _filterCountrySearch.after(i)
+                                    }
+                                    
+                                    $(".filter_country_add").hide()
+                                    
+                                    if (_filterCountrySearch) {
+                                        _filterCountrySearch.addEventListener("keyup", event => {
+                                            
+                                            if (_filterCountrySearch.value !== "") {
+                                                $(".filter_country_add").show()
+                                            } else {
+                                                $(".filter_country_add").hide()
+                                            }
+                                            
+                                        })
+                                    }
+                                }
+                                
+                            })
+                            .on("change", function () {
+                                let country_id = (!isNaN(parseInt($(this).val()))) ? parseInt($(this).val()) : null
+                                let province_el_id = $(this)
+                                    .attr("id")
+                                    .replace("country", "province")
+                                let province_element = document.getElementById(province_el_id)
+                                let city_el_id = $(this)
+                                    .attr("id")
+                                    .replace("country", "city")
+                                let city_element = document.getElementById(city_el_id)
+                                // ----
+                                if (!isNaN(parseInt($(this).val()))) {
+                                    if (province_element) {
+                                        Province.get(parseInt($(this).val()), province_element)
+                                        //City.get(null, null, city_element)
+                                    }
+                                } else {
+                                    Province.get(null, province_element)
+                                }
+                            })
                         // ----
                     }
                     
@@ -9142,7 +9740,7 @@ const Country = (function () {
                 })
                 /*
                 sendGetRequest("/api/v1.0/countries", dataToSend, function (data, status, xhr) {
-                    //Console.log(data)
+                    //console.log(data)
                     
                     if (data) {
                         // Country.all = data.result
@@ -9153,7 +9751,7 @@ const Country = (function () {
                 })
                 //*/
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
                 return handle_country_error("Error Validating Country")
             }
         } else {
@@ -9181,12 +9779,12 @@ const Country = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
                 handle_country_error("Error: Validating Country")
             }
             
         } else {
-            Console.log("Error: Missing Data")
+            console.log("Error: Missing Data")
             handle_country_error("Error: Missing Data")
         }
     }
@@ -9410,40 +10008,40 @@ const Country = (function () {
         if (_name.value === "") {
             $(_name).addClass("is-invalid")
             $("#country_name-error")
-              .text("Required: Field is required")
-              .show()
+                .text("Required: Field is required")
+                .show()
             valid = false
         } else {
             $(_name).removeClass("is-invalid")
             $("#country_name-error")
-              .text("")
-              .hide()
+                .text("")
+                .hide()
         }
         
         if (_country_iso2.value === "") {
             $(_country_iso2).addClass("is-invalid")
             $("#country_iso2-error")
-              .text("Required: Field is required")
-              .show()
+                .text("Required: Field is required")
+                .show()
             valid = false
         } else {
             $(_country_iso2).removeClass("is-invalid")
             $("#country_iso2-error")
-              .text("")
-              .hide()
+                .text("")
+                .hide()
         }
         
         if (_country_iso3.value === "") {
             $(_country_iso3).addClass("is-invalid")
             $("#country_iso3-error")
-              .text("Required: Field is required")
-              .show()
+                .text("Required: Field is required")
+                .show()
             valid = false
         } else {
             $(_country_iso3).removeClass("is-invalid")
             $("#country_iso3-error")
-              .text("")
-              .hide()
+                .text("")
+                .hide()
         }
         
         return valid
@@ -9942,7 +10540,7 @@ const Location = (function () {
                     }
                     
                     if (_form_edit_location) {
-                        clear_validation(_form_edit_location)
+                        clearValidation(_form_edit_location)
                     }
                 },
                 onSearchComplete: function (query, suggestions) {
@@ -10779,13 +11377,9 @@ const Variant = (function () {
                 $(this).select()
             })
             .on("search", function () {
-                //*
-                //console.log("Variant._product_edit_variant_form_variant_name_filter:search()", Variant)
-                // ----
                 globalSelectedVariant = false
                 resetForm()
                 $table_variant_product_edit.clearSelectedRows()
-                //*/
             })
             .on("change", function () {
                 //*
@@ -10817,8 +11411,6 @@ const Variant = (function () {
                 paramName: "st",
                 params: { "category_id": category_id },
                 onSelect: function (suggestion) {
-                    //console.log("_product_edit_variant_form_variant_name_filter:autocomplete() - suggestion", suggestion)
-                    // ----
                     $table_variant_product_edit.clearSelectedRows()
                     
                     if (!suggestion || !suggestion.data) {
@@ -11051,7 +11643,7 @@ const Variant = (function () {
     const clearForm = function () {
         //console.log("Variant.clearForm()", Variant.all)
         // ----
-        clear_validation(_product_edit_variant_form)
+        clearValidation(_product_edit_variant_form)
         _display_product_variant_name.innerText = "&nbsp;"
         _product_edit_variant_form_variant_id.value = ""
         _product_edit_variant_form_variant_name.value = ""
@@ -12572,7 +13164,7 @@ const Address = (function () {
     const set_detail = function (address) {
         let detail = _default_detail()
         if (address) {
-            //Console.log("address", address)
+            //console.log("address", address)
             detail.country = {
                 id: parseInt((address.country.id) ? address.country.id : null),
                 name: (address.country.name) ? address.country.name : null,
@@ -12681,7 +13273,7 @@ const Address = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
                 return handle_address_error("Error Validating Company")
             }
         } else {
@@ -12772,7 +13364,7 @@ $.fn.DisabledDOW = function (settings) {
     const $this = $(_this)
     
     $this.on("change", function () {
-        //Console.log("change")
+        //console.log("change")
     })
     
     /**
@@ -12851,61 +13443,61 @@ $.fn.DisabledDOW = function (settings) {
         DisabledDOW.days_of_week = new Map()
         
         DisabledDOW.days_of_week.set(
-          "*", {
-              label: "All",
-              for: name_prefix + "dow_select_all",
-              value: "*",
-              class: "custom-control-input dow_select",
-          })
+            "*", {
+                label: "All",
+                for: name_prefix + "dow_select_all",
+                value: "*",
+                class: "custom-control-input dow_select",
+            })
         DisabledDOW.days_of_week.set(
-          "0", {
-              label: "Sun",
-              for: name_prefix + "dow_select_sun",
-              value: 0,
-              class: "custom-control-input dow_select",
-          })
+            "0", {
+                label: "Sun",
+                for: name_prefix + "dow_select_sun",
+                value: 0,
+                class: "custom-control-input dow_select",
+            })
         DisabledDOW.days_of_week.set(
-          "1", {
-              label: "Mon",
-              for: name_prefix + "dow_select_mon",
-              value: 1,
-              class: "custom-control-input dow_select",
-          })
+            "1", {
+                label: "Mon",
+                for: name_prefix + "dow_select_mon",
+                value: 1,
+                class: "custom-control-input dow_select",
+            })
         DisabledDOW.days_of_week.set(
-          "2", {
-              label: "Tue",
-              for: name_prefix + "dow_select_tue",
-              value: 2,
-              class: "custom-control-input dow_select",
-          })
+            "2", {
+                label: "Tue",
+                for: name_prefix + "dow_select_tue",
+                value: 2,
+                class: "custom-control-input dow_select",
+            })
         DisabledDOW.days_of_week.set(
-          "3", {
-              label: "Wed",
-              for: name_prefix + "dow_select_wed",
-              value: 3,
-              class: "custom-control-input dow_select",
-          })
+            "3", {
+                label: "Wed",
+                for: name_prefix + "dow_select_wed",
+                value: 3,
+                class: "custom-control-input dow_select",
+            })
         DisabledDOW.days_of_week.set(
-          "4", {
-              label: "Thu",
-              for: name_prefix + "dow_select_thu",
-              value: 4,
-              class: "custom-control-input dow_select",
-          })
+            "4", {
+                label: "Thu",
+                for: name_prefix + "dow_select_thu",
+                value: 4,
+                class: "custom-control-input dow_select",
+            })
         DisabledDOW.days_of_week.set(
-          "5", {
-              label: "Fri",
-              for: name_prefix + "dow_select_fri",
-              value: 5,
-              class: "custom-control-input dow_select",
-          })
+            "5", {
+                label: "Fri",
+                for: name_prefix + "dow_select_fri",
+                value: 5,
+                class: "custom-control-input dow_select",
+            })
         DisabledDOW.days_of_week.set(
-          "6", {
-              label: "Sat",
-              for: name_prefix + "dow_select_sat",
-              value: 6,
-              class: "custom-control-input dow_select",
-          })
+            "6", {
+                label: "Sat",
+                for: name_prefix + "dow_select_sat",
+                value: 6,
+                class: "custom-control-input dow_select",
+            })
         
         let row = buildCheckBoxRow()
         let leadColumn = buildCheckBoxColumnLabel()
@@ -12928,7 +13520,7 @@ $.fn.DisabledDOW = function (settings) {
             let id = (typeof v === "number") ? v.toString() : v
             let day = DisabledDOW.days_of_week.get(id)
             
-            //Console.log("DisabledDOW.days_of_week", DisabledDOW.days_of_week)
+            //console.log("DisabledDOW.days_of_week", DisabledDOW.days_of_week)
             if (day) {
                 if (day.for) {
                     document.getElementById(day.for).checked = true
@@ -12996,7 +13588,7 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                //Console.log("dow_select_tue", DisabledDOW.disabled_dows)
+                //console.log("dow_select_tue", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_wed":
                 indexId = 3
@@ -13011,7 +13603,7 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                //Console.log("dow_select_wed", DisabledDOW.disabled_dows)
+                //console.log("dow_select_wed", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_thu":
                 indexId = 4
@@ -13026,7 +13618,7 @@ $.fn.DisabledDOW = function (settings) {
                     }
                 }
                 DisabledDOW.disabled_dows.sort()
-                //Console.log("dow_select_thu", DisabledDOW.disabled_dows)
+                //console.log("dow_select_thu", DisabledDOW.disabled_dows)
                 break
             case name_prefix + "dow_select_fri":
                 indexId = 5
@@ -13065,7 +13657,7 @@ $.fn.DisabledDOW = function (settings) {
     
     const value = function (val) {
         if (val) {
-            //Console.log("val", val)
+            //console.log("val", val)
         } else {
         
         }
@@ -13123,14 +13715,14 @@ const ColorScheme = (function () {
     
     //
     $(_button_close_edit_scheme)
-      .on("click", function () {
-          $(_edit_scheme).hide()
-      })
+        .on("click", function () {
+            $(_edit_scheme).hide()
+        })
     
     $(_season_id)
-      .on("click", function () {
-          $(_edit_scheme).show()
-      })
+        .on("click", function () {
+            $(_edit_scheme).show()
+        })
     
     //
     const reset_form = function () {
@@ -13206,7 +13798,7 @@ const ColorScheme = (function () {
     }
     
     const change = function (el) {
-        Console.log("ColorScheme:change(el)", el)
+        console.log("ColorScheme:change(el)", el)
     }
     
     return {
@@ -13234,7 +13826,7 @@ const ColorScheme = (function () {
 })()
 
 $.fn.ColorScheme = function (settings) {
-    Console.log("Test", Types.color_scheme)
+    console.log("Test", Types.color_scheme)
     
 }
 
@@ -13284,7 +13876,7 @@ const AirportTypes = (function () {
     }
     
     const init = function (settings) {
-        Console.log(" -- AirportTypes -- ", {})
+        console.log(" -- AirportTypes -- ", {})
     }
     
     const set = function (airport_types) {
@@ -13316,7 +13908,7 @@ const AirportTypes = (function () {
             AirportTypes.all.set("id", detail)
         })
         
-        Console.log(" AirportTypes.all", AirportTypes.all)
+        console.log(" AirportTypes.all", AirportTypes.all)
     }
     
     return {
@@ -13356,10 +13948,6 @@ const Category = (function () {
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
-    const handleCategoryError = function (msg) {
-        toastr.error(msg)
-    }
-    
     $(_modal_product_category_id)
         .on("change", function () {
             let category_id = $(this).val()
@@ -13376,6 +13964,10 @@ const Category = (function () {
     const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
     const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
+    
+    const handleCategoryError = function (msg) {
+        toastr.error(msg)
+    }
     
     const handle_product_change = function (category_id) {
         $("div[data-categoryid]").hide()
@@ -13738,7 +14330,7 @@ const Category = (function () {
     }
     
     const init = function (settings) {
-        //Console.log("Category.init()", settings)
+        //console.log("Category.init()", settings)
         let categories = []
         if (settings) {
             if (settings.categories) {
@@ -13750,7 +14342,7 @@ const Category = (function () {
     }
     
     const set = function (category) {
-        //Console.log("Category.set()", category)
+        //console.log("Category.set()", category)
         let detail = defaultDetail()
         if (category) {
             detail.id = (category.id) ? category.id : null
@@ -13788,7 +14380,7 @@ const Category = (function () {
     }
     
     const load_all = function (categories) {
-        //Console.log("Category.load_all()", categories)
+        //console.log("Category.load_all()", categories)
         Category.all = new Map()
         
         if (!categories) {
@@ -13797,12 +14389,12 @@ const Category = (function () {
         
         $.each(categories, function (i, category) {
             let detail = set(category)
-            //Console.log("detail", detail)
-            //Console.log("detail.id", detail.id)
+            //console.log("detail", detail)
+            //console.log("detail.id", detail.id)
             Category.all.set(detail.id, detail)
         })
         
-        //Console.log(" Category.all", Category.all)
+        //console.log(" Category.all", Category.all)
     }
     
     return {
@@ -13871,7 +14463,7 @@ const ContactTypes = (function () {
     }
     
     const init = function (settings) {
-        Console.log(" -- ContactTypes -- ", {})
+        console.log(" -- ContactTypes -- ", {})
     }
     
     const set = function (contact_types) {
@@ -13903,7 +14495,7 @@ const ContactTypes = (function () {
             ContactTypes.all.set("id", detail)
         })
         
-        Console.log(" ContactTypes.all", ContactTypes.all)
+        console.log(" ContactTypes.all", ContactTypes.all)
     }
     
     return {
@@ -14005,177 +14597,177 @@ const Company = (function () {
     })
     
     $(_button_cancel_edit_company_name)
-      .on("click", function () {
-          let detail = set_detail(tempCompany)
-          populate_form(detail)
-          hide_form()
-      })
+        .on("click", function () {
+            let detail = set_detail(tempCompany)
+            populate_form(detail)
+            hide_form()
+        })
     
     $(_button_edit_company_name)
-      .on("click", function () {
-          tempCompany = build()
-          show_form()
-      })
+        .on("click", function () {
+            tempCompany = build()
+            show_form()
+        })
     
     $(_button_clear_form_edit_company)
-      .on("click", function () {
-          reset_form()
-      })
+        .on("click", function () {
+            reset_form()
+        })
     
     $(_button_close_edit_company_form)
-      .on("click", function () {
-          hide_form()
-      })
+        .on("click", function () {
+            hide_form()
+        })
     
     $(_button_submit_form_edit_company)
-      .on("click", function () {
-          let company = Company.build()
-          if (company) {
-              confirmDialog(`Would you like to update?`, (ans) => {
-                  if (ans) {
-                      add_to_company_list(company, function (data) {
-                          if (data) {
-                              if (data[0]) {
-                                  let company = data[0]
-                                  let detail = set_detail(company)
-                                  reset_company = detail
-                                  populate_form(detail)
-                                  initAutoComplete()
-                                  hide_form()
-                              }
-                          }
-                      })
-                  }
-              })
-          }
-      })
+        .on("click", function () {
+            let company = Company.build()
+            if (company) {
+                confirmDialog(`Would you like to update?`, (ans) => {
+                    if (ans) {
+                        add_to_company_list(company, function (data) {
+                            if (data) {
+                                if (data[0]) {
+                                    let company = data[0]
+                                    let detail = set_detail(company)
+                                    reset_company = detail
+                                    populate_form(detail)
+                                    initAutoComplete()
+                                    hide_form()
+                                }
+                            }
+                        })
+                    }
+                })
+            }
+        })
     
     $(_company_id)
-      .on("change", function () {
-          _address_company_id.value = _company_id.value
-      })
+        .on("change", function () {
+            _address_company_id.value = _company_id.value
+        })
     
     $(_form_edit_company)
-      .on("change", function () {
-          set_progress()
-      })
+        .on("change", function () {
+            set_progress()
+        })
     
     const initAutoComplete = function () {
         $(_company_name)
-          .on("change", function () {
-              setTimeout(function () {
-                  let company_name = _company_name.value
-                  
-                  if (globalSelectedCompany === false) {
-                      if (company_name === "") {
-                          _company_name.value = ""
-                          _company_id.value = ""
-                          globalSelectedCompany = false
-                      } else {
-                          company_exists(company_name)
-                      }
-                  }
-              }, 200)
-          })
-          .on("search", function () {
-              /*
-              temp_company = Company.detail
-              window.addEventListener("click", on_click_outside)
-              hide_form()
-              //*/
-              Company.reset_form(true)
-              if (_form_edit_provider) {
-                  Provider.reset_form()
-              }
-              if (_form_edit_vendor) {
-                  Vendor.reset_form()
-              }
-              
-          })
-          .on("click", function (e) {
-              if ($(this).attr("readonly") === "readonly") {
-                  e.preventDefault()
-              } else {
-                  $(this).select()
-              }
-              
-          })
-          .autocomplete({
-              serviceUrl: "/api/v1.0/autocomplete/companies",
-              minChars: 2,
-              cache: false,
-              dataType: "json",
-              triggerSelectOnValidInput: false,
-              paramName: "st",
-              onSelect: function (suggestion) {
-                  if (!suggestion.data) {
-                      return
-                  }
-                  
-                  /**
-                   * created_by: 4
-                   * date_created: "2021-11-08 08:48:45"
-                   * date_modified: "2021-11-08 08:48:45"
-                   * email: "testcompany@email.com"
-                   * enabled: 1
-                   * fax: "+39-055-646465465"
-                   * id: 1
-                   * modified_by: 4
-                   * name: "Test Company 1"
-                   * note: null
-                   * phone_1: "1112223333"
-                   * phone_2: "+39-055-646465465"
-                   * status_id: 10
-                   * website: "https://www.google.com"
-                   */
-                  let company = suggestion.data
-                  globalSelectedCompany = true
-                  populate_form(company)
-                  if (_provider_name) {
-                      $(_provider_name).val(company.name).trigger("change")
-                  } else {
-                      $(_vendor_name).val(company.name)
-                  }
-                  
-                  if (_provider_company_id) {
-                      $(_provider_company_id).val(company.id)
-                  }
-                  
-                  Address.get_by_company_id(company.id)
-                  Contact.getByCompanyId(company.id)
-                  
-                  /*
-                  let provider = suggestion.data
-                  let company = (provider.company) ? provider.company : {}
-                  let addresses = (provider.addresses) ? provider.addresses : {}
-                  let contacts = (provider.contacts) ? provider.contacts : {}
-                  let location = (provider.location) ? provider.location : {}
-                  let vendor = (provider.vendor) ? provider.vendor : {}
-                  let provider_id = provider.id
-                  let company_name = provider.company.name
-                  let provider_company_id = provider.company.id
-                 
-                  if (_form_edit_provider) {
-                      $(_provider_company_id).val(provider_company_id)
-                      $(_provider_id).val(provider_id)
-                      confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
-                          if (ans) {
-                              window.location.replace("/providers/" + provider_id)
-                              populate_form(provider)
-                              Company.populate_form(company)
-                              Location.populate_form(location)
-                              $(_vendor_company_id).val(provider_company_id)
-                              $(_vendor_name).val(company_name).trigger("change")
-                          } else {
-                              Provider.reset_form()
-                              Vendor.reset_form()
-                          }
-                      })
-                  }
-    
-                  //*/
-              },
-          })
+            .on("change", function () {
+                setTimeout(function () {
+                    let company_name = _company_name.value
+                    
+                    if (globalSelectedCompany === false) {
+                        if (company_name === "") {
+                            _company_name.value = ""
+                            _company_id.value = ""
+                            globalSelectedCompany = false
+                        } else {
+                            company_exists(company_name)
+                        }
+                    }
+                }, 200)
+            })
+            .on("search", function () {
+                /*
+                temp_company = Company.detail
+                window.addEventListener("click", on_click_outside)
+                hide_form()
+                //*/
+                Company.reset_form(true)
+                if (_form_edit_provider) {
+                    Provider.reset_form()
+                }
+                if (_form_edit_vendor) {
+                    Vendor.reset_form()
+                }
+                
+            })
+            .on("click", function (e) {
+                if ($(this).attr("readonly") === "readonly") {
+                    e.preventDefault()
+                } else {
+                    $(this).select()
+                }
+                
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/companies",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                paramName: "st",
+                onSelect: function (suggestion) {
+                    if (!suggestion.data) {
+                        return
+                    }
+                    
+                    /**
+                     * created_by: 4
+                     * date_created: "2021-11-08 08:48:45"
+                     * date_modified: "2021-11-08 08:48:45"
+                     * email: "testcompany@email.com"
+                     * enabled: 1
+                     * fax: "+39-055-646465465"
+                     * id: 1
+                     * modified_by: 4
+                     * name: "Test Company 1"
+                     * note: null
+                     * phone_1: "1112223333"
+                     * phone_2: "+39-055-646465465"
+                     * status_id: 10
+                     * website: "https://www.google.com"
+                     */
+                    let company = suggestion.data
+                    globalSelectedCompany = true
+                    populate_form(company)
+                    if (_provider_name) {
+                        $(_provider_name).val(company.name).trigger("change")
+                    } else {
+                        $(_vendor_name).val(company.name)
+                    }
+                    
+                    if (_provider_company_id) {
+                        $(_provider_company_id).val(company.id)
+                    }
+                    
+                    Address.get_by_company_id(company.id)
+                    Contact.getByCompanyId(company.id)
+                    
+                    /*
+                    let provider = suggestion.data
+                    let company = (provider.company) ? provider.company : {}
+                    let addresses = (provider.addresses) ? provider.addresses : {}
+                    let contacts = (provider.contacts) ? provider.contacts : {}
+                    let location = (provider.location) ? provider.location : {}
+                    let vendor = (provider.vendor) ? provider.vendor : {}
+                    let provider_id = provider.id
+                    let company_name = provider.company.name
+                    let provider_company_id = provider.company.id
+                   
+                    if (_form_edit_provider) {
+                        $(_provider_company_id).val(provider_company_id)
+                        $(_provider_id).val(provider_id)
+                        confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
+                            if (ans) {
+                                window.location.replace("/providers/" + provider_id)
+                                populate_form(provider)
+                                Company.populate_form(company)
+                                Location.populate_form(location)
+                                $(_vendor_company_id).val(provider_company_id)
+                                $(_vendor_name).val(company_name).trigger("change")
+                            } else {
+                                Provider.reset_form()
+                                Vendor.reset_form()
+                            }
+                        })
+                    }
+      
+                    //*/
+                },
+            })
     }
     
     const defaultDetail = function () {
@@ -14342,26 +14934,27 @@ const Company = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleCompanyError("Oops: 1")
+                        handleCompanyError("Oops: 1")
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
-                return handleCompanyError("Error Validating Company")
+                console.log("error", e)
+                handleCompanyError("Error Validating Company")
             }
         } else {
-            return handleCompanyError("Error Loading Company- Missing Data")
+            handleCompanyError("Error Loading Company- Missing Data")
         }
     }
     
     const add_to_company_list = function (dataToSend, callback) {
+        console.log("add_to_company_list()")
         let url = "/api/v1.0/companies/update"
         if (dataToSend) {
             sendPostRequest(url, dataToSend, function (data, status, xhr) {
                 if (data) {
                     return callback(data)
                 } else {
-                    return handleCompanyError("Oops: 1")
+                    handleCompanyError("Oops: 1")
                 }
             })
         }
@@ -14614,40 +15207,40 @@ const Contact = (function () {
      * submit contact form button
      */
     $(_button_submit_form_edit_contact)
-      .on("click", function () {
-          if (validate_form()) {
-              confirmDialog(`Would you like to update?`, (ans) => {
-                  if (ans) {
-                      save()
-                  }
-              })
-          }
-      })
+        .on("click", function () {
+            if (validate_form()) {
+                confirmDialog(`Would you like to update?`, (ans) => {
+                    if (ans) {
+                        save()
+                    }
+                })
+            }
+        })
     
     $(_button_add_contact_table)
-      .on("click", function () {
-          $contact_table.clearSelectedRows()
-          clear_form()
-          show_form()
-      })
+        .on("click", function () {
+            $contact_table.clearSelectedRows()
+            clear_form()
+            show_form()
+        })
     
     $(_button_clear_form_edit_contact)
-      .on("click", function () {
-          $contact_table.clearSelectedRows()
-          clear_form()
-      })
+        .on("click", function () {
+            $contact_table.clearSelectedRows()
+            clear_form()
+        })
     
     $(_button_close_edit_contact_form)
-      .on("click", function () {
-          $contact_table.clearSelectedRows()
-          clear_form()
-          hide_form()
-      })
+        .on("click", function () {
+            $contact_table.clearSelectedRows()
+            clear_form()
+            hide_form()
+        })
     
     $(_clear_contact_table)
-      .on("click", function () {
-          Contact.clearTable()
-      })
+        .on("click", function () {
+            Contact.clearTable()
+        })
     
     /**
      * validate contact form
@@ -14727,7 +15320,7 @@ const Contact = (function () {
         let dataToSend = build()
         if (dataToSend) {
             update_contact(dataToSend, function (data) {
-                Console.log(data)
+                console.log(data)
                 if (data) {
                     if (data[0]) {
                         let contact = data[0]
@@ -14827,7 +15420,7 @@ const Contact = (function () {
         clear_form()
         _contact_company_id.value = _company_id.value
         if (contact) {
-            Console.log("contact", contact)
+            console.log("contact", contact)
             _contact_id.value = validInt(contact.id)
             _contact_name_first.value = (contact.name_first) ? contact.name_first : null
             _contact_name_last.value = (contact.name_last) ? contact.name_last : null
@@ -14909,7 +15502,7 @@ const Contact = (function () {
             $contact_table.loadRow(contacts[0])
         }
         
-        //Console.log(" Contact.all", Contact.all)
+        //console.log(" Contact.all", Contact.all)
     }
     
     /**
@@ -14967,7 +15560,7 @@ const Contact = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
                 return handleContactError("Error Validating Company")
             }
         } else {
@@ -15093,7 +15686,7 @@ const Currency = (function () {
     }
     
     const init = function (settings) {
-        //Console.log(' -- Currency -- ', {})
+        //console.log(' -- Currency -- ', {})
     }
     
     const set = function (currency) {
@@ -15128,7 +15721,7 @@ const Currency = (function () {
             Currency.all.set("id", detail)
         })
         
-        //Console.log(' Currency.all',  Currency.all);
+        //console.log(' Currency.all',  Currency.all);
     }
     
     return {
@@ -17514,12 +18107,12 @@ const Provider = (function () {
             let addresses = Array.from(Address.all.values())
             let contacts = Array.from(Contact.all.values())
             /*
-            Console.log("company_detail", company_detail)
-            Console.log("provider_detail", provider_detail)
-            Console.log("location_detail", location_detail)
-            Console.log("vendor_detail", vendor_detail)
-            Console.log("addresses", addresses)
-            Console.log("contacts", contacts)
+            console.log("company_detail", company_detail)
+            console.log("provider_detail", provider_detail)
+            console.log("location_detail", location_detail)
+            console.log("vendor_detail", vendor_detail)
+            console.log("addresses", addresses)
+            console.log("contacts", contacts)
             //*/
             if (!company_detail || !provider_detail || !location_detail || !vendor_detail || !addresses || !contacts) {
                 $.each(panels, function (index, item) {
@@ -17567,7 +18160,7 @@ const Provider = (function () {
     
     $(_button_add_provider_page_heading)
         .on("click", function () {
-            //Console.log("test")
+            //console.log("test")
         })
     
     $(_button_edit_provider_name)
@@ -17586,9 +18179,8 @@ const Provider = (function () {
      * @param provider
      */
     const add = function (provider) {
-        Console.log("add", provider)
+        console.log("Provider.add(provider)", provider)
         if (provider) {
-            
             let dataToSend = {
                 name: _modal_product_provider_name.value,
                 status_id: 1,
@@ -17607,7 +18199,7 @@ const Provider = (function () {
                     if (data[0]) {
                         vendor_detail = data[0]
                     }
-                    Console.log("Provider Upodating Vendor: vendor_detail", vendor_detail)
+                    console.log("Provider Upodating Vendor: vendor_detail", vendor_detail)
                     
                     provider.location_id = (provider.location_id) ? provider.location_id : 1
                     provider.vendor_id = vendor_detail.id
@@ -17615,12 +18207,12 @@ const Provider = (function () {
                         provider_detail: provider,
                     }
                     
-                    Console.log("Provider : provider_detail", provider_detail)
+                    console.log("Provider : provider_detail", provider_detail)
                     updateProvider(provider_detail, function (data) {
                         if (data) {
-                            Console.log("data", data)
+                            console.log("data", data)
                             if (data[0]) {
-                                //Console.log("data[0]", data[0])
+                                //console.log("data[0]", data[0])
                                 let provider = data[0]
                                 let vendor = provider.vendor
                                 let company = provider.company
@@ -17643,7 +18235,6 @@ const Provider = (function () {
                     })
                 }
             })
-            
         }
     }
     
@@ -17651,162 +18242,162 @@ const Provider = (function () {
      * initialize provider autocomplete
      */
     const initAutoComplete = function () {
-        
-        $(_provider_name)
-            .on("change", function () {
-                /*
-                setTimeout(function () {
-                    let provider_name = _provider_name.value
-                    
-                    if (globalSelectedProvider === false) {
-                        if (provider_name === "") {
-                            _provider_name.value = ""
-                            _provider_company_id.value = ""
-                            globalSelectedProvider = false
-                            $(_vendor_name).val("").trigger("change")
-                            $(_provider_company_id).val("").trigger("change")
-                        } else {
-                            provider_exists(provider_name)
-                        }
-                    }
-                }, 200)
-                //*/
-            })
-            .on("search", function () {
-                //_provider_id.value = ""
-                //_provider_company_id.value = ""
-                
-                //$(_vendor_name).val("").trigger("change")
-                //$(_provider_company_id).val("").trigger("change")
-                Provider.reset_form()
-                Vendor.reset_form()
-            })
-            .on("click", function () {
-                $(this).select(function () {
-                    //$( "div" ).text( "Something was selected" ).show().fadeOut( 1000 );
-                })
-            })
-            .autocomplete({
-                serviceUrl: "/api/v1.0/autocomplete/providers",
-                minChars: 2,
-                cache: false,
-                dataType: "json",
-                triggerSelectOnValidInput: false,
-                paramName: "st",
-                onSelect: function (suggestion) {
-                    if (!suggestion.data) {
-                        return
-                    }
-                    Console.log("suggestion.data", suggestion.data)
-                    let provider = suggestion.data
-                    let company = (provider.company) ? provider.company : {}
-                    let addresses = (provider.addresses) ? provider.addresses : {}
-                    let contacts = (provider.contacts) ? provider.contacts : {}
-                    let location = (provider.location) ? provider.location : {}
-                    let vendor = (provider.vendor) ? provider.vendor : {}
-                    
-                    //
-                    
-                    let provider_id = provider.id
-                    let company_name = provider.company.name
-                    let provider_company_id = provider.company.id
-                    //
-                    if (_form_edit_provider) {
-                        $(_provider_company_id).val(provider_company_id)
-                        $(_provider_id).val(provider_id)
-                        confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
-                            if (ans) {
-                                window.location.replace("/providers/" + provider_id)
-                                populate_form(provider)
-                                Company.populate_form(company)
-                                Location.populate_form(location)
-                                $(_vendor_company_id).val(provider_company_id)
-                                $(_vendor_name).val(company_name).trigger("change")
+        if (_provider_name) {
+            $(_provider_name)
+                .on("change", function () {
+                    /*
+                    setTimeout(function () {
+                        let provider_name = _provider_name.value
+                        
+                        if (globalSelectedProvider === false) {
+                            if (provider_name === "") {
+                                _provider_name.value = ""
+                                _provider_company_id.value = ""
+                                globalSelectedProvider = false
+                                $(_vendor_name).val("").trigger("change")
+                                $(_provider_company_id).val("").trigger("change")
                             } else {
-                                Provider.reset_form()
-                                Vendor.reset_form()
+                                provider_exists(provider_name)
                             }
-                        })
-                    }
-                },
-            })
-        
-        $(_modal_product_provider_name)
-            .on("change", function () {
-                setTimeout(function () {
-                    let provider_name = _modal_product_provider_name.value
-                    
-                    if (globalSelectedProvider === false) {
-                        if (provider_name === "") {
-                            _modal_product_vendor_id.value = ""
-                            _modal_product_provider_id.value = ""
-                            _modal_product_vendor_name.value = ""
-                            _modal_product_provider_name.value = ""
-                            _modal_product_vendor_company_id.value = ""
-                            _modal_product_provider_company_id.value = ""
-                            _modal_product_provider_location_id.value = ""
-                            _modal_product_vendor_name.disabled = true
-                            Product.attr2 = null
-                            Product.attr3 = null
-                            Product.updateProductSKU()
-                            globalSelectedProvider = false
-                        } else {
-                            provider_exists(provider_name)
                         }
+                    }, 200)
+                    //*/
+                })
+                .on("search", function () {
+                    //_provider_id.value = ""
+                    //_provider_company_id.value = ""
+                    
+                    //$(_vendor_name).val("").trigger("change")
+                    //$(_provider_company_id).val("").trigger("change")
+                    Provider.reset_form()
+                    Vendor.reset_form()
+                })
+                .on("click", function () {
+                    if ($(this).attr("readonly") === "readonly") {
+                        e.preventDefault()
+                    } else {
+                        $(this).select()
                     }
-                }, 200)
-            })
-            .on("search", function () {
-                _modal_product_vendor_id.value = ""
-                _modal_product_provider_id.value = ""
-                _modal_product_vendor_name.value = ""
-                _modal_product_provider_name.value = ""
-                _modal_product_vendor_company_id.value = ""
-                _modal_product_provider_company_id.value = ""
-                _modal_product_provider_location_id.value = ""
-                Product.attr2 = null
-                Product.attr3 = null
-                Product.updateProductSKU()
-                _modal_product_vendor_name.disabled = true
-            })
-            .on("click", function () {
-                $(this).select()
-            })
-            .autocomplete({
-                serviceUrl: "/api/v1.0/autocomplete/providers",
-                minChars: 2,
-                cache: false,
-                dataType: "json",
-                triggerSelectOnValidInput: false,
-                paramName: "st",
-                onSelect: function (suggestion) {
-                    if (!suggestion || !suggestion.data) {
-                        return
-                    }
-                    Console.log("suggestion.data", suggestion.data)
-                    let provider = set(suggestion.data)
-                    let vendor = provider.vendor
-                    let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
-                    let sku = (vendor.sku) ? vendor.sku : null
-                    
-                    _modal_product_vendor_id.value = parseInt(suggestion.data.vendor.id)
-                    _modal_product_provider_id.value = suggestion.data.id
-                    _modal_product_vendor_name.value = suggestion.data.name
-                    _modal_product_vendor_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
-                    _modal_product_provider_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
-                    _modal_product_provider_vendor_match.checked = true
-                    _modal_product_vendor_name.disabled = false
-                    _modal_product_provider_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
-                    
-                    Product.attr2 = code_direct
-                    Product.attr3 = sku
-                    Product.updateProductSKU()
-                    
-                    //$(_modal_product_vendor_name).trigger("change")
-                },
-            })
+                })
+                .autocomplete({
+                    serviceUrl: "/api/v1.0/autocomplete/providers",
+                    minChars: 2,
+                    cache: false,
+                    dataType: "json",
+                    triggerSelectOnValidInput: false,
+                    paramName: "st",
+                    onSelect: function (suggestion) {
+                        if (!suggestion.data) {
+                            return
+                        }
+                        let provider = suggestion.data
+                        let company = (provider.company) ? provider.company : {}
+                        let addresses = (provider.addresses) ? provider.addresses : {}
+                        let contacts = (provider.contacts) ? provider.contacts : {}
+                        let location = (provider.location) ? provider.location : {}
+                        let vendor = (provider.vendor) ? provider.vendor : {}
+                        let provider_id = provider.id
+                        let company_name = provider.company.name
+                        let provider_company_id = provider.company.id
+                        
+                        if (_form_edit_provider) {
+                            $(_provider_company_id).val(provider_company_id)
+                            $(_provider_id).val(provider_id)
+                            confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
+                                if (ans) {
+                                    window.location.replace("/providers/" + provider_id)
+                                    populate_form(provider)
+                                    Company.populate_form(company)
+                                    Location.populate_form(location)
+                                    $(_vendor_company_id).val(provider_company_id)
+                                    $(_vendor_name).val(company_name).trigger("change")
+                                } else {
+                                    Provider.reset_form()
+                                    Vendor.reset_form()
+                                }
+                            })
+                        }
+                    },
+                })
+        }
         
     }
+    
+    $("#modal_product_provider_name")
+        .on("change", function () {
+            setTimeout(function () {
+                let provider_name = _modal_product_provider_name.value
+                
+                if (globalSelectedProvider === false) {
+                    if (provider_name === "") {
+                        _modal_product_vendor_id.value = ""
+                        _modal_product_provider_id.value = ""
+                        _modal_product_vendor_name.value = ""
+                        _modal_product_provider_name.value = ""
+                        _modal_product_vendor_company_id.value = ""
+                        _modal_product_provider_company_id.value = ""
+                        _modal_product_provider_location_id.value = ""
+                        _modal_product_vendor_name.disabled = true
+                        Product.attr2 = null
+                        Product.attr3 = null
+                        Product.updateProductSKU()
+                        globalSelectedProvider = false
+                    } else {
+                        provider_exists(provider_name)
+                    }
+                }
+            }, 200)
+        })
+        .on("search", function () {
+            _modal_product_vendor_id.value = ""
+            _modal_product_provider_id.value = ""
+            _modal_product_vendor_name.value = ""
+            _modal_product_provider_name.value = ""
+            _modal_product_vendor_company_id.value = ""
+            _modal_product_provider_company_id.value = ""
+            _modal_product_provider_location_id.value = ""
+            Product.attr2 = null
+            Product.attr3 = null
+            Product.updateProductSKU()
+            _modal_product_vendor_name.disabled = true
+        })
+        .on("click", function () {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/providers",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion || !suggestion.data) {
+                    return
+                }
+                let provider = set(suggestion.data)
+                let vendor = provider.vendor
+                let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
+                let sku = (vendor.sku) ? vendor.sku : null
+                
+                _modal_product_vendor_id.value = parseInt(suggestion.data.vendor.id)
+                _modal_product_provider_id.value = suggestion.data.id
+                _modal_product_vendor_name.value = suggestion.data.name
+                _modal_product_vendor_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
+                _modal_product_provider_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
+                _modal_product_provider_vendor_match.checked = true
+                _modal_product_vendor_name.disabled = false
+                _modal_product_provider_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
+                
+                Product.attr2 = code_direct
+                Product.attr3 = sku
+                Product.updateProductSKU()
+            },
+        })
     
     /**
      * check if provider with same name exists
@@ -17814,7 +18405,6 @@ const Provider = (function () {
      * @param name
      */
     const provider_exists = function (name) {
-        
         if (name && name !== "") {
             let dataToSend = {
                 name: name,
@@ -17824,7 +18414,6 @@ const Provider = (function () {
                 let provider
                 
                 if (_form_product_add) {
-                    
                     if (!data || data.length === 0) {
                         confirmDialog("This provider does not exist. Would you like to create it?", (ans) => {
                             if (ans) {
@@ -17841,6 +18430,7 @@ const Provider = (function () {
                                             _modal_product_provider_name.value = company.name
                                             _modal_product_vendor_name.value = company.name
                                             _modal_product_provider_vendor_match.checked = true
+                                            
                                             add(remove_nulls({
                                                 location_id: null,
                                                 company_id: company.id,
@@ -17868,13 +18458,9 @@ const Provider = (function () {
                             }
                         }
                         
-                        Console.log("provider", provider)
-                        
                         let vendor = provider.vendor
                         let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
                         let sku = (vendor.sku) ? vendor.sku : null
-                        Console.log("code_direct", code_direct)
-                        Console.log("sku", sku)
                         
                         _modal_product_vendor_id.value = parseInt(vendor.id)
                         _modal_product_provider_id.value = provider.id
@@ -17888,18 +18474,6 @@ const Provider = (function () {
                         Product.attr2 = code_direct
                         Product.attr3 = sku
                         Product.updateProductSKU()
-                        
-                        /*
-                        
-                        
-    
-                        
-                        
-    
-                        Product.attr2 = code_direct
-                        Product.attr3 = sku
-                        Product.updateProductSKU()
-                        //*/
                     }
                 }
                 
@@ -17924,7 +18498,7 @@ const Provider = (function () {
                             
                         }
                     }
-                    Console.log("provider", provider)
+                    console.log("provider", provider)
                     $(_vendor_name).val($(_provider_name).val()).trigger("change")
                 }
                 
@@ -18077,9 +18651,9 @@ const Provider = (function () {
         if (provider) {
             updateProvider(provider, function (data) {
                 if (data) {
-                    Console.log("data 1", data)
+                    console.log("data 1", data)
                     if (data[0]) {
-                        Console.log("data[0] 1", data[0])
+                        console.log("data[0] 1", data[0])
                         let details = data[0]
                         if (details.id) {
                             if (_provider_id.value === "" || isNaN(parseInt(_provider_id.value))) {
@@ -18089,13 +18663,13 @@ const Provider = (function () {
                                 toastr.success(`Provider ${name} has been updated.`)
                             }
                         } else {
-                            Console.log("details 1", details)
+                            console.log("details 1", details)
                         }
                     } else {
-                        Console.log("details 2", data)
+                        console.log("details 2", data)
                     }
                 } else {
-                    Console.log("details 3", provider)
+                    console.log("details 3", provider)
                 }
             })
         }
@@ -18120,7 +18694,7 @@ const Provider = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
         }
     }
@@ -18199,7 +18773,7 @@ const Provider = (function () {
      * regulate tab access
      */
     const set_progress = function () {
-        Console.log("set_progress()")
+        console.log("set_progress()")
         let provider_id = (!isNaN(_provider_id.value)) ? _provider_id.value : null
         let company_id = (!isNaN(_provider_company_id.value)) ? _provider_company_id.value : null
         
@@ -18286,7 +18860,7 @@ const Provider = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
                 return handle_provider_error("Error Validating Company")
             }
         } else {
@@ -18795,32 +19369,45 @@ $(function () {
 
 $(document).ready(function () {
     
-    const inputs = document.getElementsByTagName("input")
-    
     window.addEventListener("load", function () {
+        const inputs = document.getElementsByTagName("input")
+        
         if (mdbPreloader) {
             $(mdbPreloader).delay(1000).fadeOut(300)
         }
-        /*
+        
         for (let i = 0; i < inputs.length; i++) {
-            if (inputs[i].classList.contains("date-format")) {
-                inputs[i].setAttribute("maxlength", 10)
-                inputs[i].onkeydown = function (e) {
-                    return IsNumeric(this, e.keyCode)
+            if (inputs[i].type === "text") {
+                
+                if (inputs[i].classList.contains("date-format")) {
+                    //inputs[i].setAttribute("maxlength", "10")
+                    //inputs[i].onkeydown = function (event) {
+                    //return IsNumeric(this, event.keyCode)
+                    //}
+                    //inputs[i].onkeyup = function (event) {
+                    //validateDateFormat(this, event.keyCode)
+                    //}
+                    
                 }
-                inputs[i].onkeyup = function (e) {
-                    ValidateDateFormat(this, e.keyCode)
+                
+                if (inputs[i].classList.contains("time-format")) {
+                    
+                    //inputs[i].setAttribute("maxlength", "5")
+                    //inputs[i].onkeydown = function (event) {
+                    //return IsNumeric(this, event.keyCode)
+                    //}
+                    //inputs[i].onkeyup = function (event) {
+                    //validateTimeFormat(this, event.keyCode)
+                    //}
+                    
                 }
             }
         }
-        //*/
     }, false)
     
     window.addEventListener("resize", debounce(function (e) {
         resize_elements("end of resizing")
     }))
-    
-    let codeData = document.querySelectorAll(".panel-code")
     
     new WOW().init()
     
@@ -18877,6 +19464,7 @@ $(document).ready(function () {
     //toastr.warning('I do not think that word means what you think it means.', 'Warning!')
     //toastr.error('I do not think that word means what you think it means.', 'Error!')
     
+    let codeData = document.querySelectorAll(".panel-code")
     codeData.forEach(el => {
         let html = $(el).html()
         let formattedCode = ""

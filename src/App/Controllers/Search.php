@@ -48,7 +48,7 @@
 		public static function hotels(array $params = []): void
 		{
 			$resultSet = SearchModel::fetchProductSearch($params);
-			Log::$debug_log->trace($resultSet);
+			
 			if (isset($resultSet["errors"])) {
 				/**
 				 * render invalid results json page

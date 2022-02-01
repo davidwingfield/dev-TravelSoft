@@ -75,40 +75,40 @@ const Contact = (function () {
      * submit contact form button
      */
     $(_button_submit_form_edit_contact)
-      .on("click", function () {
-          if (validate_form()) {
-              confirmDialog(`Would you like to update?`, (ans) => {
-                  if (ans) {
-                      save()
-                  }
-              })
-          }
-      })
+        .on("click", function () {
+            if (validate_form()) {
+                confirmDialog(`Would you like to update?`, (ans) => {
+                    if (ans) {
+                        save()
+                    }
+                })
+            }
+        })
     
     $(_button_add_contact_table)
-      .on("click", function () {
-          $contact_table.clearSelectedRows()
-          clear_form()
-          show_form()
-      })
+        .on("click", function () {
+            $contact_table.clearSelectedRows()
+            clear_form()
+            show_form()
+        })
     
     $(_button_clear_form_edit_contact)
-      .on("click", function () {
-          $contact_table.clearSelectedRows()
-          clear_form()
-      })
+        .on("click", function () {
+            $contact_table.clearSelectedRows()
+            clear_form()
+        })
     
     $(_button_close_edit_contact_form)
-      .on("click", function () {
-          $contact_table.clearSelectedRows()
-          clear_form()
-          hide_form()
-      })
+        .on("click", function () {
+            $contact_table.clearSelectedRows()
+            clear_form()
+            hide_form()
+        })
     
     $(_clear_contact_table)
-      .on("click", function () {
-          Contact.clearTable()
-      })
+        .on("click", function () {
+            Contact.clearTable()
+        })
     
     /**
      * validate contact form
@@ -188,7 +188,7 @@ const Contact = (function () {
         let dataToSend = build()
         if (dataToSend) {
             update_contact(dataToSend, function (data) {
-                Console.log(data)
+                console.log(data)
                 if (data) {
                     if (data[0]) {
                         let contact = data[0]
@@ -288,7 +288,7 @@ const Contact = (function () {
         clear_form()
         _contact_company_id.value = _company_id.value
         if (contact) {
-            Console.log("contact", contact)
+            console.log("contact", contact)
             _contact_id.value = validInt(contact.id)
             _contact_name_first.value = (contact.name_first) ? contact.name_first : null
             _contact_name_last.value = (contact.name_last) ? contact.name_last : null
@@ -370,7 +370,7 @@ const Contact = (function () {
             $contact_table.loadRow(contacts[0])
         }
         
-        //Console.log(" Contact.all", Contact.all)
+        //console.log(" Contact.all", Contact.all)
     }
     
     /**
@@ -428,7 +428,7 @@ const Contact = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
                 return handleContactError("Error Validating Company")
             }
         } else {

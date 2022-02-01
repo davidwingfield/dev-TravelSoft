@@ -545,7 +545,7 @@ const Address = (function () {
     const set_detail = function (address) {
         let detail = _default_detail()
         if (address) {
-            //Console.log("address", address)
+            //console.log("address", address)
             detail.country = {
                 id: parseInt((address.country.id) ? address.country.id : null),
                 name: (address.country.name) ? address.country.name : null,
@@ -654,7 +654,7 @@ const Address = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
                 return handle_address_error("Error Validating Company")
             }
         } else {

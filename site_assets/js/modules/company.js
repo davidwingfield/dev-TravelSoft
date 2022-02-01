@@ -74,177 +74,177 @@ const Company = (function () {
     })
     
     $(_button_cancel_edit_company_name)
-      .on("click", function () {
-          let detail = set_detail(tempCompany)
-          populate_form(detail)
-          hide_form()
-      })
+        .on("click", function () {
+            let detail = set_detail(tempCompany)
+            populate_form(detail)
+            hide_form()
+        })
     
     $(_button_edit_company_name)
-      .on("click", function () {
-          tempCompany = build()
-          show_form()
-      })
+        .on("click", function () {
+            tempCompany = build()
+            show_form()
+        })
     
     $(_button_clear_form_edit_company)
-      .on("click", function () {
-          reset_form()
-      })
+        .on("click", function () {
+            reset_form()
+        })
     
     $(_button_close_edit_company_form)
-      .on("click", function () {
-          hide_form()
-      })
+        .on("click", function () {
+            hide_form()
+        })
     
     $(_button_submit_form_edit_company)
-      .on("click", function () {
-          let company = Company.build()
-          if (company) {
-              confirmDialog(`Would you like to update?`, (ans) => {
-                  if (ans) {
-                      add_to_company_list(company, function (data) {
-                          if (data) {
-                              if (data[0]) {
-                                  let company = data[0]
-                                  let detail = set_detail(company)
-                                  reset_company = detail
-                                  populate_form(detail)
-                                  initAutoComplete()
-                                  hide_form()
-                              }
-                          }
-                      })
-                  }
-              })
-          }
-      })
+        .on("click", function () {
+            let company = Company.build()
+            if (company) {
+                confirmDialog(`Would you like to update?`, (ans) => {
+                    if (ans) {
+                        add_to_company_list(company, function (data) {
+                            if (data) {
+                                if (data[0]) {
+                                    let company = data[0]
+                                    let detail = set_detail(company)
+                                    reset_company = detail
+                                    populate_form(detail)
+                                    initAutoComplete()
+                                    hide_form()
+                                }
+                            }
+                        })
+                    }
+                })
+            }
+        })
     
     $(_company_id)
-      .on("change", function () {
-          _address_company_id.value = _company_id.value
-      })
+        .on("change", function () {
+            _address_company_id.value = _company_id.value
+        })
     
     $(_form_edit_company)
-      .on("change", function () {
-          set_progress()
-      })
+        .on("change", function () {
+            set_progress()
+        })
     
     const initAutoComplete = function () {
         $(_company_name)
-          .on("change", function () {
-              setTimeout(function () {
-                  let company_name = _company_name.value
-                  
-                  if (globalSelectedCompany === false) {
-                      if (company_name === "") {
-                          _company_name.value = ""
-                          _company_id.value = ""
-                          globalSelectedCompany = false
-                      } else {
-                          company_exists(company_name)
-                      }
-                  }
-              }, 200)
-          })
-          .on("search", function () {
-              /*
-              temp_company = Company.detail
-              window.addEventListener("click", on_click_outside)
-              hide_form()
-              //*/
-              Company.reset_form(true)
-              if (_form_edit_provider) {
-                  Provider.reset_form()
-              }
-              if (_form_edit_vendor) {
-                  Vendor.reset_form()
-              }
-              
-          })
-          .on("click", function (e) {
-              if ($(this).attr("readonly") === "readonly") {
-                  e.preventDefault()
-              } else {
-                  $(this).select()
-              }
-              
-          })
-          .autocomplete({
-              serviceUrl: "/api/v1.0/autocomplete/companies",
-              minChars: 2,
-              cache: false,
-              dataType: "json",
-              triggerSelectOnValidInput: false,
-              paramName: "st",
-              onSelect: function (suggestion) {
-                  if (!suggestion.data) {
-                      return
-                  }
-                  
-                  /**
-                   * created_by: 4
-                   * date_created: "2021-11-08 08:48:45"
-                   * date_modified: "2021-11-08 08:48:45"
-                   * email: "testcompany@email.com"
-                   * enabled: 1
-                   * fax: "+39-055-646465465"
-                   * id: 1
-                   * modified_by: 4
-                   * name: "Test Company 1"
-                   * note: null
-                   * phone_1: "1112223333"
-                   * phone_2: "+39-055-646465465"
-                   * status_id: 10
-                   * website: "https://www.google.com"
-                   */
-                  let company = suggestion.data
-                  globalSelectedCompany = true
-                  populate_form(company)
-                  if (_provider_name) {
-                      $(_provider_name).val(company.name).trigger("change")
-                  } else {
-                      $(_vendor_name).val(company.name)
-                  }
-                  
-                  if (_provider_company_id) {
-                      $(_provider_company_id).val(company.id)
-                  }
-                  
-                  Address.get_by_company_id(company.id)
-                  Contact.getByCompanyId(company.id)
-                  
-                  /*
-                  let provider = suggestion.data
-                  let company = (provider.company) ? provider.company : {}
-                  let addresses = (provider.addresses) ? provider.addresses : {}
-                  let contacts = (provider.contacts) ? provider.contacts : {}
-                  let location = (provider.location) ? provider.location : {}
-                  let vendor = (provider.vendor) ? provider.vendor : {}
-                  let provider_id = provider.id
-                  let company_name = provider.company.name
-                  let provider_company_id = provider.company.id
-                 
-                  if (_form_edit_provider) {
-                      $(_provider_company_id).val(provider_company_id)
-                      $(_provider_id).val(provider_id)
-                      confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
-                          if (ans) {
-                              window.location.replace("/providers/" + provider_id)
-                              populate_form(provider)
-                              Company.populate_form(company)
-                              Location.populate_form(location)
-                              $(_vendor_company_id).val(provider_company_id)
-                              $(_vendor_name).val(company_name).trigger("change")
-                          } else {
-                              Provider.reset_form()
-                              Vendor.reset_form()
-                          }
-                      })
-                  }
-    
-                  //*/
-              },
-          })
+            .on("change", function () {
+                setTimeout(function () {
+                    let company_name = _company_name.value
+                    
+                    if (globalSelectedCompany === false) {
+                        if (company_name === "") {
+                            _company_name.value = ""
+                            _company_id.value = ""
+                            globalSelectedCompany = false
+                        } else {
+                            company_exists(company_name)
+                        }
+                    }
+                }, 200)
+            })
+            .on("search", function () {
+                /*
+                temp_company = Company.detail
+                window.addEventListener("click", on_click_outside)
+                hide_form()
+                //*/
+                Company.reset_form(true)
+                if (_form_edit_provider) {
+                    Provider.reset_form()
+                }
+                if (_form_edit_vendor) {
+                    Vendor.reset_form()
+                }
+                
+            })
+            .on("click", function (e) {
+                if ($(this).attr("readonly") === "readonly") {
+                    e.preventDefault()
+                } else {
+                    $(this).select()
+                }
+                
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/companies",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                paramName: "st",
+                onSelect: function (suggestion) {
+                    if (!suggestion.data) {
+                        return
+                    }
+                    
+                    /**
+                     * created_by: 4
+                     * date_created: "2021-11-08 08:48:45"
+                     * date_modified: "2021-11-08 08:48:45"
+                     * email: "testcompany@email.com"
+                     * enabled: 1
+                     * fax: "+39-055-646465465"
+                     * id: 1
+                     * modified_by: 4
+                     * name: "Test Company 1"
+                     * note: null
+                     * phone_1: "1112223333"
+                     * phone_2: "+39-055-646465465"
+                     * status_id: 10
+                     * website: "https://www.google.com"
+                     */
+                    let company = suggestion.data
+                    globalSelectedCompany = true
+                    populate_form(company)
+                    if (_provider_name) {
+                        $(_provider_name).val(company.name).trigger("change")
+                    } else {
+                        $(_vendor_name).val(company.name)
+                    }
+                    
+                    if (_provider_company_id) {
+                        $(_provider_company_id).val(company.id)
+                    }
+                    
+                    Address.get_by_company_id(company.id)
+                    Contact.getByCompanyId(company.id)
+                    
+                    /*
+                    let provider = suggestion.data
+                    let company = (provider.company) ? provider.company : {}
+                    let addresses = (provider.addresses) ? provider.addresses : {}
+                    let contacts = (provider.contacts) ? provider.contacts : {}
+                    let location = (provider.location) ? provider.location : {}
+                    let vendor = (provider.vendor) ? provider.vendor : {}
+                    let provider_id = provider.id
+                    let company_name = provider.company.name
+                    let provider_company_id = provider.company.id
+                   
+                    if (_form_edit_provider) {
+                        $(_provider_company_id).val(provider_company_id)
+                        $(_provider_id).val(provider_id)
+                        confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
+                            if (ans) {
+                                window.location.replace("/providers/" + provider_id)
+                                populate_form(provider)
+                                Company.populate_form(company)
+                                Location.populate_form(location)
+                                $(_vendor_company_id).val(provider_company_id)
+                                $(_vendor_name).val(company_name).trigger("change")
+                            } else {
+                                Provider.reset_form()
+                                Vendor.reset_form()
+                            }
+                        })
+                    }
+      
+                    //*/
+                },
+            })
     }
     
     const defaultDetail = function () {
@@ -411,26 +411,27 @@ const Company = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleCompanyError("Oops: 1")
+                        handleCompanyError("Oops: 1")
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
-                return handleCompanyError("Error Validating Company")
+                console.log("error", e)
+                handleCompanyError("Error Validating Company")
             }
         } else {
-            return handleCompanyError("Error Loading Company- Missing Data")
+            handleCompanyError("Error Loading Company- Missing Data")
         }
     }
     
     const add_to_company_list = function (dataToSend, callback) {
+        console.log("add_to_company_list()")
         let url = "/api/v1.0/companies/update"
         if (dataToSend) {
             sendPostRequest(url, dataToSend, function (data, status, xhr) {
                 if (data) {
                     return callback(data)
                 } else {
-                    return handleCompanyError("Oops: 1")
+                    handleCompanyError("Oops: 1")
                 }
             })
         }

@@ -192,10 +192,11 @@
 				if (!is_null($id)) {
 					$where = "AND		PROVIDER.id = $id";
 				}
-				$sql = self::$selectQuery . $where;
-				$ret = Model::$db->rawQuery($sql);
+				$sql = self::$selectQuery . $where . "
+				LIMIT 1";
 				
-				return $ret;
+				return Model::$db->rawQuery($sql);
+				
 			} catch (Exception $e) {
 				Log::$debug_log->error($e->getMessage());
 				
@@ -427,22 +428,19 @@
                     modified_by = VALUES(modified_by),
                     date_modified = VALUES(date_modified);
             ";
-//            Log::$debug_log->trace($sql);
+			
 			try {
 				Model::$db->rawQuery($sql);
 				$provider_id = Model::$db->getInsertId();
 				
 				if ($provider_id) {
-//                    Log::$debug_log->trace($provider_id);
+					
 					$update = "
                         UPDATE      provider
                         SET         code_direct_id = generateCodeDirectId($provider_id)
                         WHERE       id = $provider_id;";
-//                    Log::$debug_log->trace($update);
 					try {
 						Model::$db->rawQuery($update);
-
-//                        Log::$debug_log->trace(self::get((int)$provider_id));
 						
 						return self::get((int)$provider_id);
 						

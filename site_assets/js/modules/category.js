@@ -12,10 +12,6 @@ const Category = (function () {
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
-    const handleCategoryError = function (msg) {
-        toastr.error(msg)
-    }
-    
     $(_modal_product_category_id)
         .on("change", function () {
             let category_id = $(this).val()
@@ -32,6 +28,10 @@ const Category = (function () {
     const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
     const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
+    
+    const handleCategoryError = function (msg) {
+        toastr.error(msg)
+    }
     
     const handle_product_change = function (category_id) {
         $("div[data-categoryid]").hide()
@@ -394,7 +394,7 @@ const Category = (function () {
     }
     
     const init = function (settings) {
-        //Console.log("Category.init()", settings)
+        //console.log("Category.init()", settings)
         let categories = []
         if (settings) {
             if (settings.categories) {
@@ -406,7 +406,7 @@ const Category = (function () {
     }
     
     const set = function (category) {
-        //Console.log("Category.set()", category)
+        //console.log("Category.set()", category)
         let detail = defaultDetail()
         if (category) {
             detail.id = (category.id) ? category.id : null
@@ -444,7 +444,7 @@ const Category = (function () {
     }
     
     const load_all = function (categories) {
-        //Console.log("Category.load_all()", categories)
+        //console.log("Category.load_all()", categories)
         Category.all = new Map()
         
         if (!categories) {
@@ -453,12 +453,12 @@ const Category = (function () {
         
         $.each(categories, function (i, category) {
             let detail = set(category)
-            //Console.log("detail", detail)
-            //Console.log("detail.id", detail.id)
+            //console.log("detail", detail)
+            //console.log("detail.id", detail.id)
             Category.all.set(detail.id, detail)
         })
         
-        //Console.log(" Category.all", Category.all)
+        //console.log(" Category.all", Category.all)
     }
     
     return {

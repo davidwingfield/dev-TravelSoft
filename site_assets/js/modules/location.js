@@ -403,7 +403,7 @@ const Location = (function () {
                     }
                     
                     if (_form_edit_location) {
-                        clear_validation(_form_edit_location)
+                        clearValidation(_form_edit_location)
                     }
                 },
                 onSearchComplete: function (query, suggestions) {

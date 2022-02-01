@@ -10,14 +10,14 @@ const ColorScheme = (function () {
     
     //
     $(_button_close_edit_scheme)
-      .on("click", function () {
-          $(_edit_scheme).hide()
-      })
+        .on("click", function () {
+            $(_edit_scheme).hide()
+        })
     
     $(_season_id)
-      .on("click", function () {
-          $(_edit_scheme).show()
-      })
+        .on("click", function () {
+            $(_edit_scheme).show()
+        })
     
     //
     const reset_form = function () {
@@ -93,7 +93,7 @@ const ColorScheme = (function () {
     }
     
     const change = function (el) {
-        Console.log("ColorScheme:change(el)", el)
+        console.log("ColorScheme:change(el)", el)
     }
     
     return {
@@ -121,6 +121,6 @@ const ColorScheme = (function () {
 })()
 
 $.fn.ColorScheme = function (settings) {
-    Console.log("Test", Types.color_scheme)
+    console.log("Test", Types.color_scheme)
     
 }

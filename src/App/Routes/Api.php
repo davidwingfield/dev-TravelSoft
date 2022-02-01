@@ -14,9 +14,6 @@
 	$routeLead = APIPATH . "/v" . VERSION;
 	
 	/**
-	 * get requests
-	 */
-	/**
 	 * @see Search::product()
 	 */
 	Router::get($routeLead . '/search/products', "Search@product");
@@ -52,10 +49,14 @@
 	Router::get($routeLead . '/images', "Image@serveGet");
 	Router::get($routeLead . '/images/${image_id}', "Image@serveGet");
 	Router::get($routeLead . '/images/company/${company_id}', "Image@serveGetByCompanyId");
-	
 	/**
-	 * autocomplete validate
+	 * @see Station::validate()
 	 */
+	Router::get($routeLead . "/stations/validate", "Station@validate");
+	/**
+	 * @see Airport::validateName()
+	 */
+	Router::get($routeLead . "/airports/validate", "Airport@validateName");
 	Router::get($routeLead . "/locations/validate", "Location@validateName");
 	Router::get($routeLead . "/profiles/validate", "Profile@validateName");
 	Router::get($routeLead . "/variants/validate", "Variant@validateName");
@@ -63,21 +64,37 @@
 	Router::get($routeLead . "/companies/validate", "Company@validateName");
 	Router::get($routeLead . "/providers/validate", "Provider@validateName");
 	Router::get($routeLead . "/vendors/validate", "Vendor@validateName");
-	
 	/**
-	 * autocomplete requests
-	 *
-	 * @see Autocomplete::providers()
+	 * @see Season::validateName()
 	 */
+	Router::get($routeLead . "/seasons/validate", "Season@validateName");
+	/**
+	 * @see Autocomplete::airports()
+	 */
+	Router::get($routeLead . "/autocomplete/airports", "Autocomplete@airports");
+	/**
+	 * @see Autocomplete::stations()
+	 */
+	Router::get($routeLead . "/autocomplete/stations", "Autocomplete@stations");
+	
 	Router::get($routeLead . "/autocomplete/providers", "Autocomplete@providers");
+	
 	Router::get($routeLead . "/autocomplete/seasons", "Autocomplete@seasons");
+	
 	Router::get($routeLead . "/autocomplete/units", "Autocomplete@units");
+	
 	Router::get($routeLead . "/autocomplete/variants", "Autocomplete@variants");
+	
 	Router::get($routeLead . "/autocomplete/cities", "Autocomplete@cities");
+	
 	Router::get($routeLead . "/autocomplete/products", "Autocomplete@products");
+	
 	Router::get($routeLead . "/autocomplete/vendors", "Autocomplete@vendors");
+	
 	Router::get($routeLead . "/autocomplete/profiles", "Autocomplete@profiles");
+	
 	Router::get($routeLead . "/autocomplete/locations", "Autocomplete@locations");
+	
 	Router::get($routeLead . "/autocomplete/companies", "Autocomplete@companies");
 	
 	/**
@@ -96,6 +113,7 @@
 	 * @see Product::assignSeason()
 	 */
 	Router::post($routeLead . "/products/assign_seasons", "Product@assignSeason");
+	
 	/**
 	 * @see Product::assignProfile()
 	 */
@@ -107,6 +125,13 @@
 	Router::post($routeLead . "/matrices/update", "Matrix@serveUpdate");
 	Router::post($routeLead . "/pricings/update", "Pricing@serveUpdate");
 	Router::post($routeLead . "/seasons/update", "Season@serveUpdate");
+	/**
+	 * @see Season:addSeason()
+	 */
+	Router::post($routeLead . "/seasons/add", "Season@addSeason");
+	/**
+	 * @see Season:serveDelete()
+	 */
 	Router::post($routeLead . "/seasons/remove", "Season@serveDelete");
 	Router::post($routeLead . "/variants/remove", "Variant@serveDelete");
 	Router::post($routeLead . "/profiles/remove", "Profile@serveDelete");
@@ -127,4 +152,14 @@
 	Router::post($routeLead . "/countries/update", "Country@serveUpdate");
 	Router::post($routeLead . "/profiles/update", "Profile@serveUpdate");
 	Router::post($routeLead . "/cities/update", "City@serveUpdate");
+	/**
+	 * @see Airport::serveUpdate()
+	 */
+	Router::post($routeLead . "/airports/update", "Airport@serveUpdate");
+	
+	/**
+	 * @see Station::update()
+	 */
+	Router::post($routeLead . "/stations/update", "Station@update");
+	
 	Router::post($routeLead . "/products/table_update", "Product@serveTableUpdate");

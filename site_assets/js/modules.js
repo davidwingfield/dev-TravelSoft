@@ -4,6 +4,7 @@ exports.modules = [
     "./site_assets/js/modules/Console.js",
     "./site_assets/js/modules/form_fields.js",
     "./site_assets/js/modules/date_select.js",
+    "./site_assets/js/modules/time_select.js",
     "./site_assets/js/modules/tiny_editor.js",
     "./site_assets/js/modules/context_menu.js",
     "./site_assets/js/modules/season.js",

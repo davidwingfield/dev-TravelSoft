@@ -188,13 +188,9 @@ const Variant = (function () {
                 $(this).select()
             })
             .on("search", function () {
-                //*
-                //console.log("Variant._product_edit_variant_form_variant_name_filter:search()", Variant)
-                // ----
                 globalSelectedVariant = false
                 resetForm()
                 $table_variant_product_edit.clearSelectedRows()
-                //*/
             })
             .on("change", function () {
                 //*
@@ -226,8 +222,6 @@ const Variant = (function () {
                 paramName: "st",
                 params: { "category_id": category_id },
                 onSelect: function (suggestion) {
-                    //console.log("_product_edit_variant_form_variant_name_filter:autocomplete() - suggestion", suggestion)
-                    // ----
                     $table_variant_product_edit.clearSelectedRows()
                     
                     if (!suggestion || !suggestion.data) {
@@ -460,7 +454,7 @@ const Variant = (function () {
     const clearForm = function () {
         //console.log("Variant.clearForm()", Variant.all)
         // ----
-        clear_validation(_product_edit_variant_form)
+        clearValidation(_product_edit_variant_form)
         _display_product_variant_name.innerText = "&nbsp;"
         _product_edit_variant_form_variant_id.value = ""
         _product_edit_variant_form_variant_name.value = ""

@@ -1,23 +1,14 @@
+<!-- Product -->
 <script type="text/javascript">
-	
 	const Product = (function () {
 		"use strict"
 		const base_url = "/products"
-		
-		const _form_product_add = document.getElementById("form_product_add")
-		const _product_edit_page = document.getElementById("product_edit_page")
-		const _button_add_product_page_heading = document.getElementById("button_add_product_page_heading")
-		
-		/**
-		 * MODAL ELEMENTS
-		 */
-		/**
-		 *
-		 * @type {HTMLElement}
-		 * @private
-		 */
-		const _modal_product_depart_from_airport = document.getElementById("modal_button_cancel_add_product")
-		const _modal_product_arrive_to_airport = document.getElementById("modal_button_cancel_add_product")
+		const _modal_product_depart_from_time = document.getElementById("modal_product_depart_from_time")
+		const _modal_product_depart_from_date = document.getElementById("modal_product_depart_from_date")
+		const _modal_product_arrive_to_time = document.getElementById("modal_product_arrive_to_time")
+		const _modal_product_arrive_to_date = document.getElementById("modal_product_arrive_to_date")
+		const _modal_product_depart_from_airport = document.getElementById("modal_product_depart_from_airport")
+		const _modal_product_arrive_to_airport = document.getElementById("modal_product_arrive_to_airport")
 		const _modal_product_depart_from_station = document.getElementById("modal_product_depart_from_station")
 		const _modal_product_arrive_to_station = document.getElementById("modal_product_arrive_to_station")
 		const _modal_product_depart_from_airport_id = document.getElementById("modal_product_depart_from_airport_id")
@@ -45,6 +36,17 @@
 		const _modal_product_street_1 = document.getElementById("modal_product_street_1")
 		const _modal_product_street_2 = document.getElementById("modal_product_street_2")
 		const _modal_product_postal_code = document.getElementById("modal_product_postal_code")
+		const _modal_product_city = document.getElementById("modal_product_city")
+		const _modal_product_city_id = document.getElementById("modal_product_city_id")
+		const _modal_button_clear_add_product = document.getElementById("modal_button_clear_add_product")
+		const _modal_product_depart_from_airport_types_id = document.getElementById("modal_product_depart_from_airport_types_id")
+		const _modal_product_depart_from_station_date = document.getElementById("modal_product_depart_from_station_date")
+		const _modal_product_arrive_to_station_date = document.getElementById("modal_product_arrive_to_station_date")
+		const _modal_product_depart_from_station_time = document.getElementById("modal_product_depart_from_station_time")
+		const _modal_product_arrive_to_station_time = document.getElementById("modal_product_arrive_to_station_time")
+		const _form_product_add = document.getElementById("form_product_add")
+		
+		const _product_edit_page = document.getElementById("product_edit_page")
 		
 		const _product_panel_link_overview = document.getElementById("product_panel_link_overview")
 		const _panel_tab_product_o = document.getElementById("panel_tab_product_o")
@@ -66,17 +68,16 @@
 		const _panel_tab_meta = document.getElementById("panel_tab_meta")
 		const _product_panel_link_meta = document.getElementById("product_panel_link_meta")
 		const _product_panel_link_location = document.getElementById("product_panel_link_location")
+		
 		const _product_keywords = document.getElementById("product_keywords")
 		const _product_edit_meta_description_long = document.getElementById("product_edit_meta_description_long")
 		const _product_edit_meta_description_short = document.getElementById("product_edit_meta_description_short")
-		const _modal_product_city_id = document.getElementById("modal_product_city_id")
-		const _modal_product_city = document.getElementById("modal_product_city")
 		const _product_index_page = document.getElementById("product_index_page")
 		const _product_index_table = document.getElementById("product_index_table")
-		const _use_provider_location = document.getElementById("use_provider_location")
-		const _use_product_location = document.getElementById("use_product_location")
 		const _product_amenities = document.getElementById("product_amenities")
+		
 		const _button_save_product = document.getElementById("button_save_product")
+		const _button_add_product_page_heading = document.getElementById("button_add_product_page_heading")
 		
 		let $product_keywords, $product_amenities
 		let provider_initial_location, product_initial_location = {}
@@ -84,11 +85,44 @@
 		let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
 		let $index_table, newProduct_validator
 		let add_modal_form_rules = {
+			groups: {
+				departAirport: "modal_product_depart_from_airport modal_product_depart_from_airport_id",
+				city: "modal_product_city modal_product_city modal_product_city_id",
+			},
+			
 			rules: {
 				modal_product_sku: {
 					required: true,
 				},
+				modal_product_depart_from_airport: {
+					required: function (element) {
+						return $("#modal_product_category_id").val() === "2"
+					},
+				},
+				modal_product_depart_from_airport_id: {
+					required: function (element) {
+						return $("#modal_product_category_id").val() === "2"
+					},
+				},
+				modal_product_arrive_to_airport: {
+					required: function (element) {
+						return $("#modal_product_category_id").val() === "2"
+					},
+				},
+				modal_product_arrive_to_airport_id: {
+					required: function (element) {
+						return $("#modal_product_category_id").val() === "2"
+					},
+				},
 				modal_product_rating_types_id: {
+					required: true,
+				},
+				modal_product_city: {
+					required: function (element) {
+						return $("#modal_product_category_id").val() === "1"
+					},
+				},
+				modal_product_city_id: {
 					required: true,
 				},
 				modal_product_currency_id: {
@@ -123,6 +157,9 @@
 				},
 			},
 			messages: {
+				modal_product_city_id: {
+					required: "Field Required",
+				},
 				modal_product_sku: {
 					required: "Field Required",
 				},
@@ -169,13 +206,17 @@
 		
 		$(_modal_new_product)
 			.on("hide.bs.modal", function () {
-				clear_validation(_form_product_add)
+				clearModalForm()
+				//clearValidation(_form_product_add)
 			})
 		
 		$(_modal_button_cancel_add_product)
 			.on("click", function () {
-				clear_validation(_form_product_add)
-				$(_modal_new_product).modal("hide")
+				clearModalForm()
+				Airport.resetAirportForm("depart_from")
+				Airport.resetAirportForm("arrive_to")
+				clearValidation(_form_product_add)
+				//$(_modal_new_product).modal("hide")
 			})
 		
 		$(_modal_button_submit_add_product)
@@ -216,6 +257,11 @@
 				}
 			})
 		
+		$(_modal_button_clear_add_product)
+			.on("click", function () {
+				clearModalForm()
+			})
+		
 		$("#page")
 			.on("change", function () {
 				updateProgress()
@@ -249,7 +295,11 @@
 					
 					})
 					.on("click", function () {
-						$(this).select()
+						if ($(this).attr("readonly") === "readonly") {
+							e.preventDefault()
+						} else {
+							$(this).select()
+						}
 					})
 					.autocomplete({
 						serviceUrl: "/api/v1.0/autocomplete/products",
@@ -263,9 +313,9 @@
 							if (!suggestion || !suggestion.data) {
 								return
 							}
-							//Console.log("suggestion.data", suggestion.data)
+							//console.log("suggestion.data", suggestion.data)
 							let product = suggestion.data
-							//Console.log("product", product)
+							//console.log("product", product)
 						},
 					})
 			}
@@ -310,14 +360,30 @@
 		}
 		
 		const buildInsertData = function () {
+			let categoryId = (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null
+			let depart_from, arrive_to
+			
+			if (categoryId === 2) {
+				depart_from = (!isNaN(parseInt(_modal_product_depart_from_airport_id.value))) ? parseInt(_modal_product_depart_from_airport_id.value) : null
+				arrive_to = (!isNaN(parseInt(_modal_product_arrive_to_airport_id.value))) ? parseInt(_modal_product_arrive_to_airport_id.value) : null
+			} else if (categoryId === 4) {
+				depart_from = (!isNaN(parseInt(_modal_product_depart_from_station_id.value))) ? parseInt(_modal_product_depart_from_station_id.value) : null
+				arrive_to = (!isNaN(parseInt(_modal_product_arrive_to_station_id.value))) ? parseInt(_modal_product_arrive_to_station_id.value) : null
+			} else {
+				depart_from = null
+				arrive_to = null
+			}
+			
 			let dataToSend = {
 				city_id: (!isNaN(parseInt(_modal_product_city_id.value))) ? parseInt(_modal_product_city_id.value) : null,
-				depart_from: (!isNaN(parseInt(_modal_product_city_id.value))) ? parseInt(_modal_product_city_id.value) : null,
-				arrive_to: (!isNaN(parseInt(_modal_product_city_id.value))) ? parseInt(_modal_product_city_id.value) : null,
+				
+				depart_from: depart_from,
+				arrive_to: arrive_to,
+				
 				street_1: (_modal_product_street_1.value !== "") ? _modal_product_street_1.value : null,
 				street_2: (_modal_product_street_2.value !== "") ? _modal_product_street_2.value : null,
 				postal_code: (_modal_product_postal_code.value !== "") ? _modal_product_postal_code.value : null,
-				category_id: (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null,
+				category_id: categoryId,
 				pricing_strategy_types_id: (!isNaN(parseInt(_modal_product_pricing_strategies_types_id.value))) ? parseInt(_modal_product_pricing_strategies_types_id.value) : null,
 				status_types_id: 1,
 				currency_id: (!isNaN(parseInt(_modal_product_currency_id.value))) ? parseInt(_modal_product_currency_id.value) : null,
@@ -330,6 +396,17 @@
 				sku: _modal_product_sku.value,
 				use_provider_location_id: 0,
 			}
+			
+			if (categoryId === 2) {
+				dataToSend.depart_from = (!isNaN(parseInt(_modal_product_depart_from_airport_id.value))) ? parseInt(_modal_product_depart_from_airport_id.value) : null
+				dataToSend.depart_date = (Product.depart_from_date.value() !== "") ? Product.depart_from_date.value() : null
+				dataToSend.depart_time = (Product.depart_from_time.value() !== "") ? Product.depart_from_time.value() : null
+				
+				dataToSend.arrive_to = (!isNaN(parseInt(_modal_product_arrive_to_airport_id.value))) ? parseInt(_modal_product_arrive_to_airport_id.value) : null
+				dataToSend.arrive_date = (Product.arrive_to_date.value() !== "") ? Product.arrive_to_date.value() : null
+				dataToSend.arrive_time = (Product.arrive_to_time.value() !== "") ? Product.arrive_to_time.value() : null
+			}
+			
 			return remove_nulls(dataToSend)
 		}
 		
@@ -343,14 +420,18 @@
 					if (data.length === 1) {
 						product = data[0]
 					}
-					Console.log("Product.saveNewProduct() - product", product)
+					
 					if (product.id) {
+						let detail = set(product)
+						$index_table.insertRow(detail)
+						$index_table.loadRow(detail)
+						$index_table.jumpToRow(detail)
+						$index_table.clearSelectedRows()
+						
 						toastr.success(`Product - ${product.id} was created, would you like to edit?`)
 						//window.location.replace("/products/" + product.id)
-						
 					}
 				}
-				
 			})
 		}
 		
@@ -367,14 +448,14 @@
 						}
 					})
 				} catch (e) {
-					Console.log("error", e)
+					console.log("error", e)
 					return handleProductError("Oops: 1")
 				}
 			}
 		}
 		
 		const validateNewProduct = function () {
-			//Console.log("validateNewProduct", "")
+			//console.log("validateNewProduct", "")
 			
 			if (_form_product_add) {
 				return $(_form_product_add).valid()
@@ -390,7 +471,9 @@
 			_modal_product_street_2.value = ""
 			_modal_product_postal_code.value = ""
 			
-			//
+			Product.depart_from_date.value("")
+			Product.arrive_to_date.value("")
+			
 			_modal_product_depart_from_airport.value = ""
 			_modal_product_arrive_to_airport.value = ""
 			_modal_product_depart_from_station.value = ""
@@ -406,15 +489,13 @@
 			_modal_product_currency_id.value = ""
 			_modal_product_provider_company_id.value = ""
 			_modal_product_vendor_company_id.value = ""
-			/*
-			_modal_product_vendor_name.disabled = true
-			_modal_product_provider_name.disabled = true
-			//*/
+			
 			_modal_product_pricing_strategies_types_id.value = ""
 			_modal_product_provider_location_id.value = ""
 			_modal_product_location_id.value = ""
 			_modal_product_city.value = ""
 			_modal_product_city_id.value = ""
+			
 			Product.attr1 = null
 			Product.attr2 = null
 			Product.attr3 = null
@@ -423,10 +504,22 @@
 			$("div[data-categoryid]").hide()
 			
 			Product.resetNewProductDetails()
-			clear_validation(_form_product_add)
 		}
 		
 		const resetNewProductDetails = function () {
+			Product.depart_from_date.value("")
+			Product.arrive_to_date.value("")
+			
+			Airport.resetAirportForm("depart_from")
+			Airport.resetAirportForm("arrive_to")
+			
+			Station.resetStationForm("depart_from")
+			Station.resetStationForm("arrive_to")
+			
+			_modal_product_depart_from_time.value = ""
+			_modal_product_arrive_to_time.value = ""
+			_modal_product_depart_from_airport.value = ""
+			_modal_product_arrive_to_airport.value = ""
 			_modal_product_provider_id.value = ""
 			_modal_product_vendor_id.value = ""
 			_modal_product_provider_name.value = ""
@@ -438,18 +531,20 @@
 			_modal_product_rating_types_id.value = ""
 			_modal_product_currency_id.value = ""
 			_modal_product_pricing_strategies_types_id.value = ""
+			
 			_modal_product_name.disabled = true
 			_modal_product_sku.disabled = true
 			_modal_product_rating_types_id.disabled = true
 			_modal_product_currency_id.disabled = true
 			_modal_product_pricing_strategies_types_id.disabled = true
 			_modal_product_city.disabled = true
+			
+			clearValidation(_form_product_add)
 		}
 		
 		const setNewProductModal = function () {
-			
 			clearModalForm()
-			Console.log("setNewProductModal")
+			
 			$(_modal_new_product).modal("show")
 		}
 		
@@ -660,12 +755,12 @@
 		}
 		
 		const changeHandler = function (event) {
-			//Console.log("value", this.value)
+			//console.log("value", this.value)
 			if (this.value === "use_provider_location") {
-				//Console.log("use_provider_location", provider_initial_location)
+				//console.log("use_provider_location", provider_initial_location)
 				Location.init(provider_initial_location)
 			} else if (this.value === "use_product_location") {
-				//Console.log("use_product_location", product_initial_location)
+				//console.log("use_product_location", product_initial_location)
 				Location.init(product_initial_location)
 			}
 		}
@@ -683,19 +778,8 @@
 			}
 		}
 		
-		const index = function (settings) {
-			
-			if (_product_index_table) {
-				buildIndexTable()
-				
-				if (settings) {
-					loadAll(settings)
-				}
-			}
-		}
-		
 		const setNewFormDetails = function (category_id) {
-			Console.log("setNewFormDetails()", category_id)
+			console.log("setNewFormDetails()", category_id)
 			
 		}
 		
@@ -710,15 +794,15 @@
 			} else {
 				_modal_product_sku.value = ""
 				if (is_null(att1)) {
-					//Console.log("att1 is null", att1)
+					//console.log("att1 is null", att1)
 				}
 				
 				if (is_null(att2)) {
-					//Console.log("att2 is null", att2)
+					//console.log("att2 is null", att2)
 				}
 				
 				if (is_null(att3)) {
-					//Console.log("att3 is null", att3)
+					//console.log("att3 is null", att3)
 				}
 			}
 			
@@ -804,11 +888,23 @@
 			_product_edit_meta_description_long.value = description_long
 		}
 		
+		const index = function (settings) {
+			if (_product_index_table) {
+				buildIndexTable()
+				
+				if (settings) {
+					loadAll(settings)
+				}
+			}
+		}
+		
 		const init = function (settings) {
 			let product_details, variants, seasons, units, profiles, matrices, pricings
 			
 			if (_modal_new_product) {
 				Category.init()
+				Airport.init()
+				Station.init()
 			}
 			
 			if (_product_edit_page) {
@@ -920,19 +1016,78 @@
 			if (_product_index_page) {
 				Provider.init()
 				Product.index(settings)
+				
 				if (_form_product_add) {
-					validator_init(add_modal_form_rules)
-					newProduct_validator = $(_form_product_add).validate()
+					$(document).ready(function () {
+						
+						if (_modal_product_depart_from_date) {
+							Product.depart_from_date = $(_modal_product_depart_from_date).dateSelect({
+								onStart: function () {},
+							})
+						}
+						
+						if (_modal_product_depart_from_time) {
+							Product.depart_from_time = $(_modal_product_depart_from_time).timeSelect({
+								onStart: function () {},
+							})
+						}
+						
+						if (_modal_product_arrive_to_date) {
+							Product.arrive_to_date = $(_modal_product_arrive_to_date).dateSelect({
+								onStart: function () {},
+							})
+						}
+						
+						if (_modal_product_arrive_to_time) {
+							Product.arrive_to_time = $(_modal_product_arrive_to_time).timeSelect({
+								onStart: function () {},
+							})
+						}
+						
+						if (_modal_product_arrive_to_station_date) {
+							Product.depart_from_station_date = $(_modal_product_arrive_to_station_date).dateSelect({
+								onStart: function () {},
+							})
+						}
+						
+						if (_modal_product_depart_from_station_date) {
+							Product.depart_from_station_date = $(_modal_product_depart_from_station_date).dateSelect({
+								onStart: function () {},
+							})
+						}
+						
+						if (_modal_product_arrive_to_station_time) {
+							Product.arrive_to_station_time = $(_modal_product_arrive_to_station_time).timeSelect({
+								onStart: function () {},
+							})
+						}
+						
+						if (_modal_product_depart_from_station_time) {
+							Product.depart_from_station_time = $(_modal_product_depart_from_station_time).timeSelect({
+								onStart: function () {},
+							})
+						}
+						
+						validator_init(add_modal_form_rules)
+						newProduct_validator = $(_form_product_add).validate()
+					})
 				}
+				
 				return true
 			}
 		}
 		
 		return {
 			validator: null,
+			depart_from_date: null,
+			depart_from_time: null,
 			calendars: null,
 			product_initial_location: null,
 			provider_initial_location: null,
+			arrive_to_station_time: null,
+			depart_from_station_time: null,
+			arrive_to_station_date: null,
+			depart_from_station_date: null,
 			detail: {},
 			all: new Map(),
 			attr1: null,
@@ -975,112 +1130,1161 @@
 		}
 		
 	})()
-
 </script>
+<!-- /Product -->
 
-<!-- -->
-
-<!-- -->
-
-<!-- -->
-
+<!-- Station -->
 <script type="text/javascript">
-	let isShift
-	let separator = "-"
-	
-	const IsNumeric = function (input, keyCode) {
-		if (!isNaN(parseInt(keyCode))) {
-			keyCode = parseInt(keyCode)
-		}
-		if (keyCode === 16) {
-			isShift = true
-		}
+	const Station = (function () {
+		"use strict"
+		const _modal_product_depart_from_station_cancel_button = document.getElementById("modal_product_depart_from_station_cancel_button")
+		const _modal_product_depart_from_station_submit_button = document.getElementById("modal_product_depart_from_station_submit_button")
+		const _modal_product_depart_from_station_iata_code = document.getElementById("modal_product_depart_from_station_iata_code")
+		const _modal_product_depart_from_station_country_id = document.getElementById("modal_product_depart_from_station_country_id")
+		const _modal_product_depart_from_station_province_id = document.getElementById("modal_product_depart_from_station_province_id")
+		const _modal_product_depart_from_station_city_id = document.getElementById("modal_product_depart_from_station_city_id")
+		const _modal_product_depart_from_station_city = document.getElementById("modal_product_depart_from_station_city")
+		const _modal_product_depart_from_station = document.getElementById("modal_product_depart_from_station")
+		const _modal_product_depart_from_station_id = document.getElementById("modal_product_depart_from_station_id")
+		const _modal_product_depart_from_station_add_block = document.getElementById("modal_product_depart_from_station_add_block")
 		
-		if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || (keyCode === 8) || (keyCode === 46)) {
-			if (keyCode !== 16) {
-				if ((input.value.length === 4 || input.value.length === 7) && keyCode !== 8) {
-					input.value += separator
+		const _modal_product_depart_from_new_station_id = document.getElementById("modal_product_depart_from_new_station_id")
+		const _modal_product_city_id = document.getElementById("modal_product_city_id")
+		const _modal_product_arrive_to_station_cancel_button = document.getElementById("modal_product_arrive_to_station_cancel_button")
+		const _modal_product_arrive_to_new_station_id = document.getElementById("modal_product_arrive_to_new_station_id")
+		const _modal_product_arrive_to_station_submit_button = document.getElementById("modal_product_arrive_to_station_submit_button")
+		const _modal_product_arrive_to_station_iata_code = document.getElementById("modal_product_arrive_to_station_iata_code")
+		const _modal_product_arrive_to_station_country_id = document.getElementById("modal_product_arrive_to_station_country_id")
+		const _modal_product_arrive_to_station_province_id = document.getElementById("modal_product_arrive_to_station_province_id")
+		const _modal_product_arrive_to_station_city_id = document.getElementById("modal_product_arrive_to_station_city_id")
+		const _modal_product_arrive_to_station_city = document.getElementById("modal_product_arrive_to_station_city")
+		const _modal_product_arrive_to_station = document.getElementById("modal_product_arrive_to_station")
+		const _modal_product_arrive_to_station_id = document.getElementById("modal_product_arrive_to_station_id")
+		const _modal_product_arrive_to_station_add_block = document.getElementById("modal_product_arrive_to_station_add_block")
+		
+		let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+		let globalSelectedStationDepartFrom = false
+		let globalSelectedStationArriveTo = false
+		
+		$(_modal_product_depart_from_station_add_block)
+			.on("change", function () {
+				validDepartFromRecord()
+			})
+			.on("keyup", function () {
+				validDepartFromRecord()
+			})
+		
+		$(_modal_product_depart_from_station_cancel_button)
+			.on("click", function () {
+				cancelAddStationRecord("depart_from")
+			})
+		
+		$(_modal_product_arrive_to_station_cancel_button)
+			.on("click", function () {
+				cancelAddStationRecord("arrive_to")
+			})
+		
+		$(_modal_product_depart_from_station_submit_button)
+			.on("click", function () {
+				save("depart_from")
+			})
+		
+		$(_modal_product_arrive_to_station_submit_button)
+			.on("click", function () {
+				save("arrive_to")
+			})
+		
+		const save = function (type) {
+			if (type) {
+				let dataToSend = buildAddStationRecord(type)
+				
+				if (dataToSend) {
+					confirmDialog(`Would you like to update?`, (ans) => {
+						if (ans) {
+							sendSaveRequest(dataToSend, function (data) {
+								let station
+								if (data) {
+									station = data
+									if (data[0]) {
+										station = data[0]
+									}
+								}
+								
+								if (station) {
+									if (type === "depart_from") {
+										if (_modal_product_depart_from_station) {
+											_modal_product_depart_from_station.value = (station.name) ? station.name : ""
+										}
+										
+										if (_modal_product_depart_from_new_station_id) {
+											_modal_product_depart_from_new_station_id.value = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : ""
+										}
+										
+										if (_modal_product_depart_from_station_id) {
+											_modal_product_depart_from_station_id.value = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : ""
+										}
+										
+										if (_modal_product_city_id) {
+											_modal_product_city_id.value = (!isNaN(parseInt(station.city.id))) ? parseInt(station.city.id) : ""
+										}
+									}
+									
+									if (type === "arrive_to") {
+										if (_modal_product_arrive_to_new_station_id) {
+											_modal_product_arrive_to_new_station_id.value = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : ""
+										}
+										
+										if (_modal_product_arrive_to_station) {
+											_modal_product_arrive_to_station.value = (station.name) ? station.name : ""
+										}
+										
+										if (_modal_product_arrive_to_station_id) {
+											_modal_product_arrive_to_station_id.value = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : ""
+										}
+									}
+									
+									resetStationForm(type)
+									initAutocomplete()
+								}
+							})
+						}
+					})
 				}
-				return true
 			}
 		}
-		return false
-	}
-	
-	const ValidateDateFormat = function (input, keyCode) {
-		var dateString = input.value
 		
-		if (keyCode === 16) {
-			isShift = false
+		const sendSaveRequest = function (dataToSend, callback) {
+			if (dataToSend) {
+				let url = "/api/v1.0/stations/update"
+				try {
+					sendPostRequest(url, dataToSend, function (data, status, xhr) {
+						if (data) {
+							return callback(data)
+						} else {
+							handleStationError("Oops: 1")
+						}
+					})
+				} catch (e) {
+					console.log("error", e)
+				}
+			}
 		}
-		var regex = /(((19|20)\d\d)\-(0[1-9]|1[0-2])\-((0|1)[0-9]|2[0-9]|3[0-1]))$/
-		if (regex.test(dateString) || dateString.length === 0) {
-			$(input).unSetError()
-		} else {
-			$(input).setError("Invalid Date. Only YYYY-MM-DD format allowed.")
-		}
-	}
-	
-	$(document).ready(function () {
 		
-		(function ($) {
+		const validDepartFromRecord = function () {
+			let isValid = true
 			
-			$.fn.unSetError = function () {
-				let errorElm = this.parents("div.form-element").find("div.error")
-				if (this.hasClass("time-format")) {
-					//this.parent().find("input").removeClass("is-invalid");
-					//this.parent().find("span.caret").removeClass("is-invalid");
-					//errorElm = this.parent("div.input-group").parent().find("div.error")
-				}
-				
-				if (this.hasClass("date-format")) {
-					//this.parent().find("input").removeClass("is-invalid");
-					//this.parent().find("span.caret").removeClass("is-invalid");
-					//errorElm = this.parent("div.input-group").parent().find("div.error")
-				}
-				
-				errorElm.html("&nbsp;").hide()
-				return this
+			if (_modal_product_depart_from_station_iata_code.value === "") {
+				$(_modal_product_depart_from_station_iata_code).showError("Field Required")
+				isValid = false
+			} else {
+				$(_modal_product_depart_from_station_iata_code).hideError()
 			}
 			
-			$.fn.setError = function (msg) {
-				let errorElm = this.parents("div.form-element").find("div.error")
-				
-				if (this.hasClass("time-format")) {
-					errorElm = this.parent("div.input-group").parent().find("div.error")
-				}
-				
-				if (this.hasClass("date-format")) {
-					//errorElm = this.parents("div.form-element").find("div.error")
-				}
-				
-				errorElm.html(msg).show()
-				return this
+			if (isNaN(parseInt(_modal_product_depart_from_station_city_id.value))) {
+				$(_modal_product_depart_from_station_city).showError("Field Required")
+				isValid = false
+			} else {
+				$(_modal_product_depart_from_station_city).hideError()
 			}
 			
-		})(jQuery)
-	})
-	
-	window.addEventListener("load", function () {
-		const inputs = document.getElementsByTagName("input")
-		for (let i = 0; i < inputs.length; i++) {
-			if (inputs[i].type === "text") {
-				if (inputs[i].classList.contains("date-format")) {
-					inputs[i].setAttribute("maxlength", "10")
-					inputs[i].onkeydown = function (event) {
-						return IsNumeric(this, event.keyCode)
+			return isValid
+		}
+		
+		const validArriveToRecord = function () {
+			let isValid = true
+			
+			if (_modal_product_arrive_to_station_iata_code.value === "") {
+				$(_modal_product_arrive_to_station_iata_code).showError("Field Required")
+				isValid = false
+			} else {
+				$(_modal_product_arrive_to_station_iata_code).hideError()
+			}
+			
+			if (isNaN(parseInt(_modal_product_arrive_to_station_city_id.value))) {
+				$(_modal_product_arrive_to_station_city).showError("Field Required")
+				isValid = false
+			} else {
+				$(_modal_product_arrive_to_station_city).hideError()
+			}
+			
+			return isValid
+		}
+		
+		const buildAddStationRecord = function (type) {
+			if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
+				if (type) {
+					if (type === "depart_from") {
+						if (validDepartFromRecord()) {
+							let dataToSend = {
+								city_id: (!isNaN(parseInt(_modal_product_depart_from_station_city_id.value))) ? parseInt(_modal_product_depart_from_station_city_id.value) : null,
+								name: (_modal_product_depart_from_station.value !== "") ? _modal_product_depart_from_station.value : null,
+								iata_code: (_modal_product_depart_from_station_iata_code.value !== "") ? _modal_product_depart_from_station_iata_code.value : null,
+							}
+							
+							return removeNulls(dataToSend)
+						}
+					} else if (type === "arrive_to") {
+						if (validArriveToRecord()) {
+							let dataToSend = {
+								city_id: (!isNaN(parseInt(_modal_product_arrive_to_station_city_id.value))) ? parseInt(_modal_product_arrive_to_station_city_id.value) : null,
+								name: (_modal_product_arrive_to_station.value !== "") ? _modal_product_arrive_to_station.value : null,
+								iata_code: (_modal_product_arrive_to_station_iata_code.value !== "") ? _modal_product_arrive_to_station_iata_code.value : null,
+							}
+							
+							return removeNulls(dataToSend)
+						}
 					}
-					inputs[i].onkeyup = function (event) {
-						ValidateDateFormat(this, event.keyCode)
+				}
+			}
+		}
+		
+		const cancelAddStationRecord = function (type) {
+			if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
+				clearStationForm(type)
+				hideStationForm(type)
+				
+				if (type) {
+					if (type === "depart_from") {
+					
+					} else if (type === "arrive_to") {
+					
 					}
 				}
 			}
 		}
 		
-	}, false)
-
+		const populateStationForm = function (station, type) {
+			console.log("populateStationForm(station, type)", station)
+			console.log("populateStationForm(station, type)", type)
+			
+			if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
+				clearStationForm(type)
+				
+				showStationForm(type)
+			}
+		}
+		
+		const clearStationForm = function (type) {
+			if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
+				if (type) {
+					if (type === "depart_from") {
+						_modal_product_depart_from_station_iata_code.value = ""
+						_modal_product_depart_from_station_city.value = ""
+						_modal_product_depart_from_station_city_id.value = ""
+						_modal_product_depart_from_station_country_id.value = ""
+						_modal_product_depart_from_station_province_id.value = ""
+						_modal_product_depart_from_station_city_id.value = ""
+						_modal_product_depart_from_station.disabled = false
+						clearAllValidation()
+					} else if (type === "arrive_to") {
+						_modal_product_arrive_to_station_iata_code.value = ""
+						_modal_product_arrive_to_station_city.value = ""
+						_modal_product_arrive_to_station_city_id.value = ""
+						_modal_product_arrive_to_station_country_id.value = ""
+						_modal_product_arrive_to_station_province_id.value = ""
+						_modal_product_arrive_to_station_city_id.value = ""
+						_modal_product_arrive_to_station.disabled = false
+						clearAllValidation()
+					}
+				}
+			}
+		}
+		
+		const resetStationForm = function (type) {
+			if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
+				if (type) {
+					_modal_product_arrive_to_station.disabled = false
+					_modal_product_depart_from_station.disabled = false
+					
+					clearStationForm(type)
+					
+					hideStationForm("depart_from")
+					hideStationForm("arrive_to")
+				}
+			}
+		}
+		
+		const hideStationForm = function (type) {
+			if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
+				if (type) {
+					if (type === "depart_from") {
+						$(_modal_product_depart_from_station_add_block).hide()
+					} else if (type === "arrive_to") {
+						$(_modal_product_arrive_to_station_add_block).hide()
+					}
+				}
+			}
+		}
+		
+		const showStationForm = function (type) {
+			if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
+				if (type) {
+					if (type === "depart_from") {
+						_modal_product_depart_from_station.disabled = true
+						$(_modal_product_depart_from_station_add_block).show()
+						$(_modal_product_arrive_to_station_add_block).hide()
+					} else if (type === "arrive_to") {
+						_modal_product_arrive_to_station.disabled = true
+						$(_modal_product_arrive_to_station_add_block).show()
+						$(_modal_product_depart_from_station_add_block).hide()
+					}
+				}
+			}
+		}
+		
+		const initAutocomplete = function () {
+			
+			if (_modal_product_depart_from_station) {
+				
+				$(_modal_product_depart_from_station)
+					.on("click", function () {
+						if ($(this).attr("readonly") === "readonly") {
+							e.preventDefault()
+						} else {
+							$(this).select()
+						}
+					})
+					.on("search", function () {
+						if (_modal_product_depart_from_station_id) {
+							_modal_product_depart_from_station_id.value = ""
+						}
+						if (_modal_product_depart_from_station) {
+							_modal_product_depart_from_station.value = ""
+						}
+					})
+					.on("keyup", function () {
+						globalSelectedStationDepartFrom = false
+					})
+					.on("change", function () {
+						setTimeout(function () {
+							let station_name = _modal_product_depart_from_station.value
+							
+							if (globalSelectedStationDepartFrom === false) {
+								if (station_name === "") {
+									_modal_product_depart_from_station.value = ""
+									_modal_product_depart_from_station_id.value = ""
+									globalSelectedStationDepartFrom = false
+								} else {
+									stationExists(station_name, "depart_from")
+								}
+							}
+						}, 200)
+					})
+					.autocomplete({
+						serviceUrl: "/api/v1.0/autocomplete/stations",
+						minChars: 2,
+						cache: false,
+						dataType: "json",
+						triggerSelectOnValidInput: false,
+						paramName: "st",
+						onSelect: function (suggestion) {
+							if (!suggestion || !suggestion.data) {
+								return
+							}
+							
+							globalSelectedStationDepartFrom = true
+							
+							let station = suggestion.data
+							
+							if (station) {
+								console.log("station", station)
+								if (_modal_product_depart_from_station) {
+									_modal_product_depart_from_station.value = (station.name) ? station.name : ""
+								}
+								
+								if (_modal_product_depart_from_station_id) {
+									_modal_product_depart_from_station_id.value = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : ""
+								}
+								
+								if (_modal_product_city_id) {
+									_modal_product_city_id.value = (!isNaN(parseInt(station.city.id))) ? parseInt(station.city.id) : ""
+								}
+								
+							} else {
+								resetStationForm("depart_from")
+								showStationForm("depart_from")
+							}
+						},
+					})
+			}
+			
+			if (_modal_product_arrive_to_station) {
+				
+				$(_modal_product_arrive_to_station)
+					.on("click", function () {
+						if ($(this).attr("readonly") === "readonly") {
+							e.preventDefault()
+						} else {
+							$(this).select()
+						}
+					})
+					.on("keyup", function () {
+						globalSelectedStationArriveTo = false
+					})
+					.on("search", function () {
+						if (_modal_product_arrive_to_station_id) {
+							_modal_product_arrive_to_station_id.value = ""
+						}
+						if (_modal_product_arrive_to_station) {
+							_modal_product_arrive_to_station.value = ""
+						}
+					})
+					.on("change", function () {
+						setTimeout(function () {
+							let station_name = _modal_product_arrive_to_station.value
+							
+							if (globalSelectedStationArriveTo === false) {
+								if (station_name === "") {
+									_modal_product_arrive_to_station.value = ""
+									_modal_product_arrive_to_station_id.value = ""
+									globalSelectedStationArriveTo = false
+								} else {
+									stationExists(station_name, "arrive_to")
+								}
+							}
+						}, 200)
+					})
+					.autocomplete({
+						serviceUrl: "/api/v1.0/autocomplete/stations",
+						minChars: 2,
+						cache: false,
+						dataType: "json",
+						triggerSelectOnValidInput: false,
+						paramName: "st",
+						onSelect: function (suggestion) {
+							if (!suggestion || !suggestion.data) {
+								return
+							}
+							
+							globalSelectedStationArriveTo = true
+							
+							let station = suggestion.data
+							
+							if (station) {
+								console.log("station", station)
+								if (_modal_product_arrive_to_station) {
+									_modal_product_arrive_to_station.value = (station.name) ? station.name : ""
+								}
+								
+								if (_modal_product_arrive_to_station_id) {
+									_modal_product_arrive_to_station_id.value = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : ""
+								}
+								
+							} else {
+								resetStationForm("arrive_to")
+								showStationForm("arrive_to")
+							}
+						},
+					})
+			}
+			
+		}
+		
+		const stationExists = function (name, type) {
+			if (name && name !== "") {
+				/**
+				 * data to send to the server
+				 *
+				 * @type {{name}}
+				 */
+				let dataToSend = {
+					name: name,
+				}
+				
+				fetchByName(dataToSend, function (data) {
+					let station = null
+					
+					if (data) {
+						station = data
+						if (data[0]) {
+							station = data[0]
+						}
+					}
+					
+					if (station && station.id) {
+						if (type === "depart_from") {
+							globalSelectedStationDepartFrom = true
+							_modal_product_depart_from_station.value = station.name
+							_modal_product_depart_from_station_id.value = station.id
+							_modal_product_city_id.value = station.city.id
+						} else {
+							globalSelectedStationArriveTo = true
+							_modal_product_arrive_to_station.value = station.name
+							_modal_product_arrive_to_station_id.value = station.id
+						}
+					} else {
+						confirmDialog(`The station: ${name} does not exist exists. Would you like to create it?`, (ans) => {
+							if (ans) {
+								if (type === "depart_from") {
+									globalSelectedStationDepartFrom = false
+								} else {
+									globalSelectedStationArriveTo = false
+								}
+								
+								populateStationForm({
+									name: name,
+								}, type)
+								
+							} else {
+								if (type === "depart_from") {
+									if (_modal_product_city_id) {
+										_modal_product_city_id.value = ""
+									}
+									
+									if (_modal_product_depart_from_station_id) {
+										_modal_product_depart_from_station_id.value = ""
+									}
+									if (_modal_product_depart_from_station) {
+										_modal_product_depart_from_station.value = ""
+									}
+								} else {
+									if (_modal_product_arrive_to_station_id) {
+										_modal_product_arrive_to_station_id.value = ""
+									}
+									if (_modal_product_arrive_to_station) {
+										_modal_product_arrive_to_station.value = ""
+									}
+								}
+								
+							}
+						})
+					}
+				})
+			}
+		}
+		
+		const fetchByName = function (dataToSend, callback) {
+			let url = "/api/v1.0/stations/validate"
+			
+			if (dataToSend) {
+				try {
+					sendGetRequest(url, dataToSend, function (data, status, xhr) {
+						if (data) {
+							return callback(data)
+						} else {
+							handleStationError("Oops: 1")
+						}
+					})
+				} catch (e) {
+					console.log("error", e)
+					handleStationError("Error Validating Station")
+				}
+			} else {
+				handleStationError("Error Loading Station - Missing Data")
+			}
+		}
+		
+		const handleStationError = function (msg) {
+			toastr.error(msg)
+		}
+		
+		const init = function (settings) {
+			if (_modal_product_depart_from_station || _modal_product_arrive_to_station) {
+				initAutocomplete()
+				resetStationForm("depart_from")
+				resetStationForm("arrive_to")
+			}
+		}
+		
+		return {
+			resetStationForm: function (type) {
+				resetStationForm(type)
+			},
+			init: function (settings) {
+				init(settings)
+			},
+		}
+	})()
 </script>
+<!-- /Station -->
 
+<!-- Airport -->
+<script type="text/javascript">
+	const Airport = (function () {
+		"use strict"
+		const _modal_product_depart_from_airport_cancel_button = document.getElementById("modal_product_depart_from_airport_cancel_button")
+		const _modal_product_depart_from_airport_submit_button = document.getElementById("modal_product_depart_from_airport_submit_button")
+		const _modal_product_depart_from_airport_iata_code = document.getElementById("modal_product_depart_from_airport_iata_code")
+		const _modal_product_depart_from_airport_country_id = document.getElementById("modal_product_depart_from_airport_country_id")
+		const _modal_product_depart_from_airport_province_id = document.getElementById("modal_product_depart_from_airport_province_id")
+		const _modal_product_depart_from_airport_city_id = document.getElementById("modal_product_depart_from_airport_city_id")
+		const _modal_product_depart_from_airport_city = document.getElementById("modal_product_depart_from_airport_city")
+		const _modal_product_depart_from_airport = document.getElementById("modal_product_depart_from_airport")
+		const _modal_product_depart_from_airport_id = document.getElementById("modal_product_depart_from_airport_id")
+		const _modal_product_depart_from_airport_add_block = document.getElementById("modal_product_depart_from_airport_add_block")
+		const _modal_product_depart_from_airport_types_id = document.getElementById("modal_product_depart_from_airport_types_id")
+		const _modal_product_depart_from_new_airport_id = document.getElementById("modal_product_depart_from_new_airport_id")
+		const _modal_product_city_id = document.getElementById("modal_product_city_id")
+		const _modal_product_arrive_to_airport_cancel_button = document.getElementById("modal_product_arrive_to_airport_cancel_button")
+		const _modal_product_arrive_to_new_airport_id = document.getElementById("modal_product_arrive_to_new_airport_id")
+		const _modal_product_arrive_to_airport_submit_button = document.getElementById("modal_product_arrive_to_airport_submit_button")
+		const _modal_product_arrive_to_airport_iata_code = document.getElementById("modal_product_arrive_to_airport_iata_code")
+		const _modal_product_arrive_to_airport_country_id = document.getElementById("modal_product_arrive_to_airport_country_id")
+		const _modal_product_arrive_to_airport_province_id = document.getElementById("modal_product_arrive_to_airport_province_id")
+		const _modal_product_arrive_to_airport_city_id = document.getElementById("modal_product_arrive_to_airport_city_id")
+		const _modal_product_arrive_to_airport_city = document.getElementById("modal_product_arrive_to_airport_city")
+		const _modal_product_arrive_to_airport = document.getElementById("modal_product_arrive_to_airport")
+		const _modal_product_arrive_to_airport_id = document.getElementById("modal_product_arrive_to_airport_id")
+		const _modal_product_arrive_to_airport_add_block = document.getElementById("modal_product_arrive_to_airport_add_block")
+		const _modal_product_arrive_to_airport_types_id = document.getElementById("modal_product_arrive_to_airport_types_id")
+		
+		let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+		let globalSelectedAirportDepartFrom = false
+		let globalSelectedAirportArriveTo = false
+		
+		$(_modal_product_depart_from_airport_add_block)
+			.on("change", function () {
+				validDepartFromRecord()
+			})
+			.on("keyup", function () {
+				validDepartFromRecord()
+			})
+		
+		$(_modal_product_depart_from_airport_cancel_button)
+			.on("click", function () {
+				cancelAddAirportRecord("depart_from")
+			})
+		
+		$(_modal_product_arrive_to_airport_cancel_button)
+			.on("click", function () {
+				cancelAddAirportRecord("arrive_to")
+			})
+		
+		$(_modal_product_depart_from_airport_submit_button)
+			.on("click", function () {
+				save("depart_from")
+			})
+		
+		$(_modal_product_arrive_to_airport_submit_button)
+			.on("click", function () {
+				save("arrive_to")
+			})
+		
+		const save = function (type) {
+			if (type) {
+				let dataToSend = buildAddAirportRecord(type)
+				
+				if (dataToSend) {
+					console.log("dataToSend", dataToSend)
+					confirmDialog(`Would you like to update?`, (ans) => {
+						if (ans) {
+							sendSaveRequest(dataToSend, function (data) {
+								let airport
+								if (data) {
+									airport = data
+									if (data[0]) {
+										airport = data[0]
+									}
+								}
+								
+								if (airport) {
+									if (type === "depart_from") {
+										if (_modal_product_depart_from_airport) {
+											_modal_product_depart_from_airport.value = (airport.name) ? airport.name : ""
+										}
+										
+										if (_modal_product_depart_from_new_airport_id) {
+											_modal_product_depart_from_new_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
+										}
+										
+										if (_modal_product_depart_from_airport_id) {
+											_modal_product_depart_from_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
+										}
+										
+										if (_modal_product_city_id) {
+											_modal_product_city_id.value = (!isNaN(parseInt(airport.city.id))) ? parseInt(airport.city.id) : ""
+										}
+									}
+									
+									if (type === "arrive_to") {
+										
+										if (_modal_product_arrive_to_airport) {
+											_modal_product_arrive_to_airport.value = (airport.name) ? airport.name : ""
+										}
+										
+										if (_modal_product_arrive_to_new_airport_id) {
+											_modal_product_arrive_to_new_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
+										}
+										
+										if (_modal_product_arrive_to_airport_id) {
+											_modal_product_arrive_to_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
+										}
+									}
+									
+									resetAirportForm(type)
+									initAutocomplete()
+								}
+							})
+						}
+					})
+				}
+			}
+		}
+		
+		const sendSaveRequest = function (dataToSend, callback) {
+			if (dataToSend) {
+				let url = "/api/v1.0/airports/update"
+				try {
+					sendPostRequest(url, dataToSend, function (data, status, xhr) {
+						if (data) {
+							return callback(data)
+						} else {
+							handleAirportError("Oops: 1")
+						}
+					})
+				} catch (e) {
+					console.log("error", e)
+				}
+			}
+		}
+		
+		const validDepartFromRecord = function () {
+			let isValid = true
+			
+			if (_modal_product_depart_from_airport_iata_code.value === "") {
+				$(_modal_product_depart_from_airport_iata_code).showError("Field Required")
+				isValid = false
+			} else {
+				$(_modal_product_depart_from_airport_iata_code).hideError()
+			}
+			
+			if (_modal_product_depart_from_airport_types_id.value === "") {
+				$(_modal_product_depart_from_airport_types_id).showError("Field Required")
+				isValid = false
+			} else {
+				$(_modal_product_depart_from_airport_types_id).hideError()
+			}
+			
+			if (isNaN(parseInt(_modal_product_depart_from_airport_city_id.value))) {
+				$(_modal_product_depart_from_airport_city).showError("Field Required")
+				isValid = false
+			} else {
+				$(_modal_product_depart_from_airport_city).hideError()
+			}
+			
+			return isValid
+		}
+		
+		const validArriveToRecord = function () {
+			let isValid = true
+			
+			if (_modal_product_arrive_to_airport_iata_code.value === "") {
+				$(_modal_product_arrive_to_airport_iata_code).showError("Field Required")
+				isValid = false
+			} else {
+				$(_modal_product_arrive_to_airport_iata_code).hideError()
+			}
+			
+			if (_modal_product_arrive_to_airport_types_id.value === "") {
+				$(_modal_product_arrive_to_airport_types_id).showError("Field Required")
+				isValid = false
+			} else {
+				$(_modal_product_arrive_to_airport_types_id).hideError()
+			}
+			
+			if (isNaN(parseInt(_modal_product_arrive_to_airport_city_id.value))) {
+				$(_modal_product_arrive_to_airport_city).showError("Field Required")
+				isValid = false
+			} else {
+				$(_modal_product_arrive_to_airport_city).hideError()
+			}
+			
+			return isValid
+		}
+		
+		const buildAddAirportRecord = function (type) {
+			if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
+				if (type) {
+					if (type === "depart_from") {
+						if (validDepartFromRecord()) {
+							let dataToSend = {
+								airport_types_id: (!isNaN(parseInt(_modal_product_depart_from_airport_types_id.value))) ? parseInt(_modal_product_depart_from_airport_types_id.value) : null,
+								city_id: (!isNaN(parseInt(_modal_product_depart_from_airport_city_id.value))) ? parseInt(_modal_product_depart_from_airport_city_id.value) : null,
+								name: (_modal_product_depart_from_airport.value !== "") ? _modal_product_depart_from_airport.value : null,
+								iata_code: (_modal_product_depart_from_airport_iata_code.value !== "") ? _modal_product_depart_from_airport_iata_code.value : null,
+							}
+							
+							return removeNulls(dataToSend)
+						}
+					} else if (type === "arrive_to") {
+						if (validArriveToRecord()) {
+							let dataToSend = {
+								airport_types_id: (!isNaN(parseInt(_modal_product_arrive_to_airport_types_id.value))) ? parseInt(_modal_product_arrive_to_airport_types_id.value) : null,
+								city_id: (!isNaN(parseInt(_modal_product_arrive_to_airport_city_id.value))) ? parseInt(_modal_product_arrive_to_airport_city_id.value) : null,
+								name: (_modal_product_arrive_to_airport.value !== "") ? _modal_product_arrive_to_airport.value : null,
+								iata_code: (_modal_product_arrive_to_airport_iata_code.value !== "") ? _modal_product_arrive_to_airport_iata_code.value : null,
+							}
+							
+							return removeNulls(dataToSend)
+						}
+					}
+				}
+			}
+		}
+		
+		const cancelAddAirportRecord = function (type) {
+			if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
+				clearAirportForm(type)
+				hideAirportForm(type)
+				
+				if (type) {
+					if (type === "depart_from") {
+					
+					} else if (type === "arrive_to") {
+					
+					}
+				}
+			}
+		}
+		
+		const populateAirportForm = function (airport, type) {
+			console.log("populateAirportForm(airport, type)", airport)
+			console.log("populateAirportForm(airport, type)", type)
+			
+			if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
+				clearAirportForm(type)
+				
+				showAirportForm(type)
+			}
+		}
+		
+		const clearAirportForm = function (type) {
+			if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
+				if (type) {
+					if (type === "depart_from") {
+						_modal_product_depart_from_airport_iata_code.value = ""
+						_modal_product_depart_from_airport_city.value = ""
+						_modal_product_depart_from_airport_city_id.value = ""
+						_modal_product_depart_from_airport_country_id.value = ""
+						_modal_product_depart_from_airport_province_id.value = ""
+						_modal_product_depart_from_airport_city_id.value = ""
+						_modal_product_depart_from_airport_types_id.value = ""
+						_modal_product_depart_from_airport.disabled = false
+						clearAllValidation()
+					} else if (type === "arrive_to") {
+						_modal_product_arrive_to_airport_iata_code.value = ""
+						_modal_product_arrive_to_airport_city.value = ""
+						_modal_product_arrive_to_airport_city_id.value = ""
+						_modal_product_arrive_to_airport_country_id.value = ""
+						_modal_product_arrive_to_airport_province_id.value = ""
+						_modal_product_arrive_to_airport_city_id.value = ""
+						_modal_product_arrive_to_airport_types_id.value = ""
+						_modal_product_arrive_to_airport.disabled = false
+						clearAllValidation()
+					}
+				}
+			}
+		}
+		
+		const resetAirportForm = function (type) {
+			if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
+				if (type) {
+					_modal_product_arrive_to_airport.disabled = false
+					_modal_product_depart_from_airport.disabled = false
+					
+					clearAirportForm(type)
+					
+					hideAirportForm("depart_from")
+					hideAirportForm("arrive_to")
+				}
+			}
+		}
+		
+		const hideAirportForm = function (type) {
+			if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
+				if (type) {
+					if (type === "depart_from") {
+						$(_modal_product_depart_from_airport_add_block).hide()
+					} else if (type === "arrive_to") {
+						$(_modal_product_arrive_to_airport_add_block).hide()
+					}
+				}
+			}
+		}
+		
+		const showAirportForm = function (type) {
+			if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
+				if (type) {
+					if (type === "depart_from") {
+						_modal_product_depart_from_airport.disabled = true
+						$(_modal_product_depart_from_airport_add_block).show()
+						$(_modal_product_arrive_to_airport_add_block).hide()
+					} else if (type === "arrive_to") {
+						_modal_product_arrive_to_airport.disabled = true
+						$(_modal_product_arrive_to_airport_add_block).show()
+						$(_modal_product_depart_from_airport_add_block).hide()
+					}
+				}
+			}
+		}
+		
+		const initAutocomplete = function () {
+			
+			if (_modal_product_depart_from_airport) {
+				
+				$(_modal_product_depart_from_airport)
+					.on("click", function () {
+						if ($(this).attr("readonly") === "readonly") {
+							e.preventDefault()
+						} else {
+							$(this).select()
+						}
+					})
+					.on("search", function () {
+						if (_modal_product_depart_from_airport_id) {
+							_modal_product_depart_from_airport_id.value = ""
+						}
+						if (_modal_product_depart_from_airport) {
+							_modal_product_depart_from_airport.value = ""
+						}
+					})
+					.on("keyup", function () {
+						globalSelectedAirportDepartFrom = false
+					})
+					.on("change", function () {
+						setTimeout(function () {
+							let airport_name = _modal_product_depart_from_airport.value
+							
+							if (globalSelectedAirportDepartFrom === false) {
+								if (airport_name === "") {
+									_modal_product_depart_from_airport.value = ""
+									_modal_product_depart_from_airport_id.value = ""
+									globalSelectedAirportDepartFrom = false
+								} else {
+									airportExists(airport_name, "depart_from")
+								}
+							}
+						}, 200)
+					})
+					.autocomplete({
+						serviceUrl: "/api/v1.0/autocomplete/airports",
+						minChars: 2,
+						cache: false,
+						dataType: "json",
+						triggerSelectOnValidInput: false,
+						paramName: "st",
+						onSelect: function (suggestion) {
+							if (!suggestion || !suggestion.data) {
+								return
+							}
+							
+							globalSelectedAirportDepartFrom = true
+							
+							let airport = suggestion.data
+							
+							if (airport) {
+								console.log("airport", airport)
+								if (_modal_product_depart_from_airport) {
+									_modal_product_depart_from_airport.value = (airport.name) ? airport.name : ""
+								}
+								
+								if (_modal_product_depart_from_airport_id) {
+									_modal_product_depart_from_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
+								}
+								
+								if (_modal_product_city_id) {
+									_modal_product_city_id.value = (!isNaN(parseInt(airport.city.id))) ? parseInt(airport.city.id) : ""
+								}
+								
+							} else {
+								resetAirportForm("depart_from")
+								showAirportForm("depart_from")
+							}
+						},
+					})
+			}
+			
+			if (_modal_product_arrive_to_airport) {
+				
+				$(_modal_product_arrive_to_airport)
+					.on("click", function () {
+						if ($(this).attr("readonly") === "readonly") {
+							e.preventDefault()
+						} else {
+							$(this).select()
+						}
+					})
+					.on("keyup", function () {
+						globalSelectedAirportArriveTo = false
+					})
+					.on("search", function () {
+						if (_modal_product_arrive_to_airport_id) {
+							_modal_product_arrive_to_airport_id.value = ""
+						}
+						if (_modal_product_arrive_to_airport) {
+							_modal_product_arrive_to_airport.value = ""
+						}
+					})
+					.on("change", function () {
+						setTimeout(function () {
+							let airport_name = _modal_product_arrive_to_airport.value
+							
+							if (globalSelectedAirportArriveTo === false) {
+								if (airport_name === "") {
+									_modal_product_arrive_to_airport.value = ""
+									_modal_product_arrive_to_airport_id.value = ""
+									globalSelectedAirportArriveTo = false
+								} else {
+									airportExists(airport_name, "arrive_to")
+								}
+							}
+						}, 200)
+					})
+					.autocomplete({
+						serviceUrl: "/api/v1.0/autocomplete/airports",
+						minChars: 2,
+						cache: false,
+						dataType: "json",
+						triggerSelectOnValidInput: false,
+						paramName: "st",
+						onSelect: function (suggestion) {
+							if (!suggestion || !suggestion.data) {
+								return
+							}
+							
+							globalSelectedAirportArriveTo = true
+							
+							let airport = suggestion.data
+							
+							if (airport) {
+								console.log("airport", airport)
+								if (_modal_product_arrive_to_airport) {
+									_modal_product_arrive_to_airport.value = (airport.name) ? airport.name : ""
+								}
+								
+								if (_modal_product_arrive_to_airport_id) {
+									_modal_product_arrive_to_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
+								}
+								
+							} else {
+								resetAirportForm("arrive_to")
+								showAirportForm("arrive_to")
+							}
+						},
+					})
+			}
+			
+		}
+		
+		const airportExists = function (name, type) {
+			if (name && name !== "") {
+				/**
+				 * data to send to the server
+				 *
+				 * @type {{name}}
+				 */
+				let dataToSend = {
+					name: name,
+				}
+				
+				fetchByName(dataToSend, function (data) {
+					let airport = null
+					
+					if (data) {
+						airport = data
+						if (data[0]) {
+							airport = data[0]
+						}
+					}
+					
+					if (airport && airport.id) {
+						if (type === "depart_from") {
+							globalSelectedAirportDepartFrom = true
+							_modal_product_depart_from_airport.value = airport.name
+							_modal_product_depart_from_airport_id.value = airport.id
+							_modal_product_city_id.value = airport.city.id
+						} else {
+							globalSelectedAirportArriveTo = true
+							_modal_product_arrive_to_airport.value = airport.name
+							_modal_product_arrive_to_airport_id.value = airport.id
+						}
+					} else {
+						confirmDialog(`The airport: ${name} does not exist exists. Would you like to create it?`, (ans) => {
+							if (ans) {
+								if (type === "depart_from") {
+									globalSelectedAirportDepartFrom = false
+								} else {
+									globalSelectedAirportArriveTo = false
+								}
+								
+								populateAirportForm({
+									name: name,
+								}, type)
+								
+							} else {
+								if (type === "depart_from") {
+									if (_modal_product_city_id) {
+										_modal_product_city_id.value = ""
+									}
+									
+									if (_modal_product_depart_from_airport_id) {
+										_modal_product_depart_from_airport_id.value = ""
+									}
+									if (_modal_product_depart_from_airport) {
+										_modal_product_depart_from_airport.value = ""
+									}
+								} else {
+									if (_modal_product_arrive_to_airport_id) {
+										_modal_product_arrive_to_airport_id.value = ""
+									}
+									if (_modal_product_arrive_to_airport) {
+										_modal_product_arrive_to_airport.value = ""
+									}
+								}
+								
+							}
+						})
+					}
+				})
+			}
+		}
+		
+		const fetchByName = function (dataToSend, callback) {
+			let url = "/api/v1.0/airports/validate"
+			
+			if (dataToSend) {
+				try {
+					sendGetRequest(url, dataToSend, function (data, status, xhr) {
+						if (data) {
+							return callback(data)
+						} else {
+							handleAirportError("Oops: 1")
+						}
+					})
+				} catch (e) {
+					console.log("error", e)
+					handleAirportError("Error Validating Airport")
+				}
+			} else {
+				handleAirportError("Error Loading Airport - Missing Data")
+			}
+		}
+		
+		const handleAirportError = function (msg) {
+			toastr.error(msg)
+		}
+		
+		const init = function (settings) {
+			if (_modal_product_depart_from_airport || _modal_product_arrive_to_airport) {
+				initAutocomplete()
+				resetAirportForm("depart_from")
+				resetAirportForm("arrive_to")
+			}
+		}
+		
+		return {
+			resetAirportForm: function (type) {
+				resetAirportForm(type)
+			},
+			init: function (settings) {
+				init(settings)
+			},
+		}
+	})()
+</script>
+<!-- /Airport -->
+
+<!-- PricingStrategy -->
 <script type="text/javascript">
 	const PricingStrategy = (function () {
 		"use strict"
@@ -1110,7 +2314,7 @@
 			.on("change", function () {
 				//variantCombinations = []
 				//let pricingWorksheet = PricingWorksheet.init()
-				//Console.log(pricingWorksheet)
+				//console.log(pricingWorksheet)
 			})
 		
 		$(_pricing_strategy_season_id)
@@ -1208,7 +2412,7 @@
 					}
 					
 					const buildVariantListCombinations = function (unit, season) {
-						//Console.log("PricingStrategy.buildVariantListCombinations(unit, season)", unit)
+						//console.log("PricingStrategy.buildVariantListCombinations(unit, season)", unit)
 						
 						let variants = getVariantsUsed()
 						let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
@@ -1452,8 +2656,8 @@
 								let variantCombinations = buildVariantListCombinations(unit, season)
 								// ----
 								
-								//Console.log("comboMatrix", comboMatrix)
-								//Console.log("variantCombinations", variantCombinations)
+								//console.log("comboMatrix", comboMatrix)
+								//console.log("variantCombinations", variantCombinations)
 								
 								// ----
 								
@@ -1464,7 +2668,7 @@
 									
 									}
 								}
-								//Console.log("matrix", matrix)
+								//console.log("matrix", matrix)
 								//pricingMatrix = (Matrix.all.get(matrixId)) ? Matrix.all.get(matrixId) : buildPricingMatrixCombinations(buildVariantListCombinations(unit, season), unit, season)
 							}
 						}
@@ -1474,7 +2678,7 @@
 				}
 				
 				const seasonWrapper = function (unit, season) {
-					//Console.log("PricingStrategy.seasonWrapper(season)", season)
+					//console.log("PricingStrategy.seasonWrapper(season)", season)
 					
 					let seasonWrapperId
 					if (season) {
@@ -1494,7 +2698,7 @@
 				}
 				
 				const seasonCollapse = function (unit, season) {
-					//Console.log("PricingStrategy.seasonCollapse(season)", season)
+					//console.log("PricingStrategy.seasonCollapse(season)", season)
 					let seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
 					let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
 					
@@ -1504,7 +2708,7 @@
 				}
 				
 				const seasonHeader = function (unit, season) {
-					//Console.log("PricingStrategy.seasonHeader(season)", season)
+					//console.log("PricingStrategy.seasonHeader(season)", season)
 					
 					let TR, HEADING, SPAN, A, HEADINGWRAPPER, TD, colorScheme, backgroundColor, borderColor, textColor,
 						seasonId, seasonName
@@ -1971,7 +3175,7 @@
 				switch (pricingStrategyTypesId) {
 					case 1:
 						//Per Unit
-						//Console.log("Per Unit")
+						//console.log("Per Unit")
 						variant_id = 0
 						variant_count = 0
 						variant_name = "Other"
@@ -1980,13 +3184,13 @@
 						break
 					case 2:
 						//Per Person
-						//Console.log("Per Person")
+						//console.log("Per Person")
 						
 						//buildPricingMatrix(Array.from(PricingStrategy.unitSeasons.values()))
 						break
 					case 3:
 						//Per Days
-						//Console.log("Per Days")
+						//console.log("Per Days")
 						variant_id = 0
 						variant_count = 0
 						variant_name = "Other"
@@ -2114,3 +3318,311 @@
 		
 	})()
 </script>
+<!-- /PricingStrategy -->
+
+<!-- TimeSelect -->
+<script type="text/javascript">
+	jQuery(($) => {
+		$.fn.timeSelect = function (opt) {
+			let element = $(this)
+			let filterMax = ""
+			let elementId = element.attr("id")
+			let separatorTime = ":"
+			
+			element.attr("id", "time-selector-" + elementId)
+			
+			let $element, $elementWrapper, $elementGroupWrapper, $elementGroupAppend, $buttonGroupAppend,
+				$input, $inputLabel, $errorElement, $buttonGroupAppendClear, input, picker
+			
+			let defaults = {
+				// Translations and clear button
+				clear: 'Clear',
+				
+				// Formats
+				format: 'h:i A',
+				formatLabel: undefined,
+				formatSubmit: undefined,
+				hiddenPrefix: undefined,
+				hiddenSuffix: '_submit',
+				
+				// Editable input
+				editable: undefined,
+				
+				// Time intervals
+				interval: 30,
+				
+				// Time limits
+				min: undefined,
+				max: undefined,
+				
+				// Root picker container
+				container: undefined,
+				
+				// Hidden input container
+				containerHidden: undefined,
+				
+				// Close on a user action
+				closeOnSelect: true,
+				closeOnClear: true,
+				
+				// Events
+				onStart: undefined,
+				onRender: undefined,
+				onOpen: undefined,
+				onClose: undefined,
+				onSet: undefined,
+				onStop: undefined,
+			}
+			
+			let settings = {
+				label: "Time",
+				placeholder: "Select Time",
+			}
+			
+			const isNumeric = function (input, keyCode) {
+				if (!isNaN(parseInt(keyCode))) {
+					keyCode = parseInt(keyCode)
+				}
+				
+				if (keyCode === 16) {
+					isShift = true
+				}
+				
+				if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || (keyCode === 8) || (keyCode === 46)) {
+					
+					if (keyCode !== 16) {
+						if ((input.value.length === 2) && keyCode !== 8) {
+							input.value += separatorTime
+						}
+						
+						return true
+					}
+					
+				}
+				
+				return false
+			}
+			
+			const loadError = function (input) {
+				let $errorElement = $(input).parents("div.form-element").find("div.error")
+				
+				$errorElement.html("Invalid Time. Only HH-MM format allowed.").show()
+			}
+			
+			const unSetTimeError = function (input) {
+				let $errorElement = $(input).parents("div.form-element").find("div.error")
+				
+				$errorElement.html("").hide()
+			}
+			
+			function validate_time (time) {
+				var a = true
+				var time_arr = time.split(":")
+				
+				if (time_arr.length !== 2) {
+					a = false
+				} else {
+					if (isNaN(time_arr[0]) || isNaN(time_arr[1])) {
+						a = false
+					}
+					if (time_arr[0] < 24 && time_arr[1] < 60) {
+						if (time_arr[0] && time_arr[1] && !isNaN(parseInt(time_arr[0])) && !isNaN(parseInt(time_arr[1]))) {
+							if (parseInt(time_arr[0]) <= 9) {
+								time_arr[0] = "0" + time_arr[0]
+							}
+							if (parseInt(time_arr[1]) <= 9) {
+								time_arr[0] = "0" + time_arr[0]
+							}
+							$(input).val(time_arr[0] + ":" + time_arr[1])
+						} else {
+							return false
+						}
+					} else {
+						a = false
+					}
+				}
+				return a
+			}
+			
+			const validateTimeFormat = function (input, keyCode) {
+				let timeString = input.value
+				//let regex = /^\d{2,}:(?:[0-5]\d):(?:[0-5]\d)$/
+				
+				if (validate_time(timeString)) {
+					//if (regex.test(timeString) || timeString.length === 0) {
+					unSetTimeError(input)
+				} else {
+					loadError(input)
+				}
+			}
+			
+			const buildElements = function (element, opt) {
+				$element = element
+				$elementWrapper = $("<div>")
+					.addClass(`form-element`)
+				
+				$elementGroupWrapper = $("<div>")
+					.addClass(`input-group`)
+				
+				$elementGroupAppend = $("<div>")
+					.addClass(`input-group-append`)
+				
+				$buttonGroupAppend = $("<button type='button'>")
+					.attr("id", "button-" + elementId)
+					.attr("type", "button")
+					.addClass(`btn btn-md btn-secondary m-0 px-3 py-2 z-depth-0 waves-effect waves-light`)
+					.html('<i class="fas fa-calendar-alt"></i>')
+					.on("click", function (e) {
+						e.preventDefault()
+					})
+				
+				$buttonGroupAppendClear = $("<button type='button'>")
+					.attr("id", "button-clear-" + elementId)
+					.addClass(`btn btn-md btn-outline-danger m-0 px-3 py-2 z-depth-0 waves-effect waves-light`)
+					.html('<i class="fas fa-ban"></i>')
+					.on("click", function () {
+						TimeSelect.clear()
+						$input.val("").trigger("change")
+						unSetTimeError($input[0])
+					})
+				
+				$input = $("<input>")
+					.addClass("form-control time-format")
+					.attr("id", elementId)
+					.attr("type", "text")
+					.attr("placeholder", settings.placeholder)
+					.attr("maxlength", "5")
+					.on("keydown", function (event) {
+						return isNumeric(this, event.keyCode)
+					})
+					.on("keyup", function (event) {
+						validateTimeFormat(this, event.keyCode)
+						toggleClearButton()
+					})
+					.on("change", function () {
+						toggleClearButton()
+					})
+				
+				$inputLabel = $("<label>")
+					.attr("for", elementId)
+					.html(settings.label)
+				
+				$errorElement = $("<div>")
+					.addClass("error w-100 text-center")
+			}
+			
+			const toggleClearButton = function () {
+				if ($input.val() !== "") {
+					$buttonGroupAppendClear.show()
+					let id = $input.attr("id")
+					clearError(document.getElementById(id))
+				} else {
+					$buttonGroupAppendClear.hide()
+				}
+			}
+			
+			const setWrapper = function (element, opt) {
+				buildElements(element, opt)
+				$elementGroupAppend.append($buttonGroupAppendClear, $buttonGroupAppend)
+				$elementGroupWrapper.append($input, $elementGroupAppend)
+				$elementWrapper.append($inputLabel, $elementGroupWrapper, $errorElement)
+				$element.append($elementWrapper)
+				picker = $buttonGroupAppend.pickatime("picker")
+			}
+			
+			const assignOptions = function (newOptions) {
+				if (newOptions) {
+					$.each(newOptions, function (k, v) {
+						defaults[k] = v
+					})
+				}
+				
+			}
+			
+			const clear = function () {
+				
+				if (TimeSelect.picker.clear()) {
+					TimeSelect.picker.clear()
+					TimeSelect.picker.set("select", moment().format("YYYY-MM-DD"), { format: "HH-i" })
+					TimeSelect.picker.render()
+					unSetTimeError($input[0])
+				}
+			}
+			
+			const set = function (opts) {
+				if (!opts) {
+					opts = {}
+				}
+				
+				TimeSelect.picker.set(opts, { muted: true })
+				
+			}
+			
+			const value = function (date) {
+				
+				if (date) {
+					TimeSelect.picker.set("select", date, { format: "HH-i" })
+					TimeSelect.picker.render()
+					return null
+				} else {
+					return ($input.val() === "") ? null : $input.val()
+				}
+				
+			}
+			
+			const TimeSelect = {
+				picker: null,
+				val: null,
+				fooListener: function (val) {},
+				registerNewListener: function (externalListenerFunction) {
+					this.fooListener = externalListenerFunction
+				},
+				set: function () {
+					set()
+				},
+				value: function (dataValue) {
+					if (!dataValue) {
+						dataValue = null
+					}
+					return value(dataValue)
+				},
+				clear: function () {
+					clear()
+				},
+				init: function (element, opt) {
+					init(element, opt)
+				},
+			}
+			
+			const init = function (element, opt) {
+				assignOptions(opt)
+				
+				settings.label = ($(element).attr("data-label")) ? $(element).attr("data-label") : "Date"
+				settings.placeholder = ($(element).attr("data-placeholder")) ? $(element).attr("data-placeholder") : "Select Date"
+				
+				setWrapper(element, opt)
+				
+				$buttonGroupAppend
+					.pickatime(defaults)
+					.on("change", function () {
+						if ($(this).val() === "") {
+							$input.val(filterMax)
+						} else {
+							$input.val($(this).val())
+						}
+						
+						$input.trigger("change")
+					})
+				
+				picker = $buttonGroupAppend.pickatime("picker")
+				toggleClearButton()
+				TimeSelect.picker = $buttonGroupAppend.pickatime("picker")
+			}
+			
+			init(element, opt)
+			return TimeSelect
+		}
+	})
+
+</script>
+<!-- /TimeSelect -->

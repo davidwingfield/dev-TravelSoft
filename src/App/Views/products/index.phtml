@@ -12,7 +12,10 @@
 	if (isset($page_data["types"]["currency"])) {
 		$currency = $page_data["types"]["currency"];
 	}
-
+	$airport_types = [];
+	if (isset($page_data["types"]["airport_types"])) {
+		$airport_types = $page_data["types"]["airport_types"];
+	}
 ?>
 
 <!-- Product Index Page -->
@@ -74,7 +77,22 @@
 		</table>
 	
 	</div>
-
+	
+	<?php //*?>
+	<!-- Test Elements -->
+	<div id="testElements">
+		<div class="row gx-1">
+			<?php displayJsonOnPage($airport_types, "Airport Types"); ?>
+			<?php //displayJsonOnPage($profiles, "Profiles"); ?>
+			<?php //displayJsonOnPage($matrices, "Matrices"); ?>
+			<?php //displayJsonOnPage($pricings, "Pricings"); ?>
+			<?php //displayJsonOnPage($vendor, "Vendor"); ?>
+			<?php //displayJsonOnPage($product, "Product"); ?>
+			<?php //displayJsonOnPage($location, "Location"); ?>
+		</div>
+	</div>
+	<!-- /Test Elements -->
+	<?php //*/ ?>
 </section>
 <!-- /Product Index Page -->
 

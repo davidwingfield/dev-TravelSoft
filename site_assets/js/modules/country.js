@@ -39,7 +39,7 @@ const Country = (function () {
     
     const handle_country_error = function (msg) {
         toastr.error(msg)
-        Console.log(msg)
+        console.log(msg)
     }
     
     const on_click_outside = (e) => {
@@ -59,71 +59,71 @@ const Country = (function () {
                     let element = document.getElementById(dropdown_id)
                     if (element) {
                         $(element)
-                          .select2({
-                              "language": {
-                                  "searching": function () {
-                                  },
-                              },
-                              "escapeMarkup": function (markup) {
-                                  return markup
-                              },
-                          })
-                          .on("select2:open", function (e) {
-                              let x = document.querySelectorAll("[aria-controls='select2-" + dropdown_id + "-results']")
-                              if (x[0]) {
-                                  let _filterCountrySearch = x[0]
-                                  
-                                  $(_filterCountrySearch).attr("id", "" + dropdown_id + "_search")
-                                  
-                                  if (!document.getElementById("filter_country_add_icon")) {
-                                      let i = document.createElement("i")
-                                      i.classList = "select-add-option fas fa-plus filter_country_add"
-                                      i.id = "filter_country_add_icon"
-                                      i.addEventListener("click", event => {
-                                          let val = _filterCountrySearch.value
-                                          $(element).select2("close")
-                                          Country.add(this, val)
-                                          
-                                      })
-                                      _filterCountrySearch.after(i)
-                                  }
-                                  
-                                  $(".filter_country_add").hide()
-                                  
-                                  if (_filterCountrySearch) {
-                                      _filterCountrySearch.addEventListener("keyup", event => {
-                                          
-                                          if (_filterCountrySearch.value !== "") {
-                                              $(".filter_country_add").show()
-                                          } else {
-                                              $(".filter_country_add").hide()
-                                          }
-                                          
-                                      })
-                                  }
-                              }
-                              
-                          })
-                          .on("change", function () {
-                              let country_id = (!isNaN(parseInt($(this).val()))) ? parseInt($(this).val()) : null
-                              let province_el_id = $(this)
-                                .attr("id")
-                                .replace("country", "province")
-                              let province_element = document.getElementById(province_el_id)
-                              let city_el_id = $(this)
-                                .attr("id")
-                                .replace("country", "city")
-                              let city_element = document.getElementById(city_el_id)
-                              // ----
-                              if (!isNaN(parseInt($(this).val()))) {
-                                  if (province_element) {
-                                      Province.get(parseInt($(this).val()), province_element)
-                                      //City.get(null, null, city_element)
-                                  }
-                              } else {
-                                  Province.get(null, province_element)
-                              }
-                          })
+                            .select2({
+                                "language": {
+                                    "searching": function () {
+                                    },
+                                },
+                                "escapeMarkup": function (markup) {
+                                    return markup
+                                },
+                            })
+                            .on("select2:open", function (e) {
+                                let x = document.querySelectorAll("[aria-controls='select2-" + dropdown_id + "-results']")
+                                if (x[0]) {
+                                    let _filterCountrySearch = x[0]
+                                    
+                                    $(_filterCountrySearch).attr("id", "" + dropdown_id + "_search")
+                                    
+                                    if (!document.getElementById("filter_country_add_icon")) {
+                                        let i = document.createElement("i")
+                                        i.classList = "select-add-option fas fa-plus filter_country_add"
+                                        i.id = "filter_country_add_icon"
+                                        i.addEventListener("click", event => {
+                                            let val = _filterCountrySearch.value
+                                            $(element).select2("close")
+                                            Country.add(this, val)
+                                            
+                                        })
+                                        _filterCountrySearch.after(i)
+                                    }
+                                    
+                                    $(".filter_country_add").hide()
+                                    
+                                    if (_filterCountrySearch) {
+                                        _filterCountrySearch.addEventListener("keyup", event => {
+                                            
+                                            if (_filterCountrySearch.value !== "") {
+                                                $(".filter_country_add").show()
+                                            } else {
+                                                $(".filter_country_add").hide()
+                                            }
+                                            
+                                        })
+                                    }
+                                }
+                                
+                            })
+                            .on("change", function () {
+                                let country_id = (!isNaN(parseInt($(this).val()))) ? parseInt($(this).val()) : null
+                                let province_el_id = $(this)
+                                    .attr("id")
+                                    .replace("country", "province")
+                                let province_element = document.getElementById(province_el_id)
+                                let city_el_id = $(this)
+                                    .attr("id")
+                                    .replace("country", "city")
+                                let city_element = document.getElementById(city_el_id)
+                                // ----
+                                if (!isNaN(parseInt($(this).val()))) {
+                                    if (province_element) {
+                                        Province.get(parseInt($(this).val()), province_element)
+                                        //City.get(null, null, city_element)
+                                    }
+                                } else {
+                                    Province.get(null, province_element)
+                                }
+                            })
                         // ----
                     }
                     
@@ -152,7 +152,7 @@ const Country = (function () {
                 })
                 /*
                 sendGetRequest("/api/v1.0/countries", dataToSend, function (data, status, xhr) {
-                    //Console.log(data)
+                    //console.log(data)
                     
                     if (data) {
                         // Country.all = data.result
@@ -163,7 +163,7 @@ const Country = (function () {
                 })
                 //*/
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
                 return handle_country_error("Error Validating Country")
             }
         } else {
@@ -191,12 +191,12 @@ const Country = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
                 handle_country_error("Error: Validating Country")
             }
             
         } else {
-            Console.log("Error: Missing Data")
+            console.log("Error: Missing Data")
             handle_country_error("Error: Missing Data")
         }
     }
@@ -420,40 +420,40 @@ const Country = (function () {
         if (_name.value === "") {
             $(_name).addClass("is-invalid")
             $("#country_name-error")
-              .text("Required: Field is required")
-              .show()
+                .text("Required: Field is required")
+                .show()
             valid = false
         } else {
             $(_name).removeClass("is-invalid")
             $("#country_name-error")
-              .text("")
-              .hide()
+                .text("")
+                .hide()
         }
         
         if (_country_iso2.value === "") {
             $(_country_iso2).addClass("is-invalid")
             $("#country_iso2-error")
-              .text("Required: Field is required")
-              .show()
+                .text("Required: Field is required")
+                .show()
             valid = false
         } else {
             $(_country_iso2).removeClass("is-invalid")
             $("#country_iso2-error")
-              .text("")
-              .hide()
+                .text("")
+                .hide()
         }
         
         if (_country_iso3.value === "") {
             $(_country_iso3).addClass("is-invalid")
             $("#country_iso3-error")
-              .text("Required: Field is required")
-              .show()
+                .text("Required: Field is required")
+                .show()
             valid = false
         } else {
             $(_country_iso3).removeClass("is-invalid")
             $("#country_iso3-error")
-              .text("")
-              .hide()
+                .text("")
+                .hide()
         }
         
         return valid

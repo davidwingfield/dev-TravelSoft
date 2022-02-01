@@ -50,7 +50,7 @@ const Currency = (function () {
     }
     
     const init = function (settings) {
-        //Console.log(' -- Currency -- ', {})
+        //console.log(' -- Currency -- ', {})
     }
     
     const set = function (currency) {
@@ -85,7 +85,7 @@ const Currency = (function () {
             Currency.all.set("id", detail)
         })
         
-        //Console.log(' Currency.all',  Currency.all);
+        //console.log(' Currency.all',  Currency.all);
     }
     
     return {

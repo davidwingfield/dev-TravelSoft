@@ -21,10 +21,9 @@
 			"save" => array(
 				"type" => "a",
 				"href" => "javascript:void(0)",
-				"classes" => "btn btn-sm btn-primary btn-round",
+				"classes" => "btn btn-primary btn-heading",
 				"icon" => "fas fa-save",
 				"id" => "button_save_product",
-				"text" => "save product",
 				"data" => array(
 					"toggle" => "tooltip",
 					"title" => "Save Product",
@@ -35,10 +34,9 @@
 			"new" => array(
 				"type" => "a",
 				"href" => "javascript:void(0)",
-				"classes" => "btn btn-sm btn-primary btn-round",
-				"icon" => "fas fa-plus mr-2",
+				"classes" => "btn btn-primary btn-heading",
+				"icon" => "fas fa-plus",
 				"id" => "button_add_product_page_heading",
-				"text" => "New Product",
 				"data" => array(
 					"toggle" => "tooltip",
 					"title" => "Creat a New Product",
@@ -47,11 +45,10 @@
 			),
 			
 			"calendar" => array(
-				"type" => "button",
-				"href" => "button",
-				"classes" => "btn btn-sm btn-primary btn-round flex-fill waves-effect waves-light",
-				"text" => "Calendar",
-				"icon" => "fas fa-calendar mr-2",
+				"type" => "a",
+				"href" => "javascript:void(0)",
+				"classes" => "btn btn-primary btn-heading",
+				"icon" => "fas fa-calendar",
 				"data" => array(
 					"toggle" => "modal",
 					"target" => "#seasonCalendarModal",

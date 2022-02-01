@@ -7,8 +7,8 @@
 	use Framework\Logger\Log;
 	
 	/**
-	 * Short Variant Description
-	 * Long Variant Description
+	 * Short VariantModel Description
+	 * Long VariantModel Description
 	 *
 	 * @package            Framework\App
 	 * @subpackage         Models
@@ -159,8 +159,6 @@
                     AND         VARIANT.category_id = $category_id
                     ORDER BY    LENGTH(VARIANT.name), CAST(VARIANT.name AS UNSIGNED), VARIANT.name ASC
                     LIMIT 20;";
-				
-				//Log::$debug_log->trace($sql);
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {

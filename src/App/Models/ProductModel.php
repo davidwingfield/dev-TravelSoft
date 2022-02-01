@@ -316,6 +316,8 @@
 			$depart_time = Model::setString((isset($product["depart_time"])) ? $product["depart_time"] : null);
 			$arrive_time = Model::setString((isset($product["arrive_time"])) ? $product["arrive_time"] : null);
 			$hotel_code = Model::setString((isset($product["hotel_code"])) ? $product["hotel_code"] : null);
+			$depart_date = Model::setString((isset($product["depart_date"])) ? $product["depart_date"] : null);
+			$arrive_date = Model::setString((isset($product["arrive_date"])) ? $product["arrive_date"] : null);
 			
 			$note = Model::setLongText((isset($product["note"])) ? $product["note"] : null);
 			$description_long = Model::setLongText((isset($product["description_long"])) ? $product["description_long"] : null);
@@ -347,7 +349,7 @@
                     arrive_to, depart_time, arrive_time, provider_vendor_match, use_provider_location_id,
                     day_span, cover_image, api_id, from_api, hotel_code,
                     sort_order, amenities, enabled, date_created, created_by, date_modified,
-                    modified_by, note, street_1, street_2, postal_code
+                    modified_by, note, street_1, street_2, postal_code, depart_date, arrive_date
                 ) VALUES (
                     $id, $category_id, $pricing_strategy_types_id, $status_types_id, $currency_id,
                     $location_id, $provider_id, $vendor_id, $rating_types_id, $name, $city_id,
@@ -355,7 +357,7 @@
                     $arrive_to, $depart_time, $arrive_time, $provider_vendor_match, $use_provider_location_id,
                     $day_span, '/public/img/placeholder.jpg', $api_id, 0, $hotel_code,
                     999, $amenities, $enabled, CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP,
-                    $modified_by, $note, $street_1, $street_2, $postal_code
+                    $modified_by, $note, $street_1, $street_2, $postal_code, $depart_date, $arrive_date
                 )
                 ON DUPLICATE KEY UPDATE
                     category_id = VALUES(category_id),
@@ -373,6 +375,8 @@
                     keywords = VALUES(keywords),
                     amenities = VALUES(amenities),
                     sku = VALUES(sku),
+                    depart_date = VALUES(depart_date),
+                    arrive_date = VALUES(arrive_date),
                     depart_from = VALUES(depart_from),
                     arrive_to = VALUES(arrive_to),
                     depart_time = VALUES(depart_time),

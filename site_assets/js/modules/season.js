@@ -19,10 +19,22 @@ const Season = (function () {
     const _panel_tab_season = document.getElementById("panel_tab_season")
     const _button_remove_season_from_product = document.getElementById("button_remove_season_from_product")
     const _calendar_loader = document.getElementById("calendar_loader")
+    const _table_season_product_edit_add_new_button = document.getElementById("table_season_product_edit_add_new_button")
+    const _product_edit_season_section = document.getElementById("product_edit_season_section")
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let categories = new Map()
     let $table_season_product_edit, disabledDays
+    let globalSelectedSeason = false
+    
+    $(_table_season_product_edit_add_new_button)
+        .on("click", function () {
+            loadProductSeasonForm()
+            _product_edit_season_form_season_name.disabled = false
+            _product_edit_season_form_season_name.readonly = false
+            
+            ColorScheme.enable()
+        })
     
     $(_button_remove_season_from_product)
         .on("click", function () {
@@ -70,7 +82,6 @@ const Season = (function () {
     
     $(_panel_tab_season)
         .on("hide.bs.tab", function () {
-            //clear_validation(_form_product_add)
             _product_edit_season_form_season_name_filter.value = ""
             resetForm()
             clearProductSeasonForm()
@@ -162,62 +173,6 @@ const Season = (function () {
             season_id: (!isNaN(parseInt(_product_edit_season_form_season_id.value))) ? parseInt(_product_edit_season_form_season_id.value) : null,
             disabled_dow: formatListOfIds(disabledDays.disabled_dows),
         })
-    }
-    
-    const initAutoComplete = function () {
-        let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
-        
-        $(_product_edit_season_form_season_name_filter)
-            .on("click", function () {
-                $(this).select()
-            })
-            .on("search", function () {
-                $table_season_product_edit.clearSelectedRows()
-                resetForm()
-            })
-            .on("change", function () {
-                if (_product_edit_season_form_season_name_filter.value === "") {
-                    $table_season_product_edit.clearSelectedRows()
-                    resetForm()
-                } else {
-                
-                }
-            })
-            .autocomplete({
-                serviceUrl: "/api/v1.0/autocomplete/seasons",
-                minChars: 2,
-                cache: false,
-                dataType: "json",
-                triggerSelectOnValidInput: false,
-                paramName: "st",
-                params: { "category_id": category_id },
-                onSelect: function (suggestion) {
-                    if (!suggestion.data) {
-                        return
-                    }
-                    $table_season_product_edit.clearSelectedRows()
-                    let season = suggestion.data
-                    let color_scheme = (season.color_scheme) ? season.color_scheme : {}
-                    
-                    _product_edit_season_form_season_id.value = season.id
-                    _product_edit_season_form_season_name.value = season.name
-                    _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
-                    _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
-                    
-                    ColorScheme.load(color_scheme)
-                    ColorScheme.disable()
-                    
-                    _product_edit_season_form_season_enabled.disabled = true
-                    
-                    let product_season = Season.all.get(season.id)
-                    if (product_season) {
-                        loadProductSeasonForm(product_season)
-                        $table_season_product_edit.loadRow(product_season)
-                    } else {
-                        loadProductSeasonForm(season)
-                    }
-                },
-            })
     }
     
     const defaultDetail = function () {
@@ -531,17 +486,211 @@ const Season = (function () {
             _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
             _product_edit_season_form_season_enabled.disabled = true
             _product_edit_season_form_season_name_filter.disabled = true
-            
-            $(_edit_product_season).show()
         }
-        
+        _product_edit_season_form_season_name_filter.disabled = true
         _display_product_season_name.innerText = name
         disabledDays.init(disabled_dow)
+        $(_edit_product_season).show()
     }
     
     const unloadProductSeasonForm = function () {
+        console.log("unloadProductSeasonForm()")
         _product_edit_season_form_season_name_filter.disabled = false
+        _product_edit_season_form_season_name.disabled = true
         $(_edit_product_season).hide()
+    }
+    
+    const seasonExists = function (name) {
+        let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+        if (name && name !== "" && category_id) {
+            let dataToSend = {
+                name: name,
+                category_id: category_id,
+            }
+            
+            fetchByName(dataToSend, function (data) {
+                let season = null
+                
+                if (data) {
+                    season = data
+                    if (data[0]) {
+                        season = data[0]
+                    }
+                }
+                
+                if (season && season.id) {
+                    globalSelectedSeason = true
+                    let color_scheme = (season.color_scheme) ? season.color_scheme : {}
+                    let product_season = Season.all.get(season.id)
+                    
+                    $table_season_product_edit.clearSelectedRows()
+                    
+                    _product_edit_season_form_season_id.value = season.id
+                    _product_edit_season_form_season_name.value = season.name
+                    _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
+                    _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
+                    
+                    _product_edit_season_form_season_enabled.disabled = true
+                    
+                    ColorScheme.load(color_scheme)
+                    ColorScheme.disable()
+                    
+                    if (product_season) {
+                        loadProductSeasonForm(product_season)
+                        $table_season_product_edit.loadRow(product_season)
+                    } else {
+                        loadProductSeasonForm(season)
+                    }
+                } else {
+                    confirmDialog(`The season: ${name} does not exist exists. Would you like to create it?`, (ans) => {
+                        if (ans) {
+                            addSeason(dataToSend, function (data) {
+                                let season = null
+                                
+                                if (data) {
+                                    season = data
+                                    if (data[0]) {
+                                        season = data[0]
+                                    }
+                                }
+                                
+                                if (season && season.id) {
+                                    let color_scheme = (season.color_scheme) ? season.color_scheme : {}
+                                    let product_season = Season.all.get(season.id)
+                                    
+                                    $table_season_product_edit.clearSelectedRows()
+                                    
+                                    _product_edit_season_form_season_id.value = season.id
+                                    _product_edit_season_form_season_name.value = season.name
+                                    _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
+                                    _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
+                                    
+                                    _product_edit_season_form_season_enabled.disabled = true
+                                    
+                                    ColorScheme.load(color_scheme)
+                                    ColorScheme.disable()
+                                    
+                                    if (product_season) {
+                                        loadProductSeasonForm(product_season)
+                                        $table_season_product_edit.loadRow(product_season)
+                                    } else {
+                                        loadProductSeasonForm(season)
+                                    }
+                                }
+                            })
+                        } else {
+                            $table_season_product_edit.clearSelectedRows()
+                            resetForm()
+                        }
+                    })
+                }
+            })
+        }
+    }
+    
+    const addSeason = function (dataToSend, callback) {
+        let url = "/api/v1.0/seasons/add"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        handleSeasonError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log("error", e)
+                handleSeasonError("Error Validating Airport")
+            }
+        } else {
+            handleSeasonError("Error Loading Airport - Missing Data")
+        }
+    }
+    
+    const fetchByName = function (dataToSend, callback) {
+        let url = "/api/v1.0/seasons/validate"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        handleSeasonError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log("error", e)
+                handleSeasonError("Error Validating Airport")
+            }
+        } else {
+            handleSeasonError("Error Loading Airport - Missing Data")
+        }
+    }
+    
+    const initAutoComplete = function () {
+        let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+        
+        $(_product_edit_season_form_season_name_filter)
+            .on("click", function () {
+                if ($(this).attr("readonly") === "readonly") {
+                    e.preventDefault()
+                } else {
+                    $(this).select()
+                }
+            })
+            .on("search", function () {
+                $table_season_product_edit.clearSelectedRows()
+                resetForm()
+            })
+            .on("change", function () {
+                setTimeout(function () {
+                    if (_product_edit_season_form_season_name_filter.value === "") {
+                        $table_season_product_edit.clearSelectedRows()
+                        resetForm()
+                    } else {
+                        seasonExists(_product_edit_season_form_season_name_filter.value)
+                    }
+                }, 200)
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/seasons",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                paramName: "st",
+                params: { "category_id": category_id },
+                onSelect: function (suggestion) {
+                    if (!suggestion.data) {
+                        return
+                    }
+                    let season = suggestion.data
+                    let color_scheme = (season.color_scheme) ? season.color_scheme : {}
+                    let product_season = Season.all.get(season.id)
+                    
+                    $table_season_product_edit.clearSelectedRows()
+                    
+                    _product_edit_season_form_season_id.value = season.id
+                    _product_edit_season_form_season_name.value = season.name
+                    _product_edit_season_form_season_color_scheme_id.value = season.color_scheme_id
+                    _product_edit_season_form_season_enabled.checked = (season.enabled === 1)
+                    
+                    _product_edit_season_form_season_enabled.disabled = true
+                    
+                    ColorScheme.load(color_scheme)
+                    ColorScheme.disable()
+                    
+                    if (product_season) {
+                        loadProductSeasonForm(product_season)
+                        $table_season_product_edit.loadRow(product_season)
+                    } else {
+                        loadProductSeasonForm(season)
+                    }
+                },
+            })
     }
     
     const init = function (settings) {
@@ -565,12 +714,11 @@ const Season = (function () {
                 name: "season_disabled_dow",
                 label: "Disabled DOW",
             })
-            unloadProductSeasonForm()
-            loadProductSeasonForm()
+            
         }
         
-        if (_product_season) {
-            unLoadEditSeasonForm()
+        if (_edit_product_season) {
+            unloadProductSeasonForm()
         }
         
     }

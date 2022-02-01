@@ -63,6 +63,7 @@
 			$companies = [];
 			
 			$results = CompanyModel::updateRecord($params);
+			
 			foreach ($results AS $company) {
 				$companies[] = self::format($company);
 			}

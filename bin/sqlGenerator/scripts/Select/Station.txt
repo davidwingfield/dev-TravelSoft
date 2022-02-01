@@ -1,15 +1,30 @@
 SELECT
-	STATION.id AS 'station_id',
-	STATION.name AS 'station_name',
-	STATION.iata_code AS 'station_iata_code',
-	STATION.city_id AS 'station_city_id',
-	STATION.province_id AS 'station_province_id',
-	STATION.country_id AS 'station_country_id',
-	STATION.enabled AS 'station_enabled',
-	STATION.date_created AS 'station_date_created',
-	STATION.created_by AS 'station_created_by',
-	STATION.date_modified AS 'station_date_modified',
-	STATION.modified_by AS 'station_modified_by',
-	STATION.note AS 'station_note'
+		STATION.id AS 'station_id',
+		STATION.name AS 'station_name',
+		STATION.iata_code AS 'station_iata_code',
+		STATION.city_id AS 'station_city_id',
+		STATION.province_id AS 'station_province_id',
+		STATION.country_id AS 'station_country_id',
+		STATION.enabled AS 'station_enabled',
+		STATION.date_created AS 'station_date_created',
+		STATION.created_by AS 'station_created_by',
+		STATION.date_modified AS 'station_date_modified',
+		STATION.modified_by AS 'station_modified_by',
+		STATION.note AS 'station_note'
 FROM 	station STATION
 -- JOIN 	station STATION ON STATION.id = {FK_TABLE}.station_id
+
+/*
+'id'=>$station['station_id'],
+'name'=>$station['station_name'],
+'iata_code'=>$station['station_iata_code'],
+'city_id'=>$station['station_city_id'],
+'province_id'=>$station['station_province_id'],
+'country_id'=>$station['station_country_id'],
+'enabled'=>$station['station_enabled'],
+'date_created'=>$station['station_date_created'],
+'created_by'=>$station['station_created_by'],
+'date_modified'=>$station['station_date_modified'],
+'modified_by'=>$station['station_modified_by'],
+'note'=>$station['station_note']
+*/

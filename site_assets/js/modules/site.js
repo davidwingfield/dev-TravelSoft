@@ -1,31 +1,44 @@
 $(document).ready(function () {
     
-    const inputs = document.getElementsByTagName("input")
-    
     window.addEventListener("load", function () {
+        const inputs = document.getElementsByTagName("input")
+        
         if (mdbPreloader) {
             $(mdbPreloader).delay(1000).fadeOut(300)
         }
-        /*
+        
         for (let i = 0; i < inputs.length; i++) {
-            if (inputs[i].classList.contains("date-format")) {
-                inputs[i].setAttribute("maxlength", 10)
-                inputs[i].onkeydown = function (e) {
-                    return IsNumeric(this, e.keyCode)
+            if (inputs[i].type === "text") {
+                
+                if (inputs[i].classList.contains("date-format")) {
+                    //inputs[i].setAttribute("maxlength", "10")
+                    //inputs[i].onkeydown = function (event) {
+                    //return IsNumeric(this, event.keyCode)
+                    //}
+                    //inputs[i].onkeyup = function (event) {
+                    //validateDateFormat(this, event.keyCode)
+                    //}
+                    
                 }
-                inputs[i].onkeyup = function (e) {
-                    ValidateDateFormat(this, e.keyCode)
+                
+                if (inputs[i].classList.contains("time-format")) {
+                    
+                    //inputs[i].setAttribute("maxlength", "5")
+                    //inputs[i].onkeydown = function (event) {
+                    //return IsNumeric(this, event.keyCode)
+                    //}
+                    //inputs[i].onkeyup = function (event) {
+                    //validateTimeFormat(this, event.keyCode)
+                    //}
+                    
                 }
             }
         }
-        //*/
     }, false)
     
     window.addEventListener("resize", debounce(function (e) {
         resize_elements("end of resizing")
     }))
-    
-    let codeData = document.querySelectorAll(".panel-code")
     
     new WOW().init()
     
@@ -82,6 +95,7 @@ $(document).ready(function () {
     //toastr.warning('I do not think that word means what you think it means.', 'Warning!')
     //toastr.error('I do not think that word means what you think it means.', 'Error!')
     
+    let codeData = document.querySelectorAll(".panel-code")
     codeData.forEach(el => {
         let html = $(el).html()
         let formattedCode = ""

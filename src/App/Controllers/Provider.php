@@ -31,10 +31,9 @@
 			"save" => array(
 				"type" => "a",
 				"href" => "javascript:void(0)",
-				"classes" => "btn btn-sm btn-primary btn-round",
+				"classes" => "btn btn-primary btn-heading",
 				"icon" => "fas fa-save",
 				"id" => "button_save_provider",
-				"text" => "save provider",
 				"data" => array(
 					"toggle" => "tooltip",
 					"title" => "Save Provider",
@@ -45,10 +44,9 @@
 			"new" => array(
 				"type" => "a",
 				"href" => "/providers/new",
-				"classes" => "btn btn-outline-primary btn-sm btn-icon btn-round",
+				"classes" => "btn btn-primary btn-heading",
 				"icon" => "fas fa-plus",
 				"id" => "button_add_provider_page_heading",
-				"text" => "",
 				"data" => array(
 					"toggle" => "tooltip",
 					"title" => "Creat a New Provider",
@@ -58,11 +56,6 @@
 			),
 		);
 		
-		/**
-		 * provider tabs
-		 *
-		 * @var array
-		 */
 		protected static $tabs = array(
 			"id" => "provider_edit_tabs",
 			"role" => "tablist",
@@ -152,26 +145,13 @@
 			),
 		);
 		
-		/**
-		 * result values
-		 *
-		 * @var array
-		 */
 		protected static $data = [];
 		
-		/**
-		 * __construct
-		 * Loads Controller Elements
-		 */
 		public function __construct()
 		{
 			parent::__construct();
 		}
 		
-		/**
-		 * index
-		 * Loads Provider Index
-		 */
 		public static function index(array $params = []): void
 		{
 			$data = Page::getDetails(5);
@@ -208,10 +188,6 @@
 			exit(0);
 		}
 		
-		/**
-		 * load edit provider page
-		 * Loads Provider Edit
-		 */
 		public static function edit(array $params = [])
 		{
 			$provider_id = (int)$params["provider_id"];
@@ -310,22 +286,11 @@
 			exit(0);
 		}
 		
-		/**
-		 * get by provider id
-		 *
-		 * @param int|null $provider_id
-		 *
-		 * @return array
-		 */
 		public static function getByProviderId(int $provider_id = null): array
 		{
 			return self::format_get(ProviderModel::get($provider_id));
 		}
 		
-		/**
-		 * new
-		 * Loads New Provider
-		 */
 		public static function new(array $params = [])
 		{
 			$data = Page::getDetails(14);
@@ -372,29 +337,30 @@
 			$provider = [];
 			
 			if (isset($params["company_detail"])) {
-				Log::$debug_log->trace($params["company_detail"]);
 				$company = Company::update($params["company_detail"]);
 			}
 			
 			if (isset($params["vendor_detail"])) {
-				Log::$debug_log->trace($params["vendor_detail"]);
 				$vendor = Vendor::callUpdate($params["vendor_detail"]);
 			}
 			
 			if (isset($params["provider_detail"])) {
-//                Log::$debug_log->trace($params["provider_detail"]);
-				if (!isset($params["provider_detail"]["sku"])) {
-					//$params["provider_detail"]["sku"]
-				}
-				
 				$provider = ProviderModel::update($params["provider_detail"]);
 			}
-			if (count($provider) === 1) {
-				$provider = $provider[0];
+			
+			Log::$debug_log->trace(count($provider));
+			
+			if (count($provider) >= 1) {
+				if (isset($provider[0])) {
+					$provider = $provider[0];
+				}
+			} else if (count($provider) === 0) {
+				$provider = [];
 			}
+			
 			$provider_id = $provider["provider_id"];
 			$provider_detail = self::format_get(ProviderModel::get($provider_id));
-			Log::$debug_log->trace($provider_detail);
+			
 			//
 			
 			/**

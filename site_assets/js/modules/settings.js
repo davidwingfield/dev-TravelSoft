@@ -85,6 +85,7 @@ const short_dexcription_max = 250
 const colorScheme = new Map()
 const toggleAJAXResponse = false
 const debugMode = true
+
 colorScheme.set(1, {
     name: "Color - 1",
     backGround: "#bdbdbd",
@@ -178,3 +179,6 @@ colorScheme.set(15, {
 const tableCellMaxChars = 10
 const defaultAddressView = "medium"
 let DEBUGMODE = true
+
+const initialCalenderViewCount = 12
+

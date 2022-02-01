@@ -43,17 +43,36 @@
 		
 		public static function serveUpdate(array $params = []): void
 		{
-			//Log::$debug_log->trace("serveUpdate");
 			$seasons = array();
-			//Log::$debug_log->trace($params);
+			
 			$results = SeasonModel::update($params);
+			
 			foreach ($results as $result) {
 				$seasons[] = self::format($result);
 			}
 			
 			/**
-			 * render season json
+			 * render results json page
 			 */
+			header("Content-type:application/json");
+			View::render_json($seasons);
+			exit(0);
+		}
+		
+		public static function addSeason(array $params = []): void
+		{
+			$seasons = array();
+			
+			$results = SeasonModel::updateSeason($params);
+			
+			foreach ($results as $result) {
+				$seasons[] = self::format($result);
+			}
+			
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
 			View::render_json($seasons);
 			exit(0);
 		}
@@ -67,8 +86,9 @@
 			}
 			
 			/**
-			 * render season json
+			 * render results json page
 			 */
+			header("Content-type:application/json");
 			View::render_json($seasons);
 			exit(0);
 		}
@@ -84,8 +104,9 @@
 			}
 			
 			/**
-			 * render season json
+			 * render results json page
 			 */
+			header("Content-type:application/json");
 			View::render_json($seasons);
 			exit(0);
 		}
@@ -101,9 +122,26 @@
 			return $seasons;
 		}
 		
-		/**
-		 * Private Methods
-		 */
+		public static function validateName(array $args = []): array
+		{
+			$seasons = array();
+			
+			$name = (isset($args["name"])) ? (string)$args["name"] : null;
+			$category_id = (isset($args["category_id"])) ? (int)$args["category_id"] : null;
+			
+			$results = SeasonModel::fetchBySeasonName($name, $category_id);
+			
+			foreach ($results AS $k => $season) {
+				$seasons[] = self::format($season);
+			}
+			
+			/**
+			 * render variant json
+			 */
+			header("Content-type:application/json");
+			View::render_json($seasons);
+			exit(0);
+		}
 		
 		private static function format(array $season = null): array
 		{

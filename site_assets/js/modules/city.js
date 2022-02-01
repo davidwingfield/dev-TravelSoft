@@ -3,9 +3,30 @@ const City = (function () {
     
     const class_name = "form-new-city"
     const form_id = "form_new_city"
+    
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
     const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
     const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
+    
+    const _modal_product_arrive_to_airport_city = document.getElementById("modal_product_arrive_to_airport_city")
+    const _modal_product_arrive_to_airport_country_id = document.getElementById("modal_product_arrive_to_airport_country_id")
+    const _modal_product_arrive_to_airport_province_id = document.getElementById("modal_product_arrive_to_airport_province_id")
+    const _modal_product_arrive_to_airport_city_id = document.getElementById("modal_product_arrive_to_airport_city_id")
+    
+    const _modal_product_depart_from_airport_city = document.getElementById("modal_product_depart_from_airport_city")
+    const _modal_product_depart_from_airport_country_id = document.getElementById("modal_product_depart_from_airport_country_id")
+    const _modal_product_depart_from_airport_province_id = document.getElementById("modal_product_depart_from_airport_province_id")
+    const _modal_product_depart_from_airport_city_id = document.getElementById("modal_product_depart_from_airport_city_id")
+    
+    const _modal_product_arrive_to_station_city = document.getElementById("modal_product_arrive_to_station_city")
+    const _modal_product_arrive_to_station_country_id = document.getElementById("modal_product_arrive_to_station_country_id")
+    const _modal_product_arrive_to_station_province_id = document.getElementById("modal_product_arrive_to_station_province_id")
+    const _modal_product_arrive_to_station_city_id = document.getElementById("modal_product_arrive_to_station_city_id")
+    
+    const _modal_product_depart_from_station_city = document.getElementById("modal_product_depart_from_station_city")
+    const _modal_product_depart_from_station_country_id = document.getElementById("modal_product_depart_from_station_country_id")
+    const _modal_product_depart_from_station_province_id = document.getElementById("modal_product_depart_from_station_province_id")
+    const _modal_product_depart_from_station_city_id = document.getElementById("modal_product_depart_from_station_city_id")
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
@@ -34,12 +55,12 @@ const City = (function () {
             triggerSelectOnValidInput: false,
             paramName: "st",
             onSelect: function (suggestion) {
-                Console.log("city", suggestion)
+                console.log("city", suggestion)
                 if (!suggestion.data) {
                     return
                 }
                 
-                Console.log("city", suggestion)
+                console.log("city", suggestion)
                 /*
                     "value": "Abano Terme (Padova, Italy)",
                     "data": {
@@ -99,6 +120,195 @@ const City = (function () {
             }
         })
     
+    $("#modal_product_depart_from_airport_city")
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            $(_modal_product_depart_from_airport_city).val("").trigger("change")
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                _modal_product_city_id.value = city.id
+                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+                
+                _modal_product_depart_from_airport_country_id.value = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
+                _modal_product_depart_from_airport_province_id.value = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
+                _modal_product_depart_from_airport_city_id.value = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+            },
+        })
+    
+    $("#modal_product_arrive_to_airport_city")
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            $(_modal_product_arrive_to_airport_city).val("").trigger("change")
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                //_modal_product_city_id.value = city.id
+                //$(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+                _modal_product_arrive_to_airport_country_id.value = (city.country.id) ? city.country.id : null
+                _modal_product_arrive_to_airport_province_id.value = (city.province.id) ? city.province.id : null
+                _modal_product_arrive_to_airport_city_id.value = (city.id) ? city.id : null
+                /*
+                    "value": "Abano Terme (Padova, Italy)",
+                    "data": {
+                        "id": 1,
+                        "country_id": 102,
+                        "province_id": 250,
+                        "sort_order": 999,
+                        "name": "Abano Terme",
+                        "enabled": 1,
+                        "date_created": "2021-08-03 14:40:07",
+                        "created_by": 4,
+                        "date_modified": "2021-08-03 14:40:07",
+                        "modified_by": 4,
+                        "note": "",
+                        "province": {
+                            "id": 250,
+                            "country_id": 102,
+                            "name": "Padova",
+                            "iso2": "PD",
+                            "iso3": "",
+                            "sort_order": 999,
+                            "enabled": 1,
+                            "date_created": "2021-12-15 10:58:47",
+                            "created_by": 4,
+                            "date_modified": "2021-12-15 10:58:47",
+                            "modified_by": 4,
+                            "note": null
+                        },
+                        "country": {
+                            "id": 102,
+                            "currency_id": 2,
+                            "sort_order": 0,
+                            "name": "Italy",
+                            "iso2": "IT",
+                            "iso3": "ITA",
+                            "enabled": 1,
+                            "date_created": "2021-08-03 13:04:10",
+                            "created_by": 4,
+                            "date_modified": "2021-08-03 15:13:45",
+                            "modified_by": 4,
+                            "note": ""
+                        }
+                    }
+                //*/
+            },
+        })
+    
+    $("#modal_product_depart_from_station_city")
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            $(_modal_product_city_id).val("").trigger("change")
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                _modal_product_city_id.value = city.id
+                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+                
+                _modal_product_depart_from_station_country_id.value = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
+                _modal_product_depart_from_station_province_id.value = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
+                _modal_product_depart_from_station_city_id.value = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+            },
+        })
+    
+    $("#modal_product_arrive_to_station_city")
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            $(_modal_product_city_id).val("").trigger("change")
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                
+                _modal_product_arrive_to_station_country_id.value = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
+                _modal_product_arrive_to_station_province_id.value = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
+                _modal_product_arrive_to_station_city_id.value = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+            },
+        })
+    
     $("#modal_product_city")
         .on("change", function () {
             setTimeout(function () {
@@ -124,7 +334,7 @@ const City = (function () {
             triggerSelectOnValidInput: false,
             paramName: "st",
             onSelect: function (suggestion) {
-                Console.log("city", suggestion)
+                console.log("city", suggestion)
                 if (!suggestion.data) {
                     return
                 }
@@ -179,6 +389,41 @@ const City = (function () {
             },
         })
     
+    $("#modal_product_city_cars")
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            $(_modal_product_city_id).val("").trigger("change")
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+            
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                _modal_product_city_id.value = city.id
+                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+                
+            },
+        })
+    
     const form_rules = {
         rules: {
             city_name: "required",
@@ -190,7 +435,7 @@ const City = (function () {
     
     const handle_city_error = function (msg) {
         toastr.error(msg)
-        Console.log("msg", msg)
+        console.log("msg", msg)
     }
     
     const on_click_outside = (e) => {
@@ -271,7 +516,7 @@ const City = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
                 return handle_city_error("Error Validating City")
             }
         } else {
@@ -303,11 +548,11 @@ const City = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
                 handle_city_error("Error: Validating City")
             }
         } else {
-            Console.log("Error: Missing Data")
+            console.log("Error: Missing Data")
             handle_city_error("Error: Missing Data")
         }
     }
@@ -524,8 +769,8 @@ const City = (function () {
                 })
                 
                 if (city_id !== "" && city_id !== null) {
-                    //Console.log($(el).attr("id"))
-                    //Console.log("city_id", city_id)
+                    //console.log($(el).attr("id"))
+                    //console.log("city_id", city_id)
                     $(el).val(city_id).trigger("change")
                 }
             }

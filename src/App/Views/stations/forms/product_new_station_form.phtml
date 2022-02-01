@@ -1,0 +1,209 @@
+<?php
+	if (!isset($page_data)) {
+		$page_data = [];
+	}
+
+?>
+
+<div data-categoryid="4" class="row">
+	<div class="col-12 px-0">
+		<div class="card card-body m-1 p-1 border-1 border-light">
+			<h5 class="card-title">
+				<span>Station Fields</span>
+			</h5>
+			<h6 class="card-subtitle mb-2 text-muted">Additional Product Fields</h6>
+			<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
+			
+			<div class="row">
+				
+				<div class="col-12">
+					<div class="form-element">
+						<label for="modal_product_depart_from_station">Departing From Station:</label>
+						<input type="search" id="modal_product_depart_from_station" name="modal_product_depart_from_station" class="form-control"/>
+						<div id="modal_product_depart_from_station-error" class="error w-100 text-center"></div>
+					</div>
+				</div>
+			
+			</div>
+			
+			<div class="card card-body grey lighten-4 mb-2" id="modal_product_depart_from_station_add_block">
+				<div class="row">
+					
+					<div class="col-6">
+						<div class="form-element">
+							<label for="modal_product_depart_from_new_station_id">Id:</label>
+							<input type="text" id="modal_product_depart_from_new_station_id" name="modal_product_depart_from_new_station_id" class="form-control" readonly="readonly"/>
+							<div id="modal_product_depart_from_new_station_id-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					
+					<!-- IATA Code -->
+					<div class="col-6">
+						<div class="form-element">
+							<label for="modal_product_depart_from_station_iata_code">IATA Code:</label>
+							<input type="text" id="modal_product_depart_from_station_iata_code" name="modal_product_depart_from_station_iata_code" class="form-control"/>
+							<div id="modal_product_depart_from_station_iata_code-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+				
+				</div>
+				
+				<div class="row">
+					
+					<div class="col-12">
+						<div class="form-element">
+							<label for="modal_product_depart_from_station_city">City/Province/Country:</label>
+							<input type="search" id="modal_product_depart_from_station_city" name="modal_product_depart_from_station_city" class="form-control"/>
+							<div id="modal_product_depart_from_station_city-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+				
+				</div>
+				
+				<div class="row">
+					
+					<div class="col-3">
+						<label for="modal_product_depart_from_station_city_id" class="dev-element d-none">City Id:</label>
+						<input type="hidden" id="modal_product_depart_from_station_city_id" class="form-control dev-element" value="" readonly="readonly"/>
+					</div>
+					
+					<div class="col-3">
+						<label for="modal_product_depart_from_station_province_id" class="dev-element d-none">Province Id:</label>
+						<input type="hidden" id="modal_product_depart_from_station_province_id" class="form-control dev-element" value="" readonly="readonly"/>
+					</div>
+					
+					<div class="col-3">
+						<label for="modal_product_depart_from_station_country_id" class="dev-element d-none">Country Id:</label>
+						<input type="hidden" id="modal_product_depart_from_station_country_id" class="form-control dev-element" value="" readonly="readonly"/>
+					</div>
+				
+				</div>
+				
+				<div class="row">
+					
+					<div class="col-6 text-left">
+						<button type="button" id="modal_product_depart_from_station_cancel_button" class="btn btn-outline-primary btn-sm white waves-effect waves-light">Cancel</button>
+					</div>
+					
+					<div class="col-6 text-right">
+						<button type="button" id="modal_product_depart_from_station_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">Save</button>
+					</div>
+				
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-12 col-md-6">
+					<div id="modal_product_depart_from_station_date" data-label="Departing Date" data-placeholder="Select Departing Date"></div>
+				</div>
+				
+				<div class="col-12 col-md-6">
+					<div id="modal_product_depart_from_station_time" data-label="Departing Time" data-placeholder="Select Departing Time"></div>
+				</div>
+			</div>
+			
+			<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
+			
+			<div class="row">
+				<div class="col-12">
+					<div class="form-element">
+						<label for="modal_product_arrive_to_station">Arriving To Station:</label>
+						<input type="search" id="modal_product_arrive_to_station" name="modal_product_arrive_to_station" class="form-control"/>
+						<div id="modal_product_arrive_to_station-error" class="error w-100 text-center"></div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="card card-body grey lighten-4 mb-2" id="modal_product_arrive_to_station_add_block">
+				<div class="row">
+					
+					<div class="col-6">
+						<div class="form-element">
+							<label for="modal_product_arrive_to_new_station_id">Id:</label>
+							<input type="text" id="modal_product_arrive_to_new_station_id" name="modal_product_arrive_to_new_station_id" class="form-control" readonly="readonly"/>
+							<div id="modal_product_arrive_to_new_station_id-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					
+					<!-- IATA Code -->
+					<div class="col-6">
+						<div class="form-element">
+							<label for="modal_product_arrive_to_station_iata_code">IATA Code:</label>
+							<input type="text" id="modal_product_arrive_to_station_iata_code" name="modal_product_arrive_to_station_iata_code" class="form-control"/>
+							<div id="modal_product_arrive_to_station_iata_code-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+				
+				</div>
+				
+				<div class="row">
+					
+					<div class="col-12">
+						<div class="form-element">
+							<label for="modal_product_arrive_to_station_city">City/Province/Country:</label>
+							<input type="search" id="modal_product_arrive_to_station_city" name="modal_product_arrive_to_station_city" class="form-control"/>
+							<div id="modal_product_arrive_to_station_city-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+				
+				</div>
+				
+				<div class="row">
+					
+					<div class="col-3">
+						<label for="modal_product_arrive_to_station_city_id" class="dev-element d-none">City Id:</label>
+						<input type="hidden" id="modal_product_arrive_to_station_city_id" class="form-control dev-element" value="" readonly="readonly"/>
+					</div>
+					
+					<div class="col-3">
+						<label for="modal_product_arrive_to_station_province_id" class="dev-element d-none">Province Id:</label>
+						<input type="hidden" id="modal_product_arrive_to_station_province_id" class="form-control dev-element" value="" readonly="readonly"/>
+					</div>
+					
+					<div class="col-3">
+						<label for="modal_product_arrive_to_station_country_id" class="dev-element d-none">Country Id:</label>
+						<input type="hidden" id="modal_product_arrive_to_station_country_id" class="form-control dev-element" value="" readonly="readonly"/>
+					</div>
+				
+				</div>
+				
+				<div class="row">
+					
+					<div class="col-6 text-left">
+						<button type="button" id="modal_product_arrive_to_station_cancel_button" class="btn btn-outline-primary btn-sm white waves-effect waves-light">Cancel</button>
+					</div>
+					
+					<div class="col-6 text-right">
+						<button type="button" id="modal_product_arrive_to_station_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">Save</button>
+					</div>
+				
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-12 col-md-6">
+					<div id="modal_product_arrive_to_station_date" data-label="Arriving Date" data-placeholder="Select Arriving Date"></div>
+				</div>
+				
+				<div class="col-12 col-md-6">
+					<div id="modal_product_arrive_to_station_time" data-label="Arriving Time" data-placeholder="Select Arriving Time"></div>
+				</div>
+			</div>
+			
+			<div class="row">
+				
+				<div class="col-12 col-md-6">
+					<label for="modal_product_depart_from_station_id" class="dev-element d-none">Departing From Station Id:</label>
+					<input type="hidden" id="modal_product_depart_from_station_id" name="modal_product_depart_from_station_id" class="form-control dev-element" value="" readonly="readonly">
+				</div>
+				
+				<div class="col-12 col-md-6">
+					<label for="modal_product_arrive_to_station_id" class="dev-element d-none">Arriving Station Id:</label>
+					<input type="hidden" id="modal_product_arrive_to_station_id" name="modal_product_arrive_to_station_id" class="form-control dev-element" value="" readonly="readonly">
+				</div>
+			
+			</div>
+		
+		</div>
+	</div>
+</div>

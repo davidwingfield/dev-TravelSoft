@@ -99,7 +99,7 @@
 					Log::$debug_log->warn($error["message"]);
 				}
 				
-				return array("errors" => $errors);
+				return array();
 			} else {
 				if (isset($category_id) && isset($city_id)) {
 					try {
@@ -111,14 +111,14 @@
 							return $results;
 						}
 						
-						return array("errors" => array("msg" => "OOPS"));
+						return array();
 					} catch (Exception $e) {
 						Log::$debug_log->error($e);
 						
-						return array("errors" => array("msg" => "OOPS"));
+						return array();
 					}
 				} else {
-					return array("errors" => array("msg" => "OOPS"));
+					return array();
 				}
 				
 			}

@@ -23,6 +23,10 @@
 	Router::get($routeLead . '/search/hotels', "Search@hotels");
 	Router::get($routeLead . '/pricings/${matrix_id}', "Pricing@serveGetByMatrixId");
 	Router::get($routeLead . '/pricings/product', "Pricing@serveGetByProductId");
+	/**
+	 * @see Product::serveGet()
+	 */
+	Router::get($routeLead . '/products/${product_id}', "Product@serveGet");
 	Router::get($routeLead . '/profiles/${product_id}', "Profile@getByProductId");
 	Router::get($routeLead . '/locations/getByName', "Location@getByLocationName");
 	Router::get($routeLead . '/seasons/${product_id}/${season_id}', "Season@getSeasonByProductSeasonId");
@@ -32,7 +36,6 @@
 	Router::get($routeLead . '/profiles', "Profile@serveGet");
 	Router::get($routeLead . "/countries", "Country@serveGet");
 	Router::get($routeLead . "/packages", "Package@serveGet");
-	Router::get($routeLead . '/products/${product_id}', "Product@serveGet");
 	Router::get($routeLead . "/products", "Product@serveGet");
 	Router::get($routeLead . "/provinces", "Province@serveGet");
 	Router::get($routeLead . "/cities", "City@serveGet");
@@ -101,30 +104,37 @@
 	 * login requests
 	 */
 	Router::post($routeLead . "/users/login", "User@login");
+	
 	Router::post($routeLead . "/users/register", "User@serveUpdateUser");
 	Router::post($routeLead . "/users/update", "User@serveUpdateUser");
-	
 	/**
 	 * image requests
 	 */
 	Router::post($routeLead . "/images/update", "Image@serveUpdate");
-	
 	/**
 	 * @see Product::assignSeason()
 	 */
 	Router::post($routeLead . "/products/assign_seasons", "Product@assignSeason");
-	
 	/**
 	 * @see Product::assignProfile()
 	 */
 	Router::post($routeLead . "/products/assign_profiles", "Product@assignProfile");
-	
 	/**
 	 * @see Matrix::serveUpdate()
 	 */
 	Router::post($routeLead . "/matrices/update", "Matrix@serveUpdate");
+	/**
+	 * @see Pricing::serveUpdate()
+	 */
 	Router::post($routeLead . "/pricings/update", "Pricing@serveUpdate");
+	/**
+	 * @see Season::serveUpdate()
+	 */
 	Router::post($routeLead . "/seasons/update", "Season@serveUpdate");
+	/**
+	 * @see Product::serveUpdate()
+	 */
+	Router::post($routeLead . "/products/update", "Product@serveUpdate");
 	/**
 	 * @see Season:addSeason()
 	 */

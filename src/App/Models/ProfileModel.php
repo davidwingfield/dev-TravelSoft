@@ -21,7 +21,7 @@
 			SELECT
 					PROFILE.id AS 'profile_id',
 					PROFILE.allot_by_id AS 'profile_allot_by_id',
-			       PROFILE.product_id AS 'profile_product_id',
+			       	PROFILE.product_id AS 'profile_product_id',
 					PROFILE.sales_types_id AS 'profile_sales_types_id',
 					PROFILE.name AS 'profile_name',
 					PROFILE.quantity AS 'profile_quantity',

@@ -225,6 +225,22 @@
 			exit(0);
 		}
 		
+		public static function getProductByProductId(int $product_id = null): array
+		{
+			if (is_null($product_id)) {
+				return [];
+			}
+			
+			$results = ProductModel::get($product_id);
+			
+			$products = [];
+			foreach ($results AS $k => $product) {
+				$products[] = self::format($product);
+			}
+			
+			return $products;
+		}
+		
 		public static function edit(array $params = [])
 		{
 			if (isset($params["product_id"])) {
@@ -233,15 +249,18 @@
 				$results = [];
 				$products = ProductModel::get($product_id);
 				if (count($products) === 0) {
-					header('Location: /products');
+					header("Location: /products");
 					exit(0);
 				}
+				
 				foreach (ProductModel::get($product_id) AS $k => $product) {
 					$results[] = self::format($product);
 				}
+				
 				if (isset($results[0])) {
 					$results = $results[0];
 				}
+				
 				$data["product_details"] = $results;
 				
 				/** breadcrumbs */
@@ -305,8 +324,6 @@
 			exit(0);
 		}
 		
-		// ----
-		
 		public static function assignSeason(array $params = []): void
 		{
 			$results = ProductModel::updateAssignSeasons($params);
@@ -369,20 +386,16 @@
 		public static function serveGet(array $params = []): void
 		{
 			$product_id = null;
-			$products = [];
+			
 			if ($params["product_id"]) {
 				$product_id = (int)$params["product_id"];
-			}
-			$results = ProductModel::get($product_id);
-			foreach ($results AS $k => $product) {
-				$products[] = self::format($product);
 			}
 			
 			/**
 			 * render results json page
 			 */
 			header("Content-type:application/json");
-			View::render_json($products);
+			View::render_json(self::getProductByProductId($product_id));
 			exit(0);
 		}
 		
@@ -553,6 +566,24 @@
 			 */
 			header("Content-type:application/json");
 			View::render_json(ProductModel::addRecord($params));
+			exit(0);
+		}
+		
+		public static function serveUpdate(array $params = []): void
+		{
+			$products = [];
+			
+			$results = ProductModel::updateProductRecord($params);
+			
+			foreach ($results AS $k => $product) {
+				$products[] = self::format($product);
+			}
+			
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			View::render_json($products);
 			exit(0);
 		}
 		

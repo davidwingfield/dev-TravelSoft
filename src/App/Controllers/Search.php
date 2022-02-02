@@ -49,16 +49,9 @@
 		{
 			$resultSet = SearchModel::fetchProductSearch($params);
 			
-			if (isset($resultSet["errors"])) {
-				/**
-				 * render invalid results json page
-				 */
-				header("Content-type:application/json");
-				View::render_invalid_json($resultSet["errors"]);
-				exit(1);
-			}
-			
 			$results = self::formatHotelSearch($resultSet);
+			
+			Log::$debug_log->trace($resultSet);
 			
 			/**
 			 * render valid results json page
@@ -70,6 +63,10 @@
 		
 		private static function formatHotelSearch(array $resultSet = []): array
 		{
+			if (is_null($resultSet)) {
+				return [];
+			}
+			
 			$temp = array(
 				"products" => [],
 			);

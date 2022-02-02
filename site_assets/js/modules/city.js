@@ -424,6 +424,41 @@ const City = (function () {
             },
         })
     
+    $("#modal_product_city_transports")
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            $(_modal_product_city_id).val("").trigger("change")
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+            
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                _modal_product_city_id.value = city.id
+                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+                
+            },
+        })
+    
     const form_rules = {
         rules: {
             city_name: "required",

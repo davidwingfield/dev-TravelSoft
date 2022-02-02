@@ -1,11 +1,11 @@
 $.fn.BuildKeyword = function (keywords) {
-    
     if (!$(this).hasClass("keyword")) {
         return
     }
     
     const chip_id = $(this).attr("id")
     const _chips = document.getElementById(chip_id)
+    
     let editMode = null
     let tags = new Map()
     let $chipsEl = $(_chips)
@@ -14,7 +14,6 @@ $.fn.BuildKeyword = function (keywords) {
     let counter = 0
     let $container = $(`#${chip_id} > div > div.chips_container`)
     
-    //--
     if (!keywords) {
         keywords = []
     }
@@ -36,18 +35,20 @@ $.fn.BuildKeyword = function (keywords) {
     })(jQuery)
     
     $input
-      .on("keypress", function (e) {
-          if (e.which === 13) {
-              add()
-              editMode = null
-          }
-      })
+        .on("keydown", function (e) {
+            console.log(e.keyCode)
+            
+            if (e.which === 13 || e.keyCode === 9) {
+                add()
+                editMode = null
+            }
+        })
     
     $submitButton
-      .on("click", function () {
-          add()
-          editMode = null
-      })
+        .on("click", function () {
+            add()
+            editMode = null
+        })
     
     const formatTag = function (data) {
         counter += 1
@@ -56,29 +57,29 @@ $.fn.BuildKeyword = function (keywords) {
             let $closeIcon = $("<i>")
             
             $closeIcon
-              .addClass("close fas fa-times")
-              .on("click", function (e) {
-                  e.stopPropagation()
-                  let $chip = $(this).parents("div.chip")
-                  deleteDialog(`Would you like to delete?`, (ans) => {
-                      if (ans) {
-                          $id = $chip.attr("id")
-                          chipDelete($chip)
-                      }
-                  })
-              })
+                .addClass("close fas fa-times")
+                .on("click", function (e) {
+                    e.stopPropagation()
+                    let $chip = $(this).parents("div.chip")
+                    deleteDialog(`Would you like to delete?`, (ans) => {
+                        if (ans) {
+                            $id = $chip.attr("id")
+                            chipDelete($chip)
+                        }
+                    })
+                })
             
             $chip
-              .addClass("chip blue lighten-4 waves-effect")
-              .text(data)
-              .append($closeIcon)
-              .attr("id", chip_id + "_" + counter)
-              .on("click", function (e) {
-                  let $chip = $(this)
-                  editMode = tags.get($chip.text())
-                  let id = $chip.attr("id")
-                  chipSelect(id)
-              })
+                .addClass("chip blue lighten-4 waves-effect")
+                .text(data)
+                .append($closeIcon)
+                .attr("id", chip_id + "_" + counter)
+                .on("click", function (e) {
+                    let $chip = $(this)
+                    editMode = tags.get($chip.text())
+                    let id = $chip.attr("id")
+                    chipSelect(id)
+                })
             
             // --
             

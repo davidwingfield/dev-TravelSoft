@@ -92,12 +92,11 @@ const Unit = (function () {
             _product_edit_unit_form_unit_name_filter.value = ""
             _product_edit_unit_form_unit_name_filter.disabled = false
             _product_edit_unit_form_unit_name.disabled = true
-            hideForm()
         })
     
     $(_table_unit_product_edit_add_new_button)
         .on("click", function () {
-            clearForm()
+            resetForm()
             $table_unit_product_edit.clearSelectedRows()
             disableFormFields()
             _product_edit_unit_form_unit_name_filter.value = ""
@@ -540,16 +539,14 @@ const Unit = (function () {
     }
     
     const enableFormFields = function () {
+        
         disableFormFields()
+        
         _product_edit_unit_form_unit_id.disabled = true
         _product_edit_unit_form_unit_name.disabled = true
         _product_edit_unit_form_unit_room_code.disabled = true
         _product_edit_unit_form_unit_enabled.disabled = true
-        // ----
-        _product_edit_unit_form_unit_min_nights.disabled = false
-        _product_edit_unit_form_unit_max_nights.disabled = false
-        _product_edit_unit_form_unit_min_pax.disabled = false
-        _product_edit_unit_form_unit_max_pax.disabled = false
+        
         _product_edit_unit_form_unit_description_short.disabled = false
         _product_edit_unit_form_unit_description_long.disabled = false
         
@@ -564,21 +561,150 @@ const Unit = (function () {
     }
     
     const resetForm = function () {
+        let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+        
         clearForm()
         hideForm()
+        
+        let labelMinPax, labelMaxPax, labelMinNights, labelMaxNights,
+            disabledMinPax, disabledMaxPax, disabledMinNights, disabledMaxNights,
+            valueMinPax, valueMaxPax, valueMinNights, valueMaxNights,
+            labelRoomCode, disabledRoomCode
+        
+        switch (categoryId) {
+            case 1:
+                labelMinPax = "Minimum Pax:"
+                labelMaxPax = "Maximum Pax:"
+                labelMinNights = "Minimum Nights:"
+                labelMaxNights = "Maximum Nights:"
+                
+                labelRoomCode = "Room Code:"
+                
+                disabledMinPax = false
+                disabledMaxPax = false
+                disabledMinNights = false
+                disabledMaxNights = false
+                disabledRoomCode = false
+                
+                valueMinPax = 1
+                valueMaxPax = ""
+                valueMinNights = 1
+                valueMaxNights = ""
+                break
+            case 2:
+                labelMinPax = "Minimum Pax:"
+                labelMaxPax = "Maximum Pax:"
+                labelMinNights = "Minimum Days:"
+                labelMaxNights = "Maximum Days:"
+                
+                labelRoomCode = "Seat Code:"
+                
+                valueMinPax = 1
+                valueMaxPax = 1
+                valueMinNights = 1
+                valueMaxNights = 1
+                
+                break
+            case 4:
+                labelMinPax = "Minimum Pax:"
+                labelMaxPax = "Maximum Pax:"
+                labelMinNights = "Minimum Days:"
+                labelMaxNights = "Maximum Days:"
+                
+                labelRoomCode = "Seat Code:"
+                
+                valueMinPax = 1
+                valueMaxPax = 1
+                valueMinNights = 1
+                valueMaxNights = 1
+                
+                break
+            default:
+                labelMinPax = "Minimum Pax:"
+                labelMaxPax = "Maximum Pax:"
+                labelMinNights = "Minimum Nights:"
+                labelMaxNights = "Maximum Nights:"
+                
+                disabledMinPax = false
+                disabledMaxPax = false
+                disabledMinNights = false
+                disabledMaxNights = false
+                
+                valueMinPax = 1
+                valueMaxPax = ""
+                valueMinNights = 1
+                valueMaxNights = ""
+        }
+        
+        let labels = document.getElementsByTagName('LABEL')
+        for (let i = 0; i < labels.length; i++) {
+            if (labels[i].htmlFor !== '') {
+                let elem = document.getElementById(labels[i].htmlFor)
+                if (elem) {
+                    elem.label = labels[i]
+                }
+            }
+        }
+        
+        _product_edit_unit_form_unit_min_nights.value = valueMinNights
+        _product_edit_unit_form_unit_max_nights.value = valueMaxNights
+        _product_edit_unit_form_unit_min_pax.value = valueMinPax
+        _product_edit_unit_form_unit_max_pax.value = valueMaxPax
+        
+        _product_edit_unit_form_unit_min_nights.label.innerHTML = labelMinNights
+        _product_edit_unit_form_unit_max_nights.label.innerHTML = labelMaxNights
+        _product_edit_unit_form_unit_min_pax.label.innerHTML = labelMinPax
+        _product_edit_unit_form_unit_max_pax.label.innerHTML = labelMaxPax
+        _product_edit_unit_form_unit_room_code.label.innerHTML = labelRoomCode
+        
+        _product_edit_unit_form_unit_min_nights.disabled = disabledMinNights
+        _product_edit_unit_form_unit_max_nights.disabled = disabledMaxNights
+        _product_edit_unit_form_unit_min_pax.disabled = disabledMinPax
+        _product_edit_unit_form_unit_max_pax.disabled = disabledMaxPax
+        
+    }
+    
+    const initForm = function () {
+    
     }
     
     const populateForm = function (unit) {
-        clearForm()
+        resetForm()
+        
         if (unit) {
+            let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+            
+            if (categoryId === 2 || categoryId === 4) {
+                _product_edit_unit_form_unit_min_nights.value = (unit.min_nights) ? unit.min_nights : 1
+                _product_edit_unit_form_unit_max_nights.value = (unit.max_nights) ? unit.max_nights : 1
+                _product_edit_unit_form_unit_min_pax.value = (unit.min_pax) ? unit.min_pax : 1
+                _product_edit_unit_form_unit_max_pax.value = (unit.max_pax) ? unit.max_pax : 1
+                
+                _product_edit_unit_form_unit_min_nights.disabled = true
+                _product_edit_unit_form_unit_max_nights.disabled = true
+                _product_edit_unit_form_unit_min_pax.disabled = true
+                _product_edit_unit_form_unit_max_pax.disabled = true
+                _product_edit_unit_form_unit_room_code.disabled = true
+                
+            } else {
+                _product_edit_unit_form_unit_min_nights.value = (unit.min_nights) ? unit.min_nights : 1
+                _product_edit_unit_form_unit_max_nights.value = (unit.max_nights) ? unit.max_nights : null
+                _product_edit_unit_form_unit_min_pax.value = (unit.min_pax) ? unit.min_pax : 1
+                _product_edit_unit_form_unit_max_pax.value = (unit.max_pax) ? unit.max_pax : null
+                
+                _product_edit_unit_form_unit_min_nights.disabled = false
+                _product_edit_unit_form_unit_max_nights.disabled = false
+                _product_edit_unit_form_unit_min_pax.disabled = false
+                _product_edit_unit_form_unit_max_pax.disabled = false
+                _product_edit_unit_form_unit_room_code.disabled = false
+                
+            }
+            
             _product_edit_unit_form_unit_name_filter.value = (unit.name) ? unit.name : ""
             _product_edit_unit_form_unit_id.value = (unit.id) ? unit.id : ""
             _product_edit_unit_form_unit_name.value = (unit.name) ? unit.name : ""
             _product_edit_unit_form_unit_room_code.value = (unit.room_code) ? unit.room_code : ""
-            _product_edit_unit_form_unit_min_nights.value = (unit.min_nights) ? unit.min_nights : 1
-            _product_edit_unit_form_unit_max_nights.value = (unit.max_nights) ? unit.max_nights : null
-            _product_edit_unit_form_unit_min_pax.value = (unit.min_pax) ? unit.min_pax : 1
-            _product_edit_unit_form_unit_max_pax.value = (unit.max_pax) ? unit.max_pax : null
+            
             _product_edit_unit_form_unit_description_short.value = (unit.description_short) ? unit.description_short : ""
             _product_edit_unit_form_unit_description_long.value = (unit.description_long) ? unit.description_long : ""
             _product_edit_unit_form_unit_enabled.checked = true
@@ -699,6 +825,7 @@ const Unit = (function () {
             initAutoComplete()
             validator_init(form_rules)
             Unit.validator = $(_product_edit_unit_form).validate()
+            initForm()
         }
         
         if (_product_edit_unit_form_unit_name_filter) {
@@ -707,7 +834,7 @@ const Unit = (function () {
         }
         
         if (_edit_product_unit) {
-            hideForm()
+            resetForm()
             updateProgress()
         }
         

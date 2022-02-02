@@ -415,7 +415,7 @@
 							
 							<div class="card booking-card mb-2">
 								<div class="card-body">
-									<h5 class="card-title font-weight-bold"><span id="product_name" class=""><?php echo $product_name; ?></span>
+									<h5 class="card-title font-weight-bold"><span id="display_product_name" class=""><?php echo $product_name; ?></span>
 										<a href="javascript:void(0);" id="product_panel_link_product" class="panel_link" aria-hidden="true">Edit</a>
 									</h5>
 									<h6 class="card-subtitle my-2 text-muted">
@@ -603,10 +603,24 @@
 	<!-- Hidden Elements -->
 	<div class="row gx-1 my-0">
 		<div class="col-3 px-1 my-0">
+			<label for="provider_id" class="dev-element d-none">Provider Id:</label>
+			<input type="hidden" id="provider_id" name="provider_id" class="form-control dev-element" value="<?php echo $product_provider_id; ?>" readonly="readonly"/>
+		</div>
+		<div class="col-3 px-1 my-0">
+			<label for="vendor_id" class="dev-element d-none">Vendor Id:</label>
+			<input type="hidden" id="vendor_id" name="vendor_id" class="form-control dev-element" value="<?php echo $product_vendor_id; ?>" readonly="readonly"/>
+		</div>
+		<div class="col-3 px-1 my-0">
 			<label for="category_id" class="dev-element d-none">Category Id:</label>
 			<input type="hidden" id="category_id" name="category_id" class="form-control dev-element" value="<?php echo $product_category_id; ?>" readonly="readonly"/>
+		</div>
+		<div class="col-3 px-1 my-0">
 			<label for="product_id" class="dev-element d-none">Product Id:</label>
 			<input type="hidden" id="product_id" name="product_id" class="form-control dev-element" value="<?php echo $product_id; ?>" readonly="readonly"/>
+		</div>
+		<div class="col-3 px-1 my-0">
+			<label for="product_name" class="dev-element d-none">Product Name:</label>
+			<input type="hidden" id="product_name" name="product_name" class="form-control dev-element" value="<?php echo $product_name; ?>" readonly="readonly"/>
 		</div>
 	</div>
 	<!-- /Hidden Elements -->

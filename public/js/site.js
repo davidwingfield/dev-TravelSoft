@@ -3207,13 +3207,13 @@ $.fn.table = function (settings) {
 }
 
 $.fn.BuildKeyword = function (keywords) {
-    
     if (!$(this).hasClass("keyword")) {
         return
     }
     
     const chip_id = $(this).attr("id")
     const _chips = document.getElementById(chip_id)
+    
     let editMode = null
     let tags = new Map()
     let $chipsEl = $(_chips)
@@ -3222,7 +3222,6 @@ $.fn.BuildKeyword = function (keywords) {
     let counter = 0
     let $container = $(`#${chip_id} > div > div.chips_container`)
     
-    //--
     if (!keywords) {
         keywords = []
     }
@@ -3244,18 +3243,20 @@ $.fn.BuildKeyword = function (keywords) {
     })(jQuery)
     
     $input
-      .on("keypress", function (e) {
-          if (e.which === 13) {
-              add()
-              editMode = null
-          }
-      })
+        .on("keydown", function (e) {
+            console.log(e.keyCode)
+            
+            if (e.which === 13 || e.keyCode === 9) {
+                add()
+                editMode = null
+            }
+        })
     
     $submitButton
-      .on("click", function () {
-          add()
-          editMode = null
-      })
+        .on("click", function () {
+            add()
+            editMode = null
+        })
     
     const formatTag = function (data) {
         counter += 1
@@ -3264,29 +3265,29 @@ $.fn.BuildKeyword = function (keywords) {
             let $closeIcon = $("<i>")
             
             $closeIcon
-              .addClass("close fas fa-times")
-              .on("click", function (e) {
-                  e.stopPropagation()
-                  let $chip = $(this).parents("div.chip")
-                  deleteDialog(`Would you like to delete?`, (ans) => {
-                      if (ans) {
-                          $id = $chip.attr("id")
-                          chipDelete($chip)
-                      }
-                  })
-              })
+                .addClass("close fas fa-times")
+                .on("click", function (e) {
+                    e.stopPropagation()
+                    let $chip = $(this).parents("div.chip")
+                    deleteDialog(`Would you like to delete?`, (ans) => {
+                        if (ans) {
+                            $id = $chip.attr("id")
+                            chipDelete($chip)
+                        }
+                    })
+                })
             
             $chip
-              .addClass("chip blue lighten-4 waves-effect")
-              .text(data)
-              .append($closeIcon)
-              .attr("id", chip_id + "_" + counter)
-              .on("click", function (e) {
-                  let $chip = $(this)
-                  editMode = tags.get($chip.text())
-                  let id = $chip.attr("id")
-                  chipSelect(id)
-              })
+                .addClass("chip blue lighten-4 waves-effect")
+                .text(data)
+                .append($closeIcon)
+                .attr("id", chip_id + "_" + counter)
+                .on("click", function (e) {
+                    let $chip = $(this)
+                    editMode = tags.get($chip.text())
+                    let id = $chip.attr("id")
+                    chipSelect(id)
+                })
             
             // --
             
@@ -5752,7 +5753,6 @@ const PricingWorksheet = (function () {
                             .attr("data-type", "season")
                         
                         if (hasSeason) {
-                            console.log("hasSeaosn", hasSeason)
                             seasonBackgroundColor = hexToRgb(hasSeason.color_scheme.background_color)
                             seasonTextColor = hasSeason.color_scheme.text_color
                             seasonBorderColor = hasSeason.color_scheme.border_color
@@ -8518,6 +8518,41 @@ const City = (function () {
         })
     
     $("#modal_product_city_cars")
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            $(_modal_product_city_id).val("").trigger("change")
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+            
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                _modal_product_city_id.value = city.id
+                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+                
+            },
+        })
+    
+    $("#modal_product_city_transports")
         .on("change", function () {
             setTimeout(function () {
             
@@ -11976,12 +12011,11 @@ const Unit = (function () {
             _product_edit_unit_form_unit_name_filter.value = ""
             _product_edit_unit_form_unit_name_filter.disabled = false
             _product_edit_unit_form_unit_name.disabled = true
-            hideForm()
         })
     
     $(_table_unit_product_edit_add_new_button)
         .on("click", function () {
-            clearForm()
+            resetForm()
             $table_unit_product_edit.clearSelectedRows()
             disableFormFields()
             _product_edit_unit_form_unit_name_filter.value = ""
@@ -12424,16 +12458,14 @@ const Unit = (function () {
     }
     
     const enableFormFields = function () {
+        
         disableFormFields()
+        
         _product_edit_unit_form_unit_id.disabled = true
         _product_edit_unit_form_unit_name.disabled = true
         _product_edit_unit_form_unit_room_code.disabled = true
         _product_edit_unit_form_unit_enabled.disabled = true
-        // ----
-        _product_edit_unit_form_unit_min_nights.disabled = false
-        _product_edit_unit_form_unit_max_nights.disabled = false
-        _product_edit_unit_form_unit_min_pax.disabled = false
-        _product_edit_unit_form_unit_max_pax.disabled = false
+        
         _product_edit_unit_form_unit_description_short.disabled = false
         _product_edit_unit_form_unit_description_long.disabled = false
         
@@ -12448,21 +12480,150 @@ const Unit = (function () {
     }
     
     const resetForm = function () {
+        let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+        
         clearForm()
         hideForm()
+        
+        let labelMinPax, labelMaxPax, labelMinNights, labelMaxNights,
+            disabledMinPax, disabledMaxPax, disabledMinNights, disabledMaxNights,
+            valueMinPax, valueMaxPax, valueMinNights, valueMaxNights,
+            labelRoomCode, disabledRoomCode
+        
+        switch (categoryId) {
+            case 1:
+                labelMinPax = "Minimum Pax:"
+                labelMaxPax = "Maximum Pax:"
+                labelMinNights = "Minimum Nights:"
+                labelMaxNights = "Maximum Nights:"
+                
+                labelRoomCode = "Room Code:"
+                
+                disabledMinPax = false
+                disabledMaxPax = false
+                disabledMinNights = false
+                disabledMaxNights = false
+                disabledRoomCode = false
+                
+                valueMinPax = 1
+                valueMaxPax = ""
+                valueMinNights = 1
+                valueMaxNights = ""
+                break
+            case 2:
+                labelMinPax = "Minimum Pax:"
+                labelMaxPax = "Maximum Pax:"
+                labelMinNights = "Minimum Days:"
+                labelMaxNights = "Maximum Days:"
+                
+                labelRoomCode = "Seat Code:"
+                
+                valueMinPax = 1
+                valueMaxPax = 1
+                valueMinNights = 1
+                valueMaxNights = 1
+                
+                break
+            case 4:
+                labelMinPax = "Minimum Pax:"
+                labelMaxPax = "Maximum Pax:"
+                labelMinNights = "Minimum Days:"
+                labelMaxNights = "Maximum Days:"
+                
+                labelRoomCode = "Seat Code:"
+                
+                valueMinPax = 1
+                valueMaxPax = 1
+                valueMinNights = 1
+                valueMaxNights = 1
+                
+                break
+            default:
+                labelMinPax = "Minimum Pax:"
+                labelMaxPax = "Maximum Pax:"
+                labelMinNights = "Minimum Nights:"
+                labelMaxNights = "Maximum Nights:"
+                
+                disabledMinPax = false
+                disabledMaxPax = false
+                disabledMinNights = false
+                disabledMaxNights = false
+                
+                valueMinPax = 1
+                valueMaxPax = ""
+                valueMinNights = 1
+                valueMaxNights = ""
+        }
+        
+        let labels = document.getElementsByTagName('LABEL')
+        for (let i = 0; i < labels.length; i++) {
+            if (labels[i].htmlFor !== '') {
+                let elem = document.getElementById(labels[i].htmlFor)
+                if (elem) {
+                    elem.label = labels[i]
+                }
+            }
+        }
+        
+        _product_edit_unit_form_unit_min_nights.value = valueMinNights
+        _product_edit_unit_form_unit_max_nights.value = valueMaxNights
+        _product_edit_unit_form_unit_min_pax.value = valueMinPax
+        _product_edit_unit_form_unit_max_pax.value = valueMaxPax
+        
+        _product_edit_unit_form_unit_min_nights.label.innerHTML = labelMinNights
+        _product_edit_unit_form_unit_max_nights.label.innerHTML = labelMaxNights
+        _product_edit_unit_form_unit_min_pax.label.innerHTML = labelMinPax
+        _product_edit_unit_form_unit_max_pax.label.innerHTML = labelMaxPax
+        _product_edit_unit_form_unit_room_code.label.innerHTML = labelRoomCode
+        
+        _product_edit_unit_form_unit_min_nights.disabled = disabledMinNights
+        _product_edit_unit_form_unit_max_nights.disabled = disabledMaxNights
+        _product_edit_unit_form_unit_min_pax.disabled = disabledMinPax
+        _product_edit_unit_form_unit_max_pax.disabled = disabledMaxPax
+        
+    }
+    
+    const initForm = function () {
+    
     }
     
     const populateForm = function (unit) {
-        clearForm()
+        resetForm()
+        
         if (unit) {
+            let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+            
+            if (categoryId === 2 || categoryId === 4) {
+                _product_edit_unit_form_unit_min_nights.value = (unit.min_nights) ? unit.min_nights : 1
+                _product_edit_unit_form_unit_max_nights.value = (unit.max_nights) ? unit.max_nights : 1
+                _product_edit_unit_form_unit_min_pax.value = (unit.min_pax) ? unit.min_pax : 1
+                _product_edit_unit_form_unit_max_pax.value = (unit.max_pax) ? unit.max_pax : 1
+                
+                _product_edit_unit_form_unit_min_nights.disabled = true
+                _product_edit_unit_form_unit_max_nights.disabled = true
+                _product_edit_unit_form_unit_min_pax.disabled = true
+                _product_edit_unit_form_unit_max_pax.disabled = true
+                _product_edit_unit_form_unit_room_code.disabled = true
+                
+            } else {
+                _product_edit_unit_form_unit_min_nights.value = (unit.min_nights) ? unit.min_nights : 1
+                _product_edit_unit_form_unit_max_nights.value = (unit.max_nights) ? unit.max_nights : null
+                _product_edit_unit_form_unit_min_pax.value = (unit.min_pax) ? unit.min_pax : 1
+                _product_edit_unit_form_unit_max_pax.value = (unit.max_pax) ? unit.max_pax : null
+                
+                _product_edit_unit_form_unit_min_nights.disabled = false
+                _product_edit_unit_form_unit_max_nights.disabled = false
+                _product_edit_unit_form_unit_min_pax.disabled = false
+                _product_edit_unit_form_unit_max_pax.disabled = false
+                _product_edit_unit_form_unit_room_code.disabled = false
+                
+            }
+            
             _product_edit_unit_form_unit_name_filter.value = (unit.name) ? unit.name : ""
             _product_edit_unit_form_unit_id.value = (unit.id) ? unit.id : ""
             _product_edit_unit_form_unit_name.value = (unit.name) ? unit.name : ""
             _product_edit_unit_form_unit_room_code.value = (unit.room_code) ? unit.room_code : ""
-            _product_edit_unit_form_unit_min_nights.value = (unit.min_nights) ? unit.min_nights : 1
-            _product_edit_unit_form_unit_max_nights.value = (unit.max_nights) ? unit.max_nights : null
-            _product_edit_unit_form_unit_min_pax.value = (unit.min_pax) ? unit.min_pax : 1
-            _product_edit_unit_form_unit_max_pax.value = (unit.max_pax) ? unit.max_pax : null
+            
             _product_edit_unit_form_unit_description_short.value = (unit.description_short) ? unit.description_short : ""
             _product_edit_unit_form_unit_description_long.value = (unit.description_long) ? unit.description_long : ""
             _product_edit_unit_form_unit_enabled.checked = true
@@ -12583,6 +12744,7 @@ const Unit = (function () {
             initAutoComplete()
             validator_init(form_rules)
             Unit.validator = $(_product_edit_unit_form).validate()
+            initForm()
         }
         
         if (_product_edit_unit_form_unit_name_filter) {
@@ -12591,7 +12753,7 @@ const Unit = (function () {
         }
         
         if (_edit_product_unit) {
-            hideForm()
+            resetForm()
             updateProgress()
         }
         

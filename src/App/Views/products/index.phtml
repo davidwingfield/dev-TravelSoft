@@ -27,58 +27,21 @@
 		</div>
 	</div>
 	
-	<div class="card card-body mb-2">
-		<h5 class="card-title font-weight-bold">
-			<span>Products</span>
-			<a href="javascript:void(0);" id="product_panel_link_product" class="panel_link" aria-hidden="true">Edit</a>
-		</h5>
-		
-		<table id="product_index_table" class="table table-hover dataTable table-striped w-full dtr-inline">
-			<!--
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>SKU</th>
-                            <th>Provider</th>
-                            <th>Vendor</th>
-                            <th>Location</th>
-                            <th>Category</th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        <?php
-				foreach ($page_data["products"] AS $product) {
-					$id = $product["id"];
-					$name = $product["name"];
-					$sku = $product["sku"];
-					$provider = $product["provider"]["name"];
-					$vendor = $product["vendor"]["name"];
-					$location = $product["location"]["display_medium"];
-					$category = $product["category"]["name"];
-					/*
-					echo "
-						<tr>
-							<td>$id</td>
-							<td>$name</td>
-							<td>$sku</td>
-							<td>$provider</td>
-							<td>$vendor</td>
-							<td>$location</td>
-							<td>$category</td>
-						</tr>
-					";
-					//*/
-				}
-			?>
-                        </tbody>
-                        -->
-		</table>
-	
+	<div class="row gx-1">
+		<div class="col-12 p-1">
+			<div class="card card-body">
+				<h5 class="card-title font-weight-bold">
+					<span>Products</span>
+					<a href="javascript:void(0);" id="product_panel_link_product" class="panel_link" aria-hidden="true">Edit</a>
+				</h5>
+				
+				<table id="product_index_table" class="table table-hover dataTable table-striped w-full dtr-inline"></table>
+			
+			</div>
+		</div>
 	</div>
 	
-	<?php //*?>
+	<?php /*?>
 	<!-- Test Elements -->
 	<div id="testElements">
 		<div class="row gx-1">

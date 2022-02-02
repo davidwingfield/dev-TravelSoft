@@ -1430,7 +1430,6 @@ const PricingWorksheet = (function () {
                             .attr("data-type", "season")
                         
                         if (hasSeason) {
-                            console.log("hasSeaosn", hasSeason)
                             seasonBackgroundColor = hexToRgb(hasSeason.color_scheme.background_color)
                             seasonTextColor = hasSeason.color_scheme.text_color
                             seasonBorderColor = hasSeason.color_scheme.border_color

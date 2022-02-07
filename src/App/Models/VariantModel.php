@@ -33,6 +33,12 @@
                 FROM 	variant VARIANT
                 WHERE   VARIANT.enabled = 1
         ";
+		protected static $orderByCondition = "
+			ORDER BY    LENGTH(VARIANT.name), CAST(VARIANT.name AS UNSIGNED), VARIANT.name ASC
+		";
+		protected static $limitCondition = "
+			LIMIT 20
+		";
 		
 		public static function get(int $id = null): array
 		{
@@ -91,6 +97,36 @@
                     AND         VARIANT.category_id = $category_id
                     ORDER BY    LENGTH(VARIANT.name), CAST(VARIANT.name AS UNSIGNED), VARIANT.name ASC
                     LIMIT 20;";
+			try {
+				
+				return Model::$db->rawQuery($sql);
+				
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		public static function fetchByVariantId(int $variant_id = null, int $category_id = null): array
+		{
+			if (is_null($variant_id)) {
+				Log::$debug_log->error("Missing Variant Id");
+				
+				return [];
+			}
+			
+			if (is_null($category_id)) {
+				Log::$debug_log->error("Missing Category Id");
+				
+				return [];
+			}
+			
+			$sql = self::$selectQuery . "
+                    AND			VARIANT.id = $variant_id
+                    AND         VARIANT.category_id = $category_id
+                    ORDER BY    LENGTH(VARIANT.name), CAST(VARIANT.name AS UNSIGNED), VARIANT.name ASC
+                    " . self::$limitCondition;
 			try {
 				
 				return Model::$db->rawQuery($sql);
@@ -206,6 +242,83 @@
 				//Log::$debug_log->trace($sql);
 				
 				return Model::$db->rawQuery($sql);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		public static function insertVariant(array $variant = null): array
+		{
+			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+			$created_by = Model::setInt($user_id);
+			$modified_by = Model::setInt($user_id);
+			
+			$id = Model::setInt((isset($variant["id"])) ? $variant["id"] : null);
+			$category_id = Model::setInt((isset($variant["category_id"])) ? $variant["category_id"] : null);
+			$product_id = Model::setInt((isset($variant["product_id"])) ? $variant["product_id"] : null);
+			
+			$min_age = Model::setInt((isset($variant["min_age"])) ? $variant["min_age"] : null);
+			$max_age = Model::setInt((isset($variant["max_age"])) ? $variant["max_age"] : null);
+			
+			$name = Model::setString((isset($variant["name"])) ? $variant["name"] : null);
+			$code = Model::setString((isset($variant["code"])) ? $variant["code"] : null);
+			
+			$enabled = Model::setBool((isset($variant["enabled"])) ? $variant["enabled"] : null);
+			$used_in_pricing = Model::setBool((isset($variant["used_in_pricing"])) ? $variant["used_in_pricing"] : 1);
+			
+			$note = Model::setLongText((isset($variant["note"])) ? $variant["note"] : null);
+			
+			$sql = "
+                INSERT INTO variant (
+                    id, category_id, code, name,
+                    enabled, date_created, created_by, date_modified,
+                    modified_by, note
+                ) VALUES (
+                    $id, $category_id, $code, $name,
+                    $enabled, CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP,
+                    $modified_by, $note
+                )
+                ON DUPLICATE KEY UPDATE
+                    code = VALUES(code),
+                    name = VALUES(name),
+                    note = VALUES(note),
+                    modified_by = VALUES(modified_by),
+                    date_modified = VALUES(date_modified),
+                    enabled = VALUES(enabled)
+            ";
+			
+			try {
+				
+				Model::$db->rawQuery($sql);
+				$variant_id = Model::$db->getInsertId();
+				
+				return self::fetchByVariantId($variant_id, $category_id);
+				if ($variant_id) {
+					$variant_id = (int)$variant_id;
+					$variantCode = addslashes(buildCode($variant_id, $name, "variant"));
+					
+					$update = "
+                        UPDATE      variant
+                        SET         code = '$variantCode'
+                        WHERE       id = $variant_id;";
+					try {
+						Model::$db->rawQuery($update);
+						
+						return self::fetchByVariantId($variant_id, $category_id);
+						
+					} catch (Exception $ex) {
+						Log::$debug_log->error($ex);
+						
+						return [];
+					}
+					
+				} else {
+					Log::$debug_log->error("Variant Id Not Generated");
+					
+					return [];
+				}
 			} catch (Exception $e) {
 				Log::$debug_log->error($e);
 				

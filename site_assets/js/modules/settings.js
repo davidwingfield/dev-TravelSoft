@@ -35,7 +35,7 @@ const toastrOptions = {
     "showMethod": "fadeIn",
     "hideMethod": "fadeOut",
 }
-let dow_short = [
+const dow_short = [
     "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
 ]
 const days = [
@@ -178,7 +178,7 @@ colorScheme.set(15, {
 })
 const tableCellMaxChars = 10
 const defaultAddressView = "medium"
-let DEBUGMODE = true
-
+const DEBUGMODE = true
+const inactivityTimeout = 60000 * 60
 const initialCalenderViewCount = 12
 

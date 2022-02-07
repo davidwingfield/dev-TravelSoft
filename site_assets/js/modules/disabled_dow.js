@@ -34,6 +34,7 @@ $.fn.DisabledDOW = function (settings) {
         input.value = day.value
         
         input.addEventListener("click", event => {
+            
             let id = (input.id) ? input.id : ""
             set(input, id)
         })
@@ -43,15 +44,21 @@ $.fn.DisabledDOW = function (settings) {
     
     const buildCheckBoxWrapper = function () {
         let div = document.createElement("div")
-        div.classList = "custom-control custom-checkbox custom-control-inline"
+        
+        div.classList.add("custom-control")
+        div.classList.add("custom-checkbox")
+        div.classList.add("custom-control-inline")
+        
         return div
     }
     
     const buildCheckBoxLabel = function (day) {
         let label = document.createElement("label")
-        label.classList = "custom-control-label"
+        
+        label.classList.add("custom-control-label")
         label.htmlFor = day.for
         label.innerText = day.label
+        
         return label
     }
     
@@ -59,7 +66,9 @@ $.fn.DisabledDOW = function (settings) {
         let days = Array.from(DisabledDOW.days_of_week.values())
         let div = document.createElement("div")
         
-        div.classList = "col-12 col-md-10 col-xl-9"
+        div.classList.add("col-12")
+        div.classList.add("col-md-10")
+        div.classList.add("px-1")
         
         $.each(days, function (k, day) {
             let wrapper = buildCheckBoxWrapper()
@@ -76,11 +85,15 @@ $.fn.DisabledDOW = function (settings) {
     const buildCheckBoxColumnLabel = function () {
         let div = document.createElement("div")
         let label = document.createElement("label")
+        
         label.innerText = label_text + ":"
         
-        div.classList = "col-12 col-md-2 col-xl-3"
+        div.classList.add("col-12")
+        div.classList.add("col-md-2")
+        div.classList.add("px-1")
         
         div.appendChild(label)
+        
         return div
     }
     

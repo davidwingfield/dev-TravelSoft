@@ -1,122 +1,145 @@
 <section id="product_edit_variant_section" class="section">
-    
-    <div class="row">
-        <div class="col-12">
-            <div class="form-element">
-                <label for="product_edit_variant_form_variant_name_filter" class="d-none">Variant Search:</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
+	
+	<div class="row">
+		
+		<div class="col-12 col-md-8 mb-2">
+			
+			<div class="row">
+				<div class="col-12">
+					<div class="form-element">
+						<label for="product_edit_variant_form_variant_name_filter" class="d-none">Variant Search:</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
                         <span class="input-group-text">
                             <i class="fas fa-search" aria-hidden="true"></i>
                         </span>
-                    </div>
-                    <input type="search" id="product_edit_variant_form_variant_name_filter" name="product_edit_variant_form_variant_name_filter" class="form-control" placeholder="Search Variants"/>
-                </div>
-                <div id="product_edit_variant_form_variant_name_filter-error" class="error w-100 text-center"></div>
-            </div>
-        </div>
-    </div>
+							</div>
+							<input type="search" id="product_edit_variant_form_variant_name_filter" name="product_edit_variant_form_variant_name_filter" class="form-control" placeholder="Search Variants"/>
+						</div>
+						<div id="product_edit_variant_form_variant_name_filter-error" class="error w-100 text-center"></div>
+					</div>
+				</div>
+			</div>
+			
+			<?php include_once(VIEWS_PATH . "/variants/tables/product_edit_variant_table.phtml"); ?>
+			
+			<form class="card card-body mb-2" id="product_edit_variant_form" novalidate="novalidate">
+				<h5 class="card-title">
+					<span>Variant</span>
+					<a type="button" href="javascript:void(0);" id="product_edit_variant_form_close_button" class="panel-button-close fas fa-times" aria-hidden="true"></a>
+				</h5>
+				<h6 class="card-subtitle mb-2 text-muted" id="display_product_variant_name">Single room</h6>
+				<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+				
+				<div class="row">
+					
+					<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4">
+						<div class="form-element">
+							<label for="product_edit_variant_form_variant_id">Id:</label>
+							<input type="text" id="product_edit_variant_form_variant_id" name="product_edit_variant_form_variant_id" class="form-control" readonly="readonly" disabled="">
+							<div id="product_edit_variant_form_variant_id-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					
+					<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4">
+						<div class="form-element">
+							<label for="product_edit_variant_form_variant_name">Name:</label>
+							<input type="text" id="product_edit_variant_form_variant_name" name="product_edit_variant_form_variant_name" class="form-control" disabled="">
+							<div id="product_edit_variant_form_variant_name-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					
+					<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 d-flex align-self-end justify-content-end pb-2">
+						<div class="form-element">
+							<div class="custom-control custom-switch">
+								<input id="product_edit_variant_form_variant_enabled" name="product_edit_variant_form_variant_enabled" type="checkbox" value="1" class="custom-control-input" readonly="readonly" disabled="">
+								<label for="product_edit_variant_form_variant_enabled" class="custom-control-label p-0">Enabled</label>
+							</div>
+							<div id="product_edit_variant_form_variant_enabled-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+				
+				</div>
+				
+				<div class="row">
+					
+					<div class="col-6">
+						
+						<div class="form-element">
+							<label for="product_edit_variant_form_variant_code">Variant Code:</label>
+							<input type="text" id="product_edit_variant_form_variant_code" name="product_edit_variant_form_variant_code" class="form-control" disabled="">
+							<div id="product_edit_variant_form_variant_code-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					
+					<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 d-flex align-self-end justify-content-end pb-2">
+						<div class="form-element">
+							<div class="custom-control custom-switch">
+								<input id="product_edit_variant_form_variant_used_in_pricing" name="product_edit_variant_form_variant_used_in_pricing" type="checkbox" value="1" class="custom-control-input" readonly="readonly" disabled="">
+								<label for="product_edit_variant_form_variant_used_in_pricing" class="custom-control-label p-0">Used in Pricing</label>
+							</div>
+							<div id="product_edit_variant_form_variant_used_in_pricing-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					
+					<!-- Minimum Age -->
+					<div class="col-6">
+						<div class="form-element">
+							<label for="product_edit_variant_form_variant_min_age">Minimum Age:</label>
+							<input type="number" id="product_edit_variant_form_variant_min_age" name="product_edit_variant_form_variant_min_age" class="form-control">
+							<div id="product_edit_variant_form_variant_min_age-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Minimum Age -->
+					
+					<!-- Maximum Age -->
+					<div class="col-6">
+						<div class="form-element">
+							<label for="product_edit_variant_form_variant_max_age">Maximum Age:</label>
+							<input type="number" id="product_edit_variant_form_variant_max_age" name="product_edit_variant_form_variant_max_age" class="form-control">
+							<div id="product_edit_variant_form_variant_max_age-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Maximum Age -->
+				
+				</div>
+				
+				<div class="row">
+					<div class="col-6 text-left w-100 mb-2">
+						<a href="javascript:void(0);" id="button_remove_variant_from_product" class="btn btn-danger btn-sm waves-effect waves-light">Remove</a>
+					</div>
+					<div class="col-6 text-right w-100 mb-2">
+						<a href="javascript:void(0);" id="product_edit_variant_form_clear_button" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+						<a href="javascript:void(0);" id="product_edit_variant_form_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">Save</a>
+					</div>
+				</div>
+			
+			</form>
+		
+		</div>
+		
+		<div class="col-12 col-md-4 mb-2">
+			
+			<ul class="list-group">
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					<span id="" class="">Cras justo odio</span>
+					<span class="badge badge-primary badge-pill">14</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					Dapibus ac facilisis in
+					<span class="badge badge-primary badge-pill">2</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					dfg
+					<span class="badge badge-primary badge-pill">1</span>
+				</li>
+			</ul>
+		
+		</div>
 	
-	<?php include_once(VIEWS_PATH . "/variants/tables/product_edit_variant_table.phtml"); ?>
-    
-    <div class="card card-body mb-2" id="edit_product_variant">
-        <h5 class="card-title">
-            <span>Variant</span>
-            <a type="button" href="javascript:void(0);" id="product_edit_variant_form_close_button" class="panel-button-close fas fa-times" aria-hidden="true"></a>
-        </h5>
-        <h6 class="card-subtitle mb-2 text-muted" id="display_product_variant_name">Single room</h6>
-        <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-        
-        <form id="product_edit_variant_form" novalidate="novalidate">
-            
-            <div class="row">
-                
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4">
-                    <div class="form-element">
-                        <label for="product_edit_variant_form_variant_id">Id:</label>
-                        <input type="text" id="product_edit_variant_form_variant_id" name="product_edit_variant_form_variant_id" class="form-control" readonly="readonly" disabled="">
-                        <div id="product_edit_variant_form_variant_id-error" class="error w-100 text-center"></div>
-                    </div>
-                </div>
-                
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4">
-                    <div class="form-element">
-                        <label for="product_edit_variant_form_variant_name">Name:</label>
-                        <input type="text" id="product_edit_variant_form_variant_name" name="product_edit_variant_form_variant_name" class="form-control" disabled="">
-                        <div id="product_edit_variant_form_variant_name-error" class="error w-100 text-center"></div>
-                    </div>
-                </div>
-                
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 d-flex align-self-end justify-content-end pb-2">
-                    <div class="form-element">
-                        <div class="custom-control custom-switch">
-                            <input id="product_edit_variant_form_variant_enabled" name="product_edit_variant_form_variant_enabled" type="checkbox" value="1" class="custom-control-input" readonly="readonly" disabled="">
-                            <label for="product_edit_variant_form_variant_enabled" class="custom-control-label p-0">Enabled</label>
-                        </div>
-                        <div id="product_edit_variant_form_variant_enabled-error" class="error w-100 text-center"></div>
-                    </div>
-                </div>
-            
-            </div>
-            
-            <div class="row">
-                
-                <div class="col-6">
-                    
-                    <div class="form-element">
-                        <label for="product_edit_variant_form_variant_code">Variant Code:</label>
-                        <input type="text" id="product_edit_variant_form_variant_code" name="product_edit_variant_form_variant_code" class="form-control" disabled="">
-                        <div id="product_edit_variant_form_variant_code-error" class="error w-100 text-center"></div>
-                    </div>
-                </div>
-                
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 d-flex align-self-end justify-content-end pb-2">
-                    <div class="form-element">
-                        <div class="custom-control custom-switch">
-                            <input id="product_edit_variant_form_variant_used_in_pricing" name="product_edit_variant_form_variant_used_in_pricing" type="checkbox" value="1" class="custom-control-input" readonly="readonly" disabled="">
-                            <label for="product_edit_variant_form_variant_used_in_pricing" class="custom-control-label p-0">Used in Pricing</label>
-                        </div>
-                        <div id="product_edit_variant_form_variant_used_in_pricing-error" class="error w-100 text-center"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="row">
-                
-                <!-- Minimum Age -->
-                <div class="col-6">
-                    <div class="form-element">
-                        <label for="product_edit_variant_form_variant_min_age">Minimum Age:</label>
-                        <input type="number" id="product_edit_variant_form_variant_min_age" name="product_edit_variant_form_variant_min_age" class="form-control">
-                        <div id="product_edit_variant_form_variant_min_age-error" class="error w-100 text-center"></div>
-                    </div>
-                </div>
-                <!-- /Minimum Age -->
-                
-                <!-- Maximum Age -->
-                <div class="col-6">
-                    <div class="form-element">
-                        <label for="product_edit_variant_form_variant_max_age">Maximum Age:</label>
-                        <input type="number" id="product_edit_variant_form_variant_max_age" name="product_edit_variant_form_variant_max_age" class="form-control">
-                        <div id="product_edit_variant_form_variant_max_age-error" class="error w-100 text-center"></div>
-                    </div>
-                </div>
-                <!-- /Maximum Age -->
-            
-            </div>
-            
-            <div class="row">
-                <div class="col-6 text-left w-100 mb-2">
-                    <a href="javascript:void(0);" id="button_remove_variant_from_product" class="btn btn-danger btn-sm waves-effect waves-light">Remove</a>
-                </div>
-                <div class="col-6 text-right w-100 mb-2">
-                    <a href="javascript:void(0);" id="product_edit_variant_form_clear_button" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
-                    <a href="javascript:void(0);" id="product_edit_variant_form_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">Save</a>
-                </div>
-            </div>
-        
-        </form>
-    
-    </div>
+	</div>
 
 </section>

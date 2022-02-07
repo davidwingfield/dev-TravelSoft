@@ -1,18 +1,29 @@
 $.fn.BuildKeyword = function (keywords) {
-    if (!$(this).hasClass("keyword")) {
+    let chip_input_id, chip_container_id, chip_id,
+        _chips, _input, _container,
+        $input, $container
+    let counter = 0
+    let editMode = null
+    let tags = new Map()
+    
+    if (!$(this).hasClass("keyword") || !$(this).attr("id")) {
         return
     }
     
-    const chip_id = $(this).attr("id")
-    const _chips = document.getElementById(chip_id)
+    chip_id = $(this).attr("id")
+    chip_input_id = chip_id + "_search"
+    chip_container_id = chip_id + "_container"
     
-    let editMode = null
-    let tags = new Map()
-    let $chipsEl = $(_chips)
-    let $submitButton = $(`#${chip_id} > div > div > button`)
-    let $input = $(`#${chip_id} > div > input.user-release-input`)
-    let counter = 0
-    let $container = $(`#${chip_id} > div > div.chips_container`)
+    _chips = document.getElementById(chip_id)
+    _input = document.getElementById(chip_input_id)
+    _container = document.getElementById(chip_container_id)
+    
+    if (!_container || !_input || !_chips) {
+        return
+    }
+    
+    $input = $(_input)
+    $container = $(_container)
     
     if (!keywords) {
         keywords = []
@@ -36,18 +47,14 @@ $.fn.BuildKeyword = function (keywords) {
     
     $input
         .on("keydown", function (e) {
-            console.log(e.keyCode)
+            if (e.keyCode === 9) {
+                e.preventDefault()
+            }
             
             if (e.which === 13 || e.keyCode === 9) {
                 add()
                 editMode = null
             }
-        })
-    
-    $submitButton
-        .on("click", function () {
-            add()
-            editMode = null
         })
     
     const formatTag = function (data) {
@@ -81,8 +88,6 @@ $.fn.BuildKeyword = function (keywords) {
                     chipSelect(id)
                 })
             
-            // --
-            
             return $chip
         }
     }
@@ -107,7 +112,7 @@ $.fn.BuildKeyword = function (keywords) {
             let tag = tags.get(data)
             if (tag) {
                 if (tag) {
-                    Console.log("tag", tag)
+                    console.log("tag", tag)
                     $input.val(data)
                 }
                 
@@ -146,7 +151,6 @@ $.fn.BuildKeyword = function (keywords) {
     }
     
     const add = function (data) {
-        Console.log("add(data)", data)
         if (!data) {
             data = $input.val()
         }

@@ -652,7 +652,7 @@ const Provider = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handle_provider_error("Oops: 1")
+                        handle_provider_error("Oops: 1")
                     }
                 })
             } catch (e) {
@@ -818,15 +818,15 @@ const Provider = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handle_provider_error("Oops: 1")
+                        handle_provider_error("Oops: 1")
                     }
                 })
             } catch (e) {
                 console.log("error", e)
-                return handle_provider_error("Error Validating Company")
+                handle_provider_error("Error Validating Company")
             }
         } else {
-            return handle_provider_error("Error Loading Company- Missing Data")
+            handle_provider_error("Error Loading Company- Missing Data")
         }
     }
     

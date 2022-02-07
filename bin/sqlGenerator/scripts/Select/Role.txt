@@ -1,13 +1,26 @@
 SELECT
-	ROLE.id AS 'role_id',
-	ROLE.name AS 'role_name',
-	ROLE.level AS 'role_level',
-	ROLE.sort_order AS 'role_sort_order',
-	ROLE.enabled AS 'role_enabled',
-	ROLE.date_created AS 'role_date_created',
-	ROLE.created_by AS 'role_created_by',
-	ROLE.date_modified AS 'role_date_modified',
-	ROLE.modified_by AS 'role_modified_by',
-	ROLE.note AS 'role_note'
+		ROLE.id AS 'role_id',
+		ROLE.name AS 'role_name',
+		ROLE.level AS 'role_level',
+		ROLE.sort_order AS 'role_sort_order',
+		ROLE.enabled AS 'role_enabled',
+		ROLE.date_created AS 'role_date_created',
+		ROLE.created_by AS 'role_created_by',
+		ROLE.date_modified AS 'role_date_modified',
+		ROLE.modified_by AS 'role_modified_by',
+		ROLE.note AS 'role_note'
 FROM 	role ROLE
 -- JOIN 	role ROLE ON ROLE.id = {FK_TABLE}.role_id
+
+/*
+'id'=>$role['role_id'],
+'name'=>$role['role_name'],
+'level'=>$role['role_level'],
+'sort_order'=>$role['role_sort_order'],
+'enabled'=>$role['role_enabled'],
+'date_created'=>$role['role_date_created'],
+'created_by'=>$role['role_created_by'],
+'date_modified'=>$role['role_date_modified'],
+'modified_by'=>$role['role_modified_by'],
+'note'=>$role['role_note']
+*/

@@ -1,7 +1,6 @@
 const Variant = (function () {
     "use strict"
     
-    const _calendar_loader = document.getElementById("calendar_loader")
     const _button_remove_variant_from_product = document.getElementById("button_remove_variant_from_product")
     const _product_edit_variant_section = document.getElementById("product_edit_variant_section")
     const _panel_tab_variant = document.getElementById("panel_tab_variant")
@@ -10,7 +9,6 @@ const Variant = (function () {
     const _product_edit_variant_form_variant_name_filter = document.getElementById("product_edit_variant_form_variant_name_filter")
     const _table_variant_product_edit = document.getElementById("table_variant_product_edit")
     const _product_edit_variant_form = document.getElementById("product_edit_variant_form")
-    const _edit_product_variant = document.getElementById("edit_product_variant")
     const _display_product_variant_name = document.getElementById("display_product_variant_name")
     const _product_edit_variant_form_variant_id = document.getElementById("product_edit_variant_form_variant_id")
     const _product_edit_variant_form_variant_name = document.getElementById("product_edit_variant_form_variant_name")
@@ -151,7 +149,7 @@ const Variant = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleVariantError("Oops: 1")
+                        handleVariantError("Oops: 1")
                     }
                 })
             } catch (e) {
@@ -179,8 +177,6 @@ const Variant = (function () {
     }
     
     const initAutoComplete = function () {
-        //console.log("Variant.initAutoComplete()", Variant)
-        // ----
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         $(_product_edit_variant_form_variant_name_filter)
@@ -193,10 +189,7 @@ const Variant = (function () {
                 $table_variant_product_edit.clearSelectedRows()
             })
             .on("change", function () {
-                //*
                 setTimeout(function () {
-                    //console.log("Variant._product_edit_variant_form_variant_name_filter:change()", _product_edit_variant_form_variant_name_filter.value)
-                    // ----
                     let variant_name = _product_edit_variant_form_variant_name_filter.value
                     
                     $table_variant_product_edit.clearSelectedRows()
@@ -211,7 +204,6 @@ const Variant = (function () {
                         }
                     }
                 }, 200)
-                //*/
             })
             .autocomplete({
                 serviceUrl: "/api/v1.0/autocomplete/variants",
@@ -246,14 +238,10 @@ const Variant = (function () {
     }
     
     const handleVariantError = function (msg) {
-        //console.log("Variant.handleVariantError(msg)", msg)
-        // ----
         toastr.error(msg)
     }
     
     const fetchByName = function (dataToSend, callback) {
-        //console.log("Variant.fetchByName(dataToSend)", dataToSend)
-        // ----
         let url = "/api/v1.0/variants/validate"
         
         if (dataToSend) {
@@ -262,68 +250,26 @@ const Variant = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleVariantError("Oops: 1")
+                        handleVariantError("Oops: 1")
                     }
                 })
             } catch (e) {
-                //console.log("error", e)
-                return handleVariantError("Error Validating Variant")
+                console.log("error", e)
+                handleVariantError("Error Validating Variant")
             }
         } else {
-            return handleVariantError("Error Loading Variant - Missing Data")
+            handleVariantError("Error Loading Variant - Missing Data")
         }
     }
     
     const nameExists = function (name) {
-        //console.log("Variant.nameExists(name)", name)
-        // ----
         if (name && name !== "") {
-            /**
-             * data to send to the server
-             *
-             * @type {{name}}
-             */
+            
             let dataToSend = remove_nulls({
                 name: name,
                 category_id: (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null,
             })
-            /*
-            fetchByName(dataToSend, function (data) {
-                let variant = null
-                
-                if (data) {
-                    variant = data
-                    if (data[0]) {
-                        variant = data[0]
-                    }
-                    //console.log("Variant.nameExists() - variant:", variant)
-                    // ----
-                    let detail
-                    $table_variant_product_edit.clearSelectedRows()
-                    globalSelectedVariant = true
-                    let hasVariant = Variant.all.get(parseInt(variant.id))
-                    if (hasVariant) {
-                        detail = set(hasVariant)
-                        $table_variant_product_edit.loadRow(detail)
-                    } else {
-                        detail = set(variant)
-                    }
-                    populateForm(detail)
-                } else {
-                    confirmDialog(`The variant: ${name} does not exist exists. Would you like to create it?`, (ans) => {
-                        if (ans) {
-                            $table_variant_product_edit.clearSelectedRows()
-                            globalSelectedVariant = false
-                            
-                            populateForm()
-                            _product_edit_variant_form_variant_name_filter.value = name
-                            //loadForm()
-                            //enableFormFields()
-                        }
-                    })
-                }
-            })
-            //*/
+            
             fetchByName(dataToSend, function (data) {
                 let variant = null
                 
@@ -337,7 +283,6 @@ const Variant = (function () {
                 if (variant) {
                     let hasVariant = Variant.all.get(parseInt(variant.id))
                     let detail
-                    //console.log("_product_edit_variant_form_variant_name_filter:autocomplete() - variant", variant)
                     
                     if (hasVariant) {
                         detail = set(hasVariant)
@@ -347,27 +292,45 @@ const Variant = (function () {
                     }
                     
                     populateForm(detail)
+                    
                 } else {
                     confirmDialog(`The variant: ${name} does not exist exists. Would you like to create it?`, (ans) => {
                         if (ans) {
-                            $table_variant_product_edit.clearSelectedRows()
-                            globalSelectedVariant = false
-                            clearForm()
-                            _product_edit_variant_form_variant_name.value = name
-                            _display_product_variant_name.innerText = name
-                            loadForm()
-                            enableFormFields()
+                            let url = "/api/v1.0/variants/new"
+                            try {
+                                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                                    if (data) {
+                                        let variant = data
+                                        if (data[0]) {
+                                            variant = data[0]
+                                        }
+                                        let detail = set(variant)
+                                        
+                                        clearForm()
+                                        
+                                        $table_variant_product_edit.clearSelectedRows()
+                                        globalSelectedVariant = false
+                                        
+                                        _product_edit_variant_form_variant_name.value = name
+                                        _display_product_variant_name.innerText = name
+                                        
+                                        populateForm(detail)
+                                        enableFormFields()
+                                    } else {
+                                        return handleVariantError("Oops: 1")
+                                    }
+                                })
+                            } catch (e) {
+                                console.log("error", e)
+                            }
                         }
                     })
                 }
             })
-            
         }
     }
     
     const buildProductEditTable = function () {
-        //console.log("Variant.buildProductEditTable()", Variant)
-        // ----
         $table_variant_product_edit = $(_table_variant_product_edit).table({
             table_type: "display_list",
             data: Variant.all,
@@ -411,8 +374,6 @@ const Variant = (function () {
     }
     
     const defaultDetail = function () {
-        //console.log("Variant.defaultDetail()", Variant)
-        // ----
         return {
             id: null,
             category_id: null,
@@ -436,11 +397,10 @@ const Variant = (function () {
     }
     
     const validVariantRecord = function () {
-        //console.log("Variant.validVariantRecord()", Variant.all)
-        // ----
         let valid = $(_product_edit_variant_form).valid()
         let min_age = (!isNaN(parseInt(_product_edit_variant_form_variant_min_age.value))) ? parseInt(_product_edit_variant_form_variant_min_age.value) : null
         let max_age = (!isNaN(parseInt(_product_edit_variant_form_variant_max_age.value))) ? parseInt(_product_edit_variant_form_variant_max_age.value) : null
+        
         if (min_age !== null && max_age !== null) {
             if (parseInt(max_age) < parseInt(min_age)) {
                 setError(_product_edit_variant_form_variant_max_age, "Age is greater than minimum")
@@ -452,9 +412,8 @@ const Variant = (function () {
     }
     
     const clearForm = function () {
-        //console.log("Variant.clearForm()", Variant.all)
-        // ----
         clearValidation(_product_edit_variant_form)
+        
         _display_product_variant_name.innerText = "&nbsp;"
         _product_edit_variant_form_variant_id.value = ""
         _product_edit_variant_form_variant_name.value = ""
@@ -466,9 +425,8 @@ const Variant = (function () {
     }
     
     const populateForm = function (variant) {
-        //console.log("Variant.populateForm()", variant)
-        // ----
         clearForm()
+        
         if (variant) {
             _product_edit_variant_form_variant_used_in_pricing.checked = (variant.used_in_pricing === 1)
             _display_product_variant_name.innerText = (variant.name) ? variant.name : "&nbsp;"
@@ -476,7 +434,7 @@ const Variant = (function () {
             _product_edit_variant_form_variant_name.value = (variant.name) ? variant.name : "&nbsp;"
             _product_edit_variant_form_variant_enabled.checked = (!(variant.enabled && variant.enabled === 0))
             _product_edit_variant_form_variant_code.value = (variant.name) ? variant.name : "&nbsp;"
-            _product_edit_variant_form_variant_min_age.value = (!isNaN(parseInt(variant.min_age))) ? parseInt(variant.min_age) : ""
+            _product_edit_variant_form_variant_min_age.value = (!isNaN(parseInt(variant.min_age))) ? parseInt(variant.min_age) : 1
             _product_edit_variant_form_variant_max_age.value = (!isNaN(parseInt(variant.max_age))) ? parseInt(variant.max_age) : ""
         }
         
@@ -487,19 +445,18 @@ const Variant = (function () {
     const hideForm = function () {
         updateProgress()
         _product_edit_variant_form_variant_name_filter.disabled = false
-        $(_edit_product_variant).hide()
+        _product_edit_variant_form_variant_name_filter.value = ""
+        
+        $(_product_edit_variant_form).hide()
     }
     
     const loadForm = function () {
-        //console.log("Variant.loadForm()", Variant)
-        // ----
         _product_edit_variant_form_variant_name_filter.disabled = true
-        $(_edit_product_variant).show()
+        
+        $(_product_edit_variant_form).show()
     }
     
     const enableFormFields = function () {
-        //console.log("Variant.enableFormFields()", Variant)
-        // ----
         _product_edit_variant_form_variant_used_in_pricing.disabled = false
         _product_edit_variant_form_variant_id.disabled = true
         _product_edit_variant_form_variant_name.disabled = true
@@ -511,8 +468,6 @@ const Variant = (function () {
     }
     
     const disableFormFields = function () {
-        //console.log("Variant.enableFormFields()", Variant)
-        // ----
         _product_edit_variant_form_variant_used_in_pricing.disabled = true
         _product_edit_variant_form_variant_id.disabled = true
         _product_edit_variant_form_variant_name.disabled = true
@@ -524,9 +479,6 @@ const Variant = (function () {
     }
     
     const buildVariantRecord = function () {
-        //console.log("Variant.buildVariantRecord()", Variant)
-        // ----
-        
         let dataToSend = {
             id: (!isNaN(parseInt(_product_edit_variant_form_variant_id.value))) ? parseInt(_product_edit_variant_form_variant_id.value) : null,
             category_id: (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null,
@@ -548,7 +500,7 @@ const Variant = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleVariantError("Oops: 1")
+                        handleVariantError("Oops: 1")
                     }
                 })
             } catch (e) {

@@ -1,114 +1,140 @@
 <!-- Pricing Section -->
 <section id="product_edit_pricing_section" class="section">
-    
-    <!-- Filters -->
-    <div class="card card-body mb-2">
-        
-        <!-- pricing_strategy_types_id, pricing_strategy_unit_id, pricing_strategy_season_id -->
-        <div class="row">
-            
-            <!-- Pricing Strategy Types Id -->
-            <div class="col-3">
-                <div class="form-element">
-                    <label for="pricing_strategy_types_id" class="d-flex justify-content-between"><span>Pricing Strategy Types:</span></label>
-                    <select id="pricing_strategy_types_id" name="pricing_strategy_types_id" class="form-control">
-                        <option value="" readonly disabled selected>-- Pricing Strategy --</option>
-                        <option value="1">Per Unit</option>
-                        <option value="2">Per Person</option>
-                        <option value="3">Per Days Used</option>
-                    </select>
-                    <div id="pricing_strategy_types_id-error" class="error w-100 text-center"></div>
-                </div>
-            </div>
-            <!-- /Pricing Strategy Types Id -->
-            
-            <!-- Unit Id -->
-            <div class="col-3">
-                <div class="form-element">
-                    <label for="pricing_strategy_unit_id" class="d-flex justify-content-between">
+	<div class="row">
+		
+		<div class="col-12 col-md-8 mb-2">
+			
+			<!-- Filters -->
+			<div class="card card-body mb-2">
+				
+				<!-- pricing_strategy_types_id, pricing_strategy_unit_id, pricing_strategy_season_id -->
+				<div class="row">
+					
+					<!-- Pricing Strategy Types Id -->
+					<div class="col-4 mb-2">
+						<div class="form-element">
+							<label for="pricing_strategy_types_id" class="d-flex justify-content-between"><span>Pricing Strategy Types:</span></label>
+							<select id="pricing_strategy_types_id" name="pricing_strategy_types_id" class="form-control">
+								<option value="" readonly disabled selected>-- Pricing Strategy --</option>
+								<option value="1">Per Unit</option>
+								<option value="2">Per Person</option>
+								<option value="3">Per Days Used</option>
+							</select>
+							<div id="pricing_strategy_types_id-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Pricing Strategy Types Id -->
+					
+					<!-- Unit Id -->
+					<div class="col-4 mb-2">
+						<div class="form-element">
+							<label for="pricing_strategy_unit_id" class="d-flex justify-content-between">
                         <span>
                             Unit:
                         </span>
-                        <a href="javascript:void(0);" class="text-primary" onclick='PricingStrategy.clearUnitSelection()' style="text-transform: uppercase">
-                            <small>clear</small>
-                        </a>
-                    </label>
-                    <select id="pricing_strategy_unit_id" name="pricing_strategy_unit_id" class="form-control" multiple></select>
-                    <div id="pricing_strategy_unit_id-error" class="error w-100 text-center"></div>
-                </div>
-            </div>
-            <!-- /Unit Id -->
-            
-            <!-- Season Id -->
-            <div class="col-3">
-                <div class="form-element">
-                    <label for="pricing_strategy_season_id" class="d-flex justify-content-between">
+								<a href="javascript:void(0);" class="text-primary" onclick='PricingStrategy.clearUnitSelection()' style="text-transform: uppercase">
+									<small>clear</small>
+								</a>
+							</label>
+							<select id="pricing_strategy_unit_id" name="pricing_strategy_unit_id" class="form-control" multiple></select>
+							<div id="pricing_strategy_unit_id-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Unit Id -->
+					
+					<!-- Season Id -->
+					<div class="col-4 mb-2">
+						<div class="form-element">
+							<label for="pricing_strategy_season_id" class="d-flex justify-content-between">
                         <span>
                             Season:
                         </span>
-                        <a href="javascript:void(0);" class="text-primary" onclick='PricingStrategy.clearSeasonSelection()' style="text-transform: uppercase">
-                            <small>clear</small>
-                        </a>
-                    </label>
-                    <select id="pricing_strategy_season_id" name="pricing_strategy_season_id" class="form-control" multiple></select>
-                    <div id="pricing_strategy_season_id-error" class="error w-100 text-center"></div>
-                </div>
-            </div>
-            <!-- /Season Id -->
-        
-        </div>
-        <!-- /pricing_strategy_types_id, pricing_strategy_unit_id, pricing_strategy_season_id -->
-        
-        <div class="row">
-            
-            <div class="col-3 mb-2">
-                <div class="row">
-                    <div class="col-12 mb-1">
-                        <button type="button" id="button_toggle_completed_pricings" class="btn btn-primary btn-sm btn-block waves-effect waves-light" data-shown="true">Hide Completed Pricings</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <button type="button" id="button_toggle_completed_matrices" class="btn btn-primary btn-sm btn-block waves-effect waves-light" data-shown="true">Hide Completed Matrices</button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Unit Id -->
-            <div class="col-3 mb-2">
-                <button type="button" id="button_collapse_units" class="btn btn-primary btn-sm btn-block waves-effect waves-light">Collapse Units</button>
-            </div>
-            <!-- /Unit Id -->
-            
-            <!-- Season Id -->
-            <div class="col-3 mb-2">
-                <button type="button" id="button_collapse_seasons" class="btn btn-primary btn-sm btn-block waves-effect waves-light">Collapse Seasons</button>
-            </div>
-            <!-- /Season Id -->
-        
-        </div>
-        
-        <div class="row">
-            <!-- Reset Button -->
-            <div class="col-12 text-right">
-                <button type="button" id="product_edit_pricing_section_reload_worksheet" class="btn btn-outline-primary btn-sm waves-effect waves-light">Reload Worksheet</button>
-                <button type="button" id="product_edit_pricing_section_reset_filters" class="btn btn-primary btn-sm waves-effect waves-light">Reset Filters</button>
-            </div>
-            <!-- /Reset Button -->
-        </div>
-    
-    </div>
-    <!-- /Filters -->
-    
-    <!-- Pricing Container -->
-    <div class="pricing_container" id="pricing_container">
-        
-        <!-- Product Edit Matrix Form -->
-        <div id="product_edit_matrix_form"></div>
-        <!-- /Product Edit Matrix Form -->
-    
-    </div>
-    <!-- /Pricing Container -->
+								<a href="javascript:void(0);" class="text-primary" onclick='PricingStrategy.clearSeasonSelection()' style="text-transform: uppercase">
+									<small>clear</small>
+								</a>
+							</label>
+							<select id="pricing_strategy_season_id" name="pricing_strategy_season_id" class="form-control" multiple></select>
+							<div id="pricing_strategy_season_id-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Season Id -->
+				
+				</div>
+				<!-- /pricing_strategy_types_id, pricing_strategy_unit_id, pricing_strategy_season_id -->
+				
+				<div class="row">
+					
+					<div class="col-4 mb-2">
+						<div class="row">
+							<div class="col-12 mb-1">
+								<button type="button" id="button_toggle_completed_pricings" class="btn btn-primary btn-sm btn-block waves-effect waves-light" data-shown="true">Hide Completed Pricings</button>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<button type="button" id="button_toggle_completed_matrices" class="btn btn-primary btn-sm btn-block waves-effect waves-light" data-shown="true">Hide Completed Matrices</button>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Unit Id -->
+					<div class="col-4 mb-2">
+						<button type="button" id="button_collapse_units" class="btn btn-primary btn-sm btn-block waves-effect waves-light">Collapse Units</button>
+					</div>
+					<!-- /Unit Id -->
+					
+					<!-- Season Id -->
+					<div class="col-4 mb-2">
+						<button type="button" id="button_collapse_seasons" class="btn btn-primary btn-sm btn-block waves-effect waves-light">Collapse Seasons</button>
+					</div>
+					<!-- /Season Id -->
+				
+				</div>
+				
+				<div class="row">
+					<!-- Reset Button -->
+					<div class="col-12 text-right">
+						<button type="button" id="product_edit_pricing_section_reload_worksheet" class="btn btn-outline-primary btn-sm waves-effect waves-light">Reload Worksheet</button>
+						<button type="button" id="product_edit_pricing_section_reset_filters" class="btn btn-primary btn-sm waves-effect waves-light">Reset Filters</button>
+					</div>
+					<!-- /Reset Button -->
+				</div>
+			
+			</div>
+			<!-- /Filters -->
+		
+		</div>
+		
+		<div class="col-12 col-md-4 mb-2">
+			
+			<ul class="list-group">
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					<span id="" class="">Cras justo odio</span>
+					<span class="badge badge-primary badge-pill">14</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					Dapibus ac facilisis in
+					<span class="badge badge-primary badge-pill">2</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					dfg
+					<span class="badge badge-primary badge-pill">1</span>
+				</li>
+			</ul>
+		
+		</div>
+	
+	</div>
+	
+	<!-- Pricing Container -->
+	<div class="pricing_container" id="pricing_container">
+		
+		<!-- Product Edit Matrix Form -->
+		<div id="product_edit_matrix_form"></div>
+		<!-- /Product Edit Matrix Form -->
+	
+	</div>
+	<!-- /Pricing Container -->
 
 </section>
 <!-- /Pricing Section -->

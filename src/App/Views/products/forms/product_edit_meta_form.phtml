@@ -2,78 +2,12 @@
 	
 	<div class="row">
 		
-		<!-- Product Short Description
-		<div class="col-12 col-md-6">
-			<div class="card mb-2">
-				<div class="card-body">
-					<h4 class="card-title">Short Description</h4>
-					<hr>
-					<div class="row">
-						<div class="col-12">
-							<div class="form-element">
-								<label for="product_description_short" style="display:none">&nbsp;</label>
-								<textarea id="product_description_short" name="product_description_short" class="md-textarea form-control" rows="4"></textarea>
-								<div id="product_description_short-error" class="error w-100 text-center">&nbsp;</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		-->
-		
-		<!--
-		<div class="col-12 col-md-6">
-			<div class="card mb-2">
-				<div class="card-body">
-					<a id="button_product_description_long_toggle" class="activator but_toggle waves-effect waves-light mr-4" data-texted="product_description_long">
-						<i class="fas fa-sliders-h"></i>
-					</a>
-					<h4 class="card-title">Detailed Description</h4>
-					<hr>
-					<div class="row">
-						<div class="col-12">
-							<div class="form-element">
-								<label for="product_description_long" style="display:none">Cover Image:</label>
-								<textarea id="product_description_long" name="product_description_long" class="md-textarea tmceEl form-control" rows="4"></textarea>
-								<div id="product_description_long-error" class="error w-100 text-center">&nbsp;</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		-->
-	
-	</div>
-	
-	<div class="row">
-		
-		<!-- Product Short Description -->
-		<div class="col-12 col-md-6 mb-2">
-			<div class="card card-body mb-2">
+		<div class="col-12 col-md-8 mb-2">
+			
+			<!-- Detailed Product Description -->
+			<section class="card card-body mb-2">
 				<div class="d-flex justify-content-between">
-					<h5 class="card-title">Brief Description:</h5>
-				</div>
-				<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-				<div class="row">
-					<div class="col-12">
-						<div class="form-element">
-							<label for="product_edit_meta_description_short" class="d-none">Short Description</label>
-							<textarea id="product_edit_meta_description_short" name="product_edit_meta_description_short" class="md-textarea short-description form-control" rows="4" maxlength="250"></textarea>
-							<div id="product_edit_meta_description_short-error" class="error w-100 text-center">&nbsp;</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- /Unit Short Description -->
-		
-		<!-- Detailed Product Description -->
-		<div class="col-12 col-md-6 mb-2">
-			<div class="card card-body">
-				<div class="d-flex justify-content-between">
-					<h5 class="card-title">Detailed Description:</h5>
+					<h5 class="card-title label">Detailed Description:</h5>
 					<a id="button_product_description_long_toggle" class="but_toggle waves-effect waves-light" data-texted="product_edit_meta_description_long">
 						<i class="fas fa-sliders-h"></i>
 					</a>
@@ -89,45 +23,52 @@
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		<!-- /Detailed Product Description -->
-	
-	</div>
-	
-	<div class="row">
-		
-		<!-- Product Keywords -->
-		<div class="col-12 col-md-6">
-			<div id="product_keywords" class="card mb-2 keyword">
-				<div class="card-body p-0">
-					
-					<input class="user-release-input form-control form-control-lg" type="text" placeholder="Keywords..."/>
-					<div class="container my-2 chips_container">
-					
+			</section>
+			<!-- /Detailed Product Description -->
+			
+			<!-- Product Short Description -->
+			<section class="card card-body mb-2">
+				<div class="d-flex justify-content-between">
+					<h5 class="card-title label">Brief Description:</h5>
+				</div>
+				<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+				<div class="row">
+					<div class="col-12">
+						<div class="form-element">
+							<label for="product_edit_meta_description_short" class="d-none">Short Description</label>
+							<textarea id="product_edit_meta_description_short" name="product_edit_meta_description_short" class="md-textarea short-description form-control" rows="4" maxlength="250"></textarea>
+							<div id="product_edit_meta_description_short-error" class="error w-100 text-center">&nbsp;</div>
+						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		<!-- /Product Keywords -->
-	
-	</div>
-	
-	<div class="row">
+			</section>
+			<!-- /Unit Short Description -->
 		
-		<!-- Product Amenities -->
-		<div class="col-12 col-md-6">
-			<div id="product_amenities" class="card mb-2 keyword">
-				<div class="card-body p-0">
-					<label for="product_amenities_search" class="d-none">Product Amenities:</label>
-					<input class="user-release-input form-control form-control-lg" id="product_amenities_search" type="text" placeholder="Amenities..."/>
-					<div class="container my-2 chips_container">
-					
-					</div>
-				</div>
-			</div>
 		</div>
-		<!-- /Product Amenities -->
+		
+		<div class="col-12 col-md-4 mb-2">
+			
+			<!-- Product Keywords -->
+			<section id="product_keywords" class="card card-body mb-2 keyword">
+				<label for="product_keywords_search" class="d-none">Product Keywords:</label>
+				<input class="user-release-input form-control form-control-lg" id="product_keywords_search" type="text" placeholder="Keywords..."/>
+				<div id="product_keywords_container" class="container my-2 chips_container">
+				
+				</div>
+			</section>
+			<!-- /Product Keywords -->
+			
+			<!-- Product Amenities -->
+			<section id="product_amenities" class="card card-body mb-2 keyword">
+				<label for="product_amenities_search" class="d-none">Product Amenities:</label>
+				<input id="product_amenities_search" class="user-release-input form-control form-control-lg" type="text" placeholder="Amenities..."/>
+				<div id="product_amenities_container" class="container my-2 chips_container">
+				
+				</div>
+			</section>
+			<!-- /Product Amenities -->
+		
+		</div>
 	
 	</div>
 

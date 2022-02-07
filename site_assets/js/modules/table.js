@@ -35,69 +35,69 @@ $.fn.table = function (settings) {
         let _wrapper_table = $("#" + table_id).parent("div")
         // ----
         _wrapper_table
-          .removeClass("col-sm-12")
-          .addClass("p-0 m-0 w-100 h-100")
+            .removeClass("col-sm-12")
+            .addClass("p-0 m-0 w-100 h-100")
         _wrapper
-          .find("label").each(function () {
+            .find("label").each(function () {
             $(this).parent().append($(this).children())
         })
         
         _wrapper
-          .find("div.row")
-          .removeClass("row")
-          .addClass("d-flex justify-content-between")
+            .find("div.row")
+            .removeClass("row")
+            .addClass("d-flex justify-content-between")
         
         _filter
-          .find("input").each(function () {
+            .find("input").each(function () {
             const $this = $(this)
             $this.attr("placeholder", "Search")
             $this.removeClass("form-control-sm")
         })
         
         _filter
-          .find("label").remove()
+            .find("label").remove()
         
         _filter
-          .parent("div")
-          .removeClass("col-sm-12 col-md-6")
-          .addClass("w-50")
+            .parent("div")
+            .removeClass("col-sm-12 col-md-6")
+            .addClass("w-50")
         
         _info
-          .parent("div")
-          .removeClass("col-sm-12 col-md-5")
-          .addClass("w-50 d-flex align-content-center flex-wrap px-0")
+            .parent("div")
+            .removeClass("col-sm-12 col-md-5")
+            .addClass("w-50 d-flex align-content-center flex-wrap px-0")
         
         _info
-          .addClass("py-0")
+            .addClass("py-0")
         
         _paginate
-          .parent("div")
-          .removeClass("col-sm-12 col-md-7")
-          .addClass("w-50 px-0")
+            .parent("div")
+            .removeClass("col-sm-12 col-md-7")
+            .addClass("w-50 px-0")
         
         _paginate
-          .addClass("py-0")
+            .addClass("py-0")
         
         _paginate
-          .find("ul.pagination")
-          .addClass("mb-0")
+            .find("ul.pagination")
+            .addClass("mb-0")
         
         _length
-          .parent("div")
-          .removeClass("col-sm-12 col-md-6")
-          .addClass("w-50")
+            .parent("div")
+            .removeClass("col-sm-12 col-md-6")
+            .addClass("w-50")
         
         _length
-          .find("label").each(function () {
+            .find("label").each(function () {
             const $this = $(this)
             $this.addClass("mb-0 pb-0 mr-3 d-inline-block")
         })
         
         _wrapper_select
-          .removeClass("custom-select custom-select-sm form-control form-control-sm")
+            .removeClass("custom-select custom-select-sm form-control form-control-sm")
         
         _wrapper_select
-          .addClass("form-control d-inline-block")
+            .addClass("form-control d-inline-block")
         
         if (table_type === "display_list") {
             $("#" + table_id + ">tbody>tr").css({
@@ -116,7 +116,7 @@ $.fn.table = function (settings) {
                 $dTable.page.jumpToData(row_data.id, 0)
                 formatTable()
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
         }
     }
@@ -128,7 +128,7 @@ $.fn.table = function (settings) {
                 $dTable.row(rowId).data(row_data).draw()
                 loadRow(row_data.id)
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
         }
         
@@ -136,25 +136,24 @@ $.fn.table = function (settings) {
     }
     
     const loadRow = function (row_data) {
-        
         if (row_data) {
             try {
                 $("#" + table_id + "_tr_" + row_data.id).addClass("selected")
                 $dTable.page.jumpToData(row_data.id, 0)
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
             
         }
     }
     
     const jumpToRow = function (row_data) {
-        Console.log("table:jumpToRow(row_data)", row_data)
+        //console.log("table:jumpToRow(row_data)", row_data)
         if (row_data) {
             try {
                 $dTable.page.jumpToData(row_data.id, 0)
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
             
         }
@@ -166,11 +165,11 @@ $.fn.table = function (settings) {
                 let rowId = "#" + table_id + "_tr_" + row_data.id
                 let rowData = row_data
                 $dTable
-                  .row(rowId)
-                  .remove()
-                  .draw()
+                    .row(rowId)
+                    .remove()
+                    .draw()
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
         }
     }
@@ -182,7 +181,7 @@ $.fn.table = function (settings) {
                 $(row).removeClass("selected")
             })
         } catch (e) {
-            Console.log("clear_selected_rows", e)
+            console.log("clear_selected_rows", e)
         }
     }
     ///////////////////////////////////////////////
@@ -214,7 +213,7 @@ $.fn.table = function (settings) {
             formatTable()
             
         } catch (e) {
-            Console.log("error", e)
+            console.log("error", e)
         }
         
     }

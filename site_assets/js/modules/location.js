@@ -16,17 +16,12 @@ const Location = (function () {
     const _location_zipcode = document.getElementById("location_zipcode")
     const _location_name = document.getElementById("location_name")
     const _location_enabled = document.getElementById("location_enabled")
-    const _temp_location_id = document.getElementById("temp_location_id")
     const _button_clear_form_edit_location = document.getElementById("button_clear_form_edit_location")
-    const _button_close_location_edit = document.getElementById("button_close_location_edit")
     const _button_submit_form_edit_location = document.getElementById("button_submit_form_edit_location")
     const _button_edit_location = document.getElementById("button_edit_location")
-    const _button_add_location_edit = document.getElementById("button_add_location_edit")
     const _button_close_edit_location_form = document.getElementById("button_close_edit_location_form")
     const _form_edit_location_filter = document.getElementById("form_edit_location_filter")
     const _location_name_filter_id = document.getElementById("location_name_filter_id")
-    //
-    
     const edit_location_filter_form_rules = {
         groups: {
             locationGroup: "location_name_filter location_name_filter_id",
@@ -92,10 +87,6 @@ const Location = (function () {
             location_name: { required: "Field Required" },
         },
     }
-    
-    /**
-     * Product Variables
-     */
     const _form_product_edit_location = document.getElementById("form_product_edit_location")
     const _button_edit_product_location = document.getElementById("button_edit_product_location")
     const _button_clear_form_edit_product_location = document.getElementById("button_clear_form_edit_product_location")
@@ -103,11 +94,7 @@ const Location = (function () {
     const _button_close_edit_product_location_form = document.getElementById("button_close_edit_product_location_form")
     const _product_location_search = document.getElementById("product_location_search")
     const _card_product_edit_location = document.getElementById("card_product_edit_location")
-    //
     
-    /**
-     * Global Variables
-     */
     let temp_location = {}
     let new_filter = false
     let validator, validator_name_filter
@@ -116,7 +103,6 @@ const Location = (function () {
     let suggestionsTempLocation = []
     let default_display = defaultAddressView
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    // ----
     
     $("a[data-toggle=\"tab\"]").on("hide.bs.tab", function (e) {
         //e.target // newly activated tab

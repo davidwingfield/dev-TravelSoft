@@ -39,365 +39,372 @@
 ?>
 
 <section id="product_edit_profile_section" class="section">
-    <div class="row">
-        <div class="col-12">
-            <div class="form-element">
-                <label for="product_edit_profile_form_profile_name_filter" class="d-none">Profile Search:</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
+	
+	<div class="row">
+		
+		<div class="col-12 col-md-8 mb-2">
+			
+			<div class="row">
+				<div class="col-12">
+					<div class="form-element">
+						<label for="product_edit_profile_form_profile_name_filter" class="d-none">Profile Search:</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
                         <span class="input-group-text">
                             <i class="fas fa-search" aria-hidden="true"></i>
                         </span>
-                    </div>
-                    <input type="search" id="product_edit_profile_form_profile_name_filter" name="product_edit_profile_form_profile_name_filter" class="form-control" placeholder="Search Profiles"/>
-                </div>
-                <div id="product_edit_profile_form_profile_name_filter-error" class="error w-100 text-center"></div>
-            </div>
-        </div>
-    </div>
-	
-	<?php include_once(VIEWS_PATH . "/profiles/tables/product_edit_profile_table.phtml"); ?>
-    
-    <div class="card card-body mb-2" id="edit_product_profile">
-        <h5 class="card-title">
-            <span>Inventory Profile</span>
-            <a type="button" href="javascript:void(0);" id="product_edit_profile_form_close_button" class="panel-button-close fas fa-times" aria-hidden="true"></a>
-        </h5>
-        <h6 class="card-subtitle mb-2 text-muted" id="display_product_profile_name">&nbsp;</h6>
-        <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-        
-        <form id="product_edit_profile_form" novalidate="novalidate">
-            
-            <div class="card card-body z-depth-0 mb-2">
-                
-                <div class="row">
-                    
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 mb-2">
-                        <div class="form-element">
-                            <label for="product_edit_profile_form_profile_id">Id:</label>
-                            <input type="text" id="product_edit_profile_form_profile_id" name="product_edit_profile_form_profile_id" class="form-control" readonly="readonly" disabled="">
-                            <div id="product_edit_profile_form_profile_id-error" class="error w-100 text-center"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 mb-2">
-                        <div class="form-element">
-                            <label for="product_edit_profile_form_profile_name">Name:</label>
-                            <input type="text" id="product_edit_profile_form_profile_name" name="product_edit_profile_form_profile_name" class="form-control">
-                            <div id="product_edit_profile_form_profile_name-error" class="error w-100 text-center"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 d-flex align-self-end justify-content-end pb-2 mb-2">
-                        <div class="form-element">
-                            <div class="custom-control custom-switch">
-                                <input id="product_edit_profile_form_profile_enabled" name="product_edit_profile_form_profile_enabled" type="checkbox" value="1" class="custom-control-input" readonly="readonly" disabled="">
-                                <label for="product_edit_profile_form_profile_enabled" class="custom-control-label p-0">Enabled</label>
-                            </div>
-                            <div id="product_edit_profile_form_profile_enabled-error" class="error w-100 text-center"></div>
-                        </div>
-                    </div>
-                
-                </div>
-                
-                <div class="row">
-                    
-                    <div class="col-4 mb-2">
-                        <div class="form-element">
-                            <label for="product_edit_profile_form_profile_sales_types_id">Sales Type:</label>
-                            <select id="product_edit_profile_form_profile_sales_types_id" name="product_edit_profile_form_profile_sales_types_id" class="form-control">
+							</div>
+							<input type="search" id="product_edit_profile_form_profile_name_filter" name="product_edit_profile_form_profile_name_filter" class="form-control" placeholder="Search Profiles"/>
+						</div>
+						<div id="product_edit_profile_form_profile_name_filter-error" class="error w-100 text-center"></div>
+					</div>
+				</div>
+			</div>
+			
+			<?php include_once(VIEWS_PATH . "/profiles/tables/product_edit_profile_table.phtml"); ?>
+			
+			<form id="product_edit_profile_form" class="card card-body mb-2" novalidate="novalidate">
+				<h5 class="card-title">
+					<span>Inventory Profile</span>
+					<a type="button" href="javascript:void(0);" id="product_edit_profile_form_close_button" class="panel-button-close fas fa-times" aria-hidden="true"></a>
+				</h5>
+				<h6 class="card-subtitle mb-2 text-muted" id="display_product_profile_name">&nbsp;</h6>
+				<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+				
+				<div class="row">
+					
+					<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 mb-2">
+						<div class="form-element">
+							<label for="product_edit_profile_form_profile_id">Id:</label>
+							<input type="text" id="product_edit_profile_form_profile_id" name="product_edit_profile_form_profile_id" class="form-control" readonly="readonly" disabled="">
+							<div id="product_edit_profile_form_profile_id-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					
+					<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 mb-2">
+						<div class="form-element">
+							<label for="product_edit_profile_form_profile_name">Name:</label>
+							<input type="text" id="product_edit_profile_form_profile_name" name="product_edit_profile_form_profile_name" class="form-control">
+							<div id="product_edit_profile_form_profile_name-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					
+					<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 d-flex align-self-end justify-content-end pb-2 mb-2">
+						<div class="form-element">
+							<div class="custom-control custom-switch">
+								<input id="product_edit_profile_form_profile_enabled" name="product_edit_profile_form_profile_enabled" type="checkbox" value="1" class="custom-control-input" readonly="readonly" disabled="">
+								<label for="product_edit_profile_form_profile_enabled" class="custom-control-label p-0">Enabled</label>
+							</div>
+							<div id="product_edit_profile_form_profile_enabled-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+				
+				</div>
+				
+				<div class="row">
+					
+					<div class="col-4 mb-2">
+						<div class="form-element">
+							<label for="product_edit_profile_form_profile_sales_types_id">Sales Type:</label>
+							<select id="product_edit_profile_form_profile_sales_types_id" name="product_edit_profile_form_profile_sales_types_id" class="form-control">
 								<?php echo $sales_types_dropdown; ?>
-                            </select>
-                            <div id="product_edit_profile_form_profile_sales_types_id-error" class="error w-100 text-center"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-4 mb-2" id="product_edit_profile_form_profile_allot_by_id_block">
-                        
-                        <div class="form-element">
-                            <label for="product_edit_profile_form_profile_allot_by_id">Allot By:</label>
-                            <select id="product_edit_profile_form_profile_allot_by_id" name="product_edit_profile_form_profile_allot_by_id" class="form-control">
+							</select>
+							<div id="product_edit_profile_form_profile_sales_types_id-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					
+					<div class="col-4 mb-2" id="product_edit_profile_form_profile_allot_by_id_block">
+						
+						<div class="form-element">
+							<label for="product_edit_profile_form_profile_allot_by_id">Allot By:</label>
+							<select id="product_edit_profile_form_profile_allot_by_id" name="product_edit_profile_form_profile_allot_by_id" class="form-control">
 								<?php echo $allot_by_type_dropdown; ?>
-                            </select>
-                            <div id="product_edit_profile_form_profile_allot_by_id-error" class="error w-100 text-center"></div>
-                        </div>
-                    
-                    </div>
-                    
-                    <div class="col-4 mb-2" id="product_edit_profile_form_profile_expires_block">
-                        
-                        <div id="profile_expires" data-label="Expires" data-placeholder="Select Expiration Date"></div>
-                    
-                    </div>
-                    
-                    <div class="col-4 mb-2">
-                        
-                        <div class="form-element" id="product_edit_profile_form_profile_days_out_block">
-                            <label for="product_edit_profile_form_profile_days_out" class="">Days Out:</label>
-                            <input type="number" id="product_edit_profile_form_profile_days_out" name="product_edit_profile_form_profile_days_out" class="form-control">
-                            <div id="product_edit_profile_form_profile_days_out-error" class="error w-100 text-center"></div>
-                        </div>
-                    
-                    </div>
-                
-                </div>
-                
-                <div class="row">
-                    
-                    <div class="col-4 mb-2">
-                        
-                        <div class="form-element" id="product_edit_profile_form_profile_transfer_sales_types_id_block">
-                            <label for="product_edit_profile_form_profile_transfer_sales_types_id">Transfer Sales Type:</label>
-                            <select id="product_edit_profile_form_profile_transfer_sales_types_id" name="product_edit_profile_form_profile_transfer_sales_types_id" class="form-control">
+							</select>
+							<div id="product_edit_profile_form_profile_allot_by_id-error" class="error w-100 text-center"></div>
+						</div>
+					
+					</div>
+					
+					<div class="col-4 mb-2" id="product_edit_profile_form_profile_expires_block">
+						
+						<div id="profile_expires" data-label="Expires" data-placeholder="Select Expiration Date"></div>
+					
+					</div>
+					
+					<div class="col-4 mb-2">
+						
+						<div class="form-element" id="product_edit_profile_form_profile_days_out_block">
+							<label for="product_edit_profile_form_profile_days_out" class="">Days Out:</label>
+							<input type="number" id="product_edit_profile_form_profile_days_out" name="product_edit_profile_form_profile_days_out" class="form-control">
+							<div id="product_edit_profile_form_profile_days_out-error" class="error w-100 text-center"></div>
+						</div>
+					
+					</div>
+				
+				</div>
+				
+				<div class="row">
+					
+					<div class="col-4 mb-2">
+						
+						<div class="form-element" id="product_edit_profile_form_profile_transfer_sales_types_id_block">
+							<label for="product_edit_profile_form_profile_transfer_sales_types_id">Transfer Sales Type:</label>
+							<select id="product_edit_profile_form_profile_transfer_sales_types_id" name="product_edit_profile_form_profile_transfer_sales_types_id" class="form-control">
 								<?php echo $sales_types_dropdown; ?>
-                            </select>
-                            <div id="product_edit_profile_form_profile_transfer_sales_types_id-error" class="error w-100 text-center"></div>
-                        </div>
-                    
-                    </div>
-                    
-                    <div class="col-4 mb-2" id="product_edit_profile_form_profile_quantity_block">
-                        
-                        <div class="form-element" id="product_edit_profile_form_profile_quantity_block">
-                            <label for="product_edit_profile_form_profile_quantity" class="">Quantity Allotted:</label>
-                            <input type="number" id="product_edit_profile_form_profile_quantity" name="product_edit_profile_form_profile_quantity" class="form-control">
-                            <div id="product_edit_profile_form_profile_quantity-error" class="error w-100 text-center"></div>
-                        </div>
-                    
-                    </div>
-                    
-                    <div class="col-4 mb-2" id="product_edit_profile_form_profile_release_amt_block">
-                        
-                        <div class="form-element">
-                            <label for="product_edit_profile_form_profile_release_amt" class="">Amount to Release:</label>
-                            <input type="number" id="product_edit_profile_form_profile_release_amt" name="product_edit_profile_form_profile_release_amt" class="form-control">
-                            <div id="product_edit_profile_form_profile_release_amt-error" class="error w-100 text-center"></div>
-                        </div>
-                    
-                    </div>
-                
-                </div>
-                <!-- /Allotment Fields -->
-                
-                <!-- Additional Fields -->
-                <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
-                    
-                    <!-- Accordion card -->
-                    <div class="card card-body border grey lighten-3 z-depth-0 mb-2 ">
-                        
-                        <!-- Card header -->
-                        <div class="card-header p-0 m-0" role="tab" id="headingOne1">
-                            <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne1" aria-expanded="false" aria-controls="collapseOne1">
-                                <h5 class="mb-0">
-                                    Additional Fields <i class="fas fa-angle-down rotate-icon"></i>
-                                </h5>
-                            </a>
-                        </div>
-                        
-                        <!-- Card body -->
-                        <div id="collapseOne1" class="collapse" role="tabpanel" aria-labelledby="headingOne1" data-parent="#accordionEx">
-                            <hr>
-                            <div class="row">
-                                <div class="col-12 mb-2">
-                                    <div id="product_edit_profile_form_profile_checkin_dow" class="">
-                                        <div class="row">
-                                            <div class="col-12 col-md-2 col-xl-3"><label>Checkin DOW:</label></div>
-                                            <div class="col-12 col-md-10 col-xl-9">
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkin_dowdow_select_all" name="checkin_dowdow_select_all" value="*"><label class="custom-control-label" for="checkin_dowdow_select_all">All</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkin_dowdow_select_sun" name="checkin_dowdow_select_sun" value="0"><label class="custom-control-label" for="checkin_dowdow_select_sun">Sun</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkin_dowdow_select_mon" name="checkin_dowdow_select_mon" value="1"><label class="custom-control-label" for="checkin_dowdow_select_mon">Mon</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkin_dowdow_select_tue" name="checkin_dowdow_select_tue" value="2"><label class="custom-control-label" for="checkin_dowdow_select_tue">Tue</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkin_dowdow_select_wed" name="checkin_dowdow_select_wed" value="3"><label class="custom-control-label" for="checkin_dowdow_select_wed">Wed</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkin_dowdow_select_thu" name="checkin_dowdow_select_thu" value="4"><label class="custom-control-label" for="checkin_dowdow_select_thu">Thu</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkin_dowdow_select_fri" name="checkin_dowdow_select_fri" value="5"><label class="custom-control-label" for="checkin_dowdow_select_fri">Fri</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkin_dowdow_select_sat" name="checkin_dowdow_select_sat" value="6"><label class="custom-control-label" for="checkin_dowdow_select_sat">Sat</label></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-12 mb-2">
-                                    <div id="product_edit_profile_form_profile_checkout_dow" class="">
-                                        <div class="row">
-                                            <div class="col-12 col-md-2 col-xl-3"><label>Checkout DOW:</label></div>
-                                            <div class="col-12 col-md-10 col-xl-9">
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_all" name="checkout_dowdow_select_all" value="*"><label class="custom-control-label" for="checkout_dowdow_select_all">All</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_sun" name="checkout_dowdow_select_sun" value="0"><label class="custom-control-label" for="checkout_dowdow_select_sun">Sun</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_mon" name="checkout_dowdow_select_mon" value="1"><label class="custom-control-label" for="checkout_dowdow_select_mon">Mon</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_tue" name="checkout_dowdow_select_tue" value="2"><label class="custom-control-label" for="checkout_dowdow_select_tue">Tue</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_wed" name="checkout_dowdow_select_wed" value="3"><label class="custom-control-label" for="checkout_dowdow_select_wed">Wed</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_thu" name="checkout_dowdow_select_thu" value="4"><label class="custom-control-label" for="checkout_dowdow_select_thu">Thu</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_fri" name="checkout_dowdow_select_fri" value="5"><label class="custom-control-label" for="checkout_dowdow_select_fri">Fri</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_sat" name="checkout_dowdow_select_sat" value="6"><label class="custom-control-label" for="checkout_dowdow_select_sat">Sat</label></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-12 mb-2">
-                                    <div id="product_edit_profile_form_profile_departure_dow" class="">
-                                        <div class="row">
-                                            <div class="col-12 col-md-2 col-xl-3"><label>Departure DOW:</label></div>
-                                            <div class="col-12 col-md-10 col-xl-9">
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_all" name="departure_dowdow_select_all" value="*"><label class="custom-control-label" for="departure_dowdow_select_all">All</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_sun" name="departure_dowdow_select_sun" value="0"><label class="custom-control-label" for="departure_dowdow_select_sun">Sun</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_mon" name="departure_dowdow_select_mon" value="1"><label class="custom-control-label" for="departure_dowdow_select_mon">Mon</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_tue" name="departure_dowdow_select_tue" value="2"><label class="custom-control-label" for="departure_dowdow_select_tue">Tue</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_wed" name="departure_dowdow_select_wed" value="3"><label class="custom-control-label" for="departure_dowdow_select_wed">Wed</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_thu" name="departure_dowdow_select_thu" value="4"><label class="custom-control-label" for="departure_dowdow_select_thu">Thu</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_fri" name="departure_dowdow_select_fri" value="5"><label class="custom-control-label" for="departure_dowdow_select_fri">Fri</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_sat" name="departure_dowdow_select_sat" value="6"><label class="custom-control-label" for="departure_dowdow_select_sat">Sat</label></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-12 mb-2">
-                                    <div id="product_edit_profile_form_profile_return_dow" class="">
-                                        <div class="row">
-                                            <div class="col-12 col-md-2 col-xl-3"><label>Return DOW:</label></div>
-                                            <div class="col-12 col-md-10 col-xl-9">
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_all" name="return_dowdow_select_all" value="*"><label class="custom-control-label" for="return_dowdow_select_all">All</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_sun" name="return_dowdow_select_sun" value="0"><label class="custom-control-label" for="return_dowdow_select_sun">Sun</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_mon" name="return_dowdow_select_mon" value="1"><label class="custom-control-label" for="return_dowdow_select_mon">Mon</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_tue" name="return_dowdow_select_tue" value="2"><label class="custom-control-label" for="return_dowdow_select_tue">Tue</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_wed" name="return_dowdow_select_wed" value="3"><label class="custom-control-label" for="return_dowdow_select_wed">Wed</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_thu" name="return_dowdow_select_thu" value="4"><label class="custom-control-label" for="return_dowdow_select_thu">Thu</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_fri" name="return_dowdow_select_fri" value="5"><label class="custom-control-label" for="return_dowdow_select_fri">Fri</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_sat" name="return_dowdow_select_sat" value="6"><label class="custom-control-label" for="return_dowdow_select_sat">Sat</label></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-12 mb-2">
-                                    <div id="product_edit_profile_form_profile_weekday_dow" class="">
-                                        <div class="row">
-                                            <div class="col-12 col-md-2 col-xl-3"><label>Weekdays:</label></div>
-                                            <div class="col-12 col-md-10 col-xl-9">
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_all" name="weekday_dowdow_select_all" value="*"><label class="custom-control-label" for="weekday_dowdow_select_all">All</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_sun" name="weekday_dowdow_select_sun" value="0"><label class="custom-control-label" for="weekday_dowdow_select_sun">Sun</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_mon" name="weekday_dowdow_select_mon" value="1"><label class="custom-control-label" for="weekday_dowdow_select_mon">Mon</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_tue" name="weekday_dowdow_select_tue" value="2"><label class="custom-control-label" for="weekday_dowdow_select_tue">Tue</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_wed" name="weekday_dowdow_select_wed" value="3"><label class="custom-control-label" for="weekday_dowdow_select_wed">Wed</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_thu" name="weekday_dowdow_select_thu" value="4"><label class="custom-control-label" for="weekday_dowdow_select_thu">Thu</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_fri" name="weekday_dowdow_select_fri" value="5"><label class="custom-control-label" for="weekday_dowdow_select_fri">Fri</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_sat" name="weekday_dowdow_select_sat" value="6"><label class="custom-control-label" for="weekday_dowdow_select_sat">Sat</label></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-12 mb-2">
-                                    <div id="product_edit_profile_form_profile_inc_days_dow" class="w-100">
-                                        <div class="row">
-                                            <div class="col-12 col-md-2 col-xl-3"><label>Included Days:</label></div>
-                                            <div class="col-12 col-md-10 col-xl-9">
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_all" name="inc_days_dowdow_select_all" value="*"><label class="custom-control-label" for="inc_days_dowdow_select_all">All</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_sun" name="inc_days_dowdow_select_sun" value="0"><label class="custom-control-label" for="inc_days_dowdow_select_sun">Sun</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_mon" name="inc_days_dowdow_select_mon" value="1"><label class="custom-control-label" for="inc_days_dowdow_select_mon">Mon</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_tue" name="inc_days_dowdow_select_tue" value="2"><label class="custom-control-label" for="inc_days_dowdow_select_tue">Tue</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_wed" name="inc_days_dowdow_select_wed" value="3"><label class="custom-control-label" for="inc_days_dowdow_select_wed">Wed</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_thu" name="inc_days_dowdow_select_thu" value="4"><label class="custom-control-label" for="inc_days_dowdow_select_thu">Thu</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_fri" name="inc_days_dowdow_select_fri" value="5"><label class="custom-control-label" for="inc_days_dowdow_select_fri">Fri</label></div>
-                                                <div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_sat" name="inc_days_dowdow_select_sat" value="6"><label class="custom-control-label" for="inc_days_dowdow_select_sat">Sat</label></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-3 mb-2">
-                                    <div class="form-element">
-                                        <label for="product_edit_profile_form_profile_min_length_days" class="">Min Length Days:</label>
-                                        <input type="number" id="product_edit_profile_form_profile_min_length_days" name="product_edit_profile_form_profile_min_length_days" class="form-control">
-                                        <div id="product_edit_profile_form_profile_min_length_days-error" class="error w-100 text-center"></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-3 mb-2">
-                                    <div class="form-element">
-                                        <label for="product_edit_profile_form_profile_min_duration" class="">Minimum Duration:</label>
-                                        <input type="number" id="product_edit_profile_form_profile_min_duration" name="product_edit_profile_form_profile_min_duration" class="form-control">
-                                        <div id="product_edit_profile_form_profile_min_duration-error" class="error w-100 text-center"></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-3 mb-2">
-                                    <div class="form-element">
-                                        <label for="product_edit_profile_form_profile_max_duration" class="">Maximum Duration:</label>
-                                        <input type="number" id="product_edit_profile_form_profile_max_duration" name="product_edit_profile_form_profile_max_duration" class="form-control">
-                                        <div id="product_edit_profile_form_profile_max_duration-error" class="error w-100 text-center"></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-3 mb-2">
-                                    <div class="form-element">
-                                        <label for="product_edit_profile_form_profile_equal_duration" class="">Equals Duration:</label>
-                                        <input type="number" id="product_edit_profile_form_profile_equal_duration" name="product_edit_profile_form_profile_equal_duration" class="form-control">
-                                        <div id="product_edit_profile_form_profile_equal_duration-error" class="error w-100 text-center"></div>
-                                    </div>
-                                </div>
-                            
-                            </div>
-                            
-                            <div class="row">
-                                
-                                <div class="col-4 mb-2">
-                                    <div id="profile_advanced_booking_date" data-label="Advanced Booking Date" data-placeholder="Select Date"></div>
-                                </div>
-                                
-                                <div class="col-4 mb-2">
-                                    <div class="form-element">
-                                        <label for="product_edit_profile_form_profile_advanced_booking_min" class="">Advanced Booking Min:</label>
-                                        <input type="number" id="product_edit_profile_form_profile_advanced_booking_min" name="product_edit_profile_form_profile_advanced_booking_min" class="form-control">
-                                        <div id="product_edit_profile_form_profile_advanced_booking_min-error" class="error w-100 text-center"></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-4 mb-2">
-                                    <div class="form-element">
-                                        <label for="product_edit_profile_form_profile_advanced_booking_max" class="">Advanced Booking Max:</label>
-                                        <input type="number" id="product_edit_profile_form_profile_advanced_booking_max" name="product_edit_profile_form_profile_advanced_booking_max" class="form-control">
-                                        <div id="product_edit_profile_form_profile_advanced_booking_max-error" class="error w-100 text-center"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        
-                        </div>
-                    
-                    </div>
-                    <!-- Accordion card -->
-                
-                </div>
-                <!-- /Additional Fields -->
-            
-            </div>
-            
-            <div class="row">
-                <div class="col-6 text-left w-100 mb-2">
-                    <a href="javascript:void(0);" id="button_remove_profile_from_product" class="btn btn-danger btn-sm waves-effect waves-light">Remove</a>
-                </div>
-                <div class="col-6 text-right w-100 mb-2">
-                    <a href="javascript:void(0);" id="product_edit_profile_form_clear_button" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
-                    <a href="javascript:void(0);" id="product_edit_profile_form_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">Save</a>
-                </div>
-            </div>
-        
-        </form>
-    
-    </div>
+							</select>
+							<div id="product_edit_profile_form_profile_transfer_sales_types_id-error" class="error w-100 text-center"></div>
+						</div>
+					
+					</div>
+					
+					<div class="col-4 mb-2" id="product_edit_profile_form_profile_quantity_block">
+						
+						<div class="form-element" id="product_edit_profile_form_profile_quantity_block">
+							<label for="product_edit_profile_form_profile_quantity" class="">Quantity Allotted:</label>
+							<input type="number" id="product_edit_profile_form_profile_quantity" name="product_edit_profile_form_profile_quantity" class="form-control">
+							<div id="product_edit_profile_form_profile_quantity-error" class="error w-100 text-center"></div>
+						</div>
+					
+					</div>
+					
+					<div class="col-4 mb-2" id="product_edit_profile_form_profile_release_amt_block">
+						
+						<div class="form-element">
+							<label for="product_edit_profile_form_profile_release_amt" class="">Amount to Release:</label>
+							<input type="number" id="product_edit_profile_form_profile_release_amt" name="product_edit_profile_form_profile_release_amt" class="form-control">
+							<div id="product_edit_profile_form_profile_release_amt-error" class="error w-100 text-center"></div>
+						</div>
+					
+					</div>
+				
+				</div>
+				
+				<!-- Additional Fields -->
+				<div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+					
+					<!-- Accordion card -->
+					<section class="card card-body border grey lighten-3 mb-2 ">
+						
+						<!-- Card header -->
+						<div class="card-header p-0 m-0" role="tab" id="headingOne1">
+							<a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne1" aria-expanded="false" aria-controls="collapseOne1">
+								<h5 class="mb-0">
+									Additional Fields <i class="fas fa-angle-down rotate-icon"></i>
+								</h5>
+							</a>
+						</div>
+						
+						<!-- Card body -->
+						<div id="collapseOne1" class="collapse" role="tabpanel" aria-labelledby="headingOne1" data-parent="#accordionEx">
+							
+							<hr/>
+							
+							<div class="row">
+								<div class="col-12 mb-2">
+									<div id="product_edit_profile_form_profile_checkin_dow" class=""></div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-12 mb-2">
+									<div id="product_edit_profile_form_profile_checkout_dow" class="">
+										<div class="row">
+											<div class="col-12 col-md-2 col-xl-3 px-1"><label>Checkout DOW:</label></div>
+											<div class="col-12 col-md-10 col-xl-9">
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_all" name="checkout_dowdow_select_all" value="*"><label class="custom-control-label" for="checkout_dowdow_select_all">All</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_sun" name="checkout_dowdow_select_sun" value="0"><label class="custom-control-label" for="checkout_dowdow_select_sun">Sun</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_mon" name="checkout_dowdow_select_mon" value="1"><label class="custom-control-label" for="checkout_dowdow_select_mon">Mon</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_tue" name="checkout_dowdow_select_tue" value="2"><label class="custom-control-label" for="checkout_dowdow_select_tue">Tue</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_wed" name="checkout_dowdow_select_wed" value="3"><label class="custom-control-label" for="checkout_dowdow_select_wed">Wed</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_thu" name="checkout_dowdow_select_thu" value="4"><label class="custom-control-label" for="checkout_dowdow_select_thu">Thu</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_fri" name="checkout_dowdow_select_fri" value="5"><label class="custom-control-label" for="checkout_dowdow_select_fri">Fri</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="checkout_dowdow_select_sat" name="checkout_dowdow_select_sat" value="6"><label class="custom-control-label" for="checkout_dowdow_select_sat">Sat</label></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-12 mb-2">
+									<div id="product_edit_profile_form_profile_departure_dow" class="">
+										<div class="row">
+											<div class="col-12 col-md-2 col-xl-3 px-1"><label>Departure DOW:</label></div>
+											<div class="col-12 col-md-10 col-xl-9">
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_all" name="departure_dowdow_select_all" value="*"><label class="custom-control-label" for="departure_dowdow_select_all">All</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_sun" name="departure_dowdow_select_sun" value="0"><label class="custom-control-label" for="departure_dowdow_select_sun">Sun</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_mon" name="departure_dowdow_select_mon" value="1"><label class="custom-control-label" for="departure_dowdow_select_mon">Mon</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_tue" name="departure_dowdow_select_tue" value="2"><label class="custom-control-label" for="departure_dowdow_select_tue">Tue</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_wed" name="departure_dowdow_select_wed" value="3"><label class="custom-control-label" for="departure_dowdow_select_wed">Wed</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_thu" name="departure_dowdow_select_thu" value="4"><label class="custom-control-label" for="departure_dowdow_select_thu">Thu</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_fri" name="departure_dowdow_select_fri" value="5"><label class="custom-control-label" for="departure_dowdow_select_fri">Fri</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="departure_dowdow_select_sat" name="departure_dowdow_select_sat" value="6"><label class="custom-control-label" for="departure_dowdow_select_sat">Sat</label></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-12 mb-2">
+									<div id="product_edit_profile_form_profile_return_dow" class="">
+										<div class="row">
+											<div class="col-12 col-md-2 col-xl-3 px-1"><label>Return DOW:</label></div>
+											<div class="col-12 col-md-10 col-xl-9">
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_all" name="return_dowdow_select_all" value="*"><label class="custom-control-label" for="return_dowdow_select_all">All</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_sun" name="return_dowdow_select_sun" value="0"><label class="custom-control-label" for="return_dowdow_select_sun">Sun</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_mon" name="return_dowdow_select_mon" value="1"><label class="custom-control-label" for="return_dowdow_select_mon">Mon</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_tue" name="return_dowdow_select_tue" value="2"><label class="custom-control-label" for="return_dowdow_select_tue">Tue</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_wed" name="return_dowdow_select_wed" value="3"><label class="custom-control-label" for="return_dowdow_select_wed">Wed</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_thu" name="return_dowdow_select_thu" value="4"><label class="custom-control-label" for="return_dowdow_select_thu">Thu</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_fri" name="return_dowdow_select_fri" value="5"><label class="custom-control-label" for="return_dowdow_select_fri">Fri</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="return_dowdow_select_sat" name="return_dowdow_select_sat" value="6"><label class="custom-control-label" for="return_dowdow_select_sat">Sat</label></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-12 mb-2">
+									<div id="product_edit_profile_form_profile_weekday_dow" class="">
+										<div class="row">
+											<div class="col-12 col-md-2 col-xl-3 px-1"><label>Weekdays:</label></div>
+											<div class="col-12 col-md-10 col-xl-9">
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_all" name="weekday_dowdow_select_all" value="*"><label class="custom-control-label" for="weekday_dowdow_select_all">All</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_sun" name="weekday_dowdow_select_sun" value="0"><label class="custom-control-label" for="weekday_dowdow_select_sun">Sun</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_mon" name="weekday_dowdow_select_mon" value="1"><label class="custom-control-label" for="weekday_dowdow_select_mon">Mon</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_tue" name="weekday_dowdow_select_tue" value="2"><label class="custom-control-label" for="weekday_dowdow_select_tue">Tue</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_wed" name="weekday_dowdow_select_wed" value="3"><label class="custom-control-label" for="weekday_dowdow_select_wed">Wed</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_thu" name="weekday_dowdow_select_thu" value="4"><label class="custom-control-label" for="weekday_dowdow_select_thu">Thu</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_fri" name="weekday_dowdow_select_fri" value="5"><label class="custom-control-label" for="weekday_dowdow_select_fri">Fri</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="weekday_dowdow_select_sat" name="weekday_dowdow_select_sat" value="6"><label class="custom-control-label" for="weekday_dowdow_select_sat">Sat</label></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-12 mb-2">
+									<div id="product_edit_profile_form_profile_inc_days_dow" class="w-100">
+										<div class="row">
+											<div class="col-12 col-md-2 col-xl-3 px-1"><label>Included Days:</label></div>
+											<div class="col-12 col-md-10 col-xl-9">
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_all" name="inc_days_dowdow_select_all" value="*"><label class="custom-control-label" for="inc_days_dowdow_select_all">All</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_sun" name="inc_days_dowdow_select_sun" value="0"><label class="custom-control-label" for="inc_days_dowdow_select_sun">Sun</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_mon" name="inc_days_dowdow_select_mon" value="1"><label class="custom-control-label" for="inc_days_dowdow_select_mon">Mon</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_tue" name="inc_days_dowdow_select_tue" value="2"><label class="custom-control-label" for="inc_days_dowdow_select_tue">Tue</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_wed" name="inc_days_dowdow_select_wed" value="3"><label class="custom-control-label" for="inc_days_dowdow_select_wed">Wed</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_thu" name="inc_days_dowdow_select_thu" value="4"><label class="custom-control-label" for="inc_days_dowdow_select_thu">Thu</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_fri" name="inc_days_dowdow_select_fri" value="5"><label class="custom-control-label" for="inc_days_dowdow_select_fri">Fri</label></div>
+												<div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" class="custom-control-input dow_select" id="inc_days_dowdow_select_sat" name="inc_days_dowdow_select_sat" value="6"><label class="custom-control-label" for="inc_days_dowdow_select_sat">Sat</label></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-3 mb-2">
+									<div class="form-element">
+										<label for="product_edit_profile_form_profile_min_length_days" class="">Min Length Days:</label>
+										<input type="number" id="product_edit_profile_form_profile_min_length_days" name="product_edit_profile_form_profile_min_length_days" class="form-control">
+										<div id="product_edit_profile_form_profile_min_length_days-error" class="error w-100 text-center"></div>
+									</div>
+								</div>
+								
+								<div class="col-3 mb-2">
+									<div class="form-element">
+										<label for="product_edit_profile_form_profile_min_duration" class="">Min Duration:</label>
+										<input type="number" id="product_edit_profile_form_profile_min_duration" name="product_edit_profile_form_profile_min_duration" class="form-control">
+										<div id="product_edit_profile_form_profile_min_duration-error" class="error w-100 text-center"></div>
+									</div>
+								</div>
+								
+								<div class="col-3 mb-2">
+									<div class="form-element">
+										<label for="product_edit_profile_form_profile_max_duration" class="">Max Duration:</label>
+										<input type="number" id="product_edit_profile_form_profile_max_duration" name="product_edit_profile_form_profile_max_duration" class="form-control">
+										<div id="product_edit_profile_form_profile_max_duration-error" class="error w-100 text-center"></div>
+									</div>
+								</div>
+								
+								<div class="col-3 mb-2">
+									<div class="form-element">
+										<label for="product_edit_profile_form_profile_equal_duration" class="">Equals Duration:</label>
+										<input type="number" id="product_edit_profile_form_profile_equal_duration" name="product_edit_profile_form_profile_equal_duration" class="form-control">
+										<div id="product_edit_profile_form_profile_equal_duration-error" class="error w-100 text-center"></div>
+									</div>
+								</div>
+							
+							</div>
+							
+							<div class="row">
+								
+								<div class="col-4 mb-2">
+									<div id="profile_advanced_booking_date" data-label="Adv Booking Date" data-placeholder="Select Date"></div>
+								</div>
+								
+								<div class="col-4 mb-2">
+									<div class="form-element">
+										<label for="product_edit_profile_form_profile_advanced_booking_min" class="">Adv Booking Min:</label>
+										<input type="number" id="product_edit_profile_form_profile_advanced_booking_min" name="product_edit_profile_form_profile_advanced_booking_min" class="form-control">
+										<div id="product_edit_profile_form_profile_advanced_booking_min-error" class="error w-100 text-center"></div>
+									</div>
+								</div>
+								
+								<div class="col-4 mb-2">
+									<div class="form-element">
+										<label for="product_edit_profile_form_profile_advanced_booking_max" class="">Adv Booking Max:</label>
+										<input type="number" id="product_edit_profile_form_profile_advanced_booking_max" name="product_edit_profile_form_profile_advanced_booking_max" class="form-control">
+										<div id="product_edit_profile_form_profile_advanced_booking_max-error" class="error w-100 text-center"></div>
+									</div>
+								</div>
+							</div>
+						
+						</div>
+					
+					</section>
+					<!-- Accordion card -->
+				
+				</div>
+				<!-- /Additional Fields -->
+				
+				<div class="row">
+					<div class="col-6 text-left w-100 mb-2">
+						<a href="javascript:void(0);" id="button_remove_profile_from_product" class="btn btn-danger btn-sm waves-effect waves-light">Remove</a>
+					</div>
+					<div class="col-6 text-right w-100 mb-2">
+						<a href="javascript:void(0);" id="product_edit_profile_form_clear_button" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+						<a href="javascript:void(0);" id="product_edit_profile_form_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">Save</a>
+					</div>
+				</div>
+			
+			</form>
+		
+		</div>
+		
+		<div class="col-12 col-md-4 mb-2">
+			
+			<ul class="list-group">
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					<span id="" class="">Cras justo odio</span>
+					<span class="badge badge-primary badge-pill">14</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					Dapibus ac facilisis in
+					<span class="badge badge-primary badge-pill">2</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					dfg
+					<span class="badge badge-primary badge-pill">1</span>
+				</li>
+			</ul>
+		
+		</div>
+	
+	</div>
 
 </section>
 

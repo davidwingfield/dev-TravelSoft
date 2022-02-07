@@ -102,15 +102,13 @@
 		
 		public static function get(int $id = null): array
 		{
-			$where = "";
+			$whereCondition = "";
 			if (!is_null($id)) {
-				$where = "AND   PRODUCT.id = $id";
+				$whereCondition = "AND   PRODUCT.id = $id";
 			}
 			
 			try {
-				$sql = self::$sql . $where;
-				
-				Log::$debug_log->trace($sql);
+				$sql = self::$sql . $whereCondition;
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
@@ -395,6 +393,9 @@
 		
 		public static function addRecord(array $product = null): array
 		{
+			Log::$debug_log->trace($product);
+			$location_detail = array();
+			
 			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
 			
 			$id = Model::setInt((isset($product["id"])) ? $product["id"] : null);
@@ -440,15 +441,39 @@
 			$location = [];
 			$location["name"] = (string)"City Center";
 			$location["city_id"] = (int)$city_id;
-			$location["location_types_id"] = (int)1;
+			$location["location_types_id"] = (isset($location_detail["street_1"])) ? $location_detail["street_1"] : (isset($product["street_1"])) ? $product["street_1"] : null;
+			$location["street_1"] = null;
+			$location["street_2"] = null;
+			$location["zipcode"] = null;
 			
-			$location_detail = Location::getByCityId($location["city_id"], $location["name"]);
-			
-			if (count($location_detail) <= 0) {
-				$location_detail = Location::update($location);
-				if (count($location_detail) > 0) {
-					$location_detail = $location_detail[0];
-				}
+			switch ($category_id) {
+				case 1:
+					$location_detail = Location::getByCityId($city_id, $name);
+					$location["street_1"] = (isset($location_detail["street_1"])) ? $location_detail["street_1"] : (isset($product["street_1"])) ? $product["street_1"] : null;
+					$location["street_2"] = (isset($location_detail["street_2"])) ? $location_detail["street_2"] : (isset($product["street_2"])) ? $product["street_2"] : null;
+					$location["zipcode"] = (isset($location_detail["postal_code"])) ? $location_detail["postal_code"] : (isset($product["postal_code"])) ? $product["postal_code"] : null;
+					$location["name"] = (isset($location_detail["name"])) ? $location_detail["name"] : (isset($product["name"])) ? $product["name"] : "City Center";
+					$location["city_id"] = (int)$city_id;
+					$location["location_types_id"] = (isset($location_detail["location_types_id"])) ? $location_detail["location_types_id"] : 2;
+					
+					if (count($location_detail) <= 0) {
+						$location_detail = Location::update($location);
+						
+						if (count($location_detail) > 0) {
+							$location_detail = $location_detail[0];
+						}
+					}
+					break;
+				
+				default:
+					$location_detail = Location::getByCityId($location["city_id"], $location["name"]);
+					
+					if (count($location_detail) <= 0) {
+						$location_detail = Location::update($location);
+						if (count($location_detail) > 0) {
+							$location_detail = $location_detail[0];
+						}
+					}
 			}
 			
 			$location_id = (int)$location_detail["id"];
@@ -510,8 +535,6 @@
 					postal_code = VALUES(postal_code);
             ";
 			
-			//Log::$debug_log->trace($sql);
-			
 			try {
 				Model::$db->rawQuery($sql);
 				$product_id = Model::$db->getInsertId();
@@ -520,6 +543,8 @@
 					return array("id" => $product_id);
 				} else {
 					Log::$debug_log->error("missing product id");
+					
+					return [];
 				}
 				
 			} catch (Exception $e) {
@@ -527,8 +552,6 @@
 				
 				return [];
 			}
-			
-			return [];
 		}
 		
 	}

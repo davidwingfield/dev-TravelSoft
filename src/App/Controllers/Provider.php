@@ -348,8 +348,6 @@
 				$provider = ProviderModel::update($params["provider_detail"]);
 			}
 			
-			Log::$debug_log->trace(count($provider));
-			
 			if (count($provider) >= 1) {
 				if (isset($provider[0])) {
 					$provider = $provider[0];

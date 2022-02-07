@@ -114,20 +114,18 @@
 				return [];
 			}
 			
-			//Log::$debug_log->trace($unit);
-			
 			$temp = array(
-				'id' => $unit['unit_id'],
-				'category_id' => $unit['unit_category_id'],
-				'api_id' => $unit['unit_api_id'],
-				'name' => $unit['unit_name'],
-				'room_code' => (!isset($unit['room_code'])) ? buildCode($unit['unit_id'], $unit['unit_name'], "unit") : $unit['room_code'],
-				'enabled' => $unit['unit_enabled'],
-				'date_created' => $unit['unit_date_created'],
-				'created_by' => $unit['unit_created_by'],
-				'date_modified' => $unit['unit_date_modified'],
-				'modified_by' => $unit['unit_modified_by'],
-				'note' => $unit['unit_note'],
+				"id" => $unit["unit_id"],
+				"category_id" => $unit["unit_category_id"],
+				"api_id" => $unit["unit_api_id"],
+				"name" => $unit["unit_name"],
+				"room_code" => (!isset($unit["room_code"])) ? buildCode($unit["unit_id"], $unit["unit_name"], "unit") : $unit["room_code"],
+				"enabled" => $unit["unit_enabled"],
+				"date_created" => $unit["unit_date_created"],
+				"created_by" => $unit["unit_created_by"],
+				"date_modified" => $unit["unit_date_modified"],
+				"modified_by" => $unit["unit_modified_by"],
+				"note" => $unit["unit_note"],
 			);
 			
 			if (isset($unit['product_unit_min_pax'])) {
@@ -204,13 +202,40 @@
 			return $data;
 		}
 		
+		/**
+		 * delete unit from product
+		 *
+		 * @param array $params
+		 */
 		public static function serveDelete(array $params = []): void
 		{
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			View::render_json(UnitModel::deleteProductUnit($params));
+			exit(0);
+		}
+		
+		/**
+		 * post request to add new unit record
+		 *
+		 * @param array $params
+		 */
+		public static function serveNew(array $params = [])
+		{
+			$results = UnitModel::insertUnit($params);
+			$units = [];
+			
+			foreach ($results AS $k => $unit) {
+				$units[] = self::format($unit);
+			}
 			
 			/**
-			 * render season json
+			 * render results json page
 			 */
-			View::render_json(UnitModel::deleteProductUnit($params));
+			header("Content-type:application/json");
+			View::render_json($units);
 			exit(0);
 		}
 		

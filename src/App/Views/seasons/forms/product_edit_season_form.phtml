@@ -65,138 +65,166 @@
 	$season_dropdown .= "</div>";
 ?>
 
-<section id="product_edit_season_section">
-    
-    <div class="row">
-        <div class="col-12">
-            <div class="form-element">
-                <label for="product_edit_season_form_season_name_filter" class="d-none">Season Search:</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
+<section id="product_edit_season_section" class="section">
+	
+	<div class="row">
+		
+		<div class="col-12 col-md-8 mb-2">
+			
+			<div class="row">
+				<div class="col-12">
+					<div class="form-element">
+						<label for="product_edit_season_form_season_name_filter" class="d-none">Season Search:</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
                         <span class="input-group-text">
                             <i class="fas fa-search" aria-hidden="true"></i>
                         </span>
-                    </div>
-                    <input type="search" id="product_edit_season_form_season_name_filter" name="product_edit_season_form_season_name_filter" class="form-control" placeholder="Search Seasons"/>
-                </div>
-                <div id="product_edit_season_form_season_name_filter-error" class="error w-100 text-center"></div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="row">
-        <div class="col-12">
-			<?php include_once(VIEWS_PATH . "/seasons/tables/product_edit_season_table.phtml"); ?>
-        </div>
-    </div>
-    
-    <div class="card card-body mb-2" id="edit_product_season">
-        <h5 class="card-title">
-            <span>Season</span>
-        </h5>
-        <h6 class="card-subtitle mb-2 text-muted" id="display_product_season_name">Details</h6>
-        <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-        
-        <div class="row mb-2">
-            
-            <!-- Season Id -->
-            <div class="col-12 col-md-6 col-lg-2 col-xl-2">
-                <div class="form-element">
-                    <label for="product_edit_season_form_season_id">Id:</label>
-                    <input type="text" id="product_edit_season_form_season_id" name="product_edit_season_form_season_id" class="form-control" readonly="readonly"/>
-                    <div id="product_edit_season_form_season_id-error" class="error w-100 text-center"></div>
-                </div>
-            </div>
-            <!-- /Season Id -->
-            
-            <!-- Season Name -->
-            <div class="col-12 col-md-6 col-lg-3 col-xl-3">
-                <div class="form-element">
-                    <label for="product_edit_season_form_season_name">Name:</label>
-                    <input type="text" id="product_edit_season_form_season_name" name="product_edit_season_form_season_name" class="form-control" readonly="readonly"/>
-                    <div id="product_edit_season_form_season_name-error" class="error w-100 text-center"></div>
-                </div>
-            </div>
-            <!-- /Season Name -->
-            
-            <!-- Season Color Scheme ID -->
-            <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                
-                <div class="form-element">
-                    <label for="product_edit_season_form_season_color_scheme_id">Color Scheme:</label>
-                    <input type="hidden" id="product_edit_season_form_season_color_scheme_id" name="product_edit_season_form_season_color_scheme_id" class="form-control dev-element" readonly="readonly"/>
-                    <div class="m-0 p-0 w-100">
-						<?php echo $season_dropdown; ?>
-                    </div>
-                    <div id="product_edit_season_form_season_color_scheme_id-error" class="error w-100 text-center"></div>
-                
-                </div>
-            </div>
-            <!-- /Season Color Scheme ID -->
-            
-            <!-- Season Enabled -->
-            <div class="col-12 col-md-6 col-lg-2 col-xl-2 d-flex align-items-end justify-content-end pb-2">
-                <div class="form-element">
-                    <div class="custom-control custom-switch">
-                        <input id="product_edit_season_form_season_enabled" name="product_edit_season_form_season_enabled" type="checkbox" value="1" class="custom-control-input" readonly="readonly">
-                        <label for="product_edit_season_form_season_enabled" class="custom-control-label p-0">Enabled</label>
-                    </div>
-                    <div id="product_edit_season_form_season_enabled-error" class="error w-100 text-center"></div>
-                </div>
-            </div>
-            <!-- /Season Enabled -->
-            
-            <!-- Edit Season Link -->
-            <div class="col-12 col-md-6 col-lg-2 col-xl-1 d-flex align-items-end justify-content-end pb-3">
-                <a href="javascript:void(0);" id="product_edit_season_form_edit_season_link" class="">Edit</a>
-            </div>
-            <!-- /Edit Season Link -->
-        
-        </div>
-        
-        <div class="row" id="edit_season">
-            <!--
-            <div class="col">
-                <button type="button" id="edit_season_cancel_button" class="btn btn-danger btn-sm" disabled="disabled">
-                    <i class="fas fa-edit mx-2"></i>
-                    <span class="">Cancel</span>
-                </button>
-                <button type="button" id="edit_season_update_button" class="btn btn-outline-info btn-sm" disabled="disabled">
-                    <i class="fas fa-edit mx-2"></i>
-                    <span class="">Update</span>
-                </button>
-            </div>
-            -->
-        </div>
-        
-        <hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-        
-        <div id="season_disabled_dow" class=""></div>
-        
-        <div class="row">
-            <div class="col-6 text-left w-100 mb-2">
-                <a href="javascript:void(0);" id="button_remove_season_from_product" class="btn btn-danger btn-sm waves-effect waves-light">Remove</a>
-            </div>
-            <div class="col-6 text-right w-100 mb-2">
-                <a href="javascript:void(0);" id="button_clear_form_edit_season" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
-                <a href="javascript:void(0);" id="button_submit_form_edit_season" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
-            </div>
-        </div>
-    
-    </div>
+							</div>
+							<input type="search" id="product_edit_season_form_season_name_filter" name="product_edit_season_form_season_name_filter" class="form-control" placeholder="Search Seasons"/>
+						</div>
+						<div id="product_edit_season_form_season_name_filter-error" class="error w-100 text-center"></div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-12">
+					<?php include_once(VIEWS_PATH . "/seasons/tables/product_edit_season_table.phtml"); ?>
+				</div>
+			</div>
+			
+			<form id="edit_product_season" class="card card-body mb-2">
+				
+				<h5 class="card-title">
+					<span>Season</span>
+				</h5>
+				<h6 class="card-subtitle mb-2 text-muted" id="display_product_season_name">Details</h6>
+				<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+				
+				<div class="row mb-2">
+					
+					<!-- Season Id -->
+					<div class="col-12 col-md-6 col-lg-2 col-xl-2">
+						<div class="form-element">
+							<label for="product_edit_season_form_season_id">Id:</label>
+							<input type="text" id="product_edit_season_form_season_id" name="product_edit_season_form_season_id" class="form-control" readonly="readonly"/>
+							<div id="product_edit_season_form_season_id-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Season Id -->
+					
+					<!-- Season Name -->
+					<div class="col-12 col-md-6 col-lg-3 col-xl-3">
+						<div class="form-element">
+							<label for="product_edit_season_form_season_name">Name:</label>
+							<input type="text" id="product_edit_season_form_season_name" name="product_edit_season_form_season_name" class="form-control" readonly="readonly"/>
+							<div id="product_edit_season_form_season_name-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Season Name -->
+					
+					<!-- Season Color Scheme ID -->
+					<div class="col-12 col-md-6 col-lg-4 col-xl-4">
+						
+						<div class="form-element">
+							<label for="product_edit_season_form_season_color_scheme_id">Color Scheme:</label>
+							<input type="hidden" id="product_edit_season_form_season_color_scheme_id" name="product_edit_season_form_season_color_scheme_id" class="form-control dev-element" readonly="readonly"/>
+							<div class="m-0 p-0 w-100">
+								<?php echo $season_dropdown; ?>
+							</div>
+							<div id="product_edit_season_form_season_color_scheme_id-error" class="error w-100 text-center"></div>
+						
+						</div>
+					</div>
+					<!-- /Season Color Scheme ID -->
+					
+					<!-- Season Enabled -->
+					<div class="col-12 col-md-6 col-lg-2 col-xl-2 d-flex align-items-end justify-content-end pb-2">
+						<div class="form-element">
+							<div class="custom-control custom-switch">
+								<input id="product_edit_season_form_season_enabled" name="product_edit_season_form_season_enabled" type="checkbox" value="1" class="custom-control-input" readonly="readonly">
+								<label for="product_edit_season_form_season_enabled" class="custom-control-label p-0">Enabled</label>
+							</div>
+							<div id="product_edit_season_form_season_enabled-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Season Enabled -->
+					
+					<!-- Edit Season Link -->
+					<div class="col-12 col-md-6 col-lg-2 col-xl-1 d-flex align-items-end justify-content-end pb-3">
+						<a href="javascript:void(0);" id="product_edit_season_form_edit_season_link" class="">Edit</a>
+					</div>
+					<!-- /Edit Season Link -->
+				
+				</div>
+				
+				<div class="row" id="edit_season">
+					<!--
+					<div class="col">
+						<button type="button" id="edit_season_cancel_button" class="btn btn-danger btn-sm" disabled="disabled">
+							<i class="fas fa-edit mx-2"></i>
+							<span class="">Cancel</span>
+						</button>
+						<button type="button" id="edit_season_update_button" class="btn btn-outline-info btn-sm" disabled="disabled">
+							<i class="fas fa-edit mx-2"></i>
+							<span class="">Update</span>
+						</button>
+					</div>
+					-->
+				</div>
+				
+				<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+				
+				<div id="season_disabled_dow" class=""></div>
+				
+				<div class="row">
+					<div class="col-6 text-left w-100 mb-2">
+						<a href="javascript:void(0);" id="button_remove_season_from_product" class="btn btn-danger btn-sm waves-effect waves-light">Remove</a>
+					</div>
+					<div class="col-6 text-right w-100 mb-2">
+						<a href="javascript:void(0);" id="button_clear_form_edit_season" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+						<a href="javascript:void(0);" id="button_submit_form_edit_season" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
+					</div>
+				</div>
+			
+			</form>
+		
+		</div>
+		
+		<div class="col-12 col-md-4 mb-2">
+			
+			<ul class="list-group">
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					<span id="" class="">Cras justo odio</span>
+					<span class="badge badge-primary badge-pill">14</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					Dapibus ac facilisis in
+					<span class="badge badge-primary badge-pill">2</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					dfg
+					<span class="badge badge-primary badge-pill">1</span>
+				</li>
+			</ul>
+		
+		</div>
+	
+	</div>
 
 </section>
 
 <script type="text/javascript">
-    let settings = {
-        swatches: <?php echo $color_scheme;?>,
-        els: [
-            "#form_edit_scheme_background_color",
-            "#form_edit_scheme_text_color",
-            "#form_edit_scheme_border_color",
-        ],
-    }
-    $(function () {
-        ColorScheme.init(settings)
-    })
+	let settings = {
+		swatches: <?php echo $color_scheme;?>,
+		els: [
+			"#form_edit_scheme_background_color",
+			"#form_edit_scheme_text_color",
+			"#form_edit_scheme_border_color",
+		],
+	}
+	$(function () {
+		ColorScheme.init(settings)
+	})
 </script>

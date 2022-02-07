@@ -1,0 +1,26 @@
+SELECT
+		ICON.id AS 'icon_id',
+		ICON.name AS 'icon_name',
+		ICON.class AS 'icon_class',
+		ICON.keywords AS 'icon_keywords',
+		ICON.enabled AS 'icon_enabled',
+		ICON.date_created AS 'icon_date_created',
+		ICON.created_by AS 'icon_created_by',
+		ICON.date_modified AS 'icon_date_modified',
+		ICON.modified_by AS 'icon_modified_by',
+		ICON.note AS 'icon_note'
+FROM 	icon ICON
+-- JOIN 	icon ICON ON ICON.id = {FK_TABLE}.icon_id
+
+/*
+'id'=>$icon['icon_id'],
+'name'=>$icon['icon_name'],
+'class'=>$icon['icon_class'],
+'keywords'=>$icon['icon_keywords'],
+'enabled'=>$icon['icon_enabled'],
+'date_created'=>$icon['icon_date_created'],
+'created_by'=>$icon['icon_created_by'],
+'date_modified'=>$icon['icon_date_modified'],
+'modified_by'=>$icon['icon_modified_by'],
+'note'=>$icon['icon_note']
+*/

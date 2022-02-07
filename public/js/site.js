@@ -35,7 +35,7 @@ const toastrOptions = {
     "showMethod": "fadeIn",
     "hideMethod": "fadeOut",
 }
-let dow_short = [
+const dow_short = [
     "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
 ]
 const days = [
@@ -178,8 +178,8 @@ colorScheme.set(15, {
 })
 const tableCellMaxChars = 10
 const defaultAddressView = "medium"
-let DEBUGMODE = true
-
+const DEBUGMODE = true
+const inactivityTimeout = 60000 * 60
 const initialCalenderViewCount = 12
 
 
@@ -363,17 +363,27 @@ const clearValidation = function (formElement) {
     var validator = $(formElement).validate()
     
     $("[name]", formElement).each(function () {
-        validator.successList.push(this)
-        validator.showErrors()
+        if (validator) {
+            if (validator.successList) {
+                validator.successList.push(this)
+            }
+            validator.showErrors()
+        }
     })
     
     $(".is-invalid").each(function () {
-        validator.successList.push(this)
-        validator.showErrors()
+        if (validator) {
+            if (validator.successList) {
+                validator.successList.push(this)
+            }
+            validator.showErrors()
+        }
     })
     
-    validator.resetForm()
-    validator.reset()
+    if (validator) {
+        validator.resetForm()
+        validator.reset()
+    }
 }
 
 const get_errors = function (validator) {
@@ -586,21 +596,16 @@ const formatListOfIds = function (list) {
 }
 
 const sendGetRequest = function (url, data_to_send, callback) {
-    
     let result = []
+    
     if (url && data_to_send) {
-        
         $.getJSONRequest(url, data_to_send, function (data, status, xhr) {
-            
             if (status === "success" && typeof data.result !== "undefined") {
                 result = data.result
                 return callback(result)
             } else if (status === "failed" && typeof data.error === "undefined") {
-                //console.log("getError:2")
-                return handleError("failed")
+                return handleError(data)
             } else if (status === "success" && typeof data.error !== "undefined") {
-                console.log("data.error", data.error)
-                //console.log("getError:3")
                 return handleError(data.error)
             } else {
                 //console.log("getError:4")
@@ -660,6 +665,25 @@ const sendPostRequest = function (url, data_to_send, callback) {
     }
 }
 
+const getAjaxError = function (jqXHR, exception, uri) {
+    let msg = ""
+    let error = {
+        message: "",
+        status: "",
+        uri: uri,
+    }
+    
+    if (jqXHR.status === 404) {
+        msg = "Requested page( " + uri + " ) not found. [404]"
+    }
+    
+    error.message = msg
+    error.status = jqXHR.status
+    error.uri = uri
+    error.jqXHR = jqXHR
+    return error
+}
+
 const _display_ajax_error = function (jqXHR, exception, uri) {
     let msg = ""
     let error = {
@@ -667,7 +691,7 @@ const _display_ajax_error = function (jqXHR, exception, uri) {
         status: "",
         uri: uri,
     }
-    console.log("jqXHR", jqXHR.responseText)
+    
     if (jqXHR.status === 0) {
         msg = "Not connected, verify Network."
     } else if (jqXHR.status === 404) {
@@ -700,7 +724,8 @@ const handleError = function (msg) {
     if (!msg) {
         msg = "3Error processing request"
     }
-    toastr.error(msg)
+    
+    toastr.error(" -- " + msg)
 }
 
 const validInt = function (val) {
@@ -992,6 +1017,24 @@ const setInt = function (val) {
     return returnVal
 }
 
+const inactivityTime = function () {
+    let time
+    window.onload = resetTimer
+    
+    // DOM Events
+    document.onmousemove = resetTimer
+    document.onkeydown = resetTimer
+    
+    function logout () {
+        location.href = "/logout"
+    }
+    
+    function resetTimer () {
+        clearTimeout(time)
+        time = setTimeout(logout, inactivityTimeout)
+    }
+}
+
 const htmlEncode = function (value) {
     return $("<textarea/>").text(value).html()
 }
@@ -1011,7 +1054,9 @@ const generateCodeDirectId = function (provider) {
 }
 
 const getDate = function (element) {
-    return element.pickadate("picker").get()
+    if (element.pickadate("picker")) {
+        return element.pickadate("picker").get()
+    }
 }
 
 jQuery.extend({
@@ -1085,20 +1130,28 @@ jQuery.extend({
                 callback(msg, "success")
             }
         })
+        
         getRequest.fail(function (jqXHR, textStatus, msg) {
+            let errors = getAjaxError(jqXHR, textStatus, url)
+            
             if (typeof textStatus !== "undefined") {
                 let err = _display_ajax_error(jqXHR, textStatus, url)
-                handleError(err.message)
-                console.log(err)
+                console.log("err", getAjaxError(jqXHR, textStatus, url))
+                //handleError(err.message)
             } else {
                 let err = _display_ajax_error(jqXHR, textStatus, url)
-                handleError(err.message)
-                console.log(err)
+                //handleError(err.message)
             }
+            
             if ($.isFunction(callback)) {
+                msg = errors.message
+                console.log("msg -- ", msg)
+                console.log("msg -- ", errors.message)
+                
                 callback(msg, "failed")
             }
         })
+        
     },
     getJSON: function (url, data, callback) {
         let getRequest = $.ajax({
@@ -1341,16 +1394,17 @@ const formatURL = function (param) {
 }
 
 const buildMapsURL = function (location) {
-    console.log("buildMapsURL(location)", location)
-    let street_1, street_2, zipcode, city_name, province_name, country_name
+    //console.log("buildMapsURL(location)", location)
+    let name, street_1, street_2, zipcode, city_name, province_name, country_name
     
+    name = (location.name) ? location.name : null
     street_1 = (location.street_1) ? location.street_1 : null
     street_2 = (location.street_2) ? location.street_2 : null
     zipcode = (location.zipcode) ? location.zipcode : null
     city_name = (location.city.name) ? location.city.name : null
     province_name = (location.province.iso2) ? location.province.iso2 : (location.province.iso3) ? location.province.iso3 : (location.province.name) ? location.province.name : null
     country_name = (location.province.name) ? location.country.name : (location.country.iso2) ? location.country.iso2 : (location.country.iso3) ? location.country.iso3 : null
-    
+    name = (name !== null) ? name : null
     street_1 = (street_1 !== null) ? street_1 : null
     street_2 = (street_2 !== null) ? street_2 : null
     zipcode = (zipcode !== null) ? zipcode : null
@@ -1358,24 +1412,11 @@ const buildMapsURL = function (location) {
     province_name = (province_name !== null) ? province_name : null
     country_name = (country_name !== null) ? country_name : null
     
-    /*
-    
-    // Viale Rinascimento, 141, 63074 San Benedetto del Tronto AP, Italy
-    // +39 0735 615400
-    // https://www.smeraldosuitehotel.com/
-    // CITY - San Benedetto Del Tronto: 844
-    // PROVINCE - Ascoli Piceno: 186
-    // COUNTRY - Italy: 102
-    
-    console.log("street_1", street_1)
-    console.log("street_2", street_2)
-    console.log("city_name", city_name)
-    console.log("province_name", province_name)
-    console.log("country_name", country_name)
-    console.log("zipcode", zipcode)
-    //*/
-    
     let tempURL = []
+    
+    if (!is_null(name)) {
+        tempURL.push(name)
+    }
     
     if (!is_null(street_1)) {
         tempURL.push(street_1)
@@ -2253,7 +2294,10 @@ const Season = (function () {
             _product_edit_season_form_season_name_filter.value = ""
             resetForm()
             clearProductSeasonForm()
-            $table_season_product_edit.clearSelectedRows()
+            if ($table_season_product_edit) {
+                
+                $table_season_product_edit.clearSelectedRows()
+            }
         })
     
     const updateProgress = function () {
@@ -2290,7 +2334,7 @@ const Season = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleSeasonError("Oops: 1")
+                        handleSeasonError("Oops: 1")
                     }
                 })
             } catch (e) {
@@ -2308,7 +2352,7 @@ const Season = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleSeasonError("Oops: 1")
+                        handleSeasonError("Oops: 1")
                     }
                 })
             } catch (e) {
@@ -2999,69 +3043,69 @@ $.fn.table = function (settings) {
         let _wrapper_table = $("#" + table_id).parent("div")
         // ----
         _wrapper_table
-          .removeClass("col-sm-12")
-          .addClass("p-0 m-0 w-100 h-100")
+            .removeClass("col-sm-12")
+            .addClass("p-0 m-0 w-100 h-100")
         _wrapper
-          .find("label").each(function () {
+            .find("label").each(function () {
             $(this).parent().append($(this).children())
         })
         
         _wrapper
-          .find("div.row")
-          .removeClass("row")
-          .addClass("d-flex justify-content-between")
+            .find("div.row")
+            .removeClass("row")
+            .addClass("d-flex justify-content-between")
         
         _filter
-          .find("input").each(function () {
+            .find("input").each(function () {
             const $this = $(this)
             $this.attr("placeholder", "Search")
             $this.removeClass("form-control-sm")
         })
         
         _filter
-          .find("label").remove()
+            .find("label").remove()
         
         _filter
-          .parent("div")
-          .removeClass("col-sm-12 col-md-6")
-          .addClass("w-50")
+            .parent("div")
+            .removeClass("col-sm-12 col-md-6")
+            .addClass("w-50")
         
         _info
-          .parent("div")
-          .removeClass("col-sm-12 col-md-5")
-          .addClass("w-50 d-flex align-content-center flex-wrap px-0")
+            .parent("div")
+            .removeClass("col-sm-12 col-md-5")
+            .addClass("w-50 d-flex align-content-center flex-wrap px-0")
         
         _info
-          .addClass("py-0")
+            .addClass("py-0")
         
         _paginate
-          .parent("div")
-          .removeClass("col-sm-12 col-md-7")
-          .addClass("w-50 px-0")
+            .parent("div")
+            .removeClass("col-sm-12 col-md-7")
+            .addClass("w-50 px-0")
         
         _paginate
-          .addClass("py-0")
+            .addClass("py-0")
         
         _paginate
-          .find("ul.pagination")
-          .addClass("mb-0")
+            .find("ul.pagination")
+            .addClass("mb-0")
         
         _length
-          .parent("div")
-          .removeClass("col-sm-12 col-md-6")
-          .addClass("w-50")
+            .parent("div")
+            .removeClass("col-sm-12 col-md-6")
+            .addClass("w-50")
         
         _length
-          .find("label").each(function () {
+            .find("label").each(function () {
             const $this = $(this)
             $this.addClass("mb-0 pb-0 mr-3 d-inline-block")
         })
         
         _wrapper_select
-          .removeClass("custom-select custom-select-sm form-control form-control-sm")
+            .removeClass("custom-select custom-select-sm form-control form-control-sm")
         
         _wrapper_select
-          .addClass("form-control d-inline-block")
+            .addClass("form-control d-inline-block")
         
         if (table_type === "display_list") {
             $("#" + table_id + ">tbody>tr").css({
@@ -3080,7 +3124,7 @@ $.fn.table = function (settings) {
                 $dTable.page.jumpToData(row_data.id, 0)
                 formatTable()
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
         }
     }
@@ -3092,7 +3136,7 @@ $.fn.table = function (settings) {
                 $dTable.row(rowId).data(row_data).draw()
                 loadRow(row_data.id)
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
         }
         
@@ -3100,25 +3144,24 @@ $.fn.table = function (settings) {
     }
     
     const loadRow = function (row_data) {
-        
         if (row_data) {
             try {
                 $("#" + table_id + "_tr_" + row_data.id).addClass("selected")
                 $dTable.page.jumpToData(row_data.id, 0)
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
             
         }
     }
     
     const jumpToRow = function (row_data) {
-        Console.log("table:jumpToRow(row_data)", row_data)
+        //console.log("table:jumpToRow(row_data)", row_data)
         if (row_data) {
             try {
                 $dTable.page.jumpToData(row_data.id, 0)
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
             
         }
@@ -3130,11 +3173,11 @@ $.fn.table = function (settings) {
                 let rowId = "#" + table_id + "_tr_" + row_data.id
                 let rowData = row_data
                 $dTable
-                  .row(rowId)
-                  .remove()
-                  .draw()
+                    .row(rowId)
+                    .remove()
+                    .draw()
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
             }
         }
     }
@@ -3146,7 +3189,7 @@ $.fn.table = function (settings) {
                 $(row).removeClass("selected")
             })
         } catch (e) {
-            Console.log("clear_selected_rows", e)
+            console.log("clear_selected_rows", e)
         }
     }
     ///////////////////////////////////////////////
@@ -3178,7 +3221,7 @@ $.fn.table = function (settings) {
             formatTable()
             
         } catch (e) {
-            Console.log("error", e)
+            console.log("error", e)
         }
         
     }
@@ -3207,20 +3250,31 @@ $.fn.table = function (settings) {
 }
 
 $.fn.BuildKeyword = function (keywords) {
-    if (!$(this).hasClass("keyword")) {
+    let chip_input_id, chip_container_id, chip_id,
+        _chips, _input, _container,
+        $input, $container
+    let counter = 0
+    let editMode = null
+    let tags = new Map()
+    
+    if (!$(this).hasClass("keyword") || !$(this).attr("id")) {
         return
     }
     
-    const chip_id = $(this).attr("id")
-    const _chips = document.getElementById(chip_id)
+    chip_id = $(this).attr("id")
+    chip_input_id = chip_id + "_search"
+    chip_container_id = chip_id + "_container"
     
-    let editMode = null
-    let tags = new Map()
-    let $chipsEl = $(_chips)
-    let $submitButton = $(`#${chip_id} > div > div > button`)
-    let $input = $(`#${chip_id} > div > input.user-release-input`)
-    let counter = 0
-    let $container = $(`#${chip_id} > div > div.chips_container`)
+    _chips = document.getElementById(chip_id)
+    _input = document.getElementById(chip_input_id)
+    _container = document.getElementById(chip_container_id)
+    
+    if (!_container || !_input || !_chips) {
+        return
+    }
+    
+    $input = $(_input)
+    $container = $(_container)
     
     if (!keywords) {
         keywords = []
@@ -3244,18 +3298,14 @@ $.fn.BuildKeyword = function (keywords) {
     
     $input
         .on("keydown", function (e) {
-            console.log(e.keyCode)
+            if (e.keyCode === 9) {
+                e.preventDefault()
+            }
             
             if (e.which === 13 || e.keyCode === 9) {
                 add()
                 editMode = null
             }
-        })
-    
-    $submitButton
-        .on("click", function () {
-            add()
-            editMode = null
         })
     
     const formatTag = function (data) {
@@ -3289,8 +3339,6 @@ $.fn.BuildKeyword = function (keywords) {
                     chipSelect(id)
                 })
             
-            // --
-            
             return $chip
         }
     }
@@ -3315,7 +3363,7 @@ $.fn.BuildKeyword = function (keywords) {
             let tag = tags.get(data)
             if (tag) {
                 if (tag) {
-                    Console.log("tag", tag)
+                    console.log("tag", tag)
                     $input.val(data)
                 }
                 
@@ -3354,7 +3402,6 @@ $.fn.BuildKeyword = function (keywords) {
     }
     
     const add = function (data) {
-        Console.log("add(data)", data)
         if (!data) {
             data = $input.val()
         }
@@ -3392,10 +3439,9 @@ $.fn.BuildKeyword = function (keywords) {
 
 const InventoryProfile = (function () {
     "use strict"
-    const _calendar_loader = document.getElementById("calendar_loader")
+    
     const _panel_tab_inventory = document.getElementById("panel_tab_inventory")
     const _table_profile_product_edit_add_new_button = document.getElementById("table_profile_product_edit_add_new_button")
-    const _edit_product_profile = document.getElementById("edit_product_profile")
     const _product_edit_profile_form_profile_transfer_sales_types_id_block = document.getElementById("product_edit_profile_form_profile_transfer_sales_types_id_block")
     const _product_edit_profile_form_profile_allot_by_id_block = document.getElementById("product_edit_profile_form_profile_allot_by_id_block")
     const _product_edit_profile_form_profile_name_filter = document.getElementById("product_edit_profile_form_profile_name_filter")
@@ -3498,10 +3544,10 @@ const InventoryProfile = (function () {
     
     $(_product_edit_profile_form_clear_button)
         .on("click", function () {
-            //console.log("InventoryProfile.product_edit_profile_form_clear_button: click()", {})
             $table_profile_product_edit.clearSelectedRows()
             clearInventoryProfileForm()
             _product_edit_profile_form_profile_name_filter.value = ""
+            hideForm()
         })
     
     $(_product_edit_profile_form_submit_button)
@@ -3530,7 +3576,6 @@ const InventoryProfile = (function () {
     
     $(_product_edit_profile_form_profile_allot_by_id)
         .on("change", function () {
-            //console.log("InventoryProfile.product_edit_profile_form_profile_allot_by_id: change()", {})
             setFormElementDisplay()
             InventoryProfile.expiration_date.value("")
             _product_edit_profile_form_profile_days_out.value = ""
@@ -3978,21 +4023,21 @@ const InventoryProfile = (function () {
     }
     
     const hideForm = function () {
-        if (_edit_product_profile) {
+        if (_product_edit_profile_form) {
             hideAllotmentFields()
-            $(_edit_product_profile).hide()
+            $(_product_edit_profile_form).hide()
             _product_edit_profile_form_profile_name_filter.disabled = false
             
             $("#accordionEx").collapse("hide")
+            
             updateProgress()
         }
     }
     
     const showForm = function () {
-        //console.log("InventoryProfile.showForm()", showForm)
-        if (_edit_product_profile) {
+        if (_product_edit_profile_form) {
             _product_edit_profile_form_profile_name_filter.disabled = true
-            $(_edit_product_profile).show()
+            $(_product_edit_profile_form).show()
         }
     }
     
@@ -4003,8 +4048,6 @@ const InventoryProfile = (function () {
     }
     
     const clearInventoryProfileForm = function () {
-        //console.log("InventoryProfile.clearInventoryProfileForm()", clearInventoryProfileForm)
-        
         disableInventoryProfileFormFields()
         _product_edit_profile_form_profile_id.value = ""
         _product_edit_profile_form_profile_name.value = ""
@@ -4272,6 +4315,14 @@ const InventoryProfile = (function () {
         InventoryProfile.weekday_dow = weekday_dow
         InventoryProfile.inc_days_dow = inc_days_dow
         
+        InventoryProfile.advanced_booking_date = $("#profile_advanced_booking_date").dateSelect({
+            onStart: function () {},
+        })
+        
+        InventoryProfile.expiration_date = $("#profile_expires").dateSelect({
+            onStart: function () {},
+        })
+        
         $(document).ready(function () {
             if (_table_profile_product_edit) {
                 buildInventoryProfileTable()
@@ -4284,15 +4335,8 @@ const InventoryProfile = (function () {
             if (_product_edit_profile_form) {
                 validator_init(form_rules)
                 
-                InventoryProfile.expiration_date = $("#profile_expires").dateSelect({
-                    onStart: function () {},
-                })
-                
-                InventoryProfile.advanced_booking_date = $("#profile_advanced_booking_date").dateSelect({
-                    onStart: function () {},
-                })
-                
                 InventoryProfile.validator = $(_product_edit_profile_form).validate()
+                
                 resetInventoryProfileForm()
                 hideForm()
             }
@@ -10188,17 +10232,12 @@ const Location = (function () {
     const _location_zipcode = document.getElementById("location_zipcode")
     const _location_name = document.getElementById("location_name")
     const _location_enabled = document.getElementById("location_enabled")
-    const _temp_location_id = document.getElementById("temp_location_id")
     const _button_clear_form_edit_location = document.getElementById("button_clear_form_edit_location")
-    const _button_close_location_edit = document.getElementById("button_close_location_edit")
     const _button_submit_form_edit_location = document.getElementById("button_submit_form_edit_location")
     const _button_edit_location = document.getElementById("button_edit_location")
-    const _button_add_location_edit = document.getElementById("button_add_location_edit")
     const _button_close_edit_location_form = document.getElementById("button_close_edit_location_form")
     const _form_edit_location_filter = document.getElementById("form_edit_location_filter")
     const _location_name_filter_id = document.getElementById("location_name_filter_id")
-    //
-    
     const edit_location_filter_form_rules = {
         groups: {
             locationGroup: "location_name_filter location_name_filter_id",
@@ -10264,10 +10303,6 @@ const Location = (function () {
             location_name: { required: "Field Required" },
         },
     }
-    
-    /**
-     * Product Variables
-     */
     const _form_product_edit_location = document.getElementById("form_product_edit_location")
     const _button_edit_product_location = document.getElementById("button_edit_product_location")
     const _button_clear_form_edit_product_location = document.getElementById("button_clear_form_edit_product_location")
@@ -10275,11 +10310,7 @@ const Location = (function () {
     const _button_close_edit_product_location_form = document.getElementById("button_close_edit_product_location_form")
     const _product_location_search = document.getElementById("product_location_search")
     const _card_product_edit_location = document.getElementById("card_product_edit_location")
-    //
     
-    /**
-     * Global Variables
-     */
     let temp_location = {}
     let new_filter = false
     let validator, validator_name_filter
@@ -10288,7 +10319,6 @@ const Location = (function () {
     let suggestionsTempLocation = []
     let default_display = defaultAddressView
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    // ----
     
     $("a[data-toggle=\"tab\"]").on("hide.bs.tab", function (e) {
         //e.target // newly activated tab
@@ -11225,7 +11255,6 @@ const Location = (function () {
 const Variant = (function () {
     "use strict"
     
-    const _calendar_loader = document.getElementById("calendar_loader")
     const _button_remove_variant_from_product = document.getElementById("button_remove_variant_from_product")
     const _product_edit_variant_section = document.getElementById("product_edit_variant_section")
     const _panel_tab_variant = document.getElementById("panel_tab_variant")
@@ -11234,7 +11263,6 @@ const Variant = (function () {
     const _product_edit_variant_form_variant_name_filter = document.getElementById("product_edit_variant_form_variant_name_filter")
     const _table_variant_product_edit = document.getElementById("table_variant_product_edit")
     const _product_edit_variant_form = document.getElementById("product_edit_variant_form")
-    const _edit_product_variant = document.getElementById("edit_product_variant")
     const _display_product_variant_name = document.getElementById("display_product_variant_name")
     const _product_edit_variant_form_variant_id = document.getElementById("product_edit_variant_form_variant_id")
     const _product_edit_variant_form_variant_name = document.getElementById("product_edit_variant_form_variant_name")
@@ -11375,7 +11403,7 @@ const Variant = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleVariantError("Oops: 1")
+                        handleVariantError("Oops: 1")
                     }
                 })
             } catch (e) {
@@ -11403,8 +11431,6 @@ const Variant = (function () {
     }
     
     const initAutoComplete = function () {
-        //console.log("Variant.initAutoComplete()", Variant)
-        // ----
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         $(_product_edit_variant_form_variant_name_filter)
@@ -11417,10 +11443,7 @@ const Variant = (function () {
                 $table_variant_product_edit.clearSelectedRows()
             })
             .on("change", function () {
-                //*
                 setTimeout(function () {
-                    //console.log("Variant._product_edit_variant_form_variant_name_filter:change()", _product_edit_variant_form_variant_name_filter.value)
-                    // ----
                     let variant_name = _product_edit_variant_form_variant_name_filter.value
                     
                     $table_variant_product_edit.clearSelectedRows()
@@ -11435,7 +11458,6 @@ const Variant = (function () {
                         }
                     }
                 }, 200)
-                //*/
             })
             .autocomplete({
                 serviceUrl: "/api/v1.0/autocomplete/variants",
@@ -11470,14 +11492,10 @@ const Variant = (function () {
     }
     
     const handleVariantError = function (msg) {
-        //console.log("Variant.handleVariantError(msg)", msg)
-        // ----
         toastr.error(msg)
     }
     
     const fetchByName = function (dataToSend, callback) {
-        //console.log("Variant.fetchByName(dataToSend)", dataToSend)
-        // ----
         let url = "/api/v1.0/variants/validate"
         
         if (dataToSend) {
@@ -11486,68 +11504,26 @@ const Variant = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleVariantError("Oops: 1")
+                        handleVariantError("Oops: 1")
                     }
                 })
             } catch (e) {
-                //console.log("error", e)
-                return handleVariantError("Error Validating Variant")
+                console.log("error", e)
+                handleVariantError("Error Validating Variant")
             }
         } else {
-            return handleVariantError("Error Loading Variant - Missing Data")
+            handleVariantError("Error Loading Variant - Missing Data")
         }
     }
     
     const nameExists = function (name) {
-        //console.log("Variant.nameExists(name)", name)
-        // ----
         if (name && name !== "") {
-            /**
-             * data to send to the server
-             *
-             * @type {{name}}
-             */
+            
             let dataToSend = remove_nulls({
                 name: name,
                 category_id: (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null,
             })
-            /*
-            fetchByName(dataToSend, function (data) {
-                let variant = null
-                
-                if (data) {
-                    variant = data
-                    if (data[0]) {
-                        variant = data[0]
-                    }
-                    //console.log("Variant.nameExists() - variant:", variant)
-                    // ----
-                    let detail
-                    $table_variant_product_edit.clearSelectedRows()
-                    globalSelectedVariant = true
-                    let hasVariant = Variant.all.get(parseInt(variant.id))
-                    if (hasVariant) {
-                        detail = set(hasVariant)
-                        $table_variant_product_edit.loadRow(detail)
-                    } else {
-                        detail = set(variant)
-                    }
-                    populateForm(detail)
-                } else {
-                    confirmDialog(`The variant: ${name} does not exist exists. Would you like to create it?`, (ans) => {
-                        if (ans) {
-                            $table_variant_product_edit.clearSelectedRows()
-                            globalSelectedVariant = false
-                            
-                            populateForm()
-                            _product_edit_variant_form_variant_name_filter.value = name
-                            //loadForm()
-                            //enableFormFields()
-                        }
-                    })
-                }
-            })
-            //*/
+            
             fetchByName(dataToSend, function (data) {
                 let variant = null
                 
@@ -11561,7 +11537,6 @@ const Variant = (function () {
                 if (variant) {
                     let hasVariant = Variant.all.get(parseInt(variant.id))
                     let detail
-                    //console.log("_product_edit_variant_form_variant_name_filter:autocomplete() - variant", variant)
                     
                     if (hasVariant) {
                         detail = set(hasVariant)
@@ -11571,27 +11546,43 @@ const Variant = (function () {
                     }
                     
                     populateForm(detail)
+                    
                 } else {
                     confirmDialog(`The variant: ${name} does not exist exists. Would you like to create it?`, (ans) => {
                         if (ans) {
-                            $table_variant_product_edit.clearSelectedRows()
-                            globalSelectedVariant = false
-                            clearForm()
-                            _product_edit_variant_form_variant_name.value = name
-                            _display_product_variant_name.innerText = name
-                            loadForm()
-                            enableFormFields()
+                            let url = "/api/v1.0/variants/new"
+                            try {
+                                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                                    if (data) {
+                                        let variant = data
+                                        if (data[0]) {
+                                            variant = data[0]
+                                        }
+                                        console.log("variant", variant)
+                                        let detail = set(variant)
+                                        console.log("detail", detail)
+                                        $table_variant_product_edit.clearSelectedRows()
+                                        globalSelectedVariant = false
+                                        clearForm()
+                                        _product_edit_variant_form_variant_name.value = name
+                                        _display_product_variant_name.innerText = name
+                                        populateForm(detail)
+                                        enableFormFields()
+                                    } else {
+                                        return handleVariantError("Oops: 1")
+                                    }
+                                })
+                            } catch (e) {
+                                console.log("error", e)
+                            }
                         }
                     })
                 }
             })
-            
         }
     }
     
     const buildProductEditTable = function () {
-        //console.log("Variant.buildProductEditTable()", Variant)
-        // ----
         $table_variant_product_edit = $(_table_variant_product_edit).table({
             table_type: "display_list",
             data: Variant.all,
@@ -11635,8 +11626,6 @@ const Variant = (function () {
     }
     
     const defaultDetail = function () {
-        //console.log("Variant.defaultDetail()", Variant)
-        // ----
         return {
             id: null,
             category_id: null,
@@ -11660,11 +11649,10 @@ const Variant = (function () {
     }
     
     const validVariantRecord = function () {
-        //console.log("Variant.validVariantRecord()", Variant.all)
-        // ----
         let valid = $(_product_edit_variant_form).valid()
         let min_age = (!isNaN(parseInt(_product_edit_variant_form_variant_min_age.value))) ? parseInt(_product_edit_variant_form_variant_min_age.value) : null
         let max_age = (!isNaN(parseInt(_product_edit_variant_form_variant_max_age.value))) ? parseInt(_product_edit_variant_form_variant_max_age.value) : null
+        
         if (min_age !== null && max_age !== null) {
             if (parseInt(max_age) < parseInt(min_age)) {
                 setError(_product_edit_variant_form_variant_max_age, "Age is greater than minimum")
@@ -11676,9 +11664,8 @@ const Variant = (function () {
     }
     
     const clearForm = function () {
-        //console.log("Variant.clearForm()", Variant.all)
-        // ----
         clearValidation(_product_edit_variant_form)
+        
         _display_product_variant_name.innerText = "&nbsp;"
         _product_edit_variant_form_variant_id.value = ""
         _product_edit_variant_form_variant_name.value = ""
@@ -11690,9 +11677,8 @@ const Variant = (function () {
     }
     
     const populateForm = function (variant) {
-        //console.log("Variant.populateForm()", variant)
-        // ----
         clearForm()
+        
         if (variant) {
             _product_edit_variant_form_variant_used_in_pricing.checked = (variant.used_in_pricing === 1)
             _display_product_variant_name.innerText = (variant.name) ? variant.name : "&nbsp;"
@@ -11700,7 +11686,7 @@ const Variant = (function () {
             _product_edit_variant_form_variant_name.value = (variant.name) ? variant.name : "&nbsp;"
             _product_edit_variant_form_variant_enabled.checked = (!(variant.enabled && variant.enabled === 0))
             _product_edit_variant_form_variant_code.value = (variant.name) ? variant.name : "&nbsp;"
-            _product_edit_variant_form_variant_min_age.value = (!isNaN(parseInt(variant.min_age))) ? parseInt(variant.min_age) : ""
+            _product_edit_variant_form_variant_min_age.value = (!isNaN(parseInt(variant.min_age))) ? parseInt(variant.min_age) : 1
             _product_edit_variant_form_variant_max_age.value = (!isNaN(parseInt(variant.max_age))) ? parseInt(variant.max_age) : ""
         }
         
@@ -11711,19 +11697,18 @@ const Variant = (function () {
     const hideForm = function () {
         updateProgress()
         _product_edit_variant_form_variant_name_filter.disabled = false
-        $(_edit_product_variant).hide()
+        _product_edit_variant_form_variant_name_filter.value = ""
+        
+        $(_product_edit_variant_form).hide()
     }
     
     const loadForm = function () {
-        //console.log("Variant.loadForm()", Variant)
-        // ----
         _product_edit_variant_form_variant_name_filter.disabled = true
-        $(_edit_product_variant).show()
+        
+        $(_product_edit_variant_form).show()
     }
     
     const enableFormFields = function () {
-        //console.log("Variant.enableFormFields()", Variant)
-        // ----
         _product_edit_variant_form_variant_used_in_pricing.disabled = false
         _product_edit_variant_form_variant_id.disabled = true
         _product_edit_variant_form_variant_name.disabled = true
@@ -11735,8 +11720,6 @@ const Variant = (function () {
     }
     
     const disableFormFields = function () {
-        //console.log("Variant.enableFormFields()", Variant)
-        // ----
         _product_edit_variant_form_variant_used_in_pricing.disabled = true
         _product_edit_variant_form_variant_id.disabled = true
         _product_edit_variant_form_variant_name.disabled = true
@@ -11748,9 +11731,6 @@ const Variant = (function () {
     }
     
     const buildVariantRecord = function () {
-        //console.log("Variant.buildVariantRecord()", Variant)
-        // ----
-        
         let dataToSend = {
             id: (!isNaN(parseInt(_product_edit_variant_form_variant_id.value))) ? parseInt(_product_edit_variant_form_variant_id.value) : null,
             category_id: (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null,
@@ -11772,7 +11752,7 @@ const Variant = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleVariantError("Oops: 1")
+                        handleVariantError("Oops: 1")
                     }
                 })
             } catch (e) {
@@ -12043,7 +12023,7 @@ const Unit = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleUnitError("Oops: 1")
+                        handleUnitError("Oops: 1")
                     }
                 })
             } catch (e) {
@@ -12203,14 +12183,43 @@ const Unit = (function () {
                 } else {
                     confirmDialog(`The unit: ${name} does not exist exists. Would you like to create it?`, (ans) => {
                         if (ans) {
-                            $table_unit_product_edit.clearSelectedRows()
-                            globalSelectedUnit = false
+                            let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+                            let unitName = (name) ? name : null
                             
-                            clearForm()
+                            let newUnit = removeNulls({
+                                category_id: category_id,
+                                name: unitName,
+                            })
                             
-                            _product_edit_unit_form_unit_name.value = name
-                            loadForm()
-                            enableFormFields()
+                            try {
+                                sendPostRequest("/api/v1.0/units/new", newUnit, function (data, status, xhr) {
+                                    
+                                    if (data) {
+                                        let unit = data
+                                        if (data[0]) {
+                                            unit = data[0]
+                                        }
+                                        
+                                        let detail = set(unit)
+                                        
+                                        console.log("detail", detail)
+                                        
+                                        $table_unit_product_edit.clearSelectedRows()
+                                        globalSelectedUnit = false
+                                        
+                                        clearForm()
+                                        
+                                        //_product_edit_unit_form_unit_name.value = name
+                                        populateForm(detail)
+                                        enableFormFields()
+                                    } else {
+                                    
+                                    }
+                                })
+                            } catch (e) {
+                                console.log("error", e)
+                            }
+                            
                         } else {
                             resetForm()
                             $table_unit_product_edit.clearSelectedRows()
@@ -12237,15 +12246,15 @@ const Unit = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleUnitError("Oops: 1")
+                        handleUnitError("Oops: 1")
                     }
                 })
             } catch (e) {
                 console.log("error", e)
-                return handleUnitError("Error Validating Unit")
+                handleUnitError("Error Validating Unit")
             }
         } else {
-            return handleUnitError("Error Loading Unit - Missing Data")
+            handleUnitError("Error Loading Unit - Missing Data")
         }
     }
     
@@ -12352,8 +12361,6 @@ const Unit = (function () {
     }
     
     const validUnitRecord = function () {
-        //console.log("Unit.validUnitRecord()", Unit)
-        // ----
         let valid = $(_product_edit_unit_form).valid()
         let min_pax = (!isNaN(parseInt(_product_edit_unit_form_unit_min_pax.value))) ? parseInt(_product_edit_unit_form_unit_min_pax.value) : null
         let max_pax = (!isNaN(parseInt(_product_edit_unit_form_unit_max_pax.value))) ? parseInt(_product_edit_unit_form_unit_max_pax.value) : null
@@ -12446,15 +12453,16 @@ const Unit = (function () {
     
     const disableFormFields = function () {
         _product_edit_unit_form_unit_id.disabled = true
-        _product_edit_unit_form_unit_name.disabled = true
         _product_edit_unit_form_unit_room_code.disabled = true
         _product_edit_unit_form_unit_min_nights.disabled = true
-        _product_edit_unit_form_unit_max_nights.disabled = true
         _product_edit_unit_form_unit_min_pax.disabled = true
-        _product_edit_unit_form_unit_max_pax.disabled = true
-        _product_edit_unit_form_unit_description_short.disabled = true
-        _product_edit_unit_form_unit_description_long.disabled = true
-        _product_edit_unit_form_unit_enabled.disabled = true
+        
+        _product_edit_unit_form_unit_name.disabled = false
+        _product_edit_unit_form_unit_max_nights.disabled = false
+        _product_edit_unit_form_unit_max_pax.disabled = false
+        _product_edit_unit_form_unit_description_short.disabled = false
+        _product_edit_unit_form_unit_description_long.disabled = false
+        _product_edit_unit_form_unit_enabled.disabled = false
     }
     
     const enableFormFields = function () {
@@ -13544,6 +13552,7 @@ $.fn.DisabledDOW = function (settings) {
         input.value = day.value
         
         input.addEventListener("click", event => {
+            
             let id = (input.id) ? input.id : ""
             set(input, id)
         })
@@ -13553,15 +13562,21 @@ $.fn.DisabledDOW = function (settings) {
     
     const buildCheckBoxWrapper = function () {
         let div = document.createElement("div")
-        div.classList = "custom-control custom-checkbox custom-control-inline"
+        
+        div.classList.add("custom-control")
+        div.classList.add("custom-checkbox")
+        div.classList.add("custom-control-inline")
+        
         return div
     }
     
     const buildCheckBoxLabel = function (day) {
         let label = document.createElement("label")
-        label.classList = "custom-control-label"
+        
+        label.classList.add("custom-control-label")
         label.htmlFor = day.for
         label.innerText = day.label
+        
         return label
     }
     
@@ -13569,7 +13584,9 @@ $.fn.DisabledDOW = function (settings) {
         let days = Array.from(DisabledDOW.days_of_week.values())
         let div = document.createElement("div")
         
-        div.classList = "col-12 col-md-10 col-xl-9"
+        div.classList.add("col-12")
+        div.classList.add("col-md-10")
+        div.classList.add("px-1")
         
         $.each(days, function (k, day) {
             let wrapper = buildCheckBoxWrapper()
@@ -13586,11 +13603,15 @@ $.fn.DisabledDOW = function (settings) {
     const buildCheckBoxColumnLabel = function () {
         let div = document.createElement("div")
         let label = document.createElement("label")
+        
         label.innerText = label_text + ":"
         
-        div.classList = "col-12 col-md-2 col-xl-3"
+        div.classList.add("col-12")
+        div.classList.add("col-md-2")
+        div.classList.add("px-1")
         
         div.appendChild(label)
+        
         return div
     }
     
@@ -18852,7 +18873,7 @@ const Provider = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handle_provider_error("Oops: 1")
+                        handle_provider_error("Oops: 1")
                     }
                 })
             } catch (e) {
@@ -19018,15 +19039,15 @@ const Provider = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handle_provider_error("Oops: 1")
+                        handle_provider_error("Oops: 1")
                     }
                 })
             } catch (e) {
                 console.log("error", e)
-                return handle_provider_error("Error Validating Company")
+                handle_provider_error("Error Validating Company")
             }
         } else {
-            return handle_provider_error("Error Loading Company- Missing Data")
+            handle_provider_error("Error Loading Company- Missing Data")
         }
     }
     

@@ -25,6 +25,7 @@
 	Router::get("utilities/filemanager", "StaticPages@filemanager");
 	Router::get("reset_password", "StaticPages@reset_password");
 	Router::get("forgot_password", "StaticPages@forgot_password");
+	
 	Router::get("admin/pages", "Page@index");
 	Router::get('admin/pages/${page_id}', "Page@edit");
 	/**

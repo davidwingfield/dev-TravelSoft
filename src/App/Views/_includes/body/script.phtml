@@ -1,3 +1,187 @@
+<!-- Icon -->
+<script type="text/javascript">
+	const Icon = (function () {
+		
+		const loadAll = function (icons) {
+			Icon.all = new Map()
+			
+		}
+		
+		const init = function (settings) {
+			if (settings) {
+				if (settings.icons) {
+					loadAll(settings.icons)
+				}
+			}
+		}
+		
+		return {
+			all: new Map(),
+			init: function (settings) {
+				return init(settings)
+			},
+		}
+	})()
+</script>
+<!-- /Icon -->
+
+<!-- Page -->
+<script type="text/javascript">
+	const Page = (function () {
+		"use strict"
+		const _table_pages_index = document.getElementById("table_pages_index")
+		const _page_index_section = document.getElementById("page_index_section")
+		
+		let $table_pages_index
+		let user_id = (document.getElementById('user_id')) ? (!isNaN(parseInt(document.getElementById('user_id').value))) ? parseInt(document.getElementById('user_id').value) : 4 : 4
+		
+		const addRow = function (page) {
+			//console.log("Page.addRow(page)", page)
+			$table_pages_index.insertRow(page)
+		}
+		
+		const buildIndexTable = function () {
+			//console.log("Page.buildIndexTable()")
+			if (_table_pages_index) {
+				$table_pages_index = $(_table_pages_index).table({
+					table_type: "display_list",
+					data: Array.from(Page.all.values()),
+					columnDefs: [
+						{
+							title: "Id",
+							targets: 0,
+							data: "id",
+							render: function (data, type, row, meta) {
+								return "<span style='white-space: nowrap;'>" + data + "</span>"
+							},
+						}, {
+							title: "Title",
+							targets: 1,
+							data: "title",
+							render: function (data, type, row, meta) {
+								return "<span style='white-space: nowrap;'>" + data + "</span>"
+							},
+						}, {
+							title: "Path",
+							targets: 2,
+							data: "path",
+							render: function (data, type, row, meta) {
+								return "<span style='white-space: nowrap;'>" + data + "</span>"
+							},
+						},
+					],
+					rowClick: Page.edit,
+				})
+			}
+		}
+		
+		const set = function (page) {
+			//console.log("Page.set(page)", page)
+			let detail = defaultDetail()
+			if (page) {
+				detail.id = (page.id && !isNaN(parseInt(page.id))) ? parseInt(page.id) : null
+				detail.menu_id = (page.menu_id && !isNaN(parseInt(page.menu_id))) ? parseInt(page.menu_id) : null
+				detail.path = (page.path) ? page.path : null
+				detail.title = (page.title) ? page.title : null
+				detail.sub_title = (page.sub_title) ? page.sub_title : null
+				detail.heading = (page.heading) ? page.heading : null
+				detail.sub_heading = (page.sub_heading) ? page.sub_heading : null
+				detail.description = (page.description) ? page.description : null
+				detail.keywords = (page.keywords) ? page.keywords : []
+				detail.enabled = (page.enabled) ? page.enabled : 1
+				detail.date_created = (page.date_created) ? page.date_created : formatDateMySQL()
+				detail.created_by = (page.created_by) ? page.created_by : user_id
+				detail.date_modified = (page.date_modified) ? page.date_modified : formatDateMySQL()
+				detail.modified_by = (page.modified_by) ? page.modified_by : user_id
+				detail.note = (page.note) ? page.note : null
+			}
+			return detail
+		}
+		
+		const defaultDetail = function () {
+			//console.log("Page.defaultDetail()")
+			return {
+				id: null,
+				menu_id: null,
+				path: null,
+				title: null,
+				sub_title: null,
+				heading: null,
+				sub_heading: null,
+				description: null,
+				keywords: null,
+				enabled: null,
+				date_created: null,
+				created_by: null,
+				date_modified: null,
+				modified_by: null,
+				note: null,
+			}
+		}
+		const edit = function (page) {
+			//console.log("Page.edit(page)", page)
+			
+		}
+		
+		let tempDetail = null
+		
+		const loadAll = function (pages) {
+			//console.log("Page.loadAll(pages)", pages)
+			Page.all = new Map()
+			
+			if (pages && pages.length) {
+				let counter = 0
+				tempDetail = null
+				$.each(pages, function (k, page) {
+					let detail = set(page)
+					//console.log("        detail - ", detail)
+					if (counter === 0) {tempDetail = detail}
+					
+					if (detail.id) {
+						Page.all.set(detail.id, detail)
+						addRow(detail)
+					}
+					counter++
+				})
+			} else {
+				tempDetail = null
+			}
+			
+			if (tempDetail !== null) {
+				$table_pages_index.clearSelectedRows()
+				$table_pages_index.jumpToRow(tempDetail)
+			}
+		}
+		
+		const init = function (settings) {
+			console.log("Page.init(settings)", settings)
+			if (_page_index_section) {
+				buildIndexTable()
+				
+				if (settings) {
+					if (settings.pages) {
+						loadAll(settings.pages)
+						//console.log("    Page.all - ", Array.from(Page.all.values()))
+					}
+				}
+			}
+		}
+		
+		return {
+			detail: {},
+			all: new Map(),
+			edit: function (page) {
+				edit(page)
+			},
+			init: function (settings) {
+				init(settings)
+			},
+		}
+		
+	})()
+</script>
+<!-- /Page -->
+
 <!-- Product -->
 <script type="text/javascript">
 	const Product = (function () {
@@ -39,15 +223,12 @@
 		const _modal_product_city = document.getElementById("modal_product_city")
 		const _modal_product_city_id = document.getElementById("modal_product_city_id")
 		const _modal_button_clear_add_product = document.getElementById("modal_button_clear_add_product")
-		const _modal_product_depart_from_airport_types_id = document.getElementById("modal_product_depart_from_airport_types_id")
 		const _modal_product_depart_from_station_date = document.getElementById("modal_product_depart_from_station_date")
 		const _modal_product_arrive_to_station_date = document.getElementById("modal_product_arrive_to_station_date")
 		const _modal_product_depart_from_station_time = document.getElementById("modal_product_depart_from_station_time")
 		const _modal_product_arrive_to_station_time = document.getElementById("modal_product_arrive_to_station_time")
 		const _form_product_add = document.getElementById("form_product_add")
-		
 		const _product_edit_page = document.getElementById("product_edit_page")
-		
 		const _product_panel_link_overview = document.getElementById("product_panel_link_overview")
 		const _panel_tab_product_o = document.getElementById("panel_tab_product_o")
 		const _product_panel_link_product = document.getElementById("product_panel_link_product")
@@ -68,7 +249,6 @@
 		const _panel_tab_meta = document.getElementById("panel_tab_meta")
 		const _product_panel_link_meta = document.getElementById("product_panel_link_meta")
 		const _product_panel_link_location = document.getElementById("product_panel_link_location")
-		
 		const _product_edit_details_currency_id = document.getElementById("product_edit_details_currency_id")
 		const _product_edit_details_rating_types_id = document.getElementById("product_edit_details_rating_types_id")
 		const _product_keywords = document.getElementById("product_keywords")
@@ -78,7 +258,9 @@
 		const _product_index_table = document.getElementById("product_index_table")
 		const _product_amenities = document.getElementById("product_amenities")
 		const _product_id = document.getElementById("product_id")
-		
+		const _product_edit_details_name = document.getElementById("product_edit_details_name")
+		const _product_edit_details_enabled = document.getElementById("product_edit_details_enabled")
+		const _product_edit_details_sku = document.getElementById("product_edit_details_sku")
 		const _pricing_strategy_types_id = document.getElementById("pricing_strategy_types_id")
 		const _product_edit_location_city_id = document.getElementById("product_edit_location_city_id")
 		const _product_edit_location_id = document.getElementById("product_edit_location_id")
@@ -86,10 +268,8 @@
 		const _vendor_id = document.getElementById("vendor_id")
 		const _product_name = document.getElementById("product_name")
 		const _display_product_name = document.getElementById("display_product_name")
-		
 		const _button_save_product = document.getElementById("button_save_product")
 		const _button_add_product_page_heading = document.getElementById("button_add_product_page_heading")
-		
 		const _category_id = document.getElementById("category_id")
 		
 		let $product_keywords, $product_amenities
@@ -212,6 +392,28 @@
 			},
 		}
 		
+		$(_product_edit_details_name)
+			.on("change", function () {
+				_display_product_name.innerText = _product_edit_details_name.value
+			})
+		
+		$(_product_edit_details_rating_types_id)
+			.on("change", function () {
+				let rating = (!isNaN(parseInt(_product_edit_details_rating_types_id.value))) ? parseInt(_product_edit_details_rating_types_id.value) : 0
+				let ratingDisplay = ""
+				for (let n = 0; n < rating; n++) {
+					ratingDisplay += `
+						<li class="list-inline-item mr-0">
+                            <i class="fas fa-star"></i>
+                        </li>
+					`
+				}
+				
+				$("ul.rating")
+					.empty()
+					.html(ratingDisplay)
+			})
+		
 		$(_button_save_product)
 			.on("click", function () {
 				save()
@@ -233,8 +435,10 @@
 				clearModalForm()
 				Airport.resetAirportForm("depart_from")
 				Airport.resetAirportForm("arrive_to")
+				Station.resetStationForm("depart_from")
+				Station.resetStationForm("arrive_to")
 				clearValidation(_form_product_add)
-				//$(_modal_new_product).modal("hide")
+				$(_modal_new_product).modal("hide")
 			})
 		
 		$(_modal_button_submit_add_product)
@@ -284,6 +488,7 @@
 			.on("change", function () {
 				updateProgress()
 			})
+		
 		const validateProductRecord = function () {
 			let isValid = true
 			
@@ -424,7 +629,6 @@
 				dataToSend.depart_from = (!isNaN(parseInt(_modal_product_depart_from_airport_id.value))) ? parseInt(_modal_product_depart_from_airport_id.value) : null
 				dataToSend.depart_date = (Product.depart_from_date.value() !== "") ? Product.depart_from_date.value() : null
 				dataToSend.depart_time = (Product.depart_from_time.value() !== "") ? Product.depart_from_time.value() : null
-				
 				dataToSend.arrive_to = (!isNaN(parseInt(_modal_product_arrive_to_airport_id.value))) ? parseInt(_modal_product_arrive_to_airport_id.value) : null
 				dataToSend.arrive_date = (Product.arrive_to_date.value() !== "") ? Product.arrive_to_date.value() : null
 				dataToSend.arrive_time = (Product.arrive_to_time.value() !== "") ? Product.arrive_to_time.value() : null
@@ -437,6 +641,7 @@
 			let dataToSend = buildInsertData()
 			let product
 			
+			console.log("dataToSend", dataToSend)
 			newProduct(dataToSend, function (data) {
 				if (data) {
 					product = data
@@ -446,12 +651,12 @@
 					
 					if (product.id) {
 						let detail = set(product)
+						console.log("detail", detail)
 						$index_table.insertRow(detail)
 						$index_table.loadRow(detail)
 						$index_table.jumpToRow(detail)
 						$index_table.clearSelectedRows()
-						
-						toastr.success(`Product - ${product.id} was created, would you like to edit?`)
+						toastr["success"](`Product - ${product.id} was created, would you like to edit?`, "Product Created")
 						//window.location.replace("/products/" + product.id)
 					}
 				}
@@ -622,29 +827,6 @@
 			}
 		}
 		
-		const updateProduct = function (dataToSend) {
-			sendUpdateRequest(dataToSend, function (data) {
-				if (!dataToSend) {
-					return
-				}
-				let product
-				if (data) {
-					product = data
-					if (data.length === 1) {
-						product = data[0]
-					}
-					
-					if (product.id) {
-						let detail = set(product)
-						console.log("product", product)
-						console.log("detail", detail)
-						toastr.success(`Product - ${product.id} was created, would you like to edit?`)
-						//window.location.replace("/products/" + product.id)
-					}
-				}
-			})
-		}
-		
 		const sendUpdateRequest = function (dataToSend, callback) {
 			let url = "/api/v1.0/products/update"
 			
@@ -676,7 +858,7 @@
 					keywords: $product_keywords.build(),
 					rating_types_id: (!isNaN(parseInt(_product_edit_details_rating_types_id.value))) ? parseInt(_product_edit_details_rating_types_id.value) : null,
 					currency_id: (!isNaN(parseInt(_product_edit_details_currency_id.value))) ? parseInt(_product_edit_details_currency_id.value) : null,
-					name: $(_product_name).val(),
+					name: (_product_edit_details_name.value !== "") ? _product_edit_details_name.value : null,
 					pricing_strategy_types_id: (!isNaN(parseInt(_pricing_strategy_types_id.value))) ? parseInt(_pricing_strategy_types_id.value) : null,
 					city_id: (!isNaN(parseInt(_product_edit_location_city_id.value))) ? parseInt(_product_edit_location_city_id.value) : null,
 					location_id: (!isNaN(parseInt(_product_edit_location_id.value))) ? parseInt(_product_edit_location_id.value) : null,
@@ -685,6 +867,8 @@
 					use_provider_location_id: 0,
 					provider_vendor_match: 1,
 					status_types_id: 1,
+					enabled: (_product_edit_details_enabled.checked) ? 1 : 0,
+					sku: (_product_edit_details_sku.value !== "") ? _product_edit_details_sku.value : null,
 				}
 				
 				return removeNulls(detail)
@@ -693,6 +877,7 @@
 		
 		const save = function () {
 			let dataToSend = buildProductRecord()
+			console.log("dataToSend", dataToSend)
 			
 			if (dataToSend) {
 				confirmDialog(`Would you like to update?`, (ans) => {
@@ -979,27 +1164,28 @@
 			}
 			
 			if (product.category_id === 1) {
-				product_location.street_1 = (product.street_1) ? product.street_1 : null
-				product_location.street_2 = (product.street_2) ? product.street_2 : null
-				product_location.postal_code = (product.postal_code) ? product.postal_code : null
-				
 				ProductLocation.init({
 					product_location: product_location,
-					provider_location: provider_location,
 					product: product,
 				})
 			}
 			
+			let sku = (product.sku) ? product.sku : ""
+			let name = (product.name) ? product.name : ""
 			let ratings_type_id = (product.rating_types_id) ? product.rating_types_id : ""
+			let enabled = (product.enabled && product.enabled === 1)
 			let currency_types_id = (product.currency_id) ? product.currency_id : ""
 			let description_long = (product.description_long) ? product.description_long : ""
 			let description_short = (product.description_short) ? product.description_short : ""
 			let product_keywords = (product.keywords) ? product.keywords : []
-			$product_keywords = $(_product_keywords).BuildKeyword(product_keywords)
-			
 			let product_amenities = (product.amenities) ? product.amenities : []
+			
+			$product_keywords = $(_product_keywords).BuildKeyword(product_keywords)
 			$product_amenities = $(_product_amenities).BuildKeyword(product_amenities)
 			
+			_product_edit_details_name.value = name
+			_product_edit_details_sku.value = sku
+			_product_edit_details_enabled.checked = enabled
 			_product_edit_meta_description_short.value = description_short
 			_product_edit_meta_description_long.value = description_long
 			_product_edit_details_currency_id.value = currency_types_id
@@ -1263,6 +1449,623 @@
 	})()
 </script>
 <!-- /Product -->
+
+<!-- ProductLocation -->
+<script type="text/javascript">
+	const ProductLocation = (function () {
+		"use strict"
+		
+		const _product_edit_location_id = document.getElementById("product_edit_location_id")
+		const _product_location_search = document.getElementById("product_location_search")
+		const _product_edit_location_city_id = document.getElementById("product_edit_location_city_id")
+		const _product_edit_location_city = document.getElementById("product_edit_location_city")
+		const _product_edit_location_street_1 = document.getElementById("product_edit_location_street_1")
+		const _product_edit_location_street_2 = document.getElementById("product_edit_location_street_2")
+		const _product_edit_location_zipcode = document.getElementById("product_edit_location_zipcode")
+		const _product_edit_location_location_types_id = document.getElementById("product_edit_location_location_types_id")
+		const _product_edit_location_name = document.getElementById("product_edit_location_name")
+		const _button_submit_form_product_edit_location = document.getElementById("button_submit_form_product_edit_location")
+		const _button_clear_form_product_edit_location = document.getElementById("button_clear_form_product_edit_location")
+		const _product_edit_location_city_edit = document.getElementById("product_edit_location_city_edit")
+		const _location_country_id = document.getElementById("location_country_id")
+		const _location_province_id = document.getElementById("location_province_id")
+		const _location_city_id = document.getElementById("location_city_id")
+		const _product_edit_location_form = document.getElementById("product_edit_location_form")
+		
+		const _product_id = document.getElementById("product_id")
+		const _category_id = document.getElementById("category_id")
+		
+		let form_rules = {
+			group: {
+				product_edit_location_city: "edit_location_country_id location_province_id location_city_id",
+			},
+			rules: {
+				product_edit_location_city: {
+					required: true,
+				},
+				product_edit_location_name: {
+					required: true,
+				},
+				product_edit_location_location_types_id: {
+					required: true,
+				},
+			},
+			messages: {
+				product_edit_location_city: {
+					required: "Field Required",
+				},
+				product_edit_location_name: {
+					required: "Field Required",
+				},
+				product_edit_location_location_types_id: {
+					required: "Field Required",
+				},
+			},
+		}
+		
+		let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+		
+		$(_button_submit_form_product_edit_location)
+			.on("click", function () {
+				save()
+			})
+		
+		$(_button_clear_form_product_edit_location)
+			.on("click", function () {
+				resetForm()
+			})
+		
+		$(_product_edit_location_zipcode)
+			.on("change", function () {
+				ProductLocation.detail.zipcode = (_product_edit_location_zipcode.value !== "") ? _product_edit_location_zipcode.value : null
+				renderMap()
+			})
+		$(_product_edit_location_name)
+			.on("click", function () {
+				ProductLocation.detail.name = (_product_edit_location_name.value !== "") ? _product_edit_location_name.value : null
+				renderMap()
+			})
+		
+		$(_location_country_id)
+			.on("change", function () {
+				let country_id = (!isNaN(parseInt(_location_country_id.value))) ? parseInt(_location_country_id.value) : null
+				
+				if (country_id !== null) {
+					let country = Country.all.get(country_id)
+					ProductLocation.detail.country_id = country_id
+					ProductLocation.detail.country = country
+				}
+			})
+		
+		$(_location_province_id)
+			.on("change", function () {
+				let province_id = (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null
+				
+				if (province_id !== null) {
+					let province = Province.all.get(province_id)
+					ProductLocation.detail.province_id = province_id
+					ProductLocation.detail.province = province
+				}
+			})
+		
+		$(_location_city_id)
+			.on("change", function () {
+				let city_id = (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null
+				
+				if (city_id !== null) {
+					let city = City.all.get(city_id)
+					ProductLocation.detail.city_id = city_id
+					ProductLocation.detail.city = city
+					renderMap()
+				}
+			})
+		
+		$(_product_edit_location_name)
+			.on("change", function () {
+				ProductLocation.detail.name = (_product_edit_location_name.value !== "") ? _product_edit_location_name.value : null
+				renderMap()
+			})
+		
+		$(_product_edit_location_street_1)
+			.on("change", function () {
+				ProductLocation.detail.street_1 = (_product_edit_location_street_1.value !== "") ? _product_edit_location_street_1.value : null
+				renderMap()
+			})
+		
+		$(_product_edit_location_street_2)
+			.on("change", function () {
+				ProductLocation.detail.street_2 = (_product_edit_location_street_2.value !== "") ? _product_edit_location_street_2.value : null
+				renderMap()
+			})
+		
+		$(_location_city_id)
+			.on("change", function () {
+				let cityLine = ""
+				let country_id = (!isNaN(parseInt(_location_country_id.value))) ? parseInt(_location_country_id.value) : null
+				let province_id = (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null
+				let city_id = (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null
+				let country = Country.all.get(country_id)
+				let province = Province.all.get(province_id)
+				let city = City.all.get(city_id)
+				
+				ProductLocation.detail.country = country
+				ProductLocation.detail.country_id = country_id
+				
+				ProductLocation.detail.province = province
+				ProductLocation.detail.province_id = province_id
+				
+				ProductLocation.detail.city = city
+				ProductLocation.detail.city_id = city_id
+				
+				if (country && province && city) {
+					let cityName = city.name
+					let provinceName = province.name
+					let countryName = country.name
+					_product_edit_location_city_id.value = city.id
+					cityLine = `${cityName} (${provinceName}, ${countryName})`
+				} else {
+					cityLine = ``
+					_product_edit_location_city_id.value = ``
+				}
+				
+				_product_edit_location_city.value = cityLine
+			})
+		
+		const initAutoComplete = function () {
+			
+			$(_product_edit_location_city)
+				.on("change", function () {
+					setTimeout(function () {
+						let cityName = _product_edit_location_city.value
+						if (cityName === "") {
+							resetCityForm()
+						}
+					}, 200)
+				})
+				.on("search", function () {
+					resetCityForm()
+				})
+				.on("click", function (e) {
+					if ($(this).attr("readonly") === "readonly") {
+						e.preventDefault()
+					} else {
+						$(this).select()
+					}
+					
+				})
+				.autocomplete({
+					serviceUrl: "/api/v1.0/autocomplete/cities",
+					minChars: 2,
+					cache: false,
+					dataType: "json",
+					triggerSelectOnValidInput: false,
+					paramName: "st",
+					onSelect: function (suggestion) {
+						if (!suggestion.data) {
+							return
+						}
+						let country, province, city, city_name, country_name, province_name = null
+						
+						let product_location = suggestion.data
+						
+						let detail = set(product_location)
+						
+						if (product_location.country) {
+							country = product_location.country
+							Country.set_detail(country)
+							Country.id = (country.id) ? country.id.toString() : null
+						}
+						
+						if (product_location.province) {
+							province = product_location.province
+							Province.set_detail(province)
+							province_name = province.name
+							Province.id = (province.id) ? province.id.toString() : null
+						}
+						
+						if (product_location.city) {
+							city = product_location.city
+							city_name = city.name
+							City.set_detail(city)
+							City.id = (city.id) ? city.id.toString() : null
+						}
+						
+						$(_location_country_id).val((product_location.city.country_id) ? product_location.city.country_id : "").trigger("change")
+						
+						_product_location_search.value = `City Center (${city_name}, ${province_name})`
+						
+						let name = (_product_edit_location_name && _product_edit_location_name.value !== "") ? _product_edit_location_name.value : null
+						let zipcode = (_product_edit_location_zipcode && _product_edit_location_zipcode.value !== "") ? _product_edit_location_zipcode.value : null
+						let street_1 = (_product_edit_location_street_1 && _product_edit_location_street_1.value !== "") ? _product_edit_location_street_1.value : null
+						let street_2 = (_product_edit_location_street_2 && _product_edit_location_street_2.value !== "") ? _product_edit_location_street_2.value : null
+						
+						product_location.name = name
+						product_location.street_1 = street_1
+						product_location.street_2 = street_2
+						product_location.zipcode = zipcode
+						
+						//renderMap()
+					},
+				})
+		}
+		
+		const showCityForm = function () {
+			if (_product_edit_location_city_edit) {
+				$(_product_edit_location_city_edit).show()
+			}
+		}
+		
+		const hideCityForm = function () {
+			if (_product_edit_location_city_edit) {
+				//$(_product_edit_location_city_edit).hide()
+			}
+		}
+		
+		const resetCityForm = function () {
+			_product_edit_location_zipcode.value = ""
+			_product_edit_location_city_id.value = ""
+			
+			$(_location_country_id)
+				.val("")
+				.trigger("change")
+			
+			hideCityForm()
+		}
+		
+		const resetForm = function () {
+			_product_edit_location_street_1.value = ""
+			_product_edit_location_street_2.value = ""
+			_product_edit_location_zipcode.value = ""
+			_product_edit_location_city.value = ""
+			_product_edit_location_name.value = ""
+			_product_edit_location_location_types_id.value = ""
+			
+			resetCityForm()
+		}
+		
+		const renderMap = function () {
+			console.log("ProductLocation.detail", ProductLocation.detail)
+			
+			let url = buildMapsURL(ProductLocation.detail)
+			console.log("url", url)
+			let elementWidth, elementHeight = null
+			let _locationMap = document.getElementById("locationMap")
+			
+			if (_locationMap) {
+				$(_locationMap)
+					.empty()
+					.append(
+						$("<iframe/>", {
+							id: "locationMapContainer",
+							allowfullscreen: "allowfullscreen",
+							frameborder: "0",
+							src: url,
+						}),
+					)
+				
+				elementWidth = (!isNaN(parseInt($(_locationMap).actual("width")))) ? parseInt($(_locationMap).actual("width")) : null
+				
+				if (elementWidth) {
+					elementHeight = elementWidth / 2
+					
+					$("#locationMapContainer")
+						.css({
+							"height": elementHeight + "px",
+							"width": elementWidth + "px",
+						})
+				}
+			}
+			
+		}
+		
+		const defaultDetail = function () {
+			return {
+				id: null,
+				city_id: null,
+				location_types_id: null,
+				name: null,
+				street_1: null,
+				street_2: null,
+				zipcode: null,
+				enabled: 1,
+				date_created: formatDateMySQL(),
+				created_by: user_id,
+				date_modified: formatDateMySQL(),
+				modified_by: user_id,
+				note: null,
+				display_long: null,
+				display_medium: null,
+				display_short: null,
+				country: {},
+				province: {},
+				city: {},
+				type: [],
+			}
+		}
+		
+		const set = function (productLocation) {
+			console.log("ProductLocation.set(productLocation) - productLocation ", productLocation)
+			let detail = defaultDetail()
+			
+			if (productLocation) {
+				let cityData = productLocation.city
+				let provinceData = productLocation.province
+				let countryData = productLocation.country
+				
+				detail["country"] = countryData
+				detail["province"] = provinceData
+				detail["city"] = cityData
+				detail["display_long"] = (productLocation.display_long) ? productLocation.display_long : null
+				detail["display_medium"] = (productLocation.display_medium) ? productLocation.display_medium : null
+				detail["display_short"] = (productLocation.display_short) ? productLocation.display_short : null
+				detail["enabled"] = (productLocation.enabled) ? productLocation.enabled : 1
+				detail["id"] = (productLocation.id) ? productLocation.id : null
+				detail["name"] = (productLocation.name) ? productLocation.name : null
+				detail["postal_code"] = (productLocation.postal_code) ? productLocation.postal_code : null
+				detail["province"] = (productLocation.province) ? productLocation.province : []
+				detail["street_1"] = productLocation.street_1
+				detail["street_2"] = (productLocation.street_2) ? productLocation.street_2 : null
+				detail["type"] = (productLocation.type) ? productLocation.type : []
+				detail["zipcode"] = (productLocation.zipcode) ? productLocation.zipcode : null
+				detail["location_types_id"] = (productLocation.location_types_id) ? productLocation.location_types_id : null
+				detail["type"] = (productLocation.type) ? productLocation.type : {}
+				detail["city_id"] = productLocation.city.id
+				detail["province"].id = (productLocation.province.id) ? productLocation.province.id : null
+				detail["country"].id = (productLocation.country.id) ? productLocation.country.id : null
+			}
+			
+			ProductLocation.detail = detail
+			
+			return detail
+		}
+		
+		const populateForm = function (product_location) {
+			if (!_product_edit_location_form) {
+				return
+			}
+			
+			resetForm()
+			
+			if (product_location) {
+				let detail = product_location
+				let country, province, city = {}
+				
+				ProductLocation.detail = product_location
+				ProductLocation.display_long = product_location.display_long //"City Center (Houston TX - Texas, US - United States)"
+				ProductLocation.display_medium = product_location.display_medium // "City Center (Houston, Texas)"
+				ProductLocation.display_short = product_location.display_short //"City Center (Houston TX, US)"
+				
+				let citySearchDisplay = ""
+				let location_name = (product_location.name) ? product_location.name : null
+				let location_id = (!isNaN(parseInt(product_location.id))) ? parseInt(product_location.id) : null
+				let postal_code = (product_location.postal_code) ? product_location.postal_code : ""
+				let street_1 = (product_location.street_1) ? product_location.street_1 : ""
+				let street_2 = (product_location.street_2) ? product_location.street_2 : ""
+				
+				_product_edit_location_id.value = location_id
+				_product_edit_location_street_1.value = street_1
+				_product_edit_location_street_2.value = street_2
+				_product_edit_location_zipcode.value = postal_code
+				_product_edit_location_city.value = ""
+				_product_edit_location_name.value = location_name
+				
+				$(_product_edit_location_location_types_id).val(product_location.type.id.toString())
+				
+				if (product_location.country) {
+					country = product_location.country
+					Country.set_detail(country)
+					Country.id = (country.id) ? country.id.toString() : null
+				}
+				
+				if (product_location.province) {
+					province = product_location.province
+					Province.set_detail(province)
+					Province.id = (province.id) ? province.id.toString() : null
+				}
+				
+				if (product_location.city) {
+					city = product_location.city
+					City.set_detail(city)
+					City.id = (city.id) ? city.id.toString() : null
+				}
+				
+				ProductLocation.detail.name = (product_location.name) ? product_location.name : null
+				
+				citySearchDisplay = city.name + " (" + province.name + ", " + country.name + ")"
+				_product_edit_location_city.value = citySearchDisplay
+				
+				$(_location_country_id)
+					.val((country.id) ? country.id : "")
+					.trigger("change")
+				
+				renderMap()
+			}
+			
+		}
+		
+		const valid = function () {
+			return $(_product_edit_location_form).valid()
+		}
+		
+		const buildLocationObject = function () {
+			if (valid()) {
+				let id, city_id, location_types_id, name, street_1, street_2,
+					zipcode, enabled, note
+				
+				name = (_product_edit_location_name.value !== "") ? _product_edit_location_name.value : null
+				street_1 = (_product_edit_location_street_1.value !== "") ? _product_edit_location_street_1.value : null
+				street_2 = (_product_edit_location_street_2.value !== "") ? _product_edit_location_street_2.value : null
+				city_id = (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null
+				zipcode = (_product_edit_location_zipcode.value !== "") ? _product_edit_location_zipcode.value : null
+				id = (!isNaN(parseInt(_product_edit_location_id.value))) ? parseInt(_product_edit_location_id.value) : null
+				location_types_id = (!isNaN(parseInt(_product_edit_location_location_types_id.value))) ? parseInt(_product_edit_location_location_types_id.value) : null
+				
+				let productLocation = {
+					product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
+					category_id: (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null,
+					id: id,
+					city_id: city_id,
+					location_types_id: location_types_id,
+					name: name,
+					street_1: street_1,
+					street_2: street_2,
+					zipcode: zipcode,
+					enabled: 1,
+					note: null,
+				}
+				
+				return removeNulls(productLocation)
+			}
+		}
+		
+		const sendUpdateRequest = function (dataToSend, callback) {
+			let url = "/api/v1.0/locations/update"
+			
+			try {
+				sendPostRequest(url, dataToSend, function (data, status, xhr) {
+					if (data) {
+						return callback(data)
+					}
+				})
+			} catch (e) {
+				console.log("error", e)
+				handleProductLocationError("Error Updating Location")
+			}
+		}
+		
+		const handleProductLocationError = function (msg) {
+		
+		}
+		
+		const save = function () {
+			let productLocation = buildLocationObject()
+			
+			if (productLocation) {
+				confirmDialog(`Would you like to update?`, (ans) => {
+					if (ans) {
+						sendUpdateRequest(productLocation, function (data) {
+							let location
+							if (data) {
+								location = data
+								if (data[0]) {
+									location = data[0]
+								}
+							}
+							
+							if (location) {
+								toastr["success"](`Location ${location.id} has been updated`, "Location Updated")
+							}
+						})
+					}
+				})
+			}
+		}
+		
+		const init = function (settings) {
+			console.log("ProductLocation.init(settings) - settings ", settings)
+			let location
+			
+			if (settings) {
+				if (settings.product_location) {
+					console.log("settings.product_location", settings.product_location)
+					location = settings.product_location
+					console.log("location", location)
+					let detail = set(location)
+					let name = (location.name) ? location.name : null
+					
+					console.log("detail", detail)
+					
+					if (_product_edit_location_form) {
+						validator_init(form_rules)
+						ProductLocation.validator = $(_product_edit_location_form).validate()
+						
+						$(_location_country_id).BuildDropDown({
+							data: Array.from(Country.all.values()),
+							title: "Country",
+							id_field: "id",
+							text_field: "name",
+							first_selectable: false,
+						})
+						
+						$(_location_province_id).BuildDropDown({
+							data: Array.from(Province.all.values()),
+							title: "Province",
+							id_field: "id",
+							text_field: "name",
+							first_selectable: false,
+						})
+						
+						$(_location_city_id).BuildDropDown({
+							data: Array.from(City.all.values()),
+							title: "City",
+							id_field: "id",
+							text_field: "name",
+							first_selectable: false,
+						})
+						
+						Country.init({
+							dropdowns: [
+								"location_country_id",
+							],
+						})
+						
+						Province.init({
+							dropdowns: [
+								"location_province_id",
+							],
+						})
+						
+						City.init({
+							dropdowns: [
+								"location_city_id",
+							],
+						})
+						
+						initAutoComplete()
+						
+						populateForm(location)
+					}
+				}
+			}
+		}
+		
+		return {
+			validator: null,
+			detail: {
+				id: null,
+				city_id: null,
+				location_types_id: null,
+				name: null,
+				street_1: null,
+				street_2: null,
+				zipcode: null,
+				enabled: 1,
+				date_created: formatDateMySQL(),
+				created_by: user_id,
+				date_modified: formatDateMySQL(),
+				modified_by: user_id,
+				note: null,
+				display_long: null,
+				display_medium: null,
+				display_short: null,
+				country: [],
+				province: [],
+				city: [],
+				type: [],
+			},
+			display_long: null,
+			display_medium: null,
+			display_short: null,
+			init: function (settings) {
+				$(document).ready(function () {
+					init(settings)
+				})
+			},
+		}
+	})()
+
+</script>
+<!-- /ProductLocation -->
 
 <!-- Station -->
 <script type="text/javascript">

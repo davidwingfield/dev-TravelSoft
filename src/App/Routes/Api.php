@@ -21,12 +21,30 @@
 	 * @see Search::hotels()
 	 */
 	Router::get($routeLead . '/search/hotels', "Search@hotels");
+	/**
+	 * @see Pricing::serveGetByMatrixId()
+	 */
 	Router::get($routeLead . '/pricings/${matrix_id}', "Pricing@serveGetByMatrixId");
+	/**
+	 * @see Pricing::serveGetByProductId()
+	 */
 	Router::get($routeLead . '/pricings/product', "Pricing@serveGetByProductId");
 	/**
 	 * @see Product::serveGet()
 	 */
 	Router::get($routeLead . '/products/${product_id}', "Product@serveGet");
+	/**
+	 * @see Page::serveGetByPageId()
+	 */
+	Router::get($routeLead . '/pages', "Page@serveGetByPageId");
+	/**
+	 * @see Page::serveGetMenus()
+	 */
+	Router::get($routeLead . '/pages/menus', "Page@serveGetMenus");
+	/**
+	 * @see Icon::serveGet()
+	 */
+	Router::get($routeLead . "/pages/icons", "Icon@serveGet");
 	Router::get($routeLead . '/profiles/${product_id}', "Profile@getByProductId");
 	Router::get($routeLead . '/locations/getByName', "Location@getByLocationName");
 	Router::get($routeLead . '/seasons/${product_id}/${season_id}', "Season@getSeasonByProductSeasonId");
@@ -101,14 +119,19 @@
 	Router::get($routeLead . "/autocomplete/companies", "Autocomplete@companies");
 	
 	/**
-	 * login requests
+	 * @see User::login()
 	 */
 	Router::post($routeLead . "/users/login", "User@login");
-	
+	/**
+	 * @see User::serveUpdateUser()
+	 */
 	Router::post($routeLead . "/users/register", "User@serveUpdateUser");
+	/**
+	 * @see User::serveUpdateUser()
+	 */
 	Router::post($routeLead . "/users/update", "User@serveUpdateUser");
 	/**
-	 * image requests
+	 * @see Image::serveUpdate()
 	 */
 	Router::post($routeLead . "/images/update", "Image@serveUpdate");
 	/**
@@ -143,9 +166,16 @@
 	 * @see Season:serveDelete()
 	 */
 	Router::post($routeLead . "/seasons/remove", "Season@serveDelete");
+	/**
+	 * @see Page::updateMenus()
+	 */
+	Router::post($routeLead . "/pages/menus/update", "Page@updateMenus");
 	Router::post($routeLead . "/variants/remove", "Variant@serveDelete");
 	Router::post($routeLead . "/profiles/remove", "Profile@serveDelete");
 	Router::post($routeLead . "/units/remove", "Unit@serveDelete");
+	/**
+	 * @see Product::serveAdd()
+	 */
 	Router::post($routeLead . "/products/add", "Product@serveAdd");
 	Router::post($routeLead . "/users/reset_password", "User@serveResetPassword");
 	Router::post($routeLead . "/contacts/update", "Contact@serveUpdate");
@@ -154,6 +184,9 @@
 	Router::post($routeLead . "/vendors/add", "Vendor@serveAdd");
 	Router::post($routeLead . "/companies/update", "Company@serveUpdate");
 	Router::post($routeLead . "/addresses/update", "Address@serveUpdate");
+	/**
+	 * @see Location:serveUpdate()
+	 */
 	Router::post($routeLead . "/locations/update", "Location@serveUpdate");
 	Router::post($routeLead . "/provinces/update", "Province@serveUpdate");
 	Router::post($routeLead . "/variants/update", "Variant@serveUpdate");
@@ -162,6 +195,14 @@
 	Router::post($routeLead . "/countries/update", "Country@serveUpdate");
 	Router::post($routeLead . "/profiles/update", "Profile@serveUpdate");
 	Router::post($routeLead . "/cities/update", "City@serveUpdate");
+	/**
+	 * @see Variant:serveNew()
+	 */
+	Router::post($routeLead . "/variants/new", "Variant@serveNew");
+	/**
+	 * @see Unit:serveNew()
+	 */
+	Router::post($routeLead . "/units/new", "Unit@serveNew");
 	/**
 	 * @see Airport::serveUpdate()
 	 */

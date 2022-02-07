@@ -1,9 +1,8 @@
 const InventoryProfile = (function () {
     "use strict"
-    const _calendar_loader = document.getElementById("calendar_loader")
+    
     const _panel_tab_inventory = document.getElementById("panel_tab_inventory")
     const _table_profile_product_edit_add_new_button = document.getElementById("table_profile_product_edit_add_new_button")
-    const _edit_product_profile = document.getElementById("edit_product_profile")
     const _product_edit_profile_form_profile_transfer_sales_types_id_block = document.getElementById("product_edit_profile_form_profile_transfer_sales_types_id_block")
     const _product_edit_profile_form_profile_allot_by_id_block = document.getElementById("product_edit_profile_form_profile_allot_by_id_block")
     const _product_edit_profile_form_profile_name_filter = document.getElementById("product_edit_profile_form_profile_name_filter")
@@ -106,10 +105,10 @@ const InventoryProfile = (function () {
     
     $(_product_edit_profile_form_clear_button)
         .on("click", function () {
-            //console.log("InventoryProfile.product_edit_profile_form_clear_button: click()", {})
             $table_profile_product_edit.clearSelectedRows()
             clearInventoryProfileForm()
             _product_edit_profile_form_profile_name_filter.value = ""
+            hideForm()
         })
     
     $(_product_edit_profile_form_submit_button)
@@ -138,7 +137,6 @@ const InventoryProfile = (function () {
     
     $(_product_edit_profile_form_profile_allot_by_id)
         .on("change", function () {
-            //console.log("InventoryProfile.product_edit_profile_form_profile_allot_by_id: change()", {})
             setFormElementDisplay()
             InventoryProfile.expiration_date.value("")
             _product_edit_profile_form_profile_days_out.value = ""
@@ -586,21 +584,21 @@ const InventoryProfile = (function () {
     }
     
     const hideForm = function () {
-        if (_edit_product_profile) {
+        if (_product_edit_profile_form) {
             hideAllotmentFields()
-            $(_edit_product_profile).hide()
+            $(_product_edit_profile_form).hide()
             _product_edit_profile_form_profile_name_filter.disabled = false
             
             $("#accordionEx").collapse("hide")
+            
             updateProgress()
         }
     }
     
     const showForm = function () {
-        //console.log("InventoryProfile.showForm()", showForm)
-        if (_edit_product_profile) {
+        if (_product_edit_profile_form) {
             _product_edit_profile_form_profile_name_filter.disabled = true
-            $(_edit_product_profile).show()
+            $(_product_edit_profile_form).show()
         }
     }
     
@@ -611,8 +609,6 @@ const InventoryProfile = (function () {
     }
     
     const clearInventoryProfileForm = function () {
-        //console.log("InventoryProfile.clearInventoryProfileForm()", clearInventoryProfileForm)
-        
         disableInventoryProfileFormFields()
         _product_edit_profile_form_profile_id.value = ""
         _product_edit_profile_form_profile_name.value = ""
@@ -880,6 +876,14 @@ const InventoryProfile = (function () {
         InventoryProfile.weekday_dow = weekday_dow
         InventoryProfile.inc_days_dow = inc_days_dow
         
+        InventoryProfile.advanced_booking_date = $("#profile_advanced_booking_date").dateSelect({
+            onStart: function () {},
+        })
+        
+        InventoryProfile.expiration_date = $("#profile_expires").dateSelect({
+            onStart: function () {},
+        })
+        
         $(document).ready(function () {
             if (_table_profile_product_edit) {
                 buildInventoryProfileTable()
@@ -892,15 +896,8 @@ const InventoryProfile = (function () {
             if (_product_edit_profile_form) {
                 validator_init(form_rules)
                 
-                InventoryProfile.expiration_date = $("#profile_expires").dateSelect({
-                    onStart: function () {},
-                })
-                
-                InventoryProfile.advanced_booking_date = $("#profile_advanced_booking_date").dateSelect({
-                    onStart: function () {},
-                })
-                
                 InventoryProfile.validator = $(_product_edit_profile_form).validate()
+                
                 resetInventoryProfileForm()
                 hideForm()
             }

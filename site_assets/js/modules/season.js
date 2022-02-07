@@ -85,7 +85,10 @@ const Season = (function () {
             _product_edit_season_form_season_name_filter.value = ""
             resetForm()
             clearProductSeasonForm()
-            $table_season_product_edit.clearSelectedRows()
+            if ($table_season_product_edit) {
+                
+                $table_season_product_edit.clearSelectedRows()
+            }
         })
     
     const updateProgress = function () {
@@ -122,7 +125,7 @@ const Season = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleSeasonError("Oops: 1")
+                        handleSeasonError("Oops: 1")
                     }
                 })
             } catch (e) {
@@ -140,7 +143,7 @@ const Season = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleSeasonError("Oops: 1")
+                        handleSeasonError("Oops: 1")
                     }
                 })
             } catch (e) {

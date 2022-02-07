@@ -7,210 +7,237 @@
 	$categoryId = (isset($product["category"]["id"])) ? $product["category"]["id"] : null;
 
 ?>
-<section>
+<section id="product_edit_unit_section" class="section">
 	
 	<div class="row">
-		<div class="col-12">
-			<div class="form-element">
-				<label for="product_edit_unit_form_unit_name_filter" class="d-none">Unit Search:</label>
-				
-				<div class="input-group">
+		
+		<div class="col-12 col-md-8 mb-2">
+			
+			<div class="row">
+				<div class="col-12">
 					
-					<div class="input-group-prepend">
+					<div class="form-element">
+						<label for="product_edit_unit_form_unit_name_filter" class="d-none">Unit Search:</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
                         <span class="input-group-text">
                             <i class="fas fa-search" aria-hidden="true"></i>
                         </span>
+							</div>
+							<input type="search" id="product_edit_unit_form_unit_name_filter" name="product_edit_unit_form_unit_name_filter" class="form-control" placeholder="Search Units"/>
+						</div>
+						<div id="product_edit_unit_form_unit_name_filter-error" class="error w-100 text-center"></div>
 					</div>
-					
-					<input type="search" id="product_edit_unit_form_unit_name_filter" name="product_edit_unit_form_unit_name_filter" class="form-control" placeholder="Search Units"/>
 				
 				</div>
-				
-				<div id="product_edit_unit_form_unit_name_filter-error" class="error w-100 text-center"></div>
-			
 			</div>
-		</div>
-	</div>
-	
-	<?php include_once(VIEWS_PATH . "/units/tables/product_edit_unit_table.phtml"); ?>
-	
-	<div id="edit_product_unit">
-		
-		<form class="card card-body" id="product_edit_unit_form" novalidate="novalidate">
-			<h5 class="card-title">
-				<span>Unit</span>
-				<a type="button" href="javascript:void(0);" id="product_edit_unit_form_close_button" class="panel-button-close fas fa-times" aria-hidden="true"></a>
-			</h5>
-			<h6 class="card-subtitle mb-2 text-muted" id="display_product_unit_name">&nbsp;</h6>
-			<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
 			
-			<ul class="nav md-pills">
-				<li class="nav-item">
-					<a class="nav-link active" data-toggle="tab" href="#unitDetail" role="tab">Overview</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" data-toggle="tab" href="#unitMeta" role="tab">Meta</a>
-				</li>
-			</ul>
-			
-			<div class="tab-content pt-0">
-				
-				<div class="tab-pane fade in show active" id="unitDetail" role="tabpanel">
-					<div class="row">
-						
-						<!-- Id -->
-						<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 mb-2">
-							<div class="form-element">
-								<label for="product_edit_unit_form_unit_id">Id:</label>
-								<input type="text" id="product_edit_unit_form_unit_id" name="product_edit_unit_form_unit_id" class="form-control" readonly="readonly"/>
-								<div id="product_edit_unit_form_unit_id-error" class="error w-100 text-center"></div>
-							</div>
-						</div>
-						
-						<!-- Name -->
-						<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 mb-2">
-							<div class="form-element">
-								<label for="product_edit_unit_form_unit_name">Name:</label>
-								<input type="text" id="product_edit_unit_form_unit_name" name="product_edit_unit_form_unit_name" class="form-control"/>
-								<div id="product_edit_unit_form_unit_name-error" class="error w-100 text-center"></div>
-							</div>
-						</div>
-						
-						<!-- Enabled -->
-						<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 d-flex align-self-end justify-content-end pb-2 mb-2">
-							<div class="form-element">
-								<div class="custom-control custom-switch">
-									<input id="product_edit_unit_form_unit_enabled" name="product_edit_unit_form_unit_enabled" type="checkbox" value="1" class="custom-control-input" readonly="readonly">
-									<label for="product_edit_unit_form_unit_enabled" class="custom-control-label p-0">Enabled</label>
-								</div>
-								<div id="product_edit_unit_form_unit_enabled-error" class="error w-100 text-center"></div>
-							</div>
-						</div>
-					
-					</div>
-					
-					<div class="row">
-						
-						<!-- Room Code -->
-						<div class="col-12 col-md-6 mb-2">
-							<div class="form-element">
-								<label for="product_edit_unit_form_unit_room_code">Room Code:</label>
-								<input type="text" id="product_edit_unit_form_unit_room_code" name="product_edit_unit_form_unit_room_code" class="form-control"/>
-								<div id="product_edit_unit_form_unit_room_code-error" class="error w-100 text-center"></div>
-							</div>
-						</div>
-						<!-- /Room Code -->
-					
-					</div>
-					
-					<div class="row">
-						
-						<!-- Minimum Nights -->
-						<div class="col-12 col-md-6 mb-2">
-							<div class="form-element">
-								<label for="product_edit_unit_form_unit_min_nights">Minimum Nights:</label>
-								<input type="number" id="product_edit_unit_form_unit_min_nights" name="product_edit_unit_form_unit_min_nights" class="form-control"/>
-								<div id="product_edit_unit_form_unit_min_nights-error" class="error w-100 text-center"></div>
-							</div>
-						</div>
-						<!-- /Minimum Nights -->
-						
-						<!-- Maximum Nights -->
-						<div class="col-12 col-md-6 mb-2">
-							<div class="form-element">
-								<label for="product_edit_unit_form_unit_max_nights">Maximum Nights:</label>
-								<input type="number" id="product_edit_unit_form_unit_max_nights" name="product_edit_unit_form_unit_max_nights" class="form-control"/>
-								<div id="product_edit_unit_form_unit_max_nights-error" class="error w-100 text-center"></div>
-							</div>
-						</div>
-						<!-- /Maximum Nights -->
-					
-					</div>
-					
-					<div class="row">
-						
-						<!-- Minimum Pax -->
-						<div class="col-12 col-md-6 mb-2">
-							<div class="form-element">
-								<label for="product_edit_unit_form_unit_min_pax">Minimum Pax:</label>
-								<input type="number" id="product_edit_unit_form_unit_min_pax" name="product_edit_unit_form_unit_min_pax" min="1" class="form-control"/>
-								<div id="product_edit_unit_form_unit_min_pax-error" class="error w-100 text-center"></div>
-							</div>
-						</div>
-						<!-- /Minimum Pax -->
-						
-						<!-- Maximum Pax -->
-						<div class="col-12 col-md-6 mb-2">
-							<div class="form-element">
-								<label for="product_edit_unit_form_unit_max_pax">Maximum Pax:</label>
-								<input type="number" id="product_edit_unit_form_unit_max_pax" name="product_edit_unit_form_unit_max_pax" min="1" class="form-control"/>
-								<div id="product_edit_unit_form_unit_max_pax-error" class="error w-100 text-center"></div>
-							</div>
-						</div>
-						<!-- /Maximum Pax -->
-					
-					</div>
+			<div class="row">
+				<div class="col-12">
+					<?php include_once(VIEWS_PATH . "/units/tables/product_edit_unit_table.phtml"); ?>
 				</div>
-				<div class="tab-pane fade" id="unitMeta" role="tabpanel">
-					<div class="row">
+			</div>
+			
+			<div id="edit_product_unit" class="row">
+				<div class="col-12">
+					<form class="card card-body" id="product_edit_unit_form" novalidate="novalidate">
+						<h5 class="card-title">
+							<span>Unit</span>
+							<a type="button" href="javascript:void(0);" id="product_edit_unit_form_close_button" class="panel-button-close fas fa-times" aria-hidden="true"></a>
+						</h5>
+						<h6 class="card-subtitle mb-2 text-muted" id="display_product_unit_name">&nbsp;</h6>
+						<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
 						
-						<!-- Unit Short Description -->
-						<div class="col-12 col-md-6 mb-2">
-							<div class="card card-body mb-2">
-								<div class="d-flex justify-content-between">
-									<h5 class="card-title">Brief Description:</h5>
-								</div>
-								<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+						<ul class="nav md-pills">
+							<li class="nav-item">
+								<a class="nav-link active" data-toggle="tab" href="#unitDetail" role="tab">Overview</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" data-toggle="tab" href="#unitMeta" role="tab">Meta</a>
+							</li>
+						</ul>
+						
+						<div class="tab-content pt-0">
+							
+							<div class="tab-pane fade in show active" id="unitDetail" role="tabpanel">
 								<div class="row">
-									<div class="col-12">
+									
+									<!-- Id -->
+									<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 mb-2">
 										<div class="form-element">
-											<label for="product_edit_unit_form_unit_description_short" class="d-none">Short Description</label>
-											<textarea id="product_edit_unit_form_unit_description_short" name="product_edit_unit_form_unit_description_short" class="md-textarea short-description form-control" rows="4" maxlength="250"></textarea>
-											<div id="product_edit_unit_form_unit_description_short-error" class="error w-100 text-center">&nbsp;</div>
+											<label for="product_edit_unit_form_unit_id">Id:</label>
+											<input type="text" id="product_edit_unit_form_unit_id" name="product_edit_unit_form_unit_id" class="form-control" readonly="readonly"/>
+											<div id="product_edit_unit_form_unit_id-error" class="error w-100 text-center"></div>
 										</div>
 									</div>
+									
+									<!-- Name -->
+									<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 mb-2">
+										<div class="form-element">
+											<label for="product_edit_unit_form_unit_name">Name:</label>
+											<input type="text" id="product_edit_unit_form_unit_name" name="product_edit_unit_form_unit_name" class="form-control"/>
+											<div id="product_edit_unit_form_unit_name-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									
+									<!-- Enabled -->
+									<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-4 d-flex align-self-end justify-content-end pb-2 mb-2">
+										<div class="form-element">
+											<div class="custom-control custom-switch">
+												<input id="product_edit_unit_form_unit_enabled" name="product_edit_unit_form_unit_enabled" type="checkbox" value="1" class="custom-control-input" readonly="readonly">
+												<label for="product_edit_unit_form_unit_enabled" class="custom-control-label p-0">Enabled</label>
+											</div>
+											<div id="product_edit_unit_form_unit_enabled-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+								
 								</div>
-							</div>
-						</div>
-						<!-- /Unit Short Description -->
-						
-						<!-- Unit Long Description -->
-						<div class="col-12 col-md-6 mb-2">
-							<div class="card card-body">
-								<div class="d-flex justify-content-between">
-									<h5 class="card-title">Detailed Description:</h5>
-									<a id="button_unit_description_long_toggle" class="but_toggle waves-effect waves-light" data-texted="product_edit_unit_form_unit_description_long">
-										<i class="fas fa-sliders-h"></i>
-									</a>
-								</div>
-								<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
 								
 								<div class="row">
-									<div class="col-12">
+									
+									<!-- Room Code -->
+									<div class="col-12 col-md-6 mb-2">
 										<div class="form-element">
-											<label for="product_edit_unit_form_unit_description_long" class="d-none">Long Description:</label>
-											<textarea id="product_edit_unit_form_unit_description_long" name="product_edit_unit_form_unit_description_long" class="md-textarea tmceEl form-control" rows="4"></textarea>
-											<div id="product_edit_unit_form_unit_description_long-error" class="error w-100 text-center">&nbsp;</div>
+											<label for="product_edit_unit_form_unit_room_code">Room Code:</label>
+											<input type="text" id="product_edit_unit_form_unit_room_code" name="product_edit_unit_form_unit_room_code" class="form-control"/>
+											<div id="product_edit_unit_form_unit_room_code-error" class="error w-100 text-center"></div>
 										</div>
 									</div>
+									<!-- /Room Code -->
+								
+								</div>
+								
+								<div class="row">
+									
+									<!-- Minimum Nights -->
+									<div class="col-12 col-md-6 mb-2">
+										<div class="form-element">
+											<label for="product_edit_unit_form_unit_min_nights">Minimum Nights:</label>
+											<input type="number" id="product_edit_unit_form_unit_min_nights" name="product_edit_unit_form_unit_min_nights" class="form-control"/>
+											<div id="product_edit_unit_form_unit_min_nights-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									<!-- /Minimum Nights -->
+									
+									<!-- Maximum Nights -->
+									<div class="col-12 col-md-6 mb-2">
+										<div class="form-element">
+											<label for="product_edit_unit_form_unit_max_nights">Maximum Nights:</label>
+											<input type="number" id="product_edit_unit_form_unit_max_nights" name="product_edit_unit_form_unit_max_nights" class="form-control"/>
+											<div id="product_edit_unit_form_unit_max_nights-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									<!-- /Maximum Nights -->
+								
+								</div>
+								
+								<div class="row">
+									
+									<!-- Minimum Pax -->
+									<div class="col-12 col-md-6 mb-2">
+										<div class="form-element">
+											<label for="product_edit_unit_form_unit_min_pax">Minimum Pax:</label>
+											<input type="number" id="product_edit_unit_form_unit_min_pax" name="product_edit_unit_form_unit_min_pax" min="1" class="form-control"/>
+											<div id="product_edit_unit_form_unit_min_pax-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									<!-- /Minimum Pax -->
+									
+									<!-- Maximum Pax -->
+									<div class="col-12 col-md-6 mb-2">
+										<div class="form-element">
+											<label for="product_edit_unit_form_unit_max_pax">Maximum Pax:</label>
+											<input type="number" id="product_edit_unit_form_unit_max_pax" name="product_edit_unit_form_unit_max_pax" min="1" class="form-control"/>
+											<div id="product_edit_unit_form_unit_max_pax-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									<!-- /Maximum Pax -->
+								
+								</div>
+							</div>
+							<div class="tab-pane fade" id="unitMeta" role="tabpanel">
+								<div class="row">
+									
+									<!-- Unit Short Description -->
+									<div class="col-12 col-md-6 mb-2">
+										<div class="card card-body mb-2">
+											<div class="d-flex justify-content-between">
+												<h5 class="card-title">Brief Description:</h5>
+											</div>
+											<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+											<div class="row">
+												<div class="col-12">
+													<div class="form-element">
+														<label for="product_edit_unit_form_unit_description_short" class="d-none">Short Description</label>
+														<textarea id="product_edit_unit_form_unit_description_short" name="product_edit_unit_form_unit_description_short" class="md-textarea short-description form-control" rows="4" maxlength="250"></textarea>
+														<div id="product_edit_unit_form_unit_description_short-error" class="error w-100 text-center">&nbsp;</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- /Unit Short Description -->
+									
+									<!-- Unit Long Description -->
+									<div class="col-12 col-md-6 mb-2">
+										<div class="card card-body">
+											<div class="d-flex justify-content-between">
+												<h5 class="card-title">Detailed Description:</h5>
+												<a id="button_unit_description_long_toggle" class="but_toggle waves-effect waves-light" data-texted="product_edit_unit_form_unit_description_long">
+													<i class="fas fa-sliders-h"></i>
+												</a>
+											</div>
+											<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+											
+											<div class="row">
+												<div class="col-12">
+													<div class="form-element">
+														<label for="product_edit_unit_form_unit_description_long" class="d-none">Long Description:</label>
+														<textarea id="product_edit_unit_form_unit_description_long" name="product_edit_unit_form_unit_description_long" class="md-textarea tmceEl form-control" rows="4"></textarea>
+														<div id="product_edit_unit_form_unit_description_long-error" class="error w-100 text-center">&nbsp;</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- /Unit Long Description -->
+								
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-6 text-left w-100 mb-2">
+									<a href="javascript:void(0);" id="button_remove_unit_from_product" class="btn btn-danger btn-sm waves-effect waves-light">Remove</a>
+								</div>
+								<div class="col-6 text-right w-100 mb-2">
+									<a href="javascript:void(0);" id="product_edit_unit_form_clear_button" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+									<a href="javascript:void(0);" id="product_edit_unit_form_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">Save</a>
 								</div>
 							</div>
 						</div>
-						<!-- /Unit Long Description -->
-					
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-6 text-left w-100 mb-2">
-						<a href="javascript:void(0);" id="button_remove_unit_from_product" class="btn btn-danger btn-sm waves-effect waves-light">Remove</a>
-					</div>
-					<div class="col-6 text-right w-100 mb-2">
-						<a href="javascript:void(0);" id="product_edit_unit_form_clear_button" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
-						<a href="javascript:void(0);" id="product_edit_unit_form_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">Save</a>
-					</div>
+					</form>
 				</div>
 			</div>
-		</form>
+		
+		</div>
+		
+		<div class="col-12 col-md-4 mb-2">
+			
+			<ul class="list-group">
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					<span id="" class="">Cras justo odio</span>
+					<span class="badge badge-primary badge-pill">14</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					Dapibus ac facilisis in
+					<span class="badge badge-primary badge-pill">2</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					dfg
+					<span class="badge badge-primary badge-pill">1</span>
+				</li>
+			</ul>
+		
+		</div>
 	
 	</div>
 

@@ -24,8 +24,6 @@
 			parent::__construct();
 		}
 		
-		// ----
-		
 		/**
 		 * validate if named record exists
 		 *
@@ -67,8 +65,6 @@
 			return self::format_ac(LocationModel::location_ac($st, $default_display), $default_display);
 		}
 		
-		// ----
-		
 		/**
 		 * update request
 		 *
@@ -97,15 +93,23 @@
 			$location_city_id = (isset($params["city_id"])) ? (int)$params["city_id"] : null;
 			$location_id = (isset($params["id"])) ? (int)$params["id"] : null;
 			$location_name = ($params["name"]) ? (string)$params["name"] : null;
+			
+			$street_1 = ($params["street_1"]) ? (string)$params["street_1"] : null;
+			$street_2 = ($params["street_2"]) ? (string)$params["street_2"] : null;
+			$zipcode = ($params["zipcode"]) ? (string)$params["zipcode"] : null;
+			
 			$args = array(
+				"street_1" => $street_1,
+				"street_2" => $street_2,
+				"zipcode" => $zipcode,
 				"location_types_id" => $location_types_id,
 				"city_id" => $location_city_id,
 				"id" => $location_id,
 				"name" => $location_name,
 			);
-			//Log::$debug_log->trace($args);
+			
 			$results = LocationModel::update($args);
-			//Log::$debug_log->trace($results);
+			
 			foreach ($results AS $location) {
 				$locations[] = self::formatObject($location);
 			}
@@ -114,8 +118,6 @@
 			
 			return $locations;
 		}
-		
-		// ----
 		
 		/**
 		 * get location by location id
@@ -220,8 +222,6 @@
 			View::render_json($locations);
 			exit(0);
 		}
-		
-		// ----
 		
 		/**
 		 * format autocorrect results

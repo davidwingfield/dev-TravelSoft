@@ -178,17 +178,27 @@ const clearValidation = function (formElement) {
     var validator = $(formElement).validate()
     
     $("[name]", formElement).each(function () {
-        validator.successList.push(this)
-        validator.showErrors()
+        if (validator) {
+            if (validator.successList) {
+                validator.successList.push(this)
+            }
+            validator.showErrors()
+        }
     })
     
     $(".is-invalid").each(function () {
-        validator.successList.push(this)
-        validator.showErrors()
+        if (validator) {
+            if (validator.successList) {
+                validator.successList.push(this)
+            }
+            validator.showErrors()
+        }
     })
     
-    validator.resetForm()
-    validator.reset()
+    if (validator) {
+        validator.resetForm()
+        validator.reset()
+    }
 }
 
 const get_errors = function (validator) {
@@ -401,21 +411,16 @@ const formatListOfIds = function (list) {
 }
 
 const sendGetRequest = function (url, data_to_send, callback) {
-    
     let result = []
+    
     if (url && data_to_send) {
-        
         $.getJSONRequest(url, data_to_send, function (data, status, xhr) {
-            
             if (status === "success" && typeof data.result !== "undefined") {
                 result = data.result
                 return callback(result)
             } else if (status === "failed" && typeof data.error === "undefined") {
-                //console.log("getError:2")
-                return handleError("failed")
+                return handleError(data)
             } else if (status === "success" && typeof data.error !== "undefined") {
-                console.log("data.error", data.error)
-                //console.log("getError:3")
                 return handleError(data.error)
             } else {
                 //console.log("getError:4")
@@ -475,6 +480,25 @@ const sendPostRequest = function (url, data_to_send, callback) {
     }
 }
 
+const getAjaxError = function (jqXHR, exception, uri) {
+    let msg = ""
+    let error = {
+        message: "",
+        status: "",
+        uri: uri,
+    }
+    
+    if (jqXHR.status === 404) {
+        msg = "Requested page( " + uri + " ) not found. [404]"
+    }
+    
+    error.message = msg
+    error.status = jqXHR.status
+    error.uri = uri
+    error.jqXHR = jqXHR
+    return error
+}
+
 const _display_ajax_error = function (jqXHR, exception, uri) {
     let msg = ""
     let error = {
@@ -482,7 +506,7 @@ const _display_ajax_error = function (jqXHR, exception, uri) {
         status: "",
         uri: uri,
     }
-    console.log("jqXHR", jqXHR.responseText)
+    
     if (jqXHR.status === 0) {
         msg = "Not connected, verify Network."
     } else if (jqXHR.status === 404) {
@@ -515,7 +539,8 @@ const handleError = function (msg) {
     if (!msg) {
         msg = "3Error processing request"
     }
-    toastr.error(msg)
+    
+    toastr.error(" -- " + msg)
 }
 
 const validInt = function (val) {
@@ -807,6 +832,24 @@ const setInt = function (val) {
     return returnVal
 }
 
+const inactivityTime = function () {
+    let time
+    window.onload = resetTimer
+    
+    // DOM Events
+    document.onmousemove = resetTimer
+    document.onkeydown = resetTimer
+    
+    function logout () {
+        location.href = "/logout"
+    }
+    
+    function resetTimer () {
+        clearTimeout(time)
+        time = setTimeout(logout, inactivityTimeout)
+    }
+}
+
 const htmlEncode = function (value) {
     return $("<textarea/>").text(value).html()
 }
@@ -826,7 +869,9 @@ const generateCodeDirectId = function (provider) {
 }
 
 const getDate = function (element) {
-    return element.pickadate("picker").get()
+    if (element.pickadate("picker")) {
+        return element.pickadate("picker").get()
+    }
 }
 
 jQuery.extend({
@@ -900,20 +945,28 @@ jQuery.extend({
                 callback(msg, "success")
             }
         })
+        
         getRequest.fail(function (jqXHR, textStatus, msg) {
+            let errors = getAjaxError(jqXHR, textStatus, url)
+            
             if (typeof textStatus !== "undefined") {
                 let err = _display_ajax_error(jqXHR, textStatus, url)
-                handleError(err.message)
-                console.log(err)
+                console.log("err", getAjaxError(jqXHR, textStatus, url))
+                //handleError(err.message)
             } else {
                 let err = _display_ajax_error(jqXHR, textStatus, url)
-                handleError(err.message)
-                console.log(err)
+                //handleError(err.message)
             }
+            
             if ($.isFunction(callback)) {
+                msg = errors.message
+                console.log("msg -- ", msg)
+                console.log("msg -- ", errors.message)
+                
                 callback(msg, "failed")
             }
         })
+        
     },
     getJSON: function (url, data, callback) {
         let getRequest = $.ajax({
@@ -1156,16 +1209,17 @@ const formatURL = function (param) {
 }
 
 const buildMapsURL = function (location) {
-    console.log("buildMapsURL(location)", location)
-    let street_1, street_2, zipcode, city_name, province_name, country_name
+    //console.log("buildMapsURL(location)", location)
+    let name, street_1, street_2, zipcode, city_name, province_name, country_name
     
+    name = (location.name) ? location.name : null
     street_1 = (location.street_1) ? location.street_1 : null
     street_2 = (location.street_2) ? location.street_2 : null
     zipcode = (location.zipcode) ? location.zipcode : null
     city_name = (location.city.name) ? location.city.name : null
     province_name = (location.province.iso2) ? location.province.iso2 : (location.province.iso3) ? location.province.iso3 : (location.province.name) ? location.province.name : null
     country_name = (location.province.name) ? location.country.name : (location.country.iso2) ? location.country.iso2 : (location.country.iso3) ? location.country.iso3 : null
-    
+    name = (name !== null) ? name : null
     street_1 = (street_1 !== null) ? street_1 : null
     street_2 = (street_2 !== null) ? street_2 : null
     zipcode = (zipcode !== null) ? zipcode : null
@@ -1173,24 +1227,11 @@ const buildMapsURL = function (location) {
     province_name = (province_name !== null) ? province_name : null
     country_name = (country_name !== null) ? country_name : null
     
-    /*
-    
-    // Viale Rinascimento, 141, 63074 San Benedetto del Tronto AP, Italy
-    // +39 0735 615400
-    // https://www.smeraldosuitehotel.com/
-    // CITY - San Benedetto Del Tronto: 844
-    // PROVINCE - Ascoli Piceno: 186
-    // COUNTRY - Italy: 102
-    
-    console.log("street_1", street_1)
-    console.log("street_2", street_2)
-    console.log("city_name", city_name)
-    console.log("province_name", province_name)
-    console.log("country_name", country_name)
-    console.log("zipcode", zipcode)
-    //*/
-    
     let tempURL = []
+    
+    if (!is_null(name)) {
+        tempURL.push(name)
+    }
     
     if (!is_null(street_1)) {
         tempURL.push(street_1)

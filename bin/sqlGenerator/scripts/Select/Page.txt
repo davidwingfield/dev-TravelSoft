@@ -1,18 +1,36 @@
 SELECT
-	PAGE.id AS 'page_id',
-	PAGE.menu_id AS 'page_menu_id',
-	PAGE.path AS 'page_path',
-	PAGE.title AS 'page_title',
-	PAGE.sub_title AS 'page_sub_title',
-	PAGE.heading AS 'page_heading',
-	PAGE.sub_heading AS 'page_sub_heading',
-	PAGE.description AS 'page_description',
-	PAGE.keywords AS 'page_keywords',
-	PAGE.enabled AS 'page_enabled',
-	PAGE.date_created AS 'page_date_created',
-	PAGE.created_by AS 'page_created_by',
-	PAGE.date_modified AS 'page_date_modified',
-	PAGE.modified_by AS 'page_modified_by',
-	PAGE.note AS 'page_note'
+		PAGE.id AS 'page_id',
+		PAGE.menu_id AS 'page_menu_id',
+		PAGE.path AS 'page_path',
+		PAGE.title AS 'page_title',
+		PAGE.sub_title AS 'page_sub_title',
+		PAGE.heading AS 'page_heading',
+		PAGE.sub_heading AS 'page_sub_heading',
+		PAGE.description AS 'page_description',
+		PAGE.keywords AS 'page_keywords',
+		PAGE.enabled AS 'page_enabled',
+		PAGE.date_created AS 'page_date_created',
+		PAGE.created_by AS 'page_created_by',
+		PAGE.date_modified AS 'page_date_modified',
+		PAGE.modified_by AS 'page_modified_by',
+		PAGE.note AS 'page_note'
 FROM 	page PAGE
 -- JOIN 	page PAGE ON PAGE.id = {FK_TABLE}.page_id
+
+/*
+'id'=>$page['page_id'],
+'menu_id'=>$page['page_menu_id'],
+'path'=>$page['page_path'],
+'title'=>$page['page_title'],
+'sub_title'=>$page['page_sub_title'],
+'heading'=>$page['page_heading'],
+'sub_heading'=>$page['page_sub_heading'],
+'description'=>$page['page_description'],
+'keywords'=>$page['page_keywords'],
+'enabled'=>$page['page_enabled'],
+'date_created'=>$page['page_date_created'],
+'created_by'=>$page['page_created_by'],
+'date_modified'=>$page['page_date_modified'],
+'modified_by'=>$page['page_modified_by'],
+'note'=>$page['page_note']
+*/

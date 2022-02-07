@@ -108,6 +108,23 @@
 			exit(0);
 		}
 		
+		public static function serveNew(array $params = []): void
+		{
+			$results = VariantModel::insertVariant($params);
+			$variants = [];
+			
+			foreach ($results AS $k => $variant) {
+				$variants[] = self::format($variant);
+			}
+			
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			View::render_json($variants);
+			exit(0);
+		}
+		
 		private static function format_ac(array $variants = null): array
 		{
 			$data["suggestions"] = [];

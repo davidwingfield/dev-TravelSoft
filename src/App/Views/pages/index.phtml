@@ -1,9 +1,827 @@
-<section id="page_index" class="section">
-	<div class="card">
-		<div class="card-body">
-			<div class="row">
+<?php
+	if (!isset($page_data)) {
+		$page_data = [];
+	}
+	
+	$roles = [];
+	$menus = [];
+	$icons = [];
+	
+	if (isset($page_data)) {
+		$settings = (isset($page_data["settings"])) ? json_encode($page_data["settings"], 1) : "{}";
+		if (isset($page_data["types"])) {
+			if (isset($page_data["types"]["roles"])) {
+				$roles = $page_data["types"]["roles"];
+			}
+			if (isset($page_data["types"]["menus"])) {
+				$menus = $page_data["types"]["menus"];
+			}
+			if (isset($page_data["types"]["icons"])) {
+				$icons = $page_data["types"]["icons"];
+			}
+		}
+	}
+	
+	$iconsDropDown = "<option value='' selected>-- Select Icon --</option>";
+	$iconsJson = json_encode($icons, 1);
+	
+	foreach ($icons AS $k => $icon) {
+		$id = $icon["id"];
+		$name = $icon["label"];
+		$class = $icon["class"];
+		
+		$iconsDropDown .= "<option value='$class'>$name</option>";
+	}
+	
+	$rolesDropDown = "<option value='' readonly selected>-- Select Role --</option>";
+	foreach ($roles AS $k => $role) {
+		$id = $role["id"];
+		$name = $role["name"];
+		$rolesDropDown .= "<option value='$id'>$name</option>";
+	}
+	
+	$menusDropDown = "<option value='' readonly selected>-- Select Parent Menu --</option>";
+	foreach ($menus AS $k => $menu) {
+		$id = $menu["id"];
+		$name = $menu["label"];
+		$menusDropDown .= "<option value='$id'>$name</option>";
+		if (!empty($menu["sub_menus"])) {
+			foreach ($menu["sub_menus"] AS $key => $sub_menu) {
+				$id = $sub_menu["id"];
+				$name = $sub_menu["label"];
+				$menusDropDown .= "<option value='$id'>$name</option>";
+			}
+		}
+	}
+	
+	$init = "Page.init($settings);";
+	if (!defined("COUNTRIES")) {
+		if (!empty($page_data)) {
+			define("COUNTRIES", $page_data["types"]["countries"]);
+		}
+	}
+
+?>
+
+<section id="page_index_section" class="section">
+	<div class="row">
+		<div class="col-12 col-md-8 mb-2">
 			
+			<div class="row">
+				<div class="col-12 mb-2">
+					<div class="form-element">
+						<div class="input-group form-sm form-1 pl-0">
+							<div class="input-group-prepend">
+		                        <span class="input-group-text">
+		                            <i class="fas fa-search" aria-hidden="true"></i>
+		                        </span>
+							</div>
+							<input type="search" id="pages_index_search" name="pages_index_search" class="form-control my-0 py-1" placeholder="Search" aria-label="Search"/>
+						</div>
+					</div>
+				</div>
 			</div>
+			
+			<?php include_once(VIEWS_PATH . "/pages/tables/pages_index_table.phtml"); ?>
+		
+		</div>
+		
+		<div class="col-12 col-md-4 mb-2">
+			<section class="card card-body p-1 mb-2">
+				<h5 class="card-title">
+					<span>Menus</span>
+				</h5>
+				<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+				
+				<div id="menuSection"></div>
+			</section>
+			<div class="" id="jstree_demo"></div>
 		</div>
 	</div>
 </section>
+
+<!-- New Page Modal -->
+<div class="modal top fade" id="modal_new_page" tabindex="-1" aria-labelledby="modal_new_page_label" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+				
+				<h4 class="modal-title debug" id="modal_new_page_label">New Page</h4>
+			</div>
+			
+			<div class="modal-body">
+				<div class="row">
+					<!-- Page Id -->
+					<div class="col-12 col-md-6">
+						<div class="form-element">
+							<label for="modal_new_page_id">Id:</label>
+							<input
+								type="text"
+								id="modal_new_page_id"
+								name="modal_new_page_id"
+								class="form-control"
+								readonly="readonly"
+							/>
+							<div id="modal_new_page_id-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Page Id -->
+					
+					<!-- Page Title -->
+					<div class="col-12 col-md-6">
+						<div class="form-element">
+							<label for="modal_new_page_title">Title:</label>
+							<input
+								type="text"
+								id="modal_new_page_title"
+								name="modal_new_page_title"
+								class="form-control"
+							/>
+							<div id="modal_new_page_title-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Page Title -->
+				</div>
+			</div>
+			
+			<div class="modal-footer w-100 d-block p-1">
+				<div class="row">
+					<div class="col-12 col-sm-6 text-left">
+						<button class="btn btn-outline-secondary btn-sm">Clear</button>
+					</div>
+					
+					<div class="col-12 col-sm-6 text-right">
+						<button class="btn btn-outline-primary btn-sm">Cancel</button>
+						<button class="btn btn-primary btn-sm">Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /New Page Modal -->
+
+<!-- New Menu Modal -->
+<div class="modal top fade" id="modal_edit_menu" tabindex="-1" aria-labelledby="modal_edit_menu_label" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+				
+				<h4 class="modal-title debug" id="modal_edit_menu_label">Menu Item</h4>
+			</div>
+			
+			<div class="modal-body">
+				<div class="row">
+					<!-- Menu Id -->
+					<div class="col-12 col-md-6">
+						<div class="form-element">
+							<label for="modal_edit_menu_id">Id:</label>
+							<input
+								type="text"
+								id="modal_edit_menu_id"
+								name="modal_edit_menu_id"
+								class="form-control"
+								readonly="readonly"
+							/>
+							<div id="modal_edit_menu_id-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Menu Id -->
+					
+					<!-- Menu Enabled -->
+					<div class="col-12 col-md-6 d-flex align-self-end justify-content-end pb-2 mb-2">
+						<div class="form-element">
+							<div class="custom-control custom-switch">
+								<input
+									type="checkbox"
+									id="modal_edit_menu_enabled"
+									name="modal_edit_menu_enabled"
+									value="1"
+									class="custom-control-input"
+									readonly="readonly"
+									disabled="disabled"/>
+								<label for="modal_edit_menu_enabled" class="custom-control-label p-0">Enabled</label>
+							</div>
+							<div id="modal_edit_menu_enabled-error" class="error w-100 text-center">&nbsp;</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					
+					<div class="col-12 col-md-6">
+						<div class="form-element">
+							<label for="modal_edit_menu_role_id">Role:</label>
+							<select id="modal_edit_menu_role_id" name="modal_edit_menu_role_id" class="form-control"><?php echo $rolesDropDown; ?></select>
+							<div id="modal_edit_menu_role_id-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					
+					<div class="col-12 col-md-6">
+						<div class="form-element">
+							<label for="modal_edit_menu_parent_id">Parent Menu:</label>
+							<select id="modal_edit_menu_parent_id" name="modal_edit_menu_parent_id" class="form-control"><?php echo $menusDropDown; ?></select>
+							<div id="modal_edit_menu_parent_id-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+				
+				</div>
+				
+				<div class="row">
+					<div class="col-12 col-md-6">
+						<div class="form-element">
+							<label for="modal_edit_menu_name">Label:</label>
+							<input
+								type="text"
+								id="modal_edit_menu_name"
+								name="modal_edit_menu_name"
+								class="form-control"/>
+							<div id="modal_edit_menu_name-error" class="error w-100 text-center">&nbsp;</div>
+						</div>
+					</div>
+					
+					<div class="col-12 col-md-6">
+						<div class="form-element">
+							<label for="modal_edit_menu_icon  d-block">Icon:</label>
+							<select
+								id="modal_edit_menu_icon"
+								name="modal_edit_menu_icon"
+								class="form-control">
+								<?php echo $iconsDropDown; ?>
+							</select>
+							<div id="modal_edit_menu_icon-error" class="error w-100 text-center">&nbsp;</div>
+						</div>
+					</div>
+				</div>
+			
+			</div>
+			
+			<div class="modal-footer w-100 d-block p-1">
+				<div class="row">
+					<div class="col-12 col-sm-6 text-left">
+						<button class="btn btn-outline-secondary btn-sm">Clear</button>
+					</div>
+					
+					<div class="col-12 col-sm-6 text-right">
+						<button class="btn btn-outline-primary btn-sm">Cancel</button>
+						<button class="btn btn-primary btn-sm">Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /New Menu Modal -->
+
+<script type="text/javascript">
+	$.fn.menuTree = function (settings) {
+		const _modal_edit_menu = document.getElementById("modal_edit_menu")
+		const _modal_edit_menu_role_id = document.getElementById("modal_edit_menu_role_id")
+		const _modal_edit_menu_id = document.getElementById("modal_edit_menu_id")
+		const _modal_edit_menu_enabled = document.getElementById("modal_edit_menu_enabled")
+		const _modal_edit_menu_parent_id = document.getElementById("modal_edit_menu_parent_id")
+		const _modal_edit_menu_icon = document.getElementById("modal_edit_menu_icon")
+		const _modal_edit_menu_name = document.getElementById("modal_edit_menu_name")
+		
+		let user_id = (document.getElementById('user_id')) ? (!isNaN(parseInt(document.getElementById('user_id').value))) ? parseInt(document.getElementById('user_id').value) : 4 : 4
+		let errors = []
+		
+		if (!settings) {
+			errors.push({
+				id: 1,
+				msg: "Missing Settings",
+			})
+		}
+		
+		if (!$(this).attr("id")) {
+			errors.push({
+				id: 2,
+				msg: "Missing Element Id",
+			})
+		}
+		
+		if (errors.length) {
+			console.log("errors", errors)
+			return
+		}
+		
+		//
+		
+		let elementId = $(this).attr("id")
+		let _this = document.getElementById($(this).attr("id"))
+		let $this = $(_this)
+		let id = elementId + "_menu_tree"
+		
+		let allMenus = new Map()
+		let parentMenus = new Map()
+		let childrenMenus = new Map()
+		
+		let $treeWrapper = $("<div/>", {
+			id: id + "_wrapper",
+		})
+		
+		let $treeElement = $("<textarea/>", {
+			id: id + "_input",
+		})
+		
+		let $buttonRow = $("<div/>", {
+			class: "row",
+		})
+		
+		let $buttonRowCol1 = $("<div/>", {
+			class: "col-12 col-md-6 text-left",
+		})
+		
+		let $buttonRowCol2 = $("<div/>", {
+			class: "col-12 col-md-6 text-right",
+		})
+		
+		let $updateButton = $("<button/>", {
+			id: id + "_button",
+			type: "button",
+			class: "btn btn-primary btn-sm waves-effect",
+			text: "Update",
+		})
+			.on("click", function () {
+				console.log("menuTree.$updateButton.click()")
+				let menuItems = $("#" + id + "_wrapper").jstree(true).get_json("#", { flat: false })
+				let parentMenuItems = (menuItems[0].children) ? menuItems[0].children : []
+				let menuItemsString = JSON.stringify(menuItems)
+				let sortOrderParent = 0
+				
+				let menus = []
+				
+				$.each(parentMenuItems, function (k, parentMenuItem) {
+					let parentData = (parentMenuItem.data) ? parentMenuItem.data : null
+					let childMenuItems = (parentMenuItem.children) ? parentMenuItem.children : []
+					let sortOrderChild = 0
+					let temp = {
+						created_by: user_id,
+						date_created: formatDateMySQL(),
+						date_modified: formatDateMySQL(),
+						enabled: 1,
+						icon: (parentData.icon) ? parentData.icon : null,
+						id: (parentData.id) ? parentData.id : null,
+						label: (parentMenuItem.text) ? parentMenuItem.text : null,
+						link_url: (parentData.link_url) ? parentData.link_url : null,
+						modified_by: user_id,
+						note: null,
+						parent_id: 0,
+						roles_min: (parentData.roles_min) ? parentData.roles_min : null,
+						sort_order: sortOrderParent,
+					}
+					
+					menus.push(temp)
+					$.each(childMenuItems, function (k, childMenuItem) {
+						let childMenuItemData = (childMenuItem.data) ? childMenuItem.data : {}
+						console.log("childMenuItemData", childMenuItemData)
+						let tempChild = {
+							created_by: user_id,
+							date_created: formatDateMySQL(),
+							date_modified: formatDateMySQL(),
+							enabled: 1,
+							icon: null,
+							id: (childMenuItemData.id) ? childMenuItemData.id : null,
+							label: (childMenuItem.text) ? childMenuItem.text : null,
+							link_url: (childMenuItemData.link_url) ? childMenuItemData.link_url : null,
+							modified_by: user_id,
+							note: null,
+							parent_id: (childMenuItemData.parent_id) ? childMenuItemData.parent_id : null,
+							roles_min: (childMenuItemData.roles_min) ? childMenuItemData.roles_min : null,
+							sort_order: sortOrderParent,
+						}
+						sortOrderChild += 1
+						menus.push(tempChild)
+					})
+					sortOrderParent += 1
+				})
+				
+				update(menus)
+			})
+		
+		const handleMenuError = function (msg) {
+			console.log("msg", msg)
+		}
+		
+		const sendMenuUpdateRequest = function (dataToSend, callback) {
+			console.log("fn.menuTree.sendMenuUpdateRequest(dataToSend)", dataToSend)
+			if (dataToSend) {
+				let url = "/api/v1.0/pages/menus/update"
+				try {
+					console.log("dataToSend", dataToSend)
+					sendPostRequest(url, dataToSend, function (data, status, xhr) {
+						if (data) {
+							return callback(data)
+						} else {
+							return handleMenuError("Oops: 1")
+						}
+					})
+				} catch (e) {
+					console.log("error", e)
+				}
+			}
+		}
+		
+		const update = function (menus) {
+			console.log("fn.menuTree.update(menus)", menus)
+			if (menus) {
+				let dataToSend = { menus: [] }
+				$.each(menus, function (k, menu) {
+					console.log("    menu", menu)
+					dataToSend.menus.push(menu)
+				})
+				console.log("dataToSend", dataToSend)
+				confirmDialog(`Would you like to update?`, (ans) => {
+					if (ans) {
+						sendMenuUpdateRequest(dataToSend, function (data) {
+							console.log("data", data)
+							if (data) {
+								let detail = (data[0]) ? data[0] : data
+								
+							}
+						})
+					}
+				})
+			}
+			
+		}
+		
+		const renderElements = function () {
+			//console.log("menuTree.renderElements()")
+			$buttonRowCol2
+				.append($updateButton)
+			$buttonRow
+				.append($buttonRowCol1, $buttonRowCol2)
+			$this
+				.append($treeWrapper, $buttonRow, $treeElement)
+		}
+		
+		const unLoadMenuForm = function () {
+			console.log("menuTree.unLoadMenuForm()")
+			
+		}
+		
+		const loadMenuForm = function (menu) {
+			console.log("menuTree.loadMenuForm(menu)", menu)
+			clearMenuForm()
+			
+			if (menu) {
+				let detail = setMenuObject(menu)
+				console.log("    detail", detail.enabled)
+				let menuEnabled = (detail.enabled && parseInt(detail.enabled) === 1) ? true : false
+				_modal_edit_menu_role_id.value = (detail.roles_min) ? detail.roles_min : ""
+				_modal_edit_menu_id.value = (detail.id) ? detail.id : ""
+				_modal_edit_menu_enabled.checked = menuEnabled
+				_modal_edit_menu_parent_id.value = (detail.parent_id) ? detail.parent_id : ""
+				_modal_edit_menu_icon.value = (detail.icon) ? detail.icon : ""
+				_modal_edit_menu_name.value = detail.label
+			}
+			
+			$(_modal_edit_menu).modal("show")
+		}
+		
+		const clearMenuForm = function () {
+			console.log("menuTree.clearMenuForm()")
+			_modal_edit_menu_role_id.value = ""
+			_modal_edit_menu_id.value = ""
+			_modal_edit_menu_enabled.checked = true
+			_modal_edit_menu_parent_id.value = ""
+			_modal_edit_menu_icon.value = ""
+			_modal_edit_menu_name.value = ""
+		}
+		
+		const menuDefaultDetail = function () {
+			console.log("menuTree.menuDefaultDetail()")
+			return {
+				created_by: user_id,
+				date_created: formatDateMySQL(),
+				date_modified: formatDateMySQL(),
+				enabled: 1,
+				icon: null,
+				id: null,
+				label: null,
+				link_url: null,
+				modified_by: user_id,
+				note: null,
+				parent_id: 0,
+				roles_min: 1,
+				sort_order: 0,
+			}
+		}
+		
+		const setMenuObject = function (menu) {
+			console.log("menuTree.setMenuObject(menu)", menu)
+			let detail = menuDefaultDetail()
+			if (menu) {
+				detail.created_by = (!isNaN(parseInt(menu.created_by))) ? parseInt(menu.created_by) : user_id
+				detail.date_created = (menu.date_created) ? menu.date_created : formatDateMySQL()
+				detail.date_modified = (menu.date_modified) ? menu.date_modified : formatDateMySQL()
+				detail.enabled = (menu.enabled) ? menu.enabled : 1
+				detail.icon = (menu.icon) ? menu.icon : null
+				detail.id = (!isNaN(parseInt(menu.id))) ? parseInt(menu.id) : null
+				detail.label = (menu.label) ? menu.label : null
+				detail.link_url = (menu.link_url) ? menu.link_url : null
+				detail.modified_by = (!isNaN(parseInt(menu.modified_by))) ? parseInt(menu.modified_by) : user_id
+				detail.note = (menu.note) ? menu.note : null
+				detail.parent_id = (!isNaN(parseInt(menu.parent_id))) ? parseInt(menu.parent_id) : 0
+				detail.roles_min = (!isNaN(parseInt(menu.roles_min))) ? parseInt(menu.roles_min) : 1
+				detail.sort_order = (!isNaN(parseInt(menu.sort_order))) ? parseInt(menu.sort_order) : 0
+			}
+			return detail
+		}
+		
+		const customMenu = function (node) {
+			console.log("menuTree.customMenu(node)", node)
+			if (node.data) {
+				let data = (node.data) ? node.data : {}
+				let items = $.jstree.defaults.contextmenu.items(node)
+				
+				items.ccp.label = "Copy/Paste"
+				
+				items.edit = {
+					label: "Modify",
+					action: function (obj) {
+						if (data) {
+							loadMenuForm(data)
+							
+						}
+					},
+				}
+				
+				return items
+			}
+			
+		}
+		
+		const renderMenuTree = function (children) {
+			//console.log("menuTree.renderMenuTree(children)", children)
+			$treeWrapper
+				.jstree({
+					"core": {
+						"animation": 0,
+						"check_callback": true,
+						"themes": { "stripes": true },
+						"data": [
+							{
+								"text": "Menus",
+								"icon": "fas fa-sitemap",
+								"children": children,
+							},
+						],
+					},
+					"types": {
+						"#": {
+							"max_children": 1,
+							"max_depth": 4,
+							"valid_children": ["root"],
+						},
+						"root": {
+							
+							"valid_children": ["default"],
+						},
+						"default": {
+							"icon": "fas fa-folder-open",
+							"valid_children": ["file"],
+						},
+						"file": {
+							"icon": "glyphicon glyphicon-file",
+							"valid_children": [],
+						},
+					},
+					contextmenu: { items: customMenu },
+					"plugins": [
+						"contextmenu", "dnd", "search",
+						"state", "types", "wholerow",
+					],
+				})
+				.on("select_node.jstree", function (e, data) {
+					console.log("data", data)
+					/*
+					let i, j, r = []
+					for (i = 0, j = data.selected.length; i < j; i++) {
+						r.push(data.instance.get_node(data.selected[i]).text)
+					}
+					
+					$("#" + id + "_input").html("Selected: " + r.join(', '))
+					//*/
+				})
+		}
+		
+		const formatData = function (menus) {
+			console.log("menuTree.formatData(menus)", menus)
+			let menuData = []
+			allMenus = new Map()
+			
+			if (menus) {
+				$.each(menus, function (k, menuItem) {
+					allMenus.set(menuItem.id, menuItem)
+					
+					let subMenus = (menuItem.sub_menus) ? menuItem.sub_menus : []
+					
+					let pMenu = {
+						"id": menuItem.id,
+						"icon": menuItem.icon,
+						"text": menuItem.text,
+						"state": menuItem.state,
+						"data": menuItem,
+					}
+					
+					let cMenus = []
+					$.each(subMenus, function (k, subMenuItem) {
+						let sMenu = {
+							"id": subMenuItem.id,
+							"icon": "fas fa-file-alt",
+							"text": subMenuItem.text,
+							"state": subMenuItem.state,
+							"data": subMenuItem,
+						}
+						
+						cMenus.push(sMenu)
+					})
+					pMenu["children"] = cMenus
+					menuData.push(pMenu)
+				})
+				
+				return menuData
+			}
+		}
+		
+		const handleMenuTreeError = function (msg) {
+			toastr["error"](msg, "Error")
+		}
+		
+		const get = function (callback) {
+			let url = "/api/v1.0/pages/menus"
+			
+			try {
+				sendGetRequest(url, {}, function (data, status, xhr) {
+					if (data) {
+						return callback(data)
+					} else {
+						handleMenuTreeError("Oops: 1")
+					}
+				})
+			} catch (e) {
+				console.log("error", e)
+				handleMenuTreeError("Error Validating Unit")
+			}
+		}
+		
+		const init = function (settings) {
+			console.log("menuTree.init(settings)", settings)
+			
+			get(function (data) {
+				if (data) {
+					renderElements()
+					renderMenuTree(formatData(data))
+				}
+			})
+			
+		}
+		
+		init(settings)
+	}
+	
+	const MenuTree = (function () {
+		"use strict"
+		
+		let user_id = (document.getElementById('user_id')) ? (!isNaN(parseInt(document.getElementById('user_id').value))) ? parseInt(document.getElementById('user_id').value) : 4 : 4
+		
+		const init = function (settings) {
+			console.log("MenuTree", settings)
+		}
+		
+		return {
+			all: new Map(),
+			detail: {},
+			init: function (settings) {
+				init(settings)
+			},
+		}
+	})()
+	
+	$(document).ready(function () {
+		$("#menuSection").menuTree({
+			"core": {
+				"animation": 0,
+				"check_callback": true,
+				"themes": { "stripes": true },
+			},
+		})
+		/*
+		$('#jstree_demo').jstree({
+			"core": {
+				"animation": 0,
+				"check_callback": true,
+				"themes": { "stripes": true },
+				"data": [
+					{
+						"text": "Menus",
+						"icon": "fas fa-sitemap",
+						
+						"children": [
+							{
+								"id": 1,
+								"text": "Parent node 1",
+								"state": {
+									"disabled": false,
+									"selected": false,
+									"opened": true,
+								},
+								"children": [
+									{
+										"id": 3,
+										"icon": "fas fa-file-alt",
+										"text": "Child node 3",
+										"state": {
+											"disabled": false,
+											"selected": false,
+											"opened": true,
+										},
+									},
+									{
+										"id": 4,
+										"icon": "fas fa-file-alt",
+										"text": "Child node 4",
+										"state": {
+											"disabled": false,
+											"selected": false,
+											"opened": true,
+										},
+									},
+								],
+							},
+							{
+								"id": 2,
+								"text": "Parent node 2",
+								"state": {
+									"disabled": false,
+									"selected": false,
+									"opened": false,
+								},
+								"children": [
+									{
+										"id": 5,
+										"icon": "fas fa-file-alt",
+										"text": "Child node 5",
+										"state": {
+											"disabled": false,
+											"selected": false,
+											"opened": true,
+										},
+									},
+									{
+										"id": 6,
+										"icon": "fas fa-file-alt",
+										"text": "Child node 5",
+										"state": {
+											"disabled": false,
+											"selected": false,
+											"opened": true,
+										},
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			"types": {
+				"#": {
+					"max_children": 1,
+					"max_depth": 4,
+					"valid_children": ["root"],
+				},
+				"root": {
+					
+					"valid_children": ["default"],
+				},
+				"default": {
+					"icon": "fas fa-folder-open",
+					"valid_children": ["file"],
+				},
+				"file": {
+					"icon": "glyphicon glyphicon-file",
+					"valid_children": [],
+				},
+			},
+			"plugins": [
+				"contextmenu", "dnd", "search",
+				"state", "types", "wholerow",
+			],
+		})
+		//*/
+	})
+	
+	$(function () {
+		Types.init(<?php echo TYPES;?>)
+		<?php echo $init;?>
+	})
+
+</script>

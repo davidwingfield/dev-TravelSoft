@@ -1,6 +1,51 @@
 <style>
-	td.fc-more-cell {
-		
+	table.dataTable thead > tr > th.sorting_asc,
+	table.dataTable thead > tr > th.sorting_desc,
+	table.dataTable thead > tr > th.sorting,
+	table.dataTable thead > tr > td.sorting_asc,
+	table.dataTable thead > tr > td.sorting_desc,
+	table.dataTable thead > tr > td.sorting {
+		padding-right: 1rem;
+		padding-left: 2rem;
+		}
+	
+	table.dataTable thead tr th {
+		padding-top: .25rem;
+		padding-bottom: .25rem;
+		}
+	
+	table.dataTable thead .sorting:after,
+	table.dataTable thead .sorting_asc:after,
+	table.dataTable thead .sorting_desc:after,
+	table.dataTable thead .sorting_asc_disabled:after,
+	table.dataTable thead .sorting_desc_disabled:after {
+		bottom: 0.25rem;
+		}
+	
+	table.dataTable thead .sorting:before,
+	table.dataTable thead .sorting_asc:before,
+	table.dataTable thead .sorting_desc:before,
+	table.dataTable thead .sorting_asc_disabled:before,
+	table.dataTable thead .sorting_desc_disabled:before {
+		left: 0.4rem;
+		font-size: 1rem;
+		bottom: .25rem;
+		}
+	
+	div.dataTables_wrapper div:nth-child(3) {
+		border-top: 1px solid rgba(0, 0, 0, 0.125);
+		padding-top: 0.27rem;
+		padding-left: 0.25rem;
+		padding-right: 0;
+		}
+	
+	div.dataTables_info {
+		font-size: .9rem;
+		color: #212529;
+		background-color: transparent;
+		border: 0;
+		outline: 0;
+		transition: all .3s linear;
 		}
 	
 	.modal-header .close {
@@ -35,8 +80,27 @@
 		color: #495057;
 		}
 	
+	.label,
+	.keyword input::placeholder {
+		padding: 0.429rem 0;
+		font-weight: 400;
+		display: inline-block;
+		margin-bottom: 0.15rem;
+		font-family: Roboto, sans-serif;
+		font-size: 1rem;
+		line-height: 1.571429;
+		text-align: left;
+		color: #0a070d;
+		}
+	
 	section.card.card-body,
 	form.card.card-body {
+		border: 1px solid rgba(0, 0, 0, 0.125);
+		border-radius: 0.125rem;
+		box-shadow: none;
+		padding: 0.5rem;
+		margin-bottom: 0.5rem;
+		height: auto;
 		border: 1px solid rgba(0, 0, 0, 0.125);
 		border-radius: 0.125rem;
 		box-shadow: none;

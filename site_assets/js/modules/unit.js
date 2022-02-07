@@ -124,7 +124,7 @@ const Unit = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleUnitError("Oops: 1")
+                        handleUnitError("Oops: 1")
                     }
                 })
             } catch (e) {
@@ -284,14 +284,43 @@ const Unit = (function () {
                 } else {
                     confirmDialog(`The unit: ${name} does not exist exists. Would you like to create it?`, (ans) => {
                         if (ans) {
-                            $table_unit_product_edit.clearSelectedRows()
-                            globalSelectedUnit = false
+                            let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+                            let unitName = (name) ? name : null
                             
-                            clearForm()
+                            let newUnit = removeNulls({
+                                category_id: category_id,
+                                name: unitName,
+                            })
                             
-                            _product_edit_unit_form_unit_name.value = name
-                            loadForm()
-                            enableFormFields()
+                            try {
+                                sendPostRequest("/api/v1.0/units/new", newUnit, function (data, status, xhr) {
+                                    
+                                    if (data) {
+                                        let unit = data
+                                        if (data[0]) {
+                                            unit = data[0]
+                                        }
+                                        
+                                        let detail = set(unit)
+                                        
+                                        console.log("detail", detail)
+                                        
+                                        $table_unit_product_edit.clearSelectedRows()
+                                        globalSelectedUnit = false
+                                        
+                                        clearForm()
+                                        
+                                        //_product_edit_unit_form_unit_name.value = name
+                                        populateForm(detail)
+                                        enableFormFields()
+                                    } else {
+                                    
+                                    }
+                                })
+                            } catch (e) {
+                                console.log("error", e)
+                            }
+                            
                         } else {
                             resetForm()
                             $table_unit_product_edit.clearSelectedRows()
@@ -318,15 +347,15 @@ const Unit = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handleUnitError("Oops: 1")
+                        handleUnitError("Oops: 1")
                     }
                 })
             } catch (e) {
                 console.log("error", e)
-                return handleUnitError("Error Validating Unit")
+                handleUnitError("Error Validating Unit")
             }
         } else {
-            return handleUnitError("Error Loading Unit - Missing Data")
+            handleUnitError("Error Loading Unit - Missing Data")
         }
     }
     
@@ -433,8 +462,6 @@ const Unit = (function () {
     }
     
     const validUnitRecord = function () {
-        //console.log("Unit.validUnitRecord()", Unit)
-        // ----
         let valid = $(_product_edit_unit_form).valid()
         let min_pax = (!isNaN(parseInt(_product_edit_unit_form_unit_min_pax.value))) ? parseInt(_product_edit_unit_form_unit_min_pax.value) : null
         let max_pax = (!isNaN(parseInt(_product_edit_unit_form_unit_max_pax.value))) ? parseInt(_product_edit_unit_form_unit_max_pax.value) : null
@@ -527,15 +554,16 @@ const Unit = (function () {
     
     const disableFormFields = function () {
         _product_edit_unit_form_unit_id.disabled = true
-        _product_edit_unit_form_unit_name.disabled = true
         _product_edit_unit_form_unit_room_code.disabled = true
         _product_edit_unit_form_unit_min_nights.disabled = true
-        _product_edit_unit_form_unit_max_nights.disabled = true
         _product_edit_unit_form_unit_min_pax.disabled = true
-        _product_edit_unit_form_unit_max_pax.disabled = true
-        _product_edit_unit_form_unit_description_short.disabled = true
-        _product_edit_unit_form_unit_description_long.disabled = true
-        _product_edit_unit_form_unit_enabled.disabled = true
+        
+        _product_edit_unit_form_unit_name.disabled = false
+        _product_edit_unit_form_unit_max_nights.disabled = false
+        _product_edit_unit_form_unit_max_pax.disabled = false
+        _product_edit_unit_form_unit_description_short.disabled = false
+        _product_edit_unit_form_unit_description_long.disabled = false
+        _product_edit_unit_form_unit_enabled.disabled = false
     }
     
     const enableFormFields = function () {

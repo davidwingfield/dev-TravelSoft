@@ -16,7 +16,6 @@
 	 */
 	class Product extends Controller
 	{
-		
 		protected static $buttons = array(
 			"save" => array(
 				"type" => "a",
@@ -225,35 +224,27 @@
 			exit(0);
 		}
 		
-		public static function getProductByProductId(int $product_id = null): array
-		{
-			if (is_null($product_id)) {
-				return [];
-			}
-			
-			$results = ProductModel::get($product_id);
-			
-			$products = [];
-			foreach ($results AS $k => $product) {
-				$products[] = self::format($product);
-			}
-			
-			return $products;
-		}
-		
 		public static function edit(array $params = [])
 		{
 			if (isset($params["product_id"])) {
 				$product_id = (int)$params["product_id"];
-				$data = Page::getDetails(10);
 				$results = [];
+				
+				$data = Page::getDetails(10);
 				$products = ProductModel::get($product_id);
+				
+				/**
+				 * Redirect if product not found.
+				 */
 				if (count($products) === 0) {
 					header("Location: /products");
 					exit(0);
 				}
 				
-				foreach (ProductModel::get($product_id) AS $k => $product) {
+				/**
+				 * loop and format product object
+				 */
+				foreach ($products AS $k => $product) {
 					$results[] = self::format($product);
 				}
 				
@@ -263,7 +254,7 @@
 				
 				$data["product_details"] = $results;
 				
-				/** breadcrumbs */
+				/** Breadcrumbs */
 				define("BREAD_CRUMBS", "
                     <li class='breadcrumb-item'>
                         <a href='/'>Home</a>
@@ -276,17 +267,12 @@
                     </li>"
 				);
 				
-				/**
-				 * tabs
-				 */
-				$tabs = self::$tabs;
-				
 				$data["buttons"] = array(
 					self::$buttons["calendar"],
 					self::$buttons["save"],
 					self::$buttons["new"],
 				);
-				$data["tabs"] = $tabs;
+				$data["tabs"] = self::$tabs;
 				
 				/**
 				 * render product edit page
@@ -404,8 +390,9 @@
 			if (is_null($product)) {
 				return [];
 			}
-			$rooms = array();
 			
+			$rooms = array();
+			$category_id = (int)$product['category_id'];
 			$matrices = Matrix::getMatricesByProductId((int)$product['product_id']);
 			$profiles = Profile::getByProductId((int)$product['product_id']);
 			$seasons = Season::getSeasonsByProductId((int)$product['product_id']);
@@ -438,13 +425,24 @@
 			$vendor = (isset($vendor[0])) ? $vendor[0] : [];
 			
 			$use_provider_location = false;
-			$location = Location::getByLocationId((int)$product['product_location_id']);
+			$location = Location::getByLocationId((int)$product["product_location_id"]);
+			
+			$street_1 = (isset($product['product_street_1'])) ? $product['product_street_1'] : null;
+			$street_2 = (isset($product['product_street_2'])) ? $product['product_street_2'] : null;
+			$zipcode = (isset($product['product_postal_code'])) ? $product['product_postal_code'] : null;
+			
+			if ($category_id === 1) {
+				$location["street_1"] = $street_1;
+				$location["street_2"] = $street_2;
+				$location["postal_code"] = $zipcode;
+			}
+			
 			$location_id = (int)$product['product_location_id'];
 			
 			return array(
 				'id' => $product['product_id'],
 				'use_provider_location' => $use_provider_location,
-				'category_id' => $product['product_category_id'],
+				'category_id' => $category_id,
 				'pricing_strategy_types_id' => $product['product_pricing_strategy_types_id'],
 				'status_types_id' => $product['product_status_types_id'],
 				'amenities' => $product['product_amenities'],
@@ -476,9 +474,10 @@
 				'date_modified' => $product['product_date_modified'],
 				'modified_by' => $product['product_modified_by'],
 				'note' => $product['product_note'],
-				'street_1' => ($product['product_street_1']) ? $product['product_street_1'] : null,
-				'street_2' => ($product['product_street_2']) ? $product['product_street_2'] : null,
-				'postal_code' => ($product['product_postal_code']) ? $product['product_postal_code'] : null,
+				
+				'street_1' => $street_1,
+				'street_2' => $street_2,
+				'postal_code' => $zipcode,
 				
 				'status_type_detail' => array(
 					'id' => $product['status_types_id'],
@@ -585,6 +584,22 @@
 			header("Content-type:application/json");
 			View::render_json($products);
 			exit(0);
+		}
+		
+		public static function getProductByProductId(int $product_id = null): array
+		{
+			if (is_null($product_id)) {
+				return [];
+			}
+			
+			$results = ProductModel::get($product_id);
+			
+			$products = [];
+			foreach ($results AS $k => $product) {
+				$products[] = self::format($product);
+			}
+			
+			return $products;
 		}
 		
 	}

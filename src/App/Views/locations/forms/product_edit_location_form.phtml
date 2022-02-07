@@ -74,289 +74,226 @@
 		$selectLocationTypes .= "<option value='$val'>$text</option>";
 	}
 	
-	/*
-	if (isset($product["provider"]["location"])) {
-		$provider_location = $product["provider"]["location"];
-		$provider_city_name = (isset($provider_location["city"]["name"])) ? $provider_location["city"]["name"] : null;
-		$provider_country_iso2 = (isset($provider_location["country"]["iso2"])) ? $provider_location["country"]["iso2"] : null;
-		$provider_country_iso3 = (isset($provider_location["country"]["iso3"])) ? $provider_location["country"]["iso3"] : null;
-		$provider_country_name = (isset($provider_location["country"]["name"])) ? $provider_location["country"]["name"] : null;
-		$provider_province_iso2 = (isset($provider_location["province"]["iso2"])) ? $provider_location["province"]["iso2"] : null;
-		$provider_province_iso3 = (isset($provider_location["province"]["iso3"])) ? $provider_location["province"]["iso3"] : null;
-		$provider_province_name = (isset($provider_location["province"]["name"])) ? $provider_location["province"]["name"] : null;
-		$provider_city_name = (isset($provider_location["city"]["name"])) ? $provider_location["city"]["name"] : null;
-		$provider_location_type_icon = (isset($provider_location["type"]["icon"])) ? $provider_location["type"]["icon"] : "";
-		$provider_location_name = (isset($provider_location["display_short"])) ? $provider_location["display_short"] : "";
-		$provider_location_street_1 = (isset($provider_location["street_1"])) ? $provider_location["street_1"] : null;
-		$provider_location_street_2 = (isset($provider_location["street_2"])) ? $provider_location["street_2"] : null;
-		$provider_location_zipcode = (isset($provider_location["zipcode"])) ? $provider_location["zipcode"] : null;
-		
-		if (!is_null($provider_location_street_1)) {
-			$provider_address[] = $provider_location_street_1;
-		}
-		
-		if (!is_null($provider_location_street_2)) {
-			$provider_address[] = $provider_location_street_2;
-		}
-		
-		if (!is_null($provider_city_name)) {
-			$provider_address[] = $provider_city_name;
-		}
-		
-		if (is_null($provider_location_zipcode)) {
-			$provider_location_zipcode = "";
-		}
-		
-		if (!is_null($provider_province_iso2)) {
-			$provider_address[] = $provider_province_iso2 . " " . $provider_location_zipcode;
-		} else if (!is_null($provider_province_iso3)) {
-			$provider_address[] = $provider_province_iso3 . " " . $provider_location_zipcode;
-		} else if (!is_null($provider_province_name)) {
-			$provider_address[] = $provider_province_name . " " . $provider_location_zipcode;
-		}
-		
-		if (!is_null($provider_country_iso3)) {
-			$provider_address[] = $provider_country_iso3;
-		} else if (!is_null($provider_country_iso2)) {
-			$provider_address[] = $provider_country_iso2;
-		} else if (!is_null($provider_country_name)) {
-			$provider_address[] = $provider_country_name;
-		}
-		
-		$provider_location_address = implode(", ", $provider_address);
-	}
+	$product_category_id = $product["category_id"];
 
-	if ($product["use_provider_location"]) {
-		$display_location = $product_location["name"];
-	} else {
-		$display_location = $provider_location["name"];
-	}
-	
-	$location_types = [];
-	if (isset($data["types"]["location_types"])) {
-		$location_types = $data["types"]["location_types"];
-	}
-	//*/
 ?>
 <!-- Pricing Section -->
 <section id="product_edit_location_section" class="section">
-	
 	<div class="row">
 		
 		<div class="col-12 col-md-8 mb-2">
 			
-			<div class="row">
+			<?php if ($product_category_id === 1) { ?>
 				
-				<div class="col-12 mb-2">
-					<div class="form-element">
-						
-						<div class="input-group form-sm form-1 pl-0">
-							
-							<div class="input-group-prepend">
+				<!-- Location Search Filter -->
+				<div class="row">
+					<div class="col-12 mb-2">
+						<div class="form-element">
+							<div class="input-group form-sm form-1 pl-0">
+								
+								<div class="input-group-prepend">
 		                        <span class="input-group-text">
 		                            <i class="fas fa-search" aria-hidden="true"></i>
 		                        </span>
-							</div>
+								</div>
+								
+								<input type="search" id="product_location_search" name="product_location_search" class="form-control my-0 py-1" placeholder="Search" aria-label="Search" value="<?php echo ($display_location) ? $display_location : ''; ?>"/>
 							
-							<input type="search" id="product_location_search" name="product_location_search" class="form-control my-0 py-1" placeholder="Search" aria-label="Search" value="<?php echo ($display_location) ? $display_location : ''; ?>"/>
-						
+							</div>
 						</div>
-					
 					</div>
 				</div>
-			
-			</div>
-			
-			<div class="row">
-				<div class="col-12 mb-2">
-					<div id="locationMap" class="w-100"></div>
-				</div>
-			</div>
-			
-			<div class="row">
+				<!-- /Location Search Filter -->
 				
-				<div class="col-12 mb-2">
-					<form id="product_edit_location_form" name="product_edit_location_form" class="card card-body" novalidate="novalidate">
-						<h5 class="card-title">
-							<span>Location</span>
-							<a type="button" href="javascript:void(0);" id="product_edit_location_form_close_button" class="panel-button-close fas fa-times" aria-hidden="true"></a>
-						</h5>
-						<h6 class="card-subtitle mb-2 text-muted">&nbsp;</h6>
-						<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-						
-						<div class="row">
+				<!-- Location Map -->
+				<div class="row">
+					<div class="col-12 mb-2">
+						<div id="locationMap" class="w-100"></div>
+					</div>
+				</div>
+				<!-- /Location Map -->
+				
+				<!-- Location Form -->
+				<div class="row">
+					<div class="col-12 mb-2">
+						<form id="product_edit_location_form" name="product_edit_location_form" class="card card-body" novalidate="novalidate">
+							<h5 class="card-title">
+								<span>Location</span>
+								<a type="button" href="javascript:void(0);" id="product_edit_location_form_close_button" class="panel-button-close fas fa-times" aria-hidden="true"></a>
+							</h5>
+							<h6 class="card-subtitle mb-2 text-muted">&nbsp;</h6>
+							<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
 							
-							<div class="col-12 col-md-8 mb-2">
+							<div class="row">
 								
-								<div class="row">
-									
-									<div class="col-12 mb-2">
-										
-										<div class="form-element">
-											<label for="product_edit_location_street_1">Street 1:</label>
-											<input type="text" id="product_edit_location_street_1" name="product_edit_location_street_1" class="form-control"/>
-											<div id="product_edit_location_street_1-error" class="error w-100">&nbsp;</div>
-										</div>
-									
-									</div>
-								
-								</div>
-								
-								<div class="row">
-									
-									<div class="col-12 mb-2">
-										
-										<div class="form-element">
-											<label for="product_edit_location_street_2">Street 2:</label>
-											<input type="text" id="product_edit_location_street_2" name="product_edit_location_street_2" class="form-control"/>
-											<div id="product_edit_location_street_2-error" class="error w-100">&nbsp;</div>
-										</div>
-									
-									</div>
-								
-								</div>
-								
-								<div class="row">
-									
-									<div class="col-12 col-md-8 mb-2">
-										
-										<div class="form-element">
-											<label for="product_edit_location_city" class="">City / Province / Country:</label>
-											<input type="search" id="product_edit_location_city" name="product_edit_location_city" class="form-control"/>
-											<div id="product_edit_location_city-error" class="error w-100 text-center">&nbsp;</div>
-										</div>
-									
-									</div>
-									
-									<div class="col-12 col-md-4 mb-2">
-										
-										<div class="form-element">
-											<label for="product_edit_location_zipcode" class="">Postal Code:</label>
-											<input type="text" id="product_edit_location_zipcode" name="product_edit_location_zipcode" class="form-control"/>
-											<div id="product_edit_location_zipcode-error" class="error w-100 text-center">&nbsp;</div>
-										</div>
-									
-									</div>
-								
-								</div>
-								
-								<div id="product_edit_location_city_edit" class="card card-body border border-dark d-block">
+								<div class="col-12 col-md-8 mb-2">
 									
 									<div class="row">
 										
-										<div class="col-12 col-md-4 pl-1 pr-0">
-											<div class="form-element">
-												<label for="location_country_id">Country:</label>
-												<select class="form-control" name="location_country_id" id="location_country_id" data-type="country" style="width:100%;"></select>
-												<div class="error w-100 text-center" id="location_country_id-error"></div>
-											</div>
-										</div>
-										
-										<div class="col-12 col-md-4 pl-1 pr-0">
+										<div class="col-12 mb-2">
 											
 											<div class="form-element">
-												
-												<label for="location_province_id">Province:</label>
-												<select class="form-control" name="location_province_id" id="location_province_id" data-type="province" style="width:100%;" required></select>
-												<div class="error w-100 text-center" id="location_province_id-error"></div>
-											
-											</div>
-										
-										</div>
-										
-										<div class="col-12 col-md-4 pl-1 pr-1">
-											
-											<div class="form-element">
-												
-												<label for="location_city_id">City:</label>
-												<select class="form-control" name="location_city_id" id="location_city_id" data-type="city" style="width:100%;" required></select>
-												<div class="error w-100 text-center" id="location_city_id-error"></div>
-											
+												<label for="product_edit_location_street_1">Street 1:</label>
+												<input type="text" id="product_edit_location_street_1" name="product_edit_location_street_1" class="form-control"/>
+												<div id="product_edit_location_street_1-error" class="error w-100">&nbsp;</div>
 											</div>
 										
 										</div>
 									
 									</div>
-								
-								</div>
-							
-							</div>
-							
-							<div class="col-12 col-md-4 mb-2">
-								
-								<div class="row">
 									
-									<div class="col-12 mb-2">
-										<div class="form-element">
-											<label for="product_edit_location_id" class="">Location Id:</label>
-											<input type="text" id="product_edit_location_id" name="product_edit_location_id" class="form-control" value="<?php echo $product_location_id; ?>" readonly="readonly">
-											<div id="product_edit_location_id-error" class="error w-100 text-center">&nbsp;</div>
-										</div>
-									</div>
-								
-								</div>
-								
-								<div class="row">
-									
-									<div class="col-12 mb-2">
-										<label for="product_edit_location_name" class="">Location Name:</label>
-										<input type="text" id="product_edit_location_name" name="product_edit_location_name" class="form-control">
-										<div id="product_edit_location_name-error" class="error w-100 text-center">&nbsp;</div>
-									</div>
-								
-								</div>
-								
-								<div class="row">
-									
-									<div class="col-12 mb-2">
+									<div class="row">
 										
-										<div class="form-element">
-											<label for="product_edit_location_location_types_id">Location Type:</label>
-											<select id="product_edit_location_location_types_id" name="product_edit_location_location_types_id" class="form-control">
-												<?php echo $selectLocationTypes; ?>
-											</select>
-											<div id="product_edit_location_location_types_id-error" class="error w-100">&nbsp;</div>
+										<div class="col-12 mb-2">
+											
+											<div class="form-element">
+												<label for="product_edit_location_street_2">Street 2:</label>
+												<input type="text" id="product_edit_location_street_2" name="product_edit_location_street_2" class="form-control"/>
+												<div id="product_edit_location_street_2-error" class="error w-100">&nbsp;</div>
+											</div>
+										
+										</div>
+									
+									</div>
+									
+									<div class="row">
+										
+										<div class="col-12 col-md-8 mb-2">
+											
+											<div class="form-element">
+												<label for="product_edit_location_city" class="">City / Province / Country:</label>
+												<input type="search" id="product_edit_location_city" name="product_edit_location_city" class="form-control"/>
+												<div id="product_edit_location_city-error" class="error w-100 text-center">&nbsp;</div>
+											</div>
+										
+										</div>
+										
+										<div class="col-12 col-md-4 mb-2">
+											
+											<div class="form-element">
+												<label for="product_edit_location_zipcode" class="">Postal Code:</label>
+												<input type="text" id="product_edit_location_zipcode" name="product_edit_location_zipcode" class="form-control"/>
+												<div id="product_edit_location_zipcode-error" class="error w-100 text-center">&nbsp;</div>
+											</div>
+										
+										</div>
+									
+									</div>
+									
+									<div id="product_edit_location_city_edit" class="card card-body border border-dark d-block">
+										
+										<div class="row">
+											
+											<div class="col-12 col-md-4 pl-1 pr-0">
+												<div class="form-element">
+													<label for="location_country_id">Country:</label>
+													<select class="form-control" name="location_country_id" id="location_country_id" data-type="country" style="width:100%;"></select>
+													<div class="error w-100 text-center" id="location_country_id-error"></div>
+												</div>
+											</div>
+											
+											<div class="col-12 col-md-4 pl-1 pr-0">
+												<div class="form-element">
+													<label for="location_province_id">Province:</label>
+													<select class="form-control" name="location_province_id" id="location_province_id" data-type="province" style="width:100%;" required></select>
+													<div class="error w-100 text-center" id="location_province_id-error"></div>
+												</div>
+											</div>
+											
+											<div class="col-12 col-md-4 pl-1 pr-1">
+												<div class="form-element">
+													<label for="location_city_id">City:</label>
+													<select class="form-control" name="location_city_id" id="location_city_id" data-type="city" style="width:100%;" required></select>
+													<div class="error w-100 text-center" id="location_city_id-error"></div>
+												</div>
+											</div>
+										
 										</div>
 									
 									</div>
 								
 								</div>
+								
+								<div class="col-12 col-md-4 mb-2">
+									
+									<div id="product_edit_location_detail" class="p-1 border rounded">
+										
+										<div class="row">
+											
+											<div class="col-12 mb-2">
+												<div class="form-element">
+													<label for="product_edit_location_id" class="">Location Id:</label>
+													<input type="text" id="product_edit_location_id" name="product_edit_location_id" class="form-control" value="" readonly="readonly"/>
+													<div id="product_edit_location_id-error" class="error w-100 text-center">&nbsp;</div>
+												</div>
+											</div>
+										
+										</div>
+										
+										<div class="row">
+											
+											<div class="col-12 mb-2">
+												<label for="product_edit_location_name" class="">Location Name:</label>
+												<input type="text" id="product_edit_location_name" name="product_edit_location_name" class="form-control"/>
+												<div id="product_edit_location_name-error" class="error w-100 text-center">&nbsp;</div>
+											</div>
+										
+										</div>
+										
+										<div class="row">
+											<div class="col-12 mb-2">
+												<div class="form-element">
+													<label for="product_edit_location_location_types_id">Location Type:</label>
+													<select id="product_edit_location_location_types_id" name="product_edit_location_location_types_id" class="form-control">
+														<?php echo $selectLocationTypes; ?>
+													</select>
+													<div id="product_edit_location_location_types_id-error" class="error w-100">&nbsp;</div>
+												</div>
+											</div>
+										</div>
+									
+									</div>
+								</div>
 							
 							</div>
+							
+							<div class="row">
+								
+								<div class="col-6 text-left w-100 mb-2">
+								
+								</div>
+								
+								<div class="col-6 text-right w-100 mb-2">
+									<a href="javascript:void(0);" id="button_clear_form_product_edit_location" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+									<a href="javascript:void(0);" id="button_submit_form_product_edit_location" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
+								</div>
+							
+							</div>
+							
+							<!-- HIDDEN FIELDS -->
+							<div class="row">
+								<div class="col-12 col-md-3 p-1 mb-1">
+									<label for="product_edit_location_id" class="dev-element d-none">Product Location:</label>
+									<input type="hidden" id="product_edit_location_id" name="product_edit_location_id" class="form-control mb-1 dev-element" readonly="readonly"/>
+								</div>
+								
+								<div class="col-12 col-md-3 p-1 mb-1">
+									<label for="product_edit_location_city_id" class="dev-element d-none">Product City Id:</label>
+									<input type="hidden" id="product_edit_location_city_id" name="product_edit_location_city_id" class="form-control mb-1 dev-element" readonly="readonly"/>
+								</div>
+							</div>
+							<!-- /HIDDEN FIELDS -->
 						
-						</div>
-						
-						<div class="row">
-							
-							<div class="col-6 text-left w-100 mb-2">
-							
-							</div>
-							
-							<div class="col-6 text-right w-100 mb-2">
-								<a href="javascript:void(0);" id="button_clear_form_product_edit_location" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
-								<a href="javascript:void(0);" id="button_submit_form_product_edit_location" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
-							</div>
-						
-						</div>
-						
-						<!-- HIDDEN FIELDS -->
-						<div class="row">
-							<div class="col-12 col-md-3 p-1 mb-1">
-								<label for="product_edit_location_id" class="dev-element d-none">Product Location:</label>
-								<input type="hidden" id="product_edit_location_id" name="product_edit_location_id" class="form-control mb-1 dev-element" readonly="readonly"/>
-							</div>
-							
-							<div class="col-12 col-md-3 p-1 mb-1">
-								<label for="product_edit_location_city_id" class="dev-element d-none">Product City Id:</label>
-								<input type="hidden" id="product_edit_location_city_id" name="product_edit_location_city_id" class="form-control mb-1 dev-element" readonly="readonly"/>
-							</div>
-						</div>
-						<!-- /HIDDEN FIELDS -->
-					
-					</form>
+						</form>
+					</div>
 				</div>
+				<!-- /Location Form -->
 			
-			</div>
+			<?php } else if ($product_category_id === 2) { ?>
+			
+			<?php } else { ?>
+			
+			<?php } ?>
 		
 		</div>
 		
@@ -382,356 +319,3 @@
 
 </section>
 
-<script type="text/javascript">
-	const ProductLocation = (function () {
-		"use strict"
-		const _product_location_search = document.getElementById("product_location_search")
-		const _product_edit_location_city_id = document.getElementById("product_edit_location_city_id")
-		const _product_edit_location_city = document.getElementById("product_edit_location_city")
-		const _product_edit_location_street_1 = document.getElementById("product_edit_location_street_1")
-		const _product_edit_location_street_2 = document.getElementById("product_edit_location_street_2")
-		const _product_edit_location_zipcode = document.getElementById("product_edit_location_zipcode")
-		const _product_edit_location_location_types_id = document.getElementById("product_edit_location_location_types_id")
-		const _product_edit_location_name = document.getElementById("product_edit_location_name")
-		const _button_submit_form_product_edit_location = document.getElementById("button_submit_form_product_edit_location")
-		const _button_clear_form_product_edit_location = document.getElementById("button_clear_form_product_edit_location")
-		const _product_edit_location_form_close_button = document.getElementById("product_edit_location_form_close_button")
-		const _product_edit_location_city_edit = document.getElementById("product_edit_location_city_edit")
-		const _location_country_id = document.getElementById("location_country_id")
-		const _location_province_id = document.getElementById("location_province_id")
-		const _location_city_id = document.getElementById("location_city_id")
-		const _category_id = document.getElementById("category_id")
-		
-		let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-		let category_id
-		
-		$(_button_clear_form_product_edit_location)
-			.on("click", function () {
-				resetForm()
-			})
-		
-		$(_location_city_id)
-			.on("change", function () {
-				let cityLine = ""
-				let country_id = (!isNaN(parseInt(_location_country_id.value))) ? parseInt(_location_country_id.value) : null
-				let province_id = (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null
-				let city_id = (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null
-				
-				let country = Country.all.get(country_id)
-				let province = Province.all.get(province_id)
-				let city = City.all.get(city_id)
-				
-				if (country && province && city) {
-					let cityName = city.name
-					let provinceName = province.name
-					let countryName = country.name
-					_product_edit_location_city_id.value = city.id
-					cityLine = `${cityName} (${provinceName}, ${countryName})`
-				} else {
-					cityLine = ``
-					_product_edit_location_city_id.value = ``
-				}
-				
-				_product_edit_location_city.value = cityLine
-			})
-		
-		const init = function (settings) {
-			let mapsParams = []
-			let location
-			
-			if (settings) {
-				if (settings.product_location) {
-					location = settings.product_location
-					let locationStreet1 = (settings.product.street_1) ? settings.product.street_1 : null
-					let locationStreet2 = (settings.product.street_2) ? settings.product.street_2 : null
-					let locationPostalCode = (settings.product.postal_code) ? settings.product.postal_code : null
-					let locationCity = (settings.product_location.city.name) ? settings.product_location.city.name : null
-					let locationProvince = (settings.product_location.province.name) ? settings.product_location.province.name : null
-					let locationCountry = (settings.product_location.country.iso2) ? settings.product_location.country.iso2 : null
-					if (locationStreet1) {
-						if (locationStreet2) {
-							mapsParams.push((locationStreet1) + "+" + (locationStreet2))
-						} else {
-							mapsParams.push((locationStreet1))
-						}
-					} else {
-						if (locationStreet2) {
-							mapsParams.push((locationStreet2))
-						}
-					}
-					
-					if (locationCity) {
-						mapsParams.push((locationCity))
-					}
-					
-					if (locationProvince) {
-						mapsParams.push((locationProvince))
-					}
-					
-					if (locationCountry) {
-						mapsParams.push((locationCountry))
-					}
-					
-					if (locationPostalCode) {
-						mapsParams.push((locationPostalCode))
-					}
-					
-					let mapAddress = mapsParams.join(",")
-					mapAddress = mapAddress.replace(/\s+/g, '+').toLowerCase()
-					
-					let iFrame = $("<iframe/>", {
-						class: "w-100 h-auto",
-						src: `https://maps.google.com/maps?q=${mapAddress}&t=&z=13&ie=UTF8&iwloc=&output=embed`,
-						frameborder: "0",
-						allowfullscreen: "allowfullscreen",
-					})
-					
-					//$("#locationMap").append(iFrame)
-					
-				}
-			}
-			
-			$(_location_country_id).BuildDropDown({
-				data: Array.from(Country.all.values()),
-				title: "Country",
-				id_field: "id",
-				text_field: "name",
-				first_selectable: false,
-			})
-			
-			$(_location_province_id).BuildDropDown({
-				data: Array.from(Province.all.values()),
-				title: "Province",
-				id_field: "id",
-				text_field: "name",
-				first_selectable: false,
-			})
-			
-			$(_location_city_id).BuildDropDown({
-				data: Array.from(City.all.values()),
-				title: "City",
-				id_field: "id",
-				text_field: "name",
-				first_selectable: false,
-			})
-			
-			Country.init({
-				dropdowns: [
-					"location_country_id",
-				],
-			})
-			
-			Province.init({
-				dropdowns: [
-					"location_province_id",
-				],
-			})
-			
-			City.init({
-				dropdowns: [
-					"location_city_id",
-				],
-			})
-			
-			initAutoComplete()
-			
-			if (location) {
-				Location.init(location)
-				populateForm(location)
-			}
-			
-		}
-		
-		const resetCityForm = function () {
-			_product_edit_location_zipcode.value = ""
-			_product_edit_location_city_id.value = ""
-			$(_location_country_id).val("").trigger("change")
-			hideCityForm()
-		}
-		
-		const showCityForm = function () {
-			if (_product_edit_location_city_edit) {
-				$(_product_edit_location_city_edit).show()
-			}
-		}
-		
-		const hideCityForm = function () {
-			if (_product_edit_location_city_edit) {
-				$(_product_edit_location_city_edit).hide()
-			}
-		}
-		
-		const initAutoComplete = function () {
-			
-			$(_product_edit_location_city)
-				.on("change", function () {
-					setTimeout(function () {
-						let cityName = _product_edit_location_city.value
-						if (cityName === "") {
-							resetCityForm()
-						}
-					}, 200)
-				})
-				.on("search", function () {
-					resetCityForm()
-				})
-				.on("click", function (e) {
-					if ($(this).attr("readonly") === "readonly") {
-						e.preventDefault()
-					} else {
-						$(this).select()
-					}
-					
-				})
-				.autocomplete({
-					serviceUrl: "/api/v1.0/autocomplete/cities",
-					minChars: 2,
-					cache: false,
-					dataType: "json",
-					triggerSelectOnValidInput: false,
-					paramName: "st",
-					onSelect: function (suggestion) {
-						if (!suggestion.data) {
-							return
-						}
-						let country, province, city, city_name, country_name, province_name = null
-						
-						let product_location = suggestion.data
-						
-						if (product_location.country) {
-							country = product_location.country
-							Country.set_detail(country)
-							Country.id = (country.id) ? country.id.toString() : null
-						}
-						
-						if (product_location.province) {
-							province = product_location.province
-							Province.set_detail(province)
-							province_name = province.name
-							Province.id = (province.id) ? province.id.toString() : null
-						}
-						
-						if (product_location.city) {
-							city = product_location.city
-							city_name = city.name
-							City.set_detail(city)
-							City.id = (city.id) ? city.id.toString() : null
-						}
-						
-						$(_location_country_id).val((product_location.city.country_id) ? product_location.city.country_id : "").trigger("change")
-						
-						_product_location_search.value = `City Center (${city_name}, ${province_name})`
-						
-						let zipcode = (_product_edit_location_zipcode && _product_edit_location_zipcode.value !== "") ? _product_edit_location_zipcode.value : null
-						let street_1 = (_product_edit_location_street_1 && _product_edit_location_street_1.value !== "") ? _product_edit_location_street_1.value : null
-						let street_2 = (_product_edit_location_street_2 && _product_edit_location_street_2.value !== "") ? _product_edit_location_street_2.value : null
-						
-						product_location.street_1 = street_1
-						product_location.street_2 = street_2
-						product_location.zipcode = null
-						renderMap(product_location)
-					},
-				})
-		}
-		
-		const resetForm = function () {
-			_product_edit_location_street_1.value = ""
-			_product_edit_location_street_2.value = ""
-			_product_edit_location_zipcode.value = ""
-			_product_edit_location_city.value = ""
-			_product_edit_location_name.value = ""
-			_product_edit_location_location_types_id.value = ""
-			resetCityForm()
-		}
-		
-		const renderMap = function (location) {
-			if (!location) {
-				return
-			}
-			let url = buildMapsURL(location)
-			let elementWidth, elementHeight = null
-			let _locationMap = document.getElementById("locationMap")
-			
-			if (_locationMap) {
-				$(_locationMap)
-					.empty()
-					.append(
-						$("<iframe/>", {
-							id: "locationMapContainer",
-							allowfullscreen: "allowfullscreen",
-							frameborder: "0",
-							src: url,
-						}),
-					)
-				
-				elementWidth = (!isNaN(parseInt($(_locationMap).actual("width")))) ? parseInt($(_locationMap).actual("width")) : null
-				
-				if (elementWidth) {
-					elementHeight = elementWidth / 2
-					
-					$("#locationMapContainer")
-						.css({
-							"height": elementHeight + "px",
-							"width": elementWidth + "px",
-						})
-				}
-			}
-			
-		}
-		
-		const populateForm = function (product_location) {
-			let country, province, city = {}
-			resetForm()
-			
-			ProductLocation.display_long = product_location.display_long //"City Center (Houston TX - Texas, US - United States)"
-			ProductLocation.display_medium = product_location.display_medium // "City Center (Houston, Texas)"
-			ProductLocation.display_short = product_location.display_short //"City Center (Houston TX, US)"
-			
-			let citySearchDisplay = ""
-			let postal_code = (product_location.postal_code) ? product_location.postal_code : ""
-			let street_1 = (product_location.street_1) ? product_location.street_1 : ""
-			let street_2 = (product_location.street_2) ? product_location.street_2 : ""
-			
-			_product_edit_location_street_1.value = street_1
-			_product_edit_location_street_2.value = street_2
-			_product_edit_location_zipcode.value = postal_code
-			_product_edit_location_city.value = ""
-			_product_edit_location_name.value = product_location.name
-			
-			$(_product_edit_location_location_types_id).val(product_location.type.id.toString())
-			
-			if (product_location.country) {
-				country = product_location.country
-				Country.set_detail(country)
-				Country.id = (country.id) ? country.id.toString() : null
-			}
-			
-			if (product_location.province) {
-				province = product_location.province
-				Province.set_detail(province)
-				Province.id = (province.id) ? province.id.toString() : null
-			}
-			
-			if (product_location.city) {
-				city = product_location.city
-				City.set_detail(city)
-				City.id = (city.id) ? city.id.toString() : null
-			}
-			
-			citySearchDisplay = city.name + " (" + province.name + ", " + country.name + ")"
-			_product_edit_location_city.value = citySearchDisplay
-			$(_location_country_id).val((country.id) ? country.id : "").trigger("change")
-			
-			renderMap(product_location)
-		}
-		
-		return {
-			display_long: null,
-			display_medium: null,
-			display_short: null,
-			init: function (settings) {
-				init(settings)
-			},
-		}
-	})()
-</script>

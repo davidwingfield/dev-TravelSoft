@@ -1,16 +1,32 @@
 SELECT
-	MENU.id AS 'menu_id',
-	MENU.label AS 'menu_label',
-	MENU.link_url AS 'menu_link_url',
-	MENU.parent_id AS 'menu_parent_id',
-	MENU.roles_min AS 'menu_roles_min',
-	MENU.icon AS 'menu_icon',
-	MENU.sort_order AS 'menu_sort_order',
-	MENU.enabled AS 'menu_enabled',
-	MENU.date_created AS 'menu_date_created',
-	MENU.created_by AS 'menu_created_by',
-	MENU.date_modified AS 'menu_date_modified',
-	MENU.modified_by AS 'menu_modified_by',
-	MENU.note AS 'menu_note'
+		MENU.id AS 'menu_id',
+		MENU.label AS 'menu_label',
+		MENU.link_url AS 'menu_link_url',
+		MENU.parent_id AS 'menu_parent_id',
+		MENU.roles_min AS 'menu_roles_min',
+		MENU.icon AS 'menu_icon',
+		MENU.sort_order AS 'menu_sort_order',
+		MENU.enabled AS 'menu_enabled',
+		MENU.date_created AS 'menu_date_created',
+		MENU.created_by AS 'menu_created_by',
+		MENU.date_modified AS 'menu_date_modified',
+		MENU.modified_by AS 'menu_modified_by',
+		MENU.note AS 'menu_note'
 FROM 	menu MENU
 -- JOIN 	menu MENU ON MENU.id = {FK_TABLE}.menu_id
+
+/*
+'id'=>$menu['menu_id'],
+'label'=>$menu['menu_label'],
+'link_url'=>$menu['menu_link_url'],
+'parent_id'=>$menu['menu_parent_id'],
+'roles_min'=>$menu['menu_roles_min'],
+'icon'=>$menu['menu_icon'],
+'sort_order'=>$menu['menu_sort_order'],
+'enabled'=>$menu['menu_enabled'],
+'date_created'=>$menu['menu_date_created'],
+'created_by'=>$menu['menu_created_by'],
+'date_modified'=>$menu['menu_date_modified'],
+'modified_by'=>$menu['menu_modified_by'],
+'note'=>$menu['menu_note']
+*/

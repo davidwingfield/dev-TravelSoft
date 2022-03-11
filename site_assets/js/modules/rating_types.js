@@ -42,7 +42,7 @@ const RatingTypes = (function () {
     }
     
     const init = function (settings) {
-        Console.log(" -- RatingTypes -- ", {})
+        //console.log(" -- RatingTypes -- ", {})
     }
     
     const set = function (rating_types) {
@@ -73,7 +73,7 @@ const RatingTypes = (function () {
             RatingTypes.all.set("id", detail)
         })
         
-        Console.log(" RatingTypes.all", RatingTypes.all)
+        //console.log(" RatingTypes.all", RatingTypes.all)
     }
     
     return {

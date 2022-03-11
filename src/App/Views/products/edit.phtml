@@ -248,59 +248,6 @@
 	}
 	
 	/**
-	 * Units Variables
-	 */
-	$unit_section = "";
-	foreach ($units AS $unit) {
-		$name = $unit["name"];
-		$id = (int)$unit["id"];
-		$min_pax = $unit["min_pax"];
-		$max_pax = $unit["max_pax"];
-		$min_nights = $unit["min_nights"];
-		$max_nights = $unit["max_nights"];
-		$unit_description_long = (isset($unit["description_long"]) && !is_null($unit["description_long"]) && $unit["description_long"] !== "") ? $unit["description_long"] : "&nbsp;";
-		$unit_description_short = (isset($unit["description_short"]) && !is_null($unit["description_short"]) && $unit["description_short"] !== "") ? $unit["description_short"] : "&nbsp;";
-		$cover_image = $unit["cover_image"];
-		$room_code = (isset($unit["room_code"])) ? $unit["room_code"] : buildCode($id, $name, "unit");
-		
-		$unit_profile = "
-            <div class='col-12 col-sm-12 col-md-4 px-1 '>
-                <div class='card card-body mb-2'>
-                    <h5 class='card-title w-100 text-truncate'>$name</h5>
-                    <h6 class='card-subtitle my-2 text-muted'>$room_code</h6>
-                    <!--
-                    <p class='card-text font-weight-normal text-dark truncate-overflow'>
-                        $unit_description_short
-                    </p>
-                    -->
-                    <table class='table table-sm'>
-                        <thead>
-                            <tr>
-                                <th>&nbsp;</th>
-                                <th>Min</th>
-                                <th>Max</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th>Pax:</th>
-                                <td>$min_pax</td>
-                                <td>$max_pax</td>
-                            </tr>
-                            <tr>
-                                <th>Nights:</th>
-                                <td>$min_nights</td>
-                                <td>$max_nights</td>
-                            </tr>
-                        </tbody>
-                    </table>
-            </div>
-        </div>
-        ";
-		$unit_section .= $unit_profile;
-	}
-	
-	/**
 	 * Variant Variables
 	 */
 	$variant_section = "";
@@ -312,75 +259,34 @@
 		$str = buildCode($id, $name, "variant");
 		$variant_profile = "
             <div class='col-12 col-sm-12 col-md-4 px-1'>
-            <div class='card'>
-                <div class='card-body'>
-                
-                    <h5 class='card-title'>$name</h5>
-                    <h6 class='card-subtitle my-2 text-muted'>$str</h6>
-                    <p class='card-text'></p>
-   
-                    <table class='table table-sm'>
-                        <thead>
-                            <tr>
-                                <th>&nbsp;</th>
-                                <th>Min</th>
-                                <th>Max</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Age</td>
-                                <td>$min_age</td>
-                                <td>$max_age</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class='card'>
+	                <div class='card-body'>
+	                
+	                    <h5 class='card-title'>$name</h5>
+	                    <h6 class='card-subtitle my-2 text-muted'>$str</h6>
+	                    <p class='card-text'></p>
+	   
+	                    <table class='table table-sm'>
+	                        <thead>
+	                            <tr>
+	                                <th>&nbsp;</th>
+	                                <th>Min</th>
+	                                <th>Max</th>
+	                            </tr>
+	                        </thead>
+	                        <tbody>
+	                            <tr>
+	                                <td>Age</td>
+	                                <td>$min_age</td>
+	                                <td>$max_age</td>
+	                            </tr>
+	                        </tbody>
+	                    </table>
+	                </div>
                 </div>
             </div>
-        </div>
         ";
 		$variant_section .= $variant_profile;
-	}
-	
-	/**
-	 * Season Variables
-	 */
-	$season_section = "";
-	foreach ($seasons AS $season) {
-		$color_scheme = (isset($season["color_scheme"])) ? $season["color_scheme"] : [];
-		$product_season_detail = (isset($season["product_season_detail"])) ? $season["product_season_detail"] : [];
-		
-		$disabled_dow = (isset($product_season_detail["disabled_dow"])) ? $product_season_detail["disabled_dow"] : "";
-		$disabled_dow = preg_replace('/\s+/', '', trim($disabled_dow));
-		$disabled_dow_list = explode(",", $disabled_dow);
-		$day_temp = [];
-		foreach ($disabled_dow_list AS $disabled_day) {
-			$day_temp[] = $days[(int)$disabled_day];
-		}
-		$disabled_day_line = implode(", ", $day_temp);
-		$color_scheme_background_color = $color_scheme["background_color"];
-		$color_scheme_border_color = $color_scheme["border_color"];
-		$color_scheme_text_color = $color_scheme["text_color"];
-		
-		$season_name = (isset($season["name"])) ? $season["name"] : "";
-		
-		$season_id = (isset($season["id"])) ? $season["id"] : "";
-		
-		$season_profile = "
-        <div class='col-12 col-sm-12 col-md-4 px-1'>
-        
-            <div class='card card-body mb-2' style='background:$color_scheme_background_color;color:$color_scheme_text_color;border-color:$color_scheme_border_color;'>
-            
-                <h5 class='card-title'  style='color:$color_scheme_text_color;'>$season_name</h5>
-                <h6 class='card-subtitle' style='font-size:.75rem;color:" . adjustBrightness($color_scheme_text_color, 100) . ";'>
-                    <p class='m-0 mb-1' style='font-size:.75rem;color:$color_scheme_text_color;'>Disabled Days:</p>
-                    <p class='m-0 mb-1' style='font-size:.75rem;color:" . adjustBrightness($color_scheme_text_color, 100) . ";'>$disabled_day_line</p>
-                </h6>
-            
-            </div>
-        </div>
-        ";
-		$season_section .= $season_profile;
 	}
 	
 	/**
@@ -396,7 +302,7 @@
 	 * Vendor Variables
 	 */
 	$vendor_images = [];
-	$vendor_description_short = (isset($vendor["description_short"])) ? $provider["description_short"] : "";
+	$vendor_description_short = (isset($vendor["description_short"])) ? $vendor["description_short"] : "";
 	$vendor_name = (isset($provider["name"])) ? $provider["name"] : "";
 	$vendor_sku = (isset($provider["sku"])) ? $provider["sku"] : "";
 	$vendor_description_long = (isset($provider["description_long"])) ? $provider["description_long"] : "";
@@ -431,13 +337,14 @@
 									</ul>
 									
 									<p id="product_location" class="card-text">
-										<?php echo $location_card; ?>
-									</p>
-									<p id="product_description_short" class="card-text">
-										<?php echo $product_description_short; ?>
+										<i></i> <span></span>
 									</p>
 									
-									<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+									<p id="product_description_short" class="card-text">
+									
+									</p>
+									
+									<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
 									
 									<div class="row">
 										<div class="col-12 col-md-6 col-lg-4 col-xl-6 mb-2">
@@ -460,9 +367,7 @@
 									<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
 									
 									<div class="row">
-										<div class="col">
-											
-											<?php echo $product_description_long; ?>
+										<div id="product_description_long" class="col-12 ">
 										
 										</div>
 									</div>
@@ -479,9 +384,7 @@
 									<!--<h6 class="card-subtitle mb-2 text-muted"><span>Category</span></h6>-->
 									<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
 									
-									<div class="row">
-										<?php echo $season_section; ?>
-									</div>
+									<div id="product_edit_season_display" class="row"></div>
 								</div>
 							</div>
 							
@@ -493,9 +396,7 @@
 									</h5>
 									<!--<h6 class="card-subtitle mb-2 text-muted"><span>Category</span></h6>-->
 									<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-									<div class="row">
-										<?php echo $unit_section; ?>
-									</div>
+									<div id="product_edit_unit_display" class="row"></div>
 								</div>
 							</div>
 							
@@ -507,9 +408,7 @@
 									</h5>
 									<!--<h6 class="card-subtitle mb-2 text-muted"><span>Category</span></h6>-->
 									<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
-									<div class="row">
-										<?php echo $variant_section; ?>
-									</div>
+									<div id="product_edit_variant_display" class="row"></div>
 								</div>
 							</div>
 							

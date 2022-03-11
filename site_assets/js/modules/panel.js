@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 
                 switch (dataToggle) {
                     case "panel-refresh":
-                        //Console.log("refresh")
+                        //console.log("refresh")
                         break
                     case "panel-hide":
                         elem.addEventListener("click", function () {
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         })
                         break
                     case "panel-collapse":
-                        //Console.log("collapse")
+                        //console.log("collapse")
                         break
                     case"panel-fullscreen":
                         elem.addEventListener("click", function () {
@@ -37,10 +37,10 @@ document.addEventListener("DOMContentLoaded", function () {
                                 $el.removeClass("is-fullscreen")
                             }
                         })
-                        //Console.log("fullscreen")
+                        //console.log("fullscreen")
                         break
                     case "panel-close":
-                        //Console.log("close")
+                        //console.log("close")
                         break
                     default:
                         break

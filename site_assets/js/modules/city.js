@@ -4,9 +4,16 @@ const City = (function () {
     const class_name = "form-new-city"
     const form_id = "form_new_city"
     
+    const _product_location_departing_airport_city_search = document.getElementById("product_location_departing_airport_city_search")
+    const _product_location_departing_airport_city_id = document.getElementById("product_location_departing_airport_city_id")
+    const _product_location_arriving_airport_city_id = document.getElementById("product_location_arriving_airport_city_id")
+    const _product_edit_location_city_id = document.getElementById("product_edit_location_city_id")
+    const _product_location_arriving_airport_city_search = document.getElementById("product_location_arriving_airport_city_search")
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
     const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
     const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
+    const _modal_product_province_id = document.getElementById("modal_product_province_id")
+    const _modal_product_country_id = document.getElementById("modal_product_country_id")
     
     const _modal_product_arrive_to_airport_city = document.getElementById("modal_product_arrive_to_airport_city")
     const _modal_product_arrive_to_airport_country_id = document.getElementById("modal_product_arrive_to_airport_country_id")
@@ -29,6 +36,205 @@ const City = (function () {
     const _modal_product_depart_from_station_city_id = document.getElementById("modal_product_depart_from_station_city_id")
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    
+    $("#product_location_transport_city_search")
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            _product_edit_location_city_id.value = ""
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                //console.log("city", city)
+                _product_edit_location_city_id.value = city.id
+                
+            },
+        })
+    
+    $("#product_location_cars_city_search")
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            _product_edit_location_city_id.value = ""
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+            
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                
+                _product_edit_location_city_id.value = city.id
+                
+            },
+        })
+    
+    $("#product_location_arriving_airport_city_search")
+        .on("change", function () {
+            setTimeout(function () {
+                let city = $("#product_location_arriving_airport_city_search").val()
+                if (city === "") {
+                    _product_location_arriving_airport_city_id.value = ""
+                }
+            }, 200)
+        })
+        .on("search", function () {
+            _product_location_arriving_airport_city_id.value = ""
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+            
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                
+                _product_location_arriving_airport_city_search.value = suggestion.value
+                _product_location_arriving_airport_city_id.value = city.id
+                
+            },
+        })
+    
+    $("#product_location_departing_airport_city_search")
+        
+        .on("change", function () {
+            setTimeout(function () {
+                let city = $("#product_location_departing_airport_city_search").val()
+                if (city === "") {
+                    _product_edit_location_city_id.value = ""
+                    _product_location_departing_airport_city_id.value = ""
+                }
+            }, 200)
+        })
+        .on("search", function () {
+            _product_edit_location_city_id.value = ""
+            _product_location_departing_airport_city_id.value = ""
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                
+                //console.log("city", city)
+                
+                _product_location_departing_airport_city_search.value = suggestion.value
+                _product_location_departing_airport_city_id.value = city.id
+                _product_edit_location_city_id.value = city.id
+                
+                /*
+                `${city.name} (${city.province.name}, ${city.country.name})`
+                
+                    "value": "Abano Terme (Padova, Italy)",
+                    "data": {
+                        "id": 1,
+                        "country_id": 102,
+                        "province_id": 250,
+                        "sort_order": 999,
+                        "name": "Abano Terme",
+                        "enabled": 1,
+                        "date_created": "2021-08-03 14:40:07",
+                        "created_by": 4,
+                        "date_modified": "2021-08-03 14:40:07",
+                        "modified_by": 4,
+                        "note": "",
+                        "province": {
+                            "id": 250,
+                            "country_id": 102,
+                            "name": "Padova",
+                            "iso2": "PD",
+                            "iso3": "",
+                            "sort_order": 999,
+                            "enabled": 1,
+                            "date_created": "2021-12-15 10:58:47",
+                            "created_by": 4,
+                            "date_modified": "2021-12-15 10:58:47",
+                            "modified_by": 4,
+                            "note": null
+                        },
+                        "country": {
+                            "id": 102,
+                            "currency_id": 2,
+                            "sort_order": 0,
+                            "name": "Italy",
+                            "iso2": "IT",
+                            "iso3": "ITA",
+                            "enabled": 1,
+                            "date_created": "2021-08-03 13:04:10",
+                            "created_by": 4,
+                            "date_modified": "2021-08-03 15:13:45",
+                            "modified_by": 4,
+                            "note": ""
+                        }
+                    }
+                //*/
+                
+            },
+        })
     
     $("#form_product_search_hotel_product_location")
         .on("change", function () {
@@ -55,12 +261,12 @@ const City = (function () {
             triggerSelectOnValidInput: false,
             paramName: "st",
             onSelect: function (suggestion) {
-                console.log("city", suggestion)
+                //console.log("city", suggestion)
                 if (!suggestion.data) {
                     return
                 }
                 
-                console.log("city", suggestion)
+                //console.log("city", suggestion)
                 /*
                     "value": "Abano Terme (Padova, Italy)",
                     "data": {
@@ -112,11 +318,11 @@ const City = (function () {
     $(_modal_product_city_id)
         .on("change", function () {
             if (_modal_product_city_id.value === "") {
-                _modal_product_provider_name.disabled = true
-                _modal_product_vendor_name.disabled = true
+                //_modal_product_provider_name.disabled = true
+                //_modal_product_vendor_name.disabled = true
             } else {
-                _modal_product_provider_name.disabled = false
-                _modal_product_vendor_name.disabled = false
+                //_modal_product_provider_name.disabled = false
+                //_modal_product_vendor_name.disabled = false
             }
         })
     
@@ -244,7 +450,9 @@ const City = (function () {
             }, 200)
         })
         .on("search", function () {
-            $(_modal_product_city_id).val("").trigger("change")
+            $(_modal_product_city_id)
+                .val("")
+                .trigger("change")
         })
         .on("click", function (e) {
             if ($(this).attr("readonly") === "readonly") {
@@ -312,11 +520,30 @@ const City = (function () {
     $("#modal_product_city")
         .on("change", function () {
             setTimeout(function () {
-            
+                let name = $("#modal_product_city").val()
+                if (name === "") {
+                    $(_modal_product_city_id)
+                        .val("")
+                        .trigger("change")
+                }
             }, 200)
         })
         .on("search", function () {
-            $(_modal_product_city_id).val("").trigger("change")
+            
+            if (_modal_product_city_id) {
+                $(_modal_product_city_id)
+                    .val("")
+                    .trigger("change")
+            }
+            
+            if (_modal_product_province_id) {
+                _modal_product_province_id.value = ""
+            }
+            
+            if (_modal_product_country_id) {
+                _modal_product_country_id.value = ""
+            }
+            
         })
         .on("click", function (e) {
             if ($(this).attr("readonly") === "readonly") {
@@ -324,7 +551,6 @@ const City = (function () {
             } else {
                 $(this).select()
             }
-            
         })
         .autocomplete({
             serviceUrl: "/api/v1.0/autocomplete/cities",
@@ -334,57 +560,26 @@ const City = (function () {
             triggerSelectOnValidInput: false,
             paramName: "st",
             onSelect: function (suggestion) {
-                console.log("city", suggestion)
                 if (!suggestion.data) {
                     return
                 }
+                
                 let city = suggestion.data
-                _modal_product_city_id.value = city.id
-                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
-                /*
-                    "value": "Abano Terme (Padova, Italy)",
-                    "data": {
-                        "id": 1,
-                        "country_id": 102,
-                        "province_id": 250,
-                        "sort_order": 999,
-                        "name": "Abano Terme",
-                        "enabled": 1,
-                        "date_created": "2021-08-03 14:40:07",
-                        "created_by": 4,
-                        "date_modified": "2021-08-03 14:40:07",
-                        "modified_by": 4,
-                        "note": "",
-                        "province": {
-                            "id": 250,
-                            "country_id": 102,
-                            "name": "Padova",
-                            "iso2": "PD",
-                            "iso3": "",
-                            "sort_order": 999,
-                            "enabled": 1,
-                            "date_created": "2021-12-15 10:58:47",
-                            "created_by": 4,
-                            "date_modified": "2021-12-15 10:58:47",
-                            "modified_by": 4,
-                            "note": null
-                        },
-                        "country": {
-                            "id": 102,
-                            "currency_id": 2,
-                            "sort_order": 0,
-                            "name": "Italy",
-                            "iso2": "IT",
-                            "iso3": "ITA",
-                            "enabled": 1,
-                            "date_created": "2021-08-03 13:04:10",
-                            "created_by": 4,
-                            "date_modified": "2021-08-03 15:13:45",
-                            "modified_by": 4,
-                            "note": ""
-                        }
-                    }
-                //*/
+                let cityId = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+                let provinceId = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
+                let countryId = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
+                
+                if (_modal_product_city_id && cityId) {
+                    _modal_product_city_id.value = cityId
+                }
+                
+                if (_modal_product_province_id && provinceId) {
+                    _modal_product_province_id.value = provinceId
+                }
+                
+                if (_modal_product_country_id && countryId) {
+                    _modal_product_country_id.value = countryId
+                }
                 
             },
         })
@@ -439,7 +634,40 @@ const City = (function () {
             } else {
                 $(this).select()
             }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                _modal_product_city_id.value = city.id
+                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+                
+            },
+        })
+    
+    $("#modal_product_city_tours")
+        .on("change", function () {
+            setTimeout(function () {
             
+            }, 200)
+        })
+        .on("search", function () {
+            $(_modal_product_city_id).val("").trigger("change")
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
         })
         .autocomplete({
             serviceUrl: "/api/v1.0/autocomplete/cities",
@@ -470,7 +698,7 @@ const City = (function () {
     
     const handle_city_error = function (msg) {
         toastr.error(msg)
-        console.log("msg", msg)
+        //console.log("msg", msg)
     }
     
     const on_click_outside = (e) => {
@@ -551,7 +779,7 @@ const City = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 return handle_city_error("Error Validating City")
             }
         } else {
@@ -583,11 +811,11 @@ const City = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 handle_city_error("Error: Validating City")
             }
         } else {
-            console.log("Error: Missing Data")
+            //console.log("Error: Missing Data")
             handle_city_error("Error: Missing Data")
         }
     }

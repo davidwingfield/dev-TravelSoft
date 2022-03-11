@@ -127,7 +127,43 @@ $.fn.BuildDropDown = function (settings) {
     
 }
 
+const calculateWidth = (ratioWidth, ratioHeight, height) => {
+    let aspectRatio = ratioWidth.value / ratioHeight.value
+    return parseFloat((height * aspectRatio).toFixed(2))
+}
+
+const calculateHeight = (ratioWidth, ratioHeight, width) => {
+    let aspectRatio = ratioWidth / ratioHeight
+    return parseFloat((width / aspectRatio).toFixed(2))
+}
+
+const gcd = function (a, b) {
+    return (b === 0) ? a : gcd(b, a % b)
+}
+
+const shadeColor = function (color, percent) {
+    
+    var R = parseInt(color.substring(1, 3), 16)
+    var G = parseInt(color.substring(3, 5), 16)
+    var B = parseInt(color.substring(5, 7), 16)
+    
+    R = parseInt(R * (100 + percent) / 100)
+    G = parseInt(G * (100 + percent) / 100)
+    B = parseInt(B * (100 + percent) / 100)
+    
+    R = (R < 255) ? R : 255
+    G = (G < 255) ? G : 255
+    B = (B < 255) ? B : 255
+    
+    var RR = ((R.toString(16).length === 1) ? "0" + R.toString(16) : R.toString(16))
+    var GG = ((G.toString(16).length === 1) ? "0" + G.toString(16) : G.toString(16))
+    var BB = ((B.toString(16).length === 1) ? "0" + B.toString(16) : B.toString(16))
+    
+    return "#" + RR + GG + BB
+}
+
 const clearAllValidation = function () {
+    //console.log("clearAllValidation")
     $("div.error").html(`&nbsp;`).hide()
     $(".is-invalid").removeClass("is-invalid")
 }
@@ -174,8 +210,9 @@ const isOdd = function (num) {
 }
 
 const clearValidation = function (formElement) {
+    //console.log("clearValidation(formElement)", formElement)
     $(".autocomplete-suggestions").hide()
-    var validator = $(formElement).validate()
+    let validator = $(formElement).validate()
     
     $("[name]", formElement).each(function () {
         if (validator) {
@@ -202,6 +239,7 @@ const clearValidation = function (formElement) {
 }
 
 const get_errors = function (validator) {
+    //console.log("get_errors(validator)", validator)
     var submitErrorsList = {}
     //console.dir(validator)
     //for (var i = 0; i < validator.errorList.length; i++) {
@@ -211,6 +249,97 @@ const get_errors = function (validator) {
 }
 
 const validator_init = function (settings) {
+    //console.log("validator_init(settings)", settings)
+    let rules = {}
+    let messages = {}
+    let groups = {}
+    if (settings) {
+        
+        if (settings.rules) {
+            rules = settings.rules
+        }
+        
+        if (settings.messages) {
+            messages = settings.messages
+        }
+        
+        if (settings.groups) {
+            groups = settings.groups
+        }
+    }
+    
+    jQuery.validator.setDefaults({
+        rules: rules,
+        messages: messages,
+        groups: groups,
+        ignore: "",
+        success: "valid",
+        invalidHandler: function (event, validator) {
+            var errors = validator.numberOfInvalids()
+            let errorEl = validator.findLastActive() || validator.errorList.length && validator.errorList[0].element
+            if (errorEl) {
+                $(errorEl).closest(".accordion-body").collapse("show")
+            }
+        },
+        errorElement: "span",
+        highlight: function (element) {
+            let id = $(element).attr("id")
+            let el = $("#" + id + "")
+            let error_el = $("#" + id + "-error")
+            
+            if (error_el.attr("data-ref")) {
+                $("#" + error_el.attr("data-ref")).addClass("is-invalid")
+            } else {
+                el.parent().find("span.select2").addClass("is-invalid")
+                el.addClass("is-invalid")
+            }
+            
+            if (error_el) {
+                error_el.css({ "display": "block" })
+            }
+        },
+        unhighlight: function (element) {
+            let id = $(element).attr("id")
+            let el = $("#" + id + "")
+            let error_el = $("#" + id + "-error")
+            el.parents("div.form-element").find("span.select2").removeClass("is-invalid")
+            el.removeClass("is-invalid")
+            if (error_el) {
+                error_el.css({ "display": "none" })
+            }
+        },
+        errorPlacement: function (error, element) {
+            let id = element.attr("id")
+            let el = $("#" + id + "-error")
+            el.html(error)
+        },
+        submitHandler: function (form) {
+            return true
+        },
+        
+    })
+    
+    jQuery.validator.addMethod("postalCode", function (value) {
+        return /^((\d{5}-\d{4})|(\d{5})|([A-Z]\d[A-Z]\s\d[A-Z]\d))$/.test(value)
+    }, "Please enter a valid postal code.")
+    
+    jQuery.validator.addMethod("phoneUS", function (phone_number, element) {
+        phone_number = phone_number.replace(/\s+/g, "")
+        return this.optional(element) || phone_number.length > 9 &&
+            phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/)
+    }, "Please specify a valid phone number")
+    
+    jQuery.validator.addMethod("phoneIT", function (phone_number, element) {
+        phone_number = phone_number.replace(/\s+/g, "")
+        return this.optional(element) || phone_number.length > 9 &&
+            phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/)
+    }, "Please specify a valid phone number")
+    
+    return jQuery.validator
+}
+
+const initializeValidator = function (settings) {
+    //console.log("initializeValidator(settings)", settings)
     let rules = {}
     let messages = {}
     let groups = {}
@@ -313,6 +442,7 @@ const jsonPrettify = (json) => {
 }
 
 const setError = function (element, msg) {
+    //console.log("setError")
     let id = $(element).attr("id")
     let el = $("#" + id + "")
     let error_el = $("#" + id + "-error")
@@ -332,6 +462,7 @@ const setError = function (element, msg) {
 }
 
 const clearError = function (element) {
+    //console.log("clearError(element)", element)
     let id = $(element).attr("id")
     let el = $("#" + id + "")
     let error_el = $("#" + id + "-error")
@@ -367,6 +498,7 @@ const remove_nulls = function (obj) {
 }
 
 const removeNulls = function (obj) {
+    //console.log("removeNulls()")
     let cleanedObject = {}
     $.each(obj, function (i, v) {
         if (v === null) {
@@ -444,10 +576,10 @@ const sendPostRequest = function (url, data_to_send, callback) {
     if (url && data_to_send) {
         $.postJSON(url, data_to_send, function (data, status, xhr) {
             /*
-            console.log("data", data)
-            console.log("status", status)
-            console.log("xhr", xhr)
-            console.log("typeof data.result", typeof data.result)
+            //console.log("data", data)
+            //console.log("status", status)
+            //console.log("xhr", xhr)
+            //console.log("typeof data.result", typeof data.result)
             //*/
             if (status === "success" && typeof data.result !== "undefined") {
                 
@@ -908,17 +1040,17 @@ jQuery.extend({
             }
             //*/
             /*
-            console.log("jqXHR", jqXHR)
-            console.log("jqXHR", jqXHR.responseText)
-            console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
-            console.log("textStatus", textStatus)
-            console.log("msg", msg)
-            console.log('http://dev.travelsoft.com/error')
+            //console.log("jqXHR", jqXHR)
+            //console.log("jqXHR", jqXHR.responseText)
+            //console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
+            //console.log("textStatus", textStatus)
+            //console.log("msg", msg)
+            //console.log('http://dev.travelsoft.com/error')
             //*/
             if (typeof textStatus !== "undefined") {
-                console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
+                //console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
             } else {
-                console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
+                //console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
             }
             
             if ($.isFunction(callback)) {
@@ -951,7 +1083,7 @@ jQuery.extend({
             
             if (typeof textStatus !== "undefined") {
                 let err = _display_ajax_error(jqXHR, textStatus, url)
-                console.log("err", getAjaxError(jqXHR, textStatus, url))
+                //console.log("err", getAjaxError(jqXHR, textStatus, url))
                 //handleError(err.message)
             } else {
                 let err = _display_ajax_error(jqXHR, textStatus, url)
@@ -960,8 +1092,8 @@ jQuery.extend({
             
             if ($.isFunction(callback)) {
                 msg = errors.message
-                console.log("msg -- ", msg)
-                console.log("msg -- ", errors.message)
+                //console.log("msg -- ", msg)
+                //console.log("msg -- ", errors.message)
                 
                 callback(msg, "failed")
             }
@@ -983,11 +1115,11 @@ jQuery.extend({
         })
         getRequest.fail(function (jqXHR, textStatus, msg) {
             if (typeof textStatus !== "undefined") {
-                console.log("Request failed")
-                console.log(_display_ajax_error(jqXHR, textStatus, url))
+                //console.log("Request failed")
+                //console.log(_display_ajax_error(jqXHR, textStatus, url))
             } else {
-                console.log("Request failed")
-                console.log(_display_ajax_error(jqXHR, textStatus, url))
+                //console.log("Request failed")
+                //console.log(_display_ajax_error(jqXHR, textStatus, url))
             }
             if ($.isFunction(callback)) {
                 callback(msg, "failed")
@@ -1204,7 +1336,7 @@ const deleteDialog = function (message, handler) {
 }
 
 const formatURL = function (param) {
-    console.log("formatURL()", param)
+    //console.log("formatURL()", param)
     return encodeURIComponent(param.trim())
 }
 
@@ -1316,6 +1448,45 @@ String.prototype.ucwords = function () {
         function (s) {
             return s.toUpperCase()
         })
+}
+
+const trimTrailingChars = function (s, charToTrim) {
+    return s.replace(new RegExp(charToTrim + "+$"), "")
+}
+
+const formatSize = function (bytes, decimals = 2) {
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const units = ["BYTES", "KB", "MB"]
+    let size, unit
+    
+    unit = bytes.toUpperCase()
+    unit = trimTrailingChars(unit, "S")
+    unit = unit.replace(/BYTE/g, "BYTES")
+    unit = unit.replace(/MEGABYTE/g, "MB")
+    unit = unit.replace(/KILOBYTE/g, "KB")
+    
+    if (unit.includes("BYTES")) {
+        let unitType = "BYTES"
+        
+        return (!isNaN(parseInt(unit.replace(`/${unitType}/g`, "")))) ? parseInt(unit.replace(`/${unitType}/g`, "")) : null
+    } else if (unit.includes("KB")) {
+        let unitType = "KB"
+        
+        size = (!isNaN(parseInt((parseFloat(unit.replace(`/${unitType}/g`, "")).toFixed(dm)) * 1024))) ? parseInt((parseFloat(unit.replace(`/${unitType}/g`, "")).toFixed(dm)) * 1024) : null
+        
+        if (size !== null) {
+            return size
+        }
+    } else if (unit.includes("MB")) {
+        let unitType = "MB"
+        
+        size = (!isNaN(parseInt((parseFloat(unit.replace(`/${unitType}/g`, "")).toFixed(dm)) * 2097152))) ? parseInt((parseFloat(unit.replace(`/${unitType}/g`, "")).toFixed(dm)) * 2097152) : null
+        
+        if (size !== null) {
+            return size
+        }
+    }
 }
 
 //

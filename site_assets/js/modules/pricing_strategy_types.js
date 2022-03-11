@@ -42,7 +42,7 @@ const PricingStrategyTypes = (function () {
     }
     
     const init = function (settings) {
-        //Console.log(' -- PricingStrategyTypes -- ', {})
+        //console.log(' -- PricingStrategyTypes -- ', {})
     }
     
     const set = function (pricing_strategy_types) {
@@ -73,7 +73,7 @@ const PricingStrategyTypes = (function () {
             PricingStrategyTypes.all.set("id", detail)
         })
         
-        Console.log(" PricingStrategyTypes.all", PricingStrategyTypes.all)
+        //console.log(" PricingStrategyTypes.all", PricingStrategyTypes.all)
     }
     
     return {

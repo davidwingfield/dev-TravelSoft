@@ -18,18 +18,28 @@
 		if (isset($page_data["types"]["rating_types"])) {
 			$rating_types = $page_data["types"]["rating_types"];
 		}
+		
+		$status_types = [];
+		if (isset($page_data["types"]["status_types"])) {
+			$status_types = $page_data["types"]["status_types"];
+		}
 	}
 
 ?>
 
+<!-- Edit Product Detail -->
 <section id="product_edit_details_section" class="section">
 	
 	<div class="row">
 		
-		<div class="col-12 col-md-8 mb-2">
+		<div class="col-12 col-md-8 mb-1">
 			
 			<form class="card card-body">
-				<h5 class="card-title">Product Details</h5>
+				<h5 class="card-title font-weight-bold">
+					<span>Product Details</span>
+				</h5>
+				<h6 class="card-subtitle mb-2 text-muted">&nbsp;</h6>
+				<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
 				
 				<div class="row">
 					
@@ -110,29 +120,364 @@
 					<!-- /SKU -->
 				
 				</div>
+				
+				<div class="row">
+					<div class="col-12 col-md-6 text-left">
+					
+					</div>
+					
+					<div class="col-12 col-md-6 text-right">
+						<button type="button" id="product_edit_details_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">Save</button>
+					</div>
+				</div>
 			</form>
 		
 		</div>
 		
-		<div class="col-12 col-md-4 mb-2">
-			
+		<div class="col-12 col-md-4 mb-1">
 			<ul class="list-group">
-				<li class="list-group-item d-flex justify-content-between align-items-center">
-					<span id="" class="">Cras justo odio</span>
-					<span class="badge badge-primary badge-pill">14</span>
+				<li id="product_edit_details_section_status" class="list-group-item d-flex justify-content-between align-items-center">
+					<span>Status</span>
 				</li>
 				<li class="list-group-item d-flex justify-content-between align-items-center">
-					Dapibus ac facilisis in
-					<span class="badge badge-primary badge-pill">2</span>
+					<span>Seasons</span>
+					<span id="product_edit_details_section_seasons" class=""></span>
 				</li>
 				<li class="list-group-item d-flex justify-content-between align-items-center">
-					dfg
-					<span class="badge badge-primary badge-pill">1</span>
+					<span>Units</span>
+					<span id="product_edit_details_section_units" class=""></span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					<span>Variants</span>
+					<span id="product_edit_details_section_variants" class=""></span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					<span>Inventory Profiles</span>
+					<span id="product_edit_details_section_profiles" class=""></span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					<a href="javascript:void(0);" id="product_edit_details_section_save_draft" class="btn btn-info btn-sm waves-effect waves-light">Save Draft</a>
+					<a href="javascript:void(0);" id="product_edit_details_section_publish" class="btn btn-outline-warning btn-sm waves-effect waves-light">Publish</a>
 				</li>
 			</ul>
 		
 		</div>
 	
 	</div>
+	
+	<div class="row gx-1">
+		<div class="col-12 col-md-6 p-1 mb-1">
+			<form id="product_edit_details_section_provider_form" class="card card-body">
+				<div class="p-2">
+					<h5 class="card-title">
+						<span class="card-title font-weight-bold">Provider Details</span>
+						<a href="javascript:void(0);" id="product_edit_provider_panel_link_product" class="panel_link" aria-hidden="true">Edit</a>
+					</h5>
+					<h6 class="card-subtitle mb-2 text-muted">&nbsp;</h6>
+				</div>
+				<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
+				
+				<div class="row">
+					
+					<!-- Provider Search -->
+					<div class="col-12">
+						<div class="form-element">
+							<label for="product_edit_details_section_provider_form_filter" class="d-none">Provider Search:</label>
+							<div class="input-group">
+								<div class="input-group-prepend">
+			                        <span class="input-group-text">
+			                            <i class="fas fa-search" aria-hidden="true"></i>
+			                        </span>
+								</div>
+								<input type="search" id="product_edit_details_section_provider_form_filter" name="product_edit_unit_form_unit_name_filter" class="form-control" placeholder="Search Providers" autocomplete="off">
+							</div>
+							<div id="product_edit_details_section_provider_form_filter-error" class="error w-100 text-center">&nbsp;</div>
+						</div>
+					</div>
+					<!-- /Provider Search -->
+				
+				</div>
+				
+				<div id="product_edit_details_section_provider_form_details" class="card card-body z-depth-0 border border-light">
+					
+					<h5 class="card-title">
+						<span id="display_provider_name" class="font-weight-bold">
+							Hilton Houston NASA Clear Lake
+						</span>
+					</h5>
+					
+					<h6 class="card-subtitle my-2 text-muted">
+						<span id="display_provider_code_direct"></span>
+					</h6>
+					
+					<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
+					
+					<div class="border border-light p-2">
+						
+						<div class="row">
+							
+							<!-- Name -->
+							<div class="col-12 col-md-6">
+								<div class="form-element">
+									<label for="product_edit_details_section_provider_form_provider_name">Name:</label>
+									<input type="text" id="product_edit_details_section_provider_form_provider_name" name="product_edit_details_section_provider_form_provider_name" class="form-control"/>
+									<div id="product_edit_details_section_provider_form_provider_name-error" class="error w-100 text-center"></div>
+								</div>
+							</div>
+							<!-- /Name -->
+							
+							<!-- Enabled -->
+							<div class="col-12 col-md-6 d-flex align-self-end justify-content-end pb-2">
+								<div class="form-element">
+									<div class="custom-control custom-switch">
+										<input id="product_edit_details_section_provider_form_provider_enabled" name="product_edit_details_section_provider_form_provider_enabled" type="checkbox" value="1" class="custom-control-input"/>
+										<label for="product_edit_details_section_provider_form_provider_enabled" class="custom-control-label p-0">Enabled</label>
+									</div>
+									<div id="product_edit_details_section_provider_form_provider_enabled-error" class="error w-100 text-center">&nbsp;</div>
+								</div>
+							</div>
+							<!-- /Enabled -->
+						
+						</div>
+						
+						<div class="row">
+							
+							<!-- Phone 1 -->
+							<div class="col-12 col-md-4">
+								<div class="form-element">
+									<label for="product_edit_details_section_provider_form_provider_phone_1">Phone 1:</label>
+									<input type="text" id="product_edit_details_section_provider_form_provider_phone_1" name="product_edit_details_section_provider_form_provider_phone_1" class="form-control"/>
+									<div id="product_edit_details_section_provider_form_provider_phone_1-error" class="error w-100 text-center"></div>
+								</div>
+							</div>
+							<!-- /Phone 1 -->
+							
+							<!-- Phone 2 -->
+							<div class="col-12 col-md-4">
+								<div class="form-element">
+									<label for="product_edit_details_section_provider_form_provider_phone_2">Phone 2:</label>
+									<input type="text" id="product_edit_details_section_provider_form_provider_phone_2" name="product_edit_details_section_provider_form_provider_phone_2" class="form-control"/>
+									<div id="product_edit_details_section_provider_form_provider_phone_2-error" class="error w-100 text-center"></div>
+								</div>
+							</div>
+							<!-- /Phone 2 -->
+							
+							<!-- Fax -->
+							<div class="col-12 col-md-4">
+								<div class="form-element">
+									<label for="product_edit_details_section_provider_form_provider_fax">Fax:</label>
+									<input type="text" id="product_edit_details_section_provider_form_provider_fax" name="product_edit_details_section_provider_form_provider_fax" class="form-control"/>
+									<div id="product_edit_details_section_provider_form_provider_fax-error" class="error w-100 text-center"></div>
+								</div>
+							</div>
+							<!-- /Fax -->
+						
+						</div>
+						
+						<div class="row">
+							
+							<!-- Website -->
+							<div class="col-12 col-md-6">
+								<div class="form-element">
+									<label for="product_edit_details_section_provider_form_provider_website">Website:</label>
+									<input type="url" id="product_edit_details_section_provider_form_provider_website" name="product_edit_details_section_provider_form_provider_website" class="form-control"/>
+									<div id="product_edit_details_section_provider_form_provider_website-error" class="error w-100 text-center"></div>
+								</div>
+							</div>
+							<!-- /Website -->
+							
+							<!-- Email -->
+							<div class="col-12 col-md-6">
+								<div class="form-element">
+									<label for="product_edit_details_section_provider_form_provider_email">Email:</label>
+									<input type="email" id="product_edit_details_section_provider_form_provider_email" name="product_edit_details_section_provider_form_provider_email" class="form-control"/>
+									<div id="product_edit_details_section_provider_form_provider_email-error" class="error w-100 text-center"></div>
+								</div>
+							</div>
+							<!-- /Email -->
+						
+						</div>
+						
+						<div class="row">
+							
+							<!-- Short Description -->
+							<div class="col-12">
+								<section class="card card-body mb-2">
+									<div class="d-flex justify-content-between">
+										<h5 class="card-title label">Brief Description:</h5>
+									</div>
+									<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+									<div class="row">
+										<div class="col-12">
+											<div class="form-element">
+												<label for="product_edit_details_section_provider_form_provider_description_short" class="d-none">Short Description</label>
+												<textarea id="product_edit_details_section_provider_form_provider_description_short" name="product_edit_details_section_provider_form_provider_description_short" class="md-textarea short-description form-control" rows="4" maxlength="250"></textarea>
+												<div id="product_edit_details_section_provider_form_provider_description_short-error" class="error w-100 text-center">&nbsp;</div>
+											</div>
+										</div>
+									</div>
+								</section>
+							</div>
+							<!-- Short Description -->
+						
+						</div>
+						
+						<div class="row">
+							
+							<!-- Long Description -->
+							<div class="col-12">
+								<section class="card card-body mb-2">
+									<div class="d-flex justify-content-between">
+										<h5 class="card-title label">Detailed Description:</h5>
+										<a id="button_product_edit_details_section_provider_form_provider_description_long_toggle" class="but_toggle waves-effect waves-light" data-texted="product_edit_details_section_provider_form_provider_description_long">
+											<i class="fas fa-sliders-h"></i>
+										</a>
+									</div>
+									<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+									
+									<div class="row">
+										<div class="col-12">
+											<div class="form-element">
+												<label for="product_edit_details_section_provider_form_provider_description_long" class="d-none">Detailed Description:</label>
+												<textarea id="product_edit_details_section_provider_form_provider_description_long" name="product_edit_details_section_provider_form_provider_description_long" class="md-textarea tmceEl form-control" rows="4"></textarea>
+												<div id="product_edit_details_section_provider_form_provider_description_long-error" class="error w-100 text-center">&nbsp;</div>
+											</div>
+										</div>
+									</div>
+								
+								</section>
+							</div>
+							<!-- /Long Description -->
+						
+						</div>
+						
+						<div class="row">
+							
+							<!-- Cover Image -->
+							<div class="col-12 col-md-6">
+								<div class="form-element">
+									<label for="product_edit_details_section_provider_form_provider_cover_image">Cover Image:</label>
+									<select id="product_edit_details_section_provider_form_provider_cover_image" name="product_edit_details_section_provider_form_provider_cover_image" class="form-control">
+									</select>
+									<div id="product_edit_details_section_provider_form_provider_cover_image-error" class="error w-100 text-center"></div>
+								</div>
+							</div>
+							<!-- /Cover Image -->
+							
+							<!-- Logo -->
+							<div class="col-12 col-md-6">
+								<div class="form-element">
+									<label for="product_edit_details_section_provider_form_provider_logo">Logo:</label>
+									<select id="product_edit_details_section_provider_form_provider_logo" name="product_edit_details_section_provider_form_provider_logo" class="form-control"></select>
+									<div id="product_edit_details_section_provider_form_provider_logo-error" class="error w-100 text-center">&nbsp;</div>
+								</div>
+							</div>
+							<!-- /Logo -->
+						
+						</div>
+						
+						<div class="row">
+							
+							<!-- Keywords -->
+							<div class="col-12">
+								<section id="provider_keywords" class="card card-body mb-2 keyword">
+									<label for="provider_keywords_search" class="d-none">Keywords:</label>
+									<input class="user-release-input form-control form-control-lg" id="provider_keywords_search" type="text" placeholder="Keywords..."/>
+									<div id="provider_keywords_container" class="w-100 my-2 chips_container"></div>
+								</section>
+							</div>
+							<!-- /Keywords -->
+						
+						</div>
+						
+						<hr/>
+						
+						<div class="row">
+							<div class="col-sm-12">
+								<section id="company_images" class="mb-2"></section>
+							</div>
+						</div>
+					
+					</div>
+				
+				</div>
+				
+				<!-- Hidden Fields -->
+				<div class="row mx-0">
+					
+					<!-- Provider Id -->
+					<div class="col-sm-3 p-1">
+						<label for="product_edit_details_section_provider_form_provider_id" class="dev-element d-none">Provider Id:</label>
+						<input type="hidden" id="product_edit_details_section_provider_form_provider_id" name="product_edit_details_section_provider_form_provider_id" class="form-control dev-element" value="" readonly="readonly"/>
+					</div>
+					<!-- /Provider Id -->
+					
+					<!-- Provider Company Id -->
+					<div class="col-sm-3 p-1">
+						<label for="product_edit_details_section_provider_form_provider_company_id" class="dev-element d-none">Provider Company Id:</label>
+						<input type="hidden" id="product_edit_details_section_provider_form_provider_company_id" name="product_edit_details_section_provider_form_provider_company_id" class="form-control dev-element" value="" readonly="readonly"/>
+					</div>
+					<!-- /Provider Company Id -->
+				
+				</div>
+				<!-- /Hidden Fields -->
+				
+				<div class="row">
+					<div class="col-12 col-md-6 text-left">
+						<button type="button" id="product_edit_details_section_provider_form_reset_button" class="btn btn-outline-danger btn-sm waves-effect waves-light">Reset</button>
+					</div>
+					
+					<div class="col-12 col-md-6 text-right">
+						<button type="button" id="product_edit_details_section_provider_form_cancel_button" class="btn btn-outline-secondary btn-sm waves-effect waves-light">Cancel</button>
+						<button type="button" id="product_edit_details_section_provider_form_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">Update</button>
+						<button type="button" id="product_edit_details_section_provider_form_edit_button" class="btn btn-primary btn-sm waves-effect waves-light">Edit</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		
+		<div class="col-12 col-md-6 p-1 mb-1">
+			<form id="product_edit_details_section_vendor_form" class="card card-body">
+				<h5 class="card-title">Vendor Details</h5>
+				
+				<div class="row">
+					<div class="col-12">
+						
+						<div class="form-element">
+							<label for="product_edit_details_section_vendor_form_filter" class="d-none">Vendor Search:</label>
+							<div class="input-group">
+								<div class="input-group-prepend">
+			                        <span class="input-group-text">
+			                            <i class="fas fa-search" aria-hidden="true"></i>
+			                        </span>
+								</div>
+								<input type="search" id="product_edit_details_section_vendor_form_filter" name="product_edit_details_section_vendor_form_filter" class="form-control" placeholder="Search Providers" autocomplete="off">
+							</div>
+							<div id="product_edit_details_section_vendor_form_filter-error" class="error w-100 text-center">&nbsp;</div>
+						</div>
+					
+					</div>
+				</div>
+				
+				<div class="row mx-0">
+					<div class="col-sm-3 p-1">
+						<label for="product_edit_details_section_vendor_form_vendor_id" class="dev-element d-none">Vendor Id:</label>
+						<input type="hidden" id="product_edit_details_section_vendor_form_vendor_id" name="product_edit_details_section_vendor_form_vendor_id" class="form-control dev-element" value="" readonly="readonly"/>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-12 col-md-6 text-left">
+					
+					</div>
+					
+					<div class="col-12 col-md-6 text-right">
+						<button type="button" id="product_edit_details_section_vendor_form_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">Update</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
 
 </section>
+<!-- /Edit Product Detail -->

@@ -1,5 +1,7 @@
 const Season = (function () {
     "use strict"
+    
+    const _product_edit_season_display = document.getElementById("product_edit_season_display")
     const _edit_product_season = document.getElementById("edit_product_season")
     const _product_edit_season_form_edit_season_link = document.getElementById("product_edit_season_form_edit_season_link")
     const _product_season = document.getElementById("product_season")
@@ -94,9 +96,9 @@ const Season = (function () {
     const updateProgress = function () {
         let seasons = Array.from(Season.all.values())
         if (seasons.length === 0) {
-            $(_panel_tab_season).html(`Season <span id="seasonNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
+            $(_panel_tab_season).html(`<span id="tab_span_season">Season</span> <span id="seasonNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
         } else {
-            $(_panel_tab_season).html(`Season`)
+            $(_panel_tab_season).html(`<span id="tab_span_season">Season</span>`)
         }
         Product.updateProgress()
     }
@@ -107,7 +109,9 @@ const Season = (function () {
                 updateProductSeason(dataToSend, function (data) {
                     if (data) {
                         let season = (data[0]) ? data[0] : data
+                        //console.log("|__ season", season)
                         addProductSeasonTableRow(season)
+                        buildProductOverview(season)
                     } else {
                         YearCalendar.endLoading()
                     }
@@ -129,7 +133,7 @@ const Season = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -143,11 +147,12 @@ const Season = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        handleSeasonError("Oops: 1")
+                        return handleSeasonError("Oops: 1")
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
+                return handleSeasonError(e)
             }
         }
     }
@@ -158,6 +163,7 @@ const Season = (function () {
                 deleteProductSeason(dataToSend, function (data) {
                     if (data) {
                         deleteProductSeasonTableRow(dataToSend.season_id)
+                        
                     } else {
                         YearCalendar.endLoading()
                     }
@@ -167,7 +173,7 @@ const Season = (function () {
     }
     
     const handleSeasonError = function (msg) {
-        toastr.error(msg)
+        toastr["error"](`${msg}`, "Season")
     }
     
     const buildUpdateRecord = function () {
@@ -290,6 +296,97 @@ const Season = (function () {
         }
     }
     
+    const clearProductOverview = function (season) {
+        //console.log("Season.buildProductOverview(season)", season)
+        let color_scheme, product_season_detail
+        
+        if (!season || !season.color_scheme || !season.product_season_detail) {
+            //console.log("|__ season", season)
+            //console.log("|__ color_scheme", season.color_scheme)
+            //console.log("|__ product_season_detail", season.product_season_detail)
+            return
+        }
+        
+        color_scheme = season.color_scheme
+        product_season_detail = season.product_season_detail
+        
+        //console.log("|__ season", season)
+        //console.log("|__ color_scheme", color_scheme)
+        //console.log("|__ product_season_detail", product_season_detail)
+        
+        let backgroundColor = (season.color_scheme && season.color_scheme.background_color) ? season.color_scheme.background_color : "#fff"
+        let textColor = (season.color_scheme && season.color_scheme.text_color) ? season.color_scheme.text_color : "#0a070d"
+        let borderColor = (season.color_scheme && season.color_scheme.border_color) ? season.color_scheme.border_color : "#0a070d"
+        let disabledDOW = (season.product_season_detail) ? getListOfIds(season.product_season_detail.disabled_dow) : []
+        let disabledDOWFormatted = []
+        let disabledDOWDisplay = ""
+        let name = (season.name) ? season.name : null
+        let seasonId = (season.id && !isNaN(parseInt(season.id))) ? parseInt(season.id) : null
+        
+        if (seasonId) {
+            $(`#disabledDOWDisplay${seasonId}`).remove()
+        }
+        
+    }
+    
+    const buildProductOverview = function (season) {
+        //console.log("Season.buildProductOverview(season)", season)
+        let color_scheme, product_season_detail
+        
+        if (!season || !season.color_scheme || !season.product_season_detail) {
+            //console.log("|__ season", season)
+            //console.log("|__ color_scheme", season.color_scheme)
+            //console.log("|__ product_season_detail", season.product_season_detail)
+            return
+        }
+        
+        color_scheme = season.color_scheme
+        product_season_detail = season.product_season_detail
+        
+        //console.log("|__ season", season)
+        //console.log("|__ color_scheme", color_scheme)
+        //console.log("|__ product_season_detail", product_season_detail)
+        
+        let backgroundColor = (season.color_scheme && season.color_scheme.background_color) ? season.color_scheme.background_color : "#fff"
+        let textColor = (season.color_scheme && season.color_scheme.text_color) ? season.color_scheme.text_color : "#0a070d"
+        let borderColor = (season.color_scheme && season.color_scheme.border_color) ? season.color_scheme.border_color : "#0a070d"
+        let disabledDOW = (season.product_season_detail) ? getListOfIds(season.product_season_detail.disabled_dow) : []
+        let disabledDOWFormatted = []
+        let disabledDOWDisplay = ""
+        let name = (season.name) ? season.name : null
+        let seasonId = (season.id && !isNaN(parseInt(season.id))) ? parseInt(season.id) : null
+        
+        for (let n = 0; n < disabledDOW.length; n++) {
+            let day = days[n]
+            if (day.short) {
+                disabledDOWFormatted.push(day.short.toUpperCase())
+            }
+        }
+        
+        disabledDOWDisplay = disabledDOWFormatted.join(", ")
+        backgroundColor = shadeColor(backgroundColor, 30)
+        borderColor = shadeColor(borderColor, -30)
+        
+        if (Season.all.get(seasonId)) {
+            clearProductOverview(Season.all.get(seasonId))
+        }
+        
+        $(_product_edit_season_display).append(`
+            <div class="col-12 col-sm-12 col-md-4 px-1" id="disabledDOWDisplay${seasonId}">
+        
+                <div class="card card-body mb-2" style="background:${backgroundColor};color:${textColor};border-color:${borderColor};">
+                
+                    <h5 class="card-title" style="color:${textColor};">${name}</h5>
+                    <h6 class="card-subtitle">
+                        <p class="m-0 mb-1" style="font-size:.85rem;font-weight:400;color:#0a070d;">Disabled Days:</p>
+                        <p class="m-0 mb-1" style="font-size:.75rem;color:${borderColor};">${disabledDOWDisplay}</p>
+                    </h6>
+                
+                </div>
+            </div>
+        `)
+    }
+    
     const loadAll = function (seasons) {
         Season.all = new Map()
         if (_table_season_product_edit) {
@@ -306,6 +403,7 @@ const Season = (function () {
             if (!isNaN(parseInt(detail.id))) {
                 $table_season_product_edit.insertRow(detail)
                 Season.all.set(parseInt(detail.id), detail)
+                buildProductOverview(detail)
             }
         })
         
@@ -324,9 +422,9 @@ const Season = (function () {
         if (season) {
             if (season.id) {
                 let seasonId = season.id
-                console.log("seasonId", seasonId)
+                //console.log("seasonId", seasonId)
                 let loadedSeasonId = (!_product_edit_season_form_season_id) ? null : (!isNaN(parseInt(_product_edit_season_form_season_id.value))) ? parseInt(_product_edit_season_form_season_id.value) : null
-                console.log("loadedSeasonId", loadedSeasonId)
+                //console.log("loadedSeasonId", loadedSeasonId)
             }
         }
         
@@ -408,12 +506,12 @@ const Season = (function () {
                 updateProgress()
                 resetForm()
                 clearProductSeasonForm()
+                clearProductOverview(hasSeason)
                 
-                toastr.success(`Season: ${hasSeason.name} - has been deleted`)
+                toastr["warning"](`Season: ${hasSeason.name} - has been deleted`, "Season")
                 YearCalendar.endLoading()
             }
         }
-        
     }
     
     const addProductSeasonTableRow = function (season) {
@@ -497,10 +595,52 @@ const Season = (function () {
     }
     
     const unloadProductSeasonForm = function () {
-        console.log("unloadProductSeasonForm()")
+        //console.log("unloadProductSeasonForm()")
         _product_edit_season_form_season_name_filter.disabled = false
         _product_edit_season_form_season_name.disabled = true
         $(_edit_product_season).hide()
+    }
+    
+    const addSeason = function (dataToSend, callback) {
+        let url = "/api/v1.0/seasons/add"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        handleSeasonError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                //console.log("error", e)
+                return handleSeasonError("Error Validating Airport")
+            }
+        } else {
+            return handleSeasonError("Error Loading Airport - Missing Data")
+        }
+    }
+    
+    const fetchByName = function (dataToSend, callback) {
+        let url = "/api/v1.0/seasons/validate"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        handleSeasonError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                //console.log("error", e)
+                handleSeasonError("Error Validating Airport")
+            }
+        } else {
+            handleSeasonError("Error Loading Airport - Missing Data")
+        }
     }
     
     const seasonExists = function (name) {
@@ -584,6 +724,7 @@ const Season = (function () {
                         } else {
                             $table_season_product_edit.clearSelectedRows()
                             resetForm()
+                            _product_edit_season_form_season_name_filter.value = ""
                         }
                     })
                 }
@@ -591,53 +732,11 @@ const Season = (function () {
         }
     }
     
-    const addSeason = function (dataToSend, callback) {
-        let url = "/api/v1.0/seasons/add"
-        
-        if (dataToSend) {
-            try {
-                sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    } else {
-                        handleSeasonError("Oops: 1")
-                    }
-                })
-            } catch (e) {
-                console.log("error", e)
-                handleSeasonError("Error Validating Airport")
-            }
-        } else {
-            handleSeasonError("Error Loading Airport - Missing Data")
-        }
-    }
-    
-    const fetchByName = function (dataToSend, callback) {
-        let url = "/api/v1.0/seasons/validate"
-        
-        if (dataToSend) {
-            try {
-                sendGetRequest(url, dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    } else {
-                        handleSeasonError("Oops: 1")
-                    }
-                })
-            } catch (e) {
-                console.log("error", e)
-                handleSeasonError("Error Validating Airport")
-            }
-        } else {
-            handleSeasonError("Error Loading Airport - Missing Data")
-        }
-    }
-    
     const initAutoComplete = function () {
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         $(_product_edit_season_form_season_name_filter)
-            .on("click", function () {
+            .on("click", function (e) {
                 if ($(this).attr("readonly") === "readonly") {
                     e.preventDefault()
                 } else {
@@ -708,6 +807,7 @@ const Season = (function () {
         loadTypes(seasons)
         
         if (_product_edit_season_form_season_name_filter) {
+            $(_product_edit_season_display).empty()
             initAutoComplete()
             resetForm()
         }

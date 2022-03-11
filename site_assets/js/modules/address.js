@@ -654,7 +654,7 @@ const Address = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 return handle_address_error("Error Validating Company")
             }
         } else {

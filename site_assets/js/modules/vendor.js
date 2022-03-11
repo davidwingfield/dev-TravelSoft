@@ -35,6 +35,9 @@ const Vendor = (function () {
     const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
     const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
     const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
+    
+    const _product_edit_details_section_vendor_form_filter = document.getElementById("product_edit_details_section_vendor_form_filter")
+    const _product_edit_details_section_vendor_form_vendor_id = document.getElementById("product_edit_details_section_vendor_form_vendor_id")
     //
     let new_vendor_validator, validator
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
@@ -70,7 +73,7 @@ const Vendor = (function () {
     $(_button_save_vendor)
         .on("click", function () {
             let company = Company.build()
-            Console.log("_button_save_vendor", company)
+            //console.log("_button_save_vendor", company)
             update()
         })
     
@@ -196,7 +199,7 @@ const Vendor = (function () {
                 if (!suggestion || !suggestion.data) {
                     return
                 }
-                Console.log("suggestion.data", suggestion.data)
+                //console.log("suggestion.data", suggestion.data)
                 let vendor = suggestion.data
                 if (_form_product_add) {
                     let provider_company_id = (isNaN(parseInt(_modal_product_provider_company_id.value))) ? null : parseInt(_modal_product_provider_company_id.value)
@@ -267,20 +270,24 @@ const Vendor = (function () {
                     },
                 })
         }
+        
+        if (_product_edit_details_section_vendor_form_filter) {
+        
+        }
     }
     
     const vendor_exists = function (name) {
-        Console.log("vendor_exists()", name)
+        //console.log("vendor_exists()", name)
         
         if (name && name !== "") {
             let dataToSend = {
                 name: name,
             }
             
-            Console.log("dataToSend", dataToSend)
+            //console.log("dataToSend", dataToSend)
             
             fetch_vendor_by_name(dataToSend, function (data) {
-                Console.log("fetch_vendor_by_name()", data)
+                //console.log("fetch_vendor_by_name()", data)
                 let vendor, company
                 
                 if (data && data.length > 0) {
@@ -292,7 +299,7 @@ const Vendor = (function () {
                     }
                     
                 } else {
-                    Console.log("Vendor Does Not Exist")
+                    //console.log("Vendor Does Not Exist")
                     
                     _modal_product_vendor_id.value = ""
                     _modal_product_vendor_company_id.value = ""
@@ -316,7 +323,7 @@ const Vendor = (function () {
                 }
                 
                 if (vendor) {
-                    Console.log("Vendor Exists", vendor)
+                    //console.log("Vendor Exists", vendor)
                     
                     if (_vendor_modal_vendor_name) {
                         confirmDialog(`Vendor ${vendor.name} ALREADY exists. Would you like to load this record to edit?`, (ans) => {
@@ -361,14 +368,14 @@ const Vendor = (function () {
         if (vendor) {
             newVendor(vendor, function (data) {
                 if (data) {
-                    Console.log("data 1", data)
+                    //console.log("data 1", data)
                     if (data[0]) {
-                        Console.log("data[0] 1", data[0])
+                        //console.log("data[0] 1", data[0])
                         let details = data[0]
                         
                         if (details.id) {
                             if (_form_product_add) {
-                                Console.log("_form_product_add: details", details)
+                                //console.log("_form_product_add: details", details)
                                 _modal_product_vendor_company_id.value = (details.company_id) ? details.company_id : ""
                                 _modal_product_vendor_id.value = (details.id) ? details.id : ""
                                 _modal_product_provider_vendor_match.checked = (_modal_product_vendor_company_id.value === _modal_product_provider_company_id.value)
@@ -380,13 +387,13 @@ const Vendor = (function () {
                                 window.location.replace("/vendors/" + details.id)
                             }
                         } else {
-                            Console.log("details 1", details)
+                            //console.log("details 1", details)
                         }
                     } else {
-                        Console.log("details 2", data)
+                        //console.log("details 2", data)
                     }
                 } else {
-                    Console.log("details 3", vendor)
+                    //console.log("details 3", vendor)
                 }
             })
         }
@@ -411,7 +418,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -500,7 +507,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                //console.log("error", e)
                 return handle_vendor_error("Error Validating Company")
             }
         } else {
@@ -575,25 +582,41 @@ const Vendor = (function () {
     }
     
     const set = function (vendor) {
-        
         let detail = _default_detail()
-        detail.id = (vendor.id) ? vendor.id : null
-        detail.name = (vendor.name) ? vendor.name : null
-        detail.status_id = (vendor.status_id) ? vendor.status_id : null
-        detail.show_online = vendor.show_online
-        detail.show_sales = vendor.show_sales
-        detail.show_ops = vendor.show_ops
-        detail.is_provider = vendor.is_provider
-        detail.sku = (vendor.sku) ? vendor.sku : null
-        detail.enabled = vendor.enabled
-        detail.date_created = (vendor.date_created) ? vendor.date_created : formatDateMySQL()
-        detail.created_by = (vendor.created_by) ? vendor.created_by : created_by
-        detail.date_modified = (vendor.date_modified) ? vendor.date_modified : formatDateMySQL()
-        detail.modified_by = (vendor.modified_by) ? vendor.modified_by : modified_by
-        detail.note = (vendor.note) ? vendor.note : null
-        detail.addresses = (vendor.company.addresses) ? vendor.company.addresses : []
-        detail.contacts = (vendor.company.contacts) ? vendor.company.contacts : []
-        detail.company = (vendor.company) ? vendor.company : {}
+        let company = {}
+        let addresses, contacts = []
+        
+        if (vendor) {
+            detail.id = (vendor.id) ? vendor.id : null
+            detail.name = (vendor.name) ? vendor.name : null
+            detail.status_id = (vendor.status_id) ? vendor.status_id : null
+            detail.show_online = vendor.show_online
+            detail.show_sales = vendor.show_sales
+            detail.show_ops = vendor.show_ops
+            detail.is_provider = vendor.is_provider
+            detail.sku = (vendor.sku) ? vendor.sku : null
+            detail.enabled = vendor.enabled
+            detail.date_created = (vendor.date_created) ? vendor.date_created : formatDateMySQL()
+            detail.created_by = (vendor.created_by) ? vendor.created_by : created_by
+            detail.date_modified = (vendor.date_modified) ? vendor.date_modified : formatDateMySQL()
+            detail.modified_by = (vendor.modified_by) ? vendor.modified_by : modified_by
+            detail.note = (vendor.note) ? vendor.note : null
+            if (vendor.company) {
+                company = vendor.company
+                detail.company_id = company.id
+                
+                if (vendor.company.addresses) {
+                    addresses = vendor.addresses
+                }
+                if (vendor.company.contacts) {
+                    contacts = vendor.contacts
+                }
+            }
+        }
+        
+        detail.addresses = addresses
+        detail.contacts = contacts
+        detail.company = company
         
         Vendor.detail = detail
         return detail
@@ -606,13 +629,13 @@ const Vendor = (function () {
      * @param callback
      */
     const updateVendor = function (dataToSend, callback) {
-        Console.log("updateVendor()", dataToSend)
+        //console.log("updateVendor()", dataToSend)
         let url = "/api/v1.0/vendors/update"
         
         if (dataToSend) {
             try {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    Console.log("data", data)
+                    //console.log("data", data)
                     if (data) {
                         return callback(data)
                     } else {
@@ -620,7 +643,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -632,14 +655,14 @@ const Vendor = (function () {
         if (vendor_detail) {
             confirmDialog(`Would you like to update?`, (ans) => {
                 if (ans) {
-                    Console.log("vendor_detail", vendor_detail)
+                    //console.log("vendor_detail", vendor_detail)
                     
                     updateVendor(vendor_detail, function (data) {
-                        Console.log("data", data)
+                        //console.log("data", data)
                         if (data) {
-                            Console.log("data 1", data)
+                            //console.log("data 1", data)
                             if (data[0]) {
-                                Console.log("data[0] 1", data[0])
+                                //console.log("data[0] 1", data[0])
                                 let details = data[0]
                                 if (details.id) {
                                     if (_vendor_id.value === "" || isNaN(parseInt(_vendor_id.value))) {
@@ -649,13 +672,13 @@ const Vendor = (function () {
                                         toastr.success(`Vendor ${name} has been updated.`)
                                     }
                                 } else {
-                                    Console.log("details 1", details)
+                                    //console.log("details 1", details)
                                 }
                             } else {
-                                Console.log("details 2", data)
+                                //console.log("details 2", data)
                             }
                         } else {
-                            Console.log("details 3", provider)
+                            //console.log("details 3", provider)
                         }
                     })
                 }
@@ -674,14 +697,14 @@ const Vendor = (function () {
         if (vendor) {
             updateVendor(vendor, function (data) {
                 if (data) {
-                    Console.log("data", data)
-                    Console.log(data.length)
+                    //console.log("data", data)
+                    //console.log(data.length)
                     if (data[0]) {
-                        Console.log("data[0]", data[0])
+                        //console.log("data[0]", data[0])
                         let details = data[0]
                         if (details.id) {
-                            Console.log("details.id", details.id)
-                            Console.log("_vendor_id.value", _vendor_id.value)
+                            //console.log("details.id", details.id)
+                            //console.log("_vendor_id.value", _vendor_id.value)
                             if (_vendor_id.value === "" || isNaN(parseInt(_vendor_id.value))) {
                                 window.location.replace(base_url + "/" + details.id)
                             } else {
@@ -689,13 +712,13 @@ const Vendor = (function () {
                                 toastr.success(`Vendor ${name} has been updated.`)
                             }
                         } else {
-                            Console.log("details 1", details)
+                            //console.log("details 1", details)
                         }
                     } else {
-                        Console.log("details 2", data)
+                        //console.log("details 2", data)
                     }
                 } else {
-                    Console.log("details 3", provider)
+                    //console.log("details 3", provider)
                 }
             })
         }
@@ -709,12 +732,12 @@ const Vendor = (function () {
         let addresses = Array.from(Address.all.values())
         let contacts = Array.from(Contact.all.values())
         /*
-          Console.log("company_detail", company_detail)
-          Console.log("provider_detail", provider_detail)
-          Console.log("location_detail", location_detail)
-          Console.log("vendor_detail", vendor_detail)
-          Console.log("addresses", addresses)
-          Console.log("contacts", contacts)
+          //console.log("company_detail", company_detail)
+          //console.log("provider_detail", provider_detail)
+          //console.log("location_detail", location_detail)
+          //console.log("vendor_detail", vendor_detail)
+          //console.log("addresses", addresses)
+          //console.log("contacts", contacts)
           //*/
         if (!company_detail || !vendor_detail || !addresses || !contacts) {
             $.each(panels, function (index, item) {
@@ -798,18 +821,35 @@ const Vendor = (function () {
             })
         }
         
-        Console.log(" Vendor.all", Vendor.all)
+        //console.log(" Vendor.all", Vendor.all)
     }
     
     const validate_form = function () {
         return $(_form_edit_vendor).valid()
     }
     
+    const populateProductEditVendorForm = function (vendor) {
+        //console.log("Provider.populateProductEditVendorForm(vendor)", vendor)
+        //console.log("|__ Vendor.detail", Vendor.detail)
+        _product_edit_details_section_vendor_form_filter.value = vendor.company.name
+        _product_edit_details_section_vendor_form_vendor_id.value = vendor.id
+        
+        Product.attr3 = (vendor.sku) ? vendor.sku : null
+    }
+    
     const init = function (settings) {
+        //console.log("Vendor.init(settings)", settings)
         let company = {}
         if (settings) {
             if (settings.company) {
                 company = settings.company
+            }
+            
+            if (settings.vendor_detail) {
+                let detail = set(settings.vendor_detail)
+                populateProductEditVendorForm(detail)
+                //console.log("|__ detail", detail)
+                
             }
         }
         
@@ -853,11 +893,8 @@ const Vendor = (function () {
         }
     }
     
-    /**
-     * disables fields unused from provider edit
-     */
     const setProvider = function () {
-        Console.log("Set Provider")
+        //console.log("Set Provider")
         if (_provider_edit) {
             _vendor_is_provider.checked = true
             $(_vendor_is_provider).attr("readonly", "true")
@@ -869,11 +906,6 @@ const Vendor = (function () {
         }
     }
     
-    /**
-     * initialize vendor index page
-     *
-     * @param settings
-     */
     const index = function (settings) {
         if (_form_vendor_add) {
             validator_init(add_modal_form_rules)

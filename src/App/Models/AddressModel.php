@@ -1,27 +1,25 @@
 <?php
-    
-    namespace Framework\App\Models;
-    
-    use Exception;
-    use Framework\App\Controllers\Address;
-    use Framework\Core\Model;
-    use Framework\Logger\Log;
-    
-    /**
-     * Short Address Description
-     * Long Address Description
-     *
-     * @package            Framework\App
-     * @subpackage         Models
-     */
-    class AddressModel extends Model
-    {
-        
-        protected static $dbTable = "address";
-        protected static $dbFields = Array();
-        protected static $sql = "
-            SELECT
-                                    COMPANY_ADDRESS.company_id,
+	
+	namespace Framework\App\Models;
+	
+	use Exception;
+	use Framework\Core\Model;
+	use Framework\Logger\Log;
+	
+	/**
+	 * Short AddressModel Description
+	 * Long AddressModel Description
+	 *
+	 * @package            Framework\App
+	 * @subpackage         Models
+	 */
+	class AddressModel extends Model
+	{
+		
+		protected static $dbTable = "address";
+		protected static $dbFields = Array();
+		protected static $sql = "
+            SELECT 					COMPANY_ADDRESS.company_id,
                                     COMPANY_ADDRESS.address_id,
                                     GROUP_CONCAT(COMPANY_ADDRESS.address_types_id ORDER BY COMPANY_ADDRESS.address_types_id ASC SEPARATOR ',') AS 'address_types_id',
                                     ADDRESS.id AS 'address_id',
@@ -81,84 +79,84 @@
                         AND			COUNTRY.enabled = 1
                         AND			PROVINCE.enabled = 1
                         AND			CITY.enabled = 1";
-        
-        /**
-         * get
-         *
-         * @param int|null $id
-         *
-         * @return array
-         */
-        public static function get(int $id = null): array
-        {
-            
-            try {
-                if (!is_null($id)) {
-                    self::$db->where("id", $id);
-                }
-                
-                self::$db->where("enabled", 1);
-                
-                return self::$db->get(self::$dbTable);
-            } catch (Exception $e) {
-                return [];
-            }
-        }
-        
-        public static function getOne(int $id = null): array
-        {
-            try {
-                if (!is_null($id)) {
-                    self::$db->where("id", $id);
-                }
-                
-                self::$db->where("enabled", 1);
-                
-                return self::$db->getOne(self::$dbTable);
-            } catch (Exception $e) {
-                return [];
-            }
-        }
-        
-        public static function deleteCompanyAddressByCompanyId(int $company_id, int $address_id): bool
-        {
-            $sql = "
+		
+		/**
+		 * get
+		 *
+		 * @param int|null $id
+		 *
+		 * @return array
+		 */
+		public static function get(int $id = null): array
+		{
+			
+			try {
+				if (!is_null($id)) {
+					self::$db->where("id", $id);
+				}
+				
+				self::$db->where("enabled", 1);
+				
+				return self::$db->get(self::$dbTable);
+			} catch (Exception $e) {
+				return [];
+			}
+		}
+		
+		public static function getOne(int $id = null): array
+		{
+			try {
+				if (!is_null($id)) {
+					self::$db->where("id", $id);
+				}
+				
+				self::$db->where("enabled", 1);
+				
+				return self::$db->getOne(self::$dbTable);
+			} catch (Exception $e) {
+				return [];
+			}
+		}
+		
+		public static function deleteCompanyAddressByCompanyId(int $company_id, int $address_id): bool
+		{
+			$sql = "
                 DELETE FROM company_address
                 WHERE company_id = $company_id AND address_id = $address_id;
                 ";
-            
-            try {
-                Model::$db->rawQuery($sql);
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return false;
-            }
-            
-            return true;
-        }
-        
-        public static function updateCompanyAddress(int $address_id, int $company_id, array $address_types = []): array
-        {
-            if (!isset($address_id, $company_id, $address_types)) {
-                Log::$debug_log->error("Missing Fields");
-                
-                return [];
-            }
-            
-            //
-            $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
-            $enabled = 1;
-            $note = Model::setLongText((isset($address["note"])) ? $address["note"] : null);
-            $created_by = Model::setInt($user_id);
-            $modified_by = Model::setInt($user_id);
-            
-            //
-            foreach ($address_types AS $address_types_id) {
-                $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
-                
-                try {
-                    $sql = "
+			
+			try {
+				Model::$db->rawQuery($sql);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return false;
+			}
+			
+			return true;
+		}
+		
+		public static function updateCompanyAddress(int $address_id, int $company_id, array $address_types = []): array
+		{
+			if (!isset($address_id, $company_id, $address_types)) {
+				Log::$debug_log->error("Missing Fields");
+				
+				return [];
+			}
+			
+			//
+			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+			$enabled = 1;
+			$note = Model::setLongText((isset($address["note"])) ? $address["note"] : null);
+			$created_by = Model::setInt($user_id);
+			$modified_by = Model::setInt($user_id);
+			
+			//
+			foreach ($address_types AS $address_types_id) {
+				$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+				
+				try {
+					$sql = "
                     INSERT INTO company_address (
                         company_id, address_id, address_types_id, enabled,
                         date_created, created_by, date_modified, modified_by,
@@ -172,93 +170,93 @@
                         enabled = VALUES(enabled),
                         date_modified = VALUES(date_modified);
                     ";
-                    Model::$db->rawQuery($sql);
-                } catch (Exception $e) {
-                    Log::$debug_log->error($e);
-                    
-                    return [];
-                }
-            }
-            
-            return self::getByCompanyId($company_id);
-        }
-        
-        public static function getByCompanyId(int $company_id = null): array
-        {
-            $where = "";
-            if (!is_null($company_id)) {
-                $where = "AND			COMPANY_ADDRESS.company_id = $company_id";
-            }
-            
-            $groupBy = "
+					Model::$db->rawQuery($sql);
+				} catch (Exception $e) {
+					Log::$debug_log->error($e);
+					
+					return [];
+				}
+			}
+			
+			return self::getByCompanyId($company_id);
+		}
+		
+		public static function getByCompanyId(int $company_id = null): array
+		{
+			$where = "";
+			if (!is_null($company_id)) {
+				$where = "AND			COMPANY_ADDRESS.company_id = $company_id";
+			}
+			
+			$groupBy = "
                     $where
                     GROUP BY 		COMPANY_ADDRESS.address_id;";
-            
-            try {
-                $sql = self::$sql . $groupBy;
-                
-                return Model::$db->rawQuery($sql);
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-        }
-        
-        public static function getByAddressId(int $address_id = null): array
-        {
-            $where = "";
-            if (!is_null($address_id)) {
-                $where = "AND			COMPANY_ADDRESS.address_id = $address_id";
-            }
-            
-            $groupBy = "
+			
+			try {
+				$sql = self::$sql . $groupBy;
+				
+				return Model::$db->rawQuery($sql);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		public static function getByAddressId(int $address_id = null): array
+		{
+			$where = "";
+			if (!is_null($address_id)) {
+				$where = "AND			COMPANY_ADDRESS.address_id = $address_id";
+			}
+			
+			$groupBy = "
                     $where
                     GROUP BY 		COMPANY_ADDRESS.address_id;";
-            
-            try {
-                $sql = self::$sql . $groupBy;
-                
-                return Model::$db->rawQuery($sql);
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-        }
-        
-        public static function update(array $address = []): array
-        {
-            if (!isset($address["company_id"])) {
-                Log::$debug_log->error("Missing Company Id");
-                
-                return [];
-            }
-            // ----
-            $user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
-            $address_id = Model::setInt((isset($address["id"])) ? $address["id"] : null);
-            $street_1 = Model::setString((isset($address["street_1"])) ? $address["street_1"] : null);
-            $street_2 = Model::setString((isset($address["street_2"])) ? $address["street_2"] : null);
-            $street_3 = Model::setString((isset($address["street_3"])) ? $address["street_3"] : null);
-            $postal_code = Model::setString((isset($address["postal_code"])) ? $address["postal_code"] : null);
-            $company_id = Model::setInt((isset($address["company_id"])) ? $address["company_id"] : null);
-            $country_id = Model::setInt((isset($address["country_id"])) ? $address["country_id"] : null);
-            $province_id = Model::setInt((isset($address["province_id"])) ? $address["province_id"] : null);
-            $city_id = Model::setInt((isset($address["city_id"])) ? $address["city_id"] : null);
-            $status_id = Model::setInt((isset($address["status_id"])) ? $address["status_id"] : null);
-            $enabled = Model::setBool((isset($address["enabled"])) ? $address["enabled"] : null);
-            $note = Model::setLongText((isset($address["note"])) ? $address["note"] : null);
-            $created_by = Model::setInt($user_id);
-            $modified_by = Model::setInt($user_id);
-            $address_types_id = [];
-            
-            if (isset($address["address_types_id"])) {
-                foreach ($address["address_types_id"] AS $address_type) {
-                    $address_types_id[] = $address_type;
-                }
-            }
-            
-            $sql = "
+			
+			try {
+				$sql = self::$sql . $groupBy;
+				
+				return Model::$db->rawQuery($sql);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		public static function update(array $address = []): array
+		{
+			if (!isset($address["company_id"])) {
+				Log::$debug_log->error("Missing Company Id");
+				
+				return [];
+			}
+			// ----
+			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+			$address_id = Model::setInt((isset($address["id"])) ? $address["id"] : null);
+			$street_1 = Model::setString((isset($address["street_1"])) ? $address["street_1"] : null);
+			$street_2 = Model::setString((isset($address["street_2"])) ? $address["street_2"] : null);
+			$street_3 = Model::setString((isset($address["street_3"])) ? $address["street_3"] : null);
+			$postal_code = Model::setString((isset($address["postal_code"])) ? $address["postal_code"] : null);
+			$company_id = Model::setInt((isset($address["company_id"])) ? $address["company_id"] : null);
+			$country_id = Model::setInt((isset($address["country_id"])) ? $address["country_id"] : null);
+			$province_id = Model::setInt((isset($address["province_id"])) ? $address["province_id"] : null);
+			$city_id = Model::setInt((isset($address["city_id"])) ? $address["city_id"] : null);
+			$status_id = Model::setInt((isset($address["status_id"])) ? $address["status_id"] : null);
+			$enabled = Model::setBool((isset($address["enabled"])) ? $address["enabled"] : null);
+			$note = Model::setLongText((isset($address["note"])) ? $address["note"] : null);
+			$created_by = Model::setInt($user_id);
+			$modified_by = Model::setInt($user_id);
+			$address_types_id = [];
+			
+			if (isset($address["address_types_id"])) {
+				foreach ($address["address_types_id"] AS $address_type) {
+					$address_types_id[] = $address_type;
+				}
+			}
+			
+			$sql = "
                 INSERT INTO address
                 (
                     id, city_id, province_id, country_id, street_1,
@@ -279,36 +277,36 @@
                     postal_code = VALUES(postal_code),
                     enabled = VALUES(enabled),
                     date_modified = VALUES(date_modified);";
-            try {
-                Model::$db->rawQuery($sql);
-                $address_id = Model::$db->getInsertId();
-                if (isset($company_id, $address_id, $address_types_id)) {
-                    $del = self::deleteCompanyAddressByCompanyId((int)$company_id, (int)$address_id);
-                    $company_addresses = self::updateCompanyAddress((int)$address_id, (int)$company_id, $address_types_id);
-                }
-                
-                return self::getByAddressId((int)$address_id);
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-        }
-        
-        public static function getAddressTypeById(int $address_types_id)
-        {
-            $address_types = array();
-            Model::$db->where("enabled", 1);
-            if (!is_null($address_types_id)) {
-                Model::$db->where("id", (int)$address_types_id);
-            }
-            try {
-                $address_types = self::$db->get("address_types");
-            } catch (Exception $e) {
-                Log::$debug_log->error($e->getMessage());
-            }
-            
-            return $address_types;
-        }
-        
-    }
+			try {
+				Model::$db->rawQuery($sql);
+				$address_id = Model::$db->getInsertId();
+				if (isset($company_id, $address_id, $address_types_id)) {
+					$del = self::deleteCompanyAddressByCompanyId((int)$company_id, (int)$address_id);
+					$company_addresses = self::updateCompanyAddress((int)$address_id, (int)$company_id, $address_types_id);
+				}
+				
+				return self::getByAddressId((int)$address_id);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		public static function getAddressTypeById(int $address_types_id)
+		{
+			$address_types = array();
+			Model::$db->where("enabled", 1);
+			if (!is_null($address_types_id)) {
+				Model::$db->where("id", (int)$address_types_id);
+			}
+			try {
+				$address_types = self::$db->get("address_types");
+			} catch (Exception $e) {
+				Log::$debug_log->error($e->getMessage());
+			}
+			
+			return $address_types;
+		}
+		
+	}

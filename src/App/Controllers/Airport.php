@@ -82,13 +82,6 @@
 			exit(0);
 		}
 		
-		/**
-		 * Format Autocomplete DataSet
-		 *
-		 * @param array|null $airports
-		 *
-		 * @return array
-		 */
 		private static function format_ac(array $airports = null): array
 		{
 			if (is_null($airports)) {
@@ -119,13 +112,6 @@
 			
 		}
 		
-		/**
-		 * format result set
-		 *
-		 * @param array|null $airport
-		 *
-		 * @return array
-		 */
 		private static function format(array $airport = null): array
 		{
 			if (is_null($airport)) {
@@ -140,6 +126,9 @@
 				"airport_types_id" => $airport["airport_types_id"],
 				"name" => $airport["airport_name"],
 				"iata_code" => $airport["airport_iata_code"],
+				"street_1" => $airport["airport_street_1"],
+				"street_2" => $airport["airport_street_2"],
+				"postal_code" => $airport["airport_postal_code"],
 				"gps_code" => $airport["airport_gps_code"],
 				"local_code" => $airport["airport_local_code"],
 				"home_link" => $airport["airport_home_link"],
@@ -208,6 +197,36 @@
 					"note" => $airport["city_note"],
 				),
 			);
+		}
+		
+		public static function get(int $airport_id = null): array
+		{
+			$airports = [];
+			$results = AirportModel::fetchByAirportId($airport_id);
+			
+			foreach ($results AS $k => $airport) {
+				$airports[] = self::format($airport);
+			}
+			
+			return $airports;
+		}
+		
+		public static function serveGet(array $params = null): void
+		{
+			$airport_id = null;
+			
+			if (isset($params["airport_id"])) {
+				$airport_id = (int)$params["airport_id"];
+			}
+			
+			$airports = self::get($airport_id);
+			
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			View::render_json($airports);
+			exit(0);
 		}
 		
 	}

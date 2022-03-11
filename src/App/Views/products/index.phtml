@@ -1,21 +1,59 @@
 <?php
+	
+	use Framework\App\Controllers\Location;
+	
 	if (!isset($page_data)) {
 		$page_data = [];
 	}
 	
-	$settings = json_encode($page_data["products"], 1);
+	$temp = [];
+	$temp["products"] = [];
+	$temp["stations"] = [];
+	$temp["airports"] = [];
+	
+	$products = (isset($page_data["products"])) ? $page_data["products"] : [];
+	$stations = (isset($page_data["stations"])) ? $page_data["stations"] : [];
+	$airports = (isset($page_data["airports"])) ? $page_data["airports"] : [];
+	
+	foreach ($products AS $product) {
+		$temp["products"][] = $product;
+	}
+	
+	foreach ($stations AS $station) {
+		$temp["stations"][] = $station;
+	}
+	
+	foreach ($airports AS $airport) {
+		$temp["airports"][] = $airport;
+	}
+	
+	$types = json_decode(TYPES, true);
+	
+	foreach ($types AS $k => $type) {
+		$temp["types"][$k] = $type;
+	}
+	
+	$settings = json_encode($temp, 1);
+	
+	//echo "<pre>" . var_export($types["category"], 1) . "</pre>";
+	//echo "<pre>" . var_export($page_data["products"], 1) . "</pre>";
+	
 	$init = "Product.init($settings);";
+	
 	if (!defined("COUNTRIES")) {
 		define("COUNTRIES", $page_data["types"]["countries"]);
 	}
+	
 	$currency = [];
 	if (isset($page_data["types"]["currency"])) {
 		$currency = $page_data["types"]["currency"];
 	}
+	
 	$airport_types = [];
 	if (isset($page_data["types"]["airport_types"])) {
 		$airport_types = $page_data["types"]["airport_types"];
 	}
+
 ?>
 
 <!-- Product Index Page -->
@@ -41,13 +79,13 @@
 		</div>
 	</div>
 	
-	<?php /*?>
+	<?php //*?>
 	<!-- Test Elements -->
 	<div id="testElements">
 		<div class="row gx-1">
-			<?php displayJsonOnPage($airport_types, "Airport Types"); ?>
-			<?php //displayJsonOnPage($profiles, "Profiles"); ?>
-			<?php //displayJsonOnPage($matrices, "Matrices"); ?>
+			<?php //displayJsonOnPage(TYPES, "TEMP"); ?>
+			<?php //displayJsonOnPage($products, "products"); ?>
+			<?php //displayJsonOnPage($stations, "stations"); ?>
 			<?php //displayJsonOnPage($pricings, "Pricings"); ?>
 			<?php //displayJsonOnPage($vendor, "Vendor"); ?>
 			<?php //displayJsonOnPage($product, "Product"); ?>

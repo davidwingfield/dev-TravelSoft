@@ -1,8 +1,7 @@
 <section id="product_edit_meta_section" class="section">
-	
 	<div class="row">
 		
-		<div class="col-12 col-md-8 mb-2">
+		<div class="col-12 col-md-7 mb-2">
 			
 			<!-- Detailed Product Description -->
 			<section class="card card-body mb-2">
@@ -23,6 +22,14 @@
 						</div>
 					</div>
 				</div>
+				
+				<div class="row">
+					<div class="col-12 col-md-6 text-left"></div>
+					<div class="col-12 col-md-6 text-right">
+						<button type="button" id="product_edit_meta_description_long_update_button" name="product_edit_meta_description_long_update_button" class="btn btn-primary btn-sm waves-effect waves-light">Update</button>
+					</div>
+				</div>
+			
 			</section>
 			<!-- /Detailed Product Description -->
 			
@@ -41,19 +48,29 @@
 						</div>
 					</div>
 				</div>
+				<div class="row">
+					<div class="col-12 col-md-6 text-left"></div>
+					<div class="col-12 col-md-6 text-right">
+						<button type="button" id="product_edit_meta_description_short_update_button" name="product_edit_meta_description_short_update_button" class="btn btn-primary btn-sm waves-effect waves-light">Update</button>
+					</div>
+				</div>
 			</section>
-			<!-- /Unit Short Description -->
+			<!-- /Product Short Description -->
 		
 		</div>
 		
-		<div class="col-12 col-md-4 mb-2">
+		<div class="col-12 col-md-5 mb-2 px-1">
 			
 			<!-- Product Keywords -->
 			<section id="product_keywords" class="card card-body mb-2 keyword">
 				<label for="product_keywords_search" class="d-none">Product Keywords:</label>
 				<input class="user-release-input form-control form-control-lg" id="product_keywords_search" type="text" placeholder="Keywords..."/>
-				<div id="product_keywords_container" class="container my-2 chips_container">
-				
+				<div id="product_keywords_container" class="w-100 my-2 chips_container"></div>
+				<div class="row">
+					<div class="col-12 col-md-6 text-left"></div>
+					<div class="col-12 col-md-6 text-right">
+						<button type="button" id="product_edit_meta_product_keywords_update_button" name="product_edit_meta_product_keywords_update_button" class="btn btn-primary btn-sm waves-effect waves-light">Update</button>
+					</div>
 				</div>
 			</section>
 			<!-- /Product Keywords -->
@@ -62,14 +79,189 @@
 			<section id="product_amenities" class="card card-body mb-2 keyword">
 				<label for="product_amenities_search" class="d-none">Product Amenities:</label>
 				<input id="product_amenities_search" class="user-release-input form-control form-control-lg" type="text" placeholder="Amenities..."/>
-				<div id="product_amenities_container" class="container my-2 chips_container">
+				<div id="product_amenities_container" class="w-100 my-2 chips_container">
 				
+				</div>
+				<div class="row">
+					<div class="col-12 col-md-6 text-left"></div>
+					<div class="col-12 col-md-6 text-right">
+						<button type="button" id="product_edit_meta_product_amenities_update_button" name="product_edit_meta_product_amenities_update_button" class="btn btn-primary btn-sm waves-effect waves-light">Update</button>
+					</div>
 				</div>
 			</section>
 			<!-- /Product Amenities -->
+			
+			<!-- Product Images -->
+			<section id="product_images" class="mb-2"></section>
+			<!-- /Product Images -->
 		
 		</div>
 	
 	</div>
-
 </section>
+
+<!-- Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true" data-mdb-backdrop="static" data-mdb-keyboard="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title debug" id="imageModalLabel">Image</h4>
+			</div>
+			
+			<div class="modal-body p-2">
+				
+				<div class="card card-body">
+					<div class="row">
+						<div class="col-12">
+							<input type="file" id="image_file" class="" data-height="300"/>
+						</div>
+					</div>
+					
+					<h5 class="card-title font-weight-bold">
+						<span id="image_modal_file_name_display">File Name</span>
+					</h5>
+					
+					<div class="row">
+						
+						<!-- Cover Image -->
+						<div class="col-12 col-sm-6 col-md-6 d-flex align-self-end justify-content-center pb-2">
+							<div class="form-element">
+								<div class="custom-control custom-switch">
+									<input id="image_is_cover" name="image_is_cover" type="checkbox" value="1" class="custom-control-input"/>
+									<label for="image_is_cover" class="custom-control-label p-0">Cover Image</label>
+								</div>
+								<div id="image_is_cover-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						<!-- /Cover Image -->
+						
+						<!-- Enabled -->
+						<div class="col-12 col-sm-6 col-md-6 d-flex align-self-end justify-content-center pb-2">
+							<div class="form-element">
+								<div class="custom-control custom-switch">
+									<input id="image_enabled" name="image_enabled" type="checkbox" value="1" class="custom-control-input"/>
+									<label for="image_enabled" class="custom-control-label p-0">Enabled</label>
+								</div>
+								<div id="image_enabled-error" class="error w-100 text-center" style="display: none;">&nbsp;</div>
+							</div>
+						</div>
+						<!-- /Enabled -->
+					
+					</div>
+					
+					<div class="row">
+						
+						<!-- Id -->
+						<div class="col-12 col-md-6">
+							<div class="form-element">
+								<label for="image_id">Id:</label>
+								<input type="text" id="image_id" name="image_id" class="form-control" readonly="readonly"/>
+								<div id="image_id-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						
+						<!-- Name -->
+						<div class="col-12 col-md-6">
+							<div class="form-element">
+								<label for="image_name">Name:</label>
+								<input type="text" id="image_name" name="image_name" class="form-control" readonly="readonly"/>
+								<div id="image_name-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						<!-- /Name -->
+					
+					</div>
+					
+					<div class="row">
+						
+						<div class="col-12">
+							<div class="form-element">
+								<label for="image_title">Title:</label>
+								<input type="text" id="image_title" name="image_title" class="form-control"/>
+								<div id="image_title-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+					
+					</div>
+					
+					<div class="row">
+						
+						<div class="col-12">
+							<div class="form-element">
+								<label for="image_alt">Alt:</label>
+								<input type="text" id="image_alt" name="image_alt" class="form-control"/>
+								<div id="image_alt-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+					
+					</div>
+					
+					<div class="row">
+						
+						<div class="col-12">
+							<!-- Image Caption -->
+							<section class="card card-body mb-2">
+								<div class="d-flex justify-content-between">
+									<h5 class="card-title label">Caption:</h5>
+								</div>
+								<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+								<div class="row">
+									<div class="col-12">
+										<div class="form-element">
+											<label for="image_cation" class="d-none">Short Description</label>
+											<textarea id="image_cation" name="image_cation" class="md-textarea short-description form-control" rows="4" maxlength="250"></textarea>
+											<div id="image_cation-error" class="error w-100 text-center">&nbsp;</div>
+										</div>
+									</div>
+								</div>
+							</section>
+							<!-- /Image Caption -->
+						</div>
+					
+					</div>
+				
+				</div>
+				
+				<!-- Hidden Fields -->
+				<div class="row gx-1 my-0">
+					<div class="col-3 px-1 my-0">
+						<label for="image_path" class="dev-element d-none">Path:</label>
+						<input type="hidden" id="image_path" name="image_path" class="form-control dev-element" readonly="readonly">
+					</div>
+					<div class="col-3 px-1 my-0">
+						<label for="image_extension" class="dev-element d-none">Extension:</label>
+						<input type="hidden" id="image_extension" name="image_extension" class="form-control dev-element" readonly="readonly">
+					</div>
+					<div class="col-3 px-1 my-0">
+						<label for="image_dimensions" class="dev-element d-none">Dimensions:</label>
+						<input type="hidden" id="image_dimensions" name="image_dimensions" class="form-control dev-element" readonly="readonly">
+					</div>
+					<div class="col-3 px-1 my-0">
+						<label for="image_size" class="dev-element d-none">Size:</label>
+						<input type="hidden" id="image_size" name="image_size" class="form-control dev-element" readonly="readonly">
+					</div>
+					<div class="col-3 px-1 my-0">
+						<label for="image_height" class="dev-element d-none">Height:</label>
+						<input type="hidden" id="image_height" name="image_height" class="form-control dev-element" readonly="readonly">
+					</div>
+					<div class="col-3 px-1 my-0">
+						<label for="image_width" class="dev-element d-none">Width:</label>
+						<input type="hidden" id="image_width" name="image_width" class="form-control dev-element" readonly="readonly">
+					</div>
+				</div>
+				<!-- /Hidden Fields -->
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" id="image_modal_close_button" class="btn btn-outline-secondary btn-sm waves-effect waves-light" data-dismiss="modal">Close</button>
+				<button type="button" id="image_modal_save_button" class="btn btn-primary btn-sm waves-effect waves-light">Save</button>
+			</div>
+		
+		</div>
+	</div>
+</div>
+

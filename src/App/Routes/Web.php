@@ -16,6 +16,12 @@
 	 * Static Page Routes
 	 */
 	Router::get("", "StaticPages@index");
+	/**
+	 * @see Utilitiy::test()
+	 */
+	Router::get("utilities/test", "StaticPages@test");
+	Router::post("utilities/test", "StaticPages@test");
+	Router::get("utilities/filemanager", "StaticPages@filemanager");
 	Router::get("register", "StaticPages@register");
 	Router::get("login", "StaticPages@login");
 	Router::get("logout", "StaticPages@logout");
@@ -63,3 +69,4 @@
 	Router::get('users/${user_id}/products/${product_id}', "User@get_products_by_user");
 	Router::get("admin/users", "User@index");
 	
+	Router::get("itineraries", "Itineraries@index");

@@ -13,11 +13,11 @@ const StatusTypes = (function () {
     const _input_status_types_sort_order = document.getElementById("input_status_types_sort_order")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
-    const handle_status_types_error = function (msg) {
+    const handleStatusTypesError = function (msg) {
         toastr.error(msg)
     }
     
-    const _default_detail = function () {
+    const defaultDetail = function () {
         return {
             id: null,
             name: null,
@@ -44,11 +44,44 @@ const StatusTypes = (function () {
     }
     
     const init = function (settings) {
-        Console.log(" -- StatusTypes -- ", {})
+        //console.log("StatusTypes.init(settings)", settings)
+        if (settings) {
+            if (settings.status_types) {
+                loadAll(settings.status_types)
+                buildDropdown()
+            }
+        }
+    }
+    
+    const loadAll = function (statusTypes) {
+        //console.log("StatusTypes.loadAll(settings)", statusTypes)
+        StatusTypes.all = new Map()
+        
+        if (statusTypes) {
+            $.each(statusTypes, function (k, statusType) {
+                let detail = set(statusType)
+                //console.log("detail", detail)
+                if (detail.id) {
+                    StatusTypes.all.set(detail.id, detail)
+                }
+            })
+        }
+    }
+    
+    const buildDropdown = function (statusTypeId) {
+        //console.log("StatusTypes.buildDropdown(statusTypeId)", statusTypeId)
+        let selected = ""
+        if (statusTypeId) {
+            selected = statusTypeId
+        }
+        
+        let statusTypes = Array.from(StatusTypes.all.values())
+        //console.log("|__ statusTypes", statusTypes)
     }
     
     const set = function (status_types) {
-        let detail = _default_detail()
+        //console.log("StatusTypes.set(status_types)", status_types)
+        let detail = defaultDetail()
         if (status_types) {
             detail.id = (status_types.id) ? status_types.id : null
             detail.name = (status_types.name) ? status_types.name : null
@@ -65,20 +98,6 @@ const StatusTypes = (function () {
         return detail
     }
     
-    const load_all = function (status_types) {
-        StatusTypes.all = new Map()
-        
-        if (!status_types) {
-            return
-        }
-        $.each(status_types, function (i, status_types) {
-            let detail = set(status_types)
-            StatusTypes.all.set("id", detail)
-        })
-        
-        //Console.log(' StatusTypes.all',  StatusTypes.all);
-    }
-    
     return {
         validator: null,
         detail: {},
@@ -87,13 +106,13 @@ const StatusTypes = (function () {
             get(params)
         },
         load_all: function (params) {
-            load_all(params)
+            loadAll(params)
         },
         save: function (params) {
             save(params)
         },
-        init: function () {
-            init()
+        init: function (settings) {
+            init(settings)
         },
     }
     

@@ -3,7 +3,9 @@
 	namespace Framework\App\Models;
 	
 	use Exception;
+	use Framework\App\Controllers\Airport;
 	use Framework\App\Controllers\Location;
+	use Framework\App\Controllers\Product;
 	use Framework\Core\Model;
 	use Framework\Logger\Log;
 	
@@ -393,7 +395,10 @@
 		
 		public static function addRecord(array $product = null): array
 		{
+			/*
+			Log::$debug_log->info("ProductModel::addRecord(product)");
 			Log::$debug_log->trace($product);
+			//*/
 			$location_detail = array();
 			
 			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
@@ -424,8 +429,11 @@
 			$postal_code = Model::setString((isset($product["postal_code"])) ? $product["postal_code"] : null);
 			
 			$name = Model::setString((isset($product["name"])) ? $product["name"] : null);
-			$depart_from = Model::setString((isset($product["depart_from"])) ? $product["depart_from"] : null);
-			$arrive_to = Model::setString((isset($product["arrive_to"])) ? $product["arrive_to"] : null);
+			
+			$productName = Model::setString((isset($product["name"])) ? $product["name"] : null);
+			
+			$depart_from = Model::setInt((isset($product["depart_from"])) ? $product["depart_from"] : null);
+			$arrive_to = Model::setInt((isset($product["arrive_to"])) ? $product["arrive_to"] : null);
 			$depart_time = Model::setString((isset($product["depart_time"])) ? $product["depart_time"] : null);
 			$arrive_time = Model::setString((isset($product["arrive_time"])) ? $product["arrive_time"] : null);
 			$hotel_code = Model::setString((isset($product["hotel_code"])) ? $product["hotel_code"] : null);
@@ -442,16 +450,14 @@
 			$location["name"] = (string)"City Center";
 			$location["city_id"] = (int)$city_id;
 			$location["location_types_id"] = (isset($location_detail["street_1"])) ? $location_detail["street_1"] : (isset($product["street_1"])) ? $product["street_1"] : null;
-			$location["street_1"] = null;
-			$location["street_2"] = null;
-			$location["zipcode"] = null;
 			
 			switch ($category_id) {
 				case 1:
 					$location_detail = Location::getByCityId($city_id, $name);
-					$location["street_1"] = (isset($location_detail["street_1"])) ? $location_detail["street_1"] : (isset($product["street_1"])) ? $product["street_1"] : null;
-					$location["street_2"] = (isset($location_detail["street_2"])) ? $location_detail["street_2"] : (isset($product["street_2"])) ? $product["street_2"] : null;
-					$location["zipcode"] = (isset($location_detail["postal_code"])) ? $location_detail["postal_code"] : (isset($product["postal_code"])) ? $product["postal_code"] : null;
+					
+					$location["street_1"] = $street_1;
+					$location["street_2"] = $street_2;
+					$location["zipcode"] = $postal_code;
 					$location["name"] = (isset($location_detail["name"])) ? $location_detail["name"] : (isset($product["name"])) ? $product["name"] : "City Center";
 					$location["city_id"] = (int)$city_id;
 					$location["location_types_id"] = (isset($location_detail["location_types_id"])) ? $location_detail["location_types_id"] : 2;
@@ -464,7 +470,75 @@
 						}
 					}
 					break;
-				
+				case 2:
+					$location_detail = Location::getByCityId($city_id, $name);
+					
+					$airport = Airport::get((int)$depart_from);
+					
+					if (count($airport) > 0) {
+						$airport = $airport[0];
+					} else {
+					
+					}
+					
+					$name = (isset($airport["name"])) ? $airport["name"] : "Airport";
+					
+					$location["street_1"] = $street_1;
+					$location["street_2"] = $street_2;
+					$location["zipcode"] = $postal_code;
+					$location["name"] = $name;
+					$location["city_id"] = (int)$city_id;
+					$location["location_types_id"] = (isset($location_detail["location_types_id"])) ? $location_detail["location_types_id"] : 3;
+					
+					if (count($location_detail) <= 0) {
+						$location_detail = Location::update($location);
+						
+						if (count($location_detail) > 0) {
+							$location_detail = $location_detail[0];
+						}
+					}
+					break;
+				case 3:
+					$location_detail = Location::getByCityId($city_id, $name);
+					
+					$location["location_types_id"] = (isset($location_detail["location_types_id"])) ? $location_detail["location_types_id"] : 6;
+					if (count($location_detail) <= 0) {
+						$location_detail = Location::update($location);
+						
+						if (count($location_detail) > 0) {
+							$location_detail = $location_detail[0];
+						}
+					}
+					break;
+				case 5:
+					$location_detail = Location::getByCityId($city_id, $name);
+					
+					$location["location_types_id"] = (isset($location_detail["location_types_id"])) ? $location_detail["location_types_id"] : 4;
+					if (count($location_detail) <= 0) {
+						$location_detail = Location::update($location);
+						
+						if (count($location_detail) > 0) {
+							$location_detail = $location_detail[0];
+						}
+					}
+					
+					break;
+				case 6:
+					Log::$debug_log->trace($city_id);
+					Log::$debug_log->trace($name);
+					// ----
+					
+					$location_detail = Location::getByCityId($city_id, $name);
+					
+					$location["location_types_id"] = (isset($location_detail["location_types_id"])) ? $location_detail["location_types_id"] : 17;
+					if (count($location_detail) <= 0) {
+						$location_detail = Location::update($location);
+						
+						if (count($location_detail) > 0) {
+							$location_detail = $location_detail[0];
+						}
+					}
+					break;
 				default:
 					$location_detail = Location::getByCityId($location["city_id"], $location["name"]);
 					
@@ -476,9 +550,12 @@
 					}
 			}
 			
-			$location_id = (int)$location_detail["id"];
+			Log::$debug_log->trace($location_detail);
 			
-			$sql = "
+			if (isset($location_detail["id"])) {
+				$location_id = (int)$location_detail["id"];
+				
+				$sql = "
                 INSERT INTO product (
                     id, category_id, pricing_strategy_types_id, status_types_id, currency_id,
                     location_id, provider_id, vendor_id, rating_types_id, name, city_id,
@@ -489,7 +566,7 @@
                     modified_by, note, street_1, street_2, postal_code, depart_date, arrive_date
                 ) VALUES (
                     $id, $category_id, $pricing_strategy_types_id, $status_types_id, $currency_id,
-                    $location_id, $provider_id, $vendor_id, $rating_types_id, $name, $city_id,
+                    $location_id, $provider_id, $vendor_id, $rating_types_id, $productName, $city_id,
                     $description_short, $description_long, $keywords, $sku, $depart_from,
                     $arrive_to, $depart_time, $arrive_time, $provider_vendor_match, $use_provider_location_id,
                     $day_span, '/public/img/placeholder.jpg', $api_id, 0, $hotel_code,
@@ -534,19 +611,189 @@
 					street_2 = VALUES(street_2),
 					postal_code = VALUES(postal_code);
             ";
+				
+				try {
+					Log::$debug_log->trace($sql);
+					
+					Model::$db->rawQuery($sql);
+					$product_id = Model::$db->getInsertId();
+					
+					if ($product_id) {
+						return self::get($product_id);
+					} else {
+						Log::$debug_log->error("missing product id");
+						
+						return [];
+					}
+					
+				} catch (Exception $e) {
+					Log::$debug_log->error($e);
+					
+					return [];
+				}
+			}
+			
+			return [];
+		}
+		
+		public static function updateProductMetaData($product): array
+		{
+			/*
+			Log::$debug_log->info("ProductModel::addRecord(product)");
+			Log::$debug_log->trace($product);
+			//*/
+			if (!isset($product["id"])) {
+				return [];
+			}
+			$location_detail = array();
+			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+			$id = Model::setInt((isset($product["id"])) ? $product["id"] : null);
+			$category_id = Model::setInt((isset($product["category_id"])) ? $product["category_id"] : null);
+			$city_id = Model::setInt((isset($product["city_id"])) ? $product["city_id"] : null);
+			$pricing_strategy_types_id = Model::setInt((isset($product["pricing_strategy_types_id"])) ? $product["pricing_strategy_types_id"] : null);
+			$status_types_id = Model::setInt((isset($product["status_types_id"])) ? $product["status_types_id"] : 1);
+			$currency_id = Model::setInt((isset($product["currency_id"])) ? $product["currency_id"] : 5);
+			$provider_id = Model::setInt((isset($product["provider_id"])) ? $product["provider_id"] : null);
+			$vendor_id = Model::setInt((isset($product["vendor_id"])) ? $product["vendor_id"] : null);
+			$rating_types_id = Model::setInt((isset($product["rating_types_id"])) ? $product["rating_types_id"] : 5);
+			$api_id = Model::setInt((isset($product["api_id"])) ? $product["api_id"] : null);
+			$created_by = Model::setInt($user_id);
+			$modified_by = Model::setInt($user_id);
+			$day_span = Model::setInt((isset($product["day_span"])) ? $product["day_span"] : 1);
+			$provider_vendor_match = Model::setBool((isset($product["provider_vendor_match"])) ? $product["provider_vendor_match"] : 0);
+			$enabled = Model::setBool((isset($product["enabled"])) ? $product["enabled"] : 1);
+			
+			$use_provider_location_id = Model::setBool((isset($product["use_provider_location_id"])) ? $product["use_provider_location_id"] : 0);
+			$sku = Model::setString((isset($product["sku"])) ? $product["sku"] : null);
+			$street_1 = Model::setString((isset($product["street_1"])) ? $product["street_1"] : null);
+			$street_2 = Model::setString((isset($product["street_2"])) ? $product["street_2"] : null);
+			$postal_code = Model::setString((isset($product["postal_code"])) ? $product["postal_code"] : null);
+			$name = Model::setString((isset($product["name"])) ? $product["name"] : null);
+			$productName = Model::setString((isset($product["name"])) ? $product["name"] : null);
+			$depart_from = Model::setInt((isset($product["depart_from"])) ? $product["depart_from"] : null);
+			$arrive_to = Model::setInt((isset($product["arrive_to"])) ? $product["arrive_to"] : null);
+			$depart_time = Model::setString((isset($product["depart_time"])) ? $product["depart_time"] : null);
+			$arrive_time = Model::setString((isset($product["arrive_time"])) ? $product["arrive_time"] : null);
+			$hotel_code = Model::setString((isset($product["hotel_code"])) ? $product["hotel_code"] : null);
+			$depart_date = Model::setString((isset($product["depart_date"])) ? $product["depart_date"] : null);
+			$arrive_date = Model::setString((isset($product["arrive_date"])) ? $product["arrive_date"] : null);
+			
+			$cover_image = Model::setString((isset($product["cover_image"])) ? $product["cover_image"] : "/public/img/placeholder.jpg");
+			$note = Model::setLongText((isset($product["note"])) ? $product["note"] : null);
+			$description_long = Model::setLongText((isset($product["description_long"])) ? $product["description_long"] : null);
+			$description_short = Model::setLongText((isset($product["description_short"])) ? $product["description_short"] : null);
+			$keywords = Model::setLongText((isset($product["keywords"])) ? $product["keywords"] : null);
+			$amenities = Model::setLongText((isset($product["amenities"])) ? $product["amenities"] : null);
+			
+			$sql = "
+				UPDATE 		product
+				SET
+							description_short = $description_short,
+							description_long = $description_long,
+							keywords = $keywords,
+							cover_image = $cover_image,
+							amenities = $amenities,
+							enabled = $enabled,
+							date_modified = CURRENT_TIMESTAMP,
+							modified_by = $modified_by,
+							note = $note
+				WHERE 		id = $id;
+			";
 			
 			try {
+				//Log::$debug_log->trace($sql);
 				Model::$db->rawQuery($sql);
-				$product_id = Model::$db->getInsertId();
 				
-				if ($product_id) {
-					return array("id" => $product_id);
+				if ($id) {
+					return self::get($id);
 				} else {
 					Log::$debug_log->error("missing product id");
 					
 					return [];
 				}
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
 				
+				return [];
+			}
+		}
+		
+		public static function updateProductDetailData($product): array
+		{
+			//*
+			Log::$debug_log->info("ProductModel::updateProductDetailData(product)");
+			Log::$debug_log->trace($product);
+			//*/
+			if (!isset($product["id"])) {
+				return [];
+			}
+			$location_detail = array();
+			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+			$id = Model::setInt((isset($product["id"])) ? $product["id"] : null);
+			$category_id = Model::setInt((isset($product["category_id"])) ? $product["category_id"] : null);
+			$city_id = Model::setInt((isset($product["city_id"])) ? $product["city_id"] : null);
+			$pricing_strategy_types_id = Model::setInt((isset($product["pricing_strategy_types_id"])) ? $product["pricing_strategy_types_id"] : null);
+			$status_types_id = Model::setInt((isset($product["status_types_id"])) ? $product["status_types_id"] : 1);
+			$currency_id = Model::setInt((isset($product["currency_id"])) ? $product["currency_id"] : 5);
+			$provider_id = Model::setInt((isset($product["provider_id"])) ? $product["provider_id"] : null);
+			$vendor_id = Model::setInt((isset($product["vendor_id"])) ? $product["vendor_id"] : null);
+			$rating_types_id = Model::setInt((isset($product["rating_types_id"])) ? $product["rating_types_id"] : 5);
+			$api_id = Model::setInt((isset($product["api_id"])) ? $product["api_id"] : null);
+			$created_by = Model::setInt($user_id);
+			$modified_by = Model::setInt($user_id);
+			$day_span = Model::setInt((isset($product["day_span"])) ? $product["day_span"] : 1);
+			$provider_vendor_match = Model::setBool((isset($product["provider_vendor_match"])) ? $product["provider_vendor_match"] : 0);
+			$enabled = Model::setBool((isset($product["enabled"])) ? $product["enabled"] : 1);
+			
+			$use_provider_location_id = Model::setBool((isset($product["use_provider_location_id"])) ? $product["use_provider_location_id"] : 0);
+			$sku = Model::setString((isset($product["sku"])) ? $product["sku"] : null);
+			$street_1 = Model::setString((isset($product["street_1"])) ? $product["street_1"] : null);
+			$street_2 = Model::setString((isset($product["street_2"])) ? $product["street_2"] : null);
+			$postal_code = Model::setString((isset($product["postal_code"])) ? $product["postal_code"] : null);
+			$name = Model::setString((isset($product["name"])) ? $product["name"] : null);
+			$productName = Model::setString((isset($product["name"])) ? $product["name"] : null);
+			$depart_from = Model::setInt((isset($product["depart_from"])) ? $product["depart_from"] : null);
+			$arrive_to = Model::setInt((isset($product["arrive_to"])) ? $product["arrive_to"] : null);
+			$depart_time = Model::setString((isset($product["depart_time"])) ? $product["depart_time"] : null);
+			$arrive_time = Model::setString((isset($product["arrive_time"])) ? $product["arrive_time"] : null);
+			$hotel_code = Model::setString((isset($product["hotel_code"])) ? $product["hotel_code"] : null);
+			$depart_date = Model::setString((isset($product["depart_date"])) ? $product["depart_date"] : null);
+			$arrive_date = Model::setString((isset($product["arrive_date"])) ? $product["arrive_date"] : null);
+			
+			$cover_image = Model::setString((isset($product["cover_image"])) ? $product["cover_image"] : "/public/img/placeholder.jpg");
+			$note = Model::setLongText((isset($product["note"])) ? $product["note"] : null);
+			$description_long = Model::setLongText((isset($product["description_long"])) ? $product["description_long"] : null);
+			$description_short = Model::setLongText((isset($product["description_short"])) ? $product["description_short"] : null);
+			$keywords = Model::setLongText((isset($product["keywords"])) ? $product["keywords"] : null);
+			$amenities = Model::setLongText((isset($product["amenities"])) ? $product["amenities"] : null);
+			
+			$sql = "
+				UPDATE product
+				
+				SET
+							currency_id = $currency_id,
+							rating_types_id = $rating_types_id,
+							name = $name,
+							sku = $sku,
+							enabled = $enabled,
+							date_modified = CURRENT_TIMESTAMP,
+							modified_by = $modified_by
+				WHERE 		id = $id;
+			";
+			
+			try {
+				Log::$debug_log->trace($sql);
+				Model::$db->rawQuery($sql);
+				
+				if ($id) {
+					Log::$debug_log->trace(["id" => $id]);
+					
+					return self::get($id);
+				} else {
+					Log::$debug_log->error("missing product id");
+					
+					return [];
+				}
 			} catch (Exception $e) {
 				Log::$debug_log->error($e);
 				

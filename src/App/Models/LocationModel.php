@@ -343,9 +343,16 @@
 				Model::$db->rawQuery($sql);
 				$location_id = Model::$db->getInsertId();
 				
+				/*
+				Log::$debug_log->trace($sql);
+				Log::$debug_log->trace($location_id);
+				Log::$debug_log->trace($product_id);
+				Log::$debug_log->trace($category_id);
+				//*/
+				
 				if ($location_id) {
-					
-					$updateProductSQL = "
+					if ($product_id) {
+						$updateProductSQL = "
 						UPDATE 			product
 						SET 			city_id = $city_id,
 										location_id = $location_id,
@@ -355,20 +362,17 @@
 										postal_code = $zipcode
 						WHERE 			id = $product_id;
 					";
-					
-					if ($category_id === 1) {
-						try {
-							Model::$db->rawQuery($updateProductSQL);
-							$pId = Model::$db->getInsertId();
-							if (!$pId) {
+						
+						if ($category_id === 1) {
+							try {
+								//Log::$debug_log->trace($location_id);
+								//Log::$debug_log->trace($updateProductSQL);
+								Model::$db->rawQuery($updateProductSQL);
+							} catch (Exception $e) {
+								Log::$debug_log->error($e);
+								
 								return [];
 							}
-							
-							return [];
-						} catch (Exception $e) {
-							Log::$debug_log->error($e);
-							
-							return [];
 						}
 					}
 					

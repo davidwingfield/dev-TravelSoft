@@ -1,5 +1,7 @@
 const Company = (function () {
     "use strict"
+    
+    const _product_edit_page = document.getElementById("product_edit_page")
     const _button_save_provider = document.getElementById("button_save_provider")
     const _form_edit_company = document.getElementById("form_edit_company")
     const _company_enabled = document.getElementById("company_enabled")
@@ -29,7 +31,7 @@ const Company = (function () {
     const _company_description_long = document.getElementById("company_description_long")
     const _company_description_short = document.getElementById("company_description_short")
     const _button_clear_form_edit_company = document.getElementById("button_clear_form_edit_company")
-    const _company_edit_table_filters = document.getElementById("company_edit_table_filters")
+    const _company_images = document.getElementById("company_images")
     const form_rules = {
         rules: {
             company_name: {
@@ -75,7 +77,7 @@ const Company = (function () {
     
     $(_button_cancel_edit_company_name)
         .on("click", function () {
-            let detail = set_detail(tempCompany)
+            let detail = setDetail(tempCompany)
             populate_form(detail)
             hide_form()
         })
@@ -106,7 +108,7 @@ const Company = (function () {
                             if (data) {
                                 if (data[0]) {
                                     let company = data[0]
-                                    let detail = set_detail(company)
+                                    let detail = setDetail(company)
                                     reset_company = detail
                                     populate_form(detail)
                                     initAutoComplete()
@@ -223,7 +225,7 @@ const Company = (function () {
                     let provider_id = provider.id
                     let company_name = provider.company.name
                     let provider_company_id = provider.company.id
-                   
+                 
                     if (_form_edit_provider) {
                         $(_provider_company_id).val(provider_company_id)
                         $(_provider_id).val(provider_id)
@@ -268,12 +270,17 @@ const Company = (function () {
             description_long: null,
             keywords: null,
             logo: null,
+            images: [],
         }
     }
     
     const populate_form = function (company) {
+        console.log("Company.populate_form(company)", company)
+        // ----
+        
         let company_logo_image = $("#company_logo").dropify()
         let company_keywords = (company.keywords) ? company.keywords : ""
+        
         $(_company_id).val((company.id) ? company.id : "").trigger("change")
         _company_name.value = (company.name) ? company.name : ""
         _company_phone_1.value = (company.phone_1) ? company.phone_1 : ""
@@ -415,7 +422,7 @@ const Company = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 handleCompanyError("Error Validating Company")
             }
         } else {
@@ -423,8 +430,28 @@ const Company = (function () {
         }
     }
     
+    const fetchCompanyByName = function (dataToSend, callback) {
+        let url = "/api/v1.0/companies/validate"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handleCompanyError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                return handleCompanyError("Error Validating Company")
+            }
+        } else {
+            return handleCompanyError("Error Loading Company- Missing Data")
+        }
+    }
+    
     const add_to_company_list = function (dataToSend, callback) {
-        console.log("add_to_company_list()")
+        //console.log("add_to_company_list()")
         let url = "/api/v1.0/companies/update"
         if (dataToSend) {
             sendPostRequest(url, dataToSend, function (data, status, xhr) {
@@ -438,26 +465,34 @@ const Company = (function () {
     }
     
     const init = function (company) {
-        let images = []
-        if (company) {
-            let detail = set_detail(company)
-            images = (company.images) ? company.images : []
-            populate_form(detail)
-        }
+        console.log("Company.init(company)", company)
+        // ----
         
-        if (_form_edit_company) {
-            validator_init(form_rules)
-            validator = $(_form_edit_company).validate()
-            initAutoComplete()
-            if (_form_edit_company_block) {
-                hide_form()
+        let images = []
+        
+        if (company) {
+            let detail = setDetail(company)
+            images = (company.images) ? company.images : []
+            
+            if (_company_images) {
+                Company.fileManager = $("#company_images").fileManager({
+                    height: 400,
+                    source: "company",
+                    sourceId: detail.id,
+                    images: images,
+                })
+            }
+            if (_form_edit_company) {
+                populate_form(detail)
+                validator_init(form_rules)
+                validator = $(_form_edit_company).validate()
+                initAutoComplete()
+                if (_form_edit_company_block) {
+                    hide_form()
+                }
             }
         }
         
-        $("#companyImages").imageManager({
-            id: "company_image_manager",
-            images: images,
-        })
     }
     
     const validate_form = function () {
@@ -484,7 +519,7 @@ const Company = (function () {
         }
     }
     
-    const set_detail = function (company) {
+    const setDetail = function (company) {
         let detail = defaultDetail()
         
         if (company) {
@@ -507,6 +542,7 @@ const Company = (function () {
             detail.keywords = (company.keywords) ? company.keywords : ""
             detail.description_long = (company.description_long) ? company.description_long : ""
             detail.description_short = (company.description_short) ? company.description_short : ""
+            detail.images = (company.images) ? company.images : []
         }
         
         Company.detail = detail
@@ -531,7 +567,7 @@ const Company = (function () {
     
     const hide_form = function () {
         if (_form_edit_company_block) {
-            let detail = set_detail(reset_company)
+            let detail = setDetail(reset_company)
             //populate_form(detail)
             $(_company_name).attr("readonly", false)
             $(_form_edit_company_block).hide()
@@ -589,6 +625,7 @@ const Company = (function () {
             status_id: 10,
             website: null,
         },
+        fileManager: null,
         add_to_company_list: function (dataToSend, callback) {
             return add_to_company_list(dataToSend, callback)
         },
@@ -604,5 +641,6 @@ const Company = (function () {
         init: function (company) {
             init(company)
         },
+        
     }
 })()

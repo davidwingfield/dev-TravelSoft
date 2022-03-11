@@ -44,7 +44,7 @@ const AirportTypes = (function () {
     }
     
     const init = function (settings) {
-        console.log(" -- AirportTypes -- ", {})
+        //console.log(" -- AirportTypes -- ", {})
     }
     
     const set = function (airport_types) {
@@ -76,7 +76,7 @@ const AirportTypes = (function () {
             AirportTypes.all.set("id", detail)
         })
         
-        console.log(" AirportTypes.all", AirportTypes.all)
+        //console.log(" AirportTypes.all", AirportTypes.all)
     }
     
     return {

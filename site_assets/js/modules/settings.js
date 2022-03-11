@@ -21,15 +21,15 @@ const sideNavOptions = {
 const toastrOptions = {
     "closeButton": true,
     "debug": false,
-    "newestOnTop": false,
-    "progressBar": false,
+    "newestOnTop": true,
+    "progressBar": true,
     "positionClass": "md-toast-bottom-right",
     "preventDuplicates": true,
     "onclick": null,
-    "showDuration": 300, //300,
-    "hideDuration": 1000,
-    "timeOut": 5000,
-    "extendedTimeOut": 1000,
+    "showDuration": 300000000, //300,
+    "hideDuration": 1000000000, //1000
+    "timeOut": 5000000, //5000
+    "extendedTimeOut": 1000000, //1000
     "showEasing": "swing",
     "hideEasing": "linear",
     "showMethod": "fadeIn",
@@ -40,44 +40,30 @@ const dow_short = [
 ]
 const days = [
     {
-        0: {
-            name: "Sunday",
-            short: "Sun",
-        },
+        name: "Sunday",
+        short: "Sun",
     }, {
-        1: {
-            name: "Monday",
-            short: "Mon",
-        },
+        name: "Monday",
+        short: "Mon",
     }, {
-        1: {
-            name: "Tuesday",
-            short: "Tue",
-        },
+        name: "Tuesday",
+        short: "Tue",
     },
     {
-        1: {
-            name: "Wednesday",
-            short: "Wed",
-        },
+        name: "Wednesday",
+        short: "Wed",
     },
     {
-        1: {
-            name: "Thursday",
-            short: "Thu",
-        },
+        name: "Thursday",
+        short: "Thu",
     },
     {
-        1: {
-            name: "Friday",
-            short: "Fri",
-        },
+        name: "Friday",
+        short: "Fri",
     },
     {
-        1: {
-            name: "Saturday",
-            short: "Sat",
-        },
+        name: "Saturday",
+        short: "Sat",
     },
 ]
 const dowStart = 1
@@ -177,8 +163,97 @@ colorScheme.set(15, {
     textColor: "#fff",
 })
 const tableCellMaxChars = 10
-const defaultAddressView = "medium"
+const defaultAddressView = "medium"//short, medium, long
 const DEBUGMODE = true
 const inactivityTimeout = 60000 * 60
 const initialCalenderViewCount = 12
-
+const FILE_TYPES = {
+    "aac": "audio/aac",
+    "abw": "application/x-abiword",
+    "arc": "application/x-freearc",
+    "avi": "video/x-msvideo",
+    "azw": "application/vnd.amazon.ebook",
+    "bin": "application/octet-stream",
+    "bmp": "image/bmp",
+    "bz": "application/x-bzip",
+    "bz2": "application/x-bzip2",
+    "csh": "application/x-csh",
+    "css": "text/css",
+    "csv": "text/csv",
+    "doc": "application/msword",
+    "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "eot": "application/vnd.ms-fontobject",
+    "epub": "application/epub+zip",
+    "gz": "application/gzip",
+    "gif": "image/gif",
+    "htm": "text/html",
+    "html": "text/html",
+    "ico": "image/vnd.microsoft.icon",
+    "ics": "text/calendar",
+    "jar": "application/java-archive",
+    "jpeg": "image/jpeg",
+    "jpg": "image/jpeg",
+    "js": "text/javascript",
+    "json": "application/json",
+    "jsonld": "application/ld+json",
+    "mid": "audio/midi audio/x-midi",
+    "midi": "audio/midi audio/x-midi",
+    "mjs": "text/javascript",
+    "mp3": "audio/mpeg",
+    "mpeg": "video/mpeg",
+    "mpkg": "application/vnd.apple.installer+xml",
+    "odp": "application/vnd.oasis.opendocument.presentation",
+    "ods": "application/vnd.oasis.opendocument.spreadsheet",
+    "odt": "application/vnd.oasis.opendocument.text",
+    "oga": "audio/ogg",
+    "ogv": "video/ogg",
+    "ogx": "application/ogg",
+    "opus": "audio/opus",
+    "otf": "font/otf",
+    "png": "image/png",
+    "pdf": "application/pdf",
+    "php": "application/x-httpd-php",
+    "ppt": "application/vnd.ms-powerpoint",
+    "pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "rar": "application/vnd.rar",
+    "rtf": "application/rtf",
+    "sh": "application/x-sh",
+    "svg": "image/svg+xml",
+    "swf": "application/x-shockwave-flash",
+    "tar": "application/x-tar",
+    "tif": "image/tiff",
+    "tiff": "image/tiff",
+    "ts": "video/mp2t",
+    "ttf": "font/ttf",
+    "txt": "text/plain",
+    "vsd": "application/vnd.visio",
+    "wav": "audio/wav",
+    "weba": "audio/webm",
+    "webm": "video/webm",
+    "webp": "image/webp",
+    "woff": "font/woff",
+    "woff2": "font/woff2",
+    "xhtml": "application/xhtml+xml",
+    "xls": "application/vnd.ms-excel",
+    "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "xml": "text/xml",
+    "xul": "application/vnd.mozilla.xul+xml",
+    "zip": "application/zip",
+    "7z": "application/x-7z-compressed",
+}
+const STANDARD_ASPECT_RATIOS = [
+    [1, "1:1"],
+    [4 / 3, "4:3"],
+    [5 / 4, "5:4"],
+    [3 / 2, "3:2"],
+    [16 / 10, "16:10"],
+    [16 / 9, "16:9"],
+    [21 / 9, "21:9"],
+    [32 / 9, "32:9"],
+]
+let ERROR_ALLOWED = 0.05
+let RATIOS = STANDARD_ASPECT_RATIOS.map(function (tpl) {return tpl[0]}).sort()
+let LOOKUP = Object()
+for (let i = 0; i < STANDARD_ASPECT_RATIOS.length; i++) {
+    LOOKUP[STANDARD_ASPECT_RATIOS[i][0]] = STANDARD_ASPECT_RATIOS[i][1]
+}

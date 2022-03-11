@@ -35,8 +35,8 @@
 		{
 			$units = [];
 			$results = UnitModel::getByProductId((int)$product_id);
-			foreach ($results AS $k => $season) {
-				$units[] = self::format($season);
+			foreach ($results AS $k => $unit) {
+				$units[] = self::format($unit);
 			}
 			
 			return $units;
@@ -114,6 +114,8 @@
 				return [];
 			}
 			
+			//Log::$debug_log->trace($unit);
+			
 			$temp = array(
 				"id" => $unit["unit_id"],
 				"category_id" => $unit["unit_category_id"],
@@ -127,51 +129,77 @@
 				"modified_by" => $unit["unit_modified_by"],
 				"note" => $unit["unit_note"],
 			);
+			$temp["cover_image"] = "/public/img/unit_cover_placeholder.jpg";
+			$images = Image::getByUnitId((int)$unit["unit_id"]);
+			foreach ($images AS $k => $image) {
+				if ($image["is_cover"] === 1) {
+					$source = "unit";
+					$sourceId = (isset($unit["unit_id"])) ? (int)$unit["unit_id"] : null;
+					$fileName = (isset($image["name"])) ? $image["name"] : null;
+					$fileExtension = (isset($image["extension"])) ? $image["extension"] : null;
+					$filePath = (isset($image["name"])) ? $image["name"] : null;
+					
+					if (!is_null($sourceId) && !is_null($fileName) && !is_null($fileExtension) && !is_null($filePath)) {
+						$temp["cover_image"] = "/public/img/$source/$sourceId/$fileName.$fileExtension";
+					}
+				}
+			}
+			$temp["images"] = (isset($images)) ? $images : [];
 			
-			if (isset($unit['product_unit_min_pax'])) {
+			if (isset($unit["product_unit_keywords"])) {
+				$temp["keywords"] = $unit["product_unit_keywords"];
+			}
+			
+			if (isset($unit["product_unit_amenities"])) {
+				$temp["amenities"] = $unit["product_unit_amenities"];
+			}
+			
+			if (isset($unit["product_unit_min_pax"])) {
 				$temp["min_pax"] = (int)$unit["product_unit_min_pax"];
 			}
-			if (isset($unit['product_unit_max_pax'])) {
-				$temp["max_pax"] = ($unit['product_unit_max_pax'] === "") ? null : (int)$unit["product_unit_max_pax"];
-			}
-			if (isset($unit['product_unit_min_nights'])) {
-				$temp["min_nights"] = (int)$unit["product_unit_min_nights"];
-			}
-			if (isset($unit['product_unit_max_nights'])) {
-				$temp["max_nights"] = ($unit['product_unit_max_nights'] === "") ? null : (int)$unit["product_unit_max_nights"];
+			
+			if (isset($unit["product_unit_max_pax"])) {
+				$temp["max_pax"] = ($unit["product_unit_max_pax"] === "") ? null : (int)$unit["product_unit_max_pax"];
 			}
 			
-			if (isset($unit['product_unit_blurb'])) {
-				$temp["blurb"] = (string)$unit['product_unit_blurb'];
+			if (isset($unit["product_unit_min_nights"])) {
+				$temp["min_nights"] = (int)$unit["product_unit_min_nights"];
 			}
-			if (isset($unit['product_unit_description_long'])) {
-				$temp["description_long"] = (string)$unit['product_unit_description_long'];
+			
+			if (isset($unit["product_unit_max_nights"])) {
+				$temp["max_nights"] = ($unit["product_unit_max_nights"] === "") ? null : (int)$unit["product_unit_max_nights"];
 			}
-			if (isset($unit['product_unit_description_short'])) {
-				$temp["description_short"] = (string)$unit['product_unit_description_short'];
+			
+			if (isset($unit["product_unit_blurb"])) {
+				$temp["blurb"] = (string)$unit["product_unit_blurb"];
 			}
-			if (isset($unit['product_unit_note'])) {
-				$temp["product_unit_note"] = (string)$unit['product_unit_note'];
+			
+			if (isset($unit["product_unit_description_long"])) {
+				$temp["description_long"] = (string)$unit["product_unit_description_long"];
 			}
-			if (isset($unit['product_unit_cover_image'])) {
-				if ($unit["product_unit_cover_image"] === "") {
-					$temp["cover_image"] = '/public/img/unit_cover_placeholder.jpg';
-				} else {
-					$temp["cover_image"] = $unit['product_unit_cover_image'];
-				}
-				
+			
+			if (isset($unit["product_unit_description_short"])) {
+				$temp["description_short"] = (string)$unit["product_unit_description_short"];
 			}
-			if (isset($unit['product_unit_meeting_point'])) {
-				$temp["meeting_point"] = $unit['product_unit_meeting_point'];
+			
+			if (isset($unit["product_unit_note"])) {
+				$temp["product_unit_note"] = (string)$unit["product_unit_note"];
 			}
-			if (isset($unit['product_unit_time_notes'])) {
-				$temp["time_notes"] = $unit['product_unit_time_notes'];
+			
+			if (isset($unit["product_unit_meeting_point"])) {
+				$temp["meeting_point"] = $unit["product_unit_meeting_point"];
 			}
-			if (isset($unit['product_unit_start_time'])) {
-				$temp["start_time"] = $unit['product_unit_start_time'];
+			
+			if (isset($unit["product_unit_time_notes"])) {
+				$temp["time_notes"] = $unit["product_unit_time_notes"];
 			}
-			if (isset($unit['product_unit_end_time'])) {
-				$temp["end_time"] = (string)$unit['product_unit_end_time'];
+			
+			if (isset($unit["product_unit_start_time"])) {
+				$temp["start_time"] = $unit["product_unit_start_time"];
+			}
+			
+			if (isset($unit["product_unit_end_time"])) {
+				$temp["end_time"] = (string)$unit["product_unit_end_time"];
 			}
 			
 			//Log::$debug_log->trace($temp);

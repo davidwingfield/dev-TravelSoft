@@ -173,6 +173,8 @@
                         UNIT.note AS 'unit_note',
                         PRODUCT_UNIT.product_id AS 'product_unit_product_id',
                         PRODUCT_UNIT.unit_id AS 'product_unit_id',
+                       	COALESCE(PRODUCT_UNIT.keywords, '') AS 'product_unit_keywords',
+                        COALESCE(PRODUCT_UNIT.amenities, '') AS 'product_unit_amenities',
                         COALESCE(PRODUCT_UNIT.min_pax, 1) AS 'product_unit_min_pax',
                         COALESCE(PRODUCT_UNIT.max_pax, '&#8734;') AS 'product_unit_max_pax',
                         COALESCE(PRODUCT_UNIT.min_nights, 1) AS 'product_unit_min_nights',
@@ -227,6 +229,8 @@
                         UNIT.note AS 'unit_note',
                         PRODUCT_UNIT.product_id AS 'product_unit_product_id',
                         PRODUCT_UNIT.unit_id AS 'product_unit_id',
+                       	COALESCE(PRODUCT_UNIT.keywords, '') AS 'product_unit_keywords',
+                        COALESCE(PRODUCT_UNIT.amenities, '') AS 'product_unit_amenities',
                         COALESCE(PRODUCT_UNIT.min_pax, 1) AS 'product_unit_min_pax',
                         COALESCE(PRODUCT_UNIT.max_pax, '') AS 'product_unit_max_pax',
                         COALESCE(PRODUCT_UNIT.min_nights, 1) AS 'product_unit_min_nights',
@@ -418,8 +422,11 @@
 			
 			$enabled = Model::setBool((isset($unit["enabled"])) ? $unit["enabled"] : null);
 			
+			$keywords = Model::setLongText((isset($unit["keywords"])) ? $unit["keywords"] : null);
+			$amenities = Model::setLongText((isset($unit["amenities"])) ? $unit["amenities"] : null);
 			$note = Model::setLongText((isset($unit["note"])) ? $unit["note"] : null);
 			$description_long = Model::setLongText((isset($unit["description_long"])) ? $unit["description_long"] : null);
+			
 			$sql = "
             INSERT INTO unit (
                 id, category_id,
@@ -468,12 +475,14 @@
                                     product_id, unit_id, min_pax, max_pax, min_nights,
                                     max_nights, description_long, description_short, blurb, cover_image,
                                     meeting_point, time_notes, start_time, end_time, enabled,
-                                    date_created, created_by, date_modified, modified_by, note
+                                    date_created, created_by, date_modified, modified_by, note,
+                                    keywords, amenities
                                 ) VALUES (
                                     $product_id, $unit_id, $min_pax, $max_pax, $min_nights,
                                     $max_nights, $description_long, $description_short, $blurb, $cover_image,
                                     $meeting_point, $time_notes, $start_time, $end_time, $enabled,
-                                    CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP, $modified_by, $note
+                                    CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP, $modified_by, $note,
+                                    $keywords, $amenities
                                 )
                                 ON DUPLICATE KEY UPDATE
                                     min_pax = VALUES(min_pax),
@@ -489,6 +498,8 @@
                                     description_short = VALUES(description_short),
                                     description_long = VALUES(description_long),
                                     note = VALUES(note),
+									keywords = VALUES(keywords),
+                                	amenities = VALUES(amenities),
                                     modified_by = VALUES(modified_by),
                                     date_modified = VALUES(date_modified),
                                     enabled = VALUES(enabled)

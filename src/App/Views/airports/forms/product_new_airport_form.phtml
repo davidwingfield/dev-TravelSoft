@@ -52,31 +52,33 @@
 			
 			</div>
 			
+			<!-- Departing Airport -->
 			<div class="card card-body grey lighten-4 mb-2" id="modal_product_depart_from_airport_add_block">
+				
 				<div class="row">
 					
-					<div class="col-6">
+					<!-- Airport Id -->
+					<div class="col-12 col-md-4">
 						<div class="form-element">
 							<label for="modal_product_depart_from_new_airport_id">Id:</label>
 							<input type="text" id="modal_product_depart_from_new_airport_id" name="modal_product_depart_from_new_airport_id" class="form-control" readonly="readonly"/>
 							<div id="modal_product_depart_from_new_airport_id-error" class="error w-100 text-center"></div>
 						</div>
 					</div>
+					<!-- /Airport Id -->
 					
 					<!-- IATA Code -->
-					<div class="col-6">
+					<div class="col-12 col-md-4">
 						<div class="form-element">
 							<label for="modal_product_depart_from_airport_iata_code">IATA Code:</label>
-							<input type="text" id="modal_product_depart_from_airport_iata_code" name="modal_product_depart_from_airport_iata_code" class="form-control"/>
+							<input type="text" id="modal_product_depart_from_airport_iata_code" name="modal_product_depart_from_airport_iata_code" class="form-control" maxlength="3"/>
 							<div id="modal_product_depart_from_airport_iata_code-error" class="error w-100 text-center"></div>
 						</div>
 					</div>
-				
-				</div>
-				
-				<div class="row">
+					<!-- /IATA Code -->
 					
-					<div class="col-6">
+					<!-- Airport Type -->
+					<div class="col-12 col-md-4">
 						<div class="form-element">
 							<label for="modal_product_depart_from_airport_types_id">Airport Type:</label>
 							<select id="modal_product_depart_from_airport_types_id" name="modal_product_depart_from_airport_types_id" class="form-control">
@@ -93,18 +95,59 @@
 							<div id="modal_product_depart_from_airport_types_id-error" class="error w-100 text-center"></div>
 						</div>
 					</div>
+					<!-- /Airport Type -->
 				
 				</div>
 				
 				<div class="row">
 					
+					<!-- Airport Street 1 -->
 					<div class="col-12">
+						<div class="form-element">
+							<label for="modal_product_depart_from_airport_street_1">Street 1:</label>
+							<input type="text" id="modal_product_depart_from_airport_street_1" name="modal_product_depart_from_airport_street_1" class="form-control"/>
+							<div id="modal_product_depart_from_airport_street_1-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Airport Street 1 -->
+				
+				</div>
+				
+				<div class="row">
+					
+					<!-- Departing Airport Street 2 -->
+					<div class="col-12">
+						<div class="form-element">
+							<label for="modal_product_depart_from_airport_street_2">Street 2:</label>
+							<input type="text" id="modal_product_depart_from_airport_street_2" name="modal_product_depart_from_airport_street_2" class="form-control"/>
+							<div id="modal_product_depart_from_airport_street_2-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Departing Airport Street 2 -->
+				
+				</div>
+				
+				<div class="row">
+					
+					<!-- Departing Airport City -->
+					<div class="col-12 col-md-9">
 						<div class="form-element">
 							<label for="modal_product_depart_from_airport_city">City/Province/Country:</label>
 							<input type="search" id="modal_product_depart_from_airport_city" name="modal_product_depart_from_airport_city" class="form-control"/>
 							<div id="modal_product_depart_from_airport_city-error" class="error w-100 text-center"></div>
 						</div>
 					</div>
+					<!-- /Departing Airport City -->
+					
+					<!-- Departing Airport Postal Code -->
+					<div class="col-12 col-md-3">
+						<div class="form-element">
+							<label for="modal_product_depart_from_airport_postal_code">Postal Code:</label>
+							<input type="text" id="modal_product_depart_from_airport_postal_code" name="modal_product_depart_from_airport_postal_code" class="form-control"/>
+							<div id="modal_product_depart_from_airport_postal_code-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Departing Airport Postal Code -->
 				
 				</div>
 				
@@ -138,9 +181,12 @@
 					</div>
 				
 				</div>
+			
 			</div>
+			<!-- /Departing Airport -->
 			
 			<div class="row">
+				
 				<div data-categoryid="2" class="col-12 col-md-6">
 					<div id="modal_product_depart_from_date" data-label="Departing Date" data-placeholder="Select Departing Date"></div>
 				</div>
@@ -148,6 +194,7 @@
 				<div data-categoryid="2" class="col-12 col-md-6">
 					<div id="modal_product_depart_from_time" data-label="Departing Time" data-placeholder="Select Departing Time"></div>
 				</div>
+			
 			</div>
 			
 			<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
@@ -162,31 +209,33 @@
 				</div>
 			</div>
 			
+			<!-- Arriving Airport -->
 			<div class="card card-body grey lighten-4 mb-2" id="modal_product_arrive_to_airport_add_block">
+				
 				<div class="row">
 					
-					<div class="col-6">
+					<!-- Arriving Airport ID -->
+					<div class="col-4">
 						<div class="form-element">
 							<label for="modal_product_arrive_to_new_airport_id">Id:</label>
 							<input type="text" id="modal_product_arrive_to_new_airport_id" name="modal_product_arrive_to_new_airport_id" class="form-control" readonly="readonly"/>
 							<div id="modal_product_arrive_to_new_airport_id-error" class="error w-100 text-center"></div>
 						</div>
 					</div>
+					<!-- /Arriving Airport Id -->
 					
-					<!-- IATA Code -->
-					<div class="col-6">
+					<!-- Arriving Airport IATA Code -->
+					<div class="col-4">
 						<div class="form-element">
 							<label for="modal_product_arrive_to_airport_iata_code">IATA Code:</label>
-							<input type="text" id="modal_product_arrive_to_airport_iata_code" name="modal_product_arrive_to_airport_iata_code" class="form-control"/>
+							<input type="text" id="modal_product_arrive_to_airport_iata_code" name="modal_product_arrive_to_airport_iata_code" maxlength="3" class="form-control"/>
 							<div id="modal_product_arrive_to_airport_iata_code-error" class="error w-100 text-center"></div>
 						</div>
 					</div>
-				
-				</div>
-				
-				<div class="row">
+					<!-- Arriving Airport IATA Code -->
 					
-					<div class="col-6">
+					<!-- Arriving Airport Type -->
+					<div class="col-4">
 						<div class="form-element">
 							<label for="modal_product_arrive_to_airport_types_id">Airport Type:</label>
 							<select id="modal_product_arrive_to_airport_types_id" name="modal_product_arrive_to_airport_types_id" class="form-control">
@@ -203,18 +252,59 @@
 							<div id="modal_product_arrive_to_airport_types_id-error" class="error w-100 text-center"></div>
 						</div>
 					</div>
+					<!-- /Arriving Airport Type -->
 				
 				</div>
 				
 				<div class="row">
 					
+					<!-- Arriving Airport Street 1 -->
 					<div class="col-12">
+						<div class="form-element">
+							<label for="modal_product_arrive_to_airport_street_1">Street 1:</label>
+							<input type="text" id="modal_product_arrive_to_airport_street_1" name="modal_product_arrive_to_airport_street_1" class="form-control"/>
+							<div id="modal_product_arrive_to_airport_street_1-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Arriving Airport Street 1 -->
+				
+				</div>
+				
+				<div class="row">
+					
+					<!-- Arriving Airport Street 2 -->
+					<div class="col-12">
+						<div class="form-element">
+							<label for="modal_product_arrive_to_airport_street_2">Street 2:</label>
+							<input type="text" id="modal_product_arrive_to_airport_street_2" name="modal_product_arrive_to_airport_street_2" class="form-control"/>
+							<div id="modal_product_arrive_to_airport_street_2-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Departing Airport Street 2 -->
+				
+				</div>
+				
+				<div class="row">
+					
+					<!-- Arriving Airport City -->
+					<div class="col-12 col-md-9">
 						<div class="form-element">
 							<label for="modal_product_arrive_to_airport_city">City/Province/Country:</label>
 							<input type="search" id="modal_product_arrive_to_airport_city" name="modal_product_arrive_to_airport_city" class="form-control"/>
 							<div id="modal_product_arrive_to_airport_city-error" class="error w-100 text-center"></div>
 						</div>
 					</div>
+					<!-- /Arriving Airport City -->
+					
+					<!-- Arriving Airport Postal Code -->
+					<div class="col-12 col-md-9">
+						<div class="form-element">
+							<label for="modal_product_arrive_to_airport_postal_code">Postal Code:</label>
+							<input type="text" id="modal_product_arrive_to_airport_postal_code" name="modal_product_arrive_to_airport_postal_code" class="form-control"/>
+							<div id="modal_product_arrive_to_airport_postal_code-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Arriving Airport Postal Code -->
 				
 				</div>
 				
@@ -248,7 +338,9 @@
 					</div>
 				
 				</div>
+			
 			</div>
+			<!-- /Arriving Airport -->
 			
 			<div class="row">
 				<div class="col-12 col-md-6">

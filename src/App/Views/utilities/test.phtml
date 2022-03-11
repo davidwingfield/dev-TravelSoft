@@ -1,0 +1,394 @@
+<?php
+	
+	use Framework\App\Apis\Senses;
+	
+	//$hotelAPI = [];
+	
+	//$senses = new Senses();
+	//$searchAccomodations = $senses->getHotels(array());
+	//$searchAccomodations = $senses->searchAccommodations(array());
+
+?>
+
+<section id="utilities_test_section" class="section">
+	<div class="row">
+		<div class="col-12 col-md-7 mb-2">
+		
+		</div>
+		
+		<div class="col-12 col-md-5 mb-2 px-1">
+			<!--
+			<form id="imageManagerForm" class="dw-form" data-source="product" data-source-id="1" novalidate="novalidate">
+				
+				<section id="imageManagerFormDetails" class="card card-body z-depth-0 mb-2">
+					<h5 class="card-title">
+						<span>Image</span>
+						<a href="javascript:void(0);" id="imageManagerCancel" name="imageManagerCancel" class="panel-button-close fas fa-times" aria-hidden="true"></a>
+					</h5>
+					<h6 class="card-subtitle mb-2 text-muted" id="display_image_name">testimage.jpg</h6>
+					<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+					
+					<div class="z-depth-1-half mb-4 p-2 d-flex justify-content-center align-items-center">
+						<img id="imageManagerPreview" src="/public/img/placeholder.jpg" class="img-fluid" alt="example placeholder">
+					</div>
+					
+					<section class="card card-body grey lighten-3 p-3 mb-2">
+						
+						<div class="row">
+							
+							<div class="col-12 col-md-3">
+								<div><span class="font-weight-bolder">Name:</span></div>
+							</div>
+							
+							<div class="col-12 col-md-3">
+								<div id="fileName"></div>
+							</div>
+							
+							<div class="col-12 col-md-3">
+								<div><span class="font-weight-bolder">Size:</span></div>
+							</div>
+							
+							<div class="col-12 col-md-3">
+								<div id="fileSize"></div>
+							</div>
+						
+						</div>
+						
+						<div class="row">
+							
+							<div class="col-12 col-md-3">
+								<div><span class="font-weight-bolder">Dimensions:</span></div>
+							</div>
+							
+							<div class="col-12 col-md-3">
+								<div id="fileDimensions"></div>
+							</div>
+							
+							<div class="col-12 col-md-3">
+								<div><span class="font-weight-bolder">Ratio:</span></div>
+							</div>
+							
+							<div class="col-12 col-md-3">
+								<div id="fileRatio"></div>
+							</div>
+						
+						</div>
+						
+						<div class="row">
+							
+							<div class="col-12 col-md-3">
+								<div><span class="font-weight-bolder">Height:</span></div>
+							</div>
+							
+							<div class="col-12 col-md-3">
+								<div id="fileHeight"></div>
+							</div>
+							
+							<div class="col-12 col-md-3">
+								<div><span class="font-weight-bolder">Width:</span></div>
+							</div>
+							
+							<div class="col-12 col-md-3">
+								<div id="fileWidth"></div>
+							</div>
+						
+						</div>
+						
+						<div class="row">
+							
+							<div class="col-12 col-md-3">
+								<div><span class="font-weight-bolder">Type:</span></div>
+							</div>
+							
+							<div class="col-12 col-md-3">
+								<div id="fileType"></div>
+							</div>
+							
+							<div class="col-12 col-md-3">
+								<div><span class="font-weight-bolder">Extension:</span></div>
+							</div>
+							
+							<div class="col-12 col-md-3">
+								<div id="fileExtension"></div>
+							</div>
+						
+						</div>
+					
+					</section>
+
+					<div class="row">
+						
+		
+						<div class="col-12 col-md-6">
+							<div class="form-element">
+								<label for="image_id">Id:</label>
+								<input type="text" id="image_id" name="image_id" class="form-control" readonly="readonly"/>
+								<div id="image_id-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						
+						<div class="col-12 col-md-6">
+							<div class="form-element">
+								<label for="image_name">Name:</label>
+								<input type="text" id="image_name" name="image_name" class="form-control" readonly="readonly"/>
+								<div id="image_name-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						
+					
+					</div>
+					
+					<div class="row">
+						<div class="col-12 col-md-4 d-flex align-self-end justify-content-center pb-2 mb-2 mt-2">
+							<div class="form-element">
+								<div class="custom-control custom-switch">
+									<input id="image_enabled" name="image_enabled" type="checkbox" value="1" class="custom-control-input">
+									<label for="image_enabled" class="custom-control-label p-0">Enabled</label>
+								</div>
+								<div id="image_enabled-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						
+						<div class="col-12 col-md-4 d-flex align-self-end justify-content-center pb-2 mb-2 mt-2">
+							<div class="form-element">
+								<div class="custom-control custom-switch">
+									<input id="image_is_shown" name="image_is_shown" type="checkbox" value="1" class="custom-control-input">
+									<label for="image_is_shown" class="custom-control-label p-0">Shown</label>
+								</div>
+								<div id="image_is_shown-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						
+						<div class="col-12 col-md-4 d-flex align-self-end justify-content-center pb-2 mb-2 mt-2">
+							<div class="form-element">
+								<div class="custom-control custom-switch">
+									<input id="image_is_cover" name="image_is_cover" type="checkbox" value="1" class="custom-control-input">
+									<label for="image_is_cover" class="custom-control-label p-0">Cover</label>
+								</div>
+								<div id="image_is_cover-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row">
+						
+						<div class="col-12">
+							<div class="form-element">
+								<label for="image_title">Title:</label>
+								<input type="text" id="image_title" name="image_title" class="form-control"/>
+								<div id="image_title-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+					
+					</div>
+					
+					<div class="row">
+						
+						<div class="col-12">
+							<div class="form-element">
+								<label for="image_alt">Alt:</label>
+								<input type="text" id="image_alt" name="image_alt" class="form-control"/>
+								<div id="image_alt-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+					
+					</div>
+					
+					<div class="row">
+						
+						<div class="col-12">
+							
+							<section class="card card-body mb-2">
+								<div class="d-flex justify-content-between">
+									<h5 class="card-title label">Caption:</h5>
+								</div>
+								<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+								<div class="row">
+									<div class="col-12">
+										<div class="form-element">
+											<label for="image_caption" class="d-none">Short Description</label>
+											<textarea id="image_caption" name="image_caption" class="md-textarea short-description form-control" rows="4" maxlength="250"></textarea>
+											<div id="image_caption-error" class="error w-100 text-center">&nbsp;</div>
+										</div>
+									</div>
+								</div>
+							</section>
+			
+						</div>
+					
+					</div>
+					
+					<div id="progressNumber"></div>
+					
+				
+					<div class="row">
+						
+						<div class="col-12 col-md-6 text-left">
+							<button type="button" id="imageManagerFormCancelButton" class="btn btn-danger btn-sm waves-effect waves-light">cancel</button>
+							<button type="button" id="imageManagerFormRemoveButton" class="btn btn-outline-danger btn-sm waves-effect waves-light">remove</button>
+						</div>
+						
+						<div class="col-12 col-md-6 text-right">
+							
+							<a href="javascript:void(0);" id="imageManagerFormClearButton" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+							<button type="button" id="imageManagerFormSubmitButton" name="submit" class="btn btn-primary btn-sm waves-effect waves-light">Upload</button>
+						</div>
+					
+					</div>
+	
+				</section>
+				-->
+			<!--
+				<section class="card card-body z-depth-0 mb-2">
+					<div class="d-flex justify-content-between">
+						<h5 class="card-title label">Product Images:</h5>
+						<a id="button_product_images_toggle" class="waves-effect waves-light">
+							<i class="fas fa-sliders-h"></i>
+						</a>
+					</div>
+					<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+					
+					<div id="imageManagerFormImagesBlock" class="row"></div>
+					
+					<div class="row">
+						<div class="col-12">
+							<div class="file-field">
+								
+								
+								<div class="d-flex justify-content-end mb-2">
+									<div class="btn btn-secondary btn-sm waves-effect waves-light">
+										<span id="fileToUploadDisplay">Choose file</span>
+										<input type="file" name="fileToUpload" id="fileToUpload"/>
+									</div>
+								</div>
+					
+							</div>
+						</div>
+					</div>
+				
+				</section>
+			
+			</form>
+			-->
+			
+			<section id="product_images" class="mb-2"></section>
+		
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-3">
+			<a href="javascript:void(0);" class="btn btn-info btn-sm waves-effect waves-light" onclick="showForm()">Show Form</a>
+		</div>
+	</div>
+
+</section>
+
+<script type="text/javascript">
+	let productImages
+	
+	function showForm () {
+		console.log("showForm", productImages)
+		
+		productImages.load({
+			source: "unit",
+			sourceId: 204,
+			images: [
+				{
+					"id": 1,
+					"name": "121",
+					"thumbs_path": "/public/thumbs/unit/204",
+					"path": "/public/img/unit/204",
+					"ratio": "2.27:1",
+					"type": "image/jpg",
+					"extension": "jpg",
+					"dimensions": "1321:583",
+					"caption": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean quis ex felis. Curabitur leo nibh, suscipit vitae imperdiet nec, facilisis in erat. Duis gravida congue sapien. Nulla sed cursus tellus.",
+					"is_cover": 1,
+					"title": "Image Title 1",
+					"alt": "Image Alt 1",
+					"size": "0.2 MB",
+					"date_created": "2022-03-01 17:06:35",
+					"created_by": 4,
+					"date_modified": "2022-03-01 17:06:35",
+					"modified_by": 4,
+					"note": null,
+					"enabled": 1,
+					"is_shown": 1,
+					"height": 583,
+					"width": 1321,
+				},
+				{
+					"id": 2,
+					"name": "88",
+					"thumbs_path": "/public/thumbs/unit/204",
+					"path": "/public/img/unit/204",
+					"ratio": "2.27:1",
+					"type": "image/jpg",
+					"extension": "jpg",
+					"dimensions": "1321:583",
+					"caption": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean quis ex felis. Curabitur leo nibh, suscipit vitae imperdiet nec, facilisis in erat. Duis gravida congue sapien. Nulla sed cursus tellus.",
+					"is_cover": 0,
+					"title": "Image Title 2",
+					"alt": "Image Alt 2",
+					"size": "0.2 MB",
+					"date_created": "2022-03-01 17:06:35",
+					"created_by": 4,
+					"date_modified": "2022-03-01 17:06:35",
+					"modified_by": 4,
+					"note": null,
+					"enabled": 1,
+					"is_shown": 0,
+					"height": 583,
+					"width": 1321,
+				},
+				{
+					"id": 3,
+					"name": "cron-job-format-1",
+					"thumbs_path": "/public/thumbs/unit/204",
+					"path": "/public/img/unit/204",
+					"ratio": "32:9",
+					"type": "image/png",
+					"extension": "png",
+					"dimensions": "652 x 185",
+					"caption": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean quis ex felis. Curabitur leo nibh, suscipit vitae imperdiet nec, facilisis in erat. Duis gravida congue sapien. Nulla sed cursus tellus.",
+					"is_cover": 0,
+					"title": "Image Title 3",
+					"alt": "Image Alt 3",
+					"size": "6.4KB",
+					"date_created": "2022-03-01 17:06:35",
+					"created_by": 4,
+					"date_modified": "2022-03-01 17:06:35",
+					"modified_by": 4,
+					"note": null,
+					"enabled": 1,
+					"is_shown": 1,
+					"height": 185,
+					"width": 652,
+				},
+			],
+		})
+	}
+	
+	/*
+	console.log("1024Bytes", formatSize("1024Bytes"))
+	console.log("2KB", formatSize("2KB"))
+	console.log("2.3656Kb", formatSize("2.3656kbKb"))
+	console.log("2.3656kb", formatSize("2.3656kb"))
+	console.log("1.3656551MB", formatSize("1.3656551MB"))
+	console.log("1.3656551Megabyte", formatSize("1.3656551Megabyte"))
+	console.log("1.3656551Mb", formatSize("1.3656551Mb"))
+	console.log("1.3656551mb", formatSize("1.3656551mb"))
+	//*/
+	$(document).ready(function () {
+		
+		productImages = $("#product_images").fileManager({
+			height: 400,
+			source: "product",
+			images: [],
+		})
+		
+		console.log("productImages", productImages)
+		
+	})
+</script>

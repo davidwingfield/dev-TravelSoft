@@ -5,7 +5,7 @@ const InventoryProfile = (function () {
     const _table_profile_product_edit_add_new_button = document.getElementById("table_profile_product_edit_add_new_button")
     const _product_edit_profile_form_profile_transfer_sales_types_id_block = document.getElementById("product_edit_profile_form_profile_transfer_sales_types_id_block")
     const _product_edit_profile_form_profile_allot_by_id_block = document.getElementById("product_edit_profile_form_profile_allot_by_id_block")
-    const _product_edit_profile_form_profile_name_filter = document.getElementById("product_edit_profile_form_profile_name_filter")
+    //const _product_edit_profile_form_profile_name_filter = document.getElementById("product_edit_profile_form_profile_name_filter")
     const _table_profile_product_edit = document.getElementById("table_profile_product_edit")
     const _product_edit_profile_form_profile_days_out_block = document.getElementById("product_edit_profile_form_profile_days_out_block")
     const _product_edit_profile_form_profile_expires_block = document.getElementById("product_edit_profile_form_profile_expires_block")
@@ -98,7 +98,7 @@ const InventoryProfile = (function () {
     $(_table_profile_product_edit_add_new_button)
         .on("click", function () {
             //console.log("InventoryProfile.table_profile_product_edit_add_new_button: click()", {})
-            _product_edit_profile_form_profile_name_filter.value = ""
+            //_product_edit_profile_form_profile_name_filter.value = ""
             $table_profile_product_edit.clearSelectedRows()
             populateInventoryProfileForm()
         })
@@ -107,7 +107,7 @@ const InventoryProfile = (function () {
         .on("click", function () {
             $table_profile_product_edit.clearSelectedRows()
             clearInventoryProfileForm()
-            _product_edit_profile_form_profile_name_filter.value = ""
+            //_product_edit_profile_form_profile_name_filter.value = ""
             hideForm()
         })
     
@@ -123,7 +123,7 @@ const InventoryProfile = (function () {
             clearInventoryProfileForm()
             setFormElementDisplay()
             hideForm()
-            _product_edit_profile_form_profile_name_filter.value = ""
+            //_product_edit_profile_form_profile_name_filter.value = ""
         })
     
     $(_product_edit_profile_form_profile_sales_types_id)
@@ -158,7 +158,7 @@ const InventoryProfile = (function () {
             clearInventoryProfileForm()
             setFormElementDisplay()
             hideForm()
-            _product_edit_profile_form_profile_name_filter.value = ""
+            //_product_edit_profile_form_profile_name_filter.value = ""
         })
     
     const updateProgress = function () {
@@ -185,7 +185,7 @@ const InventoryProfile = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -207,7 +207,7 @@ const InventoryProfile = (function () {
                             $table_profile_product_edit.deleteRow(detail)
                             $table_profile_product_edit.clearSelectedRows()
                             
-                            _product_edit_profile_form_profile_name_filter.value = ""
+                            //_product_edit_profile_form_profile_name_filter.value = ""
                             
                             PricingWorksheet.pricingWorksheet()
                             Pricing.resetForm()
@@ -268,62 +268,6 @@ const InventoryProfile = (function () {
     const initAutoComplete = function () {
         //console.log('InventoryProfile.initAutoComplete()', InventoryProfile)
         let product_id = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
-        
-        $(_product_edit_profile_form_profile_name_filter)
-            .on("click", function () {
-                $(this).select()
-            })
-            .on("search", function () {
-                $table_profile_product_edit.clearSelectedRows()
-                resetInventoryProfileForm()
-            })
-            .on("change", function () {
-                setTimeout(function () {
-                    //*
-                    let profile_name = _product_edit_profile_form_profile_name_filter.value
-                    
-                    if (globalSelectedProfile === false) {
-                        if (profile_name === "") {
-                            globalSelectedProfile = false
-                            $table_profile_product_edit.clearSelectedRows()
-                            resetInventoryProfileForm()
-                        } else {
-                            nameExists(profile_name)
-                        }
-                    }
-                    //*/
-                }, 200)
-                if (_product_edit_profile_form_profile_name_filter.value === "") {
-                    $table_profile_product_edit.clearSelectedRows()
-                    resetInventoryProfileForm()
-                }
-            })
-            .autocomplete({
-                serviceUrl: "/api/v1.0/autocomplete/profiles",
-                minChars: 2,
-                cache: false,
-                dataType: "json",
-                triggerSelectOnValidInput: false,
-                params: { "product_id": product_id },
-                paramName: "st",
-                onSelect: function (suggestion) {
-                    if (!suggestion.data) {
-                        return
-                    }
-                    $table_profile_product_edit.clearSelectedRows()
-                    let id = (!isNaN(parseInt(suggestion.data.id))) ? parseInt(suggestion.data.id) : null
-                    let inventory_profile = InventoryProfile.all.get(id)
-                    
-                    if (inventory_profile) {
-                        $table_profile_product_edit.loadRow(inventory_profile)
-                        populateInventoryProfileForm(inventory_profile)
-                        return
-                    }
-                    
-                    populateInventoryProfileForm()
-                    _product_edit_profile_form_profile_name.value = _product_edit_profile_form_profile_name_filter.value
-                },
-            })
     }
     
     const nameExists = function (name) {
@@ -587,7 +531,7 @@ const InventoryProfile = (function () {
         if (_product_edit_profile_form) {
             hideAllotmentFields()
             $(_product_edit_profile_form).hide()
-            _product_edit_profile_form_profile_name_filter.disabled = false
+            //_product_edit_profile_form_profile_name_filter.disabled = false
             
             $("#accordionEx").collapse("hide")
             
@@ -597,7 +541,7 @@ const InventoryProfile = (function () {
     
     const showForm = function () {
         if (_product_edit_profile_form) {
-            _product_edit_profile_form_profile_name_filter.disabled = true
+            //_product_edit_profile_form_profile_name_filter.disabled = true
             $(_product_edit_profile_form).show()
         }
     }
@@ -760,8 +704,8 @@ const InventoryProfile = (function () {
             let detail = set(inventory_profile)
             
             showForm()
-            _product_edit_profile_form_profile_name_filter.value = detail.name
-            _product_edit_profile_form_profile_name_filter.disabled = true
+            //_product_edit_profile_form_profile_name_filter.value = detail.name
+            //_product_edit_profile_form_profile_name_filter.disabled = true
             $table_profile_product_edit.loadRow(detail)
             populateInventoryProfileForm(detail)
         }
@@ -790,7 +734,7 @@ const InventoryProfile = (function () {
                             $table_profile_product_edit.jumpToRow(detail)
                             $table_profile_product_edit.clearSelectedRows()
                             
-                            _product_edit_profile_form_profile_name_filter.value = ""
+                            //_product_edit_profile_form_profile_name_filter.value = ""
                             
                             PricingWorksheet.pricingWorksheet()
                             Pricing.resetForm()
@@ -825,9 +769,81 @@ const InventoryProfile = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
+    }
+    
+    const initProductEdit = function (settings) {
+        let inventory_profiles = []
+        
+        if (settings) {
+            if (settings.profiles) {
+                inventory_profiles = settings.profiles
+            }
+        }
+        
+        checkin_dow = $(_product_edit_profile_form_profile_checkin_dow).DisabledDOW({
+            name: "checkin_dow",
+            label: "Checkin DOW",
+        })
+        
+        checkout_dow = $(_product_edit_profile_form_profile_checkout_dow).DisabledDOW({
+            name: "checkout_dow",
+            label: "Checkout DOW",
+        })
+        
+        departure_dow = $(_product_edit_profile_form_profile_departure_dow).DisabledDOW({
+            name: "departure_dow",
+            label: "Departure DOW",
+        })
+        
+        return_dow = $(_product_edit_profile_form_profile_return_dow).DisabledDOW({
+            name: "return_dow",
+            label: "Return DOW",
+        })
+        
+        inc_days_dow = $(_product_edit_profile_form_profile_inc_days_dow).DisabledDOW({
+            name: "inc_days_dow",
+            label: "Included Days",
+        })
+        
+        weekday_dow = $(_product_edit_profile_form_profile_weekday_dow).DisabledDOW({
+            name: "weekday_dow",
+            label: "Weekdays",
+        })
+        
+        InventoryProfile.checkin_dow = checkin_dow
+        InventoryProfile.checkout_dow = checkout_dow
+        InventoryProfile.departure_dow = departure_dow
+        InventoryProfile.return_dow = return_dow
+        InventoryProfile.weekday_dow = weekday_dow
+        InventoryProfile.inc_days_dow = inc_days_dow
+        
+        InventoryProfile.advanced_booking_date = $("#profile_advanced_booking_date").dateSelect({
+            onStart: function () {},
+        })
+        
+        InventoryProfile.expiration_date = $("#profile_expires").dateSelect({
+            onStart: function () {},
+        })
+        
+        //$(document).ready(function () {
+        if (_table_profile_product_edit) {
+            buildInventoryProfileTable()
+        }
+        
+        if (_product_edit_profile_form) {
+            validator_init(form_rules)
+            
+            InventoryProfile.validator = $(_product_edit_profile_form).validate()
+            
+            resetInventoryProfileForm()
+            hideForm()
+        }
+        
+        loadAll(inventory_profiles)
+        //})
     }
     
     const init = function (settings) {
@@ -889,10 +905,6 @@ const InventoryProfile = (function () {
                 buildInventoryProfileTable()
             }
             
-            if (_product_edit_profile_form_profile_name_filter) {
-                initAutoComplete()
-            }
-            
             if (_product_edit_profile_form) {
                 validator_init(form_rules)
                 
@@ -918,6 +930,9 @@ const InventoryProfile = (function () {
         return_dow: null,
         weekday_dow: null,
         inc_days_dow: null,
+        initProductEdit: function (settings) {
+            initProductEdit(settings)
+        },
         init: function (settings) { init(settings) },
         initAutoComplete: function () { initAutoComplete() },
         edit: function (inventory_profile) {

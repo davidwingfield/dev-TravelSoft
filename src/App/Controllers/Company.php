@@ -3,7 +3,9 @@
 	namespace Framework\App\Controllers;
 	
 	use Exception;
+	use Framework\App\Models\AddressModel;
 	use Framework\App\Models\CompanyModel;
+	use Framework\App\Models\ContactModel;
 	use Framework\Core\Controller;
 	use Framework\Core\View;
 	use Framework\Logger\Log;
@@ -103,43 +105,71 @@
 			return $data;
 		}
 		
-		private static function format(array $company): array
+		public static function format(array $company): array
 		{
-			if (isset($company)) {
-				$id = (int)$company["company_id"];
-				$images = Image::getByCompanyId($id);
-				$cover_image = "";
-				for ($n = 0; $n < count($images); $n++) {
-					if ($images[$n]["is_cover_image"] === 1) {
-						$cover_image = $images[$n]["path"];
-					}
-				}
-				
-				return array(
-					"id" => $company["company_id"],
-					"name" => $company["company_name"],
-					"phone_1" => $company["company_phone_1"],
-					"phone_2" => $company["company_phone_2"],
-					"fax" => $company["company_fax"],
-					"website" => $company["company_website"],
-					"cover_image" => $cover_image,
-					"email" => $company["company_email"],
-					"status_id" => $company["company_status_id"],
-					"enabled" => $company["company_enabled"],
-					"date_created" => $company["company_date_created"],
-					"created_by" => $company["company_created_by"],
-					"date_modified" => $company["company_date_modified"],
-					"modified_by" => $company["company_modified_by"],
-					"note" => $company["company_note"],
-					"keywords" => (isset($company["company_keywords"])) ? $company["company_keywords"] : "",
-					"description_long" => (isset($company["company_description_long"])) ? $company["company_description_long"] : "",
-					"description_short" => (isset($company["company_description_short"])) ? $company["company_description_short"] : "",
-					"logo" => (isset($company["company_logo"])) ? $company["company_logo"] : "/public/img/logo_placeholder.jpg",
-					"images" => Image::getByCompanyId($id),
-				);
+			$address_list_formatted = [];
+			$contact_list_formatted = [];
+			
+			$id = (int)$company["company_id"];
+			
+			// Addresses
+			$addresses = AddressModel::getByCompanyId($id);
+			//Log::$debug_log->trace($addresses);
+			foreach ($addresses AS $k => $address) {
+				$address_list_formatted[] = $address;
 			}
 			
-			return [];
+			//Contacts
+			$contacts = ContactModel::getByCompanyId($id);
+			
+			foreach ($contacts AS $k => $contact) {
+				$contact_list_formatted[] = Contact::format($contact);
+			}
+			
+			// Images
+			$images = Image::getByCompanyId($id);
+			$cover_image = "/public/img/unit_cover_placeholder.jpg";
+			
+			foreach ($images AS $k => $image) {
+				if ($image["is_cover"] === 1) {
+					$source = "unit";
+					$sourceId = (isset($unit["unit_id"])) ? (int)$unit["unit_id"] : null;
+					$fileName = (isset($image["name"])) ? $image["name"] : null;
+					$fileExtension = (isset($image["extension"])) ? $image["extension"] : null;
+					$filePath = (isset($image["name"])) ? $image["name"] : null;
+					
+					if (!is_null($sourceId) && !is_null($fileName) && !is_null($fileExtension) && !is_null($filePath)) {
+						$cover_image = "/public/img/$source/$sourceId/$fileName.$fileExtension";
+					}
+				}
+			}
+			
+			// Return
+			return array(
+				"id" => $company["company_id"],
+				"name" => $company["company_name"],
+				"phone_1" => $company["company_phone_1"],
+				"phone_2" => $company["company_phone_2"],
+				"fax" => $company["company_fax"],
+				"website" => $company["company_website"],
+				"cover_image" => $cover_image,
+				"email" => $company["company_email"],
+				"status_id" => $company["company_status_id"],
+				"enabled" => $company["company_enabled"],
+				"date_created" => $company["company_date_created"],
+				"created_by" => $company["company_created_by"],
+				"date_modified" => $company["company_date_modified"],
+				"modified_by" => $company["company_modified_by"],
+				"note" => $company["company_note"],
+				"keywords" => (isset($company["company_keywords"])) ? $company["company_keywords"] : "",
+				"description_long" => (isset($company["company_description_long"])) ? $company["company_description_long"] : "",
+				"description_short" => (isset($company["company_description_short"])) ? $company["company_description_short"] : "",
+				"logo" => (isset($company["company_logo"])) ? $company["company_logo"] : "/public/img/logo_placeholder.jpg",
+				"images" => $images,
+				"contacts" => $contact_list_formatted,
+				"addresses" => $addresses,
+			);
+			
 		}
 		
 	}

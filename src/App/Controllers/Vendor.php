@@ -535,7 +535,7 @@
 			//
 			
 			for ($n = 0; $n < count($images); $n++) {
-				if ($images[$n]["is_cover_image"] === 1) {
+				if ($images[$n]["is_cover"] === 1) {
 					$cover_image = $images[$n]["path"] . "/" . $images[$n]["name"] . "." . $images[$n]["extension"];
 				}
 			}

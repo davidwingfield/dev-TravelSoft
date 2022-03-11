@@ -1,27 +1,3167 @@
 <?php
-    if (!isset($page_data)) {
-        $page_data = [];
-    }
-    
-    $settings = json_encode($page_data, 1);
-    $init = "Provider.index($settings)"
+	if (!isset($page_data)) {
+		$page_data = [];
+	}
+	
+	$settings = json_encode($page_data, 1);
+	//$init = "Provider.index($settings)"
 ?>
+
+<!-- Provider Index -->
 <section id="provider_index" class="section">
-    
-    <div class="row">
-        
-        <div class="col-12 col-lg-8 mb-1">
-            <?php
-                include_once(__DIR__ . "/tables/provider_index_table.phtml"); ?>
-        </div>
-    
-    </div>
+	
+	<div class="row">
+		
+		<!-- Left -->
+		<div class="col-12 col-lg-8">
+			
+			<!-- Provider Table -->
+			<?php include_once(__DIR__ . "/tables/provider_index_table.phtml"); ?>
+			<!-- /Provider Table -->
+		
+		</div>
+		<!-- /Left -->
+		
+		<!-- Right -->
+		<div class="col-12 col-lg-4">
+		
+		</div>
+		<!-- /Right -->
+	
+	</div>
+	
+	<form id="provider_index_form" class="card card-body mb-2" novalidate="novalidate">
+		<h5 class='card-title'>
+			<span class="">New Provider Form</span>
+			<a href="javascript:void(0);" id="provider_index_form_button_close" class="panel-button-close fas fa-times"></a>
+		</h5>
+		<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
+		
+		<div class="row mx-1">
+			
+			<!-- Left -->
+			<div class="col-12 col-lg-8 p-1 mb-2">
+				<section id="" class="card card-body p-2 border border-light rounded">
+					<h6 class="card-subtitle my-2 font-weight-bold text-muted">Company Detail</h6>
+					<div class="row">
+						
+						<!-- Company Name Filter -->
+						<div class="col-12">
+							<div class="form-element">
+								<label for="company_name_filter" class="d-none">Company Name Search:</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+                                        <span class="input-group-text">
+											<i class="fas fa-search" aria-hidden="true"></i>
+                                        </span>
+									</div>
+									<input type="search" id="company_name_filter" name="company_name_filter" class="form-control" placeholder="Search Companies" value=""/>
+								</div>
+								<div id="company_name_filter-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						<!-- /Company Name Filter -->
+					
+					</div>
+					<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
+					
+					<div class="row">
+						
+						<!-- Company Left Side -->
+						<div class="col-12 col-lg-8">
+							
+							<div class="row">
+								
+								<!-- Company Id -->
+								<div class="col-12 col-md-6">
+									<div class="form-element">
+										<label for="company_id">Id:</label>
+										<input type="text" id="company_id" name="company_id" class="form-control" placeholder="" value="" readonly="readonly"/>
+										<div id="company_id-error" class="error w-100 text-center">&nbsp;</div>
+									</div>
+								</div>
+								<!-- Company Id -->
+								
+								<!-- Company Enabled -->
+								<div class="col-12 col-md-6 d-flex align-items-end justify-content-end pb-2">
+									<div class="form-element">
+										<div class="custom-control custom-switch mt-1">
+											<input type="checkbox" id="company_enabled" name="company_enabled" class="custom-control-input" value="1">
+											<label for="company_enabled" class="custom-control-label p-0">Enabled</label>
+										</div>
+										<div id="company_enabled-error" class="error w-100 text-center"></div>
+									</div>
+								</div>
+								<!-- /Company Enabled -->
+							
+							</div>
+							
+							<div class="row">
+								
+								<!-- Company Website -->
+								<div class="col-12">
+									<div class="form-element">
+										<label for="company_website">Website:</label>
+										<input type="url" id="company_website" name="company_website" class="form-control" placeholder="" value=""/>
+										<div id="company_website-error" class="error w-100 text-center">&nbsp;</div>
+									</div>
+								</div>
+								<!-- /Company Website -->
+							
+							</div>
+							
+							<div class="row">
+								
+								<!-- Company Email -->
+								<div class="col-12">
+									<div class="form-element">
+										<label for="company_email">Email:</label>
+										<input type="email" id="company_email" name="company_email" class="form-control" placeholder="" value=""/>
+										<div id="company_email-error" class="error w-100 text-center">&nbsp;</div>
+									</div>
+								</div>
+								<!-- /Company Email -->
+							
+							</div>
+						
+						</div>
+						<!-- /Company Left Side -->
+						
+						<!-- Company Logo -->
+						<div class="col-12 col-lg-4">
+							<div class="form-element">
+								<label for="company_logo">Logo:</label>
+								<input type="file" id="company_logo" name="company_logo" class="dropify" data-height="200"/>
+								<div id="company_logo-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						<!-- /Company Logo -->
+					
+					</div>
+					
+					<!-- Detailed Company Description -->
+					<section class="card card-body mb-2">
+						<div class="d-flex justify-content-between">
+							<h5 class="card-title label">Detailed Description:</h5>
+							<a id="button_company_description_long_toggle" class="but_toggle waves-effect waves-light" data-texted="company_description_long">
+								<i class="fas fa-sliders-h"></i>
+							</a>
+						</div>
+						<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+						
+						<div class="row">
+							<div class="col-12">
+								<div class="form-element">
+									<label for="company_description_long" class="d-none">Detailed Description:</label>
+									<textarea id="company_description_long" name="company_description_long" class="md-textarea tmceEl form-control" rows="4"></textarea>
+									<div id="company_description_long-error" class="error w-100 text-center">&nbsp;</div>
+								</div>
+							</div>
+						</div>
+					
+					</section>
+					<!-- /Detailed Company Description -->
+					
+					<!-- Company Images -->
+					<section id="company_images" class="mb-2"></section>
+					<!-- /Company Images -->
+				
+				</section>
+			</div>
+			
+			<div class="col-12 col-lg-4 mb-2 p-1">
+				
+				<!-- Contact Info -->
+				<section id="" class="card card-body p-2 border border-light rounded">
+					<h6 class="card-subtitle my-2 font-weight-bold text-muted">Company Contact:</h6>
+					<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
+					
+					<div class="row">
+						
+						<!-- Company Phone 1 -->
+						<div class="col-12 mb-2">
+							<div class="form-element">
+								<label for="company_phone_1">Phone 1:</label>
+								<input type="text" id="company_phone_1" name="company_phone_1" class="form-control" placeholder="" value=""/>
+								<div id="company_phone_1-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						<!-- /Company Phone 1 -->
+					
+					</div>
+					
+					<div class="row">
+						
+						<!-- Company Phone 2 -->
+						<div class="col-12 mb-2">
+							<div class="form-element">
+								<label for="company_phone_2">Phone 2:</label>
+								<input type="text" id="company_phone_2" name="company_phone_2" class="form-control" placeholder="" value=""/>
+								<div id="company_phone_2-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						<!-- /Company Phone 2 -->
+					
+					</div>
+					
+					<div class="row">
+						
+						<!-- Company Fax -->
+						<div class="col-12 mb-2">
+							<div class="form-element">
+								<label for="company_fax">Fax:</label>
+								<input type="text" id="company_fax" name="company_fax" class="form-control" placeholder="" value=""/>
+								<div id="company_fax-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						<!-- /Company Fax -->
+					
+					</div>
+				
+				</section>
+				<!-- /Contact Info -->
+				
+				<!-- Company Short Description -->
+				<section class="card card-body mb-2">
+					<div class="d-flex justify-content-between">
+						<h5 class="card-title label">Brief Description:</h5>
+					</div>
+					<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+					<div class="row">
+						<div class="col-12">
+							<div class="form-element">
+								<label for="company_description_short" class="d-none">Short Description</label>
+								<textarea id="company_description_short" name="company_description_short" class="md-textarea short-description form-control" rows="4" maxlength="250"></textarea>
+								<div id="company_description_short-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+					</div>
+				</section>
+				<!-- /Company Short Description -->
+				
+				<!-- Company Keywords -->
+				<section id="company_keywords" class="card card-body mb-2 keyword">
+					<label for="company_keywords_search" class="d-none">Company Keywords:</label>
+					<input type="text" id="company_keywords_search" class="user-release-input form-control form-control-lg" placeholder="Keywords..."/>
+					<div id="company_keywords_container" class="w-100 my-2 chips_container"></div>
+				</section>
+				<!-- /Company Keywords -->
+			
+			</div>
+		</div>
+		
+		<div class="row mx-1">
+			<div class="col-12 col-lg-8 p-1 mb-2">
+				<section id="" class="card card-body p-2 border border-light rounded">
+					<h6 class="card-subtitle my-2 font-weight-bold text-muted">Provider Detail</h6>
+					<div class="row">
+						
+						<!-- Provider Name Filter -->
+						<div class="col-12">
+							<div class="form-element">
+								<label for="provider_name_filter" class="d-none">Provider Name Search:</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+                                        <span class="input-group-text">
+											<i class="fas fa-search" aria-hidden="true"></i>
+                                        </span>
+									</div>
+									<input type="search" id="provider_name_filter" name="provider_name_filter" class="form-control" placeholder="Search Providers" value=""/>
+								</div>
+								<div id="provider_name_filter-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						<!-- /Provider Name Filter -->
+					
+					</div>
+					<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
+					
+					<div class="row">
+						
+						<!-- Provider Id -->
+						<div class="col-12 col-md-6">
+							<div class="form-element">
+								<label for="provider_id">Id:</label>
+								<input type="text" id="provider_id" name="provider_id" class="form-control" placeholder="" value="" readonly="readonly"/>
+								<div id="provider_id-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						<!-- Provider Id -->
+						
+						<!-- Provider Enabled -->
+						<div class="col-12 col-md-6 d-flex align-items-end justify-content-end pb-2">
+							<div class="form-element">
+								<div class="custom-control custom-switch mt-1">
+									<input type="checkbox" id="provider_enabled" name="provider_enabled" class="custom-control-input" value="1">
+									<label for="provider_enabled" class="custom-control-label p-0">Enabled</label>
+								</div>
+								<div id="provider_enabled-error" class="error w-100 text-center"></div>
+							</div>
+						</div>
+						<!-- /Provider Enabled -->
+					
+					</div>
+					
+					<div class="row">
+						
+						<!-- Provider Name -->
+						<div class="col-12 col-lg-6 mb-2">
+							<div class="form-element">
+								<label for="provider_name">Name:</label>
+								<input type="text" id="provider_name" name="provider_name" class="form-control" placeholder="" value="" readonly="readonly"/>
+								<div id="provider_name-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						<!-- /Provider Name -->
+						
+						<!-- Provider Code Direct Id -->
+						<div class="col-12 col-lg-6 mb-2">
+							<div class="form-element">
+								<label for="provider_code_direct_id">Code Direct Id:</label>
+								<input type="text" id="provider_code_direct_id" name="provider_code_direct_id" class="form-control" placeholder="" value="" readonly="readonly"/>
+								<div id="provider_code_direct_id-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						<!-- /Provider Code Direct Id -->
+					
+					</div>
+					
+					<div class="row">
+						<div class="col-12 col-md-4">
+							<label for="provider_company_id" class="dev-element d-none">Provider Company Id:</label>
+							<input type="hidden" id="provider_company_id" name="provider_company_id" class="form-control dev-element" value="" readonly="readonly">
+						</div>
+					</div>
+				
+				</section>
+			</div>
+		</div>
+		
+		<div class="row mx-1">
+			<div class="col-12 col-md-6 mb-2 text-left">
+				<button type="button" id="provider_index_form_button_cancel" name="provider_index_form_button_cancel" class="btn btn-outline-danger btn-sm waves-effect waves-light">Cancel</button>
+			</div>
+			<div class="col-12 col-md-6 mb-2 text-right">
+				<button type="button" id="provider_index_form_button_clear" name="provider_index_form_button_clear" class="btn btn-outline-primary btn-sm waves-effect waves-light">Clear</button>
+				<button type="button" id="provider_index_form_button_save" name="provider_index_form_button_save" class="btn btn-primary btn-sm waves-effect waves-light">Save</button>
+			</div>
+		</div>
+	</form>
 
 </section>
+<!-- /Provider Index -->
 
 <script type="text/javascript">
-    $(function () {
-        Types.init(<?php echo TYPES;?>)
-        <?php echo $init;?>
-    })
+	$(function () {
+		Types.init(<?php echo TYPES;?>)
+		<?php //echo $init;?>
+	})
+</script>
+
+<script type="text/javascript">
+	// ---------- Company 2 ----------
+	const Company2 = (function () {
+		"use strict"
+		
+		const _company_name_filter = document.getElementById("company_name_filter")
+		const _company_id = document.getElementById("company_id")
+		const _company_name = document.getElementById("company_name")
+		const _company_phone_1 = document.getElementById("company_phone_1")
+		const _company_phone_2 = document.getElementById("company_phone_2")
+		const _company_fax = document.getElementById("company_fax")
+		const _company_website = document.getElementById("company_website")
+		const _company_email = document.getElementById("company_email")
+		const _company_enabled = document.getElementById("company_enabled")
+		const _company_logo = document.getElementById("company_logo")
+		const _company_keywords = document.getElementById("company_keywords")
+		const _company_description_short = document.getElementById("company_description_short")
+		const _company_description_long = document.getElementById("company_description_long")
+		const _company_images = document.getElementById("company_images")
+		
+		let $companyKeywords, $companyLogo, $companyImages
+		let globalSelectedCompany = false
+		let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+		
+		const handleCompanyError = function (msg, title, level) {
+			console.log("Company.handleCompanyError(msg)", msg)
+			// ----
+			
+			if (!title) {
+				title = "Company"
+			}
+			
+			if (!level) {
+				level = "error"
+			}
+			
+			toastr[level](`${msg}`, title)
+		}
+		
+		const fetchCompanyByName = function (dataToSend, callback) {
+			console.log("Provider.fetchCompanyByName(dataToSend, callback)", dataToSend, callback)
+			// ----
+			
+			let url = "/api/v1.0/companies/validate"
+			
+			if (dataToSend) {
+				try {
+					sendGetRequest(url, dataToSend, function (data, status, xhr) {
+						if (data) {
+							return callback(data)
+						} else {
+							return handleCompanyError("Oops: 1", "Company", "error")
+						}
+					})
+				} catch (e) {
+					return handleCompanyError("Error Validating Company", "Company", "error")
+				}
+			} else {
+				return handleCompanyError("Error Loading Company- Missing Data", "Company", "error")
+			}
+		}
+		
+		const companyExists = function (companyName) {
+			console.log("Provider.companyExists(companyName)", companyName)
+			// ----
+			
+			if (companyName) {
+				fetchCompanyByName({ name: companyName }, function (data) {
+					if (data) {
+						let company = (data[0]) ? data[0] : data
+						console.log("|__ |__ company", company)
+					}
+				})
+			}
+		}
+		
+		const initAutocomplete = function () {
+			if (_company_name_filter) {
+				$(_company_name_filter)
+					.on("search", function () {
+						console.log("Provider.company_name_filter:search()")
+						// ----
+						
+					})
+					.on("click", function () {
+						console.log("Provider.company_name_filter:click()")
+						// ----
+						if ($(this).attr("readonly") === "readonly") {
+							e.preventDefault()
+						} else {
+							$(this).select()
+						}
+					})
+					.on("keyup", function () {
+						globalSelectedCompany = false
+					})
+					.on("change", function () {
+						console.log("Provider.company_name_filter:change()")
+						// ----
+						
+						let companyName = this.value
+						
+						setTimeout(function () {
+							if (globalSelectedCompany === false && companyName !== "") {
+								companyExists(companyName)
+							}
+						}, 200)
+						
+					})
+					.autocomplete({
+						serviceUrl: "/api/v1.0/autocomplete/companies",
+						minChars: 2,
+						cache: false,
+						dataType: "json",
+						triggerSelectOnValidInput: false,
+						paramName: "st",
+						onSelect: function (suggestion) {
+							if (!suggestion.data) {
+								return
+							}
+							let company = suggestion.data
+							globalSelectedCompany = true
+							console.log("|__ company", company)
+						},
+					})
+			}
+		}
+		
+		const initImages = function () {
+			if (_company_images) {
+				Company2.fileManager = $(_company_images).fileManager({
+					height: 400,
+					source: "company",
+				})
+			}
+			
+			if (_company_logo) {
+				$companyLogo = $(_company_logo)
+					.dropify({
+						messages: {
+							"default": "Drag and drop a file here or click",
+							"replace": "Drag and drop or click to replace",
+							"remove": "Remove",
+							"error": "Ooops, something wrong happended.",
+						},
+					})
+			}
+		}
+		
+		const formBuild = function () {
+			initAutocomplete()
+			initImages()
+			
+			if (_company_keywords) {
+				$companyKeywords = $(_company_keywords).BuildKeyword([])
+			}
+		}
+		
+		const formReset = function () {
+			console.log("Company.formReset()")
+			// ----
+			
+			if ($companyKeywords) {
+				$companyKeywords.clear()
+			}
+			
+			if (_company_name_filter) {
+				_company_name_filter.value = ""
+			}
+			
+			if (_company_id) {
+				_company_id.value = ""
+			}
+			
+			if (_company_name) {
+				_company_name.value = ""
+			}
+			
+			if (_company_name_filter) {
+				_company_name_filter.value = ""
+			}
+			
+			if (_company_phone_1) {
+				_company_phone_1.value = ""
+			}
+			
+			if (_company_phone_2) {
+				_company_phone_2.value = ""
+			}
+			
+			if (_company_fax) {
+				_company_fax.value = ""
+			}
+			
+			if (_company_website) {
+				_company_website.value = ""
+			}
+			
+			if (_company_email) {
+				_company_email.value = ""
+			}
+			
+			if (_company_enabled) {
+				_company_enabled.checked = true
+			}
+			
+			if (_company_description_short) {
+				_company_description_short.value = ""
+			}
+			
+			if (_company_description_long) {
+				_company_description_long.value = ""
+			}
+		}
+		
+		const formPopulate = function (company) {
+			console.log("Company.formPopulate(company)", company)
+			// ----
+			
+			let companyId, companyName, companyPhone1, companyPhone2, companyFax, companyWebsite, companyEmail, companyCoverImage,
+				companyStatusId, companyEnabled, companyDateCreated, companyCreatedBy, companyDateModified, companyModifiedBy, companyNote,
+				companyKeywords, companyDescriptionLong, companyDescriptionShort, companyLogo, companyAddresses, companyContacts
+			
+			companyId = (company && company.id && !isNaN(parseInt(company.id))) ? parseInt(company.id) : null
+			companyName = (company && company.name) ? company.name : null
+			companyPhone1 = (company && company.phone_1) ? company.phone_1 : null
+			companyPhone2 = (company && company.phone_2) ? company.phone_2 : null
+			companyFax = (company && company.fax) ? company.fax : null
+			companyWebsite = (company && company.website) ? company.website : null
+			companyEmail = (company && company.email) ? company.email : null
+			companyStatusId = (company && company.status_id && !isNaN(parseInt(company.status_id))) ? parseInt(company.status_id) : 1
+			companyEnabled = !!(company && company.enabled && company.enabled === 1)
+			companyDateCreated = (company && company.date_created) ? company.date_created : formatDateMySQL()
+			companyCreatedBy = (company && company.date_created && !isNaN(parseInt(company.date_created))) ? parseInt(company.date_created) : userId
+			companyDateModified = (company && company.date_modified) ? company.date_modified : formatDateMySQL()
+			companyModifiedBy = (company && company.modified_by && !isNaN(parseInt(company.modified_by))) ? parseInt(company.modified_by) : userId
+			companyNote = (company && company.note) ? company.note : null
+			companyKeywords = (company && company.keywords) ? company.keywords : []
+			companyDescriptionShort = (company && company.description_short) ? company.description_short : null
+			companyDescriptionLong = (company && company.description_long) ? company.description_long : null
+			companyCoverImage = (company && company.cover_image) ? company.cover_image : "/public/img/placeholder.jpg"
+			companyLogo = (company && company.logo) ? company.logo : "/public/img/placeholder.jpg"
+			companyAddresses = (company && company.addresses) ? company.addresses : []
+			companyContacts = (company && company.contacts) ? company.contacts : []
+			
+			formReset()
+			
+			if ($companyKeywords) {
+				$companyKeywords.build(companyKeywords)
+			}
+			
+			if (_company_id) {
+				_company_id.value = (company.id) ? company.id : null
+			}
+			
+			if (_company_name_filter) {
+				_company_name_filter.value = companyName
+			}
+			
+			if (_company_name) {
+				_company_name.value = companyName
+			}
+			
+			if (_company_phone_1) {
+				_company_phone_1.value = companyPhone1
+			}
+			
+			if (_company_phone_2) {
+				_company_phone_2.value = companyPhone2
+			}
+			
+			if (_company_fax) {
+				_company_fax.value = companyFax
+			}
+			
+			if (_company_website) {
+				_company_website.value = companyWebsite
+			}
+			
+			if (_company_email) {
+				_company_email.value = companyEmail
+			}
+			
+			if (_company_enabled) {
+				_company_enabled.checked = companyEnabled
+			}
+			
+			if (_company_description_short) {
+				_company_description_short.value = companyDescriptionShort
+			}
+			
+			if (_company_description_long) {
+				_company_description_long.value = companyDescriptionLong
+			}
+			
+		}
+		
+		const detailDefault = function () {
+			return {
+				id: null,
+				name: null,
+				phone_1: null,
+				phone_2: null,
+				fax: null,
+				website: null,
+				email: null,
+				cover_image: null,
+				status_id: 1,
+				enabled: 1,
+				date_created: formatDateMySQL(),
+				created_by: userId,
+				date_modified: formatDateMySQL(),
+				modified_by: userId,
+				note: null,
+				description_long: null,
+				description_short: null,
+				logo: null,
+				keywords: [],
+				addresses: [],
+				contacts: [],
+				images: [],
+			}
+		}
+		
+		const detailSet = function (company) {
+			let companyEmail, companyCoverImage,
+				companyStatusId, companyEnabled, companyDateCreated, companyCreatedBy, companyDateModified, companyModifiedBy, companyNote,
+				companyKeywords, companyDescriptionLong, companyDescriptionShort, companyLogo, companyAddresses, companyContacts
+			
+			let detail = detailDefault()
+			
+			detail.id = (company && company.id && !isNaN(parseInt(company.id))) ? parseInt(company.id) : null
+			detail.name = (company && company.name) ? company.name : null
+			detail.phone_1 = (company && company.phone_1) ? company.phone_1 : null
+			detail.phone_2 = (company && company.phone_2) ? company.phone_2 : null
+			detail.fax = (company && company.fax) ? company.fax : null
+			detail.website = (company && company.website) ? company.website : null
+			detail.email = (company && company.email) ? company.email : null
+			detail.status_id = (company && company.status_id && !isNaN(parseInt(company.status_id))) ? parseInt(company.status_id) : 1
+			detail.enabled = (company && company.enabled) ? company.enabled : 0
+			companyDateCreated = (company && company.date_created) ? company.date_created : formatDateMySQL()
+			companyCreatedBy = (company && company.date_created && !isNaN(parseInt(company.date_created))) ? parseInt(company.date_created) : userId
+			companyDateModified = (company && company.date_modified) ? company.date_modified : formatDateMySQL()
+			companyModifiedBy = (company && company.modified_by && !isNaN(parseInt(company.modified_by))) ? parseInt(company.modified_by) : userId
+			companyNote = (company && company.note) ? company.note : null
+			companyKeywords = (company && company.keywords) ? company.keywords : []
+			companyDescriptionShort = (company && company.description_short) ? company.description_short : null
+			companyDescriptionLong = (company && company.description_long) ? company.description_long : null
+			detail.cover_image = (company && company.cover_image) ? company.cover_image : "/public/img/placeholder.jpg"
+			companyLogo = (company && company.logo) ? company.logo : "/public/img/placeholder.jpg"
+			companyAddresses = (company && company.addresses) ? company.addresses : []
+			companyContacts = (company && company.contacts) ? company.contacts : []
+			
+			detail.date_created = companyDateCreated
+			detail.created_by = companyCreatedBy
+			detail.date_modified = companyDateModified
+			detail.modified_by = companyModifiedBy
+			detail.note = companyNote
+			detail.keywords = companyKeywords
+			detail.description_long = companyDescriptionLong
+			detail.description_short = companyDescriptionShort
+			detail.logo = companyLogo
+			detail.addresses = companyAddresses
+			detail.contacts = companyContacts
+			
+			return detail
+		}
+		
+		const init = function (options) {
+			formBuild(options)
+		}
+		
+		const addToCompanyList = function (dataToSend, callback) {
+			if (!dataToSend) {
+				return handleCompanyError("um", "Company")
+			}
+		}
+		return {
+			all: new Map(),
+			detail: {},
+			init: function (options) {
+				init(options)
+			},
+			formReset: function () {
+				formReset()
+			},
+			detailSet: function (company) {
+				return detailSet(company)
+			},
+			addToCompanyList: function (dataToSend, callback) {
+				addToCompanyList(dataToSend, callback)
+			},
+			formPopulate: function (company) {
+				formPopulate(company)
+			},
+		}
+	})()
+	// ---------- Company 2 ----------
+	
+	// ----
+	
+	// ---------- Provider 3 ----------
+	const Provider3 = (function () {
+		"use strict"
+		
+		const _provider_index = document.getElementById("provider_index")
+		const _button_add_provider_page_heading = document.getElementById("button_add_provider_page_heading")
+		
+		const _provider_edit = document.getElementById("provider_edit")
+		
+		const _provider_index_form = document.getElementById("provider_index_form")
+		const _provider_index_form_button_save = document.getElementById("provider_index_form_button_save")
+		const _provider_index_form_button_cancel = document.getElementById("provider_index_form_button_cancel")
+		const _provider_index_form_button_clear = document.getElementById("provider_index_form_button_clear")
+		const _provider_index_form_button_close = document.getElementById("provider_index_form_button_close")
+		
+		const _provider_index_table = document.getElementById("provider_index_table")
+		
+		const _provider_name_filter = document.getElementById("provider_name_filter")
+		const _provider_id = document.getElementById("provider_id")
+		const _provider_enabled = document.getElementById("provider_enabled")
+		const _provider_code_direct_id = document.getElementById("provider_code_direct_id")
+		const _provider_name = document.getElementById("provider_name")
+		
+		const _provider_company_id = document.getElementById("provider_company_id")
+		
+		let globalSelectedProvider = false
+		let $providerIndexTable, userId
+		
+		$(_provider_id)
+			.on("change", function () {
+				let id = (!isNaN(parseInt(_provider_id.value))) ? parseInt(_provider_id.value) : null
+				let provider = Provider3.all.get(id)
+				
+				if (provider) {
+					$providerIndexTable.jumpToRow(provider)
+					//$providerIndexTable.loadRow(provider)
+					//$(`#provider_index_table_tr_${id}`).addClass("selected")
+				} else {
+				
+				}
+				
+				console.log("|__ provider", provider)
+			})
+		
+		$(_provider_index_form_button_save)
+			.on("click", function () {
+				console.log("Provider.provider_index_form_button_save:click()")
+				// ----
+				
+			})
+		
+		$(_provider_index_form_button_close)
+			.on("click", function () {
+				console.log("Provider.provider_index_form_button_close:click()")
+				// ----
+				
+				addFormClose()
+			})
+		
+		$(_button_add_provider_page_heading)
+			.on("click", function () {
+				console.log("Provider.button_add_provider_page_heading:click()")
+				// ----
+				
+				addFormOpen()
+			})
+		
+		$(_provider_index_form_button_cancel)
+			.on("click", function () {
+				console.log("Provider.provider_index_form_button_cancel:click()")
+				// ----
+				
+				addFormReset()
+			})
+		
+		$(_provider_index_form_button_clear)
+			.on("click", function () {
+				console.log("Provider.provider_index_form_button_clear:click()")
+				// ----
+				
+				addFormClear()
+			})
+		
+		const handleProviderError = function (msg, title, level) {
+			console.log("Provider.handleProviderError(msg)", msg)
+			if (!title) {
+				title = "Provider"
+			}
+			
+			if (!level) {
+				level = "error"
+			}
+			
+			toastr[level](`${msg}`, title)
+		}
+		
+		const buildIndexTable = function () {
+			console.log("Provider.buildIndexTable()")
+			// ----
+			if (_provider_index_table) {
+				$providerIndexTable = $(_provider_index_table).table({
+					table_type: "display_list",
+					data: [],
+					columnDefs: [
+						{
+							title: "&nbsp;",
+							targets: 0,
+							data: "company.logo",
+							orderable: false,
+							render: function (data, type, row, meta) {
+								return `<img alt="thumbnail" style="max-height:50px;" class="img-thumbnail" src="${data}"/>`
+							},
+						},
+						{
+							title: "Name",
+							targets: 1,
+							data: "company.name",
+							render: function (data, type, row, meta) {
+								return "<span style='white-space: nowrap;'>" + data + "</span>"
+							},
+						},
+						{
+							title: "Code Direct",
+							targets: 2,
+							data: "code_direct_id",
+							render: function (data, type, row, meta) {
+								return "<span style='white-space: nowrap;'>" + data + "</span>"
+							},
+						},
+					],
+					rowClick: Provider3.navigate,
+				})
+			}
+		}
+		
+		const indexTableAddRow = function (provider) {
+			console.log("Provider.indexTableAddRow(provider)", provider)
+			// ----
+			if (_provider_index_table && provider) {
+				$providerIndexTable.insertRow(provider)
+			}
+		}
+		
+		const navigate = function () {
+			console.log("Provider.navigate()")
+			// ----
+			
+		}
+		
+		const addFormDisableFields = function () {
+			console.log("Provider.addFormDisableFields()")
+			// ----
+			
+		}
+		
+		const addFormEnableFields = function () {
+			console.log("Provider.addFormEnableFields()")
+			// ----
+			
+		}
+		
+		const addFormHide = function () {
+			console.log("Provider.addFormHide()")
+			// ----
+			
+			addFormEnableFields()
+			$(_provider_index_form).hide()
+		}
+		
+		const addFormShow = function () {
+			console.log("Provider.addFormShow()")
+			// ----
+			
+			addFormDisableFields()
+			$(_provider_index_form).show()
+		}
+		
+		const addFormPopulate = function (provider) {
+			console.log("Provider.addFormPopulate(provider)", provider)
+			// ----
+			
+			let detail = setDetail(provider)
+			
+			//console.log("|__ detail", detail)
+			
+			_provider_company_id.value = detail.company_id
+			_provider_id.value = detail.id
+			_provider_code_direct_id.value = detail.code_direct_id
+			_provider_enabled.checked = (detail.enabled !== 0)
+			
+			if (detail.company) {
+				_provider_name_filter.value = detail.company.name
+				_provider_name.value = detail.company.name
+				
+				Company2.formPopulate(detail.company)
+			}
+		}
+		
+		const addFormClear = function () {
+			console.log("Provider.addFormClear()")
+			// ----
+			
+			_provider_name_filter.value = ""
+			_provider_id.value = ""
+			_provider_company_id.value = ""
+			_provider_enabled.checked = true
+			_provider_name.value = ""
+			_provider_code_direct_id.value = ""
+			
+			Company2.formReset()
+			
+		}
+		
+		const addFormLoad = function (provider) {
+			console.log("Provider.addFormLoad(provider)", provider)
+			// ----
+			
+			addFormClear()
+			addFormPopulate(provider)
+		}
+		
+		const addFormOpen = function () {
+			console.log("Provider.addFormOpen()")
+			// ----
+			
+			addFormShow()
+		}
+		
+		const addFormClose = function () {
+			console.log("Provider.addFormClose()")
+			// ----
+			
+			addFormReset()
+			addFormHide()
+		}
+		
+		const addFormReset = function () {
+			console.log("Provider.addFormReset()")
+			// ----
+			
+			addFormClear()
+		}
+		
+		const initIndexElements = function (options) {
+			console.log("Provider.initIndexElements(options)", options)
+			// ----
+			
+			buildIndexTable()
+		}
+		
+		const defaultDetail = function () {
+			console.log("Provider.defaultDetail()")
+			// ----
+			
+			return {
+				id: null,
+				company_id: null,
+				code_direct_id: null,
+				provider_vendor: 1,
+				enabled: 1,
+				status_id: 1,
+				date_created: formatDateMySQL(),
+				created_by: userId,
+				date_modified: formatDateMySQL(),
+				modified_by: userId,
+				note: null,
+				vendor: {
+					id: null,
+					company_id: null,
+					status_id: 1,
+					show_online: 1,
+					show_sales: 1,
+					show_ops: 1,
+					is_provider: 1,
+					sku: null,
+					description_short: null,
+					description_long: null,
+					enabled: 1,
+					date_created: formatDateMySQL(),
+					created_by: userId,
+					date_modified: formatDateMySQL(),
+					modified_by: userId,
+					note: null,
+				},
+				company: {
+					id: null,
+					name: null,
+					phone_1: null,
+					phone_2: null,
+					fax: null,
+					website: null,
+					email: null,
+					cover_image: null,
+					status_id: 1,
+					enabled: 1,
+					date_created: formatDateMySQL(),
+					created_by: userId,
+					date_modified: formatDateMySQL(),
+					modified_by: userId,
+					note: null,
+					description_long: null,
+					description_short: null,
+					logo: null,
+					keywords: [],
+					addresses: [],
+					contacts: [],
+					images: [],
+				},
+			}
+		}
+		
+		const setDetail = function (provider) {
+			console.log("Provider.setDetail(provider)", provider)
+			// ----
+			let companyId, companyName, companyPhone1, companyPhone2, companyFax, companyWebsite, companyEmail, companyCoverImage,
+				companyStatusId, companyEnabled, companyDateCreated, companyCreatedBy, companyDateModified, companyModifiedBy, companyNote,
+				companyKeywords, companyDescriptionLong, companyDescriptionShort, companyLogo, companyAddresses, companyContacts,
+				providerId, providerCodeDirectId, providerVendor, providerEnabled, providerDateCreated, providerCreatedBy, providerDateModified, providerModifiedBy
+			
+			let detail = defaultDetail()
+			
+			let providerCompany = provider.company
+			providerCompany.addresses = (provider.addresses) ? provider.addresses : []
+			providerCompany.contacts = (provider.contacts) ? provider.contacts : []
+			let company = Company2.detailSet(providerCompany)
+			
+			console.log("|__ company", company)
+			if (provider) {
+				providerId = (provider.id && !isNaN(parseInt(provider.id))) ? parseInt(provider.id) : null
+				providerCodeDirectId = (provider.code_direct_id) ? provider.code_direct_id : null
+				providerVendor = 1
+				providerEnabled = (provider.enabled) ? provider.enabled : 0
+				providerDateCreated = (provider.date_created) ? provider.date_created : formatDateMySQL()
+				providerCreatedBy = (provider.date_created && !isNaN(parseInt(provider.date_created))) ? parseInt(provider.date_created) : userId
+				providerDateModified = (provider.date_modified) ? provider.date_modified : formatDateMySQL()
+				providerModifiedBy = (provider.modified_by && !isNaN(parseInt(provider.modified_by))) ? parseInt(provider.modified_by) : userId
+				
+				if (provider.company) {
+					companyId = (provider.company && provider.company.id && !isNaN(parseInt(provider.company.id))) ? parseInt(provider.company.id) : null
+					companyName = (provider.company && provider.company.name) ? provider.company.name : null
+					companyPhone1 = (provider.company && provider.company.phone_1) ? provider.company.phone_1 : null
+					companyPhone2 = (provider.company && provider.company.phone_2) ? provider.company.phone_2 : null
+					companyFax = (provider.company && provider.company.fax) ? provider.company.fax : null
+					companyWebsite = (provider.company && provider.company.website) ? provider.company.website : null
+					companyEmail = (provider.company && provider.company.email) ? provider.company.email : null
+					companyStatusId = (provider.company && provider.company.status_id && !isNaN(parseInt(provider.company.status_id))) ? parseInt(provider.company.status_id) : 1
+					companyEnabled = (provider.company && provider.company.enabled) ? provider.company.enabled : 0
+					companyDateCreated = (provider.company && provider.company.date_created) ? provider.company.date_created : formatDateMySQL()
+					companyCreatedBy = (provider.company && provider.company.date_created && !isNaN(parseInt(provider.company.date_created))) ? parseInt(provider.company.date_created) : userId
+					companyDateModified = (provider.company && provider.company.date_modified) ? provider.company.date_modified : formatDateMySQL()
+					companyModifiedBy = (provider.company && provider.company.modified_by && !isNaN(parseInt(provider.company.modified_by))) ? parseInt(provider.company.modified_by) : userId
+					companyNote = (provider.company && provider.company.note) ? provider.company.note : null
+					companyKeywords = (provider.company && provider.company.keywords) ? provider.company.keywords : []
+					companyDescriptionShort = (provider.company && provider.company.description_short) ? provider.company.description_short : null
+					companyDescriptionLong = (provider.company && provider.company.description_long) ? provider.company.description_long : null
+					companyCoverImage = (provider.company && provider.company.cover_image) ? provider.company.cover_image : "/public/img/placeholder.jpg"
+					companyLogo = (provider.company && provider.company.logo) ? provider.company.logo : "/public/img/placeholder.jpg"
+					companyAddresses = (provider.addresses) ? provider.addresses : []
+					companyContacts = (provider.contacts) ? provider.contacts : []
+				}
+				// Vendor Values
+				detail.vendor.company_id = companyId
+				
+				// Provider Values
+				detail.id = providerId
+				detail.company_id = companyId
+				detail.code_direct_id = providerCodeDirectId
+				detail.enabled = providerEnabled
+				detail.date_created = providerDateCreated
+				detail.created_by = providerCreatedBy
+				detail.date_modified = providerDateCreated
+				detail.modified_by = providerModifiedBy
+				
+				// Company Values
+				detail.company.id = companyId
+				detail.company.name = companyName
+				detail.company.phone_1 = companyPhone1
+				detail.company.phone_2 = companyPhone2
+				detail.company.fax = companyFax
+				detail.company.website = companyWebsite
+				detail.company.email = companyEmail
+				detail.company.cover_image = companyCoverImage
+				detail.company.status_id = companyStatusId
+				detail.company.enabled = companyEnabled
+				detail.company.date_created = companyDateCreated
+				detail.company.created_by = companyCreatedBy
+				detail.company.date_modified = companyDateModified
+				detail.company.modified_by = companyModifiedBy
+				detail.company.note = companyNote
+				detail.company.keywords = companyKeywords
+				detail.company.description_long = companyDescriptionLong
+				detail.company.description_short = companyDescriptionShort
+				detail.company.logo = companyLogo
+				detail.company.addresses = companyAddresses
+				detail.company.contacts = companyContacts
+			}
+			
+			return detail
+		}
+		
+		const loadAll = function (providers) {
+			console.log("Provider.loadAll(providers)", providers)
+			// ----
+			
+			Provider3.all = new Map()
+			
+			if (providers) {
+				$.each(providers, function (i, provider) {
+					let providerDetail = setDetail(provider)
+					let company = (providerDetail.company) ? Company2.detailSet(providerDetail.company) : null
+					
+					let providerId = (!isNaN(parseInt(providerDetail.id))) ? parseInt(providerDetail.id) : null
+					
+					if (providerId !== null) {
+						Provider3.all.set(providerId, providerDetail)
+						indexTableAddRow(providerDetail)
+					}
+					
+					console.log("|__ providerDetail", providerDetail)
+					console.log("|__ company", company)
+				})
+			}
+		}
+		
+		const fetchProviderByName = function (dataToSend, callback) {
+			console.log("Provider.providerExists(dataToSend, callback)", dataToSend)
+			// ----
+			
+			let url = "/api/v1.0/providers/validate"
+			
+			if (dataToSend) {
+				try {
+					sendGetRequest(url, dataToSend, function (data, status, xhr) {
+						if (data) {
+							return callback(data)
+						} else {
+							return handleProviderError("Oops: 1")
+						}
+					})
+				} catch (e) {
+					console.log("error", e)
+					return handleProviderError("Error Validating Company", "Provider", "error")
+				}
+			} else {
+				return handleProviderError("Error Loading Company- Missing Data")
+			}
+		}
+		
+		const providerExists = function (name) {
+			console.log("Provider.providerExists(name)", name)
+			// ----
+			
+			console.log("|__ globalSelectedProvider", globalSelectedProvider)
+			if (globalSelectedProvider === false) {
+				if (name && name !== "") {
+					let dataToSend = {
+						name: name,
+					}
+					
+					fetchProviderByName(dataToSend, function (data) {
+						
+						let provider
+						
+						if (_provider_index_form) {
+							if (!data || data.length === 0) {
+								confirmDialog("This provider does not exist. Would you like to create it?", (ans) => {
+									if (ans) {
+										let companyDetail = {}
+										Company2.addToCompanyList(null, function (data) {
+											if (data) {
+												let company = (data[0]) ? data[0] : data
+												console.log("|__ data", data)
+											} else {
+											
+											}
+										})
+									} else {
+										globalSelectedProvider = false
+									}
+									/*
+									if (ans) {
+										Company.add_to_company_list({
+											name: _modal_product_provider_name.value,
+											status_id: 10,
+											enabled: 1,
+										}, function (data) {
+											if (data) {
+												if (data[0]) {
+													let company = data[0]
+													_modal_product_provider_company_id.value = company.id
+													_modal_product_vendor_company_id.value = company.id
+													_modal_product_provider_name.value = company.name
+													_modal_product_vendor_name.value = company.name
+													_modal_product_provider_vendor_match.checked = true
+													
+													add(remove_nulls({
+														location_id: null,
+														company_id: company.id,
+														code_direct_id: null,
+														id: null,
+														provider_vendor: 1,
+														enabled: 1,
+													}))
+												}
+											}
+										})
+									} else {
+										_modal_product_vendor_id.value = ""
+										_modal_product_provider_id.value = ""
+										_modal_product_vendor_name.value = ""
+										_modal_product_provider_name.value = ""
+										globalSelectedProvider = false
+									}
+									//*/
+								})
+							} else {
+								provider = (data[0]) ? data[0] : data
+								console.log("|__ provider", provider)
+								
+							}
+						} else {
+							console.log("******************* HERE *********************")
+						}
+					})
+				}
+			}
+		}
+		
+		const initIndexForm = function () {
+			console.log("Provider.initIndexForm()")
+			// ----
+			
+			if (_provider_name_filter) {
+				
+				$(_provider_name_filter)
+					.on("change", function () {
+						let providerName = _provider_name_filter.value
+						
+						if (globalSelectedProvider === false) {
+							setTimeout(function () {
+								if (providerName === "") {
+									addFormClear()
+								} else {
+									providerExists(providerName)
+								}
+							}, 200)
+						}
+					})
+					.on("keyup", function () {
+						globalSelectedProvider = false
+					})
+					.on("search", function () {
+						globalSelectedProvider = false
+						addFormClear()
+					})
+					.on("click", function () {
+						if ($(this).attr("readonly") === "readonly") {
+							e.preventDefault()
+						} else {
+							$(this).select()
+						}
+					})
+					.autocomplete({
+						serviceUrl: "/api/v1.0/autocomplete/providers",
+						minChars: 2,
+						cache: false,
+						dataType: "json",
+						triggerSelectOnValidInput: false,
+						paramName: "st",
+						onSelect: function (suggestion) {
+							if (!suggestion.data) {
+								return
+							}
+							let provider = (suggestion.data) ? suggestion.data : null
+							let company = provider.company
+							
+							globalSelectedProvider = true
+							
+							console.log("|__ provider", provider)
+							console.log("|__ company", company)
+							
+							if (company && provider) {
+								Company2.formPopulate(company)
+								addFormLoad(provider)
+								
+								$(_provider_id).trigger("change")
+							}
+							
+						},
+					})
+			}
+		}
+		
+		const initIndexPage = function (options) {
+			console.log("Provider.initIndexPage(options)", options)
+			// ----
+			Company2.init()
+			
+			userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+			
+			let providers = (options && options.providers) ? options.providers : []
+			
+			initIndexElements()
+			initIndexForm()
+			loadAll(providers)
+		}
+		
+		const initEditPage = function (options) {
+			console.log("Provider.initEditPage(options)", options)
+			// ----
+			
+		}
+		
+		const init = function (options) {
+			console.log("Provider.init(options)", options)
+			// ----
+			
+			if (_provider_index) {
+				initIndexPage(options)
+			}
+		}
+		// ----------------- END PROVIDER ----------------
+		
+		return {
+			all: new Map(),
+			detail: {},
+			init: function (options) {
+				init(options)
+			},
+			navigate: function () {
+				navigate()
+			},
+		}
+	})()
+	
+	$(function () {
+		Provider3.init({
+			providers: [
+				{
+					"id": 1,
+					"name": "Test Company 1",
+					"code_direct_id": "P-TC01",
+					"description_long": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.",
+					"description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.",
+					"keywords": "key1, key2, key3",
+					"location_id": 1,
+					"note": null,
+					"enabled": 1,
+					"company_id": 1,
+					"date_created": "2022-03-02 11:39:11",
+					"date_modified": "2022-03-02 11:39:11",
+					"created_by": 4,
+					"modified_by": 4,
+					"vendor": {
+						"id": 1,
+						"company_id": 1,
+						"name": "Test Company 1",
+						"sku": "V-TC01",
+						"show_online": 0,
+						"is_provider": 1,
+						"show_sales": 1,
+						"show_ops": 0,
+						"enabled": 1,
+						"created_by": 4,
+						"date_created": "2022-03-02 11:39:12",
+						"modified_by": 4,
+						"date_modified": "2022-03-02 11:39:12",
+						"note": null,
+						"company": {
+							"images": [
+								{
+									"id": 1,
+									"name": "121",
+									"thumbs_path": "/public/thumbs/company/1",
+									"path": "/public/img/company/1",
+									"ratio": "2.27:1",
+									"type": "image/jpg",
+									"extension": "jpg",
+									"dimensions": "1321:583",
+									"caption": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean quis ex felis. Curabitur leo nibh, suscipit vitae imperdiet nec, facilisis in erat. Duis gravida congue sapien. Nulla sed cursus tellus.",
+									"is_cover": 1,
+									"title": "Image Title 1",
+									"alt": "Image Alt 1",
+									"size": "0.2 MB",
+									"date_created": "2022-03-02 11:39:10",
+									"created_by": 4,
+									"date_modified": "2022-03-02 11:39:10",
+									"modified_by": 4,
+									"note": null,
+									"enabled": 1,
+									"is_shown": 1,
+									"height": 583,
+									"width": 1321,
+								},
+								{
+									"id": 2,
+									"name": "88",
+									"thumbs_path": "/public/thumbs/company/1",
+									"path": "/public/img/company/1",
+									"ratio": "2.27:1",
+									"type": "image/jpg",
+									"extension": "jpg",
+									"dimensions": "1321:583",
+									"caption": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean quis ex felis. Curabitur leo nibh, suscipit vitae imperdiet nec, facilisis in erat. Duis gravida congue sapien. Nulla sed cursus tellus.",
+									"is_cover": 0,
+									"title": "Image Title 2",
+									"alt": "Image Alt 2",
+									"size": "0.2 MB",
+									"date_created": "2022-03-02 11:39:10",
+									"created_by": 4,
+									"date_modified": "2022-03-02 11:39:10",
+									"modified_by": 4,
+									"note": null,
+									"enabled": 1,
+									"is_shown": 1,
+									"height": 583,
+									"width": 1321,
+								},
+							],
+							"id": 1,
+							"name": "Test Company 1",
+							"phone_1": "1112223333",
+							"phone_2": "+39-055-646465465",
+							"fax": "+39-055-646465465",
+							"website": "https://www.google.com",
+							"email": "testcompany@email.com",
+							"enabled": 1,
+							"created_by": 4,
+							"date_created": "2022-03-02 11:39:10",
+							"modified_by": 4,
+							"date_modified": "2022-03-02 11:39:10",
+							"status": 10,
+							"note": null,
+						},
+					},
+					"company": {
+						"images": [
+							{
+								"id": 1,
+								"name": "121",
+								"thumbs_path": "/public/thumbs/company/1",
+								"path": "/public/img/company/1",
+								"ratio": "2.27:1",
+								"type": "image/jpg",
+								"extension": "jpg",
+								"dimensions": "1321:583",
+								"caption": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean quis ex felis. Curabitur leo nibh, suscipit vitae imperdiet nec, facilisis in erat. Duis gravida congue sapien. Nulla sed cursus tellus.",
+								"is_cover": 1,
+								"title": "Image Title 1",
+								"alt": "Image Alt 1",
+								"size": "0.2 MB",
+								"date_created": "2022-03-02 11:39:10",
+								"created_by": 4,
+								"date_modified": "2022-03-02 11:39:10",
+								"modified_by": 4,
+								"note": null,
+								"enabled": 1,
+								"is_shown": 1,
+								"height": 583,
+								"width": 1321,
+							},
+							{
+								"id": 2,
+								"name": "88",
+								"thumbs_path": "/public/thumbs/company/1",
+								"path": "/public/img/company/1",
+								"ratio": "2.27:1",
+								"type": "image/jpg",
+								"extension": "jpg",
+								"dimensions": "1321:583",
+								"caption": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean quis ex felis. Curabitur leo nibh, suscipit vitae imperdiet nec, facilisis in erat. Duis gravida congue sapien. Nulla sed cursus tellus.",
+								"is_cover": 0,
+								"title": "Image Title 2",
+								"alt": "Image Alt 2",
+								"size": "0.2 MB",
+								"date_created": "2022-03-02 11:39:10",
+								"created_by": 4,
+								"date_modified": "2022-03-02 11:39:10",
+								"modified_by": 4,
+								"note": null,
+								"enabled": 1,
+								"is_shown": 1,
+								"height": 583,
+								"width": 1321,
+							},
+						],
+						"keywords": "kry1, key2, key3",
+						"description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed condimentum ante eget sodales congue. Sed ligula nisi, faucibus eget ullamcorper sit amet, fringilla id enim. Pellentesque sapien nibh, aliquam nec imperdiet in, gravida sed turpis viverra.",
+						"description_long": "\r \r \tArticle section one.\r \t\r \tPerspecta historiae studiis consuevit deterius scribentur expleantur\r \t  illam invenire anteponant, cuiquam probo accusantium segnitiae hostis.\r \t  Quos reprehenderit videntur solam amplificarique temeritate incorruptis\r \t  plena filio, metu, intellegitur videor amotio discordant tenebo officiis\r \t  quaerendum parentes scaevola dolorum, vivendum dialectica neglegentur\r \t  liberemus verterunt esset inhaererent, iam mala huc fortitudinis\r \t  derigatur tollitur ipsum legum.\r \t  \r \tLoca invitat maior ferre amicitiae, neque profecta fictae ferae afflueret\r \t  fugienda difficilem praesentibus, nacti quoniam exultat memoria,\r \t  tranquillat iudicari expetendam, dulce efficiat caret vivere cn concessum\r \t  transferrem odio magna, nominavi nocet allicit depravate inciderint\r \t  certamen retinere summumque nemini, iusto conciliant aliqua respirare\r \t  finitum. Quem conformavit, pueriliter quaerenda clamat fugiendum\r \t  specie.\r   \r \r \r \r \tArticle section three.\r \t\r \tCum personae causas hae diligamus opibus morbi formidinum voluntates.\r \tQuicquam alteram splendide romano discordiae cui. Relinqueret vera\r \tfama vocent hortatore constituant aperiri compositis, mediocrem huius\r \tutilitate legum, eas intellegunt deditum sollicitudines omnino penitus\r \ttantam cumanum privavisse, situm intellegunt iis litteris moribus\r \tlegendi multos privamur, fugiamus existimo privamur domesticarum,\r \tindoctis corporum.\r \t\r \t\r \t\t\r \t\t\tArticle section three-one.\r \t\t\t\r \t\t\tIneruditus defendere docti scribimus voluptatis, suis constituant\r \t\t\tpossent, desiderent litteris allicit acuti iuvaret sensus praetermissum\r \t\t\tincidunt effecerit, iucunditas detraxisse dulce legemus regione\r \t\t\tdum studium aliquod, tollatur, explicatis sic exorsus torquato\r \t\t\tfinitum aperta feci, philosophiae nobis defatigatio non tribuat\r \t\t\tiudicari aliquid nati servare, virtutem docere idque magnis aliquid\r \t\t\tsoliditatem nos, lucilius.\r \t\t\t\r \t\t\tIneruditus defendere docti scribimus voluptatis, suis constituant\r \t\t\tpossent, desiderent litteris allicit acuti iuvaret sensus praetermissum\r \t\t\tincidunt effecerit, iucunditas detraxisse dulce legemus regione\r \t\t\tdum studium aliquod, tollatur, explicatis sic exorsus torquato\r \t\t\tfinitum aperta feci, philosophiae nobis defatigatio non tribuat\r \t\t\tiudicari aliquid nati servare, virtutem docere idque magnis aliquid\r \t\t\tsoliditatem nos, lucilius.\r \r \t\t\r \t\t\r \t\t\tArticle section three-two.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\t\r \t\t\r \t\t\tArticle section three-three.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\t\r \t\t\r \t\t\tArticle section three-four.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\r ",
+						"logo": null,
+						"id": 1,
+						"cover_image": "/public/img/company/1/121.jpg",
+						"name": "Test Company 1",
+						"phone_1": "1112223333",
+						"phone_2": "+39-055-646465465",
+						"fax": "+39-055-646465465",
+						"website": "https://www.google.com",
+						"email": "testcompany@email.com",
+						"enabled": 1,
+						"created_by": 4,
+						"date_created": "2022-03-02 11:39:10",
+						"modified_by": 4,
+						"date_modified": "2022-03-02 11:39:10",
+						"status_id": 10,
+						"note": null,
+					},
+					"addresses": [
+						{
+							"company_id": 1,
+							"address_id": 1,
+							"address_types_id": "1",
+							"address_street_1": "street 1",
+							"address_street_2": "street 2",
+							"address_street_3": "street 3",
+							"address_city_id": 428,
+							"address_country_id": 219,
+							"address_province_id": 51,
+							"address_postal_code": "12345",
+							"address_date_created": "2022-03-02 11:39:10",
+							"address_created_by": 4,
+							"address_date_modified": "2022-03-02 11:39:10",
+							"address_modified_by": 4,
+							"address_enabled": 1,
+							"address_note": null,
+							"city_id": 428,
+							"city_sort_order": 999,
+							"city_name": "Houston",
+							"city_enabled": 1,
+							"city_date_created": "2021-08-03 14:40:07",
+							"city_created_by": 4,
+							"city_date_modified": "2021-08-03 14:40:07",
+							"city_modified_by": 4,
+							"city_note": "",
+							"province_id": 51,
+							"province_country_id": 219,
+							"province_name": "Texas",
+							"province_iso2": "TX",
+							"province_iso3": "",
+							"province_sort_order": 1,
+							"province_enabled": 1,
+							"province_date_created": "2022-03-02 11:39:09",
+							"province_created_by": 4,
+							"province_date_modified": "2022-03-02 11:39:09",
+							"province_modified_by": 4,
+							"province_note": null,
+							"country_id": 219,
+							"country_name": "United States",
+							"country_iso2": "US",
+							"country_iso3": "USA",
+							"country_currency_id": 5,
+							"country_sort_order": 1,
+							"country_enabled": 1,
+							"country_date_created": "2021-08-03 13:04:10",
+							"country_created_by": 4,
+							"country_date_modified": "2021-08-03 15:13:45",
+							"country_modified_by": 4,
+							"country_note": "",
+						},
+						{
+							"company_id": 1,
+							"address_id": 2,
+							"address_types_id": "1,2,3",
+							"address_street_1": "street 1",
+							"address_street_2": "street 2",
+							"address_street_3": "street 3",
+							"address_city_id": 428,
+							"address_country_id": 219,
+							"address_province_id": 51,
+							"address_postal_code": "12345",
+							"address_date_created": "2022-03-02 11:39:10",
+							"address_created_by": 4,
+							"address_date_modified": "2022-03-02 11:39:10",
+							"address_modified_by": 4,
+							"address_enabled": 1,
+							"address_note": null,
+							"city_id": 428,
+							"city_sort_order": 999,
+							"city_name": "Houston",
+							"city_enabled": 1,
+							"city_date_created": "2021-08-03 14:40:07",
+							"city_created_by": 4,
+							"city_date_modified": "2021-08-03 14:40:07",
+							"city_modified_by": 4,
+							"city_note": "",
+							"province_id": 51,
+							"province_country_id": 219,
+							"province_name": "Texas",
+							"province_iso2": "TX",
+							"province_iso3": "",
+							"province_sort_order": 1,
+							"province_enabled": 1,
+							"province_date_created": "2022-03-02 11:39:09",
+							"province_created_by": 4,
+							"province_date_modified": "2022-03-02 11:39:09",
+							"province_modified_by": 4,
+							"province_note": null,
+							"country_id": 219,
+							"country_name": "United States",
+							"country_iso2": "US",
+							"country_iso3": "USA",
+							"country_currency_id": 5,
+							"country_sort_order": 1,
+							"country_enabled": 1,
+							"country_date_created": "2021-08-03 13:04:10",
+							"country_created_by": 4,
+							"country_date_modified": "2021-08-03 15:13:45",
+							"country_modified_by": 4,
+							"country_note": "",
+						},
+						{
+							"company_id": 1,
+							"address_id": 3,
+							"address_types_id": "1",
+							"address_street_1": "street 1",
+							"address_street_2": "street 2",
+							"address_street_3": "street 3",
+							"address_city_id": 428,
+							"address_country_id": 219,
+							"address_province_id": 51,
+							"address_postal_code": "12345",
+							"address_date_created": "2022-03-02 11:39:10",
+							"address_created_by": 4,
+							"address_date_modified": "2022-03-02 11:39:10",
+							"address_modified_by": 4,
+							"address_enabled": 1,
+							"address_note": null,
+							"city_id": 428,
+							"city_sort_order": 999,
+							"city_name": "Houston",
+							"city_enabled": 1,
+							"city_date_created": "2021-08-03 14:40:07",
+							"city_created_by": 4,
+							"city_date_modified": "2021-08-03 14:40:07",
+							"city_modified_by": 4,
+							"city_note": "",
+							"province_id": 51,
+							"province_country_id": 219,
+							"province_name": "Texas",
+							"province_iso2": "TX",
+							"province_iso3": "",
+							"province_sort_order": 1,
+							"province_enabled": 1,
+							"province_date_created": "2022-03-02 11:39:09",
+							"province_created_by": 4,
+							"province_date_modified": "2022-03-02 11:39:09",
+							"province_modified_by": 4,
+							"province_note": null,
+							"country_id": 219,
+							"country_name": "United States",
+							"country_iso2": "US",
+							"country_iso3": "USA",
+							"country_currency_id": 5,
+							"country_sort_order": 1,
+							"country_enabled": 1,
+							"country_date_created": "2021-08-03 13:04:10",
+							"country_created_by": 4,
+							"country_date_modified": "2021-08-03 15:13:45",
+							"country_modified_by": 4,
+							"country_note": "",
+						},
+						{
+							"company_id": 1,
+							"address_id": 4,
+							"address_types_id": "1",
+							"address_street_1": "street 1",
+							"address_street_2": "street 2",
+							"address_street_3": "street 3",
+							"address_city_id": 428,
+							"address_country_id": 219,
+							"address_province_id": 51,
+							"address_postal_code": "12345",
+							"address_date_created": "2022-03-02 11:39:10",
+							"address_created_by": 4,
+							"address_date_modified": "2022-03-02 11:39:10",
+							"address_modified_by": 4,
+							"address_enabled": 1,
+							"address_note": null,
+							"city_id": 428,
+							"city_sort_order": 999,
+							"city_name": "Houston",
+							"city_enabled": 1,
+							"city_date_created": "2021-08-03 14:40:07",
+							"city_created_by": 4,
+							"city_date_modified": "2021-08-03 14:40:07",
+							"city_modified_by": 4,
+							"city_note": "",
+							"province_id": 51,
+							"province_country_id": 219,
+							"province_name": "Texas",
+							"province_iso2": "TX",
+							"province_iso3": "",
+							"province_sort_order": 1,
+							"province_enabled": 1,
+							"province_date_created": "2022-03-02 11:39:09",
+							"province_created_by": 4,
+							"province_date_modified": "2022-03-02 11:39:09",
+							"province_modified_by": 4,
+							"province_note": null,
+							"country_id": 219,
+							"country_name": "United States",
+							"country_iso2": "US",
+							"country_iso3": "USA",
+							"country_currency_id": 5,
+							"country_sort_order": 1,
+							"country_enabled": 1,
+							"country_date_created": "2021-08-03 13:04:10",
+							"country_created_by": 4,
+							"country_date_modified": "2021-08-03 15:13:45",
+							"country_modified_by": 4,
+							"country_note": "",
+						},
+						{
+							"company_id": 1,
+							"address_id": 5,
+							"address_types_id": "1",
+							"address_street_1": "street 1",
+							"address_street_2": "street 2",
+							"address_street_3": "street 3",
+							"address_city_id": 23,
+							"address_country_id": 219,
+							"address_province_id": 13,
+							"address_postal_code": "12345",
+							"address_date_created": "2022-03-02 11:39:10",
+							"address_created_by": 4,
+							"address_date_modified": "2022-03-02 11:39:10",
+							"address_modified_by": 4,
+							"address_enabled": 1,
+							"address_note": null,
+							"city_id": 23,
+							"city_sort_order": 999,
+							"city_name": "Alpharetta",
+							"city_enabled": 1,
+							"city_date_created": "2021-08-03 14:40:07",
+							"city_created_by": 4,
+							"city_date_modified": "2021-08-03 14:40:07",
+							"city_modified_by": 4,
+							"city_note": "",
+							"province_id": 13,
+							"province_country_id": 219,
+							"province_name": "Georgia",
+							"province_iso2": "GA",
+							"province_iso3": "",
+							"province_sort_order": 999,
+							"province_enabled": 1,
+							"province_date_created": "2022-03-02 11:39:09",
+							"province_created_by": 4,
+							"province_date_modified": "2022-03-02 11:39:09",
+							"province_modified_by": 4,
+							"province_note": null,
+							"country_id": 219,
+							"country_name": "United States",
+							"country_iso2": "US",
+							"country_iso3": "USA",
+							"country_currency_id": 5,
+							"country_sort_order": 1,
+							"country_enabled": 1,
+							"country_date_created": "2021-08-03 13:04:10",
+							"country_created_by": 4,
+							"country_date_modified": "2021-08-03 15:13:45",
+							"country_modified_by": 4,
+							"country_note": "",
+						},
+						{
+							"company_id": 1,
+							"address_id": 6,
+							"address_types_id": "1",
+							"address_street_1": "street 1",
+							"address_street_2": "street 2",
+							"address_street_3": "street 3",
+							"address_city_id": 23,
+							"address_country_id": 219,
+							"address_province_id": 13,
+							"address_postal_code": "12345",
+							"address_date_created": "2022-03-02 11:39:10",
+							"address_created_by": 4,
+							"address_date_modified": "2022-03-02 11:39:10",
+							"address_modified_by": 4,
+							"address_enabled": 1,
+							"address_note": null,
+							"city_id": 23,
+							"city_sort_order": 999,
+							"city_name": "Alpharetta",
+							"city_enabled": 1,
+							"city_date_created": "2021-08-03 14:40:07",
+							"city_created_by": 4,
+							"city_date_modified": "2021-08-03 14:40:07",
+							"city_modified_by": 4,
+							"city_note": "",
+							"province_id": 13,
+							"province_country_id": 219,
+							"province_name": "Georgia",
+							"province_iso2": "GA",
+							"province_iso3": "",
+							"province_sort_order": 999,
+							"province_enabled": 1,
+							"province_date_created": "2022-03-02 11:39:09",
+							"province_created_by": 4,
+							"province_date_modified": "2022-03-02 11:39:09",
+							"province_modified_by": 4,
+							"province_note": null,
+							"country_id": 219,
+							"country_name": "United States",
+							"country_iso2": "US",
+							"country_iso3": "USA",
+							"country_currency_id": 5,
+							"country_sort_order": 1,
+							"country_enabled": 1,
+							"country_date_created": "2021-08-03 13:04:10",
+							"country_created_by": 4,
+							"country_date_modified": "2021-08-03 15:13:45",
+							"country_modified_by": 4,
+							"country_note": "",
+						},
+					],
+					"contacts": [
+						{
+							"id": 1,
+							"contact_types_id": "1,2,3",
+							"formatted_types": "SalesBookingOwner/Operator",
+							"formatted_names": "Banks Lindsey",
+							"name_first": "Banks",
+							"name_last": "Lindsey",
+							"phone": "9255482092",
+							"email": "genacollier@kongene.com",
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:10",
+							"date_modified": "2022-03-02 11:39:10",
+							"created_by": 4,
+							"modified_by": 4,
+							"note": null,
+						},
+						{
+							"id": 2,
+							"contact_types_id": "1,2",
+							"formatted_types": "SalesBooking",
+							"formatted_names": "Fischer Todd",
+							"name_first": "Fischer",
+							"name_last": "Todd",
+							"phone": "8564372706",
+							"email": "deannabattle@exerta.com",
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:10",
+							"date_modified": "2022-03-02 11:39:10",
+							"created_by": 4,
+							"modified_by": 4,
+							"note": null,
+						},
+						{
+							"id": 3,
+							"contact_types_id": "1",
+							"formatted_types": "Sales",
+							"formatted_names": "Katy Alston",
+							"name_first": "Katy",
+							"name_last": "Alston",
+							"phone": "8264763542",
+							"email": "lindsayrowe@ewaves.com",
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:10",
+							"date_modified": "2022-03-02 11:39:10",
+							"created_by": 4,
+							"modified_by": 4,
+							"note": null,
+						},
+						{
+							"id": 4,
+							"contact_types_id": "1,2",
+							"formatted_types": "SalesBooking",
+							"formatted_names": "Shannon Cantrell",
+							"name_first": "Shannon",
+							"name_last": "Cantrell",
+							"phone": "8934302814",
+							"email": "stefaniecox@geekola.com",
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:10",
+							"date_modified": "2022-03-02 11:39:10",
+							"created_by": 4,
+							"modified_by": 4,
+							"note": null,
+						},
+						{
+							"id": 5,
+							"contact_types_id": "1",
+							"formatted_types": "Sales",
+							"formatted_names": "Sasha Oneal",
+							"name_first": "Sasha",
+							"name_last": "Oneal",
+							"phone": "8514882913",
+							"email": "finleybenjamin@bytrex.com",
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:10",
+							"date_modified": "2022-03-02 11:39:10",
+							"created_by": 4,
+							"modified_by": 4,
+							"note": null,
+						},
+						{
+							"id": 6,
+							"contact_types_id": "4",
+							"formatted_types": "Front Desk",
+							"formatted_names": "Esther Mann",
+							"name_first": "Esther",
+							"name_last": "Mann",
+							"phone": "8925423450",
+							"email": "aileenconway@anivet.com",
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:10",
+							"date_modified": "2022-03-02 11:39:10",
+							"created_by": 4,
+							"modified_by": 4,
+							"note": null,
+						},
+					],
+					"location": {
+						"display_short": "Trips2Italy (Houston TX, US)",
+						"display_medium": "Trips2Italy (Houston, Texas)",
+						"display_long": "Trips2Italy (Houston TX - Texas, US - United States)",
+						"name": "Trips2Italy",
+						"id": 1,
+						"street_1": "5701 Woodway Dr",
+						"street_2": "#220",
+						"zipcode": "77057",
+						"enabled": 1,
+						"date_created": "2021-10-27 12:21:10",
+						"created_by": 4,
+						"date_modified": "2021-10-27 12:21:10",
+						"modified_by": 4,
+						"note": null,
+						"type": {
+							"id": 16,
+							"name": "Location",
+							"icon": "fas fa-map-pin",
+							"sort_order": 15,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:10",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:10",
+							"modified_by": 4,
+							"note": null,
+						},
+						"country": {
+							"id": 219,
+							"name": "United States",
+							"name_long": "US - United States",
+							"iso2": "US",
+							"iso3": "USA",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2021-08-03 13:04:10",
+							"created_by": 4,
+							"date_modified": "2021-08-03 15:13:45",
+							"modified_by": 4,
+							"note": "",
+						},
+						"province": {
+							"id": 51,
+							"name": "Texas",
+							"name_long": "TX - Texas",
+							"iso2": "TX",
+							"iso3": "",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:09",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:09",
+							"modified_by": 4,
+							"note": null,
+						},
+						"city": {
+							"id": 428,
+							"name": "Houston",
+							"sort_order": 999,
+							"enabled": 1,
+							"date_created": "2021-08-03 14:40:07",
+							"created_by": 4,
+							"date_modified": "2021-08-03 14:40:07",
+							"modified_by": 4,
+							"note": "",
+						},
+					},
+				},
+				{
+					"id": 2,
+					"name": "Test Company 2",
+					"code_direct_id": "P-TC02",
+					"description_long": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.",
+					"description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.",
+					"keywords": "key1, key2, key3",
+					"location_id": 1,
+					"note": null,
+					"enabled": 1,
+					"company_id": 2,
+					"date_created": "2022-03-02 11:39:11",
+					"date_modified": "2022-03-02 11:39:11",
+					"created_by": 4,
+					"modified_by": 4,
+					"vendor": {
+						"id": 2,
+						"company_id": 2,
+						"name": "Test Company 2",
+						"sku": "V-TC02",
+						"show_online": 1,
+						"is_provider": 1,
+						"show_sales": 1,
+						"show_ops": 1,
+						"enabled": 1,
+						"created_by": 4,
+						"date_created": "2022-03-02 11:39:12",
+						"modified_by": 4,
+						"date_modified": "2022-03-02 11:39:12",
+						"note": null,
+						"company": {
+							"images": [],
+							"id": 2,
+							"name": "Test Company 2",
+							"phone_1": "2223334444",
+							"phone_2": null,
+							"fax": "+39-055-646465465",
+							"website": null,
+							"email": null,
+							"enabled": 1,
+							"created_by": 4,
+							"date_created": "2022-03-02 11:39:10",
+							"modified_by": 4,
+							"date_modified": "2022-03-02 11:39:10",
+							"status": 10,
+							"note": null,
+						},
+					},
+					"company": {
+						"images": [],
+						"keywords": "kry1, key2, key3",
+						"description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed condimentum ante eget sodales congue. Sed ligula nisi, faucibus eget ullamcorper sit amet, fringilla id enim. Pellentesque sapien nibh, aliquam nec imperdiet in, gravida sed turpis viverra.",
+						"description_long": "\r \r \tArticle section one.\r \t\r \tPerspecta historiae studiis consuevit deterius scribentur expleantur\r \t  illam invenire anteponant, cuiquam probo accusantium segnitiae hostis.\r \t  Quos reprehenderit videntur solam amplificarique temeritate incorruptis\r \t  plena filio, metu, intellegitur videor amotio discordant tenebo officiis\r \t  quaerendum parentes scaevola dolorum, vivendum dialectica neglegentur\r \t  liberemus verterunt esset inhaererent, iam mala huc fortitudinis\r \t  derigatur tollitur ipsum legum.\r \t  \r \tLoca invitat maior ferre amicitiae, neque profecta fictae ferae afflueret\r \t  fugienda difficilem praesentibus, nacti quoniam exultat memoria,\r \t  tranquillat iudicari expetendam, dulce efficiat caret vivere cn concessum\r \t  transferrem odio magna, nominavi nocet allicit depravate inciderint\r \t  certamen retinere summumque nemini, iusto conciliant aliqua respirare\r \t  finitum. Quem conformavit, pueriliter quaerenda clamat fugiendum\r \t  specie.\r   \r \r \r \r \tArticle section three.\r \t\r \tCum personae causas hae diligamus opibus morbi formidinum voluntates.\r \tQuicquam alteram splendide romano discordiae cui. Relinqueret vera\r \tfama vocent hortatore constituant aperiri compositis, mediocrem huius\r \tutilitate legum, eas intellegunt deditum sollicitudines omnino penitus\r \ttantam cumanum privavisse, situm intellegunt iis litteris moribus\r \tlegendi multos privamur, fugiamus existimo privamur domesticarum,\r \tindoctis corporum.\r \t\r \t\r \t\t\r \t\t\tArticle section three-one.\r \t\t\t\r \t\t\tIneruditus defendere docti scribimus voluptatis, suis constituant\r \t\t\tpossent, desiderent litteris allicit acuti iuvaret sensus praetermissum\r \t\t\tincidunt effecerit, iucunditas detraxisse dulce legemus regione\r \t\t\tdum studium aliquod, tollatur, explicatis sic exorsus torquato\r \t\t\tfinitum aperta feci, philosophiae nobis defatigatio non tribuat\r \t\t\tiudicari aliquid nati servare, virtutem docere idque magnis aliquid\r \t\t\tsoliditatem nos, lucilius.\r \t\t\t\r \t\t\tIneruditus defendere docti scribimus voluptatis, suis constituant\r \t\t\tpossent, desiderent litteris allicit acuti iuvaret sensus praetermissum\r \t\t\tincidunt effecerit, iucunditas detraxisse dulce legemus regione\r \t\t\tdum studium aliquod, tollatur, explicatis sic exorsus torquato\r \t\t\tfinitum aperta feci, philosophiae nobis defatigatio non tribuat\r \t\t\tiudicari aliquid nati servare, virtutem docere idque magnis aliquid\r \t\t\tsoliditatem nos, lucilius.\r \r \t\t\r \t\t\r \t\t\tArticle section three-two.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\t\r \t\t\r \t\t\tArticle section three-three.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\t\r \t\t\r \t\t\tArticle section three-four.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\r ",
+						"logo": null,
+						"id": 2,
+						"cover_image": "",
+						"name": "Test Company 2",
+						"phone_1": "2223334444",
+						"phone_2": "",
+						"fax": "+39-055-646465465",
+						"website": "",
+						"email": "",
+						"enabled": 1,
+						"created_by": 4,
+						"date_created": "2022-03-02 11:39:10",
+						"modified_by": 4,
+						"date_modified": "2022-03-02 11:39:10",
+						"status_id": 10,
+						"note": null,
+					},
+					"addresses": [],
+					"contacts": [],
+					"location": {
+						"display_short": "Trips2Italy (Houston TX, US)",
+						"display_medium": "Trips2Italy (Houston, Texas)",
+						"display_long": "Trips2Italy (Houston TX - Texas, US - United States)",
+						"name": "Trips2Italy",
+						"id": 1,
+						"street_1": "5701 Woodway Dr",
+						"street_2": "#220",
+						"zipcode": "77057",
+						"enabled": 1,
+						"date_created": "2021-10-27 12:21:10",
+						"created_by": 4,
+						"date_modified": "2021-10-27 12:21:10",
+						"modified_by": 4,
+						"note": null,
+						"type": {
+							"id": 16,
+							"name": "Location",
+							"icon": "fas fa-map-pin",
+							"sort_order": 15,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:10",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:10",
+							"modified_by": 4,
+							"note": null,
+						},
+						"country": {
+							"id": 219,
+							"name": "United States",
+							"name_long": "US - United States",
+							"iso2": "US",
+							"iso3": "USA",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2021-08-03 13:04:10",
+							"created_by": 4,
+							"date_modified": "2021-08-03 15:13:45",
+							"modified_by": 4,
+							"note": "",
+						},
+						"province": {
+							"id": 51,
+							"name": "Texas",
+							"name_long": "TX - Texas",
+							"iso2": "TX",
+							"iso3": "",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:09",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:09",
+							"modified_by": 4,
+							"note": null,
+						},
+						"city": {
+							"id": 428,
+							"name": "Houston",
+							"sort_order": 999,
+							"enabled": 1,
+							"date_created": "2021-08-03 14:40:07",
+							"created_by": 4,
+							"date_modified": "2021-08-03 14:40:07",
+							"modified_by": 4,
+							"note": "",
+						},
+					},
+				},
+				{
+					"id": 3,
+					"name": "Test Company 3",
+					"code_direct_id": "P-TC03",
+					"description_long": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.",
+					"description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.",
+					"keywords": "key1, key2, key3",
+					"location_id": 1,
+					"note": null,
+					"enabled": 1,
+					"company_id": 3,
+					"date_created": "2022-03-02 11:39:11",
+					"date_modified": "2022-03-02 11:39:11",
+					"created_by": 4,
+					"modified_by": 4,
+					"vendor": {
+						"id": 3,
+						"company_id": 3,
+						"name": "Test Company 3",
+						"sku": "V-TC03",
+						"show_online": 1,
+						"is_provider": 1,
+						"show_sales": 1,
+						"show_ops": 1,
+						"enabled": 1,
+						"created_by": 4,
+						"date_created": "2022-03-02 11:39:12",
+						"modified_by": 4,
+						"date_modified": "2022-03-02 11:39:12",
+						"note": null,
+						"company": {
+							"images": [],
+							"id": 3,
+							"name": "Test Company 3",
+							"phone_1": "3334445555",
+							"phone_2": null,
+							"fax": "+39-055-646465465",
+							"website": "https://www.google.com",
+							"email": null,
+							"enabled": 1,
+							"created_by": 4,
+							"date_created": "2022-03-02 11:39:10",
+							"modified_by": 4,
+							"date_modified": "2022-03-02 11:39:10",
+							"status": 10,
+							"note": null,
+						},
+					},
+					"company": {
+						"images": [],
+						"keywords": "kry1, key2, key3",
+						"description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed condimentum ante eget sodales congue. Sed ligula nisi, faucibus eget ullamcorper sit amet, fringilla id enim. Pellentesque sapien nibh, aliquam nec imperdiet in, gravida sed turpis viverra.",
+						"description_long": "\r \r \tArticle section one.\r \t\r \tPerspecta historiae studiis consuevit deterius scribentur expleantur\r \t  illam invenire anteponant, cuiquam probo accusantium segnitiae hostis.\r \t  Quos reprehenderit videntur solam amplificarique temeritate incorruptis\r \t  plena filio, metu, intellegitur videor amotio discordant tenebo officiis\r \t  quaerendum parentes scaevola dolorum, vivendum dialectica neglegentur\r \t  liberemus verterunt esset inhaererent, iam mala huc fortitudinis\r \t  derigatur tollitur ipsum legum.\r \t  \r \tLoca invitat maior ferre amicitiae, neque profecta fictae ferae afflueret\r \t  fugienda difficilem praesentibus, nacti quoniam exultat memoria,\r \t  tranquillat iudicari expetendam, dulce efficiat caret vivere cn concessum\r \t  transferrem odio magna, nominavi nocet allicit depravate inciderint\r \t  certamen retinere summumque nemini, iusto conciliant aliqua respirare\r \t  finitum. Quem conformavit, pueriliter quaerenda clamat fugiendum\r \t  specie.\r   \r \r \r \r \tArticle section three.\r \t\r \tCum personae causas hae diligamus opibus morbi formidinum voluntates.\r \tQuicquam alteram splendide romano discordiae cui. Relinqueret vera\r \tfama vocent hortatore constituant aperiri compositis, mediocrem huius\r \tutilitate legum, eas intellegunt deditum sollicitudines omnino penitus\r \ttantam cumanum privavisse, situm intellegunt iis litteris moribus\r \tlegendi multos privamur, fugiamus existimo privamur domesticarum,\r \tindoctis corporum.\r \t\r \t\r \t\t\r \t\t\tArticle section three-one.\r \t\t\t\r \t\t\tIneruditus defendere docti scribimus voluptatis, suis constituant\r \t\t\tpossent, desiderent litteris allicit acuti iuvaret sensus praetermissum\r \t\t\tincidunt effecerit, iucunditas detraxisse dulce legemus regione\r \t\t\tdum studium aliquod, tollatur, explicatis sic exorsus torquato\r \t\t\tfinitum aperta feci, philosophiae nobis defatigatio non tribuat\r \t\t\tiudicari aliquid nati servare, virtutem docere idque magnis aliquid\r \t\t\tsoliditatem nos, lucilius.\r \t\t\t\r \t\t\tIneruditus defendere docti scribimus voluptatis, suis constituant\r \t\t\tpossent, desiderent litteris allicit acuti iuvaret sensus praetermissum\r \t\t\tincidunt effecerit, iucunditas detraxisse dulce legemus regione\r \t\t\tdum studium aliquod, tollatur, explicatis sic exorsus torquato\r \t\t\tfinitum aperta feci, philosophiae nobis defatigatio non tribuat\r \t\t\tiudicari aliquid nati servare, virtutem docere idque magnis aliquid\r \t\t\tsoliditatem nos, lucilius.\r \r \t\t\r \t\t\r \t\t\tArticle section three-two.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\t\r \t\t\r \t\t\tArticle section three-three.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\t\r \t\t\r \t\t\tArticle section three-four.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\r ",
+						"logo": null,
+						"id": 3,
+						"cover_image": "",
+						"name": "Test Company 3",
+						"phone_1": "3334445555",
+						"phone_2": "",
+						"fax": "+39-055-646465465",
+						"website": "https://www.google.com",
+						"email": "",
+						"enabled": 1,
+						"created_by": 4,
+						"date_created": "2022-03-02 11:39:10",
+						"modified_by": 4,
+						"date_modified": "2022-03-02 11:39:10",
+						"status_id": 10,
+						"note": null,
+					},
+					"addresses": [],
+					"contacts": [],
+					"location": {
+						"display_short": "Trips2Italy (Houston TX, US)",
+						"display_medium": "Trips2Italy (Houston, Texas)",
+						"display_long": "Trips2Italy (Houston TX - Texas, US - United States)",
+						"name": "Trips2Italy",
+						"id": 1,
+						"street_1": "5701 Woodway Dr",
+						"street_2": "#220",
+						"zipcode": "77057",
+						"enabled": 1,
+						"date_created": "2021-10-27 12:21:10",
+						"created_by": 4,
+						"date_modified": "2021-10-27 12:21:10",
+						"modified_by": 4,
+						"note": null,
+						"type": {
+							"id": 16,
+							"name": "Location",
+							"icon": "fas fa-map-pin",
+							"sort_order": 15,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:10",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:10",
+							"modified_by": 4,
+							"note": null,
+						},
+						"country": {
+							"id": 219,
+							"name": "United States",
+							"name_long": "US - United States",
+							"iso2": "US",
+							"iso3": "USA",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2021-08-03 13:04:10",
+							"created_by": 4,
+							"date_modified": "2021-08-03 15:13:45",
+							"modified_by": 4,
+							"note": "",
+						},
+						"province": {
+							"id": 51,
+							"name": "Texas",
+							"name_long": "TX - Texas",
+							"iso2": "TX",
+							"iso3": "",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:09",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:09",
+							"modified_by": 4,
+							"note": null,
+						},
+						"city": {
+							"id": 428,
+							"name": "Houston",
+							"sort_order": 999,
+							"enabled": 1,
+							"date_created": "2021-08-03 14:40:07",
+							"created_by": 4,
+							"date_modified": "2021-08-03 14:40:07",
+							"modified_by": 4,
+							"note": "",
+						},
+					},
+				},
+				{
+					"id": 4,
+					"name": "Test Company 4",
+					"code_direct_id": "P-TC04",
+					"description_long": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.",
+					"description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.",
+					"keywords": "key1, key2, key3",
+					"location_id": 1,
+					"note": null,
+					"enabled": 1,
+					"company_id": 4,
+					"date_created": "2022-03-02 11:39:11",
+					"date_modified": "2022-03-02 11:39:11",
+					"created_by": 4,
+					"modified_by": 4,
+					"vendor": {
+						"id": 4,
+						"company_id": 4,
+						"name": "Test Company 4",
+						"sku": "V-TC04",
+						"show_online": 1,
+						"is_provider": 1,
+						"show_sales": 1,
+						"show_ops": 1,
+						"enabled": 1,
+						"created_by": 4,
+						"date_created": "2022-03-02 11:39:12",
+						"modified_by": 4,
+						"date_modified": "2022-03-02 11:39:12",
+						"note": null,
+						"company": {
+							"images": [],
+							"id": 4,
+							"name": "Test Company 4",
+							"phone_1": "4445556666",
+							"phone_2": null,
+							"fax": null,
+							"website": null,
+							"email": null,
+							"enabled": 1,
+							"created_by": 4,
+							"date_created": "2022-03-02 11:39:10",
+							"modified_by": 4,
+							"date_modified": "2022-03-02 11:39:10",
+							"status": 10,
+							"note": null,
+						},
+					},
+					"company": {
+						"images": [],
+						"keywords": "kry1, key2, key3",
+						"description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed condimentum ante eget sodales congue. Sed ligula nisi, faucibus eget ullamcorper sit amet, fringilla id enim. Pellentesque sapien nibh, aliquam nec imperdiet in, gravida sed turpis viverra.",
+						"description_long": "\r \r \tArticle section one.\r \t\r \tPerspecta historiae studiis consuevit deterius scribentur expleantur\r \t  illam invenire anteponant, cuiquam probo accusantium segnitiae hostis.\r \t  Quos reprehenderit videntur solam amplificarique temeritate incorruptis\r \t  plena filio, metu, intellegitur videor amotio discordant tenebo officiis\r \t  quaerendum parentes scaevola dolorum, vivendum dialectica neglegentur\r \t  liberemus verterunt esset inhaererent, iam mala huc fortitudinis\r \t  derigatur tollitur ipsum legum.\r \t  \r \tLoca invitat maior ferre amicitiae, neque profecta fictae ferae afflueret\r \t  fugienda difficilem praesentibus, nacti quoniam exultat memoria,\r \t  tranquillat iudicari expetendam, dulce efficiat caret vivere cn concessum\r \t  transferrem odio magna, nominavi nocet allicit depravate inciderint\r \t  certamen retinere summumque nemini, iusto conciliant aliqua respirare\r \t  finitum. Quem conformavit, pueriliter quaerenda clamat fugiendum\r \t  specie.\r   \r \r \r \r \tArticle section three.\r \t\r \tCum personae causas hae diligamus opibus morbi formidinum voluntates.\r \tQuicquam alteram splendide romano discordiae cui. Relinqueret vera\r \tfama vocent hortatore constituant aperiri compositis, mediocrem huius\r \tutilitate legum, eas intellegunt deditum sollicitudines omnino penitus\r \ttantam cumanum privavisse, situm intellegunt iis litteris moribus\r \tlegendi multos privamur, fugiamus existimo privamur domesticarum,\r \tindoctis corporum.\r \t\r \t\r \t\t\r \t\t\tArticle section three-one.\r \t\t\t\r \t\t\tIneruditus defendere docti scribimus voluptatis, suis constituant\r \t\t\tpossent, desiderent litteris allicit acuti iuvaret sensus praetermissum\r \t\t\tincidunt effecerit, iucunditas detraxisse dulce legemus regione\r \t\t\tdum studium aliquod, tollatur, explicatis sic exorsus torquato\r \t\t\tfinitum aperta feci, philosophiae nobis defatigatio non tribuat\r \t\t\tiudicari aliquid nati servare, virtutem docere idque magnis aliquid\r \t\t\tsoliditatem nos, lucilius.\r \t\t\t\r \t\t\tIneruditus defendere docti scribimus voluptatis, suis constituant\r \t\t\tpossent, desiderent litteris allicit acuti iuvaret sensus praetermissum\r \t\t\tincidunt effecerit, iucunditas detraxisse dulce legemus regione\r \t\t\tdum studium aliquod, tollatur, explicatis sic exorsus torquato\r \t\t\tfinitum aperta feci, philosophiae nobis defatigatio non tribuat\r \t\t\tiudicari aliquid nati servare, virtutem docere idque magnis aliquid\r \t\t\tsoliditatem nos, lucilius.\r \r \t\t\r \t\t\r \t\t\tArticle section three-two.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\t\r \t\t\r \t\t\tArticle section three-three.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\t\r \t\t\r \t\t\tArticle section three-four.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\r ",
+						"logo": null,
+						"id": 4,
+						"cover_image": "",
+						"name": "Test Company 4",
+						"phone_1": "4445556666",
+						"phone_2": "",
+						"fax": "",
+						"website": "",
+						"email": "",
+						"enabled": 1,
+						"created_by": 4,
+						"date_created": "2022-03-02 11:39:10",
+						"modified_by": 4,
+						"date_modified": "2022-03-02 11:39:10",
+						"status_id": 10,
+						"note": null,
+					},
+					"addresses": [],
+					"contacts": [],
+					"location": {
+						"display_short": "Trips2Italy (Houston TX, US)",
+						"display_medium": "Trips2Italy (Houston, Texas)",
+						"display_long": "Trips2Italy (Houston TX - Texas, US - United States)",
+						"name": "Trips2Italy",
+						"id": 1,
+						"street_1": "5701 Woodway Dr",
+						"street_2": "#220",
+						"zipcode": "77057",
+						"enabled": 1,
+						"date_created": "2021-10-27 12:21:10",
+						"created_by": 4,
+						"date_modified": "2021-10-27 12:21:10",
+						"modified_by": 4,
+						"note": null,
+						"type": {
+							"id": 16,
+							"name": "Location",
+							"icon": "fas fa-map-pin",
+							"sort_order": 15,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:10",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:10",
+							"modified_by": 4,
+							"note": null,
+						},
+						"country": {
+							"id": 219,
+							"name": "United States",
+							"name_long": "US - United States",
+							"iso2": "US",
+							"iso3": "USA",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2021-08-03 13:04:10",
+							"created_by": 4,
+							"date_modified": "2021-08-03 15:13:45",
+							"modified_by": 4,
+							"note": "",
+						},
+						"province": {
+							"id": 51,
+							"name": "Texas",
+							"name_long": "TX - Texas",
+							"iso2": "TX",
+							"iso3": "",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:09",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:09",
+							"modified_by": 4,
+							"note": null,
+						},
+						"city": {
+							"id": 428,
+							"name": "Houston",
+							"sort_order": 999,
+							"enabled": 1,
+							"date_created": "2021-08-03 14:40:07",
+							"created_by": 4,
+							"date_modified": "2021-08-03 14:40:07",
+							"modified_by": 4,
+							"note": "",
+						},
+					},
+				},
+				{
+					"id": 5,
+					"name": "Test Company 6",
+					"code_direct_id": "P-TC05",
+					"description_long": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.",
+					"description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.",
+					"keywords": "key1, key2, key3",
+					"location_id": 1,
+					"note": null,
+					"enabled": 1,
+					"company_id": 6,
+					"date_created": "2022-03-02 11:39:11",
+					"date_modified": "2022-03-02 11:39:11",
+					"created_by": 4,
+					"modified_by": 4,
+					"vendor": {
+						"id": 6,
+						"company_id": 6,
+						"name": "Test Company 6",
+						"sku": "V-TC06",
+						"show_online": 1,
+						"is_provider": 1,
+						"show_sales": 1,
+						"show_ops": 1,
+						"enabled": 1,
+						"created_by": 4,
+						"date_created": "2022-03-02 11:39:12",
+						"modified_by": 4,
+						"date_modified": "2022-03-02 11:39:12",
+						"note": null,
+						"company": {
+							"images": [],
+							"id": 6,
+							"name": "Test Company 6",
+							"phone_1": "6667778888",
+							"phone_2": "+39-055-646465465",
+							"fax": null,
+							"website": "https://www.google.com",
+							"email": null,
+							"enabled": 1,
+							"created_by": 4,
+							"date_created": "2022-03-02 11:39:10",
+							"modified_by": 4,
+							"date_modified": "2022-03-02 11:39:10",
+							"status": 10,
+							"note": null,
+						},
+					},
+					"company": {
+						"images": [],
+						"keywords": "kry1, key2, key3",
+						"description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed condimentum ante eget sodales congue. Sed ligula nisi, faucibus eget ullamcorper sit amet, fringilla id enim. Pellentesque sapien nibh, aliquam nec imperdiet in, gravida sed turpis viverra.",
+						"description_long": "\r \r \tArticle section one.\r \t\r \tPerspecta historiae studiis consuevit deterius scribentur expleantur\r \t  illam invenire anteponant, cuiquam probo accusantium segnitiae hostis.\r \t  Quos reprehenderit videntur solam amplificarique temeritate incorruptis\r \t  plena filio, metu, intellegitur videor amotio discordant tenebo officiis\r \t  quaerendum parentes scaevola dolorum, vivendum dialectica neglegentur\r \t  liberemus verterunt esset inhaererent, iam mala huc fortitudinis\r \t  derigatur tollitur ipsum legum.\r \t  \r \tLoca invitat maior ferre amicitiae, neque profecta fictae ferae afflueret\r \t  fugienda difficilem praesentibus, nacti quoniam exultat memoria,\r \t  tranquillat iudicari expetendam, dulce efficiat caret vivere cn concessum\r \t  transferrem odio magna, nominavi nocet allicit depravate inciderint\r \t  certamen retinere summumque nemini, iusto conciliant aliqua respirare\r \t  finitum. Quem conformavit, pueriliter quaerenda clamat fugiendum\r \t  specie.\r   \r \r \r \r \tArticle section three.\r \t\r \tCum personae causas hae diligamus opibus morbi formidinum voluntates.\r \tQuicquam alteram splendide romano discordiae cui. Relinqueret vera\r \tfama vocent hortatore constituant aperiri compositis, mediocrem huius\r \tutilitate legum, eas intellegunt deditum sollicitudines omnino penitus\r \ttantam cumanum privavisse, situm intellegunt iis litteris moribus\r \tlegendi multos privamur, fugiamus existimo privamur domesticarum,\r \tindoctis corporum.\r \t\r \t\r \t\t\r \t\t\tArticle section three-one.\r \t\t\t\r \t\t\tIneruditus defendere docti scribimus voluptatis, suis constituant\r \t\t\tpossent, desiderent litteris allicit acuti iuvaret sensus praetermissum\r \t\t\tincidunt effecerit, iucunditas detraxisse dulce legemus regione\r \t\t\tdum studium aliquod, tollatur, explicatis sic exorsus torquato\r \t\t\tfinitum aperta feci, philosophiae nobis defatigatio non tribuat\r \t\t\tiudicari aliquid nati servare, virtutem docere idque magnis aliquid\r \t\t\tsoliditatem nos, lucilius.\r \t\t\t\r \t\t\tIneruditus defendere docti scribimus voluptatis, suis constituant\r \t\t\tpossent, desiderent litteris allicit acuti iuvaret sensus praetermissum\r \t\t\tincidunt effecerit, iucunditas detraxisse dulce legemus regione\r \t\t\tdum studium aliquod, tollatur, explicatis sic exorsus torquato\r \t\t\tfinitum aperta feci, philosophiae nobis defatigatio non tribuat\r \t\t\tiudicari aliquid nati servare, virtutem docere idque magnis aliquid\r \t\t\tsoliditatem nos, lucilius.\r \r \t\t\r \t\t\r \t\t\tArticle section three-two.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\t\r \t\t\r \t\t\tArticle section three-three.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\t\r \t\t\r \t\t\tArticle section three-four.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\r ",
+						"logo": null,
+						"id": 6,
+						"cover_image": "",
+						"name": "Test Company 6",
+						"phone_1": "6667778888",
+						"phone_2": "+39-055-646465465",
+						"fax": "",
+						"website": "https://www.google.com",
+						"email": "",
+						"enabled": 1,
+						"created_by": 4,
+						"date_created": "2022-03-02 11:39:10",
+						"modified_by": 4,
+						"date_modified": "2022-03-02 11:39:10",
+						"status_id": 10,
+						"note": null,
+					},
+					"addresses": [],
+					"contacts": [],
+					"location": {
+						"display_short": "Trips2Italy (Houston TX, US)",
+						"display_medium": "Trips2Italy (Houston, Texas)",
+						"display_long": "Trips2Italy (Houston TX - Texas, US - United States)",
+						"name": "Trips2Italy",
+						"id": 1,
+						"street_1": "5701 Woodway Dr",
+						"street_2": "#220",
+						"zipcode": "77057",
+						"enabled": 1,
+						"date_created": "2021-10-27 12:21:10",
+						"created_by": 4,
+						"date_modified": "2021-10-27 12:21:10",
+						"modified_by": 4,
+						"note": null,
+						"type": {
+							"id": 16,
+							"name": "Location",
+							"icon": "fas fa-map-pin",
+							"sort_order": 15,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:10",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:10",
+							"modified_by": 4,
+							"note": null,
+						},
+						"country": {
+							"id": 219,
+							"name": "United States",
+							"name_long": "US - United States",
+							"iso2": "US",
+							"iso3": "USA",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2021-08-03 13:04:10",
+							"created_by": 4,
+							"date_modified": "2021-08-03 15:13:45",
+							"modified_by": 4,
+							"note": "",
+						},
+						"province": {
+							"id": 51,
+							"name": "Texas",
+							"name_long": "TX - Texas",
+							"iso2": "TX",
+							"iso3": "",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:09",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:09",
+							"modified_by": 4,
+							"note": null,
+						},
+						"city": {
+							"id": 428,
+							"name": "Houston",
+							"sort_order": 999,
+							"enabled": 1,
+							"date_created": "2021-08-03 14:40:07",
+							"created_by": 4,
+							"date_modified": "2021-08-03 14:40:07",
+							"modified_by": 4,
+							"note": "",
+						},
+					},
+				},
+				{
+					"id": 6,
+					"name": "Test Company 7",
+					"code_direct_id": "P-TC06",
+					"description_long": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.",
+					"description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.",
+					"keywords": "key1, key2, key3",
+					"location_id": 1,
+					"note": null,
+					"enabled": 1,
+					"company_id": 7,
+					"date_created": "2022-03-02 11:39:11",
+					"date_modified": "2022-03-02 11:39:11",
+					"created_by": 4,
+					"modified_by": 4,
+					"vendor": {
+						"id": 7,
+						"company_id": 7,
+						"name": "Test Company 7",
+						"sku": "V-TC07",
+						"show_online": 1,
+						"is_provider": 1,
+						"show_sales": 1,
+						"show_ops": 1,
+						"enabled": 1,
+						"created_by": 4,
+						"date_created": "2022-03-02 11:39:12",
+						"modified_by": 4,
+						"date_modified": "2022-03-02 11:39:12",
+						"note": null,
+						"company": {
+							"images": [],
+							"id": 7,
+							"name": "Test Company 7",
+							"phone_1": "7778889999",
+							"phone_2": null,
+							"fax": null,
+							"website": null,
+							"email": null,
+							"enabled": 1,
+							"created_by": 4,
+							"date_created": "2022-03-02 11:39:10",
+							"modified_by": 4,
+							"date_modified": "2022-03-02 11:39:10",
+							"status": 10,
+							"note": null,
+						},
+					},
+					"company": {
+						"images": [],
+						"keywords": "kry1, key2, key3",
+						"description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed condimentum ante eget sodales congue. Sed ligula nisi, faucibus eget ullamcorper sit amet, fringilla id enim. Pellentesque sapien nibh, aliquam nec imperdiet in, gravida sed turpis viverra.",
+						"description_long": "\r \r \tArticle section one.\r \t\r \tPerspecta historiae studiis consuevit deterius scribentur expleantur\r \t  illam invenire anteponant, cuiquam probo accusantium segnitiae hostis.\r \t  Quos reprehenderit videntur solam amplificarique temeritate incorruptis\r \t  plena filio, metu, intellegitur videor amotio discordant tenebo officiis\r \t  quaerendum parentes scaevola dolorum, vivendum dialectica neglegentur\r \t  liberemus verterunt esset inhaererent, iam mala huc fortitudinis\r \t  derigatur tollitur ipsum legum.\r \t  \r \tLoca invitat maior ferre amicitiae, neque profecta fictae ferae afflueret\r \t  fugienda difficilem praesentibus, nacti quoniam exultat memoria,\r \t  tranquillat iudicari expetendam, dulce efficiat caret vivere cn concessum\r \t  transferrem odio magna, nominavi nocet allicit depravate inciderint\r \t  certamen retinere summumque nemini, iusto conciliant aliqua respirare\r \t  finitum. Quem conformavit, pueriliter quaerenda clamat fugiendum\r \t  specie.\r   \r \r \r \r \tArticle section three.\r \t\r \tCum personae causas hae diligamus opibus morbi formidinum voluntates.\r \tQuicquam alteram splendide romano discordiae cui. Relinqueret vera\r \tfama vocent hortatore constituant aperiri compositis, mediocrem huius\r \tutilitate legum, eas intellegunt deditum sollicitudines omnino penitus\r \ttantam cumanum privavisse, situm intellegunt iis litteris moribus\r \tlegendi multos privamur, fugiamus existimo privamur domesticarum,\r \tindoctis corporum.\r \t\r \t\r \t\t\r \t\t\tArticle section three-one.\r \t\t\t\r \t\t\tIneruditus defendere docti scribimus voluptatis, suis constituant\r \t\t\tpossent, desiderent litteris allicit acuti iuvaret sensus praetermissum\r \t\t\tincidunt effecerit, iucunditas detraxisse dulce legemus regione\r \t\t\tdum studium aliquod, tollatur, explicatis sic exorsus torquato\r \t\t\tfinitum aperta feci, philosophiae nobis defatigatio non tribuat\r \t\t\tiudicari aliquid nati servare, virtutem docere idque magnis aliquid\r \t\t\tsoliditatem nos, lucilius.\r \t\t\t\r \t\t\tIneruditus defendere docti scribimus voluptatis, suis constituant\r \t\t\tpossent, desiderent litteris allicit acuti iuvaret sensus praetermissum\r \t\t\tincidunt effecerit, iucunditas detraxisse dulce legemus regione\r \t\t\tdum studium aliquod, tollatur, explicatis sic exorsus torquato\r \t\t\tfinitum aperta feci, philosophiae nobis defatigatio non tribuat\r \t\t\tiudicari aliquid nati servare, virtutem docere idque magnis aliquid\r \t\t\tsoliditatem nos, lucilius.\r \r \t\t\r \t\t\r \t\t\tArticle section three-two.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\t\r \t\t\r \t\t\tArticle section three-three.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\t\r \t\t\r \t\t\tArticle section three-four.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\r \t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\r \t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\r \t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\r \t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\r \t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\r \t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\r \t\t\t\r \t\t\r \t\r ",
+						"logo": null,
+						"id": 7,
+						"cover_image": "",
+						"name": "Test Company 7",
+						"phone_1": "7778889999",
+						"phone_2": "",
+						"fax": "",
+						"website": "",
+						"email": "",
+						"enabled": 1,
+						"created_by": 4,
+						"date_created": "2022-03-02 11:39:10",
+						"modified_by": 4,
+						"date_modified": "2022-03-02 11:39:10",
+						"status_id": 10,
+						"note": null,
+					},
+					"addresses": [],
+					"contacts": [],
+					"location": {
+						"display_short": "Trips2Italy (Houston TX, US)",
+						"display_medium": "Trips2Italy (Houston, Texas)",
+						"display_long": "Trips2Italy (Houston TX - Texas, US - United States)",
+						"name": "Trips2Italy",
+						"id": 1,
+						"street_1": "5701 Woodway Dr",
+						"street_2": "#220",
+						"zipcode": "77057",
+						"enabled": 1,
+						"date_created": "2021-10-27 12:21:10",
+						"created_by": 4,
+						"date_modified": "2021-10-27 12:21:10",
+						"modified_by": 4,
+						"note": null,
+						"type": {
+							"id": 16,
+							"name": "Location",
+							"icon": "fas fa-map-pin",
+							"sort_order": 15,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:10",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:10",
+							"modified_by": 4,
+							"note": null,
+						},
+						"country": {
+							"id": 219,
+							"name": "United States",
+							"name_long": "US - United States",
+							"iso2": "US",
+							"iso3": "USA",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2021-08-03 13:04:10",
+							"created_by": 4,
+							"date_modified": "2021-08-03 15:13:45",
+							"modified_by": 4,
+							"note": "",
+						},
+						"province": {
+							"id": 51,
+							"name": "Texas",
+							"name_long": "TX - Texas",
+							"iso2": "TX",
+							"iso3": "",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:09",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:09",
+							"modified_by": 4,
+							"note": null,
+						},
+						"city": {
+							"id": 428,
+							"name": "Houston",
+							"sort_order": 999,
+							"enabled": 1,
+							"date_created": "2021-08-03 14:40:07",
+							"created_by": 4,
+							"date_modified": "2021-08-03 14:40:07",
+							"modified_by": 4,
+							"note": "",
+						},
+					},
+				},
+				{
+					"id": 7,
+					"name": "Test Company 9",
+					"code_direct_id": "P-TC07",
+					"description_long": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.",
+					"description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.",
+					"keywords": "key1, key2, key3",
+					"location_id": 1,
+					"note": null,
+					"enabled": 1,
+					"company_id": 9,
+					"date_created": "2022-03-02 11:39:11",
+					"date_modified": "2022-03-02 11:39:11",
+					"created_by": 4,
+					"modified_by": 4,
+					"vendor": {
+						"id": 9,
+						"company_id": 9,
+						"name": "Test Company 9",
+						"sku": "V-TC09",
+						"show_online": 1,
+						"is_provider": 1,
+						"show_sales": 1,
+						"show_ops": 1,
+						"enabled": 1,
+						"created_by": 4,
+						"date_created": "2022-03-02 11:39:12",
+						"modified_by": 4,
+						"date_modified": "2022-03-02 11:39:12",
+						"note": null,
+						"company": {
+							"images": [],
+							"id": 9,
+							"name": "Test Company 9",
+							"phone_1": null,
+							"phone_2": null,
+							"fax": "+39-055-646465465",
+							"website": null,
+							"email": null,
+							"enabled": 1,
+							"created_by": 4,
+							"date_created": "2022-03-02 11:39:10",
+							"modified_by": 4,
+							"date_modified": "2022-03-02 11:39:10",
+							"status": 10,
+							"note": null,
+						},
+					},
+					"company": {
+						"images": [],
+						"keywords": "kry1, key2, key3",
+						"description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed condimentum ante eget sodales congue. Sed ligula nisi, faucibus eget ullamcorper sit amet, fringilla id enim. Pellentesque sapien nibh, aliquam nec imperdiet in, gravida sed turpis viverra.",
+						"description_long": "\n\n\tArticle section one.\n\t\n\tPerspecta historiae studiis consuevit deterius scribentur expleantur\n\t  illam invenire anteponant, cuiquam probo accusantium segnitiae hostis.\n\t  Quos reprehenderit videntur solam amplificarique temeritate incorruptis\n\t  plena filio, metu, intellegitur videor amotio discordant tenebo officiis\n\t  quaerendum parentes scaevola dolorum, vivendum dialectica neglegentur\n\t  liberemus verterunt esset inhaererent, iam mala huc fortitudinis\n\t  derigatur tollitur ipsum legum.\n\t  \n\tLoca invitat maior ferre amicitiae, neque profecta fictae ferae afflueret\n\t  fugienda difficilem praesentibus, nacti quoniam exultat memoria,\n\t  tranquillat iudicari expetendam, dulce efficiat caret vivere cn concessum\n\t  transferrem odio magna, nominavi nocet allicit depravate inciderint\n\t  certamen retinere summumque nemini, iusto conciliant aliqua respirare\n\t  finitum. Quem conformavit, pueriliter quaerenda clamat fugiendum\n\t  specie.\n  \n\n\n\n\tArticle section three.\n\t\n\tCum personae causas hae diligamus opibus morbi formidinum voluntates.\n\tQuicquam alteram splendide romano discordiae cui. Relinqueret vera\n\tfama vocent hortatore constituant aperiri compositis, mediocrem huius\n\tutilitate legum, eas intellegunt deditum sollicitudines omnino penitus\n\ttantam cumanum privavisse, situm intellegunt iis litteris moribus\n\tlegendi multos privamur, fugiamus existimo privamur domesticarum,\n\tindoctis corporum.\n\t\n\t\n\t\t\n\t\t\tArticle section three-one.\n\t\t\t\n\t\t\tIneruditus defendere docti scribimus voluptatis, suis constituant\n\t\t\tpossent, desiderent litteris allicit acuti iuvaret sensus praetermissum\n\t\t\tincidunt effecerit, iucunditas detraxisse dulce legemus regione\n\t\t\tdum studium aliquod, tollatur, explicatis sic exorsus torquato\n\t\t\tfinitum aperta feci, philosophiae nobis defatigatio non tribuat\n\t\t\tiudicari aliquid nati servare, virtutem docere idque magnis aliquid\n\t\t\tsoliditatem nos, lucilius.\n\t\t\t\n\t\t\tIneruditus defendere docti scribimus voluptatis, suis constituant\n\t\t\tpossent, desiderent litteris allicit acuti iuvaret sensus praetermissum\n\t\t\tincidunt effecerit, iucunditas detraxisse dulce legemus regione\n\t\t\tdum studium aliquod, tollatur, explicatis sic exorsus torquato\n\t\t\tfinitum aperta feci, philosophiae nobis defatigatio non tribuat\n\t\t\tiudicari aliquid nati servare, virtutem docere idque magnis aliquid\n\t\t\tsoliditatem nos, lucilius.\n\n\t\t\n\t\t\n\t\t\tArticle section three-two.\n\t\t\t\n\t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\n\t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\n\t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\n\t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\n\t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\n\t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\n\t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\n\t\t\t\n\t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\n\t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\n\t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\n\t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\n\t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\n\t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\n\t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\n\t\t\t\n\t\t\n\t\t\n\t\t\n\t\t\tArticle section three-three.\n\t\t\t\n\t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\n\t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\n\t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\n\t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\n\t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\n\t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\n\t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\n\t\t\t\n\t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\n\t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\n\t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\n\t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\n\t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\n\t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\n\t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\n\t\t\t\n\t\t\n\t\t\n\t\t\n\t\t\tArticle section three-four.\n\t\t\t\n\t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\n\t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\n\t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\n\t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\n\t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\n\t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\n\t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\n\t\t\t\n\t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\n\t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\n\t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\n\t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\n\t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\n\t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\n\t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\n\t\t\t\n\t\t\n\t\n",
+						"logo": null,
+						"id": 9,
+						"cover_image": "",
+						"name": "Test Company 9",
+						"phone_1": "",
+						"phone_2": "",
+						"fax": "+39-055-646465465",
+						"website": "",
+						"email": "",
+						"enabled": 1,
+						"created_by": 4,
+						"date_created": "2022-03-02 11:39:10",
+						"modified_by": 4,
+						"date_modified": "2022-03-02 11:39:10",
+						"status_id": 10,
+						"note": null,
+					},
+					"addresses": [],
+					"contacts": [],
+					"location": {
+						"display_short": "Trips2Italy (Houston TX, US)",
+						"display_medium": "Trips2Italy (Houston, Texas)",
+						"display_long": "Trips2Italy (Houston TX - Texas, US - United States)",
+						"name": "Trips2Italy",
+						"id": 1,
+						"street_1": "5701 Woodway Dr",
+						"street_2": "#220",
+						"zipcode": "77057",
+						"enabled": 1,
+						"date_created": "2021-10-27 12:21:10",
+						"created_by": 4,
+						"date_modified": "2021-10-27 12:21:10",
+						"modified_by": 4,
+						"note": null,
+						"type": {
+							"id": 16,
+							"name": "Location",
+							"icon": "fas fa-map-pin",
+							"sort_order": 15,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:10",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:10",
+							"modified_by": 4,
+							"note": null,
+						},
+						"country": {
+							"id": 219,
+							"name": "United States",
+							"name_long": "US - United States",
+							"iso2": "US",
+							"iso3": "USA",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2021-08-03 13:04:10",
+							"created_by": 4,
+							"date_modified": "2021-08-03 15:13:45",
+							"modified_by": 4,
+							"note": "",
+						},
+						"province": {
+							"id": 51,
+							"name": "Texas",
+							"name_long": "TX - Texas",
+							"iso2": "TX",
+							"iso3": "",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:09",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:09",
+							"modified_by": 4,
+							"note": null,
+						},
+						"city": {
+							"id": 428,
+							"name": "Houston",
+							"sort_order": 999,
+							"enabled": 1,
+							"date_created": "2021-08-03 14:40:07",
+							"created_by": 4,
+							"date_modified": "2021-08-03 14:40:07",
+							"modified_by": 4,
+							"note": "",
+						},
+					},
+				},
+				{
+					"id": 8,
+					"name": "Test Company 10",
+					"code_direct_id": "P-TC08",
+					"description_long": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.",
+					"description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla ante eu nulla condimentum ullamcorper. Curabitur euismod, erat id facilisis accumsan, lacus nisl molestie risus, ut dapibus tellus justo id arcu.",
+					"keywords": "key1, key2, key3",
+					"location_id": 1,
+					"note": null,
+					"enabled": 1,
+					"company_id": 10,
+					"date_created": "2022-03-02 11:39:11",
+					"date_modified": "2022-03-02 11:39:11",
+					"created_by": 4,
+					"modified_by": 4,
+					"vendor": {
+						"id": 10,
+						"company_id": 10,
+						"name": "Test Company 10",
+						"sku": "V-TC10",
+						"show_online": 1,
+						"is_provider": 1,
+						"show_sales": 1,
+						"show_ops": 1,
+						"enabled": 1,
+						"created_by": 4,
+						"date_created": "2022-03-02 11:39:12",
+						"modified_by": 4,
+						"date_modified": "2022-03-02 11:39:12",
+						"note": null,
+						"company": {
+							"images": [],
+							"id": 10,
+							"name": "Test Company 10",
+							"phone_1": null,
+							"phone_2": null,
+							"fax": null,
+							"website": null,
+							"email": null,
+							"enabled": 1,
+							"created_by": 4,
+							"date_created": "2022-03-02 11:39:10",
+							"modified_by": 4,
+							"date_modified": "2022-03-02 11:39:10",
+							"status": 10,
+							"note": null,
+						},
+					},
+					"company": {
+						"images": [],
+						"keywords": "kry1, key2, key3",
+						"description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed condimentum ante eget sodales congue. Sed ligula nisi, faucibus eget ullamcorper sit amet, fringilla id enim. Pellentesque sapien nibh, aliquam nec imperdiet in, gravida sed turpis viverra.",
+						"description_long": "\n\n\tArticle section one.\n\t\n\tPerspecta historiae studiis consuevit deterius scribentur expleantur\n\t  illam invenire anteponant, cuiquam probo accusantium segnitiae hostis.\n\t  Quos reprehenderit videntur solam amplificarique temeritate incorruptis\n\t  plena filio, metu, intellegitur videor amotio discordant tenebo officiis\n\t  quaerendum parentes scaevola dolorum, vivendum dialectica neglegentur\n\t  liberemus verterunt esset inhaererent, iam mala huc fortitudinis\n\t  derigatur tollitur ipsum legum.\n\t  \n\tLoca invitat maior ferre amicitiae, neque profecta fictae ferae afflueret\n\t  fugienda difficilem praesentibus, nacti quoniam exultat memoria,\n\t  tranquillat iudicari expetendam, dulce efficiat caret vivere cn concessum\n\t  transferrem odio magna, nominavi nocet allicit depravate inciderint\n\t  certamen retinere summumque nemini, iusto conciliant aliqua respirare\n\t  finitum. Quem conformavit, pueriliter quaerenda clamat fugiendum\n\t  specie.\n  \n\n\n\n\tArticle section three.\n\t\n\tCum personae causas hae diligamus opibus morbi formidinum voluntates.\n\tQuicquam alteram splendide romano discordiae cui. Relinqueret vera\n\tfama vocent hortatore constituant aperiri compositis, mediocrem huius\n\tutilitate legum, eas intellegunt deditum sollicitudines omnino penitus\n\ttantam cumanum privavisse, situm intellegunt iis litteris moribus\n\tlegendi multos privamur, fugiamus existimo privamur domesticarum,\n\tindoctis corporum.\n\t\n\t\n\t\t\n\t\t\tArticle section three-one.\n\t\t\t\n\t\t\tIneruditus defendere docti scribimus voluptatis, suis constituant\n\t\t\tpossent, desiderent litteris allicit acuti iuvaret sensus praetermissum\n\t\t\tincidunt effecerit, iucunditas detraxisse dulce legemus regione\n\t\t\tdum studium aliquod, tollatur, explicatis sic exorsus torquato\n\t\t\tfinitum aperta feci, philosophiae nobis defatigatio non tribuat\n\t\t\tiudicari aliquid nati servare, virtutem docere idque magnis aliquid\n\t\t\tsoliditatem nos, lucilius.\n\t\t\t\n\t\t\tIneruditus defendere docti scribimus voluptatis, suis constituant\n\t\t\tpossent, desiderent litteris allicit acuti iuvaret sensus praetermissum\n\t\t\tincidunt effecerit, iucunditas detraxisse dulce legemus regione\n\t\t\tdum studium aliquod, tollatur, explicatis sic exorsus torquato\n\t\t\tfinitum aperta feci, philosophiae nobis defatigatio non tribuat\n\t\t\tiudicari aliquid nati servare, virtutem docere idque magnis aliquid\n\t\t\tsoliditatem nos, lucilius.\n\n\t\t\n\t\t\n\t\t\tArticle section three-two.\n\t\t\t\n\t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\n\t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\n\t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\n\t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\n\t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\n\t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\n\t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\n\t\t\t\n\t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\n\t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\n\t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\n\t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\n\t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\n\t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\n\t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\n\t\t\t\n\t\t\n\t\t\n\t\t\n\t\t\tArticle section three-three.\n\t\t\t\n\t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\n\t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\n\t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\n\t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\n\t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\n\t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\n\t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\n\t\t\t\n\t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\n\t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\n\t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\n\t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\n\t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\n\t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\n\t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\n\t\t\t\n\t\t\n\t\t\n\t\t\n\t\t\tArticle section three-four.\n\t\t\t\n\t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\n\t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\n\t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\n\t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\n\t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\n\t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\n\t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\n\t\t\t\n\t\t\tOstendis acutum totam declinabunt verterunt ullo. Tria fatendum\n\t\t\tfacultas res concursio necessitatibus futuros gessisse recordamur\n\t\t\tintercapedo, vix doceat una quaeso tantopere, tranquillae libero\n\t\t\tcontentus probo opera ab utilitatibus pulcherrimum scripserit.\n\t\t\tIndividua mediocriterne studiose posse corrumpit status locatus\n\t\t\tmultoque fortibus essent, statuat irridente omittantur pugnare.\n\t\t\tFerantur numquidnam delectamur praesentium circumcisaque horribiles.\n\t\t\t\n\t\t\n\t\n",
+						"logo": null,
+						"id": 10,
+						"cover_image": "",
+						"name": "Test Company 10",
+						"phone_1": "",
+						"phone_2": "",
+						"fax": "",
+						"website": "",
+						"email": "",
+						"enabled": 1,
+						"created_by": 4,
+						"date_created": "2022-03-02 11:39:10",
+						"modified_by": 4,
+						"date_modified": "2022-03-02 11:39:10",
+						"status_id": 10,
+						"note": null,
+					},
+					"addresses": [],
+					"contacts": [],
+					"location": {
+						"display_short": "Trips2Italy (Houston TX, US)",
+						"display_medium": "Trips2Italy (Houston, Texas)",
+						"display_long": "Trips2Italy (Houston TX - Texas, US - United States)",
+						"name": "Trips2Italy",
+						"id": 1,
+						"street_1": "5701 Woodway Dr",
+						"street_2": "#220",
+						"zipcode": "77057",
+						"enabled": 1,
+						"date_created": "2021-10-27 12:21:10",
+						"created_by": 4,
+						"date_modified": "2021-10-27 12:21:10",
+						"modified_by": 4,
+						"note": null,
+						"type": {
+							"id": 16,
+							"name": "Location",
+							"icon": "fas fa-map-pin",
+							"sort_order": 15,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:10",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:10",
+							"modified_by": 4,
+							"note": null,
+						},
+						"country": {
+							"id": 219,
+							"name": "United States",
+							"name_long": "US - United States",
+							"iso2": "US",
+							"iso3": "USA",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2021-08-03 13:04:10",
+							"created_by": 4,
+							"date_modified": "2021-08-03 15:13:45",
+							"modified_by": 4,
+							"note": "",
+						},
+						"province": {
+							"id": 51,
+							"name": "Texas",
+							"name_long": "TX - Texas",
+							"iso2": "TX",
+							"iso3": "",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:09",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:09",
+							"modified_by": 4,
+							"note": null,
+						},
+						"city": {
+							"id": 428,
+							"name": "Houston",
+							"sort_order": 999,
+							"enabled": 1,
+							"date_created": "2021-08-03 14:40:07",
+							"created_by": 4,
+							"date_modified": "2021-08-03 14:40:07",
+							"modified_by": 4,
+							"note": "",
+						},
+					},
+				},
+				{
+					"id": 9,
+					"name": "Look-A-Round Tour Company",
+					"code_direct_id": "P-09",
+					"description_long": null,
+					"description_short": null,
+					"keywords": null,
+					"location_id": 1,
+					"note": null,
+					"enabled": 1,
+					"company_id": 11,
+					"date_created": "2022-03-02 11:39:47",
+					"date_modified": "2022-03-02 11:39:47",
+					"created_by": 7,
+					"modified_by": 7,
+					"vendor": {
+						"id": 11,
+						"company_id": 11,
+						"name": "Look-A-Round Tour Company",
+						"sku": "LTC00000000011",
+						"show_online": 1,
+						"is_provider": 1,
+						"show_sales": 1,
+						"show_ops": 1,
+						"enabled": 1,
+						"created_by": 7,
+						"date_created": "2022-03-02 11:39:47",
+						"modified_by": 7,
+						"date_modified": "2022-03-02 11:39:47",
+						"note": null,
+						"company": {
+							"images": [],
+							"id": 11,
+							"name": "Look-A-Round Tour Company",
+							"phone_1": null,
+							"phone_2": null,
+							"fax": null,
+							"website": null,
+							"email": null,
+							"enabled": 1,
+							"created_by": 7,
+							"date_created": "2022-03-02 11:39:47",
+							"modified_by": 7,
+							"date_modified": "2022-03-02 11:39:47",
+							"status": 1,
+							"note": null,
+						},
+					},
+					"company": {
+						"images": [],
+						"keywords": null,
+						"description_short": null,
+						"description_long": null,
+						"logo": null,
+						"id": 11,
+						"cover_image": "",
+						"name": "Look-A-Round Tour Company",
+						"phone_1": "",
+						"phone_2": "",
+						"fax": "",
+						"website": "",
+						"email": "",
+						"enabled": 1,
+						"created_by": 7,
+						"date_created": "2022-03-02 11:39:47",
+						"modified_by": 7,
+						"date_modified": "2022-03-02 11:39:47",
+						"status_id": 1,
+						"note": null,
+					},
+					"addresses": [],
+					"contacts": [],
+					"location": {
+						"display_short": "Trips2Italy (Houston TX, US)",
+						"display_medium": "Trips2Italy (Houston, Texas)",
+						"display_long": "Trips2Italy (Houston TX - Texas, US - United States)",
+						"name": "Trips2Italy",
+						"id": 1,
+						"street_1": "5701 Woodway Dr",
+						"street_2": "#220",
+						"zipcode": "77057",
+						"enabled": 1,
+						"date_created": "2021-10-27 12:21:10",
+						"created_by": 4,
+						"date_modified": "2021-10-27 12:21:10",
+						"modified_by": 4,
+						"note": null,
+						"type": {
+							"id": 16,
+							"name": "Location",
+							"icon": "fas fa-map-pin",
+							"sort_order": 15,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:10",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:10",
+							"modified_by": 4,
+							"note": null,
+						},
+						"country": {
+							"id": 219,
+							"name": "United States",
+							"name_long": "US - United States",
+							"iso2": "US",
+							"iso3": "USA",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2021-08-03 13:04:10",
+							"created_by": 4,
+							"date_modified": "2021-08-03 15:13:45",
+							"modified_by": 4,
+							"note": "",
+						},
+						"province": {
+							"id": 51,
+							"name": "Texas",
+							"name_long": "TX - Texas",
+							"iso2": "TX",
+							"iso3": "",
+							"sort_order": 1,
+							"enabled": 1,
+							"date_created": "2022-03-02 11:39:09",
+							"created_by": 4,
+							"date_modified": "2022-03-02 11:39:09",
+							"modified_by": 4,
+							"note": null,
+						},
+						"city": {
+							"id": 428,
+							"name": "Houston",
+							"sort_order": 999,
+							"enabled": 1,
+							"date_created": "2021-08-03 14:40:07",
+							"created_by": 4,
+							"date_modified": "2021-08-03 14:40:07",
+							"modified_by": 4,
+							"note": "",
+						},
+					},
+				},
+			],
+		})
+		
+		console.log("Provider3.all", Provider3.all)
+	})
 </script>

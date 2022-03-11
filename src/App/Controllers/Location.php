@@ -94,9 +94,9 @@
 			$location_id = (isset($params["id"])) ? (int)$params["id"] : null;
 			$location_name = ($params["name"]) ? (string)$params["name"] : null;
 			
-			$street_1 = ($params["street_1"]) ? (string)$params["street_1"] : null;
-			$street_2 = ($params["street_2"]) ? (string)$params["street_2"] : null;
-			$zipcode = ($params["zipcode"]) ? (string)$params["zipcode"] : null;
+			$street_1 = (isset($params["street_1"])) ? (string)$params["street_1"] : null;
+			$street_2 = (isset($params["street_2"])) ? (string)$params["street_2"] : null;
+			$zipcode = (isset($params["zipcode"])) ? (string)$params["zipcode"] : null;
 			
 			$args = array(
 				"street_1" => $street_1,
@@ -113,8 +113,6 @@
 			foreach ($results AS $location) {
 				$locations[] = self::formatObject($location);
 			}
-			
-			//Log::$debug_log->trace($locations);
 			
 			return $locations;
 		}

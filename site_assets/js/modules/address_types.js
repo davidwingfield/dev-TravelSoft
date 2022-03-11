@@ -80,7 +80,7 @@ const AddressTypes = (function () {
             AddressTypes.all.set("id", detail)
         })
         
-        console.log(" AddressTypes.all", AddressTypes.all)
+        //console.log(" AddressTypes.all", AddressTypes.all)
     }
     
     return {

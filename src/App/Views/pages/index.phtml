@@ -104,61 +104,180 @@
 <div class="modal top fade" id="modal_new_page" tabindex="-1" aria-labelledby="modal_new_page_label" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">×</span>
-				</button>
+			<form id="modal_new_page_form" name="modal_new_page_form" class="" novalidate="novalidate">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+					
+					<h4 class="modal-title debug" id="modal_new_page_label">New Page</h4>
+				</div>
 				
-				<h4 class="modal-title debug" id="modal_new_page_label">New Page</h4>
-			</div>
-			
-			<div class="modal-body">
-				<div class="row">
-					<!-- Page Id -->
-					<div class="col-12 col-md-6">
-						<div class="form-element">
-							<label for="modal_new_page_id">Id:</label>
-							<input
-								type="text"
-								id="modal_new_page_id"
-								name="modal_new_page_id"
-								class="form-control"
-								readonly="readonly"
-							/>
-							<div id="modal_new_page_id-error" class="error w-100 text-center"></div>
+				<div class="modal-body">
+					<div class="row">
+						
+						<!-- Page Id -->
+						<div class="col-12 col-md-6">
+							<div class="form-element">
+								<label for="modal_new_page_id">Id:</label>
+								<input type="text" id="modal_new_page_id" name="modal_new_page_id" class="form-control" readonly="readonly"/>
+								<div id="modal_new_page_id-error" class="error w-100 text-center"></div>
+							</div>
 						</div>
-					</div>
-					<!-- /Page Id -->
+						<!-- /Page Id -->
+						
+						<!-- Enabled -->
+						<div class="col-12 col-md-6 d-flex align-self-end justify-content-end pb-2 mb-2">
+							<div class="form-element">
+								<div class="custom-control custom-switch">
+									<input type="checkbox" id="modal_new_page_enabled" name="modal_new_page_enabled" value="1" class="custom-control-input">
+									<label for="modal_new_page_enabled" class="custom-control-label p-0">Enabled</label>
+								</div>
+								<div id="modal_new_page_enabled-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						<!-- /Enabled -->
 					
-					<!-- Page Title -->
-					<div class="col-12 col-md-6">
-						<div class="form-element">
-							<label for="modal_new_page_title">Title:</label>
-							<input
-								type="text"
-								id="modal_new_page_title"
-								name="modal_new_page_title"
-								class="form-control"
-							/>
-							<div id="modal_new_page_title-error" class="error w-100 text-center"></div>
-						</div>
-					</div>
-					<!-- /Page Title -->
-				</div>
-			</div>
-			
-			<div class="modal-footer w-100 d-block p-1">
-				<div class="row">
-					<div class="col-12 col-sm-6 text-left">
-						<button class="btn btn-outline-secondary btn-sm">Clear</button>
 					</div>
 					
-					<div class="col-12 col-sm-6 text-right">
-						<button class="btn btn-outline-primary btn-sm">Cancel</button>
-						<button class="btn btn-primary btn-sm">Save</button>
+					<div class="row">
+						
+						<!-- Menu Id -->
+						<div class="col-12 col-md-6">
+							<div class="form-element">
+								<label for="modal_new_page_menu_id">Menu:</label>
+								<select id="modal_new_page_menu_id" name="modal_new_page_menu_id" class="form-control">
+								
+								</select>
+								<div id="modal_new_page_menu_id-error" class="error w-100 text-center"></div>
+							</div>
+						</div>
+						<!-- /Menu Id -->
+						
+						<!-- Sub Menu Id -->
+						<div class="col-12 col-md-6">
+							<div class="form-element">
+								<label for="modal_new_page_sub_menu_id">Sub Menu:</label>
+								<select id="modal_new_page_sub_menu_id" name="modal_new_page_sub_menu_id" class="form-control"></select>
+								<div id="modal_new_page_sub_menu_id-error" class="error w-100 text-center"></div>
+							</div>
+						</div>
+						<!-- /Sub Menu Id -->
+					
+					</div>
+					
+					<div class="row">
+						
+						<!-- Path -->
+						<div class="col-12">
+							<div class="form-element">
+								<label for="modal_new_page_path">Path:</label>
+								<input type="text" id="modal_new_page_path" name="modal_new_page_path" class="form-control"/>
+								<div id="modal_new_page_path-error" class="error w-100 text-center"></div>
+							</div>
+						</div>
+						<!-- /Path -->
+					
+					</div>
+					
+					<div class="row">
+						
+						<!-- Title -->
+						<div class="col-12">
+							<div class="form-element">
+								<label for="modal_new_page_title">Title:</label>
+								<input type="text" id="modal_new_page_title" name="modal_new_page_title" class="form-control"/>
+								<div id="modal_new_page_title-error" class="error w-100 text-center"></div>
+							</div>
+						</div>
+						<!-- /Title -->
+					
+					</div>
+					
+					<div class="row">
+						
+						<!-- Sub-Title -->
+						<div class="col-12">
+							<div class="form-element">
+								<label for="modal_new_page_sub_title">Sub Title:</label>
+								<input type="text" id="modal_new_page_sub_title" name="modal_new_page_sub_title" class="form-control"/>
+								<div id="modal_new_page_sub_title-error" class="error w-100 text-center"></div>
+							</div>
+						</div>
+						<!-- /Sub-title -->
+					
+					</div>
+					
+					<div class="row">
+						
+						<!-- Heading -->
+						<div class="col-12">
+							<div class="form-element">
+								<label for="modal_new_page_heading">Heading:</label>
+								<input type="text" id="modal_new_page_heading" name="modal_new_page_heading" class="form-control"/>
+								<div id="modal_new_page_heading-error" class="error w-100 text-center"></div>
+							</div>
+						</div>
+						<!-- /Heading -->
+					
+					</div>
+					
+					<div class="row">
+						
+						<!-- Sub-Heading -->
+						<div class="col-12">
+							<div class="form-element">
+								<label for="modal_new_page_sub_heading">Sub Heading:</label>
+								<input type="text" id="modal_new_page_sub_heading" name="modal_new_page_sub_heading" class="form-control"/>
+								<div id="modal_new_page_sub_heading-error" class="error w-100 text-center"></div>
+							</div>
+						</div>
+						<!-- /Sub-Heading -->
+					</div>
+					
+					<div class="row">
+						
+						<!-- Description -->
+						<div class="col-12 col-md-6">
+							<div class="form-element">
+								<label for="modal_new_page_description">Description:</label>
+								<textarea id="modal_new_page_description" name="modal_new_page_description" class="form-control"></textarea>
+								<div id="modal_new_page_description-error" class="error w-100 text-center"></div>
+							</div>
+						</div>
+						<!-- /Description -->
+						
+						<!-- Keywords -->
+						<div class="col-12 col-md-6">
+							<section id="modal_new_page_keywords" class="card card-body mb-2 keyword">
+								<label for="modal_new_page_keywords_search" class="d-none">Keywords:</label>
+								<input class="user-release-input form-control form-control-lg" id="modal_new_page_keywords_search" type="text" placeholder="Keywords..."/>
+								<div id="modal_new_page_keywords_container" class="container my-2 chips_container w-100 p-1">
+								
+								</div>
+							</section>
+							<div id="modal_new_page_keywords"></div>
+						</div>
+					
 					</div>
 				</div>
-			</div>
+				
+				<div class="modal-footer w-100 d-block p-1">
+					<div class="row">
+						
+						<div class="col-12 col-sm-6 text-left">
+							<button type="button" id="modal_new_page_clear_button" name="modal_new_page_clear_button" class="btn btn-outline-secondary btn-sm waves-effect waves-light">Clear</button>
+						</div>
+						
+						<div class="col-12 col-sm-6 text-right">
+							<button type="button" id="modal_new_page_cancel_button" name="modal_new_page_cancel_button" class="btn btn-outline-primary btn-sm waves-effect waves-light">Cancel</button>
+							<button type="button" id="modal_new_page_save_button" name="modal_new_page_save_button" class="btn btn-primary btn-sm waves-effect waves-light">Save</button>
+						</div>
+					
+					</div>
+				</div>
+			
+			</form>
 		</div>
 	</div>
 </div>
@@ -167,114 +286,113 @@
 <!-- New Menu Modal -->
 <div class="modal top fade" id="modal_edit_menu" tabindex="-1" aria-labelledby="modal_edit_menu_label" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">×</span>
-				</button>
-				
-				<h4 class="modal-title debug" id="modal_edit_menu_label">Menu Item</h4>
-			</div>
-			
-			<div class="modal-body">
-				<div class="row">
-					<!-- Menu Id -->
-					<div class="col-12 col-md-6">
-						<div class="form-element">
-							<label for="modal_edit_menu_id">Id:</label>
-							<input
-								type="text"
-								id="modal_edit_menu_id"
-								name="modal_edit_menu_id"
-								class="form-control"
-								readonly="readonly"
-							/>
-							<div id="modal_edit_menu_id-error" class="error w-100 text-center"></div>
-						</div>
-					</div>
-					<!-- /Menu Id -->
+		<form id="modal_edit_menu_form" name="modal_edit_menu_form" class="" novalidate="novalidate">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
 					
-					<!-- Menu Enabled -->
-					<div class="col-12 col-md-6 d-flex align-self-end justify-content-end pb-2 mb-2">
-						<div class="form-element">
-							<div class="custom-control custom-switch">
+					<h4 class="modal-title debug" id="modal_edit_menu_label">Menu Item</h4>
+				</div>
+				
+				<div class="modal-body">
+					
+					<div class="row">
+						<!-- Menu Id -->
+						<div class="col-12 col-md-6">
+							<div class="form-element">
+								<label for="modal_edit_menu_id">Id:</label>
 								<input
-									type="checkbox"
-									id="modal_edit_menu_enabled"
-									name="modal_edit_menu_enabled"
-									value="1"
-									class="custom-control-input"
+									type="text"
+									id="modal_edit_menu_id"
+									name="modal_edit_menu_id"
+									class="form-control"
 									readonly="readonly"
-									disabled="disabled"/>
-								<label for="modal_edit_menu_enabled" class="custom-control-label p-0">Enabled</label>
+								/>
+								<div id="modal_edit_menu_id-error" class="error w-100 text-center"></div>
 							</div>
-							<div id="modal_edit_menu_enabled-error" class="error w-100 text-center">&nbsp;</div>
+						</div>
+						<!-- /Menu Id -->
+						
+						<!-- Menu Enabled -->
+						<div class="col-12 col-md-6 d-flex align-self-end justify-content-end pb-2 mb-2">
+							<div class="form-element">
+								<div class="custom-control custom-switch">
+									<input
+										type="checkbox"
+										id="modal_edit_menu_enabled"
+										name="modal_edit_menu_enabled"
+										value="1"
+										class="custom-control-input"
+										readonly="readonly"
+										disabled="disabled"/>
+									<label for="modal_edit_menu_enabled" class="custom-control-label p-0">Enabled</label>
+								</div>
+								<div id="modal_edit_menu_enabled-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
 						</div>
 					</div>
+					
+					<div class="row">
+						
+						<div class="col-12 col-md-6">
+							<div class="form-element">
+								<label for="modal_edit_menu_role_id">Role:</label>
+								<select id="modal_edit_menu_role_id" name="modal_edit_menu_role_id" class="form-control"><?php echo $rolesDropDown; ?></select>
+								<div id="modal_edit_menu_role_id-error" class="error w-100 text-center"></div>
+							</div>
+						</div>
+						
+						<div class="col-12 col-md-6">
+							<div class="form-element">
+								<label for="modal_edit_menu_parent_id">Parent Menu:</label>
+								<select id="modal_edit_menu_parent_id" name="modal_edit_menu_parent_id" class="form-control"><?php echo $menusDropDown; ?></select>
+								<div id="modal_edit_menu_parent_id-error" class="error w-100 text-center"></div>
+							</div>
+						</div>
+					
+					</div>
+					
+					<div class="row">
+						<div class="col-12 col-md-6">
+							<div class="form-element">
+								<label for="modal_edit_menu_name">Label:</label>
+								<input
+									type="text"
+									id="modal_edit_menu_name"
+									name="modal_edit_menu_name"
+									class="form-control"/>
+								<div id="modal_edit_menu_name-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+						
+						<div class="col-12 col-md-6">
+							<div class="form-element">
+								<label for="modal_edit_menu_icon" class="d-block">Icon:</label>
+								<select id="modal_edit_menu_icon" name="modal_edit_menu_icon" class="form-control">
+									<?php echo $iconsDropDown; ?>
+								</select>
+								<div id="modal_edit_menu_icon-error" class="error w-100 text-center">&nbsp;</div>
+							</div>
+						</div>
+					</div>
+				
 				</div>
 				
-				<div class="row">
-					
-					<div class="col-12 col-md-6">
-						<div class="form-element">
-							<label for="modal_edit_menu_role_id">Role:</label>
-							<select id="modal_edit_menu_role_id" name="modal_edit_menu_role_id" class="form-control"><?php echo $rolesDropDown; ?></select>
-							<div id="modal_edit_menu_role_id-error" class="error w-100 text-center"></div>
+				<div class="modal-footer w-100 d-block p-1">
+					<div class="row">
+						<div class="col-12 col-sm-6 text-left">
+							<button type="button" id="modal_edit_menu_clear_button" class="btn btn-outline-secondary btn-sm">Clear</button>
 						</div>
-					</div>
-					
-					<div class="col-12 col-md-6">
-						<div class="form-element">
-							<label for="modal_edit_menu_parent_id">Parent Menu:</label>
-							<select id="modal_edit_menu_parent_id" name="modal_edit_menu_parent_id" class="form-control"><?php echo $menusDropDown; ?></select>
-							<div id="modal_edit_menu_parent_id-error" class="error w-100 text-center"></div>
-						</div>
-					</div>
-				
-				</div>
-				
-				<div class="row">
-					<div class="col-12 col-md-6">
-						<div class="form-element">
-							<label for="modal_edit_menu_name">Label:</label>
-							<input
-								type="text"
-								id="modal_edit_menu_name"
-								name="modal_edit_menu_name"
-								class="form-control"/>
-							<div id="modal_edit_menu_name-error" class="error w-100 text-center">&nbsp;</div>
-						</div>
-					</div>
-					
-					<div class="col-12 col-md-6">
-						<div class="form-element">
-							<label for="modal_edit_menu_icon  d-block">Icon:</label>
-							<select
-								id="modal_edit_menu_icon"
-								name="modal_edit_menu_icon"
-								class="form-control">
-								<?php echo $iconsDropDown; ?>
-							</select>
-							<div id="modal_edit_menu_icon-error" class="error w-100 text-center">&nbsp;</div>
+						
+						<div class="col-12 col-sm-6 text-right">
+							<button type="button" id="modal_edit_menu_cancel_button" class="btn btn-outline-primary btn-sm">Cancel</button>
+							<button type="button" id="modal_edit_menu_save_button" class="btn btn-primary btn-sm">Save</button>
 						</div>
 					</div>
 				</div>
-			
-			</div>
-			
-			<div class="modal-footer w-100 d-block p-1">
-				<div class="row">
-					<div class="col-12 col-sm-6 text-left">
-						<button class="btn btn-outline-secondary btn-sm">Clear</button>
-					</div>
-					
-					<div class="col-12 col-sm-6 text-right">
-						<button class="btn btn-outline-primary btn-sm">Cancel</button>
-						<button class="btn btn-primary btn-sm">Save</button>
-					</div>
-				</div>
-			</div>
-		</div>
+		</form>
 	</div>
 </div>
 <!-- /New Menu Modal -->
@@ -288,6 +406,9 @@
 		const _modal_edit_menu_parent_id = document.getElementById("modal_edit_menu_parent_id")
 		const _modal_edit_menu_icon = document.getElementById("modal_edit_menu_icon")
 		const _modal_edit_menu_name = document.getElementById("modal_edit_menu_name")
+		const _modal_edit_menu_clear_button = document.getElementById("modal_edit_menu_clear_button")
+		const _modal_edit_menu_save_button = document.getElementById("modal_edit_menu_save_button")
+		const _modal_edit_menu_cancel_button = document.getElementById("modal_edit_menu_cancel_button")
 		
 		let user_id = (document.getElementById('user_id')) ? (!isNaN(parseInt(document.getElementById('user_id').value))) ? parseInt(document.getElementById('user_id').value) : 4 : 4
 		let errors = []
@@ -311,16 +432,11 @@
 			return
 		}
 		
-		//
-		
 		let elementId = $(this).attr("id")
 		let _this = document.getElementById($(this).attr("id"))
 		let $this = $(_this)
 		let id = elementId + "_menu_tree"
-		
 		let allMenus = new Map()
-		let parentMenus = new Map()
-		let childrenMenus = new Map()
 		
 		let $treeWrapper = $("<div/>", {
 			id: id + "_wrapper",
@@ -352,9 +468,7 @@
 				console.log("menuTree.$updateButton.click()")
 				let menuItems = $("#" + id + "_wrapper").jstree(true).get_json("#", { flat: false })
 				let parentMenuItems = (menuItems[0].children) ? menuItems[0].children : []
-				let menuItemsString = JSON.stringify(menuItems)
 				let sortOrderParent = 0
-				
 				let menus = []
 				
 				$.each(parentMenuItems, function (k, parentMenuItem) {
@@ -403,6 +517,21 @@
 				})
 				
 				update(menus)
+			})
+		
+		$(_modal_edit_menu_clear_button)
+			.on("click", function () {
+				clearMenuForm()
+			})
+		
+		$(_modal_edit_menu_cancel_button)
+			.on("click", function () {
+				unLoadMenuForm()
+			})
+		
+		$(_modal_edit_menu_save_button)
+			.on("click", function () {
+				saveMenuItem()
 			})
 		
 		const handleMenuError = function (msg) {
@@ -462,19 +591,44 @@
 				.append($treeWrapper, $buttonRow, $treeElement)
 		}
 		
-		const unLoadMenuForm = function () {
-			console.log("menuTree.unLoadMenuForm()")
+		const validMenuItem = function () {
+			let isValid = true
+			
+			return isValid
+		}
+		
+		const saveMenuItem = function () {
+			console.log("menuTree.saveMenuItem()")
+			
+			if (validMenuItem()) {
+				let menuItems = buildMenuItemRecord()
+				console.log("menuItems", menuItems)
+			}
 			
 		}
 		
+		const buildMenuItemRecord = function () {
+			return removeNulls({
+				id: null,
+				enabled: 1,
+				name: "test",
+			})
+		}
+		
+		const unLoadMenuForm = function () {
+			//console.log("menuTree.unLoadMenuForm()")
+			clearMenuForm()
+			$(_modal_edit_menu).modal("hide")
+		}
+		
 		const loadMenuForm = function (menu) {
-			console.log("menuTree.loadMenuForm(menu)", menu)
+			//console.log("menuTree.loadMenuForm(menu)", menu)
 			clearMenuForm()
 			
 			if (menu) {
 				let detail = setMenuObject(menu)
-				console.log("    detail", detail.enabled)
-				let menuEnabled = (detail.enabled && parseInt(detail.enabled) === 1) ? true : false
+				let menuEnabled = (detail.enabled && parseInt(detail.enabled) === 1)
+				
 				_modal_edit_menu_role_id.value = (detail.roles_min) ? detail.roles_min : ""
 				_modal_edit_menu_id.value = (detail.id) ? detail.id : ""
 				_modal_edit_menu_enabled.checked = menuEnabled
@@ -720,77 +874,7 @@
 				"animation": 0,
 				"check_callback": true,
 				"themes": { "stripes": true },
-				"data": [
-					{
-						"text": "Menus",
-						"icon": "fas fa-sitemap",
-						
-						"children": [
-							{
-								"id": 1,
-								"text": "Parent node 1",
-								"state": {
-									"disabled": false,
-									"selected": false,
-									"opened": true,
-								},
-								"children": [
-									{
-										"id": 3,
-										"icon": "fas fa-file-alt",
-										"text": "Child node 3",
-										"state": {
-											"disabled": false,
-											"selected": false,
-											"opened": true,
-										},
-									},
-									{
-										"id": 4,
-										"icon": "fas fa-file-alt",
-										"text": "Child node 4",
-										"state": {
-											"disabled": false,
-											"selected": false,
-											"opened": true,
-										},
-									},
-								],
-							},
-							{
-								"id": 2,
-								"text": "Parent node 2",
-								"state": {
-									"disabled": false,
-									"selected": false,
-									"opened": false,
-								},
-								"children": [
-									{
-										"id": 5,
-										"icon": "fas fa-file-alt",
-										"text": "Child node 5",
-										"state": {
-											"disabled": false,
-											"selected": false,
-											"opened": true,
-										},
-									},
-									{
-										"id": 6,
-										"icon": "fas fa-file-alt",
-										"text": "Child node 5",
-										"state": {
-											"disabled": false,
-											"selected": false,
-											"opened": true,
-										},
-									},
-								],
-							},
-						],
-					},
-				],
+			
 			},
 			"types": {
 				"#": {

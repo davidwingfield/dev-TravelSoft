@@ -18,16 +18,20 @@
 		protected static $dbTable = "airport";
 		protected static $dbFields = Array();
 		protected static $selectQuery = "
-                SELECT
-						AIRPORT.id AS 'airport_id',
-						CONCAT(AIRPORT.name, ' (', CITY.name, ', ', COUNTRY.iso3, ')') AS 'display_short',
-						CONCAT(AIRPORT.name, ' (', CITY.name, ', ', PROVINCE.iso2, ', ', COUNTRY.iso3, ')') AS 'display_medium',
-						CONCAT(AIRPORT.name, ' (', CITY.name, ', ', PROVINCE.name, ', ', COUNTRY.name, ')') AS 'display_long',
+            SELECT 		AIRPORT.id AS 'airport_id',
+						CONCAT(COALESCE(AIRPORT.iata_code, ''), ' - ', AIRPORT.name, ' (', CITY.name, ', ', COUNTRY.iso3, ')') AS 'display_short',
+						CONCAT(COALESCE(AIRPORT.iata_code, ''), ' - ', AIRPORT.name, ' (', CITY.name, ', ', PROVINCE.iso2, ', ', COUNTRY.iso3, ')') AS 'display_medium',
+						CONCAT(COALESCE(AIRPORT.iata_code, ''), ' - ', AIRPORT.name, ' (', CITY.name, ', ', PROVINCE.name, ', ', COUNTRY.name, ')') AS 'display_long',
 						AIRPORT.name AS 'airport_name',
 						AIRPORT.iata_code AS 'airport_iata_code',
 						AIRPORT.gps_code AS 'airport_gps_code',
 						AIRPORT.local_code AS 'airport_local_code',
 						AIRPORT.home_link AS 'airport_home_link',
+                       
+                       	AIRPORT.street_1 AS 'airport_street_1',
+                       	AIRPORT.street_2 AS 'airport_street_2',
+                       	AIRPORT.postal_code AS 'airport_postal_code',
+                       
 						AIRPORT.wikipedia_link AS 'airport_wikipedia_link',
 						AIRPORT.scheduled_service AS 'airport_scheduled_service',
 						AIRPORT.keywords AS 'airport_keywords',
@@ -138,7 +142,7 @@
                     AND			AIRPORT.id = $id
                     ";
 			try {
-				Log::$debug_log->trace($sql);
+				//Log::$debug_log->trace($sql);
 				
 				return Model::$db->rawQuery($sql);
 				
@@ -155,9 +159,9 @@
 			try {
 				$searchTerm = addslashes($st);
 				
-				$searchDisplayShort = "CONCAT(AIRPORT.name, ' (', CITY.name, ', ', COUNTRY.iso3, ')')";
-				$searchDisplayMedium = "CONCAT(AIRPORT.name, ' (', CITY.name, ', ', PROVINCE.iso2, ', ', COUNTRY.iso3, ')')";
-				$searchDisplayLong = "CONCAT(AIRPORT.name, ' (', CITY.name, ', ', PROVINCE.name, ', ', COUNTRY.name, ')')";
+				$searchDisplayShort = "CONCAT(COALESCE(AIRPORT.iata_code, ''), ' - ', AIRPORT.name, ' (', CITY.name, ', ', COUNTRY.iso3, ')')";
+				$searchDisplayMedium = "CONCAT(COALESCE(AIRPORT.iata_code, ''), ' - ', AIRPORT.name, ' (', CITY.name, ', ', PROVINCE.iso2, ', ', COUNTRY.iso3, ')')";
+				$searchDisplayLong = "CONCAT(COALESCE(AIRPORT.iata_code, ''), ' - ', AIRPORT.name, ' (', CITY.name, ', ', PROVINCE.name, ', ', COUNTRY.name, ')')";
 				
 				$and = "AIRPORT.name";
 				
@@ -204,6 +208,11 @@
 			$airport_types_id = Model::setInt((isset($airport["airport_types_id"])) ? $airport["airport_types_id"] : 1);
 			$city_id = Model::setInt((isset($airport["city_id"])) ? $airport["city_id"] : null);
 			$name = Model::setString((isset($airport["name"])) ? $airport["name"] : null);
+			
+			$postal_code = Model::setString((isset($airport["postal_code"])) ? $airport["postal_code"] : null);
+			$street_1 = Model::setString((isset($airport["street_1"])) ? $airport["street_1"] : null);
+			$street_2 = Model::setString((isset($airport["street_2"])) ? $airport["street_2"] : null);
+			
 			$iata_code = Model::setString((isset($airport["iata_code"])) ? $airport["iata_code"] : null);
 			$gps_code = Model::setString((isset($airport["gps_code"])) ? $airport["gps_code"] : null);
 			$local_code = Model::setString((isset($airport["local_code"])) ? $airport["local_code"] : null);
@@ -214,16 +223,23 @@
 			$keywords = Model::setLongText((isset($airport["keywords"])) ? $airport["keywords"] : null);
 			$note = Model::setLongText((isset($airport["note"])) ? $airport["note"] : null);
 			
+			$tempKeywords = buildKeywordsList($name, array(
+				"name" => $name,
+			
+			));
+			
 			try {
 				
 				$sql = "
                     INSERT INTO airport (
 						id, airport_types_id, city_id, name, iata_code,
+						postal_code, street_1, street_2,
 						gps_code, local_code, home_link, wikipedia_link, scheduled_service,
 						keywords, enabled, date_created, created_by, date_modified,
 						modified_by, note
 					) VALUES (
 						$id, $airport_types_id, $city_id, $name, $iata_code,
+						$postal_code, $street_1, $street_2,
 						$gps_code, $local_code, $home_link, $wikipedia_link, $scheduled_service,
 						$keywords, $enabled, CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP,
 						$modified_by, $note
@@ -233,6 +249,9 @@
 					    city_id = VALUES(city_id),
 						name = VALUES(name),
 					    iata_code = VALUES(iata_code),
+						postal_code = VALUES(postal_code),
+                        street_1 = VALUES(street_1),
+                        street_2 = VALUES(street_2),
 						gps_code = VALUES(gps_code),
 						local_code = VALUES(local_code),
 						home_link = VALUES(home_link),
@@ -248,7 +267,8 @@
 				Model::$db->rawQuery($sql);
 				
 				$airport_id = Model::$db->getInsertId();
-				Log::$debug_log->trace($airport_id);
+				
+				//Log::$debug_log->trace($airport_id);
 				
 				return self::fetchByAirportId($airport_id);
 				

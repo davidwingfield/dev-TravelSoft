@@ -37,11 +37,19 @@
         "thingengineer/mysqli-database-class": "dev-master",
         "ext-readline": "*",
         "claviska/simpleimage": "*",
-        "ext-imagick": "*"
+        "calcinai/php-imagick": "dev-master",
+        "ext-zip": "*",
+        "ext-mbstring": "*",
+        "ext-exif": "*"
     },
     "autoload": {
         "psr-4": {
             "Framework\\": "src/"
+        }
+    },
+    "config": {
+        "platform":{
+            "ext-imagick": "3.4.4"
         }
     }
 }

@@ -4,7 +4,7 @@ const ContextMenu = (function () {
     let $contextMenu
     
     const assignSeasonToDays = function () {
-        console.log("ContextMenu:assignSeasonToDays()", ContextMenu)
+        //console.log("ContextMenu:assignSeasonToDays()", ContextMenu)
     }
     
     const init = function (settings) {

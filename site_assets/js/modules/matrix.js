@@ -48,13 +48,13 @@ const Matrix = (function () {
             detail.season_id = (matrix.season_id) ? matrix.season_id : null
             detail.unit_id = (matrix.unit_id) ? matrix.unit_id : null
             /*
-            //Console.log("matrix.pricings", matrix.pricings)
+            //console.log("matrix.pricings", matrix.pricings)
             if (matrix.pricings && typeof matrix.pricings == "object") {
                 let pricings = (matrix.pricings && typeof matrix.pricings == "object") ? matrix.pricings : []
-                //Console.log("pricings", pricings)
+                //console.log("pricings", pricings)
                 matrixPricings = new Map()
                 $.each(pricings, function (k, pricing) {
-                    //Console.log("pricing", pricing)
+                    //console.log("pricing", pricing)
                     let formattedPricing = {
                         code: pricing.pricing_code,
                         pricing_code: pricing.pricing_code,
@@ -102,7 +102,7 @@ const Matrix = (function () {
     }
     
     const loadAll = function (matrices) {
-        //Console.log("Matrix.loadAll(matrices)", matrices)
+        //console.log("Matrix.loadAll(matrices)", matrices)
         // ----
         
         Matrix.all = new Map()
@@ -112,7 +112,7 @@ const Matrix = (function () {
         
         //Pricing.all = new Map()
         $.each(matrices, function (k, matrix) {
-            //Console.log("matrix", matrix)
+            //console.log("matrix", matrix)
             let detail = set(matrix)
             let id = matrix.code
             
@@ -152,38 +152,38 @@ const Matrix = (function () {
         matrix_margin = document.getElementsByName("matrix_margin")
         matrix_cost.forEach(el => el.addEventListener("keyup", event => {
             let matrix_id = el.dataset.matrixid
-            //Console.log("matrix_cost", el.value)
-            //Console.log("matrix_cost", matrix_id)
+            //console.log("matrix_cost", el.value)
+            //console.log("matrix_cost", matrix_id)
         }))
         
         matrix_price.forEach(el => el.addEventListener("keyup", event => {
             let matrix_id = el.dataset.matrixid
-            //Console.log("matrix_price", el.value)
-            //Console.log("matrix_price", matrix_id)
+            //console.log("matrix_price", el.value)
+            //console.log("matrix_price", matrix_id)
         }))
         
         matrix_margin.forEach(el => el.addEventListener("keyup", event => {
             let matrix_id = el.dataset.matrixid
-            //Console.log("matrix_margin", el.value)
-            //Console.log("matrix_margin", matrix_id)
+            //console.log("matrix_margin", el.value)
+            //console.log("matrix_margin", matrix_id)
         }))
         
     }
     
     const loadPerUnitForm = function () {
-        //Console.log("Matrix.loadPerUnitForm()", Matrix)
+        //console.log("Matrix.loadPerUnitForm()", Matrix)
         // ----
         
     }
     
     const loadPerPersonForm = function () {
-        //Console.log("Matrix.loadPerPersonForm()", Matrix)
+        //console.log("Matrix.loadPerPersonForm()", Matrix)
         // ----
         
     }
     
     const loadPerDayForm = function () {
-        //Console.log("Matrix.loadPerDayForm()", Matrix)
+        //console.log("Matrix.loadPerDayForm()", Matrix)
         // ----
         
     }

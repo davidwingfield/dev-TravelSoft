@@ -60,7 +60,7 @@ const Profile = (function () {
      */
     const buildEditTable = function () {
         /*
-        Console.log("Profile.buildEditTable()", Profile)
+        //console.log("Profile.buildEditTable()", Profile)
         $table_profile_product_edit = $(_table_profile_product_edit).table({
             table_type: "display_list",
             data: [],
@@ -78,7 +78,7 @@ const Profile = (function () {
                     targets: 1,
                     data: "sales_types_details",
                     render: function (data, type, row, meta) {
-                        Console.log("sales_types_details", data)
+                        //console.log("sales_types_details", data)
                         let nights = 1
                         if (data === null) {
                             nights = "null"
@@ -127,7 +127,7 @@ const Profile = (function () {
     
     const initAutoComplete = function () {
         /*
-        Console.log("Profile.initAutoComplete()", Profile)
+        //console.log("Profile.initAutoComplete()", Profile)
         $(_product_edit_profile_form_profile_name_filter)
           .on("click", function () {
           
@@ -155,7 +155,7 @@ const Profile = (function () {
                   }
                   $table_profile_product_edit.clearSelectedRows()
                   let profile = suggestion.data
-                  Console.log("profile", profile)
+                  //console.log("profile", profile)
               },
           })
           
@@ -258,15 +258,15 @@ const Profile = (function () {
         
         $.each(profiles, function (k, profile) {
             let detail = set(profile)
-            Console.log("detail", detail)
+            //console.log("detail", detail)
         })
         
-        Console.log("Profile.all", Profile.all)
+        //console.log("Profile.all", Profile.all)
     }
     
     const set = function (profile) {
         let detail = defaultDetail()
-        Console.log("Profile.set(profile)", profile)
+        //console.log("Profile.set(profile)", profile)
         if (profile) {
             detail.advanced_booking_date = (profile.advanced_booking_date) ? profile.advanced_booking_date : null
             detail.advanced_booking_max = (profile.advanced_booking_max) ? profile.advanced_booking_max : null
@@ -285,7 +285,7 @@ const Profile = (function () {
     }
     
     const init = function (settings) {
-        //Console.log("Profile.init(settings)", settings)
+        //console.log("Profile.init(settings)", settings)
         let profiles = []
         if (settings) {
             if (settings.profiles) {
@@ -324,7 +324,7 @@ const Profile = (function () {
     }
     
     const edit = function (profile) {
-        Console.log("Profile.edit(profile)", profile)
+        //console.log("Profile.edit(profile)", profile)
     }
     
     return {

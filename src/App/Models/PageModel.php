@@ -21,7 +21,6 @@
 		
 		public static function get(int $id = null): array
 		{
-			
 			try {
 				if (!is_null($id)) {
 					self::$db->where("id", $id);
@@ -287,6 +286,70 @@
 				$menu_id = Model::$db->getInsertId();
 				if ($menu_id) {
 					return array("id" => $menu_id);
+				} else {
+					return [];
+				}
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
+		public static function updatePageRecord(array $page = null): array
+		{
+			if (is_null($page)) {
+				Log::$debug_log->error("Missing Page");
+				
+				return [];
+			}
+			
+			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
+			$created_by = Model::setInt($user_id);
+			$modified_by = Model::setInt($user_id);
+			$id = Model::setInt((isset($page["id"])) ? $page["id"] : null);
+			$menu_id = Model::setInt((isset($page["menu_id"])) ? $page["menu_id"] : null);
+			$path = Model::setString((isset($page["path"])) ? $page["path"] : null);
+			$title = Model::setString((isset($page["title"])) ? $page["title"] : null);
+			$sub_title = Model::setString((isset($page["sub_title"])) ? $page["sub_title"] : null);
+			$heading = Model::setString((isset($page["heading"])) ? $page["heading"] : null);
+			$sub_heading = Model::setString((isset($page["sub_heading"])) ? $page["sub_heading"] : null);
+			$description = Model::setString((isset($page["description"])) ? $page["description"] : null);
+			$keywords = Model::setString((isset($page["keywords"])) ? $page["keywords"] : null);
+			$enabled = Model::setBool((isset($page["enabled"])) ? $page["enabled"] : 1);
+			$note = Model::setLongText((isset($page["note"])) ? $page["note"] : null);
+			
+			$sql = "
+				INSERT INTO page (
+					id, menu_id, path, title, sub_title,
+					heading, sub_heading, description, keywords, enabled,
+					date_created, created_by, date_modified, modified_by, note
+				) VALUES (
+					$id, $menu_id, $path, $title, $sub_title,
+					$heading, $sub_heading, $description, $keywords, $enabled,
+					CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP, $modified_by, $note
+				)
+				ON DUPLICATE KEY UPDATE
+					id = VALUES(id),
+				    menu_id = VALUES(menu_id),
+				    path = VALUES(path),
+				    title = VALUES(title),
+				    sub_title = VALUES(sub_title),
+					heading = VALUES(heading),
+				    sub_heading = VALUES(sub_heading),
+				    description = VALUES(description),
+				    keywords = VALUES(keywords),
+				    enabled = VALUES(enabled),
+				    date_modified = VALUES(date_modified),
+				    modified_by = VALUES(modified_by),
+				    note = VALUES(note)
+			";
+			
+			try {
+				Model::$db->rawQuery($sql);
+				$page_id = Model::$db->getInsertId();
+				if ($page_id) {
+					return self::fetchPages($page_id);
 				} else {
 					return [];
 				}

@@ -51,6 +51,22 @@
 		}
 		
 		/**
+		 * autocomplete countries
+		 */
+		public function countries(): void
+		{
+			$st = "";
+			extract($_GET);
+			$results = Country::autocomplete($st);
+			Log::$debug_log->trace($results);
+			
+			// ----
+			header("Content-type:application/json");
+			echo json_encode($results);
+			exit(0);
+		}
+		
+		/**
 		 * autocomplete products
 		 */
 		public function products(): void

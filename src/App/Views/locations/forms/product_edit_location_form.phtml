@@ -75,9 +75,14 @@
 	}
 	
 	$product_category_id = $product["category_id"];
-
+	
+	$airport_types = [];
+	if (isset($page_data["types"]["airport_types"])) {
+		$airport_types = $page_data["types"]["airport_types"];
+	}
 ?>
-<!-- Pricing Section -->
+
+<!-- Location Section -->
 <section id="product_edit_location_section" class="section">
 	<div class="row">
 		
@@ -276,11 +281,7 @@
 									<label for="product_edit_location_id" class="dev-element d-none">Product Location:</label>
 									<input type="hidden" id="product_edit_location_id" name="product_edit_location_id" class="form-control mb-1 dev-element" readonly="readonly"/>
 								</div>
-								
-								<div class="col-12 col-md-3 p-1 mb-1">
-									<label for="product_edit_location_city_id" class="dev-element d-none">Product City Id:</label>
-									<input type="hidden" id="product_edit_location_city_id" name="product_edit_location_city_id" class="form-control mb-1 dev-element" readonly="readonly"/>
-								</div>
+							
 							</div>
 							<!-- /HIDDEN FIELDS -->
 						
@@ -290,15 +291,905 @@
 				<!-- /Location Form -->
 			
 			<?php } else if ($product_category_id === 2) { ?>
+				
+				<!-- Departing Airport -->
+				<section class="card card-body">
+					
+					<h5 class="card-title font-weight-bold">
+						<span>Airport</span>
+						
+						<!-- Departing Airport Edit -->
+						<a href="javascript:void(0);" id="product_location_departing_airport_edit_button" class="panel_link" aria-hidden="true">Edit</a>
+						<!-- /Departing Airport Edit -->
+					
+					</h5>
+					<h6 class="card-subtitle mb-2 text-muted">Departing</h6>
+					<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
+					
+					<!-- Departing Airport Search -->
+					<div class="row">
+						<div class="col-12 mb-2">
+							<div class="form-element">
+								<div class="input-group form-sm form-1 pl-0">
+									<div class="input-group-prepend">
+		                                        <span class="input-group-text">
+		                                            <i class="fas fa-search" aria-hidden="true"></i>
+		                                        </span>
+									</div>
+									<input type="search" id="product_location_departing_airport_search" name="product_location_departing_airport_search" class="form-control my-0 py-1" placeholder="Search" aria-label="Search"/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /Departing Airport Search -->
+					
+					<!-- Departing Airport Form -->
+					<form class="card card-body" id="product_location_departing_airport_form">
+						<div class="row">
+							<div class="col-12 col-md-8">
+								
+								<div class="row">
+									
+									<!-- Name -->
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_departing_airport_name">Name:</label>
+											<input type="text" id="product_location_departing_airport_name" name="product_location_departing_airport_name" class="form-control"/>
+											<div id="product_location_departing_airport_name-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									<!-- /Name -->
+								
+								</div>
+								
+								<div class="row">
+									<!-- IATA Code -->
+									<div class="col-12 col-md-6">
+										<div class="form-element">
+											<label for="product_location_departing_airport_iata_code">IATA Code:</label>
+											<input type="text" id="product_location_departing_airport_iata_code" name="product_location_departing_airport_iata_code" class="form-control"/>
+											<div id="product_location_departing_airport_iata_code-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									<!-- /IATA Code -->
+									
+									<!-- Enabled -->
+									<div class="col-12 col-sm-6 col-md-6 d-flex align-self-end justify-content-end pb-2 mb-2">
+										<div class="form-element">
+											<div class="custom-control custom-switch">
+												<input id="product_location_departing_airport_enabled" name="product_location_departing_airport_enabled" type="checkbox" value="1" class="custom-control-input">
+												<label for="product_location_departing_airport_enabled" class="custom-control-label p-0">Enabled</label>
+											</div>
+											<div id="product_location_departing_airport_enabled-error" class="error w-100 text-center">&nbsp;</div>
+										</div>
+									</div>
+									<!-- /Enabled -->
+								
+								</div>
+								
+								<div class="row">
+									
+									<!-- Airport Type -->
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_departing_airport_airport_types_id">Airport Type:</label>
+											<select id="product_location_departing_airport_airport_types_id" name="product_location_departing_airport_airport_types_id" class="form-control">
+												<?php
+													$options = "<option  value='' disabled selected>-- Airport Type --</option>";
+													foreach ($airport_types AS $k => $value) {
+														$name = $value["name"];
+														$val = $value["id"];
+														$options .= "<option value='$val'>$name</option>";
+													}
+													echo $options;
+												?>
+											</select>
+											<div id="product_location_departing_airport_airport_types_id-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									<!-- /Airport Type -->
+								
+								</div>
+								
+								<div class="row">
+									
+									<!-- City -->
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_departing_airport_city_search">City:</label>
+											<input type="search" id="product_location_departing_airport_city_search" name="product_location_departing_airport_city_search" class="form-control"/>
+											<div id="product_location_departing_airport_city_search-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									<!-- /City -->
+								
+								</div>
+								
+								<div class="row">
+									
+									<!-- Link -->
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_departing_airport_home_link">Link:</label>
+											<input type="url" id="product_location_departing_airport_home_link" name="product_location_departing_airport_home_link" class="form-control"/>
+											<div id="product_location_departing_airport_home_link-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									<!-- /Link -->
+								
+								</div>
+								
+								<div class="row">
+									
+									<!-- Wiki Link -->
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_departing_airport_wikipedia_link">Wiki Link:</label>
+											<input type="url" id="product_location_departing_airport_wikipedia_link" name="product_location_departing_airport_wikipedia_link" class="form-control"/>
+											<div id="product_location_departing_airport_wikipedia_link-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									<!-- /Wiki Link -->
+								
+								</div>
+							
+							</div>
+							
+							<div class="col-12 col-md-4">
+							
+							</div>
+						
+						</div>
+						
+						<div class="row">
+							
+							<!-- Cancel Button -->
+							<div class="col-12 col-md-4 text-left w-100 mb-2">
+								<a href="javascript:void(0);" id="product_location_departing_airport_remove_button" class="btn btn-danger btn-sm waves-effect waves-light">Cancel</a>
+							</div>
+							<!-- /Cancel Button -->
+							
+							<!-- Clear And Save Buttons -->
+							<div class="col-12 col-md-8 text-right w-100 mb-2">
+								<a href="javascript:void(0);" id="product_location_departing_airport_clear_button" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+								<a href="javascript:void(0);" id="product_location_departing_airport_save_button" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
+							</div>
+							<!-- /Clear And Save Buttons -->
+						
+						</div>
+						
+						<!-- Hidden Fields -->
+						<div class="row mx-0">
+							<div class="col-4 p-1">
+								<label for="product_location_departing_airport_id" class="dev-element d-none">Departing Airport Id:</label>
+								<input type="hidden" id="product_location_departing_airport_id" name="product_location_departing_airport_id" class="form-control dev-element" value="" readonly="readonly"/>
+							</div>
+							
+							<div class="col-4 p-1">
+								<label for="product_location_departing_airport_city_id" class="dev-element d-none">Departing Airport City Id:</label>
+								<input type="hidden" id="product_location_departing_airport_city_id" name="product_location_departing_airport_city_id" class="form-control dev-element" value="" readonly="readonly"/>
+							</div>
+						</div>
+						<!-- /Hidden Fields -->
+					
+					</form>
+					<!-- /Departing Airport Form -->
+				
+				</section>
+				<!-- /Departing Airport -->
+				
+				<!-- Arriving Airport -->
+				<section class="card card-body">
+					<h5 class="card-title font-weight-bold">
+						<span>Airport</span>
+						
+						<!-- Arriving Airport Edit -->
+						<a href="javascript:void(0);" id="product_location_arriving_airport_edit_button" class="panel_link" aria-hidden="true">Edit</a>
+						<!-- /Arriving Airport Edit -->
+					
+					</h5>
+					<h6 class="card-subtitle mb-2 text-muted">Arriving</h6>
+					<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
+					
+					<!-- Arriving Airport Search -->
+					<div class="row">
+						<div class="col-12 mb-2">
+							<div class="form-element">
+								<div class="input-group form-sm form-1 pl-0">
+									<div class="input-group-prepend">
+												<span class="input-group-text">
+													<i class="fas fa-search" aria-hidden="true"></i>
+												</span>
+									</div>
+									<input type="search" id="product_location_arriving_airport_search" name="product_location_arriving_airport_search" class="form-control my-0 py-1" placeholder="Search" aria-label="Search"/>
+								</div>
+							</div>
+						</div>
+					
+					</div>
+					<!-- /Arriving Airport Search -->
+					
+					<!-- Arriving Airport Form -->
+					<form class="card card-body" id="product_location_arriving_airport_form">
+						
+						<div class="row">
+							<div class="col-12 col-md-8">
+								
+								<div class="row">
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_arriving_airport_name">Name:</label>
+											<input type="text" id="product_location_arriving_airport_name" name="product_location_arriving_airport_name" class="form-control"/>
+											<div id="product_location_arriving_airport_name-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-12 col-md-6">
+										<div class="form-element">
+											<label for="product_location_arriving_airport_iata_code">IATA Code:</label>
+											<input type="text" id="product_location_arriving_airport_iata_code" name="product_location_arriving_airport_iata_code" class="form-control"/>
+											<div id="product_location_arriving_airport_iata_code-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									
+									<div class="col-12 col-sm-6 col-md-6 d-flex align-self-end justify-content-end pb-2 mb-2">
+										<div class="form-element">
+											<div class="custom-control custom-switch">
+												<input id="product_location_arriving_airport_enabled" name="product_location_arriving_airport_enabled" type="checkbox" value="1" class="custom-control-input">
+												<label for="product_location_arriving_airport_enabled" class="custom-control-label p-0">Enabled</label>
+											</div>
+											<div id="product_location_arriving_airport_enabled-error" class="error w-100 text-center">&nbsp;</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_arriving_airport_airport_types_id">Airport Type:</label>
+											<select id="product_location_arriving_airport_airport_types_id" name="product_location_arriving_airport_airport_types_id" class="form-control">
+												<?php
+													$options = "<option  value='' disabled selected>-- Airport Type --</option>";
+													foreach ($airport_types AS $k => $value) {
+														$name = $value["name"];
+														$val = $value["id"];
+														$options .= "<option value='$val'>$name</option>";
+													}
+													echo $options;
+												?>
+											</select>
+											<div id="product_location_arriving_airport_airport_types_id-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+								
+								</div>
+								
+								<div class="row">
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_arriving_airport_city_search">City:</label>
+											<input type="search" id="product_location_arriving_airport_city_search" name="product_location_arriving_airport_city_search" class="form-control"/>
+											<div id="product_location_arriving_airport_city_search-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_arriving_airport_home_link">Link:</label>
+											<input type="url" id="product_location_arriving_airport_home_link" name="product_location_arriving_airport_home_link" class="form-control"/>
+											<div id="product_location_arriving_airport_home_link-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_arriving_airport_wikipedia_link">Wiki Link:</label>
+											<input type="url" id="product_location_arriving_airport_wikipedia_link" name="product_location_arriving_airport_wikipedia_link" class="form-control"/>
+											<div id="product_location_arriving_airport_wikipedia_link-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+								</div>
+							
+							</div>
+							
+							<div class="col-12 col-md-4">
+							
+							</div>
+						
+						</div>
+						
+						<div class="row">
+							
+							<div class="col-12 col-md-4 text-left w-100 mb-2">
+								<a href="javascript:void(0);" id="product_location_arriving_airport_remove_button" class="btn btn-danger btn-sm waves-effect waves-light">Cancel</a>
+							</div>
+							
+							<div class="col-12 col-md-8 text-right w-100 mb-2">
+								<a href="javascript:void(0);" id="product_location_arriving_airport_clear_button" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+								<a href="javascript:void(0);" id="product_location_arriving_airport_save_button" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
+							</div>
+						
+						</div>
+						
+						<div class="row mx-0">
+							<div class="col-4 p-1">
+								<label for="product_location_arriving_airport_id" class="dev-element d-none">Arriving Airport Id:</label>
+								<input type="hidden" id="product_location_arriving_airport_id" name="product_location_arriving_airport_id" class="form-control dev-element" value="" readonly="readonly"/>
+							</div>
+							
+							<div class="col-4 p-1">
+								<label for="product_location_arriving_airport_city_id" class="dev-element d-none">Arriving Airport City Id:</label>
+								<input type="hidden" id="product_location_arriving_airport_city_id" name="product_location_arriving_airport_city_id" class="form-control dev-element" value="" readonly="readonly"/>
+							</div>
+						
+						</div>
+					
+					</form>
+					<!-- /Arriving Airport Form -->
+				
+				</section>
+				<!-- /Arriving Airport -->
 			
+			<?php } else if ($product_category_id === 3) { ?>
+				<!-- CARS -->
+				<div class="row">
+					<div class="col-12 mb-2">
+						<div class="form-element">
+							<div class="input-group form-sm form-1 pl-0">
+								
+								<div class="input-group-prepend">
+		                            <span class="input-group-text">
+		                                <i class="fas fa-search" aria-hidden="true"></i>
+		                            </span>
+								</div>
+								
+								<input type="search" id="product_location_cars_city_search" name="product_location_cars_city_search" class="form-control my-0 py-1" placeholder="Search" aria-label="Search" value="<?php echo ($display_location) ? $display_location : ''; ?>"/>
+							
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /CARS -->
+			<?php } else if ($product_category_id === 4) { ?>
+				<!-- Departing Station -->
+				<section class="card card-body">
+					
+					<h5 class="card-title font-weight-bold">
+						<span>Station</span>
+						
+						<!-- Departing Station Edit -->
+						<a href="javascript:void(0);" id="product_location_departing_station_edit_button" class="panel_link" aria-hidden="true">Edit</a>
+						<!-- /Departing Station Edit -->
+					
+					</h5>
+					<h6 class="card-subtitle mb-2 text-muted">Departing</h6>
+					<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
+					
+					<!-- Departing Station Search -->
+					<div class="row">
+						<div class="col-12 mb-2">
+							<div class="form-element">
+								<div class="input-group form-sm form-1 pl-0">
+									<div class="input-group-prepend">
+								<span class="input-group-text">
+									<i class="fas fa-search" aria-hidden="true"></i>
+								</span>
+									</div>
+									<input type="search" id="product_location_departing_station_search" name="product_location_departing_station_search" class="form-control my-0 py-1" placeholder="Search" aria-label="Search"/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /Departing Station Search -->
+					
+					<!-- Departing Station Form -->
+					<form class="card card-body" id="product_location_departing_station_form">
+						<div class="row">
+							<div class="col-12 col-md-8">
+								
+								<div class="row">
+									
+									<!-- Name -->
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_departing_station_name">Name:</label>
+											<input type="text" id="product_location_departing_station_name" name="product_location_departing_station_name" class="form-control"/>
+											<div id="product_location_departing_station_name-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									<!-- /Name -->
+								
+								</div>
+								
+								<div class="row">
+									<!-- IATA Code -->
+									<div class="col-12 col-md-6">
+										<div class="form-element">
+											<label for="product_location_departing_station_iata_code">IATA Code:</label>
+											<input type="text" id="product_location_departing_station_iata_code" name="product_location_departing_station_iata_code" class="form-control"/>
+											<div id="product_location_departing_station_iata_code-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									<!-- /IATA Code -->
+									
+									<!-- Enabled -->
+									<div class="col-12 col-sm-6 col-md-6 d-flex align-self-end justify-content-end pb-2 mb-2">
+										<div class="form-element">
+											<div class="custom-control custom-switch">
+												<input id="product_location_departing_station_enabled" name="product_location_departing_station_enabled" type="checkbox" value="1" class="custom-control-input">
+												<label for="product_location_departing_station_enabled" class="custom-control-label p-0">Enabled</label>
+											</div>
+											<div id="product_location_departing_station_enabled-error" class="error w-100 text-center">&nbsp;</div>
+										</div>
+									</div>
+									<!-- /Enabled -->
+								
+								</div>
+								
+								<div class="row">
+									
+									<!-- City -->
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_departing_station_city_search">City:</label>
+											<input type="search" id="product_location_departing_station_city_search" name="product_location_departing_station_city_search" class="form-control"/>
+											<div id="product_location_departing_station_city_search-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									<!-- /City -->
+								
+								</div>
+								
+								<div class="row">
+									
+									<!-- Link -->
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_departing_station_home_link">Link:</label>
+											<input type="url" id="product_location_departing_station_home_link" name="product_location_departing_station_home_link" class="form-control"/>
+											<div id="product_location_departing_station_home_link-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									<!-- /Link -->
+								
+								</div>
+								
+								<div class="row">
+									
+									<!-- Wiki Link -->
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_departing_station_wikipedia_link">Wiki Link:</label>
+											<input type="url" id="product_location_departing_station_wikipedia_link" name="product_location_departing_station_wikipedia_link" class="form-control"/>
+											<div id="product_location_departing_station_wikipedia_link-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									<!-- /Wiki Link -->
+								
+								</div>
+							
+							</div>
+							
+							<div class="col-12 col-md-4">
+							
+							</div>
+						
+						</div>
+						
+						<div class="row">
+							
+							<!-- Cancel Button -->
+							<div class="col-12 col-md-4 text-left w-100 mb-2">
+								<a href="javascript:void(0);" id="product_location_departing_station_remove_button" class="btn btn-danger btn-sm waves-effect waves-light">Cancel</a>
+							</div>
+							<!-- /Cancel Button -->
+							
+							<!-- Clear And Save Buttons -->
+							<div class="col-12 col-md-8 text-right w-100 mb-2">
+								<a href="javascript:void(0);" id="product_location_departing_station_clear_button" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+								<a href="javascript:void(0);" id="product_location_departing_station_save_button" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
+							</div>
+							<!-- /Clear And Save Buttons -->
+						
+						</div>
+						
+						<!-- Hidden Fields -->
+						<div class="row mx-0">
+							<div class="col-4 p-1">
+								<label for="product_location_departing_station_id" class="dev-element d-none">Departing Station Id:</label>
+								<input type="hidden" id="product_location_departing_station_id" name="product_location_departing_station_id" class="form-control dev-element" value="" readonly="readonly"/>
+							</div>
+							
+							<div class="col-4 p-1">
+								<label for="product_location_departing_station_city_id" class="dev-element d-none">Departing Station City Id:</label>
+								<input type="hidden" id="product_location_departing_station_city_id" name="product_location_departing_station_city_id" class="form-control dev-element" value="" readonly="readonly"/>
+							</div>
+						</div>
+						<!-- /Hidden Fields -->
+					
+					</form>
+					<!-- /Departing Station Form -->
+				
+				</section>
+				<!-- /Departing Station -->
+				
+				<!-- Arriving Station -->
+				<section class="card card-body">
+					<h5 class="card-title font-weight-bold">
+						<span>Station</span>
+						
+						<!-- Arriving Station Edit -->
+						<a href="javascript:void(0);" id="product_location_arriving_station_edit_button" class="panel_link" aria-hidden="true">Edit</a>
+						<!-- /Arriving Station Edit -->
+					
+					</h5>
+					<h6 class="card-subtitle mb-2 text-muted">Arriving</h6>
+					<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
+					
+					<!-- Arriving Station Search -->
+					<div class="row">
+						<div class="col-12 mb-2">
+							<div class="form-element">
+								<div class="input-group form-sm form-1 pl-0">
+									<div class="input-group-prepend">
+								<span class="input-group-text">
+									<i class="fas fa-search" aria-hidden="true"></i>
+								</span>
+									</div>
+									<input type="search" id="product_location_arriving_station_search" name="product_location_arriving_station_search" class="form-control my-0 py-1" placeholder="Search" aria-label="Search"/>
+								</div>
+							</div>
+						</div>
+					
+					</div>
+					<!-- /Arriving Station Search -->
+					
+					<!-- Arriving Station Form -->
+					<form class="card card-body" id="product_location_arriving_station_form">
+						
+						<div class="row">
+							<div class="col-12 col-md-8">
+								
+								<div class="row">
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_arriving_station_name">Name:</label>
+											<input type="text" id="product_location_arriving_station_name" name="product_location_arriving_station_name" class="form-control"/>
+											<div id="product_location_arriving_station_name-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-12 col-md-6">
+										<div class="form-element">
+											<label for="product_location_arriving_station_iata_code">IATA Code:</label>
+											<input type="text" id="product_location_arriving_station_iata_code" name="product_location_arriving_station_iata_code" class="form-control"/>
+											<div id="product_location_arriving_station_iata_code-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+									
+									<div class="col-12 col-sm-6 col-md-6 d-flex align-self-end justify-content-end pb-2 mb-2">
+										<div class="form-element">
+											<div class="custom-control custom-switch">
+												<input id="product_location_arriving_station_enabled" name="product_location_arriving_station_enabled" type="checkbox" value="1" class="custom-control-input">
+												<label for="product_location_arriving_station_enabled" class="custom-control-label p-0">Enabled</label>
+											</div>
+											<div id="product_location_arriving_station_enabled-error" class="error w-100 text-center">&nbsp;</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_arriving_station_city_search">City:</label>
+											<input type="search" id="product_location_arriving_station_city_search" name="product_location_arriving_station_city_search" class="form-control"/>
+											<div id="product_location_arriving_station_city_search-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_arriving_station_home_link">Link:</label>
+											<input type="url" id="product_location_arriving_station_home_link" name="product_location_arriving_station_home_link" class="form-control"/>
+											<div id="product_location_arriving_station_home_link-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-12">
+										<div class="form-element">
+											<label for="product_location_arriving_station_wikipedia_link">Wiki Link:</label>
+											<input type="url" id="product_location_arriving_station_wikipedia_link" name="product_location_arriving_station_wikipedia_link" class="form-control"/>
+											<div id="product_location_arriving_station_wikipedia_link-error" class="error w-100 text-center"></div>
+										</div>
+									</div>
+								</div>
+							
+							</div>
+							
+							<div class="col-12 col-md-4">
+							
+							</div>
+						
+						</div>
+						
+						<div class="row">
+							
+							<div class="col-12 col-md-4 text-left w-100 mb-2">
+								<a href="javascript:void(0);" id="product_location_arriving_station_remove_button" class="btn btn-danger btn-sm waves-effect waves-light">Cancel</a>
+							</div>
+							
+							<div class="col-12 col-md-8 text-right w-100 mb-2">
+								<a href="javascript:void(0);" id="product_location_arriving_station_clear_button" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+								<a href="javascript:void(0);" id="product_location_arriving_station_save_button" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
+							</div>
+						
+						</div>
+						
+						<div class="row mx-0">
+							<div class="col-4 p-1">
+								<label for="product_location_arriving_station_id" class="dev-element d-none">Arriving Station Id:</label>
+								<input type="hidden" id="product_location_arriving_station_id" name="product_location_arriving_station_id" class="form-control dev-element" value="" readonly="readonly"/>
+							</div>
+							
+							<div class="col-4 p-1">
+								<label for="product_location_arriving_station_city_id" class="dev-element d-none">Arriving Station City Id:</label>
+								<input type="hidden" id="product_location_arriving_station_city_id" name="product_location_arriving_station_city_id" class="form-control dev-element" value="" readonly="readonly"/>
+							</div>
+						
+						</div>
+					
+					</form>
+					<!-- /Arriving Station Form -->
+				
+				</section>
+				<!-- /Arriving Station -->
+			<?php } else if ($product_category_id === 5) { ?>
+				<!-- Transport -->
+				<div class="row">
+					<div class="col-12 mb-2">
+						<div class="form-element">
+							<div class="input-group form-sm form-1 pl-0">
+								
+								<div class="input-group-prepend">
+		                            <span class="input-group-text">
+		                                <i class="fas fa-search" aria-hidden="true"></i>
+		                            </span>
+								</div>
+								
+								<input type="search" id="product_location_transport_city_search" name="product_location_transport_city_search" class="form-control my-0 py-1" placeholder="Search" aria-label="Search" value="<?php echo ($display_location) ? $display_location : ''; ?>"/>
+							
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /Transport -->
+			<?php } else if ($product_category_id === 6) { ?>
+				<!-- Tour -->
+				<!-- Location Search Filter -->
+				<div class="row">
+					<div class="col-12 mb-2">
+						<div class="form-element">
+							<div class="input-group form-sm form-1 pl-0">
+								
+								<div class="input-group-prepend">
+		                        <span class="input-group-text">
+		                            <i class="fas fa-search" aria-hidden="true"></i>
+		                        </span>
+								</div>
+								
+								<input type="search" id="product_location_search" name="product_location_search" class="form-control my-0 py-1" placeholder="Search" aria-label="Search" value="<?php echo ($display_location) ? $display_location : ''; ?>"/>
+							
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /Location Search Filter -->
+				
+				<!-- Location Map -->
+				<div class="row">
+					<div class="col-12 mb-2">
+						<div id="locationMap" class="w-100"></div>
+					</div>
+				</div>
+				<!-- /Location Map -->
+				
+				<!-- Location Form -->
+				<div class="row">
+					<div class="col-12 mb-2">
+						<form id="product_edit_location_form" name="product_edit_location_form" class="card card-body" novalidate="novalidate">
+							<h5 class="card-title">
+								<span>Location</span>
+								<a type="button" href="javascript:void(0);" id="product_edit_location_form_close_button" class="panel-button-close fas fa-times" aria-hidden="true"></a>
+							</h5>
+							<h6 class="card-subtitle mb-2 text-muted">&nbsp;</h6>
+							<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">
+							
+							<div class="row">
+								
+								<div class="col-12 col-md-8 mb-2">
+									
+									<div class="row">
+										
+										<div class="col-12 mb-2">
+											
+											<div class="form-element">
+												<label for="product_edit_location_street_1">Street 1:</label>
+												<input type="text" id="product_edit_location_street_1" name="product_edit_location_street_1" class="form-control"/>
+												<div id="product_edit_location_street_1-error" class="error w-100">&nbsp;</div>
+											</div>
+										
+										</div>
+									
+									</div>
+									
+									<div class="row">
+										
+										<div class="col-12 mb-2">
+											
+											<div class="form-element">
+												<label for="product_edit_location_street_2">Street 2:</label>
+												<input type="text" id="product_edit_location_street_2" name="product_edit_location_street_2" class="form-control"/>
+												<div id="product_edit_location_street_2-error" class="error w-100">&nbsp;</div>
+											</div>
+										
+										</div>
+									
+									</div>
+									
+									<div class="row">
+										
+										<div class="col-12 col-md-8 mb-2">
+											
+											<div class="form-element">
+												<label for="product_edit_location_city" class="">City / Province / Country:</label>
+												<input type="search" id="product_edit_location_city" name="product_edit_location_city" class="form-control"/>
+												<div id="product_edit_location_city-error" class="error w-100 text-center">&nbsp;</div>
+											</div>
+										
+										</div>
+										
+										<div class="col-12 col-md-4 mb-2">
+											
+											<div class="form-element">
+												<label for="product_edit_location_zipcode" class="">Postal Code:</label>
+												<input type="text" id="product_edit_location_zipcode" name="product_edit_location_zipcode" class="form-control"/>
+												<div id="product_edit_location_zipcode-error" class="error w-100 text-center">&nbsp;</div>
+											</div>
+										
+										</div>
+									
+									</div>
+									
+									<div id="product_edit_location_city_edit" class="card card-body border border-dark d-block">
+										
+										<div class="row">
+											
+											<div class="col-12 col-md-4 pl-1 pr-0">
+												<div class="form-element">
+													<label for="location_country_id">Country:</label>
+													<select class="form-control" name="location_country_id" id="location_country_id" data-type="country" style="width:100%;"></select>
+													<div class="error w-100 text-center" id="location_country_id-error"></div>
+												</div>
+											</div>
+											
+											<div class="col-12 col-md-4 pl-1 pr-0">
+												<div class="form-element">
+													<label for="location_province_id">Province:</label>
+													<select class="form-control" name="location_province_id" id="location_province_id" data-type="province" style="width:100%;" required></select>
+													<div class="error w-100 text-center" id="location_province_id-error"></div>
+												</div>
+											</div>
+											
+											<div class="col-12 col-md-4 pl-1 pr-1">
+												<div class="form-element">
+													<label for="location_city_id">City:</label>
+													<select class="form-control" name="location_city_id" id="location_city_id" data-type="city" style="width:100%;" required></select>
+													<div class="error w-100 text-center" id="location_city_id-error"></div>
+												</div>
+											</div>
+										
+										</div>
+									
+									</div>
+								
+								</div>
+								
+								<div class="col-12 col-md-4 mb-2">
+									
+									<div id="product_edit_location_detail" class="p-1 border rounded">
+										
+										<div class="row">
+											
+											<div class="col-12 mb-2">
+												<div class="form-element">
+													<label for="product_edit_location_id" class="">Location Id:</label>
+													<input type="text" id="product_edit_location_id" name="product_edit_location_id" class="form-control" value="" readonly="readonly"/>
+													<div id="product_edit_location_id-error" class="error w-100 text-center">&nbsp;</div>
+												</div>
+											</div>
+										
+										</div>
+										
+										<div class="row">
+											
+											<div class="col-12 mb-2">
+												<label for="product_edit_location_name" class="">Location Name:</label>
+												<input type="text" id="product_edit_location_name" name="product_edit_location_name" class="form-control"/>
+												<div id="product_edit_location_name-error" class="error w-100 text-center">&nbsp;</div>
+											</div>
+										
+										</div>
+										
+										<div class="row">
+											<div class="col-12 mb-2">
+												<div class="form-element">
+													<label for="product_edit_location_location_types_id">Location Type:</label>
+													<select id="product_edit_location_location_types_id" name="product_edit_location_location_types_id" class="form-control">
+														<?php echo $selectLocationTypes; ?>
+													</select>
+													<div id="product_edit_location_location_types_id-error" class="error w-100">&nbsp;</div>
+												</div>
+											</div>
+										</div>
+									
+									</div>
+								</div>
+							
+							</div>
+							
+							<div class="row">
+								
+								<div class="col-6 text-left w-100 mb-2">
+								
+								</div>
+								
+								<div class="col-6 text-right w-100 mb-2">
+									<a href="javascript:void(0);" id="button_clear_form_product_edit_location" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light">clear</a>
+									<a href="javascript:void(0);" id="button_submit_form_product_edit_location" class="btn btn-primary btn-sm waves-effect waves-light">Update</a>
+								</div>
+							
+							</div>
+							
+							<!-- HIDDEN FIELDS -->
+							<div class="row">
+								<div class="col-12 col-md-3 p-1 mb-1">
+									<label for="product_edit_location_id" class="dev-element d-none">Product Location:</label>
+									<input type="hidden" id="product_edit_location_id" name="product_edit_location_id" class="form-control mb-1 dev-element" readonly="readonly"/>
+								</div>
+							
+							</div>
+							<!-- /HIDDEN FIELDS -->
+						
+						</form>
+					</div>
+				</div>
+				<!-- /Location Form -->
+				<!-- /Tour -->
 			<?php } else { ?>
 			
 			<?php } ?>
-		
+			
+			<div class="col-12 col-md-3 p-1 mb-1">
+				<label for="product_edit_location_city_id" class="dev-element d-none">Product City Id:</label>
+				<input type="hidden" id="product_edit_location_city_id" name="product_edit_location_city_id" class="form-control mb-1 dev-element" readonly="readonly"/>
+			</div>
 		</div>
 		
 		<div class="col-12 col-md-4 mb-2">
-			<ul class="list-group">
+			<ul class="list-group mb-2">
 				<li class="list-group-item d-flex justify-content-between align-items-center">
 					Cras justo odio
 					<span class="badge badge-primary badge-pill">14</span>
@@ -312,10 +1203,35 @@
 					<span class="badge badge-primary badge-pill">1</span>
 				</li>
 			</ul>
-		
+			
+			<?php if ($product_category_id === 6) { ?>
+				<section id="tour_route" class="card card-body z-depth-0 mb-2">
+					<div class="d-flex justify-content-between">
+						<h5 class="card-title label" id="route_manager_heading">
+							<span>Tour Route:</span>
+						</h5>
+						<a id="route_manager_heading_toggle">
+							<i class="fas fa-sliders-h"></i>
+						</a>
+					</div>
+					<ul id="route_manager_wrapper" class="list-group route-manager-wrapper">
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							Route Stop Name 1
+							<span class="badge badge-primary badge-pill">14</span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							Route Stop Name 2
+							<span class="badge badge-primary badge-pill">14</span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							Route Stop Name 3
+							<span class="badge badge-primary badge-pill">14</span>
+						</li>
+					</ul>
+				</section>
+			<?php } ?>
 		</div>
 	
 	</div>
-
 </section>
 

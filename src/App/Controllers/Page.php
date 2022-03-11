@@ -39,8 +39,9 @@
 				"icon" => "fas fa-plus",
 				"id" => "button_add_page_heading",
 				"data" => array(
-					"toggle" => "modal",
-					"target" => "#modal_new_page",
+					"toggle" => "tooltip",
+					"title" => "Add New Page",
+					"placement" => "top",
 				),
 			),
 		);
@@ -74,7 +75,7 @@
 				"rating_types" => RatingTypesModel::get(),
 				"roles" => Role::getTypes(),
 				"sales_types" => SalesTypesModel::get(),
-				"status_types" => StatusTypesModel::get(),
+				"status_types" => StatusType::get(),
 			
 			);
 		}
@@ -521,6 +522,23 @@
 			 * render calendar json
 			 */
 			View::render_json($menus);
+			exit(0);
+		}
+		
+		public static function serveUpdate(array $params = null): void
+		{
+			$pages = [];
+			$results = PageModel::updatePageRecord($params);
+			
+			foreach ($results AS $k => $page) {
+				$pages[] = self::format($page);
+			}
+			
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			View::render_json($pages);
 			exit(0);
 		}
 		

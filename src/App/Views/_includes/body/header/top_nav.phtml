@@ -1,83 +1,84 @@
 <?php
-
-    use Framework\App\Middlewares\Auth;
-
-    if (Auth::logged_in()) {
-        ?>
-        <nav class="navbar fixed-top navbar-expand-lg double-nav">
-            
-            <div class=" d-inline-block d-xl-none">
-                
-                <a href="#" data-activates="slide-out" class="float-left button-collapse">
-                    <span class="navbar-toggler-icon"></span>
-                </a>
-                
-                <a class="navbar-brand">
-                    <?php
-                        $pageheading = "Trips2Italy";
-                        if (defined("PAGEHEADING")) {
-                            $pageheading = PAGEHEADING;
-                        }
-                        echo $pageheading;
-                    ?>
-                </a>
-            
-            </div>
-            
-            <ul class="nav navbar-nav nav-flex-icons ml-auto">
-                
-                <li class="nav-item">
+	
+	use Framework\App\Middlewares\Auth;
+	
+	if (Auth::logged_in()) {
+		?>
+		<nav class="navbar fixed-top navbar-expand-lg double-nav">
+			
+			<div class=" d-inline-block d-xl-none">
+				
+				<a href="#" data-activates="slide-out" class="float-left button-collapse">
+					<span class="navbar-toggler-icon"></span>
+				</a>
+				
+				<a class="navbar-brand">
+					<?php
+						$pageheading = "Trips2Italy";
+						if (defined("PAGEHEADING")) {
+							$pageheading = PAGEHEADING;
+						}
+						echo $pageheading;
+					?>
+				</a>
+			
+			</div>
+			
+			<ul class="nav navbar-nav nav-flex-icons ml-auto">
+				
+				<li class="nav-item">
                     <span class="debug_demo">
                         <span class="">W:
                             <span id="screen_width"></span>px - H:
                             <span id="screen_height"></span>px&nbsp;
                         </span>
                     </span>
-                </li>
-                
-                <li class="nav-item dropdown notifications-nav">
-                
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link waves-effect"><i class="fas fa-envelope"></i>
-                        <span class="clearfix d-none d-sm-inline-block">Contact</span>
-                    </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link waves-effect"><i class="far fa-comments"></i>
-                        <span class="clearfix d-none d-sm-inline-block">Support</span>
-                    </a>
-                </li>
-                
-                <li class="nav-item dropdown">
-
-                    <a class="nav-link dropdown-toggle waves-effect" href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-user"></i>
-                        <span class="clearfix d-none d-sm-inline-block">
+				</li>
+				
+				<li class="nav-item dropdown notifications-nav">
+				
+				</li>
+				
+				<li class="nav-item">
+					<a class="nav-link waves-effect"><i class="fas fa-envelope"></i>
+						<span class="clearfix d-none d-sm-inline-block">Contact</span>
+					</a>
+				</li>
+				
+				<li class="nav-item">
+					<a class="nav-link waves-effect"><i class="far fa-comments"></i>
+						<span class="clearfix d-none d-sm-inline-block">Support</span>
+					</a>
+				</li>
+				
+				<li class="nav-item dropdown">
+					
+					<a class="nav-link dropdown-toggle waves-effect" href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-user"></i>
+						<span class="clearfix d-none d-sm-inline-block">
                         <?php
-                            if (defined("FNAME")) {
-                                echo ucfirst(FNAME);
-                            } else {
-                                echo $_SESSION["name_first"] . "&nbsp;" . $_SESSION["name_last"];;
-                            }
-                            echo "&nbsp;";
-                            if (defined("LNAME")) {
-                                echo ucfirst(LNAME);
-                            }
+	                        if (defined("FNAME")) {
+		                        echo ucfirst(FNAME);
+	                        } else {
+		                        echo $_SESSION["name_first"] . "&nbsp;" . $_SESSION["name_last"];;
+	                        }
+	                        echo "&nbsp;";
+	                        if (defined("LNAME")) {
+		                        echo ucfirst(LNAME);
+	                        }
                         ?>
 				        </span>
-                    </a>
-
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a class="dropdown-item waves-effect waves-light" href="/logout">Log Out</a>
-                        <a class="dropdown-item waves-effect waves-light" href="/profile">My account</a>
-                    </div>
-                </li>
-
-            </ul>
-        </nav>
-        <?php
-    }
+					</a>
+					
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+						<a class="dropdown-item waves-effect waves-light" href="/logout">Log Out</a>
+						<a class="dropdown-item waves-effect waves-light" href="/profile">My account</a>
+					</div>
+				</li>
+			
+			</ul>
+		
+		</nav>
+		<?php
+	}
 ?>

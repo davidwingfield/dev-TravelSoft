@@ -21,6 +21,7 @@ const Variant = (function () {
     const _product_edit_variant_form_close_button = document.getElementById("product_edit_variant_form_close_button")
     const _product_edit_variant_form_variant_used_in_pricing = document.getElementById("product_edit_variant_form_variant_used_in_pricing")
     const _table_variant_product_edit_add_new_button = document.getElementById("table_variant_product_edit_add_new_button")
+    const _product_edit_variant_display = document.getElementById("product_edit_variant_display")
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $table_variant_product_edit = $(_table_variant_product_edit)
@@ -102,6 +103,72 @@ const Variant = (function () {
             _product_edit_variant_form_variant_name_filter.disabled = false
         })
     
+    const clearProductOverview = function (variant) {
+        //console.log("Variant.clearProductOverview(variant)", variant)
+        let color_scheme, product_unit_detail
+        
+        if (!variant) {
+            //console.log("No Variant", variant)
+            return
+        }
+        
+        let variantId = (!isNaN(parseInt(variant.id))) ? parseInt(variant.id) : null
+        
+        if (variantId) {
+            $(`#product_edit_variant_display_${variantId}`).remove()
+        }
+        
+    }
+    
+    const buildProductOverview = function (variant) {
+        //console.log("Variant.buildProductOverview(variant)", variant)
+        
+        if (!variant) {
+            //console.log("|__ variant", variant)
+            return
+        }
+        
+        let variantId = (!isNaN(parseInt(variant.id))) ? parseInt(variant.id) : null
+        let variantMaxAge = (!isNaN(parseInt(variant.max_age))) ? parseInt(variant.max_age) : null
+        let variantMinAge = (!isNaN(parseInt(variant.min_age))) ? parseInt(variant.min_age) : null
+        let variantName = (variant.name) ? variant.name : null
+        let variantCode = (variant.code) ? variant.code : null
+        
+        if (Variant.all.get(variantId)) {
+            clearProductOverview(Variant.all.get(variantId))
+        }
+        
+        $(_product_edit_variant_display).append(`
+            <div id="product_edit_variant_display_${variantId}" class="col-12 col-sm-12 col-md-4 px-1">
+                <div class="card">
+                    <div class="card-body">
+                    
+                        <h5 class="card-title">${variantName}</h5>
+                        <h6 class="card-subtitle my-2 text-muted">${variantCode}</h6>
+                        <p class="card-text"></p>
+       
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>Min</th>
+                                    <th>Max</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Age</td>
+                                    <td>${variantMinAge}</td>
+                                    <td>${variantMaxAge}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        `)
+    }
+    
     const remove = function () {
         confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
             if (ans) {
@@ -124,12 +191,12 @@ const Variant = (function () {
                         PricingWorksheet.pricingWorksheet()
                         Pricing.resetForm()
                         YearCalendar.refresh()
-                        
                         updateProgress()
                         resetForm()
-                        
-                        toastr.success(`Variant: ${detail.name} - has been updated`)
                         YearCalendar.endLoading()
+                        clearProductOverview(detail)
+                        
+                        toastr["warning"](`Variant: ${detail.name} - has been removed`, "Variant")
                     }
                 })
             } else {
@@ -153,7 +220,7 @@ const Variant = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -168,9 +235,9 @@ const Variant = (function () {
                 "id": "variantNeedsAttention",
             })
             
-            $(_panel_tab_variant).html(`Variant<span id="variantNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
+            $(_panel_tab_variant).html(`<span id="tab_span_variant">Variant</span> <span id="variantNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
         } else {
-            $(_panel_tab_variant).html(`Variant`)
+            $(_panel_tab_variant).html(`<span id="tab_span_variant">Variant</span>`)
         }
         
         Product.updateProgress()
@@ -238,7 +305,7 @@ const Variant = (function () {
     }
     
     const handleVariantError = function (msg) {
-        toastr.error(msg)
+        toastr["error"](msg, "Variant Error")
     }
     
     const fetchByName = function (dataToSend, callback) {
@@ -254,7 +321,7 @@ const Variant = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 handleVariantError("Error Validating Variant")
             }
         } else {
@@ -321,7 +388,7 @@ const Variant = (function () {
                                     }
                                 })
                             } catch (e) {
-                                console.log("error", e)
+                                //console.log("error", e)
                             }
                         }
                     })
@@ -504,7 +571,7 @@ const Variant = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -540,9 +607,10 @@ const Variant = (function () {
                             
                             updateProgress()
                             resetForm()
+                            buildProductOverview(detail)
                             
-                            toastr.success(`Variant: ${detail.name} - has been updated`)
                             YearCalendar.endLoading()
+                            toastr["success"](`Variant: ${detail.name} - has been updated`, "Variant")
                         }
                     })
                 } else {
@@ -557,15 +625,17 @@ const Variant = (function () {
     
     const loadAll = function (variants) {
         //console.log("Variant.loadAll(variants)", variants)
-        // ----
         Variant.all = new Map()
         
         if (variants) {
             $.each(variants, function (k, variant) {
                 let detail = set(variant)
+                
                 Variant.all.set(detail.id, detail)
+                
                 $table_variant_product_edit.insertRow(detail)
-                //console.log("Variant - detail", detail)
+                
+                buildProductOverview(detail)
             })
         }
     }

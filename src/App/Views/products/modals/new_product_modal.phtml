@@ -163,6 +163,10 @@
 					<?php include_once(VIEWS_PATH . "/transports/forms/product_new_transports_form.phtml"); ?>
 					<!-- /Transport -->
 					
+					<!-- Tours -->
+					<?php include_once(VIEWS_PATH . "/tours/forms/product_new_tours_form.phtml"); ?>
+					<!-- /Tours -->
+					
 					<!-- Rating Id, Currency Id, Pricing Strategy Id -->
 					<div class="row">
 						
@@ -231,10 +235,20 @@
 					
 					<!-- HIDDEN VALUES -->
 					<div class="row">
+						
+						<div class="col-3 col-md-3">
+							<label for="modal_product_country_id" class="dev-element d-none">Country Id:</label>
+							<input type="hidden" id="modal_product_country_id" class="form-control dev-element" value="" readonly="readonly"/>
+						</div>
+						<div class="col-3 col-md-3">
+							<label for="modal_product_province_id" class="dev-element d-none">Province Id:</label>
+							<input type="hidden" id="modal_product_province_id" class="form-control dev-element" value="" readonly="readonly"/>
+						</div>
 						<div class="col-3 col-md-3">
 							<label for="modal_product_city_id" class="dev-element d-none">City Id:</label>
 							<input type="hidden" id="modal_product_city_id" class="form-control dev-element" value="" readonly="readonly"/>
 						</div>
+					
 					</div>
 					<!-- HIDDEN VALUES -->
 				</form>
@@ -259,7 +273,7 @@
 	</div>
 </div>
 
-<script>
+<script type="text/javascript">
 	$(document).ready(function () {
 		const $rating = $("#rating")
 		const $rating_types_id = $("#rating_types_id")
@@ -274,7 +288,7 @@
 		})
 		
 		const buildSKU = function (stringValue) {
-			console.log("buildSKU")
+			console.log("buildSKU(stringValue)", stringValue)
 			let myArray = []
 			let categorySection = null
 			let productSection = ""
@@ -326,11 +340,6 @@
 			
 			return codeValue
 		}
-		
-		$("#modal_product_name")
-			.on("keyup", function () {
-				// console.log("string", buildSKU($(this).val()))
-			})
 		
 	})
 </script>

@@ -856,7 +856,9 @@ const PricingWorksheet = (function () {
                     })
                     
                     PricingWorksheet.pricingWorksheet()
-                    toastr.success(`Matrix: ${matrix.name} - has been updated`)
+                    
+                    Product.updateProgress()
+                    toastr["success"](`Matrix: ${matrix.name} - has been updated`, "Pricing Worksheet")
                 }
             })
         }
@@ -875,10 +877,10 @@ const PricingWorksheet = (function () {
                     
                     PricingWorksheet.pricingWorksheet()
                     
-                    console.log("pricingsHidden", pricingsHidden)
-                    console.log("matricesHidden", matricesHidden)
-                    console.log("unitsCollapsed", unitsCollapsed)
-                    console.log("seasonsCollapsed", seasonsCollapsed)
+                    //console.log("pricingsHidden", pricingsHidden)
+                    //console.log("matricesHidden", matricesHidden)
+                    //console.log("unitsCollapsed", unitsCollapsed)
+                    //console.log("seasonsCollapsed", seasonsCollapsed)
                     
                     if (seasonsCollapsed) {
                         $(_button_collapse_seasons).attr("data-shown", "false")
@@ -923,7 +925,7 @@ const PricingWorksheet = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -941,7 +943,7 @@ const PricingWorksheet = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }

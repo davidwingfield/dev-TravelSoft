@@ -44,12 +44,47 @@
 				
 				<div class="col-12 col-md-8">
 					<div class="form-element">
-						<label for="modal_product_city_cars">City:</label>
-						<input type="text" id="modal_product_city_cars" name="modal_product_city_cars" class="form-control"/>
-						<div id="modal_product_city_cars-error" class="error w-100 text-center"></div>
+						<label for="modal_product_country_cars">Country:</label>
+						<input type="search" id="modal_product_country_cars" name="modal_product_country_cars" class="form-control"/>
+						<div id="modal_product_country_cars-error" class="error w-100 text-center"></div>
 					</div>
 				</div>
 			
+			</div>
+			
+			<div id="form_new_country" class="card card-body m-2 p-2 grey lighten-3 form-new-country">
+				<h5 class="card-title">Country Details</h5>
+				<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
+				
+				<div class="row">
+					<div class="col-lg-4 mb-1">
+						<div class="form-element">
+							<label for="country_name" class="active">Name:</label>
+							<input id="country_name" name="country_name" type="text" class="form-control" aria-invalid="false">
+							<div id="country_name-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<div class="col-lg-4 mb-1">
+						<div class="form-element"><label for="country_iso2">ISO2:</label><input id="country_iso2" name="country_iso2" type="text" maxlength="2" class="form-control ">
+							<div id="country_iso2-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<div class="col-lg-4 mb-1">
+						<div class="form-element"><label for="country_iso3">ISO3:</label>
+							<input id="country_iso3" name="country_iso3" type="text" maxlength="3" class="form-control ">
+							<div id="country_iso3-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-6 mb-1 text-left">
+					
+					</div>
+					<div class="col-6 mb-1 text-right">
+						<button type="button" id="new_country_cancel_button" class="btn btn-outline-danger btn-sm white waves-effect waves-light">cancel</button>
+						<button type="button" id="new_country_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">save</button>
+					</div>
+				</div>
 			</div>
 		
 		</div>

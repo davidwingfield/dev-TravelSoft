@@ -26,6 +26,18 @@
 			parent::__construct();
 		}
 		
+		public static function test(array $params = []): void
+		{
+			$data = Page::getDetails(24);
+			$products = [];
+			
+			/**
+			 * render index view
+			 */
+			View::render_template("utilities/test", $data);
+			exit(0);
+		}
+		
 		public static function profile()
 		{
 			$data = Page::getDetails(13);

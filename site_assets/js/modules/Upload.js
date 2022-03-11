@@ -2,7 +2,7 @@ const Upload = function (file) {
     this.file = file
 }
 
-const _image_manager_is_cover_image = document.getElementById("image_manager_is_cover_image")
+const _image_manager_is_cover = document.getElementById("image_manager_is_cover")
 const _image_manager_title = document.getElementById("image_manager_title")
 const _image_manager_caption = document.getElementById("image_manager_caption")
 const _image_manager_upload = document.getElementById("image_manager_upload")
@@ -36,7 +36,7 @@ Upload.prototype.doUpload = function () {
     formData.append("upload_file", true)
     formData.append("title", (_image_manager_title.value !== "") ? _image_manager_title.value : null)
     formData.append("caption", (_image_manager_caption.value !== "") ? _image_manager_caption.value : null)
-    formData.append("is_cover_image", (_image_manager_is_cover_image.checked !== true) ? parseInt(0) : parseInt(1))
+    formData.append("is_cover", (_image_manager_is_cover.checked !== true) ? parseInt(0) : parseInt(1))
     formData.append("alt", (_image_manager_alt_text.value !== "") ? _image_manager_alt_text.value : null)
     
     /**
@@ -63,7 +63,7 @@ Upload.prototype.doUpload = function () {
             return myXhr
         },
         success: function (data) {
-            Console.log("data", data)
+            //console.log("data", data)
             let image, result = null
             if (data) {
                 if (data.result) {
@@ -93,7 +93,7 @@ Upload.prototype.doUpload = function () {
         },
         error: function (error) {
             toastr.error("Error")
-            Console.log("error", error)
+            //console.log("error", error)
         },
         async: true,
         data: formData,
@@ -126,7 +126,7 @@ Upload.prototype.progressReset = function () {
 
 Upload.prototype.resetForm = function () {
     Upload.prototype.progressReset()
-    _image_manager_is_cover_image.checked = false
+    _image_manager_is_cover.checked = false
     _image_manager_image_id.value = ""
     _image_manager_title.value = ""
     _image_manager_upload.value = ""
@@ -139,7 +139,7 @@ Upload.prototype.resetForm = function () {
 Upload.prototype.populateForm = function (image) {
     Upload.prototype.progressReset()
     let img = image.path + "/" + image.name + "." + image.extension
-    _image_manager_is_cover_image.checked = (image.is_cover_image === 1)
+    _image_manager_is_cover.checked = (image.is_cover === 1)
     _image_manager_image_id.value = image.id
     _image_manager_title.value = image.title
     _image_manager_caption.value = image.caption
@@ -151,16 +151,16 @@ Upload.prototype.populateForm = function (image) {
 }
 
 $("#image_manager_upload")
-  .on("change", function () {
-      _image_manager_is_cover_image.checked = false
-      _image_manager_image_id.value = ""
-      _image_manager_title.value = ""
-      _image_manager_caption.value = ""
-      _image_manager_alt_text.value = ""
-      $(_image_manager_form_data).show()
-  })
+    .on("change", function () {
+        _image_manager_is_cover.checked = false
+        _image_manager_image_id.value = ""
+        _image_manager_title.value = ""
+        _image_manager_caption.value = ""
+        _image_manager_alt_text.value = ""
+        $(_image_manager_form_data).show()
+    })
 
 $("#image_manager_clear_button")
-  .on("click", function () {
-      Upload.prototype.resetForm()
-  })
+    .on("click", function () {
+        Upload.prototype.resetForm()
+    })

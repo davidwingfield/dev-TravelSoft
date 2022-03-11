@@ -50,14 +50,14 @@ const Login = (function () {
         Login.validator = validator_init(form_rules)
         
         $(_button_login_register)
-          .on("click", function () {
-          
-          })
+            .on("click", function () {
+            
+            })
         
         $(_button_login_submit)
-          .on("click", function () {
-              submit_login()
-          })
+            .on("click", function () {
+                submit_login()
+            })
         
         const handle_login_error = function (msg) {
             toastr.error(msg)
@@ -67,7 +67,7 @@ const Login = (function () {
             if (dataToSend) {
                 try {
                     sendPostRequest("/api/v1.0/users/login", dataToSend, function (data, status, xhr) {
-                        Console.log("data", data.id)
+                        //console.log("data", data.id)
                         if (data && data.id) {
                             if (data.id) {
                                 window.location.replace("/")
@@ -77,7 +77,7 @@ const Login = (function () {
                         }
                     })
                 } catch (e) {
-                    Console.error("Error", e)
+                    //console.error("Error", e)
                     return handle_login_error("Error: 2")
                 }
             } else {
@@ -144,9 +144,9 @@ const Login = (function () {
         Login.validator = validator_init(form_rules_register)
         
         $(_register_form_submit_button)
-          .on("click", function () {
-              submit_register()
-          })
+            .on("click", function () {
+                submit_register()
+            })
         
         const submit_register = function () {
             if (validate_form(_register_page_form, form_rules_register)) {
@@ -162,11 +162,11 @@ const Login = (function () {
         }
         
         const send_register = function (dataToSend) {
-            Console.log("Login.register->send_register", dataToSend)
+            //console.log("Login.register->send_register", dataToSend)
             if (dataToSend) {
                 try {
                     sendPostRequest("/api/v1.0/users/register", dataToSend, function (data, status, xhr) {
-                        Console.log("data", data.id)
+                        //console.log("data", data.id)
                         if (data && data.id) {
                             if (data.id) {
                                 window.location.replace("/")
@@ -176,7 +176,7 @@ const Login = (function () {
                         }
                     })
                 } catch (e) {
-                    Console.error("Error", e)
+                    //console.error("Error", e)
                     return handle_login_error("Error: 2")
                 }
             } else {

@@ -112,7 +112,7 @@ $.fn.BuildKeyword = function (keywords) {
             let tag = tags.get(data)
             if (tag) {
                 if (tag) {
-                    console.log("tag", tag)
+                    //console.log("tag", tag)
                     $input.val(data)
                 }
                 
@@ -150,6 +150,12 @@ $.fn.BuildKeyword = function (keywords) {
         })
     }
     
+    const clear = function () {
+        tags = new Map()
+        $input.val("")
+        $container.empty()
+    }
+    
     const add = function (data) {
         if (!data) {
             data = $input.val()
@@ -161,9 +167,31 @@ $.fn.BuildKeyword = function (keywords) {
         }
     }
     
+    const set = function (values) {
+        let data
+        if (typeof values === "string") {
+            data = (values !== "") ? values.toString().replace(/,\s/g, ",").trim().split(",") : []
+        } else if (typeof values === "object") {
+            data = values
+        } else {
+            data = []
+        }
+        
+        if ($container) {
+            $container.empty()
+        }
+        
+        $.each(data, function (k, chip) {
+            add(chip)
+        })
+    }
+    
     init(keywords)
     
     return {
+        clear: function () {
+            clear()
+        },
         add: function (data) {
             chipAdd(data)
         },
@@ -179,6 +207,9 @@ $.fn.BuildKeyword = function (keywords) {
                 results.push(data)
             }
             return results.join(",")
+        },
+        set: function (vals) {
+            set(vals)
         },
         init: function () {
             init()

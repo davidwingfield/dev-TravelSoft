@@ -11,8 +11,6 @@ const Types = (function () {
         $.each(types, function (k, type) {
             Types[types_name].set(type.id, type)
         })
-        
-        //Console.log(types_name, Types[types_name])
     }
     
     const init = function (settings) {
@@ -88,15 +86,13 @@ const Types = (function () {
         }
         
         if (settings.status_types) {
+            //console.log(settings.status_types)
             setType(settings.status_types, "status_types")
+            StatusTypes.init({ status_types: settings.status_types })
         }
         
         if (settings.allot_by) {
             setType(settings.allot_by, "allot_by")
-        }
-        
-        if (settings.countries) {
-            Country.load_all(settings.countries)
         }
         
         if (settings.countries) {

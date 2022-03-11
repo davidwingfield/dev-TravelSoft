@@ -1,6 +1,5 @@
 var pluginName = "dropify"
 
-
 /**
  * Dropify plugin
  *
@@ -93,7 +92,6 @@ function Dropify (element, options) {
     
     this.input.on("change", this.onChange)
 }
-
 
 /**
  * On change event
@@ -362,8 +360,8 @@ Dropify.prototype.setContainerSize = function () {
  */
 Dropify.prototype.isTouchDevice = function () {
     return (("ontouchstart" in window) ||
-      (navigator.MaxTouchPoints > 0) ||
-      (navigator.msMaxTouchPoints > 0))
+        (navigator.MaxTouchPoints > 0) ||
+        (navigator.msMaxTouchPoints > 0))
 }
 
 /**
@@ -381,7 +379,7 @@ Dropify.prototype.getFileType = function () {
  * @return {Boolean}
  */
 Dropify.prototype.isImage = function () {
-    if (this.settings.imgFileExtensions.indexOf(this.getFileType()) != "-1") {
+    if (this.settings.imgFileExtensions.indexOf(this.getFileType()) !== "-1") {
         return true
     }
     
@@ -396,7 +394,7 @@ Dropify.prototype.isImage = function () {
 Dropify.prototype.isFileExtensionAllowed = function () {
     
     if (this.settings.allowedFileExtensions.indexOf("*") != "-1" ||
-      this.settings.allowedFileExtensions.indexOf(this.getFileType()) != "-1") {
+        this.settings.allowedFileExtensions.indexOf(this.getFileType()) != "-1") {
         return true
     }
     this.pushError("fileExtension")
@@ -434,9 +432,9 @@ Dropify.prototype.sizeToByte = function (size) {
     
     if (size !== 0) {
         var unit = size.slice(-1).toUpperCase(),
-          kb = 1024,
-          mb = kb * 1024,
-          gb = mb * 1024
+            kb = 1024,
+            mb = kb * 1024,
+            gb = mb * 1024
         
         if (unit === "K") {
             value = parseFloat(size) * kb
@@ -532,7 +530,7 @@ Dropify.prototype.showError = function (errorKey) {
  */
 Dropify.prototype.getError = function (errorKey) {
     var error = this.settings.error[errorKey],
-      value = ""
+        value = ""
     
     if (errorKey === "fileSize") {
         value = this.settings.maxFileSize

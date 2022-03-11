@@ -46,7 +46,7 @@ const SalesTypes = (function () {
     }
     
     const init = function (settings) {
-        Console.log(" -- SalesTypes -- ", {})
+        //console.log(" -- SalesTypes -- ", {})
     }
     
     const set = function (sales_types) {
@@ -79,7 +79,7 @@ const SalesTypes = (function () {
             SalesTypes.all.set("id", detail)
         })
         
-        Console.log(" SalesTypes.all", SalesTypes.all)
+        //console.log(" SalesTypes.all", SalesTypes.all)
     }
     
     return {

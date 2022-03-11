@@ -43,7 +43,7 @@
 			
 			"new" => array(
 				"type" => "a",
-				"href" => "/providers/new",
+				"href" => "javascript:void(0)",
 				"classes" => "btn btn-primary btn-heading",
 				"icon" => "fas fa-plus",
 				"id" => "button_add_provider_page_heading",
@@ -181,9 +181,13 @@
 			}
 			
 			/**
+			 * Provider List
+			 */
+			$data["providers"] = self::format_get(ProviderModel::fetchAllProviders());
+			
+			/**
 			 * render view
 			 */
-			$data["providers"] = self::format_get(ProviderModel::get());
 			View::render_template("providers/index", $data);
 			exit(0);
 		}
@@ -327,11 +331,6 @@
 			exit(0);
 		}
 		
-		/**
-		 * handle post update request
-		 *
-		 * @param array $params
-		 */
 		public static function serveUpdate(array $params = [])
 		{
 			$provider = [];
@@ -368,22 +367,11 @@
 			exit(0);
 		}
 		
-		/**
-		 * autocomplete
-		 * Autocomplete json
-		 */
 		public static function autocomplete(string $st = ""): array
 		{
 			return self::format_ac(ProviderModel::provider_ac($st));
 		}
 		
-		/**
-		 * validate if name already exists
-		 *
-		 * @param array $args
-		 *
-		 * @return array
-		 */
 		public static function validateName(array $args = []): array
 		{
 			$providers = array();
@@ -400,15 +388,66 @@
 			exit(0);
 		}
 		
+		private static function format_get(array $providers = []): array
+		{
+			$data = [];
+			foreach ($providers AS $k => $provider) {
+				array_push($data, self::format($provider));
+			}
+			
+			return $data;
+		}
+		
 		/**
-		 * format
+		 * format autocomplete results
 		 *
 		 * @param array $providers
 		 *
 		 * @return array
 		 */
+		private static function format_ac(array $providers = []): array
+		{
+			$data["suggestions"] = [];
+			foreach ($providers AS $k => $provider) {
+				$l = (object)$provider;
+				$value = utf8_encode($l->company_name);
+				array_push($data["suggestions"], [
+					"value" => utf8_encode($value),
+					"data" => self::format($provider),
+				]);
+			}
+			
+			return $data;
+		}
+		
+		/**
+		 * system generated Code Direct Id
+		 *
+		 * @param array $provider
+		 *
+		 * @return string
+		 */
+		public static function generateCodeDirectId(array $provider): string
+		{
+			//Log::$debug_log->trace($provider);
+			
+			$name = $provider["company_name"];
+			$id = $provider["provider_id"];
+			
+			$words = preg_split("/\s+/", $name);
+			$count = count($words);
+			$codeDirectId = str_pad($id, 1, "0", STR_PAD_LEFT);
+			
+			$t = "P-";
+			
+			return $t . $codeDirectId;
+		}
+		
 		private static function format(array $provider = []): array
 		{
+			$address_list_formatted = [];
+			$contact_list_formatted = [];
+			
 			$company_id = $provider["company_id"];
 			$vendor_id = (isset($provider["vendor_id"])) ? (int)$provider["vendor_id"] : null;
 			$vendor_company_id = (isset($provider["vendor_id"])) ? (int)$provider["vendor_company_id"] : null;
@@ -425,32 +464,26 @@
 			$vendor_company_date_modified = (isset($provider["vendor_company_date_modified"])) ? $provider["vendor_company_date_modified"] : null;
 			$vendor_company_status = (isset($provider["vendor_company_status"])) ? (int)$provider["vendor_company_status"] : null;
 			$vendor_company_note = (isset($provider["vendor_company_note"])) ? $provider["vendor_company_note"] : null;
-			$addresses = AddressModel::getByCompanyId((int)$company_id);
-			$address_list_formatted = [];
-			foreach ($addresses AS $k => $address) {
-				$address_list_formatted[] = $address;
-			}
-			$contacts = ContactModel::getByCompanyId((int)$company_id);
-			$contact_list_formatted = [];
-			foreach ($contacts AS $k => $contact) {
-				$contact_list_formatted[] = Contact::format($contact);
-			}
-			
+			/*
 			$cover_image = "";
 			$images = Image::getByCompanyId((int)$provider["company_id"]);
 			for ($n = 0; $n < count($images); $n++) {
-				if ($images[$n]["is_cover_image"] === 1) {
+				if ($images[$n]["is_cover"] === 1) {
 					$cover_image = $images[$n]["path"] . "/" . $images[$n]["name"] . "." . $images[$n]["extension"];
 				}
 			}
+			//*/
+			$codeDirectId = self::generateCodeDirectId($provider);
+			
+			$company = Company::format($provider);
 			
 			$temp = array(
 				"id" => (int)$provider["provider_id"],
 				"name" => $provider["company_name"],
 				"code_direct_id" => $provider["provider_code_direct_id"],
-				"description_long" => $provider["provider_description_long"],
-				"description_short" => $provider["provider_description_short"],
-				"keywords" => $provider["provider_keywords"],
+				//"description_long" => $provider["provider_description_long"],
+				//"description_short" => $provider["provider_description_short"],
+				//"keywords" => $provider["provider_keywords"],
 				"location_id" => $provider["provider_location_id"],
 				"note" => $provider["provider_note"],
 				"enabled" => $provider["provider_enabled"],
@@ -492,8 +525,9 @@
 						"note" => $vendor_company_note,
 					),
 				),
+				"company" => $company,
+				/*
 				"company" => array(
-					"images" => $images,
 					"keywords" => $provider["company_keywords"],
 					"description_short" => $provider["company_description_short"],
 					"description_long" => $provider["company_description_long"],
@@ -513,9 +547,11 @@
 					"date_modified" => $provider["company_date_modified"],
 					"status_id" => $provider["company_status_id"],
 					"note" => $provider["company_note"],
+					"images" => $images,
 				),
-				"addresses" => $address_list_formatted,
-				"contacts" => $contact_list_formatted,
+				//*/
+				//"addresses" => $address_list_formatted,
+				//"contacts" => $contact_list_formatted,
 				"location" => array(
 					"display_short" => $provider["location_short"],
 					"display_medium" => $provider["location"],
@@ -585,66 +621,9 @@
 				),
 			);
 			
+			//Log::$debug_log->trace($temp);
+			
 			return $temp;
-		}
-		
-		/**
-		 * format_get
-		 */
-		private static function format_get(array $providers = []): array
-		{
-			$data = [];
-			foreach ($providers AS $k => $provider) {
-				array_push($data, self::format($provider));
-			}
-			
-			return $data;
-		}
-		
-		/**
-		 * format autocomplete results
-		 *
-		 * @param array $providers
-		 *
-		 * @return array
-		 */
-		private static function format_ac(array $providers = []): array
-		{
-			$data["suggestions"] = [];
-			foreach ($providers AS $k => $provider) {
-				$l = (object)$provider;
-				$value = utf8_encode($l->company_name);
-				array_push($data["suggestions"], [
-					"value" => utf8_encode($value),
-					"data" => self::format($provider),
-				]);
-			}
-			
-			return $data;
-		}
-		
-		/**
-		 * system generated Code Direct Id
-		 *
-		 * @param array $provider
-		 *
-		 * @return string
-		 */
-		public static function generateCodeDirectId(array $provider): string
-		{
-			Log::$debug_log->trace("-------- generateCodeDirectId --------");
-			Log::$debug_log->trace($provider);
-			Log::$debug_log->trace("-------------------------");
-			$name = $provider["company_name"];
-			$id = $provider["provider_id"];
-			
-			$words = preg_split("/\s+/", $name);
-			$count = count($words);
-			$codeDirectId = str_pad($id, 1, "0", STR_PAD_LEFT);
-			
-			$t = "P-";
-			
-			return $t . $codeDirectId;
 		}
 		
 	}

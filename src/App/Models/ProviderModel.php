@@ -31,6 +31,7 @@
 			"modified_by" => array(),
 			"date_modified" => array(),
 			"note" => array(),
+			"keywords" => [],
 		];
 		
 		/**
@@ -39,15 +40,11 @@
 		 * @var string
 		 */
 		protected static $selectQuery = "
-            SELECT
-                            PROVIDER.id AS 'provider_id',
+            SELECT          PROVIDER.id AS 'provider_id',
                             PROVIDER.company_id AS 'provider_company_id',
                             PROVIDER.location_id AS 'provider_location_id',
                             PROVIDER.code_direct_id AS 'provider_code_direct_id',
                             PROVIDER.provider_vendor AS 'provider_provider_vendor',
-                            PROVIDER.description_long AS 'provider_description_long',
-                            PROVIDER.description_short AS 'provider_description_short',
-                            PROVIDER.keywords AS 'provider_keywords',
                             PROVIDER.enabled AS 'provider_enabled',
                             PROVIDER.date_created AS 'provider_date_created',
                             PROVIDER.created_by AS 'provider_created_by',
@@ -60,16 +57,16 @@
                             COMPANY.keywords AS 'company_keywords',
                             COMPANY.id AS 'company_id',
                             COMPANY.name AS 'company_name',
-                            COALESCE(COMPANY.phone_1, '') AS 'company_phone_1',
-                            COALESCE(COMPANY.phone_2, '') AS 'company_phone_2',
-                            COALESCE(COMPANY.fax, '') AS 'company_fax',
-                            COALESCE(COMPANY.website, '') AS 'company_website',
-                            COALESCE(COMPANY.email, '') AS 'company_email',
+                            COMPANY.phone_1 AS 'company_phone_1',
+                            COMPANY.phone_2 AS 'company_phone_2',
+                            COMPANY.fax AS 'company_fax',
+                            COMPANY.website AS 'company_website',
+                            COMPANY.email AS 'company_email',
                             COMPANY.enabled AS 'company_enabled',
                             COMPANY.created_by AS 'company_created_by',
-                            DATE_FORMAT(COMPANY.date_created, '%m/%d/%Y') AS 'company_date_created',
+                            COMPANY.date_created AS 'company_date_created',
                             COMPANY.modified_by AS 'company_modified_by',
-                            DATE_FORMAT(COMPANY.date_modified, '%m/%d/%Y') AS 'company_date_modified',
+                            COMPANY.date_modified AS 'company_date_modified',
                             COMPANY.status_id AS 'company_status_id',
                             COMPANY.note AS 'company_note',
                             COMPANY.cover_image AS 'company_cover_image',
@@ -90,16 +87,16 @@
                             LOCATION.date_modified AS 'location_date_modified',
                             LOCATION.modified_by AS 'location_modified_by',
                             LOCATION.note AS 'location_note',
-                            LOCATIONTYPES.id AS 'location_types_id',
-                            LOCATIONTYPES.name AS 'location_types_name',
-                            LOCATIONTYPES.icon AS 'location_types_icon',
-                            LOCATIONTYPES.sort_order AS 'location_types_sort_order',
-                            LOCATIONTYPES.enabled AS 'location_types_enabled',
-                            LOCATIONTYPES.date_created AS 'location_types_date_created',
-                            LOCATIONTYPES.created_by AS 'location_types_created_by',
-                            LOCATIONTYPES.date_modified AS 'location_types_date_modified',
-                            LOCATIONTYPES.modified_by AS 'location_types_modified_by',
-                            LOCATIONTYPES.note AS 'location_types_note',
+                            LOCATION_TYPES.id AS 'location_types_id',
+                            LOCATION_TYPES.name AS 'location_types_name',
+                            LOCATION_TYPES.icon AS 'location_types_icon',
+                            LOCATION_TYPES.sort_order AS 'location_types_sort_order',
+                            LOCATION_TYPES.enabled AS 'location_types_enabled',
+                            LOCATION_TYPES.date_created AS 'location_types_date_created',
+                            LOCATION_TYPES.created_by AS 'location_types_created_by',
+                            LOCATION_TYPES.date_modified AS 'location_types_date_modified',
+                            LOCATION_TYPES.modified_by AS 'location_types_modified_by',
+                            LOCATION_TYPES.note AS 'location_types_note',
                             CITY.id AS 'city_id',
                             CITY.sort_order AS 'city_sort_order',
                             CITY.province_id AS 'city_province_id',
@@ -135,20 +132,20 @@
                             COUNTRY.created_by AS 'country_created_by',
                             COUNTRY.date_modified AS 'country_date_modified',
                             COUNTRY.modified_by AS 'country_modified_by',
-                            VENDORCOMPANY.id AS 'vendor_company_id',
-                            VENDORCOMPANY.name AS 'vendor_company_name',
-                            VENDORCOMPANY.phone_1 AS 'vendor_company_phone_1',
-                            VENDORCOMPANY.phone_2 AS 'vendor_company_phone_2',
-                            VENDORCOMPANY.fax AS 'vendor_company_fax',
-                            VENDORCOMPANY.website AS 'vendor_company_website',
-                            VENDORCOMPANY.email AS 'vendor_company_email',
-                            VENDORCOMPANY.enabled AS 'vendor_company_enabled',
-                            VENDORCOMPANY.created_by AS 'vendor_company_created_by',
-                            DATE_FORMAT(VENDORCOMPANY.date_created, '%m/%d/%Y') AS 'vendor_company_date_created',
-                            VENDORCOMPANY.modified_by AS 'vendor_company_modified_by',
-                            DATE_FORMAT(VENDORCOMPANY.date_modified, '%m/%d/%Y') AS 'vendor_company_date_modified',
-                            VENDORCOMPANY.status_id AS 'vendor_company_status',
-                            VENDORCOMPANY.note AS 'vendor_company_note',
+                            VENDOR_COMPANY.id AS 'vendor_company_id',
+                            VENDOR_COMPANY.name AS 'vendor_company_name',
+                            VENDOR_COMPANY.phone_1 AS 'vendor_company_phone_1',
+                            VENDOR_COMPANY.phone_2 AS 'vendor_company_phone_2',
+                            VENDOR_COMPANY.fax AS 'vendor_company_fax',
+                            VENDOR_COMPANY.website AS 'vendor_company_website',
+                            VENDOR_COMPANY.email AS 'vendor_company_email',
+                            VENDOR_COMPANY.enabled AS 'vendor_company_enabled',
+                            VENDOR_COMPANY.created_by AS 'vendor_company_created_by',
+                            VENDOR_COMPANY.date_created AS 'vendor_company_date_created',
+                            VENDOR_COMPANY.modified_by AS 'vendor_company_modified_by',
+                            VENDOR_COMPANY.date_modified AS 'vendor_company_date_modified',
+                            VENDOR_COMPANY.status_id AS 'vendor_company_status',
+                            VENDOR_COMPANY.note AS 'vendor_company_note',
                             VENDOR.id AS 'vendor_id',
                             VENDOR.company_id AS 'vendor_company_id',
                             VENDOR.status_id AS 'vendor_status_id',
@@ -157,24 +154,35 @@
                             VENDOR.show_sales AS 'vendor_show_sales',
                             VENDOR.show_ops AS 'vendor_show_ops',
                             VENDOR.is_provider AS 'vendor_is_provider',
-                            DATE_FORMAT(VENDOR.date_created, '%m/%d/%Y') AS 'vendor_date_created',
+                            VENDOR.date_created AS 'vendor_date_created',
                             VENDOR.created_by  AS 'vendor_created_by',
-                            DATE_FORMAT(VENDOR.date_modified, '%m/%d/%Y') AS 'vendor_date_modified',
+                            VENDOR.date_modified AS 'vendor_date_modified',
                             VENDOR.modified_by  AS 'vendor_modified_by',
                             VENDOR.enabled AS 'vendor_enabled',
                             VENDOR.note  AS 'vendor_note'
             FROM 			provider PROVIDER
-            
-            LEFT JOIN			company COMPANY ON COMPANY.id = PROVIDER.company_id
-            LEFT JOIN			location LOCATION ON LOCATION.id = PROVIDER.location_id
-            LEFT JOIN			location_types LOCATIONTYPES ON LOCATIONTYPES.id = LOCATION.location_types_id
-            LEFT JOIN			city CITY ON CITY.id = LOCATION.city_id
-            LEFT JOIN			province PROVINCE ON CITY.province_id = PROVINCE.id
-            LEFT JOIN			country COUNTRY ON PROVINCE.country_id = COUNTRY.id
-            LEFT JOIN			vendor VENDOR ON VENDOR.company_id = COMPANY.id AND VENDOR.is_provider = 1
-            LEFT JOIN		company VENDORCOMPANY ON VENDORCOMPANY.id = VENDOR.company_id
-            WHERE			PROVIDER.enabled = 1
+            LEFT JOIN		company COMPANY ON COMPANY.id = PROVIDER.company_id
+            LEFT JOIN		location LOCATION ON LOCATION.id = PROVIDER.location_id
+            LEFT JOIN		location_types LOCATION_TYPES ON LOCATION_TYPES.id = LOCATION.location_types_id
+            LEFT JOIN		city CITY ON CITY.id = LOCATION.city_id
+            LEFT JOIN		province PROVINCE ON CITY.province_id = PROVINCE.id
+            LEFT JOIN		country COUNTRY ON PROVINCE.country_id = COUNTRY.id
+            LEFT JOIN		vendor VENDOR ON VENDOR.company_id = COMPANY.id AND VENDOR.is_provider = 1
+            LEFT JOIN		company VENDOR_COMPANY ON VENDOR_COMPANY.id = VENDOR.company_id
             ";
+		
+		public static function fetchAllProviders()
+		{
+			try {
+				
+				return Model::$db->rawQuery(self::$selectQuery);
+				
+			} catch (Exception $e) {
+				Log::$debug_log->error($e->getMessage());
+				
+				return [];
+			}
+		}
 		
 		/**
 		 * Gets provider(s) by id
@@ -186,14 +194,19 @@
 		 */
 		public static function get(int $id = null): array
 		{
-			$where = "";
+			$whereCondition = "";
+			
+			if (!is_null($id)) {
+				$whereCondition = "
+					WHERE			PROVIDER.enabled = 1
+						AND		    PROVIDER.id = $id
+						LIMIT 1
+					";
+			}
+			
+			$sql = self::$selectQuery . $whereCondition . "";
+			
 			try {
-				
-				if (!is_null($id)) {
-					$where = "AND		PROVIDER.id = $id";
-				}
-				$sql = self::$selectQuery . $where . "
-				LIMIT 1";
 				
 				return Model::$db->rawQuery($sql);
 				
@@ -217,7 +230,7 @@
 			
 			try {
 				$where = "
-                    AND			COMPANY.name LIKE '$searchTerm'
+                    WHERE		COMPANY.name = '$searchTerm'
                     ORDER BY    COMPANY.name ASC
                     ";
 				$sql = self::$selectQuery . " " . $where;
@@ -374,6 +387,7 @@
 				return [];
 			}
 			
+			return [];
 		}
 		
 		/**

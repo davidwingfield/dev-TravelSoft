@@ -63,8 +63,6 @@
 				if (!is_null($id)) {
 					$where = "
                     WHERE           COMPANY.id = $id";
-					
-					$company_images = Image::getByCompanyId((int)$id);
 				}
 				
 				$sql = self::$selectQuery . $where;

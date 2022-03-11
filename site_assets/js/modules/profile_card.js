@@ -4,9 +4,9 @@ $(function () {
     const _profile_edit_name = document.getElementById("profile_edit_name")
     
     $(_profile_edit_name)
-      .on("click", function () {
-          Console.log("_profile_edit_name:click")
-      })
+        .on("click", function () {
+            //console.log("_profile_edit_name:click")
+        })
     
     let tempName = {
         first: "",
@@ -28,11 +28,11 @@ $(function () {
         imageWidth = wd + "px"
         
         $(_cover_image)
-          .css({
-              "width": "100%",
-              "height": "100%",
-              "max-height": imageHeight + "px",
-          })
+            .css({
+                "width": "100%",
+                "height": "100%",
+                "max-height": imageHeight + "px",
+            })
     }
     
     window.addEventListener("resize", debounce(function (e) {

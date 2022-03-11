@@ -8,7 +8,6 @@ const ColorScheme = (function () {
     const _button_close_edit_scheme = document.getElementById("button_close_edit_scheme")
     let season_toggle_items
     
-    //
     $(_button_close_edit_scheme)
         .on("click", function () {
             $(_edit_scheme).hide()
@@ -19,7 +18,6 @@ const ColorScheme = (function () {
             $(_edit_scheme).show()
         })
     
-    //
     const reset_form = function () {
     
     }
@@ -93,7 +91,7 @@ const ColorScheme = (function () {
     }
     
     const change = function (el) {
-        console.log("ColorScheme:change(el)", el)
+        //console.log("ColorScheme:change(el)", el)
     }
     
     return {
@@ -121,6 +119,6 @@ const ColorScheme = (function () {
 })()
 
 $.fn.ColorScheme = function (settings) {
-    console.log("Test", Types.color_scheme)
+    //console.log("Test", Types.color_scheme)
     
 }

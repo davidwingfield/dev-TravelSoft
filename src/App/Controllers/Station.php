@@ -79,7 +79,32 @@
 			exit(0);
 		}
 		
-		//
+		public static function get(int $station_id = null): array
+		{
+			$stations = [];
+			$results = StationModel::fetchStationByStationId($station_id);
+			foreach ($results AS $k => $station) {
+				$stations[] = self::format($station);
+			}
+			
+			return $stations;
+		}
+		
+		public static function serveGet(array $params = null): void
+		{
+			$station_id = null;
+			
+			if (isset($params["station_id"])) {
+				$station_id = (int)$params["station_id"];
+			}
+			
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			View::render_json(self::get($station_id));
+			exit(0);
+		}
 		
 		private static function format(array $station = null): array
 		{
@@ -93,6 +118,11 @@
 				"display_medium" => $station["display_medium"],
 				"display_long" => $station["display_long"],
 				"name" => $station["station_name"],
+				
+				"street_1" => $station["station_street_1"],
+				"street_2" => $station["station_street_2"],
+				"postal_code" => $station["station_postal_code"],
+				
 				"iata_code" => $station["station_iata_code"],
 				"keywords" => $station["station_keywords"],
 				"enabled" => $station["station_enabled"],

@@ -118,7 +118,7 @@ $.fn.YearCalendar = function (settings) {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 return callback([])
             }
         } else {
@@ -342,7 +342,7 @@ $.fn.YearCalendar = function (settings) {
                     }
                 },
                 eventClick: function (calEvent, jsEvent, view) {
-                    console.log('Event: ', calEvent)
+                    //console.log('Event: ', calEvent)
                     //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY)
                     //alert('View: ' + view.name)
                     
@@ -755,7 +755,7 @@ const YearCalendar = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 handleCalendarError("Oops: 2")
                 endLoading()
             }
@@ -775,7 +775,7 @@ const YearCalendar = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 return handleCalendarError("Oops: 1")
             }
         }
@@ -864,7 +864,7 @@ const YearCalendar = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }

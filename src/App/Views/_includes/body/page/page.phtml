@@ -13,6 +13,7 @@
 	if (defined("PAGEHEADINGCLASS")) {
 		$pageHeadingClass = PAGEHEADINGCLASS;
 	}
+	
 	$tabSection = [];
 	if (isset($data["tabs"])) {
 		$tabSection = $data["tabs"];
@@ -20,23 +21,22 @@
 ?>
 
 <div class="page" id="page">
-    
-    <div class="page-header <?php
-		echo $pageHeadingClass; ?>" id="page_header">
-        
-        <!-- PAGE TITLE -->
-        <div class="row">
-            <div class="col-6">
-                <!-- BREADCRUMBS -->
-                <ol class="breadcrumb ">
+	
+	<div class="page-header <?php echo $pageHeadingClass; ?>" id="page_header">
+		
+		<!-- PAGE TITLE -->
+		<div class="row">
+			<div class="col-6">
+				<!-- BREADCRUMBS -->
+				<ol class="breadcrumb ">
 					<?php
 						if (defined("BREAD_CRUMBS")) {
 							echo BREAD_CRUMBS;
 						}
 					?>
-                </ol>
-                <!-- /BREADCRUMBS -->
-                <h1 class="page-title" id="page_title">
+				</ol>
+				<!-- /BREADCRUMBS -->
+				<h1 class="page-title" id="page_title">
 					<?php
 						if (defined("PAGE_HEADING")) {
 							echo PAGE_HEADING;
@@ -51,18 +51,24 @@
 							//echo "<p class='page-description'>&nbsp;</p>";
 						}
 					?>
-                </h1>
-            </div>
-            
-            <div class="col-6">
-                <div class="page-header-actions">
-					<?php
-						echo (isset($page_heading_buttons)) ? $page_heading_buttons : "&nbsp;"; ?>
-                </div>
-            </div>
-        </div>
+				</h1>
+			</div>
+			
+			<div class="col-6">
+				<div class="page-header-actions">
+					<?php echo (isset($page_heading_buttons)) ? $page_heading_buttons : "&nbsp;"; ?>
+				</div>
+			</div>
+		</div>
 		
 		<?php
+			
+			function clean($string)
+			{
+				$string = str_replace(" ", "_", strtolower($string)); // Replaces all spaces with hyphens.
+				
+				return preg_replace('/[^A-Za-z0-9\-]/', "", $string); // Removes special chars.
+			}
 			
 			function buildPageTabs($tab_details)
 			{
@@ -91,10 +97,12 @@
 							$data_values .= " data-$name='$value' ";
 						}
 						
+						$span_id = clean($tabName);
+						
 						echo "
                         <li class='nav-item waves-effect waves-light ' role='presentation'>
                             <a class='nav-link $active' data-toggle='tab' id='$li_id' $href $controls $aria_values $data_values>
-                                $tabName
+                                <span id='tab_span_$span_id'>$tabName</span>
                             </a>
                        </li>";
 					}
@@ -111,18 +119,17 @@
 			buildPageTabs($tabSection);
 		
 		?>
-    
-    </div>
-	<?php
-		include_once(__DIR__ . "/alert_box.phtml");
-	?>
-    <div class="page-content container-fluid">
-		
+	
+	</div>
+	
+	<?php include_once(__DIR__ . "/alert_box.phtml"); ?>
+	
+	<div class="page-content container-fluid">
 		<?php
 			if (defined("MAIN")) {
 				include_once(MAIN);
 			}
 		?>
-    </div>
+	</div>
 
 </div>

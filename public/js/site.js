@@ -21,15 +21,15 @@ const sideNavOptions = {
 const toastrOptions = {
     "closeButton": true,
     "debug": false,
-    "newestOnTop": false,
-    "progressBar": false,
+    "newestOnTop": true,
+    "progressBar": true,
     "positionClass": "md-toast-bottom-right",
     "preventDuplicates": true,
     "onclick": null,
-    "showDuration": 300, //300,
-    "hideDuration": 1000,
-    "timeOut": 5000,
-    "extendedTimeOut": 1000,
+    "showDuration": 300000000, //300,
+    "hideDuration": 1000000000, //1000
+    "timeOut": 5000000, //5000
+    "extendedTimeOut": 1000000, //1000
     "showEasing": "swing",
     "hideEasing": "linear",
     "showMethod": "fadeIn",
@@ -40,44 +40,30 @@ const dow_short = [
 ]
 const days = [
     {
-        0: {
-            name: "Sunday",
-            short: "Sun",
-        },
+        name: "Sunday",
+        short: "Sun",
     }, {
-        1: {
-            name: "Monday",
-            short: "Mon",
-        },
+        name: "Monday",
+        short: "Mon",
     }, {
-        1: {
-            name: "Tuesday",
-            short: "Tue",
-        },
+        name: "Tuesday",
+        short: "Tue",
     },
     {
-        1: {
-            name: "Wednesday",
-            short: "Wed",
-        },
+        name: "Wednesday",
+        short: "Wed",
     },
     {
-        1: {
-            name: "Thursday",
-            short: "Thu",
-        },
+        name: "Thursday",
+        short: "Thu",
     },
     {
-        1: {
-            name: "Friday",
-            short: "Fri",
-        },
+        name: "Friday",
+        short: "Fri",
     },
     {
-        1: {
-            name: "Saturday",
-            short: "Sat",
-        },
+        name: "Saturday",
+        short: "Sat",
     },
 ]
 const dowStart = 1
@@ -177,11 +163,100 @@ colorScheme.set(15, {
     textColor: "#fff",
 })
 const tableCellMaxChars = 10
-const defaultAddressView = "medium"
+const defaultAddressView = "medium"//short, medium, long
 const DEBUGMODE = true
 const inactivityTimeout = 60000 * 60
 const initialCalenderViewCount = 12
-
+const FILE_TYPES = {
+    "aac": "audio/aac",
+    "abw": "application/x-abiword",
+    "arc": "application/x-freearc",
+    "avi": "video/x-msvideo",
+    "azw": "application/vnd.amazon.ebook",
+    "bin": "application/octet-stream",
+    "bmp": "image/bmp",
+    "bz": "application/x-bzip",
+    "bz2": "application/x-bzip2",
+    "csh": "application/x-csh",
+    "css": "text/css",
+    "csv": "text/csv",
+    "doc": "application/msword",
+    "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "eot": "application/vnd.ms-fontobject",
+    "epub": "application/epub+zip",
+    "gz": "application/gzip",
+    "gif": "image/gif",
+    "htm": "text/html",
+    "html": "text/html",
+    "ico": "image/vnd.microsoft.icon",
+    "ics": "text/calendar",
+    "jar": "application/java-archive",
+    "jpeg": "image/jpeg",
+    "jpg": "image/jpeg",
+    "js": "text/javascript",
+    "json": "application/json",
+    "jsonld": "application/ld+json",
+    "mid": "audio/midi audio/x-midi",
+    "midi": "audio/midi audio/x-midi",
+    "mjs": "text/javascript",
+    "mp3": "audio/mpeg",
+    "mpeg": "video/mpeg",
+    "mpkg": "application/vnd.apple.installer+xml",
+    "odp": "application/vnd.oasis.opendocument.presentation",
+    "ods": "application/vnd.oasis.opendocument.spreadsheet",
+    "odt": "application/vnd.oasis.opendocument.text",
+    "oga": "audio/ogg",
+    "ogv": "video/ogg",
+    "ogx": "application/ogg",
+    "opus": "audio/opus",
+    "otf": "font/otf",
+    "png": "image/png",
+    "pdf": "application/pdf",
+    "php": "application/x-httpd-php",
+    "ppt": "application/vnd.ms-powerpoint",
+    "pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "rar": "application/vnd.rar",
+    "rtf": "application/rtf",
+    "sh": "application/x-sh",
+    "svg": "image/svg+xml",
+    "swf": "application/x-shockwave-flash",
+    "tar": "application/x-tar",
+    "tif": "image/tiff",
+    "tiff": "image/tiff",
+    "ts": "video/mp2t",
+    "ttf": "font/ttf",
+    "txt": "text/plain",
+    "vsd": "application/vnd.visio",
+    "wav": "audio/wav",
+    "weba": "audio/webm",
+    "webm": "video/webm",
+    "webp": "image/webp",
+    "woff": "font/woff",
+    "woff2": "font/woff2",
+    "xhtml": "application/xhtml+xml",
+    "xls": "application/vnd.ms-excel",
+    "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "xml": "text/xml",
+    "xul": "application/vnd.mozilla.xul+xml",
+    "zip": "application/zip",
+    "7z": "application/x-7z-compressed",
+}
+const STANDARD_ASPECT_RATIOS = [
+    [1, "1:1"],
+    [4 / 3, "4:3"],
+    [5 / 4, "5:4"],
+    [3 / 2, "3:2"],
+    [16 / 10, "16:10"],
+    [16 / 9, "16:9"],
+    [21 / 9, "21:9"],
+    [32 / 9, "32:9"],
+]
+let ERROR_ALLOWED = 0.05
+let RATIOS = STANDARD_ASPECT_RATIOS.map(function (tpl) {return tpl[0]}).sort()
+let LOOKUP = Object()
+for (let i = 0; i < STANDARD_ASPECT_RATIOS.length; i++) {
+    LOOKUP[STANDARD_ASPECT_RATIOS[i][0]] = STANDARD_ASPECT_RATIOS[i][1]
+}
 
 let mdbPreloader = document.getElementById("mdb-preloader")
 /*
@@ -312,7 +387,43 @@ $.fn.BuildDropDown = function (settings) {
     
 }
 
+const calculateWidth = (ratioWidth, ratioHeight, height) => {
+    let aspectRatio = ratioWidth.value / ratioHeight.value
+    return parseFloat((height * aspectRatio).toFixed(2))
+}
+
+const calculateHeight = (ratioWidth, ratioHeight, width) => {
+    let aspectRatio = ratioWidth / ratioHeight
+    return parseFloat((width / aspectRatio).toFixed(2))
+}
+
+const gcd = function (a, b) {
+    return (b === 0) ? a : gcd(b, a % b)
+}
+
+const shadeColor = function (color, percent) {
+    
+    var R = parseInt(color.substring(1, 3), 16)
+    var G = parseInt(color.substring(3, 5), 16)
+    var B = parseInt(color.substring(5, 7), 16)
+    
+    R = parseInt(R * (100 + percent) / 100)
+    G = parseInt(G * (100 + percent) / 100)
+    B = parseInt(B * (100 + percent) / 100)
+    
+    R = (R < 255) ? R : 255
+    G = (G < 255) ? G : 255
+    B = (B < 255) ? B : 255
+    
+    var RR = ((R.toString(16).length === 1) ? "0" + R.toString(16) : R.toString(16))
+    var GG = ((G.toString(16).length === 1) ? "0" + G.toString(16) : G.toString(16))
+    var BB = ((B.toString(16).length === 1) ? "0" + B.toString(16) : B.toString(16))
+    
+    return "#" + RR + GG + BB
+}
+
 const clearAllValidation = function () {
+    //console.log("clearAllValidation")
     $("div.error").html(`&nbsp;`).hide()
     $(".is-invalid").removeClass("is-invalid")
 }
@@ -359,8 +470,9 @@ const isOdd = function (num) {
 }
 
 const clearValidation = function (formElement) {
+    //console.log("clearValidation(formElement)", formElement)
     $(".autocomplete-suggestions").hide()
-    var validator = $(formElement).validate()
+    let validator = $(formElement).validate()
     
     $("[name]", formElement).each(function () {
         if (validator) {
@@ -387,6 +499,7 @@ const clearValidation = function (formElement) {
 }
 
 const get_errors = function (validator) {
+    //console.log("get_errors(validator)", validator)
     var submitErrorsList = {}
     //console.dir(validator)
     //for (var i = 0; i < validator.errorList.length; i++) {
@@ -396,6 +509,97 @@ const get_errors = function (validator) {
 }
 
 const validator_init = function (settings) {
+    //console.log("validator_init(settings)", settings)
+    let rules = {}
+    let messages = {}
+    let groups = {}
+    if (settings) {
+        
+        if (settings.rules) {
+            rules = settings.rules
+        }
+        
+        if (settings.messages) {
+            messages = settings.messages
+        }
+        
+        if (settings.groups) {
+            groups = settings.groups
+        }
+    }
+    
+    jQuery.validator.setDefaults({
+        rules: rules,
+        messages: messages,
+        groups: groups,
+        ignore: "",
+        success: "valid",
+        invalidHandler: function (event, validator) {
+            var errors = validator.numberOfInvalids()
+            let errorEl = validator.findLastActive() || validator.errorList.length && validator.errorList[0].element
+            if (errorEl) {
+                $(errorEl).closest(".accordion-body").collapse("show")
+            }
+        },
+        errorElement: "span",
+        highlight: function (element) {
+            let id = $(element).attr("id")
+            let el = $("#" + id + "")
+            let error_el = $("#" + id + "-error")
+            
+            if (error_el.attr("data-ref")) {
+                $("#" + error_el.attr("data-ref")).addClass("is-invalid")
+            } else {
+                el.parent().find("span.select2").addClass("is-invalid")
+                el.addClass("is-invalid")
+            }
+            
+            if (error_el) {
+                error_el.css({ "display": "block" })
+            }
+        },
+        unhighlight: function (element) {
+            let id = $(element).attr("id")
+            let el = $("#" + id + "")
+            let error_el = $("#" + id + "-error")
+            el.parents("div.form-element").find("span.select2").removeClass("is-invalid")
+            el.removeClass("is-invalid")
+            if (error_el) {
+                error_el.css({ "display": "none" })
+            }
+        },
+        errorPlacement: function (error, element) {
+            let id = element.attr("id")
+            let el = $("#" + id + "-error")
+            el.html(error)
+        },
+        submitHandler: function (form) {
+            return true
+        },
+        
+    })
+    
+    jQuery.validator.addMethod("postalCode", function (value) {
+        return /^((\d{5}-\d{4})|(\d{5})|([A-Z]\d[A-Z]\s\d[A-Z]\d))$/.test(value)
+    }, "Please enter a valid postal code.")
+    
+    jQuery.validator.addMethod("phoneUS", function (phone_number, element) {
+        phone_number = phone_number.replace(/\s+/g, "")
+        return this.optional(element) || phone_number.length > 9 &&
+            phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/)
+    }, "Please specify a valid phone number")
+    
+    jQuery.validator.addMethod("phoneIT", function (phone_number, element) {
+        phone_number = phone_number.replace(/\s+/g, "")
+        return this.optional(element) || phone_number.length > 9 &&
+            phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/)
+    }, "Please specify a valid phone number")
+    
+    return jQuery.validator
+}
+
+const initializeValidator = function (settings) {
+    //console.log("initializeValidator(settings)", settings)
     let rules = {}
     let messages = {}
     let groups = {}
@@ -498,6 +702,7 @@ const jsonPrettify = (json) => {
 }
 
 const setError = function (element, msg) {
+    //console.log("setError")
     let id = $(element).attr("id")
     let el = $("#" + id + "")
     let error_el = $("#" + id + "-error")
@@ -517,6 +722,7 @@ const setError = function (element, msg) {
 }
 
 const clearError = function (element) {
+    //console.log("clearError(element)", element)
     let id = $(element).attr("id")
     let el = $("#" + id + "")
     let error_el = $("#" + id + "-error")
@@ -552,6 +758,7 @@ const remove_nulls = function (obj) {
 }
 
 const removeNulls = function (obj) {
+    //console.log("removeNulls()")
     let cleanedObject = {}
     $.each(obj, function (i, v) {
         if (v === null) {
@@ -629,10 +836,10 @@ const sendPostRequest = function (url, data_to_send, callback) {
     if (url && data_to_send) {
         $.postJSON(url, data_to_send, function (data, status, xhr) {
             /*
-            console.log("data", data)
-            console.log("status", status)
-            console.log("xhr", xhr)
-            console.log("typeof data.result", typeof data.result)
+            //console.log("data", data)
+            //console.log("status", status)
+            //console.log("xhr", xhr)
+            //console.log("typeof data.result", typeof data.result)
             //*/
             if (status === "success" && typeof data.result !== "undefined") {
                 
@@ -1093,17 +1300,17 @@ jQuery.extend({
             }
             //*/
             /*
-            console.log("jqXHR", jqXHR)
-            console.log("jqXHR", jqXHR.responseText)
-            console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
-            console.log("textStatus", textStatus)
-            console.log("msg", msg)
-            console.log('http://dev.travelsoft.com/error')
+            //console.log("jqXHR", jqXHR)
+            //console.log("jqXHR", jqXHR.responseText)
+            //console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
+            //console.log("textStatus", textStatus)
+            //console.log("msg", msg)
+            //console.log('http://dev.travelsoft.com/error')
             //*/
             if (typeof textStatus !== "undefined") {
-                console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
+                //console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
             } else {
-                console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
+                //console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
             }
             
             if ($.isFunction(callback)) {
@@ -1136,7 +1343,7 @@ jQuery.extend({
             
             if (typeof textStatus !== "undefined") {
                 let err = _display_ajax_error(jqXHR, textStatus, url)
-                console.log("err", getAjaxError(jqXHR, textStatus, url))
+                //console.log("err", getAjaxError(jqXHR, textStatus, url))
                 //handleError(err.message)
             } else {
                 let err = _display_ajax_error(jqXHR, textStatus, url)
@@ -1145,8 +1352,8 @@ jQuery.extend({
             
             if ($.isFunction(callback)) {
                 msg = errors.message
-                console.log("msg -- ", msg)
-                console.log("msg -- ", errors.message)
+                //console.log("msg -- ", msg)
+                //console.log("msg -- ", errors.message)
                 
                 callback(msg, "failed")
             }
@@ -1168,11 +1375,11 @@ jQuery.extend({
         })
         getRequest.fail(function (jqXHR, textStatus, msg) {
             if (typeof textStatus !== "undefined") {
-                console.log("Request failed")
-                console.log(_display_ajax_error(jqXHR, textStatus, url))
+                //console.log("Request failed")
+                //console.log(_display_ajax_error(jqXHR, textStatus, url))
             } else {
-                console.log("Request failed")
-                console.log(_display_ajax_error(jqXHR, textStatus, url))
+                //console.log("Request failed")
+                //console.log(_display_ajax_error(jqXHR, textStatus, url))
             }
             if ($.isFunction(callback)) {
                 callback(msg, "failed")
@@ -1389,7 +1596,7 @@ const deleteDialog = function (message, handler) {
 }
 
 const formatURL = function (param) {
-    console.log("formatURL()", param)
+    //console.log("formatURL()", param)
     return encodeURIComponent(param.trim())
 }
 
@@ -1501,6 +1708,45 @@ String.prototype.ucwords = function () {
         function (s) {
             return s.toUpperCase()
         })
+}
+
+const trimTrailingChars = function (s, charToTrim) {
+    return s.replace(new RegExp(charToTrim + "+$"), "")
+}
+
+const formatSize = function (bytes, decimals = 2) {
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const units = ["BYTES", "KB", "MB"]
+    let size, unit
+    
+    unit = bytes.toUpperCase()
+    unit = trimTrailingChars(unit, "S")
+    unit = unit.replace(/BYTE/g, "BYTES")
+    unit = unit.replace(/MEGABYTE/g, "MB")
+    unit = unit.replace(/KILOBYTE/g, "KB")
+    
+    if (unit.includes("BYTES")) {
+        let unitType = "BYTES"
+        
+        return (!isNaN(parseInt(unit.replace(`/${unitType}/g`, "")))) ? parseInt(unit.replace(`/${unitType}/g`, "")) : null
+    } else if (unit.includes("KB")) {
+        let unitType = "KB"
+        
+        size = (!isNaN(parseInt((parseFloat(unit.replace(`/${unitType}/g`, "")).toFixed(dm)) * 1024))) ? parseInt((parseFloat(unit.replace(`/${unitType}/g`, "")).toFixed(dm)) * 1024) : null
+        
+        if (size !== null) {
+            return size
+        }
+    } else if (unit.includes("MB")) {
+        let unitType = "MB"
+        
+        size = (!isNaN(parseInt((parseFloat(unit.replace(`/${unitType}/g`, "")).toFixed(dm)) * 2097152))) ? parseInt((parseFloat(unit.replace(`/${unitType}/g`, "")).toFixed(dm)) * 2097152) : null
+        
+        if (size !== null) {
+            return size
+        }
+    }
 }
 
 //
@@ -1645,13 +1891,1490 @@ const Console = (function () {
                             vals = arguments[1]
                         }
                         
-                        console.log(title + type, vals)
+                        //console.log(title + type, vals)
                     }
                 }
             }
         },
     }
 })()
+
+const Icon = (function () {
+    
+    const loadAll = function (icons) {
+        Icon.all = new Map()
+        
+    }
+    
+    const init = function (settings) {
+        if (settings) {
+            if (settings.icons) {
+                loadAll(settings.icons)
+            }
+        }
+    }
+    
+    return {
+        all: new Map(),
+        init: function (settings) {
+            return init(settings)
+        },
+    }
+})()
+
+const ProductLocation = (function () {
+    "use strict"
+    
+    const _product_location_transport_city_search = document.getElementById("product_location_transport_city_search")
+    const _product_edit_location_id = document.getElementById("product_edit_location_id")
+    const _product_location_search = document.getElementById("product_location_search")
+    const _product_edit_location_city_id = document.getElementById("product_edit_location_city_id")
+    const _product_edit_location_city = document.getElementById("product_edit_location_city")
+    const _product_edit_location_street_1 = document.getElementById("product_edit_location_street_1")
+    const _product_edit_location_street_2 = document.getElementById("product_edit_location_street_2")
+    const _product_edit_location_zipcode = document.getElementById("product_edit_location_zipcode")
+    const _product_edit_location_location_types_id = document.getElementById("product_edit_location_location_types_id")
+    const _product_edit_location_name = document.getElementById("product_edit_location_name")
+    const _button_submit_form_product_edit_location = document.getElementById("button_submit_form_product_edit_location")
+    const _button_clear_form_product_edit_location = document.getElementById("button_clear_form_product_edit_location")
+    const _product_edit_location_city_edit = document.getElementById("product_edit_location_city_edit")
+    const _location_country_id = document.getElementById("location_country_id")
+    const _location_province_id = document.getElementById("location_province_id")
+    const _location_city_id = document.getElementById("location_city_id")
+    const _product_edit_location_form = document.getElementById("product_edit_location_form")
+    const _product_location = document.getElementById("product_location")
+    
+    const _product_id = document.getElementById("product_id")
+    const _category_id = document.getElementById("category_id")
+    
+    let form_rules = {
+        group: {
+            product_edit_location_city: "edit_location_country_id location_province_id location_city_id",
+        },
+        rules: {
+            product_edit_location_city: {
+                required: true,
+            },
+            product_edit_location_name: {
+                required: true,
+            },
+            product_edit_location_location_types_id: {
+                required: true,
+            },
+        },
+        messages: {
+            product_edit_location_city: {
+                required: "Field Required",
+            },
+            product_edit_location_name: {
+                required: "Field Required",
+            },
+            product_edit_location_location_types_id: {
+                required: "Field Required",
+            },
+        },
+    }
+    
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    
+    $(_button_submit_form_product_edit_location)
+        .on("click", function () {
+            save()
+        })
+    
+    $(_button_clear_form_product_edit_location)
+        .on("click", function () {
+            resetForm()
+        })
+    
+    $(_product_edit_location_zipcode)
+        .on("change", function () {
+            ProductLocation.detail.zipcode = (_product_edit_location_zipcode.value !== "") ? _product_edit_location_zipcode.value : null
+            renderMap()
+        })
+    
+    $(_product_edit_location_name)
+        .on("click", function () {
+            ProductLocation.detail.name = (_product_edit_location_name.value !== "") ? _product_edit_location_name.value : null
+            renderMap()
+        })
+    
+    $(_location_country_id)
+        .on("change", function () {
+            let country_id = (!isNaN(parseInt(_location_country_id.value))) ? parseInt(_location_country_id.value) : null
+            
+            if (country_id !== null) {
+                let country = Country.all.get(country_id)
+                ProductLocation.detail.country_id = country_id
+                ProductLocation.detail.country = country
+            }
+        })
+    
+    $(_location_province_id)
+        .on("change", function () {
+            let province_id = (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null
+            
+            if (province_id !== null) {
+                let province = Province.all.get(province_id)
+                ProductLocation.detail.province_id = province_id
+                ProductLocation.detail.province = province
+            }
+        })
+    
+    $(_location_city_id)
+        .on("change", function () {
+            let city_id = (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null
+            
+            if (city_id !== null) {
+                let city = City.all.get(city_id)
+                ProductLocation.detail.city_id = city_id
+                ProductLocation.detail.city = city
+                renderMap()
+            }
+        })
+    
+    $(_product_edit_location_name)
+        .on("change", function () {
+            ProductLocation.detail.name = (_product_edit_location_name.value !== "") ? _product_edit_location_name.value : null
+            renderMap()
+        })
+    
+    $(_product_edit_location_street_1)
+        .on("change", function () {
+            ProductLocation.detail.street_1 = (_product_edit_location_street_1.value !== "") ? _product_edit_location_street_1.value : null
+            renderMap()
+        })
+    
+    $(_product_edit_location_street_2)
+        .on("change", function () {
+            ProductLocation.detail.street_2 = (_product_edit_location_street_2.value !== "") ? _product_edit_location_street_2.value : null
+            renderMap()
+        })
+    
+    $(_location_city_id)
+        .on("change", function () {
+            let cityLine = ""
+            let country_id = (!isNaN(parseInt(_location_country_id.value))) ? parseInt(_location_country_id.value) : null
+            let province_id = (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null
+            let city_id = (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null
+            let country = Country.all.get(country_id)
+            let province = Province.all.get(province_id)
+            let city = City.all.get(city_id)
+            
+            ProductLocation.detail.country = country
+            ProductLocation.detail.country_id = country_id
+            
+            ProductLocation.detail.province = province
+            ProductLocation.detail.province_id = province_id
+            
+            ProductLocation.detail.city = city
+            ProductLocation.detail.city_id = city_id
+            
+            if (country && province && city) {
+                let cityName = city.name
+                let provinceName = province.name
+                let countryName = country.name
+                _product_edit_location_city_id.value = city.id
+                cityLine = `${cityName} (${provinceName}, ${countryName})`
+            } else {
+                cityLine = ``
+                _product_edit_location_city_id.value = ``
+            }
+            
+            _product_edit_location_city.value = cityLine
+        })
+    
+    const initAutoComplete = function () {
+        
+        $(_product_edit_location_city)
+            .on("change", function () {
+                setTimeout(function () {
+                    let cityName = _product_edit_location_city.value
+                    if (cityName === "") {
+                        resetCityForm()
+                    }
+                }, 200)
+            })
+            .on("search", function () {
+                resetCityForm()
+            })
+            .on("click", function (e) {
+                if ($(this).attr("readonly") === "readonly") {
+                    e.preventDefault()
+                } else {
+                    $(this).select()
+                }
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/cities",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                paramName: "st",
+                onSelect: function (suggestion) {
+                    if (!suggestion.data) {
+                        return
+                    }
+                    let country, province, city, city_name, country_name, province_name = null
+                    
+                    let product_location = suggestion.data
+                    
+                    let detail = set(product_location)
+                    
+                    if (product_location.country) {
+                        country = product_location.country
+                        Country.set_detail(country)
+                        Country.id = (country.id) ? country.id.toString() : null
+                    }
+                    
+                    if (product_location.province) {
+                        province = product_location.province
+                        Province.set_detail(province)
+                        province_name = province.name
+                        Province.id = (province.id) ? province.id.toString() : null
+                    }
+                    
+                    if (product_location.city) {
+                        city = product_location.city
+                        city_name = city.name
+                        City.set_detail(city)
+                        City.id = (city.id) ? city.id.toString() : null
+                    }
+                    
+                    $(_location_country_id).val((product_location.city.country_id) ? product_location.city.country_id : "").trigger("change")
+                    
+                    _product_location_search.value = `City Center (${city_name}, ${province_name})`
+                    
+                    let name = (_product_edit_location_name && _product_edit_location_name.value !== "") ? _product_edit_location_name.value : null
+                    let zipcode = (_product_edit_location_zipcode && _product_edit_location_zipcode.value !== "") ? _product_edit_location_zipcode.value : null
+                    let street_1 = (_product_edit_location_street_1 && _product_edit_location_street_1.value !== "") ? _product_edit_location_street_1.value : null
+                    let street_2 = (_product_edit_location_street_2 && _product_edit_location_street_2.value !== "") ? _product_edit_location_street_2.value : null
+                    
+                    product_location.name = name
+                    product_location.street_1 = street_1
+                    product_location.street_2 = street_2
+                    product_location.zipcode = zipcode
+                    
+                    //renderMap()
+                },
+            })
+    }
+    
+    const showCityForm = function () {
+        if (_product_edit_location_city_edit) {
+            $(_product_edit_location_city_edit).show()
+        }
+    }
+    
+    const hideCityForm = function () {
+        if (_product_edit_location_city_edit) {
+            //$(_product_edit_location_city_edit).hide()
+        }
+    }
+    
+    const resetCityForm = function () {
+        _product_edit_location_zipcode.value = ""
+        _product_edit_location_city_id.value = ""
+        
+        $(_location_country_id)
+            .val("")
+            .trigger("change")
+        
+        hideCityForm()
+    }
+    
+    const resetForm = function () {
+        _product_edit_location_street_1.value = ""
+        _product_edit_location_street_2.value = ""
+        _product_edit_location_zipcode.value = ""
+        _product_edit_location_city.value = ""
+        _product_edit_location_name.value = ""
+        _product_edit_location_location_types_id.value = ""
+        
+        resetCityForm()
+    }
+    
+    const renderMap = function () {
+        //console.log("ProductLocation.detail", ProductLocation.detail)
+        
+        let url = buildMapsURL(ProductLocation.detail)
+        let elementWidth, elementHeight = null
+        let _locationMap = document.getElementById("locationMap")
+        
+        if (_locationMap) {
+            $(_locationMap)
+                .empty()
+                .append(
+                    $("<iframe/>", {
+                        id: "locationMapContainer",
+                        allowfullscreen: "allowfullscreen",
+                        frameborder: "0",
+                        src: url,
+                    }),
+                )
+            
+            elementWidth = (!isNaN(parseInt($(_locationMap).actual("width")))) ? parseInt($(_locationMap).actual("width")) : null
+            
+            if (elementWidth) {
+                elementHeight = elementWidth / 2
+                
+                $("#locationMapContainer")
+                    .css({
+                        "height": elementHeight + "px",
+                        "width": elementWidth + "px",
+                    })
+            }
+        }
+        
+    }
+    
+    const defaultDetail = function () {
+        return {
+            id: null,
+            city_id: null,
+            location_types_id: null,
+            name: null,
+            street_1: null,
+            street_2: null,
+            zipcode: null,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
+            display_long: null,
+            display_medium: null,
+            display_short: null,
+            country: {},
+            province: {},
+            city: {},
+            type: [],
+        }
+    }
+    
+    const set = function (productLocation) {
+        /*
+        //console.log("ProductLocation.set(productLocation) - productLocation ", productLocation)
+        let detail = defaultDetail()
+        
+        if (productLocation) {
+            let locationTypesId = (!isNaN(parseInt(productLocation.location_types_id))) ? parseInt(productLocation.location_types_id) : null
+            
+            detail["zipcode"] = (productLocation.zipcode) ? productLocation.zipcode : null
+            detail["street_1"] = (productLocation.street_1) ? productLocation.street_1 : null
+            detail["street_2"] = (productLocation.street_2) ? productLocation.street_2 : null
+            detail["country"] = (productLocation.country) ? productLocation.country : null
+            detail["province"] = (productLocation.province) ? productLocation.province : null
+            detail["city"] = (productLocation.city) ? productLocation.city : null
+            detail["display_long"] = (productLocation.display_long) ? productLocation.display_long : null
+            detail["display_medium"] = (productLocation.display_medium) ? productLocation.display_medium : null
+            detail["display_short"] = (productLocation.display_short) ? productLocation.display_short : null
+            detail["postal_code"] = (productLocation.postal_code) ? productLocation.postal_code : null
+            
+            detail["enabled"] = (productLocation.enabled) ? productLocation.enabled : 1
+            detail["id"] = (productLocation.id) ? productLocation.id : null
+            detail["name"] = (productLocation.name) ? productLocation.name : null
+            
+            detail["type"] = (productLocation.type) ? productLocation.type : []
+            
+            detail["location_types_id"] = locationTypesId
+            detail["type"] = (productLocation.type) ? productLocation.type : {}
+            detail["city_id"] = (productLocation.city.id) ? productLocation.city.id : null
+            detail["province"].id = (productLocation.province.id) ? productLocation.province.id : null
+            detail["country"].id = (productLocation.country.id) ? productLocation.country.id : null
+        }
+        
+        ProductLocation.detail = detail
+        
+        return detail
+        //*/
+    }
+    
+    const populateForm = function (product_location) {
+        if (!_product_edit_location_form) {
+            return
+        }
+        
+        resetForm()
+        
+        if (product_location) {
+            let detail = product_location
+            let country, province, city = {}
+            
+            ProductLocation.detail = product_location
+            ProductLocation.display_long = product_location.display_long //"City Center (Houston TX - Texas, US - United States)"
+            ProductLocation.display_medium = product_location.display_medium // "City Center (Houston, Texas)"
+            ProductLocation.display_short = product_location.display_short //"City Center (Houston TX, US)"
+            
+            let citySearchDisplay = ""
+            let location_name = (product_location.name) ? product_location.name : null
+            let location_id = (!isNaN(parseInt(product_location.id))) ? parseInt(product_location.id) : null
+            let postal_code = (product_location.postal_code) ? product_location.postal_code : ""
+            let street_1 = (product_location.street_1) ? product_location.street_1 : ""
+            let street_2 = (product_location.street_2) ? product_location.street_2 : ""
+            
+            _product_edit_location_id.value = location_id
+            _product_edit_location_street_1.value = street_1
+            _product_edit_location_street_2.value = street_2
+            _product_edit_location_zipcode.value = postal_code
+            _product_edit_location_city.value = ""
+            _product_edit_location_name.value = location_name
+            
+            $(_product_edit_location_location_types_id).val(product_location.type.id.toString())
+            
+            if (product_location.country) {
+                country = product_location.country
+                Country.set_detail(country)
+                Country.id = (country.id) ? country.id.toString() : null
+            }
+            
+            if (product_location.province) {
+                province = product_location.province
+                Province.set_detail(province)
+                Province.id = (province.id) ? province.id.toString() : null
+            }
+            
+            if (product_location.city) {
+                city = product_location.city
+                City.set_detail(city)
+                City.id = (city.id) ? city.id.toString() : null
+            }
+            
+            ProductLocation.detail.name = (product_location.name) ? product_location.name : null
+            
+            citySearchDisplay = city.name + " (" + province.name + ", " + country.name + ")"
+            _product_edit_location_city.value = citySearchDisplay
+            
+            $(_location_country_id)
+                .val((country.id) ? country.id : "")
+                .trigger("change")
+            
+            renderMap()
+        }
+        
+    }
+    
+    const valid = function () {
+        return $(_product_edit_location_form).valid()
+    }
+    
+    const buildLocationObject = function () {
+        //console.log("ProductLocation.buildLocationObject()")
+        if (valid()) {
+            let id, city_id, location_types_id, name, street_1, street_2,
+                zipcode, enabled, note
+            
+            name = (_product_edit_location_name.value !== "") ? _product_edit_location_name.value : null
+            street_1 = (_product_edit_location_street_1.value !== "") ? _product_edit_location_street_1.value : null
+            street_2 = (_product_edit_location_street_2.value !== "") ? _product_edit_location_street_2.value : null
+            city_id = (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null
+            zipcode = (_product_edit_location_zipcode.value !== "") ? _product_edit_location_zipcode.value : null
+            id = (!isNaN(parseInt(_product_edit_location_id.value))) ? parseInt(_product_edit_location_id.value) : null
+            location_types_id = (!isNaN(parseInt(_product_edit_location_location_types_id.value))) ? parseInt(_product_edit_location_location_types_id.value) : null
+            
+            let productLocation = {
+                product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
+                category_id: (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null,
+                id: id,
+                city_id: city_id,
+                location_types_id: location_types_id,
+                name: name,
+                street_1: street_1,
+                street_2: street_2,
+                zipcode: zipcode,
+                enabled: 1,
+                note: null,
+            }
+            
+            return removeNulls(productLocation)
+        }
+    }
+    
+    const sendUpdateRequest = function (dataToSend, callback) {
+        let url = "/api/v1.0/locations/update"
+        
+        try {
+            sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                if (data) {
+                    return callback(data)
+                }
+            })
+        } catch (e) {
+            //console.log("error", e)
+            handleProductLocationError("Error Updating Location")
+        }
+    }
+    
+    const handleProductLocationError = function (msg) {
+    
+    }
+    
+    const save = function () {
+        let productLocation = buildLocationObject()
+        
+        if (productLocation) {
+            confirmDialog(`Would you like to update?`, (ans) => {
+                if (ans) {
+                    sendUpdateRequest(productLocation, function (data) {
+                        let location
+                        if (data) {
+                            location = data
+                            if (data[0]) {
+                                location = data[0]
+                            }
+                        }
+                        
+                        if (location) {
+                            Product.detail.location = location
+                            
+                            //console.log("location", location)
+                            //console.log("Product.detail.location", Product.detail.location)
+                            Product.updateDisplay()
+                            toastr["success"](`Location ${location.id} has been updated`, "Location Updated")
+                        }
+                    })
+                }
+            })
+        }
+    }
+    
+    const init = function (settings) {
+        //console.log("init(settings)", settings)
+        
+        $(document).ready(function () {
+            let categoryId = (_category_id && (!isNaN(parseInt(_category_id.value)))) ? parseInt(_category_id.value) : null
+            let location
+            
+            if (settings) {
+                
+                _product_edit_location_city_id.value = (settings.product.city_id) ? settings.product.city_id : null
+                
+                if (categoryId === 1) {
+                    if (_product_edit_location_form) {
+                        _product_edit_location_city_id.value = (settings.product.city_id) ? settings.product.city_id : null
+                        location = (settings.product_location) ? settings.product_location : null
+                        if (location) {
+                            validator_init(form_rules)
+                            ProductLocation.validator = $(_product_edit_location_form).validate()
+                            
+                            $(_location_country_id).BuildDropDown({
+                                data: Array.from(Country.all.values()),
+                                title: "Country",
+                                id_field: "id",
+                                text_field: "name",
+                                first_selectable: false,
+                            })
+                            
+                            $(_location_province_id).BuildDropDown({
+                                data: Array.from(Province.all.values()),
+                                title: "Province",
+                                id_field: "id",
+                                text_field: "name",
+                                first_selectable: false,
+                            })
+                            
+                            $(_location_city_id).BuildDropDown({
+                                data: Array.from(City.all.values()),
+                                title: "City",
+                                id_field: "id",
+                                text_field: "name",
+                                first_selectable: false,
+                            })
+                            
+                            Country.init({
+                                dropdowns: [
+                                    "location_country_id",
+                                ],
+                            })
+                            
+                            Province.init({
+                                dropdowns: [
+                                    "location_province_id",
+                                ],
+                            })
+                            
+                            City.init({
+                                dropdowns: [
+                                    "location_city_id",
+                                ],
+                            })
+                            
+                            initAutoComplete()
+                            
+                            populateForm(location)
+                        }
+                    }
+                }
+                
+                if (categoryId === 2) {
+                    //console.log("settings - 2", settings)
+                    let cityId = (settings.product.city_id) ? settings.product.city_id : null
+                    //console.log("cityId - 3", cityId)
+                    _product_edit_location_city_id.value = cityId
+                    if (settings.arriving_location && settings.departing_location) {
+                        Airport.init(settings)
+                    }
+                }
+                
+                if (categoryId === 3) {
+                    //console.log("settings - 3", settings)
+                    let cityId = (settings.product.city_id) ? settings.product.city_id : null
+                    //console.log("cityId - 3", cityId)
+                    _product_edit_location_city_id.value = (settings.product.city_id) ? settings.product.city_id : null
+                    Car.init(settings)
+                }
+                
+                if (categoryId === 4) {
+                
+                }
+                
+                if (categoryId === 5) {
+                
+                }
+                
+                if (categoryId === 6) {
+                    if (_product_edit_location_form) {
+                        _product_edit_location_city_id.value = (settings.product.city_id) ? settings.product.city_id : null
+                        location = (settings.product_location) ? settings.product_location : null
+                        if (location) {
+                            validator_init(form_rules)
+                            ProductLocation.validator = $(_product_edit_location_form).validate()
+                            
+                            $(_location_country_id).BuildDropDown({
+                                data: Array.from(Country.all.values()),
+                                title: "Country",
+                                id_field: "id",
+                                text_field: "name",
+                                first_selectable: false,
+                            })
+                            
+                            $(_location_province_id).BuildDropDown({
+                                data: Array.from(Province.all.values()),
+                                title: "Province",
+                                id_field: "id",
+                                text_field: "name",
+                                first_selectable: false,
+                            })
+                            
+                            $(_location_city_id).BuildDropDown({
+                                data: Array.from(City.all.values()),
+                                title: "City",
+                                id_field: "id",
+                                text_field: "name",
+                                first_selectable: false,
+                            })
+                            
+                            Country.init({
+                                dropdowns: [
+                                    "location_country_id",
+                                ],
+                            })
+                            
+                            Province.init({
+                                dropdowns: [
+                                    "location_province_id",
+                                ],
+                            })
+                            
+                            City.init({
+                                dropdowns: [
+                                    "location_city_id",
+                                ],
+                            })
+                            
+                            initAutoComplete()
+                            
+                            populateForm(location)
+                        }
+                    }
+                }
+                
+                if (categoryId === 7) {
+                
+                }
+                
+                if (categoryId === 8) {
+                
+                }
+                
+                if (categoryId === 9) {
+                
+                }
+                
+            }
+        })
+    }
+    
+    return {
+        validator: null,
+        detail: {
+            id: null,
+            city_id: null,
+            location_types_id: null,
+            name: null,
+            street_1: null,
+            street_2: null,
+            zipcode: null,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
+            display_long: null,
+            display_medium: null,
+            display_short: null,
+            country: [],
+            province: [],
+            city: [],
+            type: [],
+        },
+        display_long: null,
+        display_medium: null,
+        display_short: null,
+        init: function (settings) {
+            $(document).ready(function () {
+                init(settings)
+            })
+        },
+    }
+})()
+
+let today = new Date()
+let today_year = today.getFullYear()
+let today_month = today.getMonth()
+let today_date = today.getDate()
+$.fn.productSearch = function (settings) {
+    "use strict"
+    
+}
+
+const ProductSearch = function (settings) {
+    "use strict"
+    
+    const _form_product_search = document.getElementById("form_product_search")
+    const _formProductSearchCitySubmit = document.getElementById('formProductSearchCitySubmit')
+    const _formProductSearchNameSubmit = document.getElementById('formProductSearchNameSubmit')
+    const _formProductSearchGuestSubmit = document.getElementById('formProductSearchGuestSubmit')
+    const _formProductSearchName = document.getElementById('formProductSearchName')
+    const _product_search_name_display = document.getElementById('product_search_name_display')
+    const _form_product_search_hotel_product_name = document.getElementById('form_product_search_hotel_product_name')
+    const _buttonProductSearchName = document.getElementById("buttonProductSearchName")
+    const roomNumber = document.getElementById('product_search_room_quantity')
+    const adultNumber = document.getElementById('product_search_adult_quantity')
+    const childNumber = document.getElementById('product_search_clild_quantity')
+    const _form_product_search_hotel_product_number_of_rooms = document.getElementById('form_product_search_hotel_product_number_of_rooms')
+    const _form_product_search_hotel_product_number_of_adults = document.getElementById('form_product_search_hotel_product_number_of_adults')
+    const _form_product_search_hotel_product_number_of_children = document.getElementById('form_product_search_hotel_product_number_of_children')
+    const _buttonProductSearchGuest = document.getElementById('buttonProductSearchGuest')
+    const roomDisplay = document.getElementById('product_search_room_quantity_display')
+    const adultDisplay = document.getElementById('product_search_adult_quantity_display')
+    const childDisplay = document.getElementById('product_search_children_quantity_display')
+    const _buttonProductSearchCity = document.getElementById('buttonProductSearchCity')
+    const _formProductSearchCity = document.getElementById("formProductSearchCity")
+    const _product_search_city_display = document.getElementById('product_search_city_display')
+    const _form_product_search_hotel_product_city_id = document.getElementById('form_product_search_hotel_product_city_id')
+    const _formProductSearchCityId = document.getElementById("formProductSearchCityId")
+    const _buttonProductSearchCheckOut = document.getElementById("buttonProductSearchCheckOut")
+    const _buttonProductSearchCheckIn = document.getElementById("buttonProductSearchCheckIn")
+    const _form_product_search_hotel_product_arrive_date = document.getElementById("form_product_search_hotel_product_arrive_date")
+    const _form_product_search_hotel_product_depart_date = document.getElementById("form_product_search_hotel_product_depart_date")
+    const _product_search_category_display = document.getElementById("product_search_category_display")
+    const _product_search_name_icon_display = document.getElementById("product_search_name_icon_display")
+    const _formProductSearchIcon = document.getElementById("formProductSearchIcon")
+    const _formProductSearchGuestClose = document.getElementById("formProductSearchGuestClose")
+    const _formProductSearchCityClose = document.getElementById("formProductSearchCityClose")
+    const _formProductSearchNameClose = document.getElementById("formProductSearchNameClose")
+    const _form_product_search_hotel_product_category_id = document.getElementById("form_product_search_hotel_product_category_id")
+    const _buttonProductSearchCategory = document.getElementById("buttonProductSearchCategory")
+    const _formProductSearchNameId = document.getElementById("formProductSearchNameId")
+    const _product_search_subtitle = document.getElementById("product_search_subtitle")
+    const _button_product_search_panel_hotels_clear = document.getElementById("button_product_search_panel_hotels_clear")
+    const _product_search_check_in_display = document.getElementById("product_search_check_in_display")
+    const _product_search_check_out_display = document.getElementById("product_search_check_out_display")
+    const _form_product_search_hotel_product_product_id = document.getElementById("form_product_search_hotel_product_product_id")
+    const _button_product_search_panel_hotels_submit = document.getElementById("button_product_search_panel_hotels_submit")
+    const _product_search_results = document.getElementById("product_search_results")
+    
+    let popupGuestTitle, popupGuestContent, popupNameTitle, popupNameContent, popupCityTitle, popupCityContent, category_id, categoryItem
+    let startDate = []
+    
+    $(_form_product_search)
+        .on("change", function () {
+        
+        })
+    
+    $(_button_product_search_panel_hotels_submit)
+        .on("click", function () {
+            buildSearchParameters()
+        })
+    
+    $(_button_product_search_panel_hotels_clear)
+        .on("click", function () {
+            resetForm()
+        })
+    
+    $(_form_product_search_hotel_product_category_id)
+        .on("change", function () {
+            if (_form_product_search_hotel_product_category_id.dataset.categoryid) {
+                categoryChanged()
+                let categoryId = parseInt(_form_product_search_hotel_product_category_id.dataset.categoryid)
+                let categoryName = _form_product_search_hotel_product_category_id.dataset.categoryname
+                let categoryIcon = _form_product_search_hotel_product_category_id.dataset.categoryicon
+                _form_product_search_hotel_product_category_id.value = categoryId
+                _product_search_name_icon_display.classList = categoryIcon + " btn-guest-picker-icon"
+                _product_search_category_display.innerText = categoryName
+                switch (categoryId) {
+                    case 1:
+                        enableHotelFormFields()
+                        //console.log("Hotels")
+                        break
+                    case 2:
+                        enableFlightFormFields()
+                        //console.log("Flights")
+                        break
+                    case 3:
+                        //console.log("Cars")
+                        break
+                    case 4:
+                        //console.log("Rail")
+                        break
+                    case 5:
+                        //console.log("Transport")
+                        break
+                    case 6:
+                        //console.log("Tours")
+                        break
+                    case 7:
+                        //console.log("Cruises")
+                        break
+                    case 8:
+                        //console.log("Packages")
+                        break
+                    case 9:
+                        //console.log("Other")
+                        break
+                    default:
+                        //console.log("Default")
+                        break
+                }
+            }
+        })
+    
+    $(_buttonProductSearchCategory)
+        .on("click", function () {
+            closeProductGuestSearch()
+            closeProductNameSearch()
+            closeProductCitySearch()
+        })
+    
+    $(_buttonProductSearchCheckIn)
+        .on("click", function () {
+            closeProductGuestSearch()
+            closeProductNameSearch()
+            closeProductCitySearch()
+        })
+        .datepicker({
+            startDate: '-1d',
+            autoclose: true,
+            //numberOfMonths: 2,
+            title: function () {
+                return "<div class='popover-header'><span class='cPZwQ'>Select a date to continue</span></div>"
+            },
+            //clearBtn: true,
+            todayHighlight: false,
+            //todayBtn: true,
+            format: "yyyy-mm-dd",
+            orientation: "bottom auto",
+            showOnFocus: "false",
+            beforeShowDay: function (date) {
+                /*
+                var highlight = eventDates[date]
+                if (highlight) {
+                    //console.log("y")
+                    return {
+                        content: "This",
+                        classList: [true, "test1"],
+                    }
+                } else {
+                    return [true, 'tttt', 'Tooltip']
+                }
+                //*/
+            },
+        })
+        .on("changeDate", function (selected) {
+            const _buttonProductSearchCheckIn = document.getElementById("buttonProductSearchCheckIn")
+            const roomDisplay = document.getElementById('buttonProductSearchCheckIn')
+            
+            let formattedDate = $(_buttonProductSearchCheckIn).datepicker("getFormattedDate")
+            
+            startDate = [getTimeStamp($(_buttonProductSearchCheckIn).datepicker("getFormattedDate"))]
+            _form_product_search_hotel_product_arrive_date.value = formattedDate
+            
+            if (roomDisplay) {
+                $(roomDisplay).find("span#product_search_check_in_display").text((formattedDate === "") ? " — / — / — " : formattedDate)
+            }
+            
+            $(_buttonProductSearchCheckOut)
+                .val("")
+                .datepicker("setStartDate", (formattedDate !== "") ? formattedDate : null)
+                .datepicker("update")
+                .trigger("changeDate")
+                .datepicker("update")
+        })
+    
+    $(_buttonProductSearchCheckOut)
+        .on("click", function () {
+            closeProductGuestSearch()
+            closeProductNameSearch()
+            closeProductCitySearch()
+        })
+        .datepicker({
+            startDate: '-1d',
+            autoclose: true,
+            todayBtn: "linked",
+            numberOfMonths: 2,
+            title: function () {
+                return "<div class='popover-header'><span class='cPZwQ'>Select a date to continue</span></div>"
+            },
+            clearBtn: true,
+            todayHighlight: false,
+            maxViewMode: 2,
+            format: "yyyy-mm-dd",
+            orientation: "bottom auto",
+            showOnFocus: "false",
+            toggleActive: true,
+            autoSize: true,
+            defaultViewDate: {
+                year: today_year,
+                month: today_month,
+                day: today_date,
+            },
+            beforeShowDay: function (date) {
+                
+                //let y = date.getFullYear().toString() // get full year
+                //let m = (date.getMonth() + 1).toString() // get month.
+                //let d = date.getDate().toString() // get Day
+                
+                //if (m.length === 1) { m = '0' + m } // append zero(0) if single digit
+                //if (d.length === 1) { d = '0' + d } // append zero(0) if single digit
+                
+                //let currDate = getTimeStamp(y + '-' + m + '-' + d)
+                
+                //if ($.inArray(currDate, startDate) > -1) {
+                //console.log(this)
+                //console.log("dates", startDate)
+                //console.log("currDate", currDate)
+                //console.dir(this)
+                //return {
+                //	content: date.getUTCDate(),
+                //	dateClass: 'blue-highlight',
+                //}
+                //return [true, "blue-highlight"]
+                //} else {
+                //return [true, "red-highlight"]
+                //}
+            },
+            beforeShowMonth: function (date) {
+                //console.log(date)
+            },
+        })
+        .on("changeDate", function (e) {
+            const roomDisplay = document.getElementById('buttonProductSearchCheckOut')
+            let formattedDate = $(_buttonProductSearchCheckOut).datepicker("getFormattedDate")
+            
+            _form_product_search_hotel_product_depart_date.value = formattedDate
+            
+            if (roomDisplay) {
+                $(roomDisplay).find("span#product_search_check_out_display").text((formattedDate === "") ? " — / — / — " : formattedDate)
+            }
+            
+        })
+    
+    $(_formProductSearchNameClose)
+        .on("click", function () {
+            closeProductNameSearch()
+        })
+    
+    $(_formProductSearchCityClose)
+        .on("click", function () {
+            closeProductCitySearch()
+        })
+    
+    $(_formProductSearchGuestClose)
+        .on("click", function () {
+            closeProductGuestSearch()
+        })
+    
+    $(_formProductSearchCitySubmit)
+        .on("click", function () {
+            updateProductCitySearch()
+            closeProductGuestSearch()
+        })
+    
+    $(_formProductSearchNameSubmit)
+        .on("click", function () {
+            updateProductNameSearch()
+            closeProductNameSearch()
+        })
+    
+    $(_formProductSearchGuestSubmit)
+        .on("click", function () {
+            updateProductGuestSearch()
+            closeProductGuestSearch()
+        })
+    
+    $(_buttonProductSearchCity)
+        .on("show.bs.popover", function () {
+            initProductCitySearch()
+            
+        })
+        .on("shown.bs.popover", function () {
+            //_formProductSearchCity.focus()
+        })
+        .on("hidden.bs.popover", function () {
+            window.removeEventListener("click", clickOutsideProductNameSearch)
+        })
+    
+    $(_buttonProductSearchGuest)
+        .on("show.bs.popover", function () {
+            initProductGuestSearch()
+            
+        })
+        .on("shown.bs.popover", function () {
+            //_formProductSearchName.focus()
+        })
+        .on("hidden.bs.popover", function () {
+            window.removeEventListener("click", clickOutsideProductGuestSearch)
+        })
+    
+    $(_buttonProductSearchName)
+        .on("show.bs.popover", function () {
+            initProductNameSearch()
+        })
+        .on("shown.bs.popover", function () {
+            //_formProductSearchName.focus()
+        })
+        .on("hidden.bs.popover", function () {
+            window.removeEventListener("click", clickOutsideProductNameSearch)
+        })
+    
+    const getTimeStamp = function (selectedDate) {
+        if (!isNaN(Date.parse(selectedDate))) {
+            let date = new Date(selectedDate + " 00:00")
+            let y = date.getFullYear().toString() // get full year
+            let m = (date.getMonth() + 1).toString() // get month.
+            let d = date.getDate().toString() // get Day
+            
+            if (m.length === 1) { m = '0' + m } // append zero(0) if single digit
+            if (d.length === 1) { d = '0' + d } // append zero(0) if single digit
+            
+            return moment(y + '-' + m + '-' + d + ' 00:00', "YYYY-MM-DD H:mm").valueOf()
+        }
+        
+    }
+    
+    const clearSearchResults = function () {
+    
+    }
+    
+    const submitHotel = function (params, callback) {
+        let url = "/api/v1.0/search/hotels"
+        
+        if (params) {
+            try {
+                sendGetRequest(url, params, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    }
+                })
+            } catch (e) {
+                //console.log("error", e)
+            }
+        }
+    }
+    
+    const hotelSearch = function (data) {
+        clearSearchResults()
+        submitHotel(data, function (results) {
+            if (results) {
+                //console.log("results", results)
+            }
+        })
+    }
+    
+    const buildSearchParameters = function () {
+        let categoryId = (!isNaN(parseInt(_form_product_search_hotel_product_category_id.value))) ? parseInt(_form_product_search_hotel_product_category_id.value) : null
+        
+        if (!categoryId) {
+            return
+        }
+        let data = {}
+        
+        switch (categoryId) {
+            case 1:
+                let adults = (!isNaN(parseInt(_form_product_search_hotel_product_number_of_adults.value))) ? parseInt(_form_product_search_hotel_product_number_of_adults.value) : 1
+                let children = (!isNaN(parseInt(_form_product_search_hotel_product_number_of_children.value))) ? parseInt(_form_product_search_hotel_product_number_of_children.value) : 0
+                let cityId = (!isNaN(parseInt(_form_product_search_hotel_product_city_id.value))) ? parseInt(_form_product_search_hotel_product_city_id.value) : null
+                let guestCount = (adults + children)
+                let fromDate = (_form_product_search_hotel_product_arrive_date.value !== "") ? _form_product_search_hotel_product_arrive_date.value : null
+                let toDate = (_form_product_search_hotel_product_depart_date.value !== "") ? _form_product_search_hotel_product_depart_date.value : null
+                
+                if (cityId && fromDate && toDate) {
+                    data.category_id = categoryId
+                    data.city_id = cityId
+                    data.from_date = fromDate
+                    data.to_date = toDate
+                    data.pax = guestCount
+                    
+                    hotelSearch(data)
+                }
+                
+                break
+            default:
+                return
+        }
+    }
+    
+    const resetForm = function () {
+        $("div[data-hotel='true'").hide()
+        $("div[data-flight='true'").hide()
+        
+        closeProductGuestSearch()
+        closeProductNameSearch()
+        closeProductCitySearch()
+        
+        updateProductGuestSearch()
+        updateProductNameSearch()
+        updateProductCitySearch()
+        
+        _product_search_category_display.innerText = "** Select **"
+        _product_search_name_display.innerText = "any"
+        _product_search_city_display.innerText = "city name"
+        _product_search_check_in_display.innerText = "— / — / —"
+        _product_search_check_out_display.innerText = "— / — / —"
+        
+        roomNumber.value = 1
+        adultNumber.value = 1
+        childNumber.value = 0
+        
+        let roomCount = (!isNaN(parseInt(roomNumber.value))) ? parseInt(roomNumber.value) : 1
+        let adultCount = (!isNaN(parseInt(adultNumber.value))) ? parseInt(adultNumber.value) : 1
+        let childCount = (!isNaN(parseInt(childNumber.value))) ? parseInt(childNumber.value) : 0
+        
+        roomDisplay.innerText = (roomCount > 1) ? roomCount + ' rooms, ' : roomCount + ' room, '
+        adultDisplay.innerText = (adultCount > 1) ? adultCount + ' adults, ' : adultCount + ' adult, '
+        childDisplay.innerText = (childCount > 1) ? childCount + ' children' : childCount + ' child'
+        
+        _product_search_name_icon_display.classList = "fas fa-pencil-alt btn-guest-picker-icon"
+        
+        _form_product_search_hotel_product_city_id.value = ""
+        _form_product_search_hotel_product_category_id.value = ""
+        _form_product_search_hotel_product_product_id.value = ""
+        _form_product_search_hotel_product_name.value = ""
+        _form_product_search_hotel_product_arrive_date.value = ""
+        _form_product_search_hotel_product_number_of_children.value = "0"
+        _form_product_search_hotel_product_number_of_adults.value = "1"
+        _form_product_search_hotel_product_number_of_rooms.value = "1"
+        _form_product_search_hotel_product_depart_date.value = ""
+        
+        disableFormFields()
+    }
+    
+    const enableHotelFormFields = function () {
+        _buttonProductSearchName.disabled = false
+        _buttonProductSearchCity.disabled = false
+        _buttonProductSearchCheckIn.disabled = false
+        _buttonProductSearchCheckOut.disabled = false
+        _buttonProductSearchGuest.disabled = false
+        $("div[data-hotel='true'").show()
+    }
+    
+    const enableFlightFormFields = function () {
+        _buttonProductSearchName.disabled = false
+        _buttonProductSearchCity.disabled = false
+        _buttonProductSearchCheckIn.disabled = false
+        _buttonProductSearchCheckOut.disabled = false
+        _buttonProductSearchGuest.disabled = false
+        $("div[data-flight='true'").show()
+    }
+    
+    const disableFormFields = function () {
+        _buttonProductSearchName.disabled = true
+        _buttonProductSearchCity.disabled = true
+        _buttonProductSearchCheckIn.disabled = true
+        _buttonProductSearchCheckOut.disabled = true
+        _buttonProductSearchGuest.disabled = true
+    }
+    
+    const initAutocomplete = function (category_id) {
+        
+        $(_formProductSearchCity)
+            .on("search", function () {
+                _formProductSearchCity.value = ""
+                _formProductSearchCityId.value = ""
+                updateProductCitySearch()
+            })
+            .on("click", function (e) {
+                $(this).select()
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/cities",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                paramName: "st",
+                onSelect: function (suggestion) {
+                    if (!suggestion.data) {
+                        return
+                    }
+                    let city = suggestion.data
+                    
+                    _formProductSearchCityId.value = city.id
+                },
+            })
+        
+        $(_formProductSearchName)
+            .on("search", function () {
+                _formProductSearchName.value = ""
+                _formProductSearchNameId.value = ""
+                updateProductCitySearch()
+            })
+            .on("click", function (e) {
+                $(this).select()
+            })
+            .autocomplete({
+                serviceUrl: "/api/v1.0/autocomplete/products",
+                minChars: 2,
+                cache: false,
+                dataType: "json",
+                triggerSelectOnValidInput: false,
+                params: { "category_id": category_id },
+                paramName: "st",
+                onSelect: function (suggestion) {
+                    if (!suggestion.data) {
+                        return
+                    }
+                    let product = suggestion.data
+                    _form_product_search_hotel_product_product_id.value = product.id
+                    _formProductSearchNameId.value = product.id
+                },
+            })
+    }
+    
+    const categoryChanged = function () {
+        resetForm()
+    }
+    
+    const updateProductNameSearch = function () {
+        
+        if (_formProductSearchName) {
+            let name = (_formProductSearchName.value !== '') ? _formProductSearchName.value : 'any'
+            
+            _product_search_name_display.innerText = name
+            _form_product_search_hotel_product_name.value = name
+            
+            if (_buttonProductSearchName) {
+                $(_buttonProductSearchName).popover("hide")
+            }
+        }
+    }
+    
+    const updateProductGuestSearch = function () {
+        
+        if (
+            roomNumber && adultNumber && childNumber
+            && _form_product_search_hotel_product_number_of_rooms && _form_product_search_hotel_product_number_of_adults && _form_product_search_hotel_product_number_of_children
+            && roomDisplay && adultDisplay && childDisplay
+        ) {
+            let roomCount = (!isNaN(parseInt(roomNumber.value))) ? parseInt(roomNumber.value) : 1
+            let adultCount = (!isNaN(parseInt(adultNumber.value))) ? parseInt(adultNumber.value) : 1
+            let childCount = (!isNaN(parseInt(childNumber.value))) ? parseInt(childNumber.value) : 0
+            
+            roomDisplay.innerText = (roomCount > 1) ? roomCount + ' rooms, ' : roomCount + ' room, '
+            adultDisplay.innerText = (adultCount > 1) ? adultCount + ' adults, ' : adultCount + ' adult, '
+            childDisplay.innerText = (childCount > 1) ? childCount + ' children' : childCount + ' child'
+            
+            _form_product_search_hotel_product_number_of_rooms.value = (roomCount > 1) ? roomCount : 1
+            _form_product_search_hotel_product_number_of_adults.value = (adultCount > 1) ? adultCount : 1
+            _form_product_search_hotel_product_number_of_children.value = (childCount > 0) ? childCount : 0
+            
+            if (_buttonProductSearchGuest) {
+                $(_buttonProductSearchGuest).popover("hide")
+            }
+        }
+    }
+    
+    const updateProductCitySearch = function () {
+        if (_formProductSearchCity) {
+            _product_search_city_display.innerText = (_formProductSearchCity.value !== '') ? _formProductSearchCity.value : 'city name'
+            _form_product_search_hotel_product_city_id.value = _formProductSearchCityId.value
+            $(_form_product_search_hotel_product_city_id).trigger("change")
+        }
+    }
+    
+    const closeProductNameSearch = function () {
+        if (_buttonProductSearchName) {
+            $(_buttonProductSearchName).popover("hide")
+        }
+        
+        window.removeEventListener("click", clickOutsideProductNameSearch)
+    }
+    
+    const closeProductCitySearch = function () {
+        if (_buttonProductSearchCity) {
+            $(_buttonProductSearchCity).popover("hide")
+        }
+        window.removeEventListener("click", clickOutsideProductCitySearch)
+    }
+    
+    const closeProductGuestSearch = function () {
+        if (_buttonProductSearchGuest) {
+            $(_buttonProductSearchGuest).popover("hide")
+        }
+        
+        window.removeEventListener("click", clickOutsideProductGuestSearch)
+    }
+    
+    const clickOutsideProductNameSearch = (e) => {
+        let class_name = "name-search"
+        let tar = $(e.target).parents("div.popover")
+        
+        if (!tar[0] && !e.target.className.includes(class_name)) {
+            updateProductNameSearch()
+            closeProductNameSearch()
+        }
+    }
+    
+    const clickOutsideProductGuestSearch = (e) => {
+        let class_name = "btn-guest-picker"
+        let tar = $(e.target).parents("div.popover")
+        
+        if ((!tar[0] && !e.target.className.includes(class_name))) {
+            updateProductGuestSearch()
+            closeProductGuestSearch()
+        }
+    }
+    
+    const clickOutsideProductCitySearch = (e) => {
+        let class_name = "btn-city-picker"
+        let tar = $(e.target).parents("div.popover")
+        
+        if (!tar[0] && !e.target.className.includes(class_name)) {
+            updateProductCitySearch()
+            closeProductCitySearch()
+        }
+    }
+    
+    const initProductNameSearch = function () {
+        window.addEventListener("click", clickOutsideProductNameSearch)
+    }
+    
+    const initProductGuestSearch = function () {
+        window.addEventListener("click", clickOutsideProductGuestSearch)
+    }
+    
+    const initProductCitySearch = function () {
+        window.addEventListener("click", clickOutsideProductCitySearch)
+    }
+    
+    const init = function (settings) {
+        $(function () {
+            
+            if (_form_product_search) {
+                categoryItem = document.querySelectorAll(".category-dropdown-item")
+                categoryItem.forEach(el => el.addEventListener("click", event => {
+                    _formProductSearchIcon.classList = " " + el.dataset.categoryicon + " mr-3 "
+                    _product_search_name_icon_display.classList = " " + el.dataset.categoryicon + " btn-guest-picker-icon"
+                    _product_search_category_display.innerText = el.dataset.categoryname
+                    category_id = parseInt(el.dataset.categoryid)
+                    initAutocomplete(category_id)
+                    _form_product_search_hotel_product_category_id.value = category_id
+                    _form_product_search_hotel_product_category_id.dataset.categoryid = category_id
+                    _form_product_search_hotel_product_category_id.dataset.categoryname = el.dataset.categoryname
+                    _form_product_search_hotel_product_category_id.dataset.categoryicon = el.dataset.categoryicon
+                    _product_search_subtitle.innerText = el.dataset.categoryname
+                    $(_form_product_search_hotel_product_category_id).trigger("change")
+                    $(_buttonProductSearchCategory).trigger("change")
+                }))
+                
+                if (_buttonProductSearchName) {
+                    popupNameTitle = $("#popoverNameForm .popover-head h5")
+                    popupNameContent = $("#popoverNameForm .popover-body form")
+                    
+                    $(_buttonProductSearchName).popover({
+                        placement: "bottom",
+                        title: () => popupNameTitle,
+                        html: true,
+                        container: "body",
+                        content: () => popupNameContent,
+                        
+                    })
+                }
+                
+                if (_buttonProductSearchCity) {
+                    popupCityTitle = $("#popoverCityForm .popover-head h5")
+                    popupCityContent = $("#popoverCityForm .popover-body form")
+                    
+                    $(_buttonProductSearchCity).popover({
+                        placement: "bottom",
+                        title: () => popupCityTitle,
+                        html: true,
+                        container: "body",
+                        content: () => popupCityContent,
+                        
+                    })
+                }
+                
+                if (_buttonProductSearchGuest) {
+                    popupGuestTitle = $("#popoverGuestForm .popover-head h5")
+                    popupGuestContent = $("#popoverGuestForm .popover-body form")
+                    
+                    $(_buttonProductSearchGuest).popover({
+                        placement: "bottom",
+                        title: () => popupGuestTitle,
+                        html: true,
+                        container: "body",
+                        content: () => popupGuestContent,
+                        
+                    })
+                }
+                
+                if (_product_search_results) {
+                    //$(_product_search_results).hide()
+                    
+                }
+                
+                resetForm()
+            }
+            
+        })
+    }
+    
+    init(settings)
+    
+    return {
+        init: function (settings) {
+            init(settings)
+        },
+        updateProductCitySearch: function () {
+            updateProductCitySearch()
+        },
+        updateProductNameSearch: function () {
+            updateProductNameSearch()
+        },
+        closeProductGuestSearch: function () {
+            closeProductGuestSearch()
+        },
+    }
+}
+
+$(function () {
+    //let productSearch = ProductSearch()
+})
 
 $.fn.formFields = function (settings) {
     "use strict"
@@ -1987,6 +3710,307 @@ jQuery(($) => {
     }
 })
 
+jQuery(($) => {
+    $.fn.timeSelect = function (opt) {
+        let element = $(this)
+        let filterMax = ""
+        let elementId = element.attr("id")
+        let separatorTime = ":"
+        
+        element.attr("id", "time-selector-" + elementId)
+        
+        let $element, $elementWrapper, $elementGroupWrapper, $elementGroupAppend, $buttonGroupAppend,
+            $input, $inputLabel, $errorElement, $buttonGroupAppendClear, input, picker
+        
+        let defaults = {
+            // Translations and clear button
+            clear: 'Clear',
+            
+            // Formats
+            format: 'h:i A',
+            formatLabel: undefined,
+            formatSubmit: undefined,
+            hiddenPrefix: undefined,
+            hiddenSuffix: '_submit',
+            
+            // Editable input
+            editable: undefined,
+            
+            // Time intervals
+            interval: 30,
+            
+            // Time limits
+            min: undefined,
+            max: undefined,
+            
+            // Root picker container
+            container: undefined,
+            
+            // Hidden input container
+            containerHidden: undefined,
+            
+            // Close on a user action
+            closeOnSelect: true,
+            closeOnClear: true,
+            
+            // Events
+            onStart: undefined,
+            onRender: undefined,
+            onOpen: undefined,
+            onClose: undefined,
+            onSet: undefined,
+            onStop: undefined,
+        }
+        
+        let settings = {
+            label: "Time",
+            placeholder: "Select Time",
+        }
+        
+        const isNumeric = function (input, keyCode) {
+            if (!isNaN(parseInt(keyCode))) {
+                keyCode = parseInt(keyCode)
+            }
+            
+            if (keyCode === 16) {
+                isShift = true
+            }
+            
+            if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || (keyCode === 8) || (keyCode === 46)) {
+                
+                if (keyCode !== 16) {
+                    if ((input.value.length === 2) && keyCode !== 8) {
+                        input.value += separatorTime
+                    }
+                    
+                    return true
+                }
+                
+            }
+            
+            return false
+        }
+        
+        const loadError = function (input) {
+            let $errorElement = $(input).parents("div.form-element").find("div.error")
+            
+            $errorElement.html("Invalid Time. Only HH-MM format allowed.").show()
+        }
+        
+        const unSetTimeError = function (input) {
+            let $errorElement = $(input).parents("div.form-element").find("div.error")
+            
+            $errorElement.html("").hide()
+        }
+        
+        function validate_time (time) {
+            var a = true
+            var time_arr = time.split(":")
+            
+            if (time_arr.length !== 2) {
+                a = false
+            } else {
+                if (isNaN(time_arr[0]) || isNaN(time_arr[1])) {
+                    a = false
+                }
+                if (time_arr[0] < 24 && time_arr[1] < 60) {
+                    if (time_arr[0] && time_arr[1] && !isNaN(parseInt(time_arr[0])) && !isNaN(parseInt(time_arr[1]))) {
+                        if (parseInt(time_arr[0]) <= 9) {
+                            time_arr[0] = "0" + time_arr[0]
+                        }
+                        if (parseInt(time_arr[1]) <= 9) {
+                            time_arr[0] = "0" + time_arr[0]
+                        }
+                        $(input).val(time_arr[0] + ":" + time_arr[1])
+                    } else {
+                        return false
+                    }
+                } else {
+                    a = false
+                }
+            }
+            return a
+        }
+        
+        const validateTimeFormat = function (input, keyCode) {
+            let timeString = input.value
+            //let regex = /^\d{2,}:(?:[0-5]\d):(?:[0-5]\d)$/
+            
+            if (validate_time(timeString)) {
+                //if (regex.test(timeString) || timeString.length === 0) {
+                unSetTimeError(input)
+            } else {
+                loadError(input)
+            }
+        }
+        
+        const buildElements = function (element, opt) {
+            $element = element
+            $elementWrapper = $("<div>")
+                .addClass(`form-element`)
+            
+            $elementGroupWrapper = $("<div>")
+                .addClass(`input-group`)
+            
+            $elementGroupAppend = $("<div>")
+                .addClass(`input-group-append`)
+            
+            $buttonGroupAppend = $("<button type='button'>")
+                .attr("id", "button-" + elementId)
+                .attr("type", "button")
+                .addClass(`btn btn-md btn-secondary m-0 px-3 py-2 z-depth-0 waves-effect waves-light`)
+                .html('<i class="fas fa-calendar-alt"></i>')
+                .on("click", function (e) {
+                    e.preventDefault()
+                })
+            
+            $buttonGroupAppendClear = $("<button type='button'>")
+                .attr("id", "button-clear-" + elementId)
+                .addClass(`btn btn-md btn-outline-danger m-0 px-3 py-2 z-depth-0 waves-effect waves-light`)
+                .html('<i class="fas fa-ban"></i>')
+                .on("click", function () {
+                    TimeSelect.clear()
+                    $input.val("").trigger("change")
+                    unSetTimeError($input[0])
+                })
+            
+            $input = $("<input>")
+                .addClass("form-control time-format")
+                .attr("id", elementId)
+                .attr("type", "text")
+                .attr("placeholder", settings.placeholder)
+                .attr("maxlength", "5")
+                .on("keydown", function (event) {
+                    return isNumeric(this, event.keyCode)
+                })
+                .on("keyup", function (event) {
+                    validateTimeFormat(this, event.keyCode)
+                    toggleClearButton()
+                })
+                .on("change", function () {
+                    toggleClearButton()
+                })
+            
+            $inputLabel = $("<label>")
+                .attr("for", elementId)
+                .html(settings.label)
+            
+            $errorElement = $("<div>")
+                .addClass("error w-100 text-center")
+        }
+        
+        const toggleClearButton = function () {
+            if ($input.val() !== "") {
+                $buttonGroupAppendClear.show()
+                let id = $input.attr("id")
+                clearError(document.getElementById(id))
+            } else {
+                $buttonGroupAppendClear.hide()
+            }
+        }
+        
+        const setWrapper = function (element, opt) {
+            buildElements(element, opt)
+            $elementGroupAppend.append($buttonGroupAppendClear, $buttonGroupAppend)
+            $elementGroupWrapper.append($input, $elementGroupAppend)
+            $elementWrapper.append($inputLabel, $elementGroupWrapper, $errorElement)
+            $element.append($elementWrapper)
+            picker = $buttonGroupAppend.pickatime("picker")
+        }
+        
+        const assignOptions = function (newOptions) {
+            if (newOptions) {
+                $.each(newOptions, function (k, v) {
+                    defaults[k] = v
+                })
+            }
+            
+        }
+        
+        const clear = function () {
+            
+            if (TimeSelect.picker.clear()) {
+                TimeSelect.picker.clear()
+                TimeSelect.picker.set("select", moment().format("YYYY-MM-DD"), { format: "HH-i" })
+                TimeSelect.picker.render()
+                unSetTimeError($input[0])
+            }
+        }
+        
+        const set = function (opts) {
+            if (!opts) {
+                opts = {}
+            }
+            
+            TimeSelect.picker.set(opts, { muted: true })
+            
+        }
+        
+        const value = function (date) {
+            
+            if (date) {
+                TimeSelect.picker.set("select", date, { format: "HH-i" })
+                TimeSelect.picker.render()
+                return null
+            } else {
+                return ($input.val() === "") ? null : $input.val()
+            }
+            
+        }
+        
+        const TimeSelect = {
+            picker: null,
+            val: null,
+            fooListener: function (val) {},
+            registerNewListener: function (externalListenerFunction) {
+                this.fooListener = externalListenerFunction
+            },
+            set: function () {
+                set()
+            },
+            value: function (dataValue) {
+                if (!dataValue) {
+                    dataValue = null
+                }
+                return value(dataValue)
+            },
+            clear: function () {
+                clear()
+            },
+            init: function (element, opt) {
+                init(element, opt)
+            },
+        }
+        
+        const init = function (element, opt) {
+            assignOptions(opt)
+            
+            settings.label = ($(element).attr("data-label")) ? $(element).attr("data-label") : "Date"
+            settings.placeholder = ($(element).attr("data-placeholder")) ? $(element).attr("data-placeholder") : "Select Date"
+            
+            setWrapper(element, opt)
+            
+            $buttonGroupAppend
+                .pickatime(defaults)
+                .on("change", function () {
+                    if ($(this).val() === "") {
+                        $input.val(filterMax)
+                    } else {
+                        $input.val($(this).val())
+                    }
+                    
+                    $input.trigger("change")
+                })
+            
+            picker = $buttonGroupAppend.pickatime("picker")
+            toggleClearButton()
+            TimeSelect.picker = $buttonGroupAppend.pickatime("picker")
+        }
+        
+        init(element, opt)
+        return TimeSelect
+    }
+})
 
 const tinyEditor = (function () {
     "use strict"
@@ -2148,7 +4172,7 @@ const ContextMenu = (function () {
     let $contextMenu
     
     const assignSeasonToDays = function () {
-        console.log("ContextMenu:assignSeasonToDays()", ContextMenu)
+        //console.log("ContextMenu:assignSeasonToDays()", ContextMenu)
     }
     
     const init = function (settings) {
@@ -2209,6 +4233,8 @@ const ContextMenu = (function () {
 
 const Season = (function () {
     "use strict"
+    
+    const _product_edit_season_display = document.getElementById("product_edit_season_display")
     const _edit_product_season = document.getElementById("edit_product_season")
     const _product_edit_season_form_edit_season_link = document.getElementById("product_edit_season_form_edit_season_link")
     const _product_season = document.getElementById("product_season")
@@ -2303,9 +4329,9 @@ const Season = (function () {
     const updateProgress = function () {
         let seasons = Array.from(Season.all.values())
         if (seasons.length === 0) {
-            $(_panel_tab_season).html(`Season <span id="seasonNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
+            $(_panel_tab_season).html(`<span id="tab_span_season">Season</span> <span id="seasonNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
         } else {
-            $(_panel_tab_season).html(`Season`)
+            $(_panel_tab_season).html(`<span id="tab_span_season">Season</span>`)
         }
         Product.updateProgress()
     }
@@ -2316,7 +4342,9 @@ const Season = (function () {
                 updateProductSeason(dataToSend, function (data) {
                     if (data) {
                         let season = (data[0]) ? data[0] : data
+                        //console.log("|__ season", season)
                         addProductSeasonTableRow(season)
+                        buildProductOverview(season)
                     } else {
                         YearCalendar.endLoading()
                     }
@@ -2338,7 +4366,7 @@ const Season = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -2352,11 +4380,12 @@ const Season = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        handleSeasonError("Oops: 1")
+                        return handleSeasonError("Oops: 1")
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
+                return handleSeasonError(e)
             }
         }
     }
@@ -2367,6 +4396,7 @@ const Season = (function () {
                 deleteProductSeason(dataToSend, function (data) {
                     if (data) {
                         deleteProductSeasonTableRow(dataToSend.season_id)
+                        
                     } else {
                         YearCalendar.endLoading()
                     }
@@ -2376,7 +4406,7 @@ const Season = (function () {
     }
     
     const handleSeasonError = function (msg) {
-        toastr.error(msg)
+        toastr["error"](`${msg}`, "Season")
     }
     
     const buildUpdateRecord = function () {
@@ -2499,6 +4529,97 @@ const Season = (function () {
         }
     }
     
+    const clearProductOverview = function (season) {
+        //console.log("Season.buildProductOverview(season)", season)
+        let color_scheme, product_season_detail
+        
+        if (!season || !season.color_scheme || !season.product_season_detail) {
+            //console.log("|__ season", season)
+            //console.log("|__ color_scheme", season.color_scheme)
+            //console.log("|__ product_season_detail", season.product_season_detail)
+            return
+        }
+        
+        color_scheme = season.color_scheme
+        product_season_detail = season.product_season_detail
+        
+        //console.log("|__ season", season)
+        //console.log("|__ color_scheme", color_scheme)
+        //console.log("|__ product_season_detail", product_season_detail)
+        
+        let backgroundColor = (season.color_scheme && season.color_scheme.background_color) ? season.color_scheme.background_color : "#fff"
+        let textColor = (season.color_scheme && season.color_scheme.text_color) ? season.color_scheme.text_color : "#0a070d"
+        let borderColor = (season.color_scheme && season.color_scheme.border_color) ? season.color_scheme.border_color : "#0a070d"
+        let disabledDOW = (season.product_season_detail) ? getListOfIds(season.product_season_detail.disabled_dow) : []
+        let disabledDOWFormatted = []
+        let disabledDOWDisplay = ""
+        let name = (season.name) ? season.name : null
+        let seasonId = (season.id && !isNaN(parseInt(season.id))) ? parseInt(season.id) : null
+        
+        if (seasonId) {
+            $(`#disabledDOWDisplay${seasonId}`).remove()
+        }
+        
+    }
+    
+    const buildProductOverview = function (season) {
+        //console.log("Season.buildProductOverview(season)", season)
+        let color_scheme, product_season_detail
+        
+        if (!season || !season.color_scheme || !season.product_season_detail) {
+            //console.log("|__ season", season)
+            //console.log("|__ color_scheme", season.color_scheme)
+            //console.log("|__ product_season_detail", season.product_season_detail)
+            return
+        }
+        
+        color_scheme = season.color_scheme
+        product_season_detail = season.product_season_detail
+        
+        //console.log("|__ season", season)
+        //console.log("|__ color_scheme", color_scheme)
+        //console.log("|__ product_season_detail", product_season_detail)
+        
+        let backgroundColor = (season.color_scheme && season.color_scheme.background_color) ? season.color_scheme.background_color : "#fff"
+        let textColor = (season.color_scheme && season.color_scheme.text_color) ? season.color_scheme.text_color : "#0a070d"
+        let borderColor = (season.color_scheme && season.color_scheme.border_color) ? season.color_scheme.border_color : "#0a070d"
+        let disabledDOW = (season.product_season_detail) ? getListOfIds(season.product_season_detail.disabled_dow) : []
+        let disabledDOWFormatted = []
+        let disabledDOWDisplay = ""
+        let name = (season.name) ? season.name : null
+        let seasonId = (season.id && !isNaN(parseInt(season.id))) ? parseInt(season.id) : null
+        
+        for (let n = 0; n < disabledDOW.length; n++) {
+            let day = days[n]
+            if (day.short) {
+                disabledDOWFormatted.push(day.short.toUpperCase())
+            }
+        }
+        
+        disabledDOWDisplay = disabledDOWFormatted.join(", ")
+        backgroundColor = shadeColor(backgroundColor, 30)
+        borderColor = shadeColor(borderColor, -30)
+        
+        if (Season.all.get(seasonId)) {
+            clearProductOverview(Season.all.get(seasonId))
+        }
+        
+        $(_product_edit_season_display).append(`
+            <div class="col-12 col-sm-12 col-md-4 px-1" id="disabledDOWDisplay${seasonId}">
+        
+                <div class="card card-body mb-2" style="background:${backgroundColor};color:${textColor};border-color:${borderColor};">
+                
+                    <h5 class="card-title" style="color:${textColor};">${name}</h5>
+                    <h6 class="card-subtitle">
+                        <p class="m-0 mb-1" style="font-size:.85rem;font-weight:400;color:#0a070d;">Disabled Days:</p>
+                        <p class="m-0 mb-1" style="font-size:.75rem;color:${borderColor};">${disabledDOWDisplay}</p>
+                    </h6>
+                
+                </div>
+            </div>
+        `)
+    }
+    
     const loadAll = function (seasons) {
         Season.all = new Map()
         if (_table_season_product_edit) {
@@ -2515,6 +4636,7 @@ const Season = (function () {
             if (!isNaN(parseInt(detail.id))) {
                 $table_season_product_edit.insertRow(detail)
                 Season.all.set(parseInt(detail.id), detail)
+                buildProductOverview(detail)
             }
         })
         
@@ -2533,9 +4655,9 @@ const Season = (function () {
         if (season) {
             if (season.id) {
                 let seasonId = season.id
-                console.log("seasonId", seasonId)
+                //console.log("seasonId", seasonId)
                 let loadedSeasonId = (!_product_edit_season_form_season_id) ? null : (!isNaN(parseInt(_product_edit_season_form_season_id.value))) ? parseInt(_product_edit_season_form_season_id.value) : null
-                console.log("loadedSeasonId", loadedSeasonId)
+                //console.log("loadedSeasonId", loadedSeasonId)
             }
         }
         
@@ -2617,12 +4739,12 @@ const Season = (function () {
                 updateProgress()
                 resetForm()
                 clearProductSeasonForm()
+                clearProductOverview(hasSeason)
                 
-                toastr.success(`Season: ${hasSeason.name} - has been deleted`)
+                toastr["warning"](`Season: ${hasSeason.name} - has been deleted`, "Season")
                 YearCalendar.endLoading()
             }
         }
-        
     }
     
     const addProductSeasonTableRow = function (season) {
@@ -2706,10 +4828,52 @@ const Season = (function () {
     }
     
     const unloadProductSeasonForm = function () {
-        console.log("unloadProductSeasonForm()")
+        //console.log("unloadProductSeasonForm()")
         _product_edit_season_form_season_name_filter.disabled = false
         _product_edit_season_form_season_name.disabled = true
         $(_edit_product_season).hide()
+    }
+    
+    const addSeason = function (dataToSend, callback) {
+        let url = "/api/v1.0/seasons/add"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        handleSeasonError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                //console.log("error", e)
+                return handleSeasonError("Error Validating Airport")
+            }
+        } else {
+            return handleSeasonError("Error Loading Airport - Missing Data")
+        }
+    }
+    
+    const fetchByName = function (dataToSend, callback) {
+        let url = "/api/v1.0/seasons/validate"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        handleSeasonError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                //console.log("error", e)
+                handleSeasonError("Error Validating Airport")
+            }
+        } else {
+            handleSeasonError("Error Loading Airport - Missing Data")
+        }
     }
     
     const seasonExists = function (name) {
@@ -2793,6 +4957,7 @@ const Season = (function () {
                         } else {
                             $table_season_product_edit.clearSelectedRows()
                             resetForm()
+                            _product_edit_season_form_season_name_filter.value = ""
                         }
                     })
                 }
@@ -2800,53 +4965,11 @@ const Season = (function () {
         }
     }
     
-    const addSeason = function (dataToSend, callback) {
-        let url = "/api/v1.0/seasons/add"
-        
-        if (dataToSend) {
-            try {
-                sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    } else {
-                        handleSeasonError("Oops: 1")
-                    }
-                })
-            } catch (e) {
-                console.log("error", e)
-                handleSeasonError("Error Validating Airport")
-            }
-        } else {
-            handleSeasonError("Error Loading Airport - Missing Data")
-        }
-    }
-    
-    const fetchByName = function (dataToSend, callback) {
-        let url = "/api/v1.0/seasons/validate"
-        
-        if (dataToSend) {
-            try {
-                sendGetRequest(url, dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    } else {
-                        handleSeasonError("Oops: 1")
-                    }
-                })
-            } catch (e) {
-                console.log("error", e)
-                handleSeasonError("Error Validating Airport")
-            }
-        } else {
-            handleSeasonError("Error Loading Airport - Missing Data")
-        }
-    }
-    
     const initAutoComplete = function () {
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         $(_product_edit_season_form_season_name_filter)
-            .on("click", function () {
+            .on("click", function (e) {
                 if ($(this).attr("readonly") === "readonly") {
                     e.preventDefault()
                 } else {
@@ -2917,6 +5040,7 @@ const Season = (function () {
         loadTypes(seasons)
         
         if (_product_edit_season_form_season_name_filter) {
+            $(_product_edit_season_display).empty()
             initAutoComplete()
             resetForm()
         }
@@ -2953,6 +5077,1481 @@ const Season = (function () {
     }
 })()
 
+const Page = (function () {
+    "use strict"
+    
+    const _modal_new_page = document.getElementById("modal_new_page")
+    const _button_add_page_heading = document.getElementById("button_add_page_heading")
+    const _table_pages_index = document.getElementById("table_pages_index")
+    const _page_index_section = document.getElementById("page_index_section")
+    const _modal_new_page_id = document.getElementById("modal_new_page_id")
+    const _modal_new_page_menu_id = document.getElementById("modal_new_page_menu_id")
+    const _modal_new_page_path = document.getElementById("modal_new_page_path")
+    const _modal_new_page_title = document.getElementById("modal_new_page_title")
+    const _modal_new_page_sub_title = document.getElementById("modal_new_page_sub_title")
+    const _modal_new_page_heading = document.getElementById("modal_new_page_heading")
+    const _modal_new_page_sub_heading = document.getElementById("modal_new_page_sub_heading")
+    const _modal_new_page_description = document.getElementById("modal_new_page_description")
+    const _modal_new_page_keywords = document.getElementById("modal_new_page_keywords")
+    const _modal_new_page_enabled = document.getElementById("modal_new_page_enabled")
+    const _modal_new_page_form = document.getElementById("modal_new_page_form")
+    const _modal_new_page_save_button = document.getElementById("modal_new_page_save_button")
+    const _modal_new_page_cancel_button = document.getElementById("modal_new_page_cancel_button")
+    const _modal_new_page_clear_button = document.getElementById("modal_new_page_clear_button")
+    
+    const formRules = {
+        rules: {
+            modal_new_page_path: {
+                required: true,
+            },
+        },
+        messages: {
+            modal_new_page_path: {
+                required: "Fields Required",
+            },
+        },
+    }
+    
+    let $table_pages_index, $page_keywords
+    let user_id = (document.getElementById('user_id')) ? (!isNaN(parseInt(document.getElementById('user_id').value))) ? parseInt(document.getElementById('user_id').value) : 4 : 4
+    let tempDetail = null
+    
+    $(_button_add_page_heading)
+        .on("click", function () {
+            //console.log("Page.button_add_page_heading.click()")
+            clearNewProductForm()
+            renderPageForm()
+        })
+    
+    $(_modal_new_page_save_button)
+        .on("click", function () {
+            //console.log("Page.modal_new_page_save_button.click()")
+            save()
+        })
+    
+    $(_modal_new_page_cancel_button)
+        .on("click", function () {
+            //console.log("Page.modal_new_page_cancel_button.click()")
+            clearNewProductForm()
+            hidePageForm()
+        })
+    
+    $(_modal_new_page_clear_button)
+        .on("click", function () {
+            //console.log("Page.modal_new_page_clear_button.click()")
+            clearNewProductForm()
+        })
+    
+    const addRow = function (page) {
+        //console.log("Page.addRow(page)", page)
+        $table_pages_index.insertRow(page)
+    }
+    
+    const updateRow = function (page) {
+        //console.log("Page.updateRow(page)", page)
+        
+        //$table_pages_index.insertRow(page)
+    }
+    
+    const buildIndexTable = function () {
+        //console.log("Page.buildIndexTable()")
+        if (_table_pages_index) {
+            $table_pages_index = $(_table_pages_index).table({
+                table_type: "display_list",
+                data: Array.from(Page.all.values()),
+                columnDefs: [
+                    {
+                        title: "Id",
+                        targets: 0,
+                        data: "id",
+                        render: function (data, type, row, meta) {
+                            return "<span style='white-space: nowrap;'>" + data + "</span>"
+                        },
+                    }, {
+                        title: "Title",
+                        targets: 1,
+                        data: "title",
+                        render: function (data, type, row, meta) {
+                            return "<span style='white-space: nowrap;'>" + data + "</span>"
+                        },
+                    }, {
+                        title: "Path",
+                        targets: 2,
+                        data: "path",
+                        render: function (data, type, row, meta) {
+                            return "<span style='white-space: nowrap;'>" + data + "</span>"
+                        },
+                    },
+                ],
+                rowClick: Page.edit,
+            })
+        }
+    }
+    
+    const handlePageError = function (msg, title) {
+        //console.log("Page.handlePageError(msg, title) - msg", msg)
+        //console.log("Page.handlePageError(msg, title) - title", title)
+        if (!title) {
+            title = "Error"
+        }
+        
+        toastr["error"](msg, title)
+    }
+    
+    const sendSaveRequest = function (dataToSend, callback) {
+        //console.log("Page.sendSaveRequest(dataToSend, callback) - dataToSend -", dataToSend)
+        //console.log("Page.sendSaveRequest(dataToSend, callback) - callback -", callback)
+        let url = "/api/v1.0/pages/save"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handlePageError("Oops: 1", "Save Error")
+                    }
+                })
+            } catch (e) {
+                return handlePageError("Error Validating Page", "Save Error")
+            }
+        } else {
+            return handlePageError("Error Loading Page - Missing Data", "Save Error")
+        }
+    }
+    
+    const set = function (page) {
+        //console.log("Page.set(page)", page)
+        let detail = defaultDetail()
+        
+        if (page) {
+            Page.detail.id = (!isNaN(parseInt(page.id))) ? parseInt(page.id) : null
+            Page.detail.menu_id = (!isNaN(parseInt(page.menu_id))) ? parseInt(page.menu_id) : null
+            Page.detail.path = (page.path) ? page.path : null
+            Page.detail.title = (page.title) ? page.title : null
+            Page.detail.sub_title = (page.sub_title) ? page.sub_title : null
+            Page.detail.heading = (page.heading) ? page.heading : null
+            Page.detail.sub_heading = (page.sub_heading) ? page.sub_heading : null
+            Page.detail.description = (page.description) ? page.description : null
+            Page.detail.keywords = (page.keywords && page.keywords !== "") ? page.keywords.toString().replace(/,\s/g, ",").trim().split(",") : []
+            Page.detail.enabled = (page.enabled && page.enabled === 1) ? 1 : 0
+            Page.detail.date_created = (page.date_created) ? page.date_created : formatDateMySQL()
+            Page.detail.created_by = (page.created_by) ? page.created_by : user_id
+            Page.detail.date_modified = (page.date_modified) ? page.date_modified : formatDateMySQL()
+            Page.detail.modified_by = (page.modified_by) ? page.modified_by : user_id
+            Page.detail.note = (page.note) ? page.note : null
+            
+            detail.id = Page.detail.id
+            detail.menu_id = Page.detail.menu_id
+            detail.path = Page.detail.path
+            detail.title = Page.detail.title
+            detail.sub_title = Page.detail.sub_title
+            detail.heading = Page.detail.heading
+            detail.sub_heading = Page.detail.sub_heading
+            detail.description = Page.detail.description
+            detail.keywords = Page.detail.keywords
+            detail.enabled = Page.detail.enabled
+            detail.date_created = Page.detail.date_created
+            detail.created_by = Page.detail.created_by
+            detail.date_modified = Page.detail.date_modified
+            detail.modified_by = Page.detail.modified_by
+            detail.note = Page.detail.note
+        }
+        
+        return detail
+    }
+    
+    const defaultDetail = function () {
+        //console.log("Page.defaultDetail(menus)")
+        Page.detail.id = null
+        Page.detail.menu_id = null
+        Page.detail.path = null
+        Page.detail.title = null
+        Page.detail.sub_title = null
+        Page.detail.heading = null
+        Page.detail.sub_heading = null
+        Page.detail.description = null
+        Page.detail.keywords = []
+        Page.detail.enabled = 1
+        Page.detail.date_created = formatDateMySQL()
+        Page.detail.created_by = user_id
+        Page.detail.date_modified = formatDateMySQL()
+        Page.detail.modified_by = user_id
+        Page.detail.note = null
+        
+        return {
+            id: null,
+            menu_id: null,
+            path: null,
+            title: null,
+            sub_title: null,
+            heading: null,
+            sub_heading: null,
+            description: null,
+            keywords: [],
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
+        }
+    }
+    
+    const buildMenuDropDown = function (menus) {
+        //console.log("Page.buildMenuDropDown(menus)", menus)
+        if (_modal_new_page_menu_id) {
+            let selectOptions = `<option value="" disabled selected>-- Menu --</option>`
+            
+            $(_modal_new_page_menu_id).empty()
+            
+            $.each(menus, function (k, menu) {
+                let id = (!isNaN(parseInt(menu.id))) ? parseInt(menu.id) : null
+                let label = (menu.label) ? menu.label : null
+                let subMenus = menu.sub_menus
+                
+                selectOptions += `<option  value="${id}">${label}</option>`
+                $.each(subMenus, function (k, subMenu) {
+                    let idSubMenus = (!isNaN(parseInt(subMenu.id))) ? parseInt(subMenu.id) : null
+                    let labelSubMenus = (subMenu.label) ? subMenu.label : null
+                    selectOptions += `<option value="${idSubMenus}">${labelSubMenus}</option>`
+                })
+            })
+            
+            $(_modal_new_page_menu_id).html(selectOptions)
+        }
+    }
+    
+    const buildPageRecord = function () {
+        //console.log("Page.buildPageRecord()")
+        return removeNulls({
+            id: (!isNaN(parseInt(_modal_new_page_id.value))) ? parseInt(_modal_new_page_id.value) : null,
+            menu_id: (!isNaN(parseInt(_modal_new_page_menu_id.value))) ? parseInt(_modal_new_page_menu_id.value) : null,
+            path: (_modal_new_page_path && _modal_new_page_path.value !== "") ? _modal_new_page_path.value : null,
+            title: (_modal_new_page_title && _modal_new_page_title.value !== "") ? _modal_new_page_title.value : null,
+            sub_title: (_modal_new_page_sub_title && _modal_new_page_sub_title.value !== "") ? _modal_new_page_sub_title.value : null,
+            heading: (_modal_new_page_heading && _modal_new_page_heading.value !== "") ? _modal_new_page_heading.value : null,
+            sub_heading: (_modal_new_page_sub_heading && _modal_new_page_sub_heading.value !== "") ? _modal_new_page_sub_heading.value : null,
+            description: (_modal_new_page_description && _modal_new_page_description.value !== "") ? _modal_new_page_description.value : null,
+            keywords: $page_keywords.build(),
+            enabled: (_modal_new_page_enabled && _modal_new_page_enabled.checked === true) ? 1 : 0,
+        })
+    }
+    
+    const validatePageForm = function () {
+        //console.log("Page.validatePageForm()")
+        return $(_modal_new_page_form).valid()
+    }
+    
+    const renderPageForm = function () {
+        //console.log("Page.renderPageForm()")
+        if (_modal_new_page) {
+            $(_modal_new_page).modal("show")
+        }
+    }
+    
+    const hidePageForm = function () {
+        //console.log("Page.hidePageForm()")
+        if (_modal_new_page) {
+            $(_modal_new_page).modal("hide")
+        }
+    }
+    
+    const populatePageForm = function (page) {
+        //console.log("Page.populatePageForm(page)", page)
+        if (page) {
+            let parent_menu_id, sub_menu_id
+            let menu = (Page.menus.get(Page.detail.menu_id)) ? Page.menus.get(Page.detail.menu_id) : ""
+            
+            _modal_new_page_menu_id.value = Page.detail.menu_id
+            _modal_new_page_id.value = Page.detail.id
+            _modal_new_page_path.value = Page.detail.path
+            _modal_new_page_title.value = Page.detail.title
+            _modal_new_page_sub_title.value = Page.detail.sub_title
+            _modal_new_page_heading.value = Page.detail.heading
+            _modal_new_page_sub_heading.value = Page.detail.sub_heading
+            _modal_new_page_description.value = Page.detail.description
+            $page_keywords.set(Page.detail.keywords)
+            _modal_new_page_enabled.checked = (Page.detail.enabled && Page.detail.enabled === 1)
+        }
+    }
+    
+    const clearNewProductForm = function () {
+        //console.log("Page.clearNewProductForm()")
+        
+        _modal_new_page_id.value = ""
+        _modal_new_page_menu_id.value = ""
+        _modal_new_page_path.value = ""
+        _modal_new_page_title.value = ""
+        _modal_new_page_sub_title.value = ""
+        _modal_new_page_heading.value = ""
+        _modal_new_page_sub_heading.value = ""
+        _modal_new_page_description.value = ""
+        $page_keywords.clear()
+        _modal_new_page_enabled.checked = true
+    }
+    
+    const loadPageForm = function (page) {
+        //console.log("Page.loadPageForm(page)", page)
+        if (page) {
+            let detail = set(page)
+            
+            clearNewProductForm()
+            populatePageForm(detail)
+            renderPageForm()
+            
+        }
+    }
+    
+    const loadAll = function (pages) {
+        //console.log("Page.loadAll(pages)", pages)
+        Page.all = new Map()
+        
+        if (pages && pages.length) {
+            let counter = 0
+            tempDetail = null
+            $.each(pages, function (k, page) {
+                let detail = set(page)
+                
+                if (counter === 0) {tempDetail = detail}
+                
+                if (detail.id) {
+                    Page.all.set(detail.id, detail)
+                    addRow(detail)
+                }
+                counter++
+            })
+        } else {
+            tempDetail = null
+        }
+        
+        if (tempDetail !== null) {
+            $table_pages_index.clearSelectedRows()
+            $table_pages_index.jumpToRow(tempDetail)
+        }
+    }
+    
+    const loadAllMenus = function (menus) {
+        //console.log("Page.loadAllMenus(menus)", menus)
+        Page.menus = new Map()
+        Page.sub_menus = new Map()
+        
+        if (menus && menus.length) {
+            $.each(menus, function (k, menu) {
+                let sub_menus = (menu.sub_menus) ? menu.sub_menus : []
+                $.each(sub_menus, function (k, sub_menu) {
+                    Page.menus.set(sub_menu.id, sub_menu)
+                })
+                Page.menus.set(menu.id, menu)
+            })
+        }
+    }
+    
+    const edit = function (page) {
+        //console.log("Page.edit(page)", page)
+        if (page) {
+            loadPageForm(page)
+        }
+    }
+    
+    const save = function () {
+        //console.log("Page.save()")
+        if (validatePageForm()) {
+            let dataToSend = buildPageRecord()
+            
+            if (dataToSend) {
+                confirmDialog(`Page: ${dataToSend.title} does not exist. Would you like to create it?`, (ans) => {
+                    if (ans) {
+                        sendSaveRequest(dataToSend, function (data) {
+                            let pageDetails
+                            if (data) {
+                                pageDetails = data
+                                if (data[0]) {
+                                    pageDetails = data[0]
+                                }
+                                let detail = set(pageDetails)
+                                
+                                //console.log("    detail", detail)
+                            }
+                            
+                        })
+                    }
+                })
+            }
+        }
+    }
+    
+    const init = function (settings) {
+        //console.log("Page.init(settings)", settings)
+        if (_page_index_section) {
+            buildIndexTable()
+            
+            if (settings) {
+                if (settings.pages) {
+                    loadAll(settings.pages)
+                }
+                
+                if (settings.menus) {
+                    loadAllMenus(settings.menus)
+                    buildMenuDropDown(settings.menus)
+                }
+                
+                $page_keywords = $(_modal_new_page_keywords).BuildKeyword([])
+                
+                initializeValidator(formRules)
+                Page.validator = $(_modal_new_page_form).validate()
+            }
+        }
+    }
+    
+    return {
+        menus: new Map(),
+        sub_menus: new Map(),
+        detail: {
+            id: null,
+            menu_id: null,
+            path: null,
+            title: null,
+            sub_title: null,
+            heading: null,
+            sub_heading: null,
+            description: null,
+            keywords: null,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
+        },
+        all: new Map(),
+        buildMenuDropDown: function () {
+            buildMenuDropDown()
+        },
+        edit: function (page) {
+            edit(page)
+        },
+        init: function (settings) {
+            init(settings)
+        },
+    }
+    
+})()
+
+const PricingStrategy = (function () {
+    "use strict"
+    
+    /**
+     * Static Variable Decloration
+     */
+    const daysOfTheWeek = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"]
+    const _product_id = document.getElementById("product_id")
+    const _pricing_strategy_types_id = document.getElementById("pricing_strategy_types_id")
+    const _pricing_strategy_unit_id = document.getElementById("pricing_strategy_unit_id")
+    const _pricing_strategy_season_id = document.getElementById("pricing_strategy_season_id")
+    const _pricing_container = document.getElementById("pricing_container")
+    const panel_tab_pricing = document.getElementById("panel_tab_pricing")
+    
+    /**
+     * Dynamic Variable Decloration
+     */
+    let variantCombinations = []
+    let variant_id, variant_count, variant_name
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    
+    /**
+     * Element Event Handlers
+     */
+    $(_pricing_strategy_types_id)
+        .on("change", function () {
+            //variantCombinations = []
+            //let pricingWorksheet = PricingWorksheet.init()
+            //console.log(pricingWorksheet)
+        })
+    
+    $(_pricing_strategy_season_id)
+        .on("change", function () {
+            //season_id = (!isNaN(parseInt(_pricing_strategy_season_id.value))) ? parseInt(_pricing_strategy_season_id.value) : null
+            //emptyPricingMatrix()
+            //buildPricingMatrix()
+        })
+    
+    $(_pricing_strategy_unit_id)
+        .on("change", function () {
+            //unit_id = (!isNaN(parseInt(_pricing_strategy_unit_id.value))) ? parseInt(_pricing_strategy_unit_id.value) : null
+            
+        })
+    
+    /**
+     * buildPricingMatrix
+     */
+    const buildPricingMatrix = function () {
+        let pricingStrategyForm
+        let pricingStrategyTypesId = (!isNaN(parseInt(_pricing_strategy_types_id.value))) ? parseInt(_pricing_strategy_types_id.value) : null
+        let CONTAINER = $("<div/>")
+        
+        const tableDOW = function () {
+            let tableHeadRow = $("<tr/>")
+            let tableHeadRowColumn0 = $("<th/>", {
+                class: "p-1",
+            })
+            let tableHeadRowColumn0Span = $("<span/>", {
+                class: "p-1",
+                html: '&nbsp;',
+            })
+            tableHeadRowColumn0.append(tableHeadRowColumn0Span)
+            tableHeadRow.append(tableHeadRowColumn0)
+            for (let n = 0; n < daysOfTheWeek.length; n++) {
+                let tableHeadRowColumn = $("<th/>", {
+                    class: "p-1",
+                    text: `${ucwords(daysOfTheWeek[n])}`,
+                })
+                
+                tableHeadRow.append(tableHeadRowColumn)
+            }
+            
+            let tableHeadRowColumnSave = $("<th/>", {
+                class: "p-1",
+                html: '&nbsp;',
+            })
+            
+            tableHeadRow.append(tableHeadRowColumnSave)
+            return tableHeadRow
+        }
+        
+        const closeAllToggles = function () {
+            let els = document.getElementsByClassName("collapse-toggle")
+            
+            $.each(els, function (k, element) {
+                collapseWindow(element)
+            })
+        }
+        
+        const openAllToggles = function () {
+            let els = document.getElementsByClassName("collapse-toggle")
+            
+            $.each(els, function (k, element) {
+                expandWindow(element)
+            })
+        }
+        
+        const seasonForm = function (unit, season) {
+            
+            const getMatrix = function (unit, season) {
+                let pricingMatrix = [], seasonId, unitId, productId, matrixId
+                
+                const getVariantCombinations = function (depth, baseString, arrLetters) {
+                    for (let i = 0; i < arrLetters.length; i++) {
+                        if (depth === 1) {
+                            let variantComboId = baseString + arrLetters[i]
+                            
+                            let combos = variantComboId.split('-').map(function (item) {
+                                return parseInt(item, 10)
+                            })
+                            
+                            combos = combos.sort().join("-")
+                            
+                            let hasVariantComboIndex = variantCombinations.indexOf(variantComboId)
+                            if (hasVariantComboIndex < 0) {
+                                variantCombinations.push(combos)
+                            }
+                            
+                        } else {
+                            let id = arrLetters[i]
+                            getVariantCombinations(depth - 1, baseString + arrLetters[i] + "-", arrLetters)
+                        }
+                    }
+                }
+                
+                const buildVariantListCombinations = function (unit, season) {
+                    let variants = getVariantsUsed()
+                    let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+                    variantCombinations = []
+                    
+                    if (unitId) {
+                        let unit = Unit.all.get(unitId)
+                        if (unit) {
+                            let min = (!isNaN(parseInt(unit.min_pax))) ? parseInt(unit.min_pax) : 1
+                            let max = (!isNaN(parseInt(unit.max_pax))) ? parseInt(unit.max_pax) : 1
+                            if (min > max) {
+                                let temp = max
+                                max = min
+                                min = temp
+                            }
+                            
+                            for (let n = min; n <= max; n++) {
+                                getVariantCombinations(n, "", variants)
+                            }
+                        }
+                    }
+                    
+                    return variantCombinations
+                }
+                
+                const formatCombos = function (variantList) {
+                    let worksheet = Array.from(variantList.values())
+                    let pricingWorksheet = new Map()
+                    
+                    let sectionName = []
+                    let myPricings = []
+                    let hasWorksheet, code
+                    $.each(worksheet, function (index, variantComboList) {
+                        let name = variantComboList.name
+                        let count = variantComboList.count
+                        code = variantComboList.code
+                        let pricings = variantComboList.pricings
+                        hasWorksheet = pricingWorksheet.get(code)
+                        
+                        if (!hasWorksheet) {
+                            hasWorksheet = {
+                                name: null,
+                                pricings: [],
+                            }
+                        }
+                        
+                        sectionName.push(count + " " + pluralize(name, count))
+                        myPricings.push(pricings)
+                        
+                    })
+                    
+                    let wPricing = []
+                    let pricingGroupName = sectionName.join(", ")
+                    for (let m = 0; m < myPricings.length; m++) {
+                        for (let n = 0; n < myPricings[m].length; n++) {
+                            let priceLine = myPricings[m][n]
+                            
+                            let priceLineCode = priceLine.code
+                            let pricing = Pricing.all.get(priceLineCode)
+                            if (pricing) {
+                                //console.log("pricing", pricing)
+                            } else {
+                                pricing = Pricing.set()
+                            }
+                            
+                            pricing.code = priceLine.code
+                            pricing.count = priceLine.count
+                            pricing.name = priceLine.name
+                            pricing.product_id = productId
+                            pricing.season_id = seasonId
+                            pricing.unit_id = unitId
+                            pricing.variant_id = priceLine.variant_id
+                            wPricing.push(pricing)
+                        }
+                    }
+                    
+                    let matrix = Matrix.all.get(code)
+                    if (!matrix) {
+                        matrix = Matrix.set()
+                        matrix.code = code
+                        matrix.product_id = productId
+                        matrix.season_id = seasonId
+                        matrix.unit_id = unitId
+                    }
+                    
+                    pricingWorksheet.set(code, {
+                        been_saved: matrix.been_saved,
+                        code: matrix.code,
+                        cost: matrix.cost,
+                        created_by: matrix.created_by,
+                        date_created: matrix.date_created,
+                        date_modified: matrix.date_modified,
+                        enabled: matrix.enabled,
+                        has_pricing: matrix.has_pricing,
+                        id: matrix.id,
+                        margin: matrix.margin,
+                        modified_by: matrix.modified_by,
+                        note: matrix.note,
+                        price: matrix.price,
+                        product_id: matrix.product_id,
+                        season_id: matrix.season_id,
+                        unit_id: matrix.unit_id,
+                        name: pricingGroupName,
+                        pricings: wPricing,
+                    })
+                    
+                    return pricingWorksheet
+                }
+                
+                const buildPricingMatrixCombinations = function (combos, unit, season) {
+                    
+                    let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
+                    let seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
+                    let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+                    let matrixCode = productId + "-" + unitId + "-" + seasonId
+                    
+                    $.each(combos, function (k, variantComboId) {
+                        let variants = variantComboId.split("-").map(Number)
+                        let variantList = new Map()
+                        
+                        $.each(variants, function (k, variantId) {
+                            let variant = Variant.all.get(variantId)
+                            let hasVariant = variantList.get(variantId)
+                            
+                            if (hasVariant) {
+                                let variantCount = parseInt(hasVariant.count) + 1
+                                let count = variantCount
+                                hasVariant.count = variantCount
+                                hasVariant.pricings.push({
+                                    code: matrixId + "-" + variantId + "-" + count,
+                                    count: count,
+                                    name: variant.name + " " + count,
+                                    product_id: productId,
+                                    season_id: seasonId,
+                                    unit_id: unitId,
+                                    variant_id: parseInt(variantId),
+                                    mon: null,
+                                    tue: null,
+                                    wed: null,
+                                    thu: null,
+                                    fri: null,
+                                    sat: null,
+                                    sun: null,
+                                    monMargin: null,
+                                    tueMargin: null,
+                                    wedMargin: null,
+                                    thuMargin: null,
+                                    friMargin: null,
+                                    satMargin: null,
+                                    sunMargin: null,
+                                    enabled: 1,
+                                    date_created: formatDateMySQL(),
+                                    created_by: user_id,
+                                    date_modified: formatDateMySQL(),
+                                    modified_by: user_id,
+                                    note: null,
+                                })
+                                variantList.set(variantId, hasVariant)
+                            } else {
+                                let variantCount = 0
+                                let count = variantCount + 1
+                                
+                                variantList.set(variantId, {
+                                    count: count,
+                                    name: variant.name,
+                                    code: matrixCode,
+                                    product_id: productId,
+                                    season_id: seasonId,
+                                    unit_id: unitId,
+                                    cost: 0,
+                                    enabled: 1,
+                                    has_pricing: 0,
+                                    id: null,
+                                    margin: 0,
+                                    price: 0,
+                                    modified_by: user_id,
+                                    note: null,
+                                    created_by: user_id,
+                                    date_created: formatDateMySQL(),
+                                    date_modified: formatDateMySQL(),
+                                    pricings: [
+                                        {
+                                            code: matrixCode + "-" + variantId + "-" + count,
+                                            count: count,
+                                            name: variant.name + " " + count,
+                                            product_id: productId,
+                                            season_id: seasonId,
+                                            unit_id: unitId,
+                                            matrix_id: null,
+                                            variant_id: parseInt(variantId),
+                                            mon: 0,
+                                            tue: 0,
+                                            wed: 0,
+                                            thu: 0,
+                                            fri: 0,
+                                            sat: 0,
+                                            sun: 0,
+                                            monMargin: 0,
+                                            tueMargin: 0,
+                                            wedMargin: 0,
+                                            thuMargin: 0,
+                                            friMargin: 0,
+                                            satMargin: 0,
+                                            sunMargin: 0,
+                                            enabled: 1,
+                                            date_created: formatDateMySQL(),
+                                            created_by: user_id,
+                                            date_modified: formatDateMySQL(),
+                                            modified_by: user_id,
+                                            note: null,
+                                        },
+                                    ],
+                                })
+                            }
+                            
+                        })
+                        
+                        let matrixLine = formatCombos(variantList)
+                        
+                        pricingMatrix.push(Array.from(matrixLine.values()))
+                        
+                    })
+                    
+                    return pricingMatrix
+                }
+                
+                let comboMatrix
+                
+                if (unit && season) {
+                    productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
+                    if (productId) {
+                        unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+                        seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
+                        
+                        if (unitId && seasonId) {
+                            matrixId = productId + "-" + unitId + "-" + seasonId
+                            let matrix = Matrix.all.get(matrixId)
+                            comboMatrix = buildPricingMatrixCombinations(buildVariantListCombinations(unit, season), unit, season)
+                            
+                            let variantCombinations = buildVariantListCombinations(unit, season)
+                            
+                            if (!matrix) {
+                                matrix = Matrix.set()
+                            } else {
+                                if (matrix.pricings) {
+                                
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                return comboMatrix
+            }
+            
+            const seasonWrapper = function (unit, season) {
+                let seasonWrapperId
+                if (season) {
+                    let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+                    let seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
+                    if (unitId && seasonId) {
+                        seasonWrapperId = "seasonForm_container_" + unitId + "_" + seasonId
+                    }
+                    
+                    return $("<div/>", {
+                        id: seasonWrapperId,
+                    })
+                }
+                
+                return null
+                
+            }
+            
+            const seasonCollapse = function (unit, season) {
+                let seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
+                let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+                
+                return $("<section/>", {
+                    id: "seasonFormContainer_" + unitId + "_" + seasonId,
+                })
+            }
+            
+            const seasonHeader = function (unit, season) {
+                let TR, HEADING, SPAN, A, HEADINGWRAPPER, TD, colorScheme, backgroundColor, borderColor, textColor,
+                    seasonId, seasonName
+                
+                if (season) {
+                    colorScheme = season.color_scheme
+                    backgroundColor = (colorScheme.background_color) ? colorScheme.background_color : "#fff"
+                    borderColor = (colorScheme.border_color) ? colorScheme.border_color : "#fff"
+                    textColor = (colorScheme.text_color) ? colorScheme.text_color : "#fff"
+                    seasonName = season.name
+                    seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
+                    
+                    SPAN = $("<span/>", {
+                        class: "",
+                        text: seasonName,
+                    })
+                    
+                    A = $("<a/>", {
+                        href: "javascript:void(0)",
+                        class: "panel_link",
+                        css: {
+                            "color": textColor,
+                        },
+                        html: "<i class='fas fa-angle-down'></i>",
+                    })
+                    
+                    HEADING = $("<h6/>", {
+                        class: "h6-responsive m-0 py-1 px-2",
+                        css: {
+                            "color": textColor,
+                        },
+                    })
+                        .attr("aria-expanded", "true")
+                        .attr("aria-target", "#seasonForm_container_" + unit.id + "_" + seasonId)
+                        .on("click", function () {
+                            let isExpanded = ($(this).attr("aria-expanded") === "true")
+                            if (isExpanded) {
+                                collapseWindow(this)
+                            } else {
+                                expandWindow(this)
+                            }
+                        })
+                        .append(SPAN, A)
+                    
+                    HEADINGWRAPPER = $("<div/>", {
+                        id: "seasonForm_" + unit.id + "_" + seasonId,
+                        class: "p-0 collapse-toggle",
+                        css: {
+                            "background": backgroundColor,
+                            "color": textColor,
+                            "border": "solid 1px " + borderColor,
+                            "cursor": "pointer",
+                        },
+                    })
+                        .append(HEADING)
+                }
+                
+                return HEADINGWRAPPER
+            }
+            
+            const buildMatrixForm = function (unit, season) {
+                let matrix = getMatrix(unit, season)
+                let pricings = (matrix.pricings) ? Array.from(matrix.pricings.values()) : []
+                
+                let WRAPPER = []
+                
+                $.each(pricings, function (index, pricing) {
+                    let matrixId = parseInt(pricing.matrix_id)
+                    let TBODY = $("<tbody/>")
+                        .attr("matrixid", matrixId)
+                    
+                    let TROW = matrixRow(pricing)
+                    
+                    TBODY.append(TROW)
+                    WRAPPER.push(TBODY)
+                })
+                
+                return WRAPPER
+            }
+            
+            const matrixRow = function (pricing) {
+                return $("<tr/>")
+            }
+            
+            let TABLE = $("<table class='table table-bordered'/>")
+            let TABLEHEAD = $("<thead/>")
+            let SEASONHEADER = seasonHeader(unit, season)
+            let SEASONBLOCK = seasonWrapper(unit, season)
+            let DOWROW = tableDOW()
+            
+            let SEASONROW = buildMatrixForm(unit, season)
+            let SEASONCOLLAPSE = seasonCollapse(unit, season)
+            
+            TABLEHEAD.append(DOWROW)
+            TABLE.append(TABLEHEAD)
+            
+            $.each(SEASONROW, function (index, row) {
+                TABLE.append(row)
+            })
+            
+            SEASONBLOCK.append(TABLE)
+            SEASONCOLLAPSE.append(SEASONHEADER, SEASONBLOCK)
+            
+            return SEASONCOLLAPSE
+            
+        }
+        
+        const unitForm = function (units) {
+            let UNITFORM, MATRIXFORM, TABLEBODY
+            
+            const unitFormHiddenFields = function (unit) {
+                
+                if (unit) {
+                    if (unit.id) {
+                        let unitId = (unit && unit.id && !isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+                        
+                        return $("<div/>", {
+                            class: "row",
+                        })
+                            .append(
+                                /**
+                                 * columnWrapperMatrixId
+                                 */
+                                $("<div/>", {
+                                    class: "col-3",
+                                })
+                                    .append(
+                                        /**
+                                         * inputWrapperMatrixId
+                                         */
+                                        $("<div/>", {
+                                            class: "form-element",
+                                        })
+                                            .append(
+                                                $("<label>", {
+                                                    class: "d-none",
+                                                    for: "product_edit_matrix_id_" + unitId,
+                                                    text: "product_edit_matrix_id_" + unitId,
+                                                }),
+                                                $("<input/>", {
+                                                    type: "text",
+                                                    placeholder: "product_edit_matrix_id_" + unitId,
+                                                    disabled: "disabled",
+                                                    name: "product_edit_matrix_id_" + unitId,
+                                                    class: "form-control dev-element",
+                                                    id: "product_edit_matrix_id_" + unitId,
+                                                }),
+                                            ),
+                                    ),
+                            )
+                    }
+                }
+                
+                return null
+            }
+            
+            const unitFormBaseFields = function (unit) {
+                let unitId = unit.id
+                
+                let columnWrapperMatrixEnabled = $("<div/>",
+                    {
+                        class: "col-3 d-flex align-self-end justify-content-end pb-2 mb-2",
+                    })
+                    .append(
+                        $("<div/>", { class: "custom-control custom-switch" })
+                            .append(
+                                $("<div/>", { class: "form-element" })
+                                    .append(
+                                        $("<input/>",
+                                            {
+                                                type: "checkbox",
+                                                name: "matrix_enabled_" + unitId,
+                                                class: "custom-control-input",
+                                                id: "matrix_enabled_" + unitId,
+                                            },
+                                        ),
+                                        
+                                        $("<label/>",
+                                            {
+                                                class: "custom-control-label p-0",
+                                                for: "matrix_enabled_" + unitId,
+                                                text: "Enabled:",
+                                            },
+                                        ),
+                                    ),
+                            ),
+                    )
+                
+                let columnWrapperMatrixBaseCost = $("<div/>",
+                    {
+                        class: "col-3",
+                    })
+                    .append(
+                        $("<div/>", { class: "form-element" })
+                            .append(
+                                $("<label>",
+                                    {
+                                        class: "",
+                                        for: "matrix_cost_" + unitId,
+                                        text: "Base Cost:",
+                                    },
+                                ),
+                                
+                                $("<input/>",
+                                    {
+                                        type: "text",
+                                        placeholder: "Base Cost",
+                                        name: "matrix_cost_" + unitId,
+                                        class: "form-control",
+                                        id: "matrix_cost_" + unitId,
+                                    },
+                                )
+                                    .attr("data-type", "cost")
+                                    .attr("data-form", `product_edit_matrix_form_${unitId}`)
+                                    .on("keyup", function (e) {
+                                        let val = $(this).val()
+                                        let form = document.getElementById($(this).attr("data-form"))
+                                        // ----
+                                        
+                                        if (form) {
+                                            let inputs = document.getElementById($(this).attr("data-form")).querySelectorAll("[name='cost']")
+                                            for (let i = 0; i < inputs.length; i++) {
+                                                if (!inputs[i].disabled) {
+                                                    inputs[i].value = val
+                                                    $(inputs[i]).parent("div").find("label").addClass("active")
+                                                } else {
+                                                    inputs[i].value = ""
+                                                    $(inputs[i]).parent("div").find("label").removeClass("active")
+                                                }
+                                            }
+                                        }
+                                    }),
+                            ),
+                    )
+                
+                let columnWrapperMatrixBaseMargin = $("<div/>",
+                    {
+                        class: "col-3",
+                    })
+                    .append(
+                        $("<div/>",
+                            {
+                                class: "form-element",
+                            })
+                            .append(
+                                $("<label>",
+                                    {
+                                        class: "",
+                                        for: "matrix_margin_" + unitId,
+                                        text: "Base Margin:",
+                                    },
+                                ),
+                                
+                                $("<input/>",
+                                    {
+                                        type: "text",
+                                        placeholder: "Base Margin",
+                                        name: "matrix_margin_" + unitId,
+                                        class: "form-control",
+                                        id: "matrix_margin_" + unitId,
+                                    },
+                                )
+                                    .attr("data-type", "margin")
+                                    .attr("data-form", `product_edit_matrix_form_${unitId}`)
+                                    .on("keyup", function (e) {
+                                        let val = $(this).val()
+                                        let form = document.getElementById($(this).attr("data-form"))
+                                        // ----
+                                        
+                                        if (form) {
+                                            let inputs = document.getElementById($(this).attr("data-form")).querySelectorAll("[name='margin']")
+                                            for (let i = 0; i < inputs.length; i++) {
+                                                if (!inputs[i].disabled) {
+                                                    inputs[i].value = val
+                                                    $(inputs[i]).parent("div").find("label").addClass("active")
+                                                } else {
+                                                    inputs[i].value = ""
+                                                    $(inputs[i]).parent("div").find("label").removeClass("active")
+                                                }
+                                            }
+                                        }
+                                    }),
+                            ),
+                    )
+                
+                return $("<div/>", { class: "row" })
+                    .append(columnWrapperMatrixBaseCost, columnWrapperMatrixBaseMargin, columnWrapperMatrixEnabled)
+            }
+            
+            const unitFormContainer = function (unit) {
+                let TABLE = $("<div class=''/>")
+                const tableBody = function (unit) {
+                    let TABLEBODY = $("<div/>")
+                    // ----
+                    
+                    $.each(Array.from(Season.all.values()), function (x, season) {
+                        if (unit && season) {
+                            TABLEBODY.append(seasonForm(unit, season))
+                        }
+                    })
+                    
+                    return TABLEBODY
+                }
+                
+                TABLE.append(tableBody(unit))
+                
+                return TABLE
+            }
+            
+            const unitFormButtons = function (unit) {
+                
+                let BUTTONROW = $("<div/>", {
+                    class: "w-100 text-right w-100",
+                })
+                let BUTTONROWCLEAR = $("<a/>", {
+                    href: "javascript:void(0);",
+                    class: "btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light",
+                    text: "Reset",
+                })
+                let BUTTONROWSUBMIT = $("<a/>", {
+                    href: "javascript:void(0);",
+                    class: "btn btn-primary btn-sm waves-effect waves-light",
+                    text: "Update",
+                })
+                
+                return BUTTONROW.append(BUTTONROWCLEAR, BUTTONROWSUBMIT)
+            }
+            
+            const unitFormHeading = function (unit) {
+                let SPAN, I, A, HEADING, HEADINGWRAPPER
+                
+                let headingText = "Test Heading Text"
+                let unitId = null
+                if (unit) {
+                    unitId = unit.id
+                    headingText = unit.name
+                }
+                
+                let elementId = "unitForm_" + unitId
+                
+                let wrapper = $("<div/>", {
+                    class: "card-header mb-2 collapse-toggle",
+                    css: {
+                        "cursor": "pointer",
+                        "background": "initial",
+                    },
+                    id: elementId,
+                })
+                    .on("click", function () {
+                        let isExpanded = ($(this).attr("aria-expanded") === "true")
+                        if (isExpanded) {
+                            collapseWindow(this)
+                        } else {
+                            expandWindow(this)
+                        }
+                    })
+                wrapper.attr("aria-expanded", "true")
+                wrapper.attr("aria-target", "#unitForm_container_" + unitId)
+                
+                let heading = $("<h5/>", {
+                    class: "mb-0 w-100 d-flex align-items-center justify-content-between p-1",
+                })
+                
+                SPAN = $("<span/>", {
+                    text: headingText,
+                })
+                
+                I = $("<i/>", {
+                    class: "fas fa-angle-down",
+                })
+                
+                A = $("<a />", {
+                    href: "javascript:void(0);",
+                    class: "panel_link",
+                })
+                A.attr("aria-hidden", "true")
+                A.append(I)
+                
+                wrapper.append(heading.append(SPAN, A))
+                return wrapper
+            }
+            
+            const buildUnitFormCollapse = function (unit) {
+                if (unit) {
+                    let HIDDENFIELDS, BUTTONS, BASEFIELDS, UNITCONTAINER
+                    let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+                    HIDDENFIELDS = unitFormHiddenFields(unit)
+                    BUTTONS = unitFormButtons(unit)
+                    BASEFIELDS = unitFormBaseFields(unit)
+                    UNITCONTAINER = unitFormContainer(unit)
+                    
+                    return $("<div/>",
+                        {
+                            id: "unitForm_container_" + unitId,
+                            class: "",
+                        })
+                        .attr("id", "unitForm_container_" + unitId)
+                        .append(HIDDENFIELDS, BASEFIELDS, UNITCONTAINER, BUTTONS)
+                }
+                
+                return null
+            }
+            
+            const buildUnitForm = function (unit) {
+                
+                let UNITFORM = $("<div/>", {
+                    class: "",
+                })
+                
+                if (unit) {
+                    if (unit.id) {
+                        let unitId = (unit && unit.id && !isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+                        UNITFORM.attr("id", unitId)
+                    }
+                }
+                
+                if (unit) {
+                    let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+                    
+                    let UNITHEADING = unitFormHeading(unit)
+                    let UNITCOLLAPSE = buildUnitFormCollapse(unit)
+                    // ----
+                    if (unitId) {
+                        
+                        UNITFORM
+                            .attr("id", "unitForm_" + unitId)
+                            .append(UNITHEADING, UNITCOLLAPSE)
+                    }
+                    
+                    return UNITFORM
+                }
+                
+                return null
+            }
+            
+            $.each(units, function (k, unit) {
+                if (unit.id) {
+                    let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+                    
+                    MATRIXFORM = $("<div/>", {
+                        id: "product_edit_matrix_form_" + unitId,
+                        class: "",
+                    })
+                    
+                    UNITFORM = buildUnitForm(unit)
+                    MATRIXFORM.append(UNITFORM)
+                    CONTAINER.append(MATRIXFORM)
+                }
+            })
+            
+            return CONTAINER
+        }
+        
+        const matrixForm = function (units) {
+            unitForm(units)
+            $(_pricing_container).append(unitForm(units))
+        }
+        
+        const buildPricingMatrix = function (units) {
+            matrixForm(units)
+        }
+        
+        if (pricingStrategyTypesId !== null) {
+            switch (pricingStrategyTypesId) {
+                case 1:
+                    //Per Unit
+                    variant_id = 0
+                    variant_count = 0
+                    variant_name = "Other"
+                    //buildPricingMatrix(Array.from(PricingStrategy.unitSeasons.values()))
+                    closeAllToggles()
+                    break
+                case 2:
+                    //Per Person
+                    //console.log("Per Person")
+                    
+                    //buildPricingMatrix(Array.from(PricingStrategy.unitSeasons.values()))
+                    break
+                case 3:
+                    //Per Days
+                    variant_id = 0
+                    variant_count = 0
+                    variant_name = "Other"
+                    
+                    //buildPricingMatrix(Array.from(PricingStrategy.unitSeasons.values()))
+                    openAllToggles()
+                    break
+                default:
+                    return
+            }
+        }
+    }
+    
+    const updatePricingStrategyTypesId = function (pricing_strategy_types_id) {
+        if (pricing_strategy_types_id) {
+            pricing_strategy_types_id = (!isNaN(parseInt(_pricing_strategy_types_id.value))) ? parseInt(_pricing_strategy_types_id.value) : null
+            //emptyPricingMatrix()
+            //buildPricingMatrix()
+        }
+    }
+    
+    const getVariantsUsed = function () {
+        let results = []
+        
+        let variantsUsed = findObjectByKey(Array.from(Variant.all.values()), 'used_in_pricing', 1)
+        $.each(variantsUsed, function (k, variant) {
+            let id = (!isNaN(parseInt(variant.id))) ? parseInt(variant.id) : null
+            if (!is_null(id)) {
+                results.push(id)
+            }
+        })
+        
+        return results.sort()
+        
+    }
+    
+    const collapseWindow = function (_this) {
+        let targetElement = $(_this).attr("aria-target")
+        let icon = $(_this).find("i")
+        icon.removeClass("fa-angle-down").addClass("fa-angle-up")
+        $(_this).attr("aria-expanded", "false")
+        $(targetElement).slideUp()
+    }
+    
+    const expandWindow = function (_this) {
+        let icon = $(_this).find("i")
+        let targetElement = $(_this).attr("aria-target")
+        icon.removeClass("fa-angle-up").addClass("fa-angle-down")
+        $(_this).attr("aria-expanded", "true")
+        $(targetElement).slideDown()
+    }
+    
+    const buildUnitSeasonValues = function () {
+        PricingStrategy.unitSeasons = new Map()
+        
+        $.each(Array.from(Unit.all.values()), function (k, unit) {
+            PricingStrategy.unitSeasons.set(unit.id, {
+                id: unit.id,
+                name: unit.name,
+                seasons: Season.all,
+            })
+        })
+    }
+    
+    const clearUnitSelection = function () {
+        $(_pricing_strategy_unit_id).val([]).trigger("change")
+    }
+    
+    const clearSeasonSelection = function () {
+        $(_pricing_strategy_season_id).val([]).trigger("change")
+    }
+    
+    const updatePrice = function (el) {
+        let costEl = document.getElementById(el)
+        let marginEl = document.getElementById(el.replace('cost', 'margin'))
+        let priceEl = document.getElementById(el.replace('cost', 'price'))
+        // ----
+        //let cost = (!isNaN(parseInt(costEl.value))) ? parseInt(costEl.value) : 0
+        //let margin = ((!isNaN(parseInt(marginEl.value))) ? parseInt(marginEl.value) : 0) / 100
+        
+        priceEl.value = parseInt(((!isNaN(parseInt(costEl.value))) ? parseInt(costEl.value) : 0 / 100) + (!isNaN(parseInt(costEl.value))) ? parseInt(costEl.value) : 0)
+        
+    }
+    
+    const updateStatus = function () {
+        let test = 4
+        if (test === 0) {
+            $(panel_tab_pricing).append($("<span>", {
+                class: "badge rounded-pill badge-notification bg-danger tab-badge",
+                alt: "Notification",
+                css: { "color": "rgb(255, 255, 255) !important" },
+                text: '!',
+            }))
+        } else {
+            $(panel_tab_pricing).find("span").remove()
+        }
+    }
+    
+    const init = function (pricing_strategies) {
+    
+    }
+    
+    return {
+        all: new Map(),
+        unitSeasons: new Map(),
+        updateStatus: function () {
+            updateStatus()
+        },
+        init: function (pricing_strategies) {
+            init(pricing_strategies)
+        },
+        updatePrice: function (el) {
+            updatePrice(el)
+        },
+        clearUnitSelection: function () {
+            clearUnitSelection()
+        },
+        clearSeasonSelection: function () {
+            clearSeasonSelection()
+        },
+        buildUnitSeasonValues: function () {
+            buildUnitSeasonValues()
+        },
+    }
+    
+})()
+
 document.addEventListener("DOMContentLoaded", function () {
     let panelData = document.querySelectorAll("div.panel")
     
@@ -2968,7 +6567,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 
                 switch (dataToggle) {
                     case "panel-refresh":
-                        //Console.log("refresh")
+                        //console.log("refresh")
                         break
                     case "panel-hide":
                         elem.addEventListener("click", function () {
@@ -2978,7 +6577,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         })
                         break
                     case "panel-collapse":
-                        //Console.log("collapse")
+                        //console.log("collapse")
                         break
                     case"panel-fullscreen":
                         elem.addEventListener("click", function () {
@@ -2992,10 +6591,10 @@ document.addEventListener("DOMContentLoaded", function () {
                                 $el.removeClass("is-fullscreen")
                             }
                         })
-                        //Console.log("fullscreen")
+                        //console.log("fullscreen")
                         break
                     case "panel-close":
-                        //Console.log("close")
+                        //console.log("close")
                         break
                     default:
                         break
@@ -3115,7 +6714,6 @@ $.fn.table = function (settings) {
         
     }
     
-    ///////////////////////////////////////////////
     const insertRow = function (row_data) {
         if (row_data) {
             try {
@@ -3124,7 +6722,7 @@ $.fn.table = function (settings) {
                 $dTable.page.jumpToData(row_data.id, 0)
                 formatTable()
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -3136,7 +6734,7 @@ $.fn.table = function (settings) {
                 $dTable.row(rowId).data(row_data).draw()
                 loadRow(row_data.id)
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
         
@@ -3149,14 +6747,16 @@ $.fn.table = function (settings) {
                 $("#" + table_id + "_tr_" + row_data.id).addClass("selected")
                 $dTable.page.jumpToData(row_data.id, 0)
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
             
         }
     }
     
     const jumpToRow = function (row_data) {
-        //console.log("table:jumpToRow(row_data)", row_data)
+        console.log("table:jumpToRow(row_data)", row_data)
+        // ----
+        
         if (row_data) {
             try {
                 $dTable.page.jumpToData(row_data.id, 0)
@@ -3177,22 +6777,22 @@ $.fn.table = function (settings) {
                     .remove()
                     .draw()
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
     
-    const clear_selected_rows = function () {
+    const clearSelectedRows = function () {
         try {
             let table = $("#" + table_id + "> tbody  > tr")
             $.each(table, function (i, row) {
                 $(row).removeClass("selected")
             })
         } catch (e) {
-            console.log("clear_selected_rows", e)
+            //console.log("clear_selected_rows", e)
         }
     }
-    ///////////////////////////////////////////////
+    
     if (_table) {
         
         try {
@@ -3205,14 +6805,18 @@ $.fn.table = function (settings) {
             })
             
             if (settings.rowClick) {
-                $dTable.on("click", "tr", function () {
+                $dTable.on("click", "tr", function (event) {
                     if ($(this).find("td").hasClass("dataTables_empty")) {
                     
                     } else {
-                        clear_selected_rows()
-                        $(this).addClass("selected")
-                        let rowData = $dTable.row(this).data()
-                        settings.rowClick(rowData)
+                        clearSelectedRows()
+                        if (event.target.nodeName === "TH") {
+                        
+                        } else {
+                            $(this).addClass("selected")
+                            let rowData = $dTable.row(this).data()
+                            settings.rowClick(rowData)
+                        }
                     }
                     
                 })
@@ -3221,17 +6825,17 @@ $.fn.table = function (settings) {
             formatTable()
             
         } catch (e) {
-            console.log("error", e)
+            //console.log("error", e)
         }
         
     }
-    ///////////////////////////////////////////////
+    
     return {
         insertRow: function (row_data) {
             insertRow(row_data)
         },
         clearSelectedRows: function () {
-            clear_selected_rows()
+            clearSelectedRows()
         },
         deleteRow: function (row_data) {
             deleteRow(row_data)
@@ -3363,7 +6967,7 @@ $.fn.BuildKeyword = function (keywords) {
             let tag = tags.get(data)
             if (tag) {
                 if (tag) {
-                    console.log("tag", tag)
+                    //console.log("tag", tag)
                     $input.val(data)
                 }
                 
@@ -3401,6 +7005,12 @@ $.fn.BuildKeyword = function (keywords) {
         })
     }
     
+    const clear = function () {
+        tags = new Map()
+        $input.val("")
+        $container.empty()
+    }
+    
     const add = function (data) {
         if (!data) {
             data = $input.val()
@@ -3412,9 +7022,31 @@ $.fn.BuildKeyword = function (keywords) {
         }
     }
     
+    const set = function (values) {
+        let data
+        if (typeof values === "string") {
+            data = (values !== "") ? values.toString().replace(/,\s/g, ",").trim().split(",") : []
+        } else if (typeof values === "object") {
+            data = values
+        } else {
+            data = []
+        }
+        
+        if ($container) {
+            $container.empty()
+        }
+        
+        $.each(data, function (k, chip) {
+            add(chip)
+        })
+    }
+    
     init(keywords)
     
     return {
+        clear: function () {
+            clear()
+        },
         add: function (data) {
             chipAdd(data)
         },
@@ -3431,6 +7063,9 @@ $.fn.BuildKeyword = function (keywords) {
             }
             return results.join(",")
         },
+        set: function (vals) {
+            set(vals)
+        },
         init: function () {
             init()
         },
@@ -3444,7 +7079,7 @@ const InventoryProfile = (function () {
     const _table_profile_product_edit_add_new_button = document.getElementById("table_profile_product_edit_add_new_button")
     const _product_edit_profile_form_profile_transfer_sales_types_id_block = document.getElementById("product_edit_profile_form_profile_transfer_sales_types_id_block")
     const _product_edit_profile_form_profile_allot_by_id_block = document.getElementById("product_edit_profile_form_profile_allot_by_id_block")
-    const _product_edit_profile_form_profile_name_filter = document.getElementById("product_edit_profile_form_profile_name_filter")
+    //const _product_edit_profile_form_profile_name_filter = document.getElementById("product_edit_profile_form_profile_name_filter")
     const _table_profile_product_edit = document.getElementById("table_profile_product_edit")
     const _product_edit_profile_form_profile_days_out_block = document.getElementById("product_edit_profile_form_profile_days_out_block")
     const _product_edit_profile_form_profile_expires_block = document.getElementById("product_edit_profile_form_profile_expires_block")
@@ -3537,7 +7172,7 @@ const InventoryProfile = (function () {
     $(_table_profile_product_edit_add_new_button)
         .on("click", function () {
             //console.log("InventoryProfile.table_profile_product_edit_add_new_button: click()", {})
-            _product_edit_profile_form_profile_name_filter.value = ""
+            //_product_edit_profile_form_profile_name_filter.value = ""
             $table_profile_product_edit.clearSelectedRows()
             populateInventoryProfileForm()
         })
@@ -3546,7 +7181,7 @@ const InventoryProfile = (function () {
         .on("click", function () {
             $table_profile_product_edit.clearSelectedRows()
             clearInventoryProfileForm()
-            _product_edit_profile_form_profile_name_filter.value = ""
+            //_product_edit_profile_form_profile_name_filter.value = ""
             hideForm()
         })
     
@@ -3562,7 +7197,7 @@ const InventoryProfile = (function () {
             clearInventoryProfileForm()
             setFormElementDisplay()
             hideForm()
-            _product_edit_profile_form_profile_name_filter.value = ""
+            //_product_edit_profile_form_profile_name_filter.value = ""
         })
     
     $(_product_edit_profile_form_profile_sales_types_id)
@@ -3597,7 +7232,7 @@ const InventoryProfile = (function () {
             clearInventoryProfileForm()
             setFormElementDisplay()
             hideForm()
-            _product_edit_profile_form_profile_name_filter.value = ""
+            //_product_edit_profile_form_profile_name_filter.value = ""
         })
     
     const updateProgress = function () {
@@ -3624,7 +7259,7 @@ const InventoryProfile = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -3646,7 +7281,7 @@ const InventoryProfile = (function () {
                             $table_profile_product_edit.deleteRow(detail)
                             $table_profile_product_edit.clearSelectedRows()
                             
-                            _product_edit_profile_form_profile_name_filter.value = ""
+                            //_product_edit_profile_form_profile_name_filter.value = ""
                             
                             PricingWorksheet.pricingWorksheet()
                             Pricing.resetForm()
@@ -3707,62 +7342,6 @@ const InventoryProfile = (function () {
     const initAutoComplete = function () {
         //console.log('InventoryProfile.initAutoComplete()', InventoryProfile)
         let product_id = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
-        
-        $(_product_edit_profile_form_profile_name_filter)
-            .on("click", function () {
-                $(this).select()
-            })
-            .on("search", function () {
-                $table_profile_product_edit.clearSelectedRows()
-                resetInventoryProfileForm()
-            })
-            .on("change", function () {
-                setTimeout(function () {
-                    //*
-                    let profile_name = _product_edit_profile_form_profile_name_filter.value
-                    
-                    if (globalSelectedProfile === false) {
-                        if (profile_name === "") {
-                            globalSelectedProfile = false
-                            $table_profile_product_edit.clearSelectedRows()
-                            resetInventoryProfileForm()
-                        } else {
-                            nameExists(profile_name)
-                        }
-                    }
-                    //*/
-                }, 200)
-                if (_product_edit_profile_form_profile_name_filter.value === "") {
-                    $table_profile_product_edit.clearSelectedRows()
-                    resetInventoryProfileForm()
-                }
-            })
-            .autocomplete({
-                serviceUrl: "/api/v1.0/autocomplete/profiles",
-                minChars: 2,
-                cache: false,
-                dataType: "json",
-                triggerSelectOnValidInput: false,
-                params: { "product_id": product_id },
-                paramName: "st",
-                onSelect: function (suggestion) {
-                    if (!suggestion.data) {
-                        return
-                    }
-                    $table_profile_product_edit.clearSelectedRows()
-                    let id = (!isNaN(parseInt(suggestion.data.id))) ? parseInt(suggestion.data.id) : null
-                    let inventory_profile = InventoryProfile.all.get(id)
-                    
-                    if (inventory_profile) {
-                        $table_profile_product_edit.loadRow(inventory_profile)
-                        populateInventoryProfileForm(inventory_profile)
-                        return
-                    }
-                    
-                    populateInventoryProfileForm()
-                    _product_edit_profile_form_profile_name.value = _product_edit_profile_form_profile_name_filter.value
-                },
-            })
     }
     
     const nameExists = function (name) {
@@ -4026,7 +7605,7 @@ const InventoryProfile = (function () {
         if (_product_edit_profile_form) {
             hideAllotmentFields()
             $(_product_edit_profile_form).hide()
-            _product_edit_profile_form_profile_name_filter.disabled = false
+            //_product_edit_profile_form_profile_name_filter.disabled = false
             
             $("#accordionEx").collapse("hide")
             
@@ -4036,7 +7615,7 @@ const InventoryProfile = (function () {
     
     const showForm = function () {
         if (_product_edit_profile_form) {
-            _product_edit_profile_form_profile_name_filter.disabled = true
+            //_product_edit_profile_form_profile_name_filter.disabled = true
             $(_product_edit_profile_form).show()
         }
     }
@@ -4199,8 +7778,8 @@ const InventoryProfile = (function () {
             let detail = set(inventory_profile)
             
             showForm()
-            _product_edit_profile_form_profile_name_filter.value = detail.name
-            _product_edit_profile_form_profile_name_filter.disabled = true
+            //_product_edit_profile_form_profile_name_filter.value = detail.name
+            //_product_edit_profile_form_profile_name_filter.disabled = true
             $table_profile_product_edit.loadRow(detail)
             populateInventoryProfileForm(detail)
         }
@@ -4229,7 +7808,7 @@ const InventoryProfile = (function () {
                             $table_profile_product_edit.jumpToRow(detail)
                             $table_profile_product_edit.clearSelectedRows()
                             
-                            _product_edit_profile_form_profile_name_filter.value = ""
+                            //_product_edit_profile_form_profile_name_filter.value = ""
                             
                             PricingWorksheet.pricingWorksheet()
                             Pricing.resetForm()
@@ -4264,9 +7843,81 @@ const InventoryProfile = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
+    }
+    
+    const initProductEdit = function (settings) {
+        let inventory_profiles = []
+        
+        if (settings) {
+            if (settings.profiles) {
+                inventory_profiles = settings.profiles
+            }
+        }
+        
+        checkin_dow = $(_product_edit_profile_form_profile_checkin_dow).DisabledDOW({
+            name: "checkin_dow",
+            label: "Checkin DOW",
+        })
+        
+        checkout_dow = $(_product_edit_profile_form_profile_checkout_dow).DisabledDOW({
+            name: "checkout_dow",
+            label: "Checkout DOW",
+        })
+        
+        departure_dow = $(_product_edit_profile_form_profile_departure_dow).DisabledDOW({
+            name: "departure_dow",
+            label: "Departure DOW",
+        })
+        
+        return_dow = $(_product_edit_profile_form_profile_return_dow).DisabledDOW({
+            name: "return_dow",
+            label: "Return DOW",
+        })
+        
+        inc_days_dow = $(_product_edit_profile_form_profile_inc_days_dow).DisabledDOW({
+            name: "inc_days_dow",
+            label: "Included Days",
+        })
+        
+        weekday_dow = $(_product_edit_profile_form_profile_weekday_dow).DisabledDOW({
+            name: "weekday_dow",
+            label: "Weekdays",
+        })
+        
+        InventoryProfile.checkin_dow = checkin_dow
+        InventoryProfile.checkout_dow = checkout_dow
+        InventoryProfile.departure_dow = departure_dow
+        InventoryProfile.return_dow = return_dow
+        InventoryProfile.weekday_dow = weekday_dow
+        InventoryProfile.inc_days_dow = inc_days_dow
+        
+        InventoryProfile.advanced_booking_date = $("#profile_advanced_booking_date").dateSelect({
+            onStart: function () {},
+        })
+        
+        InventoryProfile.expiration_date = $("#profile_expires").dateSelect({
+            onStart: function () {},
+        })
+        
+        //$(document).ready(function () {
+        if (_table_profile_product_edit) {
+            buildInventoryProfileTable()
+        }
+        
+        if (_product_edit_profile_form) {
+            validator_init(form_rules)
+            
+            InventoryProfile.validator = $(_product_edit_profile_form).validate()
+            
+            resetInventoryProfileForm()
+            hideForm()
+        }
+        
+        loadAll(inventory_profiles)
+        //})
     }
     
     const init = function (settings) {
@@ -4328,10 +7979,6 @@ const InventoryProfile = (function () {
                 buildInventoryProfileTable()
             }
             
-            if (_product_edit_profile_form_profile_name_filter) {
-                initAutoComplete()
-            }
-            
             if (_product_edit_profile_form) {
                 validator_init(form_rules)
                 
@@ -4357,6 +8004,9 @@ const InventoryProfile = (function () {
         return_dow: null,
         weekday_dow: null,
         inc_days_dow: null,
+        initProductEdit: function (settings) {
+            initProductEdit(settings)
+        },
         init: function (settings) { init(settings) },
         initAutoComplete: function () { initAutoComplete() },
         edit: function (inventory_profile) {
@@ -5223,7 +8873,9 @@ const PricingWorksheet = (function () {
                     })
                     
                     PricingWorksheet.pricingWorksheet()
-                    toastr.success(`Matrix: ${matrix.name} - has been updated`)
+                    
+                    Product.updateProgress()
+                    toastr["success"](`Matrix: ${matrix.name} - has been updated`, "Pricing Worksheet")
                 }
             })
         }
@@ -5242,10 +8894,10 @@ const PricingWorksheet = (function () {
                     
                     PricingWorksheet.pricingWorksheet()
                     
-                    console.log("pricingsHidden", pricingsHidden)
-                    console.log("matricesHidden", matricesHidden)
-                    console.log("unitsCollapsed", unitsCollapsed)
-                    console.log("seasonsCollapsed", seasonsCollapsed)
+                    //console.log("pricingsHidden", pricingsHidden)
+                    //console.log("matricesHidden", matricesHidden)
+                    //console.log("unitsCollapsed", unitsCollapsed)
+                    //console.log("seasonsCollapsed", seasonsCollapsed)
                     
                     if (seasonsCollapsed) {
                         $(_button_collapse_seasons).attr("data-shown", "false")
@@ -5290,7 +8942,7 @@ const PricingWorksheet = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -5308,7 +8960,7 @@ const PricingWorksheet = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -6454,7 +10106,7 @@ const Upload = function (file) {
     this.file = file
 }
 
-const _image_manager_is_cover_image = document.getElementById("image_manager_is_cover_image")
+const _image_manager_is_cover = document.getElementById("image_manager_is_cover")
 const _image_manager_title = document.getElementById("image_manager_title")
 const _image_manager_caption = document.getElementById("image_manager_caption")
 const _image_manager_upload = document.getElementById("image_manager_upload")
@@ -6488,7 +10140,7 @@ Upload.prototype.doUpload = function () {
     formData.append("upload_file", true)
     formData.append("title", (_image_manager_title.value !== "") ? _image_manager_title.value : null)
     formData.append("caption", (_image_manager_caption.value !== "") ? _image_manager_caption.value : null)
-    formData.append("is_cover_image", (_image_manager_is_cover_image.checked !== true) ? parseInt(0) : parseInt(1))
+    formData.append("is_cover", (_image_manager_is_cover.checked !== true) ? parseInt(0) : parseInt(1))
     formData.append("alt", (_image_manager_alt_text.value !== "") ? _image_manager_alt_text.value : null)
     
     /**
@@ -6515,7 +10167,7 @@ Upload.prototype.doUpload = function () {
             return myXhr
         },
         success: function (data) {
-            Console.log("data", data)
+            //console.log("data", data)
             let image, result = null
             if (data) {
                 if (data.result) {
@@ -6545,7 +10197,7 @@ Upload.prototype.doUpload = function () {
         },
         error: function (error) {
             toastr.error("Error")
-            Console.log("error", error)
+            //console.log("error", error)
         },
         async: true,
         data: formData,
@@ -6578,7 +10230,7 @@ Upload.prototype.progressReset = function () {
 
 Upload.prototype.resetForm = function () {
     Upload.prototype.progressReset()
-    _image_manager_is_cover_image.checked = false
+    _image_manager_is_cover.checked = false
     _image_manager_image_id.value = ""
     _image_manager_title.value = ""
     _image_manager_upload.value = ""
@@ -6591,7 +10243,7 @@ Upload.prototype.resetForm = function () {
 Upload.prototype.populateForm = function (image) {
     Upload.prototype.progressReset()
     let img = image.path + "/" + image.name + "." + image.extension
-    _image_manager_is_cover_image.checked = (image.is_cover_image === 1)
+    _image_manager_is_cover.checked = (image.is_cover === 1)
     _image_manager_image_id.value = image.id
     _image_manager_title.value = image.title
     _image_manager_caption.value = image.caption
@@ -6603,19 +10255,19 @@ Upload.prototype.populateForm = function (image) {
 }
 
 $("#image_manager_upload")
-  .on("change", function () {
-      _image_manager_is_cover_image.checked = false
-      _image_manager_image_id.value = ""
-      _image_manager_title.value = ""
-      _image_manager_caption.value = ""
-      _image_manager_alt_text.value = ""
-      $(_image_manager_form_data).show()
-  })
+    .on("change", function () {
+        _image_manager_is_cover.checked = false
+        _image_manager_image_id.value = ""
+        _image_manager_title.value = ""
+        _image_manager_caption.value = ""
+        _image_manager_alt_text.value = ""
+        $(_image_manager_form_data).show()
+    })
 
 $("#image_manager_clear_button")
-  .on("click", function () {
-      Upload.prototype.resetForm()
-  })
+    .on("click", function () {
+        Upload.prototype.resetForm()
+    })
 
 $.fn.YearCalendar = function (settings) {
     "use strict"
@@ -6737,7 +10389,7 @@ $.fn.YearCalendar = function (settings) {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 return callback([])
             }
         } else {
@@ -6961,7 +10613,7 @@ $.fn.YearCalendar = function (settings) {
                     }
                 },
                 eventClick: function (calEvent, jsEvent, view) {
-                    console.log('Event: ', calEvent)
+                    //console.log('Event: ', calEvent)
                     //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY)
                     //alert('View: ' + view.name)
                     
@@ -7374,7 +11026,7 @@ const YearCalendar = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 handleCalendarError("Oops: 2")
                 endLoading()
             }
@@ -7394,7 +11046,7 @@ const YearCalendar = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 return handleCalendarError("Oops: 1")
             }
         }
@@ -7483,7 +11135,7 @@ const YearCalendar = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -7584,376 +11236,959 @@ const YearCalendar = (function () {
 })()
 
 
-$.fn.imageManager = function (options) {
-    const $carouselWrapper = $(this).find("div.carousel")
-    const $carouselIndicators = $(this).find("ol.carousel-indicators")
-    const $carouselInner = $(this).find("div.carousel-inner")
-    const _form_edit_company_images = document.getElementById("companyImageManager")
-    const _image_manager_is_cover_image = document.getElementById("image_manager_is_cover_image")
-    const _image_manager_title = document.getElementById("image_manager_title")
-    const _image_manager_caption = document.getElementById("image_manager_caption")
-    const _image_manager_upload = document.getElementById("image_manager_upload")
-    const _image_manager_alt_text = document.getElementById("image_manager_alt_text")
-    const _image_manager_form_data = document.getElementById("image_manager_form_data")
-    const _image_manager_image_id = document.getElementById("image_manager_id")
-    const $imageForm = $("#image_manager_form_data")
-    const _vendor_edit = document.getElementById("vendor_edit")
-    const _image_manager_cancel_upload = document.getElementById("image_manager_cancel_upload")
-    let drEvent, validator
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    let counter = 0
-    let carouselId = ""
+const ImageManager = (function () {
+    "use strict"
     
-    const form_rules = {
+    const _button_product_images_toggle = document.getElementById("button_product_images_toggle")
+    const _imageManagerCancel = document.getElementById("imageManagerCancel")
+    const _imageManagerFormRemoveButton = document.getElementById("imageManagerFormRemoveButton")
+    const _fileDimensions = document.getElementById("fileDimensions")
+    const _fileWidth = document.getElementById("fileWidth")
+    const _fileHeight = document.getElementById("fileHeight")
+    const _fileRatio = document.getElementById("fileRatio")
+    const _imageManagerForm = document.getElementById("imageManagerForm")
+    const _imageManagerFormImagesBlock = document.getElementById("imageManagerFormImagesBlock")
+    const _imageManagerFormSubmitButton = document.getElementById("imageManagerFormSubmitButton")
+    const _imageManagerFormCancelButton = document.getElementById("imageManagerFormCancelButton")
+    const _imageManagerFormClearButton = document.getElementById("imageManagerFormClearButton")
+    const _imageManagerFormDetails = document.getElementById("imageManagerFormDetails")
+    const _fileName = document.getElementById("fileName")
+    const _fileType = document.getElementById("fileType")
+    const _fileExtension = document.getElementById("fileExtension")
+    const _fileSize = document.getElementById("fileSize")
+    const _image_id = document.getElementById("image_id")
+    const _image_name = document.getElementById("image_name")
+    const _image_title = document.getElementById("image_title")
+    const _image_alt = document.getElementById("image_alt")
+    const _image_caption = document.getElementById("image_caption")
+    const _fileToUpload = document.getElementById("fileToUpload")
+    const _image_enabled = document.getElementById("image_enabled")
+    const _image_is_cover = document.getElementById("image_is_cover")
+    const _image_is_shown = document.getElementById("image_is_shown")
+    const _imageManagerPreview = document.getElementById("imageManagerPreview")
+    
+    let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let source, sourceId, img_toggle
+    let imageType = new Map()
+    let imageFormRules = {
         rules: {
-            image_manager_title: {
+            image_name: {
                 required: true,
             },
-            image_manager_alt_text: {
+            image_title: {
                 required: true,
             },
-            image_manager_caption: {
+            image_alt: {
+                required: true,
+            },
+            image_caption: {
                 required: true,
             },
         },
         messages: {
-            image_manager_title: {
+            image_name: {
                 required: "Field Required",
             },
-            image_manager_alt_text: {
+            image_title: {
                 required: "Field Required",
             },
-            image_manager_caption: {
+            image_alt: {
+                required: "Field Required",
+            },
+            image_caption: {
                 required: "Field Required",
             },
         },
     }
+    let currentImage = null
+    let currentImageCover = null
+    let currentImageShown = null
     
-    $("#image_manager_upload_button")
-      .on("click", function () {
-          if (_form_edit_company_images) {
-              if (validate_form()) {
-                  confirmDialog(`Would you like to update?`, (ans) => {
-                      if (ans) {
-                          save()
-                      }
-                  })
-              }
-          }
-      })
+    imageType.set("png", "image/png")
+    imageType.set("jpg", "image/jpeg")
+    imageType.set("gif", "image/gif")
+    imageType.set("webp", "image/webp")
     
-    $("button.dropify-clear")
-      .on("click", function () {
-          $("input.dropify").trigger("change")
-      })
+    $(_fileToUpload)
+        .on("change", function (event) {
+            if ($(this).val() !== "") {
+                fileSelected(event)
+            } else {
+                resetFileInput(event)
+            }
+        })
     
-    $(_image_manager_cancel_upload)
-      .on("click", function () {
-          Upload.prototype.resetForm()
-          $("button.dropify-clear").trigger("click")
-      })
+    $(_imageManagerFormSubmitButton)
+        .on("click", function (event) {
+            submit(event)
+        })
     
-    const handle_image_error = function (msg) {
-        toastr.error(msg)
+    $(_imageManagerFormClearButton)
+        .on("click", function () {
+            clear()
+        })
+    
+    $(_imageManagerFormCancelButton)
+        .on("click", function () {
+            clear()
+            hideImageForm()
+        })
+    
+    $(_imageManagerCancel)
+        .on("click", function () {
+            clear()
+            hideImageForm()
+        })
+    
+    $(_imageManagerFormRemoveButton)
+        .on("click", function () {
+            let imageId = (!isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
+            
+            if (imageId !== null) {
+                confirmDialog(`Would you like to delete this image?`, (ans) => {
+                    if (ans) {
+                        remove(imageId)
+                    }
+                })
+            }
+        })
+    
+    $(_image_is_shown)
+        .on("change", function () {
+            console.log("ImageManager.image_is_shown:change()", _image_is_shown.checked)
+            let imageId = (!isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
+            let el = document.getElementById("image_" + imageId + "")
+            currentImage = imageId
+            if (!_image_is_shown.checked) {
+                if (_image_is_cover.checked) {
+                    currentImageCover = imageId
+                    _image_is_cover.checked = false
+                    $(el).removeClass("is-cover-image")
+                }
+                $(el).removeClass("is-shown")
+                currentImageShown = true
+            } else {
+                currentImageShown = false
+                $(el).addClass("is-shown")
+            }
+        })
+    
+    $(_image_is_cover)
+        .on("change", function () {
+            console.log("ImageManager.is_cover:change()", _image_is_cover.checked)
+            let imageId = (!isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
+            let el = document.getElementById("image_" + imageId + "")
+            
+            currentImageCover = (!isNaN(parseInt($(".img-thumbnail.is-cover-image").data("id")))) ? parseInt($(".img-thumbnail.is-cover-image").data("id")) : null
+            currentImageShown = (_image_is_shown) ? _image_is_shown.checked : null
+            
+            if (_image_is_cover.checked) {
+                if (!_image_is_shown.checked) {
+                    _image_is_shown.checked = true
+                }
+                
+                $(".img-thumbnail.is-cover-image").removeClass("is-cover-image")
+                $(el).addClass("is-cover-image is-shown")
+            }
+        })
+    
+    $("#button_product_images_toggle")
+        .on("click", function () {
+            $(_fileToUpload).trigger("click")
+        })
+    
+    const handleImageManagerError = function (msg, title, level) {
+        if (!title) {
+            title = "Image"
+        }
+        
+        if (!level) {
+            level = "success"
+        }
+        
+        toastr[level](`${msg}`, title)
     }
     
-    const updateImage = function (dataToSend, callback) {
-        let url = "/api/v1.0/images/update"
+    const remove = function (image_id) {
+        console.log("ImageManager.remove(image_id)", image_id)
+        if (!image_id || !ImageManager.source || !ImageManager.sourceId) {
+            return
+        }
         
+        let dataToSend = {
+            image_id: image_id,
+            source: ImageManager.source,
+            source_id: ImageManager.sourceId,
+        }
+        
+        console.log("|__ dataToSend", dataToSend)
+        
+        sendRemoveRequest({
+            image_id: image_id,
+            source: ImageManager.source,
+            source_id: ImageManager.sourceId,
+        }, function (data) {
+            if (data) {
+                console.log("data", data)
+            }
+        })
+    }
+    
+    const sendRemoveRequest = function (dataToSend, callback) {
         if (dataToSend) {
-            Console.log("data", dataToSend)
+            let url = "/api/v1.0/images/remove"
             try {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
                     if (data) {
                         return callback(data)
-                    } else {
-                        return handle_image_error("Oops: 1")
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                console.log("error", e)
+                return handleImageManagerError("Error Removing Image.", "Image Manager", "error")
             }
         }
     }
     
-    const validate_form = function () {
-        return $(_form_edit_company_images).valid()
-    }
-    
-    const init = function (options) {
-        drEvent = $("#image_manager_upload").dropify({})
-        if (options) {
-            if (options.images) {
-                loadAll(options.images)
-            }
-            if (options.id) {
-                carouselId = "carousel-" + options.id
-            }
-        }
-        if (_form_edit_company_images) {
-            validator_init(form_rules)
-            validator = $(_form_edit_company_images).validate()
-            
-        }
-        
-        $carouselWrapper.carousel()
-    }
-    
-    const save = function () {
-        let file = null
-        if (_image_manager_image_id) {
-            if (!isNaN(parseInt(_image_manager_image_id.value))) {
-                let dataToSend = this.all.get(parseInt(_image_manager_image_id.value))
-                
-                dataToSend.alt = (_image_manager_alt_text.value !== "") ? _image_manager_alt_text.value : null
-                dataToSend.caption = (_image_manager_caption.value !== "") ? _image_manager_caption.value : null
-                dataToSend.is_cover_image = (_image_manager_is_cover_image.checked === true) ? 1 : 0
-                dataToSend.title = (_image_manager_title.value !== "") ? _image_manager_title.value : null
-                
-                if (_provider_edit) {
-                    dataToSend.directory_id = (parseInt(_provider_company_id.value))
-                    dataToSend.directory = "company"
+    const submit = function (event) {
+        console.log("ImageManager.submit(event)", event)
+        let isValid = validate()
+        if (isValid) {
+            confirmDialog(`Would you like to update?`, (ans) => {
+                if (ans) {
+                    uploadFile(event)
                 }
-                
-                if (_vendor_edit) {
-                    dataToSend.directory_id = (parseInt(_provider_company_id.value))
-                    dataToSend.directory = "company"
-                }
-                
-                updateImage(dataToSend, function (data) {
-                    Console.log("data", data)
-                    let image
-                    
+            })
+        }
+    }
+    
+    const validate = function () {
+        return $(_imageManagerForm).valid()
+    }
+    
+    const sendUpdateRequest = function (dataToSend, callback) {
+        if (dataToSend) {
+            let url = "/api/v1.0/images/update"
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
                     if (data) {
-                        if (data[0]) {
-                            image = data[0]
-                            set(image)
-                        }
+                        return callback(data)
                     }
                 })
-                
-            } else {
-                let $input = $(_image_manager_upload)
-                
-                if ($input) {
-                    if ($input[0]) {
-                        if ($input[0].files) {
-                            if ($input[0].files[0]) {
-                                file = $input[0].files[0]
-                                let upload = new Upload(file)
-                                upload.doUpload()
-                            } else {
-                                //Console.log("Missing $input[0].files[0]")
-                            }
-                        } else {
-                            //Console.log("Missing $input[0].files")
-                        }
-                    } else {
-                        //Console.log("Missing $input[0]")
+            } catch (e) {
+                console.log("error", e)
+                return handleImageManagerError("Error", "Image Manager", "error")
+            }
+        }
+    }
+    
+    const uploadFile = function (event) {
+        console.log("ImageManager.uploadFile(event)", event)
+        const _fileToUpload = document.getElementById("fileToUpload")
+        let filePath, fileHeight, fileWidth, fileSize, fileExtension, fileName,
+            fileType, fileRatio, ratioHeight, ratioWidth, fileDimensions, source, sourceId,
+            fileTitle, fileAlt, fileCaption, fileIsShown, fileIsCover, fileEnabled, fileId,
+            fileThumbsPath = null
+        let formData = new FormData()
+        let xhr = new XMLHttpRequest()
+        
+        fileId = (_image_id && !isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
+        fileCaption = (_image_caption && _image_caption.value !== "") ? _image_caption.value : null
+        fileTitle = (_image_title && _image_title.value !== "") ? _image_title.value : null
+        fileAlt = (_image_alt && _image_alt.value !== "") ? _image_alt.value : null
+        fileIsShown = (_image_is_shown && _image_is_shown.checked === true) ? 1 : 0
+        fileEnabled = (_image_enabled && _image_enabled.checked === true) ? 1 : 0
+        fileIsCover = (_image_is_cover && _image_is_cover.checked === true) ? 1 : 0
+        
+        if (fileId !== null) {
+            fileName = document.getElementById("fileName").innerText
+            fileExtension = (document.getElementById("fileExtension")) ? document.getElementById("fileExtension").innerText : null
+            fileSize = (document.getElementById("fileSize")) ? document.getElementById("fileSize").innerText : null
+            fileDimensions = (document.getElementById("fileDimensions")) ? document.getElementById("fileDimensions").innerText : null
+            fileWidth = (document.getElementById("fileWidth")) ? (!isNaN(parseInt(document.getElementById("fileWidth").innerText))) ? parseInt(document.getElementById("fileWidth").innerText) : null : null
+            fileHeight = (document.getElementById("fileHeight")) ? (!isNaN(parseInt(document.getElementById("fileHeight").innerText))) ? parseInt(document.getElementById("fileHeight").innerText) : null : null
+            
+            let dataToSend = removeNulls({
+                id: fileId,
+                name: fileName,
+                alt: fileAlt,
+                title: fileTitle,
+                caption: fileCaption,
+                is_cover: fileIsCover,
+                path: `/public/img/${ImageManager.source}/${ImageManager.sourceId}`,
+                thumbs_path: `/public/thumbs/${ImageManager.source}/${ImageManager.sourceId}`,
+                extension: fileExtension,
+                dimensions: fileDimensions,
+                size: fileSize,
+                height: fileHeight,
+                width: fileWidth,
+                enabled: fileEnabled,
+                directory: ImageManager.source,
+                directory_id: ImageManager.sourceId,
+                is_shown: fileIsShown,
+            })
+            
+            console.log("dataToSend", dataToSend)
+            
+            sendUpdateRequest(dataToSend, function (data) {
+                if (data) {
+                    let detail = set((data[0]) ? data[0] : data)
+                    console.log("|__ detail", detail)
+                    let image = ImageManager.all.get(detail.id)
+                    console.log("|__ image", image)
+                    if (image) {
+                    
                     }
-                } else {
-                    //Console.log("Missing $input")
+                    
+                    ImageManager.all.set(detail.id, detail)
+                    
+                    toastr["success"](`Image Manager: ${detail.name} - has been updated`, "Image Manager")
+                }
+            })
+            
+        } else {
+            buildImageObject(event, function (data) {
+                console.log("|__ data", data)
+                source = data.source
+                sourceId = data.source_id
+                filePath = (data.path) ? data.path : null
+                fileHeight = (!isNaN(parseInt(data.height))) ? parseInt(data.height) : null
+                fileWidth = (!isNaN(parseInt(data.width))) ? parseInt(data.width) : null
+                fileName = (data.name) ? data.name : null
+                fileExtension = (data.extension) ? data.extension : null
+                fileSize = (data.size) ? data.size : null
+                fileRatio = (data.ratio) ? data.ratio : null
+                fileType = (data.type) ? data.type : null
+                fileThumbsPath = data.thumbs_path
+                fileDimensions = (data.dimensions) ? data.dimensions : null
+                
+                formData.append("dimensions", fileDimensions)
+                formData.append("extension", fileExtension)
+                formData.append("file", _fileToUpload.files[0], `${fileName}.${fileExtension}`)
+                formData.append("height", fileHeight)
+                formData.append("name", fileName)
+                formData.append("path", filePath)
+                formData.append("thumbs_path", fileThumbsPath)
+                formData.append("ratio", fileRatio)
+                formData.append("size", fileSize)
+                formData.append("type", fileType)
+                formData.append("width", fileWidth)
+                formData.append("directory", source)
+                formData.append("directory_id", sourceId)
+                formData.append("title", fileTitle)
+                formData.append("enabled", fileEnabled)
+                formData.append("is_shown", fileIsShown)
+                formData.append("is_cover", fileIsCover)
+                formData.append("alt", fileAlt)
+                formData.append("caption", fileCaption)
+                
+                xhr.upload.addEventListener("progress", uploadProgress, false)
+                xhr.addEventListener("load", uploadComplete, false)
+                xhr.addEventListener("error", uploadFailed, false)
+                xhr.addEventListener("abort", uploadCanceled, false)
+                
+                switch (source.toLowerCase()) {
+                    case "product":
+                        xhr.open("POST", "/api/v1.0/upload/product")
+                        xhr.send(formData)
+                        break
+                    case "unit":
+                        console.log("|__ |__ unit")
+                        break
+                    case "company":
+                        console.log("|__ |__ company")
+                        break
+                    case "user":
+                        console.log("|__ |__ user")
+                        break
+                    default:
+                        return
+                }
+            })
+        }
+        
+    }
+    
+    const uploadProgress = function (event) {
+        console.log("ImageManager.uploadProgress(event)", event)
+        if (event.lengthComputable) {
+            let percentComplete = Math.round(event.loaded * 100 / event.total)
+            document.getElementById("progressNumber").innerHTML = percentComplete.toString() + "%"
+        } else {
+            document.getElementById("progressNumber").innerHTML = "unable to compute"
+        }
+    }
+    
+    const uploadComplete = function (event) {
+        console.log("ImageManager.uploadComplete(event)", event)
+        let results = null
+        
+        if (event) {
+            if (event.target) {
+                if (event.target.responseText) {
+                    const image = JSON.parse(event.target.responseText)
+                    
+                    if (image) {
+                        if (image.status) {
+                            if (image.status === "success" && image.result) {
+                                results = image.result
+                                if (image.result.length === 1) {
+                                    results = image.result[0]
+                                }
+                                let detail = set(results)
+                                let allImages = Array.from(ImageManager.all.values())
+                                let counter = allImages.length
+                                
+                                console.log("|__ image", detail)
+                                
+                                $(_imageManagerFormImagesBlock).append(buildImageThumbnail(detail))
+                                
+                                ImageManager.all.set(detail.id, detail)
+                                
+                                console.log("|__ ImageManager.all", ImageManager.all)
+                                console.log("|__ detail", detail)
+                                
+                                clear()
+                                hideImageForm()
+                                
+                                toastr["success"](`Image was added.`, "Image Manager")
+                            }
+                        }
+                    }
                 }
             }
         }
     }
     
-    const default_detail = function () {
+    const uploadFailed = function (event) {
+        console.log("ImageManager.uploadFailed(event)", event)
+        console.log("There was an error attempting to upload this file.")
+    }
+    
+    const uploadCanceled = function (event) {
+        console.log("ImageManager.uploadCanceled(event)", event)
+        console.log("This upload has been canceled by the user or the browser dropped the connection.")
+    }
+    
+    const defaultDetail = function () {
         return {
-            id: null,
-            path: null,
-            type: null,
-            caption: null,
             alt: null,
-            is_cover_image: 0,
-            enabled: 1,
+            caption: null,
+            created_by: userId,
             date_created: formatDateMySQL(),
-            created_by: user_id,
             date_modified: formatDateMySQL(),
-            modified_by: user_id,
+            dimensions: null,
+            enabled: 1,
+            extension: null,
+            height: null,
+            id: null,
+            is_cover: 0,
+            is_shown: 1,
+            modified_by: userId,
+            name: null,
             note: null,
+            path: null,
+            size: null,
+            thumbs_path: null,
+            title: null,
+            width: null,
         }
-    }
-    
-    const set_detail = function (image) {
-        let detail = default_detail()
-        detail.alt = (image.alt) ? image.alt : ""
-        detail._caption = (image.caption) ? image.caption : "This is a Test Caption 3"
-        detail.id = (image.id) ? image.id : 3
-        detail.is_cover_image = (image.is_cover_image) ? image.is_cover_image : 0
-        detail.path = (image.path) ? image.path : "/company/1/image_3"
-        detail.title = (image.title) ? image.title : "Image 3"
-        detail.type = (image.type) ? image.type : "jpg"
-        
-        return detail
-    }
-    
-    const formatImage = function (image, count) {
-        let detail = set_detail(image)
-        let image_alt = (image.alt) ? image.alt : ""
-        let image_name = (image.name) ? image.name : ""
-        let image_caption = (image.caption) ? image.caption : ""
-        let image_id = (image.id) ? image.id : 3
-        let image_is_cover_image = (image.is_cover_image) ? image.is_cover_image : 0
-        let image_path = (image.path) ? image.path : ""
-        let image_title = (image.title) ? image.title : ""
-        let image_type = (image.extension) ? image.extension : "jpg"
-        let active = (count === 0) ? "active " : ""
-        let $heading = $("<H3>")
-        let $image = $("<img>")
-        let $carouselItem = $("<div>")
-        let $carouselCaption = $("<div>")
-        let $view = $("<div>")
-        let $mask = $("<div>")
-        let $caption = $("<p>")
-        let is_cover = (image.is_cover_image === 1) ? " is_cover " : ""
-        
-        $carouselItem
-          .addClass("carousel-item " + active + is_cover)
-        
-        $view
-          .addClass("view")
-          .appendTo($carouselItem)
-        
-        $image
-          .addClass("d-block w-100 imageManager_edit")
-          .attr("src", `${image_path}/${image_name}.${image_type}`)
-          .data("imgid", image_id)
-          .data("is_cover", image_is_cover_image)
-          .attr("alt", image_alt)
-          .appendTo($view)
-        
-        $mask
-          .addClass("mask rgba-blue-light")
-          .data("key", image)
-          .css({ "cursor": "pointer" })
-          .on("click", function () {
-              populate_form($(this).data("key"))
-          })
-          .appendTo($view)
-        
-        $heading
-          .addClass("")
-          .text(image_title)
-          .appendTo($carouselCaption)
-          .css({ "cursor": "pointer" })
-          .data("key", image)
-          .on("click", function () {
-              populate_form($(this).data("key"))
-          })
-        
-        $caption
-          .addClass("")
-          .text(image_caption)
-          .appendTo($carouselCaption)
-          .data("key", image)
-          .css({ "cursor": "pointer" })
-          .on("click", function () {
-              populate_form($(this).data("key"))
-          })
-        
-        $carouselCaption
-          .addClass("carousel-caption")
-          .appendTo($carouselItem)
-        
-        return $carouselItem
-        
-    }
-    
-    const populate_form = function (image) {
-        Upload.prototype.populateForm(image)
-    }
-    
-    const formatIndicator = function (image, count) {
-        let active = (count === 0) ? "active" : ""
-        let is_cover = (image.is_cover_image === 1) ? " is_cover " : ""
-        let $li = $("<li>")
-        $li
-          .addClass(active + " " + is_cover)
-          .attr("data-slide-to", count)
-          .attr("data-target", "#carousel-companyImageManager")
-        return $li
-    }
-    
-    const format_image_lightbox = function (image) {
-        Console.log(image)
-        
-        if (image) {
-            let image_alt = (image.alt) ? image.alt : ""
-            let image_name = (image.name) ? image.name : ""
-            let image_caption = (image.caption) ? image.caption : ""
-            let image_id = (image.id) ? image.id : 3
-            let image_is_cover_image = (image.is_cover_image) ? image.is_cover_image : 0
-            let image_path = (image.path) ? image.path : ""
-            let image_title = (image.title) ? image.title : ""
-            let image_type = (image.extension) ? image.extension : "jpg"
-            let data_size = image.width + "x" + image.height
-            let thumbs_path = image.path.replace("public/img", "public/img/thumbs")
-            let $img = $(`<img src="${thumbs_path}/${image_name}.${image_type}"  alt="${image_alt}" class="img-fluid" >`)
-            $img.data("key", image)
-            
-            let $figure = $("<figure class='col-md-4'>")
-            let $a = $(`<a href="${image_path}/${image_name}.${image_type}" data-size="${data_size}">`)
-            $img.appendTo($a)
-            
-            let $figcaption = $("<figcaption itemprop='caption description'>")
-            $figcaption.text = image_caption
-            
-            $a.appendTo($figure)
-            $figcaption.appendTo($figure)
-            return $figure
-        }
-        
-    }
-    
-    const loadAll = function (images) {
-        counter = 0
-        $carouselIndicators.empty()
-        $carouselInner.empty()
-        this.all = new Map()
-        
-        for (let n = 0; n < images.length; n++) {
-            let im = images[n]
-            this.all.set(im.id, im)
-            $carouselIndicators.append(formatIndicator(im, counter))
-            $carouselInner.append(formatImage(im, counter))
-            counter += 1
-        }
-        
     }
     
     const set = function (image) {
+        console.log("ImageManager.set(image)", image)
+        let detail = defaultDetail()
         if (image) {
-            this.all.set(image.id, image)
-            loadAll(Array.from(this.all.values()))
+            detail.alt = (image.alt) ? image.alt : null
+            detail.caption = (image.caption) ? image.caption : null
+            detail.created_by = (image.created_by) ? image.created_by : userId
+            detail.date_created = (image.date_created) ? image.date_created : formatDateMySQL()
+            detail.date_modified = (image.date_modified) ? image.date_modified : formatDateMySQL()
+            detail.dimensions = (image.dimensions) ? image.dimensions : null
+            detail.enabled = (!isNaN(parseInt(image.enabled))) ? parseInt(image.enabled) : 1
+            detail.extension = (image.extension) ? image.extension : null
+            detail.height = (image.height) ? image.height : null
+            detail.id = (!isNaN(parseInt(image.id))) ? parseInt(image.id) : null
+            detail.is_cover = (image.is_cover) ? image.is_cover : 0
+            detail.is_shown = (image.is_shown && image.is_shown === 1) ? 1 : 0
+            detail.modified_by = (image.modified_by) ? image.modified_by : userId
+            detail.name = (image.name) ? image.name : null
+            detail.note = (image.note) ? image.note : null
+            detail.path = (image.path) ? image.path : null
+            detail.size = (image.size) ? image.size : null
+            detail.thumbs_path = (image.thumbs_path) ? image.thumbs_path : null
+            detail.title = (image.title) ? image.title : null
+            detail.width = (image.width) ? image.width : null
+        }
+        
+        ImageManager.detail = detail
+        return detail
+    }
+    
+    const resetFileInput = function (event) {
+        console.log("ImageManager.resetFileInput(event)", event)
+        let _fileToUpload = document.getElementById("fileToUpload")
+        let _fileName = document.getElementById("fileName")
+        let _fileSize = document.getElementById("fileSize")
+        let _fileType = document.getElementById("fileType")
+        let _fileExtension = document.getElementById("fileExtension")
+        let _imageManagerPreview = document.getElementById("imageManagerPreview")
+        let _fileToUploadDisplay = document.getElementById("fileToUploadDisplay")
+        
+        $(_fileName).html("&nbsp;")
+        $(_fileSize).html("&nbsp;")
+        $(_fileType).html("&nbsp;")
+        $(_fileExtension).html("&nbsp;")
+        $(_fileToUploadDisplay).html("CHOOSE FILE")
+        $(_imageManagerPreview).attr("src", "/public/img/placeholder.jpg")
+        _image_is_shown.checked = true
+    }
+    
+    const clear = function () {
+        resetFileInput()
+        resetImageForm()
+        $("img.img-thumbnail").removeClass("selected")
+    }
+    
+    const getFileSize = function (file) {
+        let fileSize = null
+        
+        if (file.size > 1024 * 1024) {
+            fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB'
+        } else {
+            fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB'
+        }
+        
+        return fileSize
+    }
+    
+    const getFileName = function (file) {
+        let fileName, fileExtension = null
+        let fileNameTemp = []
+        
+        if (file) {
+            if (file.name) {
+                let fileNameParts = file.name.split(".")
+                
+                if (fileNameParts.length) {
+                    fileExtension = fileNameParts[fileNameParts.length - 1]
+                    for (let n = 0; n < fileNameParts.length - 1; n++) {
+                        fileNameTemp.push(fileNameParts[n])
+                    }
+                    fileName = fileNameTemp.join(".")
+                }
+                
+            }
+        }
+        
+        return removeNulls({
+            "name": fileName,
+            "extension": fileExtension,
+        })
+    }
+    
+    const getFileType = function (file) {
+        let fileType = null
+        
+        if (file) {
+            if (file.type) {
+                fileType = file.type
+            }
+        }
+        
+        return fileType
+    }
+    
+    const buildImageObject = function (event, callback) {
+        console.log("ImageManager.buildImageObject(event)", event)
+        const _fileToUpload = document.getElementById("fileToUpload")
+        const _imageManagerPreview = document.getElementById("imageManagerPreview")
+        const _imageManagerForm = document.getElementById("imageManagerForm")
+        const reader = new FileReader()
+        const img = new Image()
+        
+        let filePath, fileHeight, fileWidth, fileSize, fileExtension, fileName,
+            fileType, fileRatio, ratioHeight, ratioWidth, fileDimensions, source, sourceId,
+            fileThumbsPath, filePathFull, fileThumbsPathFull = null
+        
+        if (event) {
+            if (_imageManagerForm) {
+                if (_imageManagerForm.dataset.source) {
+                    source = (_imageManagerForm.dataset.source) ? _imageManagerForm.dataset.source : null
+                    sourceId = (_imageManagerForm.dataset.sourceId && !isNaN(parseInt(_imageManagerForm.dataset.sourceId))) ? parseInt(_imageManagerForm.dataset.sourceId) : null
+                    filePath = `/public/img/${source}/${sourceId}`
+                    fileThumbsPath = `/public/thumbs/${source}/${sourceId}`
+                    
+                    if (_fileToUpload) {
+                        let file = _fileToUpload.files[0]
+                        console.log("|__ file", file)
+                        $(_imageManagerPreview).attr("src", event.result)
+                        
+                        if (file) {
+                            let fileNameParts = getFileName(file)
+                            console.log("|__ |__ fileNameParts", fileNameParts)
+                            fileExtension = (fileNameParts.extension) ? fileNameParts.extension : null
+                            fileName = (fileNameParts.name) ? fileNameParts.name : null
+                            fileSize = getFileSize(file)
+                            fileType = getFileType(file)
+                            filePathFull = filePath + "/" + fileName + "." + fileExtension
+                            fileThumbsPathFull = fileThumbsPath + "/" + fileName + "." + fileExtension
+                            
+                            reader.onload = function (e) {
+                                img.onload = function () {
+                                    fileHeight = (this.height) ? this.height : null
+                                    fileWidth = (this.width) ? this.width : null
+                                    if (!is_null(fileWidth) && !is_null(fileHeight)) {
+                                        let ratio = gcd(fileWidth, fileHeight)
+                                        fileDimensions = `${fileWidth} x ${fileHeight}`
+                                        ratioHeight = fileHeight / ratio
+                                        ratioWidth = fileWidth / ratio
+                                        fileRatio = `${ratioWidth}:${ratioHeight}`
+                                    } else {
+                                        console.error("Missing Height or Width")
+                                    }
+                                    
+                                    return callback({
+                                        "file": file,
+                                        "source": source,
+                                        "source_id": (!isNaN(parseInt(sourceId))) ? parseInt(sourceId) : null,
+                                        "name": (!is_null(fileName)) ? fileName : null,
+                                        "height": (!isNaN(parseInt(fileHeight))) ? parseInt(fileHeight) : null,
+                                        "width": (!isNaN(parseInt(fileWidth))) ? parseInt(fileWidth) : null,
+                                        "path": (!is_null(filePath)) ? filePath : null,
+                                        "full_path": (!is_null(filePathFull)) ? filePathFull : null,
+                                        "full_thumbs_path": (!is_null(fileThumbsPathFull)) ? fileThumbsPathFull : null,
+                                        "thumbs_path": (!is_null(fileThumbsPath)) ? fileThumbsPath : null,
+                                        "size": (!is_null(fileSize)) ? fileSize : null,
+                                        "extension": (!is_null(fileExtension)) ? fileExtension : null,
+                                        "type": (!is_null(fileType)) ? fileType : null,
+                                        "ratio": (!is_null(fileRatio)) ? fileRatio : null,
+                                        "dimensions": (!is_null(fileDimensions)) ? fileDimensions : null,
+                                    })
+                                }
+                                
+                                img.src = e.target.result
+                            }
+                            reader.readAsDataURL(_fileToUpload.files[0])
+                        }
+                    }
+                }
+            }
         }
     }
     
-    const addImage = function (image) {
+    const fileSelected = function (event) {
+        console.log("ImageManager.fileSelected(event)", event)
+        clear()
+        
+        let _fileToUpload = document.getElementById("fileToUpload")
+        let _fileName = document.getElementById("fileName")
+        let _fileSize = document.getElementById("fileSize")
+        let _fileType = document.getElementById("fileType")
+        let _fileExtension = document.getElementById("fileExtension")
+        let _imageManagerPreview = document.getElementById("imageManagerPreview")
+        let _fileToUploadDisplay = document.getElementById("fileToUploadDisplay")
+        
+        buildImageObject(event, function (data) {
+            if (data) {
+                console.log("|__ data", data)
+                let fileName = (data.name) ? data.name : null
+                let fileSize = (data.size) ? data.size : null
+                let fileType = (data.type) ? data.type : null
+                let fileExtension = (data.extension) ? data.extension : null
+                let fileRatio = (data.ratio) ? data.ratio : null
+                let fileDimensions = (data.dimensions) ? data.dimensions : null
+                let fileWidth = (data.width) ? data.width : null
+                let fileHeight = (data.height) ? data.height : null
+                let reader = new FileReader()
+                
+                $(_fileName).html(fileName)
+                $(_fileSize).html(fileSize)
+                $(_fileType).html(fileType)
+                $(_fileExtension).html(fileExtension)
+                $(_fileToUploadDisplay).html(fileName)
+                $(_fileRatio).html(fileRatio)
+                $(_fileWidth).html(fileWidth)
+                $(_fileHeight).html(fileHeight)
+                $(_fileDimensions).html(fileDimensions)
+                
+                $(_imageManagerPreview).attr("src")
+                $(_image_id).val("")
+                $(_image_name).val(fileName)
+                
+                reader.onload = function (e) {
+                    $(_imageManagerPreview).attr("src", e.target.result)
+                }
+                reader.readAsDataURL(_fileToUpload.files[0])
+                renderImageForm()
+            }
+        })
+    }
+    
+    const hideImageForm = function () {
+        console.log("ImageManager.hideImageForm()")
+        $(_fileToUpload).removeClass("disabled")
+        $(_button_product_images_toggle).removeClass("disabled")
+        
+        _fileToUpload.disabled = false
+        _button_product_images_toggle.disabled = false
+        
+        _imageManagerFormSubmitButton.innerText = "choose file"
+        
+        $(_imageManagerFormDetails).hide()
+    }
+    
+    const renderImageForm = function () {
+        console.log("ImageManager.renderImageForm()")
+        $(_fileToUpload).addClass("disabled")
+        $(_button_product_images_toggle).addClass("disabled")
+        
+        _fileToUpload.disabled = true
+        _button_product_images_toggle.disabled = true
+        $("#imageManagerFormDetails").show()
+    }
+    
+    const populateImageForm = function (image) {
+        console.log("ImageManager.populateImageForm(image)", image)
+        
         if (image) {
-            this.all.set(image.id, image)
-            loadAll(Array.from(this.all.values()))
+            console.log(image)
+            let fileType = (image.extension) ? imageType.get(image.extension) : null
+            let fileAlt = (image.alt) ? image.alt : null
+            let fileCaption = (image.caption) ? image.caption : null
+            let fileCreatedBy = (!isNaN(parseInt(image.created_by))) ? parseInt(image.created_by) : userId
+            let fileDateCreated = (image.date_created) ? image.date_created : formatDateMySQL()
+            let fileDateModified = (image.date_modified) ? image.date_modified : formatDateMySQL()
+            let fileDimensions = (image.dimensions) ? image.dimensions : null
+            let fileEnabled = (image.enabled && image.enabled === 1)
+            let fileExtension = (image.extension) ? image.extension : null
+            let fileHeight = (!isNaN(parseInt(image.height))) ? parseInt(image.height) : null
+            let fileId = (!isNaN(parseInt(image.id))) ? parseInt(image.id) : null
+            let fileIsCoverImage = !!(image.is_cover && image.is_cover === 1)
+            let fileIsShown = !!(image.is_shown && image.is_shown === 1)
+            let fileModifiedBy = (!isNaN(parseInt(image.modified_by))) ? parseInt(image.modified_by) : userId
+            let fileName = (image.name) ? image.name : null
+            let fileNote = (image.note) ? image.note : null
+            let filePath = (image.path) ? image.path : null
+            let fileSize = (image.size) ? image.size : null
+            let fileTitle = (image.title) ? image.title : null
+            let fileWidth = (!isNaN(parseInt(image.width))) ? parseInt(image.width) : null
+            let ratio = gcd(fileWidth, fileHeight)
+            let ratioHeight = fileHeight / ratio
+            let ratioWidth = fileWidth / ratio
+            let fileRatio = `${ratioWidth}:${ratioHeight}`
+            let filePreview = `${filePath}/${fileName}.${fileExtension}`
+            
+            _fileName.innerHTML = fileName
+            _fileType.innerHTML = fileType
+            _fileExtension.innerHTML = fileExtension
+            _fileSize.innerHTML = fileSize
+            _fileRatio.innerHTML = fileRatio
+            _fileDimensions.innerHTML = fileDimensions
+            _fileWidth.innerHTML = fileWidth
+            _fileHeight.innerHTML = fileHeight
+            _image_id.value = fileId
+            _image_name.value = fileName
+            _image_title.value = fileTitle
+            _image_alt.value = fileAlt
+            _image_caption.value = fileCaption
+            
+            _image_enabled.checked = fileEnabled
+            _image_is_cover.checked = fileIsCoverImage
+            _image_is_shown.checked = fileIsShown
+            
+            $(_imageManagerPreview)
+                .attr("src", filePreview)
+            
+            renderImageForm()
+        }
+        
+    }
+    
+    const resetImageForm = function () {
+        console.log("ImageManager.resetImageForm()")
+        let filePreview = `/public/img/placeholder.jpg`
+        
+        _fileName.innerHTML = "&nbsp;"
+        _fileType.innerHTML = "&nbsp;"
+        _fileExtension.innerHTML = "&nbsp;"
+        _fileSize.innerHTML = "&nbsp;"
+        _fileRatio.innerHTML = "&nbsp;"
+        _fileWidth.innerHTML = "&nbsp;"
+        _fileHeight.innerHTML = "&nbsp;"
+        _fileDimensions.innerHTML = "&nbsp;"
+        
+        _image_id.value = ""
+        _image_name.value = ""
+        _image_title.value = ""
+        _image_alt.value = ""
+        _image_caption.value = ""
+        
+        _image_enabled.checked = true
+        _image_is_cover.checked = false
+        _image_is_shown.checked = true
+        
+        $(_imageManagerPreview)
+            .attr("src", filePreview)
+        
+        if (currentImage !== null) {
+            let isCover = (currentImageCover !== null && currentImageCover === true) ? "is-cover-image" : ""
+            let isShown = (currentImageCover !== null && currentImageCover === true) ? "is-shown" : ""
+            $(".img-thumbnail.is-cover-image").removeClass("is-cover-image")
+            $("#image_" + currentImage).addClass(`${isCover} ${isShown}`)
+            currentImage = null
+            currentImageCover = null
+            currentImageShown = null
+        }
+        
+        $("img.img-thumbnail").removeClass("selected")
+    }
+    
+    const edit = function (image) {
+        console.log("ImageManager.edit(image)", image)
+        if (image) {
+            clear()
+            let imageId = (!isNaN(parseInt(image.id))) ? image.id : null
+            let elementId = (imageId) ? "image_" + imageId.toString() : null
+            let imageElement = document.getElementById(elementId)
+            if (imageElement) {
+                $(imageElement).addClass("selected")
+                populateImageForm(image)
+                _imageManagerFormSubmitButton.innerText = "Save"
+            }
         }
     }
     
-    init(options)
+    const buildImageThumbnail = function (image) {
+        console.log("ImageManager.buildImageThumbnail(image)", image)
+        let isCoverClass = ""
+        let isShownClass = ""
+        
+        if (image) {
+            let src = (image.path) ? image.path : null
+            let alt = (image.alt) ? image.alt : null
+            let imageId = (image.id && !isNaN(parseInt(image.id))) ? parseInt(image.id) : null
+            let isCover = !!(image.is_cover && image.is_cover === 1)
+            let isShown = !!(image.is_shown && image.is_shown === 1)
+            let thumbsPath = (image.thumbs_path) ? image.thumbs_path : null
+            let path = (image.path) ? image.path : null
+            let name = (image.name) ? image.name : null
+            let extension = (image.extension) ? image.extension : null
+            
+            if (isCover) {
+                isCoverClass = "is-cover-image"
+            }
+            
+            if (isShown) {
+                isShownClass = "is-shown"
+            }
+            
+            if (thumbsPath !== null && path !== null && name !== null && extension !== null) {
+                let $IMG = $("<img/>", {
+                    id: "image_" + imageId,
+                    attr: {
+                        "data-id": imageId,
+                    },
+                    class: `img-thumbnail ${isCoverClass} ${isShownClass}`,
+                    alt: alt,
+                    src: `${thumbsPath}/${name}.${extension}`,
+                })
+                    .on("click", function () {
+                        let el = this
+                        let image_id = (el.dataset.id && !isNaN(parseInt(el.dataset.id))) ? parseInt(el.dataset.id) : null
+                        
+                        if (image_id) {
+                            let image = ImageManager.all.get(image_id)
+                            
+                            if (image) {
+                                edit(image)
+                            } else {
+                                console.log("|__ |__ ImageManager.all", ImageManager.all)
+                            }
+                            
+                        } else {
+                            console.log("nope")
+                        }
+                    })
+                
+                return $("<div/>", {
+                    class: "col-12 col-md-4 mb-2",
+                })
+                    .append($IMG)
+            }
+            
+        }
+    }
+    
+    const loadAll = function (images) {
+        console.log("ImageManager.loadAll(images)", images)
+        ImageManager.all = new Map()
+        
+        if (images) {
+            let counter = 0
+            $.each(images, function (k, image) {
+                let detail = set(image)
+                ImageManager.all.set(detail.id, detail)
+                $(_imageManagerFormImagesBlock).append(buildImageThumbnail(detail))
+            })
+        }
+        
+    }
+    
+    const get = function (dataToSend, callback) {
+        console.log("ImageManager.get()")
+        
+        if (dataToSend) {
+            let url = `/api/v1.0/images/${ImageManager.source}/${ImageManager.sourceId}`
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    }
+                })
+            } catch (e) {
+                console.log("error", e)
+                return handleImageManagerError("Error Retrieving Images.", "Image Manager", "error")
+            }
+        }
+    }
+    
+    const init = function (options) {
+        console.log("ImageManager.init(settings)", options)
+        
+        if (options && options.source) {
+            source = (options.source) ? options.source : null
+            sourceId = (options.id && !isNaN(parseInt(options.id))) ? parseInt(options.id) : null
+            //let images = (options.images) ? options.images : []
+            
+            $(_imageManagerFormImagesBlock).empty()
+            //loadAll(images)
+            hideImageForm()
+            
+            initializeValidator(imageFormRules)
+            
+            ImageManager.source = source
+            ImageManager.sourceId = sourceId
+            ImageManager.validator = $(_imageManagerForm).validate()
+            
+            get({}, function (images) {
+                loadAll(images)
+            })
+            
+        }
+    }
     
     return {
-        addImage: function (image) {
-            addImage(image)
-        },
-        reset: function () {
-        
-        },
+        source: null,
+        sourceId: null,
+        detail: {},
         all: new Map(),
-        init: function (settings) {
-            init(settings)
-        },
-        loadAll: function (images) {
-            loadAll(images)
+        init: function (options) {
+            return init(options)
         },
     }
-}
+    
+})()
 
 
 const LocationTypes = (function () {
@@ -8004,7 +12239,7 @@ const LocationTypes = (function () {
     }
     
     const init = function (settings) {
-        //Console.log(" -- LocationTypes -- ", {})
+        //console.log(" -- LocationTypes -- ", {})
     }
     
     const set = function (location_types) {
@@ -8037,7 +12272,7 @@ const LocationTypes = (function () {
             LocationTypes.all.set("id", detail)
         })
         
-        //Console.log(" LocationTypes.all", LocationTypes.all)
+        //console.log(" LocationTypes.all", LocationTypes.all)
     }
     
     return {
@@ -8147,7 +12382,7 @@ const AddressTypes = (function () {
             AddressTypes.all.set("id", detail)
         })
         
-        console.log(" AddressTypes.all", AddressTypes.all)
+        //console.log(" AddressTypes.all", AddressTypes.all)
     }
     
     return {
@@ -8176,9 +12411,16 @@ const City = (function () {
     const class_name = "form-new-city"
     const form_id = "form_new_city"
     
+    const _product_location_departing_airport_city_search = document.getElementById("product_location_departing_airport_city_search")
+    const _product_location_departing_airport_city_id = document.getElementById("product_location_departing_airport_city_id")
+    const _product_location_arriving_airport_city_id = document.getElementById("product_location_arriving_airport_city_id")
+    const _product_edit_location_city_id = document.getElementById("product_edit_location_city_id")
+    const _product_location_arriving_airport_city_search = document.getElementById("product_location_arriving_airport_city_search")
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
     const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
     const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
+    const _modal_product_province_id = document.getElementById("modal_product_province_id")
+    const _modal_product_country_id = document.getElementById("modal_product_country_id")
     
     const _modal_product_arrive_to_airport_city = document.getElementById("modal_product_arrive_to_airport_city")
     const _modal_product_arrive_to_airport_country_id = document.getElementById("modal_product_arrive_to_airport_country_id")
@@ -8201,6 +12443,205 @@ const City = (function () {
     const _modal_product_depart_from_station_city_id = document.getElementById("modal_product_depart_from_station_city_id")
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    
+    $("#product_location_transport_city_search")
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            _product_edit_location_city_id.value = ""
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                //console.log("city", city)
+                _product_edit_location_city_id.value = city.id
+                
+            },
+        })
+    
+    $("#product_location_cars_city_search")
+        .on("change", function () {
+            setTimeout(function () {
+            
+            }, 200)
+        })
+        .on("search", function () {
+            _product_edit_location_city_id.value = ""
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+            
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                
+                _product_edit_location_city_id.value = city.id
+                
+            },
+        })
+    
+    $("#product_location_arriving_airport_city_search")
+        .on("change", function () {
+            setTimeout(function () {
+                let city = $("#product_location_arriving_airport_city_search").val()
+                if (city === "") {
+                    _product_location_arriving_airport_city_id.value = ""
+                }
+            }, 200)
+        })
+        .on("search", function () {
+            _product_location_arriving_airport_city_id.value = ""
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+            
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                
+                _product_location_arriving_airport_city_search.value = suggestion.value
+                _product_location_arriving_airport_city_id.value = city.id
+                
+            },
+        })
+    
+    $("#product_location_departing_airport_city_search")
+        
+        .on("change", function () {
+            setTimeout(function () {
+                let city = $("#product_location_departing_airport_city_search").val()
+                if (city === "") {
+                    _product_edit_location_city_id.value = ""
+                    _product_location_departing_airport_city_id.value = ""
+                }
+            }, 200)
+        })
+        .on("search", function () {
+            _product_edit_location_city_id.value = ""
+            _product_location_departing_airport_city_id.value = ""
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                
+                //console.log("city", city)
+                
+                _product_location_departing_airport_city_search.value = suggestion.value
+                _product_location_departing_airport_city_id.value = city.id
+                _product_edit_location_city_id.value = city.id
+                
+                /*
+                `${city.name} (${city.province.name}, ${city.country.name})`
+                
+                    "value": "Abano Terme (Padova, Italy)",
+                    "data": {
+                        "id": 1,
+                        "country_id": 102,
+                        "province_id": 250,
+                        "sort_order": 999,
+                        "name": "Abano Terme",
+                        "enabled": 1,
+                        "date_created": "2021-08-03 14:40:07",
+                        "created_by": 4,
+                        "date_modified": "2021-08-03 14:40:07",
+                        "modified_by": 4,
+                        "note": "",
+                        "province": {
+                            "id": 250,
+                            "country_id": 102,
+                            "name": "Padova",
+                            "iso2": "PD",
+                            "iso3": "",
+                            "sort_order": 999,
+                            "enabled": 1,
+                            "date_created": "2021-12-15 10:58:47",
+                            "created_by": 4,
+                            "date_modified": "2021-12-15 10:58:47",
+                            "modified_by": 4,
+                            "note": null
+                        },
+                        "country": {
+                            "id": 102,
+                            "currency_id": 2,
+                            "sort_order": 0,
+                            "name": "Italy",
+                            "iso2": "IT",
+                            "iso3": "ITA",
+                            "enabled": 1,
+                            "date_created": "2021-08-03 13:04:10",
+                            "created_by": 4,
+                            "date_modified": "2021-08-03 15:13:45",
+                            "modified_by": 4,
+                            "note": ""
+                        }
+                    }
+                //*/
+                
+            },
+        })
     
     $("#form_product_search_hotel_product_location")
         .on("change", function () {
@@ -8227,12 +12668,12 @@ const City = (function () {
             triggerSelectOnValidInput: false,
             paramName: "st",
             onSelect: function (suggestion) {
-                console.log("city", suggestion)
+                //console.log("city", suggestion)
                 if (!suggestion.data) {
                     return
                 }
                 
-                console.log("city", suggestion)
+                //console.log("city", suggestion)
                 /*
                     "value": "Abano Terme (Padova, Italy)",
                     "data": {
@@ -8284,11 +12725,11 @@ const City = (function () {
     $(_modal_product_city_id)
         .on("change", function () {
             if (_modal_product_city_id.value === "") {
-                _modal_product_provider_name.disabled = true
-                _modal_product_vendor_name.disabled = true
+                //_modal_product_provider_name.disabled = true
+                //_modal_product_vendor_name.disabled = true
             } else {
-                _modal_product_provider_name.disabled = false
-                _modal_product_vendor_name.disabled = false
+                //_modal_product_provider_name.disabled = false
+                //_modal_product_vendor_name.disabled = false
             }
         })
     
@@ -8416,7 +12857,9 @@ const City = (function () {
             }, 200)
         })
         .on("search", function () {
-            $(_modal_product_city_id).val("").trigger("change")
+            $(_modal_product_city_id)
+                .val("")
+                .trigger("change")
         })
         .on("click", function (e) {
             if ($(this).attr("readonly") === "readonly") {
@@ -8484,11 +12927,30 @@ const City = (function () {
     $("#modal_product_city")
         .on("change", function () {
             setTimeout(function () {
-            
+                let name = $("#modal_product_city").val()
+                if (name === "") {
+                    $(_modal_product_city_id)
+                        .val("")
+                        .trigger("change")
+                }
             }, 200)
         })
         .on("search", function () {
-            $(_modal_product_city_id).val("").trigger("change")
+            
+            if (_modal_product_city_id) {
+                $(_modal_product_city_id)
+                    .val("")
+                    .trigger("change")
+            }
+            
+            if (_modal_product_province_id) {
+                _modal_product_province_id.value = ""
+            }
+            
+            if (_modal_product_country_id) {
+                _modal_product_country_id.value = ""
+            }
+            
         })
         .on("click", function (e) {
             if ($(this).attr("readonly") === "readonly") {
@@ -8496,7 +12958,6 @@ const City = (function () {
             } else {
                 $(this).select()
             }
-            
         })
         .autocomplete({
             serviceUrl: "/api/v1.0/autocomplete/cities",
@@ -8506,57 +12967,26 @@ const City = (function () {
             triggerSelectOnValidInput: false,
             paramName: "st",
             onSelect: function (suggestion) {
-                console.log("city", suggestion)
                 if (!suggestion.data) {
                     return
                 }
+                
                 let city = suggestion.data
-                _modal_product_city_id.value = city.id
-                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
-                /*
-                    "value": "Abano Terme (Padova, Italy)",
-                    "data": {
-                        "id": 1,
-                        "country_id": 102,
-                        "province_id": 250,
-                        "sort_order": 999,
-                        "name": "Abano Terme",
-                        "enabled": 1,
-                        "date_created": "2021-08-03 14:40:07",
-                        "created_by": 4,
-                        "date_modified": "2021-08-03 14:40:07",
-                        "modified_by": 4,
-                        "note": "",
-                        "province": {
-                            "id": 250,
-                            "country_id": 102,
-                            "name": "Padova",
-                            "iso2": "PD",
-                            "iso3": "",
-                            "sort_order": 999,
-                            "enabled": 1,
-                            "date_created": "2021-12-15 10:58:47",
-                            "created_by": 4,
-                            "date_modified": "2021-12-15 10:58:47",
-                            "modified_by": 4,
-                            "note": null
-                        },
-                        "country": {
-                            "id": 102,
-                            "currency_id": 2,
-                            "sort_order": 0,
-                            "name": "Italy",
-                            "iso2": "IT",
-                            "iso3": "ITA",
-                            "enabled": 1,
-                            "date_created": "2021-08-03 13:04:10",
-                            "created_by": 4,
-                            "date_modified": "2021-08-03 15:13:45",
-                            "modified_by": 4,
-                            "note": ""
-                        }
-                    }
-                //*/
+                let cityId = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+                let provinceId = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
+                let countryId = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
+                
+                if (_modal_product_city_id && cityId) {
+                    _modal_product_city_id.value = cityId
+                }
+                
+                if (_modal_product_province_id && provinceId) {
+                    _modal_product_province_id.value = provinceId
+                }
+                
+                if (_modal_product_country_id && countryId) {
+                    _modal_product_country_id.value = countryId
+                }
                 
             },
         })
@@ -8611,7 +13041,40 @@ const City = (function () {
             } else {
                 $(this).select()
             }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/cities",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion.data) {
+                    return
+                }
+                let city = suggestion.data
+                _modal_product_city_id.value = city.id
+                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+                
+            },
+        })
+    
+    $("#modal_product_city_tours")
+        .on("change", function () {
+            setTimeout(function () {
             
+            }, 200)
+        })
+        .on("search", function () {
+            $(_modal_product_city_id).val("").trigger("change")
+        })
+        .on("click", function (e) {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
         })
         .autocomplete({
             serviceUrl: "/api/v1.0/autocomplete/cities",
@@ -8642,7 +13105,7 @@ const City = (function () {
     
     const handle_city_error = function (msg) {
         toastr.error(msg)
-        console.log("msg", msg)
+        //console.log("msg", msg)
     }
     
     const on_click_outside = (e) => {
@@ -8723,7 +13186,7 @@ const City = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 return handle_city_error("Error Validating City")
             }
         } else {
@@ -8755,11 +13218,11 @@ const City = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 handle_city_error("Error: Validating City")
             }
         } else {
-            console.log("Error: Missing Data")
+            //console.log("Error: Missing Data")
             handle_city_error("Error: Missing Data")
         }
     }
@@ -9065,6 +13528,914 @@ const City = (function () {
     
 })()
 
+const Station = (function () {
+    "use strict"
+    const _modal_product_depart_from_station_cancel_button = document.getElementById("modal_product_depart_from_station_cancel_button")
+    const _modal_product_depart_from_station_submit_button = document.getElementById("modal_product_depart_from_station_submit_button")
+    const _modal_product_depart_from_station_iata_code = document.getElementById("modal_product_depart_from_station_iata_code")
+    const _modal_product_depart_from_station_country_id = document.getElementById("modal_product_depart_from_station_country_id")
+    const _modal_product_depart_from_station_province_id = document.getElementById("modal_product_depart_from_station_province_id")
+    const _modal_product_depart_from_station_city_id = document.getElementById("modal_product_depart_from_station_city_id")
+    const _modal_product_depart_from_station_city = document.getElementById("modal_product_depart_from_station_city")
+    const _modal_product_depart_from_station = document.getElementById("modal_product_depart_from_station")
+    const _modal_product_depart_from_station_id = document.getElementById("modal_product_depart_from_station_id")
+    const _modal_product_depart_from_station_add_block = document.getElementById("modal_product_depart_from_station_add_block")
+    
+    const _modal_product_arrive_to_station_postal_code = document.getElementById("modal_product_arrive_to_station_postal_code")
+    const _modal_product_arrive_to_station_street_1 = document.getElementById("modal_product_arrive_to_station_street_1")
+    const _modal_product_arrive_to_station_street_2 = document.getElementById("modal_product_arrive_to_station_street_2")
+    
+    const _modal_product_depart_from_station_postal_code = document.getElementById("modal_product_depart_from_station_postal_code")
+    const _modal_product_depart_from_station_street_1 = document.getElementById("modal_product_depart_from_station_street_1")
+    const _modal_product_depart_from_station_street_2 = document.getElementById("modal_product_depart_from_station_street_2")
+    
+    const _modal_product_country_id = document.getElementById("modal_product_country_id")
+    const _modal_product_province_id = document.getElementById("modal_product_province_id")
+    const _modal_product_city_id = document.getElementById("modal_product_city_id")
+    const _modal_product_depart_from_station_edit_link = document.getElementById("modal_product_depart_from_station_edit_link")
+    const _modal_product_arrive_to_station_edit_link = document.getElementById("modal_product_arrive_to_station_edit_link")
+    const _modal_product_depart_from_new_station_id = document.getElementById("modal_product_depart_from_new_station_id")
+    const _modal_product_arrive_to_station_cancel_button = document.getElementById("modal_product_arrive_to_station_cancel_button")
+    const _modal_product_arrive_to_new_station_id = document.getElementById("modal_product_arrive_to_new_station_id")
+    const _modal_product_arrive_to_station_submit_button = document.getElementById("modal_product_arrive_to_station_submit_button")
+    const _modal_product_arrive_to_station_iata_code = document.getElementById("modal_product_arrive_to_station_iata_code")
+    const _modal_product_arrive_to_station_country_id = document.getElementById("modal_product_arrive_to_station_country_id")
+    const _modal_product_arrive_to_station_province_id = document.getElementById("modal_product_arrive_to_station_province_id")
+    const _modal_product_arrive_to_station_city_id = document.getElementById("modal_product_arrive_to_station_city_id")
+    const _modal_product_arrive_to_station_city = document.getElementById("modal_product_arrive_to_station_city")
+    const _modal_product_arrive_to_station = document.getElementById("modal_product_arrive_to_station")
+    const _modal_product_arrive_to_station_id = document.getElementById("modal_product_arrive_to_station_id")
+    const _modal_product_arrive_to_station_add_block = document.getElementById("modal_product_arrive_to_station_add_block")
+    
+    let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let globalSelectedStationDepartFrom = false
+    let globalSelectedStationArriveTo = false
+    
+    $(_modal_product_depart_from_station_edit_link)
+        .on("click", function () {
+            console.log("Station.modal_product_depart_from_station_edit_link:click()")
+            // ----
+            
+            let stationId = (_modal_product_depart_from_station_edit_link.dataset.stationId && !isNaN(parseInt(_modal_product_depart_from_station_edit_link.dataset.stationId))) ? parseInt(_modal_product_depart_from_station_edit_link.dataset.stationId) : null
+            let station = Station.all.get(stationId)
+            
+            /*
+            console.log("|__ stationId", stationId)
+            console.log("|__ station", station)
+            //*/
+            
+            if (station) {
+                clearStationForm("depart_from")
+                populateStationForm(station, "depart_from")
+                showStationForm("depart_from")
+            }
+        })
+    
+    $(_modal_product_arrive_to_station_edit_link)
+        .on("click", function () {
+            console.log("Station.modal_product_arrive_to_station_edit_link:click()")
+        })
+    
+    $(_modal_product_depart_from_station_add_block)
+        .on("change", function () {
+            validDepartFromRecord()
+        })
+        .on("keyup", function () {
+            validDepartFromRecord()
+        })
+    
+    $(_modal_product_depart_from_station_cancel_button)
+        .on("click", function () {
+            cancelAddStationRecord("depart_from")
+        })
+    
+    $(_modal_product_arrive_to_station_cancel_button)
+        .on("click", function () {
+            cancelAddStationRecord("arrive_to")
+        })
+    
+    $(_modal_product_depart_from_station_submit_button)
+        .on("click", function () {
+            save("depart_from")
+        })
+    
+    $(_modal_product_arrive_to_station_submit_button)
+        .on("click", function () {
+            save("arrive_to")
+        })
+    
+    const save = function (type) {
+        if (type) {
+            let dataToSend = buildAddStationRecord(type)
+            
+            if (dataToSend) {
+                confirmDialog(`Would you like to update?`, (ans) => {
+                    if (ans) {
+                        sendSaveRequest(dataToSend, function (data) {
+                            let station
+                            if (data) {
+                                station = data
+                                if (data[0]) {
+                                    station = data[0]
+                                }
+                            }
+                            
+                            if (station) {
+                                console.log("|__ station", station)
+                                
+                                let countryId = (station.country && !isNaN(parseInt(station.country.id))) ? parseInt(station.country.id) : null
+                                let provinceId = (station.province && !isNaN(parseInt(station.province.id))) ? parseInt(station.province.id) : null
+                                let cityId = (station.city && !isNaN(parseInt(station.city.id))) ? parseInt(station.city.id) : null
+                                let stationId = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : null
+                                let stationName = (station.name) ? station.name : null
+                                
+                                if (type === "depart_from") {
+                                    
+                                    if (_modal_product_depart_from_station) {
+                                        _modal_product_depart_from_station.value = stationName
+                                    }
+                                    
+                                    if (_modal_product_depart_from_new_station_id) {
+                                        _modal_product_depart_from_new_station_id.value = stationId
+                                    }
+                                    
+                                    if (_modal_product_depart_from_station_id) {
+                                        _modal_product_depart_from_station_id.value = stationId
+                                    }
+                                    
+                                    if (_modal_product_country_id) {
+                                        _modal_product_country_id.value = countryId
+                                    }
+                                    
+                                    if (_modal_product_province_id) {
+                                        _modal_product_province_id.value = provinceId
+                                    }
+                                    
+                                    if (_modal_product_city_id) {
+                                        _modal_product_city_id.value = cityId
+                                    }
+                                    
+                                    _modal_product_depart_from_station_edit_link.dataset.stationId = stationId
+                                    $(_modal_product_depart_from_station_edit_link).show()
+                                    
+                                } else if (type === "arrive_to") {
+                                    if (_modal_product_arrive_to_station) {
+                                        _modal_product_arrive_to_station.value = stationName
+                                    }
+                                    
+                                    if (_modal_product_arrive_to_new_station_id) {
+                                        _modal_product_arrive_to_new_station_id.value = stationId
+                                    }
+                                    
+                                    if (_modal_product_arrive_to_station_id) {
+                                        _modal_product_arrive_to_station_id.value = stationId
+                                    }
+                                    
+                                    if (_modal_product_country_id) {
+                                        _modal_product_country_id.value = countryId
+                                    }
+                                    
+                                    if (_modal_product_province_id) {
+                                        _modal_product_province_id.value = provinceId
+                                    }
+                                    
+                                    if (_modal_product_city_id) {
+                                        _modal_product_city_id.value = cityId
+                                    }
+                                    
+                                    _modal_product_arrive_to_station_edit_link.dataset.stationId = stationId
+                                    $(_modal_product_arrive_to_station_edit_link).show()
+                                }
+                                
+                                resetStationForm(type)
+                                initAutocomplete()
+                            }
+                        })
+                    }
+                })
+            }
+        }
+    }
+    
+    const sendSaveRequest = function (dataToSend, callback) {
+        if (dataToSend) {
+            let url = "/api/v1.0/stations/update"
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        handleStationError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                //console.log("error", e)
+            }
+        }
+    }
+    
+    const validDepartFromRecord = function () {
+        let isValid = true
+        
+        if (_modal_product_depart_from_station_iata_code.value === "") {
+            $(_modal_product_depart_from_station_iata_code).showError("Field Required")
+            isValid = false
+        } else {
+            $(_modal_product_depart_from_station_iata_code).hideError()
+        }
+        
+        if (isNaN(parseInt(_modal_product_depart_from_station_city_id.value))) {
+            $(_modal_product_depart_from_station_city).showError("Field Required")
+            isValid = false
+        } else {
+            $(_modal_product_depart_from_station_city).hideError()
+        }
+        
+        return isValid
+    }
+    
+    const validArriveToRecord = function () {
+        let isValid = true
+        
+        if (_modal_product_arrive_to_station_iata_code.value === "") {
+            $(_modal_product_arrive_to_station_iata_code).showError("Field Required")
+            isValid = false
+        } else {
+            $(_modal_product_arrive_to_station_iata_code).hideError()
+        }
+        
+        if (isNaN(parseInt(_modal_product_arrive_to_station_city_id.value))) {
+            $(_modal_product_arrive_to_station_city).showError("Field Required")
+            isValid = false
+        } else {
+            $(_modal_product_arrive_to_station_city).hideError()
+        }
+        
+        return isValid
+    }
+    
+    const buildAddStationRecord = function (type) {
+        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
+            if (type) {
+                if (type === "depart_from") {
+                    if (validDepartFromRecord()) {
+                        let dataToSend = {
+                            postal_code: (_modal_product_depart_from_station_postal_code.value !== "") ? _modal_product_depart_from_station_postal_code.value : null,
+                            street_1: (_modal_product_depart_from_station_street_1.value !== "") ? _modal_product_depart_from_station_street_1.value : null,
+                            street_2: (_modal_product_depart_from_station_street_2.value !== "") ? _modal_product_depart_from_station_street_2.value : null,
+                            city_id: (!isNaN(parseInt(_modal_product_depart_from_station_city_id.value))) ? parseInt(_modal_product_depart_from_station_city_id.value) : null,
+                            name: (_modal_product_depart_from_station.value !== "") ? _modal_product_depart_from_station.value : null,
+                            iata_code: (_modal_product_depart_from_station_iata_code.value !== "") ? _modal_product_depart_from_station_iata_code.value : null,
+                        }
+                        
+                        return removeNulls(dataToSend)
+                    }
+                } else if (type === "arrive_to") {
+                    if (validArriveToRecord()) {
+                        let dataToSend = {
+                            postal_code: (_modal_product_arrive_to_station_postal_code.value !== "") ? _modal_product_arrive_to_station_postal_code.value : null,
+                            street_1: (_modal_product_arrive_to_station_street_1.value !== "") ? _modal_product_arrive_to_station_street_1.value : null,
+                            street_2: (_modal_product_arrive_to_station_street_2.value !== "") ? _modal_product_arrive_to_station_street_2.value : null,
+                            city_id: (!isNaN(parseInt(_modal_product_arrive_to_station_city_id.value))) ? parseInt(_modal_product_arrive_to_station_city_id.value) : null,
+                            name: (_modal_product_arrive_to_station.value !== "") ? _modal_product_arrive_to_station.value : null,
+                            iata_code: (_modal_product_arrive_to_station_iata_code.value !== "") ? _modal_product_arrive_to_station_iata_code.value : null,
+                        }
+                        
+                        return removeNulls(dataToSend)
+                    }
+                }
+            }
+        }
+    }
+    
+    const cancelAddStationRecord = function (type) {
+        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
+            clearStationForm(type)
+            hideStationForm(type)
+            
+            if (type) {
+                if (type === "depart_from") {
+                    _modal_product_depart_from_station.value = ""
+                } else if (type === "arrive_to") {
+                    _modal_product_arrive_to_station.value = ""
+                }
+            }
+        }
+    }
+    
+    const populateStationForm = function (station, type) {
+        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
+            clearStationForm(type)
+            if (station) {
+                console.log("|__ station", station)
+                
+                let countryId = (station.country && station.country.id && !isNaN(parseInt(station.country.id))) ? parseInt(station.country.id) : null
+                let provinceId = (station.province && station.province.id && !isNaN(parseInt(station.province.id))) ? parseInt(station.province.id) : null
+                let cityId = (station.city && station.city.id && !isNaN(parseInt(station.city.id))) ? parseInt(station.city.id) : null
+                let stationId = (station.id && !isNaN(parseInt(station.id))) ? parseInt(station.id) : null
+                let stationName = (station.name) ? station.name : null
+                let stationIATACode = (station.iata_code) ? station.iata_code : null
+                let stationStreet1 = (station.street_1) ? station.street_1 : null
+                let stationStreet2 = (station.street_2) ? station.street_2 : null
+                let stationPostalCode = (station.postal_code) ? station.postal_code : null
+                
+                if (type) {
+                    if (type === "depart_from") {
+                        _modal_product_depart_from_new_station_id.value = stationId
+                        _modal_product_depart_from_station_iata_code.value = stationIATACode
+                        _modal_product_depart_from_station_city.value = ""
+                        _modal_product_depart_from_station_city_id.value = cityId
+                        _modal_product_depart_from_station_country_id.value = countryId
+                        _modal_product_depart_from_station_province_id.value = provinceId
+                        _modal_product_depart_from_station_postal_code.value = stationPostalCode
+                        _modal_product_depart_from_station_street_1.value = stationStreet1
+                        _modal_product_depart_from_station_street_2.value = stationStreet2
+                        _modal_product_depart_from_station_id.value = stationId
+                        _modal_product_country_id.value = countryId
+                        _modal_product_province_id.value = provinceId
+                        _modal_product_city_id.value = cityId
+                        
+                    } else if (type === "arrive_to") {
+                    
+                    }
+                }
+                showStationForm(type)
+            }
+        }
+    }
+    
+    const clearStationForm = function (type) {
+        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
+            if (type) {
+                if (type === "depart_from") {
+                    _modal_product_depart_from_new_station_id.value = ""
+                    _modal_product_depart_from_station_iata_code.value = ""
+                    _modal_product_depart_from_station_city.value = ""
+                    _modal_product_depart_from_station_city_id.value = ""
+                    _modal_product_depart_from_station_country_id.value = ""
+                    _modal_product_depart_from_station_province_id.value = ""
+                    _modal_product_depart_from_station_postal_code.value = ""
+                    _modal_product_depart_from_station_street_1.value = ""
+                    _modal_product_depart_from_station_street_2.value = ""
+                    _modal_product_depart_from_station_id.value = ""
+                    _modal_product_country_id.value = ""
+                    _modal_product_province_id.value = ""
+                    _modal_product_city_id.value = ""
+                    
+                    _modal_product_depart_from_station.disabled = false
+                    
+                    _modal_product_depart_from_station_edit_link.dataset.stationId = ""
+                    $(_modal_product_depart_from_station_edit_link).hide()
+                    
+                    clearAllValidation()
+                    
+                } else if (type === "arrive_to") {
+                    _modal_product_arrive_to_new_station_id.value = ""
+                    _modal_product_arrive_to_station_iata_code.value = ""
+                    _modal_product_arrive_to_station_city.value = ""
+                    _modal_product_arrive_to_station_city_id.value = ""
+                    _modal_product_arrive_to_station_country_id.value = ""
+                    _modal_product_arrive_to_station_province_id.value = ""
+                    _modal_product_arrive_to_station_postal_code.value = ""
+                    _modal_product_arrive_to_station_street_1.value = ""
+                    _modal_product_arrive_to_station_street_2.value = ""
+                    _modal_product_arrive_to_station_id.value = ""
+                    
+                    _modal_product_arrive_to_station.disabled = false
+                    
+                    _modal_product_arrive_to_station_edit_link.dataset.stationId = ""
+                    $(_modal_product_arrive_to_station_edit_link).hide()
+                    
+                    clearAllValidation()
+                }
+            }
+            
+            _modal_product_country_id.value = ""
+            _modal_product_province_id.value = ""
+            _modal_product_city_id.value = ""
+        }
+    }
+    
+    const resetStationForm = function (type) {
+        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
+            if (type) {
+                _modal_product_arrive_to_station.disabled = false
+                _modal_product_depart_from_station.disabled = false
+                
+                clearStationForm(type)
+                
+                hideStationForm("depart_from")
+                hideStationForm("arrive_to")
+            }
+        }
+    }
+    
+    const hideStationForm = function (type) {
+        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
+            if (type) {
+                if (type === "depart_from") {
+                    $(_modal_product_depart_from_station_add_block).hide()
+                } else if (type === "arrive_to") {
+                    $(_modal_product_arrive_to_station_add_block).hide()
+                }
+            }
+        }
+    }
+    
+    const showStationForm = function (type) {
+        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
+            if (type) {
+                if (type === "depart_from") {
+                    _modal_product_depart_from_station.disabled = true
+                    $(_modal_product_depart_from_station_add_block).show()
+                    $(_modal_product_arrive_to_station_add_block).hide()
+                } else if (type === "arrive_to") {
+                    _modal_product_arrive_to_station.disabled = true
+                    $(_modal_product_arrive_to_station_add_block).show()
+                    $(_modal_product_depart_from_station_add_block).hide()
+                }
+            }
+        }
+    }
+    
+    const initAutocomplete = function () {
+        
+        if (_modal_product_depart_from_station) {
+            
+            $(_modal_product_depart_from_station)
+                .on("click", function (e) {
+                    if ($(this).attr("readonly") === "readonly") {
+                        e.preventDefault()
+                    } else {
+                        $(this).select()
+                    }
+                })
+                .on("search", function () {
+                    
+                    if (_modal_product_depart_from_station_id) {
+                        _modal_product_depart_from_station_id.value = ""
+                    }
+                    
+                    if (_modal_product_depart_from_station_country_id) {
+                        _modal_product_depart_from_station_country_id.value = ""
+                    }
+                    
+                    if (_modal_product_depart_from_station_province_id) {
+                        _modal_product_depart_from_station_province_id.value = ""
+                    }
+                    
+                    if (_modal_product_depart_from_station_city_id) {
+                        _modal_product_depart_from_station_city_id.value = ""
+                    }
+                    
+                    if (_modal_product_depart_from_station) {
+                        _modal_product_depart_from_station.value = ""
+                    }
+                    
+                    _modal_product_depart_from_station_edit_link.dataset.stationId = ""
+                    $(_modal_product_depart_from_station_edit_link).hide()
+                    
+                })
+                .on("keyup", function () {
+                    globalSelectedStationDepartFrom = false
+                })
+                .on("change", function () {
+                    setTimeout(function () {
+                        let station_name = _modal_product_depart_from_station.value
+                        
+                        if (globalSelectedStationDepartFrom === false) {
+                            if (station_name === "") {
+                                _modal_product_depart_from_station.value = ""
+                                _modal_product_depart_from_station_id.value = ""
+                                _modal_product_depart_from_station_province_id.value = ""
+                                _modal_product_depart_from_station_city_id.value = ""
+                                
+                                _modal_product_depart_from_station_edit_link.dataset.stationId = ""
+                                $(_modal_product_depart_from_station_edit_link).hide()
+                                
+                                globalSelectedStationDepartFrom = false
+                            } else {
+                                stationExists(station_name, "depart_from")
+                            }
+                        }
+                    }, 200)
+                })
+                .autocomplete({
+                    serviceUrl: "/api/v1.0/autocomplete/stations",
+                    minChars: 2,
+                    cache: false,
+                    dataType: "json",
+                    triggerSelectOnValidInput: false,
+                    paramName: "st",
+                    onSelect: function (suggestion) {
+                        if (!suggestion || !suggestion.data) {
+                            return
+                        }
+                        
+                        let station = suggestion.data
+                        if (station[0]) {
+                            station = station[0]
+                        }
+                        
+                        globalSelectedStationDepartFrom = true
+                        
+                        console.log("|__ station", station)
+                        
+                        if (station) {
+                            
+                            let countryId = (station.country && !isNaN(parseInt(station.country.id))) ? parseInt(station.country.id) : null
+                            let provinceId = (station.province && !isNaN(parseInt(station.province.id))) ? parseInt(station.province.id) : null
+                            let cityId = (station.city && !isNaN(parseInt(station.city.id))) ? parseInt(station.city.id) : null
+                            let stationId = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : null
+                            let stationName = (station.name) ? station.name : null
+                            
+                            if (_modal_product_depart_from_station) {
+                                _modal_product_depart_from_station.value = stationName
+                            }
+                            
+                            if (_modal_product_depart_from_station_id) {
+                                _modal_product_depart_from_station_id.value = stationId
+                            }
+                            
+                            if (_modal_product_depart_from_station_country_id) {
+                                _modal_product_depart_from_station_country_id.value = countryId
+                            }
+                            
+                            if (_modal_product_depart_from_station_province_id) {
+                                _modal_product_depart_from_station_province_id.value = provinceId
+                            }
+                            
+                            if (_modal_product_depart_from_station_city_id) {
+                                _modal_product_depart_from_station_city_id.value = cityId
+                            }
+                            
+                            _modal_product_depart_from_station_edit_link.dataset.stationId = stationId
+                            $(_modal_product_depart_from_station_edit_link).show()
+                            
+                        } else {
+                            _modal_product_depart_from_station_edit_link.dataset.stationId = ""
+                            $(_modal_product_depart_from_station_edit_link).hide()
+                            resetStationForm("depart_from")
+                            showStationForm("depart_from")
+                        }
+                    },
+                })
+        }
+        
+        if (_modal_product_arrive_to_station) {
+            
+            $(_modal_product_arrive_to_station)
+                .on("click", function () {
+                    if ($(this).attr("readonly") === "readonly") {
+                        e.preventDefault()
+                    } else {
+                        $(this).select()
+                    }
+                })
+                .on("keyup", function () {
+                    globalSelectedStationArriveTo = false
+                })
+                .on("search", function () {
+                    if (_modal_product_arrive_to_station_id) {
+                        _modal_product_arrive_to_station_id.value = ""
+                    }
+                    if (_modal_product_arrive_to_station) {
+                        _modal_product_arrive_to_station.value = ""
+                    }
+                })
+                .on("change", function () {
+                    setTimeout(function () {
+                        let station_name = _modal_product_arrive_to_station.value
+                        
+                        if (globalSelectedStationArriveTo === false) {
+                            if (station_name === "") {
+                                _modal_product_arrive_to_station.value = ""
+                                _modal_product_arrive_to_station_id.value = ""
+                                globalSelectedStationArriveTo = false
+                            } else {
+                                stationExists(station_name, "arrive_to")
+                            }
+                        }
+                    }, 200)
+                })
+                .autocomplete({
+                    serviceUrl: "/api/v1.0/autocomplete/stations",
+                    minChars: 2,
+                    cache: false,
+                    dataType: "json",
+                    triggerSelectOnValidInput: false,
+                    paramName: "st",
+                    onSelect: function (suggestion) {
+                        if (!suggestion || !suggestion.data) {
+                            return
+                        }
+                        
+                        globalSelectedStationArriveTo = true
+                        
+                        let station = suggestion.data
+                        
+                        if (station) {
+                            if (_modal_product_arrive_to_station) {
+                                _modal_product_arrive_to_station.value = (station.name) ? station.name : ""
+                            }
+                            
+                            if (_modal_product_arrive_to_station_id) {
+                                _modal_product_arrive_to_station_id.value = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : ""
+                            }
+                            
+                            _modal_product_arrive_to_station_edit_link.dataset.stationId = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : ""
+                            $(_modal_product_arrive_to_station_edit_link).show()
+                            
+                        } else {
+                            _modal_product_arrive_to_station_edit_link.dataset.stationId = ""
+                            $(_modal_product_arrive_to_station_edit_link).hide()
+                            resetStationForm("arrive_to")
+                            showStationForm("arrive_to")
+                        }
+                    },
+                })
+        }
+        
+    }
+    
+    const stationExists = function (name, type) {
+        if (name && name !== "") {
+            /**
+             * data to send to the server
+             *
+             * @type {{name}}
+             */
+            let dataToSend = {
+                name: name,
+            }
+            
+            fetchByName(dataToSend, function (data) {
+                let station = null
+                
+                if (data) {
+                    station = data
+                    if (data[0]) {
+                        station = data[0]
+                    }
+                }
+                
+                if (station && station.id) {
+                    if (type === "depart_from") {
+                        globalSelectedStationDepartFrom = true
+                        
+                        _modal_product_depart_from_station.value = station.name
+                        _modal_product_depart_from_station_id.value = station.id
+                        _modal_product_city_id.value = station.city.id
+                        
+                        _modal_product_depart_from_station_edit_link.dataset.stationId = station.id
+                        $(_modal_product_depart_from_station_edit_link).show()
+                    } else {
+                        globalSelectedStationArriveTo = true
+                        _modal_product_arrive_to_station.value = station.name
+                        _modal_product_arrive_to_station_id.value = station.id
+                        
+                        _modal_product_arrive_to_station_edit_link.dataset.stationId = station.id
+                        $(_modal_product_arrive_to_station_edit_link).show()
+                    }
+                } else {
+                    confirmDialog(`The station: ${name} does not exist exists. Would you like to create it?`, (ans) => {
+                        if (ans) {
+                            if (type === "depart_from") {
+                                globalSelectedStationDepartFrom = false
+                            } else {
+                                globalSelectedStationArriveTo = false
+                            }
+                            
+                            populateStationForm({
+                                name: name,
+                            }, type)
+                            
+                        } else {
+                            if (type === "depart_from") {
+                                if (_modal_product_city_id) {
+                                    _modal_product_city_id.value = ""
+                                }
+                                
+                                if (_modal_product_depart_from_station_id) {
+                                    _modal_product_depart_from_station_id.value = ""
+                                }
+                                if (_modal_product_depart_from_station) {
+                                    _modal_product_depart_from_station.value = ""
+                                }
+                            } else {
+                                if (_modal_product_arrive_to_station_id) {
+                                    _modal_product_arrive_to_station_id.value = ""
+                                }
+                                if (_modal_product_arrive_to_station) {
+                                    _modal_product_arrive_to_station.value = ""
+                                }
+                            }
+                            
+                        }
+                    })
+                }
+            })
+        }
+    }
+    
+    const fetchByName = function (dataToSend, callback) {
+        let url = "/api/v1.0/stations/validate"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        handleStationError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                //console.log("error", e)
+                handleStationError("Error Validating Station")
+            }
+        } else {
+            handleStationError("Error Loading Station - Missing Data")
+        }
+    }
+    
+    const handleStationError = function (msg) {
+        toastr.error(msg)
+    }
+    
+    const defaultDetail = function () {
+        console.log("Station.defaultDetail()")
+        // ----
+        
+        return {
+            city: {
+                id: null,
+                country_id: null,
+                province_id: null,
+                name: null,
+                sort_order: null,
+                enabled: 1,
+                date_created: formatDateMySQL(),
+                created_by: userId,
+                date_modified: formatDateMySQL(),
+                modified_by: userId,
+                note: null,
+            },
+            country: {
+                id: null,
+                name: null,
+                sort_order: null,
+                iso2: null,
+                iso3: null,
+                enabled: 1,
+                date_created: formatDateMySQL(),
+                created_by: userId,
+                date_modified: formatDateMySQL(),
+                modified_by: userId,
+                note: null,
+            },
+            created_by: userId,
+            date_created: formatDateMySQL(),
+            date_modified: formatDateMySQL(),
+            display_long: null,
+            display_medium: null,
+            display_short: null,
+            enabled: 1,
+            iata_code: null,
+            id: null,
+            keywords: null,
+            modified_by: userId,
+            name: null,
+            note: null,
+            postal_code: null,
+            province: {
+                id: null,
+                name: null,
+                sort_order: null,
+                country_id: null,
+                iso2: null,
+                iso3: null,
+                enabled: 1,
+                date_created: formatDateMySQL(),
+                created_by: userId,
+                date_modified: formatDateMySQL(),
+                modified_by: userId,
+                note: null,
+            },
+            street_1: null,
+            street_2: null,
+        }
+    }
+    
+    const setDetail = function (station) {
+        console.log("Station.setDetail(station)", station)
+        // ----
+        
+        let detail = defaultDetail()
+        
+        if (station) {
+            detail.city = (station.city) ? station.city : {
+                id: null,
+                country_id: null,
+                province_id: null,
+                name: null,
+                sort_order: null,
+                enabled: 1,
+                date_created: formatDateMySQL(),
+                created_by: userId,
+                date_modified: formatDateMySQL(),
+                modified_by: userId,
+                note: null,
+            }
+            detail.country = (station.country) ? station.country : {
+                id: null,
+                name: null,
+                sort_order: null,
+                iso2: null,
+                iso3: null,
+                enabled: 1,
+                date_created: formatDateMySQL(),
+                created_by: userId,
+                date_modified: formatDateMySQL(),
+                modified_by: userId,
+                note: null,
+            }
+            detail.province = (station.province) ? station.province : {
+                id: null,
+                name: null,
+                sort_order: null,
+                country_id: null,
+                iso2: null,
+                iso3: null,
+                enabled: 1,
+                date_created: formatDateMySQL(),
+                created_by: userId,
+                date_modified: formatDateMySQL(),
+                modified_by: userId,
+                note: null,
+            }
+            detail.created_by = (station.created_by) ? station.created_by : userId
+            detail.date_created = (station.date_created) ? station.date_created : formatDateMySQL()
+            detail.date_modified = (station.date_modified) ? station.date_modified : formatDateMySQL()
+            detail.display_long = (station.display_long) ? station.display_long : null
+            detail.display_medium = (station.display_medium) ? station.display_medium : null
+            detail.display_short = (station.display_short) ? station.display_short : null
+            detail.enabled = (station.enabled) ? station.enabled : 1
+            detail.iata_code = (station.iata_code) ? station.iata_code : null
+            detail.id = (station.id && !isNaN(parseInt(station.id))) ? parseInt(station.id) : null
+            detail.keywords = (station.keywords) ? station.keywords : []
+            detail.modified_by = (station.modified_by) ? station.modified_by : userId
+            detail.name = (station.name) ? station.name : null
+            detail.note = (station.note) ? station.note : null
+            detail.postal_code = (station.postal_code) ? station.postal_code : null
+            detail.street_1 = (station.street_1) ? station.street_1 : null
+            detail.street_2 = (station.street_2) ? station.street_2 : null
+        }
+        
+        return detail
+    }
+    
+    const loadAll = function (stations) {
+        console.log("Station.loadAll(stations)", stations)
+        // ----
+        
+        Station.all = new Map()
+        
+        $.each(stations, function (k, station) {
+            let detail = setDetail(station)
+            let stationId = (detail && !isNaN(parseInt(detail.id))) ? parseInt(detail.id) : null
+            
+            Station.all.set(stationId, detail)
+        })
+        
+    }
+    
+    const init = function (settings) {
+        console.log("Station.init(settings)", settings)
+        // ----
+        
+        if (_modal_product_depart_from_station || _modal_product_arrive_to_station) {
+            initAutocomplete()
+            resetStationForm("depart_from")
+            resetStationForm("arrive_to")
+            
+            loadAll(settings)
+            
+            //console.log("|__ Station.all", Station.all)
+        }
+    }
+    
+    return {
+        resetStationForm: function (type) {
+            resetStationForm(type)
+        },
+        init: function (settings) {
+            init(settings)
+        },
+    }
+})
+()
+
 const Province = (function () {
     "use strict"
     
@@ -9122,40 +14493,40 @@ const Province = (function () {
         if (_name.value === "") {
             $(_name).addClass("is-invalid")
             $("#province_name-error")
-              .text("Required: Field is required")
-              .show()
+                .text("Required: Field is required")
+                .show()
             valid = false
         } else {
             $(_name).removeClass("is-invalid")
             $("#province_name-error")
-              .text("")
-              .hide()
+                .text("")
+                .hide()
         }
         
         if (_province_iso2.value === "") {
             $(_province_iso2).addClass("is-invalid")
             $("#province_iso2-error")
-              .text("Required: Field is required")
-              .show()
+                .text("Required: Field is required")
+                .show()
             valid = false
         } else {
             $(_province_iso2).removeClass("is-invalid")
             $("#province_iso2-error")
-              .text("")
-              .hide()
+                .text("")
+                .hide()
         }
         
         if (_province_iso3.value === "") {
             $(_province_iso3).addClass("is-invalid")
             $("#province_iso3-error")
-              .text("Required: Field is required")
-              .show()
+                .text("Required: Field is required")
+                .show()
             valid = false
         } else {
             $(_province_iso3).removeClass("is-invalid")
             $("#province_iso3-error")
-              .text("")
-              .hide()
+                .text("")
+                .hide()
         }
         
         return valid
@@ -9163,7 +14534,7 @@ const Province = (function () {
     
     const handle_province_error = function (msg) {
         toastr.error(msg)
-        Console.log(msg)
+        //console.log(msg)
     }
     
     const on_click_outside = (e) => {
@@ -9184,83 +14555,83 @@ const Province = (function () {
                     if (element) {
                         
                         $(element)
-                          .select2({
-                              "language": {
-                                  "searching": function () {
-                                  },
-                              },
-                              "escapeMarkup": function (markup) {
-                                  return markup
-                              },
-                          })
-                          .on("select2:open", function (e) {
-                              let x = document.querySelectorAll("[aria-controls='select2-" + dropdown_id + "-results']")
-                              if (x[0]) {
-                                  let _filterProvinceSearch = x[0]
-                                  $(_filterProvinceSearch).attr("id", "" + dropdown_id + "_search")
-                                  if (!document.getElementById("filter_province_add_icon")) {
-                                      let i = document.createElement("i")
-                                      i.classList = "select-add-option fas fa-plus filter_province_add"
-                                      i.id = "filter_province_add_icon"
-                                      i.addEventListener("click", event => {
-                                          let val = _filterProvinceSearch.value
-                                          $(element).select2("close")
-                                          Province.add(this, val, dropdown_id)
-                                      })
-                                      _filterProvinceSearch.after(i)
-                                  }
-                                  $(".filter_province_add").hide()
-                                  if (_filterProvinceSearch) {
-                                      _filterProvinceSearch.addEventListener("keyup", event => {
-                                          if (_filterProvinceSearch.value !== "") {
-                                              $(".filter_province_add").show()
-                                          } else {
-                                              $(".filter_province_add").hide()
-                                          }
-                                      })
-                                  }
-                              }
-                              
-                          })
-                          .on("change", function () {
-                              let city_el_id = $(this)
-                                .attr("id")
-                                .replace("province", "city")
-                              
-                              let country_el_id = $(this)
-                                .attr("id")
-                                .replace("province", "country")
-                              
-                              let city_element = document.getElementById(city_el_id)
-                              let country_element = document.getElementById(country_el_id)
-                              
-                              if (city_element) {
-                                  if (country_element) {
-                                      country_id = parseInt(country_element.value)
-                                      if (!isNaN(parseInt(country_element.value))) {
-                                          
-                                          //
-                                          
-                                          if (!isNaN(parseInt($(this).val()))) {
-                                              City.get(country_id, parseInt($(this).val()), city_element)
-                                          } else {
-                                              City.id = null
-                                              City.get(country_id, null, city_element)
-                                              if (City.id) {
-                                              
-                                              }
-                                          }
-                                          //
-                                          
-                                      } else {
-                                          City.id = null
-                                          City.get(null, null, city_element)
-                                      }
-                                  }
-                              }
-                              City.id = null
-                              Province.id = null
-                          })
+                            .select2({
+                                "language": {
+                                    "searching": function () {
+                                    },
+                                },
+                                "escapeMarkup": function (markup) {
+                                    return markup
+                                },
+                            })
+                            .on("select2:open", function (e) {
+                                let x = document.querySelectorAll("[aria-controls='select2-" + dropdown_id + "-results']")
+                                if (x[0]) {
+                                    let _filterProvinceSearch = x[0]
+                                    $(_filterProvinceSearch).attr("id", "" + dropdown_id + "_search")
+                                    if (!document.getElementById("filter_province_add_icon")) {
+                                        let i = document.createElement("i")
+                                        i.classList = "select-add-option fas fa-plus filter_province_add"
+                                        i.id = "filter_province_add_icon"
+                                        i.addEventListener("click", event => {
+                                            let val = _filterProvinceSearch.value
+                                            $(element).select2("close")
+                                            Province.add(this, val, dropdown_id)
+                                        })
+                                        _filterProvinceSearch.after(i)
+                                    }
+                                    $(".filter_province_add").hide()
+                                    if (_filterProvinceSearch) {
+                                        _filterProvinceSearch.addEventListener("keyup", event => {
+                                            if (_filterProvinceSearch.value !== "") {
+                                                $(".filter_province_add").show()
+                                            } else {
+                                                $(".filter_province_add").hide()
+                                            }
+                                        })
+                                    }
+                                }
+                                
+                            })
+                            .on("change", function () {
+                                let city_el_id = $(this)
+                                    .attr("id")
+                                    .replace("province", "city")
+                                
+                                let country_el_id = $(this)
+                                    .attr("id")
+                                    .replace("province", "country")
+                                
+                                let city_element = document.getElementById(city_el_id)
+                                let country_element = document.getElementById(country_el_id)
+                                
+                                if (city_element) {
+                                    if (country_element) {
+                                        country_id = parseInt(country_element.value)
+                                        if (!isNaN(parseInt(country_element.value))) {
+                                            
+                                            //
+                                            
+                                            if (!isNaN(parseInt($(this).val()))) {
+                                                City.get(country_id, parseInt($(this).val()), city_element)
+                                            } else {
+                                                City.id = null
+                                                City.get(country_id, null, city_element)
+                                                if (City.id) {
+                                                
+                                                }
+                                            }
+                                            //
+                                            
+                                        } else {
+                                            City.id = null
+                                            City.get(null, null, city_element)
+                                        }
+                                    }
+                                }
+                                City.id = null
+                                Province.id = null
+                            })
                         
                     }
                 })
@@ -9282,7 +14653,7 @@ const Province = (function () {
                 })
                 //*/
             } catch (e) {
-                Console.log("error", e)
+                //console.log("error", e)
                 return handle_province_error("Error Validating Province")
             }
         } else {
@@ -9599,7 +14970,7 @@ const Province = (function () {
                 sendPostRequest("/api/v1.0/provinces/update", dataToSend, function (data, status, xhr) {
                     if (data && data[0]) {
                         let new_province = data[0]
-                        Console.log("new_province", new_province)
+                        //console.log("new_province", new_province)
                         Province.all.set(new_province.id, new_province)
                         let province_elements = $("select[data-type='province']")
                         Province.id = new_province.id
@@ -9619,11 +14990,11 @@ const Province = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                //console.log("error", e)
                 handle_province_error("Error: Validating Province")
             }
         } else {
-            Console.log("Error: Missing Data")
+            //console.log("Error: Missing Data")
             handle_province_error("Error: Missing Data")
         }
     }
@@ -9670,52 +15041,608 @@ const Country = (function () {
     
     const class_name = "form-new-country"
     const form_id = "form_new_country"
-    
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    
-    const form_rules = {
+    const _country_iso3 = document.getElementById("country_iso3")
+    const _country_iso2 = document.getElementById("country_iso2")
+    const _country_name = document.getElementById("country_name")
+    const _form_new_country = document.getElementById("form_new_country")
+    const _new_country_submit_button = document.getElementById("new_country_submit_button")
+    const _new_country_cancel_button = document.getElementById("new_country_cancel_button")
+    const _modal_product_country_cars = document.getElementById("modal_product_country_cars")
+    const _modal_product_country_id = document.getElementById("modal_product_country_id")
+    const _modal_product_province_id = document.getElementById("modal_product_province_id")
+    const _modal_product_city_id = document.getElementById("modal_product_city_id")
+    const _modal_product_location_id = document.getElementById("modal_product_location_id")
+    const _modal_new_product = document.getElementById("modal_new_product")
+    const formRules = {
         rules: {
             country_name: {
                 required: true,
-                //minlength: 3,
+                minlength: 3,
             },
             country_iso2: {
-                //required: true,
+                required: true,
                 minlength: 2,
             },
             country_iso3: {
-                //required: true,
+                required: true,
                 minlength: 3,
             },
         },
         messages: {
             country_name: {
-                required: "required",
-                //minlength: "too short",
+                required: "Field Required",
+                minlength: "too short",
             },
             country_iso2: {
-                //required: "required",
+                required: "Field Required",
                 minlength: "too short",
             },
             country_iso3: {
-                //required: "required",
+                required: "Field Required",
                 minlength: "too short",
             },
         },
     }
     
-    const handle_country_error = function (msg) {
-        toastr.error(msg)
-        console.log(msg)
+    let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let globalSelectedCountry = false
+    
+    $(_new_country_submit_button)
+        .on("click", function () {
+            //console.log("Country.new_country_submit_button:click()")
+            // ----
+            
+            save(this)
+            
+        })
+    
+    $(_new_country_cancel_button)
+        .on("click", function () {
+            //console.log("Country.new_country_cancel_button:click()")
+            // ----
+            
+            clearNewCountryForm()
+        })
+    
+    // ----
+    
+    const initAutocomplete = function () {
+        //console.log("Country.initAutocomplete()")
+        // ----
+        
+        if (_form_new_country) {
+            if (_modal_product_country_cars) {
+                _modal_product_country_cars.value = ""
+            }
+            clearNewCountryForm()
+            hideNewCountryForm()
+            $(_form_new_country)
+                .on("change", function () {
+                    console.log("Country.form_new_country:change()")
+                    // ----
+                    validateNewCountryForm()
+                })
+        }
+        
+        if (_modal_product_country_cars) {
+            $(_modal_product_country_cars)
+                .on("search", function () {
+                    //console.log("Country.modal_product_country_cars:search()")
+                    // ----
+                    
+                    clearNewCountryForm()
+                    populateNewCountryForm()
+                    //hideNewCountryForm()
+                    if (_modal_product_country_cars) {
+                        _modal_product_country_cars.value = ""
+                    }
+                })
+                .on("click", function (e) {
+                    if ($(this).attr("readonly") === "readonly") {
+                        e.preventDefault()
+                    } else {
+                        $(this).select()
+                    }
+                })
+                .on("keyup", function () {
+                    //console.log("Country.modal_product_country_cars:keyup()")
+                    // ----
+                    
+                    let countryName = _modal_product_country_cars.value
+                    //console.log("|__ countryName", countryName)
+                    
+                    globalSelectedCountry = false
+                    
+                    if (countryName === "") {
+                        clearNewProductModalForm()
+                    }
+                    
+                })
+                .on("change", function () {
+                    //console.log("Country.modal_product_country_cars:change()")
+                    // ----
+                    
+                    let countryName = $(this).val()
+                    //console.log("|__ countryName", countryName)
+                    
+                    globalSelectedCountry = false
+                    
+                    setTimeout(function () {
+                        
+                        if (countryName === "") {
+                            clearNewProductModalForm()
+                        } else {
+                            countryExists(countryName)
+                        }
+                        
+                    }, 200)
+                })
+                .autocomplete({
+                    serviceUrl: "/api/v1.0/autocomplete/countries",
+                    minChars: 2,
+                    cache: false,
+                    dataType: "json",
+                    triggerSelectOnValidInput: false,
+                    paramName: "st",
+                    onSelect: function (suggestion) {
+                        if (!suggestion.data) {
+                            return
+                        }
+                        
+                        let country = setDetail(suggestion.data)
+                        let countryId = (country && !isNaN(parseInt(country.id))) ? parseInt(country.id) : null
+                        let detail = Country.all.get(countryId)
+                        
+                        globalSelectedCountry = true
+                        populateNewCountryForm(country)
+                    },
+                })
+        }
     }
     
-    const on_click_outside = (e) => {
+    const clearNewProductValidation = function () {
+        //console.log("Country.clearNewProductValidation()")
+        // ----
+        
+        $(_country_name).hideError()
+        $(_country_iso2).hideError()
+        $(_country_iso3).hideError()
+    }
+    
+    const validateNewCountryForm = function () {
+        //console.log("Country.validateNewCountryForm()")
+        // ----
+        
+        let valid = true
+        let countryName = (_country_name && _country_name.value !== "") ? _country_name.value : null
+        let countryISO3 = (_country_iso3 && _country_iso3.value !== "") ? _country_iso3.value : null
+        let countryISO2 = (_country_iso2 && _country_iso2.value !== "") ? _country_iso2.value : null
+        
+        if (is_null(countryName)) {
+            valid = false
+            $(_country_name).showError("oops")
+        } else {
+            $(_country_name).hideError()
+        }
+        
+        if (is_null(countryISO3)) {
+            valid = false
+            $(_country_iso3).showError("oops")
+        } else {
+            $(_country_iso3).hideError()
+        }
+        
+        if (is_null(countryISO2)) {
+            valid = false
+            $(_country_iso2).showError("oops")
+        } else {
+            $(_country_iso2).hideError()
+        }
+        
+        if (valid) {
+            return {
+                name: countryName,
+                iso2: countryISO2,
+                iso3: countryISO3,
+                sort_order: null,
+                enabled: 1,
+                currency_id: 5,
+            }
+        }
+    }
+    
+    const hideNewCountryForm = function () {
+        //console.log("Country.hideNewCountryForm()")
+        // ----
+        
+        if (_form_new_country) {
+            if (_country_name) {
+                _country_name.disabled = true
+            }
+            
+            if (_country_iso2) {
+                _country_iso2.disabled = true
+            }
+            
+            if (_country_iso3) {
+                _country_iso3.disabled = true
+            }
+            
+            $(_form_new_country).hide()
+            
+        }
+        
+    }
+    
+    const showNewCountryForm = function () {
+        //console.log("Country.showNewCountryForm()")
+        // ----
+        
+        if (_form_new_country) {
+            
+            if (_country_iso2) {
+                _country_iso2.disabled = false
+            }
+            
+            if (_country_iso3) {
+                _country_iso3.disabled = false
+            }
+            
+            $(_form_new_country).show()
+            
+        }
+        
+    }
+    
+    const clearNewCountryForm = function () {
+        //console.log("Country.clearNewCountryForm()")
+        // ----
+        
+        if (_modal_product_country_id) {
+            _modal_product_country_id.value = ""
+        }
+        if (_modal_product_province_id) {
+            _modal_product_province_id.value = ""
+        }
+        if (_modal_product_city_id) {
+            _modal_product_city_id.value = ""
+        }
+        if (_country_iso3) {
+            _country_iso3.value = ""
+        }
+        if (_country_iso2) {
+            _country_iso2.value = ""
+        }
+        if (_country_name) {
+            _country_name.value = ""
+        }
+        
+        globalSelectedCountry = false
+        clearNewProductValidation()
+    }
+    
+    const populateNewCountryForm = function (country) {
+        //console.log("Country.populateNewCountryForm(country)", country)
+        // ----
+        
+        let name, iso2, iso3, id = ""
+        
+        if (country) {
+            id = (!isNaN(parseInt(country.id))) ? parseInt(country.id) : ""
+            name = (country.name) ? country.name : ""
+            iso2 = (country.iso2) ? country.iso2 : ""
+            iso3 = (country.iso3) ? country.iso3 : ""
+            
+        } else {
+            if (_modal_product_country_cars) {
+                name = _modal_product_country_cars.value
+                iso2 = ""
+                iso3 = ""
+                id = ""
+            }
+        }
+        
+        if (_modal_product_location_id) {
+            _modal_product_location_id.value = id
+        }
+        
+        if (_modal_product_country_id) {
+            _modal_product_country_id.value = id
+        }
+        if (_modal_product_province_id) {
+            _modal_product_province_id.value = ""
+        }
+        if (_modal_product_city_id) {
+            _modal_product_city_id.value = ""
+        }
+        if (_country_iso3) {
+            _country_iso3.value = iso3
+        }
+        if (_country_iso2) {
+            _country_iso2.value = iso2
+        }
+        if (_country_name) {
+            _country_name.value = name
+        }
+        if (_modal_product_country_cars) {
+            _modal_product_country_cars.value = name
+        }
+    }
+    
+    const fetchByName = function (dataToSend, callback) {
+        let url = "/api/v1.0/countries/validate"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data) {
+                    console.log("|__ data", data)
+                    
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        handleCountryError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log("error", e)
+                return handleCountryError("Error Validating Country")
+            }
+        } else {
+            return handleCountryError("Error Loading Country - Missing Data")
+        }
+    }
+    
+    const clearNewProductModalForm = function () {
+        //console.log("Country.clearNewProductModalForm()")
+        // ----
+        
+        if (_country_name) {
+            _country_name.value = ""
+        }
+        if (_country_iso2) {
+            _country_iso2.value = ""
+        }
+        if (_country_iso3) {
+            _country_iso3.value = ""
+        }
+        if (_modal_product_country_id) {
+            _modal_product_country_id.value = ""
+        }
+        if (_modal_product_province_id) {
+            _modal_product_province_id.value = ""
+        }
+        if (_modal_product_city_id) {
+            _modal_product_city_id.value = ""
+        }
+        if (_modal_product_location_id) {
+            _modal_product_location_id.value = ""
+        }
+        
+        globalSelectedCountry = false
+        clearNewProductValidation()
+        
+    }
+    
+    const countryExists = function (name) {
+        //console.log("Country.countryExists(name)", name)
+        // ----
+        
+        if (globalSelectedCountry === false) {
+            if (name && name !== "") {
+                let dataToSend = { name: name }
+                //console.log("|__ dataToSend", dataToSend)
+                
+                fetchByName(dataToSend, function (data) {
+                    //console.log("|__ |__ data", data)
+                    let country
+                    
+                    if (data && data.length) {
+                        country = data
+                        if (data[0]) {
+                            country = data[0]
+                        }
+                        
+                    }
+                    
+                    if (country && country.length) {
+                        
+                        globalSelectedCountry = true
+                        clearNewCountryForm()
+                        populateNewCountryForm(country)
+                    } else {
+                        globalSelectedCountry = false
+                        
+                        confirmDialog(`The country: ${name} does not exist exists. Would you like to create it?`, (ans) => {
+                            if (ans) {
+                                clearNewCountryForm()
+                                populateNewCountryForm()
+                                showNewCountryForm()
+                            } else {
+                                clearNewProductModalForm()
+                                if (_modal_product_country_cars) {
+                                    _modal_product_country_cars.value = ""
+                                }
+                            }
+                        })
+                    }
+                })
+            } else {
+                handleCountryError("here")
+            }
+        }
+    }
+    
+    const handleCountryError = function (msg, title, type) {
+        //console.log("Country.handleCountryError(msg)", msg)
+        // ----
+        
+        let messageTitle = (title) ? title : "Country"
+        let messageType = (type) ? type : "error"
+        
+        toastr[messageType](msg, messageTitle)
+    }
+    
+    const save = function ($this) {
+        //console.log("Country.initAutocomplete()")
+        // ----
+        
+        if (_country_name && _form_new_country && _country_iso2 && _country_iso3) {
+            
+            if (validateNewCountryForm()) {
+                let country_detail = {}
+                
+                country_detail.name = (_country_name && _country_name.value !== "") ? _country_name.value : null
+                country_detail.iso2 = (_country_iso2 && _country_iso2.value !== "") ? _country_iso2.value : null
+                country_detail.iso3 = (_country_iso3 && _country_iso3.value !== "") ? _country_iso3.value : null
+                country_detail.enabled = 1
+                country_detail.sort_order = null
+                
+                confirmDialog(`Would you like to update?`, (ans) => {
+                    if (ans) {
+                        updateCountryRecord($this, remove_nulls(country_detail))
+                    }
+                })
+                
+            }
+        } else {
+            toastr.error("Error: 2")
+        }
+        
+    }
+    
+    const updateCountryRecord = function ($this, dataToSend) {
+        //console.log("Country.updateCountryRecord(dataToSend)", dataToSend)
+        // ----
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest("/api/v1.0/countries/update", dataToSend, function (data) {
+                    let country, countryId, countryName
+                    let country_elements = $("select[data-type='country']")
+                    
+                    if (data) {
+                        country = setDetail((data[0]) ? data[0] : data)
+                        
+                        if (country) {
+                            
+                            countryName = (country.name) ? country.name : null
+                            countryId = (country.id) ? country.id : null
+                            
+                            if (countryId !== null && countryName !== null) {
+                                Country.all.set(countryId, country)
+                                
+                                country_elements.each(function (index, element) {
+                                    let newOption = new Option(countryName, countryId, false, false)
+                                    
+                                    if (countryName !== null && countryId !== null) {
+                                        $(element).append(newOption).trigger("change")
+                                    }
+                                })
+                                
+                                $($this).val(countryId).trigger("change")
+                                
+                                if (_modal_new_product && _form_new_country) {
+                                    
+                                    initAutocomplete()
+                                    populateNewCountryForm(country)
+                                    //hideNewCountryForm()
+                                    if (_modal_product_country_cars) {
+                                        _modal_product_country_cars.value = countryName
+                                    }
+                                } else {
+                                    Country.close()
+                                }
+                                
+                                handleCountryError(countryName + " was updated", "Country", "success")
+                            }
+                        }
+                    } else {
+                        return handleCountryError("Error: 1")
+                    }
+                })
+            } catch (e) {
+                console.log("error", e)
+                return handleCountryError("Error: Validating Country")
+            }
+            
+        } else {
+            console.log("Error: Missing Data")
+            return handleCountryError("Error: Missing Data")
+        }
+    }
+    
+    const setDetail = function (country) {
+        //console.log("Country.setDetail(country)", country)
+        // ----
+        
+        let detail = clearDetail()
+        let id = null
+        
+        if (country) {
+            /*
+            console.log("|__ country", country)
+            console.log("|__ country.id", country.id)
+            console.log("|__ country.ios2", country.iso2)
+            console.log("|__ country.sort_order", country.sort_order)
+            //*/
+            id = validInt(country.id)
+            detail["id"] = validInt(country.id)
+            detail["name"] = (country.name) ? country.name : null
+            detail["sort_order"] = (country.sort_order) ? country.sort_order : null
+            detail["iso2"] = (country.iso2) ? country.iso2 : null
+            detail["iso3"] = (country.iso3) ? country.iso3 : null
+            detail["currency_id"] = validInt(country.currency_id)
+            detail["enabled"] = (country.enabled) ? country.enabled : 1
+            detail["date_created"] = (country.date_created) ? country.date_created : formatDateMySQL()
+            detail["created_by"] = (country.created_by) ? country.created_by : userId
+            detail["date_modified"] = (country.date_modified) ? country.date_modified : formatDateMySQL()
+            detail["modified_by"] = (country.modified_by) ? country.modified_by : userId
+            detail["note"] = (country.note) ? country.note : null
+            detail["display_long"] = (country.display_long) ? country.display_long : null
+            detail["display_medium"] = (country.display_medium) ? country.display_medium : null
+            detail["display_short"] = (country.display_short) ? country.display_short : null
+        }
+        
+        Country.id = id
+        Country.detail = detail
+        return detail
+    }
+    
+    const clearDetail = function () {
+        //console.log("Country.clearDetail()")
+        // ----
+        
+        return {
+            id: null,
+            name: null,
+            sort_order: null,
+            iso2: null,
+            iso3: null,
+            currency_id: null,
+            enabled: 1,
+            note: null,
+            created_by: userId,
+            modified_by: userId,
+            date_created: formatDateMySQL(),
+            date_modified: formatDateMySQL(),
+            display_long: null,
+            display_medium: null,
+            display_short: null,
+        }
+    }
+    
+    const onClickOutside = (e) => {
+        //console.log("Country.onClickOutside(e)", e)
+        // ----
+        
         let tar = $(e.target).parents("div." + class_name)
         
         if (!tar[0] && !e.target.className.includes("select-add-option")) {
             Country.close()
         }
     }
+    
+    // ----
     
     const build_drop_downs = function (settings) {
         
@@ -9802,6 +15729,9 @@ const Country = (function () {
     }
     
     const fetch_country_list = function (dataToSend, callback) {
+        //console.log("Country.fetch_country_list(dataToSend, callback)", dataToSend)
+        // ----
+        
         if (dataToSend) {
             try {
                 $.ajax({
@@ -9814,99 +15744,15 @@ const Country = (function () {
                     if (data) {
                         return callback(data)
                     } else {
-                        return handle_country_error("Oops: 1")
-                    }
-                })
-                /*
-                sendGetRequest("/api/v1.0/countries", dataToSend, function (data, status, xhr) {
-                    //console.log(data)
-                    
-                    if (data) {
-                        // Country.all = data.result
-                        return callback(data)
-                    } else {
-                        return handle_country_error("Oops: 1")
-                    }
-                })
-                //*/
-            } catch (e) {
-                console.log("error", e)
-                return handle_country_error("Error Validating Country")
-            }
-        } else {
-            return handle_country_error("Error Loading Country- Missing Data")
-        }
-    }
-    
-    const update_country_record = function ($this, dataToSend) {
-        if (dataToSend) {
-            try {
-                sendPostRequest("/api/v1.0/countries/update", dataToSend, function (data, status, xhr) {
-                    if (data && data[0]) {
-                        let new_country = data[0]
-                        Country.all.set(new_country.id, new_country)
-                        let country_elements = $("select[data-type='country']")
-                        country_elements.each(function (index, element) {
-                            var newOption = new Option(new_country.name, new_country.id, false, false)
-                            $(element).append(newOption).trigger("change")
-                        })
-                        $($this).val(new_country.id).trigger("change")
-                        Country.close()
-                        toastr.success("Country: " + new_country.id + " updated")
-                    } else {
-                        return handle_country_error("Error: 1")
+                        return handleCountryError("Oops: 1")
                     }
                 })
             } catch (e) {
                 console.log("error", e)
-                handle_country_error("Error: Validating Country")
+                return handleCountryError("Error Validating Country")
             }
-            
         } else {
-            console.log("Error: Missing Data")
-            handle_country_error("Error: Missing Data")
-        }
-    }
-    
-    const set_detail = function (country) {
-        let detail = clear_detail()
-        let id = null
-        if (country) {
-            id = validInt(country.id)
-            detail = {
-                id: validInt(country.id),
-                name: (country.name) ? country.name : null,
-                sort_order: (country.sort_order) ? country.sort_order : null,
-                iso2: (country.iso2) ? country.iso2 : null,
-                iso3: (country.iso3) ? country.iso3 : null,
-                currency_id: validInt(country.currency_id),
-                enabled: (country.enabled) ? country.enabled : 1,
-                date_created: (country.date_created) ? country.date_created : formatDateMySQL(),
-                created_by: (country.created_by) ? country.created_by : user_id,
-                date_modified: (country.date_modified) ? country.date_modified : formatDateMySQL(),
-                modified_by: (country.modified_by) ? country.modified_by : user_id,
-                note: (country.note) ? country.note : null,
-            }
-        }
-        Country.id = id
-        Country.detail = detail
-        return detail
-    }
-    
-    const clear_detail = function () {
-        return {
-            id: null,
-            name: null,
-            sort_order: null,
-            iso2: null,
-            iso3: null,
-            currency_id: null,
-            enabled: 1,
-            note: null,
-            created_by: user_id,
-            modified_by: user_id,
-            date_created: formatDateMySQL(),
-            date_modified: formatDateMySQL(),
+            return handleCountryError("Error Loading Country- Missing Data")
         }
     }
     
@@ -10062,14 +15908,14 @@ const Country = (function () {
         name_text_element.value = value
         name_text_element.focus({ preventScroll: false })
         
-        window.addEventListener("click", on_click_outside)
+        window.addEventListener("click", onClickOutside)
     }
     
     const destroy_form = function () {
         let elem = document.getElementById(form_id)
         if (elem) {
             elem.parentNode.removeChild(elem)
-            window.removeEventListener("click", on_click_outside)
+            window.removeEventListener("click", onClickOutside)
         }
     }
     
@@ -10080,7 +15926,7 @@ const Country = (function () {
         let valid = true
         // ----
         if (!_name || !_country_iso2 || !_country_iso3) {
-            handle_country_error("Error Processing Data")
+            handleCountryError("Error Processing Data")
             return false
         }
         
@@ -10143,42 +15989,22 @@ const Country = (function () {
         build_form(elem, val)
     }
     
-    const save = function ($this) {
-        let _name = document.getElementById("country_name")
-        let _country_iso2 = document.getElementById("country_iso2")
-        let _country_iso3 = document.getElementById("country_iso3")
-        if (_name && _country_iso2 && _country_iso3) {
-            
-            if (validate_form()) {
-                let country_detail = {}
-                
-                country_detail.name = (_name.value !== "") ? _name.value : null
-                country_detail.iso2 = (_country_iso2.value !== "") ? _country_iso2.value : null
-                country_detail.iso3 = (_country_iso3.value !== "") ? _country_iso3.value : null
-                
-                confirmDialog(`Would you like to update?`, (ans) => {
-                    if (ans) {
-                        update_country_record($this, remove_nulls(country_detail))
-                    }
-                })
-                
-            }
-        } else {
-            toastr.error("Error: 2")
-        }
-        
-    }
-    
     const init = function (settings) {
         build_drop_downs(settings)
     }
     
-    const load_all = function (countries) {
+    const loadAll = function (countries) {
+        //console.log("Country.loadAll(countries)", countries)
+        // ----
+        
         Country.all = new Map()
         
         if (countries) {
             $.each(countries, function (k, country) {
-                let detail = set_detail(country)
+                //console.log("|__ country", country)
+                
+                let detail = setDetail(country)
+                //console.log("|__ detail", detail)
                 Country.all.set(detail.id, detail)
             })
         }
@@ -10187,6 +16013,9 @@ const Country = (function () {
     return {
         detail: {},
         all: new Map(),
+        buildCountryDropDown: function () {
+        
+        },
         close: function () {
             destroy_form()
         },
@@ -10200,16 +16029,19 @@ const Country = (function () {
             set(country_id)
         },
         set_detail: function (country) {
-            set_detail(country)
+            setDetail(country)
         },
         load_all: function (countries) {
-            load_all(countries)
+            loadAll(countries)
         },
         get: function (settings) {
             get(settings)
         },
         init: function (settings) {
             init(settings)
+        },
+        initAutocomplete: function () {
+            initAutocomplete()
         },
     }
 })()
@@ -10327,7 +16159,7 @@ const Location = (function () {
     })
     
     const clear_product_location_form = function () {
-        //Console.log("Location.clear_product_location_form()")
+        //console.log("Location.clear_product_location_form()")
         _location_id.value = ""
         _location_types_id.value = ""
         _location_name.value = ""
@@ -10406,7 +16238,7 @@ const Location = (function () {
     }
     
     const load_product_location_form = function (location) {
-        //Console.log("Location.load_product_location_form(location)", location)
+        //console.log("Location.load_product_location_form(location)", location)
         clear_product_location_form()
         populate_product_location_form(location)
         $(_card_product_edit_location).show()
@@ -10465,7 +16297,7 @@ const Location = (function () {
             onSelect: function (suggestion) {
                 if (suggestion && suggestion.data) {
                     globalSelectedLocation = true
-                    //Console.log("suggestion", suggestion)
+                    //console.log("suggestion", suggestion)
                 }
             },
             onSearchComplete: function (query, suggestions) {
@@ -10532,7 +16364,7 @@ const Location = (function () {
         .on("change", function () {
             
             let selected_value = $("input[name='location_display']:checked").val()
-            //Console.log("selected_value", selected_value)
+            //console.log("selected_value", selected_value)
             default_display = selected_value
             initAutoComplete()
             if (Location.detail["display_" + selected_value] !== null) {
@@ -10772,7 +16604,6 @@ const Location = (function () {
                     }
                 })
             } catch (e) {
-                //Console.log("error", e)
                 return handle_location_error("Error Validating Location")
             }
         } else {
@@ -11239,8 +17070,8 @@ const Location = (function () {
             populate_form(location)
         },
         set_detail: function (location) {
-            //Console.log("location", location)
-            set_detail(location)
+            //console.log("location", location)
+            return set_detail(location)
         },
         build: function () {
             if (validate_edit_location_filter_form()) {
@@ -11275,6 +17106,7 @@ const Variant = (function () {
     const _product_edit_variant_form_close_button = document.getElementById("product_edit_variant_form_close_button")
     const _product_edit_variant_form_variant_used_in_pricing = document.getElementById("product_edit_variant_form_variant_used_in_pricing")
     const _table_variant_product_edit_add_new_button = document.getElementById("table_variant_product_edit_add_new_button")
+    const _product_edit_variant_display = document.getElementById("product_edit_variant_display")
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $table_variant_product_edit = $(_table_variant_product_edit)
@@ -11356,6 +17188,72 @@ const Variant = (function () {
             _product_edit_variant_form_variant_name_filter.disabled = false
         })
     
+    const clearProductOverview = function (variant) {
+        //console.log("Variant.clearProductOverview(variant)", variant)
+        let color_scheme, product_unit_detail
+        
+        if (!variant) {
+            //console.log("No Variant", variant)
+            return
+        }
+        
+        let variantId = (!isNaN(parseInt(variant.id))) ? parseInt(variant.id) : null
+        
+        if (variantId) {
+            $(`#product_edit_variant_display_${variantId}`).remove()
+        }
+        
+    }
+    
+    const buildProductOverview = function (variant) {
+        //console.log("Variant.buildProductOverview(variant)", variant)
+        
+        if (!variant) {
+            //console.log("|__ variant", variant)
+            return
+        }
+        
+        let variantId = (!isNaN(parseInt(variant.id))) ? parseInt(variant.id) : null
+        let variantMaxAge = (!isNaN(parseInt(variant.max_age))) ? parseInt(variant.max_age) : null
+        let variantMinAge = (!isNaN(parseInt(variant.min_age))) ? parseInt(variant.min_age) : null
+        let variantName = (variant.name) ? variant.name : null
+        let variantCode = (variant.code) ? variant.code : null
+        
+        if (Variant.all.get(variantId)) {
+            clearProductOverview(Variant.all.get(variantId))
+        }
+        
+        $(_product_edit_variant_display).append(`
+            <div id="product_edit_variant_display_${variantId}" class="col-12 col-sm-12 col-md-4 px-1">
+                <div class="card">
+                    <div class="card-body">
+                    
+                        <h5 class="card-title">${variantName}</h5>
+                        <h6 class="card-subtitle my-2 text-muted">${variantCode}</h6>
+                        <p class="card-text"></p>
+       
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>Min</th>
+                                    <th>Max</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Age</td>
+                                    <td>${variantMinAge}</td>
+                                    <td>${variantMaxAge}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        `)
+    }
+    
     const remove = function () {
         confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
             if (ans) {
@@ -11378,12 +17276,12 @@ const Variant = (function () {
                         PricingWorksheet.pricingWorksheet()
                         Pricing.resetForm()
                         YearCalendar.refresh()
-                        
                         updateProgress()
                         resetForm()
-                        
-                        toastr.success(`Variant: ${detail.name} - has been updated`)
                         YearCalendar.endLoading()
+                        clearProductOverview(detail)
+                        
+                        toastr["warning"](`Variant: ${detail.name} - has been removed`, "Variant")
                     }
                 })
             } else {
@@ -11407,7 +17305,7 @@ const Variant = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -11422,9 +17320,9 @@ const Variant = (function () {
                 "id": "variantNeedsAttention",
             })
             
-            $(_panel_tab_variant).html(`Variant<span id="variantNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
+            $(_panel_tab_variant).html(`<span id="tab_span_variant">Variant</span> <span id="variantNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
         } else {
-            $(_panel_tab_variant).html(`Variant`)
+            $(_panel_tab_variant).html(`<span id="tab_span_variant">Variant</span>`)
         }
         
         Product.updateProgress()
@@ -11492,7 +17390,7 @@ const Variant = (function () {
     }
     
     const handleVariantError = function (msg) {
-        toastr.error(msg)
+        toastr["error"](msg, "Variant Error")
     }
     
     const fetchByName = function (dataToSend, callback) {
@@ -11508,7 +17406,7 @@ const Variant = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 handleVariantError("Error Validating Variant")
             }
         } else {
@@ -11558,14 +17456,16 @@ const Variant = (function () {
                                         if (data[0]) {
                                             variant = data[0]
                                         }
-                                        console.log("variant", variant)
                                         let detail = set(variant)
-                                        console.log("detail", detail)
+                                        
+                                        clearForm()
+                                        
                                         $table_variant_product_edit.clearSelectedRows()
                                         globalSelectedVariant = false
-                                        clearForm()
+                                        
                                         _product_edit_variant_form_variant_name.value = name
                                         _display_product_variant_name.innerText = name
+                                        
                                         populateForm(detail)
                                         enableFormFields()
                                     } else {
@@ -11573,7 +17473,7 @@ const Variant = (function () {
                                     }
                                 })
                             } catch (e) {
-                                console.log("error", e)
+                                //console.log("error", e)
                             }
                         }
                     })
@@ -11756,7 +17656,7 @@ const Variant = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -11792,9 +17692,10 @@ const Variant = (function () {
                             
                             updateProgress()
                             resetForm()
+                            buildProductOverview(detail)
                             
-                            toastr.success(`Variant: ${detail.name} - has been updated`)
                             YearCalendar.endLoading()
+                            toastr["success"](`Variant: ${detail.name} - has been updated`, "Variant")
                         }
                     })
                 } else {
@@ -11809,15 +17710,17 @@ const Variant = (function () {
     
     const loadAll = function (variants) {
         //console.log("Variant.loadAll(variants)", variants)
-        // ----
         Variant.all = new Map()
         
         if (variants) {
             $.each(variants, function (k, variant) {
                 let detail = set(variant)
+                
                 Variant.all.set(detail.id, detail)
+                
                 $table_variant_product_edit.insertRow(detail)
-                //console.log("Variant - detail", detail)
+                
+                buildProductOverview(detail)
             })
         }
     }
@@ -11918,12 +17821,25 @@ const Unit = (function () {
     const _product_edit_unit_form_unit_description_short = document.getElementById("product_edit_unit_form_unit_description_short")
     const _product_edit_unit_form_unit_description_long = document.getElementById("product_edit_unit_form_unit_description_long")
     const _product_edit_unit_form_unit_enabled = document.getElementById("product_edit_unit_form_unit_enabled")
-    const _calendar_loader = document.getElementById("calendar_loader")
     const _display_product_unit_name = document.getElementById("display_product_unit_name")
     const _product_edit_unit_form_clear_button = document.getElementById("product_edit_unit_form_clear_button")
     const _product_edit_unit_form_close_button = document.getElementById("product_edit_unit_form_close_button")
     const _table_unit_product_edit_add_new_button = document.getElementById("table_unit_product_edit_add_new_button")
+    const _unit_keywords = document.getElementById("unit_keywords")
+    const _unit_amenities = document.getElementById("unit_amenities")
+    const _product_edit_unit_display = document.getElementById("product_edit_unit_display")
+    const _product_edit_unit_images = document.getElementById("unit_images")
     
+    let counter = 1
+    let $unit_keywords, $unit_amenities
+    let tabLabel = "Unit"
+    let nightsLabel = "Nights"
+    let paxLabel = "Pax"
+    let maxNightDefaultValue = null
+    let minNightDefaultValue = 1
+    let maxPaxDefaultValue = null
+    let minPaxDefaultValue = 1
+    let currentUnit = null
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $table_unit_product_edit = $(_table_unit_product_edit)
     let category_id
@@ -11986,6 +17902,7 @@ const Unit = (function () {
     
     $(_product_edit_unit_form_close_button)
         .on("click", function () {
+            console.log("Unit.product_edit_unit_form_close_button:click()")
             resetForm()
             $table_unit_product_edit.clearSelectedRows()
             _product_edit_unit_form_unit_name_filter.value = ""
@@ -12027,7 +17944,7 @@ const Unit = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -12064,9 +17981,11 @@ const Unit = (function () {
                         updateProgress()
                         clearForm()
                         hideForm()
+                        clearProductOverview(unit)
                         
-                        toastr.success(`Unit: ${unit.name} - has been removed`)
                         YearCalendar.endLoading()
+                        
+                        toastr["warning"](`Unit: ${unit.name} - has been removed`, "Unit")
                     }
                 })
             }
@@ -12075,10 +17994,11 @@ const Unit = (function () {
     
     const updateProgress = function () {
         let units = Array.from(Unit.all.values())
+        
         if (units.length === 0) {
-            $(_panel_tab_unit).html(`Unit <span id="unitNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
+            $(_panel_tab_unit).html(`<span id="tab_span_unit">${tabLabel}</span> <span id="unitNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
         } else {
-            $(_panel_tab_unit).html(`Unit`)
+            $(_panel_tab_unit).html(`<span id="tab_span_unit">${tabLabel}</span>`)
         }
         
         Product.updateProgress()
@@ -12202,7 +18122,7 @@ const Unit = (function () {
                                         
                                         let detail = set(unit)
                                         
-                                        console.log("detail", detail)
+                                        //console.log("detail", detail)
                                         
                                         $table_unit_product_edit.clearSelectedRows()
                                         globalSelectedUnit = false
@@ -12217,7 +18137,7 @@ const Unit = (function () {
                                     }
                                 })
                             } catch (e) {
-                                console.log("error", e)
+                                //console.log("error", e)
                             }
                             
                         } else {
@@ -12234,7 +18154,7 @@ const Unit = (function () {
     }
     
     const handleUnitError = function (msg) {
-        toastr.error(msg)
+        toastr["error"](`${msg}`, "Unit")
     }
     
     const fetchByName = function (dataToSend, callback) {
@@ -12250,7 +18170,7 @@ const Unit = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 handleUnitError("Error Validating Unit")
             }
         } else {
@@ -12283,6 +18203,9 @@ const Unit = (function () {
             room_code: null,
             start_time: null,
             time_notes: null,
+            keywords: [],
+            amenities: [],
+            images: [],
         }
     }
     
@@ -12313,51 +18236,111 @@ const Unit = (function () {
             detail.room_code = (unit.room_code) ? unit.room_code : null
             detail.start_time = (unit.start_time) ? unit.start_time : null
             detail.time_notes = (unit.time_notes) ? unit.time_notes : null
+            detail.amenities = (unit.amenities) ? unit.amenities : null
+            detail.keywords = (unit.keywords) ? unit.keywords : null
+            detail.images = (unit.images) ? unit.images : []
         }
         
         return detail
     }
     
-    const save = function () {
-        if (validUnitRecord()) {
-            confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
-                if (ans) {
-                    let dataToSend = buildUnitRecord()
-                    
-                    saveProductUnit(dataToSend, function (data) {
-                        if (data) {
-                            let detail = set((data[0]) ? data[0] : data)
-                            let hasUnit = Unit.all.get(detail.id)
-                            
-                            if (hasUnit) {
-                                $table_unit_product_edit.updateRow(detail)
-                            } else {
-                                $table_unit_product_edit.insertRow(detail)
-                            }
-                            
-                            Unit.all.set(detail.id, detail)
-                            
-                            $table_unit_product_edit.loadRow(detail)
-                            $table_unit_product_edit.jumpToRow(detail)
-                            $table_unit_product_edit.clearSelectedRows()
-                            
-                            _product_edit_unit_form_unit_name_filter.value = ""
-                            
-                            PricingWorksheet.pricingWorksheet()
-                            Pricing.resetForm()
-                            YearCalendar.refresh()
-                            
-                            updateProgress()
-                            clearForm()
-                            hideForm()
-                            
-                            toastr.success(`Unit: ${detail.name} - has been updated`)
-                            YearCalendar.endLoading()
-                        }
-                    })
-                }
-            })
+    const clearProductOverview = function (unit) {
+        //console.log("Unit.clearProductOverview(unit)", unit)
+        let color_scheme, product_unit_detail
+        
+        if (!unit) {
+            //console.log("No Unit", unit)
+            return
         }
+        
+        let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+        
+        if (unitId) {
+            $(`#product_edit_unit_display_${unitId}`).remove()
+        }
+        
+    }
+    
+    const buildProductOverview = function (unit) {
+        //console.log("Unit.buildProductOverview(unit)", unit)
+        let color_scheme, product_unit_detail
+        
+        if (!unit) {
+            //console.log("|__ unit", unit)
+            //console.log("|__ color_scheme", season.color_scheme)
+            //console.log("|__ product_season_detail", season.product_season_detail)
+            return
+        }
+        
+        let unitAmenities = (unit.ammenities) ? getListOfIds(unit.ammenities) : []
+        let unitApiId = null
+        let unitBlurb = null
+        let unitCategoryId = (!isNaN(parseInt(unit.category_id))) ? parseInt(unit.category_id) : null
+        let unitCoverImage = "/public/img/unit_cover_placeholder.jpg"
+        let unitDescriptionLong = null
+        let unitDescriptionShort = null
+        let unitEnabled = 1
+        let unitEndTime = null
+        let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
+        let unitKeywords = (unit.keywords) ? getListOfIds(unit.keywords) : []
+        let unitMaxNights = (!isNaN(parseInt(unit.max_nights))) ? parseInt(unit.max_nights) : null
+        let unitMaxPax = (!isNaN(parseInt(unit.max_pax))) ? parseInt(unit.max_pax) : null
+        let unitMeeting_point = null
+        let unitMinNights = (!isNaN(parseInt(unit.min_nights))) ? parseInt(unit.min_nights) : null
+        let unitMinPax = (!isNaN(parseInt(unit.min_pax))) ? parseInt(unit.min_pax) : null
+        let unitName = (unit.name) ? unit.name : null
+        let unitRoomCode = (unit.room_code) ? unit.room_code : null
+        let unitStartTime = (unit.start_time) ? unit.start_time : null
+        let unitTimeNotes = (unit.time_notes) ? unit.time_notes : null
+        let colorSchemeId = counter
+        let colorSchemeSelected = colorScheme.get(colorSchemeId)
+        if (counter >= 16) {
+            counter = 0
+        }
+        counter++
+        
+        let backgroundColor = (colorSchemeSelected && colorSchemeSelected.backGround) ? colorSchemeSelected.backGround : "#fff"
+        let textColor = (colorSchemeSelected && colorSchemeSelected.textColor) ? colorSchemeSelected.textColor : "#0a070d"
+        let borderColor = (colorSchemeSelected && colorSchemeSelected.borderColor) ? colorSchemeSelected.borderColor : "#0a070d"
+        
+        backgroundColor = shadeColor(backgroundColor, 30)
+        borderColor = shadeColor(borderColor, -30)
+        
+        let _unit = Unit.all.get(unitId)
+        
+        if (_unit) {
+            clearProductOverview(_unit)
+        }
+        
+        $(_product_edit_unit_display).append(`
+            <div id="product_edit_unit_display_${unitId}" class="col-12 col-sm-12 col-md-4 px-1">
+                <div class="card card-body mb-2" style="background-color:${backgroundColor}; color:${textColor};border:solid 1px ${borderColor};">
+                    <h5 class="card-title w-100 text-truncate" style="color:${textColor};border-color:${borderColor}">${unitName}</h5>
+                    <h6 class="card-subtitle my-2 text-muted" style="color:${textColor}">${unitRoomCode}</h6>
+                    <table class="table table-sm" style="color:${textColor};border-color:${borderColor}">
+                        <thead>
+                            <tr style="font-size:.85rem;font-weight:400;color:#0a070d;">
+                                <th style="font-size:.85rem;font-weight:400;color:#0a070d;">&nbsp;</th>
+                                <th style="font-size:.85rem;font-weight:400;color:#0a070d;">Min</th>
+                                <th style="font-size:.85rem;font-weight:400;color:#0a070d;">Max</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-top-color: ${borderColor} !important;">
+                                <th style="border-top-color: ${borderColor} !important;">Pax:</th>
+                                <td>${unitMinPax}</td>
+                                <td>${unitMaxPax}</td>
+                            </tr>
+                            <tr>
+                                <th>Nights:</th>
+                                <td>${unitMinNights}</td>
+                                <td>${unitMaxNights}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `)
     }
     
     const validUnitRecord = function () {
@@ -12410,9 +18393,52 @@ const Unit = (function () {
             description_short: (_product_edit_unit_form_unit_description_short.value) ? _product_edit_unit_form_unit_description_short.value : null,
             description_long: (_product_edit_unit_form_unit_description_long.value) ? _product_edit_unit_form_unit_description_long.value : null,
             enabled: (_product_edit_unit_form_unit_enabled.checked === true) ? 1 : 0,
+            keywords: $unit_keywords.build(),
+            amenities: $unit_amenities.build(),
         }
         
         return remove_nulls(dataToSend)
+    }
+    
+    const save = function () {
+        if (validUnitRecord()) {
+            confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
+                if (ans) {
+                    let dataToSend = buildUnitRecord()
+                    saveProductUnit(dataToSend, function (data) {
+                        if (data) {
+                            let detail = set((data[0]) ? data[0] : data)
+                            let hasUnit = Unit.all.get(detail.id)
+                            
+                            if (hasUnit) {
+                                $table_unit_product_edit.updateRow(detail)
+                            } else {
+                                $table_unit_product_edit.insertRow(detail)
+                            }
+                            
+                            buildProductOverview(detail)
+                            
+                            Unit.all.set(detail.id, detail)
+                            
+                            PricingWorksheet.pricingWorksheet()
+                            Pricing.resetForm()
+                            YearCalendar.refresh()
+                            
+                            resetForm()
+                            updateProgress()
+                            
+                            $table_unit_product_edit.clearSelectedRows()
+                            _product_edit_unit_form_unit_name_filter.value = ""
+                            _product_edit_unit_form_unit_name_filter.disabled = false
+                            _product_edit_unit_form_unit_name.disabled = true
+                            
+                            toastr["success"](`Unit: ${detail.name} - has been updated`, "Unit")
+                            YearCalendar.endLoading()
+                        }
+                    })
+                }
+            })
+        }
     }
     
     const saveProductUnit = function (dataToSend, callback) {
@@ -12425,29 +18451,9 @@ const Unit = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
+                return handleUnitError("Error")
             }
-        }
-    }
-    
-    const clearForm = function () {
-        //console.log("Unit:clearForm()", Unit)
-        _product_edit_unit_form_unit_id.value = ""
-        _product_edit_unit_form_unit_name.value = ""
-        _product_edit_unit_form_unit_room_code.value = ""
-        _product_edit_unit_form_unit_min_nights.value = 1
-        _product_edit_unit_form_unit_max_nights.value = ""
-        _product_edit_unit_form_unit_min_pax.value = 1
-        _product_edit_unit_form_unit_max_pax.value = ""
-        _product_edit_unit_form_unit_description_short.value = ""
-        _product_edit_unit_form_unit_description_long.value = ""
-        _product_edit_unit_form_unit_enabled.checked = true
-    }
-    
-    const loadForm = function () {
-        if (_edit_product_unit) {
-            $(_edit_product_unit).show()
-            _product_edit_unit_form_unit_name_filter.disabled = true
         }
     }
     
@@ -12465,183 +18471,80 @@ const Unit = (function () {
         _product_edit_unit_form_unit_enabled.disabled = false
     }
     
-    const enableFormFields = function () {
-        
-        disableFormFields()
-        
-        _product_edit_unit_form_unit_id.disabled = true
-        _product_edit_unit_form_unit_name.disabled = true
-        _product_edit_unit_form_unit_room_code.disabled = true
-        _product_edit_unit_form_unit_enabled.disabled = true
-        
-        _product_edit_unit_form_unit_description_short.disabled = false
-        _product_edit_unit_form_unit_description_long.disabled = false
-        
-    }
-    
-    const hideForm = function () {
-        if (_edit_product_unit) {
-            $(_edit_product_unit).hide()
-            _product_edit_unit_form_unit_name_filter.disabled = false
-            updateProgress()
-        }
-    }
-    
-    const resetForm = function () {
-        let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
-        
-        clearForm()
-        hideForm()
-        
-        let labelMinPax, labelMaxPax, labelMinNights, labelMaxNights,
-            disabledMinPax, disabledMaxPax, disabledMinNights, disabledMaxNights,
-            valueMinPax, valueMaxPax, valueMinNights, valueMaxNights,
-            labelRoomCode, disabledRoomCode
-        
-        switch (categoryId) {
-            case 1:
-                labelMinPax = "Minimum Pax:"
-                labelMaxPax = "Maximum Pax:"
-                labelMinNights = "Minimum Nights:"
-                labelMaxNights = "Maximum Nights:"
-                
-                labelRoomCode = "Room Code:"
-                
-                disabledMinPax = false
-                disabledMaxPax = false
-                disabledMinNights = false
-                disabledMaxNights = false
-                disabledRoomCode = false
-                
-                valueMinPax = 1
-                valueMaxPax = ""
-                valueMinNights = 1
-                valueMaxNights = ""
-                break
-            case 2:
-                labelMinPax = "Minimum Pax:"
-                labelMaxPax = "Maximum Pax:"
-                labelMinNights = "Minimum Days:"
-                labelMaxNights = "Maximum Days:"
-                
-                labelRoomCode = "Seat Code:"
-                
-                valueMinPax = 1
-                valueMaxPax = 1
-                valueMinNights = 1
-                valueMaxNights = 1
-                
-                break
-            case 4:
-                labelMinPax = "Minimum Pax:"
-                labelMaxPax = "Maximum Pax:"
-                labelMinNights = "Minimum Days:"
-                labelMaxNights = "Maximum Days:"
-                
-                labelRoomCode = "Seat Code:"
-                
-                valueMinPax = 1
-                valueMaxPax = 1
-                valueMinNights = 1
-                valueMaxNights = 1
-                
-                break
-            default:
-                labelMinPax = "Minimum Pax:"
-                labelMaxPax = "Maximum Pax:"
-                labelMinNights = "Minimum Nights:"
-                labelMaxNights = "Maximum Nights:"
-                
-                disabledMinPax = false
-                disabledMaxPax = false
-                disabledMinNights = false
-                disabledMaxNights = false
-                
-                valueMinPax = 1
-                valueMaxPax = ""
-                valueMinNights = 1
-                valueMaxNights = ""
-        }
-        
-        let labels = document.getElementsByTagName('LABEL')
-        for (let i = 0; i < labels.length; i++) {
-            if (labels[i].htmlFor !== '') {
-                let elem = document.getElementById(labels[i].htmlFor)
-                if (elem) {
-                    elem.label = labels[i]
-                }
-            }
-        }
-        
-        _product_edit_unit_form_unit_min_nights.value = valueMinNights
-        _product_edit_unit_form_unit_max_nights.value = valueMaxNights
-        _product_edit_unit_form_unit_min_pax.value = valueMinPax
-        _product_edit_unit_form_unit_max_pax.value = valueMaxPax
-        
-        _product_edit_unit_form_unit_min_nights.label.innerHTML = labelMinNights
-        _product_edit_unit_form_unit_max_nights.label.innerHTML = labelMaxNights
-        _product_edit_unit_form_unit_min_pax.label.innerHTML = labelMinPax
-        _product_edit_unit_form_unit_max_pax.label.innerHTML = labelMaxPax
-        _product_edit_unit_form_unit_room_code.label.innerHTML = labelRoomCode
-        
-        _product_edit_unit_form_unit_min_nights.disabled = disabledMinNights
-        _product_edit_unit_form_unit_max_nights.disabled = disabledMaxNights
-        _product_edit_unit_form_unit_min_pax.disabled = disabledMinPax
-        _product_edit_unit_form_unit_max_pax.disabled = disabledMaxPax
-        
-    }
-    
     const initForm = function () {
-    
-    }
-    
-    const populateForm = function (unit) {
-        resetForm()
+        let categoryId = (document.getElementById("category_id") && !isNaN(parseInt(document.getElementById("category_id").value))) ? parseInt(document.getElementById("category_id").value) : null
         
-        if (unit) {
-            let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
-            
-            if (categoryId === 2 || categoryId === 4) {
-                _product_edit_unit_form_unit_min_nights.value = (unit.min_nights) ? unit.min_nights : 1
-                _product_edit_unit_form_unit_max_nights.value = (unit.max_nights) ? unit.max_nights : 1
-                _product_edit_unit_form_unit_min_pax.value = (unit.min_pax) ? unit.min_pax : 1
-                _product_edit_unit_form_unit_max_pax.value = (unit.max_pax) ? unit.max_pax : 1
-                
-                _product_edit_unit_form_unit_min_nights.disabled = true
-                _product_edit_unit_form_unit_max_nights.disabled = true
-                _product_edit_unit_form_unit_min_pax.disabled = true
-                _product_edit_unit_form_unit_max_pax.disabled = true
-                _product_edit_unit_form_unit_room_code.disabled = true
-                
-            } else {
-                _product_edit_unit_form_unit_min_nights.value = (unit.min_nights) ? unit.min_nights : 1
-                _product_edit_unit_form_unit_max_nights.value = (unit.max_nights) ? unit.max_nights : null
-                _product_edit_unit_form_unit_min_pax.value = (unit.min_pax) ? unit.min_pax : 1
-                _product_edit_unit_form_unit_max_pax.value = (unit.max_pax) ? unit.max_pax : null
-                
-                _product_edit_unit_form_unit_min_nights.disabled = false
-                _product_edit_unit_form_unit_max_nights.disabled = false
-                _product_edit_unit_form_unit_min_pax.disabled = false
-                _product_edit_unit_form_unit_max_pax.disabled = false
-                _product_edit_unit_form_unit_room_code.disabled = false
-                
+        if (categoryId) {
+            //console.log("categoryId", categoryId)
+            switch (categoryId) {
+                case 1:
+                    maxNightDefaultValue = null
+                    minNightDefaultValue = 1
+                    maxPaxDefaultValue = null
+                    minPaxDefaultValue = 1
+                    
+                    paxLabel = "Pax"
+                    nightsLabel = "Nights"
+                    tabLabel = "Units"
+                    break
+                case 2:
+                    maxNightDefaultValue = 1
+                    minNightDefaultValue = 1
+                    maxPaxDefaultValue = 1
+                    minPaxDefaultValue = 1
+                    
+                    paxLabel = "Pax"
+                    nightsLabel = "Days"
+                    tabLabel = "Seat"
+                    break
+                case 3:
+                    maxNightDefaultValue = null
+                    minNightDefaultValue = 1
+                    maxPaxDefaultValue = null
+                    minPaxDefaultValue = 1
+                    
+                    paxLabel = "Pax"
+                    nightsLabel = "Days"
+                    tabLabel = "Units"
+                    break
+                case 4:
+                    maxNightDefaultValue = null
+                    minNightDefaultValue = 1
+                    maxPaxDefaultValue = null
+                    minPaxDefaultValue = 1
+                    
+                    paxLabel = "Pax"
+                    nightsLabel = "Nights"
+                    tabLabel = "Units"
+                    break
+                case 5:
+                    maxNightDefaultValue = null
+                    minNightDefaultValue = 1
+                    maxPaxDefaultValue = null
+                    minPaxDefaultValue = 1
+                    
+                    paxLabel = "Pax"
+                    nightsLabel = "Nights"
+                    tabLabel = "Units"
+                    break
+                default:
+                    maxNightDefaultValue = null
+                    minNightDefaultValue = 1
+                    maxPaxDefaultValue = null
+                    minPaxDefaultValue = 1
+                    
+                    paxLabel = "Pax"
+                    nightsLabel = "Nights"
+                    tabLabel = "Units"
             }
             
-            _product_edit_unit_form_unit_name_filter.value = (unit.name) ? unit.name : ""
-            _product_edit_unit_form_unit_id.value = (unit.id) ? unit.id : ""
-            _product_edit_unit_form_unit_name.value = (unit.name) ? unit.name : ""
-            _product_edit_unit_form_unit_room_code.value = (unit.room_code) ? unit.room_code : ""
-            
-            _product_edit_unit_form_unit_description_short.value = (unit.description_short) ? unit.description_short : ""
-            _product_edit_unit_form_unit_description_long.value = (unit.description_long) ? unit.description_long : ""
-            _product_edit_unit_form_unit_enabled.checked = true
-            _display_product_unit_name.innerText = (unit.name) ? unit.name : ""
+            $unit_keywords = $(_unit_keywords).BuildKeyword([])
+            $unit_amenities = $(_unit_amenities).BuildKeyword([])
         }
-        
-        loadForm()
     }
     
     const loadAll = function (units) {
+        console.log("Unit.loadAll(units)", units)
         Unit.all = new Map()
         
         if (!units) {
@@ -12649,10 +18552,12 @@ const Unit = (function () {
         }
         
         $.each(units, function (k, unit) {
+            console.log("|__ unit", unit)
             let detail = set(unit)
-            //console.log("detail", detail)
-            Unit.all.set(detail.id, detail)
+            
             $table_unit_product_edit.insertRow(detail)
+            buildProductOverview(detail)
+            Unit.all.set(detail.id, detail)
         })
         
         updateProgress()
@@ -12748,32 +18653,287 @@ const Unit = (function () {
             }
         }
         
-        if (_product_edit_unit_form) {
-            initAutoComplete()
-            validator_init(form_rules)
-            Unit.validator = $(_product_edit_unit_form).validate()
-            initForm()
-        }
-        
-        if (_product_edit_unit_form_unit_name_filter) {
-            buildProductEditTable()
-            loadAll(units)
-        }
-        
-        if (_edit_product_unit) {
-            resetForm()
-            updateProgress()
-        }
-        
+        $(document).ready(function () {
+            if (_product_edit_unit_form) {
+                initAutoComplete()
+                validator_init(form_rules)
+                Unit.validator = $(_product_edit_unit_form).validate()
+                initForm()
+            }
+            
+            if (_product_edit_unit_images) {
+                Unit.unitImages = $("#unit_images").fileManager({
+                    height: 400,
+                    source: "unit",
+                    //sourceId: 204,
+                    images: [],
+                })
+            }
+            
+            if (_product_edit_unit_form_unit_name_filter) {
+                buildProductEditTable()
+                loadAll(units)
+            }
+            
+            if (_edit_product_unit) {
+                resetForm()
+                updateProgress()
+            }
+        })
     }
     
     const edit = function (unit) {
+        console.log("Unit.edit(unit)", unit)
+        let currentUnitId = (currentUnit && currentUnit.id && (!isNaN(parseInt(currentUnit.id)))) ? parseInt(currentUnit.id) : null
+        let editUnitId = (unit && unit.id && (!isNaN(parseInt(unit.id)))) ? parseInt(unit.id) : null
+        
+        if (currentUnitId && editUnitId) {
+            if (currentUnitId === editUnitId) {
+                return
+            }
+        }
+        
+        currentUnit = unit
+        
         populateForm(unit)
+        Unit.unitImages.load({
+            height: 400,
+            source: "unit",
+            sourceId: unit.id,
+            images: unit.images,
+        })
         enableFormFields()
-        //console.log("Unit.edit(unit)", unit)
+    }
+    
+    const clearForm = function () {
+        console.log("Unit:clearForm()")
+        // ----
+        
+        _product_edit_unit_form_unit_id.value = ""
+        _product_edit_unit_form_unit_name.value = ""
+        _product_edit_unit_form_unit_room_code.value = ""
+        _product_edit_unit_form_unit_min_nights.value = 1
+        _product_edit_unit_form_unit_max_nights.value = ""
+        _product_edit_unit_form_unit_min_pax.value = 1
+        _product_edit_unit_form_unit_max_pax.value = ""
+        _product_edit_unit_form_unit_description_short.value = ""
+        _product_edit_unit_form_unit_description_long.value = ""
+        _product_edit_unit_form_unit_enabled.checked = true
+    }
+    
+    const hideForm = function () {
+        console.log("Unit:hideForm()")
+        // ----
+        
+        if (_edit_product_unit) {
+            $(_edit_product_unit).hide()
+            _product_edit_unit_form_unit_name_filter.disabled = false
+            updateProgress()
+        }
+    }
+    
+    const resetForm = function () {
+        console.log("Unit:resetForm()")
+        // ----
+        
+        let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+        
+        clearForm()
+        hideForm()
+        
+        let labelMinPax, labelMaxPax, labelMinNights, labelMaxNights,
+            disabledMinPax, disabledMaxPax, disabledMinNights, disabledMaxNights,
+            valueMinPax, valueMaxPax, valueMinNights, valueMaxNights,
+            labelRoomCode, disabledRoomCode
+        
+        switch (categoryId) {
+            case 1:
+                labelMinPax = "Minimum Pax:"
+                labelMaxPax = "Maximum Pax:"
+                labelMinNights = "Minimum Nights:"
+                labelMaxNights = "Maximum Nights:"
+                
+                labelRoomCode = "Room Code:"
+                
+                disabledMinPax = false
+                disabledMaxPax = false
+                disabledMinNights = false
+                disabledMaxNights = false
+                disabledRoomCode = false
+                
+                valueMinPax = 1
+                valueMaxPax = ""
+                valueMinNights = 1
+                valueMaxNights = ""
+                break
+            case 2:
+                labelMinPax = "Minimum Pax:"
+                labelMaxPax = "Maximum Pax:"
+                labelMinNights = "Minimum Days:"
+                labelMaxNights = "Maximum Days:"
+                
+                labelRoomCode = "Seat Code:"
+                
+                valueMinPax = 1
+                valueMaxPax = 1
+                valueMinNights = 1
+                valueMaxNights = 1
+                
+                break
+            case 3:
+                labelMinPax = "Minimum Pax:"
+                labelMaxPax = "Maximum Pax:"
+                labelMinNights = "Minimum Days:"
+                labelMaxNights = "Maximum Days:"
+                
+                labelRoomCode = "Unit Code:"
+                
+                valueMinPax = 1
+                valueMaxPax = 1
+                valueMinNights = 1
+                valueMaxNights = 1
+                
+                break
+            case 4:
+                labelMinPax = "Minimum Pax:"
+                labelMaxPax = "Maximum Pax:"
+                labelMinNights = "Minimum Days:"
+                labelMaxNights = "Maximum Days:"
+                
+                labelRoomCode = "Seat Code:"
+                
+                valueMinPax = 1
+                valueMaxPax = 1
+                valueMinNights = 1
+                valueMaxNights = 1
+                
+                break
+            default:
+                labelMinPax = "Minimum Pax:"
+                labelMaxPax = "Maximum Pax:"
+                labelMinNights = "Minimum Nights:"
+                labelMaxNights = "Maximum Nights:"
+                
+                disabledMinPax = false
+                disabledMaxPax = false
+                disabledMinNights = false
+                disabledMaxNights = false
+                
+                valueMinPax = 1
+                valueMaxPax = ""
+                valueMinNights = 1
+                valueMaxNights = ""
+        }
+        
+        let labels = document.getElementsByTagName("LABEL")
+        for (let i = 0; i < labels.length; i++) {
+            if (labels[i].htmlFor !== '') {
+                let elem = document.getElementById(labels[i].htmlFor)
+                if (elem) {
+                    elem.label = labels[i]
+                }
+            }
+        }
+        
+        _product_edit_unit_form_unit_min_nights.value = valueMinNights
+        _product_edit_unit_form_unit_max_nights.value = valueMaxNights
+        _product_edit_unit_form_unit_min_pax.value = valueMinPax
+        _product_edit_unit_form_unit_max_pax.value = valueMaxPax
+        
+        _product_edit_unit_form_unit_min_nights.label.innerHTML = labelMinNights
+        _product_edit_unit_form_unit_max_nights.label.innerHTML = labelMaxNights
+        _product_edit_unit_form_unit_min_pax.label.innerHTML = labelMinPax
+        _product_edit_unit_form_unit_max_pax.label.innerHTML = labelMaxPax
+        _product_edit_unit_form_unit_room_code.label.innerHTML = labelRoomCode
+        
+        _product_edit_unit_form_unit_min_nights.disabled = disabledMinNights
+        _product_edit_unit_form_unit_max_nights.disabled = disabledMaxNights
+        _product_edit_unit_form_unit_min_pax.disabled = disabledMinPax
+        _product_edit_unit_form_unit_max_pax.disabled = disabledMaxPax
+        
+        $unit_amenities.clear()
+        $unit_keywords.clear()
+    }
+    
+    const loadForm = function () {
+        if (_edit_product_unit) {
+            $('label[for="product_edit_unit_form_unit_min_nights"]').html(`Minimum ${nightsLabel}`)
+            $('label[for="product_edit_unit_form_unit_max_nights"]').html(`Maximum ${nightsLabel}`)
+            $('label[for="product_edit_unit_form_unit_min_pax"]').html(`Minimum ${paxLabel}`)
+            $('label[for="product_edit_unit_form_unit_max_pax"]').html(`Maximum ${paxLabel}`)
+            
+            $(_edit_product_unit).show()
+            _product_edit_unit_form_unit_name_filter.disabled = true
+        }
+    }
+    
+    const populateForm = function (unit) {
+        resetForm()
+        
+        if (unit) {
+            let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+            let unit_keywords = (unit.keywords) ? unit.keywords : []
+            let unit_amenities = (unit.amenities) ? unit.amenities : []
+            
+            if (categoryId === 2 || categoryId === 4) {
+                _product_edit_unit_form_unit_min_nights.value = (unit.min_nights) ? unit.min_nights : 1
+                _product_edit_unit_form_unit_max_nights.value = (unit.max_nights) ? unit.max_nights : 1
+                _product_edit_unit_form_unit_min_pax.value = (unit.min_pax) ? unit.min_pax : 1
+                _product_edit_unit_form_unit_max_pax.value = (unit.max_pax) ? unit.max_pax : 1
+                
+                _product_edit_unit_form_unit_min_nights.disabled = true
+                _product_edit_unit_form_unit_max_nights.disabled = true
+                _product_edit_unit_form_unit_min_pax.disabled = true
+                _product_edit_unit_form_unit_max_pax.disabled = true
+                _product_edit_unit_form_unit_room_code.disabled = true
+                
+            } else {
+                _product_edit_unit_form_unit_min_nights.value = (unit.min_nights) ? unit.min_nights : 1
+                _product_edit_unit_form_unit_max_nights.value = (unit.max_nights) ? unit.max_nights : null
+                _product_edit_unit_form_unit_min_pax.value = (unit.min_pax) ? unit.min_pax : 1
+                _product_edit_unit_form_unit_max_pax.value = (unit.max_pax) ? unit.max_pax : null
+                
+                _product_edit_unit_form_unit_min_nights.disabled = false
+                _product_edit_unit_form_unit_max_nights.disabled = false
+                _product_edit_unit_form_unit_min_pax.disabled = false
+                _product_edit_unit_form_unit_max_pax.disabled = false
+                _product_edit_unit_form_unit_room_code.disabled = false
+                
+            }
+            
+            _product_edit_unit_form_unit_name_filter.value = (unit.name) ? unit.name : ""
+            _product_edit_unit_form_unit_id.value = (unit.id) ? unit.id : ""
+            _product_edit_unit_form_unit_name.value = (unit.name) ? unit.name : ""
+            _product_edit_unit_form_unit_room_code.value = (unit.room_code) ? unit.room_code : ""
+            _product_edit_unit_form_unit_description_short.value = (unit.description_short) ? unit.description_short : ""
+            _product_edit_unit_form_unit_description_long.value = (unit.description_long) ? unit.description_long : ""
+            _product_edit_unit_form_unit_enabled.checked = true
+            _display_product_unit_name.innerText = (unit.name) ? unit.name : ""
+            
+            $unit_keywords.set(unit_keywords)
+            $unit_amenities.set(unit_amenities)
+            
+        }
+        
+        loadForm()
+    }
+    
+    const enableFormFields = function () {
+        
+        disableFormFields()
+        
+        _product_edit_unit_form_unit_id.disabled = true
+        _product_edit_unit_form_unit_name.disabled = true
+        _product_edit_unit_form_unit_room_code.disabled = true
+        _product_edit_unit_form_unit_enabled.disabled = true
+        
+        _product_edit_unit_form_unit_description_short.disabled = false
+        _product_edit_unit_form_unit_description_long.disabled = false
+        
     }
     
     return {
+        unitImages: null,
         all: new Map(),
         byValue: "Night",
         paxValue: "Pax",
@@ -13443,7 +19603,7 @@ const Address = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 return handle_address_error("Error Validating Company")
             }
         } else {
@@ -13896,7 +20056,6 @@ const ColorScheme = (function () {
     const _button_close_edit_scheme = document.getElementById("button_close_edit_scheme")
     let season_toggle_items
     
-    //
     $(_button_close_edit_scheme)
         .on("click", function () {
             $(_edit_scheme).hide()
@@ -13907,7 +20066,6 @@ const ColorScheme = (function () {
             $(_edit_scheme).show()
         })
     
-    //
     const reset_form = function () {
     
     }
@@ -13981,7 +20139,7 @@ const ColorScheme = (function () {
     }
     
     const change = function (el) {
-        console.log("ColorScheme:change(el)", el)
+        //console.log("ColorScheme:change(el)", el)
     }
     
     return {
@@ -14009,9 +20167,1408 @@ const ColorScheme = (function () {
 })()
 
 $.fn.ColorScheme = function (settings) {
-    console.log("Test", Types.color_scheme)
+    //console.log("Test", Types.color_scheme)
     
 }
+
+const Car = (function () {
+    "use strict"
+    
+    const baseUrl = "/cars"
+    const _category_id = document.getElementById("category_id")
+    
+    let categoryId, userId
+    
+    const init = function (settings) {
+        console.log("Car.init(settings)", settings)
+        // ----
+        
+        //$(document).ready(function () {
+        categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+        userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+        
+        //})
+    }
+    
+    return {
+        id: null,
+        detail: {
+            id: null,
+            province_id: null,
+            country_id: null,
+            created_by: null,
+            modified_by: null,
+            sort_order: null,
+            name: null,
+            enabled: null,
+            date_created: null,
+            date_modified: null,
+            note: null,
+        },
+        all: new Map(),
+        init: function (settings) {
+            init(settings)
+        },
+    }
+    
+})()
+
+const Airport = (function () {
+    "use strict"
+    
+    const _product_edit_location_section = document.getElementById("product_edit_location_section")
+    const _category_id = document.getElementById("category_id")
+    
+    const _modal_product_depart_from_airport_cancel_button = document.getElementById("modal_product_depart_from_airport_cancel_button")
+    const _modal_product_depart_from_airport_submit_button = document.getElementById("modal_product_depart_from_airport_submit_button")
+    const _modal_product_depart_from_airport_iata_code = document.getElementById("modal_product_depart_from_airport_iata_code")
+    const _modal_product_depart_from_airport_country_id = document.getElementById("modal_product_depart_from_airport_country_id")
+    const _modal_product_depart_from_airport_province_id = document.getElementById("modal_product_depart_from_airport_province_id")
+    const _modal_product_depart_from_airport_city_id = document.getElementById("modal_product_depart_from_airport_city_id")
+    const _modal_product_depart_from_airport_city = document.getElementById("modal_product_depart_from_airport_city")
+    const _modal_product_depart_from_airport = document.getElementById("modal_product_depart_from_airport")
+    const _modal_product_depart_from_airport_id = document.getElementById("modal_product_depart_from_airport_id")
+    const _modal_product_depart_from_airport_add_block = document.getElementById("modal_product_depart_from_airport_add_block")
+    const _modal_product_depart_from_airport_types_id = document.getElementById("modal_product_depart_from_airport_types_id")
+    const _modal_product_depart_from_new_airport_id = document.getElementById("modal_product_depart_from_new_airport_id")
+    
+    const _modal_product_arrive_to_airport_cancel_button = document.getElementById("modal_product_arrive_to_airport_cancel_button")
+    const _modal_product_arrive_to_new_airport_id = document.getElementById("modal_product_arrive_to_new_airport_id")
+    const _modal_product_arrive_to_airport_submit_button = document.getElementById("modal_product_arrive_to_airport_submit_button")
+    const _modal_product_arrive_to_airport_iata_code = document.getElementById("modal_product_arrive_to_airport_iata_code")
+    const _modal_product_arrive_to_airport_country_id = document.getElementById("modal_product_arrive_to_airport_country_id")
+    const _modal_product_arrive_to_airport_province_id = document.getElementById("modal_product_arrive_to_airport_province_id")
+    const _modal_product_arrive_to_airport_city_id = document.getElementById("modal_product_arrive_to_airport_city_id")
+    const _modal_product_arrive_to_airport_city = document.getElementById("modal_product_arrive_to_airport_city")
+    const _modal_product_arrive_to_airport = document.getElementById("modal_product_arrive_to_airport")
+    const _modal_product_arrive_to_airport_id = document.getElementById("modal_product_arrive_to_airport_id")
+    const _modal_product_arrive_to_airport_add_block = document.getElementById("modal_product_arrive_to_airport_add_block")
+    const _modal_product_arrive_to_airport_types_id = document.getElementById("modal_product_arrive_to_airport_types_id")
+    const _modal_product_location_id = document.getElementById("modal_product_location_id")
+    const _modal_product_street_1 = document.getElementById("modal_product_street_1")
+    const _modal_product_street_2 = document.getElementById("modal_product_street_2")
+    const _modal_product_postal_code = document.getElementById("modal_product_postal_code")
+    const _modal_product_province_id = document.getElementById("modal_product_province_id")
+    const _modal_product_country_id = document.getElementById("modal_product_country_id")
+    const _modal_product_city_id = document.getElementById("modal_product_city_id")
+    
+    const _product_edit_location_city_id = document.getElementById("product_edit_location_city_id")
+    const _product_location_departing_airport_form = document.getElementById("product_location_departing_airport_form")
+    const _product_location_departing_airport_search = document.getElementById("product_location_departing_airport_search")
+    const _product_location_departing_airport_id = document.getElementById("product_location_departing_airport_id")
+    const _product_location_departing_airport_airport_types_id = document.getElementById("product_location_departing_airport_airport_types_id")
+    const _product_location_departing_airport_city_id = document.getElementById("product_location_departing_airport_city_id")
+    const _product_location_departing_airport_name = document.getElementById("product_location_departing_airport_name")
+    const _product_location_departing_airport_iata_code = document.getElementById("product_location_departing_airport_iata_code")
+    const _product_location_departing_airport_edit_button = document.getElementById("product_location_departing_airport_edit_button")
+    const _product_location_departing_airport_gps_code = document.getElementById("product_location_departing_airport_gps_code")
+    const _product_location_departing_airport_local_code = document.getElementById("product_location_departing_airport_local_code")
+    const _product_location_departing_airport_home_link = document.getElementById("product_location_departing_airport_home_link")
+    const _product_location_departing_airport_wikipedia_link = document.getElementById("product_location_departing_airport_wikipedia_link")
+    const _product_location_departing_airport_scheduled_service = document.getElementById("product_location_departing_airport_scheduled_service")
+    const _product_location_departing_airport_keywords = document.getElementById("product_location_departing_airport_keywords")
+    const _product_location_departing_airport_enabled = document.getElementById("product_location_departing_airport_enabled")
+    const _product_location_departing_airport_date_created = document.getElementById("product_location_departing_airport_date_created")
+    const _product_location_departing_airport_created_by = document.getElementById("product_location_departing_airport_created_by")
+    const _product_location_departing_airport_date_modified = document.getElementById("product_location_departing_airport_date_modified")
+    const _product_location_departing_airport_modified_by = document.getElementById("product_location_departing_airport_modified_by")
+    const _product_location_departing_airport_note = document.getElementById("product_location_departing_airport_note")
+    const _product_location_departing_airport_city_search = document.getElementById("product_location_departing_airport_city_search")
+    const _product_location_departing_airport_remove_button = document.getElementById("product_location_departing_airport_remove_button")
+    const _product_location_departing_airport_clear_button = document.getElementById("product_location_departing_airport_clear_button")
+    const _product_location_departing_airport_save_button = document.getElementById("product_location_departing_airport_save_button")
+    
+    const _product_location_arriving_airport_edit_button = document.getElementById("product_location_arriving_airport_edit_button")
+    const _product_location_arriving_airport_form = document.getElementById("product_location_arriving_airport_form")
+    const _product_location_arriving_airport_search = document.getElementById("product_location_arriving_airport_search")
+    const _product_location_arriving_airport_id = document.getElementById("product_location_arriving_airport_id")
+    const _product_location_arriving_airport_airport_types_id = document.getElementById("product_location_arriving_airport_airport_types_id")
+    const _product_location_arriving_airport_city_id = document.getElementById("product_location_arriving_airport_city_id")
+    const _product_location_arriving_airport_name = document.getElementById("product_location_arriving_airport_name")
+    const _product_location_arriving_airport_iata_code = document.getElementById("product_location_arriving_airport_iata_code")
+    const _product_location_arriving_airport_gps_code = document.getElementById("product_location_arriving_airport_gps_code")
+    const _product_location_arriving_airport_local_code = document.getElementById("product_location_arriving_airport_local_code")
+    const _product_location_arriving_airport_home_link = document.getElementById("product_location_arriving_airport_home_link")
+    const _product_location_arriving_airport_wikipedia_link = document.getElementById("product_location_arriving_airport_wikipedia_link")
+    const _product_location_arriving_airport_scheduled_service = document.getElementById("product_location_arriving_airport_scheduled_service")
+    const _product_location_arriving_airport_keywords = document.getElementById("product_location_arriving_airport_keywords")
+    const _product_location_arriving_airport_enabled = document.getElementById("product_location_arriving_airport_enabled")
+    const _product_location_arriving_airport_date_created = document.getElementById("product_location_arriving_airport_date_created")
+    const _product_location_arriving_airport_created_by = document.getElementById("product_location_arriving_airport_created_by")
+    const _product_location_arriving_airport_date_modified = document.getElementById("product_location_arriving_airport_date_modified")
+    const _product_location_arriving_airport_modified_by = document.getElementById("product_location_arriving_airport_modified_by")
+    const _product_location_arriving_airport_note = document.getElementById("product_location_arriving_airport_note")
+    const _product_location_arriving_airport_city_search = document.getElementById("product_location_arriving_airport_city_search")
+    const _product_location_arriving_airport_remove_button = document.getElementById("product_location_arriving_airport_remove_button")
+    const _product_location_arriving_airport_clear_button = document.getElementById("product_location_arriving_airport_clear_button")
+    const _product_location_arriving_airport_save_button = document.getElementById("product_location_arriving_airport_save_button")
+    
+    const _modal_product_arrive_to_airport_postal_code = document.getElementById("modal_product_arrive_to_airport_postal_code")
+    const _modal_product_arrive_to_airport_street_1 = document.getElementById("modal_product_arrive_to_airport_street_1")
+    const _modal_product_arrive_to_airport_street_2 = document.getElementById("modal_product_arrive_to_airport_street_2")
+    
+    const _modal_product_depart_from_airport_postal_code = document.getElementById("modal_product_depart_from_airport_postal_code")
+    const _modal_product_depart_from_airport_street_1 = document.getElementById("modal_product_depart_from_airport_street_1")
+    const _modal_product_depart_from_airport_street_2 = document.getElementById("modal_product_depart_from_airport_street_2")
+    
+    let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let airportDepartFromRules = {
+        groups: {
+            locationGroup: "product_location_departing_airport_city_search product_location_departing_airport_city_id",
+        },
+        rules: {
+            product_location_departing_airport_name: {
+                required: true,
+            },
+            product_location_departing_airport_iata_code: {
+                required: true,
+            },
+            product_location_departing_airport_airport_types_id: {
+                required: true,
+            },
+            product_location_departing_airport_city_search: {
+                required: true,
+            },
+            product_location_departing_airport_city_id: {
+                required: true,
+            },
+            product_location_departing_airport_home_link: {
+                url: true,
+            },
+            product_location_departing_airport_wikipedia_link: {
+                url: true,
+            },
+            
+        },
+        messages: {
+            product_location_departing_airport_name: {
+                required: "Field Required",
+            },
+            product_location_departing_airport_iata_code: {
+                required: "Field Required",
+            },
+            product_location_departing_airport_airport_types_id: {
+                required: "Field Required",
+            },
+            product_location_departing_airport_city_search: {
+                required: "Field Required",
+            },
+            product_location_departing_airport_city_id: {
+                required: "Field Required",
+            },
+            product_location_departing_airport_home_link: {
+                url: "Field Invalid",
+            },
+            product_location_departing_airport_wikipedia_link: {
+                url: "Field Invalid",
+            },
+        },
+    }
+    let airportArriveToRules = {
+        groups: {
+            locationGroup: "product_location_arriving_airport_city_search product_location_arriving_airport_city_id",
+        },
+        rules: {
+            product_location_arriving_airport_name: {
+                required: true,
+            },
+            product_location_arriving_airport_iata_code: {
+                required: true,
+            },
+            product_location_arriving_airport_airport_types_id: {
+                required: true,
+            },
+            product_location_arriving_airport_city_search: {
+                required: true,
+            },
+            product_location_arriving_airport_city_id: {
+                required: true,
+            },
+            product_location_arriving_airport_home_link: {
+                url: true,
+            },
+            product_location_arriving_airport_wikipedia_link: {
+                url: true,
+            },
+            
+        },
+        messages: {
+            product_location_arriving_airport_name: {
+                required: "Field Required",
+            },
+            product_location_arriving_airport_iata_code: {
+                required: "Field Required",
+            },
+            product_location_arriving_airport_airport_types_id: {
+                required: "Field Required",
+            },
+            product_location_arriving_airport_city_search: {
+                required: "Field Required",
+            },
+            product_location_arriving_airport_city_id: {
+                required: "Field Required",
+            },
+            product_location_arriving_airport_home_link: {
+                url: "Field Invalid",
+            },
+            product_location_arriving_airport_wikipedia_link: {
+                url: "Field Invalid",
+            },
+        },
+    }
+    let globalSelectedAirportDepartFrom = false
+    let globalSelectedAirportArriveTo = false
+    
+    $(_product_location_departing_airport_edit_button)
+        .on("click", function () {
+            //console.log("Airport.product_location_departing_airport_edit_button.click()")
+            
+            _product_location_departing_airport_search.disabled = true
+            
+            showAirportForm("depart_from")
+            hideAirportForm("arrive_to")
+        })
+    
+    $(_product_location_arriving_airport_edit_button)
+        .on("click", function () {
+            //console.log("Airport.product_location_arriving_airport_edit_button.click()")
+            
+            _product_location_arriving_airport_search.disabled = true
+            
+            showAirportForm("arrive_to")
+            hideAirportForm("depart_from")
+        })
+    
+    $(_product_location_departing_airport_remove_button)
+        .on("click", function () {
+            //console.log("ProductLocation.product_location_departing_airport_remove_button.click()")
+            let departing_location = Airport.departingAirport
+            
+            setLocationAirportForm(departing_location, "depart_from")
+            hideAirportForm("depart_from")
+            clearValidation(_product_location_departing_airport_form)
+        })
+    
+    $(_product_location_arriving_airport_remove_button)
+        .on("click", function () {
+            //console.log("ProductLocation.product_location_arriving_airport_remove_button.click()")
+            let arriving_location = Airport.arrivingAirport
+            
+            setLocationAirportForm(arriving_location, "arrive_to")
+            hideAirportForm("arrive_to")
+            clearValidation(_product_location_arriving_airport_form)
+        })
+    
+    $(_product_location_departing_airport_clear_button)
+        .on("click", function () {
+            //console.log("ProductLocation.product_location_departing_airport_clear_button.click()")
+            clearLocationAirportForm("depart_from")
+        })
+    
+    $(_product_location_arriving_airport_clear_button)
+        .on("click", function () {
+            //console.log("ProductLocation.product_location_arriving_airport_clear_button.click()")
+            clearLocationAirportForm("arrive_to")
+        })
+    
+    $(_product_location_departing_airport_save_button)
+        .on("click", function () {
+            //console.log("ProductLocation.product_location_departing_airport_save_button.click()")
+            update("depart_from")
+        })
+    
+    $(_product_location_arriving_airport_save_button)
+        .on("click", function () {
+            //console.log("ProductLocation.product_location_arriving_airport_save_button.click()")
+            update("arrive_to")
+        })
+    
+    $(_modal_product_depart_from_airport_add_block)
+        .on("change", function () {
+            validDepartFromRecord()
+        })
+        .on("keyup", function () {
+            validDepartFromRecord()
+        })
+    
+    $(_modal_product_depart_from_airport_cancel_button)
+        .on("click", function () {
+            cancelAddAirportRecord("depart_from")
+        })
+    
+    $(_modal_product_arrive_to_airport_cancel_button)
+        .on("click", function () {
+            cancelAddAirportRecord("arrive_to")
+        })
+    
+    $(_modal_product_depart_from_airport_submit_button)
+        .on("click", function () {
+            save("depart_from")
+        })
+    
+    $(_modal_product_arrive_to_airport_submit_button)
+        .on("click", function () {
+            save("arrive_to")
+        })
+    
+    const validAirport = function (type) {
+        //console.log("Airport.validAirport(type)", type)
+        if (type) {
+            if (type === "depart_from") {
+                return $(_product_location_departing_airport_form).valid()
+            } else if (type === "arrive_to") {
+                return $(_product_location_arriving_airport_form).valid()
+            }
+        }
+    }
+    
+    const buildAirportUpdateRecord = function (type) {
+        console.log("Airport.buildAirportUpdateRecord(type)", type)
+        // ----
+        
+        let returnObject = {}
+        if (type) {
+            if (type === "depart_from") {
+                let street1 = (_modal_product_depart_from_airport_street_1 && _modal_product_depart_from_airport_street_1.value !== "") ? _modal_product_depart_from_airport_street_1.value : null
+                let street2 = (_modal_product_depart_from_airport_street_2 && _modal_product_depart_from_airport_street_2.value !== "") ? _modal_product_depart_from_airport_street_2.value : null
+                let postalCode = (_modal_product_depart_from_airport_postal_code && _modal_product_depart_from_airport_postal_code.value !== "") ? _modal_product_depart_from_airport_postal_code.value : null
+                
+                returnObject.id = (!isNaN(parseInt(_product_location_departing_airport_id.value))) ? parseInt(_product_location_departing_airport_id.value) : null
+                returnObject.airport_types_id = (!isNaN(parseInt(_product_location_departing_airport_airport_types_id.value))) ? parseInt(_product_location_departing_airport_airport_types_id.value) : null
+                returnObject.city_id = (!isNaN(parseInt(_product_location_departing_airport_city_id.value))) ? parseInt(_product_location_departing_airport_city_id.value) : null
+                returnObject.name = (_product_location_departing_airport_name.value === "") ? null : _product_location_departing_airport_name.value
+                returnObject.iata_code = (_product_location_departing_airport_iata_code.value === "") ? null : _product_location_departing_airport_iata_code.value
+                returnObject.home_link = (_product_location_departing_airport_home_link.value === "") ? null : _product_location_departing_airport_home_link.value
+                returnObject.wikipedia_link = (_product_location_departing_airport_wikipedia_link.value === "") ? null : _product_location_departing_airport_wikipedia_link.value
+                returnObject.enabled = (_product_location_departing_airport_enabled.checked === true) ? 1 : 0
+                returnObject.street_1 = street1
+                returnObject.street_2 = street2
+                returnObject.postal_code = postalCode
+                
+            } else if (type === "arrive_to") {
+                let street1 = (_modal_product_arrive_to_airport_street_1 && _modal_product_arrive_to_airport_street_1.value !== "") ? _modal_product_arrive_to_airport_street_1.value : null
+                let street2 = (_modal_product_arrive_to_airport_street_2 && _modal_product_arrive_to_airport_street_2.value !== "") ? _modal_product_arrive_to_airport_street_2.value : null
+                let postalCode = (_modal_product_arrive_to_airport_postal_code && _modal_product_arrive_to_airport_postal_code.value !== "") ? _modal_product_arrive_to_airport_postal_code.value : null
+                
+                returnObject.id = (!isNaN(parseInt(_product_location_arriving_airport_id.value))) ? parseInt(_product_location_arriving_airport_id.value) : null
+                returnObject.airport_types_id = (!isNaN(parseInt(_product_location_arriving_airport_airport_types_id.value))) ? parseInt(_product_location_arriving_airport_airport_types_id.value) : null
+                returnObject.city_id = (!isNaN(parseInt(_product_location_arriving_airport_city_id.value))) ? parseInt(_product_location_arriving_airport_city_id.value) : null
+                returnObject.name = (_product_location_arriving_airport_name.value === "") ? null : _product_location_arriving_airport_name.value
+                returnObject.iata_code = (_product_location_arriving_airport_iata_code.value === "") ? null : _product_location_arriving_airport_iata_code.value
+                returnObject.home_link = (_product_location_arriving_airport_home_link.value === "") ? null : _product_location_arriving_airport_home_link.value
+                returnObject.wikipedia_link = (_product_location_arriving_airport_wikipedia_link.value === "") ? null : _product_location_arriving_airport_wikipedia_link.value
+                returnObject.enabled = (_product_location_arriving_airport_enabled.checked === true) ? 1 : 0
+                returnObject.street_1 = street1
+                returnObject.street_2 = street2
+                returnObject.postal_code = postalCode
+            }
+        }
+        
+        return returnObject
+    }
+    
+    const sendUpdateRequest = function (dataToSend, callback) {
+        console.log("Airport.sendUpdateRequest(dataToSend)", dataToSend)
+        // ----
+        
+        if (dataToSend) {
+            let url = "/api/v1.0/airports/update"
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    }
+                })
+            } catch (e) {
+                //console.log("error", e)
+            }
+        }
+    }
+    
+    const sendSaveRequest = function (dataToSend, callback) {
+        if (dataToSend) {
+            let url = "/api/v1.0/airports/update"
+            try {
+                sendPostRequest(url, dataToSend, function (data) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        handleAirportError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                
+                console.log("error", e)
+            }
+        }
+    }
+    
+    const validDepartFromRecord = function () {
+        let isValid = true
+        
+        if (_modal_product_depart_from_airport_iata_code.value === "") {
+            $(_modal_product_depart_from_airport_iata_code).showError("Field Required")
+            isValid = false
+        } else {
+            $(_modal_product_depart_from_airport_iata_code).hideError()
+        }
+        
+        if (_modal_product_depart_from_airport_types_id.value === "") {
+            $(_modal_product_depart_from_airport_types_id).showError("Field Required")
+            isValid = false
+        } else {
+            $(_modal_product_depart_from_airport_types_id).hideError()
+        }
+        
+        if (isNaN(parseInt(_modal_product_depart_from_airport_city_id.value))) {
+            $(_modal_product_depart_from_airport_city).showError("Field Required")
+            isValid = false
+        } else {
+            $(_modal_product_depart_from_airport_city).hideError()
+        }
+        
+        return isValid
+    }
+    
+    const validArriveToRecord = function () {
+        let isValid = true
+        
+        if (_modal_product_arrive_to_airport_iata_code.value === "") {
+            $(_modal_product_arrive_to_airport_iata_code).showError("Field Required")
+            isValid = false
+        } else {
+            $(_modal_product_arrive_to_airport_iata_code).hideError()
+        }
+        
+        if (_modal_product_arrive_to_airport_types_id.value === "") {
+            $(_modal_product_arrive_to_airport_types_id).showError("Field Required")
+            isValid = false
+        } else {
+            $(_modal_product_arrive_to_airport_types_id).hideError()
+        }
+        
+        if (isNaN(parseInt(_modal_product_arrive_to_airport_city_id.value))) {
+            $(_modal_product_arrive_to_airport_city).showError("Field Required")
+            isValid = false
+        } else {
+            $(_modal_product_arrive_to_airport_city).hideError()
+        }
+        
+        return isValid
+    }
+    
+    const buildAddAirportRecord = function (type) {
+        if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
+            if (type) {
+                if (type === "depart_from") {
+                    if (validDepartFromRecord()) {
+                        let street1 = (_modal_product_depart_from_airport_street_1 && _modal_product_depart_from_airport_street_1.value !== "") ? _modal_product_depart_from_airport_street_1.value : null
+                        let street2 = (_modal_product_depart_from_airport_street_2 && _modal_product_depart_from_airport_street_2.value !== "") ? _modal_product_depart_from_airport_street_2.value : null
+                        let postalCode = (_modal_product_depart_from_airport_postal_code && _modal_product_depart_from_airport_postal_code.value !== "") ? _modal_product_depart_from_airport_postal_code.value : null
+                        
+                        let dataToSend = {
+                            airport_types_id: (!isNaN(parseInt(_modal_product_depart_from_airport_types_id.value))) ? parseInt(_modal_product_depart_from_airport_types_id.value) : null,
+                            city_id: (!isNaN(parseInt(_modal_product_depart_from_airport_city_id.value))) ? parseInt(_modal_product_depart_from_airport_city_id.value) : null,
+                            name: (_modal_product_depart_from_airport.value !== "") ? _modal_product_depart_from_airport.value : null,
+                            street_1: street1,
+                            street_2: street2,
+                            postal_code: postalCode,
+                            iata_code: (_modal_product_depart_from_airport_iata_code.value !== "") ? _modal_product_depart_from_airport_iata_code.value : null,
+                        }
+                        
+                        return removeNulls(dataToSend)
+                    }
+                } else if (type === "arrive_to") {
+                    if (validArriveToRecord()) {
+                        let street1 = (_modal_product_arrive_to_airport_street_1 && _modal_product_arrive_to_airport_street_1.value !== "") ? _modal_product_arrive_to_airport_street_1.value : null
+                        let street2 = (_modal_product_arrive_to_airport_street_2 && _modal_product_arrive_to_airport_street_2.value !== "") ? _modal_product_arrive_to_airport_street_2.value : null
+                        let postalCode = (_modal_product_arrive_to_airport_postal_code && _modal_product_arrive_to_airport_postal_code.value !== "") ? _modal_product_arrive_to_airport_postal_code.value : null
+                        
+                        let dataToSend = {
+                            airport_types_id: (!isNaN(parseInt(_modal_product_arrive_to_airport_types_id.value))) ? parseInt(_modal_product_arrive_to_airport_types_id.value) : null,
+                            city_id: (!isNaN(parseInt(_modal_product_arrive_to_airport_city_id.value))) ? parseInt(_modal_product_arrive_to_airport_city_id.value) : null,
+                            name: (_modal_product_arrive_to_airport.value !== "") ? _modal_product_arrive_to_airport.value : null,
+                            street_1: street1,
+                            street_2: street2,
+                            postal_code: postalCode,
+                            iata_code: (_modal_product_arrive_to_airport_iata_code.value !== "") ? _modal_product_arrive_to_airport_iata_code.value : null,
+                        }
+                        
+                        return removeNulls(dataToSend)
+                    }
+                }
+            }
+        }
+    }
+    
+    const cancelAddAirportRecord = function (type) {
+        if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
+            clearAirportForm(type)
+            hideAirportForm(type)
+            
+            if (type) {
+                if (type === "depart_from") {
+                
+                } else if (type === "arrive_to") {
+                
+                }
+            }
+        }
+    }
+    
+    const populateAirportForm = function (airport, type) {
+        if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
+            clearAirportForm(type)
+            
+            showAirportForm(type)
+        }
+    }
+    
+    const clearAirportForm = function (type) {
+        if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
+            if (type) {
+                if (type === "depart_from") {
+                    _modal_product_depart_from_airport_iata_code.value = ""
+                    _modal_product_depart_from_airport_city.value = ""
+                    _modal_product_depart_from_airport_city_id.value = ""
+                    _modal_product_depart_from_airport_country_id.value = ""
+                    _modal_product_depart_from_airport_province_id.value = ""
+                    _modal_product_depart_from_airport_city_id.value = ""
+                    _modal_product_depart_from_airport_types_id.value = ""
+                    _modal_product_depart_from_airport_postal_code.value = ""
+                    _modal_product_depart_from_airport_street_1.value = ""
+                    _modal_product_depart_from_airport_street_2.value = ""
+                    _modal_product_depart_from_airport.disabled = false
+                    clearAllValidation()
+                } else if (type === "arrive_to") {
+                    _modal_product_arrive_to_airport_iata_code.value = ""
+                    _modal_product_arrive_to_airport_city.value = ""
+                    _modal_product_arrive_to_airport_city_id.value = ""
+                    _modal_product_arrive_to_airport_country_id.value = ""
+                    _modal_product_arrive_to_airport_province_id.value = ""
+                    _modal_product_arrive_to_airport_city_id.value = ""
+                    _modal_product_arrive_to_airport_types_id.value = ""
+                    _modal_product_arrive_to_airport_postal_code.value = ""
+                    _modal_product_arrive_to_airport_street_1.value = ""
+                    _modal_product_arrive_to_airport_street_2.value = ""
+                    _modal_product_arrive_to_airport.disabled = false
+                    clearAllValidation()
+                }
+            }
+        }
+    }
+    
+    const resetAirportForm = function (type) {
+        if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
+            if (type) {
+                _modal_product_arrive_to_airport.disabled = false
+                _modal_product_depart_from_airport.disabled = false
+                
+                clearAirportForm(type)
+                
+                hideAirportForm("depart_from")
+                hideAirportForm("arrive_to")
+            }
+        }
+    }
+    
+    const hideAirportForm = function (type) {
+        //console.log("ProductLocation.hideAirportForm(type)", type)
+        if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
+            if (type) {
+                if (type === "depart_from") {
+                    $(_modal_product_depart_from_airport_add_block).hide()
+                } else if (type === "arrive_to") {
+                    $(_modal_product_arrive_to_airport_add_block).hide()
+                }
+            }
+        }
+        
+        if (_product_edit_location_section) {
+            if (type) {
+                if (type === "depart_from") {
+                    if (_product_location_departing_airport_form) {
+                        $(_product_location_departing_airport_form).hide()
+                        _product_location_departing_airport_search.disabled = false
+                    }
+                }
+                
+                if (type === "arrive_to") {
+                    if (_product_location_arriving_airport_form) {
+                        $(_product_location_arriving_airport_form).hide()
+                        _product_location_arriving_airport_search.disabled = false
+                    }
+                }
+            }
+        }
+    }
+    
+    const showAirportForm = function (type) {
+        //console.log("ProductLocation.showAirportForm(type)", type)
+        if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
+            if (type) {
+                if (type === "depart_from") {
+                    _modal_product_depart_from_airport.disabled = true
+                    $(_modal_product_depart_from_airport_add_block).show()
+                    $(_modal_product_arrive_to_airport_add_block).hide()
+                } else if (type === "arrive_to") {
+                    _modal_product_arrive_to_airport.disabled = true
+                    $(_modal_product_arrive_to_airport_add_block).show()
+                    $(_modal_product_depart_from_airport_add_block).hide()
+                }
+            }
+        }
+        
+        if (_product_edit_location_section) {
+            if (type) {
+                if (type === "depart_from") {
+                    if (_product_location_departing_airport_form) {
+                        $(_product_location_departing_airport_form).show()
+                        _product_location_departing_airport_search.disabled = true
+                    }
+                }
+                
+                if (type === "arrive_to") {
+                    if (_product_location_arriving_airport_form) {
+                        $(_product_location_arriving_airport_form).show()
+                        _product_location_arriving_airport_search.disabled = true
+                    }
+                }
+                
+            }
+        }
+    }
+    
+    const initAutocomplete = function () {
+        
+        if (_product_location_departing_airport_search) {
+            
+            $(_product_location_departing_airport_search)
+                .on("click", function () {
+                    if ($(this).attr("readonly") === "readonly") {
+                        e.preventDefault()
+                    } else {
+                        $(this).select()
+                    }
+                })
+                .on("search", function () {
+                    if (_product_location_departing_airport_id) {
+                        _product_location_departing_airport_id.value = ""
+                    }
+                    
+                    if (_product_location_departing_airport_search) {
+                        _product_location_departing_airport_search.value = ""
+                    }
+                    
+                    clearLocationAirportForm("depart_from")
+                    
+                })
+                .on("keyup", function () {
+                    globalSelectedAirportDepartFrom = false
+                })
+                .on("change", function () {
+                    setTimeout(function () {
+                        let airport_name = _product_location_departing_airport_search.value
+                        
+                        if (globalSelectedAirportDepartFrom === false) {
+                            if (airport_name === "") {
+                                _product_location_departing_airport_search.value = ""
+                                _product_location_departing_airport_id.value = ""
+                                globalSelectedAirportDepartFrom = false
+                            } else {
+                                airportExists(airport_name, "depart_from")
+                            }
+                        }
+                    }, 200)
+                })
+                .autocomplete({
+                    serviceUrl: "/api/v1.0/autocomplete/airports",
+                    minChars: 2,
+                    cache: false,
+                    dataType: "json",
+                    triggerSelectOnValidInput: false,
+                    paramName: "st",
+                    onSelect: function (suggestion) {
+                        if (!suggestion || !suggestion.data) {
+                            return
+                        }
+                        
+                        globalSelectedAirportDepartFrom = true
+                        
+                        let airport = suggestion.data
+                        
+                        if (airport) {
+                            setLocationAirportForm(airport, "depart_from")
+                            if (_product_location_departing_airport_id) {
+                                _product_location_departing_airport_id.value = airport.id
+                            }
+                            
+                            if (_product_location_departing_airport_city_id) {
+                                _product_location_departing_airport_city_id.value = airport.city.id
+                                _product_edit_location_city_id.value = airport.city.id
+                            }
+                            
+                            if (_product_location_departing_airport_search) {
+                                _product_location_departing_airport_search.value = suggestion.value
+                            }
+                        }
+                    },
+                })
+        }
+        
+        if (_product_location_arriving_airport_search) {
+            
+            $(_product_location_arriving_airport_search)
+                .on("click", function () {
+                    if ($(this).attr("readonly") === "readonly") {
+                        e.preventDefault()
+                    } else {
+                        $(this).select()
+                    }
+                })
+                .on("search", function () {
+                    if (_product_location_departing_airport_id) {
+                        _product_location_departing_airport_id.value = ""
+                    }
+                    if (_product_location_departing_airport_search) {
+                        _product_location_departing_airport_search.value = ""
+                    }
+                    clearLocationAirportForm("arrive_to")
+                })
+                .on("keyup", function () {
+                    globalSelectedAirportDepartFrom = false
+                })
+                .on("change", function () {
+                
+                })
+                .autocomplete({
+                    serviceUrl: "/api/v1.0/autocomplete/airports",
+                    minChars: 2,
+                    cache: false,
+                    dataType: "json",
+                    triggerSelectOnValidInput: false,
+                    paramName: "st",
+                    onSelect: function (suggestion) {
+                        if (!suggestion || !suggestion.data) {
+                            return
+                        }
+                        
+                        globalSelectedAirportDepartFrom = true
+                        
+                        let airport = suggestion.data
+                        
+                        if (airport) {
+                            setLocationAirportForm(airport, "arrive_to")
+                            if (_product_location_arriving_airport_id) {
+                                _product_location_arriving_airport_id.value = airport.id
+                            }
+                            
+                            if (_product_location_arriving_airport_city_id) {
+                                _product_location_arriving_airport_city_id.value = airport.city.id
+                            }
+                            
+                            if (_product_location_arriving_airport_search) {
+                                _product_location_arriving_airport_search.value = suggestion.value
+                            }
+                        }
+                    },
+                })
+        }
+        
+        if (_modal_product_depart_from_airport) {
+            
+            $(_modal_product_depart_from_airport)
+                .on("click", function (e) {
+                    if ($(this).attr("readonly") === "readonly") {
+                        e.preventDefault()
+                    } else {
+                        $(this).select()
+                    }
+                })
+                .on("search", function () {
+                    if (_modal_product_depart_from_airport_id) {
+                        _modal_product_depart_from_airport_id.value = ""
+                    }
+                    
+                    if (_modal_product_depart_from_airport) {
+                        _modal_product_depart_from_airport.value = ""
+                    }
+                    
+                    if (_modal_product_country_id) {
+                        _modal_product_country_id.value = ""
+                    }
+                    
+                    if (_modal_product_province_id) {
+                        _modal_product_province_id.value = ""
+                    }
+                    
+                    if (_modal_product_city_id) {
+                        _modal_product_city_id.value = ""
+                    }
+                })
+                .on("keyup", function () {
+                    globalSelectedAirportDepartFrom = false
+                })
+                .on("change", function () {
+                    setTimeout(function () {
+                        let airport_name = _modal_product_depart_from_airport.value
+                        
+                        if (globalSelectedAirportDepartFrom === false) {
+                            if (airport_name === "") {
+                                _modal_product_depart_from_airport.value = ""
+                                _modal_product_depart_from_airport_id.value = ""
+                                if (_modal_product_country_id) {
+                                    _modal_product_country_id.value = ""
+                                }
+                                
+                                if (_modal_product_province_id) {
+                                    _modal_product_province_id.value = ""
+                                }
+                                
+                                if (_modal_product_city_id) {
+                                    _modal_product_city_id.value = ""
+                                }
+                                globalSelectedAirportDepartFrom = false
+                            } else {
+                                airportExists(airport_name, "depart_from")
+                            }
+                        }
+                    }, 200)
+                })
+                .autocomplete({
+                    serviceUrl: "/api/v1.0/autocomplete/airports",
+                    minChars: 2,
+                    cache: false,
+                    dataType: "json",
+                    triggerSelectOnValidInput: false,
+                    paramName: "st",
+                    onSelect: function (suggestion) {
+                        if (!suggestion || !suggestion.data) {
+                            return
+                        }
+                        
+                        globalSelectedAirportDepartFrom = true
+                        
+                        let airport = suggestion.data
+                        console.log("|__ airport", airport)
+                        if (airport) {
+                            let countryId = (!isNaN(parseInt(airport.country.id))) ? parseInt(airport.country.id) : null
+                            let provinceId = (!isNaN(parseInt(airport.province.id))) ? parseInt(airport.province.id) : null
+                            let cityId = (!isNaN(parseInt(airport.city.id))) ? parseInt(airport.city.id) : null
+                            
+                            if (_modal_product_depart_from_airport) {
+                                _modal_product_depart_from_airport.value = (airport.name) ? airport.name : ""
+                            }
+                            
+                            if (_modal_product_depart_from_airport_id) {
+                                _modal_product_depart_from_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
+                            }
+                            
+                            if (_modal_product_country_id) {
+                                _modal_product_country_id.value = countryId
+                            }
+                            
+                            if (_modal_product_province_id) {
+                                _modal_product_province_id.value = provinceId
+                            }
+                            
+                            if (_modal_product_city_id) {
+                                _modal_product_city_id.value = cityId
+                            }
+                            
+                        } else {
+                            resetAirportForm("depart_from")
+                            showAirportForm("depart_from")
+                        }
+                    },
+                })
+        }
+        
+        if (_modal_product_arrive_to_airport) {
+            
+            $(_modal_product_arrive_to_airport)
+                .on("click", function () {
+                    if ($(this).attr("readonly") === "readonly") {
+                        e.preventDefault()
+                    } else {
+                        $(this).select()
+                    }
+                })
+                .on("keyup", function () {
+                    globalSelectedAirportArriveTo = false
+                })
+                .on("search", function () {
+                    if (_modal_product_arrive_to_airport_id) {
+                        _modal_product_arrive_to_airport_id.value = ""
+                    }
+                    if (_modal_product_arrive_to_airport) {
+                        _modal_product_arrive_to_airport.value = ""
+                    }
+                })
+                .on("change", function () {
+                    setTimeout(function () {
+                        let airport_name = _modal_product_arrive_to_airport.value
+                        
+                        if (globalSelectedAirportArriveTo === false) {
+                            if (airport_name === "") {
+                                _modal_product_arrive_to_airport.value = ""
+                                _modal_product_arrive_to_airport_id.value = ""
+                                globalSelectedAirportArriveTo = false
+                            } else {
+                                airportExists(airport_name, "arrive_to")
+                            }
+                        }
+                    }, 200)
+                })
+                .autocomplete({
+                    serviceUrl: "/api/v1.0/autocomplete/airports",
+                    minChars: 2,
+                    cache: false,
+                    dataType: "json",
+                    triggerSelectOnValidInput: false,
+                    paramName: "st",
+                    onSelect: function (suggestion) {
+                        if (!suggestion || !suggestion.data) {
+                            return
+                        }
+                        
+                        globalSelectedAirportArriveTo = true
+                        
+                        let airport = suggestion.data
+                        
+                        if (airport) {
+                            if (_modal_product_arrive_to_airport) {
+                                _modal_product_arrive_to_airport.value = (airport.name) ? airport.name : ""
+                            }
+                            
+                            if (_modal_product_arrive_to_airport_id) {
+                                _modal_product_arrive_to_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
+                            }
+                            
+                        } else {
+                            resetAirportForm("arrive_to")
+                            showAirportForm("arrive_to")
+                        }
+                    },
+                })
+        }
+        
+    }
+    
+    const clearLocationAirportForm = function (type) {
+        //console.log("ProductLocation.clearLocationAirportForm(type)", type)
+        if (type) {
+            if (type === "depart_from") {
+                _product_location_departing_airport_airport_types_id.value = ""
+                _product_location_departing_airport_name.value = ""
+                _product_location_departing_airport_city_id.value = ""
+                _product_location_departing_airport_search.value = ""
+                _product_location_departing_airport_id.value = ""
+                _product_location_departing_airport_home_link.value = ""
+                _product_location_departing_airport_wikipedia_link.value = ""
+                _product_location_departing_airport_city_search.value = ""
+                _product_location_departing_airport_enabled.checked = true
+                _product_location_departing_airport_iata_code.value = ""
+                _product_location_departing_airport_remove_button.disabled = true
+                _product_location_departing_airport_save_button.disabled = true
+                _product_location_departing_airport_clear_button.disabled = true
+                _product_edit_location_city_id.value = ""
+            }
+            
+            if (type === "arrive_to") {
+                _product_location_arriving_airport_airport_types_id.value = ""
+                _product_location_arriving_airport_name.value = ""
+                _product_location_arriving_airport_city_id.value = ""
+                _product_location_arriving_airport_search.value = ""
+                _product_location_arriving_airport_id.value = ""
+                _product_location_arriving_airport_home_link.value = ""
+                _product_location_arriving_airport_wikipedia_link.value = ""
+                _product_location_arriving_airport_city_search.value = ""
+                _product_location_arriving_airport_enabled.checked = true
+                _product_location_arriving_airport_iata_code.value = ""
+                _product_location_arriving_airport_remove_button.disabled = true
+                _product_location_arriving_airport_save_button.disabled = true
+                _product_location_arriving_airport_clear_button.disabled = true
+            }
+            
+        }
+        
+    }
+    
+    const setLocationAirportForm = function (airport, type) {
+        //console.log("ProductLocation.setLocationAirportForm(type)", type)
+        if (type) {
+            clearLocationAirportForm(type)
+            if (airport) {
+                if (airport.city) {
+                    let displayShort = `${airport.city.name} (${airport.province.name}, ${airport.country.name})`
+                    let displayMedium = `${airport.city.name} (${airport.province.name}, ${airport.country.name})`
+                    let displayLong = `${airport.city.name} (${airport.province.name}, ${airport.country.name})`
+                    let searchDisplayText = ""
+                    
+                    if (airport.name && airport.iata_code) {
+                        searchDisplayText = `${airport.iata_code} - ${airport.name}`
+                    } else if (airport.name && !airport.iata_code) {
+                        searchDisplayText = `${airport.name}`
+                    } else if (!airport.name && airport.iata_code) {
+                        searchDisplayText = `${airport.iata_code}`
+                    } else {
+                        searchDisplayText = `Airport Name`
+                    }
+                    
+                    if (type === "depart_from") {
+                        let cityId = (!isNaN(parseInt(airport.city.id))) ? parseInt(airport.city.id) : null
+                        _product_location_departing_airport_airport_types_id.value = (airport.airport_types_id) ? airport.airport_types_id : ""
+                        _product_location_departing_airport_name.value = (airport.name) ? airport.name : null
+                        _product_location_departing_airport_city_id.value = (!isNaN(parseInt(airport.city.id))) ? parseInt(airport.city.id) : null
+                        _product_location_departing_airport_search.value = searchDisplayText
+                        _product_location_departing_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : null
+                        _product_location_departing_airport_home_link.value = (airport.home_link) ? airport.home_link : null
+                        _product_location_departing_airport_wikipedia_link.value = (airport.wikipedia_link) ? airport.wikipedia_link : null
+                        _product_location_departing_airport_enabled.checked = (airport.enabled && airport.enabled === 1)
+                        _product_location_departing_airport_iata_code.value = (airport.iata_code) ? airport.iata_code : null
+                        
+                        _product_location_departing_airport_remove_button.disabled = false
+                        _product_location_departing_airport_save_button.disabled = false
+                        _product_location_departing_airport_clear_button.disabled = false
+                        
+                        _product_edit_location_city_id.value = cityId
+                        
+                        if (defaultAddressView === "medium") {
+                            _product_location_departing_airport_city_search.value = displayMedium
+                        }
+                        
+                        if (defaultAddressView === "long") {
+                            _product_location_departing_airport_city_search.value = displayLong
+                        }
+                        
+                        if (defaultAddressView === "short") {
+                            _product_location_departing_airport_city_search.value = displayShort
+                        }
+                    }
+                    
+                    if (type === "arrive_to") {
+                        _product_location_arriving_airport_airport_types_id.value = (airport.airport_types_id) ? airport.airport_types_id : ""
+                        _product_location_arriving_airport_name.value = (airport.name) ? airport.name : null
+                        _product_location_arriving_airport_city_id.value = (!isNaN(parseInt(airport.city.id))) ? parseInt(airport.city.id) : null
+                        _product_location_arriving_airport_search.value = searchDisplayText
+                        _product_location_arriving_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : null
+                        _product_location_arriving_airport_home_link.value = (airport.home_link) ? airport.home_link : null
+                        _product_location_arriving_airport_wikipedia_link.value = (airport.wikipedia_link) ? airport.wikipedia_link : null
+                        _product_location_arriving_airport_enabled.checked = (airport.enabled && airport.enabled === 1)
+                        _product_location_arriving_airport_iata_code.value = (airport.iata_code) ? airport.iata_code : null
+                        
+                        _product_location_arriving_airport_remove_button.disabled = false
+                        _product_location_arriving_airport_save_button.disabled = false
+                        _product_location_arriving_airport_clear_button.disabled = false
+                        
+                        if (defaultAddressView === "medium") {
+                            _product_location_arriving_airport_city_search.value = displayMedium
+                        }
+                        
+                        if (defaultAddressView === "long") {
+                            _product_location_arriving_airport_city_search.value = displayLong
+                        }
+                        
+                        if (defaultAddressView === "short") {
+                            _product_location_arriving_airport_city_search.value = displayShort
+                        }
+                        
+                    }
+                }
+                
+            }
+        }
+    }
+    
+    const airportExists = function (name, type) {
+        if (name && name !== "") {
+            /**
+             * data to send to the server
+             *
+             * @type {{name}}
+             */
+            let dataToSend = {
+                name: name,
+            }
+            
+            fetchByName(dataToSend, function (data) {
+                let airport = null
+                
+                if (data) {
+                    airport = data
+                    if (data[0]) {
+                        airport = data[0]
+                    }
+                }
+                
+                if (airport && airport.id) {
+                    console.log("|__ airport", airport)
+                    
+                    if (type === "depart_from") {
+                        let airportName = (airport.name) ? airport.name : null
+                        let airportId = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : null
+                        let countryId = (!isNaN(parseInt(airport.country.id))) ? parseInt(airport.country.id) : null
+                        let provinceId = (!isNaN(parseInt(airport.province.id))) ? parseInt(airport.province.id) : null
+                        let cityId = (!isNaN(parseInt(airport.city.id))) ? parseInt(airport.city.id) : null
+                        
+                        globalSelectedAirportDepartFrom = true
+                        
+                        if (_modal_product_depart_from_airport) {
+                            _modal_product_depart_from_airport.value = airportName
+                        }
+                        
+                        if (_modal_product_depart_from_airport_id) {
+                            _modal_product_depart_from_airport_id.value = airportId
+                        }
+                        
+                        if (_modal_product_country_id) {
+                            _modal_product_country_id.value = countryId
+                        }
+                        
+                        if (_modal_product_province_id) {
+                            _modal_product_province_id.value = provinceId
+                        }
+                        
+                        if (_modal_product_city_id) {
+                            _modal_product_city_id.value = cityId
+                        }
+                        
+                    } else {
+                        globalSelectedAirportArriveTo = true
+                        _modal_product_arrive_to_airport.value = airport.name
+                        _modal_product_arrive_to_airport_id.value = airport.id
+                    }
+                } else {
+                    confirmDialog(`The airport: ${name} does not exist exists. Would you like to create it?`, (ans) => {
+                        if (ans) {
+                            if (type === "depart_from") {
+                                globalSelectedAirportDepartFrom = false
+                            } else {
+                                globalSelectedAirportArriveTo = false
+                            }
+                            
+                            populateAirportForm({
+                                name: name,
+                            }, type)
+                            
+                        } else {
+                            if (type === "depart_from") {
+                                if (_modal_product_country_id) {
+                                    _modal_product_country_id.value = ""
+                                }
+                                
+                                if (_modal_product_province_id) {
+                                    _modal_product_province_id.value = ""
+                                }
+                                
+                                if (_modal_product_city_id) {
+                                    _modal_product_city_id.value = ""
+                                }
+                                
+                                if (_modal_product_depart_from_airport_id) {
+                                    _modal_product_depart_from_airport_id.value = ""
+                                }
+                                if (_modal_product_depart_from_airport) {
+                                    _modal_product_depart_from_airport.value = ""
+                                }
+                            } else {
+                                if (_modal_product_arrive_to_airport_id) {
+                                    _modal_product_arrive_to_airport_id.value = ""
+                                }
+                                if (_modal_product_arrive_to_airport) {
+                                    _modal_product_arrive_to_airport.value = ""
+                                }
+                            }
+                            
+                        }
+                    })
+                }
+            })
+        }
+    }
+    
+    const fetchByName = function (dataToSend, callback) {
+        let url = "/api/v1.0/airports/validate"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        handleAirportError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                //console.log("error", e)
+                handleAirportError("Error Validating Airport")
+            }
+        } else {
+            handleAirportError("Error Loading Airport - Missing Data")
+        }
+    }
+    
+    const handleAirportError = function (msg) {
+        toastr.error(msg)
+    }
+    
+    const update = function (type) {
+        //console.log("Airport.update(type)", type)
+        if (validAirport(type)) {
+            confirmDialog(`Would you like to update?`, (ans) => {
+                if (ans) {
+                    sendUpdateRequest(buildAirportUpdateRecord(type), function (data) {
+                        let airport
+                        if (data) {
+                            airport = data
+                            if (data[0]) {
+                                airport = data[0]
+                            }
+                            //console.log("airport", airport)
+                            let name = (airport.name) ? airport.name : null
+                            toastr["success"](`Airport ${name} has been updated`, "Airport Updated")
+                        }
+                    })
+                }
+            })
+        }
+    }
+    
+    const save = function (type) {
+        if (type) {
+            let dataToSend = buildAddAirportRecord(type)
+            
+            if (dataToSend) {
+                confirmDialog(`Would you like to update?`, (ans) => {
+                    if (ans) {
+                        sendSaveRequest(dataToSend, function (data) {
+                            let airport
+                            if (data) {
+                                airport = data
+                                if (data[0]) {
+                                    airport = data[0]
+                                }
+                            }
+                            
+                            if (airport) {
+                                
+                                if (type === "depart_from") {
+                                    if (_modal_product_depart_from_airport) {
+                                        _modal_product_depart_from_airport.value = (airport.name) ? airport.name : ""
+                                    }
+                                    
+                                    if (_modal_product_depart_from_new_airport_id) {
+                                        _modal_product_depart_from_new_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
+                                    }
+                                    
+                                    if (_modal_product_depart_from_airport_id) {
+                                        _modal_product_depart_from_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
+                                    }
+                                    
+                                    if (_modal_product_country_id) {
+                                        _modal_product_country_id.value = (!isNaN(parseInt(airport.country.id))) ? parseInt(airport.country.id) : ""
+                                    }
+                                    
+                                    if (_modal_product_province_id) {
+                                        _modal_product_province_id.value = (!isNaN(parseInt(airport.province.id))) ? parseInt(airport.province.id) : ""
+                                    }
+                                    
+                                    if (_modal_product_city_id) {
+                                        _modal_product_city_id.value = (!isNaN(parseInt(airport.city.id))) ? parseInt(airport.city.id) : ""
+                                    }
+                                    
+                                }
+                                
+                                if (type === "arrive_to") {
+                                    
+                                    if (_modal_product_arrive_to_airport) {
+                                        _modal_product_arrive_to_airport.value = (airport.name) ? airport.name : ""
+                                    }
+                                    
+                                    if (_modal_product_arrive_to_new_airport_id) {
+                                        _modal_product_arrive_to_new_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
+                                    }
+                                    
+                                    if (_modal_product_arrive_to_airport_id) {
+                                        _modal_product_arrive_to_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
+                                    }
+                                }
+                                
+                                resetAirportForm(type)
+                                initAutocomplete()
+                            }
+                        })
+                    }
+                })
+            }
+        }
+    }
+    
+    const init = function (settings) {
+        $(document).ready(function () {
+            if (_modal_product_depart_from_airport || _modal_product_arrive_to_airport) {
+                initAutocomplete()
+                resetAirportForm("depart_from")
+                resetAirportForm("arrive_to")
+            }
+            
+            if (settings) {
+                console.log("|__ settings", settings)
+                let categoryId = (_category_id && !isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+                
+                if (_product_edit_location_section) {
+                    if (categoryId === 2) {
+                        initAutocomplete()
+                        clearLocationAirportForm("depart_from")
+                        clearLocationAirportForm("arrive_to")
+                        
+                        if (settings.product) {
+                            let product = settings.product
+                            if (product.arriving_location) {
+                                Airport.arrivingAirport = product.arriving_location
+                                let arriving_location = product.arriving_location
+                                setLocationAirportForm(arriving_location, "arrive_to")
+                            } else {
+                                Airport.arrivingAirport = null
+                            }
+                            
+                            if (product.departing_location) {
+                                let departing_location = product.departing_location
+                                Airport.departingAirport = product.departing_location
+                                setLocationAirportForm(departing_location, "depart_from")
+                            } else {
+                                Airport.departingAirport = null
+                            }
+                        }
+                        
+                        initializeValidator(airportDepartFromRules)
+                        Airport.airportDepartValidator = $(_product_location_departing_airport_form).validate()
+                        
+                        initializeValidator(airportArriveToRules)
+                        Airport.airportArriveValidator = $(_product_location_arriving_airport_form).validate()
+                    }
+                }
+            }
+            
+            hideAirportForm("depart_from")
+            hideAirportForm("arrive_to")
+        })
+    }
+    
+    return {
+        airportDepartValidator: null,
+        airportArriveValidator: null,
+        arrivingAirport: null,
+        departingAirport: null,
+        resetAirportForm: function (type) {
+            resetAirportForm(type)
+        },
+        init: function (settings) {
+            init(settings)
+        },
+    }
+})()
 
 const AirportTypes = (function () {
     "use strict"
@@ -14059,7 +21616,7 @@ const AirportTypes = (function () {
     }
     
     const init = function (settings) {
-        console.log(" -- AirportTypes -- ", {})
+        //console.log(" -- AirportTypes -- ", {})
     }
     
     const set = function (airport_types) {
@@ -14091,7 +21648,7 @@ const AirportTypes = (function () {
             AirportTypes.all.set("id", detail)
         })
         
-        console.log(" AirportTypes.all", AirportTypes.all)
+        //console.log(" AirportTypes.all", AirportTypes.all)
     }
     
     return {
@@ -14120,26 +21677,15 @@ const AirportTypes = (function () {
 const Category = (function () {
     "use strict"
     
-    const base_url = "/category"
     const _modal_product_category_id = document.getElementById("modal_product_category_id")
-    const _modal_new_product = document.getElementById("modal_new_product")
     const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
     const _modal_product_provider_location_id = document.getElementById("modal_product_provider_location_id")
     const _modal_product_location_id = document.getElementById("modal_product_location_id")
     const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
     const _modal_product_city = document.getElementById("modal_product_city")
-    
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    
-    $(_modal_product_category_id)
-        .on("change", function () {
-            let category_id = $(this).val()
-            handle_product_change(category_id)
-        })
-    
+    const _modal_product_country_cars = document.getElementById("modal_product_country_cars")
     const _modal_product_name = document.getElementById("modal_product_name")
     const _modal_product_sku = document.getElementById("modal_product_sku")
-    const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
     const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
     const _modal_product_provider_id = document.getElementById("modal_product_provider_id")
     const _modal_product_vendor_id = document.getElementById("modal_product_vendor_id")
@@ -14147,43 +21693,72 @@ const Category = (function () {
     const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
     const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
+    const _modal_product_country_id = document.getElementById("modal_product_country_id")
+    const _modal_product_province_id = document.getElementById("modal_product_province_id")
     
-    const handleCategoryError = function (msg) {
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    
+    $(_modal_product_category_id)
+        .on("change", function () {
+            let categoryId = $(this).val()
+            handleProductChange(categoryId)
+        })
+    
+    const handleCategoryError = function (msg, title, type) {
         toastr.error(msg)
     }
     
-    const handle_product_change = function (category_id) {
-        $("div[data-categoryid]").hide()
-        if (!category_id) {
-            return
-        }
+    const handleProductChange = function (categoryId) {
+        console.log("Category.handleProductChange(categoryId)", categoryId)
+        // ----
         
-        category_id = parseInt(category_id)
+        let category
+        
+        $("div[data-categoryid]").hide()
+        
+        if (!categoryId) {
+            return
+        } else {
+            categoryId = parseInt(categoryId)
+            category = Types.category.get(parseInt(categoryId))
+            if (!category) {
+                return
+            }
+        }
         
         Product.resetNewProductDetails()
-        Product.initAutoComplete(category_id)
-        
-        let category = Types.category.get(category_id)
-        if (!category) {
-            return
-        }
-        
+        Product.initAutoComplete(categoryId)
         Product.attr1 = category.attribute_id
         Product.attr2 = null
         Product.attr3 = null
         Product.updateProductSKU()
         
-        if (category_id && !isNaN(parseInt(category_id))) {
-            
-            switch (parseInt(category_id)) {
+        if (categoryId && !isNaN(parseInt(categoryId))) {
+            switch (parseInt(categoryId)) {
                 case 1:
                     /**
                      * Hotels
                      */
-                    _modal_product_pricing_strategies_types_id.value = ""
+                    if (_modal_product_country_cars) {
+                        _modal_product_country_cars.value = ""
+                    }
+                    if (_modal_product_pricing_strategies_types_id) {
+                        _modal_product_pricing_strategies_types_id.value = ""
+                    }
                     _modal_product_vendor_name.value = ""
                     _modal_product_vendor_name.value = ""
-                    _modal_product_city_id.value = ""
+                    if (_modal_product_country_id) {
+                        _modal_product_country_id.value = ""
+                    }
+                    if (_modal_product_province_id) {
+                        _modal_product_province_id.value = ""
+                    }
+                    if (_modal_product_city_id) {
+                        _modal_product_city_id.value = ""
+                    }
+                    if (_modal_product_country_cars) {
+                        _modal_product_country_cars.value = ""
+                    }
                     _modal_product_provider_id.value = ""
                     _modal_product_provider_company_id.value = ""
                     _modal_product_provider_location_id.value = ""
@@ -14194,9 +21769,7 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    //.disabled = true
-                    //_modal_product_vendor_name.disabled = true
-                    
+                    //
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
@@ -14213,7 +21786,18 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.value = "2"
                     _modal_product_vendor_name.value = ""
                     _modal_product_vendor_name.value = ""
-                    _modal_product_city_id.value = ""
+                    if (_modal_product_country_id) {
+                        _modal_product_country_id.value = ""
+                    }
+                    if (_modal_product_province_id) {
+                        _modal_product_province_id.value = ""
+                    }
+                    if (_modal_product_city_id) {
+                        _modal_product_city_id.value = ""
+                    }
+                    if (_modal_product_country_cars) {
+                        _modal_product_country_cars.value = ""
+                    }
                     _modal_product_provider_id.value = ""
                     _modal_product_provider_company_id.value = ""
                     _modal_product_provider_location_id.value = ""
@@ -14243,7 +21827,19 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.value = "3"
                     _modal_product_vendor_name.value = ""
                     _modal_product_vendor_name.value = ""
-                    _modal_product_city_id.value = ""
+                    if (_modal_product_country_cars) {
+                        _modal_product_country_cars.value = ""
+                    }
+                    if (_modal_product_country_id) {
+                        _modal_product_country_id.value = ""
+                    }
+                    if (_modal_product_province_id) {
+                        _modal_product_province_id.value = ""
+                    }
+                    if (_modal_product_city_id) {
+                        _modal_product_city_id.value = ""
+                    }
+                    
                     _modal_product_provider_id.value = ""
                     _modal_product_provider_company_id.value = ""
                     _modal_product_provider_location_id.value = ""
@@ -14254,6 +21850,7 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
+                    //
                     //_modal_product_provider_name.disabled = true
                     //_modal_product_vendor_name.disabled = true
                     
@@ -14261,10 +21858,12 @@ const Category = (function () {
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
-                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_pricing_strategies_types_id.disabled = true
                     _modal_product_sku.disabled = true
                     
                     $("div[data-categoryid='3']").show()
+                    Country.initAutocomplete()
+                    
                     break
                 case 4:
                     /**
@@ -14273,7 +21872,18 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.value = "2"
                     _modal_product_vendor_name.value = ""
                     _modal_product_vendor_name.value = ""
-                    _modal_product_city_id.value = ""
+                    if (_modal_product_country_id) {
+                        _modal_product_country_id.value = ""
+                    }
+                    if (_modal_product_province_id) {
+                        _modal_product_province_id.value = ""
+                    }
+                    if (_modal_product_city_id) {
+                        _modal_product_city_id.value = ""
+                    }
+                    if (_modal_product_country_cars) {
+                        _modal_product_country_cars.value = ""
+                    }
                     _modal_product_provider_id.value = ""
                     _modal_product_provider_company_id.value = ""
                     _modal_product_provider_location_id.value = ""
@@ -14303,7 +21913,18 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_vendor_name.value = ""
                     _modal_product_vendor_name.value = ""
-                    _modal_product_city_id.value = ""
+                    if (_modal_product_country_id) {
+                        _modal_product_country_id.value = ""
+                    }
+                    if (_modal_product_province_id) {
+                        _modal_product_province_id.value = ""
+                    }
+                    if (_modal_product_city_id) {
+                        _modal_product_city_id.value = ""
+                    }
+                    if (_modal_product_country_cars) {
+                        _modal_product_country_cars.value = ""
+                    }
                     _modal_product_provider_id.value = ""
                     _modal_product_provider_company_id.value = ""
                     _modal_product_provider_location_id.value = ""
@@ -14314,8 +21935,6 @@ const Category = (function () {
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
                     
-                    //_modal_product_provider_name.disabled = true
-                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
@@ -14329,9 +21948,21 @@ const Category = (function () {
                     /**
                      * Tours
                      */
+                    _modal_product_pricing_strategies_types_id.value = "2"
                     _modal_product_vendor_name.value = ""
                     _modal_product_vendor_name.value = ""
-                    _modal_product_city_id.value = ""
+                    if (_modal_product_country_id) {
+                        _modal_product_country_id.value = ""
+                    }
+                    if (_modal_product_province_id) {
+                        _modal_product_province_id.value = ""
+                    }
+                    if (_modal_product_city_id) {
+                        _modal_product_city_id.value = ""
+                    }
+                    if (_modal_product_country_cars) {
+                        _modal_product_country_cars.value = ""
+                    }
                     _modal_product_provider_id.value = ""
                     _modal_product_provider_company_id.value = ""
                     _modal_product_provider_location_id.value = ""
@@ -14341,14 +21972,11 @@ const Category = (function () {
                     _modal_product_rating_types_id.value = ""
                     _modal_product_sku.value = ""
                     _modal_product_currency_id.value = ""
-                    
-                    //_modal_product_provider_name.disabled = true
-                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
-                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_pricing_strategies_types_id.disabled = true
                     _modal_product_sku.disabled = true
                     
                     $("div[data-categoryid='6']").show()
@@ -14359,7 +21987,18 @@ const Category = (function () {
                      */
                     _modal_product_vendor_name.value = ""
                     _modal_product_vendor_name.value = ""
-                    _modal_product_city_id.value = ""
+                    if (_modal_product_country_id) {
+                        _modal_product_country_id.value = ""
+                    }
+                    if (_modal_product_province_id) {
+                        _modal_product_province_id.value = ""
+                    }
+                    if (_modal_product_city_id) {
+                        _modal_product_city_id.value = ""
+                    }
+                    if (_modal_product_country_cars) {
+                        _modal_product_country_cars.value = ""
+                    }
                     _modal_product_provider_id.value = ""
                     _modal_product_provider_company_id.value = ""
                     _modal_product_provider_location_id.value = ""
@@ -14387,7 +22026,18 @@ const Category = (function () {
                      */
                     _modal_product_vendor_name.value = ""
                     _modal_product_vendor_name.value = ""
-                    _modal_product_city_id.value = ""
+                    if (_modal_product_country_id) {
+                        _modal_product_country_id.value = ""
+                    }
+                    if (_modal_product_province_id) {
+                        _modal_product_province_id.value = ""
+                    }
+                    if (_modal_product_city_id) {
+                        _modal_product_city_id.value = ""
+                    }
+                    if (_modal_product_country_cars) {
+                        _modal_product_country_cars.value = ""
+                    }
                     _modal_product_provider_id.value = ""
                     _modal_product_provider_company_id.value = ""
                     _modal_product_provider_location_id.value = ""
@@ -14415,7 +22065,18 @@ const Category = (function () {
                      */
                     _modal_product_vendor_name.value = ""
                     _modal_product_vendor_name.value = ""
-                    _modal_product_city_id.value = ""
+                    if (_modal_product_country_id) {
+                        _modal_product_country_id.value = ""
+                    }
+                    if (_modal_product_province_id) {
+                        _modal_product_province_id.value = ""
+                    }
+                    if (_modal_product_city_id) {
+                        _modal_product_city_id.value = ""
+                    }
+                    if (_modal_product_country_cars) {
+                        _modal_product_country_cars.value = ""
+                    }
                     _modal_product_provider_id.value = ""
                     _modal_product_provider_company_id.value = ""
                     _modal_product_provider_location_id.value = ""
@@ -14442,7 +22103,18 @@ const Category = (function () {
                      */
                     _modal_product_vendor_name.value = ""
                     _modal_product_vendor_name.value = ""
-                    _modal_product_city_id.value = ""
+                    if (_modal_product_country_cars) {
+                        _modal_product_country_cars.value = ""
+                    }
+                    if (_modal_product_country_id) {
+                        _modal_product_country_id.value = ""
+                    }
+                    if (_modal_product_province_id) {
+                        _modal_product_province_id.value = ""
+                    }
+                    if (_modal_product_city_id) {
+                        _modal_product_city_id.value = ""
+                    }
                     _modal_product_provider_id.value = ""
                     _modal_product_provider_company_id.value = ""
                     _modal_product_provider_location_id.value = ""
@@ -14452,21 +22124,16 @@ const Category = (function () {
                     _modal_product_rating_types_id.value = ""
                     _modal_product_sku.value = ""
                     
-                    //_modal_product_provider_name.disabled = true
-                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = true
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = true
                     _modal_product_currency_id.disabled = true
                     _modal_product_pricing_strategies_types_id.disabled = true
                     _modal_product_sku.disabled = true
-                    
                     _modal_product_sku.disabled = true
                     _modal_product_city.disabled = true
                     _modal_product_rating_types_id.disabled = true
-                    
                     _modal_product_pricing_strategies_types_id.disabled = true
-                    
                     break
             }
         }
@@ -14513,7 +22180,9 @@ const Category = (function () {
     }
     
     const init = function (settings) {
-        //console.log("Category.init()", settings)
+        console.log("Category.init()", settings)
+        // ----
+        
         let categories = []
         if (settings) {
             if (settings.categories) {
@@ -14521,7 +22190,7 @@ const Category = (function () {
             }
         }
         
-        load_all(categories)
+        loadAll(categories)
     }
     
     const set = function (category) {
@@ -14562,8 +22231,10 @@ const Category = (function () {
         return detail
     }
     
-    const load_all = function (categories) {
-        //console.log("Category.load_all()", categories)
+    const loadAll = function (categories) {
+        console.log("Category.loadAll(categories)", categories)
+        // ----
+        
         Category.all = new Map()
         
         if (!categories) {
@@ -14588,7 +22259,7 @@ const Category = (function () {
             get(params)
         },
         load_all: function (params) {
-            load_all(params)
+            loadAll(params)
         },
         save: function (params) {
             save(params)
@@ -14646,7 +22317,7 @@ const ContactTypes = (function () {
     }
     
     const init = function (settings) {
-        console.log(" -- ContactTypes -- ", {})
+        //console.log(" -- ContactTypes -- ", {})
     }
     
     const set = function (contact_types) {
@@ -14678,7 +22349,7 @@ const ContactTypes = (function () {
             ContactTypes.all.set("id", detail)
         })
         
-        console.log(" ContactTypes.all", ContactTypes.all)
+        //console.log(" ContactTypes.all", ContactTypes.all)
     }
     
     return {
@@ -14706,6 +22377,8 @@ const ContactTypes = (function () {
 
 const Company = (function () {
     "use strict"
+    
+    const _product_edit_page = document.getElementById("product_edit_page")
     const _button_save_provider = document.getElementById("button_save_provider")
     const _form_edit_company = document.getElementById("form_edit_company")
     const _company_enabled = document.getElementById("company_enabled")
@@ -14735,7 +22408,7 @@ const Company = (function () {
     const _company_description_long = document.getElementById("company_description_long")
     const _company_description_short = document.getElementById("company_description_short")
     const _button_clear_form_edit_company = document.getElementById("button_clear_form_edit_company")
-    const _company_edit_table_filters = document.getElementById("company_edit_table_filters")
+    const _company_images = document.getElementById("company_images")
     const form_rules = {
         rules: {
             company_name: {
@@ -14781,7 +22454,7 @@ const Company = (function () {
     
     $(_button_cancel_edit_company_name)
         .on("click", function () {
-            let detail = set_detail(tempCompany)
+            let detail = setDetail(tempCompany)
             populate_form(detail)
             hide_form()
         })
@@ -14812,7 +22485,7 @@ const Company = (function () {
                             if (data) {
                                 if (data[0]) {
                                     let company = data[0]
-                                    let detail = set_detail(company)
+                                    let detail = setDetail(company)
                                     reset_company = detail
                                     populate_form(detail)
                                     initAutoComplete()
@@ -14929,7 +22602,7 @@ const Company = (function () {
                     let provider_id = provider.id
                     let company_name = provider.company.name
                     let provider_company_id = provider.company.id
-                   
+                 
                     if (_form_edit_provider) {
                         $(_provider_company_id).val(provider_company_id)
                         $(_provider_id).val(provider_id)
@@ -14974,12 +22647,17 @@ const Company = (function () {
             description_long: null,
             keywords: null,
             logo: null,
+            images: [],
         }
     }
     
     const populate_form = function (company) {
+        console.log("Company.populate_form(company)", company)
+        // ----
+        
         let company_logo_image = $("#company_logo").dropify()
         let company_keywords = (company.keywords) ? company.keywords : ""
+        
         $(_company_id).val((company.id) ? company.id : "").trigger("change")
         _company_name.value = (company.name) ? company.name : ""
         _company_phone_1.value = (company.phone_1) ? company.phone_1 : ""
@@ -15121,7 +22799,7 @@ const Company = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 handleCompanyError("Error Validating Company")
             }
         } else {
@@ -15129,8 +22807,28 @@ const Company = (function () {
         }
     }
     
+    const fetchCompanyByName = function (dataToSend, callback) {
+        let url = "/api/v1.0/companies/validate"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handleCompanyError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                return handleCompanyError("Error Validating Company")
+            }
+        } else {
+            return handleCompanyError("Error Loading Company- Missing Data")
+        }
+    }
+    
     const add_to_company_list = function (dataToSend, callback) {
-        console.log("add_to_company_list()")
+        //console.log("add_to_company_list()")
         let url = "/api/v1.0/companies/update"
         if (dataToSend) {
             sendPostRequest(url, dataToSend, function (data, status, xhr) {
@@ -15144,26 +22842,34 @@ const Company = (function () {
     }
     
     const init = function (company) {
-        let images = []
-        if (company) {
-            let detail = set_detail(company)
-            images = (company.images) ? company.images : []
-            populate_form(detail)
-        }
+        console.log("Company.init(company)", company)
+        // ----
         
-        if (_form_edit_company) {
-            validator_init(form_rules)
-            validator = $(_form_edit_company).validate()
-            initAutoComplete()
-            if (_form_edit_company_block) {
-                hide_form()
+        let images = []
+        
+        if (company) {
+            let detail = setDetail(company)
+            images = (company.images) ? company.images : []
+            
+            if (_company_images) {
+                Company.fileManager = $("#company_images").fileManager({
+                    height: 400,
+                    source: "company",
+                    sourceId: detail.id,
+                    images: images,
+                })
+            }
+            if (_form_edit_company) {
+                populate_form(detail)
+                validator_init(form_rules)
+                validator = $(_form_edit_company).validate()
+                initAutoComplete()
+                if (_form_edit_company_block) {
+                    hide_form()
+                }
             }
         }
         
-        $("#companyImages").imageManager({
-            id: "company_image_manager",
-            images: images,
-        })
     }
     
     const validate_form = function () {
@@ -15190,7 +22896,7 @@ const Company = (function () {
         }
     }
     
-    const set_detail = function (company) {
+    const setDetail = function (company) {
         let detail = defaultDetail()
         
         if (company) {
@@ -15213,6 +22919,7 @@ const Company = (function () {
             detail.keywords = (company.keywords) ? company.keywords : ""
             detail.description_long = (company.description_long) ? company.description_long : ""
             detail.description_short = (company.description_short) ? company.description_short : ""
+            detail.images = (company.images) ? company.images : []
         }
         
         Company.detail = detail
@@ -15237,7 +22944,7 @@ const Company = (function () {
     
     const hide_form = function () {
         if (_form_edit_company_block) {
-            let detail = set_detail(reset_company)
+            let detail = setDetail(reset_company)
             //populate_form(detail)
             $(_company_name).attr("readonly", false)
             $(_form_edit_company_block).hide()
@@ -15295,6 +23002,7 @@ const Company = (function () {
             status_id: 10,
             website: null,
         },
+        fileManager: null,
         add_to_company_list: function (dataToSend, callback) {
             return add_to_company_list(dataToSend, callback)
         },
@@ -15310,6 +23018,7 @@ const Company = (function () {
         init: function (company) {
             init(company)
         },
+        
     }
 })()
 
@@ -15503,7 +23212,7 @@ const Contact = (function () {
         let dataToSend = build()
         if (dataToSend) {
             update_contact(dataToSend, function (data) {
-                console.log(data)
+                //console.log(data)
                 if (data) {
                     if (data[0]) {
                         let contact = data[0]
@@ -15603,7 +23312,7 @@ const Contact = (function () {
         clear_form()
         _contact_company_id.value = _company_id.value
         if (contact) {
-            console.log("contact", contact)
+            //console.log("contact", contact)
             _contact_id.value = validInt(contact.id)
             _contact_name_first.value = (contact.name_first) ? contact.name_first : null
             _contact_name_last.value = (contact.name_last) ? contact.name_last : null
@@ -15743,7 +23452,7 @@ const Contact = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
                 return handleContactError("Error Validating Company")
             }
         } else {
@@ -15967,6 +23676,9 @@ const Vendor = (function () {
     const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
     const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
     const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
+    
+    const _product_edit_details_section_vendor_form_filter = document.getElementById("product_edit_details_section_vendor_form_filter")
+    const _product_edit_details_section_vendor_form_vendor_id = document.getElementById("product_edit_details_section_vendor_form_vendor_id")
     //
     let new_vendor_validator, validator
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
@@ -16002,7 +23714,7 @@ const Vendor = (function () {
     $(_button_save_vendor)
         .on("click", function () {
             let company = Company.build()
-            Console.log("_button_save_vendor", company)
+            //console.log("_button_save_vendor", company)
             update()
         })
     
@@ -16128,7 +23840,7 @@ const Vendor = (function () {
                 if (!suggestion || !suggestion.data) {
                     return
                 }
-                Console.log("suggestion.data", suggestion.data)
+                //console.log("suggestion.data", suggestion.data)
                 let vendor = suggestion.data
                 if (_form_product_add) {
                     let provider_company_id = (isNaN(parseInt(_modal_product_provider_company_id.value))) ? null : parseInt(_modal_product_provider_company_id.value)
@@ -16199,20 +23911,24 @@ const Vendor = (function () {
                     },
                 })
         }
+        
+        if (_product_edit_details_section_vendor_form_filter) {
+        
+        }
     }
     
     const vendor_exists = function (name) {
-        Console.log("vendor_exists()", name)
+        //console.log("vendor_exists()", name)
         
         if (name && name !== "") {
             let dataToSend = {
                 name: name,
             }
             
-            Console.log("dataToSend", dataToSend)
+            //console.log("dataToSend", dataToSend)
             
             fetch_vendor_by_name(dataToSend, function (data) {
-                Console.log("fetch_vendor_by_name()", data)
+                //console.log("fetch_vendor_by_name()", data)
                 let vendor, company
                 
                 if (data && data.length > 0) {
@@ -16224,7 +23940,7 @@ const Vendor = (function () {
                     }
                     
                 } else {
-                    Console.log("Vendor Does Not Exist")
+                    //console.log("Vendor Does Not Exist")
                     
                     _modal_product_vendor_id.value = ""
                     _modal_product_vendor_company_id.value = ""
@@ -16248,7 +23964,7 @@ const Vendor = (function () {
                 }
                 
                 if (vendor) {
-                    Console.log("Vendor Exists", vendor)
+                    //console.log("Vendor Exists", vendor)
                     
                     if (_vendor_modal_vendor_name) {
                         confirmDialog(`Vendor ${vendor.name} ALREADY exists. Would you like to load this record to edit?`, (ans) => {
@@ -16293,14 +24009,14 @@ const Vendor = (function () {
         if (vendor) {
             newVendor(vendor, function (data) {
                 if (data) {
-                    Console.log("data 1", data)
+                    //console.log("data 1", data)
                     if (data[0]) {
-                        Console.log("data[0] 1", data[0])
+                        //console.log("data[0] 1", data[0])
                         let details = data[0]
                         
                         if (details.id) {
                             if (_form_product_add) {
-                                Console.log("_form_product_add: details", details)
+                                //console.log("_form_product_add: details", details)
                                 _modal_product_vendor_company_id.value = (details.company_id) ? details.company_id : ""
                                 _modal_product_vendor_id.value = (details.id) ? details.id : ""
                                 _modal_product_provider_vendor_match.checked = (_modal_product_vendor_company_id.value === _modal_product_provider_company_id.value)
@@ -16312,13 +24028,13 @@ const Vendor = (function () {
                                 window.location.replace("/vendors/" + details.id)
                             }
                         } else {
-                            Console.log("details 1", details)
+                            //console.log("details 1", details)
                         }
                     } else {
-                        Console.log("details 2", data)
+                        //console.log("details 2", data)
                     }
                 } else {
-                    Console.log("details 3", vendor)
+                    //console.log("details 3", vendor)
                 }
             })
         }
@@ -16343,7 +24059,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -16432,7 +24148,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                //console.log("error", e)
                 return handle_vendor_error("Error Validating Company")
             }
         } else {
@@ -16507,25 +24223,41 @@ const Vendor = (function () {
     }
     
     const set = function (vendor) {
-        
         let detail = _default_detail()
-        detail.id = (vendor.id) ? vendor.id : null
-        detail.name = (vendor.name) ? vendor.name : null
-        detail.status_id = (vendor.status_id) ? vendor.status_id : null
-        detail.show_online = vendor.show_online
-        detail.show_sales = vendor.show_sales
-        detail.show_ops = vendor.show_ops
-        detail.is_provider = vendor.is_provider
-        detail.sku = (vendor.sku) ? vendor.sku : null
-        detail.enabled = vendor.enabled
-        detail.date_created = (vendor.date_created) ? vendor.date_created : formatDateMySQL()
-        detail.created_by = (vendor.created_by) ? vendor.created_by : created_by
-        detail.date_modified = (vendor.date_modified) ? vendor.date_modified : formatDateMySQL()
-        detail.modified_by = (vendor.modified_by) ? vendor.modified_by : modified_by
-        detail.note = (vendor.note) ? vendor.note : null
-        detail.addresses = (vendor.company.addresses) ? vendor.company.addresses : []
-        detail.contacts = (vendor.company.contacts) ? vendor.company.contacts : []
-        detail.company = (vendor.company) ? vendor.company : {}
+        let company = {}
+        let addresses, contacts = []
+        
+        if (vendor) {
+            detail.id = (vendor.id) ? vendor.id : null
+            detail.name = (vendor.name) ? vendor.name : null
+            detail.status_id = (vendor.status_id) ? vendor.status_id : null
+            detail.show_online = vendor.show_online
+            detail.show_sales = vendor.show_sales
+            detail.show_ops = vendor.show_ops
+            detail.is_provider = vendor.is_provider
+            detail.sku = (vendor.sku) ? vendor.sku : null
+            detail.enabled = vendor.enabled
+            detail.date_created = (vendor.date_created) ? vendor.date_created : formatDateMySQL()
+            detail.created_by = (vendor.created_by) ? vendor.created_by : created_by
+            detail.date_modified = (vendor.date_modified) ? vendor.date_modified : formatDateMySQL()
+            detail.modified_by = (vendor.modified_by) ? vendor.modified_by : modified_by
+            detail.note = (vendor.note) ? vendor.note : null
+            if (vendor.company) {
+                company = vendor.company
+                detail.company_id = company.id
+                
+                if (vendor.company.addresses) {
+                    addresses = vendor.addresses
+                }
+                if (vendor.company.contacts) {
+                    contacts = vendor.contacts
+                }
+            }
+        }
+        
+        detail.addresses = addresses
+        detail.contacts = contacts
+        detail.company = company
         
         Vendor.detail = detail
         return detail
@@ -16538,13 +24270,13 @@ const Vendor = (function () {
      * @param callback
      */
     const updateVendor = function (dataToSend, callback) {
-        Console.log("updateVendor()", dataToSend)
+        //console.log("updateVendor()", dataToSend)
         let url = "/api/v1.0/vendors/update"
         
         if (dataToSend) {
             try {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    Console.log("data", data)
+                    //console.log("data", data)
                     if (data) {
                         return callback(data)
                     } else {
@@ -16552,7 +24284,7 @@ const Vendor = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -16564,14 +24296,14 @@ const Vendor = (function () {
         if (vendor_detail) {
             confirmDialog(`Would you like to update?`, (ans) => {
                 if (ans) {
-                    Console.log("vendor_detail", vendor_detail)
+                    //console.log("vendor_detail", vendor_detail)
                     
                     updateVendor(vendor_detail, function (data) {
-                        Console.log("data", data)
+                        //console.log("data", data)
                         if (data) {
-                            Console.log("data 1", data)
+                            //console.log("data 1", data)
                             if (data[0]) {
-                                Console.log("data[0] 1", data[0])
+                                //console.log("data[0] 1", data[0])
                                 let details = data[0]
                                 if (details.id) {
                                     if (_vendor_id.value === "" || isNaN(parseInt(_vendor_id.value))) {
@@ -16581,13 +24313,13 @@ const Vendor = (function () {
                                         toastr.success(`Vendor ${name} has been updated.`)
                                     }
                                 } else {
-                                    Console.log("details 1", details)
+                                    //console.log("details 1", details)
                                 }
                             } else {
-                                Console.log("details 2", data)
+                                //console.log("details 2", data)
                             }
                         } else {
-                            Console.log("details 3", provider)
+                            //console.log("details 3", provider)
                         }
                     })
                 }
@@ -16606,14 +24338,14 @@ const Vendor = (function () {
         if (vendor) {
             updateVendor(vendor, function (data) {
                 if (data) {
-                    Console.log("data", data)
-                    Console.log(data.length)
+                    //console.log("data", data)
+                    //console.log(data.length)
                     if (data[0]) {
-                        Console.log("data[0]", data[0])
+                        //console.log("data[0]", data[0])
                         let details = data[0]
                         if (details.id) {
-                            Console.log("details.id", details.id)
-                            Console.log("_vendor_id.value", _vendor_id.value)
+                            //console.log("details.id", details.id)
+                            //console.log("_vendor_id.value", _vendor_id.value)
                             if (_vendor_id.value === "" || isNaN(parseInt(_vendor_id.value))) {
                                 window.location.replace(base_url + "/" + details.id)
                             } else {
@@ -16621,13 +24353,13 @@ const Vendor = (function () {
                                 toastr.success(`Vendor ${name} has been updated.`)
                             }
                         } else {
-                            Console.log("details 1", details)
+                            //console.log("details 1", details)
                         }
                     } else {
-                        Console.log("details 2", data)
+                        //console.log("details 2", data)
                     }
                 } else {
-                    Console.log("details 3", provider)
+                    //console.log("details 3", provider)
                 }
             })
         }
@@ -16641,12 +24373,12 @@ const Vendor = (function () {
         let addresses = Array.from(Address.all.values())
         let contacts = Array.from(Contact.all.values())
         /*
-          Console.log("company_detail", company_detail)
-          Console.log("provider_detail", provider_detail)
-          Console.log("location_detail", location_detail)
-          Console.log("vendor_detail", vendor_detail)
-          Console.log("addresses", addresses)
-          Console.log("contacts", contacts)
+          //console.log("company_detail", company_detail)
+          //console.log("provider_detail", provider_detail)
+          //console.log("location_detail", location_detail)
+          //console.log("vendor_detail", vendor_detail)
+          //console.log("addresses", addresses)
+          //console.log("contacts", contacts)
           //*/
         if (!company_detail || !vendor_detail || !addresses || !contacts) {
             $.each(panels, function (index, item) {
@@ -16730,18 +24462,35 @@ const Vendor = (function () {
             })
         }
         
-        Console.log(" Vendor.all", Vendor.all)
+        //console.log(" Vendor.all", Vendor.all)
     }
     
     const validate_form = function () {
         return $(_form_edit_vendor).valid()
     }
     
+    const populateProductEditVendorForm = function (vendor) {
+        //console.log("Provider.populateProductEditVendorForm(vendor)", vendor)
+        //console.log("|__ Vendor.detail", Vendor.detail)
+        _product_edit_details_section_vendor_form_filter.value = vendor.company.name
+        _product_edit_details_section_vendor_form_vendor_id.value = vendor.id
+        
+        Product.attr3 = (vendor.sku) ? vendor.sku : null
+    }
+    
     const init = function (settings) {
+        //console.log("Vendor.init(settings)", settings)
         let company = {}
         if (settings) {
             if (settings.company) {
                 company = settings.company
+            }
+            
+            if (settings.vendor_detail) {
+                let detail = set(settings.vendor_detail)
+                populateProductEditVendorForm(detail)
+                //console.log("|__ detail", detail)
+                
             }
         }
         
@@ -16785,11 +24534,8 @@ const Vendor = (function () {
         }
     }
     
-    /**
-     * disables fields unused from provider edit
-     */
     const setProvider = function () {
-        Console.log("Set Provider")
+        //console.log("Set Provider")
         if (_provider_edit) {
             _vendor_is_provider.checked = true
             $(_vendor_is_provider).attr("readonly", "true")
@@ -16801,11 +24547,6 @@ const Vendor = (function () {
         }
     }
     
-    /**
-     * initialize vendor index page
-     *
-     * @param settings
-     */
     const index = function (settings) {
         if (_form_vendor_add) {
             validator_init(add_modal_form_rules)
@@ -16902,6 +24643,63 @@ const Vendor = (function () {
     
 })()
 
+const Tour = (function () {
+    "use strict"
+    const _tour_route = document.getElementById("tour_route")
+    
+    const init = function (options) {
+        console.log("Tour.init(options)", options)
+        // ----
+        
+        if (_tour_route) {
+            $(_tour_route).routeManager({
+                stops: [
+                    {
+                        id: 1,
+                        location_id: 1,
+                        time: "01:00",
+                    },
+                    {
+                        id: 2,
+                        location_id: 2,
+                        time: "01:00",
+                    },
+                    {
+                        id: 3,
+                        location_id: 3,
+                        time: "01:00",
+                    },
+                    {
+                        id: 4,
+                        location_id: 4,
+                        time: "01:00",
+                    },
+                    {
+                        id: 5,
+                        location_id: 5,
+                        time: "01:00",
+                    },
+                    {
+                        id: 6,
+                        location_id: 6,
+                        time: "01:00",
+                    },
+                ],
+            })
+        }
+        
+    }
+    
+    return {
+        all: new Map(),
+        route: null,
+        detail: {},
+        init: function (options) {
+            init(options)
+        },
+    }
+})()
+
 const MessageTypes = (function () {
     "use strict"
     
@@ -16950,7 +24748,7 @@ const MessageTypes = (function () {
     }
     
     const init = function (settings) {
-        Console.log(" -- MessageTypes -- ", {})
+        //console.log(" -- MessageTypes -- ", {})
     }
     
     const set = function (message_types) {
@@ -16983,7 +24781,7 @@ const MessageTypes = (function () {
             MessageTypes.all.set("id", detail)
         })
         
-        Console.log(" MessageTypes.all", MessageTypes.all)
+        //console.log(" MessageTypes.all", MessageTypes.all)
     }
     
     return {
@@ -17304,13 +25102,13 @@ const Matrix = (function () {
             detail.season_id = (matrix.season_id) ? matrix.season_id : null
             detail.unit_id = (matrix.unit_id) ? matrix.unit_id : null
             /*
-            //Console.log("matrix.pricings", matrix.pricings)
+            //console.log("matrix.pricings", matrix.pricings)
             if (matrix.pricings && typeof matrix.pricings == "object") {
                 let pricings = (matrix.pricings && typeof matrix.pricings == "object") ? matrix.pricings : []
-                //Console.log("pricings", pricings)
+                //console.log("pricings", pricings)
                 matrixPricings = new Map()
                 $.each(pricings, function (k, pricing) {
-                    //Console.log("pricing", pricing)
+                    //console.log("pricing", pricing)
                     let formattedPricing = {
                         code: pricing.pricing_code,
                         pricing_code: pricing.pricing_code,
@@ -17358,7 +25156,7 @@ const Matrix = (function () {
     }
     
     const loadAll = function (matrices) {
-        //Console.log("Matrix.loadAll(matrices)", matrices)
+        //console.log("Matrix.loadAll(matrices)", matrices)
         // ----
         
         Matrix.all = new Map()
@@ -17368,7 +25166,7 @@ const Matrix = (function () {
         
         //Pricing.all = new Map()
         $.each(matrices, function (k, matrix) {
-            //Console.log("matrix", matrix)
+            //console.log("matrix", matrix)
             let detail = set(matrix)
             let id = matrix.code
             
@@ -17408,38 +25206,38 @@ const Matrix = (function () {
         matrix_margin = document.getElementsByName("matrix_margin")
         matrix_cost.forEach(el => el.addEventListener("keyup", event => {
             let matrix_id = el.dataset.matrixid
-            //Console.log("matrix_cost", el.value)
-            //Console.log("matrix_cost", matrix_id)
+            //console.log("matrix_cost", el.value)
+            //console.log("matrix_cost", matrix_id)
         }))
         
         matrix_price.forEach(el => el.addEventListener("keyup", event => {
             let matrix_id = el.dataset.matrixid
-            //Console.log("matrix_price", el.value)
-            //Console.log("matrix_price", matrix_id)
+            //console.log("matrix_price", el.value)
+            //console.log("matrix_price", matrix_id)
         }))
         
         matrix_margin.forEach(el => el.addEventListener("keyup", event => {
             let matrix_id = el.dataset.matrixid
-            //Console.log("matrix_margin", el.value)
-            //Console.log("matrix_margin", matrix_id)
+            //console.log("matrix_margin", el.value)
+            //console.log("matrix_margin", matrix_id)
         }))
         
     }
     
     const loadPerUnitForm = function () {
-        //Console.log("Matrix.loadPerUnitForm()", Matrix)
+        //console.log("Matrix.loadPerUnitForm()", Matrix)
         // ----
         
     }
     
     const loadPerPersonForm = function () {
-        //Console.log("Matrix.loadPerPersonForm()", Matrix)
+        //console.log("Matrix.loadPerPersonForm()", Matrix)
         // ----
         
     }
     
     const loadPerDayForm = function () {
-        //Console.log("Matrix.loadPerDayForm()", Matrix)
+        //console.log("Matrix.loadPerDayForm()", Matrix)
         // ----
         
     }
@@ -17513,7 +25311,7 @@ const PricingStrategyTypes = (function () {
     }
     
     const init = function (settings) {
-        //Console.log(' -- PricingStrategyTypes -- ', {})
+        //console.log(' -- PricingStrategyTypes -- ', {})
     }
     
     const set = function (pricing_strategy_types) {
@@ -17544,7 +25342,7 @@ const PricingStrategyTypes = (function () {
             PricingStrategyTypes.all.set("id", detail)
         })
         
-        Console.log(" PricingStrategyTypes.all", PricingStrategyTypes.all)
+        //console.log(" PricingStrategyTypes.all", PricingStrategyTypes.all)
     }
     
     return {
@@ -17614,7 +25412,7 @@ const RatingTypes = (function () {
     }
     
     const init = function (settings) {
-        Console.log(" -- RatingTypes -- ", {})
+        //console.log(" -- RatingTypes -- ", {})
     }
     
     const set = function (rating_types) {
@@ -17645,7 +25443,7 @@ const RatingTypes = (function () {
             RatingTypes.all.set("id", detail)
         })
         
-        Console.log(" RatingTypes.all", RatingTypes.all)
+        //console.log(" RatingTypes.all", RatingTypes.all)
     }
     
     return {
@@ -17719,7 +25517,7 @@ const SalesTypes = (function () {
     }
     
     const init = function (settings) {
-        Console.log(" -- SalesTypes -- ", {})
+        //console.log(" -- SalesTypes -- ", {})
     }
     
     const set = function (sales_types) {
@@ -17752,7 +25550,7 @@ const SalesTypes = (function () {
             SalesTypes.all.set("id", detail)
         })
         
-        Console.log(" SalesTypes.all", SalesTypes.all)
+        //console.log(" SalesTypes.all", SalesTypes.all)
     }
     
     return {
@@ -17793,11 +25591,11 @@ const StatusTypes = (function () {
     const _input_status_types_sort_order = document.getElementById("input_status_types_sort_order")
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
-    const handle_status_types_error = function (msg) {
+    const handleStatusTypesError = function (msg) {
         toastr.error(msg)
     }
     
-    const _default_detail = function () {
+    const defaultDetail = function () {
         return {
             id: null,
             name: null,
@@ -17824,11 +25622,44 @@ const StatusTypes = (function () {
     }
     
     const init = function (settings) {
-        Console.log(" -- StatusTypes -- ", {})
+        //console.log("StatusTypes.init(settings)", settings)
+        if (settings) {
+            if (settings.status_types) {
+                loadAll(settings.status_types)
+                buildDropdown()
+            }
+        }
+    }
+    
+    const loadAll = function (statusTypes) {
+        //console.log("StatusTypes.loadAll(settings)", statusTypes)
+        StatusTypes.all = new Map()
+        
+        if (statusTypes) {
+            $.each(statusTypes, function (k, statusType) {
+                let detail = set(statusType)
+                //console.log("detail", detail)
+                if (detail.id) {
+                    StatusTypes.all.set(detail.id, detail)
+                }
+            })
+        }
+    }
+    
+    const buildDropdown = function (statusTypeId) {
+        //console.log("StatusTypes.buildDropdown(statusTypeId)", statusTypeId)
+        let selected = ""
+        if (statusTypeId) {
+            selected = statusTypeId
+        }
+        
+        let statusTypes = Array.from(StatusTypes.all.values())
+        //console.log("|__ statusTypes", statusTypes)
     }
     
     const set = function (status_types) {
-        let detail = _default_detail()
+        //console.log("StatusTypes.set(status_types)", status_types)
+        let detail = defaultDetail()
         if (status_types) {
             detail.id = (status_types.id) ? status_types.id : null
             detail.name = (status_types.name) ? status_types.name : null
@@ -17845,20 +25676,6 @@ const StatusTypes = (function () {
         return detail
     }
     
-    const load_all = function (status_types) {
-        StatusTypes.all = new Map()
-        
-        if (!status_types) {
-            return
-        }
-        $.each(status_types, function (i, status_types) {
-            let detail = set(status_types)
-            StatusTypes.all.set("id", detail)
-        })
-        
-        //Console.log(' StatusTypes.all',  StatusTypes.all);
-    }
-    
     return {
         validator: null,
         detail: {},
@@ -17867,13 +25684,13 @@ const StatusTypes = (function () {
             get(params)
         },
         load_all: function (params) {
-            load_all(params)
+            loadAll(params)
         },
         save: function (params) {
             save(params)
         },
-        init: function () {
-            init()
+        init: function (settings) {
+            init(settings)
         },
     }
     
@@ -17895,8 +25712,6 @@ const Types = (function () {
         $.each(types, function (k, type) {
             Types[types_name].set(type.id, type)
         })
-        
-        //Console.log(types_name, Types[types_name])
     }
     
     const init = function (settings) {
@@ -17972,15 +25787,13 @@ const Types = (function () {
         }
         
         if (settings.status_types) {
+            //console.log(settings.status_types)
             setType(settings.status_types, "status_types")
+            StatusTypes.init({ status_types: settings.status_types })
         }
         
         if (settings.allot_by) {
             setType(settings.allot_by, "allot_by")
-        }
-        
-        if (settings.countries) {
-            Country.load_all(settings.countries)
         }
         
         if (settings.countries) {
@@ -18067,14 +25880,14 @@ const Login = (function () {
         Login.validator = validator_init(form_rules)
         
         $(_button_login_register)
-          .on("click", function () {
-          
-          })
+            .on("click", function () {
+            
+            })
         
         $(_button_login_submit)
-          .on("click", function () {
-              submit_login()
-          })
+            .on("click", function () {
+                submit_login()
+            })
         
         const handle_login_error = function (msg) {
             toastr.error(msg)
@@ -18084,7 +25897,7 @@ const Login = (function () {
             if (dataToSend) {
                 try {
                     sendPostRequest("/api/v1.0/users/login", dataToSend, function (data, status, xhr) {
-                        Console.log("data", data.id)
+                        //console.log("data", data.id)
                         if (data && data.id) {
                             if (data.id) {
                                 window.location.replace("/")
@@ -18094,7 +25907,7 @@ const Login = (function () {
                         }
                     })
                 } catch (e) {
-                    Console.error("Error", e)
+                    //console.error("Error", e)
                     return handle_login_error("Error: 2")
                 }
             } else {
@@ -18161,9 +25974,9 @@ const Login = (function () {
         Login.validator = validator_init(form_rules_register)
         
         $(_register_form_submit_button)
-          .on("click", function () {
-              submit_register()
-          })
+            .on("click", function () {
+                submit_register()
+            })
         
         const submit_register = function () {
             if (validate_form(_register_page_form, form_rules_register)) {
@@ -18179,11 +25992,11 @@ const Login = (function () {
         }
         
         const send_register = function (dataToSend) {
-            Console.log("Login.register->send_register", dataToSend)
+            //console.log("Login.register->send_register", dataToSend)
             if (dataToSend) {
                 try {
                     sendPostRequest("/api/v1.0/users/register", dataToSend, function (data, status, xhr) {
-                        Console.log("data", data.id)
+                        //console.log("data", data.id)
                         if (data && data.id) {
                             if (data.id) {
                                 window.location.replace("/")
@@ -18193,7 +26006,7 @@ const Login = (function () {
                         }
                     })
                 } catch (e) {
-                    Console.error("Error", e)
+                    //console.error("Error", e)
                     return handle_login_error("Error: 2")
                 }
             } else {
@@ -18221,6 +26034,7 @@ Login.init()
 
 const Provider = (function () {
     "use strict"
+    
     const base_url = "/providers"
     const _button_add_provider_page_heading = document.getElementById("button_add_provider_page_heading")
     const _button_edit_provider_name = document.getElementById("button_edit_provider_name")
@@ -18252,15 +26066,38 @@ const Provider = (function () {
     const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
     const _modal_product_provider_location_id = document.getElementById("modal_product_provider_location_id")
     const _modal_product_location_id = document.getElementById("modal_product_location_id")
-    // --
+    const _product_edit_details_section_provider_form = document.getElementById("product_edit_details_section_provider_form")
+    const _product_edit_details_section_provider_form_filter = document.getElementById("product_edit_details_section_provider_form_filter")
+    const _product_edit_details_section_provider_form_provider_id = document.getElementById("product_edit_details_section_provider_form_provider_id")
+    const _product_edit_details_section_provider_form_submit_button = document.getElementById("product_edit_details_section_provider_form_submit_button")
+    const _product_edit_details_section_provider_form_provider_company_id = document.getElementById("product_edit_details_section_provider_form_provider_company_id")
+    const _product_edit_details_section_provider_form_details = document.getElementById("product_edit_details_section_provider_form_details")
+    const _product_edit_details_section_provider_form_provider_name = document.getElementById("product_edit_details_section_provider_form_provider_name")
+    const _product_edit_details_section_provider_form_provider_phone_1 = document.getElementById("product_edit_details_section_provider_form_provider_phone_1")
+    const _product_edit_details_section_provider_form_provider_phone_2 = document.getElementById("product_edit_details_section_provider_form_provider_phone_2")
+    const _product_edit_details_section_provider_form_provider_fax = document.getElementById("product_edit_details_section_provider_form_provider_fax")
+    const _product_edit_details_section_provider_form_provider_website = document.getElementById("product_edit_details_section_provider_form_provider_website")
+    const _product_edit_details_section_provider_form_provider_email = document.getElementById("product_edit_details_section_provider_form_provider_email")
+    const _product_edit_details_section_provider_form_provider_cover_image = document.getElementById("product_edit_details_section_provider_form_provider_cover_image")
+    const _product_edit_details_section_provider_form_provider_enabled = document.getElementById("product_edit_details_section_provider_form_provider_enabled")
+    const _product_edit_details_section_provider_form_provider_note = document.getElementById("product_edit_details_section_provider_form_provider_note")
+    const _product_edit_details_section_provider_form_provider_keywords = document.getElementById("product_edit_details_section_provider_form_provider_keywords")
+    const _product_edit_details_section_provider_form_provider_description_long = document.getElementById("product_edit_details_section_provider_form_provider_description_long")
+    const _product_edit_details_section_provider_form_provider_description_short = document.getElementById("product_edit_details_section_provider_form_provider_description_short")
+    const _product_edit_details_section_provider_form_provider_logo = document.getElementById("product_edit_details_section_provider_form_provider_logo")
+    const _product_edit_details_section_provider_form_cancel_button = document.getElementById("product_edit_details_section_provider_form_cancel_button")
+    const _provider_keywords = document.getElementById("provider_keywords")
+    const _product_edit_details_section_provider_form_reset_button = document.getElementById("product_edit_details_section_provider_form_reset_button")
+    const _product_edit_provider_panel_link_product = document.getElementById("product_edit_provider_panel_link_product")
+    const _display_provider_name = document.getElementById("display_provider_name")
+    const _display_provider_code_direct = document.getElementById("display_provider_code_direct")
+    const _product_edit_details_section_provider_form_edit_button = document.getElementById("product_edit_details_section_provider_form_edit_button")
     
-    // --
-    let globalSelectedProvider = false
-    let isNew = false
-    let validator
+    let $provider_keywords, tempProvider, validator
+    let globalSelectedProvider, isNew = false
     let $index_table = $(_table_provider_index)
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    let form_rules = {
+    let formRules = {
         rules: {
             provider_name: {
                 required: true,
@@ -18279,6 +26116,38 @@ const Provider = (function () {
         },
     }
     
+    $(_product_edit_details_section_provider_form_edit_button)
+        .on("click", function () {
+            console.log("Provider.product_edit_details_section_provider_form_reset_button:click()")
+            openProductEditProviderForm()
+        })
+    
+    $(_product_edit_details_section_provider_form_reset_button)
+        .on("click", function () {
+            console.log("Provider.product_edit_details_section_provider_form_reset_button:click()")
+            let detail = set()
+            
+            resetProductEditProviderForm(detail)
+        })
+    
+    $(_product_edit_details_section_provider_form_submit_button)
+        .on("click", function () {
+            console.log("Provider.product_edit_details_section_provider_form_submit_button:click()")
+            
+        })
+    
+    $(_product_edit_provider_panel_link_product)
+        .on("click", function () {
+            console.log("Provider.product_edit_provider_panel_link_product:click()")
+            openProductEditProviderForm()
+        })
+    $(_product_edit_details_section_provider_form_cancel_button)
+        .on("click", function () {
+            console.log("Provider.product_edit_details_section_provider_form_cancel_button:click()")
+            populateProductEditProviderForm(tempProvider)
+            closeProductEditProviderForm()
+        })
+    
     $(_button_save_provider)
         .on("click", function () {
             let tabs = $("#provider_edit_tabs > li.nav-item > a.nav-link")
@@ -18289,14 +26158,7 @@ const Provider = (function () {
             let vendor_detail = Vendor.build()
             let addresses = Array.from(Address.all.values())
             let contacts = Array.from(Contact.all.values())
-            /*
-            console.log("company_detail", company_detail)
-            console.log("provider_detail", provider_detail)
-            console.log("location_detail", location_detail)
-            console.log("vendor_detail", vendor_detail)
-            console.log("addresses", addresses)
-            console.log("contacts", contacts)
-            //*/
+            
             if (!company_detail || !provider_detail || !location_detail || !vendor_detail || !addresses || !contacts) {
                 $.each(panels, function (index, item) {
                     if ($(this).find(".is-invalid").length > 0) {
@@ -18356,74 +26218,242 @@ const Provider = (function () {
             $(_provider_company_id).val(_company_id.value)
         })
     
-    /**
-     * add provider
-     *
-     * @param provider
-     */
-    const add = function (provider) {
-        console.log("Provider.add(provider)", provider)
-        if (provider) {
-            let dataToSend = {
-                name: _modal_product_provider_name.value,
-                status_id: 1,
-                show_online: 1,
-                show_sales: 1,
-                show_ops: 1,
-                is_provider: 1,
-                enabled: 1,
-            }
-            
-            Vendor.newVendor(dataToSend, function (data) {
-                let vendor_detail, provider_detail = {}
+    $("#modal_product_provider_name")
+        .on("change", function () {
+            globalSelectedProvider = false
+            setTimeout(function () {
+                let provider_name = _modal_product_provider_name.value
+                console.log("|__ provider_name", provider_name)
                 
-                if (data) {
-                    vendor_detail = data
-                    if (data[0]) {
-                        vendor_detail = data[0]
-                    }
-                    console.log("Provider Upodating Vendor: vendor_detail", vendor_detail)
-                    
-                    provider.location_id = (provider.location_id) ? provider.location_id : 1
-                    provider.vendor_id = vendor_detail.id
-                    provider_detail = {
-                        provider_detail: provider,
-                    }
-                    
-                    console.log("Provider : provider_detail", provider_detail)
-                    updateProvider(provider_detail, function (data) {
-                        if (data) {
-                            console.log("data", data)
-                            if (data[0]) {
-                                //console.log("data[0]", data[0])
-                                let provider = data[0]
-                                let vendor = provider.vendor
-                                let company = provider.company
-                                let provider_detail = set(provider)
-                                _modal_product_provider_name.value = provider.name
-                                _modal_product_provider_id.value = provider.id
-                                _modal_product_provider_company_id.value = company.id
-                                _modal_product_vendor_name.value = provider.name
-                                _modal_product_vendor_id.value = vendor.id
-                                _modal_product_vendor_company_id.value = company.id
-                                
-                                initAutoComplete()
-                                
-                                Product.attr2 = (provider.code_direct_id) ? provider.code_direct_id : null
-                                Product.attr3 = (vendor.sku) ? vendor.sku : null
-                                Product.updateProductSKU()
-                                
-                            }
-                        }
-                    })
+                if (provider_name === "") {
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_provider_id.value = ""
+                    _modal_product_vendor_name.value = ""
+                    _modal_product_provider_name.value = ""
+                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_provider_company_id.value = ""
+                    _modal_product_provider_location_id.value = ""
+                    _modal_product_vendor_name.disabled = true
+                    Product.attr2 = null
+                    Product.attr3 = null
+                    Product.updateProductSKU()
+                } else {
+                    provider_exists(provider_name)
                 }
-            })
+            }, 200)
+        })
+        .on("search", function () {
+            globalSelectedProvider = false
+            _modal_product_vendor_id.value = ""
+            _modal_product_provider_id.value = ""
+            _modal_product_vendor_name.value = ""
+            _modal_product_provider_name.value = ""
+            _modal_product_vendor_company_id.value = ""
+            _modal_product_provider_company_id.value = ""
+            _modal_product_provider_location_id.value = ""
+            Product.attr2 = null
+            Product.attr3 = null
+            Product.updateProductSKU()
+            _modal_product_vendor_name.disabled = true
+        })
+        .on("click", function () {
+            if ($(this).attr("readonly") === "readonly") {
+                e.preventDefault()
+            } else {
+                $(this).select()
+            }
+        })
+        .autocomplete({
+            serviceUrl: "/api/v1.0/autocomplete/providers",
+            minChars: 2,
+            cache: false,
+            dataType: "json",
+            triggerSelectOnValidInput: false,
+            paramName: "st",
+            onSelect: function (suggestion) {
+                if (!suggestion || !suggestion.data) {
+                    return
+                }
+                let provider = set(suggestion.data)
+                let vendor = provider.vendor
+                let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
+                let sku = (vendor.sku) ? vendor.sku : null
+                
+                _modal_product_vendor_id.value = parseInt(suggestion.data.vendor.id)
+                _modal_product_provider_id.value = suggestion.data.id
+                _modal_product_vendor_name.value = suggestion.data.name
+                _modal_product_vendor_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
+                _modal_product_provider_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
+                _modal_product_provider_vendor_match.checked = true
+                _modal_product_vendor_name.disabled = false
+                _modal_product_provider_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
+                
+                Product.attr2 = code_direct
+                Product.attr3 = sku
+                Product.updateProductSKU()
+            },
+        })
+    
+    const getImages = function (dataToSend, callback) {
+        console.log("Provider.getImages(dataToSend)", dataToSend)
+        if (dataToSend) {
+            if (dataToSend.type && dataToSend.id) {
+                let id = (!isNaN(parseInt(dataToSend.id))) ? parseInt(dataToSend.id) : null
+                let type = (dataToSend.type) ? dataToSend.type : null
+                if (type && id) {
+                    let url = `/api/v1.0/images/src/company/${id}`
+                    try {
+                        sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                            if (data) {
+                                return callback(data)
+                            } else {
+                                return handleProviderError("Error", "Product", "error")
+                            }
+                        })
+                    } catch (e) {
+                        console.log("error", e)
+                        return handleProviderError("Error", "Provider", "error")
+                    }
+                }
+            }
         }
     }
     
-    /**
-     * initialize provider autocomplete
-     */
+    const regex = /[^A-Za-z0-9]/g
+    
+    const renderImageDropDown = function (images) {
+        console.log("Provider.renderImageDropDown(images)", images)
+        let initValue = "/public/img/placeholder.jpg".replace(regex, "")
+        let options = `<option value="${initValue}" readonly selected>-- Images --</options>`
+        
+        if (!images) {
+            images = []
+        }
+        
+        $.each(images, function (k, image) {
+            console.log("|__ image", image)
+            let value = `${image.path}/${image.name}.${image.extension}`
+            let newStr = value.replace(regex, "")
+            let name = image.name
+            console.log("|__ value", value)
+            options += `<option value="${newStr}">${name}</options>`
+        })
+        
+        if (_product_edit_details_section_provider_form_provider_logo) {
+            $(_product_edit_details_section_provider_form_provider_logo).empty().html(options)
+        }
+        if (_product_edit_details_section_provider_form_provider_cover_image) {
+            $(_product_edit_details_section_provider_form_provider_cover_image).empty().html(options)
+        }
+        
+    }
+    
+    const buildImageDropdown = function (id) {
+        console.log("Provider.buildImageDropdown(id)", id)
+        
+        if (id) {
+            if (_product_edit_details_section_provider_form_provider_cover_image) {
+                let dataToSend = {
+                    type: "company",
+                    id: id,
+                }
+                
+                getImages(dataToSend, function (data) {
+                    if (data) {
+                        renderImageDropDown(data)
+                    }
+                })
+                
+            }
+        }
+    }
+    
+    const populateProductEditProviderForm = function (provider) {
+        console.log("Provider.populateProductEditProviderForm(provider)", provider)
+        let detail = set(provider)
+        let keywords = (detail.keywords) ? detail.keywords : []
+        let coverImage = (detail.company.cover_image) ? detail.company.cover_image : "/public/img/placeholder.jpg"
+        let logoImage = (detail.company.logo) ? detail.company.logo : "/public/img/placeholder.jpg"
+        let companyName = (detail.company.name) ? detail.company.name : null
+        let codeDirectId = (provider.code_direct_id) ? provider.code_direct_id : null
+        
+        logoImage = logoImage.replace(regex, "")
+        coverImage = coverImage.replace(regex, "")
+        
+        console.log("|__ coverImage", coverImage)
+        console.log("|__ logoImage", logoImage)
+        console.log("|__ Provider.detail", Provider.detail)
+        
+        _product_edit_details_section_provider_form_filter.value = (provider.company.name) ? provider.company.name : null
+        _product_edit_details_section_provider_form_provider_id.value = (provider.id) ? provider.id : null
+        _product_edit_details_section_provider_form_provider_company_id.value = (provider.company_id) ? provider.company_id : null
+        _product_edit_details_section_provider_form_provider_name.value = (provider.company.name) ? provider.company.name : null
+        _product_edit_details_section_provider_form_provider_phone_1.value = (provider.company.phone_1) ? provider.company.phone_1 : null
+        _product_edit_details_section_provider_form_provider_phone_2.value = (provider.company.phone_2) ? provider.company.phone_2 : null
+        _product_edit_details_section_provider_form_provider_fax.value = (provider.company.fax) ? provider.company.fax : null
+        _product_edit_details_section_provider_form_provider_website.value = (provider.company.website) ? provider.company.website : null
+        _product_edit_details_section_provider_form_provider_email.value = (provider.company.email) ? provider.company.email : null
+        _product_edit_details_section_provider_form_provider_description_long.value = (provider.description_long) ? provider.description_long : null
+        _product_edit_details_section_provider_form_provider_description_short.value = (provider.description_short) ? provider.description_short : null
+        _product_edit_details_section_provider_form_provider_enabled.checked = (provider.enabled && provider.enabled === 1)
+        
+        _product_edit_details_section_provider_form_provider_cover_image.value = coverImage.toString()
+        _product_edit_details_section_provider_form_provider_logo.value = logoImage.toString()
+        
+        $provider_keywords = $(_provider_keywords).BuildKeyword(keywords)
+        
+        _display_provider_name.innerText = companyName
+        _display_provider_code_direct.innerText = codeDirectId
+        Product.attr2 = codeDirectId
+        
+    }
+    
+    const enableProductEditProviderForm = function () {
+        $(_product_edit_details_section_provider_form_edit_button).addClass("d-none")
+        
+        $(_product_edit_details_section_provider_form_reset_button).removeClass("d-none")
+        $(_product_edit_details_section_provider_form_submit_button).removeClass("d-none")
+        $(_product_edit_details_section_provider_form_cancel_button).removeClass("d-none")
+        
+    }
+    
+    const disableProductEditProviderForm = function () {
+        $(_product_edit_details_section_provider_form_edit_button).addClass("d-none")
+        
+        $(_product_edit_details_section_provider_form_reset_button).addClass("d-none")
+        $(_product_edit_details_section_provider_form_submit_button).addClass("d-none")
+        $(_product_edit_details_section_provider_form_cancel_button).addClass("d-none")
+    }
+    
+    const resetProductEditProviderForm = function () {
+        console.log("Provider.resetProductEditProviderForm()")
+        _product_edit_details_section_provider_form_filter.value = ""
+        _product_edit_details_section_provider_form_provider_id.value = ""
+        _product_edit_details_section_provider_form_provider_company_id.value = ""
+        _product_edit_details_section_provider_form_provider_name.value = ""
+        _product_edit_details_section_provider_form_provider_phone_1.value = ""
+        _product_edit_details_section_provider_form_provider_phone_2.value = ""
+        _product_edit_details_section_provider_form_provider_fax.value = ""
+        _product_edit_details_section_provider_form_provider_website.value = ""
+        _product_edit_details_section_provider_form_provider_email.value = ""
+        _product_edit_details_section_provider_form_provider_description_long.value = ""
+        _product_edit_details_section_provider_form_provider_description_short.value = ""
+        _product_edit_details_section_provider_form_provider_enabled.checked = true
+        _product_edit_details_section_provider_form_provider_cover_image.value = "/public/img/placeholder.jpg"
+    }
+    
+    const openProductEditProviderForm = function () {
+        console.log("Provider.openProductEditProviderForm()")
+        $(_product_edit_details_section_provider_form_details).show()
+        enableProductEditProviderForm()
+    }
+    
+    const closeProductEditProviderForm = function () {
+        console.log("Provider.closeProductEditProviderForm()")
+        $(_product_edit_details_section_provider_form_details).hide()
+        disableProductEditProviderForm()
+    }
+    
     const initAutoComplete = function () {
         if (_provider_name) {
             $(_provider_name)
@@ -18504,96 +26534,103 @@ const Provider = (function () {
                 })
         }
         
+        if (_product_edit_details_section_provider_form_filter) {
+            $(_product_edit_details_section_provider_form_filter)
+                .on("change", function () {
+                    //*
+                    setTimeout(function () {
+                        let provider_name = _product_edit_details_section_provider_form_filter.value
+                        
+                        if (globalSelectedProvider === false) {
+                            if (provider_name === "") {
+                                _product_edit_details_section_provider_form_filter.value = ""
+                                _product_edit_details_section_provider_form_provider_company_id.value = ""
+                                _product_edit_details_section_provider_form_provider_id.value = ""
+                                globalSelectedProvider = false
+                                //$(_vendor_name).val("").trigger("change")
+                                $(_product_edit_details_section_provider_form_provider_company_id).val("").trigger("change")
+                                $(_product_edit_details_section_provider_form_provider_id).val("").trigger("change")
+                            } else {
+                                provider_exists(provider_name)
+                            }
+                        }
+                    }, 200)
+                    //*/
+                })
+                .on("search", function () {
+                    //_provider_id.value = ""
+                    //_provider_company_id.value = ""
+                    
+                    //$(_vendor_name).val("").trigger("change")
+                    //$(_provider_company_id).val("").trigger("change")
+                    //Provider.reset_form()
+                    //Vendor.reset_form()
+                })
+                .on("click", function () {
+                    if ($(this).attr("readonly") === "readonly") {
+                        e.preventDefault()
+                    } else {
+                        $(this).select()
+                    }
+                })
+                .autocomplete({
+                    serviceUrl: "/api/v1.0/autocomplete/providers",
+                    minChars: 2,
+                    cache: false,
+                    dataType: "json",
+                    triggerSelectOnValidInput: false,
+                    paramName: "st",
+                    onSelect: function (suggestion) {
+                        if (!suggestion.data) {
+                            return
+                        }
+                        let provider = suggestion.data
+                        tempProvider = provider
+                        //console.log("provider", provider)
+                        
+                        let company = (provider.company) ? provider.company : {}
+                        let addresses = (provider.addresses) ? provider.addresses : {}
+                        let contacts = (provider.contacts) ? provider.contacts : {}
+                        let location = (provider.location) ? provider.location : {}
+                        let vendor = (provider.vendor) ? provider.vendor : {}
+                        let provider_id = provider.id
+                        let company_name = provider.company.name
+                        let provider_company_id = provider.company.id
+                        
+                        populateProductEditProviderForm(provider)
+                        /*
+                        if (_form_edit_provider) {
+                            $(_provider_company_id).val(provider_company_id)
+                            $(_provider_id).val(provider_id)
+                            confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
+                                if (ans) {
+                                    window.location.replace("/providers/" + provider_id)
+                                    populate_form(provider)
+                                    Company.populate_form(company)
+                                    Location.populate_form(location)
+                                    $(_vendor_company_id).val(provider_company_id)
+                                    $(_vendor_name).val(company_name).trigger("change")
+                                } else {
+                                    Provider.reset_form()
+                                    Vendor.reset_form()
+                                }
+                            })
+                        }
+                        //*/
+                    },
+                })
+        }
     }
     
-    $("#modal_product_provider_name")
-        .on("change", function () {
-            setTimeout(function () {
-                let provider_name = _modal_product_provider_name.value
-                
-                if (globalSelectedProvider === false) {
-                    if (provider_name === "") {
-                        _modal_product_vendor_id.value = ""
-                        _modal_product_provider_id.value = ""
-                        _modal_product_vendor_name.value = ""
-                        _modal_product_provider_name.value = ""
-                        _modal_product_vendor_company_id.value = ""
-                        _modal_product_provider_company_id.value = ""
-                        _modal_product_provider_location_id.value = ""
-                        _modal_product_vendor_name.disabled = true
-                        Product.attr2 = null
-                        Product.attr3 = null
-                        Product.updateProductSKU()
-                        globalSelectedProvider = false
-                    } else {
-                        provider_exists(provider_name)
-                    }
-                }
-            }, 200)
-        })
-        .on("search", function () {
-            _modal_product_vendor_id.value = ""
-            _modal_product_provider_id.value = ""
-            _modal_product_vendor_name.value = ""
-            _modal_product_provider_name.value = ""
-            _modal_product_vendor_company_id.value = ""
-            _modal_product_provider_company_id.value = ""
-            _modal_product_provider_location_id.value = ""
-            Product.attr2 = null
-            Product.attr3 = null
-            Product.updateProductSKU()
-            _modal_product_vendor_name.disabled = true
-        })
-        .on("click", function () {
-            if ($(this).attr("readonly") === "readonly") {
-                e.preventDefault()
-            } else {
-                $(this).select()
-            }
-        })
-        .autocomplete({
-            serviceUrl: "/api/v1.0/autocomplete/providers",
-            minChars: 2,
-            cache: false,
-            dataType: "json",
-            triggerSelectOnValidInput: false,
-            paramName: "st",
-            onSelect: function (suggestion) {
-                if (!suggestion || !suggestion.data) {
-                    return
-                }
-                let provider = set(suggestion.data)
-                let vendor = provider.vendor
-                let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
-                let sku = (vendor.sku) ? vendor.sku : null
-                
-                _modal_product_vendor_id.value = parseInt(suggestion.data.vendor.id)
-                _modal_product_provider_id.value = suggestion.data.id
-                _modal_product_vendor_name.value = suggestion.data.name
-                _modal_product_vendor_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
-                _modal_product_provider_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
-                _modal_product_provider_vendor_match.checked = true
-                _modal_product_vendor_name.disabled = false
-                _modal_product_provider_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
-                
-                Product.attr2 = code_direct
-                Product.attr3 = sku
-                Product.updateProductSKU()
-            },
-        })
-    
-    /**
-     * check if provider with same name exists
-     *
-     * @param name
-     */
     const provider_exists = function (name) {
+        console.log("Provider.provider_exists(name)", name)
         if (name && name !== "") {
             let dataToSend = {
                 name: name,
             }
             
             fetch_provider_by_name(dataToSend, function (data) {
+                console.log("|__ data", data)
                 let provider
                 
                 if (_form_product_add) {
@@ -18681,7 +26718,7 @@ const Provider = (function () {
                             
                         }
                     }
-                    console.log("provider", provider)
+                    //console.log("provider", provider)
                     $(_vendor_name).val($(_provider_name).val()).trigger("change")
                 }
                 
@@ -18689,25 +26726,17 @@ const Provider = (function () {
         }
     }
     
-    /**
-     * initialize provider index page
-     *
-     * @param settings
-     */
     const index = function (settings) {
         build_index_table()
         
         if (settings) {
             if (settings.providers) {
-                load_all(settings.providers)
+                loadAll(settings.providers)
             }
         }
         
     }
     
-    /**
-     * build provider index table
-     */
     const build_index_table = function () {
         $index_table = $(_table_provider_index).table({
             table_type: "display_list",
@@ -18759,32 +26788,43 @@ const Provider = (function () {
         })
     }
     
-    /**
-     * when provider index table row clicked handle event
-     *
-     * @param provider
-     */
     const navigate = function (provider) {
         if (provider && provider.id) {
             window.location.replace(base_url + "/" + provider.id)
         }
     }
     
-    /**
-     * handle provider form errors
-     *
-     * @param msg
-     */
-    const handle_provider_error = function (msg) {
-        toastr.error(msg)
+    const handleProviderError = function (msg, title, level) {
+        console.log("Provider.handleProviderError(msg)", msg)
+        if (!title) {
+            title = "Product"
+        }
+        
+        if (!level) {
+            level = "error"
+        }
+        
+        toastr[level](`${msg}`, title)
     }
     
-    /**
-     * set default provider object values
-     *
-     * @returns {{note: null, addresses: *[], company_id: null, date_created: *, code_direct_id: null, created_by: (number|number), enabled: number, provider_vendor: number, date_modified: *, vendor: {}, name: null, modified_by: (number|number), location: {}, company: {}, id: null, contacts: *[]}}
-     * @private
-     */
+    const updateProvider = function (dataToSend, callback) {
+        let url = "/api/v1.0/providers/update"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        handleProviderError("Oops: 1", "Provider", "error")
+                    }
+                })
+            } catch (e) {
+                console.log("error", e)
+            }
+        }
+    }
+    
     const _default_detail = function () {
         return {
             addresses: [],
@@ -18809,12 +26849,7 @@ const Provider = (function () {
         }
     }
     
-    /**
-     * load all providers into object
-     *
-     * @param providers
-     */
-    const load_all = function (providers) {
+    const loadAll = function (providers) {
         Provider.all = new Map()
         if (providers) {
             $.each(providers, function (i, provider) {
@@ -18825,18 +26860,11 @@ const Provider = (function () {
         }
     }
     
-    /**
-     * save provider object
-     *
-     * @param provider
-     */
     const save = function (provider) {
         if (provider) {
             updateProvider(provider, function (data) {
                 if (data) {
-                    console.log("data 1", data)
                     if (data[0]) {
-                        console.log("data[0] 1", data[0])
                         let details = data[0]
                         if (details.id) {
                             if (_provider_id.value === "" || isNaN(parseInt(_provider_id.value))) {
@@ -18846,73 +26874,78 @@ const Provider = (function () {
                                 toastr.success(`Provider ${name} has been updated.`)
                             }
                         } else {
-                            console.log("details 1", details)
+                            //console.log("details 1", details)
                         }
                     } else {
-                        console.log("details 2", data)
+                        //console.log("details 2", data)
                     }
                 } else {
-                    console.log("details 3", provider)
+                    //console.log("details 3", provider)
                 }
             })
         }
     }
     
-    /**
-     * update provider record
-     *
-     * @param dataToSend
-     * @param callback
-     */
-    const updateProvider = function (dataToSend, callback) {
-        let url = "/api/v1.0/providers/update"
-        
-        if (dataToSend) {
-            try {
-                sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    } else {
-                        handle_provider_error("Oops: 1")
-                    }
-                })
-            } catch (e) {
-                console.log("error", e)
+    const add = function (provider) {
+        //console.log("Provider.add(provider)", provider)
+        if (provider) {
+            let dataToSend = {
+                name: _modal_product_provider_name.value,
+                status_id: 1,
+                show_online: 1,
+                show_sales: 1,
+                show_ops: 1,
+                is_provider: 1,
+                enabled: 1,
             }
+            
+            Vendor.newVendor(dataToSend, function (data) {
+                let vendor_detail, provider_detail = {}
+                
+                if (data) {
+                    vendor_detail = data
+                    if (data[0]) {
+                        vendor_detail = data[0]
+                    }
+                    //console.log("Provider Upodating Vendor: vendor_detail", vendor_detail)
+                    
+                    provider.location_id = (provider.location_id) ? provider.location_id : 1
+                    provider.vendor_id = vendor_detail.id
+                    provider_detail = {
+                        provider_detail: provider,
+                    }
+                    
+                    //console.log("Provider : provider_detail", provider_detail)
+                    updateProvider(provider_detail, function (data) {
+                        if (data) {
+                            //console.log("data", data)
+                            if (data[0]) {
+                                //console.log("data[0]", data[0])
+                                let provider = data[0]
+                                let vendor = provider.vendor
+                                let company = provider.company
+                                let provider_detail = set(provider)
+                                _modal_product_provider_name.value = provider.name
+                                _modal_product_provider_id.value = provider.id
+                                _modal_product_provider_company_id.value = company.id
+                                _modal_product_vendor_name.value = provider.name
+                                _modal_product_vendor_id.value = vendor.id
+                                _modal_product_vendor_company_id.value = company.id
+                                
+                                initAutoComplete()
+                                
+                                Product.attr2 = (provider.code_direct_id) ? provider.code_direct_id : null
+                                Product.attr3 = (vendor.sku) ? vendor.sku : null
+                                Product.updateProductSKU()
+                                
+                            }
+                        }
+                    })
+                }
+            })
         }
     }
     
-    /**
-     * build provider object
-     *
-     * @returns {*}
-     */
-    const build = function () {
-        return remove_nulls({
-            location_id: (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null,
-            company_id: (!isNaN(parseInt(_provider_company_id.value))) ? parseInt(_provider_company_id.value) : null,
-            code_direct_id: (_provider_code_direct_id.value === "") ? null : _provider_code_direct_id.value,
-            id: (!isNaN(parseInt(_provider_id.value))) ? parseInt(_provider_id.value) : null,
-            provider_vendor: (_form_edit_provider) ? 1 : 0,
-            enabled: 1,
-        })
-    }
-    
-    /**
-     * validate for values
-     *
-     * @returns {*|jQuery}
-     */
-    const validate_form = function () {
-        return $(_form_edit_provider).valid()
-    }
-    
-    /**
-     * set provider object values
-     *
-     * @param provider
-     * @returns {{note: null, addresses: *[], company_id: null, date_created: *, code_direct_id: null, created_by: (number|number), enabled: number, provider_vendor: number, date_modified: *, vendor: {}, name: null, modified_by: (number|number), location: {}, company: {}, id: null, contacts: *[]}}
-     */
     const set = function (provider) {
         let detail = _default_detail()
         
@@ -18943,119 +26976,17 @@ const Provider = (function () {
         return detail
     }
     
-    /**
-     * enable form fields
-     */
-    const enable_form_fields = function () {
-        if (_provider_id.value !== "" && _provider_company_id.value !== "") {
-        
-        }
+    const build = function () {
+        return remove_nulls({
+            location_id: (!isNaN(parseInt(_location_id.value))) ? parseInt(_location_id.value) : null,
+            company_id: (!isNaN(parseInt(_provider_company_id.value))) ? parseInt(_provider_company_id.value) : null,
+            code_direct_id: (_provider_code_direct_id.value === "") ? null : _provider_code_direct_id.value,
+            id: (!isNaN(parseInt(_provider_id.value))) ? parseInt(_provider_id.value) : null,
+            provider_vendor: (_form_edit_provider) ? 1 : 0,
+            enabled: 1,
+        })
     }
     
-    /**
-     * regulate tab access
-     */
-    const set_progress = function () {
-        console.log("set_progress()")
-        let provider_id = (!isNaN(_provider_id.value)) ? _provider_id.value : null
-        let company_id = (!isNaN(_provider_company_id.value)) ? _provider_company_id.value : null
-        
-        if (company_id === null || company_id === "") {
-            $(_panel_tab_contact).addClass("disabled")
-            $(_panel_tab_address).addClass("disabled")
-            $(_panel_tab_provider).addClass("disabled")
-            $(_panel_tab_vendor).addClass("disabled")
-        } else {
-            $(_panel_tab_contact).removeClass("disabled")
-            $(_panel_tab_address).removeClass("disabled")
-            $(_panel_tab_provider).removeClass("disabled")
-            $(_panel_tab_vendor).removeClass("disabled")
-        }
-        
-        _button_save_provider.disabled = !(_company_id.value !== "" && _location_name_filter_id.value !== "")
-        
-    }
-    
-    /**
-     * disable form fields
-     */
-    const disable_form_fields = function () {
-        $(_provider_name).attr("readonly", true)
-        
-        if (_form_edit_provider) {
-            if (isNew) {
-                //$(_provider_name).attr("readonly", false)
-                //_company_cover_image.disabled = true
-                //_button_edit_provider_name.disabled = true
-                //$(_panel_tab_contact).addClass("disabled")
-                //$(_panel_tab_address).addClass("disabled")
-            } else {
-                $(_company_name).attr("readonly", true)
-            }
-        }
-        
-    }
-    
-    /**
-     * pupulate provider form
-     *
-     * @param provider
-     */
-    const populate_form = function (provider) {
-        if (provider) {
-            _provider_id.value = (provider.id) ? provider.id : null
-            $(_provider_name).val((provider.name) ? provider.name : null)
-            $(_company_name).val($(_provider_name).val())
-            _provider_company_id.value = (provider.company_id) ? provider.company_id : null
-            _provider_code_direct_id.value = (provider.code_direct_id) ? provider.code_direct_id : null
-            _provider_enabled.checked = (provider.enabled) ? (provider.enabled === 1) : true
-        }
-        
-    }
-    
-    /**
-     * reset provider form
-     */
-    const reset_form = function () {
-        _provider_id.value = ""
-        $(_provider_name).val("").trigger("change")
-        _provider_company_id.value = ""
-        _provider_code_direct_id.value = ""
-        _provider_enabled.checked = true
-    }
-    
-    /**
-     * fetch provider by name
-     *
-     * @param dataToSend
-     * @param callback
-     */
-    const fetch_provider_by_name = function (dataToSend, callback) {
-        let url = "/api/v1.0/providers/validate"
-        
-        if (dataToSend) {
-            try {
-                sendGetRequest(url, dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    } else {
-                        handle_provider_error("Oops: 1")
-                    }
-                })
-            } catch (e) {
-                console.log("error", e)
-                handle_provider_error("Error Validating Company")
-            }
-        } else {
-            handle_provider_error("Error Loading Company- Missing Data")
-        }
-    }
-    
-    /**
-     * initialize provider edit page
-     *
-     * @param settings
-     */
     const edit = function (settings) {
         let provider = {}
         let addresses = []
@@ -19066,7 +26997,7 @@ const Provider = (function () {
         //
         if (_form_edit_provider) {
             initAutoComplete()
-            validator_init(form_rules)
+            validator_init(formRules)
             validator = $(_form_edit_provider).validate()
         }
         
@@ -19104,18 +27035,123 @@ const Provider = (function () {
         set_progress()
     }
     
-    /**
-     * initialize provider object
-     *
-     * @param settings
-     */
     const init = function (settings) {
-        initAutoComplete()
+        console.log("Provider.init(settings)", settings)
+        // ----
+        
+        if (settings) {
+            if (settings.provider_detail) {
+                let detail = set(settings.provider_detail)
+                tempProvider = detail
+                
+                if (settings.provider_detail.company) {
+                    console.log("Provider.init(settings)", settings)
+                    
+                    Company.init(settings.provider_detail.company)
+                }
+                
+                populateProductEditProviderForm(detail)
+            }
+        }
+        
+        if (_product_edit_details_section_provider_form_filter) {
+            initAutoComplete()
+            closeProductEditProviderForm()
+        } else {
+            initAutoComplete()
+        }
+        
     }
     
-    /**
-     * return public params
-     */
+    const validate_form = function () {
+        return $(_form_edit_provider).valid()
+    }
+    
+    const enable_form_fields = function () {
+        if (_provider_id.value !== "" && _provider_company_id.value !== "") {
+        
+        }
+    }
+    
+    const disable_form_fields = function () {
+        $(_provider_name).attr("readonly", true)
+        
+        if (_form_edit_provider) {
+            if (isNew) {
+                //$(_provider_name).attr("readonly", false)
+                //_company_cover_image.disabled = true
+                //_button_edit_provider_name.disabled = true
+                //$(_panel_tab_contact).addClass("disabled")
+                //$(_panel_tab_address).addClass("disabled")
+            } else {
+                $(_company_name).attr("readonly", true)
+            }
+        }
+        
+    }
+    
+    const populate_form = function (provider) {
+        if (provider) {
+            _provider_id.value = (provider.id) ? provider.id : null
+            $(_provider_name).val((provider.name) ? provider.name : null)
+            $(_company_name).val($(_provider_name).val())
+            _provider_company_id.value = (provider.company_id) ? provider.company_id : null
+            _provider_code_direct_id.value = (provider.code_direct_id) ? provider.code_direct_id : null
+            _provider_enabled.checked = (provider.enabled) ? (provider.enabled === 1) : true
+        }
+        
+    }
+    
+    const reset_form = function () {
+        _provider_id.value = ""
+        $(_provider_name).val("").trigger("change")
+        _provider_company_id.value = ""
+        _provider_code_direct_id.value = ""
+        _provider_enabled.checked = true
+    }
+    
+    const fetch_provider_by_name = function (dataToSend, callback) {
+        let url = "/api/v1.0/providers/validate"
+        
+        if (dataToSend) {
+            try {
+                sendGetRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        handleProviderError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                //console.log("error", e)
+                handleProviderError("Error Validating Company")
+            }
+        } else {
+            handleProviderError("Error Loading Company- Missing Data")
+        }
+    }
+    
+    const set_progress = function () {
+        //console.log("set_progress()")
+        let provider_id = (!isNaN(_provider_id.value)) ? _provider_id.value : null
+        let company_id = (!isNaN(_provider_company_id.value)) ? _provider_company_id.value : null
+        
+        if (company_id === null || company_id === "") {
+            $(_panel_tab_contact).addClass("disabled")
+            $(_panel_tab_address).addClass("disabled")
+            $(_panel_tab_provider).addClass("disabled")
+            $(_panel_tab_vendor).addClass("disabled")
+        } else {
+            $(_panel_tab_contact).removeClass("disabled")
+            $(_panel_tab_address).removeClass("disabled")
+            $(_panel_tab_provider).removeClass("disabled")
+            $(_panel_tab_vendor).removeClass("disabled")
+        }
+        
+        _button_save_provider.disabled = !(_company_id.value !== "" && _location_name_filter_id.value !== "")
+        
+    }
+    
     return {
         validator: null,
         detail: {},
@@ -19132,13 +27168,13 @@ const Provider = (function () {
             }
         },
         load_all: function (params) {
-            load_all(params)
+            loadAll(params)
         },
         save: function (params) {
             save(params)
         },
-        init: function () {
-            init()
+        init: function (settings) {
+            init(settings)
         },
         reset_form: function () {
             reset_form()
@@ -19224,7 +27260,7 @@ const Profile = (function () {
      */
     const buildEditTable = function () {
         /*
-        Console.log("Profile.buildEditTable()", Profile)
+        //console.log("Profile.buildEditTable()", Profile)
         $table_profile_product_edit = $(_table_profile_product_edit).table({
             table_type: "display_list",
             data: [],
@@ -19242,7 +27278,7 @@ const Profile = (function () {
                     targets: 1,
                     data: "sales_types_details",
                     render: function (data, type, row, meta) {
-                        Console.log("sales_types_details", data)
+                        //console.log("sales_types_details", data)
                         let nights = 1
                         if (data === null) {
                             nights = "null"
@@ -19291,7 +27327,7 @@ const Profile = (function () {
     
     const initAutoComplete = function () {
         /*
-        Console.log("Profile.initAutoComplete()", Profile)
+        //console.log("Profile.initAutoComplete()", Profile)
         $(_product_edit_profile_form_profile_name_filter)
           .on("click", function () {
           
@@ -19319,7 +27355,7 @@ const Profile = (function () {
                   }
                   $table_profile_product_edit.clearSelectedRows()
                   let profile = suggestion.data
-                  Console.log("profile", profile)
+                  //console.log("profile", profile)
               },
           })
           
@@ -19422,15 +27458,15 @@ const Profile = (function () {
         
         $.each(profiles, function (k, profile) {
             let detail = set(profile)
-            Console.log("detail", detail)
+            //console.log("detail", detail)
         })
         
-        Console.log("Profile.all", Profile.all)
+        //console.log("Profile.all", Profile.all)
     }
     
     const set = function (profile) {
         let detail = defaultDetail()
-        Console.log("Profile.set(profile)", profile)
+        //console.log("Profile.set(profile)", profile)
         if (profile) {
             detail.advanced_booking_date = (profile.advanced_booking_date) ? profile.advanced_booking_date : null
             detail.advanced_booking_max = (profile.advanced_booking_max) ? profile.advanced_booking_max : null
@@ -19449,7 +27485,7 @@ const Profile = (function () {
     }
     
     const init = function (settings) {
-        //Console.log("Profile.init(settings)", settings)
+        //console.log("Profile.init(settings)", settings)
         let profiles = []
         if (settings) {
             if (settings.profiles) {
@@ -19488,7 +27524,7 @@ const Profile = (function () {
     }
     
     const edit = function (profile) {
-        Console.log("Profile.edit(profile)", profile)
+        //console.log("Profile.edit(profile)", profile)
     }
     
     return {
@@ -19503,6 +27539,3896 @@ const Profile = (function () {
     
 })()
 
+function FileManager (element, options) {
+    if (!(options && options.source && element)) {
+        console.log("Missing options.")
+        console.log("|__ options", options)
+        console.log("|__ options.source", options.source)
+        console.log("|__ options.sourceId", options.sourceId)
+        return
+    }
+    let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let source = options.source
+    let sourceId = options.sourceId
+    let baseId = "file_manager" + "_" + source
+    let defaults = {
+        defaultFile: "", // - /public/img/placeholder.jpg
+        maxFileSize: 0,
+        minWidth: 0,
+        maxWidth: 0,
+        minHeight: 0,
+        maxHeight: 0,
+        showRemove: true,
+        showLoader: true,
+        showErrors: true,
+        errorTimeout: 3000,
+        errorsPosition: "overlay",
+        imgFileExtensions: ["png", "jpg", "jpeg", "gif", "bmp", "webp"],
+        maxFileSizePreview: "5M",
+        allowedFormats: ["portrait", "square", "landscape"],
+        allowedFileExtensions: ["*"],
+        urls: {
+            "remove": `/`,
+            "update": `/`,
+            "get": `get`,
+            "upload": `/`,
+        },
+        messages: {
+            "default": "Drag and drop a file here or click",
+            "replace": "Drag and drop or click to replace",
+            "remove": "Remove",
+            "error": "Ooops, something wrong happended.",
+        },
+        error: {
+            "fileSize": "The file size is too big ({{ value }} max).",
+            "minWidth": "The image width is too small ({{ value }}}px min).",
+            "maxWidth": "The image width is too big ({{ value }}}px max).",
+            "minHeight": "The image height is too small ({{ value }}}px min).",
+            "maxHeight": "The image height is too big ({{ value }}px max).",
+            "imageFormat": "The image format is not allowed ({{ value }} only).",
+            "fileExtension": "The file is not allowed ({{ value }} only).",
+        },
+        tpl: {
+            gallery: {
+                wrap: ``,
+            },
+            preview: {
+                wrapper: `<section id="${baseId}_preview" class="mb-4 p-0 filemanager-preview-wrapper d-flex align-items-center justify-content-center" />`,
+                error: `<img id="${baseId}_image" src="/public/img/placeholder.jpg" alt="Preview Placeholder" class="img-fluid" />`,
+                container: `<div class="filemanager-preview "/>`,
+                loader: "<div class='filemanager-loader'></div>",
+                message: `<div class="filemanager-message w-100 text-center d-flex flex-column"><i class="fas fa-upload w-100 fa-4x mb-2"></i><p class="w-100 mt-4">Drag and drop a file here or click</p></div>`,//"<div class=\"fileManager-message\"><i class=\"fas fa-upload mr-2\"></i> <p>Drop File Here</p></div>",
+                errorsContainer: "<div class=\"filemanager-errors-container\"><ul></ul></div>",
+                errorLine: "<p class=\"filemanager-error\"></p>",
+                clearButton: `<button type="button" class="filemanager-clear">remove</button>`,
+            },
+            filename: "<p class=\"fileManager-filename\"><span class=\"fileManager-filename-inner\"></span></p>",
+        },
+    }
+    
+    this.userId = userId
+    this.element = element
+    this.source = source
+    this.sourceId = sourceId
+    this.baseId = baseId
+    this.isInit = false
+    this.errorsEvent = $.Event("filemanager.errors")
+    this.errorsEvent.errors = []
+    this.isDisabled = false
+    this.all = new Map()
+    this.images = (options.images) ? options.images : []
+    this.inputs = {
+        labels: {},
+        buttons: {},
+        fields: {},
+        displays: {},
+        errors: {},
+    }
+    this.detail = {
+        alt: null,
+        caption: null,
+        created_by: userId,
+        date_created: formatDateMySQL(),
+        date_modified: formatDateMySQL(),
+        dimensions: null,
+        enabled: 1,
+        extension: null,
+        height: null,
+        id: null,
+        is_cover: 0,
+        is_shown: 1,
+        modified_by: userId,
+        name: null,
+        note: null,
+        path: null,
+        size: null,
+        thumbs_path: null,
+        title: null,
+        width: null,
+    }
+    this.file = {
+        object: null,
+        name: null,
+        size: null,
+        width: null,
+        height: null,
+        type: null,
+    }
+    this.settings = $.extend(true, defaults, options)
+    
+    if (!Array.isArray(this.settings.allowedFormats)) {
+        this.settings.allowedFormats = this.settings.allowedFormats.split(" ")
+    }
+    
+    if (!Array.isArray(this.settings.allowedFileExtensions)) {
+        this.settings.allowedFileExtensions = this.settings.allowedFileExtensions.split(" ")
+    }
+    
+    this.uploadProgress = this.uploadProgress.bind(this)
+    this.uploadComplete = this.uploadComplete.bind(this)
+    this.uploadFailed = this.uploadFailed.bind(this)
+    this.uploadCanceled = this.uploadCanceled.bind(this)
+    this.validate = this.validate.bind(this)
+    this.isShown = this.isShown.bind(this)
+    this.isCover = this.isCover.bind(this)
+    this.clearElement = this.clearElement.bind(this)
+    this.formHide = this.formHide.bind(this)
+    this.formShow = this.formShow.bind(this)
+    this.formRemove = this.formRemove.bind(this)
+    this.formCancel = this.formCancel.bind(this)
+    this.onChange = this.onChange.bind(this)
+    this.formClear = this.formClear.bind(this)
+    this.fileSelected = this.fileSelected.bind(this)
+    this.formReset = this.formReset.bind(this)
+    this.open = this.open.bind(this)
+    this.load = this.load.bind(this)
+    this.onFileReady = this.onFileReady.bind(this)
+    this.displaySet = this.displaySet.bind(this)
+    this.buildImageThumbnails = this.buildImageThumbnails.bind(this)
+    this.formUpload = this.formUpload.bind(this)
+    this.sendUpdateRequest = this.sendUpdateRequest.bind(this)
+    
+    this.init(options)
+    //this.translateMessages()
+    this.createElements()
+    this.assignEvents()
+    this.loadAll()
+    
+    this.formReset()
+}
+
+FileManager.prototype.createPreviewElements = function () {
+    console.log("FileManager.createPreviewElements()")
+    // ----
+    
+    let messageWrapper
+    
+    this.previewWrapper = $(this.settings.tpl.preview.wrapper)
+    this.previewLoader = $(this.settings.tpl.preview.loader)
+    this.previewContainer = $(this.settings.tpl.preview.container)
+    this.previewMessage = $(this.settings.tpl.preview.message)
+    
+    this.previewWrapper.append(this.previewContainer)
+    
+    messageWrapper = $(this.settings.tpl.preview.message).insertBefore(this.previewContainer)
+    $(this.settings.tpl.preview.errorLine).appendTo(messageWrapper)
+    
+    if (this.settings.showLoader === true) {
+        this.loader = $(this.settings.tpl.preview.loader)
+        this.previewWrapper.append(this.loader)
+        this.hideLoader()
+    }
+    
+    if (this.settings.showErrors === true) {
+        this.previewErrorsContainer = $(this.settings.tpl.preview.errorsContainer)
+        
+        if (this.settings.errorsPosition === "outside") {
+            this.previewErrorsContainer.insertAfter(this.previewWrapper)
+        } else {
+            this.previewWrapper.append(this.previewErrorsContainer)
+        }
+    }
+    
+    if (this.isDisabled === false && this.settings.showRemove === true) {
+        this.clearButton = $(this.settings.tpl.preview.clearButton)
+        this.previewWrapper.append(this.clearButton)
+        this.clearButton.on("click", this.clearElement)
+    }
+    
+    let defaultFile = this.settings.defaultFile || ""
+    if (defaultFile.trim() !== "") {
+        this.file.name = this.cleanFilename(defaultFile)
+        this.setPreview(this.isImage(), defaultFile)
+    }
+    
+    this.preview = this.previewWrapper
+}
+FileManager.prototype.setPreview = function (previewable, src) {
+    console.log("FileManager.setPreview(previewable, src)", this)
+    // ----
+    
+    let render = this.previewContainer
+    
+    this.hideLoader()
+    this.preview.removeClass("has-error").addClass("has-preview")
+    
+    if (previewable === true) {
+        let imgTag = $("<img alt='File Preview' class='img-fluid' src='" + src + "'/>")
+        
+        if (this.settings.height) {
+            imgTag.css("max-height", this.settings.height)
+        }
+        
+        this.previewContainer.empty()
+        imgTag.appendTo(render)
+    } else {
+        $("<i />").attr("class", "filemanager-font-file").appendTo(render)
+        $("<span class=\"filemanager-extension\" />").html(this.getFileType()).appendTo(render)
+    }
+    
+    this.formShow()
+}
+FileManager.prototype.resetPreview = function () {
+    console.log("FileManager.resetPreview()")
+    // ----
+    
+    let render = this.previewContainer
+    this.preview.removeClass("has-error")
+    this.preview.removeClass("has-preview")
+    render.find(".filemanager-extension").remove()
+    render.find("i").remove()
+    render.find("img").remove()
+    
+    this.hideLoader()
+}
+FileManager.prototype.clearElement = function () {
+    console.log("FileManager.clearElement()")
+    // ----
+    
+    if (this.errorsEvent.errors.length === 0) {
+        let eventBefore = $.Event("filemanager.beforeClear")
+        this.inputs.fields.imageFile.trigger(eventBefore, [this])
+        
+        if (eventBefore.result !== false) {
+            this.resetFile()
+            this.inputs.fields.imageFile.val("")
+            this.resetPreview()
+            
+            this.inputs.fields.imageFile.trigger($.Event("filemanager.afterClear"), [this])
+            
+        }
+        
+        this.formClear()
+        this.displayClear()
+        this.formHide()
+    }
+}
+FileManager.prototype.hideLoader = function (input) {
+    $(this.loader).hide()
+}
+FileManager.prototype.showLoader = function (input) {
+    $(this.loader).show()
+}
+FileManager.prototype.clearErrors = function () {
+    console.log("FileManager.clearErrors()")
+    // ----
+    
+    this.preview.removeClass("has-errors")
+    if (typeof this.previewErrorsContainer !== "undefined") {
+        this.previewErrorsContainer.children("ul").html("")
+    }
+}
+FileManager.prototype.pushError = function (errorKey) {
+    console.log("FileManager.pushError(errorKey)", errorKey)
+    // ----
+    
+    let e = $.Event("filemanager.error." + errorKey)
+    this.errorsEvent.errors.push(e)
+    this.inputs.fields.imageFile.trigger(e, [this])
+    console.log("|__ this.errorsEvent.errors", this.errorsEvent.errors)
+}
+FileManager.prototype.showError = function (errorKey) {
+    console.log("FileManager.showError(errorKey)", errorKey)
+    // ----
+    
+    if (typeof this.previewErrorsContainer !== "undefined") {
+        this.previewErrorsContainer.children("ul").append("<li>" + this.getError(errorKey) + "</li>")
+    }
+}
+FileManager.prototype.getError = function (errorKey) {
+    console.log("FileManager.getError(errorKey)", errorKey)
+    // ----
+    
+    let error = this.settings.error[errorKey],
+        value = ""
+    
+    if (errorKey === "fileSize") {
+        value = this.settings.maxFileSize
+    } else if (errorKey === "minWidth") {
+        value = this.settings.minWidth
+    } else if (errorKey === "maxWidth") {
+        value = this.settings.maxWidth
+    } else if (errorKey === "minHeight") {
+        value = this.settings.minHeight
+    } else if (errorKey === "maxHeight") {
+        value = this.settings.maxHeight
+    } else if (errorKey === "imageFormat") {
+        value = this.settings.allowedFormats.join(", ")
+    } else if (errorKey === "fileExtension") {
+        value = this.settings.allowedFileExtensions.join(", ")
+    }
+    
+    if (value !== "") {
+        return error.replace("{{ value }}", value)
+    }
+    
+    return error
+}
+FileManager.prototype.createElements = function () {
+    this.isInit = true
+    
+    // Wrapper Elements
+    
+    // Button Elements
+    this.inputs.buttons.close = $(`<a href="javascript:void(0);" id="${this.baseId + "_form_button_close"}" class="panel-button-close fas fa-times"/>`)
+    this.inputs.buttons.upload = $(`<button type="button" id="${this.baseId + "_form_button_upload"}" name="submit" class="btn btn-primary btn-sm waves-effect waves-light" >upload</button>`)
+    this.inputs.buttons.clear = $(`<button type="button" id="${this.baseId + "_form_button_clear"}" name="clear" class="btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light" >clear</button>`)
+    this.inputs.buttons.cancel = $(`<button type="button" id="${this.baseId + "_form_button_cancel"}" name="cancel" class="btn btn-danger btn-sm waves-effect waves-light" >cancel</button>`)
+    this.inputs.buttons.remove = $(`<button type="button" id="${this.baseId + "_form_button_remove"}" name="remove" class="btn btn-outline-danger btn-sm waves-effect waves-ligh" >remove</button>`)
+    
+    // Field Elements
+    this.inputs.fields.imageFile = $(`<input type="file" id="${this.baseId + "_form_file_upload"}" name="${this.baseId + "_form_file_upload"}" />`)
+    this.inputs.fields.imageId = $(`<input type="text" id="${this.baseId + "_form_id"}" name="${this.baseId + "_form_id"}" value="" placeholder="" class="form-control" readonly="readonly"/>`)
+    this.inputs.fields.imageName = $(`<input type="text" id="${this.baseId + "_form_name"}" name="${this.baseId + "_form_name"}" value="" placeholder="" class="form-control" readonly="readonly"/>`)
+    this.inputs.fields.imageEnabled = $(`<input type="checkbox" id="${this.baseId + "_form_enabled"}" name="${this.baseId + "_form_enabled"}" value="1" class="custom-control-input" />`)
+    this.inputs.fields.imageIsShown = $(`<input type="checkbox" id="${this.baseId + "_form_is_shown"}" name="${this.baseId + "_form_is_shown"}" value="1" class="custom-control-input" />`)
+    this.inputs.fields.imageIsCover = $(`<input type="checkbox" id="${this.baseId + "_form_is_cover"}" name="${this.baseId + "_form_is_cover"}" value="1" class="custom-control-input" />`)
+    this.inputs.fields.imageCaption = $(`<textarea id="${this.baseId + "_form_caption"}" name="${this.baseId + "_form_caption"}" class="md-textarea short-description form-control" rows="4" maxlength="200"/>`)
+    this.inputs.fields.imageAlt = $(`<input type="text" id="${this.baseId + "_form_alt"}" name="${this.baseId + "_form_alt"}" class="form-control"/>`)
+    this.inputs.fields.imageTitle = $(`<input type="text" id="${this.baseId + "_form_title"}" name="${this.baseId + "_form_title"}" class="form-control"/>`)
+    this.input = this.inputs.fields.imageFile
+    
+    // Error Elements
+    this.inputs.errors.imageFile = $(`<div id="${this.baseId + '_form_enabled'}-error" class="error w-100 text-center"/>`)
+    this.inputs.errors.imageId = $(`<div id="${this.baseId + '_form_id'}-error" class="error w-100 text-center"/>`)
+    this.inputs.errors.imageName = $(`<div id="${this.baseId + '_form_name'}-error" class="error w-100 text-center"/>`)
+    this.inputs.errors.imageEnabled = $(`<div id="${this.baseId + '_form_enabled'}-error" class="error w-100 text-center"/>`)
+    this.inputs.errors.imageIsShown = $(`<div id="${this.baseId + '_form_is_shown'}-error" class="error w-100 text-center"/>`)
+    this.inputs.errors.imageIsCover = $(`<div id="${this.baseId + '_form_is_cover'}-error" class="error w-100 text-center"/>`)
+    this.inputs.errors.imageCaption = $(`<div id="${this.baseId + '_form_caption'}-error" class="error w-100 text-center"/>`)
+    this.inputs.errors.imageAlt = $(`<div id="${this.baseId + '_form_alt'}-error" class="error w-100 text-center"/>`)
+    this.inputs.errors.imageTitle = $(`<div id="${this.baseId + '_form_title'}-error" class="error w-100 text-center"/>`)
+    
+    // Label Elements
+    this.inputs.labels.imageEnabled = $(`<label for="${this.baseId + "_form_enabled"}" class="custom-control-label p-0">Enabled</label>`)
+    this.inputs.labels.imageIsShown = $(`<label for="${this.baseId + "_form_is_shown"}" class="custom-control-label p-0">Shown</label>`)
+    this.inputs.labels.imageIsCover = $(`<label for="${this.baseId + "_form_is_cover"}" class="custom-control-label p-0">Cover</label>`)
+    this.inputs.labels.imageId = $(`<label for="${this.baseId + '_form_enabled'}" >Id:</label>`)
+    this.inputs.labels.imageTitle = $(`<label for="${this.baseId + '_form_title'}" >Title:</label>`)
+    this.inputs.labels.imageAlt = $(`<label for="${this.baseId + '_form_alt'}" >Alt:</label>`)
+    this.inputs.labels.imageCaption = $(`<label for="${this.baseId + '_form_caption'}" >Caption:</label>`)
+    this.inputs.labels.imageNameField = $(`<label for="${this.baseId + '_form_name'}" >Name:</label>`)
+    this.inputs.labels.imageNameDetail = $(`<span class="font-weight-bolder" >Name:</span>`)
+    this.inputs.labels.imageRatio = $(`<span class="font-weight-bolder" >Ratio:</span>`)
+    this.inputs.labels.imageSize = $(`<span class="font-weight-bolder" >Size:</span>`)
+    this.inputs.labels.imageExtension = $(`<span class="font-weight-bolder" >Extension:</span>`)
+    this.inputs.labels.imageDimensions = $(`<span class="font-weight-bolder" >Dimensions:</span>`)
+    this.inputs.labels.imageType = $(`<span class="font-weight-bolder" >Type:</span>`)
+    this.inputs.labels.imageHeight = $(`<span class="font-weight-bolder" >Height:</span>`)
+    this.inputs.labels.imageWidth = $(`<span class="font-weight-bolder" >Width:</span>`)
+    
+    // Display Elements
+    this.inputs.displays.imageRatio = $(`<span id="${this.baseId + "_form_ratio"}" />`)
+    this.inputs.displays.imageHeight = $(`<span id="${this.baseId + "_form_height"}" />`)
+    this.inputs.displays.imageWidth = $(`<span id="${this.baseId + "_form_width"}" />`)
+    this.inputs.displays.imageSize = $(`<span id="${this.baseId + "_form_size"}" />`)
+    this.inputs.displays.imageExtension = $(`<span id="${this.baseId + "_form_extension"}"/>`)
+    this.inputs.displays.imageName = $(`<span id="${this.baseId + "_form_name"}" />`)
+    this.inputs.displays.imageDimensions = $(`<span id="${this.baseId + "_form_dimensions"}" />`)
+    this.inputs.displays.imageType = $(`<span id="${this.baseId + "_form_type"}" />`)
+    
+    // Preview Elements
+    this.createPreviewElements()
+    
+    // Detail Elements
+    this.detailSection = $(`<section id="${this.baseId + "_detail"}" class="card card-body grey lighten-3 p-3 mb-2"/>`)
+    
+    this.render()
+}
+FileManager.prototype.fileGallery = function () {
+    let sectionName = "gallery"
+    let sectionTitle = (this.source) ? this.source.ucwords() + " Images:" : "Files"
+    let $WRAPPER_SUBHEADING, $WRAPPER_HEADING_SPAN, $WRAPPER_HEADING, $WRAPPER, $HR,
+        $FIELD_FILE_UPLOAD, $WRAPPER_FILE_UPLOAD, $BUTTON_FILE_UPLOAD, $SPAN_FILE_UPLOAD,
+        $WRAPPER_HEADING_ICON, $COL_2_1, $ROW_1, $ROW_2
+    
+    $WRAPPER_HEADING_ICON = $(`<i/>`, {
+        class: "fas fa-sliders-h",
+    })
+    
+    $WRAPPER_HEADING_SPAN = $(`<span/>`, {
+        text: sectionTitle,
+    })
+    
+    this.inputs.buttons.toggle = $(`<a/>`, {
+        id: this.baseId + "_" + sectionName + "_" + "toggle",
+    })
+        .append($WRAPPER_HEADING_ICON)
+    
+    $HR = $(`<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>`)
+    
+    $WRAPPER_HEADING = $(`<h5/>`, {
+        class: "card-title label",
+        id: this.baseId + "_" + sectionName + "_" + "heading",
+    })
+    
+    $WRAPPER_HEADING.append($WRAPPER_HEADING_SPAN)
+    
+    $WRAPPER_SUBHEADING = $(`<div/>`, {
+        class: "d-flex justify-content-between",
+    })
+        .append($WRAPPER_HEADING, this.inputs.buttons.toggle)
+    
+    this.galleryContainer = $("<div/>", {
+        id: this.baseId + "_" + sectionName + "_" + "container",
+        class: "row",
+    })
+    
+    $SPAN_FILE_UPLOAD = $("<span/>", {
+        text: "Choose File",
+        id: this.baseId + "_" + sectionName + "_" + "file_upload_label",
+    })
+    
+    this.inputs.fields.imageFileButton = $("<div/>", {
+        class: "btn btn-secondary btn-sm waves-effect waves-light",
+    })
+        .append($SPAN_FILE_UPLOAD, this.inputs.fields.imageFile)
+    
+    $WRAPPER_FILE_UPLOAD = $("<div/>", {
+        class: "d-flex justify-content-end mb-2",
+    })
+        .append(this.inputs.fields.imageFileButton)
+    
+    $FIELD_FILE_UPLOAD = $("<div/>", {
+        class: "file-field",
+    })
+        .append($WRAPPER_FILE_UPLOAD)
+    
+    $COL_2_1 = $("<div/>", {
+        class: "col-12",
+    })
+        .append($FIELD_FILE_UPLOAD)
+    
+    $ROW_2 = $("<div/>", {
+        class: "row",
+    })
+        .append($COL_2_1)
+    
+    $WRAPPER = $(`<section/>`, {
+        class: "card card-body z-depth-0 mb-2",
+        id: this.baseId + "_" + sectionName,
+    })
+        .append($WRAPPER_SUBHEADING, $HR, this.galleryContainer, $ROW_2)
+    
+    return $WRAPPER
+}
+FileManager.prototype.fileFormFields = function () {
+    let $WRAPPER, $ROW_1, $ROW_2, $ROW_3, $ROW_4, $ROW_5, $ROW_6, $CHECK_WRAPPER_ENABLED, $CHECK_WRAPPER_IS_SHOWN,
+        $CHECK_WRAPPER_IS_COVER, $COL_1_1, $COL_1_2, $COL_2_1, $COL_2_2, $COL_2_3, $COL_3_1, $COL_4_1, $COL_5_1,
+        $COL_6_1, $WRAPPER_ID, $WRAPPER_NAME, $WRAPPER_ENABLED, $WRAPPER_IS_SHOWN, $WRAPPER_IS_COVER,
+        $WRAPPER_TITLE, $WRAPPER_ALT, $WRAPPER_CAPTION, $ROW_7, $COL_7_1, $COL_7_2, $PROGRESS_WRAPPER
+    
+    $WRAPPER_ID = $("<div class='form-element'/>")
+    $WRAPPER_NAME = $("<div class='form-element'/>")
+    $WRAPPER_ENABLED = $("<div class='form-element'/>")
+    $WRAPPER_IS_SHOWN = $("<div class='form-element'/>")
+    $WRAPPER_IS_COVER = $("<div class='form-element'/>")
+    $WRAPPER_CAPTION = $("<div class='form-element mb-4'/>")
+    $WRAPPER_ALT = $("<div class='form-element'/>")
+    $WRAPPER_TITLE = $("<div class='form-element'/>")
+    
+    $CHECK_WRAPPER_ENABLED = $("<div/>", { class: "custom-control custom-switch" })
+        .append(this.inputs.fields.imageEnabled, this.inputs.labels.imageEnabled)
+    $CHECK_WRAPPER_IS_SHOWN = $("<div/>", { class: "custom-control custom-switch" })
+        .append(this.inputs.fields.imageIsShown, this.inputs.labels.imageIsShown)
+    $CHECK_WRAPPER_IS_COVER = $("<div/>", { class: "custom-control custom-switch" })
+        .append(this.inputs.fields.imageIsCover, this.inputs.labels.imageIsCover)
+    
+    $WRAPPER_ID.append(this.inputs.labels.imageId, this.inputs.fields.imageId, this.inputs.errors.imageId)
+    $WRAPPER_NAME.append(this.inputs.labels.imageNameField, this.inputs.fields.imageName, this.inputs.errors.imageName)
+    $WRAPPER_ENABLED.append($CHECK_WRAPPER_ENABLED, this.inputs.errors.imageEnabled)
+    $WRAPPER_IS_COVER.append($CHECK_WRAPPER_IS_COVER, this.inputs.errors.imageIsCover)
+    $WRAPPER_IS_SHOWN.append($CHECK_WRAPPER_IS_SHOWN, this.inputs.errors.imageIsShown)
+    $WRAPPER_TITLE.append(this.inputs.labels.imageTitle, this.inputs.fields.imageTitle, this.inputs.errors.imageTitle)
+    $WRAPPER_ALT.append(this.inputs.labels.imageAlt, this.inputs.fields.imageAlt, this.inputs.errors.imageAlt)
+    $WRAPPER_CAPTION.append(this.inputs.labels.imageCaption, this.inputs.fields.imageCaption, this.inputs.errors.imageCaption)
+    
+    this.inputs.fields.progress = $(`<div id="${this.baseId + "_progress"}" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"/>`)
+    $PROGRESS_WRAPPER = $("<div class='progress'/>")
+        .append(this.inputs.fields.progress)
+    
+    $COL_1_1 = $("<div/>", { class: "col-12 col-md-6" })
+        .append($WRAPPER_ID)
+    $COL_1_2 = $("<div/>", { class: "col-12 col-md-6" })
+        .append($WRAPPER_NAME)
+    $COL_2_1 = $("<div/>", { class: "col-12 col-md-4 d-flex align-self-end justify-content-center pb-2 mb-2 mt-4" })
+        .append($WRAPPER_ENABLED)
+    $COL_2_2 = $("<div/>", { class: "col-12 col-md-4 d-flex align-self-end justify-content-center pb-2 mb-2 mt-4" })
+        .append($WRAPPER_IS_SHOWN)
+    $COL_2_3 = $("<div/>", { class: "col-12 col-md-4 d-flex align-self-end justify-content-center pb-2 mb-2 mt-4" })
+        .append($WRAPPER_IS_COVER)
+    $COL_3_1 = $("<div/>", { class: "col-12" })
+        .append($WRAPPER_TITLE)
+    $COL_4_1 = $("<div/>", { class: "col-12" })
+        .append($WRAPPER_ALT)
+    $COL_5_1 = $("<div/>", { class: "col-12" })
+        .append($WRAPPER_CAPTION)
+    $COL_6_1 = $("<div/>", { class: "col-12" })
+        .append($PROGRESS_WRAPPER)
+    $COL_7_1 = $("<div/>", { class: "col-12 col-md-6 text-left" })
+        .append(this.inputs.buttons.cancel, this.inputs.buttons.remove)
+    $COL_7_2 = $("<div/>", { class: "col-12 col-md-6 text-right" })
+        .append(this.inputs.buttons.clear, this.inputs.buttons.upload)
+    
+    //Rows
+    $ROW_1 = $("<div/>", { class: "row" })
+        .append($COL_1_1, $COL_1_2)
+    $ROW_2 = $("<div/>", { class: "row" })
+        .append($COL_2_1, $COL_2_2, $COL_2_3)
+    $ROW_3 = $("<div/>", { class: "row" })
+        .append($COL_3_1)
+    $ROW_4 = $("<div/>", { class: "row" })
+        .append($COL_4_1)
+    $ROW_5 = $("<div/>", { class: "row" })
+        .append($COL_5_1)
+    $ROW_6 = $("<div/>", { class: "row mt-2" })
+        .append($COL_6_1)
+    $ROW_7 = $("<div/>", { class: "row mt-2" })
+        .append($COL_7_1, $COL_7_2)
+    
+    $WRAPPER = $("<section/>", {
+        id: this.baseId + "_" + "form_data",
+    })
+        .append($ROW_1, $ROW_2, $ROW_3, $ROW_4, $ROW_5, $ROW_6, $ROW_7)
+    
+    return $WRAPPER
+}
+FileManager.prototype.fileForm = function () {
+    let $WRAPPER_SUBHEADING, $WRAPPER_HEADING_SPAN, $WRAPPER_HEADING, $WRAPPER, $HR
+    let sectionName = "form"
+    
+    this.form = $(`<form id="${this.baseId}_${sectionName}" class="card card-body z-depth-0 mb-2" novalidate="novalidate"/>`)
+    
+    $WRAPPER_HEADING_SPAN = $(`<span/>`, {
+        text: "Image",
+    })
+    
+    $WRAPPER_HEADING = $(`<h5/>`, {
+        class: "card-title",
+        id: this.baseId + "_" + sectionName + "_" + "heading",
+    })
+    
+    $WRAPPER_SUBHEADING = $(`<h6/>`, {
+        id: this.baseId + "_" + sectionName + "_" + "subheading",
+    })
+    
+    $HR = $(`<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>`)
+    
+    $WRAPPER_HEADING.append($WRAPPER_HEADING_SPAN, this.inputs.buttons.close)
+    
+    this.form.append($WRAPPER_HEADING, $WRAPPER_SUBHEADING, $HR, this.preview, this.fileDetail(this), this.fileFormFields(this))
+    
+    return this.form
+}
+FileManager.prototype.fileDetail = function () {
+    let $ROW_1, $ROW_2, $ROW_3, $ROW_4, $COL_1_1, $COL_1_2, $COL_1_3, $COL_1_4,
+        $COL_2_1, $COL_2_2, $COL_2_3, $COL_2_4, $COL_3_1, $COL_3_2, $COL_3_3, $COL_3_4,
+        $COL_4_1, $COL_4_2, $COL_4_3, $COL_4_4
+    
+    $COL_1_1 = $(`<div class="col-12 col-md-3 p-1 text-truncate"/>`).append(this.inputs.labels.imageNameDetail)
+    $COL_1_2 = $(`<div class="col-12 col-md-3 p-1 text-truncate"/>`).append(this.inputs.displays.imageName)
+    $COL_1_3 = $(`<div class="col-12 col-md-3 p-1 text-truncate"/>`).append(this.inputs.labels.imageSize)
+    $COL_1_4 = $(`<div class="col-12 col-md-3 p-1 text-truncate"/>`).append(this.inputs.displays.imageSize)
+    $COL_2_1 = $(`<div class="col-12 col-md-3 p-1 text-truncate"/>`).append(this.inputs.labels.imageDimensions)
+    $COL_2_2 = $(`<div class="col-12 col-md-3 p-1 text-truncate"/>`).append(this.inputs.displays.imageDimensions)
+    $COL_2_3 = $(`<div class="col-12 col-md-3 p-1 text-truncate"/>`).append(this.inputs.labels.imageRatio)
+    $COL_2_4 = $(`<div class="col-12 col-md-3 p-1 text-truncate"/>`).append(this.inputs.displays.imageRatio)
+    $COL_3_1 = $(`<div class="col-12 col-md-3 p-1 text-truncate"/>`).append(this.inputs.labels.imageHeight)
+    $COL_3_2 = $(`<div class="col-12 col-md-3 p-1 text-truncate"/>`).append(this.inputs.displays.imageHeight)
+    $COL_3_3 = $(`<div class="col-12 col-md-3 p-1 text-truncate"/>`).append(this.inputs.labels.imageWidth)
+    $COL_3_4 = $(`<div class="col-12 col-md-3 p-1 text-truncate"/>`).append(this.inputs.displays.imageWidth)
+    $COL_4_1 = $(`<div class="col-12 col-md-3 p-1 text-truncate"/>`).append(this.inputs.labels.imageType)
+    $COL_4_2 = $(`<div class="col-12 col-md-3 p-1 text-truncate"/>`).append(this.inputs.displays.imageType)
+    $COL_4_3 = $(`<div class="col-12 col-md-3 p-1 text-truncate"/>`).append(this.inputs.labels.imageExtension)
+    $COL_4_4 = $(`<div class="col-12 col-md-3 p-1 text-truncate"/>`).append(this.inputs.displays.imageExtension)
+    
+    $ROW_1 = $(`<div/>`, { class: "row" }).append($COL_1_1, $COL_1_2, $COL_1_3, $COL_1_4)
+    $ROW_2 = $(`<div/>`, { class: "row" }).append($COL_2_1, $COL_2_2, $COL_2_3, $COL_2_4)
+    $ROW_3 = $(`<div/>`, { class: "row" }).append($COL_3_1, $COL_3_2, $COL_3_3, $COL_3_4)
+    $ROW_4 = $(`<div/>`, { class: "row" }).append($COL_4_1, $COL_4_2, $COL_4_3, $COL_4_4)
+    
+    this.detailSection.append($ROW_1, $ROW_2, $ROW_3, $ROW_4)
+    
+    return this.detailSection
+}
+FileManager.prototype.formShow = function () {
+    console.log("this.formShow()")
+    // ----
+    let _input_file = document.getElementById(this.inputs.fields.imageFile.attr("id"))
+    let _input_toggle = document.getElementById(this.inputs.buttons.toggle.attr("id"))
+    
+    this.form.show()
+    
+    _input_toggle.disabled = true
+    _input_file.disabled = true
+}
+FileManager.prototype.formHide = function () {
+    console.log("this.formHide()")
+    // ----
+    
+    let _input_file = document.getElementById(this.inputs.fields.imageFile.attr("id"))
+    let _input_toggle = document.getElementById(this.inputs.buttons.toggle.attr("id"))
+    
+    this.form.hide()
+    
+    this.inputs.buttons.upload.html("upload")
+    
+    _input_toggle.disabled = false
+    _input_file.disabled = false
+}
+FileManager.prototype.formClear = function () {
+    console.log("FileManager.formClear()", this.inputs)
+    // ----
+    
+    let _progress_bar = document.getElementById(this.inputs.fields.progress.attr("id"))
+    
+    $(this.inputs.fields.imageId).val("")
+    $(this.inputs.fields.imageName).val("")
+    $(this.inputs.fields.imageAlt).val("")
+    $(this.inputs.fields.imageTitle).val("")
+    $(this.inputs.fields.imageCaption).val("")
+    
+    $(this.inputs.fields.imageIsCover).attr("checked", false)
+    $(this.inputs.fields.imageEnabled).attr("checked", true)
+    $(this.inputs.fields.imageIsShown).attr("checked", true)
+    
+    $("img.selected").removeClass("selected")
+    
+    $(_progress_bar).css({
+        "width": "0%",
+        "background-color": "#007bff",
+        "color": "#fff",
+    })
+    
+    clearValidation(this.form)
+}
+FileManager.prototype.formReset = function () {
+    console.log("this.formReset()")
+    // ----
+    
+    this.formClear()
+    this.displayClear()
+    this.resetPreview()
+    this.clearSelected()
+}
+FileManager.prototype.formCancel = function () {
+    console.log("FileManager.formCancel()")
+    // ----
+    
+    this.formReset()
+    this.formHide()
+}
+FileManager.prototype.formRemove = function () {
+    console.log("FileManager.formRemove()")
+    // ----
+    const _image_id = this.inputs.fields.imageId[0]
+    
+    let _this = this
+    
+    if (_image_id) {
+        let imageId = (!isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
+        
+        if (imageId !== null) {
+            console.log("|__ imageId", imageId)
+            let image = _this.all.get(imageId)
+            if (image) {
+                console.log("|__ image", image)
+                let el = document.getElementById("image_" + imageId)
+                if (el) {
+                    confirmDialog(`Would you like to delete this image?`, (ans) => {
+                        if (ans) {
+                            this.sendRemoveRequest({
+                                image_id: imageId,
+                                source: _this.source,
+                                source_id: _this.sourceId,
+                            }, function (data) {
+                                if (data && data.deleted) {
+                                    
+                                    if (data.deleted === true || data.deleted === "true") {
+                                        _this.all.delete(imageId)
+                                        $(el).parent("div").remove()
+                                        _this.formReset()
+                                        _this.formHide()
+                                        toastr["success"]("File Removed", "File Manager")
+                                    }
+                                }
+                            })
+                        }
+                    })
+                }
+            }
+        }
+    }
+}
+FileManager.prototype.formLoad = function (image) {
+    console.log("FileManager.formLoad(image)", image)
+    // ----
+    
+    if (image) {
+        let imageId = (!isNaN(parseInt(image.id))) ? parseInt(image.id) : null
+        let imageName = (image.name) ? image.name : null
+        let imageTitle = (image.title) ? image.title : null
+        let imageAlt = (image.alt) ? image.alt : null
+        let imageCaption = (image.caption) ? image.caption : null
+        let imageEnabled = (image.enabled && image.enabled === 1)
+        let imageIsShown = !!(image.is_shown && image.is_shown === 1)
+        let imageIsCover = !!(image.is_cover && image.is_cover === 1)
+        let filePath = (image.path) ? image.path : null
+        let fileName = (image.name) ? image.name : null
+        let fileExtension = (image.extension) ? image.extension : null
+        
+        //*
+        console.log("|__ imageId", imageId)
+        console.log("|__ imageName", imageName)
+        console.log("|__ imageTitle", imageTitle)
+        console.log("|__ imageAlt", imageAlt)
+        console.log("|__ imageCaption", imageCaption)
+        console.log("|__ imageEnabled", imageEnabled)
+        console.log("|__ imageIsShown", imageIsShown)
+        console.log("|__ imageIsCover", imageIsCover)
+        //*/
+        
+        $(this.inputs.fields.imageId).val(imageId)
+        $(this.inputs.fields.imageName).val(imageName)
+        $(this.inputs.fields.imageAlt).val(imageAlt)
+        $(this.inputs.fields.imageTitle).val(imageTitle)
+        $(this.inputs.fields.imageCaption).val(imageCaption)
+        
+        $(this.inputs.fields.imageIsCover).attr("checked", imageIsCover)
+        $(this.inputs.fields.imageEnabled).attr("checked", imageEnabled)
+        $(this.inputs.fields.imageIsShown).attr("checked", imageIsShown)
+        
+        let path = (!is_null(filePath) && !is_null(fileName) && !is_null(fileExtension)) ? `${filePath}/${fileName}.${fileExtension}` : (this.settings.defaultFile) ? this.settings.defaultFile : null
+        console.log("|__ path", path)
+        
+        this.setPreview(this.isImage(), path)
+        
+        this.displaySet()
+        
+        this.form.show()
+    }
+}
+FileManager.prototype.displayReset = function () {
+    console.log("FileManager.displayReset()", this)
+    // ----
+    
+    this.displayClear()
+}
+FileManager.prototype.displayClear = function () {
+    console.log("FileManager.displayClear()", this)
+    // ----
+    
+    $(this.inputs.displays.imageName).html("&nbsp;")
+    $(this.inputs.displays.imageType).html("&nbsp;")
+    $(this.inputs.displays.imageRatio).html("&nbsp;")
+    $(this.inputs.displays.imageExtension).html("&nbsp;")
+    $(this.inputs.displays.imageDimensions).html("&nbsp;")
+    $(this.inputs.displays.imageSize).html("&nbsp;")
+    $(this.inputs.displays.imageHeight).html("&nbsp;")
+    $(this.inputs.displays.imageWidth).html("&nbsp;")
+}
+FileManager.prototype.displaySet = function () {
+    console.log("FileManager.displaySet()", this.detail)
+    // ----
+    
+    this.displayReset()
+    
+    let imageName, imageType, imageRatio, imageExtension, imageDimensions, imageSize, imageHeight, imageWidth
+    
+    imageName = (this.detail.name) ? this.detail.name : '&nbsp;'
+    imageType = (this.detail.type) ? this.detail.type : '&nbsp;'
+    imageRatio = (this.detail.ratio) ? this.detail.ratio : '&nbsp;'
+    imageExtension = (this.detail.extension) ? this.detail.extension : '&nbsp;'
+    imageDimensions = (this.detail.dimensions) ? this.detail.dimensions : '&nbsp;'
+    imageSize = (this.detail.size) ? this.detail.size : '&nbsp;'
+    imageHeight = (!isNaN(parseInt(this.detail.height))) ? this.detail.height + "px" : '&nbsp;'
+    imageWidth = (!isNaN(parseInt(this.detail.width))) ? this.detail.width + "px" : '&nbsp;'
+    
+    //*
+    $(this.inputs.displays.imageName).html(imageName)
+    $(this.inputs.displays.imageType).html(imageType)
+    $(this.inputs.displays.imageRatio).html(imageRatio)
+    $(this.inputs.displays.imageExtension).html(imageExtension)
+    $(this.inputs.displays.imageDimensions).html(imageDimensions)
+    $(this.inputs.displays.imageSize).html(imageSize)
+    $(this.inputs.displays.imageHeight).html(imageHeight)
+    $(this.inputs.displays.imageWidth).html(imageWidth)
+    //*/
+}
+FileManager.prototype.handleError = function (msg, title, level) {
+    if (!level) {
+        level = "error"
+    }
+    if (!title) {
+        title = "File Manager"
+    }
+    
+    toastr[level](msg, title)
+}
+FileManager.prototype.defaultDetail = function () {
+    this.detail = {
+        alt: null,
+        caption: null,
+        created_by: this.userId,
+        date_created: formatDateMySQL(),
+        date_modified: formatDateMySQL(),
+        dimensions: null,
+        enabled: 1,
+        extension: null,
+        height: null,
+        id: null,
+        is_cover: 0,
+        is_shown: 1,
+        modified_by: this.userId,
+        name: null,
+        note: null,
+        path: null,
+        size: null,
+        thumbs_path: null,
+        title: null,
+        width: null,
+    }
+}
+FileManager.prototype.setDetail = function (image) {
+    console.log("FileManager.setDetail(image)", image)
+    // ----
+    
+    this.defaultDetail()
+    
+    if (image) {
+        this.detail.alt = (image.alt) ? image.alt : null
+        this.detail.caption = (image.caption) ? image.caption : null
+        this.detail.created_by = (!isNaN(parseInt(this.created_by))) ? parseInt(this.created_by) : this.userId
+        this.detail.date_created = (image.date_created) ? image.date_created : formatDateMySQL()
+        this.detail.date_modified = (image.date_modified) ? image.date_modified : formatDateMySQL()
+        this.detail.dimensions = (image.dimensions) ? image.dimensions : null
+        this.detail.enabled = (image.enabled && image.enabled === 1) ? 1 : 0
+        this.detail.extension = (image.extension) ? image.extension : null
+        this.detail.height = (!isNaN(parseInt(image.height))) ? parseInt(image.height) : null
+        this.detail.id = (!isNaN(parseInt(image.id))) ? parseInt(image.id) : null
+        this.detail.is_cover = (image.is_cover && image.is_cover === 1) ? 1 : 0
+        this.detail.is_shown = (image.is_shown && image.is_shown === 1) ? 1 : 0
+        this.detail.modified_by = (!isNaN(parseInt(this.modified_by))) ? parseInt(this.modified_by) : this.userId
+        this.detail.name = (image.name) ? image.name : null
+        this.detail.note = (image.note) ? image.note : null
+        this.detail.path = (image.path) ? image.path : null
+        this.detail.size = (image.size) ? image.size : null
+        this.detail.thumbs_path = (image.thumbs_path) ? image.thumbs_path : null
+        this.detail.title = (image.title) ? image.title : null
+        this.detail.width = (!isNaN(parseInt(image.width))) ? parseInt(image.width) : null
+        
+        this.setFile(image)
+        
+        console.log("|__ this.detail", this.detail)
+        console.log("|__ this.file", this.file)
+        
+        return this.detail
+    }
+}
+FileManager.prototype.loadAll = function () {
+    console.log("this.loadAll()")
+    // ----
+    
+    if (!this.images) {
+        this.images = []
+    }
+    
+    let all = new Map()
+    let _this = this
+    
+    $.each(this.images, function (k, image) {
+        _this.setDetail(image)
+        all.set(image.id, image)
+        _this.galleryContainer.append(_this.buildImageThumbnails(image))
+    })
+    
+    this.all = all
+    
+}
+FileManager.prototype.buildImageThumbnails = function (image) {
+    console.log("this.buildImageThumbnails(image)", image)
+    // ----
+    
+    let isCoverClass = ""
+    let isShownClass = ""
+    
+    if (image) {
+        let _this = this
+        let src = (image.path) ? image.path : null
+        let alt = (image.alt) ? image.alt : null
+        let imageId = (image.id && !isNaN(parseInt(image.id))) ? parseInt(image.id) : null
+        let isCover = !!(image.is_cover && image.is_cover === 1)
+        let isShown = !!(image.is_shown && image.is_shown === 1)
+        let thumbsPath = (image.thumbs_path) ? image.thumbs_path : null
+        let path = (image.path) ? image.path : null
+        let name = (image.name) ? image.name : null
+        let extension = (image.extension) ? image.extension : null
+        
+        if (isCover) {
+            isCoverClass = "is-cover-image"
+        }
+        
+        if (isShown) {
+            isShownClass = "is-shown"
+        }
+        
+        if (thumbsPath !== null && path !== null && name !== null && extension !== null) {
+            let $IMG = $(`<img id="image_${imageId}" data-id="${imageId}" class="img-thumbnail ${isCoverClass} ${isShownClass}" alt="${alt}" src="${thumbsPath}/${name}.${extension}" />`)
+            $IMG.on("click", function () {
+                _this.edit(image.id)
+            })
+            
+            return $("<div/>", {
+                class: "col-12 col-md-4 mb-2",
+            })
+                .append($IMG)
+        }
+    }
+}
+FileManager.prototype.clearSelected = function () {
+    console.log("this.clearSelected()")
+    // ----
+    
+    $("img.selected").removeClass("selected")
+}
+FileManager.prototype.translateMessages = function () {
+    console.log("FileManager.translateMessages()")
+    // ----
+    
+    for (let name in this.settings.tpl) {
+        console.log("|__ name", name)
+        for (let key in this.settings.messages) {
+            console.log("|__ |__ key", key)
+            if (this.settings.tpl[name]) {
+                this.settings.tpl[name] = this.settings.tpl[name].replace("{{ " + key + " }}", this.settings.messages[key])
+            } else if (this.settings.tpl.preview[name]) {
+                this.settings.tpl.preview[name] = this.settings.tpl.preview[name].replace("{{ " + key + " }}", this.settings.messages[key])
+            }
+            
+        }
+    }
+}
+FileManager.prototype.cleanFilename = function (src) {
+    var filename = src.split("\\").pop()
+    if (filename === src) {
+        filename = src.split("/").pop()
+    }
+    
+    return src !== "" ? filename : ""
+}
+FileManager.prototype.validateImage = function () {
+    if (this.settings.minWidth !== 0 && this.settings.minWidth >= this.file.width) {
+        this.pushError("minWidth")
+    }
+    
+    if (this.settings.maxWidth !== 0 && this.settings.maxWidth <= this.file.width) {
+        this.pushError("maxWidth")
+    }
+    
+    if (this.settings.minHeight !== 0 && this.settings.minHeight >= this.file.height) {
+        this.pushError("minHeight")
+    }
+    
+    if (this.settings.maxHeight !== 0 && this.settings.maxHeight <= this.file.height) {
+        this.pushError("maxHeight")
+    }
+    
+    if (this.settings.allowedFormats.indexOf(this.getImageFormat()) === "-1") {
+        this.pushError("imageFormat")
+    }
+}
+FileManager.prototype.checkFileSize = function () {
+    if (this.sizeToByte(this.settings.maxFileSize) !== 0 && this.file.size > this.sizeToByte(this.settings.maxFileSize)) {
+        this.pushError("fileSize")
+    }
+}
+FileManager.prototype.isFileExtensionAllowed = function () {
+    console.log("FileManager.isFileExtensionAllowed")
+    // ----
+    
+    if (this.settings.allowedFileExtensions.indexOf("*") !== "-1" ||
+        this.settings.allowedFileExtensions.indexOf(this.getFileType()) !== "-1") {
+        return true
+    }
+    
+    this.pushError("fileExtension")
+    
+    return false
+}
+FileManager.prototype.isImage = function (image) {
+    console.log("FileManager.isImage")
+    // ----
+    
+    let allowedExtensions = this.settings.imgFileExtensions
+    let fileType = this.getFileType()
+    let index = allowedExtensions.indexOf(fileType)
+    
+    /*
+    console.log("|__ allowedExtensions", allowedExtensions)
+    console.log("|__ fileType", fileType)
+    console.log("|__ index", index)
+    //*/
+    
+    return index >= 0
+}
+FileManager.prototype.getFileType = function () {
+    console.log("FileManager.getFileType()")
+    // ----
+    
+    return this.file.name.split(".").pop().toLowerCase()
+}
+FileManager.prototype.getImageFormat = function () {
+    if (this.file.width === this.file.height) {
+        return "square"
+    }
+    
+    if (this.file.width < this.file.height) {
+        return "portrait"
+    }
+    
+    if (this.file.width > this.file.height) {
+        return "landscape"
+    }
+}
+FileManager.prototype.setFileName = function (file) {
+    console.log("FileManager.setFileName(file)", file)
+    // ----
+    
+    let fileName, fileExtension = null
+    let fileNameTemp = []
+    
+    if (file) {
+        if (file.name) {
+            let fileNameParts = file.name.split(".")
+            
+            if (fileNameParts.length) {
+                fileExtension = fileNameParts[fileNameParts.length - 1]
+                for (let n = 0; n < fileNameParts.length - 1; n++) {
+                    fileNameTemp.push(fileNameParts[n])
+                }
+                fileName = fileNameTemp.join(".")
+            }
+            
+        }
+    }
+    
+    this.detail.name = fileName
+    this.detail.extension = fileExtension
+}
+FileManager.prototype.setFileDetail = function (file) {
+    console.log("FileManager.setFileDetail(file)", file)
+    // ----
+    
+    this.detail.path = `/public/img/${this.source}/${this.sourceId}`
+    this.detail.thumbs_path = `/public/img/${this.source}/${this.sourceId}`
+    this.detail.id = null
+    this.detail.title = null
+    this.detail.alt = null
+    this.detail.title = null
+    this.detail.caption = null
+    this.detail.enabled = 1
+    this.detail.is_shown = 1
+    this.detail.is_cover = 0
+    this.detail.date_created = formatDateMySQL()
+    this.detail.date_modified = formatDateMySQL()
+    this.detail.created_by = this.userId
+    this.detail.modified_by = this.userId
+    this.detail.note = null
+}
+FileManager.prototype.setFileDimensions = function (width, height) {
+    console.log("FileManager.setFileDimensions(width, height)", width, height)
+    // ----
+    
+    this.file.width = null
+    this.file.height = null
+    this.detail.dimensions = null
+    this.detail.width = null
+    this.detail.height = null
+    
+    if (width && height) {
+        this.file.width = width
+        this.file.height = height
+        this.detail.dimensions = `${width} x ${height}`
+        this.detail.width = width
+        this.detail.height = height
+    }
+}
+FileManager.prototype.setFileSize = function (file) {
+    console.log("FileManager.setFileSize(file)", file)
+    // ----
+    
+    let fileSize = null
+    
+    if (file.size > 1024 * 1024) {
+        fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + "MB"
+    } else {
+        fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + "KB"
+    }
+    
+    this.detail.size = fileSize
+}
+FileManager.prototype.setFileInformation = function (file) {
+    console.log("FileManager.setFileInformation(file)", file)
+    // ----
+    
+    this.file.object = file
+    this.file.name = file.name
+    this.file.size = file.size
+    this.file.type = file.type
+    this.file.width = null
+    this.file.height = null
+    
+    this.detail.type = file.type
+}
+FileManager.prototype.sizeToByte = function (size) {
+    let value = 0
+    
+    if (size !== 0) {
+        let unit = size.slice(-1).toUpperCase(),
+            kb = 1024,
+            mb = kb * 1024,
+            gb = mb * 1024
+        
+        if (unit === "K") {
+            value = parseFloat(size) * kb
+        } else if (unit === "M") {
+            value = parseFloat(size) * mb
+        } else if (unit === "G") {
+            value = parseFloat(size) * gb
+        }
+    }
+    
+    return value
+}
+FileManager.prototype.findClosest = function (arrSorted, value) {
+    console.log("FileManager.findClosest(arrSorted, value)", arrSorted, value)
+    // ----
+    
+    let closest = arrSorted[0]
+    let closestDiff = Math.abs(arrSorted[0] - value)
+    
+    for (let i = 1; i < arrSorted.length; i++) {
+        let diff = Math.abs(arrSorted[i] - value)
+        if (diff < closestDiff) {
+            closestDiff = diff
+            closest = arrSorted[i]
+        } else {
+            return closest
+        }
+    }
+    return arrSorted[arrSorted.length - 1]
+}
+FileManager.prototype.estimateAspectRatio = function (width, height) {
+    console.log("FileManager.estimateAspectRatio(width, height)", width, height)
+    // ----
+    
+    let ratio = Math.max(width, height) / Math.min(width, height)
+    if (ratio in LOOKUP) {
+        this.detail.ratio = LOOKUP[ratio]
+        return
+    }
+    
+    let closest = this.findClosest(RATIOS, ratio)
+    if (Math.abs(closest - ratio) <= ERROR_ALLOWED) {
+        this.detail.ratio = LOOKUP[closest]
+        return
+    }
+    
+    this.detail.ratio = Math.round(ratio * 100) / 100 + ":1"
+}
+FileManager.prototype.resetFile = function () {
+    console.log("FileManager.resetFile()")
+    // ----
+    
+    this.file.object = null
+    
+    this.file.name = null
+    this.file.size = null
+    this.file.type = null
+    this.file.width = null
+    this.file.height = null
+}
+FileManager.prototype.setFile = function (file) {
+    console.log("FileManager.setFile(file)", file)
+    // ----
+    
+    this.resetFile()
+    
+    if (file) {
+        let fileName = (file.name && file.extension) ? file.name + "." + file.extension : null
+        let fileType = (file.extension) ? FILE_TYPES[file.extension] : null
+        let fileSize = (file.size && (!isNaN(parseInt(formatSize(file.size))))) ? parseInt(formatSize(file.size)) : null
+        let fileSizeFormatted = (file.size) ? file.size : null
+        let fileWidth = (file.width && (!isNaN(parseInt(file.width)))) ? parseInt(file.width) : null
+        let fileHeight = (file.height && (!isNaN(parseInt(file.height)))) ? parseInt(file.height) : null
+        
+        /*
+        console.log("|__ fileName", fileName)
+        console.log("|__ fileType", fileType)
+        console.log("|__ fileSize", fileSize)
+        console.log("|__ fileSizeFormatted", fileSizeFormatted)
+        console.log("|__ fileWidth", fileWidth)
+        console.log("|__ fileHeight", fileHeight)
+        //*/
+        
+        this.file.object = (file.object) ? file.object : null
+        this.file.size = fileSize
+        this.file.name = fileName
+        this.file.sizeFormatted = fileSizeFormatted
+        this.file.type = fileType
+        this.file.width = fileWidth
+        this.file.height = fileHeight
+        this.detail.type = fileType
+        this.detail.width = fileWidth
+        this.detail.height = fileHeight
+        
+        this.setFileDimensions(this.file.width, this.file.height)
+        this.estimateAspectRatio(this.file.width, this.file.height)
+    }
+}
+FileManager.prototype.fileSelected = function (event) {
+    console.log("FileManager.fileSelected(event)", event)
+    // ----
+    
+    this.readFile(this.inputs.fields.imageFile[0])
+}
+FileManager.prototype.readFile = function (input) {
+    console.log("FileManager.readFile(input)", input)
+    // ----
+    
+    if (!input || !input.files[0]) {
+        this.handleError("Missing fields", "File Manager", "error")
+    }
+    
+    const reader = new FileReader()
+    const image = new Image()
+    
+    let file = input.files[0]
+    let srcBase64 = null
+    let _this = this
+    let eventFileReady = $.Event("filemanager.fileReady")
+    let _remove_button = document.getElementById($(this.inputs.buttons.remove).attr("id"))
+    
+    this.errorsEvent.errors = []
+    
+    this.showLoader()
+    this.setFileInformation(file)
+    this.setFileDetail(file)
+    this.checkFileSize()
+    this.isFileExtensionAllowed()
+    
+    if (this.isImage() && this.file.size < this.sizeToByte(this.settings.maxFileSizePreview)) {
+        this.inputs.fields.imageFile.on("filemanager.fileReady", this.onFileReady)
+        reader.readAsDataURL(file)
+        reader.onload = function (_file) {
+            srcBase64 = _file.target.result
+            image.src = _file.target.result
+            image.onload = function () {
+                _this.setFileDimensions(this.width, this.height)
+                _this.estimateAspectRatio(this.width, this.height)
+                _this.setFileSize(file)
+                _this.setFileName(file)
+                _this.validateImage()
+                $(_this.input).trigger(eventFileReady, [true, srcBase64])
+                //*
+                console.log("|__ file", _this.file)
+                console.log("|__ detail", _this.detail)
+                //*/
+                _this.displaySet()
+                _remove_button.disabled = true
+            }
+        }.bind(this)
+    } else {
+        this.onFileReady(false)
+    }
+    
+}
+FileManager.prototype.onFileReady = function (event, previewable, src) {
+    console.log("FileManager.onFileReady(event, previewable, src)", event)
+    // ----
+    
+    $(this.inputs.fields.imageFile).off("fileManager.fileReady", this.onFileReady)
+    //*
+    console.log("|__ this.errorsEvent.errors", this.errorsEvent.errors)
+    //*/
+    if (this.errorsEvent.errors.length === 0) {
+        this.setPreview(previewable, src)
+    } else {
+        this.inputs.fields.imageFile.trigger(this.errorsEvent, [this])
+        for (let i = this.errorsEvent.errors.length - 1; i >= 0; i--) {
+            let errorNamespace = this.errorsEvent.errors[i].namespace
+            let errorKey = errorNamespace.split(".").pop()
+            this.showError(errorKey)
+        }
+        
+        if (typeof this.previewErrorsContainer !== "undefined") {
+            this.previewErrorsContainer.addClass("visible")
+            
+            let errorsContainer = this.previewErrorsContainer
+            let previewContainer = this.preview
+            setTimeout(function () {
+                errorsContainer.removeClass("visible")
+                previewContainer.removeClass("has-error")
+            }, this.settings.errorTimeout)
+        }
+        
+        this.resetPreview()
+    }
+}
+FileManager.prototype.onChange = function (event) {
+    if ($(this.inputs.fields.imageFile).val() !== "") {
+        this.formReset()
+        this.fileSelected(event)
+    } else {
+        this.formReset(event)
+    }
+}
+FileManager.prototype.isShown = function () {
+    console.log("FileManager.isShown()")
+    // ----
+    const _is_shown = document.getElementById($(this.inputs.fields.imageIsShown).attr("id"))
+    const _image_id = document.getElementById($(this.inputs.fields.imageId).attr("id"))
+    //*
+    console.log("|__ _is_shown", _is_shown)
+    console.log("|__ _image_id", _image_id)
+    //*/
+    if (_is_shown && _image_id) {
+        let imageId = (!isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
+        if (imageId) {
+            let _element = document.getElementById("image_" + imageId)
+            if (_element) {
+                if (_is_shown.checked === true) {
+                    $(_element).addClass("is-shown")
+                } else {
+                    $(_element).removeClass("is-shown")
+                }
+            }
+        }
+    }
+}
+FileManager.prototype.isCover = function () {
+    console.log("FileManager.isCover()")
+    // ----
+    const _is_cover = document.getElementById($(this.inputs.fields.imageIsCover).attr("id"))
+    const _image_id = document.getElementById($(this.inputs.fields.imageId).attr("id"))
+    //*
+    console.log("|__ _is_cover", _is_cover)
+    console.log("|__ _image_id", _image_id)
+    //*/
+    if (_is_cover && _image_id) {
+        let imageId = (!isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
+        if (imageId) {
+            let _element = document.getElementById("image_" + imageId)
+            if (_element) {
+                if (_is_cover.checked === true) {
+                    $("img.is-cover-image").removeClass("is-cover-image")
+                    $(_element).addClass("is-cover-image")
+                } else {
+                    $(_element).removeClass("is-cover-image")
+                }
+            }
+        }
+    }
+}
+FileManager.prototype.formUpload = function () {
+    console.log("FileManager.formUpload()")
+    // ----
+    const _image_id = document.getElementById($(this.inputs.fields.imageId).attr("id"))
+    const _image_alt = document.getElementById($(this.inputs.fields.imageAlt).attr("id"))
+    const _image_title = document.getElementById($(this.inputs.fields.imageTitle).attr("id"))
+    const _image_caption = document.getElementById($(this.inputs.fields.imageCaption).attr("id"))
+    const _image_is_shown = document.getElementById($(this.inputs.fields.imageIsShown).attr("id"))
+    const _image_enabled = document.getElementById($(this.inputs.fields.imageEnabled).attr("id"))
+    const _image_is_cover = document.getElementById($(this.inputs.fields.imageIsCover).attr("id"))
+    const _image_height = document.getElementById($(this.inputs.displays.imageHeight).attr("id"))
+    const _image_width = document.getElementById($(this.inputs.displays.imageWidth).attr("id"))
+    const _image_extension = document.getElementById($(this.inputs.displays.imageExtension).attr("id"))
+    const _image_dimensions = document.getElementById($(this.inputs.displays.imageDimensions).attr("id"))
+    const _image_size = document.getElementById($(this.inputs.displays.imageSize).attr("id"))
+    const _image_ratio = document.getElementById($(this.inputs.displays.imageRatio).attr("id"))
+    const _image_file = document.getElementById($(this.inputs.fields.imageFile).attr("id"))
+    const _image_file_type = document.getElementById($(this.inputs.displays.imageType).attr("id"))
+    
+    let filePath, fileHeight, fileWidth, fileSize, fileExtension, fileName,
+        fileType, fileRatio, fileDimensions, source, sourceId,
+        fileTitle, fileAlt, fileCaption, fileIsShown, fileIsCover, fileEnabled, fileId,
+        fileThumbsPath, tempHeight, tempWidth = null
+    let formData = new FormData()
+    let xhr = new XMLHttpRequest()
+    let _this = this
+    
+    tempHeight = (_image_height) ? _image_height.innerHTML : null
+    tempHeight = tempHeight.replace("px", "")
+    tempHeight = parseInt(tempHeight)
+    
+    tempWidth = (_image_width) ? _image_width.innerHTML : null
+    tempWidth = tempWidth.replace("px", "")
+    tempWidth = parseInt(tempWidth)
+    
+    fileId = (_image_id && !isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
+    fileCaption = (_image_caption && _image_caption.value !== "") ? _image_caption.value : null
+    fileTitle = (_image_title && _image_title.value !== "") ? _image_title.value : null
+    fileType = (_image_file_type && _image_file_type.innerHTML !== "") ? _image_file_type.innerHTML : null
+    fileAlt = (_image_alt && _image_alt.value !== "") ? _image_alt.value : null
+    fileIsShown = (_image_is_shown && _image_is_shown.checked === true) ? 1 : 0
+    fileEnabled = (_image_enabled && _image_enabled.checked === true) ? 1 : 0
+    fileIsCover = (_image_is_cover && _image_is_cover.checked === true) ? 1 : 0
+    fileName = (document.getElementById($(this.inputs.displays.imageName).attr("id"))) ? document.getElementById($(this.inputs.displays.imageName).attr("id")).innerText : null
+    fileExtension = (_image_extension) ? _image_extension.innerText : null
+    fileSize = (_image_size) ? _image_size.innerText : null
+    fileDimensions = (_image_dimensions) ? _image_dimensions.innerText : null
+    fileWidth = (tempWidth) ? (!isNaN(parseInt(tempWidth))) ? parseInt(tempWidth) : null : null
+    fileHeight = (tempHeight) ? (!isNaN(parseInt(tempHeight))) ? parseInt(tempHeight) : null : null
+    fileRatio = (_image_ratio) ? _image_ratio.innerText : null
+    source = _this.source
+    sourceId = _this.sourceId
+    filePath = `/public/img/${source}/${sourceId}`
+    fileThumbsPath = `/public/thumbs/${source}/${sourceId}`
+    
+    let dataToSend = {
+        alt: fileAlt,
+        caption: fileCaption,
+        dimensions: fileDimensions,
+        directory: source,
+        directory_id: sourceId,
+        enabled: fileEnabled,
+        extension: fileExtension,
+        height: fileHeight,
+        id: fileId,
+        is_cover: fileIsCover,
+        is_shown: fileIsShown,
+        name: fileName,
+        path: filePath,
+        ratio: fileRatio,
+        size: fileSize,
+        thumbs_path: fileThumbsPath,
+        type: fileType,
+        title: fileTitle,
+        width: fileWidth,
+    }
+    
+    if (this.validate()) {
+        let imageId = (!isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
+        
+        if (imageId !== null) {
+            confirmDialog(`Would you like to update this image?`, (ans) => {
+                if (ans) {
+                    this.sendUpdateRequest(removeNulls(dataToSend), function (data) {
+                        if (data) {
+                            console.log("|__ data", data)
+                            let detail = _this.setDetail((data[0]) ? data[0] : data)
+                            if (detail.id && detail.name) {
+                                console.log("|__ detail", detail)
+                                let image = _this.all.get(detail.id)
+                                console.log("|__ image", image)
+                                
+                                _this.all.set(detail.id, detail)
+                                
+                                _this.formReset()
+                                _this.formHide()
+                                
+                                toastr["success"](`${detail.name} - has been updated`, "File Manager")
+                            } else {
+                                console.log("|__ data", data)
+                                toastr["error"](`${detail.name} - has not been updated`, "File Manager")
+                            }
+                        }
+                    })
+                }
+            })
+        } else {
+            confirmDialog(`Would you like to add this image?`, (ans) => {
+                if (ans) {
+                    let file = _image_file.files[0]
+                    if (file) {
+                        dataToSend.file = file
+                        
+                        formData.append("dimensions", fileDimensions)
+                        formData.append("extension", fileExtension)
+                        formData.append("file", _image_file.files[0], `${fileName}.${fileExtension}`)
+                        formData.append("height", fileHeight)
+                        formData.append("name", fileName)
+                        formData.append("path", filePath)
+                        formData.append("thumbs_path", fileThumbsPath)
+                        formData.append("ratio", fileRatio)
+                        formData.append("size", fileSize)
+                        formData.append("type", fileType)
+                        formData.append("width", fileWidth)
+                        formData.append("directory", source)
+                        formData.append("directory_id", sourceId)
+                        formData.append("title", fileTitle)
+                        formData.append("enabled", fileEnabled)
+                        formData.append("is_shown", fileIsShown)
+                        formData.append("is_cover", fileIsCover)
+                        formData.append("alt", fileAlt)
+                        formData.append("caption", fileCaption)
+                        
+                        xhr.upload.addEventListener("progress", this.uploadProgress, false)
+                        xhr.addEventListener("load", this.uploadComplete, false)
+                        xhr.addEventListener("error", this.uploadFailed, false)
+                        xhr.addEventListener("abort", this.uploadCanceled, false)
+                        
+                        switch (source.toLowerCase()) {
+                            case "product":
+                                xhr.open("POST", "/api/v1.0/upload/product")
+                                xhr.send(formData)
+                                break
+                            case "unit":
+                                xhr.open("POST", "/api/v1.0/upload/unit")
+                                xhr.send(formData)
+                                break
+                            case "company":
+                                xhr.open("POST", "/api/v1.0/upload/company")
+                                xhr.send(formData)
+                                break
+                            case "user":
+                                xhr.open("POST", "/api/v1.0/upload/user")
+                                xhr.send(formData)
+                                break
+                            default:
+                                return
+                        }
+                    }
+                }
+            })
+        }
+    }
+}
+FileManager.prototype.uploadComplete = function (event) {
+    console.log("FileManager.uploadComplete(event)", event)
+    // ----
+    
+    let results = null
+    
+    if (event) {
+        if (event.target) {
+            if (event.target.responseText) {
+                const image = JSON.parse(event.target.responseText)
+                console.log("image", image)
+                if (image) {
+                    if (image.status && image.status === "success" && image.result !== undefined) {
+                        
+                        results = (image.result[0]) ? image.result[0] : image.result
+                        
+                        this.formReset()
+                        this.formHide()
+                        this.all.set(results.id, results)
+                        this.galleryContainer.append(this.buildImageThumbnails(results))
+                        
+                        toastr["success"](`Image ${results.name} was added.`, "File Manager")
+                        
+                    } else if (image.status && image.status === "error" && image.error !== undefined) {
+                        results = image.error
+                        let counter = 1
+                        let count = results.length
+                        
+                        $.each(results, function (i, err) {
+                            console.log(`Error(${counter} of ${count}): `, err)
+                            
+                            counter++
+                        })
+                        
+                        this.formReset()
+                        this.formHide()
+                        
+                        toastr["warning"](`Image was added with issues.`, "File Manager")
+                    }
+                }
+            }
+        }
+    }
+}
+FileManager.prototype.uploadProgress = function (event) {
+    console.log("FileManager.uploadProgress(event)", event)
+    // ----
+    
+    let _progress_bar = document.getElementById(this.inputs.fields.progress.attr("id"))
+    
+    if (event.lengthComputable) {
+        let percentComplete = Math.round(event.loaded * 100 / event.total)
+        
+        _progress_bar.innerHTML = percentComplete.toString() + "%"
+        $(_progress_bar).css({
+            "width": `${percentComplete}%`,
+            "background-color": "#007bff",
+            "color": "#fff",
+        })
+    } else {
+        _progress_bar.innerHTML = "unable to compute"
+        $(_progress_bar).css({
+            "width": "100%",
+            "background-color": "#c58e34",
+            "color": "#06030a",
+        })
+    }
+}
+FileManager.prototype.uploadFailed = function (event) {
+    console.log("FileManager.uploadFailed(event)", event)
+    // ----
+    
+}
+FileManager.prototype.uploadCanceled = function (event) {
+    console.log("FileManager.uploadFailed(event)", event)
+    // ----
+    
+}
+FileManager.prototype.sendRemoveRequest = function (dataToSend, callback) {
+    console.log("FileManager.sendRemoveRequest(dataToSend, callback)", dataToSend, callback)
+    // ----
+    
+    if (dataToSend) {
+        let url = "/api/v1.0/images/remove"
+        try {
+            sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                if (data) {
+                    return callback(data)
+                }
+            })
+        } catch (e) {
+            console.log("error", e)
+            return this.handleError("Error Removing Image.", "Image Manager", "error")
+        }
+    }
+}
+FileManager.prototype.sendUpdateRequest = function (dataToSend, callback) {
+    console.log("FileManager.sendUpdateRequest(dataToSend, callback)", dataToSend, callback)
+    // ----
+    
+    let _this = this
+    let source = (this.source) ? this.source : null
+    let sourceId = (!isNaN(parseInt(this.sourceId))) ? parseInt(this.sourceId) : null
+    
+    if (dataToSend && source !== null && sourceId !== null) {
+        let url = `/api/v1.0/images/update`
+        try {
+            sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                if (data) {
+                    return callback(data)
+                }
+            })
+        } catch (e) {
+            console.log("error", e)
+            return _this.handleError("Error Retrieving Images.", "Image Manager", "error")
+        }
+    }
+}
+FileManager.prototype.validate = function () {
+    console.log("FileManager.validate()")
+    // ----
+    let _form = this.form[0]
+    return $(_form).valid()
+}
+FileManager.prototype.formRules = function () {
+    console.log("FileManager.formRules()")
+    // ----
+    let rules = {}
+    let messages = {}
+    
+    rules[`file_manager_${this.source}_form_title`] = {
+        required: true,
+    }
+    rules[`file_manager_${this.source}_form_alt`] = {
+        required: true,
+    }
+    rules[`file_manager_${this.source}_form_caption`] = {
+        required: true,
+    }
+    
+    messages[`file_manager_${this.source}_form_title`] = {
+        required: "Field is required.",
+    }
+    messages[`file_manager_${this.source}_form_alt`] = {
+        required: "Field is required.",
+    }
+    messages[`file_manager_${this.source}_form_caption`] = {
+        required: "Field is required.",
+    }
+    
+    return {
+        rules: rules,
+        messages: messages,
+    }
+}
+FileManager.prototype.assignEvents = function () {
+    console.log("FileManager.assignEvents()")
+    // ----
+    
+    let _form = this.form[0]
+    let formRules = this.formRules()
+    
+    initializeValidator(formRules)
+    
+    this.inputs.buttons.toggle.on("click", this.open)
+    this.inputs.buttons.close.on("click", this.formHide)
+    this.inputs.buttons.cancel.on("click", this.formCancel)
+    this.inputs.buttons.remove.on("click", this.formRemove)
+    this.inputs.buttons.clear.on("click", this.formClear)
+    this.inputs.buttons.upload.on("click", this.formUpload)
+    this.inputs.fields.imageFile.on("change", this.onChange)
+    this.inputs.fields.imageIsShown.on("change", this.isShown)
+    this.inputs.fields.imageIsCover.on("change", this.isCover)
+    this.validator = $(_form).validate()
+    
+}
+FileManager.prototype.edit = function (imageId) {
+    console.log("FileManager.edit(imageId)", imageId)
+    // ----
+    
+    let _remove_button = document.getElementById($(this.inputs.buttons.remove).attr("id"))
+    
+    this.formReset()
+    this.inputs.buttons.upload.html("Update")
+    
+    if (imageId) {
+        let image = this.all.get(imageId)
+        let elementId = (imageId) ? "image_" + imageId.toString() : null
+        let imageElement = document.getElementById(elementId)
+        
+        if (image && imageElement) {
+            
+            $(imageElement).addClass("selected")
+            
+            this.setDetail(image)
+            this.formLoad(image)
+            _remove_button.disabled = false
+        }
+    }
+}
+FileManager.prototype.open = function () {
+    console.log("FileManager.open()")
+    // ----
+    
+    $(this.inputs.fields.imageFile).trigger("click")
+}
+FileManager.prototype.render = function () {
+    this.form = this.fileForm()
+    this.gallery = this.fileGallery()
+    
+    $(this.element).append(this.form, this.gallery)
+    this.input = $(this.inputs.fields.imageFile)[0]
+    
+    /**
+     * Initialize Validation
+     */
+    let _form = document.getElementById($(this.form).attr("id"))
+    //*
+    initializeValidator()
+    //*/
+    //console.log("_form", _form)
+    //return $(_form).valid()
+    this.formHide()
+}
+FileManager.prototype.load = function (options) {
+    console.log("FileManager.load(options)", options)
+    // ----
+    
+    if (options && options.source && options.sourceId) {
+        this.all = new Map()
+        this.source = (options.source) ? options.source : null
+        this.images = (options.images) ? options.images : []
+        this.sourceId = (!isNaN(parseInt(options.sourceId))) ? parseInt(options.sourceId) : null
+        this.formReset()
+        this.formHide()
+        this.galleryContainer.empty()
+        this.loadAll()
+    }
+}
+FileManager.prototype.init = function (options) {
+    console.log("FileManager.init(options)", options)
+    // ----
+    
+    /**
+     * Display Elements
+     */
+    this.inputs.displays.imageId = null
+    this.inputs.displays.imageName = null
+    this.inputs.displays.imageAlt = null
+    this.inputs.displays.imageTitle = null
+    this.inputs.displays.imageIsCover = null
+    this.inputs.displays.imagePath = null
+    this.inputs.displays.imageExtension = null
+    this.inputs.displays.imageDimensions = null
+    this.inputs.displays.imageSize = null
+    this.inputs.displays.imageHeight = null
+    this.inputs.displays.imageWidth = null
+    this.inputs.displays.imageEnabled = null
+    this.inputs.displays.imageDateCreated = null
+    this.inputs.displays.imageCreatedBy = null
+    this.inputs.displays.imageDateModified = null
+    this.inputs.displays.imageModifiedBy = null
+    this.inputs.displays.imageNote = null
+    this.inputs.displays.imageFile = null
+    this.inputs.displays.imageType = null
+    this.inputs.displays.imageRatio = null
+    
+    /**
+     * Error Elements
+     */
+    this.inputs.errors.imageId = null
+    this.inputs.errors.imageName = null
+    this.inputs.errors.imageAlt = null
+    this.inputs.errors.imageTitle = null
+    this.inputs.errors.imageIsCover = null
+    this.inputs.errors.imageEnabled = null
+    this.inputs.errors.imageIsShown = null
+    this.inputs.errors.imageFile = null
+    
+    /**
+     * Label Elements
+     */
+    this.inputs.labels.imageId = null
+    this.inputs.labels.imageNameField = null
+    this.inputs.labels.imageNameDetail = null
+    this.inputs.labels.imageAlt = null
+    this.inputs.labels.imageTitle = null
+    this.inputs.labels.imageIsCover = null
+    this.inputs.labels.imageEnabled = null
+    this.inputs.labels.imageIsShown = null
+    
+    /**
+     * Input Elements
+     */
+    this.inputs.fields.imageId = null
+    this.inputs.fields.imageName = null
+    this.inputs.fields.imageAlt = null
+    this.inputs.fields.imageTitle = null
+    this.inputs.fields.imageIsCover = null
+    this.inputs.fields.imageEnabled = null
+    this.inputs.fields.imageIsShown = null
+    this.inputs.fields.progress = null
+    
+    /**
+     * Button Elements
+     */
+    this.inputs.buttons.toggle = null
+    this.inputs.buttons.close = null
+    this.inputs.buttons.cancel = null
+    this.inputs.buttons.remove = null
+    this.inputs.buttons.clear = null
+    this.inputs.buttons.upload = null
+    this.inputs.fields.imageFileButton = null
+    
+    /**
+     * Loader Elements
+     */
+    this.loader = null
+    this.input = null
+    this.file.sizeFormatted = null
+    
+    /**
+     * Sections
+     */
+    this.form = null
+    this.gallery = null
+    this.preview = null
+    this.detailSection = null
+    this.galleryContainer = null
+    
+    /**
+     * URL's
+     */
+    this.settings.urls = {
+        "get": `/api/v1.0/images/${this.source}/${this.sourceId}`,
+        "update": `/api/v1.0/images/update`,
+        "remove": `/api/v1.0/images/remove`,
+    }
+    
+}
+
+$.fn.fileManager = function (options) {
+    "use strict"
+    
+    return new FileManager(document.getElementById($(this).attr("id")), options)
+}
+
+const Product = (function () {
+    "use strict"
+    
+    const base_url = "/products"
+    const regex = /[^A-Za-z0-9]/g
+    const _product_edit_meta_description_long_update_button = document.getElementById("product_edit_meta_description_long_update_button")
+    const _product_edit_meta_description_short_update_button = document.getElementById("product_edit_meta_description_short_update_button")
+    const _product_edit_meta_product_amenities_update_button = document.getElementById("product_edit_meta_product_amenities_update_button")
+    const _product_edit_meta_product_keywords_update_button = document.getElementById("product_edit_meta_product_keywords_update_button")
+    const _product_edit_details_section_publish = document.getElementById("product_edit_details_section_publish")
+    const _product_edit_details_section_save_draft = document.getElementById("product_edit_details_section_save_draft")
+    const _modal_product_depart_from_time = document.getElementById("modal_product_depart_from_time")
+    const _modal_product_depart_from_date = document.getElementById("modal_product_depart_from_date")
+    const _modal_product_arrive_to_time = document.getElementById("modal_product_arrive_to_time")
+    const _modal_product_arrive_to_date = document.getElementById("modal_product_arrive_to_date")
+    const _modal_product_depart_from_airport = document.getElementById("modal_product_depart_from_airport")
+    const _modal_product_arrive_to_airport = document.getElementById("modal_product_arrive_to_airport")
+    const _modal_product_depart_from_station = document.getElementById("modal_product_depart_from_station")
+    const _modal_product_arrive_to_station = document.getElementById("modal_product_arrive_to_station")
+    const _modal_product_depart_from_airport_id = document.getElementById("modal_product_depart_from_airport_id")
+    const _modal_product_arrive_to_airport_id = document.getElementById("modal_product_arrive_to_airport_id")
+    const _modal_product_depart_from_station_id = document.getElementById("modal_product_depart_from_station_id")
+    const _modal_product_arrive_to_station_id = document.getElementById("modal_product_arrive_to_station_id")
+    const _modal_button_cancel_add_product = document.getElementById("modal_button_cancel_add_product")
+    const _modal_button_submit_add_product = document.getElementById("modal_button_submit_add_product")
+    const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
+    const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
+    const _modal_product_provider_id = document.getElementById("modal_product_provider_id")
+    const _modal_product_vendor_id = document.getElementById("modal_product_vendor_id")
+    const _modal_new_product = document.getElementById("modal_new_product")
+    const _modal_product_name = document.getElementById("modal_product_name")
+    const _modal_product_category_id = document.getElementById("modal_product_category_id")
+    const _modal_product_sku = document.getElementById("modal_product_sku")
+    const _modal_product_rating_types_id = document.getElementById("modal_product_rating_types_id")
+    const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
+    const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
+    const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
+    const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
+    const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
+    const _modal_product_provider_location_id = document.getElementById("modal_product_provider_location_id")
+    const _modal_product_location_id = document.getElementById("modal_product_location_id")
+    const _modal_product_street_1 = document.getElementById("modal_product_street_1")
+    const _modal_product_street_2 = document.getElementById("modal_product_street_2")
+    const _modal_product_postal_code = document.getElementById("modal_product_postal_code")
+    const _modal_product_city_id = document.getElementById("modal_product_city_id")
+    const _modal_product_province_id = document.getElementById("modal_product_province_id")
+    const _modal_product_country_id = document.getElementById("modal_product_country_id")
+    const _modal_product_city = document.getElementById("modal_product_city")
+    
+    const _modal_button_clear_add_product = document.getElementById("modal_button_clear_add_product")
+    const _modal_product_depart_from_station_date = document.getElementById("modal_product_depart_from_station_date")
+    const _modal_product_arrive_to_station_date = document.getElementById("modal_product_arrive_to_station_date")
+    const _modal_product_depart_from_station_time = document.getElementById("modal_product_depart_from_station_time")
+    const _modal_product_arrive_to_station_time = document.getElementById("modal_product_arrive_to_station_time")
+    const _form_product_add = document.getElementById("form_product_add")
+    const _product_edit_page = document.getElementById("product_edit_page")
+    const _product_panel_link_overview = document.getElementById("product_panel_link_overview")
+    const _panel_tab_product_o = document.getElementById("panel_tab_product_o")
+    const _product_panel_link_product = document.getElementById("product_panel_link_product")
+    const _panel_tab_product = document.getElementById("panel_tab_product")
+    const _product_panel_link_season = document.getElementById("product_panel_link_season")
+    const _panel_tab_season = document.getElementById("panel_tab_season")
+    const _product_panel_link_unit = document.getElementById("product_panel_link_unit")
+    const _panel_tab_unit = document.getElementById("panel_tab_unit")
+    const _product_panel_link_variant = document.getElementById("product_panel_link_variant")
+    const _panel_tab_variant = document.getElementById("panel_tab_variant")
+    const _product_panel_link_inventory = document.getElementById("product_panel_link_inventory")
+    const _panel_tab_inventory = document.getElementById("panel_tab_inventory")
+    const _product_panel_link_pricing = document.getElementById("product_panel_link_pricing")
+    const _panel_tab_pricing = document.getElementById("panel_tab_pricing")
+    const _panel_tab_location = document.getElementById("panel_tab_location")
+    const _panel_tab_product_location = document.getElementById("panel_tab_product_location")
+    const _panel_tab_product_meta = document.getElementById("panel_tab_product_meta")
+    const _panel_tab_meta = document.getElementById("panel_tab_meta")
+    const _product_panel_link_meta = document.getElementById("product_panel_link_meta")
+    const _product_panel_link_location = document.getElementById("product_panel_link_location")
+    const _product_edit_details_currency_id = document.getElementById("product_edit_details_currency_id")
+    const _product_edit_details_rating_types_id = document.getElementById("product_edit_details_rating_types_id")
+    const _product_keywords = document.getElementById("product_keywords")
+    const _product_edit_meta_description_long = document.getElementById("product_edit_meta_description_long")
+    const _product_edit_meta_description_short = document.getElementById("product_edit_meta_description_short")
+    const _product_index_page = document.getElementById("product_index_page")
+    const _product_index_table = document.getElementById("product_index_table")
+    const _product_amenities = document.getElementById("product_amenities")
+    const _product_id = document.getElementById("product_id")
+    const _product_edit_details_name = document.getElementById("product_edit_details_name")
+    const _product_edit_details_enabled = document.getElementById("product_edit_details_enabled")
+    const _product_edit_details_sku = document.getElementById("product_edit_details_sku")
+    const _pricing_strategy_types_id = document.getElementById("pricing_strategy_types_id")
+    const _product_edit_location_city_id = document.getElementById("product_edit_location_city_id")
+    const _product_edit_location_id = document.getElementById("product_edit_location_id")
+    const _provider_id = document.getElementById("provider_id")
+    const _vendor_id = document.getElementById("vendor_id")
+    const _display_product_name = document.getElementById("display_product_name")
+    const _button_save_product = document.getElementById("button_save_product")
+    const _button_add_product_page_heading = document.getElementById("button_add_product_page_heading")
+    const _category_id = document.getElementById("category_id")
+    const _product_location_departing_station_city_id = document.getElementById("product_location_departing_station_city_id")
+    const _product_location_arriving_station_city_id = document.getElementById("product_location_arriving_station_city_id")
+    const _product_location_departing_airport_id = document.getElementById("product_location_departing_airport_id")
+    const _product_location_arriving_airport_id = document.getElementById("product_location_arriving_airport_id")
+    const _product_location = document.getElementById("product_location")
+    const _product_edit_details_submit_button = document.getElementById("product_edit_details_submit_button")
+    const _product_description_long = document.getElementById("product_description_long")
+    const _product_edit_details_section_seasons = document.getElementById("product_edit_details_section_seasons")
+    const _product_edit_details_section_units = document.getElementById("product_edit_details_section_units")
+    const _product_edit_details_section_variants = document.getElementById("product_edit_details_section_variants")
+    const _product_edit_details_section_status = document.getElementById("product_edit_details_section_status")
+    const _product_description_short = document.getElementById("product_description_short")
+    const _product_edit_details_section_profiles = document.getElementById("product_edit_details_section_profiles")
+    const _user_id = document.getElementById("user_id")
+    
+    let userId, categoryId, productId
+    let $product_keywords, $product_amenities
+    let radios = document.querySelectorAll('input[type=radio][name="location_to_use"]')
+    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let $index_table, newProduct_validator
+    let add_modal_formRules = {
+        groups: {
+            //departAirport: "modal_product_depart_from_airport modal_product_depart_from_airport_id",
+            //modalProductCity: "modal_product_city modal_product_city_id",
+        },
+        rules: {
+            modal_product_sku: {
+                required: true,
+            },
+            //*
+            modal_product_depart_from_airport: function (el) {
+                let categoryId = (!isNaN(parseInt(document.getElementById("category_id")))) ? parseInt(document.getElementById("category_id")) : null
+                console.log("categoryId", categoryId)
+                if (categoryId === 2) {
+                    return true
+                }
+            },
+            modal_product_depart_from_airport_id: function (el) {
+                let categoryId = (!isNaN(parseInt(document.getElementById("category_id")))) ? parseInt(document.getElementById("category_id")) : null
+                console.log("categoryId", categoryId)
+                if (categoryId === 2) {
+                    return true
+                }
+            },
+            modal_product_arrive_to_airport: function (el) {
+                let categoryId = (!isNaN(parseInt(document.getElementById("category_id")))) ? parseInt(document.getElementById("category_id")) : null
+                console.log("categoryId", categoryId)
+                if (categoryId === 2) {
+                    return true
+                }
+            },
+            modal_product_arrive_to_airport_id: function (el) {
+                let categoryId = (!isNaN(parseInt(document.getElementById("category_id")))) ? parseInt(document.getElementById("category_id")) : null
+                console.log("categoryId", categoryId)
+                if (categoryId === 2) {
+                    return true
+                }
+            },
+            //*/
+            modal_product_rating_types_id: {
+                required: true,
+            },
+            modal_product_city_id: {
+                required: true,
+            },
+            modal_product_currency_id: {
+                required: true,
+            },
+            modal_product_pricing_strategies_types_id: {
+                required: true,
+            },
+            modal_product_name: {
+                required: true,
+            },
+            modal_product_category_id: {
+                required: true,
+            },
+            modal_product_provider_name: {
+                required: true,
+            },
+            modal_product_provider_id: {
+                required: true,
+            },
+            modal_product_provider_company_id: {
+                required: true,
+            },
+            modal_product_vendor_name: {
+                required: true,
+            },
+            modal_product_vendor_id: {
+                required: true,
+            },
+            modal_product_vendor_company_id: {
+                required: true,
+            },
+        },
+        messages: {
+            modal_product_city_id: {
+                required: "Field Required",
+            },
+            modal_product_sku: {
+                required: "Field Required",
+            },
+            modal_product_depart_from_airport: {
+                required: "Field Required",
+            },
+            modal_product_depart_from_airport_id: {
+                required: "Field Required",
+            },
+            modal_product_arrive_to_airport: {
+                required: "Field Required",
+            },
+            modal_product_arrive_to_airport_id: {
+                required: "Field Required",
+            },
+            modal_product_rating_types_id: {
+                required: "Field Required",
+            },
+            modal_product_currency_id: {
+                required: "Field Required",
+            },
+            modal_product_pricing_strategies_types_id: {
+                required: "Field Required",
+            },
+            modal_product_name: {
+                required: "Field Required",
+            },
+            modal_product_provider_id: {
+                required: "Field Required",
+            },
+            modal_product_category_id: {
+                required: "Field Required",
+            },
+            modal_product_provider_name: {
+                required: "Field Required",
+            },
+            modal_product_vendor_name: {
+                required: "Field Required",
+            },
+            modal_product_provider_company_id: {
+                required: "Field Required",
+            },
+            modal_product_vendor_id: {
+                required: "Field Required",
+            },
+            modal_product_vendor_company_id: {
+                required: "Field Required",
+            },
+        },
+    }
+    
+    $(_product_edit_meta_description_long_update_button)
+        .on("click", function () {
+            console.log("Product.product_edit_meta_description_long_update_button.click()")
+            updateMeta()
+        })
+    
+    $(_product_edit_meta_description_short_update_button)
+        .on("click", function () {
+            console.log("Product.product_edit_meta_description_short_update_button.click()")
+            updateMeta()
+        })
+    
+    $(_product_edit_meta_product_amenities_update_button)
+        .on("click", function () {
+            console.log("Product.product_edit_meta_product_amenities_update_button.click()")
+            updateMeta()
+        })
+    
+    $(_product_edit_meta_product_keywords_update_button)
+        .on("click", function () {
+            console.log("Product.product_edit_meta_product_keywords_update_button.click()")
+            updateMeta()
+        })
+    
+    $(_product_edit_details_section_publish)
+        .on("click", function () {
+            console.log("Product.product_edit_details_section_publish.click()")
+        })
+    
+    $(_product_edit_details_section_save_draft)
+        .on("click", function () {
+            console.log("Product.product_edit_details_section_save_draft.click()")
+        })
+    
+    $("#button_view_calendar")
+        .on("click", function () {
+            $("#seasonCalendarModal").modal("show")
+        })
+    
+    $(_product_edit_details_name)
+        .on("change", function () {
+            _display_product_name.innerText = _product_edit_details_name.value
+        })
+    
+    $(_product_edit_details_submit_button)
+        .on("click", function () {
+            updateProductDetails()
+        })
+    
+    $(_product_edit_details_rating_types_id)
+        .on("change", function () {
+            Product.detail.rating_types_id = (!isNaN(parseInt(_product_edit_details_rating_types_id.value))) ? parseInt(_product_edit_details_rating_types_id.value) : 1
+            updateDisplay()
+        })
+    
+    $(_button_save_product)
+        .on("click", function () {
+            save()
+        })
+    
+    $(_button_add_product_page_heading)
+        .on("click", function () {
+            setNewProductModal()
+        })
+    
+    $(_modal_new_product)
+        .on("hide.bs.modal", function () {
+            clearModalForm()
+            clearValidation(_form_product_add)
+        })
+    
+    $(_modal_button_cancel_add_product)
+        .on("click", function () {
+            clearModalForm()
+            Airport.resetAirportForm("depart_from")
+            Airport.resetAirportForm("arrive_to")
+            Station.resetStationForm("depart_from")
+            Station.resetStationForm("arrive_to")
+            clearValidation(_form_product_add)
+            $(_modal_new_product).modal("hide")
+        })
+    
+    $(_modal_button_submit_add_product)
+        .on("click", function () {
+            if (validateNewProduct()) {
+                confirmDialog(`Would you like to update?`, (ans) => {
+                    if (ans) {
+                        saveNewProduct()
+                    }
+                })
+            }
+        })
+    
+    $(_modal_product_provider_vendor_match)
+        .on("change", function () {
+            let provider_company_id = (isNaN(parseInt(_modal_product_provider_company_id.value))) ? null : parseInt(_modal_product_provider_company_id.value)
+            
+            if (provider_company_id !== null) {
+                
+                if (_modal_product_provider_vendor_match.checked) {
+                    _modal_product_vendor_company_id.value = _modal_product_provider_company_id.value
+                    
+                    if (Provider.detail !== null) {
+                        _modal_product_vendor_company_id.value = Provider.detail.vendor.company_id
+                        _modal_product_vendor_id.value = Provider.detail.vendor.id
+                        _modal_product_vendor_name.value = Provider.detail.vendor.name
+                    } else {
+                        _modal_product_vendor_company_id.value = ""
+                        _modal_product_vendor_id.value = ""
+                        _modal_product_vendor_name.value = ""
+                    }
+                    
+                } else {
+                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_vendor_id.value = ""
+                    _modal_product_vendor_name.value = ""
+                }
+            }
+        })
+    
+    $(_modal_button_clear_add_product)
+        .on("click", function () {
+            clearModalForm()
+        })
+    
+    $("#page")
+        .on("change", function () {
+            updateProgress()
+        })
+    
+    $(_product_edit_meta_description_short)
+        .on("change", function () {
+            Product.detail.description_short = $(this).val()
+            updateDisplay()
+        })
+    
+    $(_product_edit_meta_description_long)
+        .on("change", function () {
+            Product.detail.description_long = $(this).val()
+            updateDisplay()
+        })
+    
+    const buildMetaObject = function () {
+        console.log("Product.buildMetaObject()")
+        // ----
+        
+        let id = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
+        let keywords = $product_keywords.build()
+        let amenities = $product_amenities.build()
+        let description_short = (_product_edit_meta_description_short.value !== "") ? _product_edit_meta_description_short.value : null
+        let description_long = (_product_edit_meta_description_long.value !== "") ? _product_edit_meta_description_long.value : null
+        
+        return removeNulls({
+            amenities: amenities,
+            keywords: keywords,
+            id: id,
+            description_long: description_long,
+            description_short: description_short,
+        })
+    }
+    
+    const updateMeta = function () {
+        console.log("Product.updateMeta()")
+        let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
+        console.log("|__ productId", productId)
+        let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+        console.log("|__ categoryId", categoryId)
+        let userId = (!isNaN(parseInt(_user_id.value))) ? parseInt(_user_id.value) : null
+        console.log("|__ userId", userId)
+        let dataToSend = buildMetaObject()
+        console.log("|__ dataToSend", dataToSend)
+        
+        confirmDialog(`Would you like to update?`, (ans) => {
+            if (ans) {
+                sendRequestUpdateProductMeta(dataToSend, function (data) {
+                    let product
+                    if (data) {
+                        product = data
+                        if (data[0]) {
+                            product = data[0]
+                        }
+                        //console.log("|__ |__ product", product)
+                        let detail = set(product)
+                        if (_product_edit_page) {
+                            updateProgress()
+                        }
+                        handleProductError(`Product ${product.name} was updated.`, "Product", "success")
+                    }
+                })
+            }
+        })
+    }
+    
+    const sendRequestUpdateProductMeta = function (dataToSend, callback) {
+        console.log("Product.sendRequestUpdateProductMeta(dataToSend, callback)", dataToSend)
+        if (dataToSend) {
+            let url = "/api/v1.0/products/update_meta"
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    }
+                })
+            } catch (e) {
+                console.log("error", e)
+                return handleProductError("Error")
+            }
+        }
+    }
+    
+    const buildProductDetailRecord = function () {
+        console.log("Product.buildProductDetailRecord()")
+        let sku = updateProductSKU()
+        let enabled = (_product_edit_details_enabled && _product_edit_details_enabled.checked === true) ? 1 : 0
+        let rating_types_id = (!isNaN(parseInt(_product_edit_details_rating_types_id.value))) ? parseInt(_product_edit_details_rating_types_id.value) : null
+        let currency_id = (!isNaN(parseInt(_product_edit_details_currency_id.value))) ? parseInt(_product_edit_details_currency_id.value) : null
+        let name = (_product_edit_details_name && _product_edit_details_name.value !== "") ? _product_edit_details_name.value : null
+        let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
+        let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+        let userId = (!isNaN(parseInt(_user_id.value))) ? parseInt(_user_id.value) : null
+        
+        return removeNulls({
+            id: (productId) ? productId : null,
+            rating_types_id: (rating_types_id) ? rating_types_id : null,
+            currency_id: (currency_id) ? currency_id : null,
+            name: (name) ? name : null,
+            sku: (sku) ? sku : null,
+            enabled: enabled,
+        })
+    }
+    
+    const sendRequestUpdateProductDetail = function (dataToSend, callback) {
+        console.log("Product.sendRequestUpdateProductDetail(dataToSend)", dataToSend)
+        if (dataToSend) {
+            let url = "/api/v1.0/products/update_detail"
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    console.log("|__ |__ data", data)
+                    if (data) {
+                        return callback(data)
+                    }
+                })
+            } catch (e) {
+                console.log("error", e)
+                return handleProductError("Error")
+            }
+        }
+    }
+    
+    const updateProductDetails = function () {
+        console.log("Product.updateProductDetails()")
+        let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
+        let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+        let userId = (!isNaN(parseInt(_user_id.value))) ? parseInt(_user_id.value) : null
+        let dataToSend = buildProductDetailRecord()
+        //console.log("dataToSend", dataToSend)
+        
+        confirmDialog(`Would you like to update?`, (ans) => {
+            if (ans) {
+                sendRequestUpdateProductDetail(dataToSend, function (data) {
+                    let product
+                    if (data) {
+                        product = data
+                        if (data[0]) {
+                            product = data[0]
+                        }
+                        console.log("|__ |__ product", product)
+                        let detail = set(product)
+                        if (_product_edit_page) {
+                            updateProgress()
+                        }
+                        handleProductError(`Product ${product.name} was updated.`, "Product", "success")
+                    }
+                })
+            }
+        })
+    }
+    
+    const validateProductRecord = function () {
+        let isValid = true
+        
+        return isValid
+    }
+    
+    const buildInsertData = function () {
+        console.log("Category.buildInsertData()")
+        // ----
+        
+        let categoryId = (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null
+        let productName, productSKU, currencyId, pricingStrategyTypesId, ratingTypesId, providerId, vendorId
+        let depart_from, arrive_to, street1, street2, postalCode, provinceId, countryId, cityId, depart_date, depart_time, arrive_date, arrive_time
+        let location = {
+            name: null,
+            street_1: null,
+            street_2: null,
+            zipcode: null,
+            country_id: null,
+            province_id: null,
+            city_id: null,
+        }
+        
+        countryId = (_modal_product_country_id && !isNaN(parseInt(_modal_product_country_id.value))) ? parseInt(_modal_product_country_id.value) : null
+        provinceId = (_modal_product_province_id && !isNaN(parseInt(_modal_product_province_id.value))) ? parseInt(_modal_product_province_id.value) : null
+        cityId = (_modal_product_city_id && !isNaN(parseInt(_modal_product_city_id.value))) ? parseInt(_modal_product_city_id.value) : null
+        street1 = (_modal_product_street_1 && _modal_product_street_1.value !== "") ? _modal_product_street_1.value : null
+        street2 = (_modal_product_street_2 && _modal_product_street_2.value !== "") ? _modal_product_street_2.value : null
+        postalCode = (_modal_product_postal_code && _modal_product_postal_code.value !== "") ? _modal_product_postal_code.value : null
+        productName = (_modal_product_name && _modal_product_name.value !== "") ? _modal_product_name.value : null
+        productSKU = (_modal_product_sku && _modal_product_sku.value !== "") ? _modal_product_sku.value : null
+        currencyId = (_modal_product_currency_id && !isNaN(parseInt(_modal_product_currency_id.value))) ? parseInt(_modal_product_currency_id.value) : null
+        providerId = (_modal_product_provider_id && !isNaN(parseInt(_modal_product_provider_id.value))) ? parseInt(_modal_product_provider_id.value) : null
+        vendorId = (_modal_product_vendor_id && !isNaN(parseInt(_modal_product_vendor_id.value))) ? parseInt(_modal_product_vendor_id.value) : null
+        ratingTypesId = (_modal_product_rating_types_id && !isNaN(parseInt(_modal_product_rating_types_id.value))) ? parseInt(_modal_product_rating_types_id.value) : null
+        pricingStrategyTypesId = (_modal_product_pricing_strategies_types_id && !isNaN(parseInt(_modal_product_pricing_strategies_types_id.value))) ? parseInt(_modal_product_pricing_strategies_types_id.value) : null
+        
+        let startDate = moment(new Date()).format("YYYY-MM-DD")
+        let defaultDepartureDate = moment(startDate, "YYYY-MM-DD").add(3, "months").format("YYYY-MM-DD")
+        let defaultArrivalDate = moment(defaultDepartureDate, "YYYY-MM-DD").add(1, "days").format("YYYY-MM-DD")
+        let defaultDepartureTime = "12:00"
+        let defaultArrivalTime = "12:00"
+        
+        if (categoryId === 1) {
+            depart_from = null
+            arrive_to = null
+            depart_date = null
+            depart_time = null
+            arrive_date = null
+            arrive_time = null
+            
+            location = {
+                name: productName,
+                location_types_id: 2,
+                street_1: street1,
+                street_2: street2,
+                zipcode: postalCode,
+                country_id: countryId,
+                province_id: provinceId,
+                city_id: cityId,
+            }
+            
+        } else if (categoryId === 2) {
+            // Flights
+            depart_from = (!isNaN(parseInt(_modal_product_depart_from_airport_id.value))) ? parseInt(_modal_product_depart_from_airport_id.value) : null
+            arrive_to = (!isNaN(parseInt(_modal_product_arrive_to_airport_id.value))) ? parseInt(_modal_product_arrive_to_airport_id.value) : null
+            depart_date = (Product.depart_from_date && Product.depart_from_date.value() !== "" && Product.depart_from_date.value() !== null) ? Product.depart_from_date.value() : defaultDepartureDate
+            depart_time = (Product.depart_from_time && Product.depart_from_time.value() !== "" && Product.depart_from_time.value() !== null) ? Product.depart_from_time.value() : defaultDepartureTime
+            arrive_date = (Product.arrive_to_date && Product.arrive_to_date.value() !== "" && Product.arrive_to_date.value() !== null) ? Product.arrive_to_date.value() : defaultArrivalDate
+            arrive_time = (Product.arrive_to_time && Product.arrive_to_time.value() !== "" && Product.arrive_to_time.value() !== null) ? Product.arrive_to_time.value() : defaultArrivalTime
+            
+            location = {
+                name: productName,
+                location_types_id: 3,
+                street_1: street1,
+                street_2: street2,
+                zipcode: postalCode,
+                country_id: countryId,
+                province_id: provinceId,
+                city_id: cityId,
+            }
+        } else if (categoryId === 3) {
+            // Cars
+            depart_from = null
+            arrive_to = null
+            depart_date = null
+            depart_time = null
+            arrive_date = null
+            arrive_time = null
+            
+            location = {
+                name: productName,
+                location_types_id: 18,
+                street_1: street1,
+                street_2: street2,
+                zipcode: postalCode,
+                country_id: countryId,
+                province_id: provinceId,
+                city_id: cityId,
+            }
+        } else if (categoryId === 4) {
+            // Rail
+            depart_from = (!isNaN(parseInt(_modal_product_depart_from_station_id.value))) ? parseInt(_modal_product_depart_from_station_id.value) : null
+            arrive_to = (!isNaN(parseInt(_modal_product_arrive_to_station_id.value))) ? parseInt(_modal_product_arrive_to_station_id.value) : null
+            depart_date = (Product.depart_from_date && Product.depart_from_date.value() !== "" && Product.depart_from_date.value() !== null) ? Product.depart_from_date.value() : defaultDepartureDate
+            depart_time = (Product.depart_from_time && Product.depart_from_time.value() !== "" && Product.depart_from_time.value() !== null) ? Product.depart_from_time.value() : defaultDepartureTime
+            arrive_date = (Product.arrive_to_date && Product.arrive_to_date.value() !== "" && Product.arrive_to_date.value() !== null) ? Product.arrive_to_date.value() : defaultArrivalDate
+            arrive_time = (Product.arrive_to_time && Product.arrive_to_time.value() !== "" && Product.arrive_to_time.value() !== null) ? Product.arrive_to_time.value() : defaultArrivalTime
+            
+            location = {
+                name: productName,
+                location_types_id: 4,
+                street_1: street1,
+                street_2: street2,
+                zipcode: postalCode,
+                country_id: countryId,
+                province_id: provinceId,
+                city_id: cityId,
+            }
+            
+        } else if (categoryId === 5) {
+            // Transport
+            depart_from = null
+            arrive_to = null
+            depart_date = null
+            depart_time = null
+            arrive_date = null
+            arrive_time = null
+            
+            location = {
+                name: productName,
+                location_types_id: 7,
+                street_1: street1,
+                street_2: street2,
+                zipcode: postalCode,
+                country_id: countryId,
+                province_id: provinceId,
+                city_id: cityId,
+            }
+            
+        } else if (categoryId === 6) {
+            // Tours
+            depart_from = null
+            arrive_to = null
+            depart_date = null
+            depart_time = null
+            arrive_date = null
+            arrive_time = null
+            
+            location = {
+                name: productName,
+                location_types_id: 17,
+                street_1: street1,
+                street_2: street2,
+                zipcode: postalCode,
+                country_id: countryId,
+                province_id: provinceId,
+                city_id: cityId,
+            }
+        } else if (categoryId === 7) {
+            // Cruises
+            depart_from = null
+            arrive_to = null
+            depart_date = null
+            depart_time = null
+            arrive_date = null
+            arrive_time = null
+            
+            location = {
+                name: productName,
+                location_types_id: 19,
+                street_1: street1,
+                street_2: street2,
+                zipcode: postalCode,
+                country_id: countryId,
+                province_id: provinceId,
+                city_id: cityId,
+            }
+        } else if (categoryId === 8) {
+            // Packages
+            depart_from = null
+            arrive_to = null
+            depart_date = null
+            depart_time = null
+            arrive_date = null
+            arrive_time = null
+            
+            location = {
+                name: productName,
+                location_types_id: 19,
+                street_1: street1,
+                street_2: street2,
+                zipcode: postalCode,
+                country_id: countryId,
+                province_id: provinceId,
+                city_id: cityId,
+            }
+        } else {
+            // Other
+            depart_from = null
+            arrive_to = null
+        }
+        //Via del Termine, 11, 50127 Firenze FI, Italy
+        let dataToSend = {
+            category_id: categoryId,
+            
+            depart_from: depart_from,
+            depart_date: depart_date,
+            depart_time: depart_time,
+            arrive_to: arrive_to,
+            arrive_date: arrive_date,
+            arrive_time: arrive_time,
+            
+            street_1: street1,
+            street_2: street2,
+            country_id: countryId,
+            province_id: provinceId,
+            city_id: cityId,
+            postal_code: postalCode,
+            
+            pricing_strategy_types_id: pricingStrategyTypesId,
+            status_types_id: 1,
+            currency_id: currencyId,
+            //location_id: (!isNaN(parseInt(_modal_product_location_id.value))) ? parseInt(_modal_product_location_id.value) : null,
+            rating_types_id: ratingTypesId,
+            provider_id: providerId,
+            vendor_id: vendorId,
+            provider_vendor_match: (((!isNaN(parseInt(_modal_product_provider_company_id.value))) ? parseInt(_modal_product_provider_company_id.value) : null) === ((!isNaN(parseInt(_modal_product_vendor_company_id.value))) ? parseInt(_modal_product_vendor_company_id.value) : null)) ? 1 : 0,
+            
+            name: productName,
+            sku: productSKU,
+            use_provider_location_id: 0,
+            location: location,
+        }
+        /*
+        if (categoryId === 2) {
+            let departDate = (Product.depart_from_date && Product.depart_from_date.value() !== "" && Product.depart_from_date.value() !== null) ? Product.depart_from_date.value() : defaultDepartureDate
+            let departTime = (_modal_product_depart_from_time && _modal_product_depart_from_time.value !== "") ? _modal_product_depart_from_time.value : defaultDepartureTime
+            let arriveDate = (Product.arrive_to_date && Product.arrive_to_date.value() !== "" && Product.arrive_to_date.value() !== null) ? Product.arrive_to_date.value() : defaultArrivalDate
+            let arriveTime = (_modal_product_arrive_to_time && _modal_product_arrive_to_time.value !== "") ? _modal_product_arrive_to_time.value : defaultArrivalTime
+            
+            dataToSend.depart_from = (!isNaN(parseInt(_modal_product_depart_from_airport_id.value))) ? parseInt(_modal_product_depart_from_airport_id.value) : null
+            dataToSend.depart_date = departDate
+            dataToSend.depart_time = departTime
+            dataToSend.arrive_to = (!isNaN(parseInt(_modal_product_arrive_to_airport_id.value))) ? parseInt(_modal_product_arrive_to_airport_id.value) : null
+            dataToSend.arrive_date = arriveDate
+            dataToSend.arrive_time = arriveTime
+        }
+        
+        if (categoryId === 4) {
+            let departDate = (Product.depart_from_date && Product.depart_from_date.value() !== "" && Product.depart_from_date.value() !== null) ? Product.depart_from_date.value() : defaultDepartureDate
+            let departTime = (_modal_product_depart_from_time && _modal_product_depart_from_time.value !== "") ? _modal_product_depart_from_time.value : defaultDepartureTime
+            let arriveDate = (Product.arrive_to_date && Product.arrive_to_date.value() !== "" && Product.arrive_to_date.value() !== null) ? Product.arrive_to_date.value() : defaultArrivalDate
+            let arriveTime = (_modal_product_arrive_to_time && _modal_product_arrive_to_time.value !== "") ? _modal_product_arrive_to_time.value : defaultArrivalTime
+            
+            dataToSend.depart_from = (!isNaN(parseInt(_modal_product_depart_from_airport_id.value))) ? parseInt(_modal_product_depart_from_airport_id.value) : null
+            dataToSend.depart_date = departDate
+            dataToSend.depart_time = departTime
+            dataToSend.arrive_to = (!isNaN(parseInt(_modal_product_arrive_to_airport_id.value))) ? parseInt(_modal_product_arrive_to_airport_id.value) : null
+            dataToSend.arrive_date = arriveDate
+            dataToSend.arrive_time = arriveTime
+        }
+        //*/
+        return remove_nulls(dataToSend)
+    }
+    
+    const saveNewProduct = function () {
+        console.log("Product.saveNewProduct()")
+        // ----
+        
+        let dataToSend = buildInsertData()
+        let product
+        
+        console.log("|__ dataToSend", dataToSend)
+        newProduct(dataToSend, function (data) {
+            console.log("data", data)
+            if (data) {
+                product = data
+                if (data.length === 1) {
+                    product = data[0]
+                }
+                
+                if (product.id) {
+                    let detail = set(product)
+                    console.log("|__ detail", detail)
+                    $index_table.insertRow(detail)
+                    $index_table.loadRow(detail)
+                    $index_table.jumpToRow(detail)
+                    $index_table.clearSelectedRows()
+                    
+                    toastr["success"](`Product - ${product.id} was created, would you like to edit?`, "Product Created")
+                    //window.location.replace("/products/" + product.id)
+                }
+            }
+        })
+    }
+    
+    const newProduct = function (dataToSend, callback) {
+        console.log("Product.newProduct(dataToSend)", dataToSend)
+        // ----
+        
+        let url = "/api/v1.0/products/add"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        return handleProductError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log("error", e)
+                handleProductError("Oops: 1")
+            }
+        }
+    }
+    
+    const validateNewProduct = function () {
+        console.log("Product.validateNewProduct()")
+        let isValid = false
+        
+        if (_form_product_add) {
+            isValid = $(_form_product_add).valid()
+            //*
+            console.log("isValid", isValid)
+            var validator = jQuery(_form_product_add).validate(add_modal_formRules)
+            console.log("validator", validator)
+            if (jQuery(_form_product_add).valid()) {
+                var submitErrorsList = new Object()
+                for (var i = 0; i < validator.errorList.length; i++) {
+                    console.log("Product.newProduct_validator.errorList[i].message")
+                }
+            }
+            console.log("Submit Errors", submitErrorsList)
+            //*/
+        }
+        console.log("isValid", isValid)
+        return isValid
+    }
+    
+    const clearModalForm = function () {
+        console.log("Product.clearModalForm()")
+        // ----
+        
+        if (_modal_new_product) {
+            _modal_product_name.value = ""
+            
+            _modal_product_street_1.value = ""
+            _modal_product_street_2.value = ""
+            _modal_product_postal_code.value = ""
+            
+            Product.depart_from_date.value("")
+            Product.arrive_to_date.value("")
+            
+            _modal_product_depart_from_airport.value = ""
+            _modal_product_arrive_to_airport.value = ""
+            _modal_product_depart_from_station.value = ""
+            _modal_product_arrive_to_station.value = ""
+            _modal_product_depart_from_airport_id.value = ""
+            _modal_product_arrive_to_airport_id.value = ""
+            _modal_product_depart_from_station_id.value = ""
+            _modal_product_arrive_to_station_id.value = ""
+            
+            _modal_product_category_id.value = ""
+            _modal_product_sku.value = ""
+            _modal_product_rating_types_id.value = ""
+            _modal_product_currency_id.value = ""
+            _modal_product_provider_company_id.value = ""
+            _modal_product_vendor_company_id.value = ""
+            
+            _modal_product_pricing_strategies_types_id.value = ""
+            _modal_product_provider_location_id.value = ""
+            _modal_product_location_id.value = ""
+            _modal_product_city.value = ""
+            _modal_product_city_id.value = ""
+            
+            Product.attr1 = null
+            Product.attr2 = null
+            Product.attr3 = null
+            Product.updateProductSKU()
+            
+            $("div[data-categoryid]").hide()
+            
+            Product.resetNewProductDetails()
+        }
+    }
+    
+    const resetNewProductDetails = function () {
+        console.log("Product.resetNewProductDetails()")
+        // ----
+        
+        Product.depart_from_date.value("")
+        Product.arrive_to_date.value("")
+        
+        Airport.resetAirportForm("depart_from")
+        Airport.resetAirportForm("arrive_to")
+        
+        Station.resetStationForm("depart_from")
+        Station.resetStationForm("arrive_to")
+        
+        _modal_product_depart_from_time.value = ""
+        _modal_product_arrive_to_time.value = ""
+        _modal_product_depart_from_airport.value = ""
+        _modal_product_arrive_to_airport.value = ""
+        _modal_product_provider_id.value = ""
+        _modal_product_vendor_id.value = ""
+        _modal_product_provider_name.value = ""
+        _modal_product_vendor_name.value = ""
+        _modal_product_city.value = ""
+        _modal_product_name.value = ""
+        _modal_product_sku.value = ""
+        _modal_product_city_id.value = ""
+        _modal_product_rating_types_id.value = ""
+        _modal_product_currency_id.value = ""
+        _modal_product_pricing_strategies_types_id.value = ""
+        
+        _modal_product_name.disabled = true
+        _modal_product_sku.disabled = true
+        _modal_product_rating_types_id.disabled = true
+        _modal_product_currency_id.disabled = true
+        _modal_product_pricing_strategies_types_id.disabled = true
+        _modal_product_city.disabled = true
+        
+        clearValidation(_form_product_add)
+    }
+    
+    const setNewProductModal = function () {
+        clearModalForm()
+        
+        $(_modal_new_product).modal("show")
+    }
+    
+    const sendUpdateRequest = function (dataToSend, callback) {
+        let url = "/api/v1.0/products/update"
+        
+        if (dataToSend) {
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        handleProductError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                console.log("error", e)
+                handleProductError("Oops: 1")
+            }
+        }
+    }
+    
+    const buildProductRecord = function () {
+        if (validateProductRecord()) {
+            let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
+            let arrive_to, depart_from
+            
+            if (categoryId === 2) {
+                arrive_to = (!isNaN(parseInt(_product_location_arriving_airport_id.value))) ? parseInt(_product_location_arriving_airport_id.value) : null
+                depart_from = (!isNaN(parseInt(_product_location_departing_airport_id.value))) ? parseInt(_product_location_departing_airport_id.value) : null
+            } else if (categoryId === 4) {
+                arrive_to = (!isNaN(parseInt(_product_location_arriving_station_city_id.value))) ? parseInt(_product_location_arriving_station_city_id.value) : null
+                depart_from = (!isNaN(parseInt(_product_location_departing_station_city_id.value))) ? parseInt(_product_location_departing_station_city_id.value) : null
+            } else {
+                arrive_to = null
+                depart_from = null
+            }
+            let detail = {
+                id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
+                category_id: (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null,
+                description_short: (_product_edit_meta_description_short && _product_edit_meta_description_short.value !== "") ? _product_edit_meta_description_short.value : null,
+                description_long: (_product_edit_meta_description_long && _product_edit_meta_description_long.value !== "") ? _product_edit_meta_description_long.value : null,
+                amenities: $product_amenities.build(),
+                keywords: $product_keywords.build(),
+                rating_types_id: (!isNaN(parseInt(_product_edit_details_rating_types_id.value))) ? parseInt(_product_edit_details_rating_types_id.value) : null,
+                currency_id: (!isNaN(parseInt(_product_edit_details_currency_id.value))) ? parseInt(_product_edit_details_currency_id.value) : null,
+                name: (_product_edit_details_name.value !== "") ? _product_edit_details_name.value : null,
+                pricing_strategy_types_id: (!isNaN(parseInt(_pricing_strategy_types_id.value))) ? parseInt(_pricing_strategy_types_id.value) : null,
+                city_id: (!isNaN(parseInt(_product_edit_location_city_id.value))) ? parseInt(_product_edit_location_city_id.value) : null,
+                location_id: (_product_edit_location_id && !isNaN(parseInt(_product_edit_location_id.value))) ? parseInt(_product_edit_location_id.value) : null,
+                provider_id: (!isNaN(parseInt(_provider_id.value))) ? parseInt(_provider_id.value) : null,
+                vendor_id: (!isNaN(parseInt(_vendor_id.value))) ? parseInt(_vendor_id.value) : null,
+                use_provider_location_id: 0,
+                provider_vendor_match: 1,
+                status_types_id: 2,
+                enabled: (_product_edit_details_enabled.checked) ? 1 : 0,
+                sku: (_product_edit_details_sku.value !== "") ? _product_edit_details_sku.value : null,
+                arrive_to: arrive_to,
+                depart_from: depart_from,
+                
+            }
+            
+            return removeNulls(detail)
+        }
+    }
+    
+    const save = function () {
+        let dataToSend = buildProductRecord()
+        console.log("dataToSend", dataToSend)
+        
+        if (dataToSend) {
+            confirmDialog(`Would you like to update?`, (ans) => {
+                if (ans) {
+                    sendUpdateRequest(dataToSend, function (data) {
+                        let product
+                        if (data) {
+                            product = data
+                            if (data[0]) {
+                                product = data[0]
+                            }
+                        }
+                        
+                        if (product.id) {
+                            let detail = set(product)
+                            let name = (detail.name) ? detail.name : null
+                            toastr["success"](`Product ${name} has been updated`, "Product Updated")
+                        }
+                    })
+                }
+            })
+        }
+        
+    }
+    
+    const navigate = function (product) {
+        if (product && product.id) {
+            window.location.replace(base_url + "/" + product.id)
+        }
+    }
+    
+    const get = function (id) {
+        let data_to_send = {}
+        if (id) {
+            data_to_send.id = id
+        }
+    }
+    
+    const defaultDetail = function () {
+        return {
+            id: null,
+            category_id: null,
+            pricing_strategy_types_id: null,
+            status_types_id: null,
+            product_status_types_id: null,
+            currency_id: null,
+            location_id: null,
+            city_id: null,
+            vendor_id: null,
+            provider_id: null,
+            name: null,
+            provider_vendor_match: 1,
+            description_short: null,
+            description_long: null,
+            rating: null,
+            sku: null,
+            phone: null,
+            infant: null,
+            child: null,
+            teen: null,
+            depart_from: null,
+            arrive_to: null,
+            depart_time: null,
+            arrive_time: null,
+            day_span: null,
+            cover_image: null,
+            api_id: null,
+            from_api: 1,
+            hotel_code: null,
+            enabled: 1,
+            date_created: formatDateMySQL(),
+            created_by: user_id,
+            date_modified: formatDateMySQL(),
+            modified_by: user_id,
+            note: null,
+            amenities: "",
+            keywords: "",
+            seasons: [],
+            units: [],
+            use_provider_location: 0,
+            variants: [],
+            category: {},
+            location: {},
+            vendor: {},
+            profiles: [],
+            provider: {},
+        }
+    }
+    
+    const set = function (product) {
+        console.log("Product.set(product)", product)
+        let detail = defaultDetail()
+        
+        if (product) {
+            detail.id = (product.id) ? product.id : null
+            detail.category_id = (product.category_id) ? product.category_id : null
+            detail.pricing_strategy_types_id = (product.pricing_strategy_types_id) ? product.pricing_strategy_types_id : null
+            detail.status_types_id = (product.status_types_id) ? product.status_types_id : null
+            detail.product_status_types_id = (product.product_status_types_id) ? product.product_status_types_id : null
+            detail.currency_id = (product.currency_id) ? product.currency_id : null
+            detail.location_id = (product.location_id) ? product.location_id : null
+            detail.city_id = (product.city_id) ? product.city_id : null
+            detail.vendor_id = (product.vendor_id) ? product.vendor_id : null
+            detail.provider_id = (product.provider_id) ? product.provider_id : null
+            detail.name = (product.name) ? product.name : null
+            detail.provider_vendor_match = (product.provider_vendor_match) ? product.provider_vendor_match : 1
+            detail.description_short = (product.description_short) ? product.description_short : null
+            detail.description_long = (product.description_long) ? product.description_long : null
+            detail.rating = (product.rating) ? product.rating : null
+            detail.sku = (product.sku) ? product.sku : null
+            detail.phone = (product.phone) ? product.phone : null
+            detail.infant = (product.infant) ? product.infant : null
+            detail.child = (product.child) ? product.child : null
+            detail.teen = (product.teen) ? product.teen : null
+            detail.depart_from = (product.depart_from) ? product.depart_from : null
+            detail.arrive_to = (product.arrive_to) ? product.arrive_to : null
+            detail.depart_time = (product.depart_time) ? product.depart_time : null
+            detail.arrive_time = (product.arrive_time) ? product.arrive_time : null
+            detail.day_span = (product.day_span) ? product.day_span : null
+            detail.cover_image = (product.cover_image) ? product.cover_image : null
+            detail.api_id = (product.api_id) ? product.api_id : null
+            detail.from_api = (product.from_api) ? product.from_api : 1
+            detail.hotel_code = (product.hotel_code) ? product.hotel_code : null
+            detail.enabled = (product.enabled) ? product.enabled : 1
+            detail.date_created = (product.date_created) ? product.date_created : formatDateMySQL()
+            detail.created_by = (product.created_by) ? product.created_by : user_id
+            detail.date_modified = (product.date_modified) ? product.date_modified : formatDateMySQL()
+            detail.modified_by = (product.modified_by) ? product.modified_by : user_id
+            detail.note = (product.note) ? product.note : null
+            detail.category = (product.category) ? product.category : {}
+            detail.keywords = (product.keywords) ? product.keywords : ""
+            detail.amenities = (product.amenities) ? product.amenities : ""
+            detail.seasons = (product.seasons) ? product.seasons : []
+            detail.units = (product.units) ? product.units : []
+            detail.use_provider_location = (product.use_provider_location) ? product.use_provider_location : 0
+            detail.variants = (product.variants) ? product.variants : []
+            detail.location = (product.location) ? product.location : {}
+            detail.vendor = (product.vendor) ? product.vendor : {}
+            detail.provider = (product.provider) ? product.provider : {}
+        }
+        
+        Product.detail = detail
+        return detail
+    }
+    
+    const loadAll = function (products) {
+        Product.all = new Map()
+        
+        if (!products) {
+            return
+        }
+        
+        $.each(products, function (i, product) {
+            let detail = set(product)
+            $index_table.insertRow(detail)
+            Product.all.set("id", detail)
+        })
+    }
+    
+    const buildIndexTable = function () {
+        
+        $index_table = $(_product_index_table).table({
+            table_type: "display_list",
+            data: [],
+            columnDefs: [
+                {
+                    title: "Name",
+                    targets: 0,
+                    data: "name",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "SKU",
+                    targets: 1,
+                    data: "sku",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data + "</span>"
+                    },
+                },
+                {
+                    title: "Provider",
+                    targets: 2,
+                    data: "provider",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data.name + "</span>"
+                    },
+                },
+                {
+                    title: "Vendor",
+                    targets: 3,
+                    data: "vendor",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data.name + "</span>"
+                    },
+                },
+                {
+                    title: "Location",
+                    targets: 4,
+                    data: "location",
+                    render: function (data, type, row, meta) {
+                        let displayLocation = ""
+                        if (defaultLocationDisplayFormat === "short") {
+                            displayLocation = data.display_short
+                        } else if (defaultLocationDisplayFormat === "long") {
+                            displayLocation = data.display_long
+                        } else {
+                            displayLocation = data.display_medium
+                        }
+                        
+                        return "<span style='white-space: nowrap;'>" + displayLocation + "</span>"
+                    },
+                },
+                {
+                    title: "Category",
+                    targets: 5,
+                    data: "category",
+                    render: function (data, type, row, meta) {
+                        return "<span style='white-space: nowrap;'>" + data.name + "</span>"
+                    },
+                },
+            ],
+            rowClick: Product.navigate,
+        })
+    }
+    
+    const changeHandler = function (event) {
+        //if (this.value === "use_provider_location") {
+        //Location.init(provider_initial_location)
+        //} else if (this.value === "use_product_location") {
+        //Location.init(product_initial_location)
+        //}
+    }
+    
+    const setDefaultProductDetails = function () {
+        return {
+            location: {},
+            provider: {},
+            vendor: {},
+            seasons: [],
+            units: [],
+            variants: [],
+            profiles: [],
+            matrix: [],
+        }
+    }
+    
+    const setNewFormDetails = function (categoryId) {
+        console.log("Product.setNewFormDetails(category_id)", categoryId)
+        
+    }
+    
+    const updateProductSKU = function () {
+        //console.log("Product.updateProductSKU()")
+        let att1 = Product.attr1
+        let att2 = Product.attr2
+        let att3 = Product.attr3
+        let sku = ""
+        
+        if (!is_null(att1) && !is_null(att2) && !is_null(att3)) {
+            sku = att1.replace(/-/g, "") + "-" + att2.replace(/-/g, "") + "-" + att3.replace(/-/g, "")
+            
+            if (_modal_product_sku) {
+                _modal_product_sku.value = sku
+            }
+            
+            if (_product_edit_details_sku) {
+                _product_edit_details_sku.value = sku
+            }
+            
+        } else {
+            if (_modal_product_sku) {
+                _modal_product_sku.value = ""
+            }
+            
+            if (is_null(att1)) {
+                //console.log("att1 is null", att1)
+                return
+            }
+            
+            if (is_null(att2)) {
+                //console.log("att2 is null", att2)
+                return
+            }
+            
+            if (is_null(att3)) {
+                //console.log("att3 is null", att3)
+                return
+            }
+        }
+        
+        return sku
+    }
+    
+    const handleProductError = function (msg, title, level) {
+        console.log("Product.handleProductError(msg)", msg)
+        if (!title) {
+            title = "Product"
+        }
+        
+        if (!level) {
+            level = "error"
+        }
+        
+        toastr[level](`${msg}`, title)
+    }
+    
+    const index = function (settings) {
+        console.log("Product.index(settings)", settings)
+        // ----
+        
+        if (_product_index_table) {
+            buildIndexTable()
+            
+            if (settings) {
+                let products = (settings.products) ? settings.products : []
+                let stations = (settings.stations) ? settings.stations : []
+                //let airports = (settings.airports) ? settings.airports : []
+                let categories = (settings.category) ? settings.category : []
+                
+                $(document).ready(function () {
+                    if (_modal_new_product) {
+                        Category.init(categories)
+                        Airport.init()
+                        Station.init(stations)
+                    }
+                    
+                    loadAll(products)
+                })
+                
+            }
+        }
+    }
+    
+    const initAutoComplete = function () {
+        let category_id = (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null
+        
+        if (category_id !== null) {
+            $(_modal_product_name)
+                .on("change", function () {
+                    /*
+                    setTimeout(function () {
+                        let product_name = _modal_product_name.value
+                        
+                        if (globalSelectedProvider === false) {
+                            if (provider_name === "") {
+                                _provider_name.value = ""
+                                _provider_company_id.value = ""
+                                globalSelectedProvider = false
+                                $(_vendor_name).val("").trigger("change")
+                                $(_provider_company_id).val("").trigger("change")
+                            } else {
+                                provider_exists(provider_name)
+                            }
+                        }
+                    }, 200)
+                    //*/
+                })
+                .on("search", function () {
+                
+                })
+                .on("click", function (e) {
+                    if ($(this).attr("readonly") === "readonly") {
+                        e.preventDefault()
+                    } else {
+                        $(this).select()
+                    }
+                })
+                .autocomplete({
+                    serviceUrl: "/api/v1.0/autocomplete/products",
+                    minChars: 2,
+                    params: { "category_id": category_id },
+                    cache: false,
+                    dataType: "json",
+                    triggerSelectOnValidInput: false,
+                    paramName: "st",
+                    onSelect: function (suggestion) {
+                        if (!suggestion || !suggestion.data) {
+                            return
+                        }
+                        let product = suggestion.data
+                        
+                    },
+                })
+        }
+    }
+    
+    const updateProgress = function () {
+        //console.log("Product.updateProgress()")
+        if (_product_edit_page) {
+            let variants = Array.from(Variant.all.values())
+            let profiles = Array.from(InventoryProfile.all.values())
+            let units = Array.from(Unit.all.values())
+            let seasons = Array.from(Season.all.values())
+            let calendarButtons = document.querySelectorAll("button[data-target='#seasonCalendarModal']")
+            
+            if (variants.length === 0 || units.length === 0 || seasons.length === 0 || profiles.length === 0) {
+                $(_product_edit_details_section_publish).addClass("disabled")
+                if (variants.length === 0 || units.length === 0 || seasons.length === 0) {
+                    calendarButtons.forEach(el => {
+                        el.disabled = true
+                    })
+                    $("#button_view_calendar").addClass("disabled")
+                    $(_panel_tab_pricing).addClass(`disabled`)
+                    $(_panel_tab_inventory).addClass(`disabled`)
+                } else {
+                    $(_panel_tab_inventory).removeClass(`disabled`)
+                }
+                
+                if (profiles.length === 0) {
+                    $("#button_view_calendar").addClass("disabled")
+                    $(_panel_tab_pricing).addClass(`disabled`)
+                } else {
+                
+                }
+                
+                $(_button_save_product).addClass("disabled")
+                
+                $("#panel_tab_pricing")
+                    .html(`
+							<span id="tab_span_pricing">Pricing</span>
+							<span class="badge rounded-pill badge-notification bg-danger tab-badge" style="color:#fff!important">!</span>
+						`)
+            
+            } else {
+                $("#button_view_calendar").removeClass("disabled")
+                $(_panel_tab_pricing).removeClass(`disabled`)
+                $(_panel_tab_inventory).removeClass(`disabled`)
+                
+                let pricingWorksheet = PricingWorksheet.status()
+                if (pricingWorksheet === "incomplete") {
+                    $(_product_edit_details_section_publish).addClass("disabled")
+                    $(_button_save_product).addClass("disabled")
+                    $("#panel_tab_pricing")
+                        .html("<span id='tab_span_pricing'>Pricing</span> <span class='badge rounded-pill badge-notification bg-danger tab-badge' style='color:#fff!important'>!</span>")
+                } else {
+                    $(_product_edit_details_section_publish).removeClass("disabled")
+                    $(_button_save_product).removeClass("disabled")
+                    $("#panel_tab_pricing")
+                        .html("<span id='tab_span_pricing'>Pricing</span>")
+                }
+            }
+            
+            updateDisplay()
+        }
+    }
+    
+    const updateDisplay = function () {
+        //console.log("Product.updateDisplay()", Product.detail)
+        if (_product_edit_page) {
+            //LOCATION DISPLAY UPDATE
+            let provider, vendor, seasons, units, variants, profiles, product_location,
+                productLocationType
+            let productLocationDisplay = "Product Location"
+            let productLocationIcon = "fas fa-archway"
+            
+            if (Product.detail.location) {
+                product_location = Product.detail.location
+            }
+            
+            if (product_location) {
+                productLocationType = (product_location.type) ? product_location.type : null
+                productLocationDisplay = (product_location.display_medium) ? product_location.display_medium : "Product Location"
+            }
+            
+            if (productLocationType) {
+                productLocationIcon = (productLocationType.icon) ? productLocationType.icon : "fas fa-archway"
+            }
+            
+            if (_product_location) {
+                $(_product_location)
+                    .empty()
+                    .html(`
+						<i class="${productLocationIcon} mr-2"></i> <span class="">${productLocationDisplay}</span>
+					`)
+            }
+            
+            //RATING DISPLAY UPDATE
+            let rating = (!isNaN(parseInt(_product_edit_details_rating_types_id.value))) ? parseInt(_product_edit_details_rating_types_id.value) : 1
+            let ratingDisplay = ""
+            for (let n = 0; n < 5; n++) {
+                if (n < rating) {
+                    ratingDisplay += `
+						<li class="list-inline-item mr-0">
+                            <i class="fas fa-star"></i>
+                        </li>
+					`
+                } else {
+                    ratingDisplay += `
+						<li class="list-inline-item mr-0">
+                            <i class="far fa-star"></i>
+                        </li>
+					`
+                }
+            }
+            
+            $("ul.rating")
+                .empty()
+                .html(ratingDisplay)
+            
+            //STATUS DISPLAY UPDATE
+            let statusDisplay = ""
+            if (_product_edit_details_section_status) {
+                let status_types_id = (!isNaN(parseInt(Product.detail.status_types_id))) ? parseInt(Product.detail.status_types_id) : null
+                if (status_types_id) {
+                    let status = StatusTypes.all.get(status_types_id)
+                    if (status) {
+                        let statusName = (status.name) ? status.name : ""
+                        let statusClass = statusName.replace(/\s+/g, '-').toLowerCase()
+                        
+                        statusDisplay = `
+							<span class="">Status</span>
+							<span id="product_edit_details_section_status_text" class="badge badge-${statusClass} badge-pill badge-status">${statusName}</span>
+						`
+                    }
+                }
+            }
+            
+            if (_product_edit_details_section_status) {
+                $(_product_edit_details_section_status)
+                    .empty()
+                    .html(statusDisplay)
+            }
+            
+            //SEASON, VARIANT, UNIT COUNTS
+            let seasonCount = Array.from(Season.all.values()).length
+            let seasonClass = "badge badge-success badge-pill"
+            if (seasonCount === 0) {
+                seasonClass = "badge badge-danger badge-pill"
+            }
+            
+            let unitCount = Array.from(Unit.all.values()).length
+            let unitClass = "badge badge-success badge-pill"
+            if (unitCount === 0) {
+                unitClass = "badge badge-danger badge-pill"
+            }
+            
+            let variantCount = Array.from(Variant.all.values()).length
+            let variantClass = "badge badge-success badge-pill"
+            if (variantCount === 0) {
+                variantClass = "badge badge-danger badge-pill"
+            }
+            
+            let inventoryProfileCount = Array.from(InventoryProfile.all.values()).length
+            let inventoryProfileClass = "badge badge-success badge-pill"
+            if (inventoryProfileCount === 0) {
+                inventoryProfileClass = "badge badge-danger badge-pill"
+            }
+            
+            _product_edit_details_section_seasons.classList = seasonClass
+            _product_edit_details_section_seasons.innerText = seasonCount
+            
+            _product_edit_details_section_units.classList = unitClass
+            _product_edit_details_section_units.innerText = unitCount
+            
+            _product_edit_details_section_variants.classList = variantClass
+            _product_edit_details_section_variants.innerText = variantCount
+            
+            _product_edit_details_section_profiles.classList = inventoryProfileClass
+            _product_edit_details_section_profiles.innerText = inventoryProfileCount
+            
+            $(_product_description_short).empty().html(Product.detail.description_short)
+            $(_product_description_long).empty().html(Product.detail.description_long)
+            
+            updateProductSKU()
+        }
+    }
+    
+    const setEditFormValues = function (product) {
+        console.log("Product.setEditFormValues(product)", product)
+        // ----
+        
+        let detail = set(product)
+        let category
+        
+        if (detail.category) {
+            category = detail.category
+        }
+        let id = (!isNaN(parseInt(product.id))) ? parseInt(product.id) : null
+        let sku = (product.sku) ? product.sku : ""
+        let name = (product.name) ? product.name : ""
+        let ratings_type_id = (product.rating_types_id) ? product.rating_types_id : ""
+        let enabled = (product.enabled && product.enabled === 1)
+        let currency_types_id = (product.currency_id) ? product.currency_id : ""
+        let description_long = (product.description_long) ? product.description_long : ""
+        let description_short = (product.description_short) ? product.description_short : ""
+        let product_keywords = (product.keywords) ? product.keywords : []
+        let product_amenities = (product.amenities) ? product.amenities : []
+        let images = (product.images) ? product.images : []
+        
+        Product.fileManager = $("#product_images").fileManager({
+            height: 400,
+            source: "product",
+            sourceId: id,
+            images: images,
+        })
+        
+        $product_keywords = $(_product_keywords).BuildKeyword(product_keywords)
+        $product_amenities = $(_product_amenities).BuildKeyword(product_amenities)
+        
+        _product_edit_details_name.value = name
+        _product_edit_details_sku.value = sku
+        _product_edit_details_enabled.checked = enabled
+        _product_edit_meta_description_short.value = description_short
+        _product_edit_meta_description_long.value = description_long
+        _product_edit_details_currency_id.value = currency_types_id
+        _product_edit_details_rating_types_id.value = ratings_type_id
+        
+        Product.attr1 = (category.attribute_id) ? category.attribute_id : null
+    }
+    
+    const initEditForm = function (settings) {
+        let product = setDefaultProductDetails()
+        
+        if (settings) {
+            product = settings
+        }
+        
+        Array.prototype.forEach.call(radios, function (radio) {
+            //radio.addEventListener("change", changeHandler)
+        })
+        
+        setEditFormValues(product)
+    }
+    
+    const init = function (settings) {
+        console.log("Product.init(settings)", settings)
+        // ----
+        
+        let product_details, variants, seasons, units, profiles, provider, vendor,
+            matrices, pricings, product_location, arriving_location, departing_location,
+            images
+        
+        if (_product_edit_page) {
+            $(document).ready(function () {
+                userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+                categoryId = (document.getElementById("category_id")) ? (!isNaN(parseInt(document.getElementById("category_id").value))) ? parseInt(document.getElementById("category_id").value) : null : null
+                productId = (document.getElementById("product_id")) ? (!isNaN(parseInt(document.getElementById("product_id").value))) ? parseInt(document.getElementById("product_id").value) : null : null
+                
+                if (settings) {
+                    if (settings.product_details) {
+                        product_details = settings.product_details
+                        
+                        if (product_details.images) {
+                            images = product_details.images
+                        }
+                        
+                        if (product_details.provider) {
+                            provider = product_details.provider
+                        }
+                        
+                        if (product_details.vendor) {
+                            vendor = product_details.vendor
+                        }
+                        
+                        if (product_details.variants) {
+                            variants = product_details.variants
+                        }
+                        
+                        if (product_details.seasons) {
+                            seasons = product_details.seasons
+                        }
+                        
+                        if (product_details.matrices) {
+                            matrices = product_details.matrices
+                        }
+                        
+                        if (product_details.profiles) {
+                            profiles = product_details.profiles
+                        }
+                        
+                        if (product_details.units) {
+                            units = product_details.units
+                        }
+                        
+                        if (product_details.pricings) {
+                            pricings = product_details.pricings
+                        }
+                        
+                        if (product_details.location) {
+                            product_location = product_details.location
+                        }
+                        
+                        if (product_details.arriving_location) {
+                            arriving_location = product_details.arriving_location
+                        }
+                        
+                        if (product_details.departing_location) {
+                            departing_location = product_details.departing_location
+                        }
+                        
+                        let pricing_strategy = {
+                            pricing_strategy_types_id: (!isNaN(parseInt(product_details.pricing_strategy_types_id))) ? parseInt(product_details.pricing_strategy_types_id) : null,
+                        }
+                        
+                        Provider.init({
+                            provider_detail: provider,
+                        })
+                        
+                        Vendor.init({
+                            vendor_detail: vendor,
+                        })
+                        
+                        Variant.init(variants)
+                        
+                        Season.init(seasons)
+                        
+                        Season.loadAll(seasons)
+                        
+                        Unit.init({ units: units })
+                        
+                        Matrix.init({ matrices: matrices })
+                        
+                        Pricing.init({ pricings: pricings })
+                        
+                        InventoryProfile.init({
+                            profiles: profiles,
+                        })
+                        
+                        PricingWorksheet.init({
+                            pricing_strategy: pricing_strategy,
+                            pricings: pricings,
+                        })
+                        
+                        Product.calendar = $("#calendar").YearCalendar({
+                            displayEventTime: false,
+                            calendarType: "season",
+                            events: [],
+                        })
+                        
+                        switch (categoryId) {
+                            case 1:
+                                ProductLocation.init({
+                                    product_location: product_location,
+                                    product: product_details,
+                                })
+                                break
+                            case 2:
+                                ProductLocation.init({
+                                    product_location: product_location,
+                                    departing_location: departing_location,
+                                    arriving_location: arriving_location,
+                                    product: product_details,
+                                })
+                                break
+                            case 3:
+                                ProductLocation.init({
+                                    product_location: product_location,
+                                    product: product_details,
+                                })
+                                break
+                            case 4:
+                                ProductLocation.init({
+                                    product_location: product_location,
+                                    departing_location: departing_location,
+                                    arriving_location: arriving_location,
+                                    product: product_details,
+                                })
+                                break
+                            case 5:
+                                ProductLocation.init({
+                                    product_location: product_location,
+                                    product: product_details,
+                                })
+                                break
+                            case 6:
+                                ProductLocation.init({
+                                    product_location: product_location,
+                                    product: product_details,
+                                })
+                                
+                                Tour.init({
+                                    route: [],
+                                    
+                                })
+                                
+                                break
+                            case 7:
+                                ProductLocation.init({
+                                    product_location: product_location,
+                                    product: product_details,
+                                })
+                                break
+                            case 8:
+                                ProductLocation.init({
+                                    product_location: product_location,
+                                    product: product_details,
+                                })
+                                break
+                            case 9:
+                                ProductLocation.init({
+                                    product_location: product_location,
+                                    product: product_details,
+                                })
+                                break
+                        }
+                        
+                        $(_product_panel_link_overview)
+                            .on("click", function () {
+                                $(_panel_tab_product_o).tab("show")
+                            })
+                        $(_product_panel_link_location)
+                            .on("click", function () {
+                                $(_panel_tab_location).tab("show")
+                            })
+                        $(_product_panel_link_product)
+                            .on("click", function () {
+                                $(_panel_tab_product).tab("show")
+                            })
+                        $(_product_panel_link_season)
+                            .on("click", function () {
+                                $(_panel_tab_season).tab("show")
+                            })
+                        $(_product_panel_link_unit)
+                            .on("click", function () {
+                                $(_panel_tab_unit).tab("show")
+                            })
+                        $(_product_panel_link_variant)
+                            .on("click", function () {
+                                $(_panel_tab_variant).tab("show")
+                            })
+                        $(_product_panel_link_inventory)
+                            .on("click", function () {
+                                $(_panel_tab_inventory).tab("show")
+                            })
+                        $(_product_panel_link_pricing)
+                            .on("click", function () {
+                                $(_panel_tab_pricing).tab("show")
+                            })
+                        $(_product_panel_link_meta)
+                            .on("click", function () {
+                                $(_panel_tab_meta).tab("show")
+                            })
+                        
+                        initAutoComplete()
+                        initEditForm(product_details)
+                        updateProgress()
+                    }
+                }
+            })
+        }
+        
+        if (_product_index_page) {
+            Provider.init()
+            Product.index(settings)
+            
+            if (_form_product_add) {
+                $(document).ready(function () {
+                    
+                    if (_modal_product_depart_from_date) {
+                        Product.depart_from_date = $(_modal_product_depart_from_date).dateSelect({
+                            onStart: function () {},
+                        })
+                    }
+                    
+                    if (_modal_product_depart_from_time) {
+                        Product.depart_from_time = $(_modal_product_depart_from_time).timeSelect({
+                            onStart: function () {},
+                        })
+                    }
+                    
+                    if (_modal_product_arrive_to_date) {
+                        Product.arrive_to_date = $(_modal_product_arrive_to_date).dateSelect({
+                            onStart: function () {},
+                        })
+                    }
+                    
+                    if (_modal_product_arrive_to_time) {
+                        Product.arrive_to_time = $(_modal_product_arrive_to_time).timeSelect({
+                            onStart: function () {},
+                        })
+                    }
+                    
+                    if (_modal_product_arrive_to_station_date) {
+                        Product.depart_from_station_date = $(_modal_product_arrive_to_station_date).dateSelect({
+                            onStart: function () {},
+                        })
+                    }
+                    
+                    if (_modal_product_depart_from_station_date) {
+                        Product.depart_from_station_date = $(_modal_product_depart_from_station_date).dateSelect({
+                            onStart: function () {},
+                        })
+                    }
+                    
+                    if (_modal_product_arrive_to_station_time) {
+                        Product.arrive_to_station_time = $(_modal_product_arrive_to_station_time).timeSelect({
+                            onStart: function () {},
+                        })
+                    }
+                    
+                    if (_modal_product_depart_from_station_time) {
+                        Product.depart_from_station_time = $(_modal_product_depart_from_station_time).timeSelect({
+                            onStart: function () {},
+                        })
+                    }
+                    
+                    validator_init(add_modal_formRules)
+                    Product.newProduct_validator = $(_form_product_add).validate()
+                })
+            }
+        }
+    }
+    
+    return {
+        validator: null,
+        depart_from_date: null,
+        depart_from_time: null,
+        calendars: null,
+        product_initial_location: null,
+        provider_initial_location: null,
+        arrive_to_station_time: null,
+        depart_from_station_time: null,
+        arrive_to_station_date: null,
+        depart_from_station_date: null,
+        detail: {},
+        all: new Map(),
+        attr1: null,
+        attr2: null,
+        attr3: null,
+        newProduct_validator: null,
+        updateDisplay: function () {
+            updateDisplay()
+        },
+        updateProgress: function () {
+            updateProgress()
+            $("html").css({ overflow: "auto" })
+        },
+        updateProductSKU: function () {
+            updateProductSKU()
+        },
+        setNewFormDetails: function (category_id) {
+            setNewFormDetails(category_id)
+        },
+        get: function (params) {
+            get(params)
+        },
+        loadAll: function (params) {
+            loadAll(params)
+        },
+        save: function (params) {
+            save(params)
+        },
+        init: function (settings) {
+            init(settings)
+        },
+        index: function (settings) {
+            index(settings)
+        },
+        navigate: function (product) {
+            navigate(product)
+        },
+        resetNewProductDetails: function () {
+            resetNewProductDetails()
+        },
+        initAutoComplete: function () {
+            initAutoComplete()
+        },
+    }
+    
+})()
 
 $(function () {
     const _profile_card = document.getElementById("profile_card")
@@ -19510,9 +31436,9 @@ $(function () {
     const _profile_edit_name = document.getElementById("profile_edit_name")
     
     $(_profile_edit_name)
-      .on("click", function () {
-          Console.log("_profile_edit_name:click")
-      })
+        .on("click", function () {
+            //console.log("_profile_edit_name:click")
+        })
     
     let tempName = {
         first: "",
@@ -19534,11 +31460,11 @@ $(function () {
         imageWidth = wd + "px"
         
         $(_cover_image)
-          .css({
-              "width": "100%",
-              "height": "100%",
-              "max-height": imageHeight + "px",
-          })
+            .css({
+                "width": "100%",
+                "height": "100%",
+                "max-height": imageHeight + "px",
+            })
     }
     
     window.addEventListener("resize", debounce(function (e) {

@@ -55,40 +55,40 @@ const Province = (function () {
         if (_name.value === "") {
             $(_name).addClass("is-invalid")
             $("#province_name-error")
-              .text("Required: Field is required")
-              .show()
+                .text("Required: Field is required")
+                .show()
             valid = false
         } else {
             $(_name).removeClass("is-invalid")
             $("#province_name-error")
-              .text("")
-              .hide()
+                .text("")
+                .hide()
         }
         
         if (_province_iso2.value === "") {
             $(_province_iso2).addClass("is-invalid")
             $("#province_iso2-error")
-              .text("Required: Field is required")
-              .show()
+                .text("Required: Field is required")
+                .show()
             valid = false
         } else {
             $(_province_iso2).removeClass("is-invalid")
             $("#province_iso2-error")
-              .text("")
-              .hide()
+                .text("")
+                .hide()
         }
         
         if (_province_iso3.value === "") {
             $(_province_iso3).addClass("is-invalid")
             $("#province_iso3-error")
-              .text("Required: Field is required")
-              .show()
+                .text("Required: Field is required")
+                .show()
             valid = false
         } else {
             $(_province_iso3).removeClass("is-invalid")
             $("#province_iso3-error")
-              .text("")
-              .hide()
+                .text("")
+                .hide()
         }
         
         return valid
@@ -96,7 +96,7 @@ const Province = (function () {
     
     const handle_province_error = function (msg) {
         toastr.error(msg)
-        Console.log(msg)
+        //console.log(msg)
     }
     
     const on_click_outside = (e) => {
@@ -117,83 +117,83 @@ const Province = (function () {
                     if (element) {
                         
                         $(element)
-                          .select2({
-                              "language": {
-                                  "searching": function () {
-                                  },
-                              },
-                              "escapeMarkup": function (markup) {
-                                  return markup
-                              },
-                          })
-                          .on("select2:open", function (e) {
-                              let x = document.querySelectorAll("[aria-controls='select2-" + dropdown_id + "-results']")
-                              if (x[0]) {
-                                  let _filterProvinceSearch = x[0]
-                                  $(_filterProvinceSearch).attr("id", "" + dropdown_id + "_search")
-                                  if (!document.getElementById("filter_province_add_icon")) {
-                                      let i = document.createElement("i")
-                                      i.classList = "select-add-option fas fa-plus filter_province_add"
-                                      i.id = "filter_province_add_icon"
-                                      i.addEventListener("click", event => {
-                                          let val = _filterProvinceSearch.value
-                                          $(element).select2("close")
-                                          Province.add(this, val, dropdown_id)
-                                      })
-                                      _filterProvinceSearch.after(i)
-                                  }
-                                  $(".filter_province_add").hide()
-                                  if (_filterProvinceSearch) {
-                                      _filterProvinceSearch.addEventListener("keyup", event => {
-                                          if (_filterProvinceSearch.value !== "") {
-                                              $(".filter_province_add").show()
-                                          } else {
-                                              $(".filter_province_add").hide()
-                                          }
-                                      })
-                                  }
-                              }
-                              
-                          })
-                          .on("change", function () {
-                              let city_el_id = $(this)
-                                .attr("id")
-                                .replace("province", "city")
-                              
-                              let country_el_id = $(this)
-                                .attr("id")
-                                .replace("province", "country")
-                              
-                              let city_element = document.getElementById(city_el_id)
-                              let country_element = document.getElementById(country_el_id)
-                              
-                              if (city_element) {
-                                  if (country_element) {
-                                      country_id = parseInt(country_element.value)
-                                      if (!isNaN(parseInt(country_element.value))) {
-                                          
-                                          //
-                                          
-                                          if (!isNaN(parseInt($(this).val()))) {
-                                              City.get(country_id, parseInt($(this).val()), city_element)
-                                          } else {
-                                              City.id = null
-                                              City.get(country_id, null, city_element)
-                                              if (City.id) {
-                                              
-                                              }
-                                          }
-                                          //
-                                          
-                                      } else {
-                                          City.id = null
-                                          City.get(null, null, city_element)
-                                      }
-                                  }
-                              }
-                              City.id = null
-                              Province.id = null
-                          })
+                            .select2({
+                                "language": {
+                                    "searching": function () {
+                                    },
+                                },
+                                "escapeMarkup": function (markup) {
+                                    return markup
+                                },
+                            })
+                            .on("select2:open", function (e) {
+                                let x = document.querySelectorAll("[aria-controls='select2-" + dropdown_id + "-results']")
+                                if (x[0]) {
+                                    let _filterProvinceSearch = x[0]
+                                    $(_filterProvinceSearch).attr("id", "" + dropdown_id + "_search")
+                                    if (!document.getElementById("filter_province_add_icon")) {
+                                        let i = document.createElement("i")
+                                        i.classList = "select-add-option fas fa-plus filter_province_add"
+                                        i.id = "filter_province_add_icon"
+                                        i.addEventListener("click", event => {
+                                            let val = _filterProvinceSearch.value
+                                            $(element).select2("close")
+                                            Province.add(this, val, dropdown_id)
+                                        })
+                                        _filterProvinceSearch.after(i)
+                                    }
+                                    $(".filter_province_add").hide()
+                                    if (_filterProvinceSearch) {
+                                        _filterProvinceSearch.addEventListener("keyup", event => {
+                                            if (_filterProvinceSearch.value !== "") {
+                                                $(".filter_province_add").show()
+                                            } else {
+                                                $(".filter_province_add").hide()
+                                            }
+                                        })
+                                    }
+                                }
+                                
+                            })
+                            .on("change", function () {
+                                let city_el_id = $(this)
+                                    .attr("id")
+                                    .replace("province", "city")
+                                
+                                let country_el_id = $(this)
+                                    .attr("id")
+                                    .replace("province", "country")
+                                
+                                let city_element = document.getElementById(city_el_id)
+                                let country_element = document.getElementById(country_el_id)
+                                
+                                if (city_element) {
+                                    if (country_element) {
+                                        country_id = parseInt(country_element.value)
+                                        if (!isNaN(parseInt(country_element.value))) {
+                                            
+                                            //
+                                            
+                                            if (!isNaN(parseInt($(this).val()))) {
+                                                City.get(country_id, parseInt($(this).val()), city_element)
+                                            } else {
+                                                City.id = null
+                                                City.get(country_id, null, city_element)
+                                                if (City.id) {
+                                                
+                                                }
+                                            }
+                                            //
+                                            
+                                        } else {
+                                            City.id = null
+                                            City.get(null, null, city_element)
+                                        }
+                                    }
+                                }
+                                City.id = null
+                                Province.id = null
+                            })
                         
                     }
                 })
@@ -215,7 +215,7 @@ const Province = (function () {
                 })
                 //*/
             } catch (e) {
-                Console.log("error", e)
+                //console.log("error", e)
                 return handle_province_error("Error Validating Province")
             }
         } else {
@@ -532,7 +532,7 @@ const Province = (function () {
                 sendPostRequest("/api/v1.0/provinces/update", dataToSend, function (data, status, xhr) {
                     if (data && data[0]) {
                         let new_province = data[0]
-                        Console.log("new_province", new_province)
+                        //console.log("new_province", new_province)
                         Province.all.set(new_province.id, new_province)
                         let province_elements = $("select[data-type='province']")
                         Province.id = new_province.id
@@ -552,11 +552,11 @@ const Province = (function () {
                     }
                 })
             } catch (e) {
-                Console.log("error", e)
+                //console.log("error", e)
                 handle_province_error("Error: Validating Province")
             }
         } else {
-            Console.log("Error: Missing Data")
+            //console.log("Error: Missing Data")
             handle_province_error("Error: Missing Data")
         }
     }

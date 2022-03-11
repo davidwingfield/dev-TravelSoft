@@ -1,0 +1,57 @@
+<?php
+	if (!isset($page_data)) {
+		$page_data = [];
+	}
+	
+	$currency = [];
+	if (isset($page_data["types"]["currency"])) {
+		$currency = $page_data["types"]["currency"];
+	}
+	
+	$pricing_strategies = [];
+	if (isset($page_data["types"]["pricing_strategy_types"])) {
+		$pricing_strategies = $page_data["types"]["pricing_strategy_types"];
+	}
+	
+	$categories = [];
+	if (isset($page_data["types"]["category"])) {
+		$categories = $page_data["types"]["category"];
+	}
+	
+	$rating_types = [];
+	if (isset($page_data["types"]["rating_types"])) {
+		$rating_types = $page_data["types"]["rating_types"];
+	}
+	
+	$airport_types = [];
+	if (isset($page_data["types"]["airport_types"])) {
+		$airport_types = $page_data["types"]["airport_types"];
+	}
+?>
+
+<div data-categoryid="6" class="row">
+	<div class="col-12 px-2">
+		<div class="card card-body m-1 p-1 border-1 border-light">
+			<div class="p-2">
+				<h5 class="card-title">
+					<span>Tour Fields</span>
+				</h5>
+				<h6 class="card-subtitle mb-2 text-muted">Additional Product Fields</h6>
+			</div>
+			<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
+			
+			<div class="row">
+				
+				<div class="col-12 col-md-8">
+					<div class="form-element">
+						<label for="modal_product_city_tours">City:</label>
+						<input type="text" id="modal_product_city_tours" name="modal_product_city_tours" class="form-control"/>
+						<div id="modal_product_city_tours-error" class="error w-100 text-center"></div>
+					</div>
+				</div>
+			
+			</div>
+		
+		</div>
+	</div>
+</div>

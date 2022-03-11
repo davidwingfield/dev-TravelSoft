@@ -3,6 +3,8 @@
 	namespace Framework\App\Models;
 	
 	use Exception;
+	use Framework\App\Controllers\Location;
+	use Framework\App\Controllers\Product;
 	use Framework\Core\Model;
 	use Framework\Logger\Log;
 	
@@ -27,6 +29,11 @@
 					STATION.name AS 'station_name',
 					STATION.iata_code AS 'station_iata_code',
 					STATION.city_id AS 'station_city_id',
+                   	
+                   	STATION.street_1 AS 'station_street_1',
+                   	STATION.street_2 AS 'station_street_2',
+                   	STATION.postal_code AS 'station_postal_code',
+                   
 					STATION.keywords AS 'station_keywords',
 					STATION.enabled AS 'station_enabled',
 					STATION.date_created AS 'station_date_created',
@@ -115,11 +122,14 @@
 		public static function fetchStationByStationId(int $id = null): array
 		{
 			$errors = [];
+			$whereQuery = "";
 			
 			if (is_null($id)) {
-				$errors[] = array(
-					"msg" => "Missing Id",
-				);
+				$whereQuery = "";
+			} else {
+				$whereQuery = "
+                    AND			STATION.id = $id
+                ";
 			}
 			
 			if (count($errors) > 0) {
@@ -128,9 +138,7 @@
 				return array();
 			}
 			
-			$sql = self::$selectQuery . "
-                    AND			STATION.id = $id
-                    ";
+			$sql = self::$selectQuery . $whereQuery;
 			try {
 				
 				return Model::$db->rawQuery($sql);
@@ -173,9 +181,7 @@
                     ORDER BY    $order
                     LIMIT 20;";
 				
-				$dataSet = Model::$db->rawQuery($sql);
-				
-				return $dataSet;
+				return Model::$db->rawQuery($sql);
 				
 			} catch (Exception $e) {
 				Log::$debug_log->error($e);
@@ -196,30 +202,78 @@
 			$id = Model::setInt((isset($station["id"])) ? $station["id"] : null);
 			$city_id = Model::setInt((isset($station["city_id"])) ? $station["city_id"] : null);
 			$name = Model::setString((isset($station["name"])) ? $station["name"] : null);
+			$street_1 = Model::setString((isset($station["street_1"])) ? $station["street_1"] : null);
+			$street_2 = Model::setString((isset($station["street_2"])) ? $station["street_2"] : null);
+			$postal_code = Model::setString((isset($station["postal_code"])) ? $station["postal_code"] : null);
 			$iata_code = Model::setString((isset($station["iata_code"])) ? $station["iata_code"] : null);
 			$enabled = Model::setBool((isset($station["enabled"])) ? $station["enabled"] : 1);
-			$keywords = Model::setLongText((isset($station["keywords"])) ? $station["keywords"] : null);
+			$keywords = Model::setLongText((isset($station["keywords"])) ? $station["keywords"] : "");
 			$note = Model::setLongText((isset($station["note"])) ? $station["note"] : null);
+			$location = Location::get($name, $city_id);
+			
+			if (!$location) {
+				$stationName = (isset($station["name"])) ? $station["name"] : null;
+				$stationCityId = (isset($station["city_id"])) ? (int)$station["city_id"] : null;
+				$stationStreet1 = (isset($station["street_1"])) ? $station["street_1"] : null;
+				$stationStreet2 = (isset($station["street_2"])) ? $station["street_2"] : null;
+				$stationPostalCode = (isset($station["postal_code"])) ? $station["postal_code"] : null;
+				$locationTypesId = Product::getLocationType(4);
+				
+				$location = Location::update(array(
+					"category_id" => 4,
+					"name" => $stationName,
+					"city_id" => $stationCityId,
+					"location_types_id" => $locationTypesId,
+					"street_1" => $stationStreet1,
+					"street_2" => $stationStreet2,
+					"zipcode" => $stationPostalCode,
+					"enabled" => 1,
+				));
+				
+				if (isset($location[0])) {
+					$location = $location[0];
+				}
+			}
+			
+			if ($keywords === "''" || $keywords === "" || is_null($keywords)) {
+				$keywordList = [];
+			} else {
+				$keywordList = explode(",", $keywords);
+			}
+			
+			$keywordValues = buildKeywordsList($name, $location, $keywordList);
+			
+			/*
+			Log::$debug_log->trace($keywords);
+			Log::$debug_log->trace($location);
+			Log::$debug_log->trace($keywordList);
+			Log::$debug_log->trace($keywordValues);
+			//*/
 			
 			try {
-				
 				$sql = "
-                    INSERT INTO station (
+					INSERT INTO station (
 						id, name, iata_code, city_id, enabled, keywords,
+						street_1, street_2, postal_code, scheduled_service,
 						date_created, created_by, date_modified, modified_by, note
 					) VALUES (
-						$id, $name, $iata_code, $city_id, $enabled, $keywords,
+						$id, $name, $iata_code, $city_id, $enabled, '$keywordValues',
+						$street_1, $street_2, $postal_code, 1,
 						CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP, $modified_by, $note
 					)
 					ON DUPLICATE KEY UPDATE
 						city_id = VALUES(city_id),
+						street_1 = VALUES(street_1),
+						street_2 = VALUES(street_2),
+					    keywords = VALUES(keywords),
+						postal_code = VALUES(postal_code),
 						name = VALUES(name),
 						iata_code = VALUES(iata_code),
 						note = VALUES(note),
 						modified_by = VALUES(modified_by),
 						date_modified = VALUES(date_modified),
 						enabled = VALUES(enabled)
-                ";
+				";
 				
 				Model::$db->rawQuery($sql);
 				

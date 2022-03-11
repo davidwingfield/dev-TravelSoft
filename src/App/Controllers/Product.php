@@ -38,7 +38,7 @@
 				"id" => "button_add_product_page_heading",
 				"data" => array(
 					"toggle" => "tooltip",
-					"title" => "Creat a New Product",
+					"title" => "Create a New Product",
 					"placement" => "top",
 				),
 			),
@@ -48,9 +48,11 @@
 				"href" => "javascript:void(0)",
 				"classes" => "btn btn-primary btn-heading",
 				"icon" => "fas fa-calendar",
+				"id" => "button_view_calendar",
 				"data" => array(
-					"toggle" => "modal",
-					"target" => "#seasonCalendarModal",
+					"toggle" => "tooltip",
+					"title" => "View Calendar",
+					"placement" => "top",
 				),
 			),
 		);
@@ -60,7 +62,6 @@
 			"role" => "tablist",
 			"class" => "nav nav-tabs nav-tabs-line",
 			"tabs" => array(
-				
 				"Overview" => array(
 					"controls" => "panel_tab_product_overview",
 					"href" => "panel_tab_product_overview",
@@ -71,7 +72,6 @@
 					),
 					"data" => array(),
 				),
-				
 				"Product" => array(
 					"controls" => "panel_tab_product_detail",
 					"href" => "panel_tab_product_detail",
@@ -82,32 +82,10 @@
 					),
 					"data" => array(),
 				),
-				
 				"Location" => array(
 					"controls" => "panel_tab_product_location",
 					"href" => "panel_tab_product_location",
 					"id" => "panel_tab_location",
-					"active" => false,
-					"aria" => array(
-						"expanded" => "false",
-					),
-					"data" => array(),
-				),
-				
-				"Provider" => array(
-					"controls" => "panel_tab_product_provider",
-					"href" => "panel_tab_product_provider",
-					"id" => "panel_tab_provider",
-					"active" => false,
-					"aria" => array(
-						"expanded" => "false",
-					),
-					"data" => array(),
-				),
-				"Vendor" => array(
-					"controls" => "panel_tab_product_vendor",
-					"href" => "panel_tab_product_vendor",
-					"id" => "panel_tab_vendor",
 					"active" => false,
 					"aria" => array(
 						"expanded" => "false",
@@ -207,6 +185,8 @@
 			foreach ($results AS $k => $product) {
 				$products[] = self::format($product);
 			}
+			$stations = Station::get();
+			$data["stations"] = $stations;
 			$data["products"] = $products;
 			
 			/**
@@ -284,6 +264,7 @@
 			/**
 			 * render product index page
 			 */
+			header("Content-type:application/json");
 			header("Location: /products");
 			exit(0);
 		}
@@ -318,7 +299,6 @@
 			 * render results json page
 			 */
 			header("Content-type:application/json");
-			
 			View::render_json($results);
 			exit(0);
 		}
@@ -348,13 +328,10 @@
 				$results[] = ProductModel::updateAssignProfiles($data);
 			}
 			
-			//$results[] = ProductModel::updateAssignProfiles($params);
-			
 			/**
 			 * render results json page
 			 */
 			header("Content-type:application/json");
-			
 			View::render_json($results);
 			exit(0);
 		}
@@ -362,11 +339,26 @@
 		public static function serveTableUpdate(array $params = []): void
 		{
 			$input = filter_input_array(INPUT_POST);
-			//Log::$debug_log->trace($input);
 			
-			// ----
-			
+			/**
+			 * render results page
+			 */
+			header("Content-type:application/json");
 			View::render_json($input);
+			exit(0);
+		}
+		
+		public static function get(int $product_id = null): array
+		{
+			$products = [];
+			
+			$results = self::getProductByProductId($product_id);
+			
+			foreach ($results AS $k => $product) {
+				$products[] = self::format($product);
+			}
+			
+			return $products;
 		}
 		
 		public static function serveGet(array $params = []): void
@@ -385,155 +377,8 @@
 			exit(0);
 		}
 		
-		private static function format(array $product = null): array
-		{
-			if (is_null($product)) {
-				return [];
-			}
-			
-			$rooms = array();
-			$category_id = (int)$product['category_id'];
-			$matrices = Matrix::getMatricesByProductId((int)$product['product_id']);
-			$profiles = Profile::getByProductId((int)$product['product_id']);
-			$seasons = Season::getSeasonsByProductId((int)$product['product_id']);
-			$units = Unit::getUnitsByProductId((int)$product['product_id']);
-			$variants = Variant::getVariantsByProductId((int)$product['product_id']);
-			$pricings = Pricing::getPricingsByProductId((int)$product['product_id']);
-			
-			foreach ($seasons AS $season) {
-				$season_name = $season["name"];
-				
-				if (!isset($rooms[$season_name])) {
-					$rooms[$season_name] = $season;
-					$rooms[$season_name]["units"] = array();
-					
-					foreach ($units AS $unit) {
-						$unit_name = $unit["name"];
-						$rooms[$season_name]["units"][$unit_name] = $unit;
-						$rooms[$season_name]["units"][$unit_name]["variants"] = $variants;
-						
-					}
-					
-				}
-				
-			}
-			
-			$provider = Provider::getByProviderId((int)$product['product_provider_id']);
-			$provider = (isset($provider[0])) ? $provider[0] : [];
-			
-			$vendor = Vendor::getByVendorId((int)$product['product_vendor_id']);
-			$vendor = (isset($vendor[0])) ? $vendor[0] : [];
-			
-			$use_provider_location = false;
-			$location = Location::getByLocationId((int)$product["product_location_id"]);
-			
-			$street_1 = (isset($product['product_street_1'])) ? $product['product_street_1'] : null;
-			$street_2 = (isset($product['product_street_2'])) ? $product['product_street_2'] : null;
-			$zipcode = (isset($product['product_postal_code'])) ? $product['product_postal_code'] : null;
-			
-			if ($category_id === 1) {
-				$location["street_1"] = $street_1;
-				$location["street_2"] = $street_2;
-				$location["postal_code"] = $zipcode;
-			}
-			
-			$location_id = (int)$product['product_location_id'];
-			
-			return array(
-				'id' => $product['product_id'],
-				'use_provider_location' => $use_provider_location,
-				'category_id' => $category_id,
-				'pricing_strategy_types_id' => $product['product_pricing_strategy_types_id'],
-				'status_types_id' => $product['product_status_types_id'],
-				'amenities' => $product['product_amenities'],
-				'city_id' => $product["product_city_id"],
-				'currency_id' => $product['product_currency_id'],
-				'location_id' => $location_id,
-				'provider_id' => $product['product_provider_id'],
-				'vendor_id' => $product['product_vendor_id'],
-				'rating_types_id' => $product['product_rating_types_id'],
-				'name' => $product['product_name'],
-				'description_short' => $product['product_description_short'],
-				'description_long' => $product['product_description_long'],
-				'sku' => $product['product_sku'],
-				'depart_from' => $product['product_depart_from'],
-				'arrive_to' => $product['product_arrive_to'],
-				'depart_time' => $product['product_depart_time'],
-				'arrive_time' => $product['product_arrive_time'],
-				'provider_vendor_match' => $product['product_provider_vendor_match'],
-				'day_span' => $product['product_day_span'],
-				'cover_image' => $product['product_cover_image'],
-				'api_id' => $product['product_api_id'],
-				'from_api' => $product['product_from_api'],
-				'hotel_code' => $product['product_hotel_code'],
-				'sort_order' => $product['product_sort_order'],
-				'keywords' => $product['product_keywords'],
-				'enabled' => $product['product_enabled'],
-				'date_created' => $product['product_date_created'],
-				'created_by' => $product['product_created_by'],
-				'date_modified' => $product['product_date_modified'],
-				'modified_by' => $product['product_modified_by'],
-				'note' => $product['product_note'],
-				
-				'street_1' => $street_1,
-				'street_2' => $street_2,
-				'postal_code' => $zipcode,
-				
-				'status_type_detail' => array(
-					'id' => $product['status_types_id'],
-					'name' => $product['status_types_name'],
-					'enabled' => $product['status_types_enabled'],
-					'date_created' => $product['status_types_date_created'],
-					'created_by' => $product['status_types_created_by'],
-					'date_modified' => $product['status_types_date_modified'],
-					'modified_by' => $product['status_types_modified_by'],
-					'note' => $product['status_types_note'],
-					'sort_order' => $product['status_types_sort_order'],
-				),
-				'category' => array(
-					'id' => $product['category_id'],
-					'pricing_strategy_types_id' => $product['category_pricing_strategy_types_id'],
-					'attribute_id' => $product['category_attribute_id'],
-					'name' => $product['category_name'],
-					'icon' => $product['category_icon'],
-					'view_product_index' => $product['category_view_product_index'],
-					'view_product_index_filter' => $product['category_view_product_index_filter'],
-					'view_product_index_search' => $product['category_view_product_index_search'],
-					'view_product_edit' => $product['category_view_product_edit'],
-					'view_product_package_edit' => $product['category_view_product_package_edit'],
-					'view_product_package_index' => $product['category_view_product_package_index'],
-					'all_day' => $product['category_all_day'],
-					'overlap' => $product['category_overlap'],
-					'editable' => $product['category_editable'],
-					'duration_editable' => $product['category_duration_editable'],
-					'start_editable' => $product['category_start_editable'],
-					'display' => $product['category_display'],
-					'background_color' => $product['category_background_color'],
-					'text_color' => $product['category_text_color'],
-					'border_color' => $product['category_border_color'],
-					'sort_order' => $product['category_sort_order'],
-					'enabled' => $product['category_enabled'],
-					'date_created' => $product['category_date_created'],
-					'created_by' => $product['category_created_by'],
-					'date_modified' => $product['category_date_modified'],
-					'modified_by' => $product['category_modified_by'],
-					'note' => $product['category_note'],
-				),
-				'location' => $location,
-				'provider' => $provider,
-				'vendor' => $vendor,
-				'seasons' => $seasons,
-				'units' => $units,
-				'variants' => $variants,
-				'profiles' => $profiles,
-				'matrices' => $matrices,
-				'pricings' => $pricings,
-			);
-		}
-		
 		public static function autocomplete(array $params = []): array
 		{
-			//Log::$debug_log->trace($params);
 			if (!isset($params["category_id"])) {
 				return [];
 			}
@@ -558,13 +403,223 @@
 			return $data;
 		}
 		
+		public static function getLocationType(int $id = null): int
+		{
+			switch ($id) {
+				case 1:
+					return 2;
+				case 2:
+					return 3;
+				case 3:
+					return 18;
+				case 4:
+					return 4;
+				case 5:
+					return 6;
+				case 6:
+					return 17;
+				case 7:
+					return 19;
+				case 8:
+					return 20;
+				default:
+					return 1;
+			}
+		}
+		
 		public static function serveAdd(array $params = []): void
 		{
+			if (!isset($params["name"]) || !isset($params["category_id"]) || !isset($params["pricing_strategy_types_id"])) {
+				header("Content-type:application/json");
+				View::render_invalid_json("Missing Fields", 500);
+				exit(0);
+			}
+			
+			$statusTypesId = 1;
+			$cityId = (isset($params["city_id"])) ? (int)$params["city_id"] : null;
+			$categoryId = (isset($params["category_id"])) ? (int)$params["category_id"] : null;
+			$productName = (isset($params["name"])) ? $params["name"] : null;
+			$pricingStrategyTypesId = (isset($params["pricing_strategy_types_id"])) ? (int)$params["pricing_strategy_types_id"] : null;
+			$providerId = (isset($params["provider_id"])) ? (int)$params["provider_id"] : null;
+			$vendorId = (isset($params["vendor_id"])) ? (int)$params["vendor_id"] : null;
+			$sku = (isset($params["sku"])) ? $params["sku"] : null;
+			$productStreet1 = (isset($params["street_1"])) ? $params["street_1"] : null;
+			$productStreet2 = (isset($params["street_2"])) ? $params["street_2"] : null;
+			$productPostalCode = (isset($params["postal_code"])) ? $params["postal_code"] : null;;
+			$locationTypesId = self::getLocationType($categoryId);
+			
+			$locationData = array(
+				"category_id" => $categoryId,
+				"name" => $productName,
+				"city_id" => $cityId,
+				"location_types_id" => $locationTypesId,
+				"street_1" => $productStreet1,
+				"street_2" => $productStreet2,
+				"zipcode" => $productPostalCode,
+				"enabled" => 1,
+			);
+			
+			switch ($categoryId) {
+				
+				case 1:
+				case 5:
+				case 6:
+					// HOTELS TRANSPORT
+					if (!isset($params["name"]) || !isset($params["city_id"])) {
+						/**
+						 * render product json
+						 */
+						header("Content-type:application/json");
+						View::render_invalid_json("Missing Fields", 500);
+						exit(0);
+					}
+					
+					$locationData = Location::get($params["name"], (int)$params["city_id"], "medium");
+					
+					if (!$locationData) {
+						$locationData = Location::update(array(
+							"category_id" => $categoryId,
+							"name" => $productName,
+							"city_id" => $cityId,
+							"location_types_id" => $locationTypesId,
+							"street_1" => $productStreet1,
+							"street_2" => $productStreet2,
+							"zipcode" => $productPostalCode,
+							"enabled" => 1,
+						));
+					}
+					break;
+				case 2:
+					// FLIGHTS
+					if (!isset($params["depart_from"])) {
+						/**
+						 * render product json
+						 */
+						header("Content-type:application/json");
+						View::render_invalid_json("Missing Airport", 500);
+						exit(0);
+					}
+					
+					$departFrom = (isset($params["depart_from"])) ? (int)$params["depart_from"] : null;
+					$airport = Airport::get($departFrom);
+					if (isset($airport[0])) {
+						$airport = $airport[0];
+					}
+					
+					if ($airport) {
+						$airportName = (isset($airport["name"])) ? $airport["name"] : null;
+						$airportCountryId = (isset($airport["country"]) && isset($airport["country"]["id"])) ? (int)$airport["country"]["id"] : null;
+						$airportProvinceId = (isset($airport["province"]) && isset($airport["province"]["id"])) ? (int)$airport["province"]["id"] : null;
+						$airportCityId = (isset($airport["city"]) && isset($airport["city"]["id"])) ? (int)$airport["city"]["id"] : null;
+						$airportStreet1 = (isset($airport["street_1"])) ? $airport["street_1"] : null;
+						$airportStreet2 = (isset($airport["street_2"])) ? $airport["street_2"] : null;
+						$airportPostalCode = (isset($airport["postal_code"])) ? $airport["postal_code"] : null;
+						
+						$locationData = Location::get($airportName, $airportCityId, "medium");
+						
+						if (!$locationData) {
+							$locationData = Location::update(array(
+								"category_id" => $categoryId,
+								"name" => $airportName,
+								"city_id" => $airportCityId,
+								"location_types_id" => $locationTypesId,
+								"street_1" => $airportStreet1,
+								"street_2" => $airportStreet2,
+								"zipcode" => $airportPostalCode,
+								"enabled" => 1,
+							));
+						}
+					}
+					
+					break;
+				case 4:
+					// RAIL
+					if (!isset($params["depart_from"])) {
+						/**
+						 * render product json
+						 */
+						header("Content-type:application/json");
+						View::render_invalid_json("Missing Airport", 500);
+						exit(0);
+					}
+					
+					$departFrom = (isset($params["depart_from"])) ? (int)$params["depart_from"] : null;
+					$station = Station::get($departFrom);
+					
+					if (isset($station[0])) {
+						$station = $station[0];
+					}
+					
+					if ($station) {
+						$stationName = (isset($station["name"])) ? $station["name"] : null;
+						$stationCountryId = (isset($station["country"]) && isset($station["country"]["id"])) ? (int)$station["country"]["id"] : null;
+						$stationProvinceId = (isset($station["province"]) && isset($station["province"]["id"])) ? (int)$station["province"]["id"] : null;
+						$stationCityId = (isset($station["city"]) && isset($station["city"]["id"])) ? (int)$station["city"]["id"] : null;
+						$stationStreet1 = (isset($station["street_1"])) ? $station["street_1"] : null;
+						$stationStreet2 = (isset($station["street_2"])) ? $station["street_2"] : null;
+						$stationPostalCode = (isset($station["postal_code"])) ? $station["postal_code"] : null;
+						
+						$locationData = Location::get($stationName, $stationCityId);
+						
+						if (!$locationData) {
+							$locationData = Location::update(array(
+								"category_id" => $categoryId,
+								"name" => $stationName,
+								"city_id" => $stationCityId,
+								"location_types_id" => $locationTypesId,
+								"street_1" => $stationStreet1,
+								"street_2" => $stationStreet2,
+								"zipcode" => $stationPostalCode,
+								"enabled" => 1,
+							));
+						}
+					}
+					
+					break;
+				default:
+					$locationData = array(
+						"name" => $productName,
+						"category_id" => $categoryId,
+						"city_id" => $productName,
+						"location_types_id" => $locationTypesId,
+						"street_1" => $productStreet1,
+						"street_2" => $productStreet2,
+						"zipcode" => $productPostalCode,
+						"enabled" => 1,
+					);
+			}
+			
+			$products = array(
+				"name" => $productName,
+				"sku" => $sku,
+				
+				"category_id" => $categoryId,
+				"status_types_id" => $statusTypesId,
+				"pricing_strategy_types_id" => $pricingStrategyTypesId,
+				"provider_id" => $providerId,
+				"vendor_id" => $vendorId,
+				
+				"location" => $locationData,
+			);
+			
 			/**
 			 * render product json
 			 */
 			header("Content-type:application/json");
-			View::render_json(ProductModel::addRecord($params));
+			View::render_json($locationData);
+			exit(0);
+			
+			$results = ProductModel::addRecord($params);
+			
+			foreach ($results AS $k => $product) {
+				$products[] = self::format($product);
+			}
+			
+			/**
+			 * render product json
+			 */
+			header("Content-type:application/json");
+			View::render_json($products);
 			exit(0);
 		}
 		
@@ -600,6 +655,236 @@
 			}
 			
 			return $products;
+		}
+		
+		private static function updateMeta(array $params = []): array
+		{
+			$products = [];
+			$results = ProductModel::updateProductMetaData($params);
+			
+			foreach ($results AS $k => $product) {
+				$products[] = self::format($product);
+			}
+			
+			return $products;
+		}
+		
+		private static function updateDetail(array $params = []): array
+		{
+			//Log::$debug_log->info("Product::updateDetail(params)");
+			//Log::$debug_log->trace($params);
+			$products = [];
+			$results = ProductModel::updateProductDetailData($params);
+			//Log::$debug_log->trace($results);
+			foreach ($results AS $k => $product) {
+				$products[] = self::format($product);
+			}
+			
+			return $products;
+		}
+		
+		private static function format(array $product = null): array
+		{
+			if (is_null($product)) {
+				return [];
+			}
+			
+			$category_id = (int)$product["category_id"];
+			$productId = (int)$product["product_id"];
+			
+			if (!isset($productId) || !isset($category_id)) {
+				return [];
+			}
+			
+			$rooms = array();
+			$arrivingLocation = [];
+			$departingLocation = [];
+			
+			$images = Image::getByProductId($productId);
+			$matrices = Matrix::getMatricesByProductId((int)$product["product_id"]);
+			$profiles = Profile::getByProductId((int)$product["product_id"]);
+			$seasons = Season::getSeasonsByProductId((int)$product["product_id"]);
+			$units = Unit::getUnitsByProductId((int)$product["product_id"]);
+			$variants = Variant::getVariantsByProductId((int)$product["product_id"]);
+			$pricings = Pricing::getPricingsByProductId((int)$product["product_id"]);
+			
+			$provider = Provider::getByProviderId((int)$product["product_provider_id"]);
+			$provider = (isset($provider[0])) ? $provider[0] : [];
+			
+			$vendor = Vendor::getByVendorId((int)$product["product_vendor_id"]);
+			$vendor = (isset($vendor[0])) ? $vendor[0] : [];
+			
+			$use_provider_location = false;
+			
+			$location = Location::getByLocationId((int)$product["product_location_id"]);
+			
+			$street_1 = (isset($product["product_street_1"])) ? $product["product_street_1"] : null;
+			$street_2 = (isset($product["product_street_2"])) ? $product["product_street_2"] : null;
+			$zipcode = (isset($product["product_postal_code"])) ? $product["product_postal_code"] : null;
+			
+			$departingFromId = (isset($product["product_depart_from"])) ? $product["product_depart_from"] : null;
+			$arrivingToId = (isset($product["product_arrive_to"])) ? $product["product_arrive_to"] : null;
+			
+			foreach ($seasons AS $season) {
+				$season_name = $season["name"];
+				
+				if (!isset($rooms[$season_name])) {
+					$rooms[$season_name] = $season;
+					$rooms[$season_name]["units"] = array();
+					
+					foreach ($units AS $unit) {
+						$unit_name = $unit["name"];
+						$rooms[$season_name]["units"][$unit_name] = $unit;
+						$rooms[$season_name]["units"][$unit_name]["variants"] = $variants;
+					}
+				}
+			}
+			
+			if ($category_id === 1) {
+				$location["street_1"] = $street_1;
+				$location["street_2"] = $street_2;
+				$location["postal_code"] = $zipcode;
+			} else if ($category_id === 2) {
+				$departingLocation = Airport::get($departingFromId);
+				$arrivingLocation = Airport::get($arrivingToId);
+				
+			} else if ($category_id === 4) {
+				$departingLocation = Station::get($departingFromId);
+				$arrivingLocation = Station::get($arrivingToId);
+			} else {
+				$departingLocation = [];
+				$arrivingLocation = [];
+			}
+			
+			if (count($departingLocation) === 1 && isset($departingLocation[0])) {
+				$departingLocation = $departingLocation[0];
+			}
+			
+			if (count($arrivingLocation) === 1 && isset($arrivingLocation[0])) {
+				$arrivingLocation = $arrivingLocation[0];
+			}
+			
+			$location_id = (int)$product["product_location_id"];
+			
+			return array(
+				"id" => $product["product_id"],
+				"use_provider_location" => $use_provider_location,
+				"category_id" => $category_id,
+				"pricing_strategy_types_id" => $product["product_pricing_strategy_types_id"],
+				"status_types_id" => $product["product_status_types_id"],
+				"amenities" => $product["product_amenities"],
+				"city_id" => $product["product_city_id"],
+				"currency_id" => $product["product_currency_id"],
+				"location_id" => $location_id,
+				"provider_id" => $product["product_provider_id"],
+				"vendor_id" => $product["product_vendor_id"],
+				"rating_types_id" => $product["product_rating_types_id"],
+				"name" => $product["product_name"],
+				"description_short" => $product["product_description_short"],
+				"description_long" => $product["product_description_long"],
+				"sku" => $product["product_sku"],
+				"depart_from" => $departingFromId,
+				"arrive_to" => $arrivingToId,
+				"arriving_location" => $arrivingLocation,
+				"departing_location" => $departingLocation,
+				"depart_time" => $product["product_depart_time"],
+				"arrive_time" => $product["product_arrive_time"],
+				"provider_vendor_match" => $product["product_provider_vendor_match"],
+				"day_span" => $product["product_day_span"],
+				"cover_image" => $product["product_cover_image"],
+				"api_id" => $product["product_api_id"],
+				"from_api" => $product["product_from_api"],
+				"hotel_code" => $product["product_hotel_code"],
+				"sort_order" => $product["product_sort_order"],
+				"keywords" => $product["product_keywords"],
+				"enabled" => $product["product_enabled"],
+				"date_created" => $product["product_date_created"],
+				"created_by" => $product["product_created_by"],
+				"date_modified" => $product["product_date_modified"],
+				"modified_by" => $product["product_modified_by"],
+				"note" => $product["product_note"],
+				"street_1" => $street_1,
+				"street_2" => $street_2,
+				"postal_code" => $zipcode,
+				"status_type_detail" => array(
+					"id" => $product["status_types_id"],
+					"name" => $product["status_types_name"],
+					"enabled" => $product["status_types_enabled"],
+					"date_created" => $product["status_types_date_created"],
+					"created_by" => $product["status_types_created_by"],
+					"date_modified" => $product["status_types_date_modified"],
+					"modified_by" => $product["status_types_modified_by"],
+					"note" => $product["status_types_note"],
+					"sort_order" => $product["status_types_sort_order"],
+				),
+				"category" => array(
+					"id" => $product["category_id"],
+					"pricing_strategy_types_id" => $product["category_pricing_strategy_types_id"],
+					"attribute_id" => $product["category_attribute_id"],
+					"name" => $product["category_name"],
+					"icon" => $product["category_icon"],
+					"view_product_index" => $product["category_view_product_index"],
+					"view_product_index_filter" => $product["category_view_product_index_filter"],
+					"view_product_index_search" => $product["category_view_product_index_search"],
+					"view_product_edit" => $product["category_view_product_edit"],
+					"view_product_package_edit" => $product["category_view_product_package_edit"],
+					"view_product_package_index" => $product["category_view_product_package_index"],
+					"all_day" => $product["category_all_day"],
+					"overlap" => $product["category_overlap"],
+					"editable" => $product["category_editable"],
+					"duration_editable" => $product["category_duration_editable"],
+					"start_editable" => $product["category_start_editable"],
+					"display" => $product["category_display"],
+					"background_color" => $product["category_background_color"],
+					"text_color" => $product["category_text_color"],
+					"border_color" => $product["category_border_color"],
+					"sort_order" => $product["category_sort_order"],
+					"enabled" => $product["category_enabled"],
+					"date_created" => $product["category_date_created"],
+					"created_by" => $product["category_created_by"],
+					"date_modified" => $product["category_date_modified"],
+					"modified_by" => $product["category_modified_by"],
+					"note" => $product["category_note"],
+				),
+				"images" => $images,
+				"location" => $location,
+				"provider" => $provider,
+				"vendor" => $vendor,
+				"seasons" => $seasons,
+				"units" => $units,
+				"variants" => $variants,
+				"profiles" => $profiles,
+				"matrices" => $matrices,
+				"pricings" => $pricings,
+			);
+		}
+		
+		public static function serveUpdateDetail(array $params = []): void
+		{
+			//Log::$debug_log->info("Product::serveUpdateMeta(params)");
+			//Log::$debug_log->trace($params);
+			$products = self::updateDetail($params);
+			//Log::$debug_log->trace($products);
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			View::render_json($products);
+			exit(0);
+		}
+		
+		public static function serveUpdateMeta(array $params = []): void
+		{
+			//Log::$debug_log->info("serveUpdateMeta(params)");
+			//Log::$debug_log->trace($params);
+			$products = self::updateMeta($params);
+			//Log::$debug_log->trace($products);
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			View::render_json($products);
+			exit(0);
 		}
 		
 	}

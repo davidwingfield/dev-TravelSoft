@@ -49,7 +49,7 @@ const Console = (function () {
                             vals = arguments[1]
                         }
                         
-                        console.log(title + type, vals)
+                        //console.log(title + type, vals)
                     }
                 }
             }

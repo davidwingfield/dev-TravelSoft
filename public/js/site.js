@@ -1,5 +1,6 @@
 const mySQLDate = ""
 const defaultLocationDisplayFormat = "medium" //long medium short
+const populateDefaultValues = false
 const sideNavOptions = {
     edge: "left", // Choose the horizontal origin
     closeOnClick: false, // Closes side-nav on &lt;a&gt; clicks, useful for Angular/Meteor
@@ -387,6 +388,36 @@ $.fn.BuildDropDown = function (settings) {
     
 }
 
+const fetchFormErrors = (form, rules) => {
+    console.log("fetchFormErrors()")
+    // ----
+    
+    let _modal_product_category_id = document.getElementById("modal_product_category_id")
+    let errors = []
+    
+    if (!form || !rules || !_modal_product_category_id) {
+        errors.push({
+            form: (form) ? form : null,
+            rules: (rules) ? rules : null,
+            message: "Missing Data",
+        })
+        
+        return {
+            valid: false,
+            errors: errors,
+        }
+    }
+    
+    let validator = jQuery(form).validate(rules)
+    
+    console.log("|__ validator", validator)
+    
+    return {
+        valid: true,
+        errors: errors,
+    }
+}
+
 const calculateWidth = (ratioWidth, ratioHeight, height) => {
     let aspectRatio = ratioWidth.value / ratioHeight.value
     return parseFloat((height * aspectRatio).toFixed(2))
@@ -599,10 +630,13 @@ const validator_init = function (settings) {
 }
 
 const initializeValidator = function (settings) {
-    //console.log("initializeValidator(settings)", settings)
+    console.log("initializeValidator(settings)", settings)
+    // ----
+    
     let rules = {}
     let messages = {}
     let groups = {}
+    
     if (settings) {
         
         if (settings.rules) {
@@ -666,7 +700,6 @@ const initializeValidator = function (settings) {
         submitHandler: function (form) {
             return true
         },
-        
     })
     
     jQuery.validator.addMethod("postalCode", function (value) {
@@ -3411,52 +3444,66 @@ $.fn.formFields = function (settings) {
 
 jQuery(($) => {
     $.fn.dateSelect = function (opt) {
+        const regex = /(((19|20)\d\d)\-(0[1-9]|1[0-2])\-((0|1)[0-9]|2[0-9]|3[0-1]))$/
+        
         let element = $(this)
         let elementId = element.attr("id")
         let separatorDate = "-"
-        
-        element.attr("id", "date-selector-" + elementId)
-        
+        let currentYear = new Date().getFullYear() - 1
+        let endYear = currentYear + 5
+        let startDate = moment(currentYear + "-01-01").format("YYYY-MM-DD")
+        let endDate = moment(endYear + "-12-31").format("YYYY-MM-DD")
         let $element, $elementWrapper, $elementGroupWrapper, $elementGroupAppend, $buttonGroupAppend,
             $input, $inputLabel, $errorElement, $buttonGroupAppendClear, input, picker
+        
+        let isShift = false
+        
+        /*
+        console.log("|__ currentYear", currentYear)
+        console.log("|__ endYear", endYear)
+        console.log("|__ startDate", startDate)
+        console.log("|__ endDate", endDate)
+        //*/
+        
+        element.attr("id", "date-selector-" + elementId)
         
         let defaults = {
             
             // Strings and translations
-            monthsFull: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            weekdaysFull: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-            weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-            showMonthsShort: undefined,
-            showWeekdaysFull: undefined,
+            monthsFull: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+            monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            weekdaysFull: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            weekdaysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            showMonthsShort: false,
+            showWeekdaysFull: false,
             
             // Buttons
-            today: 'Today',
-            clear: 'Clear',
-            close: 'Close',
+            today: "Today",
+            clear: "Clear",
+            close: "Close",
             
             // Accessibility labels
-            labelMonthNext: 'Next month',
-            labelMonthPrev: 'Previous month',
-            labelMonthSelect: 'Select a month',
-            labelYearSelect: 'Select a year',
+            labelMonthNext: "Next month",
+            labelMonthPrev: "Previous month",
+            labelMonthSelect: "Select a month",
+            labelYearSelect: "Select a year",
             
             // Formats
             format: "yyyy-mm-dd",
             formatSubmit: "yyyy-mm-dd",
-            hiddenPrefix: undefined,
-            hiddenSuffix: '_submit',
+            //hiddenPrefix: "date-selector-" + elementId,
+            hiddenSuffix: "_submit",
             hiddenName: undefined,
             
             // Editable input
             editable: undefined,
             
             // Dropdown selectors
-            selectYears: undefined,
-            selectMonths: undefined,
+            selectYears: 5,
+            selectMonths: true,
             
             // First day of the week
-            firstDay: undefined,
+            firstDay: 1,
             
             // Date limits
             min: undefined,
@@ -3480,7 +3527,10 @@ jQuery(($) => {
             onRender: undefined,
             onOpen: undefined,
             onClose: undefined,
-            onSet: undefined,
+            onSet: function (context) {
+                $input.val(moment(context.select).format("YYYY-MM-DD"))
+                toggleClearButton()
+            },
             onStop: undefined,
         }
         
@@ -3527,7 +3577,6 @@ jQuery(($) => {
         
         const validateDateFormat = function (input, keyCode) {
             let dateString = input.value
-            let regex = /(((19|20)\d\d)\-(0[1-9]|1[0-2])\-((0|1)[0-9]|2[0-9]|3[0-1]))$/
             
             if (keyCode === 16) {
                 isShift = true
@@ -3540,6 +3589,7 @@ jQuery(($) => {
             } else {
                 loadError(input)
             }
+            
         }
         
         const buildElements = function (element, opt) {
@@ -3582,11 +3632,34 @@ jQuery(($) => {
                     return isNumeric(this, event.keyCode)
                 })
                 .on("keyup", function (event) {
-                    validateDateFormat(this, event.keyCode)
+                    console.log("event", event.keyCode)
+                    
+                    if ($(this).val() === "") {
+                        DateSelect.clear()
+                        unSetDateError($input[0])
+                    } else {
+                        validateDateFormat(this, event.keyCode)
+                    }
+                    
                     toggleClearButton()
                 })
-                .on("change", function () {
+                .on("change", function (e) {
+                    console.log("DateSelect.input:change(e)")
+                    //e.preventDefault()
+                    
+                    if ($(this).val() === "") {
+                        //unSetDateError($input[0])
+                    }
+                    
                     toggleClearButton()
+                })
+                .on("focus", function (e) {
+                    /*
+                    console.log("DateSelect.input:focus(e)")
+                    console.log("|__ input.val()", $input.val())
+                    console.log("|__ buttonGroupAppend.val()", $buttonGroupAppend.val())
+                    console.log("|__ input.val()", $input.val())
+                    //*/
                 })
             
             $inputLabel = $("<label>")
@@ -3598,6 +3671,7 @@ jQuery(($) => {
         }
         
         const toggleClearButton = function () {
+            
             if ($input.val() !== "") {
                 $buttonGroupAppendClear.show()
                 let id = $input.attr("id")
@@ -3605,10 +3679,14 @@ jQuery(($) => {
             } else {
                 $buttonGroupAppendClear.hide()
             }
+            
         }
         
         const setWrapper = function (element, opt) {
+            
+            // ----
             buildElements(element, opt)
+            
             $elementGroupAppend.append($buttonGroupAppendClear, $buttonGroupAppend)
             $elementGroupWrapper.append($input, $elementGroupAppend)
             $elementWrapper.append($inputLabel, $elementGroupWrapper, $errorElement)
@@ -3622,17 +3700,17 @@ jQuery(($) => {
                     defaults[k] = v
                 })
             }
-            
         }
         
         const clear = function () {
             
             if (DateSelect.picker.clear()) {
                 DateSelect.picker.clear()
-                DateSelect.picker.set("select", moment().format("YYYY-MM-DD"), { format: "yyyy-mm-dd" })
-                DateSelect.picker.render()
                 unSetDateError($input[0])
             }
+            
+            $input.val("")
+            $buttonGroupAppend.val("")
         }
         
         const set = function (opts) {
@@ -3659,7 +3737,9 @@ jQuery(($) => {
         const DateSelect = {
             picker: null,
             val: null,
-            fooListener: function (val) {},
+            fooListener: function (val) {
+            
+            },
             registerNewListener: function (externalListenerFunction) {
                 this.fooListener = externalListenerFunction
             },
@@ -3691,18 +3771,17 @@ jQuery(($) => {
             $buttonGroupAppend
                 .pickadate(defaults)
                 .on("change", function () {
-                    if ($(this).val() === "") {
+                    if ($buttonGroupAppend.val() === "") {
                         $input.val("")
                     } else {
                         $input.val($(this).val())
                     }
-                    
-                    $input.trigger("change")
                 })
             
             picker = $buttonGroupAppend.pickadate("picker")
-            toggleClearButton()
             DateSelect.picker = $buttonGroupAppend.pickadate("picker")
+            
+            toggleClearButton()
         }
         
         init(element, opt)
@@ -4299,6 +4378,7 @@ const Season = (function () {
     $(_button_clear_form_edit_season)
         .on("click", function () {
             _product_edit_season_form_season_name_filter.value = ""
+            
             resetForm()
             clearProductSeasonForm()
             $table_season_product_edit.clearSelectedRows()
@@ -4780,11 +4860,16 @@ const Season = (function () {
     }
     
     const resetForm = function () {
+        console.log("Season.resetForm()")
+        // ----
+        
         _product_edit_season_form_season_id.value = ""
         _product_edit_season_form_season_name.value = ""
         _product_edit_season_id_name_display.value = ""
         _product_edit_season_form_season_enabled.checked = true
+        
         updateProgress()
+        
         ColorScheme.load()
     }
     
@@ -6854,14 +6939,20 @@ $.fn.table = function (settings) {
 }
 
 $.fn.BuildKeyword = function (keywords) {
-    let chip_input_id, chip_container_id, chip_id,
-        _chips, _input, _container,
-        $input, $container
+    //console.log("BuildKeyword()", $(this))
+    // ----
+    
+    let chip_input_id, chip_container_id, chip_id, chip_disable_id,
+        _chips, _input, _container, $input, $container
     let counter = 0
     let editMode = null
     let tags = new Map()
     
     if (!$(this).hasClass("keyword") || !$(this).attr("id")) {
+        /*
+        console.log("|__ MISSING FIELDS: class - ", $(this).hasClass("keyword"))
+        console.log("|__ MISSING FIELDS: id - ", $(this).attr("id"))
+        //*/
         return
     }
     
@@ -6869,11 +6960,22 @@ $.fn.BuildKeyword = function (keywords) {
     chip_input_id = chip_id + "_search"
     chip_container_id = chip_id + "_container"
     
+    /*
+    console.log("|__ chip_id", chip_id)
+    console.log("|__ chip_input_id", chip_input_id)
+    console.log("|__ chip_container_id", chip_container_id)
+    //*/
+    
     _chips = document.getElementById(chip_id)
     _input = document.getElementById(chip_input_id)
     _container = document.getElementById(chip_container_id)
     
     if (!_container || !_input || !_chips) {
+        //*
+        console.log("|__ MISSING FIELDS: _container - ", _container)
+        console.log("|__ MISSING FIELDS: _input - ", _input)
+        console.log("|__ MISSING FIELDS: _chips - ", _chips)
+        //*/
         return
     }
     
@@ -6902,11 +7004,17 @@ $.fn.BuildKeyword = function (keywords) {
     
     $input
         .on("keydown", function (e) {
-            if (e.keyCode === 9) {
+            console.log("|__ e.keyCode", e.keyCode)
+            console.log("|__ e.which", e.which)
+            
+            if (e.keyCode === 13) {
                 e.preventDefault()
+                e.stopPropagation()
+                add()
+                editMode = null
             }
             
-            if (e.which === 13 || e.keyCode === 9) {
+            if (e.which === 9) {
                 add()
                 editMode = null
             }
@@ -7041,9 +7149,27 @@ $.fn.BuildKeyword = function (keywords) {
         })
     }
     
+    const readOnly = function (val) {
+        
+        if (val === true) {
+            _input.disabled = true
+            
+            $(_input).addClass("disabled")
+            $(_container).addClass("disabled")
+        } else {
+            _input.disabled = false
+            
+            $(_input).removeClass("disabled")
+            $(_container).removeClass("disabled")
+        }
+    }
+    
     init(keywords)
     
     return {
+        readOnly: function (val) {
+            readOnly(val)
+        },
         clear: function () {
             clear()
         },
@@ -12857,6 +12983,10 @@ const City = (function () {
             }, 200)
         })
         .on("search", function () {
+            $(_modal_product_country_id)
+                .val("")
+            $(_modal_product_province_id)
+                .val("")
             $(_modal_product_city_id)
                 .val("")
                 .trigger("change")
@@ -12880,12 +13010,15 @@ const City = (function () {
                     return
                 }
                 let city = suggestion.data
-                _modal_product_city_id.value = city.id
-                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
-                
+                _modal_product_country_id.value = city.id
+                _modal_product_province_id.value = city.province.id
+                _modal_product_city_id.value = city.country.id
                 _modal_product_depart_from_station_country_id.value = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
                 _modal_product_depart_from_station_province_id.value = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
                 _modal_product_depart_from_station_city_id.value = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+                
+                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+                
             },
         })
     
@@ -13530,6 +13663,7 @@ const City = (function () {
 
 const Station = (function () {
     "use strict"
+    
     const _modal_product_depart_from_station_cancel_button = document.getElementById("modal_product_depart_from_station_cancel_button")
     const _modal_product_depart_from_station_submit_button = document.getElementById("modal_product_depart_from_station_submit_button")
     const _modal_product_depart_from_station_iata_code = document.getElementById("modal_product_depart_from_station_iata_code")
@@ -13540,60 +13674,105 @@ const Station = (function () {
     const _modal_product_depart_from_station = document.getElementById("modal_product_depart_from_station")
     const _modal_product_depart_from_station_id = document.getElementById("modal_product_depart_from_station_id")
     const _modal_product_depart_from_station_add_block = document.getElementById("modal_product_depart_from_station_add_block")
-    
-    const _modal_product_arrive_to_station_postal_code = document.getElementById("modal_product_arrive_to_station_postal_code")
-    const _modal_product_arrive_to_station_street_1 = document.getElementById("modal_product_arrive_to_station_street_1")
-    const _modal_product_arrive_to_station_street_2 = document.getElementById("modal_product_arrive_to_station_street_2")
-    
     const _modal_product_depart_from_station_postal_code = document.getElementById("modal_product_depart_from_station_postal_code")
     const _modal_product_depart_from_station_street_1 = document.getElementById("modal_product_depart_from_station_street_1")
     const _modal_product_depart_from_station_street_2 = document.getElementById("modal_product_depart_from_station_street_2")
-    
-    const _modal_product_country_id = document.getElementById("modal_product_country_id")
-    const _modal_product_province_id = document.getElementById("modal_product_province_id")
-    const _modal_product_city_id = document.getElementById("modal_product_city_id")
     const _modal_product_depart_from_station_edit_link = document.getElementById("modal_product_depart_from_station_edit_link")
-    const _modal_product_arrive_to_station_edit_link = document.getElementById("modal_product_arrive_to_station_edit_link")
     const _modal_product_depart_from_new_station_id = document.getElementById("modal_product_depart_from_new_station_id")
+    const _modal_product_depart_from_station_gps_code = document.getElementById("modal_product_depart_from_station_gps_code")
+    const _modal_product_depart_from_station_local_code = document.getElementById("modal_product_depart_from_station_local_code")
+    const _modal_product_depart_from_station_home_link = document.getElementById("modal_product_depart_from_station_home_link")
+    const _modal_product_depart_from_station_wikipedia_link = document.getElementById("modal_product_depart_from_station_wikipedia_link")
+    const _modal_product_depart_from_station_scheduled_service = document.getElementById("modal_product_depart_from_station_scheduled_service")
+    const _modal_product_depart_from_station_keywords = document.getElementById("modal_product_depart_from_station_keywords")
+    
+    const _modal_product_arrive_to_station_add_block = document.getElementById("modal_product_arrive_to_station_add_block")
     const _modal_product_arrive_to_station_cancel_button = document.getElementById("modal_product_arrive_to_station_cancel_button")
-    const _modal_product_arrive_to_new_station_id = document.getElementById("modal_product_arrive_to_new_station_id")
     const _modal_product_arrive_to_station_submit_button = document.getElementById("modal_product_arrive_to_station_submit_button")
+    const _modal_product_arrive_to_station_edit_link = document.getElementById("modal_product_arrive_to_station_edit_link")
+    const _modal_product_arrive_to_station = document.getElementById("modal_product_arrive_to_station")
+    const _modal_product_arrive_to_station_city = document.getElementById("modal_product_arrive_to_station_city")
+    const _modal_product_arrive_to_station_id = document.getElementById("modal_product_arrive_to_station_id")
+    const _modal_product_arrive_to_new_station_id = document.getElementById("modal_product_arrive_to_new_station_id")
+    const _modal_product_arrive_to_station_street_1 = document.getElementById("modal_product_arrive_to_station_street_1")
+    const _modal_product_arrive_to_station_street_2 = document.getElementById("modal_product_arrive_to_station_street_2")
+    const _modal_product_arrive_to_station_postal_code = document.getElementById("modal_product_arrive_to_station_postal_code")
     const _modal_product_arrive_to_station_iata_code = document.getElementById("modal_product_arrive_to_station_iata_code")
     const _modal_product_arrive_to_station_country_id = document.getElementById("modal_product_arrive_to_station_country_id")
     const _modal_product_arrive_to_station_province_id = document.getElementById("modal_product_arrive_to_station_province_id")
     const _modal_product_arrive_to_station_city_id = document.getElementById("modal_product_arrive_to_station_city_id")
-    const _modal_product_arrive_to_station_city = document.getElementById("modal_product_arrive_to_station_city")
-    const _modal_product_arrive_to_station = document.getElementById("modal_product_arrive_to_station")
-    const _modal_product_arrive_to_station_id = document.getElementById("modal_product_arrive_to_station_id")
-    const _modal_product_arrive_to_station_add_block = document.getElementById("modal_product_arrive_to_station_add_block")
+    const _modal_product_arrive_to_station_gps_code = document.getElementById("modal_product_arrive_to_station_gps_code")
+    const _modal_product_arrive_to_station_local_code = document.getElementById("modal_product_arrive_to_station_local_code")
+    const _modal_product_arrive_to_station_home_link = document.getElementById("modal_product_arrive_to_station_home_link")
+    const _modal_product_arrive_to_station_wikipedia_link = document.getElementById("modal_product_arrive_to_station_wikipedia_link")
+    const _modal_product_arrive_to_station_scheduled_service = document.getElementById("modal_product_arrive_to_station_scheduled_service")
+    const _modal_product_arrive_to_station_keywords = document.getElementById("modal_product_arrive_to_station_keywords")
+    
+    const _modal_product_day_span = document.getElementById("modal_product_day_span")
+    const _modal_product_station_day_span = document.getElementById("modal_product_station_day_span")
+    const _modal_product_country_id = document.getElementById("modal_product_country_id")
+    const _modal_product_province_id = document.getElementById("modal_product_province_id")
+    const _modal_product_city_id = document.getElementById("modal_product_city_id")
     
     let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let globalSelectedStationDepartFrom = false
     let globalSelectedStationArriveTo = false
     
-    $(_modal_product_depart_from_station_edit_link)
-        .on("click", function () {
-            console.log("Station.modal_product_depart_from_station_edit_link:click()")
+    $(_modal_product_station_day_span)
+        .on("change", function (e) {
+            //console.log("Station.modal_product_station_day_span:change()")
             // ----
             
-            let stationId = (_modal_product_depart_from_station_edit_link.dataset.stationId && !isNaN(parseInt(_modal_product_depart_from_station_edit_link.dataset.stationId))) ? parseInt(_modal_product_depart_from_station_edit_link.dataset.stationId) : null
-            let station = Station.all.get(stationId)
+            let daySpan
             
-            /*
-            console.log("|__ stationId", stationId)
-            console.log("|__ station", station)
-            //*/
-            
-            if (station) {
-                clearStationForm("depart_from")
-                populateStationForm(station, "depart_from")
-                showStationForm("depart_from")
+            if (_modal_product_day_span) {
+                daySpan = ((!isNaN(parseInt(_modal_product_station_day_span.value))) && parseInt(_modal_product_station_day_span.value) > 0) ? parseInt(_modal_product_station_day_span.value) : 1
+                
+                //console.log("|__ daySpan", daySpan)
+                
+                _modal_product_day_span.value = daySpan
+                
             }
+        })
+    
+    $(_modal_product_depart_from_station_edit_link)
+        .on("click", function () {
+            //console.log("Station.modal_product_depart_from_station_edit_link:click()")
+            // ----
+            
+            let type = "depart_from"
+            
+            if ($("#modal_product_depart_from_station_add_block").is(":visible")) {
+                
+                clearStationForm(type)
+                
+            } else {
+                
+                edit(this, type)
+                _modal_product_depart_from_station_edit_link.innerText = "Clear"
+                
+            }
+            
         })
     
     $(_modal_product_arrive_to_station_edit_link)
         .on("click", function () {
-            console.log("Station.modal_product_arrive_to_station_edit_link:click()")
+            //console.log("Station.modal_product_arrive_to_station_edit_link:click()")
+            // ----
+            
+            let type = "arrive_to"
+            
+            if ($("#modal_product_arrive_to_station_add_block").is(":visible")) {
+                
+                clearStationForm(type)
+                
+            } else {
+                
+                edit(this, type)
+                _modal_product_arrive_to_station_edit_link.innerText = "Clear"
+                
+            }
+            
         })
     
     $(_modal_product_depart_from_station_add_block)
@@ -13607,11 +13786,13 @@ const Station = (function () {
     $(_modal_product_depart_from_station_cancel_button)
         .on("click", function () {
             cancelAddStationRecord("depart_from")
+            _modal_product_depart_from_station_edit_link.innerText = "Edit"
         })
     
     $(_modal_product_arrive_to_station_cancel_button)
         .on("click", function () {
             cancelAddStationRecord("arrive_to")
+            _modal_product_arrive_to_station_edit_link.innerText = "Edit"
         })
     
     $(_modal_product_depart_from_station_submit_button)
@@ -13624,341 +13805,137 @@ const Station = (function () {
             save("arrive_to")
         })
     
-    const save = function (type) {
-        if (type) {
-            let dataToSend = buildAddStationRecord(type)
+    // ----
+    
+    const edit = function (el, type) {
+        //console.log("Station.edit()")
+        // ----
+        
+        let stationId = (el.dataset.stationId && !isNaN(parseInt(el.dataset.stationId))) ? parseInt(el.dataset.stationId) : null
+        let station = Station.all.get(stationId)
+        
+        //*
+        //console.log("|__ stationId", stationId)
+        //console.log("|__ station", station)
+        //*/
+        
+        //*
+        if (station) {
             
-            if (dataToSend) {
-                confirmDialog(`Would you like to update?`, (ans) => {
-                    if (ans) {
-                        sendSaveRequest(dataToSend, function (data) {
-                            let station
-                            if (data) {
-                                station = data
-                                if (data[0]) {
-                                    station = data[0]
-                                }
-                            }
-                            
-                            if (station) {
-                                console.log("|__ station", station)
-                                
-                                let countryId = (station.country && !isNaN(parseInt(station.country.id))) ? parseInt(station.country.id) : null
-                                let provinceId = (station.province && !isNaN(parseInt(station.province.id))) ? parseInt(station.province.id) : null
-                                let cityId = (station.city && !isNaN(parseInt(station.city.id))) ? parseInt(station.city.id) : null
-                                let stationId = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : null
-                                let stationName = (station.name) ? station.name : null
-                                
-                                if (type === "depart_from") {
-                                    
-                                    if (_modal_product_depart_from_station) {
-                                        _modal_product_depart_from_station.value = stationName
-                                    }
-                                    
-                                    if (_modal_product_depart_from_new_station_id) {
-                                        _modal_product_depart_from_new_station_id.value = stationId
-                                    }
-                                    
-                                    if (_modal_product_depart_from_station_id) {
-                                        _modal_product_depart_from_station_id.value = stationId
-                                    }
-                                    
-                                    if (_modal_product_country_id) {
-                                        _modal_product_country_id.value = countryId
-                                    }
-                                    
-                                    if (_modal_product_province_id) {
-                                        _modal_product_province_id.value = provinceId
-                                    }
-                                    
-                                    if (_modal_product_city_id) {
-                                        _modal_product_city_id.value = cityId
-                                    }
-                                    
-                                    _modal_product_depart_from_station_edit_link.dataset.stationId = stationId
-                                    $(_modal_product_depart_from_station_edit_link).show()
-                                    
-                                } else if (type === "arrive_to") {
-                                    if (_modal_product_arrive_to_station) {
-                                        _modal_product_arrive_to_station.value = stationName
-                                    }
-                                    
-                                    if (_modal_product_arrive_to_new_station_id) {
-                                        _modal_product_arrive_to_new_station_id.value = stationId
-                                    }
-                                    
-                                    if (_modal_product_arrive_to_station_id) {
-                                        _modal_product_arrive_to_station_id.value = stationId
-                                    }
-                                    
-                                    if (_modal_product_country_id) {
-                                        _modal_product_country_id.value = countryId
-                                    }
-                                    
-                                    if (_modal_product_province_id) {
-                                        _modal_product_province_id.value = provinceId
-                                    }
-                                    
-                                    if (_modal_product_city_id) {
-                                        _modal_product_city_id.value = cityId
-                                    }
-                                    
-                                    _modal_product_arrive_to_station_edit_link.dataset.stationId = stationId
-                                    $(_modal_product_arrive_to_station_edit_link).show()
-                                }
-                                
-                                resetStationForm(type)
-                                initAutocomplete()
-                            }
-                        })
-                    }
-                })
-            }
-        }
-    }
-    
-    const sendSaveRequest = function (dataToSend, callback) {
-        if (dataToSend) {
-            let url = "/api/v1.0/stations/update"
-            try {
-                sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    } else {
-                        handleStationError("Oops: 1")
-                    }
-                })
-            } catch (e) {
-                //console.log("error", e)
-            }
-        }
-    }
-    
-    const validDepartFromRecord = function () {
-        let isValid = true
-        
-        if (_modal_product_depart_from_station_iata_code.value === "") {
-            $(_modal_product_depart_from_station_iata_code).showError("Field Required")
-            isValid = false
-        } else {
-            $(_modal_product_depart_from_station_iata_code).hideError()
-        }
-        
-        if (isNaN(parseInt(_modal_product_depart_from_station_city_id.value))) {
-            $(_modal_product_depart_from_station_city).showError("Field Required")
-            isValid = false
-        } else {
-            $(_modal_product_depart_from_station_city).hideError()
-        }
-        
-        return isValid
-    }
-    
-    const validArriveToRecord = function () {
-        let isValid = true
-        
-        if (_modal_product_arrive_to_station_iata_code.value === "") {
-            $(_modal_product_arrive_to_station_iata_code).showError("Field Required")
-            isValid = false
-        } else {
-            $(_modal_product_arrive_to_station_iata_code).hideError()
-        }
-        
-        if (isNaN(parseInt(_modal_product_arrive_to_station_city_id.value))) {
-            $(_modal_product_arrive_to_station_city).showError("Field Required")
-            isValid = false
-        } else {
-            $(_modal_product_arrive_to_station_city).hideError()
-        }
-        
-        return isValid
-    }
-    
-    const buildAddStationRecord = function (type) {
-        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
-            if (type) {
-                if (type === "depart_from") {
-                    if (validDepartFromRecord()) {
-                        let dataToSend = {
-                            postal_code: (_modal_product_depart_from_station_postal_code.value !== "") ? _modal_product_depart_from_station_postal_code.value : null,
-                            street_1: (_modal_product_depart_from_station_street_1.value !== "") ? _modal_product_depart_from_station_street_1.value : null,
-                            street_2: (_modal_product_depart_from_station_street_2.value !== "") ? _modal_product_depart_from_station_street_2.value : null,
-                            city_id: (!isNaN(parseInt(_modal_product_depart_from_station_city_id.value))) ? parseInt(_modal_product_depart_from_station_city_id.value) : null,
-                            name: (_modal_product_depart_from_station.value !== "") ? _modal_product_depart_from_station.value : null,
-                            iata_code: (_modal_product_depart_from_station_iata_code.value !== "") ? _modal_product_depart_from_station_iata_code.value : null,
-                        }
-                        
-                        return removeNulls(dataToSend)
-                    }
-                } else if (type === "arrive_to") {
-                    if (validArriveToRecord()) {
-                        let dataToSend = {
-                            postal_code: (_modal_product_arrive_to_station_postal_code.value !== "") ? _modal_product_arrive_to_station_postal_code.value : null,
-                            street_1: (_modal_product_arrive_to_station_street_1.value !== "") ? _modal_product_arrive_to_station_street_1.value : null,
-                            street_2: (_modal_product_arrive_to_station_street_2.value !== "") ? _modal_product_arrive_to_station_street_2.value : null,
-                            city_id: (!isNaN(parseInt(_modal_product_arrive_to_station_city_id.value))) ? parseInt(_modal_product_arrive_to_station_city_id.value) : null,
-                            name: (_modal_product_arrive_to_station.value !== "") ? _modal_product_arrive_to_station.value : null,
-                            iata_code: (_modal_product_arrive_to_station_iata_code.value !== "") ? _modal_product_arrive_to_station_iata_code.value : null,
-                        }
-                        
-                        return removeNulls(dataToSend)
-                    }
-                }
-            }
-        }
-    }
-    
-    const cancelAddStationRecord = function (type) {
-        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
             clearStationForm(type)
-            hideStationForm(type)
+            populateStationForm(station, type)
+            showStationForm(type)
             
-            if (type) {
-                if (type === "depart_from") {
-                    _modal_product_depart_from_station.value = ""
-                } else if (type === "arrive_to") {
-                    _modal_product_arrive_to_station.value = ""
-                }
-            }
         }
+        //*/
+        
     }
     
-    const populateStationForm = function (station, type) {
-        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
-            clearStationForm(type)
-            if (station) {
-                console.log("|__ station", station)
-                
-                let countryId = (station.country && station.country.id && !isNaN(parseInt(station.country.id))) ? parseInt(station.country.id) : null
-                let provinceId = (station.province && station.province.id && !isNaN(parseInt(station.province.id))) ? parseInt(station.province.id) : null
-                let cityId = (station.city && station.city.id && !isNaN(parseInt(station.city.id))) ? parseInt(station.city.id) : null
-                let stationId = (station.id && !isNaN(parseInt(station.id))) ? parseInt(station.id) : null
-                let stationName = (station.name) ? station.name : null
-                let stationIATACode = (station.iata_code) ? station.iata_code : null
-                let stationStreet1 = (station.street_1) ? station.street_1 : null
-                let stationStreet2 = (station.street_2) ? station.street_2 : null
-                let stationPostalCode = (station.postal_code) ? station.postal_code : null
-                
-                if (type) {
-                    if (type === "depart_from") {
-                        _modal_product_depart_from_new_station_id.value = stationId
-                        _modal_product_depart_from_station_iata_code.value = stationIATACode
-                        _modal_product_depart_from_station_city.value = ""
-                        _modal_product_depart_from_station_city_id.value = cityId
-                        _modal_product_depart_from_station_country_id.value = countryId
-                        _modal_product_depart_from_station_province_id.value = provinceId
-                        _modal_product_depart_from_station_postal_code.value = stationPostalCode
-                        _modal_product_depart_from_station_street_1.value = stationStreet1
-                        _modal_product_depart_from_station_street_2.value = stationStreet2
-                        _modal_product_depart_from_station_id.value = stationId
-                        _modal_product_country_id.value = countryId
-                        _modal_product_province_id.value = provinceId
-                        _modal_product_city_id.value = cityId
-                        
-                    } else if (type === "arrive_to") {
-                    
-                    }
-                }
-                showStationForm(type)
-            }
+    const clearDepartFromFields = function () {
+        //console.log("Station.clearDepartFromFields()")
+        // ----
+        
+        if (_modal_product_depart_from_station_id) {
+            _modal_product_depart_from_station_id.value = ""
         }
-    }
-    
-    const clearStationForm = function (type) {
-        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
-            if (type) {
-                if (type === "depart_from") {
-                    _modal_product_depart_from_new_station_id.value = ""
-                    _modal_product_depart_from_station_iata_code.value = ""
-                    _modal_product_depart_from_station_city.value = ""
-                    _modal_product_depart_from_station_city_id.value = ""
-                    _modal_product_depart_from_station_country_id.value = ""
-                    _modal_product_depart_from_station_province_id.value = ""
-                    _modal_product_depart_from_station_postal_code.value = ""
-                    _modal_product_depart_from_station_street_1.value = ""
-                    _modal_product_depart_from_station_street_2.value = ""
-                    _modal_product_depart_from_station_id.value = ""
-                    _modal_product_country_id.value = ""
-                    _modal_product_province_id.value = ""
-                    _modal_product_city_id.value = ""
-                    
-                    _modal_product_depart_from_station.disabled = false
-                    
-                    _modal_product_depart_from_station_edit_link.dataset.stationId = ""
-                    $(_modal_product_depart_from_station_edit_link).hide()
-                    
-                    clearAllValidation()
-                    
-                } else if (type === "arrive_to") {
-                    _modal_product_arrive_to_new_station_id.value = ""
-                    _modal_product_arrive_to_station_iata_code.value = ""
-                    _modal_product_arrive_to_station_city.value = ""
-                    _modal_product_arrive_to_station_city_id.value = ""
-                    _modal_product_arrive_to_station_country_id.value = ""
-                    _modal_product_arrive_to_station_province_id.value = ""
-                    _modal_product_arrive_to_station_postal_code.value = ""
-                    _modal_product_arrive_to_station_street_1.value = ""
-                    _modal_product_arrive_to_station_street_2.value = ""
-                    _modal_product_arrive_to_station_id.value = ""
-                    
-                    _modal_product_arrive_to_station.disabled = false
-                    
-                    _modal_product_arrive_to_station_edit_link.dataset.stationId = ""
-                    $(_modal_product_arrive_to_station_edit_link).hide()
-                    
-                    clearAllValidation()
-                }
-            }
-            
+        
+        if (_modal_product_depart_from_station_country_id) {
+            _modal_product_depart_from_station_country_id.value = ""
+        }
+        
+        if (_modal_product_depart_from_station_province_id) {
+            _modal_product_depart_from_station_province_id.value = ""
+        }
+        
+        if (_modal_product_depart_from_station_city_id) {
+            _modal_product_depart_from_station_city_id.value = ""
+        }
+        
+        if (_modal_product_depart_from_station) {
+            _modal_product_depart_from_station.value = ""
+        }
+        
+        if (_modal_product_country_id) {
             _modal_product_country_id.value = ""
+        }
+        
+        if (_modal_product_province_id) {
             _modal_product_province_id.value = ""
+        }
+        
+        if (_modal_product_city_id) {
             _modal_product_city_id.value = ""
         }
+        
+        if (_modal_product_depart_from_station_edit_link) {
+            _modal_product_depart_from_station_edit_link.dataset.stationId = ""
+        }
+        
+        if (_modal_product_depart_from_station) {
+            
+            hideStationForm("depart_from")
+            toggleEditFormLink("depart_from")
+            
+            $(_modal_product_depart_from_station).trigger("change")
+        }
+        
     }
     
-    const resetStationForm = function (type) {
-        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
-            if (type) {
-                _modal_product_arrive_to_station.disabled = false
-                _modal_product_depart_from_station.disabled = false
-                
-                clearStationForm(type)
-                
-                hideStationForm("depart_from")
-                hideStationForm("arrive_to")
-            }
+    const clearArriveToFields = function () {
+        //console.log("Station.clearArriveToFields()")
+        // ----
+        
+        Station.arriveToKeywords.clear()
+        
+        if (_modal_product_depart_from_station_id) {
+            _modal_product_depart_from_station_id.value = ""
         }
-    }
-    
-    const hideStationForm = function (type) {
-        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
-            if (type) {
-                if (type === "depart_from") {
-                    $(_modal_product_depart_from_station_add_block).hide()
-                } else if (type === "arrive_to") {
-                    $(_modal_product_arrive_to_station_add_block).hide()
-                }
-            }
+        
+        if (_modal_product_depart_from_station_country_id) {
+            _modal_product_depart_from_station_country_id.value = ""
         }
-    }
-    
-    const showStationForm = function (type) {
-        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
-            if (type) {
-                if (type === "depart_from") {
-                    _modal_product_depart_from_station.disabled = true
-                    $(_modal_product_depart_from_station_add_block).show()
-                    $(_modal_product_arrive_to_station_add_block).hide()
-                } else if (type === "arrive_to") {
-                    _modal_product_arrive_to_station.disabled = true
-                    $(_modal_product_arrive_to_station_add_block).show()
-                    $(_modal_product_depart_from_station_add_block).hide()
-                }
-            }
+        
+        if (_modal_product_depart_from_station_province_id) {
+            _modal_product_depart_from_station_province_id.value = ""
         }
+        
+        if (_modal_product_depart_from_station_city_id) {
+            _modal_product_depart_from_station_city_id.value = ""
+        }
+        
+        if (_modal_product_depart_from_station) {
+            _modal_product_depart_from_station.value = ""
+        }
+        
+        if (_modal_product_country_id) {
+            _modal_product_country_id.value = ""
+        }
+        
+        if (_modal_product_province_id) {
+            _modal_product_province_id.value = ""
+        }
+        
+        if (_modal_product_city_id) {
+            _modal_product_city_id.value = ""
+        }
+        
+        if (_modal_product_depart_from_station_edit_link) {
+            _modal_product_depart_from_station_edit_link.dataset.stationId = ""
+        }
+        
+        if (_modal_product_depart_from_station) {
+            
+            hideStationForm("depart_from")
+            toggleEditFormLink("depart_from")
+            
+            $(_modal_product_depart_from_station).trigger("change")
+        }
+        
     }
     
     const initAutocomplete = function () {
+        //console.log("Station.initAutocomplete()")
+        // ----
         
         if (_modal_product_depart_from_station) {
             
@@ -13971,7 +13948,7 @@ const Station = (function () {
                     }
                 })
                 .on("search", function () {
-                    
+                    /*
                     if (_modal_product_depart_from_station_id) {
                         _modal_product_depart_from_station_id.value = ""
                     }
@@ -13992,8 +13969,29 @@ const Station = (function () {
                         _modal_product_depart_from_station.value = ""
                     }
                     
-                    _modal_product_depart_from_station_edit_link.dataset.stationId = ""
-                    $(_modal_product_depart_from_station_edit_link).hide()
+                    if (_modal_product_country_id) {
+                        _modal_product_country_id.value = ""
+                    }
+                    
+                    if (_modal_product_province_id) {
+                        _modal_product_province_id.value = ""
+                    }
+                    
+                    if (_modal_product_city_id) {
+                        _modal_product_city_id.value = ""
+                    }
+                    
+                    if (_modal_product_depart_from_station_edit_link) {
+                        _modal_product_depart_from_station_edit_link.dataset.stationId = ""
+                    }
+                    
+                    hideStationForm("depart_from")
+                    toggleEditFormLink("depart_from")
+                    //*/
+                    
+                    clearDepartFromFields()
+                    
+                    //$(_modal_product_depart_from_station).val("").trigger("change")
                     
                 })
                 .on("keyup", function () {
@@ -14004,16 +14002,20 @@ const Station = (function () {
                         let station_name = _modal_product_depart_from_station.value
                         
                         if (globalSelectedStationDepartFrom === false) {
+                            
                             if (station_name === "") {
+                                
+                                globalSelectedStationDepartFrom = false
+                                
                                 _modal_product_depart_from_station.value = ""
                                 _modal_product_depart_from_station_id.value = ""
                                 _modal_product_depart_from_station_province_id.value = ""
                                 _modal_product_depart_from_station_city_id.value = ""
-                                
                                 _modal_product_depart_from_station_edit_link.dataset.stationId = ""
-                                $(_modal_product_depart_from_station_edit_link).hide()
                                 
-                                globalSelectedStationDepartFrom = false
+                                hideStationForm("depart_from")
+                                toggleEditFormLink("depart_from")
+                                
                             } else {
                                 stationExists(station_name, "depart_from")
                             }
@@ -14033,50 +14035,24 @@ const Station = (function () {
                         }
                         
                         let station = suggestion.data
+                        
                         if (station[0]) {
                             station = station[0]
                         }
                         
                         globalSelectedStationDepartFrom = true
                         
-                        console.log("|__ station", station)
-                        
                         if (station) {
                             
-                            let countryId = (station.country && !isNaN(parseInt(station.country.id))) ? parseInt(station.country.id) : null
-                            let provinceId = (station.province && !isNaN(parseInt(station.province.id))) ? parseInt(station.province.id) : null
-                            let cityId = (station.city && !isNaN(parseInt(station.city.id))) ? parseInt(station.city.id) : null
-                            let stationId = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : null
-                            let stationName = (station.name) ? station.name : null
-                            
-                            if (_modal_product_depart_from_station) {
-                                _modal_product_depart_from_station.value = stationName
-                            }
-                            
-                            if (_modal_product_depart_from_station_id) {
-                                _modal_product_depart_from_station_id.value = stationId
-                            }
-                            
-                            if (_modal_product_depart_from_station_country_id) {
-                                _modal_product_depart_from_station_country_id.value = countryId
-                            }
-                            
-                            if (_modal_product_depart_from_station_province_id) {
-                                _modal_product_depart_from_station_province_id.value = provinceId
-                            }
-                            
-                            if (_modal_product_depart_from_station_city_id) {
-                                _modal_product_depart_from_station_city_id.value = cityId
-                            }
-                            
-                            _modal_product_depart_from_station_edit_link.dataset.stationId = stationId
-                            $(_modal_product_depart_from_station_edit_link).show()
+                            populateStationForm(station, "depart_from")
+                            toggleEditFormLink("depart_from")
                             
                         } else {
-                            _modal_product_depart_from_station_edit_link.dataset.stationId = ""
-                            $(_modal_product_depart_from_station_edit_link).hide()
+                            
                             resetStationForm("depart_from")
                             showStationForm("depart_from")
+                            toggleEditFormLink("depart_from")
+                            
                         }
                     },
                 })
@@ -14145,12 +14121,13 @@ const Station = (function () {
                             
                             _modal_product_arrive_to_station_edit_link.dataset.stationId = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : ""
                             $(_modal_product_arrive_to_station_edit_link).show()
-                            
+                            toggleEditFormLink("arrive_to")
                         } else {
                             _modal_product_arrive_to_station_edit_link.dataset.stationId = ""
                             $(_modal_product_arrive_to_station_edit_link).hide()
                             resetStationForm("arrive_to")
                             showStationForm("arrive_to")
+                            toggleEditFormLink("arrive_to")
                         }
                     },
                 })
@@ -14158,7 +14135,380 @@ const Station = (function () {
         
     }
     
+    const save = function (type) {
+        //console.log("Station.save()")
+        // ----
+        
+        if (type) {
+            let dataToSend = buildAddStationRecord(type)
+            
+            if (!dataToSend) {
+                return
+            }
+            
+            confirmDialog(`Would you like to update?`, (ans) => {
+                
+                if (ans) {
+                    
+                    sendSaveRequest(dataToSend, function (data) {
+                        let station
+                        if (data) {
+                            station = data
+                            if (data[0]) {
+                                station = data[0]
+                            }
+                        }
+                        
+                        if (station) {
+                            //console.log("|__ station", station)
+                            
+                            let stationId = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : null
+                            
+                            if (stationId !== null) {
+                                //console.log("|__ stationId", stationId)
+                                
+                                Station.all.set(stationId, station)
+                                
+                                if (type) {
+                                    resetStationForm(type)
+                                    populateStationForm(station, type)
+                                    
+                                    toggleEditFormLink(type)
+                                }
+                                
+                                initAutocomplete()
+                            }
+                            
+                            /*
+                            if (type === "depart_from") {
+                                //console.log("|__ stationId", stationId)
+                                
+                                populateStationForm(station, type)
+                                
+                            } else if (type === "arrive_to") {
+                                if (_modal_product_arrive_to_station) {
+                                    _modal_product_arrive_to_station.value = stationName
+                                }
+                                
+                                if (_modal_product_arrive_to_new_station_id) {
+                                    _modal_product_arrive_to_new_station_id.value = stationId
+                                }
+                                
+                                if (_modal_product_arrive_to_station_id) {
+                                    _modal_product_arrive_to_station_id.value = stationId
+                                }
+                                
+                                if (_modal_product_country_id) {
+                                    _modal_product_country_id.value = countryId
+                                }
+                                
+                                if (_modal_product_province_id) {
+                                    _modal_product_province_id.value = provinceId
+                                }
+                                
+                                if (_modal_product_city_id) {
+                                    _modal_product_city_id.value = cityId
+                                }
+                                
+                                _modal_product_arrive_to_station_edit_link.dataset.stationId = stationId
+                                
+                                $(_modal_product_arrive_to_station_edit_link).show()
+                            }
+                            //*/
+                            
+                        }
+                        
+                    })
+                }
+            })
+            
+        }
+        
+    }
+    
+    const sendSaveRequest = function (dataToSend, callback) {
+        //console.log("Station.sendSaveRequest()")
+        // ----
+        
+        if (dataToSend) {
+            let url = "/api/v1.0/stations/update"
+            try {
+                sendPostRequest(url, dataToSend, function (data, status, xhr) {
+                    if (data) {
+                        return callback(data)
+                    } else {
+                        handleStationError("Oops: 1")
+                    }
+                })
+            } catch (e) {
+                //console.log("error", e)
+            }
+        }
+    }
+    
+    const validDepartFromRecord = function () {
+        //console.log("Station.validDepartFromRecord()")
+        // ----
+        
+        let isValid = true
+        
+        if (_modal_product_depart_from_station_iata_code.value === "") {
+            $(_modal_product_depart_from_station_iata_code).showError("Field Required")
+            isValid = false
+        } else {
+            $(_modal_product_depart_from_station_iata_code).hideError()
+        }
+        
+        if (isNaN(parseInt(_modal_product_depart_from_station_city_id.value))) {
+            $(_modal_product_depart_from_station_city).showError("Field Required")
+            isValid = false
+        } else {
+            $(_modal_product_depart_from_station_city).hideError()
+        }
+        
+        return isValid
+    }
+    
+    const validArriveToRecord = function () {
+        //console.log("Station.validArriveToRecord()")
+        // ----
+        
+        let isValid = true
+        
+        if (_modal_product_arrive_to_station_iata_code.value === "") {
+            $(_modal_product_arrive_to_station_iata_code).showError("Field Required")
+            isValid = false
+        } else {
+            $(_modal_product_arrive_to_station_iata_code).hideError()
+        }
+        
+        if (isNaN(parseInt(_modal_product_arrive_to_station_city_id.value))) {
+            $(_modal_product_arrive_to_station_city).showError("Field Required")
+            isValid = false
+        } else {
+            $(_modal_product_arrive_to_station_city).hideError()
+        }
+        
+        return isValid
+    }
+    
+    const buildAddStationRecord = function (type) {
+        //console.log("Station.buildAddStationRecord()")
+        // ----
+        
+        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
+            
+            if (type) {
+                //console.log("|__ type", type)
+                
+                if (type === "depart_from") {
+                    if (validDepartFromRecord()) {
+                        let dataToSend = {
+                            id: (_modal_product_depart_from_new_station_id && !isNaN(parseInt(_modal_product_depart_from_new_station_id.value))) ? parseInt(_modal_product_depart_from_new_station_id.value) : null,
+                            postal_code: (_modal_product_depart_from_station_postal_code.value !== "") ? _modal_product_depart_from_station_postal_code.value : null,
+                            street_1: (_modal_product_depart_from_station_street_1.value !== "") ? _modal_product_depart_from_station_street_1.value : null,
+                            street_2: (_modal_product_depart_from_station_street_2.value !== "") ? _modal_product_depart_from_station_street_2.value : null,
+                            city_id: (!isNaN(parseInt(_modal_product_depart_from_station_city_id.value))) ? parseInt(_modal_product_depart_from_station_city_id.value) : null,
+                            name: (_modal_product_depart_from_station.value !== "") ? _modal_product_depart_from_station.value : null,
+                            iata_code: (_modal_product_depart_from_station_iata_code.value !== "") ? _modal_product_depart_from_station_iata_code.value : null,
+                            //home_link: (_modal_product_depart_from_station_home_link.value !== "") ? _modal_product_depart_from_station_home_link.value : null,
+                            //wikipedia_link: (_modal_product_depart_from_station_wikipedia_link.value !== "") ? _modal_product_depart_from_station_wikipedia_link.value : null,
+                            //gps_code: (_modal_product_depart_from_station_gps_code.value !== "") ? _modal_product_depart_from_station_gps_code.value : null,
+                            //local_code: (_modal_product_depart_from_station_local_code.value !== "") ? _modal_product_depart_from_station_local_code.value : null,
+                            //scheduled_service: (_modal_product_depart_from_station_scheduled_service && !isNaN(parseInt(_modal_product_depart_from_station_scheduled_service.value))) ? parseInt(_modal_product_depart_from_station_scheduled_service.value) : null,
+                            //keywords: (_modal_product_depart_from_station_keywords.value !== "") ? _modal_product_depart_from_station_keywords.value : null,
+                            //enabled: (_modal_product_depart_from_station_enabled.value !== "") ? _modal_product_depart_from_station_enabled.value : null,
+                        }
+                        
+                        return removeNulls(dataToSend)
+                    }
+                } else if (type === "arrive_to") {
+                    if (validArriveToRecord()) {
+                        let dataToSend = {
+                            id: (_modal_product_arrive_to_new_station_id && !isNaN(parseInt(_modal_product_arrive_to_new_station_id.value))) ? parseInt(_modal_product_arrive_to_new_station_id.value) : null,
+                            postal_code: (_modal_product_arrive_to_station_postal_code.value !== "") ? _modal_product_arrive_to_station_postal_code.value : null,
+                            street_1: (_modal_product_arrive_to_station_street_1.value !== "") ? _modal_product_arrive_to_station_street_1.value : null,
+                            street_2: (_modal_product_arrive_to_station_street_2.value !== "") ? _modal_product_arrive_to_station_street_2.value : null,
+                            city_id: (!isNaN(parseInt(_modal_product_arrive_to_station_city_id.value))) ? parseInt(_modal_product_arrive_to_station_city_id.value) : null,
+                            name: (_modal_product_arrive_to_station.value !== "") ? _modal_product_arrive_to_station.value : null,
+                            iata_code: (_modal_product_arrive_to_station_iata_code.value !== "") ? _modal_product_arrive_to_station_iata_code.value : null,
+                            //home_link: (_modal_product_arrive_to_station_home_link.value !== "") ? _modal_product_depart_from_station_home_link.value : null,
+                            //wikipedia_link: (_modal_product_arrive_to_station_wikipedia_link.value !== "") ? _modal_product_depart_from_station_wikipedia_link.value : null,
+                            //gps_code: (_modal_product_arrive_to_station_gps_code.value !== "") ? _modal_product_depart_from_station_gps_code.value : null,
+                            //local_code: (_modal_product_arrive_to_station_local_code.value !== "") ? _modal_product_depart_from_station_local_code.value : null,
+                            //scheduled_service: (_modal_product_arrive_to_station_scheduled_service && !isNaN(parseInt(_modal_product_depart_from_station_scheduled_service.value))) ? parseInt(_modal_product_depart_from_station_scheduled_service.value) : null,
+                            //keywords: (_modal_product_arrive_to_station_keywords.value !== "") ? _modal_product_depart_from_station_keywords.value : null,
+                            //enabled: (_modal_product_arrive_to_station_enabled.value !== "") ? _modal_product_depart_from_station_enabled.value : null,
+                        }
+                        
+                        return removeNulls(dataToSend)
+                    }
+                }
+            }
+        }
+    }
+    
+    const cancelAddStationRecord = function (type) {
+        //console.log("Station.cancelAddStationRecord()")
+        // ----
+        
+        if (!type) {
+            return
+        }
+        
+        hideStationForm(type)
+        
+    }
+    
+    const clearStationForm = function (type) {
+        //console.log("Station.clearStationForm()")
+        // ----
+        
+        if (!type) {
+            return
+        }
+        
+        if (type === "depart_from") {
+            if (!_modal_product_depart_from_station_add_block) {return}
+            
+            _modal_product_depart_from_new_station_id.value = ""
+            _modal_product_depart_from_station_iata_code.value = ""
+            _modal_product_depart_from_station_city.value = ""
+            _modal_product_depart_from_station_city_id.value = ""
+            _modal_product_depart_from_station_country_id.value = ""
+            _modal_product_depart_from_station_province_id.value = ""
+            _modal_product_depart_from_station_postal_code.value = ""
+            _modal_product_depart_from_station_street_1.value = ""
+            _modal_product_depart_from_station_street_2.value = ""
+            _modal_product_depart_from_station_id.value = ""
+            _modal_product_country_id.value = ""
+            _modal_product_province_id.value = ""
+            _modal_product_city_id.value = ""
+            
+            _modal_product_depart_from_station.value = ""
+            _modal_product_depart_from_station.disabled = false
+            
+            _modal_product_depart_from_station_edit_link.dataset.stationId = ""
+            
+            clearAllValidation()
+            
+        } else if (type === "arrive_to") {
+            if (!_modal_product_arrive_to_station_add_block) {return}
+            
+            _modal_product_arrive_to_new_station_id.value = ""
+            _modal_product_arrive_to_station_iata_code.value = ""
+            _modal_product_arrive_to_station_city.value = ""
+            _modal_product_arrive_to_station_city_id.value = ""
+            _modal_product_arrive_to_station_country_id.value = ""
+            _modal_product_arrive_to_station_province_id.value = ""
+            _modal_product_arrive_to_station_postal_code.value = ""
+            _modal_product_arrive_to_station_street_1.value = ""
+            _modal_product_arrive_to_station_street_2.value = ""
+            _modal_product_arrive_to_station_id.value = ""
+            
+            _modal_product_arrive_to_station.value = ""
+            _modal_product_arrive_to_station.disabled = false
+            
+            _modal_product_arrive_to_station_edit_link.dataset.stationId = ""
+            
+            clearAllValidation()
+        } else {
+            return
+        }
+        
+        _modal_product_country_id.value = ""
+        _modal_product_province_id.value = ""
+        _modal_product_city_id.value = ""
+        $(_modal_product_station_day_span).val("1").trigger("change")
+        
+    }
+    
+    const resetStationForm = function (type) {
+        //console.log("Station.resetStationForm()")
+        // ----
+        
+        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
+            if (type) {
+                _modal_product_arrive_to_station.disabled = false
+                _modal_product_depart_from_station.disabled = false
+                
+                clearStationForm(type)
+                
+                hideStationForm("depart_from")
+                hideStationForm("arrive_to")
+            }
+        }
+    }
+    
+    const hideStationForm = function (type) {
+        //console.log("Station.hideStationForm()")
+        // ----
+        
+        if (!type || !_modal_product_depart_from_station_add_block || !_modal_product_arrive_to_station_add_block) {
+            return
+        }
+        
+        if (type === "depart_from") {
+            $(_modal_product_depart_from_station_add_block).hide()
+            
+            _modal_product_depart_from_station.disabled = false
+            
+            toggleEditFormLink(type)
+        } else if (type === "arrive_to") {
+            $(_modal_product_arrive_to_station_add_block).hide()
+            
+            _modal_product_arrive_to_station.disabled = false
+            
+            toggleEditFormLink(type)
+        } else {
+            //console.log("|__ type", type)
+        }
+        
+        _modal_product_depart_from_station.disabled = false
+        _modal_product_arrive_to_station.disabled = false
+    }
+    
+    const showStationForm = function (type) {
+        //console.log("Station.showStationForm()")
+        // ----
+        
+        if (!type || !_modal_product_depart_from_station_add_block || !_modal_product_arrive_to_station_add_block) {
+            
+            //console.log("|__ _modal_product_depart_from_station_add_block", _modal_product_depart_from_station_add_block)
+            //console.log("|__ _modal_product_arrive_to_station_add_block", _modal_product_arrive_to_station_add_block)
+            //console.log("|__ type", type)
+            
+            return
+        }
+        
+        _modal_product_depart_from_station.disabled = false
+        _modal_product_arrive_to_station.disabled = false
+        
+        if (type === "depart_from") {
+            _modal_product_depart_from_station.disabled = true
+            
+            $(_modal_product_depart_from_station_add_block).show()
+            $(_modal_product_arrive_to_station_add_block).hide()
+            
+            toggleEditFormLink(type)
+            
+        } else if (type === "arrive_to") {
+            _modal_product_arrive_to_station.disabled = true
+            
+            $(_modal_product_arrive_to_station_add_block).show()
+            $(_modal_product_depart_from_station_add_block).hide()
+            
+            toggleEditFormLink(type)
+        } else {
+            //console.log("|__ type", type)
+        }
+        
+    }
+    
     const stationExists = function (name, type) {
+        //console.log("Station.stationExists()")
+        // ----
+        
         if (name && name !== "") {
             /**
              * data to send to the server
@@ -14180,24 +14530,26 @@ const Station = (function () {
                 }
                 
                 if (station && station.id) {
+                    
                     if (type === "depart_from") {
                         globalSelectedStationDepartFrom = true
                         
-                        _modal_product_depart_from_station.value = station.name
-                        _modal_product_depart_from_station_id.value = station.id
-                        _modal_product_city_id.value = station.city.id
-                        
-                        _modal_product_depart_from_station_edit_link.dataset.stationId = station.id
-                        $(_modal_product_depart_from_station_edit_link).show()
-                    } else {
+                    } else if (type === "arrive_to") {
                         globalSelectedStationArriveTo = true
+                        
                         _modal_product_arrive_to_station.value = station.name
                         _modal_product_arrive_to_station_id.value = station.id
                         
                         _modal_product_arrive_to_station_edit_link.dataset.stationId = station.id
-                        $(_modal_product_arrive_to_station_edit_link).show()
+                    } else {
+                        return
                     }
+                    
+                    populateStationForm(station, type)
+                    hideStationForm(type)
+                    toggleEditFormLink(type)
                 } else {
+                    // Station Does Not Exist
                     confirmDialog(`The station: ${name} does not exist exists. Would you like to create it?`, (ans) => {
                         if (ans) {
                             if (type === "depart_from") {
@@ -14209,6 +14561,8 @@ const Station = (function () {
                             populateStationForm({
                                 name: name,
                             }, type)
+                            
+                            showStationForm(type)
                             
                         } else {
                             if (type === "depart_from") {
@@ -14235,10 +14589,14 @@ const Station = (function () {
                     })
                 }
             })
+            
         }
     }
     
     const fetchByName = function (dataToSend, callback) {
+        //console.log("Station.fetchByName()")
+        // ----
+        
         let url = "/api/v1.0/stations/validate"
         
         if (dataToSend) {
@@ -14260,11 +14618,14 @@ const Station = (function () {
     }
     
     const handleStationError = function (msg) {
+        //console.log("Station.handleStationError()")
+        // ----
+        
         toastr.error(msg)
     }
     
     const defaultDetail = function () {
-        console.log("Station.defaultDetail()")
+        //console.log("Station.defaultDetail()")
         // ----
         
         return {
@@ -14328,7 +14689,7 @@ const Station = (function () {
     }
     
     const setDetail = function (station) {
-        console.log("Station.setDetail(station)", station)
+        //console.log("Station.setDetail()")
         // ----
         
         let detail = defaultDetail()
@@ -14396,7 +14757,7 @@ const Station = (function () {
     }
     
     const loadAll = function (stations) {
-        console.log("Station.loadAll(stations)", stations)
+        //console.log("Station.loadAll()")
         // ----
         
         Station.all = new Map()
@@ -14410,22 +14771,311 @@ const Station = (function () {
         
     }
     
-    const init = function (settings) {
-        console.log("Station.init(settings)", settings)
+    const populateStationForm = function (station, type) {
+        //console.log("Station.populateStationForm()")
         // ----
         
-        if (_modal_product_depart_from_station || _modal_product_arrive_to_station) {
-            initAutocomplete()
-            resetStationForm("depart_from")
-            resetStationForm("arrive_to")
+        if (!type || !_modal_product_depart_from_station_add_block || !_modal_product_arrive_to_station_add_block) {
+            return
+        }
+        
+        clearStationForm(type)
+        
+        if (station) {
+            let countryId = (station.country && station.country.id && !isNaN(parseInt(station.country.id))) ? parseInt(station.country.id) : null
+            let provinceId = (station.province && station.province.id && !isNaN(parseInt(station.province.id))) ? parseInt(station.province.id) : null
+            let cityId = (station.city && station.city.id && !isNaN(parseInt(station.city.id))) ? parseInt(station.city.id) : null
+            let stationId = (station.id && !isNaN(parseInt(station.id))) ? parseInt(station.id) : null
+            let stationName = (station.name) ? station.name : null
+            let stationIATACode = (station.iata_code) ? station.iata_code : null
+            let stationStreet1 = (station.street_1) ? station.street_1 : null
+            let stationStreet2 = (station.street_2) ? station.street_2 : null
+            let stationPostalCode = (station.postal_code) ? station.postal_code : null
+            let displayShort, displayMedium, displayLong = ""
+            let displayCity, displayShortCity, displayMediumCity, displayLongCity,
+                displayShortProvince, displayMediumProvince, displayLongProvince,
+                displayShortCountry, displayMediumCountry, displayLongCountry = null
+            let defaultDisplay = (defaultLocationDisplayFormat) ? defaultLocationDisplayFormat.toLowerCase() : "short"
             
-            loadAll(settings)
+            if (station.city && station.province && station.country) {
+                if (station.city) {
+                    displayShortCity = null
+                    displayMediumCity = null
+                    displayLongCity = null
+                    
+                    if (station.city.name) {
+                        displayShortCity = station.city.name
+                        displayMediumCity = station.city.name
+                        displayLongCity = station.city.name
+                    }
+                }
+                
+                if (station.province) {
+                    displayShortProvince = null
+                    displayMediumProvince = null
+                    displayLongProvince = null
+                    
+                    if (station.province.iso3) {
+                        displayShortProvince = (station.province.iso2) ? station.province.iso2 : null
+                        displayMediumProvince = (station.province.iso2) ? station.province.iso2 : null
+                        displayLongProvince = (station.province.iso2) ? station.province.iso2 : null
+                    }
+                    
+                    if (station.province.iso2) {
+                        displayShortProvince = (station.province.iso2) ? station.province.iso2 : null
+                        displayMediumProvince = (station.province.iso2) ? station.province.iso2 : null
+                        displayLongProvince = (station.province.iso2) ? station.province.iso2 : null
+                    }
+                    
+                    if (station.province.name) {
+                        
+                        if (displayShortProvince === null) {
+                            displayShortProvince = station.province.name
+                        }
+                        
+                        if (displayLongProvince === null) {
+                            displayLongProvince = station.province.name
+                        } else {
+                            displayLongProvince = displayLongProvince + " - " + station.province.name
+                        }
+                        
+                        displayMediumProvince = station.province.name
+                    }
+                    
+                }
+                
+                if (station.country) {
+                    displayShortCountry = null
+                    displayMediumCountry = null
+                    displayLongCountry = null
+                    
+                    if (station.country.iso2) {
+                        displayShortCountry = station.country.iso2
+                        //displayMediumCountry = station.country.iso2
+                        displayLongCountry = station.country.iso2
+                    }
+                    
+                    if (station.country.iso3) {
+                        displayShortCountry = station.country.iso3
+                        displayMediumCountry = station.country.iso3
+                        displayLongCountry = station.country.iso3
+                    }
+                    
+                    if (station.country.name) {
+                        
+                        if (displayShortCountry === null) {
+                            displayShortCountry = station.country.name
+                        }
+                        
+                        if (displayLongCountry === null) {
+                            displayLongCountry = station.country.name
+                        } else {
+                            displayLongCountry = displayLongCountry + " - " + station.country.name
+                        }
+                        
+                        displayMediumCountry = station.country.name
+                    }
+                    
+                }
+                
+                /*
+                //console.log("|__ displayShortCity", displayShortCity)
+                //console.log("|__ displayShortProvince", displayShortProvince)
+                //console.log("|__ displayShortCountry", displayShortCountry)
+                
+                //console.log("|__ displayMediumCity", displayMediumCity)
+                //console.log("|__ displayMediumProvince", displayMediumProvince)
+                //console.log("|__ displayMediumCountry", displayMediumCountry)
+                
+                //console.log("|__ displayLongCity", displayLongCity)
+                //console.log("|__ displayLongProvince", displayLongProvince)
+                //console.log("|__ displayLongCountry", displayLongCountry)
+                //*/
+                
+                displayShort = displayShortCity + "( " + displayShortProvince + ", " + displayShortCountry + " )"
+                displayMedium = displayMediumCity + "( " + displayMediumProvince + ", " + displayMediumCountry + " )"
+                displayLong = displayLongCity + "( " + displayLongProvince + ", " + displayLongCountry + " )"
+                
+            }
             
-            //console.log("|__ Station.all", Station.all)
+            if (!displayShort) {
+                displayShort = ""
+            }
+            
+            if (!displayMedium) {
+                displayMedium = ""
+            }
+            
+            if (!displayLong) {
+                displayLong = ""
+            }
+            
+            switch (defaultDisplay) {
+                case "short":
+                    displayCity = displayShort
+                    break
+                case "medium":
+                    displayCity = displayMedium
+                    break
+                case "long":
+                    displayCity = displayLong
+                    break
+                default:
+                    displayCity = ""
+            }
+            
+            /*
+            //console.log("|__ defaultLocationDisplayFormat", defaultLocationDisplayFormat)
+            //console.log("|__ displayCity", displayCity)
+            //console.log("|__ displayShort", displayShort)
+            //console.log("|__ displayMedium", displayMedium)
+            //console.log("|__ displayLong", displayLong)
+            //*/
+            
+            if (type === "depart_from") {
+                _modal_product_depart_from_station.value = stationName
+                _modal_product_depart_from_station_iata_code.value = stationIATACode
+                _modal_product_depart_from_station_city.value = ""
+                _modal_product_depart_from_station_postal_code.value = stationPostalCode
+                _modal_product_depart_from_station_street_1.value = stationStreet1
+                _modal_product_depart_from_station_street_2.value = stationStreet2
+                
+                if (countryId !== null) {
+                    _modal_product_depart_from_station_country_id.value = countryId.toString()
+                    _modal_product_country_id.value = countryId.toString()
+                }
+                
+                if (provinceId !== null) {
+                    _modal_product_depart_from_station_province_id.value = provinceId.toString()
+                    _modal_product_province_id.value = provinceId.toString()
+                }
+                
+                if (cityId !== null) {
+                    _modal_product_depart_from_station_city_id.value = cityId.toString()
+                    _modal_product_city_id.value = cityId.toString()
+                }
+                
+                if (stationId !== null) {
+                    _modal_product_depart_from_station_id.value = stationId.toString()
+                    _modal_product_depart_from_new_station_id.value = stationId.toString()
+                    _modal_product_depart_from_station_edit_link.dataset.stationId = stationId.toString()
+                }
+                
+                _modal_product_depart_from_station_city.value = displayCity
+                
+            } else if (type === "arrive_to") {
+                
+                _modal_product_arrive_to_station.value = stationName
+                _modal_product_arrive_to_station_iata_code.value = stationIATACode
+                _modal_product_arrive_to_station_city.value = ""
+                _modal_product_arrive_to_station_postal_code.value = stationPostalCode
+                _modal_product_arrive_to_station_street_1.value = stationStreet1
+                _modal_product_arrive_to_station_street_2.value = stationStreet2
+                
+                if (countryId !== null) {
+                    _modal_product_arrive_to_station_country_id.value = countryId.toString()
+                }
+                
+                if (provinceId !== null) {
+                    _modal_product_arrive_to_station_province_id.value = provinceId.toString()
+                }
+                
+                if (cityId !== null) {
+                    _modal_product_arrive_to_station_city_id.value = cityId.toString()
+                }
+                
+                if (stationId !== null) {
+                    _modal_product_arrive_to_station_id.value = stationId.toString()
+                    _modal_product_arrive_to_new_station_id.value = stationId.toString()
+                    _modal_product_arrive_to_station_edit_link.dataset.stationId = stationId.toString()
+                }
+                
+                _modal_product_arrive_to_station_city.value = displayCity
+                
+            } else {
+                return
+            }
+            
+            showStationForm(type)
+            
+        }
+        
+    }
+    
+    const toggleEditFormLink = function (type) {
+        //console.log("Station.toggleEditFormLink()")
+        // ----
+        
+        if (type) {
+            //console.log("|__ type", type)
+            
+            if (type === "depart_from") {
+                
+                if (_modal_product_depart_from_station_edit_link) {
+                    
+                    if (_modal_product_depart_from_new_station_id && _modal_product_depart_from_station && _modal_product_depart_from_station_city_id
+                        && _modal_product_depart_from_new_station_id.value !== "" && _modal_product_depart_from_station.value !== ""
+                        && _modal_product_depart_from_station_city_id.value !== "") {
+                        
+                        $(_modal_product_depart_from_station_edit_link).show()
+                        
+                    } else {
+                        
+                        $(_modal_product_depart_from_station_edit_link).hide()
+                        
+                    }
+                    
+                }
+                
+            } else if (type === "arrive_to") {
+                if (_modal_product_arrive_to_station_edit_link) {
+                    
+                    if (_modal_product_arrive_to_new_station_id && _modal_product_arrive_to_station && _modal_product_arrive_to_station_city_id
+                        && _modal_product_arrive_to_new_station_id.value !== "" && _modal_product_arrive_to_station.value !== ""
+                        && _modal_product_arrive_to_station_city_id.value !== "") {
+                        
+                        $(_modal_product_arrive_to_station_edit_link).show()
+                        
+                    } else {
+                        
+                        $(_modal_product_arrive_to_station_edit_link).hide()
+                        
+                    }
+                    
+                }
+            }
         }
     }
     
+    const init = function (settings) {
+        //console.log("Station.init()")
+        // ----
+        
+        let stations = []
+        
+        if (settings) {
+            if (settings.stations) {
+                stations = settings.stations
+            }
+        }
+        
+        if (_modal_product_depart_from_station || _modal_product_arrive_to_station) {
+            
+            resetStationForm("depart_from")
+            resetStationForm("arrive_to")
+            
+            hideStationForm("depart_from")
+            hideStationForm("arrive_to")
+            
+            loadAll(settings)
+            initAutocomplete()
+        }
+        
+    }
+    
     return {
+        departFromKeywords: null,
+        arriveToKeywords: null,
         resetStationForm: function (type) {
             resetStationForm(type)
         },
@@ -14433,8 +15083,8 @@ const Station = (function () {
             init(settings)
         },
     }
-})
-()
+    
+})()
 
 const Province = (function () {
     "use strict"
@@ -17893,9 +18543,15 @@ const Unit = (function () {
     
     $(_product_edit_unit_form_clear_button)
         .on("click", function () {
+            console.log("Unit.product_edit_unit_form_clear_button:click()")
+            // ----
+            
             resetForm()
+            
             $table_unit_product_edit.clearSelectedRows()
+            
             _product_edit_unit_form_unit_name_filter.value = ""
+            
             _product_edit_unit_form_unit_name_filter.disabled = false
             _product_edit_unit_form_unit_name.disabled = true
         })
@@ -17903,9 +18559,14 @@ const Unit = (function () {
     $(_product_edit_unit_form_close_button)
         .on("click", function () {
             console.log("Unit.product_edit_unit_form_close_button:click()")
+            // ----
+            
             resetForm()
+            
             $table_unit_product_edit.clearSelectedRows()
+            
             _product_edit_unit_form_unit_name_filter.value = ""
+            
             _product_edit_unit_form_unit_name_filter.disabled = false
             _product_edit_unit_form_unit_name.disabled = true
         })
@@ -18826,6 +19487,7 @@ const Unit = (function () {
         }
         
         let labels = document.getElementsByTagName("LABEL")
+        
         for (let i = 0; i < labels.length; i++) {
             if (labels[i].htmlFor !== '') {
                 let elem = document.getElementById(labels[i].htmlFor)
@@ -20213,1362 +20875,6 @@ const Car = (function () {
     
 })()
 
-const Airport = (function () {
-    "use strict"
-    
-    const _product_edit_location_section = document.getElementById("product_edit_location_section")
-    const _category_id = document.getElementById("category_id")
-    
-    const _modal_product_depart_from_airport_cancel_button = document.getElementById("modal_product_depart_from_airport_cancel_button")
-    const _modal_product_depart_from_airport_submit_button = document.getElementById("modal_product_depart_from_airport_submit_button")
-    const _modal_product_depart_from_airport_iata_code = document.getElementById("modal_product_depart_from_airport_iata_code")
-    const _modal_product_depart_from_airport_country_id = document.getElementById("modal_product_depart_from_airport_country_id")
-    const _modal_product_depart_from_airport_province_id = document.getElementById("modal_product_depart_from_airport_province_id")
-    const _modal_product_depart_from_airport_city_id = document.getElementById("modal_product_depart_from_airport_city_id")
-    const _modal_product_depart_from_airport_city = document.getElementById("modal_product_depart_from_airport_city")
-    const _modal_product_depart_from_airport = document.getElementById("modal_product_depart_from_airport")
-    const _modal_product_depart_from_airport_id = document.getElementById("modal_product_depart_from_airport_id")
-    const _modal_product_depart_from_airport_add_block = document.getElementById("modal_product_depart_from_airport_add_block")
-    const _modal_product_depart_from_airport_types_id = document.getElementById("modal_product_depart_from_airport_types_id")
-    const _modal_product_depart_from_new_airport_id = document.getElementById("modal_product_depart_from_new_airport_id")
-    
-    const _modal_product_arrive_to_airport_cancel_button = document.getElementById("modal_product_arrive_to_airport_cancel_button")
-    const _modal_product_arrive_to_new_airport_id = document.getElementById("modal_product_arrive_to_new_airport_id")
-    const _modal_product_arrive_to_airport_submit_button = document.getElementById("modal_product_arrive_to_airport_submit_button")
-    const _modal_product_arrive_to_airport_iata_code = document.getElementById("modal_product_arrive_to_airport_iata_code")
-    const _modal_product_arrive_to_airport_country_id = document.getElementById("modal_product_arrive_to_airport_country_id")
-    const _modal_product_arrive_to_airport_province_id = document.getElementById("modal_product_arrive_to_airport_province_id")
-    const _modal_product_arrive_to_airport_city_id = document.getElementById("modal_product_arrive_to_airport_city_id")
-    const _modal_product_arrive_to_airport_city = document.getElementById("modal_product_arrive_to_airport_city")
-    const _modal_product_arrive_to_airport = document.getElementById("modal_product_arrive_to_airport")
-    const _modal_product_arrive_to_airport_id = document.getElementById("modal_product_arrive_to_airport_id")
-    const _modal_product_arrive_to_airport_add_block = document.getElementById("modal_product_arrive_to_airport_add_block")
-    const _modal_product_arrive_to_airport_types_id = document.getElementById("modal_product_arrive_to_airport_types_id")
-    const _modal_product_location_id = document.getElementById("modal_product_location_id")
-    const _modal_product_street_1 = document.getElementById("modal_product_street_1")
-    const _modal_product_street_2 = document.getElementById("modal_product_street_2")
-    const _modal_product_postal_code = document.getElementById("modal_product_postal_code")
-    const _modal_product_province_id = document.getElementById("modal_product_province_id")
-    const _modal_product_country_id = document.getElementById("modal_product_country_id")
-    const _modal_product_city_id = document.getElementById("modal_product_city_id")
-    
-    const _product_edit_location_city_id = document.getElementById("product_edit_location_city_id")
-    const _product_location_departing_airport_form = document.getElementById("product_location_departing_airport_form")
-    const _product_location_departing_airport_search = document.getElementById("product_location_departing_airport_search")
-    const _product_location_departing_airport_id = document.getElementById("product_location_departing_airport_id")
-    const _product_location_departing_airport_airport_types_id = document.getElementById("product_location_departing_airport_airport_types_id")
-    const _product_location_departing_airport_city_id = document.getElementById("product_location_departing_airport_city_id")
-    const _product_location_departing_airport_name = document.getElementById("product_location_departing_airport_name")
-    const _product_location_departing_airport_iata_code = document.getElementById("product_location_departing_airport_iata_code")
-    const _product_location_departing_airport_edit_button = document.getElementById("product_location_departing_airport_edit_button")
-    const _product_location_departing_airport_gps_code = document.getElementById("product_location_departing_airport_gps_code")
-    const _product_location_departing_airport_local_code = document.getElementById("product_location_departing_airport_local_code")
-    const _product_location_departing_airport_home_link = document.getElementById("product_location_departing_airport_home_link")
-    const _product_location_departing_airport_wikipedia_link = document.getElementById("product_location_departing_airport_wikipedia_link")
-    const _product_location_departing_airport_scheduled_service = document.getElementById("product_location_departing_airport_scheduled_service")
-    const _product_location_departing_airport_keywords = document.getElementById("product_location_departing_airport_keywords")
-    const _product_location_departing_airport_enabled = document.getElementById("product_location_departing_airport_enabled")
-    const _product_location_departing_airport_date_created = document.getElementById("product_location_departing_airport_date_created")
-    const _product_location_departing_airport_created_by = document.getElementById("product_location_departing_airport_created_by")
-    const _product_location_departing_airport_date_modified = document.getElementById("product_location_departing_airport_date_modified")
-    const _product_location_departing_airport_modified_by = document.getElementById("product_location_departing_airport_modified_by")
-    const _product_location_departing_airport_note = document.getElementById("product_location_departing_airport_note")
-    const _product_location_departing_airport_city_search = document.getElementById("product_location_departing_airport_city_search")
-    const _product_location_departing_airport_remove_button = document.getElementById("product_location_departing_airport_remove_button")
-    const _product_location_departing_airport_clear_button = document.getElementById("product_location_departing_airport_clear_button")
-    const _product_location_departing_airport_save_button = document.getElementById("product_location_departing_airport_save_button")
-    
-    const _product_location_arriving_airport_edit_button = document.getElementById("product_location_arriving_airport_edit_button")
-    const _product_location_arriving_airport_form = document.getElementById("product_location_arriving_airport_form")
-    const _product_location_arriving_airport_search = document.getElementById("product_location_arriving_airport_search")
-    const _product_location_arriving_airport_id = document.getElementById("product_location_arriving_airport_id")
-    const _product_location_arriving_airport_airport_types_id = document.getElementById("product_location_arriving_airport_airport_types_id")
-    const _product_location_arriving_airport_city_id = document.getElementById("product_location_arriving_airport_city_id")
-    const _product_location_arriving_airport_name = document.getElementById("product_location_arriving_airport_name")
-    const _product_location_arriving_airport_iata_code = document.getElementById("product_location_arriving_airport_iata_code")
-    const _product_location_arriving_airport_gps_code = document.getElementById("product_location_arriving_airport_gps_code")
-    const _product_location_arriving_airport_local_code = document.getElementById("product_location_arriving_airport_local_code")
-    const _product_location_arriving_airport_home_link = document.getElementById("product_location_arriving_airport_home_link")
-    const _product_location_arriving_airport_wikipedia_link = document.getElementById("product_location_arriving_airport_wikipedia_link")
-    const _product_location_arriving_airport_scheduled_service = document.getElementById("product_location_arriving_airport_scheduled_service")
-    const _product_location_arriving_airport_keywords = document.getElementById("product_location_arriving_airport_keywords")
-    const _product_location_arriving_airport_enabled = document.getElementById("product_location_arriving_airport_enabled")
-    const _product_location_arriving_airport_date_created = document.getElementById("product_location_arriving_airport_date_created")
-    const _product_location_arriving_airport_created_by = document.getElementById("product_location_arriving_airport_created_by")
-    const _product_location_arriving_airport_date_modified = document.getElementById("product_location_arriving_airport_date_modified")
-    const _product_location_arriving_airport_modified_by = document.getElementById("product_location_arriving_airport_modified_by")
-    const _product_location_arriving_airport_note = document.getElementById("product_location_arriving_airport_note")
-    const _product_location_arriving_airport_city_search = document.getElementById("product_location_arriving_airport_city_search")
-    const _product_location_arriving_airport_remove_button = document.getElementById("product_location_arriving_airport_remove_button")
-    const _product_location_arriving_airport_clear_button = document.getElementById("product_location_arriving_airport_clear_button")
-    const _product_location_arriving_airport_save_button = document.getElementById("product_location_arriving_airport_save_button")
-    
-    const _modal_product_arrive_to_airport_postal_code = document.getElementById("modal_product_arrive_to_airport_postal_code")
-    const _modal_product_arrive_to_airport_street_1 = document.getElementById("modal_product_arrive_to_airport_street_1")
-    const _modal_product_arrive_to_airport_street_2 = document.getElementById("modal_product_arrive_to_airport_street_2")
-    
-    const _modal_product_depart_from_airport_postal_code = document.getElementById("modal_product_depart_from_airport_postal_code")
-    const _modal_product_depart_from_airport_street_1 = document.getElementById("modal_product_depart_from_airport_street_1")
-    const _modal_product_depart_from_airport_street_2 = document.getElementById("modal_product_depart_from_airport_street_2")
-    
-    let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    let airportDepartFromRules = {
-        groups: {
-            locationGroup: "product_location_departing_airport_city_search product_location_departing_airport_city_id",
-        },
-        rules: {
-            product_location_departing_airport_name: {
-                required: true,
-            },
-            product_location_departing_airport_iata_code: {
-                required: true,
-            },
-            product_location_departing_airport_airport_types_id: {
-                required: true,
-            },
-            product_location_departing_airport_city_search: {
-                required: true,
-            },
-            product_location_departing_airport_city_id: {
-                required: true,
-            },
-            product_location_departing_airport_home_link: {
-                url: true,
-            },
-            product_location_departing_airport_wikipedia_link: {
-                url: true,
-            },
-            
-        },
-        messages: {
-            product_location_departing_airport_name: {
-                required: "Field Required",
-            },
-            product_location_departing_airport_iata_code: {
-                required: "Field Required",
-            },
-            product_location_departing_airport_airport_types_id: {
-                required: "Field Required",
-            },
-            product_location_departing_airport_city_search: {
-                required: "Field Required",
-            },
-            product_location_departing_airport_city_id: {
-                required: "Field Required",
-            },
-            product_location_departing_airport_home_link: {
-                url: "Field Invalid",
-            },
-            product_location_departing_airport_wikipedia_link: {
-                url: "Field Invalid",
-            },
-        },
-    }
-    let airportArriveToRules = {
-        groups: {
-            locationGroup: "product_location_arriving_airport_city_search product_location_arriving_airport_city_id",
-        },
-        rules: {
-            product_location_arriving_airport_name: {
-                required: true,
-            },
-            product_location_arriving_airport_iata_code: {
-                required: true,
-            },
-            product_location_arriving_airport_airport_types_id: {
-                required: true,
-            },
-            product_location_arriving_airport_city_search: {
-                required: true,
-            },
-            product_location_arriving_airport_city_id: {
-                required: true,
-            },
-            product_location_arriving_airport_home_link: {
-                url: true,
-            },
-            product_location_arriving_airport_wikipedia_link: {
-                url: true,
-            },
-            
-        },
-        messages: {
-            product_location_arriving_airport_name: {
-                required: "Field Required",
-            },
-            product_location_arriving_airport_iata_code: {
-                required: "Field Required",
-            },
-            product_location_arriving_airport_airport_types_id: {
-                required: "Field Required",
-            },
-            product_location_arriving_airport_city_search: {
-                required: "Field Required",
-            },
-            product_location_arriving_airport_city_id: {
-                required: "Field Required",
-            },
-            product_location_arriving_airport_home_link: {
-                url: "Field Invalid",
-            },
-            product_location_arriving_airport_wikipedia_link: {
-                url: "Field Invalid",
-            },
-        },
-    }
-    let globalSelectedAirportDepartFrom = false
-    let globalSelectedAirportArriveTo = false
-    
-    $(_product_location_departing_airport_edit_button)
-        .on("click", function () {
-            //console.log("Airport.product_location_departing_airport_edit_button.click()")
-            
-            _product_location_departing_airport_search.disabled = true
-            
-            showAirportForm("depart_from")
-            hideAirportForm("arrive_to")
-        })
-    
-    $(_product_location_arriving_airport_edit_button)
-        .on("click", function () {
-            //console.log("Airport.product_location_arriving_airport_edit_button.click()")
-            
-            _product_location_arriving_airport_search.disabled = true
-            
-            showAirportForm("arrive_to")
-            hideAirportForm("depart_from")
-        })
-    
-    $(_product_location_departing_airport_remove_button)
-        .on("click", function () {
-            //console.log("ProductLocation.product_location_departing_airport_remove_button.click()")
-            let departing_location = Airport.departingAirport
-            
-            setLocationAirportForm(departing_location, "depart_from")
-            hideAirportForm("depart_from")
-            clearValidation(_product_location_departing_airport_form)
-        })
-    
-    $(_product_location_arriving_airport_remove_button)
-        .on("click", function () {
-            //console.log("ProductLocation.product_location_arriving_airport_remove_button.click()")
-            let arriving_location = Airport.arrivingAirport
-            
-            setLocationAirportForm(arriving_location, "arrive_to")
-            hideAirportForm("arrive_to")
-            clearValidation(_product_location_arriving_airport_form)
-        })
-    
-    $(_product_location_departing_airport_clear_button)
-        .on("click", function () {
-            //console.log("ProductLocation.product_location_departing_airport_clear_button.click()")
-            clearLocationAirportForm("depart_from")
-        })
-    
-    $(_product_location_arriving_airport_clear_button)
-        .on("click", function () {
-            //console.log("ProductLocation.product_location_arriving_airport_clear_button.click()")
-            clearLocationAirportForm("arrive_to")
-        })
-    
-    $(_product_location_departing_airport_save_button)
-        .on("click", function () {
-            //console.log("ProductLocation.product_location_departing_airport_save_button.click()")
-            update("depart_from")
-        })
-    
-    $(_product_location_arriving_airport_save_button)
-        .on("click", function () {
-            //console.log("ProductLocation.product_location_arriving_airport_save_button.click()")
-            update("arrive_to")
-        })
-    
-    $(_modal_product_depart_from_airport_add_block)
-        .on("change", function () {
-            validDepartFromRecord()
-        })
-        .on("keyup", function () {
-            validDepartFromRecord()
-        })
-    
-    $(_modal_product_depart_from_airport_cancel_button)
-        .on("click", function () {
-            cancelAddAirportRecord("depart_from")
-        })
-    
-    $(_modal_product_arrive_to_airport_cancel_button)
-        .on("click", function () {
-            cancelAddAirportRecord("arrive_to")
-        })
-    
-    $(_modal_product_depart_from_airport_submit_button)
-        .on("click", function () {
-            save("depart_from")
-        })
-    
-    $(_modal_product_arrive_to_airport_submit_button)
-        .on("click", function () {
-            save("arrive_to")
-        })
-    
-    const validAirport = function (type) {
-        //console.log("Airport.validAirport(type)", type)
-        if (type) {
-            if (type === "depart_from") {
-                return $(_product_location_departing_airport_form).valid()
-            } else if (type === "arrive_to") {
-                return $(_product_location_arriving_airport_form).valid()
-            }
-        }
-    }
-    
-    const buildAirportUpdateRecord = function (type) {
-        console.log("Airport.buildAirportUpdateRecord(type)", type)
-        // ----
-        
-        let returnObject = {}
-        if (type) {
-            if (type === "depart_from") {
-                let street1 = (_modal_product_depart_from_airport_street_1 && _modal_product_depart_from_airport_street_1.value !== "") ? _modal_product_depart_from_airport_street_1.value : null
-                let street2 = (_modal_product_depart_from_airport_street_2 && _modal_product_depart_from_airport_street_2.value !== "") ? _modal_product_depart_from_airport_street_2.value : null
-                let postalCode = (_modal_product_depart_from_airport_postal_code && _modal_product_depart_from_airport_postal_code.value !== "") ? _modal_product_depart_from_airport_postal_code.value : null
-                
-                returnObject.id = (!isNaN(parseInt(_product_location_departing_airport_id.value))) ? parseInt(_product_location_departing_airport_id.value) : null
-                returnObject.airport_types_id = (!isNaN(parseInt(_product_location_departing_airport_airport_types_id.value))) ? parseInt(_product_location_departing_airport_airport_types_id.value) : null
-                returnObject.city_id = (!isNaN(parseInt(_product_location_departing_airport_city_id.value))) ? parseInt(_product_location_departing_airport_city_id.value) : null
-                returnObject.name = (_product_location_departing_airport_name.value === "") ? null : _product_location_departing_airport_name.value
-                returnObject.iata_code = (_product_location_departing_airport_iata_code.value === "") ? null : _product_location_departing_airport_iata_code.value
-                returnObject.home_link = (_product_location_departing_airport_home_link.value === "") ? null : _product_location_departing_airport_home_link.value
-                returnObject.wikipedia_link = (_product_location_departing_airport_wikipedia_link.value === "") ? null : _product_location_departing_airport_wikipedia_link.value
-                returnObject.enabled = (_product_location_departing_airport_enabled.checked === true) ? 1 : 0
-                returnObject.street_1 = street1
-                returnObject.street_2 = street2
-                returnObject.postal_code = postalCode
-                
-            } else if (type === "arrive_to") {
-                let street1 = (_modal_product_arrive_to_airport_street_1 && _modal_product_arrive_to_airport_street_1.value !== "") ? _modal_product_arrive_to_airport_street_1.value : null
-                let street2 = (_modal_product_arrive_to_airport_street_2 && _modal_product_arrive_to_airport_street_2.value !== "") ? _modal_product_arrive_to_airport_street_2.value : null
-                let postalCode = (_modal_product_arrive_to_airport_postal_code && _modal_product_arrive_to_airport_postal_code.value !== "") ? _modal_product_arrive_to_airport_postal_code.value : null
-                
-                returnObject.id = (!isNaN(parseInt(_product_location_arriving_airport_id.value))) ? parseInt(_product_location_arriving_airport_id.value) : null
-                returnObject.airport_types_id = (!isNaN(parseInt(_product_location_arriving_airport_airport_types_id.value))) ? parseInt(_product_location_arriving_airport_airport_types_id.value) : null
-                returnObject.city_id = (!isNaN(parseInt(_product_location_arriving_airport_city_id.value))) ? parseInt(_product_location_arriving_airport_city_id.value) : null
-                returnObject.name = (_product_location_arriving_airport_name.value === "") ? null : _product_location_arriving_airport_name.value
-                returnObject.iata_code = (_product_location_arriving_airport_iata_code.value === "") ? null : _product_location_arriving_airport_iata_code.value
-                returnObject.home_link = (_product_location_arriving_airport_home_link.value === "") ? null : _product_location_arriving_airport_home_link.value
-                returnObject.wikipedia_link = (_product_location_arriving_airport_wikipedia_link.value === "") ? null : _product_location_arriving_airport_wikipedia_link.value
-                returnObject.enabled = (_product_location_arriving_airport_enabled.checked === true) ? 1 : 0
-                returnObject.street_1 = street1
-                returnObject.street_2 = street2
-                returnObject.postal_code = postalCode
-            }
-        }
-        
-        return returnObject
-    }
-    
-    const sendUpdateRequest = function (dataToSend, callback) {
-        console.log("Airport.sendUpdateRequest(dataToSend)", dataToSend)
-        // ----
-        
-        if (dataToSend) {
-            let url = "/api/v1.0/airports/update"
-            try {
-                sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    }
-                })
-            } catch (e) {
-                //console.log("error", e)
-            }
-        }
-    }
-    
-    const sendSaveRequest = function (dataToSend, callback) {
-        if (dataToSend) {
-            let url = "/api/v1.0/airports/update"
-            try {
-                sendPostRequest(url, dataToSend, function (data) {
-                    if (data) {
-                        return callback(data)
-                    } else {
-                        handleAirportError("Oops: 1")
-                    }
-                })
-            } catch (e) {
-                
-                console.log("error", e)
-            }
-        }
-    }
-    
-    const validDepartFromRecord = function () {
-        let isValid = true
-        
-        if (_modal_product_depart_from_airport_iata_code.value === "") {
-            $(_modal_product_depart_from_airport_iata_code).showError("Field Required")
-            isValid = false
-        } else {
-            $(_modal_product_depart_from_airport_iata_code).hideError()
-        }
-        
-        if (_modal_product_depart_from_airport_types_id.value === "") {
-            $(_modal_product_depart_from_airport_types_id).showError("Field Required")
-            isValid = false
-        } else {
-            $(_modal_product_depart_from_airport_types_id).hideError()
-        }
-        
-        if (isNaN(parseInt(_modal_product_depart_from_airport_city_id.value))) {
-            $(_modal_product_depart_from_airport_city).showError("Field Required")
-            isValid = false
-        } else {
-            $(_modal_product_depart_from_airport_city).hideError()
-        }
-        
-        return isValid
-    }
-    
-    const validArriveToRecord = function () {
-        let isValid = true
-        
-        if (_modal_product_arrive_to_airport_iata_code.value === "") {
-            $(_modal_product_arrive_to_airport_iata_code).showError("Field Required")
-            isValid = false
-        } else {
-            $(_modal_product_arrive_to_airport_iata_code).hideError()
-        }
-        
-        if (_modal_product_arrive_to_airport_types_id.value === "") {
-            $(_modal_product_arrive_to_airport_types_id).showError("Field Required")
-            isValid = false
-        } else {
-            $(_modal_product_arrive_to_airport_types_id).hideError()
-        }
-        
-        if (isNaN(parseInt(_modal_product_arrive_to_airport_city_id.value))) {
-            $(_modal_product_arrive_to_airport_city).showError("Field Required")
-            isValid = false
-        } else {
-            $(_modal_product_arrive_to_airport_city).hideError()
-        }
-        
-        return isValid
-    }
-    
-    const buildAddAirportRecord = function (type) {
-        if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
-            if (type) {
-                if (type === "depart_from") {
-                    if (validDepartFromRecord()) {
-                        let street1 = (_modal_product_depart_from_airport_street_1 && _modal_product_depart_from_airport_street_1.value !== "") ? _modal_product_depart_from_airport_street_1.value : null
-                        let street2 = (_modal_product_depart_from_airport_street_2 && _modal_product_depart_from_airport_street_2.value !== "") ? _modal_product_depart_from_airport_street_2.value : null
-                        let postalCode = (_modal_product_depart_from_airport_postal_code && _modal_product_depart_from_airport_postal_code.value !== "") ? _modal_product_depart_from_airport_postal_code.value : null
-                        
-                        let dataToSend = {
-                            airport_types_id: (!isNaN(parseInt(_modal_product_depart_from_airport_types_id.value))) ? parseInt(_modal_product_depart_from_airport_types_id.value) : null,
-                            city_id: (!isNaN(parseInt(_modal_product_depart_from_airport_city_id.value))) ? parseInt(_modal_product_depart_from_airport_city_id.value) : null,
-                            name: (_modal_product_depart_from_airport.value !== "") ? _modal_product_depart_from_airport.value : null,
-                            street_1: street1,
-                            street_2: street2,
-                            postal_code: postalCode,
-                            iata_code: (_modal_product_depart_from_airport_iata_code.value !== "") ? _modal_product_depart_from_airport_iata_code.value : null,
-                        }
-                        
-                        return removeNulls(dataToSend)
-                    }
-                } else if (type === "arrive_to") {
-                    if (validArriveToRecord()) {
-                        let street1 = (_modal_product_arrive_to_airport_street_1 && _modal_product_arrive_to_airport_street_1.value !== "") ? _modal_product_arrive_to_airport_street_1.value : null
-                        let street2 = (_modal_product_arrive_to_airport_street_2 && _modal_product_arrive_to_airport_street_2.value !== "") ? _modal_product_arrive_to_airport_street_2.value : null
-                        let postalCode = (_modal_product_arrive_to_airport_postal_code && _modal_product_arrive_to_airport_postal_code.value !== "") ? _modal_product_arrive_to_airport_postal_code.value : null
-                        
-                        let dataToSend = {
-                            airport_types_id: (!isNaN(parseInt(_modal_product_arrive_to_airport_types_id.value))) ? parseInt(_modal_product_arrive_to_airport_types_id.value) : null,
-                            city_id: (!isNaN(parseInt(_modal_product_arrive_to_airport_city_id.value))) ? parseInt(_modal_product_arrive_to_airport_city_id.value) : null,
-                            name: (_modal_product_arrive_to_airport.value !== "") ? _modal_product_arrive_to_airport.value : null,
-                            street_1: street1,
-                            street_2: street2,
-                            postal_code: postalCode,
-                            iata_code: (_modal_product_arrive_to_airport_iata_code.value !== "") ? _modal_product_arrive_to_airport_iata_code.value : null,
-                        }
-                        
-                        return removeNulls(dataToSend)
-                    }
-                }
-            }
-        }
-    }
-    
-    const cancelAddAirportRecord = function (type) {
-        if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
-            clearAirportForm(type)
-            hideAirportForm(type)
-            
-            if (type) {
-                if (type === "depart_from") {
-                
-                } else if (type === "arrive_to") {
-                
-                }
-            }
-        }
-    }
-    
-    const populateAirportForm = function (airport, type) {
-        if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
-            clearAirportForm(type)
-            
-            showAirportForm(type)
-        }
-    }
-    
-    const clearAirportForm = function (type) {
-        if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
-            if (type) {
-                if (type === "depart_from") {
-                    _modal_product_depart_from_airport_iata_code.value = ""
-                    _modal_product_depart_from_airport_city.value = ""
-                    _modal_product_depart_from_airport_city_id.value = ""
-                    _modal_product_depart_from_airport_country_id.value = ""
-                    _modal_product_depart_from_airport_province_id.value = ""
-                    _modal_product_depart_from_airport_city_id.value = ""
-                    _modal_product_depart_from_airport_types_id.value = ""
-                    _modal_product_depart_from_airport_postal_code.value = ""
-                    _modal_product_depart_from_airport_street_1.value = ""
-                    _modal_product_depart_from_airport_street_2.value = ""
-                    _modal_product_depart_from_airport.disabled = false
-                    clearAllValidation()
-                } else if (type === "arrive_to") {
-                    _modal_product_arrive_to_airport_iata_code.value = ""
-                    _modal_product_arrive_to_airport_city.value = ""
-                    _modal_product_arrive_to_airport_city_id.value = ""
-                    _modal_product_arrive_to_airport_country_id.value = ""
-                    _modal_product_arrive_to_airport_province_id.value = ""
-                    _modal_product_arrive_to_airport_city_id.value = ""
-                    _modal_product_arrive_to_airport_types_id.value = ""
-                    _modal_product_arrive_to_airport_postal_code.value = ""
-                    _modal_product_arrive_to_airport_street_1.value = ""
-                    _modal_product_arrive_to_airport_street_2.value = ""
-                    _modal_product_arrive_to_airport.disabled = false
-                    clearAllValidation()
-                }
-            }
-        }
-    }
-    
-    const resetAirportForm = function (type) {
-        if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
-            if (type) {
-                _modal_product_arrive_to_airport.disabled = false
-                _modal_product_depart_from_airport.disabled = false
-                
-                clearAirportForm(type)
-                
-                hideAirportForm("depart_from")
-                hideAirportForm("arrive_to")
-            }
-        }
-    }
-    
-    const hideAirportForm = function (type) {
-        //console.log("ProductLocation.hideAirportForm(type)", type)
-        if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
-            if (type) {
-                if (type === "depart_from") {
-                    $(_modal_product_depart_from_airport_add_block).hide()
-                } else if (type === "arrive_to") {
-                    $(_modal_product_arrive_to_airport_add_block).hide()
-                }
-            }
-        }
-        
-        if (_product_edit_location_section) {
-            if (type) {
-                if (type === "depart_from") {
-                    if (_product_location_departing_airport_form) {
-                        $(_product_location_departing_airport_form).hide()
-                        _product_location_departing_airport_search.disabled = false
-                    }
-                }
-                
-                if (type === "arrive_to") {
-                    if (_product_location_arriving_airport_form) {
-                        $(_product_location_arriving_airport_form).hide()
-                        _product_location_arriving_airport_search.disabled = false
-                    }
-                }
-            }
-        }
-    }
-    
-    const showAirportForm = function (type) {
-        //console.log("ProductLocation.showAirportForm(type)", type)
-        if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
-            if (type) {
-                if (type === "depart_from") {
-                    _modal_product_depart_from_airport.disabled = true
-                    $(_modal_product_depart_from_airport_add_block).show()
-                    $(_modal_product_arrive_to_airport_add_block).hide()
-                } else if (type === "arrive_to") {
-                    _modal_product_arrive_to_airport.disabled = true
-                    $(_modal_product_arrive_to_airport_add_block).show()
-                    $(_modal_product_depart_from_airport_add_block).hide()
-                }
-            }
-        }
-        
-        if (_product_edit_location_section) {
-            if (type) {
-                if (type === "depart_from") {
-                    if (_product_location_departing_airport_form) {
-                        $(_product_location_departing_airport_form).show()
-                        _product_location_departing_airport_search.disabled = true
-                    }
-                }
-                
-                if (type === "arrive_to") {
-                    if (_product_location_arriving_airport_form) {
-                        $(_product_location_arriving_airport_form).show()
-                        _product_location_arriving_airport_search.disabled = true
-                    }
-                }
-                
-            }
-        }
-    }
-    
-    const initAutocomplete = function () {
-        
-        if (_product_location_departing_airport_search) {
-            
-            $(_product_location_departing_airport_search)
-                .on("click", function () {
-                    if ($(this).attr("readonly") === "readonly") {
-                        e.preventDefault()
-                    } else {
-                        $(this).select()
-                    }
-                })
-                .on("search", function () {
-                    if (_product_location_departing_airport_id) {
-                        _product_location_departing_airport_id.value = ""
-                    }
-                    
-                    if (_product_location_departing_airport_search) {
-                        _product_location_departing_airport_search.value = ""
-                    }
-                    
-                    clearLocationAirportForm("depart_from")
-                    
-                })
-                .on("keyup", function () {
-                    globalSelectedAirportDepartFrom = false
-                })
-                .on("change", function () {
-                    setTimeout(function () {
-                        let airport_name = _product_location_departing_airport_search.value
-                        
-                        if (globalSelectedAirportDepartFrom === false) {
-                            if (airport_name === "") {
-                                _product_location_departing_airport_search.value = ""
-                                _product_location_departing_airport_id.value = ""
-                                globalSelectedAirportDepartFrom = false
-                            } else {
-                                airportExists(airport_name, "depart_from")
-                            }
-                        }
-                    }, 200)
-                })
-                .autocomplete({
-                    serviceUrl: "/api/v1.0/autocomplete/airports",
-                    minChars: 2,
-                    cache: false,
-                    dataType: "json",
-                    triggerSelectOnValidInput: false,
-                    paramName: "st",
-                    onSelect: function (suggestion) {
-                        if (!suggestion || !suggestion.data) {
-                            return
-                        }
-                        
-                        globalSelectedAirportDepartFrom = true
-                        
-                        let airport = suggestion.data
-                        
-                        if (airport) {
-                            setLocationAirportForm(airport, "depart_from")
-                            if (_product_location_departing_airport_id) {
-                                _product_location_departing_airport_id.value = airport.id
-                            }
-                            
-                            if (_product_location_departing_airport_city_id) {
-                                _product_location_departing_airport_city_id.value = airport.city.id
-                                _product_edit_location_city_id.value = airport.city.id
-                            }
-                            
-                            if (_product_location_departing_airport_search) {
-                                _product_location_departing_airport_search.value = suggestion.value
-                            }
-                        }
-                    },
-                })
-        }
-        
-        if (_product_location_arriving_airport_search) {
-            
-            $(_product_location_arriving_airport_search)
-                .on("click", function () {
-                    if ($(this).attr("readonly") === "readonly") {
-                        e.preventDefault()
-                    } else {
-                        $(this).select()
-                    }
-                })
-                .on("search", function () {
-                    if (_product_location_departing_airport_id) {
-                        _product_location_departing_airport_id.value = ""
-                    }
-                    if (_product_location_departing_airport_search) {
-                        _product_location_departing_airport_search.value = ""
-                    }
-                    clearLocationAirportForm("arrive_to")
-                })
-                .on("keyup", function () {
-                    globalSelectedAirportDepartFrom = false
-                })
-                .on("change", function () {
-                
-                })
-                .autocomplete({
-                    serviceUrl: "/api/v1.0/autocomplete/airports",
-                    minChars: 2,
-                    cache: false,
-                    dataType: "json",
-                    triggerSelectOnValidInput: false,
-                    paramName: "st",
-                    onSelect: function (suggestion) {
-                        if (!suggestion || !suggestion.data) {
-                            return
-                        }
-                        
-                        globalSelectedAirportDepartFrom = true
-                        
-                        let airport = suggestion.data
-                        
-                        if (airport) {
-                            setLocationAirportForm(airport, "arrive_to")
-                            if (_product_location_arriving_airport_id) {
-                                _product_location_arriving_airport_id.value = airport.id
-                            }
-                            
-                            if (_product_location_arriving_airport_city_id) {
-                                _product_location_arriving_airport_city_id.value = airport.city.id
-                            }
-                            
-                            if (_product_location_arriving_airport_search) {
-                                _product_location_arriving_airport_search.value = suggestion.value
-                            }
-                        }
-                    },
-                })
-        }
-        
-        if (_modal_product_depart_from_airport) {
-            
-            $(_modal_product_depart_from_airport)
-                .on("click", function (e) {
-                    if ($(this).attr("readonly") === "readonly") {
-                        e.preventDefault()
-                    } else {
-                        $(this).select()
-                    }
-                })
-                .on("search", function () {
-                    if (_modal_product_depart_from_airport_id) {
-                        _modal_product_depart_from_airport_id.value = ""
-                    }
-                    
-                    if (_modal_product_depart_from_airport) {
-                        _modal_product_depart_from_airport.value = ""
-                    }
-                    
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                })
-                .on("keyup", function () {
-                    globalSelectedAirportDepartFrom = false
-                })
-                .on("change", function () {
-                    setTimeout(function () {
-                        let airport_name = _modal_product_depart_from_airport.value
-                        
-                        if (globalSelectedAirportDepartFrom === false) {
-                            if (airport_name === "") {
-                                _modal_product_depart_from_airport.value = ""
-                                _modal_product_depart_from_airport_id.value = ""
-                                if (_modal_product_country_id) {
-                                    _modal_product_country_id.value = ""
-                                }
-                                
-                                if (_modal_product_province_id) {
-                                    _modal_product_province_id.value = ""
-                                }
-                                
-                                if (_modal_product_city_id) {
-                                    _modal_product_city_id.value = ""
-                                }
-                                globalSelectedAirportDepartFrom = false
-                            } else {
-                                airportExists(airport_name, "depart_from")
-                            }
-                        }
-                    }, 200)
-                })
-                .autocomplete({
-                    serviceUrl: "/api/v1.0/autocomplete/airports",
-                    minChars: 2,
-                    cache: false,
-                    dataType: "json",
-                    triggerSelectOnValidInput: false,
-                    paramName: "st",
-                    onSelect: function (suggestion) {
-                        if (!suggestion || !suggestion.data) {
-                            return
-                        }
-                        
-                        globalSelectedAirportDepartFrom = true
-                        
-                        let airport = suggestion.data
-                        console.log("|__ airport", airport)
-                        if (airport) {
-                            let countryId = (!isNaN(parseInt(airport.country.id))) ? parseInt(airport.country.id) : null
-                            let provinceId = (!isNaN(parseInt(airport.province.id))) ? parseInt(airport.province.id) : null
-                            let cityId = (!isNaN(parseInt(airport.city.id))) ? parseInt(airport.city.id) : null
-                            
-                            if (_modal_product_depart_from_airport) {
-                                _modal_product_depart_from_airport.value = (airport.name) ? airport.name : ""
-                            }
-                            
-                            if (_modal_product_depart_from_airport_id) {
-                                _modal_product_depart_from_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
-                            }
-                            
-                            if (_modal_product_country_id) {
-                                _modal_product_country_id.value = countryId
-                            }
-                            
-                            if (_modal_product_province_id) {
-                                _modal_product_province_id.value = provinceId
-                            }
-                            
-                            if (_modal_product_city_id) {
-                                _modal_product_city_id.value = cityId
-                            }
-                            
-                        } else {
-                            resetAirportForm("depart_from")
-                            showAirportForm("depart_from")
-                        }
-                    },
-                })
-        }
-        
-        if (_modal_product_arrive_to_airport) {
-            
-            $(_modal_product_arrive_to_airport)
-                .on("click", function () {
-                    if ($(this).attr("readonly") === "readonly") {
-                        e.preventDefault()
-                    } else {
-                        $(this).select()
-                    }
-                })
-                .on("keyup", function () {
-                    globalSelectedAirportArriveTo = false
-                })
-                .on("search", function () {
-                    if (_modal_product_arrive_to_airport_id) {
-                        _modal_product_arrive_to_airport_id.value = ""
-                    }
-                    if (_modal_product_arrive_to_airport) {
-                        _modal_product_arrive_to_airport.value = ""
-                    }
-                })
-                .on("change", function () {
-                    setTimeout(function () {
-                        let airport_name = _modal_product_arrive_to_airport.value
-                        
-                        if (globalSelectedAirportArriveTo === false) {
-                            if (airport_name === "") {
-                                _modal_product_arrive_to_airport.value = ""
-                                _modal_product_arrive_to_airport_id.value = ""
-                                globalSelectedAirportArriveTo = false
-                            } else {
-                                airportExists(airport_name, "arrive_to")
-                            }
-                        }
-                    }, 200)
-                })
-                .autocomplete({
-                    serviceUrl: "/api/v1.0/autocomplete/airports",
-                    minChars: 2,
-                    cache: false,
-                    dataType: "json",
-                    triggerSelectOnValidInput: false,
-                    paramName: "st",
-                    onSelect: function (suggestion) {
-                        if (!suggestion || !suggestion.data) {
-                            return
-                        }
-                        
-                        globalSelectedAirportArriveTo = true
-                        
-                        let airport = suggestion.data
-                        
-                        if (airport) {
-                            if (_modal_product_arrive_to_airport) {
-                                _modal_product_arrive_to_airport.value = (airport.name) ? airport.name : ""
-                            }
-                            
-                            if (_modal_product_arrive_to_airport_id) {
-                                _modal_product_arrive_to_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
-                            }
-                            
-                        } else {
-                            resetAirportForm("arrive_to")
-                            showAirportForm("arrive_to")
-                        }
-                    },
-                })
-        }
-        
-    }
-    
-    const clearLocationAirportForm = function (type) {
-        //console.log("ProductLocation.clearLocationAirportForm(type)", type)
-        if (type) {
-            if (type === "depart_from") {
-                _product_location_departing_airport_airport_types_id.value = ""
-                _product_location_departing_airport_name.value = ""
-                _product_location_departing_airport_city_id.value = ""
-                _product_location_departing_airport_search.value = ""
-                _product_location_departing_airport_id.value = ""
-                _product_location_departing_airport_home_link.value = ""
-                _product_location_departing_airport_wikipedia_link.value = ""
-                _product_location_departing_airport_city_search.value = ""
-                _product_location_departing_airport_enabled.checked = true
-                _product_location_departing_airport_iata_code.value = ""
-                _product_location_departing_airport_remove_button.disabled = true
-                _product_location_departing_airport_save_button.disabled = true
-                _product_location_departing_airport_clear_button.disabled = true
-                _product_edit_location_city_id.value = ""
-            }
-            
-            if (type === "arrive_to") {
-                _product_location_arriving_airport_airport_types_id.value = ""
-                _product_location_arriving_airport_name.value = ""
-                _product_location_arriving_airport_city_id.value = ""
-                _product_location_arriving_airport_search.value = ""
-                _product_location_arriving_airport_id.value = ""
-                _product_location_arriving_airport_home_link.value = ""
-                _product_location_arriving_airport_wikipedia_link.value = ""
-                _product_location_arriving_airport_city_search.value = ""
-                _product_location_arriving_airport_enabled.checked = true
-                _product_location_arriving_airport_iata_code.value = ""
-                _product_location_arriving_airport_remove_button.disabled = true
-                _product_location_arriving_airport_save_button.disabled = true
-                _product_location_arriving_airport_clear_button.disabled = true
-            }
-            
-        }
-        
-    }
-    
-    const setLocationAirportForm = function (airport, type) {
-        //console.log("ProductLocation.setLocationAirportForm(type)", type)
-        if (type) {
-            clearLocationAirportForm(type)
-            if (airport) {
-                if (airport.city) {
-                    let displayShort = `${airport.city.name} (${airport.province.name}, ${airport.country.name})`
-                    let displayMedium = `${airport.city.name} (${airport.province.name}, ${airport.country.name})`
-                    let displayLong = `${airport.city.name} (${airport.province.name}, ${airport.country.name})`
-                    let searchDisplayText = ""
-                    
-                    if (airport.name && airport.iata_code) {
-                        searchDisplayText = `${airport.iata_code} - ${airport.name}`
-                    } else if (airport.name && !airport.iata_code) {
-                        searchDisplayText = `${airport.name}`
-                    } else if (!airport.name && airport.iata_code) {
-                        searchDisplayText = `${airport.iata_code}`
-                    } else {
-                        searchDisplayText = `Airport Name`
-                    }
-                    
-                    if (type === "depart_from") {
-                        let cityId = (!isNaN(parseInt(airport.city.id))) ? parseInt(airport.city.id) : null
-                        _product_location_departing_airport_airport_types_id.value = (airport.airport_types_id) ? airport.airport_types_id : ""
-                        _product_location_departing_airport_name.value = (airport.name) ? airport.name : null
-                        _product_location_departing_airport_city_id.value = (!isNaN(parseInt(airport.city.id))) ? parseInt(airport.city.id) : null
-                        _product_location_departing_airport_search.value = searchDisplayText
-                        _product_location_departing_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : null
-                        _product_location_departing_airport_home_link.value = (airport.home_link) ? airport.home_link : null
-                        _product_location_departing_airport_wikipedia_link.value = (airport.wikipedia_link) ? airport.wikipedia_link : null
-                        _product_location_departing_airport_enabled.checked = (airport.enabled && airport.enabled === 1)
-                        _product_location_departing_airport_iata_code.value = (airport.iata_code) ? airport.iata_code : null
-                        
-                        _product_location_departing_airport_remove_button.disabled = false
-                        _product_location_departing_airport_save_button.disabled = false
-                        _product_location_departing_airport_clear_button.disabled = false
-                        
-                        _product_edit_location_city_id.value = cityId
-                        
-                        if (defaultAddressView === "medium") {
-                            _product_location_departing_airport_city_search.value = displayMedium
-                        }
-                        
-                        if (defaultAddressView === "long") {
-                            _product_location_departing_airport_city_search.value = displayLong
-                        }
-                        
-                        if (defaultAddressView === "short") {
-                            _product_location_departing_airport_city_search.value = displayShort
-                        }
-                    }
-                    
-                    if (type === "arrive_to") {
-                        _product_location_arriving_airport_airport_types_id.value = (airport.airport_types_id) ? airport.airport_types_id : ""
-                        _product_location_arriving_airport_name.value = (airport.name) ? airport.name : null
-                        _product_location_arriving_airport_city_id.value = (!isNaN(parseInt(airport.city.id))) ? parseInt(airport.city.id) : null
-                        _product_location_arriving_airport_search.value = searchDisplayText
-                        _product_location_arriving_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : null
-                        _product_location_arriving_airport_home_link.value = (airport.home_link) ? airport.home_link : null
-                        _product_location_arriving_airport_wikipedia_link.value = (airport.wikipedia_link) ? airport.wikipedia_link : null
-                        _product_location_arriving_airport_enabled.checked = (airport.enabled && airport.enabled === 1)
-                        _product_location_arriving_airport_iata_code.value = (airport.iata_code) ? airport.iata_code : null
-                        
-                        _product_location_arriving_airport_remove_button.disabled = false
-                        _product_location_arriving_airport_save_button.disabled = false
-                        _product_location_arriving_airport_clear_button.disabled = false
-                        
-                        if (defaultAddressView === "medium") {
-                            _product_location_arriving_airport_city_search.value = displayMedium
-                        }
-                        
-                        if (defaultAddressView === "long") {
-                            _product_location_arriving_airport_city_search.value = displayLong
-                        }
-                        
-                        if (defaultAddressView === "short") {
-                            _product_location_arriving_airport_city_search.value = displayShort
-                        }
-                        
-                    }
-                }
-                
-            }
-        }
-    }
-    
-    const airportExists = function (name, type) {
-        if (name && name !== "") {
-            /**
-             * data to send to the server
-             *
-             * @type {{name}}
-             */
-            let dataToSend = {
-                name: name,
-            }
-            
-            fetchByName(dataToSend, function (data) {
-                let airport = null
-                
-                if (data) {
-                    airport = data
-                    if (data[0]) {
-                        airport = data[0]
-                    }
-                }
-                
-                if (airport && airport.id) {
-                    console.log("|__ airport", airport)
-                    
-                    if (type === "depart_from") {
-                        let airportName = (airport.name) ? airport.name : null
-                        let airportId = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : null
-                        let countryId = (!isNaN(parseInt(airport.country.id))) ? parseInt(airport.country.id) : null
-                        let provinceId = (!isNaN(parseInt(airport.province.id))) ? parseInt(airport.province.id) : null
-                        let cityId = (!isNaN(parseInt(airport.city.id))) ? parseInt(airport.city.id) : null
-                        
-                        globalSelectedAirportDepartFrom = true
-                        
-                        if (_modal_product_depart_from_airport) {
-                            _modal_product_depart_from_airport.value = airportName
-                        }
-                        
-                        if (_modal_product_depart_from_airport_id) {
-                            _modal_product_depart_from_airport_id.value = airportId
-                        }
-                        
-                        if (_modal_product_country_id) {
-                            _modal_product_country_id.value = countryId
-                        }
-                        
-                        if (_modal_product_province_id) {
-                            _modal_product_province_id.value = provinceId
-                        }
-                        
-                        if (_modal_product_city_id) {
-                            _modal_product_city_id.value = cityId
-                        }
-                        
-                    } else {
-                        globalSelectedAirportArriveTo = true
-                        _modal_product_arrive_to_airport.value = airport.name
-                        _modal_product_arrive_to_airport_id.value = airport.id
-                    }
-                } else {
-                    confirmDialog(`The airport: ${name} does not exist exists. Would you like to create it?`, (ans) => {
-                        if (ans) {
-                            if (type === "depart_from") {
-                                globalSelectedAirportDepartFrom = false
-                            } else {
-                                globalSelectedAirportArriveTo = false
-                            }
-                            
-                            populateAirportForm({
-                                name: name,
-                            }, type)
-                            
-                        } else {
-                            if (type === "depart_from") {
-                                if (_modal_product_country_id) {
-                                    _modal_product_country_id.value = ""
-                                }
-                                
-                                if (_modal_product_province_id) {
-                                    _modal_product_province_id.value = ""
-                                }
-                                
-                                if (_modal_product_city_id) {
-                                    _modal_product_city_id.value = ""
-                                }
-                                
-                                if (_modal_product_depart_from_airport_id) {
-                                    _modal_product_depart_from_airport_id.value = ""
-                                }
-                                if (_modal_product_depart_from_airport) {
-                                    _modal_product_depart_from_airport.value = ""
-                                }
-                            } else {
-                                if (_modal_product_arrive_to_airport_id) {
-                                    _modal_product_arrive_to_airport_id.value = ""
-                                }
-                                if (_modal_product_arrive_to_airport) {
-                                    _modal_product_arrive_to_airport.value = ""
-                                }
-                            }
-                            
-                        }
-                    })
-                }
-            })
-        }
-    }
-    
-    const fetchByName = function (dataToSend, callback) {
-        let url = "/api/v1.0/airports/validate"
-        
-        if (dataToSend) {
-            try {
-                sendGetRequest(url, dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    } else {
-                        handleAirportError("Oops: 1")
-                    }
-                })
-            } catch (e) {
-                //console.log("error", e)
-                handleAirportError("Error Validating Airport")
-            }
-        } else {
-            handleAirportError("Error Loading Airport - Missing Data")
-        }
-    }
-    
-    const handleAirportError = function (msg) {
-        toastr.error(msg)
-    }
-    
-    const update = function (type) {
-        //console.log("Airport.update(type)", type)
-        if (validAirport(type)) {
-            confirmDialog(`Would you like to update?`, (ans) => {
-                if (ans) {
-                    sendUpdateRequest(buildAirportUpdateRecord(type), function (data) {
-                        let airport
-                        if (data) {
-                            airport = data
-                            if (data[0]) {
-                                airport = data[0]
-                            }
-                            //console.log("airport", airport)
-                            let name = (airport.name) ? airport.name : null
-                            toastr["success"](`Airport ${name} has been updated`, "Airport Updated")
-                        }
-                    })
-                }
-            })
-        }
-    }
-    
-    const save = function (type) {
-        if (type) {
-            let dataToSend = buildAddAirportRecord(type)
-            
-            if (dataToSend) {
-                confirmDialog(`Would you like to update?`, (ans) => {
-                    if (ans) {
-                        sendSaveRequest(dataToSend, function (data) {
-                            let airport
-                            if (data) {
-                                airport = data
-                                if (data[0]) {
-                                    airport = data[0]
-                                }
-                            }
-                            
-                            if (airport) {
-                                
-                                if (type === "depart_from") {
-                                    if (_modal_product_depart_from_airport) {
-                                        _modal_product_depart_from_airport.value = (airport.name) ? airport.name : ""
-                                    }
-                                    
-                                    if (_modal_product_depart_from_new_airport_id) {
-                                        _modal_product_depart_from_new_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
-                                    }
-                                    
-                                    if (_modal_product_depart_from_airport_id) {
-                                        _modal_product_depart_from_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
-                                    }
-                                    
-                                    if (_modal_product_country_id) {
-                                        _modal_product_country_id.value = (!isNaN(parseInt(airport.country.id))) ? parseInt(airport.country.id) : ""
-                                    }
-                                    
-                                    if (_modal_product_province_id) {
-                                        _modal_product_province_id.value = (!isNaN(parseInt(airport.province.id))) ? parseInt(airport.province.id) : ""
-                                    }
-                                    
-                                    if (_modal_product_city_id) {
-                                        _modal_product_city_id.value = (!isNaN(parseInt(airport.city.id))) ? parseInt(airport.city.id) : ""
-                                    }
-                                    
-                                }
-                                
-                                if (type === "arrive_to") {
-                                    
-                                    if (_modal_product_arrive_to_airport) {
-                                        _modal_product_arrive_to_airport.value = (airport.name) ? airport.name : ""
-                                    }
-                                    
-                                    if (_modal_product_arrive_to_new_airport_id) {
-                                        _modal_product_arrive_to_new_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
-                                    }
-                                    
-                                    if (_modal_product_arrive_to_airport_id) {
-                                        _modal_product_arrive_to_airport_id.value = (!isNaN(parseInt(airport.id))) ? parseInt(airport.id) : ""
-                                    }
-                                }
-                                
-                                resetAirportForm(type)
-                                initAutocomplete()
-                            }
-                        })
-                    }
-                })
-            }
-        }
-    }
-    
-    const init = function (settings) {
-        $(document).ready(function () {
-            if (_modal_product_depart_from_airport || _modal_product_arrive_to_airport) {
-                initAutocomplete()
-                resetAirportForm("depart_from")
-                resetAirportForm("arrive_to")
-            }
-            
-            if (settings) {
-                console.log("|__ settings", settings)
-                let categoryId = (_category_id && !isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
-                
-                if (_product_edit_location_section) {
-                    if (categoryId === 2) {
-                        initAutocomplete()
-                        clearLocationAirportForm("depart_from")
-                        clearLocationAirportForm("arrive_to")
-                        
-                        if (settings.product) {
-                            let product = settings.product
-                            if (product.arriving_location) {
-                                Airport.arrivingAirport = product.arriving_location
-                                let arriving_location = product.arriving_location
-                                setLocationAirportForm(arriving_location, "arrive_to")
-                            } else {
-                                Airport.arrivingAirport = null
-                            }
-                            
-                            if (product.departing_location) {
-                                let departing_location = product.departing_location
-                                Airport.departingAirport = product.departing_location
-                                setLocationAirportForm(departing_location, "depart_from")
-                            } else {
-                                Airport.departingAirport = null
-                            }
-                        }
-                        
-                        initializeValidator(airportDepartFromRules)
-                        Airport.airportDepartValidator = $(_product_location_departing_airport_form).validate()
-                        
-                        initializeValidator(airportArriveToRules)
-                        Airport.airportArriveValidator = $(_product_location_arriving_airport_form).validate()
-                    }
-                }
-            }
-            
-            hideAirportForm("depart_from")
-            hideAirportForm("arrive_to")
-        })
-    }
-    
-    return {
-        airportDepartValidator: null,
-        airportArriveValidator: null,
-        arrivingAirport: null,
-        departingAirport: null,
-        resetAirportForm: function (type) {
-            resetAirportForm(type)
-        },
-        init: function (settings) {
-            init(settings)
-        },
-    }
-})()
 
 const AirportTypes = (function () {
     "use strict"
@@ -21678,138 +20984,109 @@ const Category = (function () {
     "use strict"
     
     const _modal_product_category_id = document.getElementById("modal_product_category_id")
+    const _modal_product_city = document.getElementById("modal_product_city")
+    const _modal_product_name = document.getElementById("modal_product_name")
+    const _modal_product_sku = document.getElementById("modal_product_sku")
+    const _modal_product_rating_types_id = document.getElementById("modal_product_rating_types_id")
+    const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
+    const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
+    const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
+    const _modal_product_provider_id = document.getElementById("modal_product_provider_id")
+    const _modal_product_vendor_id = document.getElementById("modal_product_vendor_id")
     const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
     const _modal_product_provider_location_id = document.getElementById("modal_product_provider_location_id")
     const _modal_product_location_id = document.getElementById("modal_product_location_id")
     const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
-    const _modal_product_city = document.getElementById("modal_product_city")
     const _modal_product_country_cars = document.getElementById("modal_product_country_cars")
-    const _modal_product_name = document.getElementById("modal_product_name")
-    const _modal_product_sku = document.getElementById("modal_product_sku")
-    const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
-    const _modal_product_provider_id = document.getElementById("modal_product_provider_id")
-    const _modal_product_vendor_id = document.getElementById("modal_product_vendor_id")
-    const _modal_product_rating_types_id = document.getElementById("modal_product_rating_types_id")
-    const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
-    const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
     const _modal_product_country_id = document.getElementById("modal_product_country_id")
     const _modal_product_province_id = document.getElementById("modal_product_province_id")
+    const _modal_product_description_short = document.getElementById("modal_product_description_short")
+    const _modal_product_description_long = document.getElementById("modal_product_description_long")
+    const _modal_product_keywords = document.getElementById("modal_product_keywords")
+    const _modal_product_day_span = document.getElementById("modal_product_day_span")
+    const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
+    const _modal_button_submit_add_product = document.getElementById("modal_button_submit_add_product")
+    const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
+    const _modal_product_id = document.getElementById("modal_product_id")
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     $(_modal_product_category_id)
         .on("change", function () {
-            let categoryId = $(this).val()
-            handleProductChange(categoryId)
+            handleProductChange($(this).val())
         })
     
     const handleCategoryError = function (msg, title, type) {
-        toastr.error(msg)
+        if (!msg) {
+            msg = "There was an error."
+        }
+        
+        if (!title) {
+            title = "Category"
+        }
+        
+        if (!type) {
+            type = "error"
+        }
+        
+        toastr[type](msg, title)
     }
     
-    const handleProductChange = function (categoryId) {
-        console.log("Category.handleProductChange(categoryId)", categoryId)
+    const handleProductChange = function (id) {
+        console.log("Category.handleProductChange(id)", id)
         // ----
         
-        let category
+        $("[data-categoryid]").hide()
         
-        $("div[data-categoryid]").hide()
+        let categoryId = (!isNaN(parseInt(id))) ? parseInt(id) : null
+        let category = Types.category.get(parseInt(categoryId))
+        let attributeId = (category && category.attribute_id) ? category.attribute_id : null
         
         if (!categoryId) {
             return
-        } else {
-            categoryId = parseInt(categoryId)
-            category = Types.category.get(parseInt(categoryId))
-            if (!category) {
-                return
-            }
         }
         
-        Product.resetNewProductDetails()
-        Product.initAutoComplete(categoryId)
-        Product.attr1 = category.attribute_id
+        //Product.resetNewProductDetails()
+        // Product.enableNewFormDetails()
+        
+        Product.attr1 = (attributeId) ? attributeId : null
         Product.attr2 = null
         Product.attr3 = null
         Product.updateProductSKU()
         
-        if (categoryId && !isNaN(parseInt(categoryId))) {
-            switch (parseInt(categoryId)) {
+        let productName, productSKU,
+            providerName, vendorName = ""
+        
+        if (categoryId && !isNaN(categoryId)) {
+            Product.clearModalForm()
+            _modal_product_category_id.value = categoryId
+            
+            Product.initAutoComplete(categoryId)
+            
+            $(`[data-categoryid='${categoryId}']`).show()
+            
+            switch (categoryId) {
                 case 1:
                     /**
                      * Hotels
                      */
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    if (_modal_product_pricing_strategies_types_id) {
-                        _modal_product_pricing_strategies_types_id.value = ""
-                    }
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
                     
-                    //
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
-                    _modal_product_sku.disabled = true
                     
-                    $("div[data-categoryid='1']").show()
                     break
                 case 2:
                     /**
                      * Flight
                      */
-                    _modal_product_pricing_strategies_types_id.value = "2"
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_pricing_strategies_types_id.value = 2
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
-                    
-                    //_modal_product_provider_name.disabled = true
-                    //_modal_product_vendor_name.disabled = true
                     
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
@@ -21818,41 +21095,16 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.disabled = true
                     _modal_product_sku.disabled = true
                     
-                    $("div[data-categoryid='2']").show()
+                    Airport.departFromKeywords = $("#modal_product_depart_from_keywords_airport").BuildKeyword([])
+                    Airport.arriveToKeywords = $("#modal_product_arrive_to_keywords_airport").BuildKeyword([])
+                    
                     break
                 case 3:
                     /**
                      * Cars
                      */
-                    _modal_product_pricing_strategies_types_id.value = "3"
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_pricing_strategies_types_id.value = 3
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
-                    
-                    //
-                    //_modal_product_provider_name.disabled = true
-                    //_modal_product_vendor_name.disabled = true
                     
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
@@ -21861,7 +21113,6 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.disabled = true
                     _modal_product_sku.disabled = true
                     
-                    $("div[data-categoryid='3']").show()
                     Country.initAutocomplete()
                     
                     break
@@ -21869,71 +21120,26 @@ const Category = (function () {
                     /**
                      * Rail
                      */
-                    _modal_product_pricing_strategies_types_id.value = "2"
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_pricing_strategies_types_id.value = 2
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
-                    
-                    //_modal_product_provider_name.disabled = true
-                    //_modal_product_vendor_name.disabled = true
                     
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
-                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_pricing_strategies_types_id.disabled = true
                     _modal_product_sku.disabled = true
                     
-                    $("div[data-categoryid='4']").show()
+                    Station.departFromKeywords = $("#modal_product_depart_from_keywords_station").BuildKeyword([])
+                    Station.arriveToKeywords = $("#modal_product_arrive_to_keywords_station").BuildKeyword([])
+                    
                     break
                 case 5:
                     /**
                      * Transport
                      */
                     _modal_product_pricing_strategies_types_id.value = ""
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
                     
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
@@ -21942,200 +21148,85 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
                     
-                    $("div[data-categoryid='5']").show()
                     break
                 case 6:
                     /**
                      * Tours
                      */
-                    _modal_product_pricing_strategies_types_id.value = "2"
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
+                    
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
-                    _modal_product_pricing_strategies_types_id.disabled = true
+                    _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
                     
-                    $("div[data-categoryid='6']").show()
                     break
                 case 7:
                     /**
                      * Cruises
                      */
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
                     
-                    //_modal_product_provider_name.disabled = true
-                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
-                    
-                    $("div[data-categoryid='7']").show()
+                    _modal_product_id.disabled = true
                     break
                 case 8:
                     /**
                      * Packages
                      */
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
                     
-                    //_modal_product_provider_name.disabled = true
-                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
-                    _modal_product_rating_types_id.disabled = false
+                    _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
-                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_pricing_strategies_types_id.disabled = true
                     _modal_product_sku.disabled = true
                     
-                    $("div[data-categoryid='8']").show()
                     break
                 case 9:
                     /**
                      * Other
                      */
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
                     
-                    //_modal_product_provider_name.disabled = true
-                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
-                    $("div[data-categoryid='9']").show()
+                    
                     break
                 default:
                     /**
                      * default
                      */
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
+                    _modal_product_pricing_strategies_types_id.value = ""
                     
-                    _modal_product_city.disabled = true
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = true
                     _modal_product_currency_id.disabled = true
                     _modal_product_pricing_strategies_types_id.disabled = true
                     _modal_product_sku.disabled = true
-                    _modal_product_sku.disabled = true
                     _modal_product_city.disabled = true
-                    _modal_product_rating_types_id.disabled = true
-                    _modal_product_pricing_strategies_types_id.disabled = true
                     break
             }
+            
+        } else {
+            Product.disableNewFormDetails()
         }
     }
     
@@ -22168,29 +21259,6 @@ const Category = (function () {
             modified_by: user_id,
             note: null,
         }
-    }
-    
-    const save = function (params) {
-    
-    }
-    
-    const get = function () {
-        let data_to_send = {}
-        
-    }
-    
-    const init = function (settings) {
-        console.log("Category.init()", settings)
-        // ----
-        
-        let categories = []
-        if (settings) {
-            if (settings.categories) {
-                categories = settings.categories
-            }
-        }
-        
-        loadAll(categories)
     }
     
     const set = function (category) {
@@ -22231,6 +21299,36 @@ const Category = (function () {
         return detail
     }
     
+    const save = function (params) {
+    
+    }
+    
+    const get = function () {
+        let data_to_send = {}
+        
+    }
+    
+    const init = function (settings) {
+        console.log("Category.init()", settings)
+        // ----
+        
+        let categories = []
+        
+        if (settings) {
+            if (settings.categories) {
+                categories = settings.categories
+            }
+        }
+        
+        loadAll(categories)
+    }
+    
+    const initProductModal = function (settings) {
+        console.log("Category.initProductModal()", settings)
+        // ----
+        
+    }
+    
     const loadAll = function (categories) {
         console.log("Category.loadAll(categories)", categories)
         // ----
@@ -22243,8 +21341,6 @@ const Category = (function () {
         
         $.each(categories, function (i, category) {
             let detail = set(category)
-            //console.log("detail", detail)
-            //console.log("detail.id", detail.id)
             Category.all.set(detail.id, detail)
         })
         
@@ -22266,6 +21362,9 @@ const Category = (function () {
         },
         init: function (settings) {
             init(settings)
+        },
+        initProductModal: function (settings) {
+            initProductModal(settings)
         },
     }
     
@@ -22375,652 +21474,6 @@ const ContactTypes = (function () {
 //ContactTypes.init()
 //end object
 
-const Company = (function () {
-    "use strict"
-    
-    const _product_edit_page = document.getElementById("product_edit_page")
-    const _button_save_provider = document.getElementById("button_save_provider")
-    const _form_edit_company = document.getElementById("form_edit_company")
-    const _company_enabled = document.getElementById("company_enabled")
-    const _company_name = document.getElementById("company_name")
-    const _company_phone_1 = document.getElementById("company_phone_1")
-    const _company_phone_2 = document.getElementById("company_phone_2")
-    const _company_fax = document.getElementById("company_fax")
-    const _company_email = document.getElementById("company_email")
-    const _company_website = document.getElementById("company_website")
-    const _button_submit_form_edit_company = document.getElementById("button_submit_form_edit_company")
-    const _company_cover_image = document.getElementById("company_cover_image")
-    const _address_company_id = document.getElementById("address_company_id")
-    const _company_id = document.getElementById("company_id")
-    const _contact_company_id = document.getElementById("contact_company_id")
-    const _form_edit_company_block = document.getElementById("form_edit_company_block")
-    const _button_edit_company_name = document.getElementById("button_edit_company_name")
-    const _button_cancel_edit_company_name = document.getElementById("button_cancel_edit_company_name")
-    const _button_close_edit_company_form = document.getElementById("button_close_edit_company_form")
-    const _form_edit_vendor = document.getElementById("form_edit_vendor")
-    const _form_edit_provider = document.getElementById("form_edit_provider")
-    const _vendor_name = document.getElementById("vendor_name")
-    const _vendor_company_id = document.getElementsByClassName("vendor_company_id")
-    const _provider_name = document.getElementById("provider_name")
-    const _provider_company_id = document.getElementById("provider_company_id")
-    const _company_key = document.getElementById("company_keywords")
-    const _company_logo = document.getElementById("company_logo")
-    const _company_description_long = document.getElementById("company_description_long")
-    const _company_description_short = document.getElementById("company_description_short")
-    const _button_clear_form_edit_company = document.getElementById("button_clear_form_edit_company")
-    const _company_images = document.getElementById("company_images")
-    const form_rules = {
-        rules: {
-            company_name: {
-                required: true,
-            },
-            company_phone_1: {},
-            company_phone_2: {},
-            company_fax: {},
-            company_email: {
-                email: true,
-            },
-            company_website: {
-                url: true,
-            },
-        },
-        messages: {
-            company_name: {
-                required: "Field Required1",
-            },
-            company_email: {
-                email: "Field Invalid",
-            },
-            company_website: {
-                url: "Field Invalid",
-            },
-        },
-        
-    }
-    
-    let reset_company = {}
-    let $company_key
-    let temp_company = {}
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    let validator
-    let globalSelectedCompany = false
-    let tempCompany = {}
-    
-    $("a[data-toggle=\"tab\"]").on("hide.bs.tab", function (e) {
-        //e.target // newly activated tab
-        //e.relatedTarget // previous active tab
-        hide_form()
-    })
-    
-    $(_button_cancel_edit_company_name)
-        .on("click", function () {
-            let detail = setDetail(tempCompany)
-            populate_form(detail)
-            hide_form()
-        })
-    
-    $(_button_edit_company_name)
-        .on("click", function () {
-            tempCompany = build()
-            show_form()
-        })
-    
-    $(_button_clear_form_edit_company)
-        .on("click", function () {
-            reset_form()
-        })
-    
-    $(_button_close_edit_company_form)
-        .on("click", function () {
-            hide_form()
-        })
-    
-    $(_button_submit_form_edit_company)
-        .on("click", function () {
-            let company = Company.build()
-            if (company) {
-                confirmDialog(`Would you like to update?`, (ans) => {
-                    if (ans) {
-                        add_to_company_list(company, function (data) {
-                            if (data) {
-                                if (data[0]) {
-                                    let company = data[0]
-                                    let detail = setDetail(company)
-                                    reset_company = detail
-                                    populate_form(detail)
-                                    initAutoComplete()
-                                    hide_form()
-                                }
-                            }
-                        })
-                    }
-                })
-            }
-        })
-    
-    $(_company_id)
-        .on("change", function () {
-            _address_company_id.value = _company_id.value
-        })
-    
-    $(_form_edit_company)
-        .on("change", function () {
-            set_progress()
-        })
-    
-    const initAutoComplete = function () {
-        $(_company_name)
-            .on("change", function () {
-                setTimeout(function () {
-                    let company_name = _company_name.value
-                    
-                    if (globalSelectedCompany === false) {
-                        if (company_name === "") {
-                            _company_name.value = ""
-                            _company_id.value = ""
-                            globalSelectedCompany = false
-                        } else {
-                            company_exists(company_name)
-                        }
-                    }
-                }, 200)
-            })
-            .on("search", function () {
-                /*
-                temp_company = Company.detail
-                window.addEventListener("click", on_click_outside)
-                hide_form()
-                //*/
-                Company.reset_form(true)
-                if (_form_edit_provider) {
-                    Provider.reset_form()
-                }
-                if (_form_edit_vendor) {
-                    Vendor.reset_form()
-                }
-                
-            })
-            .on("click", function (e) {
-                if ($(this).attr("readonly") === "readonly") {
-                    e.preventDefault()
-                } else {
-                    $(this).select()
-                }
-                
-            })
-            .autocomplete({
-                serviceUrl: "/api/v1.0/autocomplete/companies",
-                minChars: 2,
-                cache: false,
-                dataType: "json",
-                triggerSelectOnValidInput: false,
-                paramName: "st",
-                onSelect: function (suggestion) {
-                    if (!suggestion.data) {
-                        return
-                    }
-                    
-                    /**
-                     * created_by: 4
-                     * date_created: "2021-11-08 08:48:45"
-                     * date_modified: "2021-11-08 08:48:45"
-                     * email: "testcompany@email.com"
-                     * enabled: 1
-                     * fax: "+39-055-646465465"
-                     * id: 1
-                     * modified_by: 4
-                     * name: "Test Company 1"
-                     * note: null
-                     * phone_1: "1112223333"
-                     * phone_2: "+39-055-646465465"
-                     * status_id: 10
-                     * website: "https://www.google.com"
-                     */
-                    let company = suggestion.data
-                    globalSelectedCompany = true
-                    populate_form(company)
-                    if (_provider_name) {
-                        $(_provider_name).val(company.name).trigger("change")
-                    } else {
-                        $(_vendor_name).val(company.name)
-                    }
-                    
-                    if (_provider_company_id) {
-                        $(_provider_company_id).val(company.id)
-                    }
-                    
-                    Address.get_by_company_id(company.id)
-                    Contact.getByCompanyId(company.id)
-                    
-                    /*
-                    let provider = suggestion.data
-                    let company = (provider.company) ? provider.company : {}
-                    let addresses = (provider.addresses) ? provider.addresses : {}
-                    let contacts = (provider.contacts) ? provider.contacts : {}
-                    let location = (provider.location) ? provider.location : {}
-                    let vendor = (provider.vendor) ? provider.vendor : {}
-                    let provider_id = provider.id
-                    let company_name = provider.company.name
-                    let provider_company_id = provider.company.id
-                 
-                    if (_form_edit_provider) {
-                        $(_provider_company_id).val(provider_company_id)
-                        $(_provider_id).val(provider_id)
-                        confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
-                            if (ans) {
-                                window.location.replace("/providers/" + provider_id)
-                                populate_form(provider)
-                                Company.populate_form(company)
-                                Location.populate_form(location)
-                                $(_vendor_company_id).val(provider_company_id)
-                                $(_vendor_name).val(company_name).trigger("change")
-                            } else {
-                                Provider.reset_form()
-                                Vendor.reset_form()
-                            }
-                        })
-                    }
-      
-                    //*/
-                },
-            })
-    }
-    
-    const defaultDetail = function () {
-        return {
-            created_by: user_id,
-            date_created: formatDateMySQL(),
-            date_modified: formatDateMySQL(),
-            email: null,
-            cover_image: "/public/img/placeholder.jpg",
-            enabled: 1,
-            fax: null,
-            id: null,
-            modified_by: user_id,
-            name: null,
-            note: null,
-            phone_1: null,
-            phone_2: null,
-            status_id: 10,
-            website: null,
-            description_short: null,
-            description_long: null,
-            keywords: null,
-            logo: null,
-            images: [],
-        }
-    }
-    
-    const populate_form = function (company) {
-        console.log("Company.populate_form(company)", company)
-        // ----
-        
-        let company_logo_image = $("#company_logo").dropify()
-        let company_keywords = (company.keywords) ? company.keywords : ""
-        
-        $(_company_id).val((company.id) ? company.id : "").trigger("change")
-        _company_name.value = (company.name) ? company.name : ""
-        _company_phone_1.value = (company.phone_1) ? company.phone_1 : ""
-        _company_phone_2.value = (company.phone_2) ? company.phone_2 : ""
-        _company_fax.value = (company.fax) ? company.fax : ""
-        _company_email.value = (company.email) ? company.email : ""
-        _company_website.value = (company.website) ? company.website : ""
-        _company_description_long.value = (company.description_long) ? company.description_long : ""
-        _company_description_short.value = (company.description_short) ? company.description_short : ""
-        
-        $company_key = $(_company_key).BuildKeyword(company_keywords)
-        if (_provider_name) {
-            $(_provider_name).val((company.name) ? company.name : "").trigger("change")
-        }
-        
-        if (_vendor_name) {
-            _vendor_name.value = (company.name) ? company.name : null
-        }
-        
-        if (_provider_company_id) {
-            _provider_company_id.value = (company.id) ? company.id : null
-        }
-        
-        if (_vendor_company_id) {
-            _vendor_company_id.value = (company.id) ? company.id : null
-        }
-        
-        if (_contact_company_id) {
-            _contact_company_id.value = (company.id) ? company.id : null
-        }
-        
-        if (_address_company_id) {
-            _address_company_id.value = (company.id) ? company.id : null
-        }
-        
-    }
-    
-    const on_click_outside = (e) => {
-        let tar = $(e.target).parents("div.form_element")
-        if (!tar[0] && !e.target.className.includes("company_name")) {
-            if (_company_name.value === "") {
-                populate_form(temp_company)
-            }
-            
-            temp_company = {}
-            destroy_click()
-        }
-    }
-    
-    const destroy_click = function () {
-        window.removeEventListener("click", on_click_outside)
-    }
-    
-    const handleCompanyError = function (msg) {
-        toastr.error(msg)
-    }
-    
-    const build = function () {
-        return remove_nulls({
-            email: $(_company_email).val(),
-            enabled: 1,
-            fax: $(_company_fax).val(),
-            id: (!isNaN(_company_id.value)) ? parseInt(_company_id.value) : null,
-            modified_by: user_id,
-            cover_image: "/public/img/placeholder.jpg",
-            description_short: _company_description_short.value,
-            description_long: _company_description_long.value,
-            keywords: $company_key.build(),
-            name: $(_company_name).val(),
-            note: null,
-            phone_1: $(_company_phone_1).val(),
-            phone_2: $(_company_phone_2).val(),
-            status_id: 10,
-            website: $(_company_website).val(),
-        })
-    }
-    
-    const company_exists = function (name) {
-        if (name && name !== "") {
-            /**
-             * data to send to the server
-             *
-             * @type {{name}}
-             */
-            let dataToSend = {
-                name: name,
-            }
-            fetch_company_by_name(dataToSend, function (data) {
-                
-                let company = null
-                
-                if (data && data[0]) {
-                    if (data[0]) {
-                        company = data[0]
-                    }
-                }
-                
-                if (company) {
-                    reset_form(true)
-                    populate_form(company)
-                    Address.get_by_company_id(company.id)
-                    Contact.getByCompanyId(company.id)
-                } else {
-                    confirmDialog(`The company: ${name} does not exist exists. Would you like to create it?`, (ans) => {
-                        if (ans) {
-                            add_to_company_list({
-                                name: _company_name.value,
-                                status_id: 10,
-                                enabled: 1,
-                            }, function (data) {
-                                if (data) {
-                                    if (data[0]) {
-                                        company = data[0]
-                                        tempCompany = company
-                                        reset_form(true)
-                                        populate_form(company)
-                                        show_form()
-                                    }
-                                }
-                            })
-                        }
-                    })
-                }
-                
-            })
-        }
-    }
-    
-    const fetch_company_by_name = function (dataToSend, callback) {
-        let url = "/api/v1.0/companies/validate"
-        
-        if (dataToSend) {
-            try {
-                sendGetRequest(url, dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    } else {
-                        handleCompanyError("Oops: 1")
-                    }
-                })
-            } catch (e) {
-                //console.log("error", e)
-                handleCompanyError("Error Validating Company")
-            }
-        } else {
-            handleCompanyError("Error Loading Company- Missing Data")
-        }
-    }
-    
-    const fetchCompanyByName = function (dataToSend, callback) {
-        let url = "/api/v1.0/companies/validate"
-        
-        if (dataToSend) {
-            try {
-                sendGetRequest(url, dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    } else {
-                        return handleCompanyError("Oops: 1")
-                    }
-                })
-            } catch (e) {
-                return handleCompanyError("Error Validating Company")
-            }
-        } else {
-            return handleCompanyError("Error Loading Company- Missing Data")
-        }
-    }
-    
-    const add_to_company_list = function (dataToSend, callback) {
-        //console.log("add_to_company_list()")
-        let url = "/api/v1.0/companies/update"
-        if (dataToSend) {
-            sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                if (data) {
-                    return callback(data)
-                } else {
-                    handleCompanyError("Oops: 1")
-                }
-            })
-        }
-    }
-    
-    const init = function (company) {
-        console.log("Company.init(company)", company)
-        // ----
-        
-        let images = []
-        
-        if (company) {
-            let detail = setDetail(company)
-            images = (company.images) ? company.images : []
-            
-            if (_company_images) {
-                Company.fileManager = $("#company_images").fileManager({
-                    height: 400,
-                    source: "company",
-                    sourceId: detail.id,
-                    images: images,
-                })
-            }
-            if (_form_edit_company) {
-                populate_form(detail)
-                validator_init(form_rules)
-                validator = $(_form_edit_company).validate()
-                initAutoComplete()
-                if (_form_edit_company_block) {
-                    hide_form()
-                }
-            }
-        }
-        
-    }
-    
-    const validate_form = function () {
-        return $(_form_edit_company).valid()
-    }
-    
-    const reset_form = function (toggleFullClear) {
-        _company_phone_1.value = ""
-        _company_phone_2.value = ""
-        _company_fax.value = ""
-        _company_email.value = ""
-        _company_website.value = ""
-        if (toggleFullClear && toggleFullClear === true) {
-            if (_provider_name) {
-                $(_provider_name).val("").trigger("change")
-            }
-            if (_vendor_name) {
-                $(_vendor_name).val("").trigger("change")
-            }
-            $(_company_id).val("").trigger("change")
-            _company_name.value = ""
-            Address.clearTable()
-            Contact.clearTable()
-        }
-    }
-    
-    const setDetail = function (company) {
-        let detail = defaultDetail()
-        
-        if (company) {
-            detail.created_by = (company.created_by) ? company.created_by : user_id
-            detail.date_created = (company.date_created) ? company.date_created : formatDateMySQL()
-            detail.date_modified = (company.date_modified) ? company.date_modified : formatDateMySQL()
-            detail.email = (company.email) ? company.email : null
-            detail.cover_image = (company.cover_image) ? company.cover_image : null
-            detail.enabled = (company.enabled) ? company.enabled : 1
-            detail.fax = (company.fax) ? company.fax : null
-            detail.id = (company.id) ? company.id : null
-            detail.modified_by = (company.modified_by) ? company.modified_by : user_id
-            detail.name = (company.name) ? company.name : null
-            detail.note = (company.note) ? company.note : null
-            detail.phone_1 = (company.phone_1) ? company.phone_1 : null
-            detail.phone_2 = (company.phone_2) ? company.phone_2 : null
-            detail.status_id = (company.status_id) ? company.status_id : 10
-            detail.website = (company.website) ? company.website : null
-            detail.logo = (company.logo) ? company.logo : ""
-            detail.keywords = (company.keywords) ? company.keywords : ""
-            detail.description_long = (company.description_long) ? company.description_long : ""
-            detail.description_short = (company.description_short) ? company.description_short : ""
-            detail.images = (company.images) ? company.images : []
-        }
-        
-        Company.detail = detail
-        return detail
-    }
-    
-    const show_form = function () {
-        reset_company = Company.build()
-        
-        if (_form_edit_company_block) {
-            $(_form_edit_company_block).show()
-            $(_button_cancel_edit_company_name).show()
-            $(_button_edit_company_name).hide()
-            $(_company_name).attr("readonly", true)
-        }
-        
-        if (_button_save_provider) {
-            $(_button_save_provider).attr("readonly", true)
-            _button_save_provider.disabled = true
-        }
-    }
-    
-    const hide_form = function () {
-        if (_form_edit_company_block) {
-            let detail = setDetail(reset_company)
-            //populate_form(detail)
-            $(_company_name).attr("readonly", false)
-            $(_form_edit_company_block).hide()
-            $(_button_cancel_edit_company_name).hide()
-            $(_button_edit_company_name).show()
-            initAutoComplete()
-        }
-        
-        if (_button_save_provider) {
-            $(_button_save_provider).attr("readonly", false)
-            _button_save_provider.disabled = false
-        }
-        
-    }
-    
-    const set_progress = function () {
-        if (!isNaN(parseInt(_company_id.value))) {
-            $(_company_phone_1).attr("readonly", false)
-            $(_company_phone_2).attr("readonly", false)
-            $(_company_fax).attr("readonly", false)
-            $(_company_email).attr("readonly", false)
-            $(_company_cover_image).attr("readonly", false)
-            _button_edit_company_name.disabled = false
-        } else {
-            _button_edit_company_name.disabled = true
-            $(_company_cover_image).attr("readonly", true)
-            $(_company_phone_1).attr("readonly", true)
-            $(_company_phone_2).attr("readonly", true)
-            $(_company_fax).attr("readonly", true)
-            $(_company_email).attr("readonly", true)
-        }
-    }
-    
-    return {
-        all: new Map(),
-        build: function () {
-            if (validate_form()) {
-                return build()
-            }
-        },
-        validator: null,
-        detail: {
-            created_by: user_id,
-            date_created: formatDateMySQL(),
-            date_modified: formatDateMySQL(),
-            email: null,
-            enabled: 1,
-            fax: null,
-            id: null,
-            modified_by: user_id,
-            name: null,
-            note: null,
-            phone_1: null,
-            phone_2: null,
-            status_id: 10,
-            website: null,
-        },
-        fileManager: null,
-        add_to_company_list: function (dataToSend, callback) {
-            return add_to_company_list(dataToSend, callback)
-        },
-        company_exists: function (name) {
-            company_exists(name)
-        },
-        populate_form: function (company) {
-            populate_form(company)
-        },
-        reset_form: function (toggleFullClear) {
-            reset_form(toggleFullClear)
-        },
-        init: function (company) {
-            init(company)
-        },
-        
-    }
-})()
 
 const Contact = (function () {
     "use strict"
@@ -23842,6 +22295,7 @@ const Vendor = (function () {
                 }
                 //console.log("suggestion.data", suggestion.data)
                 let vendor = suggestion.data
+                
                 if (_form_product_add) {
                     let provider_company_id = (isNaN(parseInt(_modal_product_provider_company_id.value))) ? null : parseInt(_modal_product_provider_company_id.value)
                     _modal_product_vendor_id.value = suggestion.data.id
@@ -23851,6 +22305,7 @@ const Vendor = (function () {
                     Product.updateProductSKU()
                     _modal_product_provider_vendor_match.checked = parseInt(suggestion.data.company_id) === provider_company_id
                 }
+                
                 globalSelectedVendor = true
                 
             },
@@ -26036,6 +24491,7 @@ const Provider = (function () {
     "use strict"
     
     const base_url = "/providers"
+    const _modal_product_category_id = document.getElementById("modal_product_category_id")
     const _button_add_provider_page_heading = document.getElementById("button_add_provider_page_heading")
     const _button_edit_provider_name = document.getElementById("button_edit_provider_name")
     const _button_save_provider = document.getElementById("button_save_provider")
@@ -26118,13 +24574,13 @@ const Provider = (function () {
     
     $(_product_edit_details_section_provider_form_edit_button)
         .on("click", function () {
-            console.log("Provider.product_edit_details_section_provider_form_reset_button:click()")
+            //console.log("Provider.product_edit_details_section_provider_form_reset_button:click()")
             openProductEditProviderForm()
         })
     
     $(_product_edit_details_section_provider_form_reset_button)
         .on("click", function () {
-            console.log("Provider.product_edit_details_section_provider_form_reset_button:click()")
+            //console.log("Provider.product_edit_details_section_provider_form_reset_button:click()")
             let detail = set()
             
             resetProductEditProviderForm(detail)
@@ -26132,18 +24588,18 @@ const Provider = (function () {
     
     $(_product_edit_details_section_provider_form_submit_button)
         .on("click", function () {
-            console.log("Provider.product_edit_details_section_provider_form_submit_button:click()")
+            //console.log("Provider.product_edit_details_section_provider_form_submit_button:click()")
             
         })
     
     $(_product_edit_provider_panel_link_product)
         .on("click", function () {
-            console.log("Provider.product_edit_provider_panel_link_product:click()")
+            //console.log("Provider.product_edit_provider_panel_link_product:click()")
             openProductEditProviderForm()
         })
     $(_product_edit_details_section_provider_form_cancel_button)
         .on("click", function () {
-            console.log("Provider.product_edit_details_section_provider_form_cancel_button:click()")
+            //console.log("Provider.product_edit_details_section_provider_form_cancel_button:click()")
             populateProductEditProviderForm(tempProvider)
             closeProductEditProviderForm()
         })
@@ -26195,7 +24651,7 @@ const Provider = (function () {
     
     $("#provider_edit")
         .on("change", function () {
-            set_progress()
+            setProgress()
         })
     
     $(_provider_company_id)
@@ -26218,84 +24674,8 @@ const Provider = (function () {
             $(_provider_company_id).val(_company_id.value)
         })
     
-    $("#modal_product_provider_name")
-        .on("change", function () {
-            globalSelectedProvider = false
-            setTimeout(function () {
-                let provider_name = _modal_product_provider_name.value
-                console.log("|__ provider_name", provider_name)
-                
-                if (provider_name === "") {
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_provider_id.value = ""
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_provider_name.value = ""
-                    _modal_product_vendor_company_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_vendor_name.disabled = true
-                    Product.attr2 = null
-                    Product.attr3 = null
-                    Product.updateProductSKU()
-                } else {
-                    provider_exists(provider_name)
-                }
-            }, 200)
-        })
-        .on("search", function () {
-            globalSelectedProvider = false
-            _modal_product_vendor_id.value = ""
-            _modal_product_provider_id.value = ""
-            _modal_product_vendor_name.value = ""
-            _modal_product_provider_name.value = ""
-            _modal_product_vendor_company_id.value = ""
-            _modal_product_provider_company_id.value = ""
-            _modal_product_provider_location_id.value = ""
-            Product.attr2 = null
-            Product.attr3 = null
-            Product.updateProductSKU()
-            _modal_product_vendor_name.disabled = true
-        })
-        .on("click", function () {
-            if ($(this).attr("readonly") === "readonly") {
-                e.preventDefault()
-            } else {
-                $(this).select()
-            }
-        })
-        .autocomplete({
-            serviceUrl: "/api/v1.0/autocomplete/providers",
-            minChars: 2,
-            cache: false,
-            dataType: "json",
-            triggerSelectOnValidInput: false,
-            paramName: "st",
-            onSelect: function (suggestion) {
-                if (!suggestion || !suggestion.data) {
-                    return
-                }
-                let provider = set(suggestion.data)
-                let vendor = provider.vendor
-                let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
-                let sku = (vendor.sku) ? vendor.sku : null
-                
-                _modal_product_vendor_id.value = parseInt(suggestion.data.vendor.id)
-                _modal_product_provider_id.value = suggestion.data.id
-                _modal_product_vendor_name.value = suggestion.data.name
-                _modal_product_vendor_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
-                _modal_product_provider_company_id.value = (!isNaN(parseInt(suggestion.data.company_id))) ? parseInt(suggestion.data.company_id) : null
-                _modal_product_provider_vendor_match.checked = true
-                _modal_product_vendor_name.disabled = false
-                _modal_product_provider_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
-                
-                Product.attr2 = code_direct
-                Product.attr3 = sku
-                Product.updateProductSKU()
-            },
-        })
-    
     const getImages = function (dataToSend, callback) {
-        console.log("Provider.getImages(dataToSend)", dataToSend)
+        //console.log("Provider.getImages(dataToSend)", dataToSend)
         if (dataToSend) {
             if (dataToSend.type && dataToSend.id) {
                 let id = (!isNaN(parseInt(dataToSend.id))) ? parseInt(dataToSend.id) : null
@@ -26311,7 +24691,7 @@ const Provider = (function () {
                             }
                         })
                     } catch (e) {
-                        console.log("error", e)
+                        //console.log("error", e)
                         return handleProviderError("Error", "Provider", "error")
                     }
                 }
@@ -26322,7 +24702,7 @@ const Provider = (function () {
     const regex = /[^A-Za-z0-9]/g
     
     const renderImageDropDown = function (images) {
-        console.log("Provider.renderImageDropDown(images)", images)
+        //console.log("Provider.renderImageDropDown(images)", images)
         let initValue = "/public/img/placeholder.jpg".replace(regex, "")
         let options = `<option value="${initValue}" readonly selected>-- Images --</options>`
         
@@ -26331,11 +24711,11 @@ const Provider = (function () {
         }
         
         $.each(images, function (k, image) {
-            console.log("|__ image", image)
+            //console.log("|__ image", image)
             let value = `${image.path}/${image.name}.${image.extension}`
             let newStr = value.replace(regex, "")
             let name = image.name
-            console.log("|__ value", value)
+            //console.log("|__ value", value)
             options += `<option value="${newStr}">${name}</options>`
         })
         
@@ -26349,7 +24729,7 @@ const Provider = (function () {
     }
     
     const buildImageDropdown = function (id) {
-        console.log("Provider.buildImageDropdown(id)", id)
+        //console.log("Provider.buildImageDropdown(id)", id)
         
         if (id) {
             if (_product_edit_details_section_provider_form_provider_cover_image) {
@@ -26369,7 +24749,7 @@ const Provider = (function () {
     }
     
     const populateProductEditProviderForm = function (provider) {
-        console.log("Provider.populateProductEditProviderForm(provider)", provider)
+        //console.log("Provider.populateProductEditProviderForm(provider)", provider)
         let detail = set(provider)
         let keywords = (detail.keywords) ? detail.keywords : []
         let coverImage = (detail.company.cover_image) ? detail.company.cover_image : "/public/img/placeholder.jpg"
@@ -26380,9 +24760,9 @@ const Provider = (function () {
         logoImage = logoImage.replace(regex, "")
         coverImage = coverImage.replace(regex, "")
         
-        console.log("|__ coverImage", coverImage)
-        console.log("|__ logoImage", logoImage)
-        console.log("|__ Provider.detail", Provider.detail)
+        //console.log("|__ coverImage", coverImage)
+        //console.log("|__ logoImage", logoImage)
+        //console.log("|__ Provider.detail", Provider.detail)
         
         _product_edit_details_section_provider_form_filter.value = (provider.company.name) ? provider.company.name : null
         _product_edit_details_section_provider_form_provider_id.value = (provider.id) ? provider.id : null
@@ -26404,6 +24784,7 @@ const Provider = (function () {
         
         _display_provider_name.innerText = companyName
         _display_provider_code_direct.innerText = codeDirectId
+        
         Product.attr2 = codeDirectId
         
     }
@@ -26426,7 +24807,7 @@ const Provider = (function () {
     }
     
     const resetProductEditProviderForm = function () {
-        console.log("Provider.resetProductEditProviderForm()")
+        //console.log("Provider.resetProductEditProviderForm()")
         _product_edit_details_section_provider_form_filter.value = ""
         _product_edit_details_section_provider_form_provider_id.value = ""
         _product_edit_details_section_provider_form_provider_company_id.value = ""
@@ -26443,287 +24824,15 @@ const Provider = (function () {
     }
     
     const openProductEditProviderForm = function () {
-        console.log("Provider.openProductEditProviderForm()")
+        //console.log("Provider.openProductEditProviderForm()")
         $(_product_edit_details_section_provider_form_details).show()
         enableProductEditProviderForm()
     }
     
     const closeProductEditProviderForm = function () {
-        console.log("Provider.closeProductEditProviderForm()")
+        //console.log("Provider.closeProductEditProviderForm()")
         $(_product_edit_details_section_provider_form_details).hide()
         disableProductEditProviderForm()
-    }
-    
-    const initAutoComplete = function () {
-        if (_provider_name) {
-            $(_provider_name)
-                .on("change", function () {
-                    /*
-                    setTimeout(function () {
-                        let provider_name = _provider_name.value
-                        
-                        if (globalSelectedProvider === false) {
-                            if (provider_name === "") {
-                                _provider_name.value = ""
-                                _provider_company_id.value = ""
-                                globalSelectedProvider = false
-                                $(_vendor_name).val("").trigger("change")
-                                $(_provider_company_id).val("").trigger("change")
-                            } else {
-                                provider_exists(provider_name)
-                            }
-                        }
-                    }, 200)
-                    //*/
-                })
-                .on("search", function () {
-                    //_provider_id.value = ""
-                    //_provider_company_id.value = ""
-                    
-                    //$(_vendor_name).val("").trigger("change")
-                    //$(_provider_company_id).val("").trigger("change")
-                    Provider.reset_form()
-                    Vendor.reset_form()
-                })
-                .on("click", function () {
-                    if ($(this).attr("readonly") === "readonly") {
-                        e.preventDefault()
-                    } else {
-                        $(this).select()
-                    }
-                })
-                .autocomplete({
-                    serviceUrl: "/api/v1.0/autocomplete/providers",
-                    minChars: 2,
-                    cache: false,
-                    dataType: "json",
-                    triggerSelectOnValidInput: false,
-                    paramName: "st",
-                    onSelect: function (suggestion) {
-                        if (!suggestion.data) {
-                            return
-                        }
-                        let provider = suggestion.data
-                        let company = (provider.company) ? provider.company : {}
-                        let addresses = (provider.addresses) ? provider.addresses : {}
-                        let contacts = (provider.contacts) ? provider.contacts : {}
-                        let location = (provider.location) ? provider.location : {}
-                        let vendor = (provider.vendor) ? provider.vendor : {}
-                        let provider_id = provider.id
-                        let company_name = provider.company.name
-                        let provider_company_id = provider.company.id
-                        
-                        if (_form_edit_provider) {
-                            $(_provider_company_id).val(provider_company_id)
-                            $(_provider_id).val(provider_id)
-                            confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
-                                if (ans) {
-                                    window.location.replace("/providers/" + provider_id)
-                                    populate_form(provider)
-                                    Company.populate_form(company)
-                                    Location.populate_form(location)
-                                    $(_vendor_company_id).val(provider_company_id)
-                                    $(_vendor_name).val(company_name).trigger("change")
-                                } else {
-                                    Provider.reset_form()
-                                    Vendor.reset_form()
-                                }
-                            })
-                        }
-                    },
-                })
-        }
-        
-        if (_product_edit_details_section_provider_form_filter) {
-            $(_product_edit_details_section_provider_form_filter)
-                .on("change", function () {
-                    //*
-                    setTimeout(function () {
-                        let provider_name = _product_edit_details_section_provider_form_filter.value
-                        
-                        if (globalSelectedProvider === false) {
-                            if (provider_name === "") {
-                                _product_edit_details_section_provider_form_filter.value = ""
-                                _product_edit_details_section_provider_form_provider_company_id.value = ""
-                                _product_edit_details_section_provider_form_provider_id.value = ""
-                                globalSelectedProvider = false
-                                //$(_vendor_name).val("").trigger("change")
-                                $(_product_edit_details_section_provider_form_provider_company_id).val("").trigger("change")
-                                $(_product_edit_details_section_provider_form_provider_id).val("").trigger("change")
-                            } else {
-                                provider_exists(provider_name)
-                            }
-                        }
-                    }, 200)
-                    //*/
-                })
-                .on("search", function () {
-                    //_provider_id.value = ""
-                    //_provider_company_id.value = ""
-                    
-                    //$(_vendor_name).val("").trigger("change")
-                    //$(_provider_company_id).val("").trigger("change")
-                    //Provider.reset_form()
-                    //Vendor.reset_form()
-                })
-                .on("click", function () {
-                    if ($(this).attr("readonly") === "readonly") {
-                        e.preventDefault()
-                    } else {
-                        $(this).select()
-                    }
-                })
-                .autocomplete({
-                    serviceUrl: "/api/v1.0/autocomplete/providers",
-                    minChars: 2,
-                    cache: false,
-                    dataType: "json",
-                    triggerSelectOnValidInput: false,
-                    paramName: "st",
-                    onSelect: function (suggestion) {
-                        if (!suggestion.data) {
-                            return
-                        }
-                        let provider = suggestion.data
-                        tempProvider = provider
-                        //console.log("provider", provider)
-                        
-                        let company = (provider.company) ? provider.company : {}
-                        let addresses = (provider.addresses) ? provider.addresses : {}
-                        let contacts = (provider.contacts) ? provider.contacts : {}
-                        let location = (provider.location) ? provider.location : {}
-                        let vendor = (provider.vendor) ? provider.vendor : {}
-                        let provider_id = provider.id
-                        let company_name = provider.company.name
-                        let provider_company_id = provider.company.id
-                        
-                        populateProductEditProviderForm(provider)
-                        /*
-                        if (_form_edit_provider) {
-                            $(_provider_company_id).val(provider_company_id)
-                            $(_provider_id).val(provider_id)
-                            confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
-                                if (ans) {
-                                    window.location.replace("/providers/" + provider_id)
-                                    populate_form(provider)
-                                    Company.populate_form(company)
-                                    Location.populate_form(location)
-                                    $(_vendor_company_id).val(provider_company_id)
-                                    $(_vendor_name).val(company_name).trigger("change")
-                                } else {
-                                    Provider.reset_form()
-                                    Vendor.reset_form()
-                                }
-                            })
-                        }
-                        //*/
-                    },
-                })
-        }
-    }
-    
-    const provider_exists = function (name) {
-        console.log("Provider.provider_exists(name)", name)
-        if (name && name !== "") {
-            let dataToSend = {
-                name: name,
-            }
-            
-            fetch_provider_by_name(dataToSend, function (data) {
-                console.log("|__ data", data)
-                let provider
-                
-                if (_form_product_add) {
-                    if (!data || data.length === 0) {
-                        confirmDialog("This provider does not exist. Would you like to create it?", (ans) => {
-                            if (ans) {
-                                Company.add_to_company_list({
-                                    name: _modal_product_provider_name.value,
-                                    status_id: 10,
-                                    enabled: 1,
-                                }, function (data) {
-                                    if (data) {
-                                        if (data[0]) {
-                                            let company = data[0]
-                                            _modal_product_provider_company_id.value = company.id
-                                            _modal_product_vendor_company_id.value = company.id
-                                            _modal_product_provider_name.value = company.name
-                                            _modal_product_vendor_name.value = company.name
-                                            _modal_product_provider_vendor_match.checked = true
-                                            
-                                            add(remove_nulls({
-                                                location_id: null,
-                                                company_id: company.id,
-                                                code_direct_id: null,
-                                                id: null,
-                                                provider_vendor: 1,
-                                                enabled: 1,
-                                            }))
-                                        }
-                                    }
-                                })
-                            } else {
-                                _modal_product_vendor_id.value = ""
-                                _modal_product_provider_id.value = ""
-                                _modal_product_vendor_name.value = ""
-                                _modal_product_provider_name.value = ""
-                                globalSelectedProvider = false
-                            }
-                        })
-                    } else {
-                        if (data) {
-                            provider = data
-                            if (data.length > 0) {
-                                provider = data[0]
-                            }
-                        }
-                        
-                        let vendor = provider.vendor
-                        let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
-                        let sku = (vendor.sku) ? vendor.sku : null
-                        
-                        _modal_product_vendor_id.value = parseInt(vendor.id)
-                        _modal_product_provider_id.value = provider.id
-                        _modal_product_vendor_name.value = provider.name
-                        _modal_product_vendor_company_id.value = (!isNaN(parseInt(provider.company_id))) ? parseInt(provider.company_id) : null
-                        _modal_product_provider_company_id.value = (!isNaN(parseInt(provider.company_id))) ? parseInt(provider.company_id) : null
-                        _modal_product_provider_vendor_match.checked = true
-                        _modal_product_vendor_name.disabled = false
-                        _modal_product_provider_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
-                        _modal_product_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
-                        Product.attr2 = code_direct
-                        Product.attr3 = sku
-                        Product.updateProductSKU()
-                    }
-                }
-                
-                if (_form_edit_provider) {
-                    if (data) {
-                        if (data.length > 0) {
-                            
-                            provider = data[0]
-                            
-                            if (_form_product_add) {
-                            
-                            }
-                            confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
-                                if (ans) {
-                                    window.location.href = "/providers/" + provider.id
-                                } else {
-                                    Company.reset_form()
-                                    Provider.reset_form()
-                                    Vendor.reset_form()
-                                }
-                            })
-                            
-                        }
-                    }
-                    //console.log("provider", provider)
-                    $(_vendor_name).val($(_provider_name).val()).trigger("change")
-                }
-                
-            })
-        }
     }
     
     const index = function (settings) {
@@ -26794,19 +24903,6 @@ const Provider = (function () {
         }
     }
     
-    const handleProviderError = function (msg, title, level) {
-        console.log("Provider.handleProviderError(msg)", msg)
-        if (!title) {
-            title = "Product"
-        }
-        
-        if (!level) {
-            level = "error"
-        }
-        
-        toastr[level](`${msg}`, title)
-    }
-    
     const updateProvider = function (dataToSend, callback) {
         let url = "/api/v1.0/providers/update"
         
@@ -26820,7 +24916,7 @@ const Provider = (function () {
                     }
                 })
             } catch (e) {
-                console.log("error", e)
+                //console.log("error", e)
             }
         }
     }
@@ -26888,7 +24984,11 @@ const Provider = (function () {
     
     const add = function (provider) {
         //console.log("Provider.add(provider)", provider)
+        // ----
+        
         if (provider) {
+            //console.log("|__ provider", provider)
+            
             let dataToSend = {
                 name: _modal_product_provider_name.value,
                 status_id: 1,
@@ -26900,49 +25000,83 @@ const Provider = (function () {
             }
             
             Vendor.newVendor(dataToSend, function (data) {
+                //console.log("|__ |__ newVendor", data)
+                // ----
+                
                 let vendor_detail, provider_detail = {}
+                let categoryId = (_modal_product_category_id && !isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null
                 
                 if (data) {
                     vendor_detail = data
                     if (data[0]) {
                         vendor_detail = data[0]
                     }
-                    //console.log("Provider Upodating Vendor: vendor_detail", vendor_detail)
-                    
                     provider.location_id = (provider.location_id) ? provider.location_id : 1
                     provider.vendor_id = vendor_detail.id
+                    
                     provider_detail = {
                         provider_detail: provider,
                     }
                     
-                    //console.log("Provider : provider_detail", provider_detail)
+                    //console.log("|__ provider_detail", provider_detail)
+                    
                     updateProvider(provider_detail, function (data) {
+                        //console.log("|__ |__ updateProvider", data)
+                        // ----
+                        
                         if (data) {
-                            //console.log("data", data)
-                            if (data[0]) {
-                                //console.log("data[0]", data[0])
-                                let provider = data[0]
-                                let vendor = provider.vendor
-                                let company = provider.company
-                                let provider_detail = set(provider)
-                                _modal_product_provider_name.value = provider.name
-                                _modal_product_provider_id.value = provider.id
-                                _modal_product_provider_company_id.value = company.id
-                                _modal_product_vendor_name.value = provider.name
-                                _modal_product_vendor_id.value = vendor.id
-                                _modal_product_vendor_company_id.value = company.id
+                            
+                            let provider = (data.length > 0) ? data[0] : data
+                            
+                            if (provider) {
+                                let detail = set(provider)
+                                let vendor = (detail.vendor) ? detail.vendor : {}
+                                let company = (detail.company) ? detail.company : {}
+                                let category = Types.category.get(categoryId)
+                                
+                                let attributeId = (category && category.attribute_id) ? category.attribute_id : null
+                                
+                                //*
+                                //console.log("|__ |__ provider", provider)
+                                //console.log("|__ |__ category", category)
+                                //console.log("|__ |__ vendor", vendor)
+                                //console.log("|__ |__ company", company)
+                                //console.log("|__ |__ detail", detail)
+                                
+                                //console.log("|__ |__ attributeId", attributeId)
+                                //*/
+                                
+                                let companyName = (company && company.name) ? company.name : null
+                                let codeDirectId = (detail && detail.code_direct_id) ? detail.code_direct_id : null
+                                let sku = (vendor && vendor.sku) ? vendor.sku : null
+                                let companyId = (company && company.id && !isNaN(parseInt(company.id))) ? parseInt(company.id) : null
+                                let providerId = (provider && provider.id && !isNaN(parseInt(provider.id))) ? parseInt(provider.id) : null
+                                let vendorId = (vendor && vendor.id && !isNaN(parseInt(vendor.id))) ? parseInt(vendor.id) : null
+                                
+                                _modal_product_provider_name.value = companyName
+                                _modal_product_provider_id.value = providerId
+                                _modal_product_provider_company_id.value = companyId
+                                _modal_product_vendor_name.value = companyName
+                                _modal_product_vendor_id.value = vendorId
+                                _modal_product_vendor_company_id.value = companyId
                                 
                                 initAutoComplete()
                                 
-                                Product.attr2 = (provider.code_direct_id) ? provider.code_direct_id : null
-                                Product.attr3 = (vendor.sku) ? vendor.sku : null
-                                Product.updateProductSKU()
+                                Product.attr1 = attributeId
+                                Product.attr2 = codeDirectId
+                                Product.attr3 = sku
                                 
+                                Product.updateProductSKU()
+                                Product.enableNewFormDetails()
                             }
+                            
                         }
                     })
+                    
                 }
+                
             })
+            
         }
     }
     
@@ -27032,35 +25166,7 @@ const Provider = (function () {
         // ----
         Vendor.setProvider()
         disable_form_fields()
-        set_progress()
-    }
-    
-    const init = function (settings) {
-        console.log("Provider.init(settings)", settings)
-        // ----
-        
-        if (settings) {
-            if (settings.provider_detail) {
-                let detail = set(settings.provider_detail)
-                tempProvider = detail
-                
-                if (settings.provider_detail.company) {
-                    console.log("Provider.init(settings)", settings)
-                    
-                    Company.init(settings.provider_detail.company)
-                }
-                
-                populateProductEditProviderForm(detail)
-            }
-        }
-        
-        if (_product_edit_details_section_provider_form_filter) {
-            initAutoComplete()
-            closeProductEditProviderForm()
-        } else {
-            initAutoComplete()
-        }
-        
+        setProgress()
     }
     
     const validate_form = function () {
@@ -27102,7 +25208,7 @@ const Provider = (function () {
         
     }
     
-    const reset_form = function () {
+    const resetForm = function () {
         _provider_id.value = ""
         $(_provider_name).val("").trigger("change")
         _provider_company_id.value = ""
@@ -27110,7 +25216,50 @@ const Provider = (function () {
         _provider_enabled.checked = true
     }
     
-    const fetch_provider_by_name = function (dataToSend, callback) {
+    const setProgress = function () {
+        //console.log("Provider.setProgress()")
+        // ----
+        
+        let providerId = (!isNaN(_provider_id.value)) ? _provider_id.value : null
+        let companyId = (!isNaN(_provider_company_id.value)) ? _provider_company_id.value : null
+        
+        if (companyId === null || companyId === "") {
+            $(_panel_tab_contact).addClass("disabled")
+            $(_panel_tab_address).addClass("disabled")
+            $(_panel_tab_provider).addClass("disabled")
+            $(_panel_tab_vendor).addClass("disabled")
+        } else {
+            $(_panel_tab_contact).removeClass("disabled")
+            $(_panel_tab_address).removeClass("disabled")
+            $(_panel_tab_provider).removeClass("disabled")
+            $(_panel_tab_vendor).removeClass("disabled")
+        }
+        
+        _button_save_provider.disabled = !(_company_id.value !== "" && _location_name_filter_id.value !== "")
+        
+    }
+    
+    //
+    
+    const handleProviderError = function (msg, title, level) {
+        //console.log("Provider.handleProviderError(msg)", msg)
+        // ----
+        
+        if (!title) {
+            title = "Product"
+        }
+        
+        if (!level) {
+            level = "error"
+        }
+        
+        toastr[level](`${msg}`, title)
+    }
+    
+    const fetchProviderByName = function (dataToSend, callback) {
+        //console.log("Provider.fetchProviderByName(dataToSend)", dataToSend)
+        // ----
+        
         let url = "/api/v1.0/providers/validate"
         
         if (dataToSend) {
@@ -27131,24 +25280,540 @@ const Provider = (function () {
         }
     }
     
-    const set_progress = function () {
-        //console.log("set_progress()")
-        let provider_id = (!isNaN(_provider_id.value)) ? _provider_id.value : null
-        let company_id = (!isNaN(_provider_company_id.value)) ? _provider_company_id.value : null
+    const providerExists = function (name) {
+        //console.log("Provider.providerExists(name)", name)
+        // ----
         
-        if (company_id === null || company_id === "") {
-            $(_panel_tab_contact).addClass("disabled")
-            $(_panel_tab_address).addClass("disabled")
-            $(_panel_tab_provider).addClass("disabled")
-            $(_panel_tab_vendor).addClass("disabled")
-        } else {
-            $(_panel_tab_contact).removeClass("disabled")
-            $(_panel_tab_address).removeClass("disabled")
-            $(_panel_tab_provider).removeClass("disabled")
-            $(_panel_tab_vendor).removeClass("disabled")
+        if (name && name !== "") {
+            let dataToSend = {
+                name: name,
+            }
+            
+            fetchProviderByName(dataToSend, function (data) {
+                let provider
+                
+                if (!data || data.length === 0) {
+                    
+                    confirmDialog("This provider does not exist. Would you like to create it?", (ans) => {
+                        if (ans) {
+                            let companyName = (dataToSend && dataToSend.name) ? dataToSend.name : null
+                            
+                            if (companyName) {
+                                //console.log("|__ companyName", companyName)
+                                
+                                let companyParams = {
+                                    name: companyName,
+                                    status_id: 10,
+                                    enabled: 1,
+                                }
+                                
+                                //console.log("|__ companyParams", companyParams)
+                                
+                                Company.add(companyParams, function (data) {
+                                    //console.log("|__ |__ data", data)
+                                    let company
+                                    
+                                    if (data) {
+                                        company = (data[0]) ? data[0] : data
+                                        
+                                        let companyId = (company && !isNaN(parseInt(company.id))) ? parseInt(company.id) : null
+                                        let companyName = (company && company.name) ? company.name : null
+                                        
+                                        if (companyId !== null && companyName !== null) {
+                                            _modal_product_provider_company_id.value = companyId
+                                            _modal_product_vendor_company_id.value = companyId
+                                            _modal_product_provider_name.value = companyName
+                                            _modal_product_vendor_name.value = companyName
+                                            _modal_product_provider_vendor_match.checked = true
+                                            
+                                            add(remove_nulls({
+                                                location_id: null,
+                                                company_id: companyId,
+                                                code_direct_id: null,
+                                                id: null,
+                                                provider_vendor: 1,
+                                                enabled: 1,
+                                            }))
+                                            
+                                        } else {
+                                            return handleProviderError("No Data", "Error", "error")
+                                        }
+                                        
+                                    } else {
+                                        return handleProviderError("No Data", "Error", "error")
+                                    }
+                                    
+                                })
+                            }
+                            
+                            /*
+                            Company.addProvider({
+                                name: _modal_product_provider_name.value,
+                                status_id: 10,
+                                enabled: 1,
+                            }, function (data) {
+                                if (data) {
+                                    if (data[0]) {
+                                        let company = data[0]
+                                        _modal_product_provider_company_id.value = company.id
+                                        _modal_product_vendor_company_id.value = company.id
+                                        _modal_product_provider_name.value = company.name
+                                        _modal_product_vendor_name.value = company.name
+                                        _modal_product_provider_vendor_match.checked = true
+                                        
+                                        add(remove_nulls({
+                                            location_id: null,
+                                            company_id: company.id,
+                                            code_direct_id: null,
+                                            id: null,
+                                            provider_vendor: 1,
+                                            enabled: 1,
+                                        }))
+                                    }
+                                }
+                            })
+                            //*/
+                        } else {
+                            _modal_product_vendor_id.value = ""
+                            _modal_product_provider_id.value = ""
+                            _modal_product_vendor_name.value = ""
+                            _modal_product_provider_name.value = ""
+                            globalSelectedProvider = false
+                        }
+                    })
+                    
+                } else {
+                    provider = (data[0]) ? data[0] : data
+                    //console.log("|__ provider", provider)
+                    
+                    if (_form_product_add) {
+                        setNewProductModalFields(provider)
+                    }
+                    
+                    /*
+            if (_form_product_add) {
+                
+                if (!data || data.length === 0) {
+                    
+                    confirmDialog("This provider does not exist. Would you like to create it?", (ans) => {
+                        if (ans) {
+                        
+                            Company.addProvider({
+                                name: _modal_product_provider_name.value,
+                                status_id: 10,
+                                enabled: 1,
+                            }, function (data) {
+                                if (data) {
+                                    if (data[0]) {
+                                        let company = data[0]
+                                        _modal_product_provider_company_id.value = company.id
+                                        _modal_product_vendor_company_id.value = company.id
+                                        _modal_product_provider_name.value = company.name
+                                        _modal_product_vendor_name.value = company.name
+                                        _modal_product_provider_vendor_match.checked = true
+                                        
+                                        add(remove_nulls({
+                                            location_id: null,
+                                            company_id: company.id,
+                                            code_direct_id: null,
+                                            id: null,
+                                            provider_vendor: 1,
+                                            enabled: 1,
+                                        }))
+                                    }
+                                }
+                            })
+                        
+                        } else {
+                            _modal_product_vendor_id.value = ""
+                            _modal_product_provider_id.value = ""
+                            _modal_product_vendor_name.value = ""
+                            _modal_product_provider_name.value = ""
+                            globalSelectedProvider = false
+                        }
+                    })
+                } else {
+                    if (data) {
+                        provider = data
+                        if (data.length > 0) {
+                            provider = data[0]
+                        }
+                    }
+                    
+                    let vendor = provider.vendor
+                    let code_direct = (provider.code_direct_id) ? provider.code_direct_id : null
+                    let sku = (vendor.sku) ? vendor.sku : null
+                    
+                    _modal_product_vendor_id.value = parseInt(vendor.id)
+                    _modal_product_provider_id.value = provider.id
+                    _modal_product_vendor_name.value = provider.name
+                    _modal_product_vendor_company_id.value = (!isNaN(parseInt(provider.company_id))) ? parseInt(provider.company_id) : null
+                    _modal_product_provider_company_id.value = (!isNaN(parseInt(provider.company_id))) ? parseInt(provider.company_id) : null
+                    _modal_product_provider_vendor_match.checked = true
+                    _modal_product_vendor_name.disabled = false
+                    _modal_product_provider_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
+                    _modal_product_location_id.value = (!isNaN(parseInt(provider.location.id))) ? parseInt(provider.location.id) : null
+                    
+                    Product.attr2 = code_direct
+                    Product.attr3 = sku
+                    Product.updateProductSKU()
+                }
+            }
+            //*/
+                
+                }
+                
+                if (_form_edit_provider) {
+                    if (data) {
+                        if (data.length > 0) {
+                            
+                            provider = data[0]
+                            
+                            if (_form_product_add) {
+                            
+                            }
+                            
+                            confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
+                                if (ans) {
+                                    window.location.href = "/providers/" + provider.id
+                                } else {
+                                    Company.reset_form()
+                                    Provider.resetForm()
+                                    Vendor.reset_form()
+                                }
+                            })
+                            
+                        }
+                    }
+                    //console.log("provider", provider)
+                    $(_vendor_name).val($(_provider_name).val()).trigger("change")
+                }
+                
+            })
+            
         }
         
-        _button_save_provider.disabled = !(_company_id.value !== "" && _location_name_filter_id.value !== "")
+    }
+    
+    const initAutoComplete = function () {
+        //console.log("Provider.initAutocomplete()")
+        // ----
+        
+        if (_provider_name) {
+            $(_provider_name)
+                .on("change", function () {
+                    /*
+                    setTimeout(function () {
+                        let provider_name = _provider_name.value
+                        
+                        if (globalSelectedProvider === false) {
+                            if (provider_name === "") {
+                                _provider_name.value = ""
+                                _provider_company_id.value = ""
+                                globalSelectedProvider = false
+                                $(_vendor_name).val("").trigger("change")
+                                $(_provider_company_id).val("").trigger("change")
+                            } else {
+                                providerExists(provider_name)
+                            }
+                        }
+                    }, 200)
+                    //*/
+                })
+                .on("search", function () {
+                    //_provider_id.value = ""
+                    //_provider_company_id.value = ""
+                    
+                    //$(_vendor_name).val("").trigger("change")
+                    //$(_provider_company_id).val("").trigger("change")
+                    Provider.resetForm()
+                    Vendor.reset_form()
+                })
+                .on("click", function () {
+                    if ($(this).attr("readonly") === "readonly") {
+                        e.preventDefault()
+                    } else {
+                        $(this).select()
+                    }
+                })
+                .autocomplete({
+                    serviceUrl: "/api/v1.0/autocomplete/providers",
+                    minChars: 2,
+                    cache: false,
+                    dataType: "json",
+                    triggerSelectOnValidInput: false,
+                    paramName: "st",
+                    onSelect: function (suggestion) {
+                        if (!suggestion.data) {
+                            return
+                        }
+                        let provider = suggestion.data
+                        let company = (provider.company) ? provider.company : {}
+                        let addresses = (provider.addresses) ? provider.addresses : {}
+                        let contacts = (provider.contacts) ? provider.contacts : {}
+                        let location = (provider.location) ? provider.location : {}
+                        let vendor = (provider.vendor) ? provider.vendor : {}
+                        let provider_id = provider.id
+                        let company_name = provider.company.name
+                        let provider_company_id = provider.company.id
+                        
+                        if (_form_edit_provider) {
+                            $(_provider_company_id).val(provider_company_id)
+                            $(_provider_id).val(provider_id)
+                            confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
+                                if (ans) {
+                                    window.location.replace("/providers/" + provider_id)
+                                    populate_form(provider)
+                                    Company.populate_form(company)
+                                    Location.populate_form(location)
+                                    $(_vendor_company_id).val(provider_company_id)
+                                    $(_vendor_name).val(company_name).trigger("change")
+                                } else {
+                                    Provider.resetForm()
+                                    Vendor.reset_form()
+                                }
+                            })
+                        }
+                    },
+                })
+        }
+        if (_product_edit_details_section_provider_form_filter) {
+            $(_product_edit_details_section_provider_form_filter)
+                .on("change", function () {
+                    //*
+                    setTimeout(function () {
+                        let provider_name = _product_edit_details_section_provider_form_filter.value
+                        
+                        if (globalSelectedProvider === false) {
+                            if (provider_name === "") {
+                                _product_edit_details_section_provider_form_filter.value = ""
+                                _product_edit_details_section_provider_form_provider_company_id.value = ""
+                                _product_edit_details_section_provider_form_provider_id.value = ""
+                                globalSelectedProvider = false
+                                //$(_vendor_name).val("").trigger("change")
+                                $(_product_edit_details_section_provider_form_provider_company_id).val("").trigger("change")
+                                $(_product_edit_details_section_provider_form_provider_id).val("").trigger("change")
+                            } else {
+                                providerExists(provider_name)
+                            }
+                        }
+                    }, 200)
+                    //*/
+                })
+                .on("search", function () {
+                    //_provider_id.value = ""
+                    //_provider_company_id.value = ""
+                    
+                    //$(_vendor_name).val("").trigger("change")
+                    //$(_provider_company_id).val("").trigger("change")
+                    //Provider.resetForm()
+                    //Vendor.reset_form()
+                })
+                .on("click", function () {
+                    if ($(this).attr("readonly") === "readonly") {
+                        e.preventDefault()
+                    } else {
+                        $(this).select()
+                    }
+                })
+                .autocomplete({
+                    serviceUrl: "/api/v1.0/autocomplete/providers",
+                    minChars: 2,
+                    cache: false,
+                    dataType: "json",
+                    triggerSelectOnValidInput: false,
+                    paramName: "st",
+                    onSelect: function (suggestion) {
+                        if (!suggestion.data) {
+                            return
+                        }
+                        let provider = suggestion.data
+                        tempProvider = provider
+                        //console.log("provider", provider)
+                        
+                        let company = (provider.company) ? provider.company : {}
+                        let addresses = (provider.addresses) ? provider.addresses : {}
+                        let contacts = (provider.contacts) ? provider.contacts : {}
+                        let location = (provider.location) ? provider.location : {}
+                        let vendor = (provider.vendor) ? provider.vendor : {}
+                        let provider_id = provider.id
+                        let company_name = provider.company.name
+                        let provider_company_id = provider.company.id
+                        
+                        populateProductEditProviderForm(provider)
+                        /*
+                        if (_form_edit_provider) {
+                            $(_provider_company_id).val(provider_company_id)
+                            $(_provider_id).val(provider_id)
+                            confirmDialog("This provider exists. Would you like to edit it?", (ans) => {
+                                if (ans) {
+                                    window.location.replace("/providers/" + provider_id)
+                                    populate_form(provider)
+                                    Company.populate_form(company)
+                                    Location.populate_form(location)
+                                    $(_vendor_company_id).val(provider_company_id)
+                                    $(_vendor_name).val(company_name).trigger("change")
+                                } else {
+                                    Provider.resetForm()
+                                    Vendor.reset_form()
+                                }
+                            })
+                        }
+                        //*/
+                    },
+                })
+        }
+        
+        if (_modal_product_provider_name) {
+            
+            $(_modal_product_provider_name)
+                .on("change", function () {
+                    //*
+                    setTimeout(function () {
+                        let provider_name = _modal_product_provider_name.value
+                        
+                        if (globalSelectedProvider === false) {
+                            
+                            if (provider_name === "") {
+                                clearNewProductModalFields()
+                            } else {
+                                providerExists(provider_name)
+                            }
+                        }
+                        
+                    }, 200)
+                    //*/
+                })
+                .on("search", function () {
+                    globalSelectedProvider = false
+                    clearNewProductModalFields()
+                })
+                .on("keyup", function () {
+                    globalSelectedProvider = false
+                })
+                .on("click", function (e) {
+                    if ($(this).attr("readonly") === "readonly") {
+                        e.preventDefault()
+                    } else {
+                        $(this).select()
+                    }
+                })
+                .autocomplete({
+                    serviceUrl: "/api/v1.0/autocomplete/providers",
+                    minChars: 2,
+                    cache: false,
+                    dataType: "json",
+                    triggerSelectOnValidInput: false,
+                    paramName: "st",
+                    onSelect: function (suggestion) {
+                        if (!suggestion.data) {
+                            return
+                        }
+                        
+                        globalSelectedProvider = true
+                        setNewProductModalFields(suggestion.data)
+                        
+                    },
+                })
+            
+        }
+        
+    }
+    
+    const clearNewProductModalFields = function () {
+        //console.log("Provider.clearNewProductModalFields()")
+        // ----
+        
+        _modal_product_provider_location_id.value = ""
+        _modal_product_provider_id.value = ""
+        _modal_product_provider_company_id.value = ""
+        _modal_product_vendor_id.value = ""
+        _modal_product_vendor_company_id.value = ""
+        _modal_product_vendor_name.value = ""
+        _modal_product_provider_vendor_match.checked = false
+        
+        $(_form_product_add).trigger("change")
+        
+    }
+    
+    const setNewProductModalFields = function (provider) {
+        //console.log("Provider.setNewModalFields(provider)", provider)
+        // ----
+        
+        let categoryId = (_modal_product_category_id && !isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null
+        let category = Types.category.get(categoryId)
+        let company = (provider && provider.company) ? provider.company : {}
+        let addresses = (provider && provider.addresses) ? provider.addresses : {}
+        let contacts = (provider && provider.contacts) ? provider.contacts : {}
+        let location = (provider && provider.location) ? provider.location : {}
+        let vendor = (provider && provider.vendor) ? provider.vendor : {}
+        let companyId = (company && company.id && !isNaN(parseInt(company.id))) ? parseInt(company.id) : null
+        let companyName = (company && company.name) ? company.name : null
+        let vendorId = (vendor && vendor.id && !isNaN(parseInt(vendor.id))) ? parseInt(vendor.id) : null
+        let providerId = (provider && provider.id && !isNaN(parseInt(provider.id))) ? parseInt(provider.id) : null
+        let codeDirect = (provider && provider.code_direct_id) ? provider.code_direct_id : null
+        let sku = (vendor && vendor.sku) ? vendor.sku : null
+        let providerVendorMatch = true
+        let locationId = (provider && provider.location_id && !isNaN(parseInt(provider.location_id))) ? parseInt(provider.location_id) : null
+        let attributeId = (category && category.attribute_id) ? category.attribute_id : null
+        
+        clearNewProductModalFields()
+        
+        _modal_product_provider_location_id.value = locationId
+        _modal_product_provider_name.value = companyName
+        _modal_product_provider_id.value = providerId
+        _modal_product_provider_company_id.value = companyId
+        _modal_product_vendor_id.value = vendorId
+        _modal_product_vendor_company_id.value = companyId
+        _modal_product_vendor_name.value = companyName
+        _modal_product_provider_vendor_match.checked = providerVendorMatch
+        
+        //$(_modal_product_provider_name).trigger("change")
+        //$(_modal_product_vendor_name).trigger("change")
+        //console.log("|__ Types.category", Array.from(Types.category.values))
+        
+        Product.attr1 = attributeId
+        Product.attr2 = codeDirect
+        Product.attr3 = sku
+        
+        $(_form_product_add).trigger("change")
+        
+        Product.updateProductSKU()
+        
+    }
+    
+    const init = function (settings) {
+        //console.log("Provider.init(settings)", settings)
+        // ----
+        
+        let detail
+        
+        if (settings) {
+            
+            if (settings.provider_detail) {
+                detail = set(settings.provider_detail)
+                
+                if (detail) {
+                    tempProvider = detail
+                    
+                    if (detail.company) {
+                        //console.log("|__ detail.company", detail.company)
+                        
+                        Company.init(detail.company)
+                    }
+                    
+                }
+                
+                //populateProductEditProviderForm(detail)
+            }
+            
+        }
+        
+        if (_product_edit_details_section_provider_form_filter) {
+            closeProductEditProviderForm()
+        }
+        
+        initAutoComplete()
         
     }
     
@@ -27176,11 +25841,11 @@ const Provider = (function () {
         init: function (settings) {
             init(settings)
         },
-        reset_form: function () {
-            reset_form()
+        resetForm: function () {
+            resetForm()
         },
-        provider_exists: function (name) {
-            provider_exists(name)
+        providerExists: function (name) {
+            providerExists(name)
         },
         enable_form_fields: function () {
             enable_form_fields()
@@ -29441,1994 +28106,6 @@ $.fn.fileManager = function (options) {
     return new FileManager(document.getElementById($(this).attr("id")), options)
 }
 
-const Product = (function () {
-    "use strict"
-    
-    const base_url = "/products"
-    const regex = /[^A-Za-z0-9]/g
-    const _product_edit_meta_description_long_update_button = document.getElementById("product_edit_meta_description_long_update_button")
-    const _product_edit_meta_description_short_update_button = document.getElementById("product_edit_meta_description_short_update_button")
-    const _product_edit_meta_product_amenities_update_button = document.getElementById("product_edit_meta_product_amenities_update_button")
-    const _product_edit_meta_product_keywords_update_button = document.getElementById("product_edit_meta_product_keywords_update_button")
-    const _product_edit_details_section_publish = document.getElementById("product_edit_details_section_publish")
-    const _product_edit_details_section_save_draft = document.getElementById("product_edit_details_section_save_draft")
-    const _modal_product_depart_from_time = document.getElementById("modal_product_depart_from_time")
-    const _modal_product_depart_from_date = document.getElementById("modal_product_depart_from_date")
-    const _modal_product_arrive_to_time = document.getElementById("modal_product_arrive_to_time")
-    const _modal_product_arrive_to_date = document.getElementById("modal_product_arrive_to_date")
-    const _modal_product_depart_from_airport = document.getElementById("modal_product_depart_from_airport")
-    const _modal_product_arrive_to_airport = document.getElementById("modal_product_arrive_to_airport")
-    const _modal_product_depart_from_station = document.getElementById("modal_product_depart_from_station")
-    const _modal_product_arrive_to_station = document.getElementById("modal_product_arrive_to_station")
-    const _modal_product_depart_from_airport_id = document.getElementById("modal_product_depart_from_airport_id")
-    const _modal_product_arrive_to_airport_id = document.getElementById("modal_product_arrive_to_airport_id")
-    const _modal_product_depart_from_station_id = document.getElementById("modal_product_depart_from_station_id")
-    const _modal_product_arrive_to_station_id = document.getElementById("modal_product_arrive_to_station_id")
-    const _modal_button_cancel_add_product = document.getElementById("modal_button_cancel_add_product")
-    const _modal_button_submit_add_product = document.getElementById("modal_button_submit_add_product")
-    const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
-    const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
-    const _modal_product_provider_id = document.getElementById("modal_product_provider_id")
-    const _modal_product_vendor_id = document.getElementById("modal_product_vendor_id")
-    const _modal_new_product = document.getElementById("modal_new_product")
-    const _modal_product_name = document.getElementById("modal_product_name")
-    const _modal_product_category_id = document.getElementById("modal_product_category_id")
-    const _modal_product_sku = document.getElementById("modal_product_sku")
-    const _modal_product_rating_types_id = document.getElementById("modal_product_rating_types_id")
-    const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
-    const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
-    const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
-    const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
-    const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
-    const _modal_product_provider_location_id = document.getElementById("modal_product_provider_location_id")
-    const _modal_product_location_id = document.getElementById("modal_product_location_id")
-    const _modal_product_street_1 = document.getElementById("modal_product_street_1")
-    const _modal_product_street_2 = document.getElementById("modal_product_street_2")
-    const _modal_product_postal_code = document.getElementById("modal_product_postal_code")
-    const _modal_product_city_id = document.getElementById("modal_product_city_id")
-    const _modal_product_province_id = document.getElementById("modal_product_province_id")
-    const _modal_product_country_id = document.getElementById("modal_product_country_id")
-    const _modal_product_city = document.getElementById("modal_product_city")
-    
-    const _modal_button_clear_add_product = document.getElementById("modal_button_clear_add_product")
-    const _modal_product_depart_from_station_date = document.getElementById("modal_product_depart_from_station_date")
-    const _modal_product_arrive_to_station_date = document.getElementById("modal_product_arrive_to_station_date")
-    const _modal_product_depart_from_station_time = document.getElementById("modal_product_depart_from_station_time")
-    const _modal_product_arrive_to_station_time = document.getElementById("modal_product_arrive_to_station_time")
-    const _form_product_add = document.getElementById("form_product_add")
-    const _product_edit_page = document.getElementById("product_edit_page")
-    const _product_panel_link_overview = document.getElementById("product_panel_link_overview")
-    const _panel_tab_product_o = document.getElementById("panel_tab_product_o")
-    const _product_panel_link_product = document.getElementById("product_panel_link_product")
-    const _panel_tab_product = document.getElementById("panel_tab_product")
-    const _product_panel_link_season = document.getElementById("product_panel_link_season")
-    const _panel_tab_season = document.getElementById("panel_tab_season")
-    const _product_panel_link_unit = document.getElementById("product_panel_link_unit")
-    const _panel_tab_unit = document.getElementById("panel_tab_unit")
-    const _product_panel_link_variant = document.getElementById("product_panel_link_variant")
-    const _panel_tab_variant = document.getElementById("panel_tab_variant")
-    const _product_panel_link_inventory = document.getElementById("product_panel_link_inventory")
-    const _panel_tab_inventory = document.getElementById("panel_tab_inventory")
-    const _product_panel_link_pricing = document.getElementById("product_panel_link_pricing")
-    const _panel_tab_pricing = document.getElementById("panel_tab_pricing")
-    const _panel_tab_location = document.getElementById("panel_tab_location")
-    const _panel_tab_product_location = document.getElementById("panel_tab_product_location")
-    const _panel_tab_product_meta = document.getElementById("panel_tab_product_meta")
-    const _panel_tab_meta = document.getElementById("panel_tab_meta")
-    const _product_panel_link_meta = document.getElementById("product_panel_link_meta")
-    const _product_panel_link_location = document.getElementById("product_panel_link_location")
-    const _product_edit_details_currency_id = document.getElementById("product_edit_details_currency_id")
-    const _product_edit_details_rating_types_id = document.getElementById("product_edit_details_rating_types_id")
-    const _product_keywords = document.getElementById("product_keywords")
-    const _product_edit_meta_description_long = document.getElementById("product_edit_meta_description_long")
-    const _product_edit_meta_description_short = document.getElementById("product_edit_meta_description_short")
-    const _product_index_page = document.getElementById("product_index_page")
-    const _product_index_table = document.getElementById("product_index_table")
-    const _product_amenities = document.getElementById("product_amenities")
-    const _product_id = document.getElementById("product_id")
-    const _product_edit_details_name = document.getElementById("product_edit_details_name")
-    const _product_edit_details_enabled = document.getElementById("product_edit_details_enabled")
-    const _product_edit_details_sku = document.getElementById("product_edit_details_sku")
-    const _pricing_strategy_types_id = document.getElementById("pricing_strategy_types_id")
-    const _product_edit_location_city_id = document.getElementById("product_edit_location_city_id")
-    const _product_edit_location_id = document.getElementById("product_edit_location_id")
-    const _provider_id = document.getElementById("provider_id")
-    const _vendor_id = document.getElementById("vendor_id")
-    const _display_product_name = document.getElementById("display_product_name")
-    const _button_save_product = document.getElementById("button_save_product")
-    const _button_add_product_page_heading = document.getElementById("button_add_product_page_heading")
-    const _category_id = document.getElementById("category_id")
-    const _product_location_departing_station_city_id = document.getElementById("product_location_departing_station_city_id")
-    const _product_location_arriving_station_city_id = document.getElementById("product_location_arriving_station_city_id")
-    const _product_location_departing_airport_id = document.getElementById("product_location_departing_airport_id")
-    const _product_location_arriving_airport_id = document.getElementById("product_location_arriving_airport_id")
-    const _product_location = document.getElementById("product_location")
-    const _product_edit_details_submit_button = document.getElementById("product_edit_details_submit_button")
-    const _product_description_long = document.getElementById("product_description_long")
-    const _product_edit_details_section_seasons = document.getElementById("product_edit_details_section_seasons")
-    const _product_edit_details_section_units = document.getElementById("product_edit_details_section_units")
-    const _product_edit_details_section_variants = document.getElementById("product_edit_details_section_variants")
-    const _product_edit_details_section_status = document.getElementById("product_edit_details_section_status")
-    const _product_description_short = document.getElementById("product_description_short")
-    const _product_edit_details_section_profiles = document.getElementById("product_edit_details_section_profiles")
-    const _user_id = document.getElementById("user_id")
-    
-    let userId, categoryId, productId
-    let $product_keywords, $product_amenities
-    let radios = document.querySelectorAll('input[type=radio][name="location_to_use"]')
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    let $index_table, newProduct_validator
-    let add_modal_formRules = {
-        groups: {
-            //departAirport: "modal_product_depart_from_airport modal_product_depart_from_airport_id",
-            //modalProductCity: "modal_product_city modal_product_city_id",
-        },
-        rules: {
-            modal_product_sku: {
-                required: true,
-            },
-            //*
-            modal_product_depart_from_airport: function (el) {
-                let categoryId = (!isNaN(parseInt(document.getElementById("category_id")))) ? parseInt(document.getElementById("category_id")) : null
-                console.log("categoryId", categoryId)
-                if (categoryId === 2) {
-                    return true
-                }
-            },
-            modal_product_depart_from_airport_id: function (el) {
-                let categoryId = (!isNaN(parseInt(document.getElementById("category_id")))) ? parseInt(document.getElementById("category_id")) : null
-                console.log("categoryId", categoryId)
-                if (categoryId === 2) {
-                    return true
-                }
-            },
-            modal_product_arrive_to_airport: function (el) {
-                let categoryId = (!isNaN(parseInt(document.getElementById("category_id")))) ? parseInt(document.getElementById("category_id")) : null
-                console.log("categoryId", categoryId)
-                if (categoryId === 2) {
-                    return true
-                }
-            },
-            modal_product_arrive_to_airport_id: function (el) {
-                let categoryId = (!isNaN(parseInt(document.getElementById("category_id")))) ? parseInt(document.getElementById("category_id")) : null
-                console.log("categoryId", categoryId)
-                if (categoryId === 2) {
-                    return true
-                }
-            },
-            //*/
-            modal_product_rating_types_id: {
-                required: true,
-            },
-            modal_product_city_id: {
-                required: true,
-            },
-            modal_product_currency_id: {
-                required: true,
-            },
-            modal_product_pricing_strategies_types_id: {
-                required: true,
-            },
-            modal_product_name: {
-                required: true,
-            },
-            modal_product_category_id: {
-                required: true,
-            },
-            modal_product_provider_name: {
-                required: true,
-            },
-            modal_product_provider_id: {
-                required: true,
-            },
-            modal_product_provider_company_id: {
-                required: true,
-            },
-            modal_product_vendor_name: {
-                required: true,
-            },
-            modal_product_vendor_id: {
-                required: true,
-            },
-            modal_product_vendor_company_id: {
-                required: true,
-            },
-        },
-        messages: {
-            modal_product_city_id: {
-                required: "Field Required",
-            },
-            modal_product_sku: {
-                required: "Field Required",
-            },
-            modal_product_depart_from_airport: {
-                required: "Field Required",
-            },
-            modal_product_depart_from_airport_id: {
-                required: "Field Required",
-            },
-            modal_product_arrive_to_airport: {
-                required: "Field Required",
-            },
-            modal_product_arrive_to_airport_id: {
-                required: "Field Required",
-            },
-            modal_product_rating_types_id: {
-                required: "Field Required",
-            },
-            modal_product_currency_id: {
-                required: "Field Required",
-            },
-            modal_product_pricing_strategies_types_id: {
-                required: "Field Required",
-            },
-            modal_product_name: {
-                required: "Field Required",
-            },
-            modal_product_provider_id: {
-                required: "Field Required",
-            },
-            modal_product_category_id: {
-                required: "Field Required",
-            },
-            modal_product_provider_name: {
-                required: "Field Required",
-            },
-            modal_product_vendor_name: {
-                required: "Field Required",
-            },
-            modal_product_provider_company_id: {
-                required: "Field Required",
-            },
-            modal_product_vendor_id: {
-                required: "Field Required",
-            },
-            modal_product_vendor_company_id: {
-                required: "Field Required",
-            },
-        },
-    }
-    
-    $(_product_edit_meta_description_long_update_button)
-        .on("click", function () {
-            console.log("Product.product_edit_meta_description_long_update_button.click()")
-            updateMeta()
-        })
-    
-    $(_product_edit_meta_description_short_update_button)
-        .on("click", function () {
-            console.log("Product.product_edit_meta_description_short_update_button.click()")
-            updateMeta()
-        })
-    
-    $(_product_edit_meta_product_amenities_update_button)
-        .on("click", function () {
-            console.log("Product.product_edit_meta_product_amenities_update_button.click()")
-            updateMeta()
-        })
-    
-    $(_product_edit_meta_product_keywords_update_button)
-        .on("click", function () {
-            console.log("Product.product_edit_meta_product_keywords_update_button.click()")
-            updateMeta()
-        })
-    
-    $(_product_edit_details_section_publish)
-        .on("click", function () {
-            console.log("Product.product_edit_details_section_publish.click()")
-        })
-    
-    $(_product_edit_details_section_save_draft)
-        .on("click", function () {
-            console.log("Product.product_edit_details_section_save_draft.click()")
-        })
-    
-    $("#button_view_calendar")
-        .on("click", function () {
-            $("#seasonCalendarModal").modal("show")
-        })
-    
-    $(_product_edit_details_name)
-        .on("change", function () {
-            _display_product_name.innerText = _product_edit_details_name.value
-        })
-    
-    $(_product_edit_details_submit_button)
-        .on("click", function () {
-            updateProductDetails()
-        })
-    
-    $(_product_edit_details_rating_types_id)
-        .on("change", function () {
-            Product.detail.rating_types_id = (!isNaN(parseInt(_product_edit_details_rating_types_id.value))) ? parseInt(_product_edit_details_rating_types_id.value) : 1
-            updateDisplay()
-        })
-    
-    $(_button_save_product)
-        .on("click", function () {
-            save()
-        })
-    
-    $(_button_add_product_page_heading)
-        .on("click", function () {
-            setNewProductModal()
-        })
-    
-    $(_modal_new_product)
-        .on("hide.bs.modal", function () {
-            clearModalForm()
-            clearValidation(_form_product_add)
-        })
-    
-    $(_modal_button_cancel_add_product)
-        .on("click", function () {
-            clearModalForm()
-            Airport.resetAirportForm("depart_from")
-            Airport.resetAirportForm("arrive_to")
-            Station.resetStationForm("depart_from")
-            Station.resetStationForm("arrive_to")
-            clearValidation(_form_product_add)
-            $(_modal_new_product).modal("hide")
-        })
-    
-    $(_modal_button_submit_add_product)
-        .on("click", function () {
-            if (validateNewProduct()) {
-                confirmDialog(`Would you like to update?`, (ans) => {
-                    if (ans) {
-                        saveNewProduct()
-                    }
-                })
-            }
-        })
-    
-    $(_modal_product_provider_vendor_match)
-        .on("change", function () {
-            let provider_company_id = (isNaN(parseInt(_modal_product_provider_company_id.value))) ? null : parseInt(_modal_product_provider_company_id.value)
-            
-            if (provider_company_id !== null) {
-                
-                if (_modal_product_provider_vendor_match.checked) {
-                    _modal_product_vendor_company_id.value = _modal_product_provider_company_id.value
-                    
-                    if (Provider.detail !== null) {
-                        _modal_product_vendor_company_id.value = Provider.detail.vendor.company_id
-                        _modal_product_vendor_id.value = Provider.detail.vendor.id
-                        _modal_product_vendor_name.value = Provider.detail.vendor.name
-                    } else {
-                        _modal_product_vendor_company_id.value = ""
-                        _modal_product_vendor_id.value = ""
-                        _modal_product_vendor_name.value = ""
-                    }
-                    
-                } else {
-                    _modal_product_vendor_company_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_name.value = ""
-                }
-            }
-        })
-    
-    $(_modal_button_clear_add_product)
-        .on("click", function () {
-            clearModalForm()
-        })
-    
-    $("#page")
-        .on("change", function () {
-            updateProgress()
-        })
-    
-    $(_product_edit_meta_description_short)
-        .on("change", function () {
-            Product.detail.description_short = $(this).val()
-            updateDisplay()
-        })
-    
-    $(_product_edit_meta_description_long)
-        .on("change", function () {
-            Product.detail.description_long = $(this).val()
-            updateDisplay()
-        })
-    
-    const buildMetaObject = function () {
-        console.log("Product.buildMetaObject()")
-        // ----
-        
-        let id = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
-        let keywords = $product_keywords.build()
-        let amenities = $product_amenities.build()
-        let description_short = (_product_edit_meta_description_short.value !== "") ? _product_edit_meta_description_short.value : null
-        let description_long = (_product_edit_meta_description_long.value !== "") ? _product_edit_meta_description_long.value : null
-        
-        return removeNulls({
-            amenities: amenities,
-            keywords: keywords,
-            id: id,
-            description_long: description_long,
-            description_short: description_short,
-        })
-    }
-    
-    const updateMeta = function () {
-        console.log("Product.updateMeta()")
-        let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
-        console.log("|__ productId", productId)
-        let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
-        console.log("|__ categoryId", categoryId)
-        let userId = (!isNaN(parseInt(_user_id.value))) ? parseInt(_user_id.value) : null
-        console.log("|__ userId", userId)
-        let dataToSend = buildMetaObject()
-        console.log("|__ dataToSend", dataToSend)
-        
-        confirmDialog(`Would you like to update?`, (ans) => {
-            if (ans) {
-                sendRequestUpdateProductMeta(dataToSend, function (data) {
-                    let product
-                    if (data) {
-                        product = data
-                        if (data[0]) {
-                            product = data[0]
-                        }
-                        //console.log("|__ |__ product", product)
-                        let detail = set(product)
-                        if (_product_edit_page) {
-                            updateProgress()
-                        }
-                        handleProductError(`Product ${product.name} was updated.`, "Product", "success")
-                    }
-                })
-            }
-        })
-    }
-    
-    const sendRequestUpdateProductMeta = function (dataToSend, callback) {
-        console.log("Product.sendRequestUpdateProductMeta(dataToSend, callback)", dataToSend)
-        if (dataToSend) {
-            let url = "/api/v1.0/products/update_meta"
-            try {
-                sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    }
-                })
-            } catch (e) {
-                console.log("error", e)
-                return handleProductError("Error")
-            }
-        }
-    }
-    
-    const buildProductDetailRecord = function () {
-        console.log("Product.buildProductDetailRecord()")
-        let sku = updateProductSKU()
-        let enabled = (_product_edit_details_enabled && _product_edit_details_enabled.checked === true) ? 1 : 0
-        let rating_types_id = (!isNaN(parseInt(_product_edit_details_rating_types_id.value))) ? parseInt(_product_edit_details_rating_types_id.value) : null
-        let currency_id = (!isNaN(parseInt(_product_edit_details_currency_id.value))) ? parseInt(_product_edit_details_currency_id.value) : null
-        let name = (_product_edit_details_name && _product_edit_details_name.value !== "") ? _product_edit_details_name.value : null
-        let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
-        let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
-        let userId = (!isNaN(parseInt(_user_id.value))) ? parseInt(_user_id.value) : null
-        
-        return removeNulls({
-            id: (productId) ? productId : null,
-            rating_types_id: (rating_types_id) ? rating_types_id : null,
-            currency_id: (currency_id) ? currency_id : null,
-            name: (name) ? name : null,
-            sku: (sku) ? sku : null,
-            enabled: enabled,
-        })
-    }
-    
-    const sendRequestUpdateProductDetail = function (dataToSend, callback) {
-        console.log("Product.sendRequestUpdateProductDetail(dataToSend)", dataToSend)
-        if (dataToSend) {
-            let url = "/api/v1.0/products/update_detail"
-            try {
-                sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    console.log("|__ |__ data", data)
-                    if (data) {
-                        return callback(data)
-                    }
-                })
-            } catch (e) {
-                console.log("error", e)
-                return handleProductError("Error")
-            }
-        }
-    }
-    
-    const updateProductDetails = function () {
-        console.log("Product.updateProductDetails()")
-        let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
-        let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
-        let userId = (!isNaN(parseInt(_user_id.value))) ? parseInt(_user_id.value) : null
-        let dataToSend = buildProductDetailRecord()
-        //console.log("dataToSend", dataToSend)
-        
-        confirmDialog(`Would you like to update?`, (ans) => {
-            if (ans) {
-                sendRequestUpdateProductDetail(dataToSend, function (data) {
-                    let product
-                    if (data) {
-                        product = data
-                        if (data[0]) {
-                            product = data[0]
-                        }
-                        console.log("|__ |__ product", product)
-                        let detail = set(product)
-                        if (_product_edit_page) {
-                            updateProgress()
-                        }
-                        handleProductError(`Product ${product.name} was updated.`, "Product", "success")
-                    }
-                })
-            }
-        })
-    }
-    
-    const validateProductRecord = function () {
-        let isValid = true
-        
-        return isValid
-    }
-    
-    const buildInsertData = function () {
-        console.log("Category.buildInsertData()")
-        // ----
-        
-        let categoryId = (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null
-        let productName, productSKU, currencyId, pricingStrategyTypesId, ratingTypesId, providerId, vendorId
-        let depart_from, arrive_to, street1, street2, postalCode, provinceId, countryId, cityId, depart_date, depart_time, arrive_date, arrive_time
-        let location = {
-            name: null,
-            street_1: null,
-            street_2: null,
-            zipcode: null,
-            country_id: null,
-            province_id: null,
-            city_id: null,
-        }
-        
-        countryId = (_modal_product_country_id && !isNaN(parseInt(_modal_product_country_id.value))) ? parseInt(_modal_product_country_id.value) : null
-        provinceId = (_modal_product_province_id && !isNaN(parseInt(_modal_product_province_id.value))) ? parseInt(_modal_product_province_id.value) : null
-        cityId = (_modal_product_city_id && !isNaN(parseInt(_modal_product_city_id.value))) ? parseInt(_modal_product_city_id.value) : null
-        street1 = (_modal_product_street_1 && _modal_product_street_1.value !== "") ? _modal_product_street_1.value : null
-        street2 = (_modal_product_street_2 && _modal_product_street_2.value !== "") ? _modal_product_street_2.value : null
-        postalCode = (_modal_product_postal_code && _modal_product_postal_code.value !== "") ? _modal_product_postal_code.value : null
-        productName = (_modal_product_name && _modal_product_name.value !== "") ? _modal_product_name.value : null
-        productSKU = (_modal_product_sku && _modal_product_sku.value !== "") ? _modal_product_sku.value : null
-        currencyId = (_modal_product_currency_id && !isNaN(parseInt(_modal_product_currency_id.value))) ? parseInt(_modal_product_currency_id.value) : null
-        providerId = (_modal_product_provider_id && !isNaN(parseInt(_modal_product_provider_id.value))) ? parseInt(_modal_product_provider_id.value) : null
-        vendorId = (_modal_product_vendor_id && !isNaN(parseInt(_modal_product_vendor_id.value))) ? parseInt(_modal_product_vendor_id.value) : null
-        ratingTypesId = (_modal_product_rating_types_id && !isNaN(parseInt(_modal_product_rating_types_id.value))) ? parseInt(_modal_product_rating_types_id.value) : null
-        pricingStrategyTypesId = (_modal_product_pricing_strategies_types_id && !isNaN(parseInt(_modal_product_pricing_strategies_types_id.value))) ? parseInt(_modal_product_pricing_strategies_types_id.value) : null
-        
-        let startDate = moment(new Date()).format("YYYY-MM-DD")
-        let defaultDepartureDate = moment(startDate, "YYYY-MM-DD").add(3, "months").format("YYYY-MM-DD")
-        let defaultArrivalDate = moment(defaultDepartureDate, "YYYY-MM-DD").add(1, "days").format("YYYY-MM-DD")
-        let defaultDepartureTime = "12:00"
-        let defaultArrivalTime = "12:00"
-        
-        if (categoryId === 1) {
-            depart_from = null
-            arrive_to = null
-            depart_date = null
-            depart_time = null
-            arrive_date = null
-            arrive_time = null
-            
-            location = {
-                name: productName,
-                location_types_id: 2,
-                street_1: street1,
-                street_2: street2,
-                zipcode: postalCode,
-                country_id: countryId,
-                province_id: provinceId,
-                city_id: cityId,
-            }
-            
-        } else if (categoryId === 2) {
-            // Flights
-            depart_from = (!isNaN(parseInt(_modal_product_depart_from_airport_id.value))) ? parseInt(_modal_product_depart_from_airport_id.value) : null
-            arrive_to = (!isNaN(parseInt(_modal_product_arrive_to_airport_id.value))) ? parseInt(_modal_product_arrive_to_airport_id.value) : null
-            depart_date = (Product.depart_from_date && Product.depart_from_date.value() !== "" && Product.depart_from_date.value() !== null) ? Product.depart_from_date.value() : defaultDepartureDate
-            depart_time = (Product.depart_from_time && Product.depart_from_time.value() !== "" && Product.depart_from_time.value() !== null) ? Product.depart_from_time.value() : defaultDepartureTime
-            arrive_date = (Product.arrive_to_date && Product.arrive_to_date.value() !== "" && Product.arrive_to_date.value() !== null) ? Product.arrive_to_date.value() : defaultArrivalDate
-            arrive_time = (Product.arrive_to_time && Product.arrive_to_time.value() !== "" && Product.arrive_to_time.value() !== null) ? Product.arrive_to_time.value() : defaultArrivalTime
-            
-            location = {
-                name: productName,
-                location_types_id: 3,
-                street_1: street1,
-                street_2: street2,
-                zipcode: postalCode,
-                country_id: countryId,
-                province_id: provinceId,
-                city_id: cityId,
-            }
-        } else if (categoryId === 3) {
-            // Cars
-            depart_from = null
-            arrive_to = null
-            depart_date = null
-            depart_time = null
-            arrive_date = null
-            arrive_time = null
-            
-            location = {
-                name: productName,
-                location_types_id: 18,
-                street_1: street1,
-                street_2: street2,
-                zipcode: postalCode,
-                country_id: countryId,
-                province_id: provinceId,
-                city_id: cityId,
-            }
-        } else if (categoryId === 4) {
-            // Rail
-            depart_from = (!isNaN(parseInt(_modal_product_depart_from_station_id.value))) ? parseInt(_modal_product_depart_from_station_id.value) : null
-            arrive_to = (!isNaN(parseInt(_modal_product_arrive_to_station_id.value))) ? parseInt(_modal_product_arrive_to_station_id.value) : null
-            depart_date = (Product.depart_from_date && Product.depart_from_date.value() !== "" && Product.depart_from_date.value() !== null) ? Product.depart_from_date.value() : defaultDepartureDate
-            depart_time = (Product.depart_from_time && Product.depart_from_time.value() !== "" && Product.depart_from_time.value() !== null) ? Product.depart_from_time.value() : defaultDepartureTime
-            arrive_date = (Product.arrive_to_date && Product.arrive_to_date.value() !== "" && Product.arrive_to_date.value() !== null) ? Product.arrive_to_date.value() : defaultArrivalDate
-            arrive_time = (Product.arrive_to_time && Product.arrive_to_time.value() !== "" && Product.arrive_to_time.value() !== null) ? Product.arrive_to_time.value() : defaultArrivalTime
-            
-            location = {
-                name: productName,
-                location_types_id: 4,
-                street_1: street1,
-                street_2: street2,
-                zipcode: postalCode,
-                country_id: countryId,
-                province_id: provinceId,
-                city_id: cityId,
-            }
-            
-        } else if (categoryId === 5) {
-            // Transport
-            depart_from = null
-            arrive_to = null
-            depart_date = null
-            depart_time = null
-            arrive_date = null
-            arrive_time = null
-            
-            location = {
-                name: productName,
-                location_types_id: 7,
-                street_1: street1,
-                street_2: street2,
-                zipcode: postalCode,
-                country_id: countryId,
-                province_id: provinceId,
-                city_id: cityId,
-            }
-            
-        } else if (categoryId === 6) {
-            // Tours
-            depart_from = null
-            arrive_to = null
-            depart_date = null
-            depart_time = null
-            arrive_date = null
-            arrive_time = null
-            
-            location = {
-                name: productName,
-                location_types_id: 17,
-                street_1: street1,
-                street_2: street2,
-                zipcode: postalCode,
-                country_id: countryId,
-                province_id: provinceId,
-                city_id: cityId,
-            }
-        } else if (categoryId === 7) {
-            // Cruises
-            depart_from = null
-            arrive_to = null
-            depart_date = null
-            depart_time = null
-            arrive_date = null
-            arrive_time = null
-            
-            location = {
-                name: productName,
-                location_types_id: 19,
-                street_1: street1,
-                street_2: street2,
-                zipcode: postalCode,
-                country_id: countryId,
-                province_id: provinceId,
-                city_id: cityId,
-            }
-        } else if (categoryId === 8) {
-            // Packages
-            depart_from = null
-            arrive_to = null
-            depart_date = null
-            depart_time = null
-            arrive_date = null
-            arrive_time = null
-            
-            location = {
-                name: productName,
-                location_types_id: 19,
-                street_1: street1,
-                street_2: street2,
-                zipcode: postalCode,
-                country_id: countryId,
-                province_id: provinceId,
-                city_id: cityId,
-            }
-        } else {
-            // Other
-            depart_from = null
-            arrive_to = null
-        }
-        //Via del Termine, 11, 50127 Firenze FI, Italy
-        let dataToSend = {
-            category_id: categoryId,
-            
-            depart_from: depart_from,
-            depart_date: depart_date,
-            depart_time: depart_time,
-            arrive_to: arrive_to,
-            arrive_date: arrive_date,
-            arrive_time: arrive_time,
-            
-            street_1: street1,
-            street_2: street2,
-            country_id: countryId,
-            province_id: provinceId,
-            city_id: cityId,
-            postal_code: postalCode,
-            
-            pricing_strategy_types_id: pricingStrategyTypesId,
-            status_types_id: 1,
-            currency_id: currencyId,
-            //location_id: (!isNaN(parseInt(_modal_product_location_id.value))) ? parseInt(_modal_product_location_id.value) : null,
-            rating_types_id: ratingTypesId,
-            provider_id: providerId,
-            vendor_id: vendorId,
-            provider_vendor_match: (((!isNaN(parseInt(_modal_product_provider_company_id.value))) ? parseInt(_modal_product_provider_company_id.value) : null) === ((!isNaN(parseInt(_modal_product_vendor_company_id.value))) ? parseInt(_modal_product_vendor_company_id.value) : null)) ? 1 : 0,
-            
-            name: productName,
-            sku: productSKU,
-            use_provider_location_id: 0,
-            location: location,
-        }
-        /*
-        if (categoryId === 2) {
-            let departDate = (Product.depart_from_date && Product.depart_from_date.value() !== "" && Product.depart_from_date.value() !== null) ? Product.depart_from_date.value() : defaultDepartureDate
-            let departTime = (_modal_product_depart_from_time && _modal_product_depart_from_time.value !== "") ? _modal_product_depart_from_time.value : defaultDepartureTime
-            let arriveDate = (Product.arrive_to_date && Product.arrive_to_date.value() !== "" && Product.arrive_to_date.value() !== null) ? Product.arrive_to_date.value() : defaultArrivalDate
-            let arriveTime = (_modal_product_arrive_to_time && _modal_product_arrive_to_time.value !== "") ? _modal_product_arrive_to_time.value : defaultArrivalTime
-            
-            dataToSend.depart_from = (!isNaN(parseInt(_modal_product_depart_from_airport_id.value))) ? parseInt(_modal_product_depart_from_airport_id.value) : null
-            dataToSend.depart_date = departDate
-            dataToSend.depart_time = departTime
-            dataToSend.arrive_to = (!isNaN(parseInt(_modal_product_arrive_to_airport_id.value))) ? parseInt(_modal_product_arrive_to_airport_id.value) : null
-            dataToSend.arrive_date = arriveDate
-            dataToSend.arrive_time = arriveTime
-        }
-        
-        if (categoryId === 4) {
-            let departDate = (Product.depart_from_date && Product.depart_from_date.value() !== "" && Product.depart_from_date.value() !== null) ? Product.depart_from_date.value() : defaultDepartureDate
-            let departTime = (_modal_product_depart_from_time && _modal_product_depart_from_time.value !== "") ? _modal_product_depart_from_time.value : defaultDepartureTime
-            let arriveDate = (Product.arrive_to_date && Product.arrive_to_date.value() !== "" && Product.arrive_to_date.value() !== null) ? Product.arrive_to_date.value() : defaultArrivalDate
-            let arriveTime = (_modal_product_arrive_to_time && _modal_product_arrive_to_time.value !== "") ? _modal_product_arrive_to_time.value : defaultArrivalTime
-            
-            dataToSend.depart_from = (!isNaN(parseInt(_modal_product_depart_from_airport_id.value))) ? parseInt(_modal_product_depart_from_airport_id.value) : null
-            dataToSend.depart_date = departDate
-            dataToSend.depart_time = departTime
-            dataToSend.arrive_to = (!isNaN(parseInt(_modal_product_arrive_to_airport_id.value))) ? parseInt(_modal_product_arrive_to_airport_id.value) : null
-            dataToSend.arrive_date = arriveDate
-            dataToSend.arrive_time = arriveTime
-        }
-        //*/
-        return remove_nulls(dataToSend)
-    }
-    
-    const saveNewProduct = function () {
-        console.log("Product.saveNewProduct()")
-        // ----
-        
-        let dataToSend = buildInsertData()
-        let product
-        
-        console.log("|__ dataToSend", dataToSend)
-        newProduct(dataToSend, function (data) {
-            console.log("data", data)
-            if (data) {
-                product = data
-                if (data.length === 1) {
-                    product = data[0]
-                }
-                
-                if (product.id) {
-                    let detail = set(product)
-                    console.log("|__ detail", detail)
-                    $index_table.insertRow(detail)
-                    $index_table.loadRow(detail)
-                    $index_table.jumpToRow(detail)
-                    $index_table.clearSelectedRows()
-                    
-                    toastr["success"](`Product - ${product.id} was created, would you like to edit?`, "Product Created")
-                    //window.location.replace("/products/" + product.id)
-                }
-            }
-        })
-    }
-    
-    const newProduct = function (dataToSend, callback) {
-        console.log("Product.newProduct(dataToSend)", dataToSend)
-        // ----
-        
-        let url = "/api/v1.0/products/add"
-        
-        if (dataToSend) {
-            try {
-                sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    } else {
-                        return handleProductError("Oops: 1")
-                    }
-                })
-            } catch (e) {
-                console.log("error", e)
-                handleProductError("Oops: 1")
-            }
-        }
-    }
-    
-    const validateNewProduct = function () {
-        console.log("Product.validateNewProduct()")
-        let isValid = false
-        
-        if (_form_product_add) {
-            isValid = $(_form_product_add).valid()
-            //*
-            console.log("isValid", isValid)
-            var validator = jQuery(_form_product_add).validate(add_modal_formRules)
-            console.log("validator", validator)
-            if (jQuery(_form_product_add).valid()) {
-                var submitErrorsList = new Object()
-                for (var i = 0; i < validator.errorList.length; i++) {
-                    console.log("Product.newProduct_validator.errorList[i].message")
-                }
-            }
-            console.log("Submit Errors", submitErrorsList)
-            //*/
-        }
-        console.log("isValid", isValid)
-        return isValid
-    }
-    
-    const clearModalForm = function () {
-        console.log("Product.clearModalForm()")
-        // ----
-        
-        if (_modal_new_product) {
-            _modal_product_name.value = ""
-            
-            _modal_product_street_1.value = ""
-            _modal_product_street_2.value = ""
-            _modal_product_postal_code.value = ""
-            
-            Product.depart_from_date.value("")
-            Product.arrive_to_date.value("")
-            
-            _modal_product_depart_from_airport.value = ""
-            _modal_product_arrive_to_airport.value = ""
-            _modal_product_depart_from_station.value = ""
-            _modal_product_arrive_to_station.value = ""
-            _modal_product_depart_from_airport_id.value = ""
-            _modal_product_arrive_to_airport_id.value = ""
-            _modal_product_depart_from_station_id.value = ""
-            _modal_product_arrive_to_station_id.value = ""
-            
-            _modal_product_category_id.value = ""
-            _modal_product_sku.value = ""
-            _modal_product_rating_types_id.value = ""
-            _modal_product_currency_id.value = ""
-            _modal_product_provider_company_id.value = ""
-            _modal_product_vendor_company_id.value = ""
-            
-            _modal_product_pricing_strategies_types_id.value = ""
-            _modal_product_provider_location_id.value = ""
-            _modal_product_location_id.value = ""
-            _modal_product_city.value = ""
-            _modal_product_city_id.value = ""
-            
-            Product.attr1 = null
-            Product.attr2 = null
-            Product.attr3 = null
-            Product.updateProductSKU()
-            
-            $("div[data-categoryid]").hide()
-            
-            Product.resetNewProductDetails()
-        }
-    }
-    
-    const resetNewProductDetails = function () {
-        console.log("Product.resetNewProductDetails()")
-        // ----
-        
-        Product.depart_from_date.value("")
-        Product.arrive_to_date.value("")
-        
-        Airport.resetAirportForm("depart_from")
-        Airport.resetAirportForm("arrive_to")
-        
-        Station.resetStationForm("depart_from")
-        Station.resetStationForm("arrive_to")
-        
-        _modal_product_depart_from_time.value = ""
-        _modal_product_arrive_to_time.value = ""
-        _modal_product_depart_from_airport.value = ""
-        _modal_product_arrive_to_airport.value = ""
-        _modal_product_provider_id.value = ""
-        _modal_product_vendor_id.value = ""
-        _modal_product_provider_name.value = ""
-        _modal_product_vendor_name.value = ""
-        _modal_product_city.value = ""
-        _modal_product_name.value = ""
-        _modal_product_sku.value = ""
-        _modal_product_city_id.value = ""
-        _modal_product_rating_types_id.value = ""
-        _modal_product_currency_id.value = ""
-        _modal_product_pricing_strategies_types_id.value = ""
-        
-        _modal_product_name.disabled = true
-        _modal_product_sku.disabled = true
-        _modal_product_rating_types_id.disabled = true
-        _modal_product_currency_id.disabled = true
-        _modal_product_pricing_strategies_types_id.disabled = true
-        _modal_product_city.disabled = true
-        
-        clearValidation(_form_product_add)
-    }
-    
-    const setNewProductModal = function () {
-        clearModalForm()
-        
-        $(_modal_new_product).modal("show")
-    }
-    
-    const sendUpdateRequest = function (dataToSend, callback) {
-        let url = "/api/v1.0/products/update"
-        
-        if (dataToSend) {
-            try {
-                sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    } else {
-                        handleProductError("Oops: 1")
-                    }
-                })
-            } catch (e) {
-                console.log("error", e)
-                handleProductError("Oops: 1")
-            }
-        }
-    }
-    
-    const buildProductRecord = function () {
-        if (validateProductRecord()) {
-            let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
-            let arrive_to, depart_from
-            
-            if (categoryId === 2) {
-                arrive_to = (!isNaN(parseInt(_product_location_arriving_airport_id.value))) ? parseInt(_product_location_arriving_airport_id.value) : null
-                depart_from = (!isNaN(parseInt(_product_location_departing_airport_id.value))) ? parseInt(_product_location_departing_airport_id.value) : null
-            } else if (categoryId === 4) {
-                arrive_to = (!isNaN(parseInt(_product_location_arriving_station_city_id.value))) ? parseInt(_product_location_arriving_station_city_id.value) : null
-                depart_from = (!isNaN(parseInt(_product_location_departing_station_city_id.value))) ? parseInt(_product_location_departing_station_city_id.value) : null
-            } else {
-                arrive_to = null
-                depart_from = null
-            }
-            let detail = {
-                id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
-                category_id: (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null,
-                description_short: (_product_edit_meta_description_short && _product_edit_meta_description_short.value !== "") ? _product_edit_meta_description_short.value : null,
-                description_long: (_product_edit_meta_description_long && _product_edit_meta_description_long.value !== "") ? _product_edit_meta_description_long.value : null,
-                amenities: $product_amenities.build(),
-                keywords: $product_keywords.build(),
-                rating_types_id: (!isNaN(parseInt(_product_edit_details_rating_types_id.value))) ? parseInt(_product_edit_details_rating_types_id.value) : null,
-                currency_id: (!isNaN(parseInt(_product_edit_details_currency_id.value))) ? parseInt(_product_edit_details_currency_id.value) : null,
-                name: (_product_edit_details_name.value !== "") ? _product_edit_details_name.value : null,
-                pricing_strategy_types_id: (!isNaN(parseInt(_pricing_strategy_types_id.value))) ? parseInt(_pricing_strategy_types_id.value) : null,
-                city_id: (!isNaN(parseInt(_product_edit_location_city_id.value))) ? parseInt(_product_edit_location_city_id.value) : null,
-                location_id: (_product_edit_location_id && !isNaN(parseInt(_product_edit_location_id.value))) ? parseInt(_product_edit_location_id.value) : null,
-                provider_id: (!isNaN(parseInt(_provider_id.value))) ? parseInt(_provider_id.value) : null,
-                vendor_id: (!isNaN(parseInt(_vendor_id.value))) ? parseInt(_vendor_id.value) : null,
-                use_provider_location_id: 0,
-                provider_vendor_match: 1,
-                status_types_id: 2,
-                enabled: (_product_edit_details_enabled.checked) ? 1 : 0,
-                sku: (_product_edit_details_sku.value !== "") ? _product_edit_details_sku.value : null,
-                arrive_to: arrive_to,
-                depart_from: depart_from,
-                
-            }
-            
-            return removeNulls(detail)
-        }
-    }
-    
-    const save = function () {
-        let dataToSend = buildProductRecord()
-        console.log("dataToSend", dataToSend)
-        
-        if (dataToSend) {
-            confirmDialog(`Would you like to update?`, (ans) => {
-                if (ans) {
-                    sendUpdateRequest(dataToSend, function (data) {
-                        let product
-                        if (data) {
-                            product = data
-                            if (data[0]) {
-                                product = data[0]
-                            }
-                        }
-                        
-                        if (product.id) {
-                            let detail = set(product)
-                            let name = (detail.name) ? detail.name : null
-                            toastr["success"](`Product ${name} has been updated`, "Product Updated")
-                        }
-                    })
-                }
-            })
-        }
-        
-    }
-    
-    const navigate = function (product) {
-        if (product && product.id) {
-            window.location.replace(base_url + "/" + product.id)
-        }
-    }
-    
-    const get = function (id) {
-        let data_to_send = {}
-        if (id) {
-            data_to_send.id = id
-        }
-    }
-    
-    const defaultDetail = function () {
-        return {
-            id: null,
-            category_id: null,
-            pricing_strategy_types_id: null,
-            status_types_id: null,
-            product_status_types_id: null,
-            currency_id: null,
-            location_id: null,
-            city_id: null,
-            vendor_id: null,
-            provider_id: null,
-            name: null,
-            provider_vendor_match: 1,
-            description_short: null,
-            description_long: null,
-            rating: null,
-            sku: null,
-            phone: null,
-            infant: null,
-            child: null,
-            teen: null,
-            depart_from: null,
-            arrive_to: null,
-            depart_time: null,
-            arrive_time: null,
-            day_span: null,
-            cover_image: null,
-            api_id: null,
-            from_api: 1,
-            hotel_code: null,
-            enabled: 1,
-            date_created: formatDateMySQL(),
-            created_by: user_id,
-            date_modified: formatDateMySQL(),
-            modified_by: user_id,
-            note: null,
-            amenities: "",
-            keywords: "",
-            seasons: [],
-            units: [],
-            use_provider_location: 0,
-            variants: [],
-            category: {},
-            location: {},
-            vendor: {},
-            profiles: [],
-            provider: {},
-        }
-    }
-    
-    const set = function (product) {
-        console.log("Product.set(product)", product)
-        let detail = defaultDetail()
-        
-        if (product) {
-            detail.id = (product.id) ? product.id : null
-            detail.category_id = (product.category_id) ? product.category_id : null
-            detail.pricing_strategy_types_id = (product.pricing_strategy_types_id) ? product.pricing_strategy_types_id : null
-            detail.status_types_id = (product.status_types_id) ? product.status_types_id : null
-            detail.product_status_types_id = (product.product_status_types_id) ? product.product_status_types_id : null
-            detail.currency_id = (product.currency_id) ? product.currency_id : null
-            detail.location_id = (product.location_id) ? product.location_id : null
-            detail.city_id = (product.city_id) ? product.city_id : null
-            detail.vendor_id = (product.vendor_id) ? product.vendor_id : null
-            detail.provider_id = (product.provider_id) ? product.provider_id : null
-            detail.name = (product.name) ? product.name : null
-            detail.provider_vendor_match = (product.provider_vendor_match) ? product.provider_vendor_match : 1
-            detail.description_short = (product.description_short) ? product.description_short : null
-            detail.description_long = (product.description_long) ? product.description_long : null
-            detail.rating = (product.rating) ? product.rating : null
-            detail.sku = (product.sku) ? product.sku : null
-            detail.phone = (product.phone) ? product.phone : null
-            detail.infant = (product.infant) ? product.infant : null
-            detail.child = (product.child) ? product.child : null
-            detail.teen = (product.teen) ? product.teen : null
-            detail.depart_from = (product.depart_from) ? product.depart_from : null
-            detail.arrive_to = (product.arrive_to) ? product.arrive_to : null
-            detail.depart_time = (product.depart_time) ? product.depart_time : null
-            detail.arrive_time = (product.arrive_time) ? product.arrive_time : null
-            detail.day_span = (product.day_span) ? product.day_span : null
-            detail.cover_image = (product.cover_image) ? product.cover_image : null
-            detail.api_id = (product.api_id) ? product.api_id : null
-            detail.from_api = (product.from_api) ? product.from_api : 1
-            detail.hotel_code = (product.hotel_code) ? product.hotel_code : null
-            detail.enabled = (product.enabled) ? product.enabled : 1
-            detail.date_created = (product.date_created) ? product.date_created : formatDateMySQL()
-            detail.created_by = (product.created_by) ? product.created_by : user_id
-            detail.date_modified = (product.date_modified) ? product.date_modified : formatDateMySQL()
-            detail.modified_by = (product.modified_by) ? product.modified_by : user_id
-            detail.note = (product.note) ? product.note : null
-            detail.category = (product.category) ? product.category : {}
-            detail.keywords = (product.keywords) ? product.keywords : ""
-            detail.amenities = (product.amenities) ? product.amenities : ""
-            detail.seasons = (product.seasons) ? product.seasons : []
-            detail.units = (product.units) ? product.units : []
-            detail.use_provider_location = (product.use_provider_location) ? product.use_provider_location : 0
-            detail.variants = (product.variants) ? product.variants : []
-            detail.location = (product.location) ? product.location : {}
-            detail.vendor = (product.vendor) ? product.vendor : {}
-            detail.provider = (product.provider) ? product.provider : {}
-        }
-        
-        Product.detail = detail
-        return detail
-    }
-    
-    const loadAll = function (products) {
-        Product.all = new Map()
-        
-        if (!products) {
-            return
-        }
-        
-        $.each(products, function (i, product) {
-            let detail = set(product)
-            $index_table.insertRow(detail)
-            Product.all.set("id", detail)
-        })
-    }
-    
-    const buildIndexTable = function () {
-        
-        $index_table = $(_product_index_table).table({
-            table_type: "display_list",
-            data: [],
-            columnDefs: [
-                {
-                    title: "Name",
-                    targets: 0,
-                    data: "name",
-                    render: function (data, type, row, meta) {
-                        return "<span style='white-space: nowrap;'>" + data + "</span>"
-                    },
-                },
-                {
-                    title: "SKU",
-                    targets: 1,
-                    data: "sku",
-                    render: function (data, type, row, meta) {
-                        return "<span style='white-space: nowrap;'>" + data + "</span>"
-                    },
-                },
-                {
-                    title: "Provider",
-                    targets: 2,
-                    data: "provider",
-                    render: function (data, type, row, meta) {
-                        return "<span style='white-space: nowrap;'>" + data.name + "</span>"
-                    },
-                },
-                {
-                    title: "Vendor",
-                    targets: 3,
-                    data: "vendor",
-                    render: function (data, type, row, meta) {
-                        return "<span style='white-space: nowrap;'>" + data.name + "</span>"
-                    },
-                },
-                {
-                    title: "Location",
-                    targets: 4,
-                    data: "location",
-                    render: function (data, type, row, meta) {
-                        let displayLocation = ""
-                        if (defaultLocationDisplayFormat === "short") {
-                            displayLocation = data.display_short
-                        } else if (defaultLocationDisplayFormat === "long") {
-                            displayLocation = data.display_long
-                        } else {
-                            displayLocation = data.display_medium
-                        }
-                        
-                        return "<span style='white-space: nowrap;'>" + displayLocation + "</span>"
-                    },
-                },
-                {
-                    title: "Category",
-                    targets: 5,
-                    data: "category",
-                    render: function (data, type, row, meta) {
-                        return "<span style='white-space: nowrap;'>" + data.name + "</span>"
-                    },
-                },
-            ],
-            rowClick: Product.navigate,
-        })
-    }
-    
-    const changeHandler = function (event) {
-        //if (this.value === "use_provider_location") {
-        //Location.init(provider_initial_location)
-        //} else if (this.value === "use_product_location") {
-        //Location.init(product_initial_location)
-        //}
-    }
-    
-    const setDefaultProductDetails = function () {
-        return {
-            location: {},
-            provider: {},
-            vendor: {},
-            seasons: [],
-            units: [],
-            variants: [],
-            profiles: [],
-            matrix: [],
-        }
-    }
-    
-    const setNewFormDetails = function (categoryId) {
-        console.log("Product.setNewFormDetails(category_id)", categoryId)
-        
-    }
-    
-    const updateProductSKU = function () {
-        //console.log("Product.updateProductSKU()")
-        let att1 = Product.attr1
-        let att2 = Product.attr2
-        let att3 = Product.attr3
-        let sku = ""
-        
-        if (!is_null(att1) && !is_null(att2) && !is_null(att3)) {
-            sku = att1.replace(/-/g, "") + "-" + att2.replace(/-/g, "") + "-" + att3.replace(/-/g, "")
-            
-            if (_modal_product_sku) {
-                _modal_product_sku.value = sku
-            }
-            
-            if (_product_edit_details_sku) {
-                _product_edit_details_sku.value = sku
-            }
-            
-        } else {
-            if (_modal_product_sku) {
-                _modal_product_sku.value = ""
-            }
-            
-            if (is_null(att1)) {
-                //console.log("att1 is null", att1)
-                return
-            }
-            
-            if (is_null(att2)) {
-                //console.log("att2 is null", att2)
-                return
-            }
-            
-            if (is_null(att3)) {
-                //console.log("att3 is null", att3)
-                return
-            }
-        }
-        
-        return sku
-    }
-    
-    const handleProductError = function (msg, title, level) {
-        console.log("Product.handleProductError(msg)", msg)
-        if (!title) {
-            title = "Product"
-        }
-        
-        if (!level) {
-            level = "error"
-        }
-        
-        toastr[level](`${msg}`, title)
-    }
-    
-    const index = function (settings) {
-        console.log("Product.index(settings)", settings)
-        // ----
-        
-        if (_product_index_table) {
-            buildIndexTable()
-            
-            if (settings) {
-                let products = (settings.products) ? settings.products : []
-                let stations = (settings.stations) ? settings.stations : []
-                //let airports = (settings.airports) ? settings.airports : []
-                let categories = (settings.category) ? settings.category : []
-                
-                $(document).ready(function () {
-                    if (_modal_new_product) {
-                        Category.init(categories)
-                        Airport.init()
-                        Station.init(stations)
-                    }
-                    
-                    loadAll(products)
-                })
-                
-            }
-        }
-    }
-    
-    const initAutoComplete = function () {
-        let category_id = (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null
-        
-        if (category_id !== null) {
-            $(_modal_product_name)
-                .on("change", function () {
-                    /*
-                    setTimeout(function () {
-                        let product_name = _modal_product_name.value
-                        
-                        if (globalSelectedProvider === false) {
-                            if (provider_name === "") {
-                                _provider_name.value = ""
-                                _provider_company_id.value = ""
-                                globalSelectedProvider = false
-                                $(_vendor_name).val("").trigger("change")
-                                $(_provider_company_id).val("").trigger("change")
-                            } else {
-                                provider_exists(provider_name)
-                            }
-                        }
-                    }, 200)
-                    //*/
-                })
-                .on("search", function () {
-                
-                })
-                .on("click", function (e) {
-                    if ($(this).attr("readonly") === "readonly") {
-                        e.preventDefault()
-                    } else {
-                        $(this).select()
-                    }
-                })
-                .autocomplete({
-                    serviceUrl: "/api/v1.0/autocomplete/products",
-                    minChars: 2,
-                    params: { "category_id": category_id },
-                    cache: false,
-                    dataType: "json",
-                    triggerSelectOnValidInput: false,
-                    paramName: "st",
-                    onSelect: function (suggestion) {
-                        if (!suggestion || !suggestion.data) {
-                            return
-                        }
-                        let product = suggestion.data
-                        
-                    },
-                })
-        }
-    }
-    
-    const updateProgress = function () {
-        //console.log("Product.updateProgress()")
-        if (_product_edit_page) {
-            let variants = Array.from(Variant.all.values())
-            let profiles = Array.from(InventoryProfile.all.values())
-            let units = Array.from(Unit.all.values())
-            let seasons = Array.from(Season.all.values())
-            let calendarButtons = document.querySelectorAll("button[data-target='#seasonCalendarModal']")
-            
-            if (variants.length === 0 || units.length === 0 || seasons.length === 0 || profiles.length === 0) {
-                $(_product_edit_details_section_publish).addClass("disabled")
-                if (variants.length === 0 || units.length === 0 || seasons.length === 0) {
-                    calendarButtons.forEach(el => {
-                        el.disabled = true
-                    })
-                    $("#button_view_calendar").addClass("disabled")
-                    $(_panel_tab_pricing).addClass(`disabled`)
-                    $(_panel_tab_inventory).addClass(`disabled`)
-                } else {
-                    $(_panel_tab_inventory).removeClass(`disabled`)
-                }
-                
-                if (profiles.length === 0) {
-                    $("#button_view_calendar").addClass("disabled")
-                    $(_panel_tab_pricing).addClass(`disabled`)
-                } else {
-                
-                }
-                
-                $(_button_save_product).addClass("disabled")
-                
-                $("#panel_tab_pricing")
-                    .html(`
-							<span id="tab_span_pricing">Pricing</span>
-							<span class="badge rounded-pill badge-notification bg-danger tab-badge" style="color:#fff!important">!</span>
-						`)
-            
-            } else {
-                $("#button_view_calendar").removeClass("disabled")
-                $(_panel_tab_pricing).removeClass(`disabled`)
-                $(_panel_tab_inventory).removeClass(`disabled`)
-                
-                let pricingWorksheet = PricingWorksheet.status()
-                if (pricingWorksheet === "incomplete") {
-                    $(_product_edit_details_section_publish).addClass("disabled")
-                    $(_button_save_product).addClass("disabled")
-                    $("#panel_tab_pricing")
-                        .html("<span id='tab_span_pricing'>Pricing</span> <span class='badge rounded-pill badge-notification bg-danger tab-badge' style='color:#fff!important'>!</span>")
-                } else {
-                    $(_product_edit_details_section_publish).removeClass("disabled")
-                    $(_button_save_product).removeClass("disabled")
-                    $("#panel_tab_pricing")
-                        .html("<span id='tab_span_pricing'>Pricing</span>")
-                }
-            }
-            
-            updateDisplay()
-        }
-    }
-    
-    const updateDisplay = function () {
-        //console.log("Product.updateDisplay()", Product.detail)
-        if (_product_edit_page) {
-            //LOCATION DISPLAY UPDATE
-            let provider, vendor, seasons, units, variants, profiles, product_location,
-                productLocationType
-            let productLocationDisplay = "Product Location"
-            let productLocationIcon = "fas fa-archway"
-            
-            if (Product.detail.location) {
-                product_location = Product.detail.location
-            }
-            
-            if (product_location) {
-                productLocationType = (product_location.type) ? product_location.type : null
-                productLocationDisplay = (product_location.display_medium) ? product_location.display_medium : "Product Location"
-            }
-            
-            if (productLocationType) {
-                productLocationIcon = (productLocationType.icon) ? productLocationType.icon : "fas fa-archway"
-            }
-            
-            if (_product_location) {
-                $(_product_location)
-                    .empty()
-                    .html(`
-						<i class="${productLocationIcon} mr-2"></i> <span class="">${productLocationDisplay}</span>
-					`)
-            }
-            
-            //RATING DISPLAY UPDATE
-            let rating = (!isNaN(parseInt(_product_edit_details_rating_types_id.value))) ? parseInt(_product_edit_details_rating_types_id.value) : 1
-            let ratingDisplay = ""
-            for (let n = 0; n < 5; n++) {
-                if (n < rating) {
-                    ratingDisplay += `
-						<li class="list-inline-item mr-0">
-                            <i class="fas fa-star"></i>
-                        </li>
-					`
-                } else {
-                    ratingDisplay += `
-						<li class="list-inline-item mr-0">
-                            <i class="far fa-star"></i>
-                        </li>
-					`
-                }
-            }
-            
-            $("ul.rating")
-                .empty()
-                .html(ratingDisplay)
-            
-            //STATUS DISPLAY UPDATE
-            let statusDisplay = ""
-            if (_product_edit_details_section_status) {
-                let status_types_id = (!isNaN(parseInt(Product.detail.status_types_id))) ? parseInt(Product.detail.status_types_id) : null
-                if (status_types_id) {
-                    let status = StatusTypes.all.get(status_types_id)
-                    if (status) {
-                        let statusName = (status.name) ? status.name : ""
-                        let statusClass = statusName.replace(/\s+/g, '-').toLowerCase()
-                        
-                        statusDisplay = `
-							<span class="">Status</span>
-							<span id="product_edit_details_section_status_text" class="badge badge-${statusClass} badge-pill badge-status">${statusName}</span>
-						`
-                    }
-                }
-            }
-            
-            if (_product_edit_details_section_status) {
-                $(_product_edit_details_section_status)
-                    .empty()
-                    .html(statusDisplay)
-            }
-            
-            //SEASON, VARIANT, UNIT COUNTS
-            let seasonCount = Array.from(Season.all.values()).length
-            let seasonClass = "badge badge-success badge-pill"
-            if (seasonCount === 0) {
-                seasonClass = "badge badge-danger badge-pill"
-            }
-            
-            let unitCount = Array.from(Unit.all.values()).length
-            let unitClass = "badge badge-success badge-pill"
-            if (unitCount === 0) {
-                unitClass = "badge badge-danger badge-pill"
-            }
-            
-            let variantCount = Array.from(Variant.all.values()).length
-            let variantClass = "badge badge-success badge-pill"
-            if (variantCount === 0) {
-                variantClass = "badge badge-danger badge-pill"
-            }
-            
-            let inventoryProfileCount = Array.from(InventoryProfile.all.values()).length
-            let inventoryProfileClass = "badge badge-success badge-pill"
-            if (inventoryProfileCount === 0) {
-                inventoryProfileClass = "badge badge-danger badge-pill"
-            }
-            
-            _product_edit_details_section_seasons.classList = seasonClass
-            _product_edit_details_section_seasons.innerText = seasonCount
-            
-            _product_edit_details_section_units.classList = unitClass
-            _product_edit_details_section_units.innerText = unitCount
-            
-            _product_edit_details_section_variants.classList = variantClass
-            _product_edit_details_section_variants.innerText = variantCount
-            
-            _product_edit_details_section_profiles.classList = inventoryProfileClass
-            _product_edit_details_section_profiles.innerText = inventoryProfileCount
-            
-            $(_product_description_short).empty().html(Product.detail.description_short)
-            $(_product_description_long).empty().html(Product.detail.description_long)
-            
-            updateProductSKU()
-        }
-    }
-    
-    const setEditFormValues = function (product) {
-        console.log("Product.setEditFormValues(product)", product)
-        // ----
-        
-        let detail = set(product)
-        let category
-        
-        if (detail.category) {
-            category = detail.category
-        }
-        let id = (!isNaN(parseInt(product.id))) ? parseInt(product.id) : null
-        let sku = (product.sku) ? product.sku : ""
-        let name = (product.name) ? product.name : ""
-        let ratings_type_id = (product.rating_types_id) ? product.rating_types_id : ""
-        let enabled = (product.enabled && product.enabled === 1)
-        let currency_types_id = (product.currency_id) ? product.currency_id : ""
-        let description_long = (product.description_long) ? product.description_long : ""
-        let description_short = (product.description_short) ? product.description_short : ""
-        let product_keywords = (product.keywords) ? product.keywords : []
-        let product_amenities = (product.amenities) ? product.amenities : []
-        let images = (product.images) ? product.images : []
-        
-        Product.fileManager = $("#product_images").fileManager({
-            height: 400,
-            source: "product",
-            sourceId: id,
-            images: images,
-        })
-        
-        $product_keywords = $(_product_keywords).BuildKeyword(product_keywords)
-        $product_amenities = $(_product_amenities).BuildKeyword(product_amenities)
-        
-        _product_edit_details_name.value = name
-        _product_edit_details_sku.value = sku
-        _product_edit_details_enabled.checked = enabled
-        _product_edit_meta_description_short.value = description_short
-        _product_edit_meta_description_long.value = description_long
-        _product_edit_details_currency_id.value = currency_types_id
-        _product_edit_details_rating_types_id.value = ratings_type_id
-        
-        Product.attr1 = (category.attribute_id) ? category.attribute_id : null
-    }
-    
-    const initEditForm = function (settings) {
-        let product = setDefaultProductDetails()
-        
-        if (settings) {
-            product = settings
-        }
-        
-        Array.prototype.forEach.call(radios, function (radio) {
-            //radio.addEventListener("change", changeHandler)
-        })
-        
-        setEditFormValues(product)
-    }
-    
-    const init = function (settings) {
-        console.log("Product.init(settings)", settings)
-        // ----
-        
-        let product_details, variants, seasons, units, profiles, provider, vendor,
-            matrices, pricings, product_location, arriving_location, departing_location,
-            images
-        
-        if (_product_edit_page) {
-            $(document).ready(function () {
-                userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-                categoryId = (document.getElementById("category_id")) ? (!isNaN(parseInt(document.getElementById("category_id").value))) ? parseInt(document.getElementById("category_id").value) : null : null
-                productId = (document.getElementById("product_id")) ? (!isNaN(parseInt(document.getElementById("product_id").value))) ? parseInt(document.getElementById("product_id").value) : null : null
-                
-                if (settings) {
-                    if (settings.product_details) {
-                        product_details = settings.product_details
-                        
-                        if (product_details.images) {
-                            images = product_details.images
-                        }
-                        
-                        if (product_details.provider) {
-                            provider = product_details.provider
-                        }
-                        
-                        if (product_details.vendor) {
-                            vendor = product_details.vendor
-                        }
-                        
-                        if (product_details.variants) {
-                            variants = product_details.variants
-                        }
-                        
-                        if (product_details.seasons) {
-                            seasons = product_details.seasons
-                        }
-                        
-                        if (product_details.matrices) {
-                            matrices = product_details.matrices
-                        }
-                        
-                        if (product_details.profiles) {
-                            profiles = product_details.profiles
-                        }
-                        
-                        if (product_details.units) {
-                            units = product_details.units
-                        }
-                        
-                        if (product_details.pricings) {
-                            pricings = product_details.pricings
-                        }
-                        
-                        if (product_details.location) {
-                            product_location = product_details.location
-                        }
-                        
-                        if (product_details.arriving_location) {
-                            arriving_location = product_details.arriving_location
-                        }
-                        
-                        if (product_details.departing_location) {
-                            departing_location = product_details.departing_location
-                        }
-                        
-                        let pricing_strategy = {
-                            pricing_strategy_types_id: (!isNaN(parseInt(product_details.pricing_strategy_types_id))) ? parseInt(product_details.pricing_strategy_types_id) : null,
-                        }
-                        
-                        Provider.init({
-                            provider_detail: provider,
-                        })
-                        
-                        Vendor.init({
-                            vendor_detail: vendor,
-                        })
-                        
-                        Variant.init(variants)
-                        
-                        Season.init(seasons)
-                        
-                        Season.loadAll(seasons)
-                        
-                        Unit.init({ units: units })
-                        
-                        Matrix.init({ matrices: matrices })
-                        
-                        Pricing.init({ pricings: pricings })
-                        
-                        InventoryProfile.init({
-                            profiles: profiles,
-                        })
-                        
-                        PricingWorksheet.init({
-                            pricing_strategy: pricing_strategy,
-                            pricings: pricings,
-                        })
-                        
-                        Product.calendar = $("#calendar").YearCalendar({
-                            displayEventTime: false,
-                            calendarType: "season",
-                            events: [],
-                        })
-                        
-                        switch (categoryId) {
-                            case 1:
-                                ProductLocation.init({
-                                    product_location: product_location,
-                                    product: product_details,
-                                })
-                                break
-                            case 2:
-                                ProductLocation.init({
-                                    product_location: product_location,
-                                    departing_location: departing_location,
-                                    arriving_location: arriving_location,
-                                    product: product_details,
-                                })
-                                break
-                            case 3:
-                                ProductLocation.init({
-                                    product_location: product_location,
-                                    product: product_details,
-                                })
-                                break
-                            case 4:
-                                ProductLocation.init({
-                                    product_location: product_location,
-                                    departing_location: departing_location,
-                                    arriving_location: arriving_location,
-                                    product: product_details,
-                                })
-                                break
-                            case 5:
-                                ProductLocation.init({
-                                    product_location: product_location,
-                                    product: product_details,
-                                })
-                                break
-                            case 6:
-                                ProductLocation.init({
-                                    product_location: product_location,
-                                    product: product_details,
-                                })
-                                
-                                Tour.init({
-                                    route: [],
-                                    
-                                })
-                                
-                                break
-                            case 7:
-                                ProductLocation.init({
-                                    product_location: product_location,
-                                    product: product_details,
-                                })
-                                break
-                            case 8:
-                                ProductLocation.init({
-                                    product_location: product_location,
-                                    product: product_details,
-                                })
-                                break
-                            case 9:
-                                ProductLocation.init({
-                                    product_location: product_location,
-                                    product: product_details,
-                                })
-                                break
-                        }
-                        
-                        $(_product_panel_link_overview)
-                            .on("click", function () {
-                                $(_panel_tab_product_o).tab("show")
-                            })
-                        $(_product_panel_link_location)
-                            .on("click", function () {
-                                $(_panel_tab_location).tab("show")
-                            })
-                        $(_product_panel_link_product)
-                            .on("click", function () {
-                                $(_panel_tab_product).tab("show")
-                            })
-                        $(_product_panel_link_season)
-                            .on("click", function () {
-                                $(_panel_tab_season).tab("show")
-                            })
-                        $(_product_panel_link_unit)
-                            .on("click", function () {
-                                $(_panel_tab_unit).tab("show")
-                            })
-                        $(_product_panel_link_variant)
-                            .on("click", function () {
-                                $(_panel_tab_variant).tab("show")
-                            })
-                        $(_product_panel_link_inventory)
-                            .on("click", function () {
-                                $(_panel_tab_inventory).tab("show")
-                            })
-                        $(_product_panel_link_pricing)
-                            .on("click", function () {
-                                $(_panel_tab_pricing).tab("show")
-                            })
-                        $(_product_panel_link_meta)
-                            .on("click", function () {
-                                $(_panel_tab_meta).tab("show")
-                            })
-                        
-                        initAutoComplete()
-                        initEditForm(product_details)
-                        updateProgress()
-                    }
-                }
-            })
-        }
-        
-        if (_product_index_page) {
-            Provider.init()
-            Product.index(settings)
-            
-            if (_form_product_add) {
-                $(document).ready(function () {
-                    
-                    if (_modal_product_depart_from_date) {
-                        Product.depart_from_date = $(_modal_product_depart_from_date).dateSelect({
-                            onStart: function () {},
-                        })
-                    }
-                    
-                    if (_modal_product_depart_from_time) {
-                        Product.depart_from_time = $(_modal_product_depart_from_time).timeSelect({
-                            onStart: function () {},
-                        })
-                    }
-                    
-                    if (_modal_product_arrive_to_date) {
-                        Product.arrive_to_date = $(_modal_product_arrive_to_date).dateSelect({
-                            onStart: function () {},
-                        })
-                    }
-                    
-                    if (_modal_product_arrive_to_time) {
-                        Product.arrive_to_time = $(_modal_product_arrive_to_time).timeSelect({
-                            onStart: function () {},
-                        })
-                    }
-                    
-                    if (_modal_product_arrive_to_station_date) {
-                        Product.depart_from_station_date = $(_modal_product_arrive_to_station_date).dateSelect({
-                            onStart: function () {},
-                        })
-                    }
-                    
-                    if (_modal_product_depart_from_station_date) {
-                        Product.depart_from_station_date = $(_modal_product_depart_from_station_date).dateSelect({
-                            onStart: function () {},
-                        })
-                    }
-                    
-                    if (_modal_product_arrive_to_station_time) {
-                        Product.arrive_to_station_time = $(_modal_product_arrive_to_station_time).timeSelect({
-                            onStart: function () {},
-                        })
-                    }
-                    
-                    if (_modal_product_depart_from_station_time) {
-                        Product.depart_from_station_time = $(_modal_product_depart_from_station_time).timeSelect({
-                            onStart: function () {},
-                        })
-                    }
-                    
-                    validator_init(add_modal_formRules)
-                    Product.newProduct_validator = $(_form_product_add).validate()
-                })
-            }
-        }
-    }
-    
-    return {
-        validator: null,
-        depart_from_date: null,
-        depart_from_time: null,
-        calendars: null,
-        product_initial_location: null,
-        provider_initial_location: null,
-        arrive_to_station_time: null,
-        depart_from_station_time: null,
-        arrive_to_station_date: null,
-        depart_from_station_date: null,
-        detail: {},
-        all: new Map(),
-        attr1: null,
-        attr2: null,
-        attr3: null,
-        newProduct_validator: null,
-        updateDisplay: function () {
-            updateDisplay()
-        },
-        updateProgress: function () {
-            updateProgress()
-            $("html").css({ overflow: "auto" })
-        },
-        updateProductSKU: function () {
-            updateProductSKU()
-        },
-        setNewFormDetails: function (category_id) {
-            setNewFormDetails(category_id)
-        },
-        get: function (params) {
-            get(params)
-        },
-        loadAll: function (params) {
-            loadAll(params)
-        },
-        save: function (params) {
-            save(params)
-        },
-        init: function (settings) {
-            init(settings)
-        },
-        index: function (settings) {
-            index(settings)
-        },
-        navigate: function (product) {
-            navigate(product)
-        },
-        resetNewProductDetails: function () {
-            resetNewProductDetails()
-        },
-        initAutoComplete: function () {
-            initAutoComplete()
-        },
-    }
-    
-})()
 
 $(function () {
     const _profile_card = document.getElementById("profile_card")

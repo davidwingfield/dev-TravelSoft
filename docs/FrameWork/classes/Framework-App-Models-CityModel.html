@@ -217,6 +217,13 @@ Long City Description</p>
 <dd></dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-Core-Model.html#method_buildSelectQuery">buildSelectQuery()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-CityModel.html#method_city_ac">city_ac()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
@@ -417,8 +424,7 @@ Long City Description</p>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">$selectQuery</span>
      = <span class="phpdocumentor-signature__default-value">&quot;
-            SELECT
-                        CONCAT( CITY.name, &#039; (&#039;,  PROVINCE.name, &#039;, &#039;, COUNTRY.name, &#039;)&#039;) AS &#039;location&#039;,
+            SELECT 		CONCAT( CITY.name, &#039; (&#039;,  PROVINCE.name, &#039;, &#039;, COUNTRY.name, &#039;)&#039;) AS &#039;location&#039;,
                         CITY.id AS &#039;city_id&#039;,
                         CITY.province_id AS &#039;city_province_id&#039;,
                         CITY.country_id AS &#039;city_country_id&#039;,
@@ -457,7 +463,7 @@ Long City Description</p>
             FROM 		city CITY
             JOIN 		province PROVINCE ON PROVINCE.id = CITY.province_id
             JOIN 		country COUNTRY ON COUNTRY.id = PROVINCE.country_id
-            &quot;</span></code>
+        &quot;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -479,6 +485,50 @@ Long City Description</p>
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_buildSelectQuery">
+        buildSelectQuery()
+        <a href="classes/Framework-Core-Model.html#method_buildSelectQuery" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Core/Model.php"><a href="files/core-model.html"><abbr title="Core/Model.php">Model.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">72</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">buildSelectQuery</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_city_ac">
         city_ac()
         <a href="classes/Framework-App-Models-CityModel.html#method_city_ac" class="headerlink"><i class="fas fa-link"></i></a>
@@ -486,7 +536,7 @@ Long City Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CityModel.php"><a href="files/app-models-citymodel.html"><abbr title="App/Models/CityModel.php">CityModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">64</span>
+    <span class="phpdocumentor-element-found-in__line">63</span>
 
     </aside>
 
@@ -530,7 +580,7 @@ Long City Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CityModel.php"><a href="files/app-models-citymodel.html"><abbr title="App/Models/CityModel.php">CityModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">81</span>
+    <span class="phpdocumentor-element-found-in__line">80</span>
 
     </aside>
 
@@ -590,7 +640,7 @@ Long City Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CityModel.php"><a href="files/app-models-citymodel.html"><abbr title="App/Models/CityModel.php">CityModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">120</span>
+    <span class="phpdocumentor-element-found-in__line">119</span>
 
     </aside>
 
@@ -843,7 +893,7 @@ Long City Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CityModel.php"><a href="files/app-models-citymodel.html"><abbr title="App/Models/CityModel.php">CityModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">135</span>
+    <span class="phpdocumentor-element-found-in__line">134</span>
 
     </aside>
 

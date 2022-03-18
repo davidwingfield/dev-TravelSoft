@@ -152,7 +152,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Country.php"><a href="files/app-controllers-country.html"><abbr title="App/Controllers/Country.php">Country.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">17</span>
+    <span class="phpdocumentor-element-found-in__line">19</span>
 
     </aside>
 
@@ -217,6 +217,13 @@ Long Country Description</p>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Controllers-Country.html#method_autocomplete">autocomplete()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Controllers-Country.html#method_get">get()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
@@ -235,7 +242,7 @@ Long Country Description</p>
     <span>
                         &nbsp;: void    </span>
 </dt>
-<dd>API get request</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Controllers-Country.html#method_serveUpdate">serveUpdate()</a>
@@ -244,8 +251,29 @@ Long Country Description</p>
 </dt>
 <dd></dd>
 
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Controllers-Country.html#method_validateName">validateName()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/Framework-App-Controllers-Country.html#method_format">format()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/Framework-App-Controllers-Country.html#method_format_ac">format_ac()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/Framework-App-Controllers-Country.html#method_formatACRecord">formatACRecord()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
@@ -385,7 +413,7 @@ Long Country Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Country.php"><a href="files/app-controllers-country.html"><abbr title="App/Controllers/Country.php">Country.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">19</span>
+    <span class="phpdocumentor-element-found-in__line">21</span>
 
     </aside>
 
@@ -411,6 +439,50 @@ Long Country Description</p>
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_autocomplete">
+        autocomplete()
+        <a href="classes/Framework-App-Controllers-Country.html#method_autocomplete" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Country.php"><a href="files/app-controllers-country.html"><abbr title="App/Controllers/Country.php">Country.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">26</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">autocomplete</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$st</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$st</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_get">
         get()
         <a href="classes/Framework-App-Controllers-Country.html#method_get" class="headerlink"><i class="fas fa-link"></i></a>
@@ -418,7 +490,7 @@ Long Country Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Country.php"><a href="files/app-controllers-country.html"><abbr title="App/Controllers/Country.php">Country.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">44</span>
+    <span class="phpdocumentor-element-found-in__line">46</span>
 
     </aside>
 
@@ -495,17 +567,17 @@ Long Country Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Country.php"><a href="files/app-controllers-country.html"><abbr title="App/Controllers/Country.php">Country.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">29</span>
+    <span class="phpdocumentor-element-found-in__line">31</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">API get request</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">serveGet</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$args</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -513,7 +585,8 @@ Long Country Description</p>
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                  = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -538,7 +611,7 @@ Long Country Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Country.php"><a href="files/app-controllers-country.html"><abbr title="App/Controllers/Country.php">Country.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">59</span>
+    <span class="phpdocumentor-element-found-in__line">61</span>
 
     </aside>
 
@@ -572,6 +645,50 @@ Long Country Description</p>
                     <article
         class="phpdocumentor-element
             -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_validateName">
+        validateName()
+        <a href="classes/Framework-App-Controllers-Country.html#method_validateName" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Country.php"><a href="files/app-controllers-country.html"><abbr title="App/Controllers/Country.php">Country.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">79</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">validateName</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$args</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$args</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
             -private
                                     -static                    "
 >
@@ -582,7 +699,7 @@ Long Country Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Country.php"><a href="files/app-controllers-country.html"><abbr title="App/Controllers/Country.php">Country.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">77</span>
+    <span class="phpdocumentor-element-found-in__line">99</span>
 
     </aside>
 
@@ -590,6 +707,94 @@ Long Country Description</p>
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">format</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$country</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$country</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_format_ac">
+        format_ac()
+        <a href="classes/Framework-App-Controllers-Country.html#method_format_ac" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Country.php"><a href="files/app-controllers-country.html"><abbr title="App/Controllers/Country.php">Country.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">210</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">format_ac</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$results</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$results</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_formatACRecord">
+        formatACRecord()
+        <a href="classes/Framework-App-Controllers-Country.html#method_formatACRecord" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Country.php"><a href="files/app-controllers-country.html"><abbr title="App/Controllers/Country.php">Country.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">155</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">formatACRecord</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$country</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
         <section class="phpdocumentor-description"></section>
 

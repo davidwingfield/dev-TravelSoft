@@ -450,6 +450,10 @@ const City = (function () {
             }, 200)
         })
         .on("search", function () {
+            $(_modal_product_country_id)
+                .val("")
+            $(_modal_product_province_id)
+                .val("")
             $(_modal_product_city_id)
                 .val("")
                 .trigger("change")
@@ -473,12 +477,15 @@ const City = (function () {
                     return
                 }
                 let city = suggestion.data
-                _modal_product_city_id.value = city.id
-                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
-                
+                _modal_product_country_id.value = city.id
+                _modal_product_province_id.value = city.province.id
+                _modal_product_city_id.value = city.country.id
                 _modal_product_depart_from_station_country_id.value = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
                 _modal_product_depart_from_station_province_id.value = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
                 _modal_product_depart_from_station_city_id.value = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+                
+                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+                
             },
         })
     

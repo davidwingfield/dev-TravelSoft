@@ -2,138 +2,109 @@ const Category = (function () {
     "use strict"
     
     const _modal_product_category_id = document.getElementById("modal_product_category_id")
+    const _modal_product_city = document.getElementById("modal_product_city")
+    const _modal_product_name = document.getElementById("modal_product_name")
+    const _modal_product_sku = document.getElementById("modal_product_sku")
+    const _modal_product_rating_types_id = document.getElementById("modal_product_rating_types_id")
+    const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
+    const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
+    const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
+    const _modal_product_provider_id = document.getElementById("modal_product_provider_id")
+    const _modal_product_vendor_id = document.getElementById("modal_product_vendor_id")
     const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
     const _modal_product_provider_location_id = document.getElementById("modal_product_provider_location_id")
     const _modal_product_location_id = document.getElementById("modal_product_location_id")
     const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
-    const _modal_product_city = document.getElementById("modal_product_city")
     const _modal_product_country_cars = document.getElementById("modal_product_country_cars")
-    const _modal_product_name = document.getElementById("modal_product_name")
-    const _modal_product_sku = document.getElementById("modal_product_sku")
-    const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
-    const _modal_product_provider_id = document.getElementById("modal_product_provider_id")
-    const _modal_product_vendor_id = document.getElementById("modal_product_vendor_id")
-    const _modal_product_rating_types_id = document.getElementById("modal_product_rating_types_id")
-    const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
-    const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
     const _modal_product_city_id = document.getElementById("modal_product_city_id")
     const _modal_product_country_id = document.getElementById("modal_product_country_id")
     const _modal_product_province_id = document.getElementById("modal_product_province_id")
+    const _modal_product_description_short = document.getElementById("modal_product_description_short")
+    const _modal_product_description_long = document.getElementById("modal_product_description_long")
+    const _modal_product_keywords = document.getElementById("modal_product_keywords")
+    const _modal_product_day_span = document.getElementById("modal_product_day_span")
+    const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
+    const _modal_button_submit_add_product = document.getElementById("modal_button_submit_add_product")
+    const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
+    const _modal_product_id = document.getElementById("modal_product_id")
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     $(_modal_product_category_id)
         .on("change", function () {
-            let categoryId = $(this).val()
-            handleProductChange(categoryId)
+            handleProductChange($(this).val())
         })
     
     const handleCategoryError = function (msg, title, type) {
-        toastr.error(msg)
+        if (!msg) {
+            msg = "There was an error."
+        }
+        
+        if (!title) {
+            title = "Category"
+        }
+        
+        if (!type) {
+            type = "error"
+        }
+        
+        toastr[type](msg, title)
     }
     
-    const handleProductChange = function (categoryId) {
-        console.log("Category.handleProductChange(categoryId)", categoryId)
+    const handleProductChange = function (id) {
+        console.log("Category.handleProductChange(id)", id)
         // ----
         
-        let category
+        $("[data-categoryid]").hide()
         
-        $("div[data-categoryid]").hide()
+        let categoryId = (!isNaN(parseInt(id))) ? parseInt(id) : null
+        let category = Types.category.get(parseInt(categoryId))
+        let attributeId = (category && category.attribute_id) ? category.attribute_id : null
         
         if (!categoryId) {
             return
-        } else {
-            categoryId = parseInt(categoryId)
-            category = Types.category.get(parseInt(categoryId))
-            if (!category) {
-                return
-            }
         }
         
-        Product.resetNewProductDetails()
-        Product.initAutoComplete(categoryId)
-        Product.attr1 = category.attribute_id
+        //Product.resetNewProductDetails()
+        // Product.enableNewFormDetails()
+        
+        Product.attr1 = (attributeId) ? attributeId : null
         Product.attr2 = null
         Product.attr3 = null
         Product.updateProductSKU()
         
-        if (categoryId && !isNaN(parseInt(categoryId))) {
-            switch (parseInt(categoryId)) {
+        let productName, productSKU,
+            providerName, vendorName = ""
+        
+        if (categoryId && !isNaN(categoryId)) {
+            Product.clearModalForm()
+            _modal_product_category_id.value = categoryId
+            
+            Product.initAutoComplete(categoryId)
+            
+            $(`[data-categoryid='${categoryId}']`).show()
+            
+            switch (categoryId) {
                 case 1:
                     /**
                      * Hotels
                      */
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    if (_modal_product_pricing_strategies_types_id) {
-                        _modal_product_pricing_strategies_types_id.value = ""
-                    }
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
                     
-                    //
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
-                    _modal_product_sku.disabled = true
                     
-                    $("div[data-categoryid='1']").show()
                     break
                 case 2:
                     /**
                      * Flight
                      */
-                    _modal_product_pricing_strategies_types_id.value = "2"
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_pricing_strategies_types_id.value = 2
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
-                    
-                    //_modal_product_provider_name.disabled = true
-                    //_modal_product_vendor_name.disabled = true
                     
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
@@ -142,41 +113,16 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.disabled = true
                     _modal_product_sku.disabled = true
                     
-                    $("div[data-categoryid='2']").show()
+                    Airport.departFromKeywords = $("#modal_product_depart_from_keywords_airport").BuildKeyword([])
+                    Airport.arriveToKeywords = $("#modal_product_arrive_to_keywords_airport").BuildKeyword([])
+                    
                     break
                 case 3:
                     /**
                      * Cars
                      */
-                    _modal_product_pricing_strategies_types_id.value = "3"
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_pricing_strategies_types_id.value = 3
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
-                    
-                    //
-                    //_modal_product_provider_name.disabled = true
-                    //_modal_product_vendor_name.disabled = true
                     
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
@@ -185,7 +131,6 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.disabled = true
                     _modal_product_sku.disabled = true
                     
-                    $("div[data-categoryid='3']").show()
                     Country.initAutocomplete()
                     
                     break
@@ -193,71 +138,26 @@ const Category = (function () {
                     /**
                      * Rail
                      */
-                    _modal_product_pricing_strategies_types_id.value = "2"
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_pricing_strategies_types_id.value = 2
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
-                    
-                    //_modal_product_provider_name.disabled = true
-                    //_modal_product_vendor_name.disabled = true
                     
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
-                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_pricing_strategies_types_id.disabled = true
                     _modal_product_sku.disabled = true
                     
-                    $("div[data-categoryid='4']").show()
+                    Station.departFromKeywords = $("#modal_product_depart_from_keywords_station").BuildKeyword([])
+                    Station.arriveToKeywords = $("#modal_product_arrive_to_keywords_station").BuildKeyword([])
+                    
                     break
                 case 5:
                     /**
                      * Transport
                      */
                     _modal_product_pricing_strategies_types_id.value = ""
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
                     
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
@@ -266,200 +166,85 @@ const Category = (function () {
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
                     
-                    $("div[data-categoryid='5']").show()
                     break
                 case 6:
                     /**
                      * Tours
                      */
-                    _modal_product_pricing_strategies_types_id.value = "2"
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
+                    
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
-                    _modal_product_pricing_strategies_types_id.disabled = true
+                    _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
                     
-                    $("div[data-categoryid='6']").show()
                     break
                 case 7:
                     /**
                      * Cruises
                      */
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
                     
-                    //_modal_product_provider_name.disabled = true
-                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
-                    
-                    $("div[data-categoryid='7']").show()
+                    _modal_product_id.disabled = true
                     break
                 case 8:
                     /**
                      * Packages
                      */
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
                     
-                    //_modal_product_provider_name.disabled = true
-                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
-                    _modal_product_rating_types_id.disabled = false
+                    _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
-                    _modal_product_pricing_strategies_types_id.disabled = false
+                    _modal_product_pricing_strategies_types_id.disabled = true
                     _modal_product_sku.disabled = true
                     
-                    $("div[data-categoryid='8']").show()
                     break
                 case 9:
                     /**
                      * Other
                      */
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
+                    _modal_product_pricing_strategies_types_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
-                    _modal_product_currency_id.value = ""
                     
-                    //_modal_product_provider_name.disabled = true
-                    //_modal_product_vendor_name.disabled = true
                     _modal_product_city.disabled = false
                     _modal_product_rating_types_id.disabled = false
                     _modal_product_name.disabled = false
                     _modal_product_currency_id.disabled = false
                     _modal_product_pricing_strategies_types_id.disabled = false
                     _modal_product_sku.disabled = true
-                    $("div[data-categoryid='9']").show()
+                    
                     break
                 default:
                     /**
                      * default
                      */
-                    _modal_product_vendor_name.value = ""
-                    _modal_product_vendor_name.value = ""
-                    if (_modal_product_country_cars) {
-                        _modal_product_country_cars.value = ""
-                    }
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    _modal_product_provider_id.value = ""
-                    _modal_product_provider_company_id.value = ""
-                    _modal_product_provider_location_id.value = ""
-                    _modal_product_location_id.value = ""
-                    _modal_product_vendor_id.value = ""
-                    _modal_product_vendor_company_id.value = ""
                     _modal_product_rating_types_id.value = ""
-                    _modal_product_sku.value = ""
+                    _modal_product_pricing_strategies_types_id.value = ""
                     
-                    _modal_product_city.disabled = true
                     _modal_product_rating_types_id.disabled = true
                     _modal_product_name.disabled = true
                     _modal_product_currency_id.disabled = true
                     _modal_product_pricing_strategies_types_id.disabled = true
                     _modal_product_sku.disabled = true
-                    _modal_product_sku.disabled = true
                     _modal_product_city.disabled = true
-                    _modal_product_rating_types_id.disabled = true
-                    _modal_product_pricing_strategies_types_id.disabled = true
                     break
             }
+            
+        } else {
+            Product.disableNewFormDetails()
         }
     }
     
@@ -492,29 +277,6 @@ const Category = (function () {
             modified_by: user_id,
             note: null,
         }
-    }
-    
-    const save = function (params) {
-    
-    }
-    
-    const get = function () {
-        let data_to_send = {}
-        
-    }
-    
-    const init = function (settings) {
-        console.log("Category.init()", settings)
-        // ----
-        
-        let categories = []
-        if (settings) {
-            if (settings.categories) {
-                categories = settings.categories
-            }
-        }
-        
-        loadAll(categories)
     }
     
     const set = function (category) {
@@ -555,6 +317,36 @@ const Category = (function () {
         return detail
     }
     
+    const save = function (params) {
+    
+    }
+    
+    const get = function () {
+        let data_to_send = {}
+        
+    }
+    
+    const init = function (settings) {
+        console.log("Category.init()", settings)
+        // ----
+        
+        let categories = []
+        
+        if (settings) {
+            if (settings.categories) {
+                categories = settings.categories
+            }
+        }
+        
+        loadAll(categories)
+    }
+    
+    const initProductModal = function (settings) {
+        console.log("Category.initProductModal()", settings)
+        // ----
+        
+    }
+    
     const loadAll = function (categories) {
         console.log("Category.loadAll(categories)", categories)
         // ----
@@ -567,8 +359,6 @@ const Category = (function () {
         
         $.each(categories, function (i, category) {
             let detail = set(category)
-            //console.log("detail", detail)
-            //console.log("detail.id", detail.id)
             Category.all.set(detail.id, detail)
         })
         
@@ -590,6 +380,9 @@ const Category = (function () {
         },
         init: function (settings) {
             init(settings)
+        },
+        initProductModal: function (settings) {
+            initProductModal(settings)
         },
     }
     

@@ -91,9 +91,15 @@ const Unit = (function () {
     
     $(_product_edit_unit_form_clear_button)
         .on("click", function () {
+            console.log("Unit.product_edit_unit_form_clear_button:click()")
+            // ----
+            
             resetForm()
+            
             $table_unit_product_edit.clearSelectedRows()
+            
             _product_edit_unit_form_unit_name_filter.value = ""
+            
             _product_edit_unit_form_unit_name_filter.disabled = false
             _product_edit_unit_form_unit_name.disabled = true
         })
@@ -101,9 +107,14 @@ const Unit = (function () {
     $(_product_edit_unit_form_close_button)
         .on("click", function () {
             console.log("Unit.product_edit_unit_form_close_button:click()")
+            // ----
+            
             resetForm()
+            
             $table_unit_product_edit.clearSelectedRows()
+            
             _product_edit_unit_form_unit_name_filter.value = ""
+            
             _product_edit_unit_form_unit_name_filter.disabled = false
             _product_edit_unit_form_unit_name.disabled = true
         })
@@ -1024,6 +1035,7 @@ const Unit = (function () {
         }
         
         let labels = document.getElementsByTagName("LABEL")
+        
         for (let i = 0; i < labels.length; i++) {
             if (labels[i].htmlFor !== '') {
                 let elem = document.getElementById(labels[i].htmlFor)

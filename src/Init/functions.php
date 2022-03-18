@@ -302,11 +302,13 @@
 		return $code;
 	}
 	
-	function buildKeywordsList(string $name = "", array $location = [], array $keywordList = [])
+	function buildKeywordsList(string $name = "", array $location = [], array $keywordList = []): string
 	{
+		/*
 		Log::$debug_log->trace($name);
 		Log::$debug_log->trace($location);
 		Log::$debug_log->trace($keywordList);
+		//*/
 		$keywords = [];
 		$temp = [];
 		
@@ -327,6 +329,7 @@
 		$cleanedProvinceISO2Parsed = explode(" ", $provinceISO2);
 		$cleanedProvinceISO3Parsed = explode(" ", $provinceISO3);
 		$cleanedCityNameParsed = explode(" ", $cityName);
+		
 		/*
 		echo "<pre>" . var_export($cleanedNameParsed, 1) . "</pre>";
 		echo "<pre>" . var_export($cleanedCountryNameParsed, 1) . "</pre>";
@@ -339,66 +342,100 @@
 		//*/
 		
 		foreach ($keywordList AS $keyword) {
-			if ($keyword !== "" && !is_null($keyword)) {
+			if ($keyword !== "" && !is_null($keyword) && strlen($keyword) > 1) {
 				$temp[$keyword] = $keyword;
 			}
 		}
 		
 		foreach ($cleanedNameParsed AS $keyword) {
-			if ($keyword !== "" && !is_null($keyword)) {
+			if ($keyword !== "" && !is_null($keyword) && strlen($keyword) > 1) {
 				$temp[$keyword] = $keyword;
 			}
 		}
 		
 		foreach ($cleanedCountryNameParsed AS $keyword) {
-			if ($keyword !== "" && !is_null($keyword)) {
+			if ($keyword !== "" && !is_null($keyword) && strlen($keyword) > 1) {
 				$temp[$keyword] = $keyword;
 			}
 		}
 		
 		foreach ($cleanedCountryISO2Parsed AS $keyword) {
-			if ($keyword !== "" && !is_null($keyword)) {
+			if ($keyword !== "" && !is_null($keyword) && strlen($keyword) > 1) {
 				$temp[$keyword] = $keyword;
 			}
 		}
 		
 		foreach ($cleanedCountryISO3Parsed AS $keyword) {
-			if ($keyword !== "" && !is_null($keyword)) {
+			if ($keyword !== "" && !is_null($keyword) && strlen($keyword) > 1) {
 				$temp[$keyword] = $keyword;
 			}
 		}
 		
 		foreach ($cleanedProvinceNameParsed AS $keyword) {
-			if ($keyword !== "" && !is_null($keyword)) {
+			if ($keyword !== "" && !is_null($keyword) && strlen($keyword) > 1) {
 				$temp[$keyword] = $keyword;
 			}
 		}
 		
 		foreach ($cleanedProvinceISO2Parsed AS $keyword) {
-			if ($keyword !== "" && !is_null($keyword)) {
+			if ($keyword !== "" && !is_null($keyword) && strlen($keyword) > 1) {
 				$temp[$keyword] = $keyword;
 			}
 		}
 		
 		foreach ($cleanedProvinceISO2Parsed AS $keyword) {
-			if ($keyword !== "" && !is_null($keyword)) {
+			if ($keyword !== "" && !is_null($keyword) && strlen($keyword) > 1) {
 				$temp[$keyword] = $keyword;
 			}
 		}
 		
 		foreach ($cleanedCityNameParsed AS $keyword) {
-			if ($keyword !== "" && !is_null($keyword)) {
+			if ($keyword !== "" && !is_null($keyword) && strlen($keyword) > 1) {
 				$temp[$keyword] = $keyword;
 			}
 		}
 		
 		foreach ($temp AS $keyword) {
-			if ($keyword !== "" && !is_null($keyword)) {
+			if ($keyword !== "" && !is_null($keyword) && strlen($keyword) > 1) {
 				$keywords[] = $keyword;
 			}
 		}
 		
 		return implode(",", $keywords);
 	}
+	
+	function stringValue($obj = null): string
+	{
+		$ret = "";
+		
+		if (isset($obj)) {
+			$type = gettype($obj);
+			
+			switch ($type) {
+				case "boolean":
+					$ret = ($obj === true) ? "true" : "false";
+					break;
+				case "double":
+				case "integer":
+					$ret = "$obj";
+					break;
+				case "array":
+					$ret = json_encode($obj, 1);
+					break;
+				case "object":
+					$ret = print_r($obj, true);
+					break;
+				case "string":
+					$ret = $obj;
+					break;
+				default:
+					$ret = $type;
+			}
+		}
+		
+		return $ret;
+	}
+	
+	
 	
 	

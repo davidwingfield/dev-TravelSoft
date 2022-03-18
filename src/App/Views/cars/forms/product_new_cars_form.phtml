@@ -1,92 +1,53 @@
-<?php
-	if (!isset($page_data)) {
-		$page_data = [];
-	}
+<fieldset id="modal_product_cars_fields" data-categoryid="3" class="fieldset-dark">
+	<legend class="">
+		<h6>Car Fields</h6>
+	</legend>
 	
-	$currency = [];
-	if (isset($page_data["types"]["currency"])) {
-		$currency = $page_data["types"]["currency"];
-	}
-	
-	$pricing_strategies = [];
-	if (isset($page_data["types"]["pricing_strategy_types"])) {
-		$pricing_strategies = $page_data["types"]["pricing_strategy_types"];
-	}
-	
-	$categories = [];
-	if (isset($page_data["types"]["category"])) {
-		$categories = $page_data["types"]["category"];
-	}
-	
-	$rating_types = [];
-	if (isset($page_data["types"]["rating_types"])) {
-		$rating_types = $page_data["types"]["rating_types"];
-	}
-	
-	$airport_types = [];
-	if (isset($page_data["types"]["airport_types"])) {
-		$airport_types = $page_data["types"]["airport_types"];
-	}
-?>
-
-<div data-categoryid="3" class="row">
-	<div class="col-12 px-2">
-		<div class="card card-body m-1 p-1 border-1 border-light">
-			<div class="p-2">
-				<h5 class="card-title">
-					<span>Car Fields</span>
-				</h5>
-				<h6 class="card-subtitle mb-2 text-muted">Additional Product Fields</h6>
-			</div>
-			<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
-			
-			<div class="row">
-				
-				<div class="col-12 col-md-8">
-					<div class="form-element">
-						<label for="modal_product_country_cars">Country:</label>
-						<input type="search" id="modal_product_country_cars" name="modal_product_country_cars" class="form-control"/>
-						<div id="modal_product_country_cars-error" class="error w-100 text-center"></div>
-					</div>
-				</div>
-			
-			</div>
-			
-			<div id="form_new_country" class="card card-body m-2 p-2 grey lighten-3 form-new-country">
-				<h5 class="card-title">Country Details</h5>
-				<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
-				
-				<div class="row">
-					<div class="col-lg-4 mb-1">
-						<div class="form-element">
-							<label for="country_name" class="active">Name:</label>
-							<input id="country_name" name="country_name" type="text" class="form-control" aria-invalid="false">
-							<div id="country_name-error" class="error w-100 text-center"></div>
-						</div>
-					</div>
-					<div class="col-lg-4 mb-1">
-						<div class="form-element"><label for="country_iso2">ISO2:</label><input id="country_iso2" name="country_iso2" type="text" maxlength="2" class="form-control ">
-							<div id="country_iso2-error" class="error w-100 text-center"></div>
-						</div>
-					</div>
-					<div class="col-lg-4 mb-1">
-						<div class="form-element"><label for="country_iso3">ISO3:</label>
-							<input id="country_iso3" name="country_iso3" type="text" maxlength="3" class="form-control ">
-							<div id="country_iso3-error" class="error w-100 text-center"></div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-6 mb-1 text-left">
-					
-					</div>
-					<div class="col-6 mb-1 text-right">
-						<button type="button" id="new_country_cancel_button" class="btn btn-outline-danger btn-sm white waves-effect waves-light">cancel</button>
-						<button type="button" id="new_country_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">save</button>
-					</div>
-				</div>
-			</div>
+	<div class="row">
 		
+		<div class="col-12 col-md-8">
+			<div class="form-element">
+				<label for="modal_product_country_cars">Country:</label>
+				<input type="search" id="modal_product_country_cars" name="modal_product_country_cars" class="form-control"/>
+				<div id="modal_product_country_cars-error" class="error w-100 text-center"></div>
+			</div>
+		</div>
+	
+	</div>
+	
+	<div id="form_new_country" class="card card-body m-2 p-2 grey lighten-3 form-new-country">
+		<h5 class="card-title">Country Details</h5>
+		<hr class="ml-3 mr-3 mt-1 mb-3 color-dark"/>
+		
+		<div class="row">
+			<div class="col-lg-4 mb-1">
+				<div class="form-element">
+					<label for="country_name" class="active">Name:</label>
+					<input id="country_name" name="country_name" type="text" class="form-control" aria-invalid="false">
+					<div id="country_name-error" class="error w-100 text-center"></div>
+				</div>
+			</div>
+			<div class="col-lg-4 mb-1">
+				<div class="form-element"><label for="country_iso2">ISO2:</label><input id="country_iso2" name="country_iso2" type="text" maxlength="2" class="form-control ">
+					<div id="country_iso2-error" class="error w-100 text-center"></div>
+				</div>
+			</div>
+			<div class="col-lg-4 mb-1">
+				<div class="form-element"><label for="country_iso3">ISO3:</label>
+					<input id="country_iso3" name="country_iso3" type="text" maxlength="3" class="form-control ">
+					<div id="country_iso3-error" class="error w-100 text-center"></div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-6 mb-1 text-left">
+			
+			</div>
+			<div class="col-6 mb-1 text-right">
+				<button type="button" id="new_country_cancel_button" class="btn btn-outline-danger btn-sm white waves-effect waves-light">cancel</button>
+				<button type="button" id="new_country_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">save</button>
+			</div>
 		</div>
 	</div>
-</div>
+
+</fieldset>

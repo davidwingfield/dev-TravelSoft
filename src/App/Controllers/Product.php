@@ -181,11 +181,16 @@
 			$data["buttons"] = array(
 				self::$buttons["new"],
 			);
+			
 			$results = ProductModel::get();
+			$airports = Airport::get();
+			$stations = Station::get();
+			
 			foreach ($results AS $k => $product) {
 				$products[] = self::format($product);
 			}
-			$stations = Station::get();
+			
+			$data["airports"] = $airports;
 			$data["stations"] = $stations;
 			$data["products"] = $products;
 			
@@ -291,74 +296,15 @@
 			exit(0);
 		}
 		
-		public static function assignSeason(array $params = []): void
+		public static function autocomplete(array $params = []): array
 		{
-			$results = ProductModel::updateAssignSeasons($params);
-			
-			/**
-			 * render results json page
-			 */
-			header("Content-type:application/json");
-			View::render_json($results);
-			exit(0);
-		}
-		
-		public static function assignProfile(array $params = []): void
-		{
-			$results = [];
-			
-			if (isset($params["params"])) {
-				$params = $params["params"];
+			if (!isset($params["category_id"])) {
+				return [];
 			}
+			$st = (isset($params["st"])) ? $params["st"] : "";
+			$category_id = (isset($params["category_id"])) ? (int)$params["category_id"] : null;
 			
-			foreach ($params AS $key => $profile) {
-				
-				$data = array(
-					"product_id" => (int)$profile["product_id"],
-					"profile_id" => (int)$profile["profile_id"],
-					"unit_id" => (int)$profile["unit_id"],
-					"description" => (isset($profile["description"])) ? (string)$profile["description"] : null,
-					"note" => (isset($profile["note"])) ? (string)$profile["note"] : null,
-					"enabled" => (isset($profile["enabled"])) ? (int)$profile["enabled"] : 1,
-					"quantity_released" => (isset($profile["quantity_released"])) ? (int)$profile["quantity_released"] : 0,
-					"quantity_used" => (isset($profile["quantity_used"])) ? (int)$profile["quantity_used"] : 0,
-					"days" => $profile["days"],
-				);
-				
-				$results[] = ProductModel::updateAssignProfiles($data);
-			}
-			
-			/**
-			 * render results json page
-			 */
-			header("Content-type:application/json");
-			View::render_json($results);
-			exit(0);
-		}
-		
-		public static function serveTableUpdate(array $params = []): void
-		{
-			$input = filter_input_array(INPUT_POST);
-			
-			/**
-			 * render results page
-			 */
-			header("Content-type:application/json");
-			View::render_json($input);
-			exit(0);
-		}
-		
-		public static function get(int $product_id = null): array
-		{
-			$products = [];
-			
-			$results = self::getProductByProductId($product_id);
-			
-			foreach ($results AS $k => $product) {
-				$products[] = self::format($product);
-			}
-			
-			return $products;
+			return self::format_ac(ProductModel::product_ac($st, (int)$category_id));
 		}
 		
 		public static function serveGet(array $params = []): void
@@ -377,56 +323,6 @@
 			exit(0);
 		}
 		
-		public static function autocomplete(array $params = []): array
-		{
-			if (!isset($params["category_id"])) {
-				return [];
-			}
-			$st = (isset($params["st"])) ? $params["st"] : "";
-			$category_id = (isset($params["category_id"])) ? (int)$params["category_id"] : null;
-			
-			return self::format_ac(ProductModel::product_ac($st, (int)$category_id));
-		}
-		
-		private static function format_ac(array $products = []): array
-		{
-			$data["suggestions"] = [];
-			foreach ($products AS $k => $product) {
-				$l = (object)$product;
-				$value = utf8_encode($l->product_name);
-				array_push($data["suggestions"], [
-					"value" => utf8_encode($value),
-					"data" => self::format($product),
-				]);
-			}
-			
-			return $data;
-		}
-		
-		public static function getLocationType(int $id = null): int
-		{
-			switch ($id) {
-				case 1:
-					return 2;
-				case 2:
-					return 3;
-				case 3:
-					return 18;
-				case 4:
-					return 4;
-				case 5:
-					return 6;
-				case 6:
-					return 17;
-				case 7:
-					return 19;
-				case 8:
-					return 20;
-				default:
-					return 1;
-			}
-		}
-		
 		public static function serveAdd(array $params = []): void
 		{
 			if (!isset($params["name"]) || !isset($params["category_id"]) || !isset($params["pricing_strategy_types_id"])) {
@@ -436,18 +332,37 @@
 			}
 			
 			$statusTypesId = 1;
+			$productId = (isset($params["id"])) ? (int)$params["id"] : null;
 			$cityId = (isset($params["city_id"])) ? (int)$params["city_id"] : null;
+			$ratingsTypesId = (isset($params["rating_types_id"])) ? (int)$params["rating_types_id"] : 3;
 			$categoryId = (isset($params["category_id"])) ? (int)$params["category_id"] : null;
-			$productName = (isset($params["name"])) ? $params["name"] : null;
+			$currencyId = (isset($params["currency_id"])) ? (int)$params["currency_id"] : 5;
 			$pricingStrategyTypesId = (isset($params["pricing_strategy_types_id"])) ? (int)$params["pricing_strategy_types_id"] : null;
 			$providerId = (isset($params["provider_id"])) ? (int)$params["provider_id"] : null;
 			$vendorId = (isset($params["vendor_id"])) ? (int)$params["vendor_id"] : null;
+			$locationTypesId = self::getLocationType($categoryId);
+			$productName = (isset($params["name"])) ? $params["name"] : null;
 			$sku = (isset($params["sku"])) ? $params["sku"] : null;
 			$productStreet1 = (isset($params["street_1"])) ? $params["street_1"] : null;
 			$productStreet2 = (isset($params["street_2"])) ? $params["street_2"] : null;
-			$productPostalCode = (isset($params["postal_code"])) ? $params["postal_code"] : null;;
-			$locationTypesId = self::getLocationType($categoryId);
-			
+			$productPostalCode = (isset($params["postal_code"])) ? $params["postal_code"] : null;
+			$providerVendorMatch = (isset($params["provider_vendor_match"])) ? (int)$params["provider_vendor_match"] : 1;
+			$productDaySpan = (isset($params["depart_from"])) ? (int)$params["depart_from"] : 1;
+			$productDepartFrom = (isset($params["depart_from"])) ? (int)$params["depart_from"] : null;
+			$productDepartFromDate = (isset($params["depart_date"])) ? $params["depart_date"] : null;
+			$productDepartFromTime = (isset($params["depart_time"])) ? $params["depart_time"] : null;
+			$productArriveTo = (isset($params["arrive_to"])) ? (int)$params["arrive_to"] : null;
+			$productArriveToDate = (isset($params["arrive_date"])) ? $params["arrive_date"] : null;
+			$productArriveToTime = (isset($params["arrive_time"])) ? $params["arrive_time"] : null;
+			$productFromApi = (isset($params["from_api"])) ? (int)$params["from_api"] : 0;
+			$productUseProviderLocationId = (isset($params["use_provider_location_id"])) ? $params["use_provider_location_id"] : 0;
+			$productDescriptionShort = (isset($params["description_short"])) ? $params["description_short"] : null;
+			$productDescriptionLong = (isset($params["description_long"])) ? $params["description_long"] : null;
+			$keywords = (isset($params["keywords"])) ? $params["keywords"] : "";
+			$countryId = (isset($params["country_id"])) ? (int)$params["country_id"] : null;
+			$provinceId = (isset($params["province_id"])) ? (int)$params["province_id"] : null;
+			$productApiId = (isset($params["api_id"])) ? (int)$params["api_id"] : null;
+			$productEnabled = (isset($params["enabled"])) ? (int)$params["enabled"] : 1;
 			$locationData = array(
 				"category_id" => $categoryId,
 				"name" => $productName,
@@ -458,6 +373,7 @@
 				"zipcode" => $productPostalCode,
 				"enabled" => 1,
 			);
+			$productKeywords = [];
 			
 			switch ($categoryId) {
 				
@@ -589,25 +505,75 @@
 					);
 			}
 			
-			$products = array(
+			if (isset($locationData) && isset($locationData[0])) {
+				$locationData = $locationData[0];
+			}
+			
+			$locationId = (isset($locationData["id"])) ? (int)$locationData["id"] : 1;
+			
+			if (gettype($keywords) == "string") {
+				$temp = explode(",", $keywords);
+				
+				foreach ($temp AS $k => $keyWord) {
+					if ($keyWord !== "") {
+						$productKeywords[] = $keyWord;
+					}
+				}
+			} else if (gettype($keywords) == "array") {
+				$productKeywords = $keywords;
+			} else {
+				$productKeywords = [];
+			}
+			
+			$keywords = buildKeywordsList($productName, $locationData, $productKeywords);
+			
+			//Log::$debug_log->trace($keywords);
+			//Log::$debug_log->trace($productKeywords);
+			
+			$params = array(
+				"category_id" => $categoryId,
+				"pricing_strategy_types_id" => $pricingStrategyTypesId,
+				"status_types_id" => $statusTypesId,
+				
+				"currency_id" => $currencyId,
+				"location_id" => $locationId,
+				"provider_id" => $providerId,
+				"vendor_id" => $vendorId,
+				"rating_types_id" => $ratingsTypesId,
+				"api_id" => $productApiId,
 				"name" => $productName,
 				"sku" => $sku,
 				
-				"category_id" => $categoryId,
-				"status_types_id" => $statusTypesId,
-				"pricing_strategy_types_id" => $pricingStrategyTypesId,
-				"provider_id" => $providerId,
-				"vendor_id" => $vendorId,
+				"street_1" => $productStreet1,
+				"street_2" => $productStreet2,
+				"country_id" => $countryId,
+				"province_id" => $provinceId,
+				"city_id" => $cityId,
+				"postal_code" => $productPostalCode,
 				
+				"day_span" => $productDaySpan,
+				"depart_from" => $productDepartFrom,
+				"depart_date" => $productDepartFromDate,
+				"depart_time" => $productDepartFromTime,
+				"arrive_to" => $productArriveTo,
+				"arrive_date" => $productArriveToDate,
+				"arrive_time" => $productArriveToTime,
+				"from_api" => $productFromApi,
+				"provider_vendor_match" => $providerVendorMatch,
+				"use_provider_location_id" => $productUseProviderLocationId,
+				"enabled" => $productEnabled,
+				
+				"description_short" => $productDescriptionShort,
+				"description_long" => $productDescriptionLong,
+				"keywords" => $keywords,
 				"location" => $locationData,
 			);
 			
-			/**
-			 * render product json
-			 */
-			header("Content-type:application/json");
-			View::render_json($locationData);
-			exit(0);
+			if (!is_null($productId)) {
+				$params["id"] = $productId;
+			}
+			
+			$products = array();
 			
 			$results = ProductModel::addRecord($params);
 			
@@ -620,6 +586,47 @@
 			 */
 			header("Content-type:application/json");
 			View::render_json($products);
+			exit(0);
+			
+		}
+		
+		public static function serveUpdateDetail(array $params = []): void
+		{
+			//Log::$debug_log->info("Product::serveUpdateMeta(params)");
+			//Log::$debug_log->trace($params);
+			$products = self::updateDetail($params);
+			//Log::$debug_log->trace($products);
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			View::render_json($products);
+			exit(0);
+		}
+		
+		public static function serveUpdateMeta(array $params = []): void
+		{
+			//Log::$debug_log->info("serveUpdateMeta(params)");
+			//Log::$debug_log->trace($params);
+			$products = self::updateMeta($params);
+			//Log::$debug_log->trace($products);
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			View::render_json($products);
+			exit(0);
+		}
+		
+		public static function serveTableUpdate(array $params = []): void
+		{
+			$input = filter_input_array(INPUT_POST);
+			
+			/**
+			 * render results page
+			 */
+			header("Content-type:application/json");
+			View::render_json($input);
 			exit(0);
 		}
 		
@@ -639,6 +646,88 @@
 			header("Content-type:application/json");
 			View::render_json($products);
 			exit(0);
+		}
+		
+		public static function assignSeason(array $params = []): void
+		{
+			$results = ProductModel::updateAssignSeasons($params);
+			
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			View::render_json($results);
+			exit(0);
+		}
+		
+		public static function assignProfile(array $params = []): void
+		{
+			$results = [];
+			
+			if (isset($params["params"])) {
+				$params = $params["params"];
+			}
+			
+			foreach ($params AS $key => $profile) {
+				
+				$data = array(
+					"product_id" => (int)$profile["product_id"],
+					"profile_id" => (int)$profile["profile_id"],
+					"unit_id" => (int)$profile["unit_id"],
+					"description" => (isset($profile["description"])) ? (string)$profile["description"] : null,
+					"note" => (isset($profile["note"])) ? (string)$profile["note"] : null,
+					"enabled" => (isset($profile["enabled"])) ? (int)$profile["enabled"] : 1,
+					"quantity_released" => (isset($profile["quantity_released"])) ? (int)$profile["quantity_released"] : 0,
+					"quantity_used" => (isset($profile["quantity_used"])) ? (int)$profile["quantity_used"] : 0,
+					"days" => $profile["days"],
+				);
+				
+				$results[] = ProductModel::updateAssignProfiles($data);
+			}
+			
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			View::render_json($results);
+			exit(0);
+		}
+		
+		public static function get(int $product_id = null): array
+		{
+			$products = [];
+			
+			$results = self::getProductByProductId($product_id);
+			
+			foreach ($results AS $k => $product) {
+				$products[] = self::format($product);
+			}
+			
+			return $products;
+		}
+		
+		public static function getLocationType(int $id = null): int
+		{
+			switch ($id) {
+				case 1:
+					return 2;
+				case 2:
+					return 3;
+				case 3:
+					return 18;
+				case 4:
+					return 4;
+				case 5:
+					return 6;
+				case 6:
+					return 17;
+				case 7:
+					return 19;
+				case 8:
+					return 20;
+				default:
+					return 1;
+			}
 		}
 		
 		public static function getProductByProductId(int $product_id = null): array
@@ -685,18 +774,13 @@
 		
 		private static function format(array $product = null): array
 		{
-			if (is_null($product)) {
+			if (is_null($product) || !isset($product["category_id"]) || !isset($product["category_id"])) {
 				return [];
 			}
 			
 			$category_id = (int)$product["category_id"];
 			$productId = (int)$product["product_id"];
-			
-			if (!isset($productId) || !isset($category_id)) {
-				return [];
-			}
-			
-			$rooms = array();
+			$rooms = [];
 			$arrivingLocation = [];
 			$departingLocation = [];
 			
@@ -707,21 +791,16 @@
 			$units = Unit::getUnitsByProductId((int)$product["product_id"]);
 			$variants = Variant::getVariantsByProductId((int)$product["product_id"]);
 			$pricings = Pricing::getPricingsByProductId((int)$product["product_id"]);
-			
+			$location = Location::getByLocationId((int)$product["product_location_id"]);
 			$provider = Provider::getByProviderId((int)$product["product_provider_id"]);
 			$provider = (isset($provider[0])) ? $provider[0] : [];
-			
 			$vendor = Vendor::getByVendorId((int)$product["product_vendor_id"]);
 			$vendor = (isset($vendor[0])) ? $vendor[0] : [];
 			
 			$use_provider_location = false;
-			
-			$location = Location::getByLocationId((int)$product["product_location_id"]);
-			
 			$street_1 = (isset($product["product_street_1"])) ? $product["product_street_1"] : null;
 			$street_2 = (isset($product["product_street_2"])) ? $product["product_street_2"] : null;
 			$zipcode = (isset($product["product_postal_code"])) ? $product["product_postal_code"] : null;
-			
 			$departingFromId = (isset($product["product_depart_from"])) ? $product["product_depart_from"] : null;
 			$arrivingToId = (isset($product["product_arrive_to"])) ? $product["product_arrive_to"] : null;
 			
@@ -859,32 +938,19 @@
 			);
 		}
 		
-		public static function serveUpdateDetail(array $params = []): void
+		private static function format_ac(array $products = []): array
 		{
-			//Log::$debug_log->info("Product::serveUpdateMeta(params)");
-			//Log::$debug_log->trace($params);
-			$products = self::updateDetail($params);
-			//Log::$debug_log->trace($products);
-			/**
-			 * render results json page
-			 */
-			header("Content-type:application/json");
-			View::render_json($products);
-			exit(0);
-		}
-		
-		public static function serveUpdateMeta(array $params = []): void
-		{
-			//Log::$debug_log->info("serveUpdateMeta(params)");
-			//Log::$debug_log->trace($params);
-			$products = self::updateMeta($params);
-			//Log::$debug_log->trace($products);
-			/**
-			 * render results json page
-			 */
-			header("Content-type:application/json");
-			View::render_json($products);
-			exit(0);
+			$data["suggestions"] = [];
+			foreach ($products AS $k => $product) {
+				$l = (object)$product;
+				$value = utf8_encode($l->product_name);
+				array_push($data["suggestions"], [
+					"value" => utf8_encode($value),
+					"data" => self::format($product),
+				]);
+			}
+			
+			return $data;
 		}
 		
 	}

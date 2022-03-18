@@ -184,14 +184,6 @@
 			}
 		}
 		
-		/**
-		 * Gets provider(s) by id
-		 * If id is passed then we search by it otherwise get all enabled
-		 *
-		 * @param int|null $id Provider Id
-		 *
-		 * @return array
-		 */
 		public static function get(int $id = null): array
 		{
 			$whereCondition = "";
@@ -217,13 +209,6 @@
 			}
 		}
 		
-		/**
-		 * fetch provider by name
-		 *
-		 * @param string $name
-		 *
-		 * @return array
-		 */
 		public static function getByName(string $name): array
 		{
 			$searchTerm = addslashes($name);
@@ -244,13 +229,6 @@
 			
 		}
 		
-		/**
-		 * fetch single object
-		 *
-		 * @param int|null $id
-		 *
-		 * @return array
-		 */
 		public static function getOne(int $id = null): array
 		{
 			try {
@@ -261,45 +239,60 @@
 				
 				return Model::$db->get("provider");
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}
 		}
 		
-		/**
-		 * autocomplete query
-		 *
-		 * @param string $st
-		 *
-		 * @return array
-		 */
 		public static function provider_ac(string $st = ""): array
 		{
+			$searchTerm = addslashes($st);
+			
+			$where = "";
+			$order = "";
+			$limit = "";
+			
+			$limitConditions = 20;
+			$whereConditions = array(
+				"COMPANY.enabled = 1",
+				"COMPANY.name LIKE '%$searchTerm%'",
+			);
+			$orderConditions = array(
+				"LENGTH(COMPANY.name)",
+				"CAST(COMPANY.name AS UNSIGNED)",
+				"COMPANY.name",
+			);
+			
+			if ((int)$limitConditions > 0) {
+				$limit = "LIMIT     " . $limitConditions;
+			}
+			
+			if (count($whereConditions) > 0) {
+				$where = "WHERE     " . implode(" AND ", $whereConditions);
+			}
+			
+			if (count($orderConditions) > 0) {
+				$order = "ORDER BY    " . implode(", ", $orderConditions);
+			}
+			
+			$sql = self::$selectQuery . "
+                    $where
+                    $order
+                    $limit;";
+			
 			try {
-				$searchTerm = addslashes($st);
-				$sql = self::$selectQuery . "
-                    AND			COMPANY.name LIKE '%$searchTerm%'
-                    ORDER BY    LENGTH(COMPANY.name), CAST(COMPANY.name AS UNSIGNED), COMPANY.name ASC
-                    LIMIT 20;";
-				
-				//Log::$debug_log->trace($sql);
 				
 				return Model::$db->rawQuery($sql);
+				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
 		}
 		
-		/**
-		 * update record
-		 *
-		 * @param array $provider
-		 *
-		 * @return array|string[]
-		 */
 		public static function updateRecord(array $provider): array
 		{
 			if (!isset($provider) || !isset($provider["location_id"])) {
@@ -375,7 +368,7 @@
 				
 				return [];
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}
@@ -390,13 +383,6 @@
 			return [];
 		}
 		
-		/**
-		 * update provider record
-		 *
-		 * @param null $provider
-		 *
-		 * @return array
-		 */
 		public static function update($provider = null): array
 		{
 			if (!isset($provider["company_id"])) {
@@ -459,7 +445,7 @@
 						return self::get((int)$provider_id);
 						
 					} catch (Exception $ex) {
-						Log::$debug_log->error($ex);
+						Log::$debug_log->error($ex->getMessage());
 						
 						return [];
 					}
@@ -469,7 +455,7 @@
 				
 				return [];
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}
@@ -477,5 +463,3 @@
 		}
 		
 	}
-
-

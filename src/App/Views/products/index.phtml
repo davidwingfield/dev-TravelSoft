@@ -58,26 +58,17 @@
 
 <!-- Product Index Page -->
 <section id="product_index_page" class="section">
-	
+	<!--
 	<div class="row gx-1">
 		<div class="col-12 p-1">
-			<?php include_once(VIEWS_PATH . "/products/forms/product_search.phtml"); ?>
+			<?php //include_once(VIEWS_PATH . "/products/forms/product_search.phtml"); ?>
 		</div>
 	</div>
+	-->
 	
-	<div class="row gx-1">
-		<div class="col-12 p-1">
-			<div class="card card-body">
-				<h5 class="card-title font-weight-bold">
-					<span>Products</span>
-					<a href="javascript:void(0);" id="product_panel_link_product" class="panel_link" aria-hidden="true">Edit</a>
-				</h5>
-				
-				<table id="product_index_table" class="table table-hover dataTable table-striped w-full dtr-inline"></table>
-			
-			</div>
-		</div>
-	</div>
+	<!-- Index Table -->
+	<?php include_once(VIEWS_PATH . "/products/tables/product_index_table.phtml"); ?>
+	<!-- /Index Table -->
 	
 	<?php //*?>
 	<!-- Test Elements -->
@@ -94,6 +85,7 @@
 	</div>
 	<!-- /Test Elements -->
 	<?php //*/ ?>
+
 </section>
 <!-- /Product Index Page -->
 
@@ -103,7 +95,19 @@
 
 <script type="text/javascript">
 	$(function () {
+	
+	})
+	
+	$("#button_add_product_page_heading")
+		.on("click", function () {
+		
+		})
+</script>
+
+<script type="text/javascript">
+	$(function () {
 		Types.init(<?php echo TYPES;?>)
 		<?php echo $init;?>
 	})
+
 </script>

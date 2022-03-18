@@ -27,28 +27,37 @@
 	if (isset($page_data["types"]["airport_types"])) {
 		$airport_types = $page_data["types"]["airport_types"];
 	}
+
 ?>
 
+<!-- New Product Modal -->
 <div class="modal fade" id="modal_new_product" tabindex="-1" role="dialog" aria-labelledby="modal_new_product" aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	
+	<div class="modal-dialog modal-lg" role="document">
+		
 		<div class="modal-content">
 			
 			<div class="modal-header">
+				
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">×</span>
 				</button>
 				
 				<h4 class="modal-title debug" id="modal_addressLabel">New Product</h4>
+			
 			</div>
 			
 			<div class="modal-body">
+				
 				<form id="form_product_add" novalidate="novalidate">
 					
-					<!-- CATEGORY DETAILS -->
+					<!-- Category Id, SKU -->
 					<div class="row">
-						<div class="col-6 p-1">
+						
+						<!-- Category Id -->
+						<div class="col-12 col-md-4">
 							<div class="form-element">
-								<label for="modal_product_category_id">Category:</label>
+								<label id="modal_product_category_id-label" for="modal_product_category_id">Category:</label>
 								<select id="modal_product_category_id" name="modal_product_category_id" class="form-control">
 									<?php
 										$options = "<option  value='' disabled selected>-- Category --</option>";
@@ -66,86 +75,340 @@
 								<div id="modal_product_category_id-error" class="error w-100 text-center"></div>
 							</div>
 						</div>
+						<!-- /Category Id -->
 						
-						<div class="col-6 p-1">
-							<div class="form-element">
-								<label for="modal_product_sku">Sku:</label>
+						<!-- SKU -->
+						<div class="col-12 col-md-4">
+							<div id="modal_product_sku-wrap" class="form-element">
+								<label id="modal_product_sku-label" for="modal_product_sku">SKU:</label>
 								<input type="text" id="modal_product_sku" name="modal_product_sku" class="form-control"/>
 								<div id="modal_product_sku-error" class="error w-100 text-center"></div>
 							</div>
 						</div>
-					</div>
-					
-					<!-- NAME DETAILS -->
-					<div class="row">
-						<div class="col-12 p-1">
-							<div class="form-element">
-								<label for="modal_product_name">Name:</label>
-								<input type="text" id="modal_product_name" name="modal_product_name" class="form-control"/>
-								<div id="modal_product_name-error" class="error w-100 text-center"></div>
+						<!-- /SKU -->
+						
+						<!-- Product Id -->
+						<div class="col-12 col-md-4">
+							<div id="modal_product_id-wrap" class="form-element">
+								<label id="modal_product_id-label" for="modal_product_id">Id:</label>
+								<input type="text" id="modal_product_id" name="modal_product_id" class="form-control"/>
+								<div id="modal_product_id-error" class="error w-100 text-center"></div>
 							</div>
 						</div>
+						<!-- /Product Id -->
+					
 					</div>
 					
-					<!-- PROVIDER VENDOR DETAILS -->
-					<div class="row">
+					<!-- Name, Provider Search, Vendor Search, Provider is also Vendor, Rating Id, Currency Id, Pricing Strategy Id -->
+					<fieldset id="modal_product_detail_fields" class="fieldset-dark my-2">
+						<legend class="mb-2">
+							<h6 class="">Detail</h6>
+						</legend>
 						
-						<!-- PROVIDER DETAILS -->
-						<div class="col-6 p-1">
-							<div class="form-element">
-								<label for="modal_product_provider_name">Provider:</label>
-								<input type="search" id="modal_product_provider_name" name="modal_product_provider_name" class="form-control"/>
-								<div id="modal_product_provider_name-error" class="error w-100 text-center"></div>
-								
-								<label for="modal_product_provider_id" class="dev-element d-none">Provider Id:</label>
-								<input type="hidden" id="modal_product_provider_id" name="modal_product_provider_id" class="form-control dev-element" placeholder="" readonly="readonly"/>
-								
-								<label for="modal_product_provider_company_id" class="dev-element d-none">Provider Company Id:</label>
-								<input type="hidden" id="modal_product_provider_company_id" name="modal_product_provider_company_id" class="form-control dev-element" placeholder="" readonly="readonly"/>
-								
-								<label for="modal_product_provider_location_id" class="dev-element d-none">Provider Location Id:</label>
-								<input type="hidden" id="modal_product_provider_location_id" name="modal_product_provider_location_id" class="dev-element form-control" placeholder="" readonly="readonly"/>
-								
-								<label for="modal_product_location_id" class="dev-element d-none">Location Id:</label>
-								<input type="hidden" id="modal_product_location_id" name="modal_product_location_id" class="form-control dev-element" placeholder="" readonly="readonly"/>
+						<!-- Name -->
+						<div class="row">
 							
-							</div>
-						</div>
-						
-						<!-- VENDOR DETAILS -->
-						<div class="col-6 p-1">
-							<div class="form-element">
-								<div class="form-element">
-									<label for="modal_product_vendor_name">Vendor:</label>
-									<input type="search" id="modal_product_vendor_name" name="modal_product_vendor_name" class="form-control"/>
-									<div id="modal_product_vendor_name-error" class="error w-100 text-center"></div>
-									
-									<label for="modal_product_vendor_id" class="dev-element d-none">Vendor Id:</label>
-									<input type="hidden" id="modal_product_vendor_id" name="modal_product_vendor_id" class="form-control dev-element" placeholder="" readonly="readonly"/>
-									<label for="modal_product_vendor_company_id" class="dev-element d-none">Vendor Company Id:</label>
-									<input type="hidden" id="modal_product_vendor_company_id" name="modal_vendor_provider_company_id" class="form-control dev-element" placeholder="" readonly="readonly"/>
-								
+							<!-- Name -->
+							<div class="col-sm-12">
+								<div id="modal_product_name-wrap" class="form-element">
+									<label for="modal_product_name" class="d-none">Name:</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+	                    <span class="input-group-text">
+	                        <i class="fas fa-search" aria-hidden="true"></i>
+	                    </span>
+										</div>
+										<input type="search" id="modal_product_name" name="modal_product_name" class="form-control" placeholder="Product Name"/>
+									</div>
+									<div id="modal_product_name-error" class="error w-100 text-center"></div>
 								</div>
 							</div>
+							<!-- /Name -->
+						
 						</div>
+						
+						<!-- Provider Search, Vendor Search -->
+						<div class="row">
+							
+							<!-- Provider Search -->
+							<div class="col-12 col-md-6">
+								<div id="modal_product_provider_name-wrap" class="form-element">
+									<label for="modal_product_provider_name" class="d-none">Provider:</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+	                    <span class="input-group-text">
+	                        <i class="fas fa-search" aria-hidden="true"></i>
+	                    </span>
+										</div>
+										<input type="search" id="modal_product_provider_name" name="modal_product_provider_name" class="form-control" placeholder="Provider"/>
+									</div>
+									<div id="modal_product_provider_name-error" class="error w-100 text-center"></div>
+								</div>
+							</div>
+							<!-- /Provider Search -->
+							
+							<!-- Vendor Search -->
+							<div class="col-12 col-md-6">
+								<div id="modal_product_vendor_name-wrap" class="form-element">
+									<label for="modal_product_vendor_name" class="d-none">Vendor:</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+	                    <span class="input-group-text">
+	                        <i class="fas fa-search" aria-hidden="true"></i>
+	                    </span>
+										</div>
+										<input type="search" id="modal_product_vendor_name" name="modal_product_vendor_name" class="form-control" placeholder="Vendor"/>
+									</div>
+									<div id="modal_product_vendor_name-error" class="error w-100 text-center"></div>
+								</div>
+							</div>
+							<!-- /Vendor Search -->
+						
+						</div>
+						
+						<!-- Provider is also Vendor -->
+						<div class="row">
+							
+							<!-- Provider is also Vendor -->
+							<div class="col-sm-12">
+								<div id="modal_product_provider_vendor_match-wrap" class="custom-control custom-checkbox custom-control-inline">
+									<input type="checkbox" id="modal_product_provider_vendor_match" name="modal_product_provider_vendor_match" class="custom-control-input">
+									<label class="custom-control-label" for="modal_product_provider_vendor_match">Provider is also Vendor</label>
+									<div id="modal_product_provider_vendor_match-error" class="error w-100 text-center"></div>
+								</div>
+							</div>
+							<!-- /Provider is also Vendor -->
+						
+						</div>
+						
+						<!-- Rating Id, Currency Id, Pricing Strategy Id -->
+						<div class="row">
+							
+							<!-- Rating Id -->
+							<div class="col-12 col-md-4">
+								<div id="modal_product_rating_types_id-wrap" class="form-element">
+									<label id="modal_product_rating_types_id-label" for="modal_product_rating_types_id" class="d-none">Rating:</label>
+									<select id="modal_product_rating_types_id" name="modal_product_rating_types_id" class="form-control">
+										<?php
+											$options = "<option  value='' disabled selected>-- Rating --</option>";
+											foreach ($rating_types AS $k => $value) {
+												$name = $value["name"];
+												$val = $value["id"];
+												$options .= "<option value='$val'>$name</option>";
+											}
+											echo $options;
+										?>
+									</select>
+									<div id="modal_product_rating_types_id-error" class="error w-100 text-center"></div>
+								</div>
+							</div>
+							<!-- /Rating Id -->
+							
+							<!-- Currency Id -->
+							<div class="col-12 col-md-4">
+								<div id="modal_product_currency_id-wrap" class="form-element">
+									<label for="modal_product_currency_id" class="d-none">Currency:</label>
+									<select id="modal_product_currency_id" name="modal_product_currency_id" class="form-control">
+										<?php
+											$options = "<option  value='' disabled selected>-- Currency --</option>";
+											foreach ($currency AS $k => $value) {
+												$name = $value["name"];
+												$val = $value["id"];
+												$options .= "<option value='$val'>$name</option>";
+											}
+											echo $options;
+										?>
+									</select>
+									<div id="modal_product_currency_id-error" class="error w-100 text-center"></div>
+								</div>
+							</div>
+							<!-- /Currency Id -->
+							
+							<!-- Pricing Strategy Id -->
+							<div class="col-12 col-md-4">
+								<div id="modal_product_pricing_strategies_types_id-wrap" class="form-element">
+									<label for="modal_product_pricing_strategies_types_id" class="d-none">Pricing Strategy:</label>
+									<select id="modal_product_pricing_strategies_types_id" name="modal_product_pricing_strategies_types_id" class="form-control">
+										<?php
+											$options = "<option  value='' disabled selected>-- Pricing Strategy --</option>";
+											foreach ($pricing_strategies AS $k => $value) {
+												$name = $value["name"];
+												$val = $value["id"];
+												$options .= "<option value='$val'>$name</option>";
+											}
+											echo $options;
+										?>
+									</select>
+									<div id="modal_product_pricing_strategies_types_id-error" class="error w-100 text-center"></div>
+								</div>
+							</div>
+							<!-- /Pricing Strategy Id -->
+						
+						</div>
+						<!-- /Rating Id, Currency Id, Pricing Strategy Id -->
 					
-					</div>
+					</fieldset>
+					<!-- /Name, Provider Search, Vendor Search, Provider is also Vendor, Rating Id, Currency Id, Pricing Strategy Id -->
 					
-					<!-- PROVIDER IS VENDOR DETAILS -->
+					<!-- Description Short, Description Long, Keywords -->
+					<fieldset id="modal_product_meta_fields" class="fieldset-dark my-2">
+						<legend class="mb-2">
+							<h6 class="">Meta</h6>
+						</legend>
+						
+						<!-- Description Short, Description Long -->
+						<div class="row">
+							
+							<!-- Description Short -->
+							<div class="col-12 col-md-6">
+								<section class="card card-body mb-2">
+									<div class="d-flex justify-content-between">
+										<h5 class="card-title label">Brief Description:</h5>
+									</div>
+									<!--<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">-->
+									<div class="row">
+										<div class="col-12">
+											<div class="form-element">
+												<label for="modal_product_description_short" class="d-none">Short Description</label>
+												<textarea id="modal_product_description_short" name="modal_product_description_short" class="md-textarea short-description form-control" rows="4" maxlength="250"></textarea>
+												<div id="modal_product_description_short-error" class="error w-100 text-center">&nbsp;</div>
+											</div>
+										</div>
+									</div>
+								</section>
+							</div>
+							<!-- /Description Short -->
+							
+							<!-- Description Long -->
+							<div class="col-12 col-md-6">
+								<section class="card card-body mb-2">
+									<div class="d-flex justify-content-between">
+										<h5 class="card-title label">Detailed Description:</h5>
+										<a id="button_modal_product_description_long_toggle" class="but_toggle waves-effect waves-light" data-texted="modal_product_description_long">
+											<i class="fas fa-sliders-h"></i>
+										</a>
+									</div>
+									<!--<hr class="ml-3 mr-3 mt-1 mb-3 color-dark">-->
+									<div class="row">
+										
+										<div class="col-12">
+											<div class="form-element">
+												<label for="modal_product_description_long" class="d-none">Detailed Description:</label>
+												<textarea id="modal_product_description_long" name="modal_product_description_long" class="md-textarea tmceEl form-control" rows="4"></textarea>
+												<div id="modal_product_description_long-error" class="error w-100 text-center">&nbsp;</div>
+											</div>
+										</div>
+									
+									</div>
+								</section>
+							</div>
+							<!-- /Description Long -->
+						
+						</div>
+						<!-- /Description Short, Description Long -->
+						
+						<!-- Keywords -->
+						<div class="row">
+							
+							<!-- Keywords -->
+							<div class="col-sm-12">
+								<section id="modal_product_keywords" class="card card-body mb-2 keyword">
+									<label for="modal_product_keywords_search" class="d-none">Keywords:</label>
+									<input class="user-release-input form-control form-control-lg" id="modal_product_keywords_search" type="text" placeholder="Keywords..."/>
+									<div id="modal_product_keywords_container" class="w-100 my-2 chips_container"></div>
+								</section>
+							</div>
+							<!-- /Keywords -->
+						
+						</div>
+						<!-- /Keywords -->
+					
+					</fieldset>
+					<!-- /Description Short, Description Long, Keywords -->
+					
+					<!-- HIDDEN: Day Span, Vendor Id,  Vendor Company Id, Provider Id, Provider Company Id, Provider Location Id, Location Id, Country Id, Province Id, City Id -->
 					<div class="row">
 						
-						<div class="col-12 p-1">
-							<div class="custom-control custom-checkbox custom-control-inline">
-								<input type="checkbox" class="custom-control-input" id="modal_product_provider_vendor_match" name="modal_product_provider_vendor_match">
-								<label class="custom-control-label" for="modal_product_provider_vendor_match">Provider is also Vendor</label>
-							</div>
+						<!-- Day Span -->
+						<div class="col-4 col-md-4 px-1">
+							<label id="modal_product_day_span-label" for="modal_product_day_span" class="dev-element d-none">Day Span:</label>
+							<input type="hidden" id="modal_product_day_span" min="1" name="modal_product_day_span" class="form-control dev-element" placeholder="" readonly="readonly"/>
 						</div>
+						<!-- /Day Span -->
+						
+						<!-- Vendor Id -->
+						<div class="col-4 col-md-4 px-1">
+							<label id="modal_product_vendor_id-label" for="modal_product_vendor_id" class="dev-element d-none">Vendor Id:</label>
+							<input type="hidden" id="modal_product_vendor_id" name="modal_product_vendor_id" class="form-control dev-element" placeholder="" readonly="readonly"/>
+						</div>
+						<!-- /Vendor Id -->
+						
+						<!--  Vendor Company Id -->
+						<div class="col-4 col-md-4 px-1">
+							<label id="modal_product_vendor_company_id-label" for="modal_product_vendor_company_id" class="dev-element d-none">Vendor Company Id:</label>
+							<input type="hidden" id="modal_product_vendor_company_id" name="modal_product_vendor_company_id" class="form-control dev-element" placeholder="" readonly="readonly"/>
+						</div>
+						<!-- /Vendor Company Id -->
+						
+						<!-- Provider Id -->
+						<div class="col-4 col-md-4 px-1">
+							<label id="modal_product_provider_id-label" for="modal_product_provider_id" class="dev-element d-none">Provider Id:</label>
+							<input type="hidden" id="modal_product_provider_id" name="modal_product_provider_id" class="form-control dev-element" placeholder="" readonly="readonly"/>
+						</div>
+						<!-- /Provider Id -->
+						
+						<!-- Provider Company Id -->
+						<div class="col-4 col-md-4 px-1">
+							<label id="modal_product_provider_company_id-label" for="modal_product_provider_company_id" class="dev-element d-none">Provider Company Id:</label>
+							<input type="hidden" id="modal_product_provider_company_id" name="modal_product_provider_company_id" class="form-control dev-element" placeholder="" readonly="readonly"/>
+						</div>
+						<!-- /Provider Company Id -->
+						
+						<!-- Provider Location Id -->
+						<div class="col-4 col-md-4 px-1">
+							<label id="modal_product_provider_location_id-label" for="modal_product_provider_location_id" class="dev-element d-none">Provider Location Id:</label>
+							<input type="hidden" id="modal_product_provider_location_id" name="modal_product_provider_location_id" class="dev-element form-control" placeholder="" readonly="readonly"/>
+						</div>
+						<!-- /Provider Location Id -->
+						
+						<!-- Location Id -->
+						<div class="col-4 col-md-4 px-1">
+							<label id="modal_product_location_id-label" for="modal_product_location_id" class="dev-element d-none">Location Id:</label>
+							<input type="hidden" id="modal_product_location_id" name="modal_product_location_id" class="form-control dev-element" placeholder="" readonly="readonly"/>
+						</div>
+						<!-- /Location Id -->
+						
+						<!-- Country Id -->
+						<div class="col-4 col-md-4 px-1">
+							<label id="modal_product_country_id-label" for="modal_product_country_id" class="dev-element d-none">Country Id:</label>
+							<input type="hidden" id="modal_product_country_id" name="modal_product_country_id" class="form-control dev-element" value="" readonly="readonly"/>
+						</div>
+						<!-- /Country Id -->
+						
+						<!-- Province Id -->
+						<div class="col-4 col-md-4 px-1">
+							<label id="modal_product_province_id-label" for="modal_product_province_id" class="dev-element d-none">Province Id:</label>
+							<input type="hidden" id="modal_product_province_id" name="modal_product_province_id" class="form-control dev-element" value="" readonly="readonly"/>
+						</div>
+						<!-- /Province Id -->
+						
+						<!-- City Id -->
+						<div class="col-4 col-md-4 px-1">
+							<label id="modal_product_city_id-label" for="modal_product_city_id" class="dev-element d-none">City Id:</label>
+							<input type="hidden" id="modal_product_city_id" name="modal_product_city_id" class="form-control dev-element" value="" readonly="readonly"/>
+						</div>
+						<!-- /City Id -->
 					
 					</div>
+					<!-- /HIDDEN -->
 					
 					<!-- Hotel -->
 					<?php include_once(VIEWS_PATH . "/hotels/forms/product_new_hotel_form.phtml"); ?>
 					<!-- /Hotel -->
+					
+					<!-- Transport -->
+					<?php include_once(VIEWS_PATH . "/transports/forms/product_new_transports_form.phtml"); ?>
+					<!-- /Transport -->
 					
 					<!-- Airport -->
 					<?php include_once(VIEWS_PATH . "/airports/forms/product_new_airport_form.phtml"); ?>
@@ -159,99 +422,12 @@
 					<?php include_once(VIEWS_PATH . "/cars/forms/product_new_cars_form.phtml"); ?>
 					<!-- /Car -->
 					
-					<!-- Transport -->
-					<?php include_once(VIEWS_PATH . "/transports/forms/product_new_transports_form.phtml"); ?>
-					<!-- /Transport -->
-					
 					<!-- Tours -->
 					<?php include_once(VIEWS_PATH . "/tours/forms/product_new_tours_form.phtml"); ?>
 					<!-- /Tours -->
-					
-					<!-- Rating Id, Currency Id, Pricing Strategy Id -->
-					<div class="row">
-						
-						<!-- Rating Id -->
-						<div class="col-12 col-md-4 p-1">
-							<div class="form-element">
-								<label for="modal_product_rating_types_id">Rating:</label>
-								<select id="modal_product_rating_types_id" name="modal_product_rating_types_id" class="form-control">
-									<?php
-										$options = "<option  value='' disabled selected>-- Rating --</option>";
-										foreach ($rating_types AS $k => $value) {
-											$name = $value["name"];
-											$val = $value["id"];
-											$options .= "<option value='$val'>$name</option>";
-										}
-										echo $options;
-									?>
-								</select>
-								<div id="modal_product_rating_types_id-error" class="error w-100 text-center"></div>
-							</div>
-						</div>
-						<!-- /Rating Id -->
-						
-						<!-- Currency Id -->
-						<div class="col-12 col-md-4 p-1">
-							<div class="form-element">
-								<label for="modal_product_currency_id">Currency:</label>
-								<select id="modal_product_currency_id" name="modal_product_currency_id" class="form-control">
-									<?php
-										$options = "<option  value='' disabled selected>-- Currency --</option>";
-										foreach ($currency AS $k => $value) {
-											$name = $value["name"];
-											$val = $value["id"];
-											$options .= "<option value='$val'>$name</option>";
-										}
-										echo $options;
-									?>
-								</select>
-								<div id="modal_product_currency_id-error" class="error w-100 text-center"></div>
-							</div>
-						</div>
-						<!-- /Currency Id -->
-						
-						<!-- Pricing Strategy Id -->
-						<div class="col-12 col-md-4 p-1">
-							<div class="form-element">
-								<label for="modal_product_pricing_strategies_types_id">Pricing Strategy:</label>
-								<select id="modal_product_pricing_strategies_types_id" name="modal_product_pricing_strategies_types_id" class="form-control">
-									<?php
-										$options = "<option  value='' disabled selected>-- Pricing Strategy --</option>";
-										foreach ($pricing_strategies AS $k => $value) {
-											$name = $value["name"];
-											$val = $value["id"];
-											$options .= "<option value='$val'>$name</option>";
-										}
-										echo $options;
-									?>
-								</select>
-								<div id="modal_product_pricing_strategies_types_id-error" class="error w-100 text-center"></div>
-							</div>
-						</div>
-						<!-- /Pricing Strategy Id -->
-					
-					</div>
-					<!-- /Rating Id, Currency Id, Pricing Strategy Id -->
-					
-					<!-- HIDDEN VALUES -->
-					<div class="row">
-						
-						<div class="col-3 col-md-3">
-							<label for="modal_product_country_id" class="dev-element d-none">Country Id:</label>
-							<input type="hidden" id="modal_product_country_id" class="form-control dev-element" value="" readonly="readonly"/>
-						</div>
-						<div class="col-3 col-md-3">
-							<label for="modal_product_province_id" class="dev-element d-none">Province Id:</label>
-							<input type="hidden" id="modal_product_province_id" class="form-control dev-element" value="" readonly="readonly"/>
-						</div>
-						<div class="col-3 col-md-3">
-							<label for="modal_product_city_id" class="dev-element d-none">City Id:</label>
-							<input type="hidden" id="modal_product_city_id" class="form-control dev-element" value="" readonly="readonly"/>
-						</div>
-					
-					</div>
-					<!-- HIDDEN VALUES -->
+				
 				</form>
+			
 			</div>
 			
 			<div class="modal-footer w-100 d-block p-1">
@@ -270,7 +446,9 @@
 			</div>
 		
 		</div>
+	
 	</div>
+
 </div>
 
 <script type="text/javascript">

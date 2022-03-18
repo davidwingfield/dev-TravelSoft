@@ -1,51 +1,65 @@
 jQuery(($) => {
     $.fn.dateSelect = function (opt) {
+        const regex = /(((19|20)\d\d)\-(0[1-9]|1[0-2])\-((0|1)[0-9]|2[0-9]|3[0-1]))$/
+        
         let element = $(this)
         let elementId = element.attr("id")
         let separatorDate = "-"
-        
-        element.attr("id", "date-selector-" + elementId)
-        
+        let currentYear = new Date().getFullYear() - 1
+        let endYear = currentYear + 5
+        let startDate = moment(currentYear + "-01-01").format("YYYY-MM-DD")
+        let endDate = moment(endYear + "-12-31").format("YYYY-MM-DD")
         let $element, $elementWrapper, $elementGroupWrapper, $elementGroupAppend, $buttonGroupAppend,
             $input, $inputLabel, $errorElement, $buttonGroupAppendClear, input, picker
+        
+        let isShift = false
+        
+        /*
+        console.log("|__ currentYear", currentYear)
+        console.log("|__ endYear", endYear)
+        console.log("|__ startDate", startDate)
+        console.log("|__ endDate", endDate)
+        //*/
+        
+        element.attr("id", "date-selector-" + elementId)
         
         let defaults = {
             
             // Strings and translations
-            monthsFull: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            weekdaysFull: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-            weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-            showMonthsShort: undefined,
-            showWeekdaysFull: undefined,
+            monthsFull: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+            monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            weekdaysFull: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            weekdaysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            showMonthsShort: false,
+            showWeekdaysFull: false,
             
             // Buttons
-            today: 'Today',
-            clear: 'Clear',
-            close: 'Close',
+            today: "Today",
+            clear: "Clear",
+            close: "Close",
             
             // Accessibility labels
-            labelMonthNext: 'Next month',
-            labelMonthPrev: 'Previous month',
-            labelMonthSelect: 'Select a month',
-            labelYearSelect: 'Select a year',
+            labelMonthNext: "Next month",
+            labelMonthPrev: "Previous month",
+            labelMonthSelect: "Select a month",
+            labelYearSelect: "Select a year",
             
             // Formats
             format: "yyyy-mm-dd",
             formatSubmit: "yyyy-mm-dd",
-            hiddenPrefix: undefined,
-            hiddenSuffix: '_submit',
+            //hiddenPrefix: "date-selector-" + elementId,
+            hiddenSuffix: "_submit",
             hiddenName: undefined,
             
             // Editable input
             editable: undefined,
             
             // Dropdown selectors
-            selectYears: undefined,
-            selectMonths: undefined,
+            selectYears: 5,
+            selectMonths: true,
             
             // First day of the week
-            firstDay: undefined,
+            firstDay: 1,
             
             // Date limits
             min: undefined,
@@ -69,7 +83,10 @@ jQuery(($) => {
             onRender: undefined,
             onOpen: undefined,
             onClose: undefined,
-            onSet: undefined,
+            onSet: function (context) {
+                $input.val(moment(context.select).format("YYYY-MM-DD"))
+                toggleClearButton()
+            },
             onStop: undefined,
         }
         
@@ -116,7 +133,6 @@ jQuery(($) => {
         
         const validateDateFormat = function (input, keyCode) {
             let dateString = input.value
-            let regex = /(((19|20)\d\d)\-(0[1-9]|1[0-2])\-((0|1)[0-9]|2[0-9]|3[0-1]))$/
             
             if (keyCode === 16) {
                 isShift = true
@@ -129,6 +145,7 @@ jQuery(($) => {
             } else {
                 loadError(input)
             }
+            
         }
         
         const buildElements = function (element, opt) {
@@ -171,11 +188,34 @@ jQuery(($) => {
                     return isNumeric(this, event.keyCode)
                 })
                 .on("keyup", function (event) {
-                    validateDateFormat(this, event.keyCode)
+                    console.log("event", event.keyCode)
+                    
+                    if ($(this).val() === "") {
+                        DateSelect.clear()
+                        unSetDateError($input[0])
+                    } else {
+                        validateDateFormat(this, event.keyCode)
+                    }
+                    
                     toggleClearButton()
                 })
-                .on("change", function () {
+                .on("change", function (e) {
+                    console.log("DateSelect.input:change(e)")
+                    //e.preventDefault()
+                    
+                    if ($(this).val() === "") {
+                        //unSetDateError($input[0])
+                    }
+                    
                     toggleClearButton()
+                })
+                .on("focus", function (e) {
+                    /*
+                    console.log("DateSelect.input:focus(e)")
+                    console.log("|__ input.val()", $input.val())
+                    console.log("|__ buttonGroupAppend.val()", $buttonGroupAppend.val())
+                    console.log("|__ input.val()", $input.val())
+                    //*/
                 })
             
             $inputLabel = $("<label>")
@@ -187,6 +227,7 @@ jQuery(($) => {
         }
         
         const toggleClearButton = function () {
+            
             if ($input.val() !== "") {
                 $buttonGroupAppendClear.show()
                 let id = $input.attr("id")
@@ -194,10 +235,14 @@ jQuery(($) => {
             } else {
                 $buttonGroupAppendClear.hide()
             }
+            
         }
         
         const setWrapper = function (element, opt) {
+            
+            // ----
             buildElements(element, opt)
+            
             $elementGroupAppend.append($buttonGroupAppendClear, $buttonGroupAppend)
             $elementGroupWrapper.append($input, $elementGroupAppend)
             $elementWrapper.append($inputLabel, $elementGroupWrapper, $errorElement)
@@ -211,17 +256,17 @@ jQuery(($) => {
                     defaults[k] = v
                 })
             }
-            
         }
         
         const clear = function () {
             
             if (DateSelect.picker.clear()) {
                 DateSelect.picker.clear()
-                DateSelect.picker.set("select", moment().format("YYYY-MM-DD"), { format: "yyyy-mm-dd" })
-                DateSelect.picker.render()
                 unSetDateError($input[0])
             }
+            
+            $input.val("")
+            $buttonGroupAppend.val("")
         }
         
         const set = function (opts) {
@@ -248,7 +293,9 @@ jQuery(($) => {
         const DateSelect = {
             picker: null,
             val: null,
-            fooListener: function (val) {},
+            fooListener: function (val) {
+            
+            },
             registerNewListener: function (externalListenerFunction) {
                 this.fooListener = externalListenerFunction
             },
@@ -280,18 +327,17 @@ jQuery(($) => {
             $buttonGroupAppend
                 .pickadate(defaults)
                 .on("change", function () {
-                    if ($(this).val() === "") {
+                    if ($buttonGroupAppend.val() === "") {
                         $input.val("")
                     } else {
                         $input.val($(this).val())
                     }
-                    
-                    $input.trigger("change")
                 })
             
             picker = $buttonGroupAppend.pickadate("picker")
-            toggleClearButton()
             DateSelect.picker = $buttonGroupAppend.pickadate("picker")
+            
+            toggleClearButton()
         }
         
         init(element, opt)

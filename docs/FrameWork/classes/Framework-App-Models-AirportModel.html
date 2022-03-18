@@ -224,6 +224,20 @@ Long AirportModel Description</p>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-Core-Model.html#method_buildSelectQuery">buildSelectQuery()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-AirportModel.html#method_fetchAll">fetchAll()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-AirportModel.html#method_fetchByAirportId">fetchByAirportId()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
@@ -417,16 +431,20 @@ Long AirportModel Description</p>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">$selectQuery</span>
      = <span class="phpdocumentor-signature__default-value">&quot;
-                SELECT
-						AIRPORT.id AS &#039;airport_id&#039;,
-						CONCAT(AIRPORT.name, &#039; (&#039;, CITY.name, &#039;, &#039;, COUNTRY.iso3, &#039;)&#039;) AS &#039;display_short&#039;,
-						CONCAT(AIRPORT.name, &#039; (&#039;, CITY.name, &#039;, &#039;, PROVINCE.iso2, &#039;, &#039;, COUNTRY.iso3, &#039;)&#039;) AS &#039;display_medium&#039;,
-						CONCAT(AIRPORT.name, &#039; (&#039;, CITY.name, &#039;, &#039;, PROVINCE.name, &#039;, &#039;, COUNTRY.name, &#039;)&#039;) AS &#039;display_long&#039;,
+            SELECT 		AIRPORT.id AS &#039;airport_id&#039;,
+						CONCAT(COALESCE(AIRPORT.iata_code, &#039;&#039;), &#039; - &#039;, AIRPORT.name, &#039; (&#039;, CITY.name, &#039;, &#039;, COUNTRY.iso3, &#039;)&#039;) AS &#039;display_short&#039;,
+						CONCAT(COALESCE(AIRPORT.iata_code, &#039;&#039;), &#039; - &#039;, AIRPORT.name, &#039; (&#039;, CITY.name, &#039;, &#039;, PROVINCE.iso2, &#039;, &#039;, COUNTRY.iso3, &#039;)&#039;) AS &#039;display_medium&#039;,
+						CONCAT(COALESCE(AIRPORT.iata_code, &#039;&#039;), &#039; - &#039;, AIRPORT.name, &#039; (&#039;, CITY.name, &#039;, &#039;, PROVINCE.name, &#039;, &#039;, COUNTRY.name, &#039;)&#039;) AS &#039;display_long&#039;,
 						AIRPORT.name AS &#039;airport_name&#039;,
 						AIRPORT.iata_code AS &#039;airport_iata_code&#039;,
 						AIRPORT.gps_code AS &#039;airport_gps_code&#039;,
 						AIRPORT.local_code AS &#039;airport_local_code&#039;,
 						AIRPORT.home_link AS &#039;airport_home_link&#039;,
+                       
+                       	AIRPORT.street_1 AS &#039;airport_street_1&#039;,
+                       	AIRPORT.street_2 AS &#039;airport_street_2&#039;,
+                       	AIRPORT.postal_code AS &#039;airport_postal_code&#039;,
+                       
 						AIRPORT.wikipedia_link AS &#039;airport_wikipedia_link&#039;,
 						AIRPORT.scheduled_service AS &#039;airport_scheduled_service&#039;,
 						AIRPORT.keywords AS &#039;airport_keywords&#039;,
@@ -518,7 +536,7 @@ Long AirportModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AirportModel.php"><a href="files/app-models-airportmodel.html"><abbr title="App/Models/AirportModel.php">AirportModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">152</span>
+    <span class="phpdocumentor-element-found-in__line">171</span>
 
     </aside>
 
@@ -555,6 +573,83 @@ Long AirportModel Description</p>
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_buildSelectQuery">
+        buildSelectQuery()
+        <a href="classes/Framework-Core-Model.html#method_buildSelectQuery" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Core/Model.php"><a href="files/core-model.html"><abbr title="Core/Model.php">Model.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">72</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">buildSelectQuery</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fetchAll">
+        fetchAll()
+        <a href="classes/Framework-App-Models-AirportModel.html#method_fetchAll" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AirportModel.php"><a href="files/app-models-airportmodel.html"><abbr title="App/Models/AirportModel.php">AirportModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">156</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fetchAll</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_fetchByAirportId">
         fetchByAirportId()
         <a href="classes/Framework-App-Models-AirportModel.html#method_fetchByAirportId" class="headerlink"><i class="fas fa-link"></i></a>
@@ -562,7 +657,7 @@ Long AirportModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AirportModel.php"><a href="files/app-models-airportmodel.html"><abbr title="App/Models/AirportModel.php">AirportModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">129</span>
+    <span class="phpdocumentor-element-found-in__line">133</span>
 
     </aside>
 
@@ -606,7 +701,7 @@ Long AirportModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AirportModel.php"><a href="files/app-models-airportmodel.html"><abbr title="App/Models/AirportModel.php">AirportModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">95</span>
+    <span class="phpdocumentor-element-found-in__line">99</span>
 
     </aside>
 
@@ -859,7 +954,7 @@ Long AirportModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AirportModel.php"><a href="files/app-models-airportmodel.html"><abbr title="App/Models/AirportModel.php">AirportModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">194</span>
+    <span class="phpdocumentor-element-found-in__line">213</span>
 
     </aside>
 

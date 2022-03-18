@@ -114,7 +114,7 @@
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}
@@ -249,7 +249,7 @@
 				}
 				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}
@@ -292,7 +292,7 @@
 				";
 				Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}
@@ -357,7 +357,7 @@
 					
 					return $product;
 				} catch (Exception $e) {
-					Log::$debug_log->error($e);
+					Log::$debug_log->error($e->getMessage());
 					
 					return [];
 				}
@@ -387,7 +387,7 @@
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}
@@ -399,6 +399,7 @@
 			Log::$debug_log->info("ProductModel::addRecord(product)");
 			Log::$debug_log->trace($product);
 			//*/
+			
 			$location_detail = array();
 			
 			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
@@ -451,10 +452,11 @@
 			$location["city_id"] = (int)$city_id;
 			$location["location_types_id"] = (isset($location_detail["street_1"])) ? $location_detail["street_1"] : (isset($product["street_1"])) ? $product["street_1"] : null;
 			
+			//Log::$debug_log->trace($location_detail);
+			
 			switch ($category_id) {
 				case 1:
 					$location_detail = Location::getByCityId($city_id, $name);
-					
 					$location["street_1"] = $street_1;
 					$location["street_2"] = $street_2;
 					$location["zipcode"] = $postal_code;
@@ -469,6 +471,7 @@
 							$location_detail = $location_detail[0];
 						}
 					}
+					
 					break;
 				case 2:
 					$location_detail = Location::getByCityId($city_id, $name);
@@ -550,13 +553,13 @@
 					}
 			}
 			
-			Log::$debug_log->trace($location_detail);
+			//Log::$debug_log->trace($location_detail);
 			
 			if (isset($location_detail["id"])) {
 				$location_id = (int)$location_detail["id"];
 				
 				$sql = "
-                INSERT INTO product (
+                	INSERT INTO product (
                     id, category_id, pricing_strategy_types_id, status_types_id, currency_id,
                     location_id, provider_id, vendor_id, rating_types_id, name, city_id,
                     description_short, description_long, keywords, sku, depart_from,
@@ -610,10 +613,12 @@
 					street_1 = VALUES(street_1),
 					street_2 = VALUES(street_2),
 					postal_code = VALUES(postal_code);
-            ";
+            	";
+				
+				//Log::$debug_log->trace($sql);
 				
 				try {
-					Log::$debug_log->trace($sql);
+					//Log::$debug_log->trace($sql);
 					
 					Model::$db->rawQuery($sql);
 					$product_id = Model::$db->getInsertId();
@@ -627,7 +632,7 @@
 					}
 					
 				} catch (Exception $e) {
-					Log::$debug_log->error($e);
+					Log::$debug_log->error($e->getMessage());
 					
 					return [];
 				}
@@ -712,7 +717,7 @@
 					return [];
 				}
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}
@@ -795,7 +800,7 @@
 					return [];
 				}
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}

@@ -66,6 +66,7 @@ const Season = (function () {
     $(_button_clear_form_edit_season)
         .on("click", function () {
             _product_edit_season_form_season_name_filter.value = ""
+            
             resetForm()
             clearProductSeasonForm()
             $table_season_product_edit.clearSelectedRows()
@@ -547,11 +548,16 @@ const Season = (function () {
     }
     
     const resetForm = function () {
+        console.log("Season.resetForm()")
+        // ----
+        
         _product_edit_season_form_season_id.value = ""
         _product_edit_season_form_season_name.value = ""
         _product_edit_season_id_name_display.value = ""
         _product_edit_season_form_season_enabled.checked = true
+        
         updateProgress()
+        
         ColorScheme.load()
     }
     

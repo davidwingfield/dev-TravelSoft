@@ -209,26 +209,39 @@
 <dd>base select query</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-Core-Model.html#method_buildSelectQuery">buildSelectQuery()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-ProviderModel.html#method_fetchAllProviders">fetchAllProviders()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-ProviderModel.html#method_get">get()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>Gets provider(s) by id
-If id is passed then we search by it otherwise get all enabled</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-ProviderModel.html#method_getByName">getByName()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>fetch provider by name</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-ProviderModel.html#method_getOne">getOne()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>fetch single object</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-Core-Model.html#method_init">init()</a>
@@ -242,7 +255,7 @@ If id is passed then we search by it otherwise get all enabled</dd>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>autocomplete query</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-Core-Model.html#method_setBool">setBool()</a>
@@ -277,7 +290,7 @@ If id is passed then we search by it otherwise get all enabled</dd>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>update provider record</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-ProviderModel.html#method_updateLocation">updateLocation()</a>
@@ -289,9 +302,9 @@ If id is passed then we search by it otherwise get all enabled</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-ProviderModel.html#method_updateRecord">updateRecord()</a>
     <span>
-                        &nbsp;: array&lt;string|int, mixed&gt;|array&lt;string|int, string&gt;    </span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>update record</dd>
+<dd></dd>
 
         </dl>
 
@@ -362,7 +375,7 @@ If id is passed then we search by it otherwise get all enabled</dd>
     <span class="phpdocumentor-signature__visibility">protected</span>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">array&lt;string|int, array&lt;string|int, mixed&gt;&gt;</span>
     <span class="phpdocumentor-signature__name">$data</span>
-     = <span class="phpdocumentor-signature__default-value">[&quot;id&quot; =&gt; array(), &quot;company_id&quot; =&gt; array(), &quot;location_id&quot; =&gt; array(), &quot;code_direct_id&quot; =&gt; array(), &quot;provider_vendor&quot; =&gt; array(), &quot;enabled&quot; =&gt; array(), &quot;created_by&quot; =&gt; array(), &quot;date_created&quot; =&gt; array(), &quot;modified_by&quot; =&gt; array(), &quot;date_modified&quot; =&gt; array(), &quot;note&quot; =&gt; array()]</span></code>
+     = <span class="phpdocumentor-signature__default-value">[&quot;id&quot; =&gt; array(), &quot;company_id&quot; =&gt; array(), &quot;location_id&quot; =&gt; array(), &quot;code_direct_id&quot; =&gt; array(), &quot;provider_vendor&quot; =&gt; array(), &quot;enabled&quot; =&gt; array(), &quot;created_by&quot; =&gt; array(), &quot;date_created&quot; =&gt; array(), &quot;modified_by&quot; =&gt; array(), &quot;date_modified&quot; =&gt; array(), &quot;note&quot; =&gt; array(), &quot;keywords&quot; =&gt; []]</span></code>
 
     
         <section class="phpdocumentor-description"><p>Table Data</p>
@@ -387,7 +400,7 @@ If id is passed then we search by it otherwise get all enabled</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">41</span>
+    <span class="phpdocumentor-element-found-in__line">42</span>
 
     </aside>
 
@@ -398,15 +411,11 @@ If id is passed then we search by it otherwise get all enabled</dd>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$selectQuery</span>
      = <span class="phpdocumentor-signature__default-value">&quot;
-            SELECT
-                            PROVIDER.id AS &#039;provider_id&#039;,
+            SELECT          PROVIDER.id AS &#039;provider_id&#039;,
                             PROVIDER.company_id AS &#039;provider_company_id&#039;,
                             PROVIDER.location_id AS &#039;provider_location_id&#039;,
                             PROVIDER.code_direct_id AS &#039;provider_code_direct_id&#039;,
                             PROVIDER.provider_vendor AS &#039;provider_provider_vendor&#039;,
-                            PROVIDER.description_long AS &#039;provider_description_long&#039;,
-                            PROVIDER.description_short AS &#039;provider_description_short&#039;,
-                            PROVIDER.keywords AS &#039;provider_keywords&#039;,
                             PROVIDER.enabled AS &#039;provider_enabled&#039;,
                             PROVIDER.date_created AS &#039;provider_date_created&#039;,
                             PROVIDER.created_by AS &#039;provider_created_by&#039;,
@@ -419,16 +428,16 @@ If id is passed then we search by it otherwise get all enabled</dd>
                             COMPANY.keywords AS &#039;company_keywords&#039;,
                             COMPANY.id AS &#039;company_id&#039;,
                             COMPANY.name AS &#039;company_name&#039;,
-                            COALESCE(COMPANY.phone_1, &#039;&#039;) AS &#039;company_phone_1&#039;,
-                            COALESCE(COMPANY.phone_2, &#039;&#039;) AS &#039;company_phone_2&#039;,
-                            COALESCE(COMPANY.fax, &#039;&#039;) AS &#039;company_fax&#039;,
-                            COALESCE(COMPANY.website, &#039;&#039;) AS &#039;company_website&#039;,
-                            COALESCE(COMPANY.email, &#039;&#039;) AS &#039;company_email&#039;,
+                            COMPANY.phone_1 AS &#039;company_phone_1&#039;,
+                            COMPANY.phone_2 AS &#039;company_phone_2&#039;,
+                            COMPANY.fax AS &#039;company_fax&#039;,
+                            COMPANY.website AS &#039;company_website&#039;,
+                            COMPANY.email AS &#039;company_email&#039;,
                             COMPANY.enabled AS &#039;company_enabled&#039;,
                             COMPANY.created_by AS &#039;company_created_by&#039;,
-                            DATE_FORMAT(COMPANY.date_created, &#039;%m/%d/%Y&#039;) AS &#039;company_date_created&#039;,
+                            COMPANY.date_created AS &#039;company_date_created&#039;,
                             COMPANY.modified_by AS &#039;company_modified_by&#039;,
-                            DATE_FORMAT(COMPANY.date_modified, &#039;%m/%d/%Y&#039;) AS &#039;company_date_modified&#039;,
+                            COMPANY.date_modified AS &#039;company_date_modified&#039;,
                             COMPANY.status_id AS &#039;company_status_id&#039;,
                             COMPANY.note AS &#039;company_note&#039;,
                             COMPANY.cover_image AS &#039;company_cover_image&#039;,
@@ -449,16 +458,16 @@ If id is passed then we search by it otherwise get all enabled</dd>
                             LOCATION.date_modified AS &#039;location_date_modified&#039;,
                             LOCATION.modified_by AS &#039;location_modified_by&#039;,
                             LOCATION.note AS &#039;location_note&#039;,
-                            LOCATIONTYPES.id AS &#039;location_types_id&#039;,
-                            LOCATIONTYPES.name AS &#039;location_types_name&#039;,
-                            LOCATIONTYPES.icon AS &#039;location_types_icon&#039;,
-                            LOCATIONTYPES.sort_order AS &#039;location_types_sort_order&#039;,
-                            LOCATIONTYPES.enabled AS &#039;location_types_enabled&#039;,
-                            LOCATIONTYPES.date_created AS &#039;location_types_date_created&#039;,
-                            LOCATIONTYPES.created_by AS &#039;location_types_created_by&#039;,
-                            LOCATIONTYPES.date_modified AS &#039;location_types_date_modified&#039;,
-                            LOCATIONTYPES.modified_by AS &#039;location_types_modified_by&#039;,
-                            LOCATIONTYPES.note AS &#039;location_types_note&#039;,
+                            LOCATION_TYPES.id AS &#039;location_types_id&#039;,
+                            LOCATION_TYPES.name AS &#039;location_types_name&#039;,
+                            LOCATION_TYPES.icon AS &#039;location_types_icon&#039;,
+                            LOCATION_TYPES.sort_order AS &#039;location_types_sort_order&#039;,
+                            LOCATION_TYPES.enabled AS &#039;location_types_enabled&#039;,
+                            LOCATION_TYPES.date_created AS &#039;location_types_date_created&#039;,
+                            LOCATION_TYPES.created_by AS &#039;location_types_created_by&#039;,
+                            LOCATION_TYPES.date_modified AS &#039;location_types_date_modified&#039;,
+                            LOCATION_TYPES.modified_by AS &#039;location_types_modified_by&#039;,
+                            LOCATION_TYPES.note AS &#039;location_types_note&#039;,
                             CITY.id AS &#039;city_id&#039;,
                             CITY.sort_order AS &#039;city_sort_order&#039;,
                             CITY.province_id AS &#039;city_province_id&#039;,
@@ -494,20 +503,20 @@ If id is passed then we search by it otherwise get all enabled</dd>
                             COUNTRY.created_by AS &#039;country_created_by&#039;,
                             COUNTRY.date_modified AS &#039;country_date_modified&#039;,
                             COUNTRY.modified_by AS &#039;country_modified_by&#039;,
-                            VENDORCOMPANY.id AS &#039;vendor_company_id&#039;,
-                            VENDORCOMPANY.name AS &#039;vendor_company_name&#039;,
-                            VENDORCOMPANY.phone_1 AS &#039;vendor_company_phone_1&#039;,
-                            VENDORCOMPANY.phone_2 AS &#039;vendor_company_phone_2&#039;,
-                            VENDORCOMPANY.fax AS &#039;vendor_company_fax&#039;,
-                            VENDORCOMPANY.website AS &#039;vendor_company_website&#039;,
-                            VENDORCOMPANY.email AS &#039;vendor_company_email&#039;,
-                            VENDORCOMPANY.enabled AS &#039;vendor_company_enabled&#039;,
-                            VENDORCOMPANY.created_by AS &#039;vendor_company_created_by&#039;,
-                            DATE_FORMAT(VENDORCOMPANY.date_created, &#039;%m/%d/%Y&#039;) AS &#039;vendor_company_date_created&#039;,
-                            VENDORCOMPANY.modified_by AS &#039;vendor_company_modified_by&#039;,
-                            DATE_FORMAT(VENDORCOMPANY.date_modified, &#039;%m/%d/%Y&#039;) AS &#039;vendor_company_date_modified&#039;,
-                            VENDORCOMPANY.status_id AS &#039;vendor_company_status&#039;,
-                            VENDORCOMPANY.note AS &#039;vendor_company_note&#039;,
+                            VENDOR_COMPANY.id AS &#039;vendor_company_id&#039;,
+                            VENDOR_COMPANY.name AS &#039;vendor_company_name&#039;,
+                            VENDOR_COMPANY.phone_1 AS &#039;vendor_company_phone_1&#039;,
+                            VENDOR_COMPANY.phone_2 AS &#039;vendor_company_phone_2&#039;,
+                            VENDOR_COMPANY.fax AS &#039;vendor_company_fax&#039;,
+                            VENDOR_COMPANY.website AS &#039;vendor_company_website&#039;,
+                            VENDOR_COMPANY.email AS &#039;vendor_company_email&#039;,
+                            VENDOR_COMPANY.enabled AS &#039;vendor_company_enabled&#039;,
+                            VENDOR_COMPANY.created_by AS &#039;vendor_company_created_by&#039;,
+                            VENDOR_COMPANY.date_created AS &#039;vendor_company_date_created&#039;,
+                            VENDOR_COMPANY.modified_by AS &#039;vendor_company_modified_by&#039;,
+                            VENDOR_COMPANY.date_modified AS &#039;vendor_company_date_modified&#039;,
+                            VENDOR_COMPANY.status_id AS &#039;vendor_company_status&#039;,
+                            VENDOR_COMPANY.note AS &#039;vendor_company_note&#039;,
                             VENDOR.id AS &#039;vendor_id&#039;,
                             VENDOR.company_id AS &#039;vendor_company_id&#039;,
                             VENDOR.status_id AS &#039;vendor_status_id&#039;,
@@ -516,23 +525,21 @@ If id is passed then we search by it otherwise get all enabled</dd>
                             VENDOR.show_sales AS &#039;vendor_show_sales&#039;,
                             VENDOR.show_ops AS &#039;vendor_show_ops&#039;,
                             VENDOR.is_provider AS &#039;vendor_is_provider&#039;,
-                            DATE_FORMAT(VENDOR.date_created, &#039;%m/%d/%Y&#039;) AS &#039;vendor_date_created&#039;,
+                            VENDOR.date_created AS &#039;vendor_date_created&#039;,
                             VENDOR.created_by  AS &#039;vendor_created_by&#039;,
-                            DATE_FORMAT(VENDOR.date_modified, &#039;%m/%d/%Y&#039;) AS &#039;vendor_date_modified&#039;,
+                            VENDOR.date_modified AS &#039;vendor_date_modified&#039;,
                             VENDOR.modified_by  AS &#039;vendor_modified_by&#039;,
                             VENDOR.enabled AS &#039;vendor_enabled&#039;,
                             VENDOR.note  AS &#039;vendor_note&#039;
             FROM 			provider PROVIDER
-            
-            LEFT JOIN			company COMPANY ON COMPANY.id = PROVIDER.company_id
-            LEFT JOIN			location LOCATION ON LOCATION.id = PROVIDER.location_id
-            LEFT JOIN			location_types LOCATIONTYPES ON LOCATIONTYPES.id = LOCATION.location_types_id
-            LEFT JOIN			city CITY ON CITY.id = LOCATION.city_id
-            LEFT JOIN			province PROVINCE ON CITY.province_id = PROVINCE.id
-            LEFT JOIN			country COUNTRY ON PROVINCE.country_id = COUNTRY.id
-            LEFT JOIN			vendor VENDOR ON VENDOR.company_id = COMPANY.id AND VENDOR.is_provider = 1
-            LEFT JOIN		company VENDORCOMPANY ON VENDORCOMPANY.id = VENDOR.company_id
-            WHERE			PROVIDER.enabled = 1
+            LEFT JOIN		company COMPANY ON COMPANY.id = PROVIDER.company_id
+            LEFT JOIN		location LOCATION ON LOCATION.id = PROVIDER.location_id
+            LEFT JOIN		location_types LOCATION_TYPES ON LOCATION_TYPES.id = LOCATION.location_types_id
+            LEFT JOIN		city CITY ON CITY.id = LOCATION.city_id
+            LEFT JOIN		province PROVINCE ON CITY.province_id = PROVINCE.id
+            LEFT JOIN		country COUNTRY ON PROVINCE.country_id = COUNTRY.id
+            LEFT JOIN		vendor VENDOR ON VENDOR.company_id = COMPANY.id AND VENDOR.is_provider = 1
+            LEFT JOIN		company VENDOR_COMPANY ON VENDOR_COMPANY.id = VENDOR.company_id
             &quot;</span></code>
 
     
@@ -553,6 +560,83 @@ If id is passed then we search by it otherwise get all enabled</dd>
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_buildSelectQuery">
+        buildSelectQuery()
+        <a href="classes/Framework-Core-Model.html#method_buildSelectQuery" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Core/Model.php"><a href="files/core-model.html"><abbr title="Core/Model.php">Model.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">72</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">buildSelectQuery</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fetchAllProviders">
+        fetchAllProviders()
+        <a href="classes/Framework-App-Models-ProviderModel.html#method_fetchAllProviders" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">174</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fetchAllProviders</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_get">
         get()
         <a href="classes/Framework-App-Models-ProviderModel.html#method_get" class="headerlink"><i class="fas fa-link"></i></a>
@@ -564,23 +648,21 @@ If id is passed then we search by it otherwise get all enabled</dd>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Gets provider(s) by id
-If id is passed then we search by it otherwise get all enabled</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">get</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">get</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$id</span>
-                : <span class="phpdocumentor-signature__argument__return-type">int|null</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>Provider Id</p>
-</section>
+                    <section class="phpdocumentor-description"></section>
 
             </dd>
             </dl>
@@ -606,17 +688,17 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">214</span>
+    <span class="phpdocumentor-element-found-in__line">212</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">fetch provider by name</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getByName</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -624,7 +706,8 @@ If id is passed then we search by it otherwise get all enabled</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -649,25 +732,26 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">241</span>
+    <span class="phpdocumentor-element-found-in__line">232</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">fetch single object</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getOne</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getOne</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$id</span>
-                : <span class="phpdocumentor-signature__argument__return-type">int|null</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -725,17 +809,17 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">264</span>
+    <span class="phpdocumentor-element-found-in__line">248</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">autocomplete query</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">provider_ac</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$st</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -743,7 +827,8 @@ If id is passed then we search by it otherwise get all enabled</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -948,21 +1033,22 @@ If id is passed then we search by it otherwise get all enabled</p>
 
     </aside>
 
-        <p class="phpdocumentor-summary">update provider record</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">update</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$provider</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">update</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$provider</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$provider</span>
-                : <span class="phpdocumentor-signature__argument__return-type">null</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -987,7 +1073,7 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">371</span>
+    <span class="phpdocumentor-element-found-in__line">377</span>
 
     </aside>
 
@@ -1039,17 +1125,17 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProviderModel.php"><a href="files/app-models-providermodel.html"><abbr title="App/Models/ProviderModel.php">ProviderModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">290</span>
+    <span class="phpdocumentor-element-found-in__line">296</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">update record</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">updateRecord</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$provider</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|array&lt;string|int, string&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">updateRecord</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$provider</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1057,14 +1143,15 @@ If id is passed then we search by it otherwise get all enabled</p>
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|array&lt;string|int, string&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
             &mdash;
         
     

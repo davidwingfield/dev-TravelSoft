@@ -1,12 +1,18 @@
 $.fn.BuildKeyword = function (keywords) {
-    let chip_input_id, chip_container_id, chip_id,
-        _chips, _input, _container,
-        $input, $container
+    //console.log("BuildKeyword()", $(this))
+    // ----
+    
+    let chip_input_id, chip_container_id, chip_id, chip_disable_id,
+        _chips, _input, _container, $input, $container
     let counter = 0
     let editMode = null
     let tags = new Map()
     
     if (!$(this).hasClass("keyword") || !$(this).attr("id")) {
+        /*
+        console.log("|__ MISSING FIELDS: class - ", $(this).hasClass("keyword"))
+        console.log("|__ MISSING FIELDS: id - ", $(this).attr("id"))
+        //*/
         return
     }
     
@@ -14,11 +20,22 @@ $.fn.BuildKeyword = function (keywords) {
     chip_input_id = chip_id + "_search"
     chip_container_id = chip_id + "_container"
     
+    /*
+    console.log("|__ chip_id", chip_id)
+    console.log("|__ chip_input_id", chip_input_id)
+    console.log("|__ chip_container_id", chip_container_id)
+    //*/
+    
     _chips = document.getElementById(chip_id)
     _input = document.getElementById(chip_input_id)
     _container = document.getElementById(chip_container_id)
     
     if (!_container || !_input || !_chips) {
+        //*
+        console.log("|__ MISSING FIELDS: _container - ", _container)
+        console.log("|__ MISSING FIELDS: _input - ", _input)
+        console.log("|__ MISSING FIELDS: _chips - ", _chips)
+        //*/
         return
     }
     
@@ -47,11 +64,17 @@ $.fn.BuildKeyword = function (keywords) {
     
     $input
         .on("keydown", function (e) {
-            if (e.keyCode === 9) {
+            console.log("|__ e.keyCode", e.keyCode)
+            console.log("|__ e.which", e.which)
+            
+            if (e.keyCode === 13) {
                 e.preventDefault()
+                e.stopPropagation()
+                add()
+                editMode = null
             }
             
-            if (e.which === 13 || e.keyCode === 9) {
+            if (e.which === 9) {
                 add()
                 editMode = null
             }
@@ -186,9 +209,27 @@ $.fn.BuildKeyword = function (keywords) {
         })
     }
     
+    const readOnly = function (val) {
+        
+        if (val === true) {
+            _input.disabled = true
+            
+            $(_input).addClass("disabled")
+            $(_container).addClass("disabled")
+        } else {
+            _input.disabled = false
+            
+            $(_input).removeClass("disabled")
+            $(_container).removeClass("disabled")
+        }
+    }
+    
     init(keywords)
     
     return {
+        readOnly: function (val) {
+            readOnly(val)
+        },
         clear: function () {
             clear()
         },

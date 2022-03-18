@@ -153,6 +153,21 @@
 			}
 		}
 		
+		public static function fetchAll(): array
+		{
+			$sql = self::$selectQuery;
+			try {
+				//Log::$debug_log->trace($sql);
+				
+				return Model::$db->rawQuery($sql);
+				
+			} catch (Exception $e) {
+				Log::$debug_log->error($e);
+				
+				return [];
+			}
+		}
+		
 		public static function airport_ac(string $st = ""): array
 		{
 			

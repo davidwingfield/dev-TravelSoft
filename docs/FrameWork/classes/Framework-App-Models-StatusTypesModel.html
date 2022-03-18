@@ -209,7 +209,28 @@ Long StatusTypes Description</p>
 </dt>
 <dd></dd>
 
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/Framework-App-Models-StatusTypesModel.html#property_selectQuery">$selectQuery</a>
+    <span>
+                &nbsp;: mixed            </span>
+</dt>
+<dd></dd>
+
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-Core-Model.html#method_buildSelectQuery">buildSelectQuery()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-StatusTypesModel.html#method_fetchStatusTypesByStatusTypesId">fetchStatusTypesByStatusTypesId()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-StatusTypesModel.html#method_get">get()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
@@ -384,6 +405,51 @@ Long StatusTypes Description</p>
     
 
 </article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_selectQuery">
+        $selectQuery
+        <a href="classes/Framework-App-Models-StatusTypesModel.html#property_selectQuery" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/StatusTypesModel.php"><a href="files/app-models-statustypesmodel.html"><abbr title="App/Models/StatusTypesModel.php">StatusTypesModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">20</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">$selectQuery</span>
+     = <span class="phpdocumentor-signature__default-value">&quot;
+			SELECT 		STATUS_TYPES.id AS &#039;status_types_id&#039;,
+						STATUS_TYPES.name AS &#039;status_types_name&#039;,
+						STATUS_TYPES.enabled AS &#039;status_types_enabled&#039;,
+						STATUS_TYPES.date_created AS &#039;status_types_date_created&#039;,
+						STATUS_TYPES.created_by AS &#039;status_types_created_by&#039;,
+						STATUS_TYPES.date_modified AS &#039;status_types_date_modified&#039;,
+						STATUS_TYPES.modified_by AS &#039;status_types_modified_by&#039;,
+						STATUS_TYPES.note AS &#039;status_types_note&#039;,
+						STATUS_TYPES.sort_order AS &#039;status_types_sort_order&#039;
+			FROM 		status_types STATUS_TYPES
+		&quot;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
             </section>
 
             <section class="phpdocumentor-methods">
@@ -397,6 +463,94 @@ Long StatusTypes Description</p>
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_buildSelectQuery">
+        buildSelectQuery()
+        <a href="classes/Framework-Core-Model.html#method_buildSelectQuery" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Core/Model.php"><a href="files/core-model.html"><abbr title="Core/Model.php">Model.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">72</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">buildSelectQuery</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fetchStatusTypesByStatusTypesId">
+        fetchStatusTypesByStatusTypesId()
+        <a href="classes/Framework-App-Models-StatusTypesModel.html#method_fetchStatusTypesByStatusTypesId" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/StatusTypesModel.php"><a href="files/app-models-statustypesmodel.html"><abbr title="App/Models/StatusTypesModel.php">StatusTypesModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">33</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fetchStatusTypesByStatusTypesId</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$status_types_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$status_types_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_get">
         get()
         <a href="classes/Framework-App-Models-StatusTypesModel.html#method_get" class="headerlink"><i class="fas fa-link"></i></a>
@@ -404,21 +558,21 @@ Long StatusTypes Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/StatusTypesModel.php"><a href="files/app-models-statustypesmodel.html"><abbr title="App/Models/StatusTypesModel.php">StatusTypesModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">21</span>
+    <span class="phpdocumentor-element-found-in__line">53</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">get</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">get</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$status_types_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$id</span>
+                <span class="phpdocumentor-signature__argument__name">$status_types_id</span>
                 : <span class="phpdocumentor-signature__argument__return-type">int</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
@@ -448,7 +602,7 @@ Long StatusTypes Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/StatusTypesModel.php"><a href="files/app-models-statustypesmodel.html"><abbr title="App/Models/StatusTypesModel.php">StatusTypesModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">37</span>
+    <span class="phpdocumentor-element-found-in__line">73</span>
 
     </aside>
 
@@ -492,7 +646,7 @@ Long StatusTypes Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/StatusTypesModel.php"><a href="files/app-models-statustypesmodel.html"><abbr title="App/Models/StatusTypesModel.php">StatusTypesModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">53</span>
+    <span class="phpdocumentor-element-found-in__line">89</span>
 
     </aside>
 
@@ -745,7 +899,7 @@ Long StatusTypes Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/StatusTypesModel.php"><a href="files/app-models-statustypesmodel.html"><abbr title="App/Models/StatusTypesModel.php">StatusTypesModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">68</span>
+    <span class="phpdocumentor-element-found-in__line">104</span>
 
     </aside>
 

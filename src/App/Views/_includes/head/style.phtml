@@ -1,7 +1,111 @@
 <style>
+	.form-control::placeholder {
+		color: #495057;
+		}
+	
+	.border-dark {
+		border-color: #37474f !important;
+		
+		}
+	
+	.border-light {
+		border-color: #ced4da !important;
+		}
+	
+	legend {
+		margin-left: 0.5rem;
+		margin-right: 0.5rem;
+		color: #6c757d;
+		width: auto;
+		font-size: 1rem;
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
+		font-weight: 400;
+		line-height: 1;
+		padding-inline-start: 0.25rem;
+		padding-inline-end: 0.25rem;
+		}
+	
+	fieldset {
+		border-radius: 0.25rem !important;
+		border: solid 1px transparent;
+		padding-top: 0;
+		padding-bottom: 0;
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
+		
+		margin-top: .5rem;
+		margin-bottom: .5rem;
+		margin-left: 0rem;
+		margin-right: 0rem;
+		}
+	
+	fieldset.fieldset-dark {
+		border-color: #37474f !important;
+		}
+	
+	fieldset.fieldset-light {
+		border-color: #ced4da !important;
+		}
+	
+	fieldset.fieldset-dark > legend > h6 {
+		margin: 0 .5rem;
+		color: #37474f;
+		font-family: Roboto, sans-serif;
+		font-weight: 400;
+		line-height: 1.2;
+		}
+	
+	fieldset.fieldset-light > legend > h6 {
+		margin: 0 .5rem;
+		color: #76838f;
+		font-family: Roboto, sans-serif;
+		font-weight: 400;
+		line-height: 1.2;
+		}
+	
+	.user-release-input {
+		border: none;
+		border-bottom: 1px solid #e4eaec;
+		border-radius: 0;
+		color: #76838f;
+		background-color: #fff;
+		background-image: none;
+		display: block;
+		padding: 0.715rem 1.286rem;
+		font-size: 1rem;
+		line-height: 1.333333;
+		width: 100%;
+		}
+	
+	.user-release-input:disabled::placeholder {
+		color: rgba(0, 0, 0, .3);
+		}
+	
+	.custom-control-label {
+		position: relative;
+		margin-bottom: 0;
+		vertical-align: top;
+		color: #0a070d;
+		}
+	
+	/*
+	fieldset {
+		color: #0a070d;
+		padding: 1rem;
+		margin-top: 0.5rem;
+		margin-bottom: 0.5rem;
+		background-color: transparent;
+		background-clip: padding-box;
+		border: 1px solid #ced4da;
+		border-radius: 0.25rem;
+		transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+		}
+	*/
+	
 	
 	.filemanager-font-file {
-		font-family: 'Font Awesome 5 Free';
+		font-family: "Font Awesome 5 Free", serif;
 		font-weight: 400;
 		font-size: 70px;
 		top: 50%;
@@ -39,15 +143,14 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		}
-		
-		}
+	
 	
 	.dropify-font:before,
 	.filemanager-wrapper .filemanager-message span.file-icon:before,
 	.filemanager-wrapper .filemanager-preview .filemanager-infos .filemanager-infos-inner p.filemanager-filename span.file-icon:before,
 	[class*=" filemanager-font-"]:before,
 	[class^=dropify-font-]:before {
-		font-family: dropify;
+		font-family: dropify, serif;
 		font-style: normal;
 		font-weight: 400;
 		speak: none;
@@ -67,7 +170,7 @@
 	.dropify-wrapper .dropify-preview .dropify-infos .dropify-infos-inner p.dropify-filename span.file-icon:before,
 	[class*=" filemanager-font-"]:before,
 	[class^=dropify-font-]:before {
-		font-family: dropify;
+		font-family: dropify, serif;
 		font-style: normal;
 		font-weight: 400;
 		speak: none;
@@ -82,9 +185,6 @@
 		line-height: 1em;
 		}
 	
-	#imageManagerFormImagesBlock {
-		
-		}
 	
 	img.img-thumbnail {
 		width: 200px !important;
@@ -295,7 +395,7 @@
 		margin-bottom: 1rem;
 		}
 	
-	#product_location icon.fas {
+	#product_location i.fas {
 		-moz-osx-font-smoothing: grayscale;
 		-webkit-font-smoothing: antialiased;
 		display: inline-block;
@@ -467,9 +567,6 @@
 	
 	section.card.card-body,
 	form.card.card-body {
-		border: 1px solid rgba(0, 0, 0, 0.125);
-		border-radius: 0.125rem;
-		box-shadow: none;
 		padding: 0.5rem;
 		margin-bottom: 0.5rem;
 		height: auto;
@@ -491,6 +588,7 @@
 	.md-accordion .card:first-of-type, .md-accordion .card:not(:first-of-type):not(:last-of-type) {
 		border-bottom: none;
 		}
+	
 	
 	.form-element label {
 		font-weight: 400;
@@ -1804,6 +1902,7 @@
 		line-height: 1.5;
 		}
 	
+	/*
 	.number-input input[type="number"] {
 		-webkit-appearance: textfield;
 		-moz-appearance: textfield;
@@ -1812,7 +1911,7 @@
 		font-size: 1rem;
 		color: #495057;
 		}
-	
+	*/
 	.number-input input[type=number]::-webkit-inner-spin-button,
 	.number-input input[type=number]::-webkit-outer-spin-button {
 		-webkit-appearance: none;
@@ -2690,7 +2789,7 @@
 	
 	a.season_toggle span {
 		display: inline-block;
-		min-width: 10rem
+		min-width: 10rem;
 		max-width: 150px;
 		width: 150px;
 		font-size: .85rem;
@@ -3015,10 +3114,8 @@
 		background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 		}
 	
-	.modal-header {
-		padding: 15px 20px;
-		padding-right: 40px;
-		border-bottom: none;
+	div.modal-header {
+		padding: 15px 40px 15px 20px;
 		display: flex;
 		align-items: flex-start;
 		justify-content: space-between;

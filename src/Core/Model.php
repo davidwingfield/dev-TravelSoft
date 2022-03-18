@@ -69,4 +69,17 @@
 			}
 		}
 		
+		public static function buildSelectQuery(array $params = null): string
+		{
+			$selectQuery = "";
+			
+			if (!is_null($params)) {
+				$fields = (isset($params["fields"])) ? $params["fields"] : [];
+				$where = (isset($params["where"])) ? $params["where"] : [];
+				$tables = (isset($params["tables"])) ? $params["tables"] : [];
+			}
+			
+			return $selectQuery;
+		}
+		
 	}

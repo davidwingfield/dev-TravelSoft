@@ -127,6 +127,36 @@ $.fn.BuildDropDown = function (settings) {
     
 }
 
+const fetchFormErrors = (form, rules) => {
+    console.log("fetchFormErrors()")
+    // ----
+    
+    let _modal_product_category_id = document.getElementById("modal_product_category_id")
+    let errors = []
+    
+    if (!form || !rules || !_modal_product_category_id) {
+        errors.push({
+            form: (form) ? form : null,
+            rules: (rules) ? rules : null,
+            message: "Missing Data",
+        })
+        
+        return {
+            valid: false,
+            errors: errors,
+        }
+    }
+    
+    let validator = jQuery(form).validate(rules)
+    
+    console.log("|__ validator", validator)
+    
+    return {
+        valid: true,
+        errors: errors,
+    }
+}
+
 const calculateWidth = (ratioWidth, ratioHeight, height) => {
     let aspectRatio = ratioWidth.value / ratioHeight.value
     return parseFloat((height * aspectRatio).toFixed(2))
@@ -339,10 +369,13 @@ const validator_init = function (settings) {
 }
 
 const initializeValidator = function (settings) {
-    //console.log("initializeValidator(settings)", settings)
+    console.log("initializeValidator(settings)", settings)
+    // ----
+    
     let rules = {}
     let messages = {}
     let groups = {}
+    
     if (settings) {
         
         if (settings.rules) {
@@ -406,7 +439,6 @@ const initializeValidator = function (settings) {
         submitHandler: function (form) {
             return true
         },
-        
     })
     
     jQuery.validator.addMethod("postalCode", function (value) {

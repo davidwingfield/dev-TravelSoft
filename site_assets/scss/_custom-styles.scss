@@ -10,7 +10,7 @@
 }
 
 [class^='dropify-font-']:before, [class*=' dropify-font-']:before, .dropify-font:before, .dropify-wrapper .dropify-message span.file-icon:before {
-  font-family: 'dropify';
+  font-family: 'dropify', serif;
   font-style: normal;
   font-weight: normal;
   speak: none;
@@ -252,7 +252,7 @@ div.page.login-form {
 }
 
 [class*=' wb-'], [class^=wb-] {
-  font-family: 'Web Icons';
+  font-family: 'Web Icons', serif;
   position: relative;
   display: inline-block;
   font-style: normal;

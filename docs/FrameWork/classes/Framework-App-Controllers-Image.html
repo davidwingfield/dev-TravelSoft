@@ -152,7 +152,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">17</span>
+    <span class="phpdocumentor-element-found-in__line">18</span>
 
     </aside>
 
@@ -212,7 +212,7 @@ Long Image Description</p>
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/Framework-App-Controllers-Image.html#property_types">$types</a>
     <span>
-                &nbsp;: array&lt;string|int, string&gt;            </span>
+                &nbsp;: mixed            </span>
 </dt>
 <dd></dd>
 
@@ -228,14 +228,35 @@ Long Image Description</p>
     <span>
                         &nbsp;: string    </span>
 </dt>
-<dd>get image aspect ratio</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Controllers-Image.html#method_getByCompanyId">getByCompanyId()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>get images by company id</dd>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Controllers-Image.html#method_getByProductId">getByProductId()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Controllers-Image.html#method_getByUnitId">getByUnitId()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Controllers-Image.html#method_getImageById">getImageById()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-Core-Controller.html#method_init">init()</a>
@@ -245,60 +266,88 @@ Long Image Description</p>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Controllers-Image.html#method_serveDelete">serveDelete()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Controllers-Image.html#method_serveGet">serveGet()</a>
     <span>
                         &nbsp;: mixed    </span>
 </dt>
-<dd>api get request</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Controllers-Image.html#method_serveGetByCompanyId">serveGetByCompanyId()</a>
     <span>
                         &nbsp;: mixed    </span>
 </dt>
-<dd>api get request by company id</dd>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Controllers-Image.html#method_serveGetByProductId">serveGetByProductId()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Controllers-Image.html#method_serveGetByUnitId">serveGetByUnitId()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Controllers-Image.html#method_serveGetImagesFromProductDirectory">serveGetImagesFromProductDirectory()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Controllers-Image.html#method_serveUpdate">serveUpdate()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                        &nbsp;: void    </span>
 </dt>
-<dd>api update request</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/Framework-App-Controllers-Image.html#method_buildDirectory">buildDirectory()</a>
     <span>
                         &nbsp;: bool    </span>
 </dt>
-<dd>create directory folder</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/Framework-App-Controllers-Image.html#method_format">format()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>format image object</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/Framework-App-Controllers-Image.html#method_makeThumbnail">makeThumbnail()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>generate image and thumbnail</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/Framework-App-Controllers-Image.html#method_moveImage">moveImage()</a>
     <span>
                         &nbsp;: bool    </span>
 </dt>
-<dd>move images to directories</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/Framework-App-Controllers-Image.html#method_seoUrl">seoUrl()</a>
     <span>
-                        &nbsp;: string|array&lt;string|int, string&gt;|null    </span>
+                        &nbsp;: mixed    </span>
 </dt>
-<dd>convert name into html entity</dd>
+<dd></dd>
 
         </dl>
 
@@ -430,19 +479,21 @@ Long Image Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">23</span>
+    <span class="phpdocumentor-element-found-in__line">20</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">array&lt;string|int, string&gt;</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">$types</span>
      = <span class="phpdocumentor-signature__default-value">array(&quot;image/jpeg&quot; =&gt; &quot;jpg&quot;, &quot;image/png&quot; =&gt; &quot;png&quot;)</span></code>
 
-    
-    
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
     
 
 </article>
@@ -499,17 +550,17 @@ Long Image Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">105</span>
+    <span class="phpdocumentor-element-found-in__line">252</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">get image aspect ratio</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getAspectRatio</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$width</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$height</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -517,14 +568,16 @@ Long Image Description</p>
                 : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$height</span>
                 : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -549,25 +602,182 @@ Long Image Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">35</span>
+    <span class="phpdocumentor-element-found-in__line">25</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">get images by company id</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getByCompanyId</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$company_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getByCompanyId</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$company_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$image_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$company_id</span>
-                : <span class="phpdocumentor-signature__argument__return-type">int|null</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$image_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getByProductId">
+        getByProductId()
+        <a href="classes/Framework-App-Controllers-Image.html#method_getByProductId" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">51</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getByProductId</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$product_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$image_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$product_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$image_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getByUnitId">
+        getByUnitId()
+        <a href="classes/Framework-App-Controllers-Image.html#method_getByUnitId" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">38</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getByUnitId</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$unit_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$image_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$unit_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$image_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getImageById">
+        getImageById()
+        <a href="classes/Framework-App-Controllers-Image.html#method_getImageById" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">64</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getImageById</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$image_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$image_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -618,6 +828,50 @@ Long Image Description</p>
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_serveDelete">
+        serveDelete()
+        <a href="classes/Framework-App-Controllers-Image.html#method_serveDelete" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">191</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">serveDelete</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_serveGet">
         serveGet()
         <a href="classes/Framework-App-Controllers-Image.html#method_serveGet" class="headerlink"><i class="fas fa-link"></i></a>
@@ -625,17 +879,17 @@ Long Image Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">349</span>
+    <span class="phpdocumentor-element-found-in__line">164</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">api get request</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">serveGet</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -643,7 +897,8 @@ Long Image Description</p>
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                  = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -668,17 +923,17 @@ Long Image Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">325</span>
+    <span class="phpdocumentor-element-found-in__line">142</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">api get request by company id</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">serveGetByCompanyId</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -686,7 +941,8 @@ Long Image Description</p>
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                  = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -704,32 +960,33 @@ Long Image Description</p>
             -public
                                     -static                    "
 >
-    <h4 class="phpdocumentor-element__name" id="method_serveUpdate">
-        serveUpdate()
-        <a href="classes/Framework-App-Controllers-Image.html#method_serveUpdate" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_serveGetByProductId">
+        serveGetByProductId()
+        <a href="classes/Framework-App-Controllers-Image.html#method_serveGetByProductId" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">59</span>
+    <span class="phpdocumentor-element-found-in__line">120</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">api update request</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">serveUpdate</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">serveGetByProductId</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$params</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;|null</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -737,6 +994,138 @@ Long Image Description</p>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_serveGetByUnitId">
+        serveGetByUnitId()
+        <a href="classes/Framework-App-Controllers-Image.html#method_serveGetByUnitId" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">102</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">serveGetByUnitId</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_serveGetImagesFromProductDirectory">
+        serveGetImagesFromProductDirectory()
+        <a href="classes/Framework-App-Controllers-Image.html#method_serveGetImagesFromProductDirectory" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">203</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">serveGetImagesFromProductDirectory</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_serveUpdate">
+        serveUpdate()
+        <a href="classes/Framework-App-Controllers-Image.html#method_serveUpdate" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">84</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">serveUpdate</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
             &mdash;
         
     
@@ -754,17 +1143,17 @@ Long Image Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">311</span>
+    <span class="phpdocumentor-element-found-in__line">486</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">create directory folder</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">buildDirectory</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -772,7 +1161,8 @@ Long Image Description</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -797,17 +1187,17 @@ Long Image Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">380</span>
+    <span class="phpdocumentor-element-found-in__line">264</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">format image object</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">format</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$image</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -815,7 +1205,8 @@ Long Image Description</p>
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                  = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -840,32 +1231,34 @@ Long Image Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">125</span>
+    <span class="phpdocumentor-element-found-in__line">315</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">generate image and thumbnail</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">makeThumbnail</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$file</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">makeThumbnail</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$file</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$file</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$params</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -890,17 +1283,17 @@ Long Image Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">296</span>
+    <span class="phpdocumentor-element-found-in__line">478</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">move images to directories</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">moveImage</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$source</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$target</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -908,14 +1301,16 @@ Long Image Description</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$target</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -940,32 +1335,33 @@ Long Image Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Image.php"><a href="files/app-controllers-image.html"><abbr title="App/Controllers/Image.php">Image.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">411</span>
+    <span class="phpdocumentor-element-found-in__line">301</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">convert name into html entity</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">seoUrl</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$string</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|array&lt;string|int, string&gt;|null</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">seoUrl</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$string</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$string</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string|array&lt;string|int, string&gt;|null</span>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
             &mdash;
         
     

@@ -152,12 +152,12 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">17</span>
+    <span class="phpdocumentor-element-found-in__line">16</span>
 
     </aside>
 
-            <p class="phpdocumentor-summary">Short Address Description
-Long Address Description</p>
+            <p class="phpdocumentor-summary">Short AddressModel Description
+Long AddressModel Description</p>
 
 
 
@@ -217,6 +217,13 @@ Long Address Description</p>
 <dd></dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-Core-Model.html#method_buildSelectQuery">buildSelectQuery()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-AddressModel.html#method_deleteCompanyAddressByCompanyId">deleteCompanyAddressByCompanyId()</a>
     <span>
                         &nbsp;: bool    </span>
@@ -367,7 +374,7 @@ Long Address Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">21</span>
+    <span class="phpdocumentor-element-found-in__line">20</span>
 
     </aside>
 
@@ -401,7 +408,7 @@ Long Address Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">20</span>
+    <span class="phpdocumentor-element-found-in__line">19</span>
 
     </aside>
 
@@ -435,7 +442,7 @@ Long Address Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">21</span>
 
     </aside>
 
@@ -445,8 +452,7 @@ Long Address Description</p>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">$sql</span>
      = <span class="phpdocumentor-signature__default-value">&quot;
-            SELECT
-                                    COMPANY_ADDRESS.company_id,
+            SELECT 					COMPANY_ADDRESS.company_id,
                                     COMPANY_ADDRESS.address_id,
                                     GROUP_CONCAT(COMPANY_ADDRESS.address_types_id ORDER BY COMPANY_ADDRESS.address_types_id ASC SEPARATOR &#039;,&#039;) AS &#039;address_types_id&#039;,
                                     ADDRESS.id AS &#039;address_id&#039;,
@@ -527,6 +533,50 @@ Long Address Description</p>
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_buildSelectQuery">
+        buildSelectQuery()
+        <a href="classes/Framework-Core-Model.html#method_buildSelectQuery" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Core/Model.php"><a href="files/core-model.html"><abbr title="Core/Model.php">Model.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">72</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">buildSelectQuery</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_deleteCompanyAddressByCompanyId">
         deleteCompanyAddressByCompanyId()
         <a href="classes/Framework-App-Models-AddressModel.html#method_deleteCompanyAddressByCompanyId" class="headerlink"><i class="fas fa-link"></i></a>
@@ -534,7 +584,7 @@ Long Address Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">123</span>
+    <span class="phpdocumentor-element-found-in__line">121</span>
 
     </aside>
 
@@ -586,7 +636,7 @@ Long Address Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">92</span>
+    <span class="phpdocumentor-element-found-in__line">90</span>
 
     </aside>
 
@@ -629,7 +679,7 @@ Long Address Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">298</span>
+    <span class="phpdocumentor-element-found-in__line">296</span>
 
     </aside>
 
@@ -673,7 +723,7 @@ Long Address Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">208</span>
+    <span class="phpdocumentor-element-found-in__line">206</span>
 
     </aside>
 
@@ -717,7 +767,7 @@ Long Address Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">186</span>
+    <span class="phpdocumentor-element-found-in__line">184</span>
 
     </aside>
 
@@ -761,7 +811,7 @@ Long Address Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">108</span>
+    <span class="phpdocumentor-element-found-in__line">106</span>
 
     </aside>
 
@@ -1014,7 +1064,7 @@ Long Address Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">230</span>
+    <span class="phpdocumentor-element-found-in__line">228</span>
 
     </aside>
 
@@ -1058,7 +1108,7 @@ Long Address Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/AddressModel.php"><a href="files/app-models-addressmodel.html"><abbr title="App/Models/AddressModel.php">AddressModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">141</span>
+    <span class="phpdocumentor-element-found-in__line">139</span>
 
     </aside>
 

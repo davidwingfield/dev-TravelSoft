@@ -202,7 +202,13 @@
 		public static function get(int $airport_id = null): array
 		{
 			$airports = [];
-			$results = AirportModel::fetchByAirportId($airport_id);
+			$results = [];
+			
+			if (!is_null($airport_id)) {
+				$results = AirportModel::fetchByAirportId($airport_id);
+			} else {
+				$results = AirportModel::fetchAll();
+			}
 			
 			foreach ($results AS $k => $airport) {
 				$airports[] = self::format($airport);

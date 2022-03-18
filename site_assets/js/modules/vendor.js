@@ -201,6 +201,7 @@ const Vendor = (function () {
                 }
                 //console.log("suggestion.data", suggestion.data)
                 let vendor = suggestion.data
+                
                 if (_form_product_add) {
                     let provider_company_id = (isNaN(parseInt(_modal_product_provider_company_id.value))) ? null : parseInt(_modal_product_provider_company_id.value)
                     _modal_product_vendor_id.value = suggestion.data.id
@@ -210,6 +211,7 @@ const Vendor = (function () {
                     Product.updateProductSKU()
                     _modal_product_provider_vendor_match.checked = parseInt(suggestion.data.company_id) === provider_company_id
                 }
+                
                 globalSelectedVendor = true
                 
             },

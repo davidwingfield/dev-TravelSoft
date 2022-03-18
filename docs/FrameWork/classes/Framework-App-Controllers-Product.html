@@ -259,6 +259,20 @@ Long Product Description</p>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Controllers-Product.html#method_get">get()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Controllers-Product.html#method_getLocationType">getLocationType()</a>
+    <span>
+                        &nbsp;: int    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Controllers-Product.html#method_getProductByProductId">getProductByProductId()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
@@ -314,6 +328,20 @@ Long Product Description</p>
 </dt>
 <dd></dd>
 
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Controllers-Product.html#method_serveUpdateDetail">serveUpdateDetail()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Controllers-Product.html#method_serveUpdateMeta">serveUpdateMeta()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd></dd>
+
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/Framework-App-Controllers-Product.html#method_format">format()</a>
     <span>
@@ -323,6 +351,20 @@ Long Product Description</p>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/Framework-App-Controllers-Product.html#method_format_ac">format_ac()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/Framework-App-Controllers-Product.html#method_updateDetail">updateDetail()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/Framework-App-Controllers-Product.html#method_updateMeta">updateMeta()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
@@ -467,7 +509,7 @@ Long Product Description</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">$buttons</span>
-     = <span class="phpdocumentor-signature__default-value">array(&quot;save&quot; =&gt; array(&quot;type&quot; =&gt; &quot;a&quot;, &quot;href&quot; =&gt; &quot;javascript:void(0)&quot;, &quot;classes&quot; =&gt; &quot;btn btn-primary btn-heading&quot;, &quot;icon&quot; =&gt; &quot;fas fa-save&quot;, &quot;id&quot; =&gt; &quot;button_save_product&quot;, &quot;data&quot; =&gt; array(&quot;toggle&quot; =&gt; &quot;tooltip&quot;, &quot;title&quot; =&gt; &quot;Save Product&quot;, &quot;placement&quot; =&gt; &quot;top&quot;)), &quot;new&quot; =&gt; array(&quot;type&quot; =&gt; &quot;a&quot;, &quot;href&quot; =&gt; &quot;javascript:void(0)&quot;, &quot;classes&quot; =&gt; &quot;btn btn-primary btn-heading&quot;, &quot;icon&quot; =&gt; &quot;fas fa-plus&quot;, &quot;id&quot; =&gt; &quot;button_add_product_page_heading&quot;, &quot;data&quot; =&gt; array(&quot;toggle&quot; =&gt; &quot;tooltip&quot;, &quot;title&quot; =&gt; &quot;Creat a New Product&quot;, &quot;placement&quot; =&gt; &quot;top&quot;)), &quot;calendar&quot; =&gt; array(&quot;type&quot; =&gt; &quot;a&quot;, &quot;href&quot; =&gt; &quot;javascript:void(0)&quot;, &quot;classes&quot; =&gt; &quot;btn btn-primary btn-heading&quot;, &quot;icon&quot; =&gt; &quot;fas fa-calendar&quot;, &quot;data&quot; =&gt; array(&quot;toggle&quot; =&gt; &quot;modal&quot;, &quot;target&quot; =&gt; &quot;#seasonCalendarModal&quot;)))</span></code>
+     = <span class="phpdocumentor-signature__default-value">array(&quot;save&quot; =&gt; array(&quot;type&quot; =&gt; &quot;a&quot;, &quot;href&quot; =&gt; &quot;javascript:void(0)&quot;, &quot;classes&quot; =&gt; &quot;btn btn-primary btn-heading&quot;, &quot;icon&quot; =&gt; &quot;fas fa-save&quot;, &quot;id&quot; =&gt; &quot;button_save_product&quot;, &quot;data&quot; =&gt; array(&quot;toggle&quot; =&gt; &quot;tooltip&quot;, &quot;title&quot; =&gt; &quot;Save Product&quot;, &quot;placement&quot; =&gt; &quot;top&quot;)), &quot;new&quot; =&gt; array(&quot;type&quot; =&gt; &quot;a&quot;, &quot;href&quot; =&gt; &quot;javascript:void(0)&quot;, &quot;classes&quot; =&gt; &quot;btn btn-primary btn-heading&quot;, &quot;icon&quot; =&gt; &quot;fas fa-plus&quot;, &quot;id&quot; =&gt; &quot;button_add_product_page_heading&quot;, &quot;data&quot; =&gt; array(&quot;toggle&quot; =&gt; &quot;tooltip&quot;, &quot;title&quot; =&gt; &quot;Create a New Product&quot;, &quot;placement&quot; =&gt; &quot;top&quot;)), &quot;calendar&quot; =&gt; array(&quot;type&quot; =&gt; &quot;a&quot;, &quot;href&quot; =&gt; &quot;javascript:void(0)&quot;, &quot;classes&quot; =&gt; &quot;btn btn-primary btn-heading&quot;, &quot;icon&quot; =&gt; &quot;fas fa-calendar&quot;, &quot;id&quot; =&gt; &quot;button_view_calendar&quot;, &quot;data&quot; =&gt; array(&quot;toggle&quot; =&gt; &quot;tooltip&quot;, &quot;title&quot; =&gt; &quot;View Calendar&quot;, &quot;placement&quot; =&gt; &quot;top&quot;)))</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -492,7 +534,7 @@ Long Product Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">58</span>
+    <span class="phpdocumentor-element-found-in__line">60</span>
 
     </aside>
 
@@ -501,7 +543,7 @@ Long Product Description</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">$tabs</span>
-     = <span class="phpdocumentor-signature__default-value">array(&quot;id&quot; =&gt; &quot;product_edit_tabs&quot;, &quot;role&quot; =&gt; &quot;tablist&quot;, &quot;class&quot; =&gt; &quot;nav nav-tabs nav-tabs-line&quot;, &quot;tabs&quot; =&gt; array(&quot;Overview&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_overview&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_overview&quot;, &quot;id&quot; =&gt; &quot;panel_tab_product_o&quot;, &quot;active&quot; =&gt; true, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;true&quot;), &quot;data&quot; =&gt; array()), &quot;Product&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_detail&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_detail&quot;, &quot;id&quot; =&gt; &quot;panel_tab_product&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Location&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_location&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_location&quot;, &quot;id&quot; =&gt; &quot;panel_tab_location&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Provider&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_provider&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_provider&quot;, &quot;id&quot; =&gt; &quot;panel_tab_provider&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Vendor&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_vendor&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_vendor&quot;, &quot;id&quot; =&gt; &quot;panel_tab_vendor&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Season&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_season&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_season&quot;, &quot;id&quot; =&gt; &quot;panel_tab_season&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Unit&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_unit&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_unit&quot;, &quot;id&quot; =&gt; &quot;panel_tab_unit&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Variant&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_variant&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_variant&quot;, &quot;id&quot; =&gt; &quot;panel_tab_variant&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Inventory&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_inventory&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_inventory&quot;, &quot;id&quot; =&gt; &quot;panel_tab_inventory&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Pricing&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_pricing&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_pricing&quot;, &quot;id&quot; =&gt; &quot;panel_tab_pricing&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Meta&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_meta&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_meta&quot;, &quot;id&quot; =&gt; &quot;panel_tab_meta&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array())))</span></code>
+     = <span class="phpdocumentor-signature__default-value">array(&quot;id&quot; =&gt; &quot;product_edit_tabs&quot;, &quot;role&quot; =&gt; &quot;tablist&quot;, &quot;class&quot; =&gt; &quot;nav nav-tabs nav-tabs-line&quot;, &quot;tabs&quot; =&gt; array(&quot;Overview&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_overview&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_overview&quot;, &quot;id&quot; =&gt; &quot;panel_tab_product_o&quot;, &quot;active&quot; =&gt; true, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;true&quot;), &quot;data&quot; =&gt; array()), &quot;Product&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_detail&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_detail&quot;, &quot;id&quot; =&gt; &quot;panel_tab_product&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Location&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_location&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_location&quot;, &quot;id&quot; =&gt; &quot;panel_tab_location&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Season&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_season&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_season&quot;, &quot;id&quot; =&gt; &quot;panel_tab_season&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Unit&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_unit&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_unit&quot;, &quot;id&quot; =&gt; &quot;panel_tab_unit&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Variant&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_variant&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_variant&quot;, &quot;id&quot; =&gt; &quot;panel_tab_variant&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Inventory&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_inventory&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_inventory&quot;, &quot;id&quot; =&gt; &quot;panel_tab_inventory&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Pricing&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_pricing&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_pricing&quot;, &quot;id&quot; =&gt; &quot;panel_tab_pricing&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array()), &quot;Meta&quot; =&gt; array(&quot;controls&quot; =&gt; &quot;panel_tab_product_meta&quot;, &quot;href&quot; =&gt; &quot;panel_tab_product_meta&quot;, &quot;id&quot; =&gt; &quot;panel_tab_meta&quot;, &quot;active&quot; =&gt; false, &quot;aria&quot; =&gt; array(&quot;expanded&quot; =&gt; &quot;false&quot;), &quot;data&quot; =&gt; array())))</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -530,7 +572,7 @@ Long Product Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">180</span>
+    <span class="phpdocumentor-element-found-in__line">158</span>
 
     </aside>
 
@@ -563,7 +605,7 @@ Long Product Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">326</span>
+    <span class="phpdocumentor-element-found-in__line">663</span>
 
     </aside>
 
@@ -607,7 +649,7 @@ Long Product Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">313</span>
+    <span class="phpdocumentor-element-found-in__line">651</span>
 
     </aside>
 
@@ -651,7 +693,7 @@ Long Product Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">534</span>
+    <span class="phpdocumentor-element-found-in__line">299</span>
 
     </aside>
 
@@ -695,7 +737,7 @@ Long Product Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">227</span>
+    <span class="phpdocumentor-element-found-in__line">212</span>
 
     </aside>
 
@@ -732,6 +774,94 @@ Long Product Description</p>
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_get">
+        get()
+        <a href="classes/Framework-App-Controllers-Product.html#method_get" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">696</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">get</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$product_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$product_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getLocationType">
+        getLocationType()
+        <a href="classes/Framework-App-Controllers-Product.html#method_getLocationType" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">709</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getLocationType</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">int</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_getProductByProductId">
         getProductByProductId()
         <a href="classes/Framework-App-Controllers-Product.html#method_getProductByProductId" class="headerlink"><i class="fas fa-link"></i></a>
@@ -739,7 +869,7 @@ Long Product Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">589</span>
+    <span class="phpdocumentor-element-found-in__line">733</span>
 
     </aside>
 
@@ -783,7 +913,7 @@ Long Product Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">185</span>
+    <span class="phpdocumentor-element-found-in__line">163</span>
 
     </aside>
 
@@ -860,7 +990,7 @@ Long Product Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">291</span>
+    <span class="phpdocumentor-element-found-in__line">277</span>
 
     </aside>
 
@@ -904,7 +1034,7 @@ Long Product Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">561</span>
+    <span class="phpdocumentor-element-found-in__line">326</span>
 
     </aside>
 
@@ -948,7 +1078,7 @@ Long Product Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">372</span>
+    <span class="phpdocumentor-element-found-in__line">310</span>
 
     </aside>
 
@@ -992,7 +1122,7 @@ Long Product Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">362</span>
+    <span class="phpdocumentor-element-found-in__line">621</span>
 
     </aside>
 
@@ -1036,7 +1166,7 @@ Long Product Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">571</span>
+    <span class="phpdocumentor-element-found-in__line">633</span>
 
     </aside>
 
@@ -1044,6 +1174,94 @@ Long Product Description</p>
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">serveUpdate</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_serveUpdateDetail">
+        serveUpdateDetail()
+        <a href="classes/Framework-App-Controllers-Product.html#method_serveUpdateDetail" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">593</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">serveUpdateDetail</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_serveUpdateMeta">
+        serveUpdateMeta()
+        <a href="classes/Framework-App-Controllers-Product.html#method_serveUpdateMeta" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">607</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">serveUpdateMeta</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -1080,7 +1298,7 @@ Long Product Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">388</span>
+    <span class="phpdocumentor-element-found-in__line">775</span>
 
     </aside>
 
@@ -1124,7 +1342,7 @@ Long Product Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">546</span>
+    <span class="phpdocumentor-element-found-in__line">941</span>
 
     </aside>
 
@@ -1139,6 +1357,94 @@ Long Product Description</p>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$products</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_updateDetail">
+        updateDetail()
+        <a href="classes/Framework-App-Controllers-Product.html#method_updateDetail" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">761</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">updateDetail</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_updateMeta">
+        updateMeta()
+        <a href="classes/Framework-App-Controllers-Product.html#method_updateMeta" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Controllers/Product.php"><a href="files/app-controllers-product.html"><abbr title="App/Controllers/Product.php">Product.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">749</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">updateMeta</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                  = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">

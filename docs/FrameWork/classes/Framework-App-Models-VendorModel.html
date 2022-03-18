@@ -217,20 +217,25 @@ Long Vendor Description</p>
 <dd></dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-Core-Model.html#method_buildSelectQuery">buildSelectQuery()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-VendorModel.html#method_get">get()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>Gets vendor(s) by id
-If id is passed then we search by it otherwise get all enabled</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-VendorModel.html#method_getByName">getByName()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>Gets vendor(s) by id
-If id is passed then we search by it otherwise get all enabled</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-VendorModel.html#method_getOne">getOne()</a>
@@ -348,7 +353,7 @@ If id is passed then we search by it otherwise get all enabled</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/VendorModel.php"><a href="files/app-models-vendormodel.html"><abbr title="App/Models/VendorModel.php">VendorModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">66</span>
+    <span class="phpdocumentor-element-found-in__line">64</span>
 
     </aside>
 
@@ -382,7 +387,7 @@ If id is passed then we search by it otherwise get all enabled</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/VendorModel.php"><a href="files/app-models-vendormodel.html"><abbr title="App/Models/VendorModel.php">VendorModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">64</span>
+    <span class="phpdocumentor-element-found-in__line">62</span>
 
     </aside>
 
@@ -463,9 +468,7 @@ If id is passed then we search by it otherwise get all enabled</dd>
                             VENDOR.description_long AS &#039;vendor_description_long&#039;
             FROM 			vendor VENDOR
             JOIN			company COMPANY ON COMPANY.id = VENDOR.company_id
-           WHERE			COMPANY.enabled = 1
-                
-                &quot;</span></code>
+		&quot;</span></code>
 
     
         <section class="phpdocumentor-description"><p>Select Query Template</p>
@@ -487,6 +490,50 @@ If id is passed then we search by it otherwise get all enabled</dd>
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_buildSelectQuery">
+        buildSelectQuery()
+        <a href="classes/Framework-Core-Model.html#method_buildSelectQuery" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Core/Model.php"><a href="files/core-model.html"><abbr title="Core/Model.php">Model.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">72</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">buildSelectQuery</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_get">
         get()
         <a href="classes/Framework-App-Models-VendorModel.html#method_get" class="headerlink"><i class="fas fa-link"></i></a>
@@ -494,27 +541,25 @@ If id is passed then we search by it otherwise get all enabled</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/VendorModel.php"><a href="files/app-models-vendormodel.html"><abbr title="App/Models/VendorModel.php">VendorModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">76</span>
+    <span class="phpdocumentor-element-found-in__line">66</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Gets vendor(s) by id
-If id is passed then we search by it otherwise get all enabled</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">get</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">get</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$id</span>
-                : <span class="phpdocumentor-signature__argument__return-type">int|null</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>Provider Id</p>
-</section>
+                    <section class="phpdocumentor-description"></section>
 
             </dd>
             </dl>
@@ -540,18 +585,17 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/VendorModel.php"><a href="files/app-models-vendormodel.html"><abbr title="App/Models/VendorModel.php">VendorModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">103</span>
+    <span class="phpdocumentor-element-found-in__line">116</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Gets vendor(s) by id
-If id is passed then we search by it otherwise get all enabled</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getByName</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -585,7 +629,7 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/VendorModel.php"><a href="files/app-models-vendormodel.html"><abbr title="App/Models/VendorModel.php">VendorModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">122</span>
+    <span class="phpdocumentor-element-found-in__line">135</span>
 
     </aside>
 
@@ -838,7 +882,7 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/VendorModel.php"><a href="files/app-models-vendormodel.html"><abbr title="App/Models/VendorModel.php">VendorModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">137</span>
+    <span class="phpdocumentor-element-found-in__line">150</span>
 
     </aside>
 
@@ -882,7 +926,7 @@ If id is passed then we search by it otherwise get all enabled</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/VendorModel.php"><a href="files/app-models-vendormodel.html"><abbr title="App/Models/VendorModel.php">VendorModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">221</span>
+    <span class="phpdocumentor-element-found-in__line">234</span>
 
     </aside>
 

@@ -615,7 +615,7 @@
 					postal_code = VALUES(postal_code);
             	";
 				
-				//Log::$debug_log->trace($sql);
+				Log::$debug_log->trace($sql);
 				
 				try {
 					//Log::$debug_log->trace($sql);

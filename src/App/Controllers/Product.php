@@ -333,7 +333,11 @@
 			
 			$statusTypesId = 1;
 			$productId = (isset($params["id"])) ? (int)$params["id"] : null;
+			
+			$countryId = (isset($params["country_id"])) ? (int)$params["country_id"] : null;
+			$provinceId = (isset($params["province_id"])) ? (int)$params["province_id"] : null;
 			$cityId = (isset($params["city_id"])) ? (int)$params["city_id"] : null;
+			
 			$ratingsTypesId = (isset($params["rating_types_id"])) ? (int)$params["rating_types_id"] : 3;
 			$categoryId = (isset($params["category_id"])) ? (int)$params["category_id"] : null;
 			$currencyId = (isset($params["currency_id"])) ? (int)$params["currency_id"] : 5;
@@ -359,14 +363,15 @@
 			$productDescriptionShort = (isset($params["description_short"])) ? $params["description_short"] : null;
 			$productDescriptionLong = (isset($params["description_long"])) ? $params["description_long"] : null;
 			$keywords = (isset($params["keywords"])) ? $params["keywords"] : "";
-			$countryId = (isset($params["country_id"])) ? (int)$params["country_id"] : null;
-			$provinceId = (isset($params["province_id"])) ? (int)$params["province_id"] : null;
+			
 			$productApiId = (isset($params["api_id"])) ? (int)$params["api_id"] : null;
 			$productEnabled = (isset($params["enabled"])) ? (int)$params["enabled"] : 1;
 			$locationData = array(
 				"category_id" => $categoryId,
 				"name" => $productName,
 				"city_id" => $cityId,
+				"province_id" => $provinceId,
+				"country_id" => $countryId,
 				"location_types_id" => $locationTypesId,
 				"street_1" => $productStreet1,
 				"street_2" => $productStreet2,
@@ -376,7 +381,37 @@
 			$productKeywords = [];
 			
 			switch ($categoryId) {
-				
+				case 3:
+					$cityList = City::getByCountryId($countryId);
+					
+					if (isset($cityList) && isset($cityList[0])) {
+						$city = $cityList[0];
+						$countryId = (isset($city["country_id"])) ? (int)$city["country_id"] : null;
+						$provinceId = (isset($city["province_id"])) ? (int)$city["province_id"] : null;
+						$cityId = (isset($city["id"])) ? (int)$city["id"] : null;
+						
+						$locationData = Location::get($params["name"], (int)$cityId, "medium");
+						
+						if (!$locationData) {
+							
+							$locationData = Location::update(array(
+								"category_id" => $categoryId,
+								"name" => $productName,
+								"city_id" => $cityId,
+								"province_id" => $provinceId,
+								"country_id" => $countryId,
+								"location_types_id" => $locationTypesId,
+								"street_1" => $productStreet1,
+								"street_2" => $productStreet2,
+								"zipcode" => $productPostalCode,
+								"enabled" => 1,
+							));
+							
+						}
+						
+					}
+					
+					break;
 				case 1:
 				case 5:
 				case 6:

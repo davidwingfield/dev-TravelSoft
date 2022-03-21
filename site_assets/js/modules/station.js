@@ -20,9 +20,6 @@ const Station = (function () {
     const _modal_product_depart_from_station_local_code = document.getElementById("modal_product_depart_from_station_local_code")
     const _modal_product_depart_from_station_home_link = document.getElementById("modal_product_depart_from_station_home_link")
     const _modal_product_depart_from_station_wikipedia_link = document.getElementById("modal_product_depart_from_station_wikipedia_link")
-    const _modal_product_depart_from_station_scheduled_service = document.getElementById("modal_product_depart_from_station_scheduled_service")
-    const _modal_product_depart_from_station_keywords = document.getElementById("modal_product_depart_from_station_keywords")
-    
     const _modal_product_arrive_to_station_add_block = document.getElementById("modal_product_arrive_to_station_add_block")
     const _modal_product_arrive_to_station_cancel_button = document.getElementById("modal_product_arrive_to_station_cancel_button")
     const _modal_product_arrive_to_station_submit_button = document.getElementById("modal_product_arrive_to_station_submit_button")
@@ -42,9 +39,8 @@ const Station = (function () {
     const _modal_product_arrive_to_station_local_code = document.getElementById("modal_product_arrive_to_station_local_code")
     const _modal_product_arrive_to_station_home_link = document.getElementById("modal_product_arrive_to_station_home_link")
     const _modal_product_arrive_to_station_wikipedia_link = document.getElementById("modal_product_arrive_to_station_wikipedia_link")
-    const _modal_product_arrive_to_station_scheduled_service = document.getElementById("modal_product_arrive_to_station_scheduled_service")
-    const _modal_product_arrive_to_station_keywords = document.getElementById("modal_product_arrive_to_station_keywords")
-    
+    const _modal_product_depart_from_station_add_block_close_button = document.getElementById("modal_product_depart_from_station_add_block_close_button")
+    const _modal_product_arrive_to_station_add_block_close_button = document.getElementById("modal_product_arrive_to_station_add_block_close_button")
     const _modal_product_day_span = document.getElementById("modal_product_day_span")
     const _modal_product_station_day_span = document.getElementById("modal_product_station_day_span")
     const _modal_product_country_id = document.getElementById("modal_product_country_id")
@@ -54,22 +50,57 @@ const Station = (function () {
     let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let globalSelectedStationDepartFrom = false
     let globalSelectedStationArriveTo = false
+    let editText = "Edit"
+    let cancelText = "Cancel"
+    
+    $(_modal_product_depart_from_station_add_block_close_button)
+        .on("click", function () {
+            //console.log("Station.modal_product_depart_from_station_add_block_close_button:click()")
+            // ----
+            
+            cancelAddStationRecord("depart_from")
+            hideStationForm("arrive_to")
+            hideStationForm("depart_from")
+            
+            _modal_product_depart_from_station_edit_link.innerText = editText
+            _modal_product_arrive_to_station_edit_link.innerText = editText
+            
+            _modal_product_arrive_to_station.disabled = false
+            _modal_product_depart_from_station.disabled = false
+            
+        })
+    
+    $(_modal_product_arrive_to_station_add_block_close_button)
+        .on("click", function () {
+            //console.log("Station.modal_product_arrive_to_station_add_block_close_button:click()")
+            // ----
+            
+            cancelAddStationRecord("arrive_to")
+            hideStationForm("arrive_to")
+            hideStationForm("depart_from")
+            
+            _modal_product_depart_from_station_edit_link.innerText = editText
+            _modal_product_arrive_to_station_edit_link.innerText = editText
+            
+            _modal_product_arrive_to_station.disabled = false
+            _modal_product_depart_from_station.disabled = false
+            
+        })
     
     $(_modal_product_station_day_span)
         .on("change", function (e) {
             //console.log("Station.modal_product_station_day_span:change()")
             // ----
             
-            let daySpan
+            let daySpan = $(this).val()
             
-            if (_modal_product_day_span) {
-                daySpan = ((!isNaN(parseInt(_modal_product_station_day_span.value))) && parseInt(_modal_product_station_day_span.value) > 0) ? parseInt(_modal_product_station_day_span.value) : 1
-                
-                //console.log("|__ daySpan", daySpan)
-                
-                _modal_product_day_span.value = daySpan
-                
+            if (daySpan === "" || isNaN(parseInt(daySpan))) {
+                daySpan = 1
+            } else if (daySpan < 1) {
+                daySpan = 1
             }
+            _modal_product_station_day_span.value = daySpan
+            _modal_product_day_span.value = daySpan
         })
     
     $(_modal_product_depart_from_station_edit_link)
@@ -77,16 +108,30 @@ const Station = (function () {
             //console.log("Station.modal_product_depart_from_station_edit_link:click()")
             // ----
             
-            let type = "depart_from"
+            let toggleData = _modal_product_depart_from_station_edit_link.innerText
             
-            if ($("#modal_product_depart_from_station_add_block").is(":visible")) {
+            if (toggleData === editText) {
                 
-                clearStationForm(type)
+                showStationForm("depart_from")
+                hideStationForm("arrive_to")
+                
+                _modal_product_depart_from_station_edit_link.innerText = cancelText
+                _modal_product_arrive_to_station_edit_link.innerText = editText
+                
+                _modal_product_depart_from_station.disabled = true
+                _modal_product_arrive_to_station.disabled = false
                 
             } else {
                 
-                edit(this, type)
-                _modal_product_depart_from_station_edit_link.innerText = "Clear"
+                cancelAddStationRecord("depart_from")
+                hideStationForm("arrive_to")
+                hideStationForm("depart_from")
+                
+                _modal_product_depart_from_station_edit_link.innerText = editText
+                _modal_product_arrive_to_station_edit_link.innerText = editText
+                
+                _modal_product_arrive_to_station.disabled = false
+                _modal_product_depart_from_station.disabled = false
                 
             }
             
@@ -97,16 +142,29 @@ const Station = (function () {
             //console.log("Station.modal_product_arrive_to_station_edit_link:click()")
             // ----
             
-            let type = "arrive_to"
+            let toggleData = _modal_product_arrive_to_station_edit_link.innerText
             
-            if ($("#modal_product_arrive_to_station_add_block").is(":visible")) {
+            if (toggleData === editText) {
                 
-                clearStationForm(type)
+                showStationForm("arrive_to")
+                hideStationForm("depart_from")
+                
+                _modal_product_depart_from_station_edit_link.innerText = editText
+                _modal_product_arrive_to_station_edit_link.innerText = cancelText
+                
+                _modal_product_arrive_to_station.disabled = true
+                _modal_product_depart_from_station.disabled = false
                 
             } else {
+                cancelAddStationRecord("arrive_to")
+                hideStationForm("arrive_to")
+                hideStationForm("depart_from")
                 
-                edit(this, type)
-                _modal_product_arrive_to_station_edit_link.innerText = "Clear"
+                _modal_product_depart_from_station_edit_link.innerText = editText
+                _modal_product_arrive_to_station_edit_link.innerText = editText
+                
+                _modal_product_arrive_to_station.disabled = false
+                _modal_product_depart_from_station.disabled = false
                 
             }
             
@@ -114,364 +172,117 @@ const Station = (function () {
     
     $(_modal_product_depart_from_station_add_block)
         .on("change", function () {
+            //console.log("Station.modal_product_depart_from_station_add_block:change()")
+            // ----
+            
             validDepartFromRecord()
         })
         .on("keyup", function () {
+            //console.log("Station.modal_product_depart_from_station_add_block:keyup()")
+            // ----
+            
             validDepartFromRecord()
         })
     
     $(_modal_product_depart_from_station_cancel_button)
         .on("click", function () {
+            //console.log("Station.modal_product_depart_from_station_cancel_button:click()")
+            // ----
+            
             cancelAddStationRecord("depart_from")
             _modal_product_depart_from_station_edit_link.innerText = "Edit"
         })
     
     $(_modal_product_arrive_to_station_cancel_button)
         .on("click", function () {
+            //console.log("Station.modal_product_arrive_to_station_cancel_button:click()")
+            // ----
+            
             cancelAddStationRecord("arrive_to")
             _modal_product_arrive_to_station_edit_link.innerText = "Edit"
         })
     
     $(_modal_product_depart_from_station_submit_button)
         .on("click", function () {
+            //console.log("Station.modal_product_depart_from_station_submit_button:click()")
+            // ----
+            
             save("depart_from")
         })
     
     $(_modal_product_arrive_to_station_submit_button)
         .on("click", function () {
+            //console.log("Station.modal_product_arrive_to_station_submit_button:click()")
+            // ----
+            
             save("arrive_to")
         })
     
-    // ----
-    
-    const edit = function (el, type) {
-        //console.log("Station.edit()")
-        // ----
-        
-        let stationId = (el.dataset.stationId && !isNaN(parseInt(el.dataset.stationId))) ? parseInt(el.dataset.stationId) : null
-        let station = Station.all.get(stationId)
-        
-        //*
-        //console.log("|__ stationId", stationId)
-        //console.log("|__ station", station)
-        //*/
-        
-        //*
-        if (station) {
-            
-            clearStationForm(type)
-            populateStationForm(station, type)
-            showStationForm(type)
-            
-        }
-        //*/
-        
-    }
-    
     const clearDepartFromFields = function () {
-        //console.log("Station.clearDepartFromFields()")
+        console.log("Station.clearDepartFromFields()")
         // ----
         
-        if (_modal_product_depart_from_station_id) {
+        if (_modal_product_depart_from_station_add_block) {
+            
+            if (Station.departFromKeywords) {
+                Station.departFromKeywords.clear()
+            }
+            
+            _modal_product_depart_from_station_gps_code.value = ""
+            _modal_product_depart_from_station_local_code.value = ""
+            _modal_product_depart_from_station_home_link.value = ""
+            _modal_product_depart_from_station_wikipedia_link.value = ""
             _modal_product_depart_from_station_id.value = ""
-        }
-        
-        if (_modal_product_depart_from_station_country_id) {
             _modal_product_depart_from_station_country_id.value = ""
-        }
-        
-        if (_modal_product_depart_from_station_province_id) {
             _modal_product_depart_from_station_province_id.value = ""
-        }
-        
-        if (_modal_product_depart_from_station_city_id) {
             _modal_product_depart_from_station_city_id.value = ""
-        }
-        
-        if (_modal_product_depart_from_station) {
             _modal_product_depart_from_station.value = ""
-        }
-        
-        if (_modal_product_country_id) {
             _modal_product_country_id.value = ""
-        }
-        
-        if (_modal_product_province_id) {
             _modal_product_province_id.value = ""
-        }
-        
-        if (_modal_product_city_id) {
             _modal_product_city_id.value = ""
-        }
-        
-        if (_modal_product_depart_from_station_edit_link) {
             _modal_product_depart_from_station_edit_link.dataset.stationId = ""
-        }
-        
-        if (_modal_product_depart_from_station) {
             
             hideStationForm("depart_from")
             toggleEditFormLink("depart_from")
-            
             $(_modal_product_depart_from_station).trigger("change")
         }
         
     }
-    
     const clearArriveToFields = function () {
-        //console.log("Station.clearArriveToFields()")
+        console.log("Station.clearArriveToFields()")
         // ----
         
-        Station.arriveToKeywords.clear()
+        let type = "arrive_to"
         
-        if (_modal_product_depart_from_station_id) {
-            _modal_product_depart_from_station_id.value = ""
+        if (Station.arriveToKeywords) {
+            Station.arriveToKeywords.clear()
         }
         
-        if (_modal_product_depart_from_station_country_id) {
-            _modal_product_depart_from_station_country_id.value = ""
-        }
+        _modal_product_arrive_to_station_gps_code.value = ""
+        _modal_product_arrive_to_station_local_code.value = ""
+        _modal_product_arrive_to_station_home_link.value = ""
+        _modal_product_arrive_to_station_wikipedia_link.value = ""
+        _modal_product_arrive_to_new_station_id.value = ""
+        _modal_product_arrive_to_station_iata_code.value = ""
+        _modal_product_arrive_to_station_city.value = ""
+        _modal_product_arrive_to_station_city_id.value = ""
+        _modal_product_arrive_to_station_country_id.value = ""
+        _modal_product_arrive_to_station_province_id.value = ""
+        _modal_product_arrive_to_station_postal_code.value = ""
+        _modal_product_arrive_to_station_street_1.value = ""
+        _modal_product_arrive_to_station_street_2.value = ""
+        _modal_product_arrive_to_station_id.value = ""
         
-        if (_modal_product_depart_from_station_province_id) {
-            _modal_product_depart_from_station_province_id.value = ""
-        }
+        _modal_product_arrive_to_station.disabled = false
         
-        if (_modal_product_depart_from_station_city_id) {
-            _modal_product_depart_from_station_city_id.value = ""
-        }
+        _modal_product_arrive_to_station_edit_link.dataset.stationId = ""
         
-        if (_modal_product_depart_from_station) {
-            _modal_product_depart_from_station.value = ""
-        }
-        
-        if (_modal_product_country_id) {
-            _modal_product_country_id.value = ""
-        }
-        
-        if (_modal_product_province_id) {
-            _modal_product_province_id.value = ""
-        }
-        
-        if (_modal_product_city_id) {
-            _modal_product_city_id.value = ""
-        }
-        
-        if (_modal_product_depart_from_station_edit_link) {
-            _modal_product_depart_from_station_edit_link.dataset.stationId = ""
-        }
-        
-        if (_modal_product_depart_from_station) {
-            
-            hideStationForm("depart_from")
-            toggleEditFormLink("depart_from")
-            
-            $(_modal_product_depart_from_station).trigger("change")
-        }
+        clearAllValidation()
+        hideStationForm(type)
+        toggleEditFormLink(type)
+        $(_modal_product_arrive_to_station).trigger("change")
         
     }
-    
-    const initAutocomplete = function () {
-        //console.log("Station.initAutocomplete()")
-        // ----
-        
-        if (_modal_product_depart_from_station) {
-            
-            $(_modal_product_depart_from_station)
-                .on("click", function (e) {
-                    if ($(this).attr("readonly") === "readonly") {
-                        e.preventDefault()
-                    } else {
-                        $(this).select()
-                    }
-                })
-                .on("search", function () {
-                    /*
-                    if (_modal_product_depart_from_station_id) {
-                        _modal_product_depart_from_station_id.value = ""
-                    }
-                    
-                    if (_modal_product_depart_from_station_country_id) {
-                        _modal_product_depart_from_station_country_id.value = ""
-                    }
-                    
-                    if (_modal_product_depart_from_station_province_id) {
-                        _modal_product_depart_from_station_province_id.value = ""
-                    }
-                    
-                    if (_modal_product_depart_from_station_city_id) {
-                        _modal_product_depart_from_station_city_id.value = ""
-                    }
-                    
-                    if (_modal_product_depart_from_station) {
-                        _modal_product_depart_from_station.value = ""
-                    }
-                    
-                    if (_modal_product_country_id) {
-                        _modal_product_country_id.value = ""
-                    }
-                    
-                    if (_modal_product_province_id) {
-                        _modal_product_province_id.value = ""
-                    }
-                    
-                    if (_modal_product_city_id) {
-                        _modal_product_city_id.value = ""
-                    }
-                    
-                    if (_modal_product_depart_from_station_edit_link) {
-                        _modal_product_depart_from_station_edit_link.dataset.stationId = ""
-                    }
-                    
-                    hideStationForm("depart_from")
-                    toggleEditFormLink("depart_from")
-                    //*/
-                    
-                    clearDepartFromFields()
-                    
-                    //$(_modal_product_depart_from_station).val("").trigger("change")
-                    
-                })
-                .on("keyup", function () {
-                    globalSelectedStationDepartFrom = false
-                })
-                .on("change", function () {
-                    setTimeout(function () {
-                        let station_name = _modal_product_depart_from_station.value
-                        
-                        if (globalSelectedStationDepartFrom === false) {
-                            
-                            if (station_name === "") {
-                                
-                                globalSelectedStationDepartFrom = false
-                                
-                                _modal_product_depart_from_station.value = ""
-                                _modal_product_depart_from_station_id.value = ""
-                                _modal_product_depart_from_station_province_id.value = ""
-                                _modal_product_depart_from_station_city_id.value = ""
-                                _modal_product_depart_from_station_edit_link.dataset.stationId = ""
-                                
-                                hideStationForm("depart_from")
-                                toggleEditFormLink("depart_from")
-                                
-                            } else {
-                                stationExists(station_name, "depart_from")
-                            }
-                        }
-                    }, 200)
-                })
-                .autocomplete({
-                    serviceUrl: "/api/v1.0/autocomplete/stations",
-                    minChars: 2,
-                    cache: false,
-                    dataType: "json",
-                    triggerSelectOnValidInput: false,
-                    paramName: "st",
-                    onSelect: function (suggestion) {
-                        if (!suggestion || !suggestion.data) {
-                            return
-                        }
-                        
-                        let station = suggestion.data
-                        
-                        if (station[0]) {
-                            station = station[0]
-                        }
-                        
-                        globalSelectedStationDepartFrom = true
-                        
-                        if (station) {
-                            
-                            populateStationForm(station, "depart_from")
-                            toggleEditFormLink("depart_from")
-                            
-                        } else {
-                            
-                            resetStationForm("depart_from")
-                            showStationForm("depart_from")
-                            toggleEditFormLink("depart_from")
-                            
-                        }
-                    },
-                })
-        }
-        
-        if (_modal_product_arrive_to_station) {
-            
-            $(_modal_product_arrive_to_station)
-                .on("click", function () {
-                    if ($(this).attr("readonly") === "readonly") {
-                        e.preventDefault()
-                    } else {
-                        $(this).select()
-                    }
-                })
-                .on("keyup", function () {
-                    globalSelectedStationArriveTo = false
-                })
-                .on("search", function () {
-                    if (_modal_product_arrive_to_station_id) {
-                        _modal_product_arrive_to_station_id.value = ""
-                    }
-                    if (_modal_product_arrive_to_station) {
-                        _modal_product_arrive_to_station.value = ""
-                    }
-                })
-                .on("change", function () {
-                    setTimeout(function () {
-                        let station_name = _modal_product_arrive_to_station.value
-                        
-                        if (globalSelectedStationArriveTo === false) {
-                            if (station_name === "") {
-                                _modal_product_arrive_to_station.value = ""
-                                _modal_product_arrive_to_station_id.value = ""
-                                globalSelectedStationArriveTo = false
-                            } else {
-                                stationExists(station_name, "arrive_to")
-                            }
-                        }
-                    }, 200)
-                })
-                .autocomplete({
-                    serviceUrl: "/api/v1.0/autocomplete/stations",
-                    minChars: 2,
-                    cache: false,
-                    dataType: "json",
-                    triggerSelectOnValidInput: false,
-                    paramName: "st",
-                    onSelect: function (suggestion) {
-                        if (!suggestion || !suggestion.data) {
-                            return
-                        }
-                        
-                        globalSelectedStationArriveTo = true
-                        
-                        let station = suggestion.data
-                        
-                        if (station) {
-                            if (_modal_product_arrive_to_station) {
-                                _modal_product_arrive_to_station.value = (station.name) ? station.name : ""
-                            }
-                            
-                            if (_modal_product_arrive_to_station_id) {
-                                _modal_product_arrive_to_station_id.value = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : ""
-                            }
-                            
-                            _modal_product_arrive_to_station_edit_link.dataset.stationId = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : ""
-                            $(_modal_product_arrive_to_station_edit_link).show()
-                            toggleEditFormLink("arrive_to")
-                        } else {
-                            _modal_product_arrive_to_station_edit_link.dataset.stationId = ""
-                            $(_modal_product_arrive_to_station_edit_link).hide()
-                            resetStationForm("arrive_to")
-                            showStationForm("arrive_to")
-                            toggleEditFormLink("arrive_to")
-                        }
-                    },
-                })
-        }
-        
-    }
-    
     const save = function (type) {
         //console.log("Station.save()")
         // ----
@@ -487,7 +298,10 @@ const Station = (function () {
                 
                 if (ans) {
                     
+                    console.log("|__ dataToSend", dataToSend)
+                    
                     sendSaveRequest(dataToSend, function (data) {
+                        console.log("data", data)
                         let station
                         if (data) {
                             station = data
@@ -502,18 +316,32 @@ const Station = (function () {
                             let stationId = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : null
                             
                             if (stationId !== null) {
-                                //console.log("|__ stationId", stationId)
-                                
                                 Station.all.set(stationId, station)
                                 
                                 if (type) {
-                                    resetStationForm(type)
-                                    populateStationForm(station, type)
+                                    if (type === "depart_from") {
+                                        Station.departingStation = station
+                                    } else {
+                                        Station.arrivingStation = station
+                                    }
+                                    cancelAddStationRecord(type)
+                                    hideStationForm(type)
+                                    initAutocomplete()
+                                    handleStationError(`Station ${stationId} has been updated.`, "Station", "success")
                                     
-                                    toggleEditFormLink(type)
+                                    _modal_product_depart_from_station_edit_link.innerText = editText
+                                    _modal_product_arrive_to_station_edit_link.innerText = editText
+                                    _modal_product_arrive_to_station.disabled = false
+                                    _modal_product_depart_from_station.disabled = false
+                                    
+                                } else {
+                                    handleStationError(`Station ${stationId} missing type.`, "Station", "warning")
                                 }
                                 
-                                initAutocomplete()
+                            } else {
+                                
+                                handleStationError("Missing Fields", "Station", "error")
+                                
                             }
                             
                             /*
@@ -556,13 +384,14 @@ const Station = (function () {
                         }
                         
                     })
+                    
                 }
+                
             })
             
         }
         
     }
-    
     const sendSaveRequest = function (dataToSend, callback) {
         //console.log("Station.sendSaveRequest()")
         // ----
@@ -581,8 +410,8 @@ const Station = (function () {
                 //console.log("error", e)
             }
         }
+        
     }
-    
     const validDepartFromRecord = function () {
         //console.log("Station.validDepartFromRecord()")
         // ----
@@ -605,7 +434,6 @@ const Station = (function () {
         
         return isValid
     }
-    
     const validArriveToRecord = function () {
         //console.log("Station.validArriveToRecord()")
         // ----
@@ -628,7 +456,6 @@ const Station = (function () {
         
         return isValid
     }
-    
     const buildAddStationRecord = function (type) {
         //console.log("Station.buildAddStationRecord()")
         // ----
@@ -639,8 +466,15 @@ const Station = (function () {
                 //console.log("|__ type", type)
                 
                 if (type === "depart_from") {
+                    
                     if (validDepartFromRecord()) {
                         let dataToSend = {
+                            gps_code: (_modal_product_depart_from_station_gps_code.value !== "") ? _modal_product_depart_from_station_gps_code.value : null,
+                            local_code: (_modal_product_depart_from_station_local_code.value !== "") ? _modal_product_depart_from_station_local_code.value : null,
+                            home_link: (_modal_product_depart_from_station_home_link.value !== "") ? _modal_product_depart_from_station_home_link.value : null,
+                            wikipedia_link: (_modal_product_depart_from_station_wikipedia_link.value !== "") ? _modal_product_depart_from_station_wikipedia_link.value : null,
+                            scheduled_service: 1,
+                            keywords: Station.departFromKeywords.build(),
                             id: (_modal_product_depart_from_new_station_id && !isNaN(parseInt(_modal_product_depart_from_new_station_id.value))) ? parseInt(_modal_product_depart_from_new_station_id.value) : null,
                             postal_code: (_modal_product_depart_from_station_postal_code.value !== "") ? _modal_product_depart_from_station_postal_code.value : null,
                             street_1: (_modal_product_depart_from_station_street_1.value !== "") ? _modal_product_depart_from_station_street_1.value : null,
@@ -648,20 +482,21 @@ const Station = (function () {
                             city_id: (!isNaN(parseInt(_modal_product_depart_from_station_city_id.value))) ? parseInt(_modal_product_depart_from_station_city_id.value) : null,
                             name: (_modal_product_depart_from_station.value !== "") ? _modal_product_depart_from_station.value : null,
                             iata_code: (_modal_product_depart_from_station_iata_code.value !== "") ? _modal_product_depart_from_station_iata_code.value : null,
-                            //home_link: (_modal_product_depart_from_station_home_link.value !== "") ? _modal_product_depart_from_station_home_link.value : null,
-                            //wikipedia_link: (_modal_product_depart_from_station_wikipedia_link.value !== "") ? _modal_product_depart_from_station_wikipedia_link.value : null,
-                            //gps_code: (_modal_product_depart_from_station_gps_code.value !== "") ? _modal_product_depart_from_station_gps_code.value : null,
-                            //local_code: (_modal_product_depart_from_station_local_code.value !== "") ? _modal_product_depart_from_station_local_code.value : null,
-                            //scheduled_service: (_modal_product_depart_from_station_scheduled_service && !isNaN(parseInt(_modal_product_depart_from_station_scheduled_service.value))) ? parseInt(_modal_product_depart_from_station_scheduled_service.value) : null,
-                            //keywords: (_modal_product_depart_from_station_keywords.value !== "") ? _modal_product_depart_from_station_keywords.value : null,
-                            //enabled: (_modal_product_depart_from_station_enabled.value !== "") ? _modal_product_depart_from_station_enabled.value : null,
+                            enabled: 1,
                         }
                         
                         return removeNulls(dataToSend)
                     }
                 } else if (type === "arrive_to") {
+                    
                     if (validArriveToRecord()) {
                         let dataToSend = {
+                            gps_code: (_modal_product_arrive_to_station_gps_code.value !== "") ? _modal_product_arrive_to_station_gps_code.value : null,
+                            local_code: (_modal_product_arrive_to_station_local_code.value !== "") ? _modal_product_arrive_to_station_local_code.value : null,
+                            home_link: (_modal_product_arrive_to_station_home_link.value !== "") ? _modal_product_arrive_to_station_home_link.value : null,
+                            wikipedia_link: (_modal_product_arrive_to_station_wikipedia_link.value !== "") ? _modal_product_arrive_to_station_wikipedia_link.value : null,
+                            scheduled_service: 1,
+                            keywords: Station.arriveToKeywords.build(),
                             id: (_modal_product_arrive_to_new_station_id && !isNaN(parseInt(_modal_product_arrive_to_new_station_id.value))) ? parseInt(_modal_product_arrive_to_new_station_id.value) : null,
                             postal_code: (_modal_product_arrive_to_station_postal_code.value !== "") ? _modal_product_arrive_to_station_postal_code.value : null,
                             street_1: (_modal_product_arrive_to_station_street_1.value !== "") ? _modal_product_arrive_to_station_street_1.value : null,
@@ -669,142 +504,40 @@ const Station = (function () {
                             city_id: (!isNaN(parseInt(_modal_product_arrive_to_station_city_id.value))) ? parseInt(_modal_product_arrive_to_station_city_id.value) : null,
                             name: (_modal_product_arrive_to_station.value !== "") ? _modal_product_arrive_to_station.value : null,
                             iata_code: (_modal_product_arrive_to_station_iata_code.value !== "") ? _modal_product_arrive_to_station_iata_code.value : null,
-                            //home_link: (_modal_product_arrive_to_station_home_link.value !== "") ? _modal_product_depart_from_station_home_link.value : null,
-                            //wikipedia_link: (_modal_product_arrive_to_station_wikipedia_link.value !== "") ? _modal_product_depart_from_station_wikipedia_link.value : null,
-                            //gps_code: (_modal_product_arrive_to_station_gps_code.value !== "") ? _modal_product_depart_from_station_gps_code.value : null,
-                            //local_code: (_modal_product_arrive_to_station_local_code.value !== "") ? _modal_product_depart_from_station_local_code.value : null,
-                            //scheduled_service: (_modal_product_arrive_to_station_scheduled_service && !isNaN(parseInt(_modal_product_depart_from_station_scheduled_service.value))) ? parseInt(_modal_product_depart_from_station_scheduled_service.value) : null,
-                            //keywords: (_modal_product_arrive_to_station_keywords.value !== "") ? _modal_product_depart_from_station_keywords.value : null,
-                            //enabled: (_modal_product_arrive_to_station_enabled.value !== "") ? _modal_product_depart_from_station_enabled.value : null,
+                            enabled: 1,
                         }
                         
                         return removeNulls(dataToSend)
                     }
                 }
+                
             }
+            
         }
+        
     }
-    
     const cancelAddStationRecord = function (type) {
-        //console.log("Station.cancelAddStationRecord()")
+        console.log("Station.cancelAddStationRecord()", Station.arrivingStation)
         // ----
         
         if (!type) {
             return
+        }
+        
+        switch (type) {
+            case "depart_from":
+                clearStationForm(type)
+                populateStationForm(Station.departingStation, type)
+                break
+            case "arrive_to":
+                clearStationForm(type)
+                populateStationForm(Station.arrivingStation, type)
+                break
         }
         
         hideStationForm(type)
         
     }
-    
-    const clearStationForm = function (type) {
-        //console.log("Station.clearStationForm()")
-        // ----
-        
-        if (!type) {
-            return
-        }
-        
-        if (type === "depart_from") {
-            if (!_modal_product_depart_from_station_add_block) {return}
-            
-            _modal_product_depart_from_new_station_id.value = ""
-            _modal_product_depart_from_station_iata_code.value = ""
-            _modal_product_depart_from_station_city.value = ""
-            _modal_product_depart_from_station_city_id.value = ""
-            _modal_product_depart_from_station_country_id.value = ""
-            _modal_product_depart_from_station_province_id.value = ""
-            _modal_product_depart_from_station_postal_code.value = ""
-            _modal_product_depart_from_station_street_1.value = ""
-            _modal_product_depart_from_station_street_2.value = ""
-            _modal_product_depart_from_station_id.value = ""
-            _modal_product_country_id.value = ""
-            _modal_product_province_id.value = ""
-            _modal_product_city_id.value = ""
-            
-            _modal_product_depart_from_station.value = ""
-            _modal_product_depart_from_station.disabled = false
-            
-            _modal_product_depart_from_station_edit_link.dataset.stationId = ""
-            
-            clearAllValidation()
-            
-        } else if (type === "arrive_to") {
-            if (!_modal_product_arrive_to_station_add_block) {return}
-            
-            _modal_product_arrive_to_new_station_id.value = ""
-            _modal_product_arrive_to_station_iata_code.value = ""
-            _modal_product_arrive_to_station_city.value = ""
-            _modal_product_arrive_to_station_city_id.value = ""
-            _modal_product_arrive_to_station_country_id.value = ""
-            _modal_product_arrive_to_station_province_id.value = ""
-            _modal_product_arrive_to_station_postal_code.value = ""
-            _modal_product_arrive_to_station_street_1.value = ""
-            _modal_product_arrive_to_station_street_2.value = ""
-            _modal_product_arrive_to_station_id.value = ""
-            
-            _modal_product_arrive_to_station.value = ""
-            _modal_product_arrive_to_station.disabled = false
-            
-            _modal_product_arrive_to_station_edit_link.dataset.stationId = ""
-            
-            clearAllValidation()
-        } else {
-            return
-        }
-        
-        _modal_product_country_id.value = ""
-        _modal_product_province_id.value = ""
-        _modal_product_city_id.value = ""
-        $(_modal_product_station_day_span).val("1").trigger("change")
-        
-    }
-    
-    const resetStationForm = function (type) {
-        //console.log("Station.resetStationForm()")
-        // ----
-        
-        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
-            if (type) {
-                _modal_product_arrive_to_station.disabled = false
-                _modal_product_depart_from_station.disabled = false
-                
-                clearStationForm(type)
-                
-                hideStationForm("depart_from")
-                hideStationForm("arrive_to")
-            }
-        }
-    }
-    
-    const hideStationForm = function (type) {
-        //console.log("Station.hideStationForm()")
-        // ----
-        
-        if (!type || !_modal_product_depart_from_station_add_block || !_modal_product_arrive_to_station_add_block) {
-            return
-        }
-        
-        if (type === "depart_from") {
-            $(_modal_product_depart_from_station_add_block).hide()
-            
-            _modal_product_depart_from_station.disabled = false
-            
-            toggleEditFormLink(type)
-        } else if (type === "arrive_to") {
-            $(_modal_product_arrive_to_station_add_block).hide()
-            
-            _modal_product_arrive_to_station.disabled = false
-            
-            toggleEditFormLink(type)
-        } else {
-            //console.log("|__ type", type)
-        }
-        
-        _modal_product_depart_from_station.disabled = false
-        _modal_product_arrive_to_station.disabled = false
-    }
-    
     const showStationForm = function (type) {
         //console.log("Station.showStationForm()")
         // ----
@@ -841,7 +574,6 @@ const Station = (function () {
         }
         
     }
-    
     const stationExists = function (name, type) {
         //console.log("Station.stationExists()")
         // ----
@@ -868,8 +600,27 @@ const Station = (function () {
                 
                 if (station && station.id) {
                     
+                    let country = (station.country) ? station.country : {}
+                    let province = (station.province) ? station.province : {}
+                    let city = (station.city) ? station.city : {}
+                    let stationId = (station && !isNaN(parseInt(station.id))) ? parseInt(station.id) : null
+                    let countryId = (country && !isNaN(parseInt(country.id))) ? parseInt(country.id) : null
+                    let provinceId = (province && !isNaN(parseInt(province.id))) ? parseInt(province.id) : null
+                    let cityId = (city && !isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+                    
+                    clearStationForm(type)
+                    populateStationForm(station, type)
+                    hideStationForm(type)
+                    toggleEditFormLink(type)
+                    
                     if (type === "depart_from") {
                         globalSelectedStationDepartFrom = true
+                        
+                        _modal_product_country_id.value = countryId
+                        _modal_product_province_id.value = provinceId
+                        _modal_product_city_id.value = cityId
+                        
+                        _modal_product_depart_from_station_edit_link.dataset.stationId = stationId
                         
                     } else if (type === "arrive_to") {
                         globalSelectedStationArriveTo = true
@@ -878,13 +629,8 @@ const Station = (function () {
                         _modal_product_arrive_to_station_id.value = station.id
                         
                         _modal_product_arrive_to_station_edit_link.dataset.stationId = station.id
-                    } else {
-                        return
                     }
                     
-                    populateStationForm(station, type)
-                    hideStationForm(type)
-                    toggleEditFormLink(type)
                 } else {
                     // Station Does Not Exist
                     confirmDialog(`The station: ${name} does not exist exists. Would you like to create it?`, (ans) => {
@@ -895,6 +641,7 @@ const Station = (function () {
                                 globalSelectedStationArriveTo = false
                             }
                             
+                            clearStationForm(type)
                             populateStationForm({
                                 name: name,
                             }, type)
@@ -925,11 +672,12 @@ const Station = (function () {
                         }
                     })
                 }
+                
             })
             
         }
+        
     }
-    
     const fetchByName = function (dataToSend, callback) {
         //console.log("Station.fetchByName()")
         // ----
@@ -953,14 +701,25 @@ const Station = (function () {
             handleStationError("Error Loading Station - Missing Data")
         }
     }
-    
-    const handleStationError = function (msg) {
+    const handleStationError = function (msg, title, type) {
         //console.log("Station.handleStationError()")
         // ----
         
-        toastr.error(msg)
+        if (!msg) {
+            msg = "There was an error."
+        }
+        
+        if (!title) {
+            title = "Station"
+        }
+        
+        if (!type) {
+            type = "error"
+        }
+        
+        toastr[type](msg, title)
+        
     }
-    
     const defaultDetail = function () {
         //console.log("Station.defaultDetail()")
         // ----
@@ -1002,6 +761,10 @@ const Station = (function () {
             iata_code: null,
             id: null,
             keywords: null,
+            gps_code: null,
+            wikipedia_link: null,
+            home_link: null,
+            local_code: null,
             modified_by: userId,
             name: null,
             note: null,
@@ -1023,8 +786,8 @@ const Station = (function () {
             street_1: null,
             street_2: null,
         }
+        
     }
-    
     const setDetail = function (station) {
         //console.log("Station.setDetail()")
         // ----
@@ -1088,11 +851,79 @@ const Station = (function () {
             detail.postal_code = (station.postal_code) ? station.postal_code : null
             detail.street_1 = (station.street_1) ? station.street_1 : null
             detail.street_2 = (station.street_2) ? station.street_2 : null
+            detail.local_code = (station.local_code) ? station.local_code : null
+            detail.gps_code = (station.gps_code) ? station.gps_code : null
+            detail.home_link = (station.home_link) ? station.home_link : null
+            detail.wikipedia_link = (station.wikipedia_link) ? station.wikipedia_link : null
         }
         
         return detail
     }
-    
+    const init = function (settings) {
+        //console.log("Station.init()")
+        // ----
+        
+        let stations = (settings && settings.stations) ? settings.stations : []
+        
+        if (_modal_product_depart_from_station || _modal_product_arrive_to_station) {
+            
+            resetStationForm("depart_from")
+            resetStationForm("arrive_to")
+            
+            hideStationForm("depart_from")
+            hideStationForm("arrive_to")
+            
+            loadAll(stations)
+            initAutocomplete()
+        }
+        
+    }
+    const resetStationForm = function (type) {
+        //console.log("Station.resetStationForm()")
+        // ----
+        
+        if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
+            if (type) {
+                _modal_product_arrive_to_station.disabled = false
+                _modal_product_depart_from_station.disabled = false
+                
+                clearStationForm(type)
+                
+                hideStationForm("depart_from")
+                hideStationForm("arrive_to")
+            }
+        }
+        
+    }
+    const hideStationForm = function (type) {
+        //console.log("Station.hideStationForm()")
+        // ----
+        
+        if (!type || !_modal_product_depart_from_station_add_block || !_modal_product_arrive_to_station_add_block) {
+            return
+        }
+        
+        if (type === "depart_from") {
+            
+            $(_modal_product_depart_from_station_add_block).hide()
+            
+            _modal_product_depart_from_station.disabled = false
+            
+            toggleEditFormLink(type)
+            
+        } else if (type === "arrive_to") {
+            $(_modal_product_arrive_to_station_add_block).hide()
+            
+            _modal_product_arrive_to_station.disabled = false
+            
+            toggleEditFormLink(type)
+        } else {
+            //console.log("|__ type", type)
+        }
+        
+        _modal_product_depart_from_station.disabled = false
+        _modal_product_arrive_to_station.disabled = false
+    }
     const loadAll = function (stations) {
         //console.log("Station.loadAll()")
         // ----
@@ -1107,310 +938,400 @@ const Station = (function () {
         })
         
     }
-    
+    const initAutocomplete = function () {
+        //console.log("Station.initAutocomplete()")
+        // ----
+        
+        if (_modal_product_depart_from_station) {
+            
+            $(_modal_product_depart_from_station)
+                .on("click", function (e) {
+                    if ($(this).attr("readonly") === "readonly") {
+                        e.preventDefault()
+                    } else {
+                        $(this).select()
+                    }
+                })
+                .on("search", function () {
+                    clearDepartFromFields()
+                })
+                .on("keyup", function () {
+                    globalSelectedStationDepartFrom = false
+                })
+                .on("change", function () {
+                    setTimeout(function () {
+                        
+                        let station_name = _modal_product_depart_from_station.value
+                        
+                        if (globalSelectedStationDepartFrom === false) {
+                            
+                            if (station_name === "") {
+                                
+                                globalSelectedStationDepartFrom = false
+                                
+                                clearDepartFromFields()
+                                
+                            } else {
+                                stationExists(station_name, "depart_from")
+                            }
+                        }
+                        
+                    }, 200)
+                })
+                .autocomplete({
+                    serviceUrl: "/api/v1.0/autocomplete/stations",
+                    minChars: 2,
+                    cache: false,
+                    dataType: "json",
+                    triggerSelectOnValidInput: false,
+                    paramName: "st",
+                    onSelect: function (suggestion) {
+                        if (!suggestion || !suggestion.data) {
+                            return
+                        }
+                        
+                        let station = suggestion.data
+                        let type = "depart_from"
+                        
+                        if (station[0]) {
+                            station = station[0]
+                        }
+                        
+                        globalSelectedStationDepartFrom = true
+                        
+                        if (station) {
+                            console.log("|__ station", station)
+                            
+                            populateStationForm(station, type)
+                            toggleEditFormLink(type)
+                            
+                        } else {
+                            
+                            resetStationForm(type)
+                            showStationForm(type)
+                            toggleEditFormLink(type)
+                            
+                        }
+                    },
+                })
+        }
+        
+        if (_modal_product_arrive_to_station) {
+            
+            $(_modal_product_arrive_to_station)
+                .on("click", function () {
+                    if ($(this).attr("readonly") === "readonly") {
+                        e.preventDefault()
+                    } else {
+                        $(this).select()
+                    }
+                })
+                .on("keyup", function () {
+                    globalSelectedStationArriveTo = false
+                })
+                .on("search", function () {
+                    
+                    clearArriveToFields()
+                    
+                    /*
+                    if (_modal_product_arrive_to_station_id) {
+                        _modal_product_arrive_to_station_id.value = ""
+                    }
+                    if (_modal_product_arrive_to_station) {
+                        _modal_product_arrive_to_station.value = ""
+                    }
+                    //*/
+                })
+                .on("change", function () {
+                    setTimeout(function () {
+                        
+                        let station_name = _modal_product_arrive_to_station.value
+                        
+                        if (globalSelectedStationArriveTo === false) {
+                            if (station_name === "") {
+                                clearArriveToFields()
+                                globalSelectedStationArriveTo = false
+                            } else {
+                                stationExists(station_name, "arrive_to")
+                            }
+                        }
+                        
+                    }, 200)
+                })
+                .autocomplete({
+                    serviceUrl: "/api/v1.0/autocomplete/stations",
+                    minChars: 2,
+                    cache: false,
+                    dataType: "json",
+                    triggerSelectOnValidInput: false,
+                    paramName: "st",
+                    onSelect: function (suggestion) {
+                        if (!suggestion || !suggestion.data) {
+                            return
+                        }
+                        
+                        let station = suggestion.data
+                        let type = "arrive_to"
+                        
+                        if (station[0]) {
+                            station = station[0]
+                        }
+                        
+                        globalSelectedStationDepartFrom = true
+                        
+                        if (station) {
+                            console.log("|__ station", station)
+                            
+                            populateStationForm(station, type)
+                            toggleEditFormLink(type)
+                            
+                        } else {
+                            
+                            resetStationForm(type)
+                            showStationForm(type)
+                            toggleEditFormLink(type)
+                            
+                        }
+                    },
+                })
+        }
+        
+    }
     const populateStationForm = function (station, type) {
-        //console.log("Station.populateStationForm()")
+        //console.log("Station.populateStationForm()", station, type)
         // ----
         
         if (!type || !_modal_product_depart_from_station_add_block || !_modal_product_arrive_to_station_add_block) {
             return
         }
         
-        clearStationForm(type)
+        let displayType = "display_" + defaultLocationDisplayFormat
+        let countryId = (station && station.country && station.country.id && !isNaN(parseInt(station.country.id))) ? parseInt(station.country.id) : null
+        let provinceId = (station && station.province && station.province.id && !isNaN(parseInt(station.province.id))) ? parseInt(station.province.id) : null
+        let provinceName = (station && station.province) ? station.province.name : null
+        let countryName = (station && station.country) ? station.country.name : null
+        let cityId = (station && station.city && station.city.id && !isNaN(parseInt(station.city.id))) ? parseInt(station.city.id) : null
+        let cityName = (station && station.city && station.city.name) ? station.city.name : null
+        let stationId = (station && station.id && !isNaN(parseInt(station.id))) ? parseInt(station.id) : null
+        let stationName = (station && station.name) ? station.name : null
+        let stationIATACode = (station && station.iata_code) ? station.iata_code : null
+        let stationStreet1 = (station && station.street_1) ? station.street_1 : null
+        let stationStreet2 = (station && station.street_2) ? station.street_2 : null
+        let stationPostalCode = (station && station.postal_code) ? station.postal_code : null
+        let gpsCode = (station && station.gps_code) ? station.gps_code : null
+        let homeLink = (station && station.home_link) ? station.home_link : null
+        let wikipediaLink = (station && station.wikipedia_link) ? station.wikipedia_link : null
+        let stationKeywords = (station && station.keywords) ? station.keywords : []
+        let cityDisplay = ""
+        let localCode = (station && station.local_code) ? station.local_code : null
+        if (cityName !== null && provinceName !== null && countryName !== null) {
+            cityDisplay = `${cityName} (${provinceName}, ${countryName})`
+        }
         
-        if (station) {
-            let countryId = (station.country && station.country.id && !isNaN(parseInt(station.country.id))) ? parseInt(station.country.id) : null
-            let provinceId = (station.province && station.province.id && !isNaN(parseInt(station.province.id))) ? parseInt(station.province.id) : null
-            let cityId = (station.city && station.city.id && !isNaN(parseInt(station.city.id))) ? parseInt(station.city.id) : null
-            let stationId = (station.id && !isNaN(parseInt(station.id))) ? parseInt(station.id) : null
-            let stationName = (station.name) ? station.name : null
-            let stationIATACode = (station.iata_code) ? station.iata_code : null
-            let stationStreet1 = (station.street_1) ? station.street_1 : null
-            let stationStreet2 = (station.street_2) ? station.street_2 : null
-            let stationPostalCode = (station.postal_code) ? station.postal_code : null
-            let displayShort, displayMedium, displayLong = ""
-            let displayCity, displayShortCity, displayMediumCity, displayLongCity,
-                displayShortProvince, displayMediumProvince, displayLongProvince,
-                displayShortCountry, displayMediumCountry, displayLongCountry = null
-            let defaultDisplay = (defaultLocationDisplayFormat) ? defaultLocationDisplayFormat.toLowerCase() : "short"
+        if (type === "depart_from") {
+            Station.departingStation = station
             
-            if (station.city && station.province && station.country) {
-                if (station.city) {
-                    displayShortCity = null
-                    displayMediumCity = null
-                    displayLongCity = null
-                    
-                    if (station.city.name) {
-                        displayShortCity = station.city.name
-                        displayMediumCity = station.city.name
-                        displayLongCity = station.city.name
-                    }
-                }
-                
-                if (station.province) {
-                    displayShortProvince = null
-                    displayMediumProvince = null
-                    displayLongProvince = null
-                    
-                    if (station.province.iso3) {
-                        displayShortProvince = (station.province.iso2) ? station.province.iso2 : null
-                        displayMediumProvince = (station.province.iso2) ? station.province.iso2 : null
-                        displayLongProvince = (station.province.iso2) ? station.province.iso2 : null
-                    }
-                    
-                    if (station.province.iso2) {
-                        displayShortProvince = (station.province.iso2) ? station.province.iso2 : null
-                        displayMediumProvince = (station.province.iso2) ? station.province.iso2 : null
-                        displayLongProvince = (station.province.iso2) ? station.province.iso2 : null
-                    }
-                    
-                    if (station.province.name) {
-                        
-                        if (displayShortProvince === null) {
-                            displayShortProvince = station.province.name
-                        }
-                        
-                        if (displayLongProvince === null) {
-                            displayLongProvince = station.province.name
-                        } else {
-                            displayLongProvince = displayLongProvince + " - " + station.province.name
-                        }
-                        
-                        displayMediumProvince = station.province.name
-                    }
-                    
-                }
-                
-                if (station.country) {
-                    displayShortCountry = null
-                    displayMediumCountry = null
-                    displayLongCountry = null
-                    
-                    if (station.country.iso2) {
-                        displayShortCountry = station.country.iso2
-                        //displayMediumCountry = station.country.iso2
-                        displayLongCountry = station.country.iso2
-                    }
-                    
-                    if (station.country.iso3) {
-                        displayShortCountry = station.country.iso3
-                        displayMediumCountry = station.country.iso3
-                        displayLongCountry = station.country.iso3
-                    }
-                    
-                    if (station.country.name) {
-                        
-                        if (displayShortCountry === null) {
-                            displayShortCountry = station.country.name
-                        }
-                        
-                        if (displayLongCountry === null) {
-                            displayLongCountry = station.country.name
-                        } else {
-                            displayLongCountry = displayLongCountry + " - " + station.country.name
-                        }
-                        
-                        displayMediumCountry = station.country.name
-                    }
-                    
-                }
-                
-                /*
-                //console.log("|__ displayShortCity", displayShortCity)
-                //console.log("|__ displayShortProvince", displayShortProvince)
-                //console.log("|__ displayShortCountry", displayShortCountry)
-                
-                //console.log("|__ displayMediumCity", displayMediumCity)
-                //console.log("|__ displayMediumProvince", displayMediumProvince)
-                //console.log("|__ displayMediumCountry", displayMediumCountry)
-                
-                //console.log("|__ displayLongCity", displayLongCity)
-                //console.log("|__ displayLongProvince", displayLongProvince)
-                //console.log("|__ displayLongCountry", displayLongCountry)
-                //*/
-                
-                displayShort = displayShortCity + "( " + displayShortProvince + ", " + displayShortCountry + " )"
-                displayMedium = displayMediumCity + "( " + displayMediumProvince + ", " + displayMediumCountry + " )"
-                displayLong = displayLongCity + "( " + displayLongProvince + ", " + displayLongCountry + " )"
-                
-            }
+            _modal_product_country_id.value = countryId
+            _modal_product_province_id.value = provinceId
+            _modal_product_city_id.value = cityId
             
-            if (!displayShort) {
-                displayShort = ""
-            }
+            _modal_product_depart_from_station.value = stationName
+            _modal_product_depart_from_station_iata_code.value = stationIATACode
+            _modal_product_depart_from_station_postal_code.value = stationPostalCode
+            _modal_product_depart_from_station_street_1.value = stationStreet1
+            _modal_product_depart_from_station_street_2.value = stationStreet2
+            _modal_product_depart_from_station_gps_code.value = gpsCode
+            _modal_product_depart_from_station_home_link.value = homeLink
+            _modal_product_depart_from_station_wikipedia_link.value = wikipediaLink
+            _modal_product_depart_from_station_city.value = cityDisplay
+            _modal_product_depart_from_station_id.value = stationId
+            _modal_product_depart_from_station_city_id.value = cityId
+            _modal_product_depart_from_new_station_id.value = stationId
+            _modal_product_depart_from_station_edit_link.dataset.stationId = stationId
+            _modal_product_depart_from_station_local_code.value = localCode
             
-            if (!displayMedium) {
-                displayMedium = ""
-            }
+            Station.departFromKeywords.set(stationKeywords)
             
-            if (!displayLong) {
-                displayLong = ""
-            }
+        } else if (type === "arrive_to") {
+            Station.arrivingStation = station
             
-            switch (defaultDisplay) {
-                case "short":
-                    displayCity = displayShort
-                    break
-                case "medium":
-                    displayCity = displayMedium
-                    break
-                case "long":
-                    displayCity = displayLong
-                    break
-                default:
-                    displayCity = ""
-            }
+            _modal_product_arrive_to_station.value = stationName
+            _modal_product_arrive_to_station_iata_code.value = stationIATACode
+            _modal_product_arrive_to_station_postal_code.value = stationPostalCode
+            _modal_product_arrive_to_station_street_1.value = stationStreet1
+            _modal_product_arrive_to_station_street_2.value = stationStreet2
+            _modal_product_arrive_to_station_gps_code.value = gpsCode
+            _modal_product_arrive_to_station_home_link.value = homeLink
+            _modal_product_arrive_to_station_wikipedia_link.value = wikipediaLink
+            _modal_product_arrive_to_station_city.value = cityDisplay
+            _modal_product_arrive_to_station_id.value = stationId
+            _modal_product_arrive_to_station_city_id.value = cityId
+            _modal_product_arrive_to_new_station_id.value = stationId
+            _modal_product_arrive_to_station_edit_link.dataset.stationId = stationId
+            _modal_product_arrive_to_station_local_code.value = localCode
             
-            /*
-            //console.log("|__ defaultLocationDisplayFormat", defaultLocationDisplayFormat)
-            //console.log("|__ displayCity", displayCity)
-            //console.log("|__ displayShort", displayShort)
-            //console.log("|__ displayMedium", displayMedium)
-            //console.log("|__ displayLong", displayLong)
-            //*/
-            
-            if (type === "depart_from") {
-                _modal_product_depart_from_station.value = stationName
-                _modal_product_depart_from_station_iata_code.value = stationIATACode
-                _modal_product_depart_from_station_city.value = ""
-                _modal_product_depart_from_station_postal_code.value = stationPostalCode
-                _modal_product_depart_from_station_street_1.value = stationStreet1
-                _modal_product_depart_from_station_street_2.value = stationStreet2
-                
-                if (countryId !== null) {
-                    _modal_product_depart_from_station_country_id.value = countryId.toString()
-                    _modal_product_country_id.value = countryId.toString()
-                }
-                
-                if (provinceId !== null) {
-                    _modal_product_depart_from_station_province_id.value = provinceId.toString()
-                    _modal_product_province_id.value = provinceId.toString()
-                }
-                
-                if (cityId !== null) {
-                    _modal_product_depart_from_station_city_id.value = cityId.toString()
-                    _modal_product_city_id.value = cityId.toString()
-                }
-                
-                if (stationId !== null) {
-                    _modal_product_depart_from_station_id.value = stationId.toString()
-                    _modal_product_depart_from_new_station_id.value = stationId.toString()
-                    _modal_product_depart_from_station_edit_link.dataset.stationId = stationId.toString()
-                }
-                
-                _modal_product_depart_from_station_city.value = displayCity
-                
-            } else if (type === "arrive_to") {
-                
-                _modal_product_arrive_to_station.value = stationName
-                _modal_product_arrive_to_station_iata_code.value = stationIATACode
-                _modal_product_arrive_to_station_city.value = ""
-                _modal_product_arrive_to_station_postal_code.value = stationPostalCode
-                _modal_product_arrive_to_station_street_1.value = stationStreet1
-                _modal_product_arrive_to_station_street_2.value = stationStreet2
-                
-                if (countryId !== null) {
-                    _modal_product_arrive_to_station_country_id.value = countryId.toString()
-                }
-                
-                if (provinceId !== null) {
-                    _modal_product_arrive_to_station_province_id.value = provinceId.toString()
-                }
-                
-                if (cityId !== null) {
-                    _modal_product_arrive_to_station_city_id.value = cityId.toString()
-                }
-                
-                if (stationId !== null) {
-                    _modal_product_arrive_to_station_id.value = stationId.toString()
-                    _modal_product_arrive_to_new_station_id.value = stationId.toString()
-                    _modal_product_arrive_to_station_edit_link.dataset.stationId = stationId.toString()
-                }
-                
-                _modal_product_arrive_to_station_city.value = displayCity
-                
-            } else {
-                return
-            }
-            
-            showStationForm(type)
+            Station.arriveToKeywords.set(stationKeywords)
             
         }
         
     }
-    
+    const clearStationForm = function (type) {
+        //console.log("Station.clearStationForm()")
+        // ----
+        
+        if (!type) {
+            return
+        }
+        
+        $(_modal_product_station_day_span).val("1").trigger("change")
+        
+        if (type === "depart_from") {
+            
+            if (!_modal_product_depart_from_station_add_block) {return}
+            
+            if (Station.departFromKeywords) {
+                Station.departFromKeywords.clear()
+            }
+            
+            _modal_product_depart_from_new_station_id.value = ""
+            _modal_product_depart_from_station_iata_code.value = ""
+            _modal_product_depart_from_station_city.value = ""
+            _modal_product_depart_from_station_city_id.value = ""
+            _modal_product_depart_from_station_country_id.value = ""
+            _modal_product_depart_from_station_province_id.value = ""
+            _modal_product_depart_from_station_postal_code.value = ""
+            _modal_product_depart_from_station_street_1.value = ""
+            _modal_product_depart_from_station_street_2.value = ""
+            _modal_product_depart_from_station_id.value = ""
+            _modal_product_country_id.value = ""
+            _modal_product_province_id.value = ""
+            _modal_product_city_id.value = ""
+            
+            _modal_product_depart_from_station.disabled = false
+            
+            _modal_product_depart_from_station_edit_link.dataset.stationId = ""
+            
+            clearAllValidation()
+        } else if (type === "arrive_to") {
+            
+            if (!_modal_product_arrive_to_station_add_block) {return}
+            
+            if (Station.arriveToKeywords) {
+                Station.arriveToKeywords.clear()
+            }
+            
+            _modal_product_arrive_to_new_station_id.value = ""
+            _modal_product_arrive_to_station_iata_code.value = ""
+            _modal_product_arrive_to_station_city.value = ""
+            _modal_product_arrive_to_station_city_id.value = ""
+            _modal_product_arrive_to_station_country_id.value = ""
+            _modal_product_arrive_to_station_province_id.value = ""
+            _modal_product_arrive_to_station_postal_code.value = ""
+            _modal_product_arrive_to_station_street_1.value = ""
+            _modal_product_arrive_to_station_street_2.value = ""
+            _modal_product_arrive_to_station_id.value = ""
+            
+            _modal_product_arrive_to_station.disabled = false
+            
+            _modal_product_arrive_to_station_edit_link.dataset.stationId = ""
+            
+            clearAllValidation()
+            
+        } else {
+            
+            _modal_product_depart_from_station_edit_link.dataset.toggle = "hidden"
+            _modal_product_arrive_to_station_edit_link.dataset.toggle = "hidden"
+            
+            $(_modal_product_depart_from_station_edit_link).hide()
+            $(_modal_product_arrive_to_station_edit_link).hide()
+            
+        }
+    }
     const toggleEditFormLink = function (type) {
-        //console.log("Station.toggleEditFormLink()")
+        //console.log("Station.toggleEditFormLink(type)", type)
         // ----
         
         if (type) {
-            //console.log("|__ type", type)
+            /*
+            console.log("|__ _modal_product_depart_from_station_edit_link", _modal_product_depart_from_station_edit_link)
+            console.log("|__ _modal_product_arrive_to_station_edit_link", _modal_product_arrive_to_station_edit_link)
+            //*/
             
-            if (type === "depart_from") {
+            if (type === "depart_from" && _modal_product_depart_from_station_edit_link) {
+                let toggleStatus = (_modal_product_depart_from_station_edit_link.dataset.toggle) ? _modal_product_depart_from_station_edit_link.dataset.toggle : "hidden"
                 
-                if (_modal_product_depart_from_station_edit_link) {
+                /*
+                console.log("|__ toggleStatus", toggleStatus)
+                console.log("|__ _modal_product_depart_from_new_station_id", _modal_product_depart_from_new_station_id)
+                console.log("|__ _modal_product_depart_from_station", _modal_product_depart_from_station)
+                console.log("|__ _modal_product_depart_from_station_city_id", _modal_product_depart_from_station_city_id)
+                console.log("|__ _modal_product_depart_from_new_station_id.value", _modal_product_depart_from_new_station_id.value)
+                console.log("|__ _modal_product_depart_from_new_station_id.value", _modal_product_depart_from_new_station_id.value)
+                console.log("|__ _modal_product_depart_from_station_city_id.value", _modal_product_depart_from_station_city_id.value)
+                //*/
+                
+                if (_modal_product_depart_from_new_station_id && _modal_product_depart_from_station && _modal_product_depart_from_station_city_id
+                    && _modal_product_depart_from_new_station_id.value !== "" && _modal_product_depart_from_station.value !== ""
+                    && _modal_product_depart_from_station_city_id.value !== "") {
+                    // ----------------------------------------------------------------------------------------------------
                     
-                    if (_modal_product_depart_from_new_station_id && _modal_product_depart_from_station && _modal_product_depart_from_station_city_id
-                        && _modal_product_depart_from_new_station_id.value !== "" && _modal_product_depart_from_station.value !== ""
-                        && _modal_product_depart_from_station_city_id.value !== "") {
-                        
-                        $(_modal_product_depart_from_station_edit_link).show()
-                        
-                    } else {
-                        
-                        $(_modal_product_depart_from_station_edit_link).hide()
-                        
-                    }
+                    _modal_product_depart_from_station_edit_link.dataset.toggle = "shown"
                     
+                    $(_modal_product_depart_from_station_edit_link).show()
+                } else {
+                    _modal_product_depart_from_station_edit_link.dataset.toggle = "hidden"
+                    
+                    $(_modal_product_depart_from_station_edit_link).hide()
+                }
+            } else if (type === "arrive_to" && _modal_product_arrive_to_station_edit_link) {
+                let toggleStatus = (_modal_product_arrive_to_station_edit_link.dataset.toggle) ? _modal_product_arrive_to_station_edit_link.dataset.toggle : "hidden"
+                
+                //*
+                console.log("|__ toggleStatus", toggleStatus)
+                console.log("|__ _modal_product_arrive_to_new_station_id", _modal_product_arrive_to_new_station_id)
+                console.log("|__ _modal_product_arrive_to_station", _modal_product_arrive_to_station)
+                console.log("|__ _modal_product_arrive_to_station_city_id", _modal_product_arrive_to_station_city_id)
+                console.log("|__ _modal_product_arrive_to_new_station_id.value", _modal_product_arrive_to_new_station_id.value)
+                console.log("|__ _modal_product_arrive_to_new_station_id.value", _modal_product_arrive_to_new_station_id.value)
+                console.log("|__ _modal_product_arrive_to_station_city_id.value", _modal_product_arrive_to_station_city_id.value)
+                //*/
+                
+                if (
+                    _modal_product_arrive_to_new_station_id &&
+                    _modal_product_arrive_to_station &&
+                    _modal_product_arrive_to_station_city_id &&
+                    _modal_product_arrive_to_new_station_id.value !== "" &&
+                    _modal_product_arrive_to_station.value !== "" &&
+                    _modal_product_arrive_to_station_city_id.value !== ""
+                ) {
+                    console.log("|__ |__ shown")
+                    _modal_product_arrive_to_station_edit_link.dataset.toggle = "shown"
+                    
+                    $(_modal_product_arrive_to_station_edit_link).show()
+                    
+                } else {
+                    console.log("|__ |__ hidden")
+                    
+                    _modal_product_arrive_to_station_edit_link.dataset.toggle = "hidden"
+                    
+                    $(_modal_product_arrive_to_station_edit_link).hide()
                 }
                 
-            } else if (type === "arrive_to") {
-                if (_modal_product_arrive_to_station_edit_link) {
-                    
-                    if (_modal_product_arrive_to_new_station_id && _modal_product_arrive_to_station && _modal_product_arrive_to_station_city_id
-                        && _modal_product_arrive_to_new_station_id.value !== "" && _modal_product_arrive_to_station.value !== ""
-                        && _modal_product_arrive_to_station_city_id.value !== "") {
-                        
-                        $(_modal_product_arrive_to_station_edit_link).show()
-                        
-                    } else {
-                        
-                        $(_modal_product_arrive_to_station_edit_link).hide()
-                        
-                    }
-                    
-                }
+            } else {
+                
+                _modal_product_depart_from_station_edit_link.dataset.toggle = "hidden"
+                _modal_product_arrive_to_station_edit_link.dataset.toggle = "hidden"
+                
+                $(_modal_product_depart_from_station_edit_link).hide()
+                $(_modal_product_arrive_to_station_edit_link).hide()
+                
             }
-        }
-    }
-    
-    const init = function (settings) {
-        //console.log("Station.init()")
-        // ----
-        
-        let stations = []
-        
-        if (settings) {
-            if (settings.stations) {
-                stations = settings.stations
-            }
-        }
-        
-        if (_modal_product_depart_from_station || _modal_product_arrive_to_station) {
             
-            resetStationForm("depart_from")
-            resetStationForm("arrive_to")
-            
-            hideStationForm("depart_from")
-            hideStationForm("arrive_to")
-            
-            loadAll(settings)
-            initAutocomplete()
         }
-        
     }
     
     return {
+        departingStation: null,
         departFromKeywords: null,
         arriveToKeywords: null,
         resetStationForm: function (type) {

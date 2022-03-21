@@ -86,37 +86,6 @@
 			exit(0);
 		}
 		
-		public static function update(array $params = []): array
-		{
-			$locations = array();
-			$location_types_id = (isset($params["location_types_id"])) ? (int)$params["location_types_id"] : null;
-			$location_city_id = (isset($params["city_id"])) ? (int)$params["city_id"] : null;
-			$location_id = (isset($params["id"])) ? (int)$params["id"] : null;
-			$location_name = ($params["name"]) ? (string)$params["name"] : null;
-			
-			$street_1 = (isset($params["street_1"])) ? (string)$params["street_1"] : null;
-			$street_2 = (isset($params["street_2"])) ? (string)$params["street_2"] : null;
-			$zipcode = (isset($params["zipcode"])) ? (string)$params["zipcode"] : null;
-			
-			$args = array(
-				"street_1" => $street_1,
-				"street_2" => $street_2,
-				"zipcode" => $zipcode,
-				"location_types_id" => $location_types_id,
-				"city_id" => $location_city_id,
-				"id" => $location_id,
-				"name" => $location_name,
-			);
-			
-			$results = LocationModel::update($args);
-			
-			foreach ($results AS $location) {
-				$locations[] = self::formatObject($location);
-			}
-			
-			return $locations;
-		}
-		
 		/**
 		 * get location by location id
 		 *
@@ -186,6 +155,7 @@
 		{
 			$locations = [];
 			$results = LocationModel::getByName((string)$location_name, (int)$city_id, (string)$default_display);
+			
 			foreach ($results AS $k => $location) {
 				$locations[] = self::format_location($location);
 			}
@@ -479,6 +449,50 @@
 					"note" => $location["city_note"],
 				),
 			);
+		}
+		
+		public static function update(array $params = []): array
+		{
+			//Log::$debug_log->trace("Location::update");
+			//Log::$debug_log->info($params);
+			
+			$locations = array();
+			
+			$categoryId = (isset($params["category_id"])) ? (int)$params["category_id"] : null;
+			
+			$location_types_id = (isset($params["location_types_id"])) ? (int)$params["location_types_id"] : null;
+			
+			$location_country_id = (isset($params["country_id"])) ? (int)$params["country_id"] : null;
+			$location_province_id = (isset($params["province_id"])) ? (int)$params["province_id"] : null;
+			$location_city_id = (isset($params["city_id"])) ? (int)$params["city_id"] : null;
+			
+			$location_id = (isset($params["id"])) ? (int)$params["id"] : null;
+			$location_name = ($params["name"]) ? (string)$params["name"] : null;
+			
+			$street_1 = (isset($params["street_1"])) ? (string)$params["street_1"] : null;
+			$street_2 = (isset($params["street_2"])) ? (string)$params["street_2"] : null;
+			$zipcode = (isset($params["zipcode"])) ? (string)$params["zipcode"] : null;
+			
+			$args = array(
+				"id" => $location_id,
+				"category_id" => $categoryId,
+				"street_1" => $street_1,
+				"street_2" => $street_2,
+				"zipcode" => $zipcode,
+				"location_types_id" => $location_types_id,
+				"country_id" => $location_country_id,
+				"province_id" => $location_province_id,
+				"city_id" => $location_city_id,
+				"name" => $location_name,
+			);
+			
+			$results = LocationModel::update($args);
+			
+			foreach ($results AS $location) {
+				$locations[] = self::formatObject($location);
+			}
+			
+			return $locations;
 		}
 		
 	}

@@ -123,6 +123,10 @@
 				"street_2" => $station["station_street_2"],
 				"postal_code" => $station["station_postal_code"],
 				
+				"gps_code" => $station["station_gps_code"],
+				"home_link" => $station["station_home_link"],
+				"wikipedia_link" => $station["station_wikipedia_link"],
+				"local_code" => $station["station_local_code"],
 				"iata_code" => $station["station_iata_code"],
 				"keywords" => $station["station_keywords"],
 				"enabled" => $station["station_enabled"],

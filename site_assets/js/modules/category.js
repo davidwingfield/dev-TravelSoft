@@ -52,7 +52,7 @@ const Category = (function () {
     }
     
     const handleProductChange = function (id) {
-        console.log("Category.handleProductChange(id)", id)
+        //console.log("Category.handleProductChange(id)", id)
         // ----
         
         $("[data-categoryid]").hide()
@@ -78,6 +78,7 @@ const Category = (function () {
         
         if (categoryId && !isNaN(categoryId)) {
             Product.clearModalForm()
+            
             _modal_product_category_id.value = categoryId
             
             Product.initAutoComplete(categoryId)
@@ -171,7 +172,7 @@ const Category = (function () {
                     /**
                      * Tours
                      */
-                    _modal_product_pricing_strategies_types_id.value = ""
+                    _modal_product_pricing_strategies_types_id.value = "2"
                     _modal_product_rating_types_id.value = ""
                     
                     _modal_product_city.disabled = false
@@ -246,6 +247,7 @@ const Category = (function () {
         } else {
             Product.disableNewFormDetails()
         }
+        
     }
     
     const defaultDetail = function () {

@@ -654,8 +654,27 @@ const City = (function () {
                     return
                 }
                 let city = suggestion.data
-                _modal_product_city_id.value = city.id
-                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+                let province = (city.province) ? city.province : {}
+                let country = (city.country) ? city.country : {}
+                let countryId = (country.id && !isNaN(parseInt(country.id))) ? parseInt(country.id) : null
+                let provinceId = (province.id && !isNaN(parseInt(province.id))) ? parseInt(province.id) : null
+                let cityId = (city.id && !isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+                
+                //*
+                console.log("|__ country", country)
+                console.log("|__ province", province)
+                console.log("|__ city", city)
+                //*/
+                
+                //*
+                console.log("|__ countryId", countryId)
+                console.log("|__ provinceId", provinceId)
+                console.log("|__ cityId", cityId)
+                //*/
+                
+                _modal_product_country_id.value = countryId
+                _modal_product_province_id.value = provinceId
+                $(_modal_product_city_id).val(cityId).trigger("change")
                 
             },
         })

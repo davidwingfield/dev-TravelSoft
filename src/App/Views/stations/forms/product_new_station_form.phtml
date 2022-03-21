@@ -1,11 +1,18 @@
+<!-- Rails -->
 <fieldset id="modal_product_rail_fields" data-categoryid="4" class="fieldset-dark">
+	<!-- Title -->
 	<legend class="">
 		<h6>Rail Fields</h6>
 	</legend>
+	<!-- /Title -->
 	
-	<!-- Departing Station -->
-	<fieldset class="px-2 border border-1 rounded my-2 border-light">
-		<legend class="card-subtitle mb-2 text-muted">Departing Station</legend>
+	<!-- Depart From Fields -->
+	<fieldset id="modal_product_rail_depart_from_fields" class="px-2 border border-1 rounded my-2 border-light">
+		<!-- Title -->
+		<legend class="">
+			<h6>Departing From</h6>
+		</legend>
+		<!-- /Title -->
 		
 		<!-- Departing Station Search -->
 		<div class="row">
@@ -36,12 +43,21 @@
 		</div>
 		<!-- /Departing Station Search -->
 		
-		<!-- Departing Station -->
+		<!-- Departing Station Form -->
 		<div class="card card-body grey lighten-4 mb-2" id="modal_product_depart_from_station_add_block">
 			
+			<!-- Title -->
+			<h5 class="card-title">
+				<span>Station Form</span>
+				<a href="javascript:void(0);" id="modal_product_depart_from_station_add_block_close_button" class="panel-button-close fas fa-times" aria-hidden="true"></a>
+			</h5>
+			<!-- /Title -->
+			
+			<!-- Departing Station Detail -->
 			<fieldset class="px-2 border border-1 rounded my-2 border-light">
 				<legend class="card-subtitle mb-2 text-muted">Detail</legend>
 				
+				<!-- Departing Station Id, Departing Station IATA Code, Depart From Local Code -->
 				<div class="row">
 					
 					<!-- Departing Station Id -->
@@ -66,35 +82,25 @@
 					
 					<!-- Depart From Local Code -->
 					<div class="col-12 col-md-4">
-						<div class="form-element">
-							<label for="modal_product_depart_from_local_code">Local Code:</label>
-							<input type="text" id="modal_product_depart_from_local_code" name="modal_product_depart_from_local_code" class="form-control"/>
-							<div id="modal_product_depart_from_local_code-error" class="error w-100 text-center"></div>
+						<div id="modal_product_depart_from_station_local_code-label" class="form-element">
+							<label id="modal_product_depart_from_station_local_code-label" for="modal_product_depart_from_station_local_code">Local Code:</label>
+							<input type="text" id="modal_product_depart_from_station_local_code" name="modal_product_depart_from_station_local_code" class="form-control"/>
+							<div id="modal_product_depart_from_station_local_code-error" class="error w-100 text-center"></div>
 						</div>
 					</div>
 					<!-- /Depart From Local Code -->
 				
 				</div>
-				
-				<div class="row">
-					
-					<!-- Depart From GPS Coords -->
-					<div class="col-12 col-md-6">
-						<div class="form-element">
-							<label for="modal_product_depart_from_gps_code">GPS Coords:</label>
-							<input type="text" id="modal_product_depart_from_gps_code" name="modal_product_depart_from_gps_code" class="form-control"/>
-							<div id="modal_product_depart_from_gps_code-error" class="error w-100 text-center"></div>
-						</div>
-					</div>
-					<!-- /Depart From GPS Coords -->
-				
-				</div>
+				<!-- /Departing Station Id, Departing Station IATA Code, Depart From Local Code -->
 			
 			</fieldset>
+			<!-- /Departing Station Detail -->
 			
+			<!-- Address Fields -->
 			<fieldset class="px-2 border border-1 rounded my-2 border-light">
 				<legend class="card-subtitle mb-2 text-muted">Address</legend>
 				
+				<!-- Departing Station Street 1 -->
 				<div class="row">
 					
 					<!-- Departing Station Street 1 -->
@@ -108,7 +114,9 @@
 					<!-- /Departing Station Street 1 -->
 				
 				</div>
+				<!-- /Departing Station Street 1 -->
 				
+				<!-- Departing Station Street 2 -->
 				<div class="row">
 					
 					<!-- Departing Station Street 2 -->
@@ -119,10 +127,12 @@
 							<div id="modal_product_depart_from_station_street_2-error" class="error w-100 text-center"></div>
 						</div>
 					</div>
-					<!-- /Departing Station Street 1 -->
+					<!-- /Departing Station Street 2 -->
 				
 				</div>
+				<!-- Departing Station Street 2 -->
 				
+				<!-- Departing Station City/Province/Country -->
 				<div class="row">
 					
 					<!-- Departing Station City/Province/Country -->
@@ -146,55 +156,65 @@
 					<!-- /Departing Station Postal Code -->
 				
 				</div>
+				<!-- /Departing Station City/Province/Country -->
 				
+				<!-- Depart From GPS Coords -->
 				<div class="row">
 					
 					<!-- Depart From GPS Coords -->
 					<div class="col-12 col-md-6">
 						<div class="form-element">
-							<label for="modal_product_depart_from_gps_code">GPS Coords:</label>
-							<input type="text" id="modal_product_depart_from_gps_code" name="modal_product_depart_from_gps_code" class="form-control"/>
-							<div id="modal_product_depart_from_gps_code-error" class="error w-100 text-center"></div>
+							<label for="modal_product_depart_from_station_gps_code">GPS Coords:</label>
+							<input type="text" id="modal_product_depart_from_station_gps_code" name="modal_product_depart_from_station_gps_code" class="form-control"/>
+							<div id="modal_product_depart_from_station_gps_code-error" class="error w-100 text-center"></div>
 						</div>
 					</div>
 					<!-- /Depart From GPS Coords -->
 				
 				</div>
+				<!-- /Depart From GPS Coords -->
 			
 			</fieldset>
+			<!-- /Address Fields -->
 			
+			<!-- Station Links -->
 			<fieldset class="px-2 border border-1 rounded my-2 border-light">
 				<legend class="card-subtitle mb-2 text-muted">Links</legend>
 				
+				<!-- Depart From Home Link -->
 				<div class="row">
 					
 					<!-- Depart From Home Link -->
 					<div class="col-12">
-						<div class="form-element">
-							<label for="modal_product_depart_from_home_link">Home Link:</label>
-							<input type="url" id="modal_product_depart_from_home_link" name="modal_product_depart_from_home_link" class="form-control"/>
-							<div id="modal_product_depart_from_home_link-error" class="error w-100 text-center"></div>
+						<div id="modal_product_depart_from_station_home_link-wrap" class="form-element">
+							<label id="modal_product_depart_from_station_home_link-label" for="modal_product_depart_from_station_home_link">Home Link:</label>
+							<input type="url" id="modal_product_depart_from_station_home_link" name="modal_product_depart_from_station_home_link" class="form-control"/>
+							<div id="modal_product_depart_from_station_home_link-error" class="error w-100 text-center"></div>
 						</div>
 					</div>
 					<!-- /Depart From Home Link -->
 				
 				</div>
+				<!-- /Depart From Home Link -->
 				
+				<!-- Depart From Wiki Link -->
 				<div class="row">
 					
 					<!-- Depart From Wiki Link -->
 					<div class="col-12">
-						<div class="form-element">
-							<label for="modal_product_depart_from_wikipedia_link">Wiki Link:</label>
-							<input type="url" id="modal_product_depart_from_wikipedia_link" name="modal_product_depart_from_wikipedia_link" class="form-control"/>
-							<div id="modal_product_depart_from_wikipedia_link-error" class="error w-100 text-center"></div>
+						<div id="modal_product_depart_from_station_wikipedia_link-wrap" class="form-element">
+							<label id="modal_product_depart_from_station_wikipedia_link-label" for="modal_product_depart_from_station_wikipedia_link">Wiki Link:</label>
+							<input type="url" id="modal_product_depart_from_station_wikipedia_link" name="modal_product_depart_from_station_wikipedia_link" class="form-control"/>
+							<div id="modal_product_depart_from_station_wikipedia_link-error" class="error w-100 text-center"></div>
 						</div>
 					</div>
 					<!-- /Depart From Wiki Link -->
 				
 				</div>
+				<!-- /Depart From Wiki Link -->
 			
 			</fieldset>
+			<!-- /Station Links -->
 			
 			<fieldset class="px-2 border border-1 rounded my-2 border-light">
 				<legend class="card-subtitle mb-2 text-muted">Meta</legend>
@@ -249,7 +269,7 @@
 			<!-- /Departing Station Buttons -->
 		
 		</div>
-		<!-- /Departing Station -->
+		<!-- /Departing Station Form -->
 		
 		<!-- Departing Station Departing Date, Departing Time -->
 		<div class="row">
@@ -270,12 +290,15 @@
 		<!-- /Departing Station Departing Date, Departing Time -->
 	
 	</fieldset>
-	<!-- Departing Station -->
+	<!-- /Depart From Fields -->
 	
-	<!-- Arriving Station -->
-	<fieldset class="px-2 border border-1 rounded my-2 border-light">
-		
-		<legend class="card-subtitle mb-2 text-muted">Arriving Station</legend>
+	<!-- Arrive To Fields -->
+	<fieldset id="modal_product_rail_arrive_to_fields" class="px-2 border border-1 rounded my-2 border-light">
+		<!-- Title -->
+		<legend class="">
+			<h6>Arriving To</h6>
+		</legend>
+		<!-- /Title -->
 		
 		<!-- Arriving Station Search -->
 		<div class="row">
@@ -286,9 +309,9 @@
 					<label for="modal_product_arrive_to_station" class="d-none">Name:</label>
 					<div class="input-group">
 						<div class="input-group-prepend">
-					<span class="input-group-text">
-						<i class="fas fa-search" aria-hidden="true"></i>
-					</span>
+						<span class="input-group-text">
+							<i class="fas fa-search" aria-hidden="true"></i>
+						</span>
 						</div>
 						<input type="search" id="modal_product_arrive_to_station" name="modal_product_arrive_to_station" class="form-control" placeholder="Search Stations"/>
 					</div>
@@ -306,85 +329,193 @@
 		</div>
 		<!-- /Arriving Station Search -->
 		
-		<!-- Arriving Station -->
+		<!-- Arriving Station Form -->
 		<div class="card card-body grey lighten-4 mb-2" id="modal_product_arrive_to_station_add_block">
 			
-			<div class="row">
-				
-				<!-- Arriving Station Id -->
-				<div class="col-12 col-md-4">
-					<div class="form-element">
-						<label for="modal_product_arrive_to_new_station_id">Id:</label>
-						<input type="text" id="modal_product_arrive_to_new_station_id" name="modal_product_arrive_to_new_station_id" class="form-control" readonly="readonly"/>
-						<div id="modal_product_arrive_to_new_station_id-error" class="error w-100 text-center"></div>
-					</div>
-				</div>
-				<!-- /Arriving Station Id -->
-				
-				<!-- Arriving Station IATA Code -->
-				<div class="col-12 col-md-4">
-					<div class="form-element">
-						<label for="modal_product_arrive_to_station_iata_code">IATA Code:</label>
-						<input type="text" id="modal_product_arrive_to_station_iata_code" name="modal_product_arrive_to_station_iata_code" class="form-control" maxlength="5"/>
-						<div id="modal_product_arrive_to_station_iata_code-error" class="error w-100 text-center"></div>
-					</div>
-				</div>
-				<!-- /Arriving Station IATA Code -->
+			<!-- Title -->
+			<h5 class="card-title">
+				<span>Station Form</span>
+				<a href="javascript:void(0);" id="modal_product_arrive_to_station_add_block_close_button" class="panel-button-close fas fa-times" aria-hidden="true"></a>
+			</h5>
+			<!-- /Title -->
 			
-			</div>
+			<!-- Arriving Station Detail -->
+			<fieldset class="px-2 border border-1 rounded my-2 border-light">
+				<legend class="card-subtitle mb-2 text-muted">Detail</legend>
+				
+				<!-- Arriving Station Id, Arriving Station IATA Code, Arrive From Local Code -->
+				<div class="row">
+					
+					<!-- Arriving Station Id -->
+					<div class="col-12 col-md-4">
+						<div class="form-element">
+							<label for="modal_product_arrive_to_new_station_id">Id:</label>
+							<input type="text" id="modal_product_arrive_to_new_station_id" name="modal_product_arrive_to_new_station_id" class="form-control" readonly="readonly"/>
+							<div id="modal_product_arrive_to_new_station_id-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Arriving Station Id -->
+					
+					<!-- Arriving Station IATA Code -->
+					<div class="col-12 col-md-4">
+						<div class="form-element">
+							<label for="modal_product_arrive_to_station_iata_code">IATA Code:</label>
+							<input type="text" id="modal_product_arrive_to_station_iata_code" name="modal_product_arrive_to_station_iata_code" class="form-control" maxlength="5"/>
+							<div id="modal_product_arrive_to_station_iata_code-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Arriving Station IATA Code -->
+					
+					<!-- Arrive From Local Code -->
+					<div class="col-12 col-md-4">
+						<div id="modal_product_arrive_to_station_local_code-label" class="form-element">
+							<label id="modal_product_arrive_to_station_local_code-label" for="modal_product_arrive_to_station_local_code">Local Code:</label>
+							<input type="text" id="modal_product_arrive_to_station_local_code" name="modal_product_arrive_to_station_local_code" class="form-control"/>
+							<div id="modal_product_arrive_to_station_local_code-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Arrive From Local Code -->
+				
+				</div>
+				<!-- /Arriving Station Id, Arriving Station IATA Code, Arrive From Local Code -->
 			
-			<div class="row">
+			</fieldset>
+			<!-- /Arriving Station Detail -->
+			
+			<!-- Address Fields -->
+			<fieldset class="px-2 border border-1 rounded my-2 border-light">
+				<legend class="card-subtitle mb-2 text-muted">Address</legend>
 				
 				<!-- Arriving Station Street 1 -->
-				<div class="col-12">
-					<div class="form-element">
-						<label for="modal_product_arrive_to_station_street_1">Street 1:</label>
-						<input type="search" id="modal_product_arrive_to_station_street_1" name="modal_product_arrive_to_station_street_1" class="form-control"/>
-						<div id="modal_product_arrive_to_station_street_1-error" class="error w-100 text-center"></div>
+				<div class="row">
+					
+					<!-- Arriving Station Street 1 -->
+					<div class="col-12">
+						<div class="form-element">
+							<label for="modal_product_arrive_to_station_street_1">Street 1:</label>
+							<input type="search" id="modal_product_arrive_to_station_street_1" name="modal_product_arrive_to_station_street_1" class="form-control"/>
+							<div id="modal_product_arrive_to_station_street_1-error" class="error w-100 text-center"></div>
+						</div>
 					</div>
+					<!-- /Arriving Station Street 1 -->
+				
 				</div>
 				<!-- /Arriving Station Street 1 -->
-			
-			</div>
-			
-			<div class="row">
 				
 				<!-- Arriving Station Street 2 -->
-				<div class="col-12">
-					<div class="form-element">
-						<label for="modal_product_arrive_to_station_street_2">Street 2:</label>
-						<input type="search" id="modal_product_arrive_to_station_street_2" name="modal_product_arrive_to_station_street_2" class="form-control"/>
-						<div id="modal_product_arrive_to_station_street_2-error" class="error w-100 text-center"></div>
+				<div class="row">
+					
+					<!-- Arriving Station Street 2 -->
+					<div class="col-12">
+						<div class="form-element">
+							<label for="modal_product_arrive_to_station_street_2">Street 2:</label>
+							<input type="search" id="modal_product_arrive_to_station_street_2" name="modal_product_arrive_to_station_street_2" class="form-control"/>
+							<div id="modal_product_arrive_to_station_street_2-error" class="error w-100 text-center"></div>
+						</div>
 					</div>
+					<!-- /Arriving Station Street 2 -->
+				
 				</div>
-				<!-- /Arriving Station Street 1 -->
-			
-			</div>
-			
-			<div class="row">
+				<!-- Arriving Station Street 2 -->
 				
 				<!-- Arriving Station City/Province/Country -->
-				<div class="col-12 col-md-9">
-					<div class="form-element">
-						<label for="modal_product_arrive_to_station_city">City/Province/Country:</label>
-						<input type="search" id="modal_product_arrive_to_station_city" name="modal_product_arrive_to_station_city" class="form-control"/>
-						<div id="modal_product_arrive_to_station_city-error" class="error w-100 text-center"></div>
+				<div class="row">
+					
+					<!-- Arriving Station City/Province/Country -->
+					<div class="col-12 col-md-9">
+						<div class="form-element">
+							<label for="modal_product_arrive_to_station_city">City/Province/Country:</label>
+							<input type="search" id="modal_product_arrive_to_station_city" name="modal_product_arrive_to_station_city" class="form-control"/>
+							<div id="modal_product_arrive_to_station_city-error" class="error w-100 text-center"></div>
+						</div>
 					</div>
+					<!-- /Arriving Station City/Province/Country -->
+					
+					<!-- Arriving Station Postal Code -->
+					<div class="col-12 col-md-3">
+						<div class="form-element">
+							<label for="modal_product_arrive_to_station_postal_code">Postal Code:</label>
+							<input type="text" id="modal_product_arrive_to_station_postal_code" name="modal_product_arrive_to_station_postal_code" class="form-control"/>
+							<div id="modal_product_arrive_to_station_postal_code-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Arriving Station Postal Code -->
+				
 				</div>
 				<!-- /Arriving Station City/Province/Country -->
 				
-				<!-- Arriving Station Postal Code -->
-				<div class="col-12 col-md-3">
-					<div class="form-element">
-						<label for="modal_product_arrive_to_station_postal_code">Postal Code:</label>
-						<input type="text" id="modal_product_arrive_to_station_postal_code" name="modal_product_arrive_to_station_postal_code" class="form-control"/>
-						<div id="modal_product_arrive_to_station_postal_code-error" class="error w-100 text-center"></div>
+				<!-- Arrive From GPS Coords -->
+				<div class="row">
+					
+					<!-- Arrive From GPS Coords -->
+					<div class="col-12 col-md-6">
+						<div class="form-element">
+							<label for="modal_product_arrive_to_station_gps_code">GPS Coords:</label>
+							<input type="text" id="modal_product_arrive_to_station_gps_code" name="modal_product_arrive_to_station_gps_code" class="form-control"/>
+							<div id="modal_product_arrive_to_station_gps_code-error" class="error w-100 text-center"></div>
+						</div>
 					</div>
+					<!-- /Arrive From GPS Coords -->
+				
 				</div>
-				<!-- /Arriving Station Postal Code -->
+				<!-- /Arrive From GPS Coords -->
 			
-			</div>
+			</fieldset>
+			<!-- /Address Fields -->
 			
+			<!-- Station Links -->
+			<fieldset class="px-2 border border-1 rounded my-2 border-light">
+				<legend class="card-subtitle mb-2 text-muted">Links</legend>
+				
+				<!-- Arrive From Home Link -->
+				<div class="row">
+					
+					<!-- Arrive From Home Link -->
+					<div class="col-12">
+						<div id="modal_product_arrive_to_station_home_link-wrap" class="form-element">
+							<label id="modal_product_arrive_to_station_home_link-label" for="modal_product_arrive_to_station_home_link">Home Link:</label>
+							<input type="url" id="modal_product_arrive_to_station_home_link" name="modal_product_arrive_to_station_home_link" class="form-control"/>
+							<div id="modal_product_arrive_to_station_home_link-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Arrive From Home Link -->
+				
+				</div>
+				<!-- /Arrive From Home Link -->
+				
+				<!-- Arrive From Wiki Link -->
+				<div class="row">
+					
+					<!-- Arrive From Wiki Link -->
+					<div class="col-12">
+						<div id="modal_product_arrive_to_station_wikipedia_link-wrap" class="form-element">
+							<label id="modal_product_arrive_to_station_wikipedia_link-label" for="modal_product_arrive_to_station_wikipedia_link">Wiki Link:</label>
+							<input type="url" id="modal_product_arrive_to_station_wikipedia_link" name="modal_product_arrive_to_station_wikipedia_link" class="form-control"/>
+							<div id="modal_product_arrive_to_station_wikipedia_link-error" class="error w-100 text-center"></div>
+						</div>
+					</div>
+					<!-- /Arrive From Wiki Link -->
+				
+				</div>
+				<!-- /Arrive From Wiki Link -->
+			
+			</fieldset>
+			<!-- /Station Links -->
+			
+			<fieldset class="px-2 border border-1 rounded my-2 border-light">
+				<legend class="card-subtitle mb-2 text-muted">Meta</legend>
+				
+				<!-- Arrive From Keywords -->
+				<section id="modal_product_arrive_to_keywords_station" class="card card-body mb-2 keyword">
+					<label for="modal_product_arrive_to_keywords_station_search" class="d-none">Keywords:</label>
+					<input type="text" id="modal_product_arrive_to_keywords_station_search" class="user-release-input form-control form-control-lg" placeholder="Keywords..."/>
+					<div id="modal_product_arrive_to_keywords_station_container" class="w-100 my-2 chips_container"></div>
+				</section>
+				<!-- /Arrive From Keywords -->
+			
+			</fieldset>
+			
+			<!-- Arriving Station Hidden Elements -->
 			<div class="row">
 				
 				<div class="col-3">
@@ -403,21 +534,28 @@
 				</div>
 			
 			</div>
+			<!-- /Arriving Station Hidden Elements -->
 			
+			<!-- Arriving Station Buttons -->
 			<div class="row">
 				
+				<!-- Arriving Station Cancel Button -->
 				<div class="col-6 text-left">
 					<button type="button" id="modal_product_arrive_to_station_cancel_button" class="btn btn-outline-primary btn-sm white waves-effect waves-light">Cancel</button>
 				</div>
+				<!-- /Arriving Station Cancel Button -->
 				
+				<!-- Arriving Station Submit Button -->
 				<div class="col-6 text-right">
 					<button type="button" id="modal_product_arrive_to_station_submit_button" class="btn btn-primary btn-sm waves-effect waves-light">Save</button>
 				</div>
+				<!-- /Arriving Station Submit Button -->
 			
 			</div>
+			<!-- /Arriving Station Buttons -->
 		
 		</div>
-		<!-- /Arriving Station -->
+		<!-- /Arriving Station Form -->
 		
 		<!-- Arriving Station Arriving Date, Arriving Time -->
 		<div class="row">
@@ -436,37 +574,9 @@
 		
 		</div>
 		<!-- /Arriving Station Arriving Date, Arriving Time -->
-		
-		<!-- Arriving Keywords -->
-		<section id="modal_product_arrive_to_keywords_station" class="card card-body mb-2 keyword">
-			<label for="modal_product_arrive_to_keywords_station_search" class="d-none">Keywords:</label>
-			<input type="text" id="modal_product_arrive_to_keywords_station_search" class="user-release-input form-control form-control-lg" placeholder="Keywords..."/>
-			<div id="modal_product_arrive_to_keywords_station_container" class="w-100 my-2 chips_container"></div>
-		</section>
-		<!-- /Arriving Keywords -->
-		
-		<!-- Arriving Station Hidden Fields -->
-		<div class="row">
-			
-			<!-- Departing From Station Id -->
-			<div class="col-12 col-md-6">
-				<label for="modal_product_depart_from_station_id" class="dev-element d-none">Departing From Station Id:</label>
-				<input type="hidden" id="modal_product_depart_from_station_id" name="modal_product_depart_from_station_id" class="form-control dev-element" value="" readonly="readonly">
-			</div>
-			<!-- /Departing From Station Id -->
-			
-			<!-- Arriving To Station Id -->
-			<div class="col-12 col-md-6">
-				<label for="modal_product_arrive_to_station_id" class="dev-element d-none">Arriving To Station Id:</label>
-				<input type="hidden" id="modal_product_arrive_to_station_id" name="modal_product_arrive_to_station_id" class="form-control dev-element" value="" readonly="readonly">
-			</div>
-			<!-- /Arriving To Station Id -->
-		
-		</div>
-		<!-- /Arriving Station Hidden Fields -->
 	
 	</fieldset>
-	<!-- /Arriving Station -->
+	<!-- /Arrive To Fields -->
 	
 	<!-- Day Span -->
 	<div class="row">
@@ -485,3 +595,4 @@
 	<!-- /Day Span -->
 
 </fieldset>
+<!-- /Rails -->

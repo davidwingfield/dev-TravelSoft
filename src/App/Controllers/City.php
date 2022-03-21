@@ -21,6 +21,23 @@
 			parent::__construct();
 		}
 		
+		public static function getByCountryId(int $countryId = null): array
+		{
+			Log::$debug_log->trace("City::getByCountryId()");
+			
+			$cities = [];
+			
+			if (!is_null($countryId)) {
+				$results = CityModel::fetchCitiesByCountryId($countryId);
+				
+				foreach ($results AS $k => $city) {
+					$cities[] = self::format($city);
+				}
+			}
+			
+			return $cities;
+		}
+		
 		public static function get(array $args = []): array
 		{
 			$country_id = null;

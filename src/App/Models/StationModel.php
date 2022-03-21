@@ -33,6 +33,10 @@
                    	STATION.street_1 AS 'station_street_1',
                    	STATION.street_2 AS 'station_street_2',
                    	STATION.postal_code AS 'station_postal_code',
+                   	STATION.local_code AS 'station_local_code',
+                   	STATION.wikipedia_link AS 'station_wikipedia_link',
+                   	STATION.home_link AS 'station_home_link',
+                   	STATION.gps_code AS 'station_gps_code',
                    
 					STATION.keywords AS 'station_keywords',
 					STATION.enabled AS 'station_enabled',
@@ -41,6 +45,7 @@
 					STATION.date_modified AS 'station_date_modified',
 					STATION.modified_by AS 'station_modified_by',
 					STATION.note AS 'station_note',
+     
 					CITY.id AS 'city_id',
 					CITY.province_id AS 'city_province_id',
 					CITY.country_id AS 'city_country_id',
@@ -207,7 +212,10 @@
 			$postal_code = Model::setString((isset($station["postal_code"])) ? $station["postal_code"] : null);
 			$iata_code = Model::setString((isset($station["iata_code"])) ? $station["iata_code"] : null);
 			$enabled = Model::setBool((isset($station["enabled"])) ? $station["enabled"] : 1);
-			$keywords = Model::setLongText((isset($station["keywords"])) ? $station["keywords"] : "");
+			$local_code = Model::setString((isset($station["local_code"])) ? $station["local_code"] : null);
+			$home_link = Model::setString((isset($station["home_link"])) ? $station["home_link"] : null);
+			$gps_code = Model::setString((isset($station["gps_code"])) ? $station["gps_code"] : null);
+			$wikipedia_link = Model::setString((isset($station["wikipedia_link"])) ? $station["wikipedia_link"] : null);
 			$note = Model::setLongText((isset($station["note"])) ? $station["note"] : null);
 			$location = Location::get($name, $city_id);
 			
@@ -235,33 +243,33 @@
 				}
 			}
 			
-			if ($keywords === "''" || $keywords === "" || is_null($keywords)) {
-				$keywordList = [];
-			} else {
-				$keywordList = explode(",", $keywords);
-			}
+			$keywordList = explode(",", (isset($station["keywords"])) ? $station["keywords"] : "");
 			
 			$keywordValues = buildKeywordsList($name, $location, $keywordList);
 			
 			/*
 			Log::$debug_log->trace($keywords);
-			Log::$debug_log->trace($location);
+			Log::$debug_log->trace($station["keywords"]);
 			Log::$debug_log->trace($keywordList);
 			Log::$debug_log->trace($keywordValues);
 			//*/
 			
-			try {
-				$sql = "
+			$sql = "
 					INSERT INTO station (
-						id, name, iata_code, city_id, enabled, keywords,
-						street_1, street_2, postal_code, scheduled_service,
+						id, name, iata_code, city_id, enabled, keywords, gps_code, local_code,
+						street_1, street_2, postal_code, scheduled_service, home_link, wikipedia_link,
 						date_created, created_by, date_modified, modified_by, note
 					) VALUES (
-						$id, $name, $iata_code, $city_id, $enabled, '$keywordValues',
-						$street_1, $street_2, $postal_code, 1,
+						$id, $name, $iata_code, $city_id, $enabled, '$keywordValues', $gps_code, $local_code,
+						$street_1, $street_2, $postal_code, 1, $home_link, $wikipedia_link,
 						CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP, $modified_by, $note
 					)
 					ON DUPLICATE KEY UPDATE
+					    local_code = VALUES(local_code),
+						gps_code = VALUES(gps_code),
+						scheduled_service = VALUES(scheduled_service),
+					    home_link = VALUES(home_link),
+					    wikipedia_link = VALUES(wikipedia_link),
 						city_id = VALUES(city_id),
 						street_1 = VALUES(street_1),
 						street_2 = VALUES(street_2),
@@ -274,6 +282,8 @@
 						date_modified = VALUES(date_modified),
 						enabled = VALUES(enabled)
 				";
+			
+			try {
 				
 				Model::$db->rawQuery($sql);
 				
@@ -282,7 +292,8 @@
 				return self::fetchStationByStationId($station_id);
 				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}

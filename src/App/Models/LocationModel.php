@@ -264,6 +264,31 @@
 			}
 		}
 		
+		public static function fetchLocationByCountryIdAndName(int $country_id = null, string $name = null): array
+		{
+			
+			$where = "
+            WHERE		COUNTRY.enabled = 1
+                 AND		NOT ISNULL(COUNTRY.name)
+                 AND		NOT ISNULL(COUNTRY.name)";
+			try {
+				if (!is_null($country_id)) {
+					$where .= "
+                             AND 		LOCATION.country_id = $country_id
+                             AND 		LOCATION.name = '$name'
+                     ";
+				}
+				
+				$sql = self::$sql . "
+                    $where;
+                ";
+				
+				return Model::$db->rawQuery($sql);
+			} catch (Exception $e) {
+				return [];
+			}
+		}
+		
 		/**
 		 * @param int|null $id
 		 *
@@ -291,15 +316,26 @@
 		 */
 		public static function update(array $location = []): array
 		{
-			if (!isset($location["city_id"]) || is_null($location["city_id"])) {
-				return [];
+			//Log::$debug_log->trace("LocationModel::update");
+			//Log::$debug_log->info($location);
+			
+			$category_id = Model::setInt((isset($location["category_id"])) ? $location["category_id"] : null);
+			//Log::$debug_log->trace($category_id);
+			
+			if ((int)$category_id === 3) {
+				if (!isset($location["country_id"]) || is_null($location["country_id"])) {
+					return [];
+				}
+			} else {
+				if (!isset($location["city_id"]) || is_null($location["city_id"])) {
+					return [];
+				}
 			}
 			
 			if (!isset($location["name"]) || is_null($location["name"])) {
 				return [];
 			}
 			
-			$category_id = Model::setInt((isset($location["category_id"])) ? $location["category_id"] : null);
 			$product_id = Model::setInt((isset($location["product_id"])) ? $location["product_id"] : null);
 			
 			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
@@ -309,26 +345,31 @@
 			$zipcode = Model::setString((isset($location["zipcode"])) ? $location["zipcode"] : null);
 			$name = Model::setString((isset($location["name"])) ? $location["name"] : null);
 			$location_types_id = Model::setInt((isset($location["location_types_id"])) ? $location["location_types_id"] : 1);
+			
+			$country_id = Model::setInt((isset($location["country_id"])) ? $location["country_id"] : null);
+			$province_id = Model::setInt((isset($location["province_id"])) ? $location["province_id"] : null);
 			$city_id = Model::setInt((isset($location["city_id"])) ? $location["city_id"] : null);
+			
 			$enabled = Model::setBool((isset($location["enabled"])) ? $location["enabled"] : 1);
 			$note = Model::setLongText((isset($location["note"])) ? $location["note"] : null);
 			$created_by = Model::setInt($user_id);
 			$modified_by = Model::setInt($user_id);
 			
-			try {
-				$sql = "
+			$sql = "
                 INSERT INTO location (
                     id, city_id, location_types_id, name,
                     street_1, street_2, zipcode, enabled,
                     date_created, created_by, date_modified, modified_by,
-                    note
+                    note, country_id, province_id
                 ) VALUES (
                     $id, $city_id, $location_types_id, $name,
                     $street_1, $street_2, $zipcode, $enabled,
                     CURRENT_TIMESTAMP, $created_by, CURRENT_TIMESTAMP, $modified_by,
-                    $note
+                    $note, $country_id, $province_id
                 )
                 ON DUPLICATE KEY UPDATE
+                    country_id = VALUES(country_id),
+                    province_id = VALUES(province_id),
                     city_id = VALUES(city_id),
                     location_types_id = VALUES(location_types_id),
                     name = VALUES(name),
@@ -339,34 +380,45 @@
                     modified_by = VALUES(modified_by),
                     date_modified = VALUES(date_modified);
                 ";
-				
+			
+			//Log::$debug_log->trace($sql);
+			
+			try {
 				Model::$db->rawQuery($sql);
 				$location_id = Model::$db->getInsertId();
 				
-				/*
-				Log::$debug_log->trace($sql);
-				Log::$debug_log->trace($location_id);
-				Log::$debug_log->trace($product_id);
-				Log::$debug_log->trace($category_id);
-				//*/
+				//Log::$debug_log->trace("location id: $location_id");
 				
 				if ($location_id) {
+					
 					if ($product_id) {
-						$updateProductSQL = "
-						UPDATE 			product
-						SET 			city_id = $city_id,
-										location_id = $location_id,
-										use_provider_location_id = 0,
-										street_1 = $street_1,
-										street_2 = $street_2,
-										postal_code = $zipcode
-						WHERE 			id = $product_id;
-					";
 						
-						if ($category_id === 1) {
+						if ($category_id !== 3) {
+							$updateProductSQL = "
+							UPDATE 			product
+							SET 			city_id = $city_id,
+											location_id = $location_id,
+											use_provider_location_id = 0,
+											street_1 = $street_1,
+											street_2 = $street_2,
+											postal_code = $zipcode
+							WHERE 			id = $product_id;
+						";
+						} else {
+							$updateProductSQL = "
+							UPDATE 			product
+							SET 			city_id = $country_id,
+											location_id = $location_id,
+											use_provider_location_id = 0,
+											street_1 = $street_1,
+											street_2 = $street_2,
+											postal_code = $zipcode
+							WHERE 			id = $product_id;
+						";
+						}
+						
+						if ($category_id === 1 || $category_id === 2 || $category_id === 4) {
 							try {
-								//Log::$debug_log->trace($location_id);
-								//Log::$debug_log->trace($updateProductSQL);
 								Model::$db->rawQuery($updateProductSQL);
 							} catch (Exception $e) {
 								Log::$debug_log->error($e);
@@ -381,7 +433,7 @@
 				
 				return [];
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}

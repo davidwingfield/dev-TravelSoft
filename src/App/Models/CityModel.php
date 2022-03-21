@@ -71,7 +71,7 @@
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}
@@ -80,6 +80,7 @@
 		public static function get(int $country_id = null, int $province_id = null, int $city_id = null): array
 		{
 			$where = "WHERE			CITY.enabled = 1";
+			
 			if (!is_null($country_id)) {
 				$where .= " AND         CITY.country_id = $country_id";
 			}
@@ -92,8 +93,7 @@
 				$where .= " AND         CITY.id = $city_id";
 			}
 			
-			try {
-				$sql = "
+			$sql = "
                 SELECT
                                 CITY.id AS 'city_id',
                                 CITY.country_id AS 'city_country_id',
@@ -109,6 +109,8 @@
                 FROM 			city CITY
                 $where
                 ORDER BY 		CITY.sort_order ASC, CITY.name ASC;";
+			
+			try {
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
@@ -168,10 +170,32 @@
 				
 				return self::get($country_id, $province_id, $id);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}
+		}
+		
+		public static function fetchCitiesByCountryId(int $countryId = null): array
+		{
+			if (!is_null($countryId)) {
+				$sql = self::$selectQuery . "
+                    WHERE		    CITY.enabled = 1
+                        AND         CITY.country_id = $countryId
+                    ORDER BY	    CONCAT( CITY.name, ' (',  PROVINCE.name, ', ', COUNTRY.name, ')')
+                    LIMIT 20;";
+				
+				try {
+					
+					return Model::$db->rawQuery($sql);
+				} catch (Exception $e) {
+					Log::$debug_log->error($e->getMessage());
+					
+					return [];
+				}
+			}
+			
+			return [];
 		}
 		
 	}

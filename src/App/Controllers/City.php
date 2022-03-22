@@ -214,4 +214,42 @@
 			return $data;
 		}
 		
+		public static function formatCity(array $city = []): array
+		{
+			Log::$debug_log->trace("City::formatCity()");
+			Log::$debug_log->info($city);
+			// ----
+			
+			$formattedCity = array();
+			
+			$cityId = (isset($city["city_id"]) && (int)$city["city_id"] > 0) ? (int)$city["city_id"] : null;
+			$cityProvinceId = (isset($city["city_province_id"]) && (int)$city["city_province_id"] > 0) ? (int)$city["city_province_id"] : null;
+			$cityCountryId = (isset($city["city_country_id"]) && (int)$city["city_country_id"] > 0) ? (int)$city["city_country_id"] : null;
+			$citySortOrder = (isset($city["city_sort_order"]) && (int)$city["city_sort_order"] > 0) ? (int)$city["city_sort_order"] : null;
+			$cityName = (isset($city["city_name"])) ? $city["city_name"] : null;
+			$cityEnabled = (isset($city["city_enabled"])) ? $city["city_enabled"] : 1;
+			$cityDateCreated = (isset($city["city_date_created"])) ? $city["city_date_created"] : null;
+			$cityCreatedBy = (isset($city["city_created_by"]) && (int)$city["city_created_by"] > 0) ? (int)$city["city_created_by"] : null;
+			$cityDateModified = (isset($city["city_date_modified"])) ? $city["city_date_modified"] : null;
+			$cityModifiedBy = (isset($city["city_modified_by"]) && (int)$city["city_modified_by"] > 0) ? (int)$city["city_modified_by"] : null;
+			$cityNote = (isset($city["city_note"])) ? $city["city_note"] : null;
+			$cityBlurb = (isset($city["city_blurb"])) ? $city["city_blurb"] : null;
+			
+			$formattedCity["blurb"] = $cityBlurb;
+			$formattedCity["country_id"] = $cityCountryId;
+			$formattedCity["created_by"] = $cityCreatedBy;
+			$formattedCity["date_created"] = $cityDateCreated;
+			$formattedCity["date_modified"] = $cityDateModified;
+			$formattedCity["enabled"] = $cityEnabled;
+			$formattedCity["id"] = $cityId;
+			$formattedCity["modified_by"] = $cityModifiedBy;
+			$formattedCity["name"] = $cityName;
+			$formattedCity["note"] = $cityNote;
+			$formattedCity["province_id"] = $cityProvinceId;
+			$formattedCity["sort_order"] = $citySortOrder;
+			
+			return $formattedCity;
+			
+		}
+		
 	}

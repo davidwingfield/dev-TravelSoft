@@ -114,6 +114,25 @@
 			$st = "";
 			extract($_GET);
 			$results = Vendor::autocomplete($st);
+			
+			// ----
+			header("Content-type:application/json");
+			echo json_encode($results);
+			exit(0);
+		}
+		
+		public function itineraries(): void
+		{
+			// Itinerary
+			// itinerary
+			// Itineraries
+			// itineraries
+			
+			$st = "";
+			extract($_GET);
+			
+			$results = Itinerary::autocomplete(array("st" => $st));
+			
 			// ----
 			header("Content-type:application/json");
 			echo json_encode($results);

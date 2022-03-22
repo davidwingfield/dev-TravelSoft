@@ -1,18 +1,36 @@
 SELECT
-	ITINERARY.id AS 'itinerary_id',
-	ITINERARY.customer_id AS 'itinerary_customer_id',
-	ITINERARY.stage_id AS 'itinerary_stage_id',
-	ITINERARY.traveler_id AS 'itinerary_traveler_id',
-	ITINERARY.name AS 'itinerary_name',
-	ITINERARY.start_date AS 'itinerary_start_date',
-	ITINERARY.end_date AS 'itinerary_end_date',
-	ITINERARY.currency_id AS 'itinerary_currency_id',
-	ITINERARY.json AS 'itinerary_json',
-	ITINERARY.enabled AS 'itinerary_enabled',
-	ITINERARY.date_created AS 'itinerary_date_created',
-	ITINERARY.created_by AS 'itinerary_created_by',
-	ITINERARY.date_modified AS 'itinerary_date_modified',
-	ITINERARY.modified_by AS 'itinerary_modified_by',
-	ITINERARY.note AS 'itinerary_note'
+		ITINERARY.id AS 'itinerary_id',
+		ITINERARY.customer_id AS 'itinerary_customer_id',
+		ITINERARY.stage_id AS 'itinerary_stage_id',
+		ITINERARY.name AS 'itinerary_name',
+		ITINERARY.start_date AS 'itinerary_start_date',
+		ITINERARY.end_date AS 'itinerary_end_date',
+		ITINERARY.budget AS 'itinerary_budget',
+		ITINERARY.currency_id AS 'itinerary_currency_id',
+		ITINERARY.json AS 'itinerary_json',
+		ITINERARY.enabled AS 'itinerary_enabled',
+		ITINERARY.date_created AS 'itinerary_date_created',
+		ITINERARY.created_by AS 'itinerary_created_by',
+		ITINERARY.date_modified AS 'itinerary_date_modified',
+		ITINERARY.modified_by AS 'itinerary_modified_by',
+		ITINERARY.note AS 'itinerary_note'
 FROM 	itinerary ITINERARY
 -- JOIN 	itinerary ITINERARY ON ITINERARY.id = {FK_TABLE}.itinerary_id
+
+/*
+'id'=>$itinerary['itinerary_id'],
+'customer_id'=>$itinerary['itinerary_customer_id'],
+'stage_id'=>$itinerary['itinerary_stage_id'],
+'name'=>$itinerary['itinerary_name'],
+'start_date'=>$itinerary['itinerary_start_date'],
+'end_date'=>$itinerary['itinerary_end_date'],
+'budget'=>$itinerary['itinerary_budget'],
+'currency_id'=>$itinerary['itinerary_currency_id'],
+'json'=>$itinerary['itinerary_json'],
+'enabled'=>$itinerary['itinerary_enabled'],
+'date_created'=>$itinerary['itinerary_date_created'],
+'created_by'=>$itinerary['itinerary_created_by'],
+'date_modified'=>$itinerary['itinerary_date_modified'],
+'modified_by'=>$itinerary['itinerary_modified_by'],
+'note'=>$itinerary['itinerary_note']
+*/

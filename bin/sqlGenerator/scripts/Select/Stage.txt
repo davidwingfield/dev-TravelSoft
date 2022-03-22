@@ -1,12 +1,24 @@
 SELECT
-	STAGE.id AS 'stage_id',
-	STAGE.itinerary_id AS 'stage_itinerary_id',
-	STAGE.stage AS 'stage_stage',
-	STAGE.enabled AS 'stage_enabled',
-	STAGE.date_created AS 'stage_date_created',
-	STAGE.created_by AS 'stage_created_by',
-	STAGE.date_modified AS 'stage_date_modified',
-	STAGE.modified_by AS 'stage_modified_by',
-	STAGE.note AS 'stage_note'
+		STAGE.id AS 'stage_id',
+		STAGE.name AS 'stage_name',
+		STAGE.class AS 'stage_class',
+		STAGE.enabled AS 'stage_enabled',
+		STAGE.date_created AS 'stage_date_created',
+		STAGE.created_by AS 'stage_created_by',
+		STAGE.date_modified AS 'stage_date_modified',
+		STAGE.modified_by AS 'stage_modified_by',
+		STAGE.note AS 'stage_note'
 FROM 	stage STAGE
 -- JOIN 	stage STAGE ON STAGE.id = {FK_TABLE}.stage_id
+
+/*
+'id'=>$stage['stage_id'],
+'name'=>$stage['stage_name'],
+'class'=>$stage['stage_class'],
+'enabled'=>$stage['stage_enabled'],
+'date_created'=>$stage['stage_date_created'],
+'created_by'=>$stage['stage_created_by'],
+'date_modified'=>$stage['stage_date_modified'],
+'modified_by'=>$stage['stage_modified_by'],
+'note'=>$stage['stage_note']
+*/

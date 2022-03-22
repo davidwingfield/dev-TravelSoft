@@ -219,6 +219,11 @@
 	Router::get($routeLead . "/countries/validate", "Country@validateName");
 	
 	/**
+	 * @see Autocomplete::itineraries()
+	 */
+	Router::get($routeLead . "/autocomplete/itineraries", "Autocomplete@itineraries");
+	
+	/**
 	 * @see Autocomplete::airports()
 	 */
 	Router::get($routeLead . "/autocomplete/airports", "Autocomplete@airports");

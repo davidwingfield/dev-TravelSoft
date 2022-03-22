@@ -227,4 +227,56 @@
 			return $data;
 		}
 		
+		public static function formatCountry(array $country = null): array
+		{
+			Log::$debug_log->trace("Country::formatCountry()");
+			Log::$debug_log->info($country);
+			// ----
+			
+			$formattedCountry = [];
+			
+			if (is_null($country)) {
+				return $formattedCountry;
+			}
+			
+			$countryId = (isset($country["country_id"]) && (int)$country["country_id"] > 0) ? (int)$country["country_id"] : null;
+			$countryName = (isset($country["country_name"])) ? $country["country_name"] : null;
+			$countrySortOrder = (isset($country["country_sort_order"])) ? $country["country_sort_order"] : null;
+			$countryISO3 = (isset($country["country_iso3"])) ? $country["country_iso3"] : null;
+			$countryISO2 = (isset($country["country_iso2"])) ? $country["country_iso2"] : null;
+			$countryCreatedBy = (isset($country["country_created_by"]) && (int)$country["country_created_by"] > 0) ? (int)$country["country_created_by"] : null;
+			$countryModifiedBy = (isset($country["country_modified_by"]) && (int)$country["country_modified_by"] > 0) ? (int)$country["country_modified_by"] : null;
+			$countryDateCreated = (isset($country["country_date_created"])) ? $country["country_date_created"] : null;
+			$countryDateModified = (isset($country["country_date_modified"])) ? $country["country_date_modified"] : null;
+			$countryEnabled = (isset($country["country_enabled"])) ? $country["country_enabled"] : 1;
+			$countryNote = (isset($country["country_note"])) ? $country["country_note"] : null;
+			$countryBlurb = (isset($country["country_blurb"])) ? $country["country_blurb"] : null;
+			$countryDisplayLong = (isset($country["country_display_long"])) ? $country["country_display_long"] : null;
+			$countryDisplayMedium = (isset($country["country_display_medium"])) ? $country["country_display_medium"] : null;
+			$countryDisplayShort = (isset($country["country_display_short"])) ? $country["country_display_short"] : null;
+			$currency_id = (isset($country["country_currency_id"]) && (int)$country["country_currency_id"] > 0) ? (int)$country["country_currency_id"] : null;
+			
+			$currency = Currency::formatCurrency($country);
+			
+			$formattedCountry["blurb"] = $countryBlurb;
+			$formattedCountry["currency"] = $currency;
+			$formattedCountry["currency_id"] = $currency_id;
+			$formattedCountry["created_by"] = $countryCreatedBy;
+			$formattedCountry["date_created"] = $countryDateCreated;
+			$formattedCountry["date_modified"] = $countryDateModified;
+			$formattedCountry["display_short"] = $countryDisplayShort;
+			$formattedCountry["display_medium"] = $countryDisplayMedium;
+			$formattedCountry["display_long"] = $countryDisplayLong;
+			$formattedCountry["enabled"] = $countryEnabled;
+			$formattedCountry["id"] = $countryId;
+			$formattedCountry["iso2"] = $countryISO2;
+			$formattedCountry["iso3"] = $countryISO3;
+			$formattedCountry["modified_by"] = $countryModifiedBy;
+			$formattedCountry["name"] = $countryName;
+			$formattedCountry["note"] = $countryNote;
+			$formattedCountry["sort_order"] = $countrySortOrder;
+			
+			return $formattedCountry;
+		}
+		
 	}

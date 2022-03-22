@@ -721,7 +721,7 @@ const Product = (function () {
         return isValid
     }
     const saveNewProduct = function () {
-        //console.log("Product.saveNewProduct()")
+        console.log("Product.saveNewProduct()")
         // ----
         
         let dataToSend = buildInsertData()
@@ -979,8 +979,8 @@ const Product = (function () {
             
         } else if (categoryId === 2) {
             // Flights
-            depart_from = (!isNaN(parseInt(_modal_product_depart_from_station_id.value))) ? parseInt(_modal_product_depart_from_station_id.value) : null
-            arrive_to = (!isNaN(parseInt(_modal_product_arrive_to_station_id.value))) ? parseInt(_modal_product_arrive_to_station_id.value) : null
+            depart_from = (!isNaN(parseInt(_modal_product_depart_from_airport_id.value))) ? parseInt(_modal_product_depart_from_airport_id.value) : null
+            arrive_to = (!isNaN(parseInt(_modal_product_arrive_to_airport_id.value))) ? parseInt(_modal_product_arrive_to_airport_id.value) : null
             depart_date = (Product.depart_from_date && Product.depart_from_date.value() !== "" && Product.depart_from_date.value() !== null) ? Product.depart_from_date.value() : defaultDepartureDate
             depart_time = (Product.depart_from_time && Product.depart_from_time.value() !== "" && Product.depart_from_time.value() !== null) ? Product.depart_from_time.value() : defaultDepartureTime
             arrive_date = (Product.arrive_to_date && Product.arrive_to_date.value() !== "" && Product.arrive_to_date.value() !== null) ? Product.arrive_to_date.value() : defaultArrivalDate

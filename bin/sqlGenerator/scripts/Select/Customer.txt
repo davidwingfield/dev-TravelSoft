@@ -1,12 +1,40 @@
 SELECT
-	CUSTOMER.id AS 'customer_id',
-	CUSTOMER.name AS 'customer_name',
-	CUSTOMER.sort_order AS 'customer_sort_order',
-	CUSTOMER.enabled AS 'customer_enabled',
-	CUSTOMER.date_created AS 'customer_date_created',
-	CUSTOMER.created_by AS 'customer_created_by',
-	CUSTOMER.date_modified AS 'customer_date_modified',
-	CUSTOMER.modified_by AS 'customer_modified_by',
-	CUSTOMER.note AS 'customer_note'
+		CUSTOMER.id AS 'customer_id',
+		CUSTOMER.address_id AS 'customer_address_id',
+		CUSTOMER.name_prefix AS 'customer_name_prefix',
+		CUSTOMER.name_first AS 'customer_name_first',
+		CUSTOMER.name_last AS 'customer_name_last',
+		CUSTOMER.name_suffix AS 'customer_name_suffix',
+		CUSTOMER.date_birth AS 'customer_date_birth',
+		CUSTOMER.email AS 'customer_email',
+		CUSTOMER.phone_1 AS 'customer_phone_1',
+		CUSTOMER.phone_2 AS 'customer_phone_2',
+		CUSTOMER.sort_order AS 'customer_sort_order',
+		CUSTOMER.enabled AS 'customer_enabled',
+		CUSTOMER.date_created AS 'customer_date_created',
+		CUSTOMER.created_by AS 'customer_created_by',
+		CUSTOMER.date_modified AS 'customer_date_modified',
+		CUSTOMER.modified_by AS 'customer_modified_by',
+		CUSTOMER.note AS 'customer_note'
 FROM 	customer CUSTOMER
 -- JOIN 	customer CUSTOMER ON CUSTOMER.id = {FK_TABLE}.customer_id
+
+/*
+'id'=>$customer['customer_id'],
+'address_id'=>$customer['customer_address_id'],
+'name_prefix'=>$customer['customer_name_prefix'],
+'name_first'=>$customer['customer_name_first'],
+'name_last'=>$customer['customer_name_last'],
+'name_suffix'=>$customer['customer_name_suffix'],
+'date_birth'=>$customer['customer_date_birth'],
+'email'=>$customer['customer_email'],
+'phone_1'=>$customer['customer_phone_1'],
+'phone_2'=>$customer['customer_phone_2'],
+'sort_order'=>$customer['customer_sort_order'],
+'enabled'=>$customer['customer_enabled'],
+'date_created'=>$customer['customer_date_created'],
+'created_by'=>$customer['customer_created_by'],
+'date_modified'=>$customer['customer_date_modified'],
+'modified_by'=>$customer['customer_modified_by'],
+'note'=>$customer['customer_note']
+*/

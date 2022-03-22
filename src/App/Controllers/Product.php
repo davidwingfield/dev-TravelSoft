@@ -325,6 +325,10 @@
 		
 		public static function serveAdd(array $params = []): void
 		{
+			Log::$debug_log->trace("Product::serveAdd()");
+			Log::$debug_log->info($params);
+			// ----
+			
 			if (!isset($params["name"]) || !isset($params["category_id"]) || !isset($params["pricing_strategy_types_id"])) {
 				header("Content-type:application/json");
 				View::render_invalid_json("Missing Fields", 500);
@@ -417,6 +421,12 @@
 				case 6:
 					// HOTELS TRANSPORT
 					if (!isset($params["name"]) || !isset($params["city_id"])) {
+						$name = (isset($params["name"])) ? $params["name"] : "MISSING";
+						$cityId = (isset($params["city_id"])) ? $params["city_id"] : "MISSING";
+						Log::$debug_log->info("Missing Fields: name - $name");
+						Log::$debug_log->info("Missing Fields: city_id - $cityId");
+						Log::$debug_log->error("Missing Fields");
+						
 						/**
 						 * render product json
 						 */
@@ -443,6 +453,8 @@
 				case 2:
 					// FLIGHTS
 					if (!isset($params["depart_from"])) {
+						Log::$debug_log->error("Missing Airport: depart_from");
+						Log::$debug_log->info($params);
 						/**
 						 * render product json
 						 */
@@ -486,11 +498,13 @@
 				case 4:
 					// RAIL
 					if (!isset($params["depart_from"])) {
+						Log::$debug_log->error("Missing Station: depart_from");
+						Log::$debug_log->info($params);
 						/**
 						 * render product json
 						 */
 						header("Content-type:application/json");
-						View::render_invalid_json("Missing Airport", 500);
+						View::render_invalid_json("Missing Station", 500);
 						exit(0);
 					}
 					

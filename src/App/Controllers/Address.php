@@ -272,10 +272,67 @@
 		 */
 		public static function format(array $addresses = []): array
 		{
+			Log::$debug_log->trace("Address::format()");
+			Log::$debug_log->info("address: $addresses");
+			// ----
+			
 			$formattedAddress = array();
+			
 			foreach ($addresses AS $address) {
 				$formattedAddress[] = self::format_address_table($address);
 			}
+			
+			return $formattedAddress;
+		}
+		
+		public static function formatAddress(array $address = null): array
+		{
+			Log::$debug_log->trace("Address::formatAddress()");
+			Log::$debug_log->info($address);
+			// ----
+			
+			$formattedAddress = [];
+			
+			$addressId = (isset($address["address_id"]) && (int)$address["address_id"] > 0) ? (int)$address["address_id"] : null;
+			$addressCityId = (isset($address["address_city_id"]) && (int)$address["address_city_id"] > 0) ? (int)$address["address_city_id"] : null;
+			$addressProvinceId = (isset($address["address_province_id"]) && (int)$address["address_province_id"] > 0) ? (int)$address["address_province_id"] : null;
+			$addressCountryId = (isset($address["address_country_id"]) && (int)$address["address_country_id"] > 0) ? (int)$address["address_country_id"] : null;
+			$addressStreet1 = (isset($address["address_street_1"])) ? $address["address_street_1"] : null;
+			$addressStreet2 = (isset($address["address_street_2"])) ? $address["address_street_2"] : null;
+			$addressStreet3 = (isset($address["address_street_3"])) ? $address["address_street_3"] : null;
+			$addressPostalCode = (isset($address["address_postal_code"])) ? $address["address_postal_code"] : null;
+			$addressEnabled = (isset($address["address_enabled"])) ? $address["address_enabled"] : 1;
+			$addressDateCreated = (isset($address["address_date_created"])) ? $address["address_date_created"] : null;
+			$addressCreatedBy = (isset($address["address_created_by"]) && (int)$address["address_created_by"] > 0) ? (int)$address["address_created_by"] : null;
+			$addressDateModified = (isset($address["address_date_modified"])) ? $address["address_date_modified"] : null;
+			$addressModifiedBy = (isset($address["address_modified_by"]) && (int)$address["address_modified_by"] > 0) ? (int)$address["address_modified_by"] : null;
+			$addressNote = (isset($address["address_note"])) ? $address["address_note"] : null;
+			
+			if (is_null($address)) {
+				return $formattedAddress;
+			}
+			
+			$country = Country::formatCountry($address);
+			$province = Province::formatProvince($address);
+			$city = City::formatCity($address);
+			
+			$formattedAddress["city"] = $city;
+			$formattedAddress["city_id"] = $addressCityId;
+			$formattedAddress["country"] = $country;
+			$formattedAddress["country_id"] = $addressCountryId;
+			$formattedAddress["created_by"] = $addressCreatedBy;
+			$formattedAddress["date_created"] = $addressDateCreated;
+			$formattedAddress["date_modified"] = $addressDateModified;
+			$formattedAddress["enabled"] = $addressEnabled;
+			$formattedAddress["id"] = $addressId;
+			$formattedAddress["modified_by"] = $addressModifiedBy;
+			$formattedAddress["note"] = $addressNote;
+			$formattedAddress["postal_code"] = $addressPostalCode;
+			$formattedAddress["province"] = $province;
+			$formattedAddress["province_id"] = $addressProvinceId;
+			$formattedAddress["street_1"] = $addressStreet1;
+			$formattedAddress["street_2"] = $addressStreet2;
+			$formattedAddress["street_3"] = $addressStreet3;
 			
 			return $formattedAddress;
 		}

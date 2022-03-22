@@ -76,7 +76,7 @@
 				"roles" => Role::getTypes(),
 				"sales_types" => SalesTypesModel::get(),
 				"status_types" => StatusType::get(),
-			
+				"stage_types" => Stage::get(),
 			);
 		}
 		

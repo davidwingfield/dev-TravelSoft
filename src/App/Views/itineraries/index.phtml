@@ -1,0 +1,370 @@
+<?php
+	$pageData = [];
+	$itinerariesAll = (isset($data) && isset($data["itineraries_all"])) ? $data["itineraries_all"] : [];
+	$itinerariesUser = (isset($data) && isset($data["itineraries_user"])) ? $data["itineraries_user"] : [];
+	$customersAll = (isset($data) && isset($data["customers_all"])) ? $data["customers_all"] : [];
+	$customersUser = (isset($data) && isset($data["customers_user"])) ? $data["customers_user"] : [];
+	
+	$pageData["itineraries_all"] = $itinerariesAll;
+	$pageData["itineraries_user"] = $itinerariesUser;
+	$pageData["customers_all"] = $customersAll;
+	$pageData["customers_user"] = $customersUser;
+	
+	$settings = json_encode($pageData, 1);
+	
+	$init = "ItineraryIndex.init($settings)"
+	//$init = "new Itinerary($settings);";
+	//$init = "Itinerary.init($settings);";
+?>
+<section id="itinerary_index" class="section">
+	
+	<div class="row">
+		
+		<div class="col-12 col-md-9">
+			
+			<?php include_once(VIEWS_PATH . "/itineraries/tables/itinerary_index_table.phtml"); ?>
+			
+			<div class="row gx-1">
+				<div class="col-12 p-1">
+					
+					<div class="card card-body">
+						<h5 class="card-title font-weight-bold">
+							<span>Customers</span>
+							<a href="javascript:void(0);" id="itinerary_index_customer_table_panel_link" class="panel_link" aria-hidden="true">Edit</a>
+						</h5>
+						
+						<table id="itinerary_index_customer_table" class="table table-hover dataTable table-striped w-full dtr-inline">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Email</th>
+									<th>Address</th>
+									<th>Phone</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							
+							<tbody>
+								<tr>
+									<td>
+										<div class="row">
+											<div class="col-12 text-truncate">
+												Praeterea iter est quasdam res quas ex communi.
+											</div>
+										</div>
+									</td>
+									<td>
+										<div class="row">
+											<div class="col-12 text-truncate">
+												<a href="mailto: abc@example.com" class="">joesmith@email.com</a>
+											</div>
+										</div>
+									</td>
+									<td>
+										<div class="row">
+											<div class="col-12 text-truncate">
+												<address class="m-0">
+													<div class="m-0 p-0" style="line-height:1.2; font-size:.85rem;vertical-align:middle;">123 Main Street</div>
+													<div class="m-0 p-0" style="line-height:1.2; font-size:.85rem;vertical-align:middle;">Street 2</div>
+													<div class="m-0 p-0" style="line-height:1.2; font-size:.85rem;vertical-align:middle;">Houston TX, 77380 USA</div>
+												</address>
+											</div>
+										</div>
+									</td>
+									<td>
+										(314) 391-9684
+									</td>
+									<td>
+										<button type="button" class="btn btn-warning btn-sm waves-effect waves-light"><i class="fas fa-edit"></i></button>
+										<button type="button" class="btn btn-danger btn-sm waves-effect waves-light"><i class="fas fa-trash"></i></button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					
+					</div>
+				</div>
+			</div>
+		
+		</div>
+		
+		<div class="col-12 col-md-3">
+		
+		</div>
+	
+	</div>
+
+</section>
+
+<script type="text/javascript">
+	function Stage (options) {
+		//console.log("Stage(options)", options)
+		// ----
+		
+		if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
+			return
+		}
+		
+		this.id = (options.id && !isNaN(parseInt(options.id))) ? parseInt(options.id) : null
+		this.name = (options.name) ? options.name : null
+		this.class = (options.class) ? options.class : null
+		this.enabled = (options.id && !isNaN(parseInt(options.enabled))) ? parseInt(options.enabled) : 1
+		this.date_created = (options.date_created) ? options.date_created : formatDateMySQL()
+		this.created_by = (options.created_by && !isNaN(parseInt(options.created_by))) ? parseInt(options.created_by) : null
+		this.date_modified = (options.date_modified) ? options.date_modified : formatDateMySQL()
+		this.modified_by = (options.modified_by && !isNaN(parseInt(options.modified_by))) ? parseInt(options.modified_by) : null
+		this.note = (options.note) ? options.note : null
+		
+	}
+	
+	Stage.prototype.createTableCell = function () {
+		
+		let fullName = []
+		let stageName = (this.name) ? this.name : null
+		let stageId = (this.id) ? this.id : null
+		let stageClass = (this.class) ? this.class : null
+		
+		return `<span data-stage-id="${stageId}" class="badge badge-default ${stageClass}">${stageName}</span>`
+	}
+	
+	function Customer (options) {
+		console.log("Itinerary(options)", options)
+		// ----
+		
+		if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
+			return
+		}
+		
+		this.id = (options.id && !isNaN(parseInt(options.id))) ? parseInt(options.id) : null
+		this.address_id = (options.address_id && !isNaN(parseInt(options.address_id))) ? parseInt(options.address_id) : null
+		this.name_prefix = (options.name_prefix) ? options.name_prefix : null
+		this.name_first = (options.name_first) ? options.name_first : null
+		this.name_last = (options.name_last) ? options.name_last : null
+		this.name_suffix = (options.name_suffix) ? options.name_suffix : null
+		this.date_birth = (options.date_birth) ? options.date_birth : null
+		this.email = (options.email) ? options.email : null
+		this.phone_1 = (options.phone_1) ? options.phone_1 : null
+		this.phone_2 = (options.phone_2) ? options.phone_2 : null
+		this.sort_order = (options.sort_order && !isNaN(parseInt(options.sort_order))) ? parseInt(options.sort_order) : null
+		this.enabled = (options.id && !isNaN(parseInt(options.enabled))) ? parseInt(options.enabled) : 1
+		this.date_created = (options.date_created) ? options.date_created : formatDateMySQL()
+		this.created_by = (options.created_by && !isNaN(parseInt(options.created_by))) ? parseInt(options.created_by) : null
+		this.date_modified = (options.date_modified) ? options.date_modified : formatDateMySQL()
+		this.modified_by = (options.modified_by && !isNaN(parseInt(options.modified_by))) ? parseInt(options.modified_by) : null
+		this.note = (options.note) ? options.note : null
+		
+	}
+	
+	Customer.prototype.createTableCell = function () {
+		
+		let fullName = []
+		let customerFirstName = (this.name_first) ? this.name_first : null
+		let customerLastName = (this.name_last) ? this.name_last : null
+		let customerPrefix = (this.name_prefix) ? this.name_prefix : null
+		let customerSuffix = (this.name_suffix) ? this.name_suffix : null
+		
+		if (customerPrefix !== null) {
+			fullName.push(customerPrefix)
+		}
+		
+		if (customerFirstName !== null) {
+			fullName.push(customerFirstName)
+		}
+		
+		if (customerLastName !== null) {
+			fullName.push(customerLastName)
+		}
+		
+		if (customerSuffix !== null) {
+			fullName.push(customerSuffix)
+		}
+		
+		return fullName.join(" ")
+	}
+	
+	function Itinerary (options) {
+		//console.log("Itinerary(options)", options)
+		// ----
+		
+		if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
+			return
+		}
+		
+		this.id = (options.id && !isNaN(parseInt(options.id))) ? parseInt(options.id) : null
+		this.customer_id = (options.id && !isNaN(parseInt(options.id))) ? parseInt(options.id) : null
+		this.stage_id = (options.id && !isNaN(parseInt(options.id))) ? parseInt(options.id) : 1
+		this.name = (options.name) ? options.name : null
+		this.start_date = (options.start_date) ? moment(options.start_date).format("YYYY-MM-DD") : null
+		this.end_date = (options.end_date) ? moment(options.end_date).format("YYYY-MM-DD") : null
+		this.budget = (options.budget) ? options.budget : null
+		this.currency_id = (options.currency_id && !isNaN(parseInt(options.currency_id))) ? parseInt(options.currency_id) : null
+		this.json = (options.json) ? options.json : null
+		this.enabled = (options.enabled && !isNaN(parseInt(options.enabled))) ? parseInt(options.enabled) : 1
+		this.date_created = (options.date_created) ? options.date_created : formatDateMySQL()
+		this.created_by = (options.created_by && !isNaN(parseInt(options.created_by))) ? parseInt(options.created_by) : null
+		this.date_modified = (options.date_modified) ? options.date_modified : formatDateMySQL()
+		this.modified_by = (options.modified_by && !isNaN(parseInt(options.modified_by))) ? parseInt(options.modified_by) : null
+		this.note = (options.note) ? options.note : null
+		this.customer = (options.customer) ? new Customer(options.customer) : new Customer()
+		this.stage = (options.stage) ? new Stage(options.stage) : new Stage()
+		
+	}
+	
+	const ItineraryIndex = (function () {
+		"use strict"
+		
+		const _itinerary_index_table = document.getElementById("itinerary_index_table")
+		const _button_add_itinerary_page_heading = document.getElementById("button_add_itinerary_page_heading")
+		
+		let $index_table
+		
+		$(_button_add_itinerary_page_heading)
+			.on("click", function () {
+				console.log("ItineraryIndex.button_add_itinerary_page_heading:click()")
+				// ----
+			})
+		
+		const buildTable = function () {
+			console.log("ItineraryIndex.buildTable()")
+			// ----
+			
+			if (_itinerary_index_table) {
+				$index_table = $(_itinerary_index_table).table({
+					table_type: "display_list",
+					data: [],
+					columnDefs: [
+						{
+							title: "Name",
+							targets: 0,
+							data: "name",
+							render: function (data, type, row, meta) {
+								
+								return "<span>" + data + "</span>"
+							},
+						},
+						{
+							title: "Customer",
+							targets: 1,
+							data: "customer",
+							render: function (data, type, row, meta) {
+								//console.log("|__ customer.data", data)
+								// ----
+								let customerTableCell = data.createTableCell()
+								
+								return `<span style="white-space: nowrap;">${customerTableCell}</span>`
+							},
+						},
+						{
+							title: "Start Date",
+							targets: 2,
+							data: "start_date",
+							render: function (data, type, row, meta) {
+								//console.log("|__ customer.start_date", data)
+								// ----
+								
+								let startDate = (data) ? data : ""
+								
+								return `<span style="white-space: nowrap;">${startDate}</span>`
+							},
+						},
+						{
+							title: "End Date",
+							targets: 3,
+							data: "end_date",
+							render: function (data, type, row, meta) {
+								//console.log("|__ customer.end_date", data)
+								// ----
+								
+								let endDate = (data) ? data : ""
+								
+								return `<span style="white-space: nowrap;">${endDate}</span>`
+							},
+						},
+						{
+							title: "Stage",
+							targets: 4,
+							data: "stage",
+							render: function (data, type, row, meta) {
+								//console.log("|__ customer.stage", data)
+								// ----
+								
+								return data.createTableCell()
+							},
+						},
+					],
+					rowClick: ItineraryIndex.navigate,
+				})
+			}
+		}
+		
+		const addTableRow = function (itinerary) {
+			console.log("ItineraryIndex.addTableRow(itinerary)", itinerary)
+			// ----
+			
+			if (itinerary) {
+				if (itinerary.id !== null) {
+					$index_table.insertRow(itinerary)
+				}
+			}
+			
+		}
+		
+		const navigate = function (itinerary) {
+			console.log("ItineraryIndex.navigate(itinerary)", itinerary)
+			// ----
+			
+		}
+		
+		const loadAll = function (itineraries) {
+			console.log("ItineraryIndex.loadAll(itineraries)", itineraries)
+			// ----
+			
+			ItineraryIndex.all = new Map()
+			
+			if (!itineraries) {
+				itineraries = []
+			}
+			
+			$.each(itineraries, function (k, itinerary) {
+				let itineraryDetail = new Itinerary(itinerary)
+				
+				if (itineraryDetail) {
+					let itineraryDetailId = (!isNaN(parseInt(itineraryDetail.id))) ? parseInt(itineraryDetail.id) : null
+					
+					if (itineraryDetailId) {
+						ItineraryIndex.all.set(itineraryDetailId, itineraryDetail)
+						addTableRow(itineraryDetail)
+					}
+				}
+				
+			})
+			
+		}
+		
+		const init = function (settings) {
+			console.log("ItineraryIndex.init(settings)", settings)
+			// ----
+			
+			let itineraries = (settings && settings.itineraries_all) ? settings.itineraries_all : []
+			
+			buildTable()
+			
+			loadAll(itineraries)
+		}
+		
+		return {
+			all: new Map(),
+			navigate: function (itinerary) {
+				navigate(itinerary)
+			},
+			init: function (settings) {
+				init(settings)
+			},
+		}
+	})()
+	
+	$(function () {
+		Types.init(<?php echo TYPES;?>)
+		<?php echo $init;?>
+	})
+</script>

@@ -706,8 +706,15 @@ const City = (function () {
                 if (!suggestion.data) {
                     return
                 }
+                
                 let city = suggestion.data
+                let country = (city.country) ? city.country : {}
+                let province = (city.province) ? city.province : {}
+                
+                _modal_product_country_id.value = (country && !isNaN(parseInt(country.id))) ? parseInt(country.id) : null
+                _modal_product_province_id.value = (province && !isNaN(parseInt(province.id))) ? parseInt(province.id) : null
                 _modal_product_city_id.value = city.id
+                
                 $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
                 
             },

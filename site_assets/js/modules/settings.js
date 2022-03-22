@@ -1,6 +1,7 @@
 const mySQLDate = ""
 const defaultLocationDisplayFormat = "medium" //long medium short
 const populateDefaultValues = false
+const defaultDateFormat = "YYYY-MM-DD"
 const sideNavOptions = {
     edge: "left", // Choose the horizontal origin
     closeOnClick: false, // Closes side-nav on &lt;a&gt; clicks, useful for Angular/Meteor

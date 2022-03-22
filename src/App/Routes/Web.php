@@ -69,4 +69,5 @@
 	Router::get('users/${user_id}/products/${product_id}', "User@get_products_by_user");
 	Router::get("admin/users", "User@index");
 	
-	Router::get("itineraries", "Itineraries@index");
+	Router::get("itineraries", "Itinerary@index");
+	Router::get('itineraries/${_itinerary_id}', "Itinerary@edit");

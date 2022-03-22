@@ -82,4 +82,28 @@
 			return $selectQuery;
 		}
 		
+		public static function buildWhereCondition(array $where = []): string
+		{
+			$whereCondition = "";
+			
+			if (count($where) > 0) {
+				$whereCondition = "WHERE		" . implode(" AND ", $where);
+				
+			}
+			
+			return $whereCondition;
+		}
+		
+		public static function buildOrderCondition(array $order = []): string
+		{
+			$orderCondition = "";
+			
+			if (count($order) > 0) {
+				$orderCondition = "ORDER BY    " . implode(", ", $order);
+				
+			}
+			
+			return $orderCondition;
+		}
+		
 	}

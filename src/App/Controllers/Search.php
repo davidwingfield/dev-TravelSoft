@@ -24,6 +24,8 @@
 		
 		public static function product(array $params = []): void
 		{
+			$results = [];
+			
 			$resultSet = SearchModel::fetchProductSearch($params);
 			
 			if (isset($resultSet["errors"])) {
@@ -35,7 +37,16 @@
 				exit(1);
 			}
 			
-			$results = self::formatHotelSearch($resultSet);
+			$counter = 0;
+			foreach ($resultSet AS $k => $result) {
+				if ($counter <= 0) {
+					Log::$debug_log->trace($result);
+				}
+				$counter++;
+			}
+			//Log::$debug_log->trace($resultSet);
+			
+			//$results = self::formatHotelSearch($resultSet);
 			
 			/**
 			 * render valid results json page
@@ -47,17 +58,207 @@
 		
 		public static function hotels(array $params = []): void
 		{
+			$longDOW = array(
+				"Sunday",
+				"Monday",
+				"Tuesday",
+				"Wednesday",
+				"Thursday",
+				"Friday",
+				"Saturday",
+			);
+			$shortDOW = array(
+				"Sun",
+				"Mon",
+				"Tue",
+				"Wed",
+				"Thu",
+				"Fri",
+				"Sat",
+			);
+			$results = [];
 			$resultSet = SearchModel::fetchProductSearch($params);
+			//$results = self::formatHotelSearch($resultSet);
+			//Log::$debug_log->trace($resultSet);
 			
-			$results = self::formatHotelSearch($resultSet);
+			foreach ($resultSet AS $result) {
+				$address = "";
+				$addressTemp = [];
+				$country = Country::formatCountry($result);
+				$province = Province::formatProvince($result);
+				$city = City::formatCity($result);
+				
+				$date = (isset($result["inventory_date"])) ? $result["inventory_date"] : null;
+				$dow = (isset($result["inventory_dow"])) ? (int)$result["inventory_dow"] : null;
+				$dowShort = $shortDOW[$dow];
+				$dowLong = $longDOW[$dow];
+				$available = (isset($result["inventory_availability"])) ? $result["inventory_availability"] : null;
+				
+				$unitId = (isset($result["unit_id"])) ? (int)$result["unit_id"] : null;
+				$unitname = (isset($result["unit_name"])) ? $result["unit_name"] : null;
+				
+				$productId = (isset($result["product_id"])) ? (int)$result["product_id"] : null;
+				$productName = (isset($result["product_name"])) ? $result["product_name"] : null;
+				$productStreet1 = (isset($result["product_street_1"])) ? $result["product_street_1"] : null;
+				$productStreet2 = (isset($result["product_street_2"])) ? $result["product_street_2"] : null;
+				$productPostalCode = (isset($result["product_postal_code"])) ? $result["product_postal_code"] : null;
+				$productSKU = (isset($result["product_sku"])) ? $result["product_sku"] : null;
+				
+				$ratingId = (isset($result["product_rating_types_id"])) ? (int)$result["product_rating_types_id"] : null;
+				
+				$cityName = (isset($city["name"])) ? $city["name"] : null;
+				$provinceName = (isset($province["name"])) ? $province["name"] : null;
+				$provinceISO2 = (isset($province["iso2"])) ? $province["iso2"] : null;
+				$provinceISO3 = (isset($province["iso3"])) ? $province["iso3"] : null;
+				$countryName = (isset($country["name"])) ? $country["name"] : null;
+				
+				$cost = (isset($result["cost"])) ? (int)$result["cost"] : 1;
+				$margin = (isset($result["margin"])) ? (int)$result["margin"] : 0;
+				$price = (($margin / 100) * $cost) + $cost;
+				
+				if (!is_null($productStreet1) && $productStreet1 !== "") {
+					$addressTemp[] = "<p class='m-0 p-0 text-uppercase text-truncate'>$productStreet1</p>";
+				}
+				
+				if (!is_null($productStreet2) && $productStreet2 !== "") {
+					$addressTemp[] = "<p class='m-0 p-0 text-uppercase text-truncate'>$productStreet2</p>";
+				}
+				
+				if (count($addressTemp) > 0) {
+					$address = $address . implode(", ", $addressTemp);
+				}
+				
+				$addressTemp = [];
+				if (!is_null($productPostalCode) && $productPostalCode !== "") {
+					$addressTemp[] = $productPostalCode;
+				}
+				
+				if (!is_null($cityName) && $cityName !== "") {
+					$addressTemp[] = $cityName;
+				}
+				
+				if (!is_null($provinceISO2) && $provinceISO2 !== "") {
+					$addressTemp[] = $provinceISO2;
+				} else if (!is_null($provinceISO3) && $provinceISO3 !== "") {
+					$addressTemp[] = $provinceISO3;
+				} else if (!is_null($provinceName) && $provinceName !== "") {
+					$addressTemp[] = $provinceName;
+				} else {
+					Log::$debug_log->trace("Here");
+					exit(0);
+				}
+				
+				if (count($addressTemp) > 0) {
+					$address = $address . "<p class='m-0 p-0 text-uppercase text-truncate'>" . implode(" ", $addressTemp) . "</p>";
+				}
+				
+				$addressTemp = [];
+				if (!is_null($countryName) && $countryName !== "") {
+					$addressTemp[] = $countryName;
+				}
+				
+				if (count($addressTemp) > 0) {
+					$address = $address . "<p class='m-0 p-0 text-uppercase text-truncate'>" . implode("", $addressTemp) . "</p>";
+				}
+				
+				if (!isset($results[$productId])) {
+					$results[$productId] = array(
+						"id" => $productId,
+						"name" => $productName,
+						"rating_id" => $ratingId,
+						"sku" => $productSKU,
+						"units" => array(),
+					);
+				}
+				
+				if (!isset($results[$productId]["units"][$unitId])) {
+					
+					$results[$productId]["units"][$unitId] = array(
+						"id" => $unitId,
+						"category_id" => $result["unit_category_id"],
+						"min_pax" => $result["unit_min_pax"],
+						"max_pax" => $result["unit_max_pax"],
+						"min_nights" => $result["unit_min_nights"],
+						"max_nights" => $result["unit_max_nights"],
+						"api_id" => $result["unit_api_id"],
+						"name" => $unitname,
+						"room_code" => $result["unit_room_code"],
+						"blurb" => $result["unit_blurb"],
+						"cover_image" => $result["unit_cover_image"],
+						"meeting_point" => $result["unit_meeting_point"],
+						"time_notes" => $result["unit_time_notes"],
+						"start_time" => $result["unit_start_time"],
+						"end_time" => $result["unit_end_time"],
+						"description_short" => $result["unit_description_short"],
+						"description_long" => $result["unit_description_long"],
+						"dates" => array(),
+					);
+				}
+				
+				if (!isset($results[$productId]["units"][$unitId]["dates"][$date])) {
+					$results[$productId]["units"][$unitId]["dates"][$date] = array(
+						"date" => $date,
+						"dow" => $date,
+						"dowShort" => $dowShort,
+						"dowLong" => $dowLong,
+						"available" => $available,
+						"cost" => $cost,
+						"margin" => $margin,
+						"price" => $price,
+					);
+				}
+			}
 			
-			Log::$debug_log->trace($resultSet);
+			$productDetail = [];
+			foreach ($results AS $h => $product) {
+				$units = (isset($product["units"])) ? $product["units"] : [];
+				
+				$unitDetail = [];
+				foreach ($units AS $i => $unit) {
+					$dates = (isset($unit["dates"])) ? $unit["dates"] : [];
+					
+					$dateDetail = [];
+					foreach ($dates AS $j => $date) {
+						$dateDetail[] = $date;
+					}
+					
+					$unitDetail[] = array(
+						"id" => $unit["id"],
+						"category_id" => $unit["category_id"],
+						"min_pax" => $unit["min_pax"],
+						"max_pax" => $unit["max_pax"],
+						"min_nights" => $unit["min_nights"],
+						"max_nights" => $unit["max_nights"],
+						"api_id" => $unit["api_id"],
+						"name" => $unit["name"],
+						"room_code" => $unit["room_code"],
+						"blurb" => $unit["blurb"],
+						"cover_image" => $unit["cover_image"],
+						"meeting_point" => $unit["meeting_point"],
+						"time_notes" => $unit["time_notes"],
+						"start_time" => $unit["start_time"],
+						"end_time" => $unit["end_time"],
+						"description_short" => $unit["description_short"],
+						"description_long" => $unit["description_long"],
+						"dates" => $dateDetail,
+					);
+				}
+				
+				$productDetail[] = array(
+					"id" => $product["id"],
+					"address" => $address,
+					"name" => $product["name"],
+					"rating_id" => $product["rating_id"],
+					"sku" => $product["sku"],
+					"units" => $unitDetail,
+				);
+			}
 			
 			/**
 			 * render valid results json page
 			 */
 			header("Content-type:application/json");
-			View::render_json($results);
+			View::render_json($productDetail);
 			exit(0);
 		}
 		
@@ -263,7 +464,12 @@
 				
 			}
 			
-			return $temp;
+			$productSearchResults = [];
+			foreach ($temp AS $k => $productSearchResult) {
+				$productSearchResults[] = $productSearchResult;
+			}
+			
+			return $productSearchResults;
 		}
 		
 	}

@@ -65,16 +65,13 @@ const Category = (function () {
             return
         }
         
-        //Product.resetNewProductDetails()
-        // Product.enableNewFormDetails()
-        
         Product.attr1 = (attributeId) ? attributeId : null
         Product.attr2 = null
         Product.attr3 = null
-        Product.updateProductSKU()
         
-        let productName, productSKU,
-            providerName, vendorName = ""
+        Product.resetNewProductDetails()
+        Product.enableNewFormDetails()
+        Product.updateProductSKU()
         
         if (categoryId && !isNaN(categoryId)) {
             Product.clearModalForm()

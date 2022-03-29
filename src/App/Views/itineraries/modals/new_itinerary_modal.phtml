@@ -1,0 +1,147 @@
+<?php
+	if (!isset($page_data)) {
+		$page_data = [];
+	}
+	
+	$currency = [];
+	if (isset($page_data["types"]["currency"])) {
+		$currency = $page_data["types"]["currency"];
+	}
+	
+	$pricing_strategies = [];
+	if (isset($page_data["types"]["pricing_strategy_types"])) {
+		$pricing_strategies = $page_data["types"]["pricing_strategy_types"];
+	}
+	
+	$categories = [];
+	if (isset($page_data["types"]["category"])) {
+		$categories = $page_data["types"]["category"];
+	}
+	
+	$rating_types = [];
+	if (isset($page_data["types"]["rating_types"])) {
+		$rating_types = $page_data["types"]["rating_types"];
+	}
+	
+	$airport_types = [];
+	if (isset($page_data["types"]["airport_types"])) {
+		$airport_types = $page_data["types"]["airport_types"];
+	}
+
+?>
+
+<!-- New Itinerary Modal -->
+<div class="modal fade" id="modal_new_itinerary" tabindex="-1" role="dialog" aria-labelledby="modal_new_itinerary-label" aria-hidden="true">
+	
+	<div class="modal-dialog modal-lg" role="document">
+		
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+				
+				<h4 class="modal-title debug" id="modal_new_itinerary-label">New Itinerary</h4>
+			
+			</div>
+			
+			<div class="modal-body">
+				
+				<div id="form_itinerary_add">
+					
+					<!-- Horizontal Steppers -->
+					<div class="row">
+						<div class="col-md-12">
+							
+							<!-- Stepers Wrapper -->
+							<ul id="form_itinerary_add_stepper" class="stepper stepper-horizontal">
+								
+								<!-- First Step -->
+								<li id="form_itinerary_add_stepper_customer" data-step="1" class="">
+									<a href="javascript:void(0)">
+										<span class="circle">1</span>
+										<span class="label">Customer</span>
+									</a>
+								</li>
+								
+								<!-- Second Step -->
+								<li id="form_itinerary_add_stepper_travelers" data-step="2" class="">
+									<a href="javascript:void(0)">
+										<span class="circle">2</span>
+										<span class="label">Travelers</span>
+									</a>
+								</li>
+								
+								<!-- Third Step -->
+								<li id="form_itinerary_add_stepper_trip" data-step="3" class="">
+									<a href="javascript:void(0)">
+										<span class="circle">3</span>
+										<span class="label">Trip</span>
+									</a>
+								</li>
+								
+								<li id="form_itinerary_add_stepper_other" class="">
+									<a href="javascript:void(0)">
+										<!--<span class="circle"><i class="fas fa-exclamation"></i></span>-->
+										<span class="circle">4</span>
+										<span class="label">Other</span>
+									</a>
+								</li>
+							
+							</ul>
+							<!-- /.Stepers Wrapper -->
+						
+						</div>
+					</div>
+					<!-- /.Horizontal Steppers -->
+					
+					<div id="form_itinerary_add_customer" class="card card-body">
+						<h5 class="card-title">Customer</h5>
+						
+						<a id="form_itinerary_add_customer_continue_button" href="javascript:void(0)" class="black-text d-flex justify-content-end">
+							<h5>Continue <i class="fas fa-angle-double-right"></i></h5>
+						</a>
+					</div>
+					
+					<div id="form_itinerary_add_travelers" class="card card-body">
+						<h5 class="card-title">Travelers</h5>
+						
+						<a id="form_itinerary_add_travelers_continue_button" href="javascript:void(0)" class="black-text d-flex justify-content-end">
+							<h5>Continue <i class="fas fa-angle-double-right"></i></h5>
+						</a>
+					</div>
+					
+					<div id="form_itinerary_add_trip" class="card card-body">
+						<h5 class="card-title">Trip</h5>
+						
+						<a id="form_itinerary_add_trip_continue_button" href="javascript:void(0)" class="black-text d-flex justify-content-end">
+							<h5>Continue <i class="fas fa-angle-double-right"></i></h5>
+						</a>
+					</div>
+				
+				</div>
+			
+			</div>
+			
+			<div class="modal-footer w-100 d-block p-1">
+				<div class="row">
+					
+					<div class="col-12 col-sm-6 text-left">
+						<button class="btn btn-outline-secondary btn-sm" id="modal_new_itinerary_clear_button">Clear</button>
+					</div>
+					
+					<div class="col-12 col-sm-6 text-right">
+						<button class="btn btn-outline-primary btn-sm" id="modal_new_itinerary_cancel_button">Cancel</button>
+						<button class="btn btn-primary btn-sm" id="modal_new_itinerary_submit_button">Save</button>
+					</div>
+				
+				</div>
+			</div>
+		
+		</div>
+	
+	</div>
+
+</div>

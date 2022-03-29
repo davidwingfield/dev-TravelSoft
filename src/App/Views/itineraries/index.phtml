@@ -96,7 +96,33 @@
 
 </section>
 
+<?php include_once(VIEWS_PATH . "/itineraries/modals/new_itinerary_modal.phtml"); ?>
+
 <script type="text/javascript">
+	function Address2 (options) {
+		//console.log("Stage(options)", options)
+		// ----
+		if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
+			return
+		}
+		
+		this.id = (options && options.id && !isNaN(parseInt(options.id))) ? parseInt(options.id) : null
+		this.city_id = (options && options.city_id && !isNaN(parseInt(options.city_id))) ? parseInt(options.city_id) : null
+		this.province_id = (options && options.province_id && !isNaN(parseInt(options.province_id))) ? parseInt(options.province_id) : null
+		this.country_id = (options && options.country_id && !isNaN(parseInt(options.country_id))) ? parseInt(options.country_id) : null
+		this.street_1 = (options && options.street_1) ? options.street_1 : null
+		this.street_2 = (options && options.street_2) ? options.street_2 : null
+		this.street_3 = (options && options.street_3) ? options.street_3 : null
+		this.postal_code = (options && options.note) ? options.note : null
+		this.enabled = (options && options.enabled && !isNaN(parseInt(options.enabled))) ? parseInt(options.enabled) : 1
+		this.date_created = (options && options.date_created) ? options.date_created : formatDateMySQL()
+		this.created_by = (options && options.created_by && !isNaN(parseInt(options.created_by))) ? parseInt(options.created_by) : null
+		this.date_modified = (options && options.date_modified) ? options.date_modified : formatDateMySQL()
+		this.modified_by = (options && options.modified_by && !isNaN(parseInt(options.modified_by))) ? parseInt(options.modified_by) : null
+		this.note = (options && options.note) ? options.note : null
+		
+	}
+	
 	function Stage (options) {
 		//console.log("Stage(options)", options)
 		// ----
@@ -105,15 +131,15 @@
 			return
 		}
 		
-		this.id = (options.id && !isNaN(parseInt(options.id))) ? parseInt(options.id) : null
-		this.name = (options.name) ? options.name : null
-		this.class = (options.class) ? options.class : null
-		this.enabled = (options.id && !isNaN(parseInt(options.enabled))) ? parseInt(options.enabled) : 1
-		this.date_created = (options.date_created) ? options.date_created : formatDateMySQL()
-		this.created_by = (options.created_by && !isNaN(parseInt(options.created_by))) ? parseInt(options.created_by) : null
-		this.date_modified = (options.date_modified) ? options.date_modified : formatDateMySQL()
-		this.modified_by = (options.modified_by && !isNaN(parseInt(options.modified_by))) ? parseInt(options.modified_by) : null
-		this.note = (options.note) ? options.note : null
+		this.id = (options && options.id && !isNaN(parseInt(options.id))) ? parseInt(options.id) : null
+		this.name = (options && options.name) ? options.name : null
+		this.class = (options && options.class) ? options.class : null
+		this.enabled = (options && options.id && !isNaN(parseInt(options.enabled))) ? parseInt(options.enabled) : 1
+		this.date_created = (options && options.date_created) ? options.date_created : formatDateMySQL()
+		this.created_by = (options && options.created_by && !isNaN(parseInt(options.created_by))) ? parseInt(options.created_by) : null
+		this.date_modified = (options && options.date_modified) ? options.date_modified : formatDateMySQL()
+		this.modified_by = (options && options.modified_by && !isNaN(parseInt(options.modified_by))) ? parseInt(options.modified_by) : null
+		this.note = (options && options.note) ? options.note : null
 		
 	}
 	
@@ -156,6 +182,14 @@
 	}
 	
 	Customer.prototype.createTableCell = function () {
+		
+		let fullName = this.formatCustomerName()
+		
+		return fullName
+	}
+	Customer.prototype.formatCustomerName = function () {
+		console.log("ItineraryIndex.formatCustomerName()")
+		// ----
 		
 		let fullName = []
 		let customerFirstName = (this.name_first) ? this.name_first : null
@@ -213,16 +247,218 @@
 	const ItineraryIndex = (function () {
 		"use strict"
 		
+		const _itinerary_index = document.getElementById("itinerary_index")
+		const _itinerary_index_add_itinerary_heading_button = document.getElementById("itinerary_index_add_itinerary_heading_button")
+		
+		const _modal_new_itinerary_form = document.getElementById("modal_new_itinerary_form")
+		const _form_itinerary_add_stepper = document.getElementById("form_itinerary_add_stepper")
+		const _form_itinerary_add_stepper_customer = document.getElementById("form_itinerary_add_stepper_customer")
+		const _form_itinerary_add_stepper_travelers = document.getElementById("form_itinerary_add_stepper_travelers")
+		const _form_itinerary_add_stepper_trip = document.getElementById("form_itinerary_add_stepper_trip")
+		
+		const _modal_new_itinerary = document.getElementById("modal_new_itinerary")
+		const _modal_new_itinerary_clear_button = document.getElementById("modal_new_itinerary_clear_button")
+		const _modal_new_itinerary_cancel_button = document.getElementById("modal_new_itinerary_cancel_button")
+		const _modal_new_itinerary_submit_button = document.getElementById("modal_new_itinerary_submit_button")
+		
+		const _form_itinerary_add_customer = document.getElementById("form_itinerary_add_customer")
+		const _form_itinerary_add_travelers = document.getElementById("form_itinerary_add_travelers")
+		const _form_itinerary_add_trip = document.getElementById("form_itinerary_add_trip")
+		
+		const _form_itinerary_add_customer_continue_button = document.getElementById("form_itinerary_add_customer_continue_button")
+		const _form_itinerary_add_travelers_continue_button = document.getElementById("form_itinerary_add_travelers_continue_button")
+		const _form_itinerary_add_trip_continue_button = document.getElementById("form_itinerary_add_trip_continue_button")
+		
 		const _itinerary_index_table = document.getElementById("itinerary_index_table")
 		const _button_add_itinerary_page_heading = document.getElementById("button_add_itinerary_page_heading")
 		
 		let $index_table
 		
-		$(_button_add_itinerary_page_heading)
+		$(_modal_new_itinerary_cancel_button)
 			.on("click", function () {
-				console.log("ItineraryIndex.button_add_itinerary_page_heading:click()")
+				console.log("ItineraryIndex.modal_new_itinerary_cancel_button:click()")
 				// ----
+				
+				modalClearForm()
+				modalHideForm()
+				
 			})
+		
+		$(_modal_new_itinerary_form)
+			.on("change", function () {
+				console.log("ItineraryIndex.form_itinerary_add_stepper_trip:click()")
+				// ----
+				
+				modalCheckFormProgress()
+				
+			})
+		
+		$(_form_itinerary_add_stepper_trip)
+			.on("click", function () {
+				console.log("ItineraryIndex.form_itinerary_add_stepper_trip:click()")
+				// ----
+				
+				modalToggleFormSections("trip")
+				
+			})
+		
+		$(_form_itinerary_add_stepper_travelers)
+			.on("click", function () {
+				console.log("ItineraryIndex.form_itinerary_add_stepper_trip:click()")
+				// ----
+				
+				modalToggleFormSections("travelers")
+				
+			})
+		
+		$(_form_itinerary_add_stepper_customer)
+			.on("click", function () {
+				console.log("ItineraryIndex.form_itinerary_add_stepper_customer:click()")
+				// ----
+				
+				modalToggleFormSections("customer")
+				
+			})
+		
+		$(_itinerary_index_add_itinerary_heading_button)
+			.on("click", function () {
+				console.log("ItineraryIndex.itinerary_index_add_itinerary_heading_button:click()")
+				// ----
+				
+				modalLoadForm()
+				modalToggleFormSections("customer")
+				
+			})
+		
+		$(_form_itinerary_add_customer_continue_button)
+			.on("click", function () {
+				console.log("ItineraryIndex.form_itinerary_add_customer_continue_button:click()")
+				// ----
+				
+				modalToggleFormSections("travelers")
+				
+			})
+		
+		$(_form_itinerary_add_travelers_continue_button)
+			.on("click", function () {
+				console.log("ItineraryIndex.form_itinerary_add_travelers_continue_button:click()")
+				// ----
+				
+				modalToggleFormSections("trip")
+				
+			})
+		
+		$(_form_itinerary_add_trip_continue_button)
+			.on("click", function () {
+				console.log("ItineraryIndex.form_itinerary_add_trip_continue_button:click()")
+				// ----
+				
+			})
+		
+		const modalCheckFormProgress = function () {
+			console.log("ItineraryIndex.modalCheckFormProgress()")
+			// ----
+			
+		}
+		
+		const modalHideFormSections = function () {
+			console.log("ItineraryIndex.modalHideFormSections()")
+			// ----
+			
+			$(_form_itinerary_add_trip).hide()
+			$(_form_itinerary_add_travelers).hide()
+			$(_form_itinerary_add_customer).hide()
+			
+			$(_form_itinerary_add_stepper_customer).removeClass("active")
+			$(_form_itinerary_add_stepper_travelers).removeClass("active")
+			$(_form_itinerary_add_stepper_trip).removeClass("active")
+			
+		}
+		
+		const modalToggleFormSections = function (section) {
+			console.log("ItineraryIndex.modalToggleFormSections(section)", section)
+			// ----
+			
+			if (section) {
+				switch (section.toLowerCase()) {
+					case "customer":
+						if (!$(_form_itinerary_add_customer).hasClass("disabled")) {
+							modalHideFormSections()
+							$(_form_itinerary_add_stepper_customer).addClass("active")
+							$(_form_itinerary_add_customer).show()
+						}
+						break
+					case "travelers":
+						if (!$(_form_itinerary_add_travelers).hasClass("disabled")) {
+							modalHideFormSections()
+							$(_form_itinerary_add_stepper_travelers).addClass("active")
+							$(_form_itinerary_add_travelers).show()
+						}
+						break
+					case "trip":
+						if (!$(_form_itinerary_add_trip).hasClass("disabled")) {
+							modalHideFormSections()
+							$(_form_itinerary_add_stepper_trip).addClass("active")
+							$(_form_itinerary_add_trip).show()
+						}
+						break
+				}
+			}
+			
+		}
+		
+		const modalLoadForm = function (itinerary) {
+			console.log("ItineraryIndex.modalLoadForm(itinerary)", itinerary)
+			// ----
+			
+			modalResetForm()
+			modalShowForm()
+		}
+		
+		const modalResetForm = function () {
+			console.log("ItineraryIndex.modalResetForm()")
+			// ----
+			
+			modalClearForm()
+		}
+		
+		const modalPopulateForm = function (itinerary) {
+			console.log("ItineraryIndex.modalPopulateForm(itinerary)", itinerary)
+			// ----
+			
+		}
+		
+		const modalPopulateFormCustomer = function (customer) {
+			console.log("ItineraryIndex.modalPopulateFormCustomer(customer)", customer)
+			// ----
+			
+		}
+		
+		const modalClearForm = function () {
+			console.log("ItineraryIndex.modalClearForm()")
+			// ----
+			
+		}
+		
+		const modalShowForm = function () {
+			console.log("ItineraryIndex.modalShowForm()")
+			// ----
+			
+			if (_modal_new_itinerary) {
+				$(_modal_new_itinerary).modal("show")
+			}
+			
+		}
+		
+		const modalHideForm = function () {
+			console.log("ItineraryIndex.modalHideForm()")
+			// ----
+			
+			if (_modal_new_itinerary) {
+				$(_modal_new_itinerary).modal("hide")
+			}
+			
+		}
 		
 		const buildTable = function () {
 			console.log("ItineraryIndex.buildTable()")
@@ -350,6 +586,8 @@
 			buildTable()
 			
 			loadAll(itineraries)
+			
+			modalHideFormSections()
 		}
 		
 		return {

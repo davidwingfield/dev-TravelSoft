@@ -107,8 +107,8 @@
 		
 		public static function formatProvince(array $province = []): array
 		{
-			Log::$debug_log->trace("Province::formatProvince()");
-			Log::$debug_log->info($province);
+			//Log::$debug_log->trace("Province::formatProvince()");
+			//Log::$debug_log->info($province);
 			// ----
 			
 			$formattedProvince = array();

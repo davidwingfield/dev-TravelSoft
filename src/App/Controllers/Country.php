@@ -229,8 +229,8 @@
 		
 		public static function formatCountry(array $country = null): array
 		{
-			Log::$debug_log->trace("Country::formatCountry()");
-			Log::$debug_log->info($country);
+			//Log::$debug_log->trace("Country::formatCountry()");
+			//Log::$debug_log->info($country);
 			// ----
 			
 			$formattedCountry = [];

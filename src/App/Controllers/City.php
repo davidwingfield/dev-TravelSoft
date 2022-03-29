@@ -216,8 +216,8 @@
 		
 		public static function formatCity(array $city = []): array
 		{
-			Log::$debug_log->trace("City::formatCity()");
-			Log::$debug_log->info($city);
+			//Log::$debug_log->trace("City::formatCity()");
+			//Log::$debug_log->info($city);
 			// ----
 			
 			$formattedCity = array();

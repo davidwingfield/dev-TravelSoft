@@ -22,7 +22,7 @@
 				"href" => "javascript:void(0)",
 				"classes" => "btn btn-primary btn-heading",
 				"icon" => "fas fa-plus",
-				"id" => "button_add_itinerary_page_heading",
+				"id" => "itinerary_index_add_itinerary_heading_button",
 				"data" => array(
 					"toggle" => "tooltip",
 					"title" => "Create a New Itinerary",

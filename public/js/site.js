@@ -1736,14 +1736,6 @@ const ucwords = function (str) {
         })
 }
 
-String.prototype.ucwords = function () {
-    str = this.toLowerCase()
-    return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
-        function (s) {
-            return s.toUpperCase()
-        })
-}
-
 const trimTrailingChars = function (s, charToTrim) {
     return s.replace(new RegExp(charToTrim + "+$"), "")
 }
@@ -1782,8 +1774,6 @@ const formatSize = function (bytes, decimals = 2) {
         }
     }
 }
-
-//
 
 /**
  * DEBUG
@@ -1873,6 +1863,101 @@ $(function () {
             }
         })
 })
+
+const lowercaseFirstLetter = function (string) {
+    return string.charAt(0).toLowerCase() + string.slice(1)
+}
+
+String.prototype.ucwords = function () {
+    str = this.toLowerCase()
+    return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
+        function (s) {
+            return s.toUpperCase()
+        })
+}
+String.prototype.toUCWords = function () {
+    let regex = /(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g
+    
+    return this.toLowerCase().replace(regex,
+        function (s) {
+            return s.toUpperCase()
+        })
+}
+String.prototype.toSnakeCase = function () {
+    const regexCleanString = /[^A-Za-z0-9]/g
+    
+    return this
+        .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
+        .map(x => x.toLowerCase())
+        .join('_')
+}
+String.prototype.toCamelCase = function () {
+    const regexCleanString = /[^A-Za-z0-9]/g
+    const regex = /(?:^\w|[A-Z]|\b\w)/g
+    
+    let text = this
+    let str = ""
+    
+    text.replace(/^\s+|\s+$/gm, '')
+    
+    //let str = this.replace(regexCleanString, "")
+    let stringParts = text.split(" ")
+    
+    for (let n = 0; n < stringParts.length; n++) {
+        let stringValue = stringParts[n].replace(regexCleanString, "")
+        
+        if (n === 0) {
+            stringValue = stringValue.toLowerCase()
+        } else {
+            stringValue = stringValue.toUCWords()
+        }
+        
+        str += stringValue
+    }
+    return str
+}
+
+const buildRow = function (attr) {
+    console.log("buildRow(attr)", attr)
+    // ----
+    
+    let el = document.createElement("div")
+    let classes = (attr && attr.classes) ? attr.classes : ["row"]
+    let data = (attr && attr.data) ? attr.data : []
+    let id = (attr && attr.id) ? attr.id : null
+    let idLine = (id !== null) ? `id="${id}"` : ""
+    
+    if (id !== null) {
+        el.setAttribute("id", id)
+    }
+    
+    for (let n = 0; n < classes.length; n++) {
+        el.classList.add(classes[n])
+    }
+    
+    return el
+}
+
+const buildColumn = function (attr) {
+    console.log("buildColumn(attr)", attr)
+    // ----
+    
+    let el = document.createElement("div")
+    let classes = (attr && attr.classes) ? attr.classes : ["col"]
+    let data = (attr && attr.data) ? attr.data : []
+    let id = (attr && attr.id) ? attr.id : null
+    let idLine = (id !== null) ? `id="${id}"` : ""
+    
+    if (id !== null) {
+        el.setAttribute("id", id)
+    }
+    
+    for (let n = 0; n < classes.length; n++) {
+        el.classList.add(classes[n])
+    }
+    
+    return el
+}
 
 const Console = (function () {
     
@@ -2680,50 +2765,50 @@ let today = new Date()
 let today_year = today.getFullYear()
 let today_month = today.getMonth()
 let today_date = today.getDate()
-$.fn.productSearch = function (settings) {
+$.fn.productSearch2 = function (settings) {
     "use strict"
     
 }
 
-const ProductSearch = function (settings) {
+const ProductSearch2 = function (settings) {
     "use strict"
     
     const _form_product_search = document.getElementById("form_product_search")
-    const _formProductSearchCitySubmit = document.getElementById('formProductSearchCitySubmit')
-    const _formProductSearchNameSubmit = document.getElementById('formProductSearchNameSubmit')
-    const _formProductSearchGuestSubmit = document.getElementById('formProductSearchGuestSubmit')
-    const _formProductSearchName = document.getElementById('formProductSearchName')
+    const _formProductSearch2CitySubmit = document.getElementById('formProductSearch2CitySubmit')
+    const _formProductSearch2NameSubmit = document.getElementById('formProductSearch2NameSubmit')
+    const _formProductSearch2GuestSubmit = document.getElementById('formProductSearch2GuestSubmit')
+    const _formProductSearch2Name = document.getElementById('formProductSearch2Name')
     const _product_search_name_display = document.getElementById('product_search_name_display')
     const _form_product_search_hotel_product_name = document.getElementById('form_product_search_hotel_product_name')
-    const _buttonProductSearchName = document.getElementById("buttonProductSearchName")
+    const _buttonProductSearch2Name = document.getElementById("buttonProductSearch2Name")
     const roomNumber = document.getElementById('product_search_room_quantity')
     const adultNumber = document.getElementById('product_search_adult_quantity')
     const childNumber = document.getElementById('product_search_clild_quantity')
     const _form_product_search_hotel_product_number_of_rooms = document.getElementById('form_product_search_hotel_product_number_of_rooms')
     const _form_product_search_hotel_product_number_of_adults = document.getElementById('form_product_search_hotel_product_number_of_adults')
     const _form_product_search_hotel_product_number_of_children = document.getElementById('form_product_search_hotel_product_number_of_children')
-    const _buttonProductSearchGuest = document.getElementById('buttonProductSearchGuest')
+    const _buttonProductSearch2Guest = document.getElementById('buttonProductSearch2Guest')
     const roomDisplay = document.getElementById('product_search_room_quantity_display')
     const adultDisplay = document.getElementById('product_search_adult_quantity_display')
     const childDisplay = document.getElementById('product_search_children_quantity_display')
-    const _buttonProductSearchCity = document.getElementById('buttonProductSearchCity')
-    const _formProductSearchCity = document.getElementById("formProductSearchCity")
+    const _buttonProductSearch2City = document.getElementById('buttonProductSearch2City')
+    const _formProductSearch2City = document.getElementById("formProductSearch2City")
     const _product_search_city_display = document.getElementById('product_search_city_display')
     const _form_product_search_hotel_product_city_id = document.getElementById('form_product_search_hotel_product_city_id')
-    const _formProductSearchCityId = document.getElementById("formProductSearchCityId")
-    const _buttonProductSearchCheckOut = document.getElementById("buttonProductSearchCheckOut")
-    const _buttonProductSearchCheckIn = document.getElementById("buttonProductSearchCheckIn")
+    const _formProductSearch2CityId = document.getElementById("formProductSearch2CityId")
+    const _buttonProductSearch2CheckOut = document.getElementById("buttonProductSearch2CheckOut")
+    const _buttonProductSearch2CheckIn = document.getElementById("buttonProductSearch2CheckIn")
     const _form_product_search_hotel_product_arrive_date = document.getElementById("form_product_search_hotel_product_arrive_date")
     const _form_product_search_hotel_product_depart_date = document.getElementById("form_product_search_hotel_product_depart_date")
     const _product_search_category_display = document.getElementById("product_search_category_display")
     const _product_search_name_icon_display = document.getElementById("product_search_name_icon_display")
-    const _formProductSearchIcon = document.getElementById("formProductSearchIcon")
-    const _formProductSearchGuestClose = document.getElementById("formProductSearchGuestClose")
-    const _formProductSearchCityClose = document.getElementById("formProductSearchCityClose")
-    const _formProductSearchNameClose = document.getElementById("formProductSearchNameClose")
+    const _formProductSearch2Icon = document.getElementById("formProductSearch2Icon")
+    const _formProductSearch2GuestClose = document.getElementById("formProductSearch2GuestClose")
+    const _formProductSearch2CityClose = document.getElementById("formProductSearch2CityClose")
+    const _formProductSearch2NameClose = document.getElementById("formProductSearch2NameClose")
     const _form_product_search_hotel_product_category_id = document.getElementById("form_product_search_hotel_product_category_id")
-    const _buttonProductSearchCategory = document.getElementById("buttonProductSearchCategory")
-    const _formProductSearchNameId = document.getElementById("formProductSearchNameId")
+    const _buttonProductSearch2Category = document.getElementById("buttonProductSearch2Category")
+    const _formProductSearch2NameId = document.getElementById("formProductSearch2NameId")
     const _product_search_subtitle = document.getElementById("product_search_subtitle")
     const _button_product_search_panel_hotels_clear = document.getElementById("button_product_search_panel_hotels_clear")
     const _product_search_check_in_display = document.getElementById("product_search_check_in_display")
@@ -2797,14 +2882,14 @@ const ProductSearch = function (settings) {
             }
         })
     
-    $(_buttonProductSearchCategory)
+    $(_buttonProductSearch2Category)
         .on("click", function () {
             closeProductGuestSearch()
             closeProductNameSearch()
             closeProductCitySearch()
         })
     
-    $(_buttonProductSearchCheckIn)
+    $(_buttonProductSearch2CheckIn)
         .on("click", function () {
             closeProductGuestSearch()
             closeProductNameSearch()
@@ -2839,19 +2924,19 @@ const ProductSearch = function (settings) {
             },
         })
         .on("changeDate", function (selected) {
-            const _buttonProductSearchCheckIn = document.getElementById("buttonProductSearchCheckIn")
-            const roomDisplay = document.getElementById('buttonProductSearchCheckIn')
+            const _buttonProductSearch2CheckIn = document.getElementById("buttonProductSearch2CheckIn")
+            const roomDisplay = document.getElementById('buttonProductSearch2CheckIn')
             
-            let formattedDate = $(_buttonProductSearchCheckIn).datepicker("getFormattedDate")
+            let formattedDate = $(_buttonProductSearch2CheckIn).datepicker("getFormattedDate")
             
-            startDate = [getTimeStamp($(_buttonProductSearchCheckIn).datepicker("getFormattedDate"))]
+            startDate = [getTimeStamp($(_buttonProductSearch2CheckIn).datepicker("getFormattedDate"))]
             _form_product_search_hotel_product_arrive_date.value = formattedDate
             
             if (roomDisplay) {
                 $(roomDisplay).find("span#product_search_check_in_display").text((formattedDate === "") ? " — / — / — " : formattedDate)
             }
             
-            $(_buttonProductSearchCheckOut)
+            $(_buttonProductSearch2CheckOut)
                 .val("")
                 .datepicker("setStartDate", (formattedDate !== "") ? formattedDate : null)
                 .datepicker("update")
@@ -2859,7 +2944,7 @@ const ProductSearch = function (settings) {
                 .datepicker("update")
         })
     
-    $(_buttonProductSearchCheckOut)
+    $(_buttonProductSearch2CheckOut)
         .on("click", function () {
             closeProductGuestSearch()
             closeProductNameSearch()
@@ -2916,8 +3001,8 @@ const ProductSearch = function (settings) {
             },
         })
         .on("changeDate", function (e) {
-            const roomDisplay = document.getElementById('buttonProductSearchCheckOut')
-            let formattedDate = $(_buttonProductSearchCheckOut).datepicker("getFormattedDate")
+            const roomDisplay = document.getElementById('buttonProductSearch2CheckOut')
+            let formattedDate = $(_buttonProductSearch2CheckOut).datepicker("getFormattedDate")
             
             _form_product_search_hotel_product_depart_date.value = formattedDate
             
@@ -2927,69 +3012,69 @@ const ProductSearch = function (settings) {
             
         })
     
-    $(_formProductSearchNameClose)
+    $(_formProductSearch2NameClose)
         .on("click", function () {
             closeProductNameSearch()
         })
     
-    $(_formProductSearchCityClose)
+    $(_formProductSearch2CityClose)
         .on("click", function () {
             closeProductCitySearch()
         })
     
-    $(_formProductSearchGuestClose)
+    $(_formProductSearch2GuestClose)
         .on("click", function () {
             closeProductGuestSearch()
         })
     
-    $(_formProductSearchCitySubmit)
+    $(_formProductSearch2CitySubmit)
         .on("click", function () {
             updateProductCitySearch()
             closeProductGuestSearch()
         })
     
-    $(_formProductSearchNameSubmit)
+    $(_formProductSearch2NameSubmit)
         .on("click", function () {
             updateProductNameSearch()
             closeProductNameSearch()
         })
     
-    $(_formProductSearchGuestSubmit)
+    $(_formProductSearch2GuestSubmit)
         .on("click", function () {
             updateProductGuestSearch()
             closeProductGuestSearch()
         })
     
-    $(_buttonProductSearchCity)
+    $(_buttonProductSearch2City)
         .on("show.bs.popover", function () {
             initProductCitySearch()
             
         })
         .on("shown.bs.popover", function () {
-            //_formProductSearchCity.focus()
+            //_formProductSearch2City.focus()
         })
         .on("hidden.bs.popover", function () {
             window.removeEventListener("click", clickOutsideProductNameSearch)
         })
     
-    $(_buttonProductSearchGuest)
+    $(_buttonProductSearch2Guest)
         .on("show.bs.popover", function () {
             initProductGuestSearch()
             
         })
         .on("shown.bs.popover", function () {
-            //_formProductSearchName.focus()
+            //_formProductSearch2Name.focus()
         })
         .on("hidden.bs.popover", function () {
             window.removeEventListener("click", clickOutsideProductGuestSearch)
         })
     
-    $(_buttonProductSearchName)
+    $(_buttonProductSearch2Name)
         .on("show.bs.popover", function () {
             initProductNameSearch()
         })
         .on("shown.bs.popover", function () {
-            //_formProductSearchName.focus()
+            //_formProductSearch2Name.focus()
         })
         .on("hidden.bs.popover", function () {
             window.removeEventListener("click", clickOutsideProductNameSearch)
@@ -3118,37 +3203,37 @@ const ProductSearch = function (settings) {
     }
     
     const enableHotelFormFields = function () {
-        _buttonProductSearchName.disabled = false
-        _buttonProductSearchCity.disabled = false
-        _buttonProductSearchCheckIn.disabled = false
-        _buttonProductSearchCheckOut.disabled = false
-        _buttonProductSearchGuest.disabled = false
+        _buttonProductSearch2Name.disabled = false
+        _buttonProductSearch2City.disabled = false
+        _buttonProductSearch2CheckIn.disabled = false
+        _buttonProductSearch2CheckOut.disabled = false
+        _buttonProductSearch2Guest.disabled = false
         $("div[data-hotel='true'").show()
     }
     
     const enableFlightFormFields = function () {
-        _buttonProductSearchName.disabled = false
-        _buttonProductSearchCity.disabled = false
-        _buttonProductSearchCheckIn.disabled = false
-        _buttonProductSearchCheckOut.disabled = false
-        _buttonProductSearchGuest.disabled = false
+        _buttonProductSearch2Name.disabled = false
+        _buttonProductSearch2City.disabled = false
+        _buttonProductSearch2CheckIn.disabled = false
+        _buttonProductSearch2CheckOut.disabled = false
+        _buttonProductSearch2Guest.disabled = false
         $("div[data-flight='true'").show()
     }
     
     const disableFormFields = function () {
-        _buttonProductSearchName.disabled = true
-        _buttonProductSearchCity.disabled = true
-        _buttonProductSearchCheckIn.disabled = true
-        _buttonProductSearchCheckOut.disabled = true
-        _buttonProductSearchGuest.disabled = true
+        _buttonProductSearch2Name.disabled = true
+        _buttonProductSearch2City.disabled = true
+        _buttonProductSearch2CheckIn.disabled = true
+        _buttonProductSearch2CheckOut.disabled = true
+        _buttonProductSearch2Guest.disabled = true
     }
     
     const initAutocomplete = function (category_id) {
         
-        $(_formProductSearchCity)
+        $(_formProductSearch2City)
             .on("search", function () {
-                _formProductSearchCity.value = ""
-                _formProductSearchCityId.value = ""
+                _formProductSearch2City.value = ""
+                _formProductSearch2CityId.value = ""
                 updateProductCitySearch()
             })
             .on("click", function (e) {
@@ -3167,14 +3252,14 @@ const ProductSearch = function (settings) {
                     }
                     let city = suggestion.data
                     
-                    _formProductSearchCityId.value = city.id
+                    _formProductSearch2CityId.value = city.id
                 },
             })
         
-        $(_formProductSearchName)
+        $(_formProductSearch2Name)
             .on("search", function () {
-                _formProductSearchName.value = ""
-                _formProductSearchNameId.value = ""
+                _formProductSearch2Name.value = ""
+                _formProductSearch2NameId.value = ""
                 updateProductCitySearch()
             })
             .on("click", function (e) {
@@ -3194,7 +3279,7 @@ const ProductSearch = function (settings) {
                     }
                     let product = suggestion.data
                     _form_product_search_hotel_product_product_id.value = product.id
-                    _formProductSearchNameId.value = product.id
+                    _formProductSearch2NameId.value = product.id
                 },
             })
     }
@@ -3205,14 +3290,14 @@ const ProductSearch = function (settings) {
     
     const updateProductNameSearch = function () {
         
-        if (_formProductSearchName) {
-            let name = (_formProductSearchName.value !== '') ? _formProductSearchName.value : 'any'
+        if (_formProductSearch2Name) {
+            let name = (_formProductSearch2Name.value !== '') ? _formProductSearch2Name.value : 'any'
             
             _product_search_name_display.innerText = name
             _form_product_search_hotel_product_name.value = name
             
-            if (_buttonProductSearchName) {
-                $(_buttonProductSearchName).popover("hide")
+            if (_buttonProductSearch2Name) {
+                $(_buttonProductSearch2Name).popover("hide")
             }
         }
     }
@@ -3236,38 +3321,38 @@ const ProductSearch = function (settings) {
             _form_product_search_hotel_product_number_of_adults.value = (adultCount > 1) ? adultCount : 1
             _form_product_search_hotel_product_number_of_children.value = (childCount > 0) ? childCount : 0
             
-            if (_buttonProductSearchGuest) {
-                $(_buttonProductSearchGuest).popover("hide")
+            if (_buttonProductSearch2Guest) {
+                $(_buttonProductSearch2Guest).popover("hide")
             }
         }
     }
     
     const updateProductCitySearch = function () {
-        if (_formProductSearchCity) {
-            _product_search_city_display.innerText = (_formProductSearchCity.value !== '') ? _formProductSearchCity.value : 'city name'
-            _form_product_search_hotel_product_city_id.value = _formProductSearchCityId.value
+        if (_formProductSearch2City) {
+            _product_search_city_display.innerText = (_formProductSearch2City.value !== '') ? _formProductSearch2City.value : 'city name'
+            _form_product_search_hotel_product_city_id.value = _formProductSearch2CityId.value
             $(_form_product_search_hotel_product_city_id).trigger("change")
         }
     }
     
     const closeProductNameSearch = function () {
-        if (_buttonProductSearchName) {
-            $(_buttonProductSearchName).popover("hide")
+        if (_buttonProductSearch2Name) {
+            $(_buttonProductSearch2Name).popover("hide")
         }
         
         window.removeEventListener("click", clickOutsideProductNameSearch)
     }
     
     const closeProductCitySearch = function () {
-        if (_buttonProductSearchCity) {
-            $(_buttonProductSearchCity).popover("hide")
+        if (_buttonProductSearch2City) {
+            $(_buttonProductSearch2City).popover("hide")
         }
         window.removeEventListener("click", clickOutsideProductCitySearch)
     }
     
     const closeProductGuestSearch = function () {
-        if (_buttonProductSearchGuest) {
-            $(_buttonProductSearchGuest).popover("hide")
+        if (_buttonProductSearch2Guest) {
+            $(_buttonProductSearch2Guest).popover("hide")
         }
         
         window.removeEventListener("click", clickOutsideProductGuestSearch)
@@ -3321,7 +3406,7 @@ const ProductSearch = function (settings) {
             if (_form_product_search) {
                 categoryItem = document.querySelectorAll(".category-dropdown-item")
                 categoryItem.forEach(el => el.addEventListener("click", event => {
-                    _formProductSearchIcon.classList = " " + el.dataset.categoryicon + " mr-3 "
+                    _formProductSearch2Icon.classList = " " + el.dataset.categoryicon + " mr-3 "
                     _product_search_name_icon_display.classList = " " + el.dataset.categoryicon + " btn-guest-picker-icon"
                     _product_search_category_display.innerText = el.dataset.categoryname
                     category_id = parseInt(el.dataset.categoryid)
@@ -3332,28 +3417,27 @@ const ProductSearch = function (settings) {
                     _form_product_search_hotel_product_category_id.dataset.categoryicon = el.dataset.categoryicon
                     _product_search_subtitle.innerText = el.dataset.categoryname
                     $(_form_product_search_hotel_product_category_id).trigger("change")
-                    $(_buttonProductSearchCategory).trigger("change")
+                    $(_buttonProductSearch2Category).trigger("change")
                 }))
                 
-                if (_buttonProductSearchName) {
+                if (_buttonProductSearch2Name) {
                     popupNameTitle = $("#popoverNameForm .popover-head h5")
                     popupNameContent = $("#popoverNameForm .popover-body form")
                     
-                    $(_buttonProductSearchName).popover({
+                    $(_buttonProductSearch2Name).popover({
                         placement: "bottom",
                         title: () => popupNameTitle,
                         html: true,
                         container: "body",
                         content: () => popupNameContent,
-                        
                     })
                 }
                 
-                if (_buttonProductSearchCity) {
+                if (_buttonProductSearch2City) {
                     popupCityTitle = $("#popoverCityForm .popover-head h5")
                     popupCityContent = $("#popoverCityForm .popover-body form")
                     
-                    $(_buttonProductSearchCity).popover({
+                    $(_buttonProductSearch2City).popover({
                         placement: "bottom",
                         title: () => popupCityTitle,
                         html: true,
@@ -3363,11 +3447,11 @@ const ProductSearch = function (settings) {
                     })
                 }
                 
-                if (_buttonProductSearchGuest) {
+                if (_buttonProductSearch2Guest) {
                     popupGuestTitle = $("#popoverGuestForm .popover-head h5")
                     popupGuestContent = $("#popoverGuestForm .popover-body form")
                     
-                    $(_buttonProductSearchGuest).popover({
+                    $(_buttonProductSearch2Guest).popover({
                         placement: "bottom",
                         title: () => popupGuestTitle,
                         html: true,
@@ -3407,7 +3491,7 @@ const ProductSearch = function (settings) {
 }
 
 $(function () {
-    //let productSearch = ProductSearch()
+    //let productSearch2 = ProductSearch2()
 })
 
 $.fn.formFields = function (settings) {
@@ -20238,6 +20322,15 @@ const Address = (function () {
         }
     }
     
+    const buildAddressDisplay = function (address) {
+        console.log("Address.buildAddressDisplay(address)", address)
+        // ----
+        
+        let addressDisplay = ``
+        
+        return addressDisplay
+    }
+    
     /**
      * globals
      */
@@ -20265,6 +20358,9 @@ const Address = (function () {
         },
         init: function (addresses) {
             init(addresses)
+        },
+        buildAddressDisplay: function (address) {
+            return buildAddressDisplay(address)
         },
     }
     
@@ -22810,16 +22906,13 @@ const Category = (function () {
             return
         }
         
-        //Product.resetNewProductDetails()
-        // Product.enableNewFormDetails()
-        
         Product.attr1 = (attributeId) ? attributeId : null
         Product.attr2 = null
         Product.attr3 = null
-        Product.updateProductSKU()
         
-        let productName, productSKU,
-            providerName, vendorName = ""
+        Product.resetNewProductDetails()
+        Product.enableNewFormDetails()
+        Product.updateProductSKU()
         
         if (categoryId && !isNaN(categoryId)) {
             Product.clearModalForm()

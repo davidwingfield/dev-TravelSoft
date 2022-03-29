@@ -1474,14 +1474,6 @@ const ucwords = function (str) {
         })
 }
 
-String.prototype.ucwords = function () {
-    str = this.toLowerCase()
-    return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
-        function (s) {
-            return s.toUpperCase()
-        })
-}
-
 const trimTrailingChars = function (s, charToTrim) {
     return s.replace(new RegExp(charToTrim + "+$"), "")
 }
@@ -1520,8 +1512,6 @@ const formatSize = function (bytes, decimals = 2) {
         }
     }
 }
-
-//
 
 /**
  * DEBUG
@@ -1611,3 +1601,98 @@ $(function () {
             }
         })
 })
+
+const lowercaseFirstLetter = function (string) {
+    return string.charAt(0).toLowerCase() + string.slice(1)
+}
+
+String.prototype.ucwords = function () {
+    str = this.toLowerCase()
+    return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
+        function (s) {
+            return s.toUpperCase()
+        })
+}
+String.prototype.toUCWords = function () {
+    let regex = /(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g
+    
+    return this.toLowerCase().replace(regex,
+        function (s) {
+            return s.toUpperCase()
+        })
+}
+String.prototype.toSnakeCase = function () {
+    const regexCleanString = /[^A-Za-z0-9]/g
+    
+    return this
+        .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
+        .map(x => x.toLowerCase())
+        .join('_')
+}
+String.prototype.toCamelCase = function () {
+    const regexCleanString = /[^A-Za-z0-9]/g
+    const regex = /(?:^\w|[A-Z]|\b\w)/g
+    
+    let text = this
+    let str = ""
+    
+    text.replace(/^\s+|\s+$/gm, '')
+    
+    //let str = this.replace(regexCleanString, "")
+    let stringParts = text.split(" ")
+    
+    for (let n = 0; n < stringParts.length; n++) {
+        let stringValue = stringParts[n].replace(regexCleanString, "")
+        
+        if (n === 0) {
+            stringValue = stringValue.toLowerCase()
+        } else {
+            stringValue = stringValue.toUCWords()
+        }
+        
+        str += stringValue
+    }
+    return str
+}
+
+const buildRow = function (attr) {
+    console.log("buildRow(attr)", attr)
+    // ----
+    
+    let el = document.createElement("div")
+    let classes = (attr && attr.classes) ? attr.classes : ["row"]
+    let data = (attr && attr.data) ? attr.data : []
+    let id = (attr && attr.id) ? attr.id : null
+    let idLine = (id !== null) ? `id="${id}"` : ""
+    
+    if (id !== null) {
+        el.setAttribute("id", id)
+    }
+    
+    for (let n = 0; n < classes.length; n++) {
+        el.classList.add(classes[n])
+    }
+    
+    return el
+}
+
+const buildColumn = function (attr) {
+    console.log("buildColumn(attr)", attr)
+    // ----
+    
+    let el = document.createElement("div")
+    let classes = (attr && attr.classes) ? attr.classes : ["col"]
+    let data = (attr && attr.data) ? attr.data : []
+    let id = (attr && attr.id) ? attr.id : null
+    let idLine = (id !== null) ? `id="${id}"` : ""
+    
+    if (id !== null) {
+        el.setAttribute("id", id)
+    }
+    
+    for (let n = 0; n < classes.length; n++) {
+        el.classList.add(classes[n])
+    }
+    
+    return el
+}

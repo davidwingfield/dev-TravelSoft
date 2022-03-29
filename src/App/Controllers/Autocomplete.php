@@ -58,7 +58,7 @@
 			$st = "";
 			extract($_GET);
 			$results = Country::autocomplete($st);
-			Log::$debug_log->trace($results);
+			//Log::$debug_log->trace($results);
 			
 			// ----
 			header("Content-type:application/json");
@@ -265,6 +265,24 @@
 			extract($_GET);
 			$results = Station::autocomplete($st);
 			
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			echo json_encode($results);
+			exit(0);
+		}
+		
+		/**
+		 * autocomplete locationSearch
+		 */
+		public function locationSearch(): void
+		{
+			$st = "";
+			
+			extract($_GET);
+			$results = Location::autocompleteSearch($st);
+			Log::$debug_log->trace($results);
 			/**
 			 * render results json page
 			 */

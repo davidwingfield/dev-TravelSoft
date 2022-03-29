@@ -61,8 +61,21 @@
 						COUNTRY.note AS 'country_note',
 			            IF((COUNTRY.iso3 IS NOT NULL) AND (COUNTRY.iso3 != '') AND (COUNTRY.name IS NOT NULL), CONCAT(COUNTRY.iso3, ' - ', COUNTRY.name), COUNTRY.name ) AS 'country_display_long',
 			            COUNTRY.name AS 'country_display_medium',
-			            IF((COUNTRY.iso3 IS NOT NULL) AND (COUNTRY.iso3 != ''), COUNTRY.iso3, COUNTRY.name ) AS 'country_display_short'
+			            IF((COUNTRY.iso3 IS NOT NULL) AND (COUNTRY.iso3 != ''), COUNTRY.iso3, COUNTRY.name ) AS 'country_display_short',
+						CURRENCY.id AS 'currency_id',
+						CURRENCY.sort_order AS 'currency_sort_order',
+						CURRENCY.name AS 'currency_name',
+						CURRENCY.iso AS 'currency_iso',
+						CURRENCY.minor_unit AS 'currency_minor_unit',
+						CURRENCY.symbol AS 'currency_symbol',
+						CURRENCY.enabled AS 'currency_enabled',
+						CURRENCY.date_created AS 'currency_date_created',
+						CURRENCY.created_by AS 'currency_created_by',
+						CURRENCY.date_modified AS 'currency_date_modified',
+						CURRENCY.modified_by AS 'currency_modified_by',
+						CURRENCY.note AS 'currency_note'
 			FROM 		country COUNTRY
+			LEFT JOIN	currency CURRENCY ON CURRENCY.id = COUNTRY.currency_id
 		";
 		protected static $searchTerm = "";
 		protected static $shortWhereCondition = "

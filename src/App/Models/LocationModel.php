@@ -194,6 +194,168 @@
 		}
 		
 		/**
+		 * @param string $st
+		 * @param string $default_display
+		 *
+		 * @return array
+		 */
+		public static function location_search_ac(string $st = "", string $default_display = "medium"): array
+		{
+			$searchTerm = addslashes($st);
+			
+			$sql = "
+				(
+					SELECT
+				        CONCAT( CITY.name, ' (',  PROVINCE.name, ', ', COUNTRY.name, ')') AS 'location',
+						CITY.id AS 'city_id',
+						CITY.province_id AS 'city_province_id',
+						CITY.country_id AS 'city_country_id',
+						CITY.sort_order AS 'city_sort_order',
+						CITY.name AS 'city_name',
+						CITY.blurb AS 'city_blurb',
+						CITY.is_capital AS 'city_is_capital',
+						CITY.enabled AS 'city_enabled',
+						CITY.date_created AS 'city_date_created',
+						CITY.created_by AS 'city_created_by',
+						CITY.date_modified AS 'city_date_modified',
+						CITY.modified_by AS 'city_modified_by',
+						CITY.note AS 'city_note',
+				        PROVINCE.id AS 'province_id',
+						PROVINCE.country_id AS 'province_country_id',
+						PROVINCE.name AS 'province_name',
+						PROVINCE.iso2 AS 'province_iso2',
+						PROVINCE.iso3 AS 'province_iso3',
+						PROVINCE.sort_order AS 'province_sort_order',
+						PROVINCE.blurb AS 'province_blurb',
+						PROVINCE.enabled AS 'province_enabled',
+						PROVINCE.date_created AS 'province_date_created',
+						PROVINCE.created_by AS 'province_created_by',
+						PROVINCE.date_modified AS 'province_date_modified',
+						PROVINCE.modified_by AS 'province_modified_by',
+						PROVINCE.note AS 'province_note',
+						COUNTRY.id AS 'country_id',
+						COUNTRY.currency_id AS 'country_currency_id',
+						COUNTRY.sort_order AS 'country_sort_order',
+						COUNTRY.name AS 'country_name',
+						COUNTRY.iso2 AS 'country_iso2',
+						COUNTRY.iso3 AS 'country_iso3',
+						COUNTRY.blurb AS 'country_blurb',
+						COUNTRY.enabled AS 'country_enabled',
+						COUNTRY.date_created AS 'country_date_created',
+						COUNTRY.created_by AS 'country_created_by',
+						COUNTRY.date_modified AS 'country_date_modified',
+						COUNTRY.modified_by AS 'country_modified_by',
+						COUNTRY.note AS 'country_note'
+				FROM 	city CITY
+				JOIN 	province PROVINCE ON PROVINCE.id = CITY.province_id
+				JOIN 	country COUNTRY ON COUNTRY.id = CITY.country_id
+				WHERE   CONCAT( CITY.name, ' (',  PROVINCE.name, ', ', COUNTRY.name, ')') LIKE '%$searchTerm%'
+				LIMIT 10
+			) UNION (
+				SELECT
+				        CONCAT( PROVINCE.name, ', ', COUNTRY.name) AS 'location',
+						null AS 'city_id',
+						null AS 'city_province_id',
+						null AS 'city_country_id',
+						null AS 'city_sort_order',
+						null AS 'city_name',
+						null AS 'city_blurb',
+						null AS 'city_is_capital',
+						null AS 'city_enabled',
+						null AS 'city_date_created',
+						null AS 'city_created_by',
+						null AS 'city_date_modified',
+						null AS 'city_modified_by',
+						null AS 'city_note',
+				        PROVINCE.id AS 'province_id',
+						PROVINCE.country_id AS 'province_country_id',
+						PROVINCE.name AS 'province_name',
+						PROVINCE.iso2 AS 'province_iso2',
+						PROVINCE.iso3 AS 'province_iso3',
+						PROVINCE.sort_order AS 'province_sort_order',
+						PROVINCE.blurb AS 'province_blurb',
+						PROVINCE.enabled AS 'province_enabled',
+						PROVINCE.date_created AS 'province_date_created',
+						PROVINCE.created_by AS 'province_created_by',
+						PROVINCE.date_modified AS 'province_date_modified',
+						PROVINCE.modified_by AS 'province_modified_by',
+						PROVINCE.note AS 'province_note',
+						COUNTRY.id AS 'country_id',
+						COUNTRY.currency_id AS 'country_currency_id',
+						COUNTRY.sort_order AS 'country_sort_order',
+						COUNTRY.name AS 'country_name',
+						COUNTRY.iso2 AS 'country_iso2',
+						COUNTRY.iso3 AS 'country_iso3',
+						COUNTRY.blurb AS 'country_blurb',
+						COUNTRY.enabled AS 'country_enabled',
+						COUNTRY.date_created AS 'country_date_created',
+						COUNTRY.created_by AS 'country_created_by',
+						COUNTRY.date_modified AS 'country_date_modified',
+						COUNTRY.modified_by AS 'country_modified_by',
+						COUNTRY.note AS 'country_note'
+				FROM 	province PROVINCE
+				JOIN 	country COUNTRY ON COUNTRY.id = PROVINCE.country_id
+				WHERE   CONCAT( PROVINCE.name, ', ', COUNTRY.name) LIKE '%$searchTerm%'
+				LIMIT 10
+			) UNION (
+				SELECT
+			        CONCAT( COUNTRY.name, ', ', COUNTRY.iso3) AS 'location',
+					null AS 'city_id',
+					null AS 'city_province_id',
+					null AS 'city_country_id',
+					null AS 'city_sort_order',
+					null AS 'city_name',
+					null AS 'city_blurb',
+					null AS 'city_is_capital',
+					null AS 'city_enabled',
+					null AS 'city_date_created',
+					null AS 'city_created_by',
+					null AS 'city_date_modified',
+					null AS 'city_modified_by',
+					null AS 'city_note',
+			        null AS 'province_id',
+					null AS 'province_country_id',
+					null AS 'province_name',
+					null AS 'province_iso2',
+					null AS 'province_iso3',
+					null AS 'province_sort_order',
+					null AS 'province_blurb',
+					null AS 'province_enabled',
+					null AS 'province_date_created',
+					null AS 'province_created_by',
+					null AS 'province_date_modified',
+					null AS 'province_modified_by',
+					null AS 'province_note',
+					COUNTRY.id AS 'country_id',
+					COUNTRY.currency_id AS 'country_currency_id',
+					COUNTRY.sort_order AS 'country_sort_order',
+					COUNTRY.name AS 'country_name',
+					COUNTRY.iso2 AS 'country_iso2',
+					COUNTRY.iso3 AS 'country_iso3',
+					COUNTRY.blurb AS 'country_blurb',
+					COUNTRY.enabled AS 'country_enabled',
+					COUNTRY.date_created AS 'country_date_created',
+					COUNTRY.created_by AS 'country_created_by',
+					COUNTRY.date_modified AS 'country_date_modified',
+					COUNTRY.modified_by AS 'country_modified_by',
+					COUNTRY.note AS 'country_note'
+			FROM 	country COUNTRY
+			WHERE   CONCAT( COUNTRY.name, ', ', COUNTRY.iso3) LIKE '%$searchTerm%'
+			LIMIT 10
+		);";
+			
+			try {
+				return Model::$db->ObjectBuilder()->rawQuery($sql);
+				
+			} catch (Exception $e) {
+				Controller::$debug_log->error($e);
+				
+				return [];
+			}
+			
+		}
+		
+		/**
 		 * @param int|null $id
 		 * @param string   $default_display
 		 *

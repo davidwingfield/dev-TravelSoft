@@ -1,44 +1,657 @@
-<?php
-	$page_data = [];
-	if (isset($data)) {
-		$page_data = $data;
-	}
-?>
-
-<section id="page_dashboard_index" class="section">
-	<div class="row">
-		
-		<!-- Left Side -->
-		<div class="col-12 col-md-8">
-			
-			<section class="card mb-2">
-				<h5>Product Search</h5>
-			</section>
-			
-			<section class="card mb-2">
-				<h5>Itinerary Search</h5>
-			</section>
-		
-		</div>
-		<!-- /Left Side -->
-		
-		<!-- Right Side -->
-		<div class="col-12 col-md-4">
-			
-			<section class="card mb-2">
-				<h5>Messages</h5>
-			</section>
-			
-			<section class="card mb-2">
-				<h5>Customers</h5>
-			</section>
-		
-		</div>
-		<!-- /Right Side -->
-	
-	</div>
+<section id="dashboard_index" class="section">
+	<div id="productSearch" class="product-search"></div>
 </section>
 
 <script type="text/javascript">
+	
+	function ProductSearch (element, options) {
+		console.log("ProductSearch(element, options)", options)
+		// ----
+		
+		if (!(options && element)) {
+			console.log("ProductSearch - Missing options.")
+			console.log("|__ options", options)
+			return
+		}
+		
+		let categories = (options && options.categories) ? options.categories : new Map()
+		let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+		let baseId = (element.id) ? element.id : "product_search"
+		let defaults = {
+			urls: {},
+			messages: {},
+			error: {},
+			tpl: {
+				toggle: "<a><i class='fas fa-sliders-h'></i></a>",
+				heading: "<div class='d-flex justify-content-between'><h5 class=''><span class=''>Tour Route</span></h5></div>",
+				container: "<ul class='list-group route-manager-wrapper'></ul>",
+			},
+		}
+		
+		this.categories = categories
+		this.userId = userId
+		this.element = element
+		this.baseId = baseId
+		this.isInit = false
+		this.errorsEvent = $.Event("productsearch.errors")
+		this.errorsEvent.errors = []
+		this.isDisabled = false
+		this.tabs = []
+		this.tab_content = []
+		
+		this.location_search = null
+		this.location_button = null
+		this.location_button_content = null
+		this.popup_location_title = null
+		this.popup_location_content = null
+		this.popup_location_input = null
+		this.popup_location_close_button = null
+		this.popup_location_update_button = null
+		
+		this.location_popup = null
+		this.from_popup = null
+		this.to_popup = null
+		this.guests_popup = null
+		
+		this.country_id = null
+		this.province_id = null
+		this.city_id = null
+		
+		this.settings = $.extend(true, defaults, options)
+		
+		this.container = $(element)
+		
+		this.init = this.init.bind(this)
+		
+		this.init(options)
+		
+		this.closeProductLocationSearch = this.closeProductLocationSearch.bind(this)
+		this.updateProductLocationSearch = this.updateProductLocationSearch.bind(this)
+		this.clickOutsideProductLocationSearch = this.clickOutsideProductLocationSearch.bind(this)
+		//
+		
+		this.popup_location_close_button.on("click", this.closeProductLocationSearch)
+		this.popup_location_update_button.on("click", this.updateProductLocationSearch)
+	}
+	
+	ProductSearch.prototype.init = function (options) {
+		console.log("ProductSearch.init(options)", options)
+		// ----
+		
+		let categories = (this.categories) ? Array.from(this.categories.values()) : []
+		let _this = this
+		
+		this.isInit = true
+		
+		$.each(categories, function (k, category) {
+			let categoryName = (category.name) ? category.name : null
+			let categoryNameSnakeCase = categoryName.toSnakeCase()
+			let categoryNameCamelCase = categoryName.toCamelCase()
+			let categoryNameUCase = categoryName.toUCWords()
+			
+			_this.tabs[categoryNameSnakeCase] = null
+			_this.tab_content[categoryNameSnakeCase] = null
+			
+		})
+		
+		this.createElements(options)
+		
+	}
+	
+	ProductSearch.prototype.createElements = function (options) {
+		console.log("ProductSearch.createElements(options)", options)
+		// ----
+		
+		this.createTabRow(options)
+		this.createSearchElements(options)
+		this.renderSearchElements(options)
+		
+		this.popup_location_close_button = $(this.popup_location_close_button)
+		this.popup_location_update_button = $(this.popup_location_update_button)
+		this.popup_location_input = $(this.popup_location_input)
+		
+		this.assignEvents(options)
+		
+	}
+	ProductSearch.prototype.createSearchElements = function (options) {
+		console.log("ProductSearch.createSearchElements(options)", options)
+		// ----
+		
+		this.createSearchElementsLocation(options)
+		this.buildPopoverForm({
+			type: "location",
+			form_title: "Going To",
+			popover_content: this.popup_location_content,
+			popover_title: this.popup_location_title,
+		})
+		this.location_search = this.buildCitySearchButton(options)
+		
+	}
+	ProductSearch.prototype.createTabRow = function (options) {
+		console.log("ProductSearch.createTabRow(options)", options)
+		// ----
+		
+		const buildTab = function (category) {
+			console.log("|__ buildTab(category)", category)
+			// ----
+			
+			if (!category || !category.id || !category.name) {
+				return
+			}
+			
+			let categoryId = (category.id) ? category.id : null
+			let categoryName = (category.name) ? category.name : ""
+			let categoryIcon = (category.icon) ? category.icon : ""
+			
+			let categoryNameSnakeCase = categoryName.toSnakeCase()
+			let categoryNameCamelCase = categoryName.toCamelCase()
+			let categoryNameUCase = categoryName.toUCWords()
+			
+			let panelId = _this.baseId + "_panel_" + categoryNameSnakeCase
+			let tabId = _this.baseId + "_tab_" + categoryNameSnakeCase
+			let linkId = _this.baseId + "_link_" + categoryNameSnakeCase
+			let isActive = (categoryCount === 0) ? "active show" : ""
+			let isSelected = (categoryCount === 0) ? "true" : "false"
+			
+			let tabElement = $(`<li id="${tabId}" class="nav-item"/>`)
+			let tabElementLink = `<a class="nav-link ${isActive}" id="${linkId}" data-toggle="tab" data-category-id="${categoryId}" href="#${panelId}" role="tab" aria-controls="${panelId}" aria-selected="${isSelected}"><i class="${categoryIcon}"></i><br/>${categoryNameUCase}</a>`
+			
+			_this.tabs[categoryNameSnakeCase] = tabElement
+			
+			tabElement.append(tabElementLink)
+			
+			return tabElement
+		}
+		const buildContainer = function (category) {
+			console.log("|__ buildTab(category)", category)
+			// ----
+			
+			if (!category || !category.id || !category.name) {
+				return
+			}
+			
+			let categoryId = (category.id) ? category.id : null
+			let categoryName = (category.name) ? category.name : ""
+			let categoryIcon = (category.icon) ? category.icon : "fas fa-home"
+			
+			let categoryNameSnakeCase = categoryName.toSnakeCase()
+			let categoryNameCamelCase = categoryName.toCamelCase()
+			let categoryNameUCase = categoryName.toUCWords()
+			
+			let panelId = _this.baseId + "_panel_" + categoryNameSnakeCase
+			let linkId = _this.baseId + "_link_" + categoryNameSnakeCase
+			let isActive = (categoryCount === 0) ? "active show" : ""
+			let containerElement = $(`<div class="tab-pane fade ${isActive}" id="${panelId}" role="tabpanel" aria-labelledby="${linkId}"/>`)
+			let containerElementContentWrapper = $(`<div class="card-body p-0 m-0" data-category-id="${categoryId}" />`)
+			let containerElementContentHeading = $(`<h5 class="card-title"><span>${categoryNameUCase}</span></h5>`)
+			let containerElementContentContainer = $(`<div class="p-1"/>`)
+			
+			containerElementContentWrapper.append(containerElementContentHeading)
+			containerElementContentWrapper.append(containerElementContentContainer)
+			
+			containerElement.append(containerElementContentWrapper)
+			
+			_this.tab_content[categoryNameSnakeCase] = containerElementContentContainer[0]
+			
+			return containerElement
+		}
+		
+		let _this = this
+		let categoryCount = 0
+		let categories = (this.categories) ? Array.from(this.categories.values()) : []
+		let tabRow = $(`<ul class="nav tabs-cyan" role="tablist"/>`)
+		let tabContent = $(`<div class="tab-content"/>`)
+		let tabWrapper = $("<div class='classic-tabs mx-2'/>")
+		let tabContentWrapper = $("<div class='tab-content card'/>")
+		
+		let hidden_row_1 = buildRow({ classes: ["row", "mx-0"] })
+		let hidden_row_1_col_1 = buildColumn({ classes: ["col-sm-3", "p-1"] })
+		let hidden_row_1_col_2 = buildColumn({ classes: ["col-sm-3", "p-1"] })
+		let hidden_row_1_col_3 = buildColumn({ classes: ["col-sm-3", "p-1"] })
+		
+		let hiddenCityIdInput = document.createElement("input")
+		hiddenCityIdInput.setAttribute("type", "hidden")
+		hiddenCityIdInput.setAttribute("readonly", "readonly")
+		hiddenCityIdInput.setAttribute("id", this.baseId + "-city-id")
+		hiddenCityIdInput.setAttribute("name", this.baseId + "-city-id")
+		hiddenCityIdInput.classList.add("form-control")
+		hiddenCityIdInput.classList.add("dev-element")
+		
+		let hiddenCityIdLabel = document.createElement("label")
+		hiddenCityIdLabel.setAttribute("for", this.baseId + "-city-id")
+		hiddenCityIdLabel.classList.add("dev-element")
+		hiddenCityIdLabel.classList.add("d-none")
+		hiddenCityIdLabel.innerText = "City Id:"
+		
+		let hiddenProvinceIdInput = document.createElement("input")
+		hiddenProvinceIdInput.setAttribute("type", "hidden")
+		hiddenProvinceIdInput.setAttribute("readonly", "readonly")
+		hiddenProvinceIdInput.setAttribute("id", this.baseId + "-province-id")
+		hiddenProvinceIdInput.setAttribute("name", this.baseId + "-province-id")
+		hiddenProvinceIdInput.classList.add("form-control")
+		hiddenProvinceIdInput.classList.add("dev-element")
+		
+		let hiddenProvinceIdLabel = document.createElement("label")
+		hiddenProvinceIdLabel.setAttribute("for", this.baseId + "-province-id")
+		hiddenProvinceIdLabel.classList.add("dev-element")
+		hiddenProvinceIdLabel.classList.add("d-none")
+		hiddenProvinceIdLabel.innerText = "Province Id:"
+		
+		let hiddenCountryIdInput = document.createElement("input")
+		hiddenCountryIdInput.setAttribute("type", "hidden")
+		hiddenCountryIdInput.setAttribute("readonly", "readonly")
+		hiddenCountryIdInput.setAttribute("id", this.baseId + "-country-id")
+		hiddenCountryIdInput.setAttribute("name", this.baseId + "-country-id")
+		hiddenCountryIdInput.classList.add("form-control")
+		hiddenCountryIdInput.classList.add("dev-element")
+		
+		let hiddenCountryIdLabel = document.createElement("label")
+		hiddenCountryIdLabel.setAttribute("for", this.baseId + "-country-id")
+		hiddenCountryIdLabel.classList.add("dev-element")
+		hiddenCountryIdLabel.classList.add("d-none")
+		hiddenCountryIdLabel.innerText = "Country Id:"
+		
+		this.country_id = hiddenCountryIdInput
+		this.province_id = hiddenProvinceIdInput
+		this.city_id = hiddenCityIdInput
+		
+		$.each(categories, function (k, category) {
+			tabRow.append(buildTab(category))
+			tabContent.append(buildContainer(category))
+			categoryCount++
+		})
+		
+		hidden_row_1_col_3.appendChild(hiddenCityIdLabel)
+		hidden_row_1_col_3.appendChild(hiddenCityIdInput)
+		
+		hidden_row_1_col_2.appendChild(hiddenProvinceIdLabel)
+		hidden_row_1_col_2.appendChild(hiddenProvinceIdInput)
+		
+		hidden_row_1_col_1.appendChild(hiddenCountryIdLabel)
+		hidden_row_1_col_1.appendChild(hiddenCountryIdInput)
+		
+		hidden_row_1.appendChild(hidden_row_1_col_1)
+		hidden_row_1.appendChild(hidden_row_1_col_2)
+		hidden_row_1.appendChild(hidden_row_1_col_3)
+		
+		tabContentWrapper.append(tabContent)
+		
+		tabContentWrapper.append(hidden_row_1)
+		
+		tabWrapper.append(tabRow)
+		tabWrapper.append(tabContentWrapper)
+		
+		this.container.append(tabWrapper)
+		
+	}
+	ProductSearch.prototype.renderSearchElements = function (options) {
+		console.log("ProductSearch.renderSearchElements(options)", options)
+		// ----
+		
+		this.tab_content.hotels.appendChild(this.location_search)
+		
+	}
+	ProductSearch.prototype.assignEvents = function (options) {
+		console.log("ProductSearch.assignEvents(options)", options)
+		// ----
+		
+		let _this = this
+		
+		console.log("|__ _this.country_id", _this.country_id)
+		console.log("|__ this.country_id", this.country_id)
+		
+		console.log("|__ _this.province_id", _this.province_id)
+		console.log("|__ this.province_id", this.province_id)
+		
+		console.log("|__ _this.city_id", _this.city_id)
+		console.log("|__ this.city_id", this.city_id)
+		
+		let popupCityTitle = this.popup_location_title
+		let popupCityContent = this.popup_location_content
+		
+		this.location_button.popover({
+			placement: "bottom",
+			title: () => popupCityTitle,
+			html: true,
+			container: "body",
+			content: () => popupCityContent,
+		})
+		this.location_button.on("show.bs.popover", function () {
+			window.addEventListener("click", _this.clickOutsideProductLocationSearch)
+		})
+		this.location_button.on("hide.bs.popover", function () {
+			window.removeEventListener("click", _this.clickOutsideProductLocationSearch)
+		})
+		
+		this.popup_location_input
+			.on("search", function () {
+				
+				_this.country_id.value = ""
+				_this.province_id.value = ""
+				_this.city_id.value = ""
+				_this.location_button_content.html("")
+				_this.location_button.removeClass("active")
+				
+			})
+			.on("click", function (e) {
+				$(this).select()
+			})
+			.autocomplete({
+				serviceUrl: "/api/v1.0/autocomplete/location_search",
+				minChars: 2,
+				cache: false,
+				dataType: "json",
+				triggerSelectOnValidInput: false,
+				paramName: "st",
+				onSelect: function (suggestion) {
+					if (!suggestion.data) {
+						return
+					}
+					let displayShort = ""
+					let displayMedium = ""
+					let displayLong = ""
+					let data = (suggestion.data[0]) ? suggestion.data[0] : suggestion.data
+					
+					let country = (data && data.country) ? data.country : null
+					let province = (data && data.province) ? data.province : null
+					let city = (data && data.city) ? data.city : null
+					
+					let countryId = (country && country.id && !isNaN(parseInt(country.id))) ? parseInt(country.id) : null
+					let provinceId = (province && province.id && !isNaN(parseInt(province.id))) ? parseInt(province.id) : null
+					let cityId = (city && city.id && !isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+					
+					let countryName = (country && country.name) ? country.name : null
+					let provinceName = (province && province.name) ? province.name : null
+					let cityName = (city && city.name) ? city.name : null
+					
+					let countryISO2 = (country && country.iso2) ? country.iso2 : null
+					let provinceISO2 = (province && province.iso2) ? province.iso2 : null
+					
+					let countryISO3 = (country && country.iso3) ? country.iso3 : null
+					let provinceISO3 = (province && province.iso3) ? province.iso3 : null
+					
+					let shortCountry, mediumCountry, longCountry,
+						shortProvince, mediumProvince, longProvince,
+						shortCity, mediumCity, longCity = null
+					
+					shortCity = (cityName) ? cityName : null
+					mediumCity = (cityName) ? cityName : null
+					longCity = (cityName) ? cityName : null
+					
+					shortProvince = (provinceISO2) ? provinceISO2 : (provinceISO3) ? provinceISO3 : (provinceName) ? provinceName : null
+					mediumProvince = (provinceName) ? provinceName : (provinceISO2) ? provinceISO2 : (provinceISO3) ? provinceISO3 : null
+					longProvince = (provinceName) ? provinceName : (provinceISO3) ? provinceISO3 : (provinceISO2) ? provinceISO2 : null
+					
+					shortCountry = (countryISO3 !== null) ? countryISO3 : (countryName !== null) ? countryName : (countryISO2 !== null) ? countryISO2 : null
+					mediumCountry = (countryName) ? countryName : null
+					longCountry = (countryName !== null) ? countryName : (countryISO3 !== null) ? countryISO3 : (countryISO2 !== null) ? countryISO2 : null
+					
+					displayShort = `${shortCity} (${shortProvince} - ${shortCountry})`
+					displayMedium = `${mediumCity} (${mediumProvince} - ${mediumCountry})`
+					displayLong = `${longCity} (${longProvince} - ${longCountry})`
+					
+					_this.country_id.value = countryId
+					_this.province_id.value = provinceId
+					_this.city_id.value = cityId
+					_this.location_button_content.html(displayShort)
+					_this.location_button.addClass("active")
+				},
+			})
+	}
+	
+	ProductSearch.prototype.clickOutsideProductLocationSearch = function (e) {
+		console.log("ProductSearch.clickOutsideProductLocationSearch(e)", e)
+		// ----
+		
+		let class_name = "btn-location-picker"
+		let tar = $(e.target).parents("div.popover")
+		
+		if (!tar[0] && !e.target.className.includes(class_name)) {
+			
+			this.updateProductLocationSearch()
+			this.closeProductLocationSearch()
+			
+		}
+		
+	}
+	
+	ProductSearch.prototype.closeProductLocationSearch = function () {
+		console.log("ProductSearch.closeProductLocationSearch()")
+		// ----
+		
+		if (this.location_button) {
+			this.location_button.popover("hide")
+		}
+	}
+	ProductSearch.prototype.resetProductLocationSearch = function () {
+		console.log("ProductSearch.resetProductLocationSearch()")
+		// ----
+		
+	}
+	ProductSearch.prototype.updateProductLocationSearch = function () {
+		console.log("ProductSearch.updateProductLocationSearch()")
+		// ----
+		
+	}
+	ProductSearch.prototype.buildCitySearchButton = function (options) {
+		console.log("ProductSearch.buildCitySearchButton(options)", options)
+		// ----
+		
+		let wrapper = document.createElement("div")
+		wrapper.classList.add("col-12")
+		wrapper.classList.add("col-xs-12")
+		wrapper.classList.add("col-sm-6")
+		wrapper.classList.add("col-md-4")
+		wrapper.classList.add("col-lg-3")
+		wrapper.classList.add("col-xl-3")
+		
+		let el = document.createElement("button")
+		el.classList.add("btn")
+		el.classList.add("btn-location-picker")
+		//el.classList.add("active")
+		this.location_button = $(el)
+		
+		let icon = document.createElement("i")
+		icon.classList.add("fas")
+		icon.classList.add("fa-map-marker-alt")
+		icon.classList.add("btn-location-picker-icon")
+		
+		let label = document.createElement("div")
+		label.classList.add("btn-location-picker-label")
+		label.innerHTML = `Going To`
+		
+		let content = document.createElement("div")
+		content.classList.add("btn-location-picker-content")
+		//content.innerHTML = "San Antonio"
+		
+		el.appendChild(icon)
+		el.appendChild(label)
+		el.appendChild(content)
+		
+		wrapper.appendChild(el)
+		
+		this.location_button_content = $(content)
+		return wrapper
+	}
+	
+	ProductSearch.prototype.buildPopoverForm = function (options) {
+		console.log("ProductSearch.buildPopoverForm(options)", options)
+		// ----
+		
+		let popoverForm = document.createElement("div")
+		let popoverFormHead = document.createElement("div")
+		let popoverFormBody = document.createElement("div")
+		
+		popoverForm.classList.add("d-none")
+		popoverForm.classList.add("city-popover")
+		popoverForm.setAttribute("id", "popoverNameForm")
+		
+		popoverFormBody.classList.add("popover-body")
+		
+		popoverFormHead.appendChild((options && options.popover_title) ? options.popover_title : document.createElement("div"))
+		popoverFormBody.appendChild((options && options.popover_content) ? options.popover_content : document.createElement("div"))
+		
+		popoverForm.appendChild(popoverFormHead)
+		popoverForm.appendChild(popoverFormBody)
+		
+		document.body.appendChild(popoverForm)
+	}
+	
+	ProductSearch.prototype.createSearchElementsFromDate = function (options) {
+		console.log("ProductSearch.createSearchElementsFromDate(options)", options)
+		// ----
+		
+	}
+	ProductSearch.prototype.createSearchElementsToDate = function (options) {
+		console.log("ProductSearch.createSearchElementsToDate(options)", options)
+		// ----
+		
+	}
+	ProductSearch.prototype.createSearchElementsName = function (options) {
+		console.log("ProductSearch.createSearchElementsName(options)", options)
+		// ----
+		
+	}
+	ProductSearch.prototype.createSearchElementsLocation = function (options) {
+		console.log("ProductSearch.createSearchElementsLocation(options)", options)
+		// ----
+		
+		let formId = this.baseId + "_city_form"
+		let formTitle = (options && options.form_title) ? options.form_title : "Going To"
+		let cityFilterId = "formProductSearchCity"
+		let cityFilterTitle = "City"
+		
+		let popoverFormHeadHeading = document.createElement("h5")
+		let popoverFormHeadHeadingText = document.createElement("span")
+		let popoverFormHeadHeadingClose = document.createElement("a")
+		let cityFilterUpdate = document.createElement("button")
+		let cityFilterText = document.createElement("span")
+		let cityFilterLabel = document.createElement("label")
+		let cityFilterIcon = document.createElement("i")
+		let cityFilterWrapper = document.createElement("div")
+		let cityFilterInput = document.createElement("input")
+		let cityFilterError = document.createElement("div")
+		let row_1 = buildRow({ classes: ["row", "mb-2"] })
+		let row_2 = buildRow({ classes: ["row", "mb-2"] })
+		let row_1_col_1 = buildColumn({ classes: ["col-12", "col-md-3"] })
+		let row_1_col_2 = buildColumn({ classes: ["col-12", "col-md-9"] })
+		let row_2_col_1 = buildColumn({ classes: ["col-12"] })
+		let cityFieldsWrapper = document.createElement("form")
+		let popoverFormBody = document.createElement("div")
+		
+		popoverFormHeadHeading.classList.add("card-title")
+		popoverFormHeadHeading.classList.add("mb-1")
+		
+		popoverFormHeadHeadingText.classList.add("cPZwQ")
+		popoverFormHeadHeadingText.innerHTML = `${formTitle}`
+		
+		popoverFormHeadHeadingClose.setAttribute("href", "javascript:void(0);")
+		popoverFormHeadHeadingClose.setAttribute("aria-hidden", "true")
+		popoverFormHeadHeadingClose.classList.add("popup-window-button-close")
+		popoverFormHeadHeadingClose.classList.add("fas")
+		popoverFormHeadHeadingClose.classList.add("fa-times")
+		
+		popoverFormBody.classList.add("w-100")
+		
+		cityFieldsWrapper.setAttribute("id", formId)
+		cityFieldsWrapper.setAttribute("novalidate", "novalidate")
+		cityFieldsWrapper.classList.add("form-inline")
+		
+		cityFilterUpdate.setAttribute("id", cityFilterId + "Submit")
+		cityFilterUpdate.setAttribute("name", cityFilterId + "Submit")
+		cityFilterUpdate.innerText = "update"
+		cityFilterUpdate.classList.add("btn")
+		cityFilterUpdate.classList.add("btn-primary")
+		cityFilterUpdate.classList.add("btn-sm")
+		cityFilterUpdate.classList.add("btn-block")
+		cityFilterUpdate.classList.add("city-popover-submit")
+		
+		cityFilterText.innerText = cityFilterTitle
+		
+		cityFilterLabel.setAttribute("id", cityFilterId + "-label")
+		cityFilterLabel.classList.add("form-label-popover")
+		cityFilterLabel.classList.add("d-flex")
+		cityFilterLabel.classList.add("justify-content-start")
+		cityFilterLabel.classList.add("align-items-center")
+		cityFilterLabel.setAttribute("for", cityFilterId)
+		
+		cityFilterError.setAttribute("type", "search")
+		cityFilterError.setAttribute("id", cityFilterId + "-error")
+		cityFilterError.classList.add("error")
+		cityFilterError.classList.add("w-100")
+		cityFilterError.classList.add("text-center")
+		
+		cityFilterInput.setAttribute("type", "search")
+		cityFilterInput.setAttribute("id", cityFilterId)
+		cityFilterInput.setAttribute("name", cityFilterId)
+		cityFilterInput.classList.add("form-control")
+		cityFilterInput.classList.add("w-100")
+		
+		cityFilterIcon.classList.add("fas")
+		cityFilterIcon.classList.add("fa-map-marker-alt")
+		cityFilterIcon.classList.add("mr-3")
+		
+		cityFilterWrapper.setAttribute("id", cityFilterId + "-wrap")
+		cityFilterWrapper.classList.add("form-element")
+		
+		cityFilterLabel.appendChild(cityFilterIcon)
+		cityFilterLabel.appendChild(cityFilterText)
+		
+		cityFilterWrapper.appendChild(cityFilterInput)
+		cityFilterWrapper.appendChild(cityFilterError)
+		
+		row_1_col_1.appendChild(cityFilterLabel)
+		row_1_col_2.appendChild(cityFilterWrapper)
+		
+		row_1.appendChild(row_1_col_1)
+		row_1.appendChild(row_1_col_2)
+		
+		row_2_col_1.appendChild(cityFilterUpdate)
+		row_2.appendChild(row_2_col_1)
+		
+		popoverFormBody.appendChild(row_1)
+		popoverFormBody.appendChild(row_2)
+		
+		cityFieldsWrapper.appendChild(popoverFormBody)
+		
+		popoverFormHeadHeading.appendChild(popoverFormHeadHeadingText)
+		popoverFormHeadHeading.appendChild(popoverFormHeadHeadingClose)
+		
+		this.popup_location_input = cityFilterInput
+		this.popup_location_update_button = cityFilterUpdate
+		this.popup_location_close_button = popoverFormHeadHeadingClose
+		this.popup_location_title = popoverFormHeadHeading
+		this.popup_location_content = popoverFormBody
+		
+	}
+	
+	// ----
+	
+	$.fn.productSearch = function (options) {
+		"use strict"
+		
+		return new ProductSearch(document.getElementById($(this).attr("id")), options)
+	}
+	
+	// ----
 
+</script>
+
+<script type="text/javascript">
+	
+	$(function () {
+		console.log(" *** TEST *** testString.toUCWords()", "dave's test string iS aWeSoMe".toUCWords())
+		console.log(" *** TEST *** testString.toCamelCase()", "this is dAve's test camel case".toCamelCase())
+		console.log(" *** TEST *** testString.toSnakeCase()", "this is a test string".toSnakeCase())
+		
+		Types.init(<?php echo TYPES;?>)
+		
+		let categories = (Types.category) ? Types.category : new Map()
+		
+		let productSearch = $(".product-search").productSearch({
+			categories: categories,
+		})
+		
+		console.log("|__ productSearch", productSearch)
+	})
 </script>

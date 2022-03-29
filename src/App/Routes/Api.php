@@ -284,6 +284,11 @@
 	Router::get($routeLead . "/autocomplete/locations", "Autocomplete@locations");
 	
 	/**
+	 * @see Autocomplete::locationSearch()
+	 */
+	Router::get($routeLead . "/autocomplete/location_search", "Autocomplete@locationSearch");
+	
+	/**
 	 * @see Autocomplete::companies()
 	 */
 	Router::get($routeLead . "/autocomplete/companies", "Autocomplete@companies");

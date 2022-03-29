@@ -66,6 +66,122 @@
 		}
 		
 		/**
+		 * autocompleteSearch method
+		 *
+		 * @param string $st
+		 * @param string $default_display
+		 *
+		 * @return array
+		 */
+		public static function autocompleteSearch(string $st = "", string $default_display = "medium"): array
+		{
+			$results = LocationModel::location_search_ac($st, $default_display);
+			$data = [];
+			$data["suggestions"] = [];
+			
+			foreach ($results AS $k => $result) {
+				$l = (object)$result;
+				$value = utf8_encode($l->location);
+				
+				$formattedResult = array();
+				
+				Log::$debug_log->trace($l);
+				$id = $l->country_id;
+				$currency_id = $l->country_currency_id;
+				$sort_order = $l->country_sort_order;
+				$name = $l->country_name;
+				$iso2 = $l->country_iso2;
+				$iso3 = $l->country_iso3;
+				$blurb = $l->country_blurb;
+				$enabled = $l->country_enabled;
+				$date_created = $l->country_date_created;
+				$created_by = $l->country_created_by;
+				$date_modified = $l->country_date_modified;
+				$modified_by = $l->country_modified_by;
+				$note = $l->country_note;
+				
+				$provinceId = ($l->province_id) ? (int)$l->province_id : null;
+				$provinceSortOrder = $l->province_sort_order;
+				$provinceName = ($l->province_name) ? $l->province_name : null;
+				$provinceISO2 = ($l->province_iso2) ? $l->province_iso2 : null;
+				$provinceISO3 = ($l->province_iso3) ? $l->province_iso3 : null;
+				$provinceBlurb = ($l->province_blurb) ? $l->province_blurb : null;
+				$provinceEnabled = ($l->province_enabled) ? $l->province_enabled : null;
+				$provinceDatecreated = ($l->province_date_created) ? $l->province_date_created : null;
+				$provinceCreatedby = ($l->province_created_by) ? (int)$l->province_created_by : null;
+				$provinceDateModified = ($l->province_date_modified) ? $l->province_date_modified : null;
+				$provinceModifiedBy = ($l->province_modified_by) ? (int)$l->province_modified_by : null;
+				$provinceNote = ($l->province_note) ? $l->province_note : null;
+				
+				$cityId = ($l->province_id) ? (int)$l->province_id : null;
+				$citySortOrder = $l->city_sort_order;
+				$cityName = ($l->city_name) ? $l->city_name : null;
+				$cityBlurb = ($l->city_blurb) ? $l->city_blurb : null;
+				$cityEnabled = ($l->city_enabled) ? $l->city_enabled : null;
+				$cityDatecreated = ($l->city_date_created) ? $l->city_date_created : null;
+				$cityCreatedby = ($l->city_created_by) ? (int)$l->city_created_by : null;
+				$cityDateModified = ($l->city_date_modified) ? $l->city_date_modified : null;
+				$cityModifiedBy = ($l->city_modified_by) ? (int)$l->city_modified_by : null;
+				$cityNote = ($l->city_note) ? $l->city_note : null;
+				
+				$city = array(
+					"id" => $cityId,
+					"sort_order" => $citySortOrder,
+					"name" => $cityName,
+					"blurb" => $cityBlurb,
+					"enabled" => $cityEnabled,
+					"date_created" => $cityDatecreated,
+					"created_by" => $cityCreatedby,
+					"date_modified" => $cityDateModified,
+					"modified_by" => $cityModifiedBy,
+					"note" => $cityNote,
+				);
+				
+				$country = array(
+					"id" => $id,
+					"currency_id" => $currency_id,
+					"sort_order" => $sort_order,
+					"name" => $name,
+					"iso2" => $iso2,
+					"iso3" => $iso3,
+					"blurb" => $blurb,
+					"enabled" => $enabled,
+					"date_created" => $date_created,
+					"created_by" => $created_by,
+					"date_modified" => $date_modified,
+					"modified_by" => $modified_by,
+					"note" => $note,
+				);
+				
+				$province = array(
+					"id" => $provinceId,
+					"sort_order" => $provinceSortOrder,
+					"name" => $provinceName,
+					"iso2" => $provinceISO2,
+					"iso3" => $provinceISO3,
+					"blurb" => $provinceBlurb,
+					"enabled" => $provinceEnabled,
+					"date_created" => $provinceDatecreated,
+					"created_by" => $provinceCreatedby,
+					"date_modified" => $provinceDateModified,
+					"modified_by" => $provinceModifiedBy,
+					"note" => $provinceNote,
+				);
+				
+				$formattedResults["country"] = $country;
+				$formattedResults["province"] = $province;
+				$formattedResults["city"] = $city;
+				
+				array_push($data["suggestions"], [
+					"value" => utf8_encode($value),
+					"data" => $formattedResults,
+				]);
+			}
+			
+			return $data;
+		}
+		
+		/**
 		 * update request
 		 *
 		 * @param array $params

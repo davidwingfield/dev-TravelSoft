@@ -23,8 +23,8 @@
 		
 		public static function get(array $params = []): array
 		{
-			Log::$debug_log->trace("Currency::get()");
-			Log::$debug_log->info($params);
+			//Log::$debug_log->trace("Currency::get()");
+			//Log::$debug_log->info($params);
 			// ----
 			
 			$currencies = [];
@@ -34,8 +34,8 @@
 		
 		public static function formatCurrency(array $currency = null): array
 		{
-			Log::$debug_log->trace("Currency::formatCurrency()");
-			Log::$debug_log->info($currency);
+			//Log::$debug_log->trace("Currency::formatCurrency()");
+			//Log::$debug_log->info($currency);
 			// ----
 			
 			$formattedCurrency = [];

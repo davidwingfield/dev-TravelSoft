@@ -679,6 +679,15 @@ const Address = (function () {
         }
     }
     
+    const buildAddressDisplay = function (address) {
+        console.log("Address.buildAddressDisplay(address)", address)
+        // ----
+        
+        let addressDisplay = ``
+        
+        return addressDisplay
+    }
+    
     /**
      * globals
      */
@@ -706,6 +715,9 @@ const Address = (function () {
         },
         init: function (addresses) {
             init(addresses)
+        },
+        buildAddressDisplay: function (address) {
+            return buildAddressDisplay(address)
         },
     }
     

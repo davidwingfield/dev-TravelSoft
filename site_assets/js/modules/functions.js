@@ -1,4 +1,6 @@
 let mdbPreloader = document.getElementById("mdb-preloader")
+let isShift = false
+
 /*
 let showElements
 let isShiftTime
@@ -1669,6 +1671,14 @@ const buildRow = function (attr) {
         el.setAttribute("id", id)
     }
     
+    if (!Array.isArray(classes)) {
+        classes = classes.split(" ")
+    }
+    
+    if (!Array.isArray(data)) {
+        data = data.split(" ")
+    }
+    
     for (let n = 0; n < classes.length; n++) {
         el.classList.add(classes[n])
     }
@@ -1695,4 +1705,30 @@ const buildColumn = function (attr) {
     }
     
     return el
+}
+
+const isNumeric = function (input, keyCode) {
+    if (!isNaN(parseInt(keyCode))) {
+        keyCode = parseInt(keyCode)
+    }
+    
+    // keyCode: 9   -   tab
+    
+    if (keyCode === 16) {
+        isShift = true
+    }
+    
+    if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || (keyCode === 8) || (keyCode === 46)) {
+        
+        if (keyCode !== 16) {
+            if ((input.value.length === 4 || input.value.length === 7) && keyCode !== 8) {
+                input.value += separatorDate
+            }
+            
+            return true
+        }
+        
+    }
+    
+    return false
 }

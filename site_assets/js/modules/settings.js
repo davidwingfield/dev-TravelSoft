@@ -259,3 +259,12 @@ let LOOKUP = Object()
 for (let i = 0; i < STANDARD_ASPECT_RATIOS.length; i++) {
     LOOKUP[STANDARD_ASPECT_RATIOS[i][0]] = STANDARD_ASPECT_RATIOS[i][1]
 }
+const separatorDate = "-"
+const pickadateSettings = {
+    format: "yyyy-mm-dd",
+    formatSubmit: "yyyy-mm-dd",
+    editable: false,
+    selectYears: true,
+    selectMonths: true,
+}
+const regex = /(((19|20)\d\d)\-(0[1-9]|1[0-2])\-((0|1)[0-9]|2[0-9]|3[0-1]))$/

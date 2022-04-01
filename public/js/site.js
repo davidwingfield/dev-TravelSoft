@@ -259,6 +259,15 @@ let LOOKUP = Object()
 for (let i = 0; i < STANDARD_ASPECT_RATIOS.length; i++) {
     LOOKUP[STANDARD_ASPECT_RATIOS[i][0]] = STANDARD_ASPECT_RATIOS[i][1]
 }
+const separatorDate = "-"
+const pickadateSettings = {
+    format: "yyyy-mm-dd",
+    formatSubmit: "yyyy-mm-dd",
+    editable: false,
+    selectYears: true,
+    selectMonths: true,
+}
+const regex = /(((19|20)\d\d)\-(0[1-9]|1[0-2])\-((0|1)[0-9]|2[0-9]|3[0-1]))$/
 
 let mdbPreloader = document.getElementById("mdb-preloader")
 /*
@@ -1931,6 +1940,14 @@ const buildRow = function (attr) {
         el.setAttribute("id", id)
     }
     
+    if (!Array.isArray(classes)) {
+        classes = classes.split(" ")
+    }
+    
+    if (!Array.isArray(data)) {
+        data = data.split(" ")
+    }
+    
     for (let n = 0; n < classes.length; n++) {
         el.classList.add(classes[n])
     }
@@ -1958,6 +1975,33 @@ const buildColumn = function (attr) {
     
     return el
 }
+
+const isNumeric = function (input, keyCode) {
+    if (!isNaN(parseInt(keyCode))) {
+        keyCode = parseInt(keyCode)
+    }
+    
+    // keyCode: 9   -   tab
+    
+    if (keyCode === 16) {
+        isShift = true
+    }
+    
+    if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || (keyCode === 8) || (keyCode === 46)) {
+        
+        if (keyCode !== 16) {
+            if ((input.value.length === 4 || input.value.length === 7) && keyCode !== 8) {
+                input.value += separatorDate
+            }
+            
+            return true
+        }
+        
+    }
+    
+    return false
+}
+
 
 const Console = (function () {
     

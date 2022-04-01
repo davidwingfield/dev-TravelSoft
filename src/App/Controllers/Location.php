@@ -86,19 +86,36 @@
 				$formattedResult = array();
 				
 				Log::$debug_log->trace($l);
-				$id = $l->country_id;
-				$currency_id = $l->country_currency_id;
-				$sort_order = $l->country_sort_order;
-				$name = $l->country_name;
-				$iso2 = $l->country_iso2;
-				$iso3 = $l->country_iso3;
-				$blurb = $l->country_blurb;
-				$enabled = $l->country_enabled;
-				$date_created = $l->country_date_created;
-				$created_by = $l->country_created_by;
-				$date_modified = $l->country_date_modified;
-				$modified_by = $l->country_modified_by;
-				$note = $l->country_note;
+				
+				$countryId = ($l->country_id) ? (int)$l->country_id : null;
+				$currencyId = ($l->country_currency_id) ? (int)$l->country_currency_id : null;
+				$countrySortOrder = ($l->country_sort_order) ? (int)$l->country_sort_order : null;
+				$countryName = $l->country_name;
+				$countryISO2 = $l->country_iso2;
+				$countryISO3 = $l->country_iso3;
+				$countryBlurb = $l->country_blurb;
+				$countryEnabled = $l->country_enabled;
+				$countryDateCreated = $l->country_date_created;
+				$countryCreatedBy = ($l->country_created_by) ? (int)$l->country_created_by : null;
+				$countryDateModified = $l->country_date_modified;
+				$countryModifiedBy = ($l->country_modified_by) ? (int)$l->country_modified_by : null;
+				$countryNote = $l->country_note;
+				
+				$country = array(
+					"id" => $countryId,
+					"currency_id" => $currencyId,
+					"sort_order" => $countrySortOrder,
+					"name" => $countryName,
+					"iso2" => $countryISO2,
+					"iso3" => $countryISO3,
+					"blurb" => $countryBlurb,
+					"enabled" => $countryEnabled,
+					"date_created" => $countryDateCreated,
+					"created_by" => $countryCreatedBy,
+					"date_modified" => $countryDateModified,
+					"modified_by" => $countryModifiedBy,
+					"note" => $countryNote,
+				);
 				
 				$provinceId = ($l->province_id) ? (int)$l->province_id : null;
 				$provinceSortOrder = $l->province_sort_order;
@@ -107,19 +124,34 @@
 				$provinceISO3 = ($l->province_iso3) ? $l->province_iso3 : null;
 				$provinceBlurb = ($l->province_blurb) ? $l->province_blurb : null;
 				$provinceEnabled = ($l->province_enabled) ? $l->province_enabled : null;
-				$provinceDatecreated = ($l->province_date_created) ? $l->province_date_created : null;
-				$provinceCreatedby = ($l->province_created_by) ? (int)$l->province_created_by : null;
+				$provinceDateCreated = ($l->province_date_created) ? $l->province_date_created : null;
+				$provinceCreatedBy = ($l->province_created_by) ? (int)$l->province_created_by : null;
 				$provinceDateModified = ($l->province_date_modified) ? $l->province_date_modified : null;
 				$provinceModifiedBy = ($l->province_modified_by) ? (int)$l->province_modified_by : null;
 				$provinceNote = ($l->province_note) ? $l->province_note : null;
 				
-				$cityId = ($l->province_id) ? (int)$l->province_id : null;
+				$province = array(
+					"id" => $provinceId,
+					"sort_order" => $provinceSortOrder,
+					"name" => $provinceName,
+					"iso2" => $provinceISO2,
+					"iso3" => $provinceISO3,
+					"blurb" => $provinceBlurb,
+					"enabled" => $provinceEnabled,
+					"date_created" => $provinceDateCreated,
+					"created_by" => $provinceCreatedBy,
+					"date_modified" => $provinceDateModified,
+					"modified_by" => $provinceModifiedBy,
+					"note" => $provinceNote,
+				);
+				
+				$cityId = ($l->city_id) ? (int)$l->city_id : null;
 				$citySortOrder = $l->city_sort_order;
 				$cityName = ($l->city_name) ? $l->city_name : null;
 				$cityBlurb = ($l->city_blurb) ? $l->city_blurb : null;
 				$cityEnabled = ($l->city_enabled) ? $l->city_enabled : null;
-				$cityDatecreated = ($l->city_date_created) ? $l->city_date_created : null;
-				$cityCreatedby = ($l->city_created_by) ? (int)$l->city_created_by : null;
+				$cityDateCreated = ($l->city_date_created) ? $l->city_date_created : null;
+				$cityCreatedBy = ($l->city_created_by) ? (int)$l->city_created_by : null;
 				$cityDateModified = ($l->city_date_modified) ? $l->city_date_modified : null;
 				$cityModifiedBy = ($l->city_modified_by) ? (int)$l->city_modified_by : null;
 				$cityNote = ($l->city_note) ? $l->city_note : null;
@@ -130,42 +162,11 @@
 					"name" => $cityName,
 					"blurb" => $cityBlurb,
 					"enabled" => $cityEnabled,
-					"date_created" => $cityDatecreated,
-					"created_by" => $cityCreatedby,
+					"date_created" => $cityDateCreated,
+					"created_by" => $cityCreatedBy,
 					"date_modified" => $cityDateModified,
 					"modified_by" => $cityModifiedBy,
 					"note" => $cityNote,
-				);
-				
-				$country = array(
-					"id" => $id,
-					"currency_id" => $currency_id,
-					"sort_order" => $sort_order,
-					"name" => $name,
-					"iso2" => $iso2,
-					"iso3" => $iso3,
-					"blurb" => $blurb,
-					"enabled" => $enabled,
-					"date_created" => $date_created,
-					"created_by" => $created_by,
-					"date_modified" => $date_modified,
-					"modified_by" => $modified_by,
-					"note" => $note,
-				);
-				
-				$province = array(
-					"id" => $provinceId,
-					"sort_order" => $provinceSortOrder,
-					"name" => $provinceName,
-					"iso2" => $provinceISO2,
-					"iso3" => $provinceISO3,
-					"blurb" => $provinceBlurb,
-					"enabled" => $provinceEnabled,
-					"date_created" => $provinceDatecreated,
-					"created_by" => $provinceCreatedby,
-					"date_modified" => $provinceDateModified,
-					"modified_by" => $provinceModifiedBy,
-					"note" => $provinceNote,
 				);
 				
 				$formattedResults["country"] = $country;

@@ -284,6 +284,11 @@
 	Router::get($routeLead . "/autocomplete/locations", "Autocomplete@locations");
 	
 	/**
+	 * @see Autocomplete::packages()
+	 */
+	Router::get($routeLead . "/autocomplete/packages", "Autocomplete@packages");
+	
+	/**
 	 * @see Autocomplete::locationSearch()
 	 */
 	Router::get($routeLead . "/autocomplete/location_search", "Autocomplete@locationSearch");
@@ -446,6 +451,16 @@
 	 * @see Location:serveUpdate()
 	 */
 	Router::post($routeLead . "/locations/update", "Location@serveUpdate");
+	
+	/**
+	 * @see Package:serveUpdate()
+	 */
+	Router::post($routeLead . "/packages/update", "Package@serveUpdate");
+	
+	/**
+	 * @see Package:serveGet()
+	 */
+	Router::get($routeLead . '/packages/${package_id}', "Package@serveGet");
 	
 	/**
 	 * @see Province:serveUpdate()

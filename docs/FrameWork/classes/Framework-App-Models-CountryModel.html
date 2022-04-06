@@ -252,7 +252,21 @@ Long Country Description</p>
 <dd></dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-Core-Model.html#method_buildOrderCondition">buildOrderCondition()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-Core-Model.html#method_buildSelectQuery">buildSelectQuery()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-Core-Model.html#method_buildWhereCondition">buildWhereCondition()</a>
     <span>
                         &nbsp;: string    </span>
 </dt>
@@ -456,7 +470,7 @@ Long Country Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CountryModel.php"><a href="files/app-models-countrymodel.html"><abbr title="App/Models/CountryModel.php">CountryModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">77</span>
+    <span class="phpdocumentor-element-found-in__line">90</span>
 
     </aside>
 
@@ -492,7 +506,7 @@ Long Country Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CountryModel.php"><a href="files/app-models-countrymodel.html"><abbr title="App/Models/CountryModel.php">CountryModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">74</span>
+    <span class="phpdocumentor-element-found-in__line">87</span>
 
     </aside>
 
@@ -528,7 +542,7 @@ Long Country Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CountryModel.php"><a href="files/app-models-countrymodel.html"><abbr title="App/Models/CountryModel.php">CountryModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">71</span>
+    <span class="phpdocumentor-element-found-in__line">84</span>
 
     </aside>
 
@@ -564,7 +578,7 @@ Long Country Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CountryModel.php"><a href="files/app-models-countrymodel.html"><abbr title="App/Models/CountryModel.php">CountryModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">67</span>
+    <span class="phpdocumentor-element-found-in__line">80</span>
 
     </aside>
 
@@ -624,8 +638,21 @@ Long Country Description</p>
 						COUNTRY.note AS &#039;country_note&#039;,
 			            IF((COUNTRY.iso3 IS NOT NULL) AND (COUNTRY.iso3 != &#039;&#039;) AND (COUNTRY.name IS NOT NULL), CONCAT(COUNTRY.iso3, &#039; - &#039;, COUNTRY.name), COUNTRY.name ) AS &#039;country_display_long&#039;,
 			            COUNTRY.name AS &#039;country_display_medium&#039;,
-			            IF((COUNTRY.iso3 IS NOT NULL) AND (COUNTRY.iso3 != &#039;&#039;), COUNTRY.iso3, COUNTRY.name ) AS &#039;country_display_short&#039;
+			            IF((COUNTRY.iso3 IS NOT NULL) AND (COUNTRY.iso3 != &#039;&#039;), COUNTRY.iso3, COUNTRY.name ) AS &#039;country_display_short&#039;,
+						CURRENCY.id AS &#039;currency_id&#039;,
+						CURRENCY.sort_order AS &#039;currency_sort_order&#039;,
+						CURRENCY.name AS &#039;currency_name&#039;,
+						CURRENCY.iso AS &#039;currency_iso&#039;,
+						CURRENCY.minor_unit AS &#039;currency_minor_unit&#039;,
+						CURRENCY.symbol AS &#039;currency_symbol&#039;,
+						CURRENCY.enabled AS &#039;currency_enabled&#039;,
+						CURRENCY.date_created AS &#039;currency_date_created&#039;,
+						CURRENCY.created_by AS &#039;currency_created_by&#039;,
+						CURRENCY.date_modified AS &#039;currency_date_modified&#039;,
+						CURRENCY.modified_by AS &#039;currency_modified_by&#039;,
+						CURRENCY.note AS &#039;currency_note&#039;
 			FROM 		country COUNTRY
+			LEFT JOIN	currency CURRENCY ON CURRENCY.id = COUNTRY.currency_id
 		&quot;</span></code>
 
         <section class="phpdocumentor-description"></section>
@@ -651,7 +678,7 @@ Long Country Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CountryModel.php"><a href="files/app-models-countrymodel.html"><abbr title="App/Models/CountryModel.php">CountryModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">68</span>
+    <span class="phpdocumentor-element-found-in__line">81</span>
 
     </aside>
 
@@ -678,6 +705,50 @@ Long Country Description</p>
             Methods
             <a href="classes/Framework-App-Models-CountryModel.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_buildOrderCondition">
+        buildOrderCondition()
+        <a href="classes/Framework-Core-Model.html#method_buildOrderCondition" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Core/Model.php"><a href="files/core-model.html"><abbr title="Core/Model.php">Model.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">97</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">buildOrderCondition</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$order</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$order</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
                     <article
         class="phpdocumentor-element
             -method
@@ -728,6 +799,50 @@ Long Country Description</p>
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_buildWhereCondition">
+        buildWhereCondition()
+        <a href="classes/Framework-Core-Model.html#method_buildWhereCondition" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Core/Model.php"><a href="files/core-model.html"><abbr title="Core/Model.php">Model.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">85</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">buildWhereCondition</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$where</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$where</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_country_ac">
         country_ac()
         <a href="classes/Framework-App-Models-CountryModel.html#method_country_ac" class="headerlink"><i class="fas fa-link"></i></a>
@@ -735,7 +850,7 @@ Long Country Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CountryModel.php"><a href="files/app-models-countrymodel.html"><abbr title="App/Models/CountryModel.php">CountryModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">140</span>
+    <span class="phpdocumentor-element-found-in__line">153</span>
 
     </aside>
 
@@ -779,7 +894,7 @@ Long Country Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CountryModel.php"><a href="files/app-models-countrymodel.html"><abbr title="App/Models/CountryModel.php">CountryModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">116</span>
+    <span class="phpdocumentor-element-found-in__line">129</span>
 
     </aside>
 
@@ -823,7 +938,7 @@ Long Country Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CountryModel.php"><a href="files/app-models-countrymodel.html"><abbr title="App/Models/CountryModel.php">CountryModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">81</span>
+    <span class="phpdocumentor-element-found-in__line">94</span>
 
     </aside>
 
@@ -867,7 +982,7 @@ Long Country Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CountryModel.php"><a href="files/app-models-countrymodel.html"><abbr title="App/Models/CountryModel.php">CountryModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">159</span>
+    <span class="phpdocumentor-element-found-in__line">172</span>
 
     </aside>
 
@@ -1120,7 +1235,7 @@ Long Country Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CountryModel.php"><a href="files/app-models-countrymodel.html"><abbr title="App/Models/CountryModel.php">CountryModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">174</span>
+    <span class="phpdocumentor-element-found-in__line">187</span>
 
     </aside>
 

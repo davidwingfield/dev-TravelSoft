@@ -1,5 +1,6 @@
 const Unit = (function () {
     "use strict"
+    
     const _panel_tab_unit = document.getElementById("panel_tab_unit")
     const _button_remove_unit_from_product = document.getElementById("button_remove_unit_from_product")
     const _category_id = document.getElementById("category_id")
@@ -28,6 +29,8 @@ const Unit = (function () {
     const _product_edit_unit_display = document.getElementById("product_edit_unit_display")
     const _product_edit_unit_images = document.getElementById("unit_images")
     
+    // ----
+    
     let counter = 1
     let $unit_keywords, $unit_amenities
     let tabLabel = "Unit"
@@ -44,7 +47,13 @@ const Unit = (function () {
     let globalSelectedUnit = false
     let form_rules = {
         rules: {
+            file_manager_unit_form_alt: { required: false },
             product_edit_unit_form_unit_min_nights: {
+                required: true,
+                number: true,
+                min: 1,
+            },
+            product_edit_unit_form_unit_max_nights: {
                 required: true,
                 number: true,
                 min: 1,
@@ -76,8 +85,15 @@ const Unit = (function () {
                 number: "Field Invalid",
                 min: "Field Invalid",
             },
+            product_edit_unit_form_unit_max_nights: {
+                required: "Field Required",
+                number: "Field Invalid",
+                min: "Field Invalid",
+            },
         },
     }
+    
+    // ----
     
     $(_button_remove_unit_from_product)
         .on("click", function () {
@@ -126,10 +142,10 @@ const Unit = (function () {
             disableFormFields()
             _product_edit_unit_form_unit_name_filter.value = ""
             _product_edit_unit_form_unit_name.value = ""
-            _product_edit_unit_form_unit_name_filter.disabled = true
             _product_edit_unit_form_unit_name.disabled = false
             enableFormFields()
             loadForm()
+            _product_edit_unit_form_unit_name_filter.disabled = false
         })
     
     $(_panel_tab_unit)
@@ -140,6 +156,8 @@ const Unit = (function () {
             _product_edit_unit_form_unit_name_filter.disabled = false
             _product_edit_unit_form_unit_name.disabled = true
         })
+    
+    // ----
     
     const removeProductUnit = function (dataToSend, callback) {
         if (dataToSend) {
@@ -256,11 +274,10 @@ const Unit = (function () {
                     if (!suggestion || !suggestion.data) {
                         return
                     }
+                    
                     let detail
                     let unit = suggestion.data
                     let hasUnit = Unit.all.get(parseInt(unit.id))
-                    
-                    //console.log("_product_edit_unit_form_unit_name_filter:autocomplete() - unit", unit)
                     
                     if (hasUnit) {
                         detail = set(hasUnit)
@@ -270,6 +287,8 @@ const Unit = (function () {
                     }
                     
                     populateForm(detail)
+                    _product_edit_unit_form_unit_name_filter.disabled = true
+                    
                 },
             })
     }
@@ -553,7 +572,11 @@ const Unit = (function () {
     }
     
     const validUnitRecord = function () {
-        let valid = $(_product_edit_unit_form).valid()
+        console.group("validUnitRecord")
+        // ----
+        
+        //let valid = $(_product_edit_unit_form).valid()
+        let valid = true
         let min_pax = (!isNaN(parseInt(_product_edit_unit_form_unit_min_pax.value))) ? parseInt(_product_edit_unit_form_unit_min_pax.value) : null
         let max_pax = (!isNaN(parseInt(_product_edit_unit_form_unit_max_pax.value))) ? parseInt(_product_edit_unit_form_unit_max_pax.value) : null
         let min_nights = (!isNaN(parseInt(_product_edit_unit_form_unit_min_nights.value))) ? parseInt(_product_edit_unit_form_unit_min_nights.value) : null
@@ -564,19 +587,25 @@ const Unit = (function () {
                 setError(_product_edit_unit_form_unit_max_pax, "Pax is greater than minimum")
                 valid = false
             } else {
+                console.log("clearError")
                 clearError(_product_edit_unit_form_unit_max_pax)
             }
         }
         
         if (min_nights !== null && max_nights !== null) {
             if (parseInt(max_nights) < parseInt(min_nights)) {
-                setError(_product_edit_unit_form_unit_max_nights, "Pax is greater than minimum")
+                setError(_product_edit_unit_form_unit_max_nights, "Nights is greater than minimum")
                 valid = false
             } else {
+                console.log("clearError")
                 clearError(_product_edit_unit_form_unit_max_nights)
             }
         }
         
+        console.log("valid", fetchFormErrors($(_product_edit_unit_form), form_rules))
+        
+        // ----
+        console.groupEnd()
         return valid
     }
     

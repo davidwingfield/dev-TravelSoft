@@ -83,10 +83,6 @@
 				$l = (object)$result;
 				$value = utf8_encode($l->location);
 				
-				$formattedResult = array();
-				
-				Log::$debug_log->trace($l);
-				
 				$countryId = ($l->country_id) ? (int)$l->country_id : null;
 				$currencyId = ($l->country_currency_id) ? (int)$l->country_currency_id : null;
 				$countrySortOrder = ($l->country_sort_order) ? (int)$l->country_sort_order : null;

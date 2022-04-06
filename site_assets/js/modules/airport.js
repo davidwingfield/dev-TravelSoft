@@ -1419,7 +1419,7 @@ const Airport = (function () {
         if (_product_location_departing_airport_search) {
             
             $(_product_location_departing_airport_search)
-                .on("click", function () {
+                .on("click", function (e) {
                     if ($(this).attr("readonly") === "readonly") {
                         e.preventDefault()
                     } else {

@@ -31,6 +31,11 @@ Search.appendIndex(
             "summary": "format\u0020object",
             "url": "classes/Framework-App-Controllers-Address.html#method_format"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Address\u003A\u003AformatAddress\u0028\u0029",
+            "name": "formatAddress",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Address.html#method_formatAddress"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Autocomplete",
             "name": "Autocomplete",
             "summary": "Autocomplete",
@@ -71,6 +76,11 @@ Search.appendIndex(
             "summary": "autocomplete\u0020vendors",
             "url": "classes/Framework-App-Controllers-Autocomplete.html#method_vendors"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Autocomplete\u003A\u003Aitineraries\u0028\u0029",
+            "name": "itineraries",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Autocomplete.html#method_itineraries"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Autocomplete\u003A\u003Alocations\u0028\u0029",
             "name": "locations",
             "summary": "autocomplete\u0020locations",
@@ -106,6 +116,16 @@ Search.appendIndex(
             "summary": "autocomplete\u0020airports",
             "url": "classes/Framework-App-Controllers-Autocomplete.html#method_stations"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Autocomplete\u003A\u003AlocationSearch\u0028\u0029",
+            "name": "locationSearch",
+            "summary": "autocomplete\u0020locationSearch",
+            "url": "classes/Framework-App-Controllers-Autocomplete.html#method_locationSearch"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Autocomplete\u003A\u003Apackages\u0028\u0029",
+            "name": "packages",
+            "summary": "autocomplete\u0020packages",
+            "url": "classes/Framework-App-Controllers-Autocomplete.html#method_packages"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\City",
             "name": "City",
             "summary": "Short\u0020City\u0020Description\nLong\u0020City\u0020Description",
@@ -115,6 +135,11 @@ Search.appendIndex(
             "name": "__construct",
             "summary": "",
             "url": "classes/Framework-App-Controllers-City.html#method___construct"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\City\u003A\u003AgetByCountryId\u0028\u0029",
+            "name": "getByCountryId",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-City.html#method_getByCountryId"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\City\u003A\u003Aget\u0028\u0029",
             "name": "get",
@@ -150,6 +175,11 @@ Search.appendIndex(
             "name": "format_ac",
             "summary": "",
             "url": "classes/Framework-App-Controllers-City.html#method_format_ac"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\City\u003A\u003AformatCity\u0028\u0029",
+            "name": "formatCity",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-City.html#method_formatCity"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Company",
             "name": "Company",
@@ -281,9 +311,14 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Country.html#method_format_ac"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Country\u003A\u003AformatCountry\u0028\u0029",
+            "name": "formatCountry",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Country.html#method_formatCountry"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Customer",
             "name": "Customer",
-            "summary": "Short\u0020Customer\u0020Description",
+            "summary": "Short\u0020Customer\u0020Description\nLong\u0020Customer\u0020Description",
             "url": "classes/Framework-App-Controllers-Customer.html"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Customer\u003A\u003A__construct\u0028\u0029",
@@ -295,6 +330,16 @@ Search.appendIndex(
             "name": "index",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Customer.html#method_index"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Customer\u003A\u003Aget\u0028\u0029",
+            "name": "get",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Customer.html#method_get"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Customer\u003A\u003Aformat\u0028\u0029",
+            "name": "format",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Customer.html#method_format"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Location",
             "name": "Location",
@@ -316,15 +361,15 @@ Search.appendIndex(
             "summary": "autocomplete\u0020method",
             "url": "classes/Framework-App-Controllers-Location.html#method_autocomplete"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Location\u003A\u003AautocompleteSearch\u0028\u0029",
+            "name": "autocompleteSearch",
+            "summary": "autocompleteSearch\u0020method",
+            "url": "classes/Framework-App-Controllers-Location.html#method_autocompleteSearch"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Location\u003A\u003AserveUpdate\u0028\u0029",
             "name": "serveUpdate",
             "summary": "update\u0020request",
             "url": "classes/Framework-App-Controllers-Location.html#method_serveUpdate"
-        },                {
-            "fqsen": "\\Framework\\App\\Controllers\\Location\u003A\u003Aupdate\u0028\u0029",
-            "name": "update",
-            "summary": "",
-            "url": "classes/Framework-App-Controllers-Location.html#method_update"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Location\u003A\u003AgetByLocationId\u0028\u0029",
             "name": "getByLocationId",
@@ -371,6 +416,11 @@ Search.appendIndex(
             "summary": "formatObject",
             "url": "classes/Framework-App-Controllers-Location.html#method_formatObject"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Location\u003A\u003Aupdate\u0028\u0029",
+            "name": "update",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Location.html#method_update"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Package",
             "name": "Package",
             "summary": "Short\u0020Package\u0020Description\nLong\u0020Package\u0020Description",
@@ -381,10 +431,30 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Package.html#method___construct"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003AautocompleteSearch\u0028\u0029",
+            "name": "autocompleteSearch",
+            "summary": "autocompleteSearch\u0020method",
+            "url": "classes/Framework-App-Controllers-Package.html#method_autocompleteSearch"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003AserveGet\u0028\u0029",
             "name": "serveGet",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Package.html#method_serveGet"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003AserveUpdate\u0028\u0029",
+            "name": "serveUpdate",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Package.html#method_serveUpdate"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Aupdate\u0028\u0029",
+            "name": "update",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Package.html#method_update"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003AformatAutocomplete\u0028\u0029",
+            "name": "formatAutocomplete",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Package.html#method_formatAutocomplete"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Package\u003A\u003Aformat\u0028\u0029",
             "name": "format",
@@ -715,6 +785,11 @@ Search.appendIndex(
             "name": "format",
             "summary": "",
             "url": "classes/Framework-App-Controllers-Province.html#method_format"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Province\u003A\u003AformatProvince\u0028\u0029",
+            "name": "formatProvince",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Province.html#method_formatProvince"
         },                {
             "fqsen": "\\Framework\\App\\Controllers\\Season",
             "name": "Season",
@@ -1396,6 +1471,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Models-CityModel.html#method_update"
         },                {
+            "fqsen": "\\Framework\\App\\Models\\CityModel\u003A\u003AfetchCitiesByCountryId\u0028\u0029",
+            "name": "fetchCitiesByCountryId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-CityModel.html#method_fetchCitiesByCountryId"
+        },                {
             "fqsen": "\\Framework\\App\\Models\\CityModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
             "summary": "",
@@ -1678,8 +1758,38 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\CustomerModel",
             "name": "CustomerModel",
-            "summary": "Short\u0020CustomerModel\u0020Description",
+            "summary": "Short\u0020CustomerModel\u0020Description\nLong\u0020CustomerModel\u0020Description",
             "url": "classes/Framework-App-Models-CustomerModel.html"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\CustomerModel\u003A\u003AfetchAll\u0028\u0029",
+            "name": "fetchAll",
+            "summary": "",
+            "url": "classes/Framework-App-Models-CustomerModel.html#method_fetchAll"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\CustomerModel\u003A\u003AfetchByCustomerId\u0028\u0029",
+            "name": "fetchByCustomerId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-CustomerModel.html#method_fetchByCustomerId"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\CustomerModel\u003A\u003AfetchByUserId\u0028\u0029",
+            "name": "fetchByUserId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-CustomerModel.html#method_fetchByUserId"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\CustomerModel\u003A\u003A\u0024dbTable",
+            "name": "dbTable",
+            "summary": "",
+            "url": "classes/Framework-App-Models-CustomerModel.html#property_dbTable"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\CustomerModel\u003A\u003A\u0024dbFields",
+            "name": "dbFields",
+            "summary": "",
+            "url": "classes/Framework-App-Models-CustomerModel.html#property_dbFields"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\CustomerModel\u003A\u003A\u0024sql",
+            "name": "sql",
+            "summary": "",
+            "url": "classes/Framework-App-Models-CustomerModel.html#property_sql"
         },                {
             "fqsen": "\\Framework\\App\\Models\\LocationModel",
             "name": "LocationModel",
@@ -1696,6 +1806,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Models-LocationModel.html#method_location_ac"
         },                {
+            "fqsen": "\\Framework\\App\\Models\\LocationModel\u003A\u003Alocation_search_ac\u0028\u0029",
+            "name": "location_search_ac",
+            "summary": "",
+            "url": "classes/Framework-App-Models-LocationModel.html#method_location_search_ac"
+        },                {
             "fqsen": "\\Framework\\App\\Models\\LocationModel\u003A\u003Aget\u0028\u0029",
             "name": "get",
             "summary": "",
@@ -1705,6 +1820,11 @@ Search.appendIndex(
             "name": "fetchLocationByCityIdAndName",
             "summary": "",
             "url": "classes/Framework-App-Models-LocationModel.html#method_fetchLocationByCityIdAndName"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\LocationModel\u003A\u003AfetchLocationByCountryIdAndName\u0028\u0029",
+            "name": "fetchLocationByCountryIdAndName",
+            "summary": "",
+            "url": "classes/Framework-App-Models-LocationModel.html#method_fetchLocationByCountryIdAndName"
         },                {
             "fqsen": "\\Framework\\App\\Models\\LocationModel\u003A\u003AgetOne\u0028\u0029",
             "name": "getOne",
@@ -1823,7 +1943,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\PackageModel",
             "name": "PackageModel",
-            "summary": "Short\u0020PackageModel\u0020Description",
+            "summary": "Short\u0020PackageModel\u0020Description\nLong\u0020PackageModel\u0020Description",
             "url": "classes/Framework-App-Models-PackageModel.html"
         },                {
             "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget_id\u0028\u0029",
@@ -2016,15 +2136,30 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Models-PackageModel.html#method_set_note"
         },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003AupdatePackageRecord\u0028\u0029",
+            "name": "updatePackageRecord",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_updatePackageRecord"
+        },                {
             "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003Aget\u0028\u0029",
             "name": "get",
-            "summary": "fetch\u0020object\u0020values",
+            "summary": "",
             "url": "classes/Framework-App-Models-PackageModel.html#method_get"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003AfetchByPackageName\u0028\u0029",
+            "name": "fetchByPackageName",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#method_fetchByPackageName"
         },                {
             "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
             "summary": "",
             "url": "classes/Framework-App-Models-PackageModel.html#property_dbTable"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024sql",
+            "name": "sql",
+            "summary": "",
+            "url": "classes/Framework-App-Models-PackageModel.html#property_sql"
         },                {
             "fqsen": "\\Framework\\App\\Models\\PackageModel\u003A\u003A\u0024id",
             "name": "id",
@@ -2333,7 +2468,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProvinceModel",
             "name": "ProvinceModel",
-            "summary": "Short\u0020Province\u0020Description",
+            "summary": "Short\u0020Province\u0020Description\nLong\u0020Province\u0020Description",
             "url": "classes/Framework-App-Models-ProvinceModel.html"
         },                {
             "fqsen": "\\Framework\\App\\Models\\ProvinceModel\u003A\u003Aget\u0028\u0029",
@@ -2538,8 +2673,23 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Framework\\App\\Models\\StageModel",
             "name": "StageModel",
-            "summary": "Short\u0020Stage\u0020Description",
+            "summary": "Short\u0020Stage\u0020Description\nLong\u0020Stage\u0020Description",
             "url": "classes/Framework-App-Models-StageModel.html"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\StageModel\u003A\u003AfetchAll\u0028\u0029",
+            "name": "fetchAll",
+            "summary": "",
+            "url": "classes/Framework-App-Models-StageModel.html#method_fetchAll"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\StageModel\u003A\u003AfetchByStageId\u0028\u0029",
+            "name": "fetchByStageId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-StageModel.html#method_fetchByStageId"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\StageModel\u003A\u003AfetchByUserId\u0028\u0029",
+            "name": "fetchByUserId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-StageModel.html#method_fetchByUserId"
         },                {
             "fqsen": "\\Framework\\App\\Models\\StageModel\u003A\u003Aget\u0028\u0029",
             "name": "get",
@@ -2565,6 +2715,11 @@ Search.appendIndex(
             "name": "dbFields",
             "summary": "",
             "url": "classes/Framework-App-Models-StageModel.html#property_dbFields"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\StageModel\u003A\u003A\u0024sql",
+            "name": "sql",
+            "summary": "",
+            "url": "classes/Framework-App-Models-StageModel.html#property_sql"
         },                {
             "fqsen": "\\Framework\\App\\Models\\StatusTypesModel",
             "name": "StatusTypesModel",
@@ -3015,6 +3170,16 @@ Search.appendIndex(
             "name": "buildSelectQuery",
             "summary": "",
             "url": "classes/Framework-Core-Model.html#method_buildSelectQuery"
+        },                {
+            "fqsen": "\\Framework\\Core\\Model\u003A\u003AbuildWhereCondition\u0028\u0029",
+            "name": "buildWhereCondition",
+            "summary": "",
+            "url": "classes/Framework-Core-Model.html#method_buildWhereCondition"
+        },                {
+            "fqsen": "\\Framework\\Core\\Model\u003A\u003AbuildOrderCondition\u0028\u0029",
+            "name": "buildOrderCondition",
+            "summary": "",
+            "url": "classes/Framework-Core-Model.html#method_buildOrderCondition"
         },                {
             "fqsen": "\\Framework\\Core\\Model\u003A\u003A\u0024db",
             "name": "db",
@@ -4806,6 +4971,46 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Framework-App-Controllers-Itinerary.html#method___construct"
         },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Itinerary\u003A\u003Aindex\u0028\u0029",
+            "name": "index",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Itinerary.html#method_index"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Itinerary\u003A\u003Aedit\u0028\u0029",
+            "name": "edit",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Itinerary.html#method_edit"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Itinerary\u003A\u003Aview\u0028\u0029",
+            "name": "view",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Itinerary.html#method_view"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Itinerary\u003A\u003Aautocomplete\u0028\u0029",
+            "name": "autocomplete",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Itinerary.html#method_autocomplete"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Itinerary\u003A\u003Aget\u0028\u0029",
+            "name": "get",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Itinerary.html#method_get"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Itinerary\u003A\u003AformatAutocomplete\u0028\u0029",
+            "name": "formatAutocomplete",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Itinerary.html#method_formatAutocomplete"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Itinerary\u003A\u003AformatItinerary\u0028\u0029",
+            "name": "formatItinerary",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Itinerary.html#method_formatItinerary"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Itinerary\u003A\u003A\u0024buttons",
+            "name": "buttons",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Itinerary.html#property_buttons"
+        },                {
             "fqsen": "\\Framework\\App\\Controllers\\StatusType",
             "name": "StatusType",
             "summary": "Short\u0020StatusType\u0020Description\nLong\u0020StatusType\u0020Description",
@@ -4901,10 +5106,45 @@ Search.appendIndex(
             "summary": "Short\u0020ItineraryModel\u0020Description\nLong\u0020ItineraryModel\u0020Description",
             "url": "classes/Framework-App-Models-ItineraryModel.html"
         },                {
-            "fqsen": "\\Framework\\App\\Models\\ItineraryModel\u003A\u003Afetch\u0028\u0029",
-            "name": "fetch",
+            "fqsen": "\\Framework\\App\\Models\\ItineraryModel\u003A\u003AfetchAll\u0028\u0029",
+            "name": "fetchAll",
             "summary": "",
-            "url": "classes/Framework-App-Models-ItineraryModel.html#method_fetch"
+            "url": "classes/Framework-App-Models-ItineraryModel.html#method_fetchAll"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ItineraryModel\u003A\u003AfetchByItineraryId\u0028\u0029",
+            "name": "fetchByItineraryId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ItineraryModel.html#method_fetchByItineraryId"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ItineraryModel\u003A\u003AfetchByUserId\u0028\u0029",
+            "name": "fetchByUserId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ItineraryModel.html#method_fetchByUserId"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ItineraryModel\u003A\u003AfetchByCustomerId\u0028\u0029",
+            "name": "fetchByCustomerId",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ItineraryModel.html#method_fetchByCustomerId"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ItineraryModel\u003A\u003AfetchByCustomerName\u0028\u0029",
+            "name": "fetchByCustomerName",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ItineraryModel.html#method_fetchByCustomerName"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ItineraryModel\u003A\u003AfetchByItineraryName\u0028\u0029",
+            "name": "fetchByItineraryName",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ItineraryModel.html#method_fetchByItineraryName"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ItineraryModel\u003A\u003AupdateItineraryRecord\u0028\u0029",
+            "name": "updateItineraryRecord",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ItineraryModel.html#method_updateItineraryRecord"
+        },                {
+            "fqsen": "\\Framework\\App\\Models\\ItineraryModel\u003A\u003AfetchItinerariesAutoComplete\u0028\u0029",
+            "name": "fetchItinerariesAutoComplete",
+            "summary": "",
+            "url": "classes/Framework-App-Models-ItineraryModel.html#method_fetchItinerariesAutoComplete"
         },                {
             "fqsen": "\\Framework\\App\\Models\\ItineraryModel\u003A\u003A\u0024dbTable",
             "name": "dbTable",
@@ -4970,6 +5210,46 @@ Search.appendIndex(
             "name": "send",
             "summary": "",
             "url": "classes/Framework-Core-Api.html#method_send"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Currency",
+            "name": "Currency",
+            "summary": "Short\u0020Currency\u0020Description\nLong\u0020Currency\u0020Description",
+            "url": "classes/Framework-App-Controllers-Currency.html"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Currency\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Currency.html#method___construct"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Currency\u003A\u003Aget\u0028\u0029",
+            "name": "get",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Currency.html#method_get"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Currency\u003A\u003AformatCurrency\u0028\u0029",
+            "name": "formatCurrency",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Currency.html#method_formatCurrency"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Stage",
+            "name": "Stage",
+            "summary": "Short\u0020Stage\u0020Description\nLong\u0020Stage\u0020Description",
+            "url": "classes/Framework-App-Controllers-Stage.html"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Stage\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Stage.html#method___construct"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Stage\u003A\u003Aget\u0028\u0029",
+            "name": "get",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Stage.html#method_get"
+        },                {
+            "fqsen": "\\Framework\\App\\Controllers\\Stage\u003A\u003Aformat\u0028\u0029",
+            "name": "format",
+            "summary": "",
+            "url": "classes/Framework-App-Controllers-Stage.html#method_format"
         },                {
             "fqsen": "\\",
             "name": "\\",

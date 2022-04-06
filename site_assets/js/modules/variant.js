@@ -1,6 +1,8 @@
 const Variant = (function () {
     "use strict"
     
+    // ----
+    
     const _button_remove_variant_from_product = document.getElementById("button_remove_variant_from_product")
     const _product_edit_variant_section = document.getElementById("product_edit_variant_section")
     const _panel_tab_variant = document.getElementById("panel_tab_variant")
@@ -22,6 +24,8 @@ const Variant = (function () {
     const _product_edit_variant_form_variant_used_in_pricing = document.getElementById("product_edit_variant_form_variant_used_in_pricing")
     const _table_variant_product_edit_add_new_button = document.getElementById("table_variant_product_edit_add_new_button")
     const _product_edit_variant_display = document.getElementById("product_edit_variant_display")
+    
+    // ----
     
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $table_variant_product_edit = $(_table_variant_product_edit)
@@ -55,6 +59,8 @@ const Variant = (function () {
         },
     }
     
+    // ----
+    
     $(_button_remove_variant_from_product)
         .on("click", function () {
             remove()
@@ -67,11 +73,16 @@ const Variant = (function () {
     
     $(_table_variant_product_edit_add_new_button)
         .on("click", function () {
-            //console.log("Variant.table_variant_product_edit_add_new_button:click()", this)
+            console.group("table_variant_product_edit_add_new_button:click")
             // ----
             
             $table_variant_product_edit.clearSelectedRows()
             populateForm()
+            
+            _product_edit_variant_form_variant_name.disabled = false
+            
+            // ----
+            console.groupEnd()
         })
     
     $(_product_edit_variant_form_clear_button)
@@ -102,6 +113,8 @@ const Variant = (function () {
             _product_edit_variant_form_variant_name_filter.value = ""
             _product_edit_variant_form_variant_name_filter.disabled = false
         })
+    
+    // ----
     
     const clearProductOverview = function (variant) {
         //console.log("Variant.clearProductOverview(variant)", variant)
@@ -300,6 +313,7 @@ const Variant = (function () {
                     
                     populateForm(detail)
                     
+                    _product_edit_variant_form_variant_name.disabled = true
                 },
             })
     }
@@ -359,6 +373,8 @@ const Variant = (function () {
                     }
                     
                     populateForm(detail)
+                    
+                    _product_edit_variant_form_variant_name.disabled = true
                     
                 } else {
                     confirmDialog(`The variant: ${name} does not exist exists. Would you like to create it?`, (ans) => {
@@ -699,6 +715,8 @@ const Variant = (function () {
         Product.detail = detail
         return detail
     }
+    
+    // ----
     
     return {
         validator: null,

@@ -282,7 +282,25 @@
 			
 			extract($_GET);
 			$results = Location::autocompleteSearch($st);
-			Log::$debug_log->trace($results);
+			
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			echo json_encode($results);
+			exit(0);
+		}
+		
+		/**
+		 * autocomplete packages
+		 */
+		public function packages(): void
+		{
+			$st = "";
+			
+			extract($_GET);
+			$results = Package::autocompleteSearch($st);
+			
 			/**
 			 * render results json page
 			 */

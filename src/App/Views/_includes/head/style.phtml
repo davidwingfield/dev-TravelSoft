@@ -3,6 +3,63 @@
 	*:focus-visible {
 		outline: none;
 	}
+	
+	#package_available_start_button {
+		color:                      rgba(66, 133, 244, 1);
+		background-color:           rgba(66, 133, 244, .35);
+		border-top-right-radius:    0.25rem;
+		border-bottom-right-radius: 0.25rem;
+		border:                     1px solid rgba(66, 133, 244, 1) !important;
+	}
+	
+	#package_available_end_button {
+		color:                      rgba(66, 133, 244, 1);
+		background-color:           rgba(66, 133, 244, .35);
+		border-top-right-radius:    0.25rem;
+		border-bottom-right-radius: 0.25rem;
+		border:                     1px solid rgba(66, 133, 244, 1) !important;
+	}
+	
+	.sort.asc, .sort.desc {
+		background-color: yellow;
+	}
+	.sort.asc::after {
+		font-family:             'Font Awesome 5 Free';
+		font-weight:             900;
+		content:                 "\f0de";
+		-moz-osx-font-smoothing: grayscale;
+		-webkit-font-smoothing:  antialiased;
+		display:                 inline-block;
+		font-style:              normal;
+		font-variant:            normal;
+		text-rendering:          auto;
+		cursor:                  pointer;
+		line-height:             1rem;
+		height:                  1rem;
+		pointer-events:          none;
+		width:                   1rem;
+		font-size:               1rem;
+		padding-left:            0.25rem;
+	}
+	.sort.desc::after {
+		font-family:             'Font Awesome 5 Free';
+		font-weight:             900;
+		content:                 "\f0dd";
+		-moz-osx-font-smoothing: grayscale;
+		-webkit-font-smoothing:  antialiased;
+		display:                 inline-block;
+		font-style:              normal;
+		font-variant:            normal;
+		text-rendering:          auto;
+		cursor:                  pointer;
+		line-height:             1rem;
+		height:                  1rem;
+		pointer-events:          none;
+		width:                   1rem;
+		font-size:               1rem;
+		padding-left:            0.25rem;
+	}
+	
 	.popover-header {
 		padding:                 0;
 		border-bottom:           1px solid rgba(0, 0, 0, 0.2);
@@ -31,6 +88,15 @@
 		border:           1px solid #e0e0e0;
 		border-left:      solid 0.4rem #697580;
 	}
+	
+	button.btn.btn-search-bar.btn-location-picker.is-invalid,
+	button.btn.btn-search-bar.btn-travelers-picker.is-invalid,
+	button.btn.btn-search-bar.btn-name-picker.is-invalid,
+	button.btn.btn-search-bar.btn-from-date-picker.is-invalid,
+	button.btn.btn-search-bar.btn-to-date-picker.is-invalid {
+		background: rgba(255, 53, 71, .30)
+	}
+	
 	.picker-content {
 		position:           absolute;
 		display:            inline-flex;

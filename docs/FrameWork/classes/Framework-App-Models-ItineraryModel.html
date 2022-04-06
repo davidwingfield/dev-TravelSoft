@@ -217,6 +217,13 @@ Long ItineraryModel Description</p>
 <dd></dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-Core-Model.html#method_buildOrderCondition">buildOrderCondition()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-Core-Model.html#method_buildSelectQuery">buildSelectQuery()</a>
     <span>
                         &nbsp;: string    </span>
@@ -224,7 +231,56 @@ Long ItineraryModel Description</p>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Framework-App-Models-ItineraryModel.html#method_fetch">fetch()</a>
+    <a href="classes/Framework-Core-Model.html#method_buildWhereCondition">buildWhereCondition()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-ItineraryModel.html#method_fetchAll">fetchAll()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-ItineraryModel.html#method_fetchByCustomerId">fetchByCustomerId()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-ItineraryModel.html#method_fetchByCustomerName">fetchByCustomerName()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-ItineraryModel.html#method_fetchByItineraryId">fetchByItineraryId()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-ItineraryModel.html#method_fetchByItineraryName">fetchByItineraryName()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-ItineraryModel.html#method_fetchByUserId">fetchByUserId()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-ItineraryModel.html#method_fetchItinerariesAutoComplete">fetchItinerariesAutoComplete()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
@@ -262,6 +318,13 @@ Long ItineraryModel Description</p>
     <a href="classes/Framework-Core-Model.html#method_setString">setString()</a>
     <span>
                         &nbsp;: string    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-ItineraryModel.html#method_updateItineraryRecord">updateItineraryRecord()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
 <dd></dd>
 
@@ -393,7 +456,7 @@ Long ItineraryModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ItineraryModel.php"><a href="files/app-models-itinerarymodel.html"><abbr title="App/Models/ItineraryModel.php">ItineraryModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">20</span>
+    <span class="phpdocumentor-element-found-in__line">21</span>
 
     </aside>
 
@@ -402,7 +465,136 @@ Long ItineraryModel Description</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">$sql</span>
-     = <span class="phpdocumentor-signature__default-value">&quot;&quot;</span></code>
+     = <span class="phpdocumentor-signature__default-value">&quot;
+		SELECT
+						ITINERARY.id AS &#039;itinerary_id&#039;,
+						ITINERARY.customer_id AS &#039;itinerary_customer_id&#039;,
+						ITINERARY.stage_id AS &#039;itinerary_stage_id&#039;,
+						ITINERARY.name AS &#039;itinerary_name&#039;,
+						ITINERARY.start_date AS &#039;itinerary_start_date&#039;,
+						ITINERARY.end_date AS &#039;itinerary_end_date&#039;,
+						ITINERARY.budget AS &#039;itinerary_budget&#039;,
+						ITINERARY.currency_id AS &#039;itinerary_currency_id&#039;,
+						ITINERARY.json AS &#039;itinerary_json&#039;,
+						ITINERARY.enabled AS &#039;itinerary_enabled&#039;,
+						ITINERARY.date_created AS &#039;itinerary_date_created&#039;,
+						ITINERARY.created_by AS &#039;itinerary_created_by&#039;,
+						ITINERARY.date_modified AS &#039;itinerary_date_modified&#039;,
+						ITINERARY.modified_by AS &#039;itinerary_modified_by&#039;,
+						ITINERARY.note AS &#039;itinerary_note&#039;,
+				  
+						CUSTOMER.id AS &#039;customer_id&#039;,
+						CUSTOMER.address_id AS &#039;customer_address_id&#039;,
+						CUSTOMER.name_prefix AS &#039;customer_name_prefix&#039;,
+						CUSTOMER.name_first AS &#039;customer_name_first&#039;,
+						CUSTOMER.name_last AS &#039;customer_name_last&#039;,
+						CUSTOMER.name_suffix AS &#039;customer_name_suffix&#039;,
+						CUSTOMER.date_birth AS &#039;customer_date_birth&#039;,
+						CUSTOMER.email AS &#039;customer_email&#039;,
+						CUSTOMER.phone_1 AS &#039;customer_phone_1&#039;,
+						CUSTOMER.phone_2 AS &#039;customer_phone_2&#039;,
+						CUSTOMER.sort_order AS &#039;customer_sort_order&#039;,
+						CUSTOMER.enabled AS &#039;customer_enabled&#039;,
+						CUSTOMER.date_created AS &#039;customer_date_created&#039;,
+						CUSTOMER.created_by AS &#039;customer_created_by&#039;,
+						CUSTOMER.date_modified AS &#039;customer_date_modified&#039;,
+						CUSTOMER.modified_by AS &#039;customer_modified_by&#039;,
+						CUSTOMER.note AS &#039;customer_note&#039;,
+
+						STAGE.class AS &#039;stage_class&#039;,
+						STAGE.created_by AS &#039;stage_created_by&#039;,
+						STAGE.date_created AS &#039;stage_date_created&#039;,
+						STAGE.date_modified AS &#039;stage_date_modified&#039;,
+						STAGE.enabled AS &#039;stage_enabled&#039;,
+						STAGE.id AS &#039;stage_id&#039;,
+						STAGE.modified_by AS &#039;stage_modified_by&#039;,
+						STAGE.name AS &#039;stage_name&#039;,
+						STAGE.note AS &#039;stage_note&#039;,
+
+						ADDRESS.city_id AS &#039;address_city_id&#039;,
+						ADDRESS.country_id AS &#039;address_country_id&#039;,
+						ADDRESS.created_by AS &#039;address_created_by&#039;,
+						ADDRESS.date_created AS &#039;address_date_created&#039;,
+						ADDRESS.date_modified AS &#039;address_date_modified&#039;,
+						ADDRESS.enabled AS &#039;address_enabled&#039;,
+						ADDRESS.id AS &#039;address_id&#039;,
+						ADDRESS.modified_by AS &#039;address_modified_by&#039;,
+						ADDRESS.note AS &#039;address_note&#039;,
+						ADDRESS.postal_code AS &#039;address_postal_code&#039;,
+						ADDRESS.province_id AS &#039;address_province_id&#039;,
+						ADDRESS.street_1 AS &#039;address_street_1&#039;,
+						ADDRESS.street_2 AS &#039;address_street_2&#039;,
+						ADDRESS.street_3 AS &#039;address_street_3&#039;,
+			   
+						CITY.blurb AS &#039;city_blurb&#039;,
+						CITY.country_id AS &#039;city_country_id&#039;,
+						CITY.created_by AS &#039;city_created_by&#039;,
+						CITY.date_created AS &#039;city_date_created&#039;,
+						CITY.date_modified AS &#039;city_date_modified&#039;,
+						CITY.enabled AS &#039;city_enabled&#039;,
+						CITY.id AS &#039;city_id&#039;,
+						CITY.modified_by AS &#039;city_modified_by&#039;,
+						CITY.name AS &#039;city_name&#039;,
+						CITY.note AS &#039;city_note&#039;,
+						CITY.province_id AS &#039;city_province_id&#039;,
+						CITY.sort_order AS &#039;city_sort_order&#039;,
+				  
+						PROVINCE.blurb AS &#039;province_blurb&#039;,
+						PROVINCE.country_id AS &#039;province_country_id&#039;,
+						PROVINCE.created_by AS &#039;province_created_by&#039;,
+						PROVINCE.date_created AS &#039;province_date_created&#039;,
+						PROVINCE.date_modified AS &#039;province_date_modified&#039;,
+						PROVINCE.enabled AS &#039;province_enabled&#039;,
+						PROVINCE.id AS &#039;province_id&#039;,
+						PROVINCE.iso2 AS &#039;province_iso2&#039;,
+						PROVINCE.iso3 AS &#039;province_iso3&#039;,
+						PROVINCE.modified_by AS &#039;province_modified_by&#039;,
+						PROVINCE.name AS &#039;province_name&#039;,
+						PROVINCE.note AS &#039;province_note&#039;,
+						PROVINCE.sort_order AS &#039;province_sort_order&#039;,
+						IF((PROVINCE.iso2 IS NOT NULL) AND (PROVINCE.iso2 != &#039;&#039;) AND (PROVINCE.name IS NOT NULL), CONCAT(PROVINCE.iso2, &#039; - &#039;, PROVINCE.name), PROVINCE.name ) AS &#039;province_display_long&#039;,
+						PROVINCE.name AS &#039;province_display_medium&#039;,
+						IF((PROVINCE.iso2 IS NOT NULL) AND (PROVINCE.iso2 != &#039;&#039;), PROVINCE.iso2, PROVINCE.name ) AS &#039;province_display_short&#039;,
+
+						COUNTRY.blurb AS &#039;country_blurb&#039;,
+						COUNTRY.created_by AS &#039;country_created_by&#039;,
+						COUNTRY.currency_id AS &#039;country_currency_id&#039;,
+						COUNTRY.date_created AS &#039;country_date_created&#039;,
+						COUNTRY.date_modified AS &#039;country_date_modified&#039;,
+						COUNTRY.enabled AS &#039;country_enabled&#039;,
+						COUNTRY.id AS &#039;country_id&#039;,
+						COUNTRY.iso2 AS &#039;country_iso2&#039;,
+						COUNTRY.iso3 AS &#039;country_iso3&#039;,
+						COUNTRY.modified_by AS &#039;country_modified_by&#039;,
+						COUNTRY.name AS &#039;country_name&#039;,
+						COUNTRY.note AS &#039;country_note&#039;,
+						COUNTRY.sort_order AS &#039;country_sort_order&#039;,
+						IF((COUNTRY.iso3 IS NOT NULL) AND (COUNTRY.iso3 != &#039;&#039;) AND (COUNTRY.name IS NOT NULL), CONCAT(COUNTRY.iso3, &#039; - &#039;, COUNTRY.name), COUNTRY.name ) AS &#039;country_display_long&#039;,
+						COUNTRY.name AS &#039;country_display_medium&#039;,
+						IF((COUNTRY.iso3 IS NOT NULL) AND (COUNTRY.iso3 != &#039;&#039;), COUNTRY.iso3, COUNTRY.name ) AS &#039;country_display_short&#039;,
+
+						CURRENCY.created_by AS &#039;currency_created_by&#039;,
+						CURRENCY.date_created AS &#039;currency_date_created&#039;,
+						CURRENCY.date_modified AS &#039;currency_date_modified&#039;,
+						CURRENCY.enabled AS &#039;currency_enabled&#039;,
+						CURRENCY.id AS &#039;currency_id&#039;,
+						CURRENCY.iso AS &#039;currency_iso&#039;,
+						CURRENCY.minor_unit AS &#039;currency_minor_unit&#039;,
+						CURRENCY.modified_by AS &#039;currency_modified_by&#039;,
+						CURRENCY.name AS &#039;currency_name&#039;,
+						CURRENCY.note AS &#039;currency_note&#039;,
+						CURRENCY.sort_order AS &#039;currency_sort_order&#039;,
+						CURRENCY.symbol AS &#039;currency_symbol&#039;
+		
+		FROM 			itinerary ITINERARY
+		JOIN 			customer CUSTOMER ON CUSTOMER.id = ITINERARY.customer_id
+		JOIN			address ADDRESS ON ADDRESS.id = CUSTOMER.address_id
+		JOIN			city CITY ON CITY.id = ADDRESS.city_id
+		JOIN			province PROVINCE ON PROVINCE.id = CITY.province_id
+		JOIN			country COUNTRY ON COUNTRY.id = PROVINCE.country_id
+		LEFT JOIN		currency CURRENCY ON CURRENCY.id = COUNTRY.currency_id
+		JOIN 			stage STAGE ON STAGE.id = ITINERARY.stage_id
+		&quot;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -418,6 +610,50 @@ Long ItineraryModel Description</p>
             Methods
             <a href="classes/Framework-App-Models-ItineraryModel.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_buildOrderCondition">
+        buildOrderCondition()
+        <a href="classes/Framework-Core-Model.html#method_buildOrderCondition" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Core/Model.php"><a href="files/core-model.html"><abbr title="Core/Model.php">Model.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">97</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">buildOrderCondition</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$order</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$order</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
                     <article
         class="phpdocumentor-element
             -method
@@ -468,30 +704,327 @@ Long ItineraryModel Description</p>
             -public
                                     -static                    "
 >
-    <h4 class="phpdocumentor-element__name" id="method_fetch">
-        fetch()
-        <a href="classes/Framework-App-Models-ItineraryModel.html#method_fetch" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_buildWhereCondition">
+        buildWhereCondition()
+        <a href="classes/Framework-Core-Model.html#method_buildWhereCondition" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ItineraryModel.php"><a href="files/app-models-itinerarymodel.html"><abbr title="App/Models/ItineraryModel.php">ItineraryModel.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Core/Model.php"><a href="files/core-model.html"><abbr title="Core/Model.php">Model.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">85</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fetch</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">buildWhereCondition</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$where</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
         <section class="phpdocumentor-description"></section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$id</span>
+                <span class="phpdocumentor-signature__argument__name">$where</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fetchAll">
+        fetchAll()
+        <a href="classes/Framework-App-Models-ItineraryModel.html#method_fetchAll" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ItineraryModel.php"><a href="files/app-models-itinerarymodel.html"><abbr title="App/Models/ItineraryModel.php">ItineraryModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">152</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fetchAll</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fetchByCustomerId">
+        fetchByCustomerId()
+        <a href="classes/Framework-App-Models-ItineraryModel.html#method_fetchByCustomerId" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ItineraryModel.php"><a href="files/app-models-itinerarymodel.html"><abbr title="App/Models/ItineraryModel.php">ItineraryModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">223</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fetchByCustomerId</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$customerId</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$customerId</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fetchByCustomerName">
+        fetchByCustomerName()
+        <a href="classes/Framework-App-Models-ItineraryModel.html#method_fetchByCustomerName" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ItineraryModel.php"><a href="files/app-models-itinerarymodel.html"><abbr title="App/Models/ItineraryModel.php">ItineraryModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">243</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fetchByCustomerName</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$customerName</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$customerName</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fetchByItineraryId">
+        fetchByItineraryId()
+        <a href="classes/Framework-App-Models-ItineraryModel.html#method_fetchByItineraryId" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ItineraryModel.php"><a href="files/app-models-itinerarymodel.html"><abbr title="App/Models/ItineraryModel.php">ItineraryModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">178</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fetchByItineraryId</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$itineraryId</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$itineraryId</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fetchByItineraryName">
+        fetchByItineraryName()
+        <a href="classes/Framework-App-Models-ItineraryModel.html#method_fetchByItineraryName" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ItineraryModel.php"><a href="files/app-models-itinerarymodel.html"><abbr title="App/Models/ItineraryModel.php">ItineraryModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">254</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fetchByItineraryName</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$itineraryName</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$itineraryName</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fetchByUserId">
+        fetchByUserId()
+        <a href="classes/Framework-App-Models-ItineraryModel.html#method_fetchByUserId" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ItineraryModel.php"><a href="files/app-models-itinerarymodel.html"><abbr title="App/Models/ItineraryModel.php">ItineraryModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">191</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fetchByUserId</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$userId</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$userId</span>
                 : <span class="phpdocumentor-signature__argument__return-type">int</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fetchItinerariesAutoComplete">
+        fetchItinerariesAutoComplete()
+        <a href="classes/Framework-App-Models-ItineraryModel.html#method_fetchItinerariesAutoComplete" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ItineraryModel.php"><a href="files/app-models-itinerarymodel.html"><abbr title="App/Models/ItineraryModel.php">ItineraryModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">283</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fetchItinerariesAutoComplete</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$st</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$st</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
 
@@ -711,6 +1244,50 @@ Long ItineraryModel Description</p>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_updateItineraryRecord">
+        updateItineraryRecord()
+        <a href="classes/Framework-App-Models-ItineraryModel.html#method_updateItineraryRecord" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ItineraryModel.php"><a href="files/app-models-itinerarymodel.html"><abbr title="App/Models/ItineraryModel.php">ItineraryModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">274</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">updateItineraryRecord</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$itinerary</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$itinerary</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
             &mdash;
         
     

@@ -85,7 +85,14 @@
 	</div>
 	<!-- /Test Elements -->
 	<?php //*/ ?>
-
+	
+	<div class="row">
+		<div class="col-12 col-md-4">
+			
+			<button type="button" id="package_test_button" class="btn btn-primary">Test</button>
+		
+		</div>
+	</div>
 </section>
 <!-- /Product Index Page -->
 
@@ -93,10 +100,18 @@
 <?php include_once(VIEWS_PATH . "/products/modals/new_product_modal.phtml"); ?>
 <!-- /New Product Modal -->
 
+<!-- New Package Modal -->
+<?php include_once(VIEWS_PATH . "/products/modals/new_package_modal.phtml"); ?>
+<!-- /New Package Modal -->
+
 <script type="text/javascript">
 	
 	$(function () {
+		console.group("TYPES")
 		Types.init(<?php echo TYPES;?>)
+		console.groupEnd()
+		
+		
 		<?php echo $init;?>
 	})
 

@@ -618,6 +618,7 @@ const Product = (function () {
         clearModalForm()
         
         $(_modal_new_product).modal("show")
+        
     }
     const clearModalForm = function () {
         //console.log("Product.clearModalForm()")
@@ -774,7 +775,7 @@ const Product = (function () {
         }
     }
     const setNewFormDetails = function (categoryId) {
-        //console.log("Product.setNewFormDetails(categoryId)", categoryId)
+        console.group("Product.setNewFormDetails(categoryId)", categoryId)
         // ----
         
     }
@@ -782,7 +783,7 @@ const Product = (function () {
         //console.log("Product.disableNewFormDetails()")
         // ----
         
-        /*
+        //*
         if (Product.product_keywords) {
             Product.product_keywords.readOnly(true)
         }
@@ -798,7 +799,7 @@ const Product = (function () {
         _modal_button_submit_add_product.disabled = true
         //*/
         
-        /*
+        //*
         _modal_product_hotel_fields.disabled = true
         _modal_product_flight_fields.disabled = true
         _modal_product_depart_from_fields.disabled = true

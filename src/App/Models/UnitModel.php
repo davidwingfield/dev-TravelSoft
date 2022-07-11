@@ -15,9 +15,17 @@
 	 */
 	class UnitModel extends Model
 	{
-		
+		/**
+		 * @var string
+		 */
 		protected static $dbTable = "unit";
+		/**
+		 * @var array
+		 */
 		protected static $dbFields = Array();
+		/**
+		 * @var string
+		 */
 		protected static $selectQuery = "
             SELECT
                     UNIT.id AS 'unit_id',
@@ -32,12 +40,13 @@
                     UNIT.modified_by AS 'unit_modified_by',
                     UNIT.note AS 'unit_note'
             FROM 	unit UNIT
-            WHERE   UNIT.enabled = 1
         ";
-		protected static $orderByCondition = "
-			ORDER BY    LENGTH(UNIT.name), CAST(UNIT.name AS UNSIGNED), UNIT.name ASC
-		";
 		
+		/**
+		 * @param int|null $id
+		 *
+		 * @return array
+		 */
 		public static function get(int $id = null): array
 		{
 			
@@ -54,6 +63,11 @@
 			}
 		}
 		
+		/**
+		 * @param int|null $id
+		 *
+		 * @return array
+		 */
 		public static function getOne(int $id = null): array
 		{
 			try {
@@ -69,6 +83,11 @@
 			}
 		}
 		
+		/**
+		 * @param array $unit
+		 *
+		 * @return array
+		 */
 		public static function insertUnit(array $unit = []): array
 		{
 			if (!isset($unit) || !isset($unit["category_id"]) || !isset($unit["name"])) {
@@ -124,7 +143,6 @@
 				$unit_id = Model::$db->getInsertId();
 				
 				if ($unit_id) {
-					$unit_id = (int)$unit_id;
 					$roomCode = addslashes(buildCode($unit_id, $name, "unit"));
 					
 					$update = "
@@ -136,7 +154,7 @@
 						
 						return self::getByUnitIdAndCategoryId($unit_id, $category_id);
 					} catch (Exception $e) {
-						Log::$debug_log->error($e);
+						Log::$debug_log->error($e->getMessage());
 						
 						return [];
 					}
@@ -146,12 +164,18 @@
 					return [];
 				}
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}
 		}
 		
+		/**
+		 * @param int|null $unit_id
+		 * @param int|null $product_id
+		 *
+		 * @return array
+		 */
 		public static function getByUnitIdAndProductId(int $unit_id = null, int $product_id = null): array
 		{
 			if (is_null($product_id) || is_null($unit_id)) {
@@ -198,16 +222,19 @@
                 WHERE   PRODUCT_UNIT.product_id = $product_id
                     AND PRODUCT_UNIT.unit_id = $unit_id";
 			try {
-				//Log::$debug_log->trace($sql);
-				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}
 		}
 		
+		/**
+		 * @param int|null $product_id
+		 *
+		 * @return array
+		 */
 		public static function getByProductId(int $product_id = null): array
 		{
 			if (is_null($product_id)) {
@@ -256,12 +283,18 @@
 			try {
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}
 		}
 		
+		/**
+		 * @param int|null $unit_id
+		 * @param int|null $category_id
+		 *
+		 * @return array
+		 */
 		public static function getByUnitIdAndCategoryId(int $unit_id = null, int $category_id = null): array
 		{
 			if (is_null($unit_id)) {
@@ -291,12 +324,17 @@
 			try {
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}
 		}
 		
+		/**
+		 * @param array $params
+		 *
+		 * @return array
+		 */
 		public static function deleteProductUnit(array $params = []): array
 		{
 			$unit_id = Model::setInt((isset($params["unit_id"])) ? $params["unit_id"] : null);
@@ -313,7 +351,7 @@
 					
 					return array("unit_id" => $unit_id);
 				} catch (Exception $e) {
-					Log::$debug_log->error($e);
+					Log::$debug_log->error($e->getMessage());
 					
 					return [];
 				}
@@ -326,73 +364,120 @@
 			}
 		}
 		
+		/**
+		 * @param string|null $name
+		 *
+		 * @return array
+		 */
 		public static function getByName(string $name = null): array
 		{
 			if (is_null($name)) {
 				return [];
 			}
 			
-			$sql = "
-                SELECT
-                        UNIT.id AS 'unit_id',
-                        UNIT.category_id AS 'unit_category_id',
-                        UNIT.api_id AS 'unit_api_id',
-                        UNIT.name AS 'unit_name',
-                        UNIT.room_code AS 'unit_room_code',
-                        UNIT.enabled AS 'unit_enabled',
-                        UNIT.date_created AS 'unit_date_created',
-                        UNIT.created_by AS 'unit_created_by',
-                        UNIT.date_modified AS 'unit_date_modified',
-                        UNIT.modified_by AS 'unit_modified_by',
-                        UNIT.note AS 'unit_note',
-                        UNIT.min_pax AS 'unit_min_pax',
-                        UNIT.max_pax AS 'unit_max_pax',
-                        UNIT.min_nights AS 'unit_min_nights',
-                        UNIT.max_nights AS 'unit_max_nights',
-                        UNIT.description_long AS 'unit_description_long',
-                        UNIT.description_short AS 'unit_description_short',
-                        UNIT.blurb AS 'unit_blurb',
-                        UNIT.cover_image AS 'unit_cover_image',
-                        UNIT.meeting_point AS 'unit_meeting_point',
-                        UNIT.time_notes AS 'unit_time_notes',
-                        UNIT.start_time AS 'unit_start_time',
-                        UNIT.end_time AS 'unit_end_time'
-                FROM 	unit UNIT
-                WHERE   UNIT.name = '$name'
-            ";
+			$searchTerm = addslashes($name);
+			$where = "";
+			$order = "";
+			$limit = "LIMIT     20";
+			
+			$whereConditions = array(
+				"UNIT.enabled = 1",
+				"UNIT.name = '$searchTerm'",
+			);
+			
+			$orderConditions = array(
+				"LENGTH(UNIT.name)",
+				"CAST(UNIT.name AS UNSIGNED)",
+				"UNIT.name",
+			);
+			
+			if (count($whereConditions) > 0) {
+				$where = "WHERE     " . implode(" AND ", $whereConditions);
+			}
+			
+			if (count($orderConditions) > 0) {
+				$order = "ORDER BY    " . implode(", ", $orderConditions);
+			}
+			
+			$sql = self::$selectQuery . "
+                    $where
+                    $order
+                    $limit;";
+			
 			try {
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
 		}
 		
+		/**
+		 * @param string   $st
+		 * @param int|null $category_id
+		 *
+		 * @return array
+		 */
 		public static function unit_ac(string $st = "", int $category_id = null): array
 		{
 			if (is_null($category_id)) {
 				return [];
 			}
 			
+			$searchTerm = addslashes($st);
+			
+			$where = "";
+			$order = "";
+			$limit = "LIMIT     20";
+			
+			$whereConditions = array(
+				"UNIT.enabled = 1",
+				"UNIT.category_id = $category_id",
+				"UNIT.name Like '%$searchTerm%'",
+			);
+			
+			$orderConditions = array(
+				"LENGTH(UNIT.name)",
+				"CAST(UNIT.name AS UNSIGNED)",
+				"UNIT.name",
+			);
+			
+			if (count($whereConditions) > 0) {
+				$where = "WHERE     " . implode(" AND ", $whereConditions);
+			}
+			
+			if (count($orderConditions) > 0) {
+				$order = "ORDER BY    " . implode(", ", $orderConditions);
+			}
+			
+			$sql = self::$selectQuery . "
+                    $where
+                    $order
+                    $limit;";
+			
 			try {
-				$searchTerm = addslashes($st);
-				
-				$sql = self::$selectQuery . "
-                    AND			UNIT.name LIKE '%$searchTerm%'
-                    AND         UNIT.category_id = $category_id
-                    ORDER BY    LENGTH(UNIT.name), CAST(UNIT.name AS UNSIGNED), UNIT.name ASC
-                    LIMIT 20;";
 				
 				return Model::$db->rawQuery($sql);
 				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
 		}
 		
+		/**
+		 * Update unit record
+		 * Update unit record insert if not exist
+		 *
+		 * @param array|null $unit
+		 *
+		 * @return array unit record
+		 * @access public
+		 */
 		public static function updateRecord(array $unit = null): array
 		{
 			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
@@ -527,7 +612,7 @@
 					return [];
 				}
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}

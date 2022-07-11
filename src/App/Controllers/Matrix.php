@@ -67,7 +67,7 @@
 		public static function serveUpdate(array $params = [])
 		{
 			$matrices = [];
-			Log::$debug_log->trace($params);
+			//Log::$debug_log->trace($params);
 			$results = MatrixModel::updateRecord($params);
 			
 			foreach ($results AS $matrix) {

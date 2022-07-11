@@ -118,7 +118,8 @@
 				return Model::$db->rawQuery($sql);
 				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -149,7 +150,8 @@
 				return Model::$db->rawQuery($sql);
 				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -157,39 +159,40 @@
 		
 		public static function fetchAutocomplete(string $st = ""): array
 		{
+			$searchTerm = addslashes($st);
 			
-			try {
-				$searchTerm = addslashes($st);
-				
-				$searchDisplayShort = "CONCAT(STATION.name, ' (', CITY.name, ', ', COUNTRY.iso3, ')')";
-				$searchDisplayMedium = "CONCAT(STATION.name, ' (', CITY.name, ', ', PROVINCE.iso2, ', ', COUNTRY.iso3, ')')";
-				$searchDisplayLong = "CONCAT(STATION.name, ' (', CITY.name, ', ', PROVINCE.name, ', ', COUNTRY.name, ')')";
-				
-				$and = "STATION.name";
-				
-				if (LOCATIONDISPLAY === "short") {
-					$order = "LENGTH($searchDisplayShort), CAST($searchDisplayShort AS UNSIGNED), $searchDisplayShort ASC";
-					$and = $searchDisplayShort;
-				} else if (LOCATIONDISPLAY === "medium") {
-					$order = "LENGTH($searchDisplayMedium), CAST($searchDisplayMedium AS UNSIGNED), $searchDisplayMedium ASC";
-					$and = $searchDisplayMedium;
-				} else if (LOCATIONDISPLAY === "long") {
-					$order = "LENGTH($searchDisplayLong), CAST($searchDisplayLong AS UNSIGNED), $searchDisplayLong ASC";
-					$and = $searchDisplayLong;
-				} else {
-					$order = "LENGTH(STATION.name), CAST(STATION.name AS UNSIGNED), STATION.name ASC";
-				}
-				
-				$sql = self::$selectQuery . "
+			$searchDisplayShort = "CONCAT(STATION.name, ' (', CITY.name, ', ', COUNTRY.iso3, ')')";
+			$searchDisplayMedium = "CONCAT(STATION.name, ' (', CITY.name, ', ', PROVINCE.iso2, ', ', COUNTRY.iso3, ')')";
+			$searchDisplayLong = "CONCAT(STATION.name, ' (', CITY.name, ', ', PROVINCE.name, ', ', COUNTRY.name, ')')";
+			
+			$and = "STATION.name";
+			
+			if (LOCATIONDISPLAY === "short") {
+				$order = "LENGTH($searchDisplayShort), CAST($searchDisplayShort AS UNSIGNED), $searchDisplayShort ASC";
+				$and = $searchDisplayShort;
+			} else if (LOCATIONDISPLAY === "medium") {
+				$order = "LENGTH($searchDisplayMedium), CAST($searchDisplayMedium AS UNSIGNED), $searchDisplayMedium ASC";
+				$and = $searchDisplayMedium;
+			} else if (LOCATIONDISPLAY === "long") {
+				$order = "LENGTH($searchDisplayLong), CAST($searchDisplayLong AS UNSIGNED), $searchDisplayLong ASC";
+				$and = $searchDisplayLong;
+			} else {
+				$order = "LENGTH(STATION.name), CAST(STATION.name AS UNSIGNED), STATION.name ASC";
+			}
+			
+			$sql = self::$selectQuery . "
                     AND			$and LIKE '%$searchTerm%'
                     
                     ORDER BY    $order
                     LIMIT 20;";
+			
+			try {
 				
 				return Model::$db->rawQuery($sql);
 				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}

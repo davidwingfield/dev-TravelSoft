@@ -1,5 +1,5 @@
 function ProductSearch (element, options) {
-    console.group("ProductSearch")
+    console.groupCollapsed("ProductSearch")
     // ----
     
     if (!(options && element)) {
@@ -299,14 +299,14 @@ function ProductSearch (element, options) {
 }
 
 ProductSearch.prototype.listCallback = function () {
-    console.group("listCallback")
+    console.groupCollapsed("listCallback")
     // ----
     
     // ----
     console.groupEnd()
 }
 ProductSearch.prototype.init = function (options) {
-    console.group("init")
+    console.groupCollapsed("init")
     // ----
     
     let categories = (this.categories) ? Array.from(this.categories.values()) : []
@@ -330,9 +330,8 @@ ProductSearch.prototype.init = function (options) {
     // ----
     console.groupEnd()
 }
-
 ProductSearch.prototype.assignEvents = function () {
-    console.group("assignEvents")
+    console.groupCollapsed("assignEvents")
     // ----
     
     let _this = this
@@ -377,7 +376,7 @@ ProductSearch.prototype.assignEvents = function () {
     
     this.popup_name_input
         .on("search", function () {
-            console.group("this.popup_name_input: search")
+            console.groupCollapsed("this.popup_name_input: search")
             // ----
             
             _this.resetNameSearch()
@@ -394,7 +393,7 @@ ProductSearch.prototype.assignEvents = function () {
             }
         })
         .on("keyup", function () {
-            console.group("this.popup_name_input: keyup")
+            console.groupCollapsed("this.popup_name_input: keyup")
             // ----
             
             _this.global_name_select = false
@@ -672,7 +671,7 @@ ProductSearch.prototype.assignEvents = function () {
                         }
                     }
                     
-                    toDate = moment(date, "YYYY-MM-DD").format("YYYY-MM-DD")
+                    toDate = moment(date, defaultDateFormat).format(defaultDateFormat)
                     
                     if (fromSelect) {
                         _this.from_picker.set("min", _this.from_picker.get("select"))
@@ -739,9 +738,9 @@ ProductSearch.prototype.assignEvents = function () {
                 if (fromSelect) {
                     let date = new Date(fromSelect.year, fromSelect.month, fromSelect.date)
                     
-                    fromDate = moment(date, "YYYY-MM-DD").format("YYYY-MM-DD")
-                    fromDatePlus1 = moment(date, "YYYY-MM-DD").add(1, "days").format("YYYY-MM-DD")
-                    fromDateSubtract1 = moment(date, "YYYY-MM-DD").subtract(1, "days").format("YYYY-MM-DD")
+                    fromDate = moment(date, defaultDateFormat).format(defaultDateFormat)
+                    fromDatePlus1 = moment(date, defaultDateFormat).add(1, "days").format(defaultDateFormat)
+                    fromDateSubtract1 = moment(date, defaultDateFormat).subtract(1, "days").format(defaultDateFormat)
                     
                     fromYear = fromSelect.year
                     fromMonth = fromSelect.month
@@ -781,9 +780,9 @@ ProductSearch.prototype.assignEvents = function () {
                         }
                     }
                     
-                    toDate = moment(toYear + "-" + toMonth + "-" + toDay, "YYYY-MM-DD").format("YYYY-MM-DD")
-                    toDatePlus1 = moment(toYear + "-" + toMonth + "-" + toDay, "YYYY-MM-DD").add(1, "days").format("YYYY-MM-DD")
-                    toDateSubtract1 = moment(toYear + "-" + toMonth + "-" + toDay, "YYYY-MM-DD").subtract(1, "days").format("YYYY-MM-DD")
+                    toDate = moment(toYear + "-" + toMonth + "-" + toDay, defaultDateFormat).format(defaultDateFormat)
+                    toDatePlus1 = moment(toYear + "-" + toMonth + "-" + toDay, defaultDateFormat).add(1, "days").format(defaultDateFormat)
+                    toDateSubtract1 = moment(toYear + "-" + toMonth + "-" + toDay, defaultDateFormat).subtract(1, "days").format(defaultDateFormat)
                     
                 } else {
                     let new_date = moment(fromSelect).add(1, "day")
@@ -836,7 +835,7 @@ ProductSearch.prototype.assignEvents = function () {
     listItem.appendChild(listItemRating)
     
     this.sort_by_name.addEventListener("click", function (e) {
-        console.group("sortByName:click(e)")
+        console.groupCollapsed("sortByName:click(e)")
         // ----
         
         let el = e.target
@@ -858,7 +857,7 @@ ProductSearch.prototype.assignEvents = function () {
     })
     
     this.sort_by_price.addEventListener("click", function (e) {
-        console.group("sortByPrice:click(e)")
+        console.groupCollapsed("sortByPrice:click(e)")
         // ----
         
         //*
@@ -947,17 +946,14 @@ ProductSearch.prototype.assignEvents = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.handleSortClick = function (e) {
-    console.group("handleSortClick")
+    console.groupCollapsed("handleSortClick")
     // ----
     
     // ----
     console.groupEnd()
 }
 ProductSearch.prototype.handleError = function (msg, title, level) {
-    console.group("handleError")
-    console.log("msg", msg)
-    console.log("title", title)
-    console.log("level", level)
+    console.groupCollapsed("handleError")
     // ----
     
     if (!msg) {
@@ -978,7 +974,7 @@ ProductSearch.prototype.handleError = function (msg, title, level) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleNumberChange = function (el) {
-    console.group("handleNumberChange")
+    console.groupCollapsed("handleNumberChange")
     console.log("el", el)
     // ----
     
@@ -1021,7 +1017,7 @@ ProductSearch.prototype.handleNumberChange = function (el) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleTabChange = function (categoryId) {
-    console.group("handleTabChange")
+    console.groupCollapsed("handleTabChange")
     // ----
     
     if (!categoryId || isNaN(parseInt(categoryId))) {
@@ -1068,7 +1064,7 @@ ProductSearch.prototype.handleTabChange = function (categoryId) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleDateClear = function (event) {
-    console.group("handleDateClear")
+    console.groupCollapsed("handleDateClear")
     // ----
     
     let dateType = (event && event.target && event.target.dataset && event.target.dataset.type) ? event.target.dataset.type : null
@@ -1084,7 +1080,7 @@ ProductSearch.prototype.handleDateClear = function (event) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleDateBlur = function (event) {
-    console.group("handleDateBlur")
+    console.groupCollapsed("handleDateBlur")
     // ----
     
     let dateType = (event && event.target && event.target.dataset && event.target.dataset.type) ? event.target.dataset.type : null
@@ -1100,7 +1096,7 @@ ProductSearch.prototype.handleDateBlur = function (event) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleDateChange = function (event) {
-    console.group("handleDateChange")
+    console.groupCollapsed("handleDateChange")
     // ----
     
     let dateType = (event && event.target && event.target.dataset && event.target.dataset.type) ? event.target.dataset.type : null
@@ -1117,7 +1113,7 @@ ProductSearch.prototype.handleDateChange = function (event) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleDateKeyUp = function (event) {
-    console.group("handleDateKeyUp")
+    console.groupCollapsed("handleDateKeyUp")
     // ----
     
     let dateType = (event && event.target && event.target.dataset && event.target.dataset.type) ? event.target.dataset.type : null
@@ -1151,7 +1147,7 @@ ProductSearch.prototype.handleDateKeyUp = function (event) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleDateSelect = function (event) {
-    console.group("handleDateSelect")
+    console.groupCollapsed("handleDateSelect")
     // ----
     
     const starts = event.target.selectionStart
@@ -1172,7 +1168,7 @@ ProductSearch.prototype.handleDateSelect = function (event) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleProductNameSelect = function (product) {
-    console.group("handleProductNameSelect")
+    console.groupCollapsed("handleProductNameSelect")
     // ----
     
     this.global_name_select = true
@@ -1185,7 +1181,7 @@ ProductSearch.prototype.handleProductNameSelect = function (product) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleDateKeyDown = function (event) {
-    console.group("handleDateKeyDown")
+    console.groupCollapsed("handleDateKeyDown")
     // ----
     
     let dateType = (event && event.target && event.target.dataset && event.target.dataset.type) ? event.target.dataset.type : null
@@ -1215,7 +1211,7 @@ ProductSearch.prototype.handleDateKeyDown = function (event) {
     
 }
 ProductSearch.prototype.numberIncrease = function (el) {
-    console.group("numberIncrease")
+    console.groupCollapsed("numberIncrease")
     console.log("el", el)
     // ----
     
@@ -1267,7 +1263,7 @@ ProductSearch.prototype.numberIncrease = function (el) {
     console.groupEnd()
 }
 ProductSearch.prototype.numberDecrease = function (el) {
-    console.group("numberDecrease")
+    console.groupCollapsed("numberDecrease")
     console.log("el", el)
     // ----
     
@@ -1318,9 +1314,8 @@ ProductSearch.prototype.numberDecrease = function (el) {
     // ----
     console.groupEnd()
 }
-
 ProductSearch.prototype.createElements = function (options) {
-    console.group("createElements")
+    console.groupCollapsed("createElements")
     // ----
     
     this.createHiddenFields(options)
@@ -1366,14 +1361,14 @@ ProductSearch.prototype.createElements = function (options) {
     console.groupEnd()
 }
 ProductSearch.prototype.createHiddenFields = function () {
-    console.group("createHiddenFields")
+    console.groupCollapsed("createHiddenFields")
     // ----
     
     let _this = this
     let hiddenElements = (this && this.settings && this.settings.hidden_elements) ? this.settings.hidden_elements : []
     let hidden_row_1 = buildRow({ classes: ["row"] })
     
-    console.group("hiddenElements")
+    console.groupCollapsed("hiddenElements")
     $.each(hiddenElements, function (k, el) {
         hidden_row_1.appendChild(_this.buildHiddenField(el))
     })
@@ -1387,11 +1382,11 @@ ProductSearch.prototype.createHiddenFields = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.createTabRow = function (options) {
-    console.group("createTabRow", options)
+    console.groupCollapsed("createTabRow", options)
     // ----
     
     const buildTab = function (category) {
-        console.group("buildTab")
+        console.groupCollapsed("buildTab")
         //console.log("category", category)
         // ----
         
@@ -1423,7 +1418,7 @@ ProductSearch.prototype.createTabRow = function (options) {
         return tabElement
     }
     const buildContainer = function (category) {
-        console.group("buildContainer")
+        console.groupCollapsed("buildContainer")
         //console.log("category", category)
         // ----
         
@@ -1465,7 +1460,7 @@ ProductSearch.prototype.createTabRow = function (options) {
     let tabWrapper = $("<div class='classic-tabs mx-0'/>")
     let tabContentWrapper = $("<div class='tab-content card p-1'/>")
     
-    console.group("categories")
+    console.groupCollapsed("categories")
     $.each(categories, function (k, category) {
         if (categoryCount === 0) {
             _this.category_id.value = category.id
@@ -1491,7 +1486,7 @@ ProductSearch.prototype.createTabRow = function (options) {
     console.groupEnd()
 }
 ProductSearch.prototype.createSearchElements = function (options) {
-    console.group("createSearchElements")
+    console.groupCollapsed("createSearchElements")
     // ----
     
     let fromDateTitle = "Check In"
@@ -1551,14 +1546,8 @@ ProductSearch.prototype.createSearchElements = function (options) {
     // ----
     console.groupEnd()
 }
-
-// ----
-
-// ----
-
-// ----
 ProductSearch.prototype.executeSearch = function () {
-    console.group("executeSearch")
+    console.groupCollapsed("executeSearch")
     // ----
     
     this.search_results.clear()
@@ -1568,7 +1557,7 @@ ProductSearch.prototype.executeSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.resetSearch = function () {
-    console.group("resetSearch")
+    console.groupCollapsed("resetSearch")
     // ----
     
     this.resetNameSearch()
@@ -1590,9 +1579,8 @@ ProductSearch.prototype.resetSearch = function () {
     // ----
     console.groupEnd()
 }
-// ----
 ProductSearch.prototype.populateSearchResultsBlock = function (results) {
-    console.group("populateSearchResultsBlock")
+    console.groupCollapsed("populateSearchResultsBlock")
     console.log("results", results)
     // ----
     
@@ -1600,7 +1588,7 @@ ProductSearch.prototype.populateSearchResultsBlock = function (results) {
     console.groupEnd()
 }
 ProductSearch.prototype.resetSearchResultsBlock = function () {
-    console.group("resetSearchResultsBlock")
+    console.groupCollapsed("resetSearchResultsBlock")
     // ----
     
     this.clearSearchResultsBlock()
@@ -1609,7 +1597,7 @@ ProductSearch.prototype.resetSearchResultsBlock = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.clearSearchResultsBlock = function () {
-    console.group("clearSearchResultsBlock")
+    console.groupCollapsed("clearSearchResultsBlock")
     // ----
     
     //this.product_search_results_element.empty()
@@ -1618,7 +1606,7 @@ ProductSearch.prototype.clearSearchResultsBlock = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.createSearchResultsBlock = function () {
-    console.group("createSearchResultsBlock")
+    console.groupCollapsed("createSearchResultsBlock")
     // ----
     
     let _this = this
@@ -1702,7 +1690,7 @@ ProductSearch.prototype.createSearchResultsBlock = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.renderSearchResultsBlock = function () {
-    console.group("renderSearchResultsBlock")
+    console.groupCollapsed("renderSearchResultsBlock")
     // ----
     
     this.container.append(this.search_results_wrapper)
@@ -1710,10 +1698,8 @@ ProductSearch.prototype.renderSearchResultsBlock = function () {
     // ----
     console.groupEnd()
 }
-// ----
-
 ProductSearch.prototype.buildHiddenField = function (options) {
-    console.group("buildHiddenField")
+    console.groupCollapsed("buildHiddenField")
     // ----
     
     if (!options) {
@@ -1747,7 +1733,7 @@ ProductSearch.prototype.buildHiddenField = function (options) {
     return COL
 }
 ProductSearch.prototype.buildPopoverForm = function (options) {
-    console.group("buildPopoverForm")
+    console.groupCollapsed("buildPopoverForm")
     console.log("options", options)
     // ----
     
@@ -1766,7 +1752,7 @@ ProductSearch.prototype.buildPopoverForm = function (options) {
     
     console.log("popoverForm", popoverForm)
     
-    console.group("classes")
+    console.groupCollapsed("classes")
     console.log("classes", classes)
     $.each(classes, function (i, className) {
         if (className !== null && className !== "") {
@@ -1796,9 +1782,8 @@ ProductSearch.prototype.buildPopoverForm = function (options) {
     // ----
     console.groupEnd()
 }
-
 ProductSearch.prototype.validateDateFormat = function (input, keyCode) {
-    console.group("validateDateFormat")
+    console.groupCollapsed("validateDateFormat")
     // ----
     
     let dateType = (input.dataset && input.dataset.type) ? input.dataset.type : null
@@ -1833,7 +1818,7 @@ ProductSearch.prototype.validateDateFormat = function (input, keyCode) {
                 let theDate = new Date(dateStringYear, dateStringMonth, dateStringDay, 0, 0, 0)
                 
                 picker.set("update", {
-                    date: moment(theDate, "YYYY-MM-DD").format("YYYY-MM-DD"),
+                    date: moment(theDate, defaultDateFormat).format(defaultDateFormat),
                 })
             }
             
@@ -1860,7 +1845,7 @@ ProductSearch.prototype.validateDateFormat = function (input, keyCode) {
     console.groupEnd()
 }
 ProductSearch.prototype.unSetDateError = function (input) {
-    console.group("unSetDateError")
+    console.groupCollapsed("unSetDateError")
     // ----
     
     let $errorElement = $(input).parents("div.form-element").find("div.error")
@@ -1871,7 +1856,7 @@ ProductSearch.prototype.unSetDateError = function (input) {
     console.groupEnd()
 }
 ProductSearch.prototype.loadError = function (input, msg) {
-    console.group("unSetDateError(input)", input)
+    console.groupCollapsed("unSetDateError(input)", input)
     // ----
     
     let $errorElement = $(input).parents("div.form-element").find("div.error")
@@ -1881,9 +1866,8 @@ ProductSearch.prototype.loadError = function (input, msg) {
     // ----
     console.groupEnd()
 }
-
 ProductSearch.prototype.setDateTitle = function () {
-    console.group("setDateTitle")
+    console.groupCollapsed("setDateTitle")
     // ----
     
     let categoryId = (this.category_id && !isNaN(parseInt(this.category_id.value))) ? parseInt(this.category_id.value) : null
@@ -1964,7 +1948,7 @@ ProductSearch.prototype.setDateTitle = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.clearBaseSearchFields = function () {
-    console.group("clearBaseSearchFields")
+    console.groupCollapsed("clearBaseSearchFields")
     // ----
     
     $("[data-hotel-search='true']").hide()
@@ -1981,7 +1965,7 @@ ProductSearch.prototype.clearBaseSearchFields = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.unSelectDateError = function (input) {
-    console.group("unSelectDateError")
+    console.groupCollapsed("unSelectDateError")
     // ----
     
     let $errorElement = $(input).parents("div.form-element").find("div.error")
@@ -1990,9 +1974,8 @@ ProductSearch.prototype.unSelectDateError = function (input) {
     // ----
     console.groupEnd()
 }
-
 ProductSearch.prototype.renderSearchElements = function () {
-    console.group("renderSearchElements")
+    console.groupCollapsed("renderSearchElements")
     // ----
     
     let baseSearchWrapper = buildRow({ classes: "searchbar" })
@@ -2013,10 +1996,8 @@ ProductSearch.prototype.renderSearchElements = function () {
     // ----
     console.groupEnd()
 }
-
-// Search & Reset Button
 ProductSearch.prototype.buildProductSearchButton = function () {
-    console.group("buildProductSearchButton")
+    console.groupCollapsed("buildProductSearchButton")
     // ----
     
     let icon = document.createElement("i")
@@ -2100,7 +2081,7 @@ ProductSearch.prototype.buildProductSearchButton = function () {
     return wrapper
 }
 ProductSearch.prototype.buildProductSearchResetButton = function () {
-    console.group("buildProductSearchResetButton")
+    console.groupCollapsed("buildProductSearchResetButton")
     // ----
     
     let icon = document.createElement("i")
@@ -2183,11 +2164,8 @@ ProductSearch.prototype.buildProductSearchResetButton = function () {
     console.groupEnd()
     return wrapper
 }
-// Search & Reset Button
-
-// ----
 ProductSearch.prototype.clearAllErrors = function () {
-    console.group("clearAllErrors")
+    console.groupCollapsed("clearAllErrors")
     // ----
     
     this.unLoadError("name")
@@ -2200,7 +2178,7 @@ ProductSearch.prototype.clearAllErrors = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.loadError = function (el, message) {
-    console.group("loadError")
+    console.groupCollapsed("loadError")
     // ----
     
     let msg = (message && message !== "") ? message : "Field Invalid"
@@ -2244,7 +2222,7 @@ ProductSearch.prototype.loadError = function (el, message) {
     console.groupEnd()
 }
 ProductSearch.prototype.unLoadError = function (el) {
-    console.group("unLoadError")
+    console.groupCollapsed("unLoadError")
     // ----
     
     if (el) {
@@ -2291,11 +2269,8 @@ ProductSearch.prototype.unLoadError = function (el) {
     // ----
     console.groupEnd()
 }
-// ----
-
-// ----
 ProductSearch.prototype.buildSearchCriteria = function () {
-    console.group("buildSearchCriteria")
+    console.groupCollapsed("buildSearchCriteria")
     // ----
     
     let errors = []
@@ -2414,7 +2389,7 @@ ProductSearch.prototype.buildSearchCriteria = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.sendSearchRequest = function (dataToSend, callback) {
-    console.group("sendSearchRequest")
+    console.groupCollapsed("sendSearchRequest")
     // ----
     
     let _this = this
@@ -2490,7 +2465,7 @@ ProductSearch.prototype.sendSearchRequest = function (dataToSend, callback) {
     console.groupEnd()
 }
 ProductSearch.prototype.renderSearchRequestResultFilters = function (product) {
-    console.group("renderSearchRequestResultFilters")
+    console.groupCollapsed("renderSearchRequestResultFilters")
     // ----
     
     let categoryId = (this.category_id && !isNaN(parseInt(this.category_id.value))) ? parseInt(this.category_id.value) : null
@@ -2537,7 +2512,7 @@ ProductSearch.prototype.renderSearchRequestResultFilters = function (product) {
     console.groupEnd()
 }
 ProductSearch.prototype.renderSearchRequestResults = function (product) {
-    console.group("renderSearchRequestResults")
+    console.groupCollapsed("renderSearchRequestResults")
     // ----
     
     let productAddress, productName, productSKU = ""
@@ -2546,7 +2521,7 @@ ProductSearch.prototype.renderSearchRequestResults = function (product) {
     let rollingPrice, rollingCost, avgPrice, count = 0
     
     const buildRating = function (rating) {
-        console.group("buildRating")
+        console.groupCollapsed("buildRating")
         console.log("rating", rating)
         // ----
         
@@ -2687,11 +2662,8 @@ ProductSearch.prototype.renderSearchRequestResults = function (product) {
     // ----
     console.groupEnd()
 }
-//
-
-// Location Search Fields
 ProductSearch.prototype.createSearchElementsLocation = function (options) {
-    console.group("createSearchElementsLocation")
+    console.groupCollapsed("createSearchElementsLocation")
     // ----
     
     let formId = this.baseId + "_location_form"
@@ -2805,7 +2777,7 @@ ProductSearch.prototype.createSearchElementsLocation = function (options) {
     console.groupEnd()
 }
 ProductSearch.prototype.buildLocationSearchButton = function () {
-    console.group("buildLocationSearchButton")
+    console.groupCollapsed("buildLocationSearchButton")
     // ----
     
     let icon = document.createElement("i")
@@ -2882,7 +2854,7 @@ ProductSearch.prototype.buildLocationSearchButton = function () {
     return wrapper
 }
 ProductSearch.prototype.clickOutsideLocationSearch = function (e) {
-    console.group("clickOutsideLocationSearch")
+    console.groupCollapsed("clickOutsideLocationSearch")
     // ----
     
     let class_name = "btn-location-picker"
@@ -2899,7 +2871,7 @@ ProductSearch.prototype.clickOutsideLocationSearch = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.closeLocationSearch = function () {
-    console.group("closeLocationSearch")
+    console.groupCollapsed("closeLocationSearch")
     // ----
     
     if (this.location_button) {
@@ -2910,7 +2882,7 @@ ProductSearch.prototype.closeLocationSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.resetLocationSearch = function () {
-    console.group("resetLocationSearch")
+    console.groupCollapsed("resetLocationSearch")
     // ----
     
     this.country_id.value = ""
@@ -2925,7 +2897,7 @@ ProductSearch.prototype.resetLocationSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.updateLocationSearch = function () {
-    console.group("updateLocationSearch")
+    console.groupCollapsed("updateLocationSearch")
     // ----
     
     this.closeLocationSearch()
@@ -2933,11 +2905,8 @@ ProductSearch.prototype.updateLocationSearch = function () {
     // ----
     console.groupEnd()
 }
-// Location Search Fields
-
-// From Date Search Fields
 ProductSearch.prototype.createSearchElementsFromDate = function (options) {
-    console.group("createSearchElementsFromDate", options)
+    console.groupCollapsed("createSearchElementsFromDate", options)
     // ----
     
     let formId = this.baseId + "_from_date_form"
@@ -3071,7 +3040,7 @@ ProductSearch.prototype.createSearchElementsFromDate = function (options) {
     console.groupEnd()
 }
 ProductSearch.prototype.buildFromDateSearchButton = function (options) {
-    console.group("buildFromDateSearchButton", options)
+    console.groupCollapsed("buildFromDateSearchButton", options)
     // ----
     
     let categoryId = (this.category_id && !isNaN(parseInt(this.category_id.value))) ? parseInt(this.category_id.value) : null
@@ -3172,7 +3141,7 @@ ProductSearch.prototype.buildFromDateSearchButton = function (options) {
     return wrapper
 }
 ProductSearch.prototype.handleFromPickerOpen = function (e) {
-    console.group("handleFromPickerOpen")
+    console.groupCollapsed("handleFromPickerOpen")
     // ----
     
     //console.log("From Picker", "Open")
@@ -3181,7 +3150,7 @@ ProductSearch.prototype.handleFromPickerOpen = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleFromPickerClose = function (e) {
-    console.group("handleFromPickerClose")
+    console.groupCollapsed("handleFromPickerClose")
     // ----
     
     let formDateVal = this.popup_from_date_button.val()
@@ -3204,14 +3173,14 @@ ProductSearch.prototype.handleFromPickerClose = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleFromPickerSet = function (e) {
-    console.group("handleFromPickerSet")
+    console.groupCollapsed("handleFromPickerSet")
     // ----
     
     // ----
     console.groupEnd()
 }
 ProductSearch.prototype.clickOutsideFromDateSearch = function (e) {
-    console.group("clickOutsideFromDateSearch")
+    console.groupCollapsed("clickOutsideFromDateSearch")
     // ----
     
     let class_name = "btn-from-date-picker"
@@ -3227,7 +3196,7 @@ ProductSearch.prototype.clickOutsideFromDateSearch = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.closeFromDateSearch = function () {
-    console.group("closeFromDateSearch")
+    console.groupCollapsed("closeFromDateSearch")
     // ----
     
     if (this.from_date_button) {
@@ -3238,7 +3207,7 @@ ProductSearch.prototype.closeFromDateSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.resetFromDateSearch = function () {
-    console.group("resetFromDateSearch")
+    console.groupCollapsed("resetFromDateSearch")
     // ----
     
     this.popup_from_date_input.val("")
@@ -3253,7 +3222,7 @@ ProductSearch.prototype.resetFromDateSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.updateFromDateSearch = function (fromDate) {
-    console.group("updateFromDateSearch")
+    console.groupCollapsed("updateFromDateSearch")
     // ----
     
     if (!fromDate) {
@@ -3270,11 +3239,8 @@ ProductSearch.prototype.updateFromDateSearch = function (fromDate) {
     // ----
     console.groupEnd()
 }
-// From Date Search Fields
-
-// To Date Search Fields
 ProductSearch.prototype.createSearchElementsToDate = function (options) {
-    console.group("createSearchElementsToDate")
+    console.groupCollapsed("createSearchElementsToDate")
     // ----
     
     let formId = this.baseId + "_to_date_form"
@@ -3410,7 +3376,7 @@ ProductSearch.prototype.createSearchElementsToDate = function (options) {
     console.groupEnd()
 }
 ProductSearch.prototype.buildToDateSearchButton = function (options) {
-    console.group("buildToDateSearchButton", options)
+    console.groupCollapsed("buildToDateSearchButton", options)
     // ----
     
     let categoryId = (this.category_id && !isNaN(parseInt(this.category_id.value))) ? parseInt(this.category_id.value) : null
@@ -3511,7 +3477,7 @@ ProductSearch.prototype.buildToDateSearchButton = function (options) {
     return wrapper
 }
 ProductSearch.prototype.handleToPickerOpen = function (e) {
-    console.group("handleToPickerOpen")
+    console.groupCollapsed("handleToPickerOpen")
     // ----
     
     //console.log("To Picker", "Open")
@@ -3520,7 +3486,7 @@ ProductSearch.prototype.handleToPickerOpen = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleToPickerClose = function (e) {
-    console.group("handleToPickerClose")
+    console.groupCollapsed("handleToPickerClose")
     // ----
     
     let formDateVal = this.popup_to_date_button.val()
@@ -3543,14 +3509,14 @@ ProductSearch.prototype.handleToPickerClose = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleToPickerSet = function (e) {
-    console.group("handleToPickerSet")
+    console.groupCollapsed("handleToPickerSet")
     // ----
     
     // ----
     console.groupEnd()
 }
 ProductSearch.prototype.clickOutsideToDateSearch = function (e) {
-    console.group("clickOutsideToDateSearch")
+    console.groupCollapsed("clickOutsideToDateSearch")
     // ----
     
     let class_name = "btn-to-date-picker"
@@ -3566,7 +3532,7 @@ ProductSearch.prototype.clickOutsideToDateSearch = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.closeToDateSearch = function () {
-    console.group("closeToDateSearch")
+    console.groupCollapsed("closeToDateSearch")
     // ----
     
     if (this.to_date_button) {
@@ -3577,7 +3543,7 @@ ProductSearch.prototype.closeToDateSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.resetToDateSearch = function () {
-    console.group("resetToDateSearch")
+    console.groupCollapsed("resetToDateSearch")
     // ----
     
     this.popup_to_date_input.val("")
@@ -3594,7 +3560,7 @@ ProductSearch.prototype.resetToDateSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.updateToDateSearch = function (toDate) {
-    console.group("updateToDateSearch")
+    console.groupCollapsed("updateToDateSearch")
     // ----
     
     if (!toDate) {
@@ -3609,11 +3575,8 @@ ProductSearch.prototype.updateToDateSearch = function (toDate) {
     // ----
     console.groupEnd()
 }
-// To Date Search Fields
-
-// Name Search Fields
 ProductSearch.prototype.createSearchElementsName = function (options) {
-    console.group("createSearchElementsName")
+    console.groupCollapsed("createSearchElementsName")
     // ----
     
     let formId = this.baseId + "_name_form"
@@ -3716,7 +3679,7 @@ ProductSearch.prototype.createSearchElementsName = function (options) {
     console.groupEnd()
 }
 ProductSearch.prototype.buildNameSearchButton = function () {
-    console.group("buildNameSearchButton")
+    console.groupCollapsed("buildNameSearchButton")
     // ----
     
     let icon = document.createElement("i")
@@ -3792,7 +3755,7 @@ ProductSearch.prototype.buildNameSearchButton = function () {
     return wrapper
 }
 ProductSearch.prototype.clickOutsideNameSearch = function (e) {
-    console.group("clickOutsideNameSearch")
+    console.groupCollapsed("clickOutsideNameSearch")
     // ----
     
     let class_name = "btn-name-picker"
@@ -3807,7 +3770,7 @@ ProductSearch.prototype.clickOutsideNameSearch = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.closeNameSearch = function () {
-    console.group("closeNameSearch")
+    console.groupCollapsed("closeNameSearch")
     // ----
     
     if (this.name_button) {
@@ -3820,7 +3783,7 @@ ProductSearch.prototype.closeNameSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.resetNameSearch = function () {
-    console.group("resetNameSearch")
+    console.groupCollapsed("resetNameSearch")
     // ----
     
     if (this.product_name) {
@@ -3838,7 +3801,7 @@ ProductSearch.prototype.resetNameSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.updateNameSearch = function () {
-    console.group("updateNameSearch")
+    console.groupCollapsed("updateNameSearch")
     // ----
     
     this.generateNameSearchContent()
@@ -3848,7 +3811,7 @@ ProductSearch.prototype.updateNameSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.generateNameSearchContent = function () {
-    console.group("generateNameSearchContent")
+    console.groupCollapsed("generateNameSearchContent")
     // ----
     
     let productName = (this.product_name && this.product_name.value) ? this.product_name.value : ""
@@ -3872,11 +3835,8 @@ ProductSearch.prototype.generateNameSearchContent = function () {
     // ----
     console.groupEnd()
 }
-// Name Search Fields
-
-// Travelers Search Fields
 ProductSearch.prototype.createSearchElementsTravelers = function (options) {
-    console.group("createSearchElementsTravelers")
+    console.groupCollapsed("createSearchElementsTravelers")
     // ----
     
     const renderElements = function () {
@@ -4184,7 +4144,7 @@ ProductSearch.prototype.createSearchElementsTravelers = function (options) {
     console.groupEnd()
 }
 ProductSearch.prototype.buildTravelersSearchButton = function () {
-    console.group("buildTravelersSearchButton")
+    console.groupCollapsed("buildTravelersSearchButton")
     // ----
     
     let icon = document.createElement("i")
@@ -4261,7 +4221,7 @@ ProductSearch.prototype.buildTravelersSearchButton = function () {
     return wrapper
 }
 ProductSearch.prototype.clickOutsideTravelersSearch = function (e) {
-    console.group("clickOutsideTravelersSearch")
+    console.groupCollapsed("clickOutsideTravelersSearch")
     // ----
     
     let class_name = "btn-travelers-picker"
@@ -4276,7 +4236,7 @@ ProductSearch.prototype.clickOutsideTravelersSearch = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.closeTravelersSearch = function () {
-    console.group("closeTravelersSearch")
+    console.groupCollapsed("closeTravelersSearch")
     // ----
     
     if (this.travelers_button) {
@@ -4287,7 +4247,7 @@ ProductSearch.prototype.closeTravelersSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.generateTravelersSearchContent = function () {
-    console.group("generateTravelersSearchContent")
+    console.groupCollapsed("generateTravelersSearchContent")
     // ----
     
     let adultCount = (this.adult_count && this.adult_count.value) ? parseInt(this.adult_count.value) : 1
@@ -4309,7 +4269,7 @@ ProductSearch.prototype.generateTravelersSearchContent = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.resetTravelersSearch = function () {
-    console.group("resetTravelersSearch")
+    console.groupCollapsed("resetTravelersSearch")
     // ----
     
     this.popup_travelers_adult_input.value = 1
@@ -4327,7 +4287,7 @@ ProductSearch.prototype.resetTravelersSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.updateTravelersSearch = function () {
-    console.group("updateTravelersSearch")
+    console.groupCollapsed("updateTravelersSearch")
     // ----
     
     this.generateTravelersSearchContent()
@@ -4336,7 +4296,6 @@ ProductSearch.prototype.updateTravelersSearch = function () {
     // ----
     console.groupEnd()
 }
-// Travelers Search Fields
 
 $.fn.productSearch = function (options) {
     return new ProductSearch(document.getElementById($(this).attr("id")), options)

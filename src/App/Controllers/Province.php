@@ -70,6 +70,19 @@
 			return $provinces;
 		}
 		
+		public static function fetch(array $params = null): array
+		{
+			$provinces = [];
+			$province_id = (!is_null($params) && isset($params["province_id"]) && (int)$params["province_id"] > 0) ? (int)$params["province_id"] : null;
+			$results = ProvinceModel::fetchProvinces($province_id);
+			
+			foreach ($results AS $k => $province) {
+				$provinces[] = self::format($province);
+			}
+			
+			return $provinces;
+		}
+		
 		public static function serveUpdate(array $args = []): void
 		{
 			if (!isset($args["country_id"], $args["name"], $args["iso2"], $args["iso3"])) {
@@ -94,8 +107,8 @@
 				"country_id" => $province["province_country_id"],
 				"sort_order" => $province["province_sort_order"],
 				"name" => $province["province_name"],
-				"ios2" => $province["province_iso2"],
-				"ios3" => $province["province_iso3"],
+				"iso2" => $province["province_iso2"],
+				"iso3" => $province["province_iso3"],
 				"enabled" => $province["province_enabled"],
 				"date_created" => $province["province_date_created"],
 				"created_by" => $province["province_created_by"],

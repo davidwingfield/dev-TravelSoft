@@ -1,0 +1,155 @@
+<?php
+	
+	$categories = (isset($page_data) && isset($page_data["types"]) && isset($page_data["types"]["category"])) ? $page_data["types"]["category"] : [];
+	$countries = (isset($page_data) && isset($page_data["types"]) && isset($page_data["types"]["countries"])) ? $page_data["types"]["countries"] : [];
+	$provinces = (isset($page_data) && isset($page_data["types"]) && isset($page_data["types"]["provinces"])) ? $page_data["types"]["provinces"] : [];
+	$cities = (isset($page_data) && isset($page_data["types"]) && isset($page_data["types"]["cities"])) ? $page_data["types"]["cities"] : [];
+	
+	//echo "<pre>" . var_export($page_data["types"]["countries"], 1) . "</pre>";
+	//echo "<pre>" . var_export($page_data["types"]["provinces"], 1) . "</pre>";
+	//echo "<pre>" . var_export($page_data["types"]["cities"], 1) . "</pre>";
+
+?>
+
+<section class="card card-body mb-2 p-0">
+	
+	<div class="p-2">
+		
+		<h5 class="card-title">Packages</h5>
+	
+	</div>
+	
+	<div class=" p-1 w-100">
+		
+		<div class="m-2 border border-light rounded-lg grey lighten-4">
+			<div class="row mx-1">
+				
+				<!-- Available Start Filter -->
+				<div class="col-6 col-md-6 col-xl-5 p-1">
+					<div id="package_index_table_available_start_filter-wrap" class="form-element input-group">
+						<label for="package_index_table_available_start_filter" class="d-none">Start:</label>
+						<input type="search" id="package_index_table_available_start_filter" name="package_index_table_available_start_filter" class="date-format form-control" placeholder="Available Start"/>
+						<div class="input-group-append">
+							<button type="button" id="package_index_table_available_start_button" name="package_index_table_available_start_button" class="input_from btn btn-md m-0 px-3 py-2 z-depth-0 waves-effect waves-light" tab-index="-1">
+								<i class="fas fa-calendar-day"></i>
+							</button>
+						</div>
+						<div id="package_index_table_available_start_filter-error" class="error w-100 text-center">&nbsp;</div>
+					</div>
+				</div>
+				<!-- Available Start Filter -->
+				
+				<!-- Available End Filter -->
+				<div class="col-6 col-md-6 col-xl-5 p-1">
+					<div id="package_index_table_available_end_filter-wrap" class="date-format form-element input-group">
+						<label for="package_index_table_available_end_filter" class="d-none">Start:</label>
+						<input type="search" id="package_index_table_available_end_filter" name="package_index_table_available_end_filter" class="date-format form-control" placeholder="Available End"/>
+						<div class="input-group-append">
+							<button type="button" id="package_index_table_available_start_button" name="package_index_table_available_start_button" class="input_from btn btn-md m-0 px-3 py-2 z-depth-0 waves-effect waves-light" tab-index="-1">
+								<i class="fas fa-calendar-day"></i>
+							</button>
+						</div>
+						<div id="package_index_table_available_end_filter-error" class="error w-100 text-center">&nbsp;</div>
+					</div>
+				</div>
+				<!-- /Available End Filter -->
+				
+				<!-- Day Span Filter -->
+				<div class="col-4 col-md-4 col-lg-2 col-xl-2 p-1">
+					<div id="package_index_table_day_span_filter-wrap" class="form-element">
+						<label id="package_index_table_day_span_filter-label" for="package_index_table_day_span_filter" class="d-none">Day Span:</label>
+						<input type="number" id="package_index_table_day_span_filter" name="package_index_table_day_span_filter" min="1" class="form-control" placeholder="Day Span"/>
+						<div id="package_index_table_day_span_filter-error" class="error w-100 text-center">&nbsp;</div>
+					</div>
+				</div>
+				<!-- /Day Span Filter -->
+				
+				<!-- Name Filter -->
+				<div class="col-8 col-md-8 col-xl-6 p-1">
+					<div id="package_index_table_name_filter-wrap" class="form-element">
+						<label id="package_index_table_name_filter-label" for="package_index_table_name_filter" class="d-none">Name:</label>
+						<input type="search" id="package_index_table_name_filter" name="package_index_table_name_filter" class="form-control" placeholder="Name"/>
+						<div id="package_index_table_name_filter-error" class="error w-100 text-center">&nbsp;</div>
+					</div>
+				</div>
+				<!-- /Name Filter -->
+				
+				<!-- Country Filter -->
+				<div class="col-4 col-xl-2 p-1">
+					<div id="package_index_table_country_filter-wrap" class="form-element">
+						<label id="package_index_table_country_filter-label" for="package_index_table_country_filter" class="d-none">Country:</label>
+						<select id="package_index_table_country_filter" name="package_index_table_country_filter" class="form-control">
+							<option value='' selected>-- Country --</option>
+							<?php
+								foreach ($countries AS $k => $country) {
+									$id = (int)$country["id"];
+									$name = $country["name"];
+									echo "<option value='$id'>$name</option>";
+								}
+							?>
+						</select>
+						<div id="package_index_table_country_filter-error" class="error w-100 text-center">&nbsp;</div>
+					</div>
+				</div>
+				<!-- /Country Filter -->
+				
+				<!-- Province Filter -->
+				<div class="col-4 col-xl-2 p-1">
+					<div id="package_index_table_province_filter-wrap" class="form-element">
+						<label id="package_index_table_province_filter-label" for="package_index_table_province_filter" class="d-none">Province:</label>
+						<select id="package_index_table_province_filter" name="package_index_table_province_filter" class="form-control">
+							<option value="" readonly="readonly" disabled selected>-- Province --</option>
+						</select>
+						<div id="package_index_table_province_filter-error" class="error w-100 text-center">&nbsp;</div>
+					</div>
+				</div>
+				<!-- /Province Filter -->
+				
+				<!-- City Filter -->
+				<div class="col-4 col-xl-2 p-1">
+					<div id="package_index_table_city_filter-wrap" class="form-element">
+						<label id="package_index_table_city_filter-label" for="package_index_table_city_filter" class="d-none">City:</label>
+						<select id="package_index_table_city_filter" name="package_index_table_city_filter" class="form-control">
+							<option value="" readonly="readonly" disabled selected>-- City --</option>
+						</select>
+						<div id="package_index_table_city_filter-error" class="error w-100 text-center">&nbsp;</div>
+					</div>
+				</div>
+				<!-- /City Filter -->
+			
+			</div>
+		
+		</div>
+		
+		<table id="package_index_table" class="table table-hover w-100 mb-0"></table>
+	
+	</div>
+
+</section>
+
+<script type="text/javascript">
+	
+	window.addEventListener("load", function () {
+		console.groupCollapsed("load")
+		// ----
+		
+		const inputs = document.getElementsByTagName("input")
+		
+		for (let i = 0; i < inputs.length; i++) {
+			
+			if (inputs[i].classList.contains("date-format")) {
+				let _input = inputs[i]
+				
+				if (_input) {
+					_input.setAttribute("maxlength", "10")
+				}
+				
+			}
+			
+		}
+		
+		// ---
+		console.groupEnd()
+	}, false)
+
+</script>

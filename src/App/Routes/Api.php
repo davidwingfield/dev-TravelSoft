@@ -1,7 +1,7 @@
 <?php
 	/**
-	 * Short Api Routes Description
-	 * Long Api Routes Description
+	 * Short Routes Description
+	 * Long Routes Description
 	 *
 	 * @package            Framework\App
 	 * @subpackage         Routes
@@ -14,19 +14,78 @@
 	$routeLead = APIPATH . "/v" . VERSION;
 	
 	/**
+	 * /autocomplete/packages
+	 *
+	 * @see Autocomplete::packages()
+	 */
+	Router::get($routeLead . "/autocomplete/packages", "Autocomplete@packages");
+	
+	/**
+	 * /search/products
+	 *
 	 * @see Search::product()
 	 */
 	Router::get($routeLead . '/search/products', "Search@product");
 	
 	/**
+	 * /products/search
+	 *
+	 * @see Product::search()
+	 */
+	Router::get($routeLead . '/products/search', "Product@search");
+	
+	/**
+	 * /search/hotels
+	 *
 	 * @see Search::hotels()
 	 */
 	Router::get($routeLead . '/search/hotels', "Search@hotels");
 	
 	/**
+	 * /pricings/${matrix_id}
+	 *
 	 * @see Pricing::serveGetByMatrixId()
 	 */
 	Router::get($routeLead . '/pricings/${matrix_id}', "Pricing@serveGetByMatrixId");
+	
+	// ----
+	
+	/**
+	 * /packages
+	 *
+	 * @see Package::serveGet()
+	 */
+	Router::get($routeLead . "/packages", "Package@serveGet");
+	
+	/**
+	 * /packages/${package_id}
+	 *
+	 * @see Package:serveGet()
+	 */
+	Router::get($routeLead . '/packages/${package_id}', "Package@serveGet");
+	
+	/**
+	 * /packages/product
+	 *
+	 * @see Package::serveGetPackageProduct()
+	 */
+	Router::get($routeLead . '/packages/product', "Package@serveGetPackageProduct");
+	
+	/**
+	 * /packages/product/update
+	 *
+	 * @see Package:serveUpdatePackageProduct()
+	 */
+	Router::post($routeLead . "/packages/product/update", "Package@serveUpdatePackageProduct");
+	
+	/**
+	 * /packages/update
+	 *
+	 * @see Package:serveUpdate()
+	 */
+	Router::post($routeLead . "/packages/update", "Package@serveUpdate");
+	
+	// ----
 	
 	/**
 	 * @see Pricing::serveGetByProductId()
@@ -94,11 +153,6 @@
 	Router::get($routeLead . "/countries", "Country@serveGet");
 	
 	/**
-	 * @see Package::serveGet()
-	 */
-	Router::get($routeLead . "/packages", "Package@serveGet");
-	
-	/**
 	 * @see Product::serveGet()
 	 */
 	Router::get($routeLead . "/products", "Product@serveGet");
@@ -107,6 +161,11 @@
 	 * @see Province::serveGet()
 	 */
 	Router::get($routeLead . "/provinces", "Province@serveGet");
+	
+	/**
+	 * @see Province::fetch()
+	 */
+	Router::get($routeLead . '/province/fetch', "Province@fetch");
 	
 	/**
 	 * @see City::serveGet()
@@ -284,11 +343,6 @@
 	Router::get($routeLead . "/autocomplete/locations", "Autocomplete@locations");
 	
 	/**
-	 * @see Autocomplete::packages()
-	 */
-	Router::get($routeLead . "/autocomplete/packages", "Autocomplete@packages");
-	
-	/**
 	 * @see Autocomplete::locationSearch()
 	 */
 	Router::get($routeLead . "/autocomplete/location_search", "Autocomplete@locationSearch");
@@ -451,16 +505,6 @@
 	 * @see Location:serveUpdate()
 	 */
 	Router::post($routeLead . "/locations/update", "Location@serveUpdate");
-	
-	/**
-	 * @see Package:serveUpdate()
-	 */
-	Router::post($routeLead . "/packages/update", "Package@serveUpdate");
-	
-	/**
-	 * @see Package:serveGet()
-	 */
-	Router::get($routeLead . '/packages/${package_id}', "Package@serveGet");
 	
 	/**
 	 * @see Province:serveUpdate()

@@ -1,27 +1,22 @@
 const Pricing = (function () {
     "use strict"
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    
     const _pricing_strategy_unit_id = document.getElementById("pricing_strategy_unit_id")
     const _pricing_strategy_season_id = document.getElementById("pricing_strategy_season_id")
-    const _pricing_strategy_profile_id = document.getElementById("pricing_strategy_profile_id")
     const _pricing_strategy_types_id = document.getElementById("pricing_strategy_types_id")
     const _calendar_filter_profile_id = document.getElementById("calendar_filter_profile_id")
     
-    /**
-     * pricing strategy types id
-     */
+    let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    
     $(_pricing_strategy_types_id)
         .on("change", function () {
             PricingWorksheet.pricingWorksheet()
-            //console.log("Pricing.pricing_strategy_types_id:change()", _pricing_strategy_types_id.value)
         })
     
-    /**
-     * initialize pricing object
-     *
-     * @param settings
-     */
     const init = function (settings) {
+        console.groupCollapsed("Pricing.init")
+        // ----
+        
         resetForm()
         let pricings = []
         let pricing_detail
@@ -37,60 +32,36 @@ const Pricing = (function () {
             PricingWorksheet.pricingStrategyId = parseInt(pricing_detail.pricing_strategy_types_id)
         }
         loadAll(pricings)
+        _pricing_strategy_types_id.disabled = true
+        $(_pricing_strategy_types_id).addClass("disabled")
+        
+        // ----
+        console.groupEnd()
     }
     
-    /**
-     * load all pricing templates
-     *
-     * @param pricing_details
-     */
     const loadAll = function (pricing_details) {
-        //console.log("Pricing.loadAll()", pricing_details)
+        console.groupCollapsed("Pricing.loadAll")
+        // ----
+        
         Pricing.all = new Map()
         if (!pricing_details) {
             pricing_details = []
         }
         
         $.each(pricing_details, function (k, matrix) {
-            //console.log("matrix", matrix)
-            // ----
-            let pricings = matrix.pricings
             let pricingCode = matrix.pricing_code
-            let matrixCode = matrix.matrix_code
-            let matrixDetails = Matrix.all.get(matrixCode)
             let detail = set(matrix)
             Pricing.all.set(pricingCode, detail)
-            /*
-            $.each(pricings, function (k, pricing) {
-                //console.log("pricing", pricing)
-                // ----
-                
-                let pricing_code = (pricing.code) ? pricing.code : null
-                
-                if (pricing_code) {
-                    Pricing.all.set(pricing_code, pricing)
-                    let details = set(pricing)
-                    //console.log("details", details)
-                    if (matrixDetails) {
-                        if (!matrixDetails["pricings"]) {
-                            matrixDetails["pricings"] = new Map()
-                        }
-                        
-                        matrixDetails["pricings"].set(pricing_code, pricing)
-                    }
-                }
-                
-            })
-            //*/
         })
         
-        //console.log("Pricings.all", Pricing.all)
+        // ----
+        console.groupEnd()
     }
     
-    /**
-     * load Season Dropdown
-     */
     const loadSeasonDropdown = function () {
+        console.groupCollapsed("Pricing.loadSeasonDropdown")
+        // ----
+        
         let seasons = (Season && Season.all) ? Array.from(Season.all.values()) : []
         let options = ""
         
@@ -102,12 +73,15 @@ const Pricing = (function () {
         
         $(_pricing_strategy_season_id).empty()
         $(_pricing_strategy_season_id).html(options)
+        
+        // ----
+        console.groupEnd()
     }
     
-    /**
-     * load Profile Dropdown
-     */
     const loadProfileDropdown = function () {
+        console.groupCollapsed("Pricing.loadProfileDropdown")
+        // ----
+        
         let profiles = (InventoryProfile && InventoryProfile.all) ? Array.from(InventoryProfile.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Profiles --</option>"
         
@@ -119,15 +93,20 @@ const Pricing = (function () {
         
         $(_calendar_filter_profile_id).empty()
         $(_calendar_filter_profile_id).html(options)
+        
+        // ----
+        console.groupEnd()
     }
     
-    /**
-     * load unit dropdown
-     */
     const loadUnitDropdown = function () {
+        console.groupCollapsed("Pricing.loadUnitDropdown")
+        // ----
+        
         let units = (Unit && Unit.all) ? Array.from(Unit.all.values()) : []
         let options = ""
         
+        //*
+        console.log("units", units)
         $.each(units, function (k, unit) {
             let name = unit.name
             let id = unit.id
@@ -136,20 +115,28 @@ const Pricing = (function () {
         
         $(_pricing_strategy_unit_id).empty()
         $(_pricing_strategy_unit_id).html(options)
+        
+        // ----
+        console.groupEnd()
     }
     
     const resetForm = function () {
-        //*
+        console.groupCollapsed("Pricing.loadUnitDropdown")
+        // ----
+        
         loadSeasonDropdown()
         loadUnitDropdown()
         loadProfileDropdown()
-        //*/
+        
+        // ----
+        console.groupEnd()
     }
     
     const defaultDetail = function () {
-        //console.log("Pricing.defaultDetail()", Pricing)
+        console.groupCollapsed("Pricing.loadUnitDropdown")
+        // ----
         
-        return {
+        let details = {
             pricing_code: null,
             matrix_code: null,
             code: null,
@@ -177,17 +164,24 @@ const Pricing = (function () {
             count: 1,
             enabled: 1,
             date_created: formatDateMySQL(),
-            created_by: user_id,
+            created_by: userId,
             date_modified: formatDateMySQL(),
-            modified_by: user_id,
+            modified_by: userId,
             note: null,
         }
+        
+        // ----
+        console.groupEnd()
+        return details
     }
     
     const set = function (pricing) {
+        console.groupCollapsed("Pricing.set")
+        // ----
+        
         let detail = defaultDetail()
         if (pricing) {
-            //console.log(pricing)
+            console.log("pricing", pricing)
             detail.pricing_code = (pricing.pricing_code) ? pricing.pricing_code : null
             detail.matrix_code = (pricing.matrix_code) ? pricing.matrix_code : null
             detail.code = (pricing.code) ? pricing.code : null
@@ -215,12 +209,14 @@ const Pricing = (function () {
             detail.count = (pricing.count) ? pricing.count : null
             detail.enabled = (pricing.enabled) ? pricing.enabled : 1
             detail.date_created = (pricing.date_created) ? pricing.date_created : formatDateMySQL()
-            detail.created_by = (pricing.created_by) ? pricing.created_by : user_id
+            detail.created_by = (pricing.created_by) ? pricing.created_by : userId
             detail.date_modified = (pricing.date_modified) ? pricing.date_modified : formatDateMySQL()
-            detail.modified_by = (pricing.modified_by) ? pricing.modified_by : user_id
+            detail.modified_by = (pricing.modified_by) ? pricing.modified_by : userId
             detail.note = (pricing.note) ? pricing.note : null
         }
-        //console.log("   detail", detail)
+        
+        // ----
+        console.groupEnd()
         Pricing.detail = detail
         return detail
     }
@@ -240,5 +236,4 @@ const Pricing = (function () {
             loadProfileDropdown()
         },
     }
-    
 })()

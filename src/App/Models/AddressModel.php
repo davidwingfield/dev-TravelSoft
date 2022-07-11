@@ -128,7 +128,8 @@
 			try {
 				Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return false;
 			}
@@ -172,7 +173,8 @@
                     ";
 					Model::$db->rawQuery($sql);
 				} catch (Exception $e) {
-					Log::$debug_log->error($e);
+					Log::$debug_log->error($e->getMessage());
+					Log::$debug_log->info($sql);
 					
 					return [];
 				}
@@ -197,7 +199,8 @@
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -219,7 +222,8 @@
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -287,7 +291,7 @@
 				
 				return self::getByAddressId((int)$address_id);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}

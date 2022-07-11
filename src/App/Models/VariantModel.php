@@ -102,7 +102,8 @@
 				return Model::$db->rawQuery($sql);
 				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -132,7 +133,8 @@
 				return Model::$db->rawQuery($sql);
 				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -172,10 +174,10 @@
                 WHERE   PRODUCT_VARIANT.product_id = $product_id
             ";
 			try {
-				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -186,19 +188,18 @@
 			if (is_null($category_id)) {
 				return [];
 			}
-			
-			try {
-				$searchTerm = addslashes($st);
-				
-				$sql = self::$selectQuery . "
+			$sql = self::$selectQuery . "
                     AND			VARIANT.name LIKE '%$searchTerm%'
                     AND         VARIANT.category_id = $category_id
                     ORDER BY    LENGTH(VARIANT.name), CAST(VARIANT.name AS UNSIGNED), VARIANT.name ASC
                     LIMIT 20;";
+			try {
+				$searchTerm = addslashes($st);
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -239,11 +240,11 @@
                 WHERE   PRODUCT_VARIANT.product_id = $product_id
                     AND PRODUCT_VARIANT.variant_id = $variant_id";
 			try {
-				//Log::$debug_log->trace($sql);
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -295,32 +296,10 @@
 				$variant_id = Model::$db->getInsertId();
 				
 				return self::fetchByVariantId($variant_id, $category_id);
-				if ($variant_id) {
-					$variant_id = (int)$variant_id;
-					$variantCode = addslashes(buildCode($variant_id, $name, "variant"));
-					
-					$update = "
-                        UPDATE      variant
-                        SET         code = '$variantCode'
-                        WHERE       id = $variant_id;";
-					try {
-						Model::$db->rawQuery($update);
-						
-						return self::fetchByVariantId($variant_id, $category_id);
-						
-					} catch (Exception $ex) {
-						Log::$debug_log->error($ex);
-						
-						return [];
-					}
-					
-				} else {
-					Log::$debug_log->error("Variant Id Not Generated");
-					
-					return [];
-				}
+				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -413,7 +392,7 @@
 						}
 						
 					} catch (Exception $ex) {
-						Log::$debug_log->error($ex);
+						Log::$debug_log->error($ex->getMessage());
 						
 						return [];
 					}
@@ -424,7 +403,7 @@
 					return [];
 				}
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}
@@ -454,7 +433,7 @@
 						"variant_id" => $variant_id,
 					);
 				} catch (Exception $e) {
-					Log::$debug_log->error($e);
+					Log::$debug_log->error($e->getMessage());
 					
 					return [];
 				}

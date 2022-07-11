@@ -269,6 +269,54 @@ const pickadateSettings = {
 }
 const regex = /(((19|20)\d\d)\-(0[1-9]|1[0-2])\-((0|1)[0-9]|2[0-9]|3[0-1]))$/
 
+const categoryColors = {
+    hotels: {
+        color: "#065565",
+        border: "#0bb2d4",
+        background: "#c2f5ff",
+    },
+    flights: {
+        color: "#5a4907",
+        border: "#997b71",
+        background: "#f5e2da",
+    },
+    cars: {
+        color: "#574400",
+        border: "#ffcd17",
+        background: "#fff6b5",
+    },
+    rails: {
+        color: "#eb6709",
+        border: "#ffa853",
+        background: "#ffe1c4",
+    },
+    transports: {
+        color: "#7f0638",
+        border: "#ab7474",
+        background: "#eed3d3",
+    },
+    tours: {
+        color: "#06562f",
+        border: "#11c26d",
+        background: "#c2fadc",
+    },
+    cruises: {
+        color: "#490ac7",
+        border: "#9463f7",
+        background: "#eae1fc",
+    },
+    packages: {
+        color: "#063f89",
+        border: "#3e8ef7",
+        background: "#d9e9ff",
+    },
+    other: {
+        color: "#304809",
+        border: "#6da611",
+        background: "#DCF7B0",
+    },
+}
+
 let mdbPreloader = document.getElementById("mdb-preloader")
 let isShift = false
 
@@ -346,861 +394,1088 @@ $.fn.setError = function (msg) {
 }
 //*/
 $.fn.BuildDropDown = function (settings) {
-    if (!settings || !settings.text_field || !settings.id_field) {
-        return
-    }
-    let _this = document.getElementById($(this).attr("id"))
-    let data = (settings.data) ? settings.data : []
-    let class_list = (settings.class_list) ? settings.class_list : ["form-control"]
-    let id_field = (settings.id_field) ? settings.id_field : ""
-    let text_field = (settings.text_field) ? settings.text_field : ""
-    let title = (settings.title) ? settings.title : "Select Option"
-    let first_selectable = (settings.first_selectable) ? settings.firstSelectable : false
-    let select2 = (settings.select2) ? settings.select2 : false
-    let multiple = (settings.type) ? settings.type : ""
-    let val = ""
-    //
-    $(_this).empty()
-    //
-    if (multiple === "multiple") {
-        _this.setAttribute("multiple", "multiple")
-    }
-    
-    if (first_selectable === false) {
-        let option = $(document.createElement("option")).prop({
-            value: "",
-            text: "-- " + title.charAt(0).toUpperCase() + title.slice(1) + " --",
-            //readonly: true,
-            disabled: true,
-        }).attr("readonly", "readonly")
-        
-        $(_this).append(option)
-    }
-    
-    $.each(data, function (i, v) {
-        let id = v[id_field]
-        let text = v[text_field]
-        
-        $(_this).append($(document.createElement("option")).prop({
-            value: id,
-            text: text.charAt(0).toUpperCase() + text.slice(1),
-        }))
-        
-    })
-    
-    $(_this).val(val)
-    
-    if (select2) {
-        $(_this).select2()
-    }
-    
-    //if ($(_this).hasClass("select2-hidden-accessible")) {
-    //    $(_this).select2("destroy");
-    //}
-    
+	if (!settings || !settings.text_field || !settings.id_field) {
+		return
+	}
+	let _this = document.getElementById($(this).attr("id"))
+	let data = (settings.data) ? settings.data : []
+	let id_field = (settings.id_field) ? settings.id_field : ""
+	let text_field = (settings.text_field) ? settings.text_field : ""
+	let title = (settings.title) ? settings.title : "Select Option"
+	let first_selectable = (settings.first_selectable) ? settings.firstSelectable : false
+	let select2 = (settings.select2) ? settings.select2 : false
+	let multiple = (settings.type) ? settings.type : ""
+	let val = ""
+	//
+	$(_this).empty()
+	//
+	if (multiple === "multiple") {
+		_this.setAttribute("multiple", "multiple")
+	}
+	
+	if (first_selectable === false) {
+		let option = $(document.createElement("option")).prop({
+			value: "",
+			text: "-- " + title.charAt(0).toUpperCase() + title.slice(1) + " --",
+			//readonly: true,
+			disabled: true,
+		}).attr("readonly", "readonly")
+		
+		$(_this).append(option)
+	}
+	
+	$.each(data, function (i, v) {
+		let id = v[id_field]
+		let text = v[text_field]
+		
+		$(_this).append($(document.createElement("option")).prop({
+			value: id,
+			text: text.charAt(0).toUpperCase() + text.slice(1),
+		}))
+		
+	})
+	
+	$(_this).val(val)
+	
+	if (select2) {
+		$(_this).select2()
+	}
+	
+	//if ($(_this).hasClass("select2-hidden-accessible")) {
+	//    $(_this).select2("destroy");
+	//}
+	
+}
+
+const formatCountryName = function (country) {
+	let countryName, countryISO2, countryISO3 = ""
+	let returnName = null
+	
+	if (country) {
+		countryName = (country.name) ? country.name : null
+		countryISO3 = (country.iso3) ? country.iso3 : null
+		countryISO2 = (country.iso2) ? country.iso2 : null
+		
+		switch (defaultLocationDisplayFormat.toLowerCase()) {
+			case "short":
+				
+				returnName = (countryISO3) ? countryISO3 : (countryISO2) ? countryISO2 : (countryName) ? countryName : null
+				break
+			
+			case "medium":
+				
+				returnName = (countryName) ? countryName : (countryISO3) ? countryISO3 : (countryISO2) ? countryISO2 : null
+				break
+			
+			case "long":
+				
+				if (countryName && countryISO3) {
+					
+					returnName = `${countryISO3}-${countryName}`
+					
+				} else if (countryName && countryISO2) {
+					
+					returnName = `${countryISO2}-${countryName}`
+					
+				} else if (countryName) {
+					
+					returnName = countryName
+					
+				} else if (countryISO3) {
+					
+					returnName = countryISO3
+					
+				} else if (countryISO2) {
+					
+					returnName = countryISO2
+					
+				} else {
+					
+					returnName = null
+					
+				}
+				
+				break
+			default:
+				returnName = null
+		}
+	}
+	
+	return returnName
+}
+
+const formatProvinceName = function (province) {
+	let provinceName, provinceISO2, provinceISO3 = ""
+	let returnName = null
+	
+	if (province) {
+		
+		provinceName = (province.name) ? province.name : null
+		provinceISO2 = (province.iso3) ? province.iso3 : null
+		provinceISO3 = (province.iso2) ? province.iso2 : null
+		
+		switch (defaultLocationDisplayFormat.toLowerCase()) {
+			
+			case "short":
+				returnName = (provinceISO2) ? provinceISO2 : (provinceISO3) ? provinceISO3 : (provinceName) ? provinceName : null
+				break
+			case "medium":
+				returnName = (provinceName) ? provinceName : (provinceISO2) ? provinceISO2 : (provinceISO3) ? provinceISO3 : null
+				break
+			case "long":
+				
+				if (provinceName && provinceISO2) {
+					
+					returnName = `${provinceISO2}-${provinceName}`
+					
+				} else if (provinceName && provinceISO3) {
+					
+					returnName = `${provinceISO3}-${provinceName}`
+					
+				} else if (provinceName) {
+					
+					returnName = provinceName
+					
+				} else if (provinceISO2) {
+					
+					returnName = provinceISO2
+					
+				} else if (provinceISO3) {
+					
+					returnName = provinceISO3
+					
+				} else {
+					
+					returnName = null
+					
+				}
+				
+				break
+			default:
+				returnName = null
+		}
+	}
+	
+	return returnName
+}
+
+const formatLocationDisplay = function (country, province, city) {
+	let formattedCountryName, formattedProvinceName, formattedCityName = null
+	let cityDisplay = ""
+	
+	if (country) {
+		formattedCountryName = formatCountryName(country)
+	}
+	
+	if (province) {
+		formattedProvinceName = formatProvinceName(province)
+	}
+	
+	if (city) {
+		formattedCityName = (city.name) ? city.name : null
+	}
+	
+	if (formattedCountryName !== null && formattedProvinceName !== null && formattedCityName !== null) { // + + +
+		/*
+		console.log("formattedCountryName", formattedCountryName)
+		console.log("formattedProvinceName", formattedProvinceName)
+		console.log("formattedCityName", formattedCityName)
+		//*/
+		cityDisplay = `${formattedCityName} (${formattedProvinceName}, ${formattedCountryName})`
+		
+	} else if (formattedCountryName && formattedProvinceName && formattedCountryName !== null && formattedProvinceName !== null && formattedCityName === null) { // + + -
+		/*
+		console.log("formattedCountryName", formattedCountryName)
+		console.log("formattedProvinceName", formattedProvinceName)
+		//*/
+		cityDisplay = `(${formattedProvinceName}, ${formattedCountryName})`
+	} else if (formattedCountryName && (!formattedProvinceName || formattedProvinceName === null) && (!formattedCityName || formattedCityName === null)) { // + - -
+		/*
+		console.log("formattedCountryName", formattedCountryName)
+		//*/
+		cityDisplay = `${formattedCountryName}`
+	} else if (formattedCityName && formattedCountryName !== null && formattedProvinceName !== null && formattedCityName !== null) { // - - +
+		/*
+		console.log("formattedCityName", formattedCityName)
+		//*/
+		cityDisplay = `${formattedCityName}`
+	} else if (formattedProvinceName && formattedCityName && formattedCountryName !== null && formattedProvinceName !== null && formattedCityName !== null) { // - + +
+		/*
+		console.log("formattedCountryName", formattedCountryName)
+		console.log("formattedProvinceName", formattedProvinceName)
+		console.log("formattedCityName", formattedCityName)
+		//*/
+		cityDisplay = `${formattedCityName} (${formattedProvinceName})`
+	} else { // - - -
+		cityDisplay = null
+	}
+	
+	return cityDisplay
+}
+
+const formatDateRange = function (startDate, endDate) {
+	console.groupCollapsed("formatDateRange")
+	// ----
+	
+	// ----
+	console.groupEnd()
 }
 
 const fetchFormErrors = (form, rules) => {
-    console.log("fetchFormErrors()")
-    // ----
-    
-    let _modal_product_category_id = document.getElementById("modal_product_category_id")
-    let errors = []
-    
-    if (!form || !rules || !_modal_product_category_id) {
-        errors.push({
-            form: (form) ? form : null,
-            rules: (rules) ? rules : null,
-            message: "Missing Data",
-        })
-        
-        return {
-            valid: false,
-            errors: errors,
-        }
-    }
-    
-    let validator = jQuery(form).validate(rules)
-    
-    console.log("|__ validator", validator)
-    
-    return {
-        valid: true,
-        errors: errors,
-    }
+	console.log("fetchFormErrors()")
+	// ----
+	
+	let _modal_product_category_id = document.getElementById("modal_product_category_id")
+	let errors = []
+	
+	if (!form || !rules || !_modal_product_category_id) {
+		errors.push({
+			form: (form) ? form : null,
+			rules: (rules) ? rules : null,
+			message: "Missing Data",
+		})
+		
+		return {
+			valid: false,
+			errors: errors,
+		}
+	}
+	
+	let validator = jQuery(form).validate(rules)
+	
+	console.log("|__ validator", validator)
+	
+	return {
+		valid: true,
+		errors: errors,
+	}
 }
 
 const calculateWidth = (ratioWidth, ratioHeight, height) => {
-    let aspectRatio = ratioWidth.value / ratioHeight.value
-    return parseFloat((height * aspectRatio).toFixed(2))
+	let aspectRatio = ratioWidth.value / ratioHeight.value
+	return parseFloat((height * aspectRatio).toFixed(2))
 }
 
 const calculateHeight = (ratioWidth, ratioHeight, width) => {
-    let aspectRatio = ratioWidth / ratioHeight
-    return parseFloat((width / aspectRatio).toFixed(2))
+	let aspectRatio = ratioWidth / ratioHeight
+	return parseFloat((width / aspectRatio).toFixed(2))
 }
 
 const gcd = function (a, b) {
-    return (b === 0) ? a : gcd(b, a % b)
+	return (b === 0) ? a : gcd(b, a % b)
 }
 
 const shadeColor = function (color, percent) {
-    
-    var R = parseInt(color.substring(1, 3), 16)
-    var G = parseInt(color.substring(3, 5), 16)
-    var B = parseInt(color.substring(5, 7), 16)
-    
-    R = parseInt(R * (100 + percent) / 100)
-    G = parseInt(G * (100 + percent) / 100)
-    B = parseInt(B * (100 + percent) / 100)
-    
-    R = (R < 255) ? R : 255
-    G = (G < 255) ? G : 255
-    B = (B < 255) ? B : 255
-    
-    var RR = ((R.toString(16).length === 1) ? "0" + R.toString(16) : R.toString(16))
-    var GG = ((G.toString(16).length === 1) ? "0" + G.toString(16) : G.toString(16))
-    var BB = ((B.toString(16).length === 1) ? "0" + B.toString(16) : B.toString(16))
-    
-    return "#" + RR + GG + BB
+	
+	let R = parseInt(color.substring(1, 3), 16)
+	let G = parseInt(color.substring(3, 5), 16)
+	let B = parseInt(color.substring(5, 7), 16)
+	
+	R = parseInt(R * (100 + percent) / 100)
+	G = parseInt(G * (100 + percent) / 100)
+	B = parseInt(B * (100 + percent) / 100)
+	
+	R = (R < 255) ? R : 255
+	G = (G < 255) ? G : 255
+	B = (B < 255) ? B : 255
+	
+	let RR = ((R.toString(16).length === 1) ? "0" + R.toString(16) : R.toString(16))
+	let GG = ((G.toString(16).length === 1) ? "0" + G.toString(16) : G.toString(16))
+	let BB = ((B.toString(16).length === 1) ? "0" + B.toString(16) : B.toString(16))
+	
+	return "#" + RR + GG + BB
 }
 
 const clearAllValidation = function () {
-    //console.log("clearAllValidation")
-    $("div.error").html(`&nbsp;`).hide()
-    $(".is-invalid").removeClass("is-invalid")
+	
+	$("div.error").html(`&nbsp;`).hide()
+	$(".is-invalid").removeClass("is-invalid")
+	
 }
 
 $.fn.showError = function (msg) {
-    let $element = this
-    let $errorElement = $element.parents("div.form-element").find("div.error")
-    
-    $element.addClass("is-invalid")
-    $errorElement.html(msg).show()
-    return this
+	let $element = this
+	let $errorElement = $element.parents("div.form-element").find("div.error")
+	
+	$element.addClass("is-invalid")
+	$errorElement.html(msg).show()
+	
+	return this
 }
 
 $.fn.hideError = function () {
-    let $element = this
-    let $errorElement = $element.parents("div.form-element").find("div.error")
-    
-    $element.removeClass("is-invalid")
-    $errorElement.html(`&nbsp;`).hide()
-    return this
+	let $element = this
+	let $errorElement = $element.parents("div.form-element").find("div.error")
+	
+	$element.removeClass("is-invalid")
+	$errorElement.html(`&nbsp;`).hide()
+	
+	return this
 }
 
 const hexToRgb = hex =>
-    hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
-            , (m, r, g, b) => "#" + r + r + g + g + b + b)
-        .substring(1).match(/.{2}/g)
-        .map(x => parseInt(x, 16))
+	hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
+			, (m, r, g, b) => "#" + r + r + g + g + b + b)
+		.substring(1).match(/.{2}/g)
+		.map(x => parseInt(x, 16))
 
 jQuery.fn.dataTable.Api.register("page.jumpToData()", function (data, column) {
-    var pos = this.column(column, {
-        order: "current",
-    }).data().indexOf(data)
-    
-    if (pos >= 0) {
-        var page = Math.floor(pos / this.page.info().length)
-        this.page(page).draw(false)
-    }
-    
-    return this
+	let pos = this.column(column, {
+		order: "current",
+	}).data().indexOf(data)
+	
+	if (pos >= 0) {
+		let page = Math.floor(pos / this.page.info().length)
+		this.page(page).draw(false)
+	}
+	
+	return this
 })
 
 const isOdd = function (num) {
-    return num % 2
+	return num % 2
 }
 
 const clearValidation = function (formElement) {
-    //console.log("clearValidation(formElement)", formElement)
-    $(".autocomplete-suggestions").hide()
-    let validator = $(formElement).validate()
-    
-    $("[name]", formElement).each(function () {
-        if (validator) {
-            if (validator.successList) {
-                validator.successList.push(this)
-            }
-            validator.showErrors()
-        }
-    })
-    
-    $(".is-invalid").each(function () {
-        if (validator) {
-            if (validator.successList) {
-                validator.successList.push(this)
-            }
-            validator.showErrors()
-        }
-    })
-    
-    if (validator) {
-        validator.resetForm()
-        validator.reset()
-    }
+	$(".autocomplete-suggestions").hide()
+	let validator = $(formElement).validate()
+	/*
+	$("[name]", formElement).each(function () {
+		if (validator) {
+			if (validator.successList) {
+				validator.successList.push(this)
+			}
+			validator.showErrors()
+		}
+	})
+	
+	$(".is-invalid").each(function () {
+		if (validator) {
+			if (validator.successList) {
+				validator.successList.push(this)
+			}
+			validator.showErrors()
+		}
+	})
+	//*/
+	if (validator) {
+		validator.resetForm()
+		validator.reset()
+	}
 }
 
 const get_errors = function (validator) {
-    //console.log("get_errors(validator)", validator)
-    var submitErrorsList = {}
-    //console.dir(validator)
-    //for (var i = 0; i < validator.errorList.length; i++) {
-    //    submitErrorsList[validator.errorList[i].element.name] = validator.errorList[i].message
-    //}
-    //console.log("Submit Errors", submitErrorsList)
+	let submitErrorsList = {}
+	
 }
 
 const validator_init = function (settings) {
-    //console.log("validator_init(settings)", settings)
-    let rules = {}
-    let messages = {}
-    let groups = {}
-    if (settings) {
-        
-        if (settings.rules) {
-            rules = settings.rules
-        }
-        
-        if (settings.messages) {
-            messages = settings.messages
-        }
-        
-        if (settings.groups) {
-            groups = settings.groups
-        }
-    }
-    
-    jQuery.validator.setDefaults({
-        rules: rules,
-        messages: messages,
-        groups: groups,
-        ignore: "",
-        success: "valid",
-        invalidHandler: function (event, validator) {
-            var errors = validator.numberOfInvalids()
-            let errorEl = validator.findLastActive() || validator.errorList.length && validator.errorList[0].element
-            if (errorEl) {
-                $(errorEl).closest(".accordion-body").collapse("show")
-            }
-        },
-        errorElement: "span",
-        highlight: function (element) {
-            let id = $(element).attr("id")
-            let el = $("#" + id + "")
-            let error_el = $("#" + id + "-error")
-            
-            if (error_el.attr("data-ref")) {
-                $("#" + error_el.attr("data-ref")).addClass("is-invalid")
-            } else {
-                el.parent().find("span.select2").addClass("is-invalid")
-                el.addClass("is-invalid")
-            }
-            
-            if (error_el) {
-                error_el.css({ "display": "block" })
-            }
-        },
-        unhighlight: function (element) {
-            let id = $(element).attr("id")
-            let el = $("#" + id + "")
-            let error_el = $("#" + id + "-error")
-            el.parents("div.form-element").find("span.select2").removeClass("is-invalid")
-            el.removeClass("is-invalid")
-            if (error_el) {
-                error_el.css({ "display": "none" })
-            }
-        },
-        errorPlacement: function (error, element) {
-            let id = element.attr("id")
-            let el = $("#" + id + "-error")
-            el.html(error)
-        },
-        submitHandler: function (form) {
-            return true
-        },
-        
-    })
-    
-    jQuery.validator.addMethod("postalCode", function (value) {
-        return /^((\d{5}-\d{4})|(\d{5})|([A-Z]\d[A-Z]\s\d[A-Z]\d))$/.test(value)
-    }, "Please enter a valid postal code.")
-    
-    jQuery.validator.addMethod("phoneUS", function (phone_number, element) {
-        phone_number = phone_number.replace(/\s+/g, "")
-        return this.optional(element) || phone_number.length > 9 &&
-            phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/)
-    }, "Please specify a valid phone number")
-    
-    jQuery.validator.addMethod("phoneIT", function (phone_number, element) {
-        phone_number = phone_number.replace(/\s+/g, "")
-        return this.optional(element) || phone_number.length > 9 &&
-            phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/)
-    }, "Please specify a valid phone number")
-    
-    return jQuery.validator
+	
+	let rules = {}
+	let messages = {}
+	let groups = {}
+	if (settings) {
+		
+		if (settings.rules) {
+			rules = settings.rules
+		}
+		
+		if (settings.messages) {
+			messages = settings.messages
+		}
+		
+		if (settings.groups) {
+			groups = settings.groups
+		}
+	}
+	
+	jQuery.validator.setDefaults({
+		rules: rules,
+		messages: messages,
+		groups: groups,
+		ignore: "",
+		success: "valid",
+		invalidHandler: function (event, validator) {
+			let errors = validator.numberOfInvalids()
+			let errorEl = validator.findLastActive() || validator.errorList.length && validator.errorList[0].element
+			if (errorEl) {
+				$(errorEl).closest(".accordion-body").collapse("show")
+			}
+		},
+		errorElement: "span",
+		highlight: function (element) {
+			let id = $(element).attr("id")
+			let el = $("#" + id + "")
+			let error_el = $("#" + id + "-error")
+			
+			if (error_el.attr("data-ref")) {
+				$("#" + error_el.attr("data-ref")).addClass("is-invalid")
+			} else {
+				el.parent().find("span.select2").addClass("is-invalid")
+				el.addClass("is-invalid")
+			}
+			
+			if (error_el) {
+				error_el.css({ "display": "block" })
+			}
+		},
+		unhighlight: function (element) {
+			let id = $(element).attr("id")
+			let el = $("#" + id + "")
+			let error_el = $("#" + id + "-error")
+			el.parents("div.form-element").find("span.select2").removeClass("is-invalid")
+			el.removeClass("is-invalid")
+			if (error_el) {
+				error_el.css({ "display": "none" })
+			}
+		},
+		errorPlacement: function (error, element) {
+			let id = element.attr("id")
+			let el = $("#" + id + "-error")
+			el.html(error)
+		},
+		submitHandler: function (form) {
+			return true
+		},
+		
+	})
+	
+	jQuery.validator.addMethod("postalCode", function (value) {
+		return /^((\d{5}-\d{4})|(\d{5})|([A-Z]\d[A-Z]\s\d[A-Z]\d))$/.test(value)
+	}, "Please enter a valid postal code.")
+	
+	jQuery.validator.addMethod("phoneUS", function (phone_number, element) {
+		phone_number = phone_number.replace(/\s+/g, "")
+		return this.optional(element) || phone_number.length > 9 &&
+			phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/)
+	}, "Please specify a valid phone number")
+	
+	jQuery.validator.addMethod("phoneIT", function (phone_number, element) {
+		phone_number = phone_number.replace(/\s+/g, "")
+		return this.optional(element) || phone_number.length > 9 &&
+			phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/)
+	}, "Please specify a valid phone number")
+	
+	return jQuery.validator
 }
 
 const initializeValidator = function (settings) {
-    console.log("initializeValidator(settings)", settings)
-    // ----
-    
-    let rules = {}
-    let messages = {}
-    let groups = {}
-    
-    if (settings) {
-        
-        if (settings.rules) {
-            rules = settings.rules
-        }
-        
-        if (settings.messages) {
-            messages = settings.messages
-        }
-        
-        if (settings.groups) {
-            groups = settings.groups
-        }
-    }
-    
-    jQuery.validator.setDefaults({
-        rules: rules,
-        messages: messages,
-        groups: groups,
-        ignore: "",
-        success: "valid",
-        invalidHandler: function (event, validator) {
-            var errors = validator.numberOfInvalids()
-            let errorEl = validator.findLastActive() || validator.errorList.length && validator.errorList[0].element
-            if (errorEl) {
-                $(errorEl).closest(".accordion-body").collapse("show")
-            }
-        },
-        errorElement: "span",
-        highlight: function (element) {
-            let id = $(element).attr("id")
-            let el = $("#" + id + "")
-            let error_el = $("#" + id + "-error")
-            
-            if (error_el.attr("data-ref")) {
-                $("#" + error_el.attr("data-ref")).addClass("is-invalid")
-            } else {
-                el.parent().find("span.select2").addClass("is-invalid")
-                el.addClass("is-invalid")
-            }
-            
-            if (error_el) {
-                error_el.css({ "display": "block" })
-            }
-        },
-        unhighlight: function (element) {
-            let id = $(element).attr("id")
-            let el = $("#" + id + "")
-            let error_el = $("#" + id + "-error")
-            el.parents("div.form-element").find("span.select2").removeClass("is-invalid")
-            el.removeClass("is-invalid")
-            if (error_el) {
-                error_el.css({ "display": "none" })
-            }
-        },
-        errorPlacement: function (error, element) {
-            let id = element.attr("id")
-            let el = $("#" + id + "-error")
-            el.html(error)
-        },
-        submitHandler: function (form) {
-            return true
-        },
-    })
-    
-    jQuery.validator.addMethod("postalCode", function (value) {
-        return /^((\d{5}-\d{4})|(\d{5})|([A-Z]\d[A-Z]\s\d[A-Z]\d))$/.test(value)
-    }, "Please enter a valid postal code.")
-    
-    jQuery.validator.addMethod("phoneUS", function (phone_number, element) {
-        phone_number = phone_number.replace(/\s+/g, "")
-        return this.optional(element) || phone_number.length > 9 &&
-            phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/)
-    }, "Please specify a valid phone number")
-    
-    jQuery.validator.addMethod("phoneIT", function (phone_number, element) {
-        phone_number = phone_number.replace(/\s+/g, "")
-        return this.optional(element) || phone_number.length > 9 &&
-            phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/)
-    }, "Please specify a valid phone number")
-    
-    return jQuery.validator
+	console.groupCollapsed("Functions.initializeValidator")
+	// ----
+	
+	let rules = {}
+	let messages = {}
+	let groups = {}
+	
+	if (settings) {
+		
+		if (settings.rules) {
+			rules = settings.rules
+		}
+		
+		if (settings.messages) {
+			messages = settings.messages
+		}
+		
+		if (settings.groups) {
+			groups = settings.groups
+		}
+	}
+	
+	jQuery.validator.setDefaults({
+		rules: rules,
+		messages: messages,
+		groups: groups,
+		ignore: "",
+		success: "valid",
+		invalidHandler: function (event, validator) {
+			let errors = validator.numberOfInvalids()
+			let errorEl = validator.findLastActive() || validator.errorList.length && validator.errorList[0].element
+			if (errorEl) {
+				$(errorEl).closest(".accordion-body").collapse("show")
+			}
+		},
+		errorElement: "span",
+		highlight: function (element) {
+			let id = $(element).attr("id")
+			let el = $("#" + id + "")
+			let error_el = $("#" + id + "-error")
+			
+			if (error_el.attr("data-ref")) {
+				$("#" + error_el.attr("data-ref")).addClass("is-invalid")
+			} else {
+				el.parent().find("span.select2").addClass("is-invalid")
+				el.addClass("is-invalid")
+			}
+			
+			if (error_el) {
+				error_el.css({ "display": "block" })
+			}
+		},
+		unhighlight: function (element) {
+			let id = $(element).attr("id")
+			let el = $("#" + id + "")
+			let error_el = $("#" + id + "-error")
+			el.parents("div.form-element").find("span.select2").removeClass("is-invalid")
+			el.removeClass("is-invalid")
+			if (error_el) {
+				error_el.css({ "display": "none" })
+			}
+		},
+		errorPlacement: function (error, element) {
+			let id = element.attr("id")
+			let el = $("#" + id + "-error")
+			el.html(error)
+		},
+		submitHandler: function (form) {
+			return true
+		},
+	})
+	
+	jQuery.validator.addMethod("postalCode", function (value) {
+		return /^((\d{5}-\d{4})|(\d{5})|([A-Z]\d[A-Z]\s\d[A-Z]\d))$/.test(value)
+	}, "Please enter a valid postal code.")
+	
+	jQuery.validator.addMethod("phoneUS", function (phone_number, element) {
+		phone_number = phone_number.replace(/\s+/g, "")
+		return this.optional(element) || phone_number.length > 9 &&
+			phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/)
+	}, "Please specify a valid phone number")
+	
+	jQuery.validator.addMethod("phoneIT", function (phone_number, element) {
+		phone_number = phone_number.replace(/\s+/g, "")
+		return this.optional(element) || phone_number.length > 9 &&
+			phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/)
+	}, "Please specify a valid phone number")
+	
+	// ----
+	console.groupEnd()
+	return jQuery.validator
 }
 
 const jsonPrettify = (json) => {
-    if (typeof json === "object" && json !== null) {
-        return JSON.stringify(json, undefined, '\t')
-    }
-    
-    try {
-        const obj = JSON.parse(json)
-        return jsonPrettify(obj)
-    } catch (e) {
-        return json
-    }
+	if (typeof json === "object" && json !== null) {
+		return JSON.stringify(json, undefined, '\t')
+	}
+	
+	try {
+		const obj = JSON.parse(json)
+		return jsonPrettify(obj)
+	} catch (e) {
+		return json
+	}
 }
 
 const setError = function (element, msg) {
-    //console.log("setError")
-    let id = $(element).attr("id")
-    let el = $("#" + id + "")
-    let error_el = $("#" + id + "-error")
-    
-    if (error_el.attr("data-ref")) {
-        $("#" + error_el.attr("data-ref")).addClass("is-invalid")
-    } else {
-        el.parent().find("span.select2").addClass("is-invalid")
-        el.addClass("is-invalid")
-    }
-    
-    if (error_el) {
-        error_el.css({ "display": "block" })
-    }
-    
-    $(error_el).append(`<span id="#${id}-error" class="invalid">${msg}</span>`)
+	//console.log("setError")
+	let id = $(element).attr("id")
+	let el = $("#" + id + "")
+	let error_el = $("#" + id + "-error")
+	
+	if (error_el.attr("data-ref")) {
+		$("#" + error_el.attr("data-ref")).addClass("is-invalid")
+	} else {
+		el.parent().find("span.select2").addClass("is-invalid")
+		el.addClass("is-invalid")
+	}
+	
+	if (error_el) {
+		error_el.css({ "display": "block" })
+	}
+	
+	$(error_el).append(`<span id="#${id}-error" class="invalid">${msg}</span>`)
 }
 
 const clearError = function (element) {
-    //console.log("clearError(element)", element)
-    let id = $(element).attr("id")
-    let el = $("#" + id + "")
-    let error_el = $("#" + id + "-error")
-    
-    if (error_el.attr("data-ref")) {
-        $("#" + error_el.attr("data-ref")).removeClass("is-invalid")
-    } else {
-        el.parent().find("span.select2").removeClass("is-invalid")
-        el.removeClass("is-invalid")
-    }
-    
-    if (error_el) {
-        $(error_el).empty()
-        error_el.css({ "display": "none" })
-        
-    }
-    
+	//console.log("clearError(element)", element)
+	let id = $(element).attr("id")
+	let el = $("#" + id + "")
+	let error_el = $("#" + id + "-error")
+	
+	if (error_el.attr("data-ref")) {
+		$("#" + error_el.attr("data-ref")).removeClass("is-invalid")
+	} else {
+		el.parent().find("span.select2").removeClass("is-invalid")
+		el.removeClass("is-invalid")
+	}
+	
+	if (error_el) {
+		$(error_el).empty()
+		error_el.css({ "display": "none" })
+		
+	}
+	
 }
 
 const toNumbers = arr => arr.map(Number)
 
 const remove_nulls = function (obj) {
-    let cleanedObject = {}
-    $.each(obj, function (i, v) {
-        if (v === null) {
-        
-        } else {
-            cleanedObject[i] = v
-        }
-    })
-    
-    return cleanedObject
+	let cleanedObject = {}
+	$.each(obj, function (i, v) {
+		if (v === null) {
+		
+		} else {
+			cleanedObject[i] = v
+		}
+	})
+	
+	return cleanedObject
 }
 
 const removeNulls = function (obj) {
-    //console.log("removeNulls()")
-    let cleanedObject = {}
-    $.each(obj, function (i, v) {
-        if (v === null) {
-        
-        } else {
-            cleanedObject[i] = v
-        }
-    })
-    
-    return cleanedObject
+	//console.log("removeNulls()")
+	let cleanedObject = {}
+	$.each(obj, function (i, v) {
+		if (v === null) {
+		
+		} else {
+			cleanedObject[i] = v
+		}
+	})
+	
+	return cleanedObject
 }
 
 const buildMap = function (arr, key) {
-    let temp = new Map()
-    $.each(arr, function (index, value) {
-        temp.set(value[key], value)
-    })
-    return temp
+	let temp = new Map()
+	$.each(arr, function (index, value) {
+		temp.set(value[key], value)
+	})
+	return temp
 }
 
 const getListOfIds = function (list) {
-    if (list) {
-        
-        if (typeof list === "string") {
-            let str = list.replace(/\s/g, "")
-            return Array.from(str.split(","), Number)
-        } else if (typeof list === "object") {
-            return list
-        }
-        
-    }
-    
-    return []
+	if (list) {
+		
+		if (typeof list === "string") {
+			let str = list.replace(/\s/g, "")
+			return Array.from(str.split(","), Number)
+		} else if (typeof list === "object") {
+			return list
+		}
+		
+	}
+	
+	return []
 }
 
 const formatListOfIds = function (list) {
-    let vals = ""
-    if (list && typeof list === "object") {
-        vals = list.join(',')
-    }
-    return vals
+	let vals = ""
+	if (list && typeof list === "object") {
+		vals = list.join(',')
+	}
+	return vals
 }
 
 const sendGetRequest = function (url, data_to_send, callback) {
-    let result = []
-    
-    if (url && data_to_send) {
-        $.getJSONRequest(url, data_to_send, function (data, status, xhr) {
-            if (status === "success" && typeof data.result !== "undefined") {
-                result = data.result
-                return callback(result)
-            } else if (status === "failed" && typeof data.error === "undefined") {
-                return handleError(data)
-            } else if (status === "success" && typeof data.error !== "undefined") {
-                return handleError(data.error)
-            } else {
-                //console.log("getError:4")
-            }
-        })
-    } else {
-        let msg = []
-        if (!url) {
-            msg.push("url")
-        }
-        if (!data_to_send) {
-            msg.push("data_to_send")
-        }
-        
-        return handleError("Missing Data: " + msg.join(", "))
-    }
+	let result = []
+	
+	if (url && data_to_send) {
+		$.getJSONRequest(url, data_to_send, function (data, status, xhr) {
+			
+			//*
+			console.log("url", url)
+			console.log("data", data)
+			console.log("status", status)
+			console.log("xhr", xhr)
+			console.log("typeof data.result", typeof data.result)
+			//*/
+			
+			if (status === "success" && typeof data.result !== "undefined") {
+				result = data.result
+				return callback(result)
+			} else if (status === "failed" && typeof data.error === "undefined") {
+				return handleError(data)
+			} else if (status === "success" && typeof data.error !== "undefined") {
+				return handleError(data.error)
+			} else {
+				console.log("getError:4")
+			}
+		})
+	} else {
+		let msg = []
+		if (!url) {
+			msg.push("url")
+		}
+		if (!data_to_send) {
+			msg.push("data_to_send")
+		}
+		
+		return handleError("Missing Data: " + msg.join(", "))
+	}
 }
 
 const sendPostRequest = function (url, data_to_send, callback) {
-    let msg, result = []
-    if (url && data_to_send) {
-        $.postJSON(url, data_to_send, function (data, status, xhr) {
-            /*
-            //console.log("data", data)
-            //console.log("status", status)
-            //console.log("xhr", xhr)
-            //console.log("typeof data.result", typeof data.result)
-            //*/
-            if (status === "success" && typeof data.result !== "undefined") {
-                
-                if (data.result) {
-                    result = data.result
-                    return callback(result)
-                } else {
-                    return handleError("Error Posting Data 1")
-                }
-            } else if (status === "failed" && typeof data.result === "undefined") {
-                if (data.error) {
-                    return handleError(data.error)
-                }
-                
-                return handleError("Error Posting Data")
-            } else {
-                
-                return handleError("Error Posting Data 2")
-            }
-        })
-    } else {
-        if (!url) {
-            msg.push("url")
-        }
-        if (!data_to_send) {
-            msg.push("data_to_send")
-        }
-        
-        return handleError("Missing Data: " + msg.join(", "))
-    }
+	let msg, result = []
+	if (url && data_to_send) {
+		$.postJSON(url, data_to_send, function (data, status, xhr) {
+			/*
+			//console.log("data", data)
+			//console.log("status", status)
+			//console.log("xhr", xhr)
+			//console.log("typeof data.result", typeof data.result)
+			//*/
+			if (status === "success" && typeof data.result !== "undefined") {
+				
+				if (data.result) {
+					result = data.result
+					return callback(result)
+				} else {
+					return handleError("Error Posting Data 1")
+				}
+			} else if (status === "failed" && typeof data.result === "undefined") {
+				if (data.error) {
+					return handleError(data.error)
+				}
+				
+				return handleError("Error Posting Data")
+			} else {
+				
+				return handleError("Error Posting Data 2")
+			}
+		})
+	} else {
+		if (!url) {
+			msg.push("url")
+		}
+		if (!data_to_send) {
+			msg.push("data_to_send")
+		}
+		
+		return handleError("Missing Data: " + msg.join(", "))
+	}
 }
 
 const getAjaxError = function (jqXHR, exception, uri) {
-    let msg = ""
-    let error = {
-        message: "",
-        status: "",
-        uri: uri,
-    }
-    
-    if (jqXHR.status === 404) {
-        msg = "Requested page( " + uri + " ) not found. [404]"
-    }
-    
-    error.message = msg
-    error.status = jqXHR.status
-    error.uri = uri
-    error.jqXHR = jqXHR
-    return error
+	let msg = ""
+	let error = {
+		message: "",
+		status: "",
+		uri: uri,
+	}
+	
+	if (jqXHR.status === 404) {
+		msg = "Requested page( " + uri + " ) not found. [404]"
+	}
+	
+	error.message = msg
+	error.status = jqXHR.status
+	error.uri = uri
+	error.jqXHR = jqXHR
+	return error
 }
 
 const _display_ajax_error = function (jqXHR, exception, uri) {
-    let msg = ""
-    let error = {
-        message: "",
-        status: "",
-        uri: uri,
-    }
-    
-    if (jqXHR.status === 0) {
-        msg = "Not connected, verify Network."
-    } else if (jqXHR.status === 404) {
-        msg = "Requested page( " + uri + " ) not found. [404]"
-    } else if (jqXHR.status === 500) {
-        if (jqXHR.responseJSON) {
-            msg = jqXHR.responseJSON
-        } else {
-            msg = "Internal Server Error [500]."
-        }
-        
-    } else if (exception === "parsererror") {
-        msg = "Requested JSON parse failed."
-    } else if (exception === "timeout") {
-        msg = "Time out error."
-    } else if (exception === "abort") {
-        msg = "Ajax request aborted."
-    } else {
-        msg = "Uncaught Error." + jqXHR.responseText
-    }
-    
-    error.message = msg
-    error.status = jqXHR.status
-    error.uri = uri
-    error.jqXHR = jqXHR
-    return error
+	let msg = ""
+	let error = {
+		message: "",
+		status: "",
+		uri: uri,
+	}
+	
+	if (jqXHR.status === 0) {
+		msg = "Not connected, verify Network."
+	} else if (jqXHR.status === 404) {
+		msg = "Requested page( " + uri + " ) not found. [404]"
+	} else if (jqXHR.status === 500) {
+		if (jqXHR.responseJSON) {
+			msg = jqXHR.responseJSON
+		} else {
+			msg = "Internal Server Error [500]."
+		}
+		
+	} else if (exception === "parsererror") {
+		msg = "Requested JSON parse failed."
+	} else if (exception === "timeout") {
+		msg = "Time out error."
+	} else if (exception === "abort") {
+		msg = "Ajax request aborted."
+	} else {
+		msg = "Uncaught Error." + jqXHR.responseText
+	}
+	
+	error.message = msg
+	error.status = jqXHR.status
+	error.uri = uri
+	error.jqXHR = jqXHR
+	return error
 }
 
-const handleError = function (msg) {
-    if (!msg) {
-        msg = "3Error processing request"
-    }
-    
-    toastr.error(" -- " + msg)
+const handleError = function (msg, title, level) {
+	console.groupCollapsed("Functions.handleError")
+	// ----
+	
+	if (!title) {
+		title = "Request"
+	}
+	
+	if (!level) {
+		level = "error"
+	}
+	
+	if (!msg) {
+		msg = "Error processing request"
+	}
+	
+	toastr[level](`${msg}`, title)
+	
+	// ----
+	console.groupEnd()
 }
 
 const validInt = function (val) {
-    if (val) {
-        if (!isNaN(parseInt(val))) {
-            return parseInt(val)
-        }
-    }
-    
-    return null
+	//console.groupCollapsed("Functions.validInt")
+	// ----
+	
+	if (val) {
+		if (!isNaN(parseInt(val))) {
+			console.groupEnd()
+			return parseInt(val)
+		}
+	}
+	
+	// ----
+	//console.groupEnd()
+	return null
 }
 
 const formatDateMySQL = function (date) {
-    if (!date) {
-        let date = new Date()
-    }
-    
-    return moment(date).format("YYYY-MM-DD HH:mm:ss")
+	if (!date) {
+		let date = new Date()
+	}
+	
+	return moment(date).format("YYYY-MM-DD HH:mm:ss")
 }
 
 const resize_elements = function () {
-    const _page = document.getElementById("page")
-    const _main = document.getElementById("main")
-    const _nav = document.getElementsByClassName("double-nav")
-    const _screen_width = document.getElementById("screen_width")
-    const _screen_height = document.getElementById("screen_height")
-    const _footer = document.getElementsByClassName("page-footer")
-    const _slide_out = document.getElementById("slide-out")
-    const _page_header = document.getElementById("page_header")
-    ////
-    let window_height = 0
-    let window_width = 0
-    let page_height = 0
-    let page_width = 0
-    let nav_height = 0
-    let side_nav_width = 0
-    let side_nav_height = 0
-    let footer_height = 0
-    ///////////////////////////////////////////////
-    window_height = window.innerHeight
-    window_width = window.innerWidth
-    ///////////////////////////////////////////////
-    $.each(_nav, function (i, elem) {
-        let temp_height = (!isNaN(parseInt($(elem).outerHeight()))) ? parseInt($(elem).outerHeight()) : 0
-        nav_height = nav_height + temp_height
-    })
-    
-    $.each(_footer, function (i, elem) {
-        let temp_height = (!isNaN(parseInt($(elem).outerHeight()))) ? parseInt($(elem).outerHeight()) : 0
-        footer_height = footer_height + temp_height
-    })
-    ///////////////////////////////////////////////
-    let page_ht = (window_height - footer_height - nav_height - 1) + "px"
-    ///////////////////////////////////////////////
-    if (_slide_out) {
-        side_nav_height = (!isNaN(parseInt($(_slide_out).outerHeight()))) ? parseInt($(_slide_out).outerHeight()) : 0
-        side_nav_width = (!isNaN(parseInt($(_slide_out).width()))) ? parseInt($(_slide_out).width()) : 0
-    }
-    
-    if (_page && _screen_height && _screen_width) {
-        if (_main) {
-            $(_main).css({
-                "padding-left": side_nav_width + "px",
-                "min-height": window_height - footer_height - nav_height + "px!important",
-            })
-        }
-        
-        if (_page) {
-            _page.setAttribute("style", "min-height:" + page_ht + "!important")
-            //_page.setAttribute("style", "min-height:" + page_ht + "!important")
-        }
-        
-        if (_page_header) {
-            _page_header.setAttribute("style", "margin-top:" + nav_height + "px;")
-        }
-        
-        //For debugging
-        _screen_height.innerText = window_height + ""
-        _screen_width.innerText = window_width + ""
-    }
-    
+	const _page = document.getElementById("page")
+	const _main = document.getElementById("main")
+	const _nav = document.getElementsByClassName("double-nav")
+	const _screen_width = document.getElementById("screen_width")
+	const _screen_height = document.getElementById("screen_height")
+	const _footer = document.getElementsByClassName("page-footer")
+	const _slide_out = document.getElementById("slide-out")
+	const _page_header = document.getElementById("page_header")
+	const _product_location_map_container = document.getElementById("product_location_map_container")
+	const _product_location_map_container_frame = document.getElementById("product_location_map_container_frame")
+	////
+	let window_height = 0
+	let window_width = 0
+	let page_height = 0
+	let page_width = 0
+	let nav_height = 0
+	let side_nav_width = 0
+	let side_nav_height = 0
+	let footer_height = 0
+	///////////////////////////////////////////////
+	window_height = window.innerHeight
+	window_width = window.innerWidth
+	///////////////////////////////////////////////
+	$.each(_nav, function (i, elem) {
+		let temp_height = (!isNaN(parseInt($(elem).outerHeight()))) ? parseInt($(elem).outerHeight()) : 0
+		nav_height = nav_height + temp_height
+	})
+	
+	$.each(_footer, function (i, elem) {
+		let temp_height = (!isNaN(parseInt($(elem).outerHeight()))) ? parseInt($(elem).outerHeight()) : 0
+		footer_height = footer_height + temp_height
+	})
+	///////////////////////////////////////////////
+	let page_ht = (window_height - footer_height - nav_height - 1) + "px"
+	///////////////////////////////////////////////
+	
+	if (_product_location_map_container && _product_location_map_container_frame) {
+		let mapWidth = parseInt($(_product_location_map_container).outerWidth())
+		let mapHeight = mapWidth / 2
+		
+		//*
+		console.log("mapWidth", mapWidth)
+		console.log("mapHeight", mapHeight)
+		//*/
+		
+		$(_product_location_map_container_frame).css({
+			"height": mapHeight + "px",
+			"min-height": mapHeight + "px",
+			"max-height": mapHeight + "px",
+		})
+		
+		$(_product_location_map_container).css({
+			"height": mapHeight + "px",
+			"min-height": mapHeight + "px",
+			"max-height": mapHeight + "px",
+		})
+		
+	}
+	
+	if (_slide_out) {
+		side_nav_height = (!isNaN(parseInt($(_slide_out).outerHeight()))) ? parseInt($(_slide_out).outerHeight()) : 0
+		side_nav_width = (!isNaN(parseInt($(_slide_out).width()))) ? parseInt($(_slide_out).width()) : 0
+	}
+	
+	if (_page && _screen_height && _screen_width) {
+		if (_main) {
+			$(_main).css({
+				"padding-left": side_nav_width + "px",
+				"min-height": window_height - footer_height - nav_height + "px!important",
+			})
+		}
+		
+		if (_page) {
+			_page.setAttribute("style", "min-height:" + page_ht + "!important")
+			//_page.setAttribute("style", "min-height:" + page_ht + "!important")
+		}
+		
+		if (_page_header) {
+			_page_header.setAttribute("style", "margin-top:" + nav_height + "px;")
+		}
+		
+		//For debugging
+		_screen_height.innerText = window_height + ""
+		_screen_width.innerText = window_width + ""
+	}
+	
 }
 
 const debounce = function (func) {
-    var timer
-    return function (event) {
-        if (timer) {
-            clearTimeout(timer)
-        }
-        timer = setTimeout(func, 100, event)
-    }
+	let timer
+	return function (event) {
+		if (timer) {
+			clearTimeout(timer)
+		}
+		timer = setTimeout(func, 100, event)
+	}
 }
 
 const populateMultiSelect = function (arr, elem) {
-    for (var i = 0, l = elem.options.length, o; i < l; i++) {
-        o = elem.options[i]
-        
-        if (arr.indexOf(o.value) !== -1) {
-            //console.log("ggg")
-            o.selected = true
-        }
-        
-    }
+	for (let i = 0, l = elem.options.length, o; i < l; i++) {
+		o = elem.options[i]
+		
+		if (arr.indexOf(o.value) !== -1) {
+			//console.log("ggg")
+			o.selected = true
+		}
+		
+	}
 }
 
 const findObjectByKey = function (array, key, value) {
-    let results = []
-    for (var i = 0; i < array.length; i++) {
-        if (array[i][key] === value) {
-            results.push(array[i])
-        }
-    }
-    
-    return results
+	let results = []
+	for (let i = 0; i < array.length; i++) {
+		if (array[i][key] === value) {
+			results.push(array[i])
+		}
+	}
+	
+	return results
 }
 
 const addTinyMCE = function (el) {
-    tinymce.init({
-        selector: "#" + el,
-        menubar: false,
-        height: "400",
-        plugins: "print visualblocks visualchars charmap hr pagebreak advlist lists",
-        content_css: [
-            "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap",
-            "/assets/css/bootstrap.min.css",
-            "/assets/css/style.css",
-        ],
-        body_class: "p-2",
-        font_formats: "Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Open Sans=Open Sans; Roboto=Roboto;Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats",
-        toolbar1: "undo redo | styleselect | fontselect fontsizeselect | removeformat | numlist bullist checklist | outdent indent ",
-        toolbar2: "cut copy | bold italic underline strikethrough | forecolor | alignleft aligncenter alignright alignjustify | backcolor",
-        content_style: "body { font-family:\"Roboto\",sans-serif\", sans-serif; font-size:14px; font-weight: 400 }",
-        style_formats: [
-            {
-                title: "Headers",
-                items: [
-                    {
-                        title: "h1",
-                        block: "h1",
-                    },
-                    {
-                        title: "h2",
-                        block: "h2",
-                    },
-                    {
-                        title: "h3",
-                        block: "h3",
-                    },
-                    {
-                        title: "h4",
-                        block: "h4",
-                    },
-                    {
-                        title: "h5",
-                        block: "h5",
-                    },
-                    {
-                        title: "h6",
-                        block: "h6",
-                    },
-                ],
-            }, {
-                title: "Blocks",
-                items: [
-                    {
-                        title: "p",
-                        block: "p",
-                    },
-                    {
-                        title: "div",
-                        block: "div",
-                    },
-                    {
-                        title: "pre",
-                        block: "pre",
-                    },
-                ],
-            }, {
-                title: "Containers",
-                items: [
-                    {
-                        title: "section",
-                        block: "section",
-                        wrapper: true,
-                        merge_siblings: false,
-                    },
-                    {
-                        title: "article",
-                        block: "article",
-                        wrapper: true,
-                        merge_siblings: false,
-                    },
-                    {
-                        title: "blockquote",
-                        block: "blockquote",
-                        wrapper: true,
-                    },
-                    {
-                        title: "hgroup",
-                        block: "hgroup",
-                        wrapper: true,
-                    },
-                    {
-                        title: "aside",
-                        block: "aside",
-                        wrapper: true,
-                    },
-                    {
-                        title: "figure",
-                        block: "figure",
-                        wrapper: true,
-                    },
-                ],
-            },
-        ],
-        branding: false,
-        resize: false,
-        setup: function (editor) {
-            editor.on("change", function () {
-                editor.save()
-            })
-        },
-    })
+	tinymce.init({
+		selector: "#" + el,
+		menubar: false,
+		height: "400",
+		plugins: "print visualblocks visualchars charmap hr pagebreak advlist lists",
+		content_css: [
+			"https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap",
+			"/assets/css/bootstrap.min.css",
+			"/assets/css/style.css",
+		],
+		body_class: "p-2",
+		font_formats: "Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Open Sans=Open Sans; Roboto=Roboto;Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats",
+		toolbar1: "undo redo | styleselect | fontselect fontsizeselect | removeformat | numlist bullist checklist | outdent indent ",
+		toolbar2: "cut copy | bold italic underline strikethrough | forecolor | alignleft aligncenter alignright alignjustify | backcolor",
+		content_style: "body { font-family:\"Roboto\",sans-serif\", sans-serif; font-size:14px; font-weight: 400 }",
+		style_formats: [
+			{
+				title: "Headers",
+				items: [
+					{
+						title: "h1",
+						block: "h1",
+					},
+					{
+						title: "h2",
+						block: "h2",
+					},
+					{
+						title: "h3",
+						block: "h3",
+					},
+					{
+						title: "h4",
+						block: "h4",
+					},
+					{
+						title: "h5",
+						block: "h5",
+					},
+					{
+						title: "h6",
+						block: "h6",
+					},
+				],
+			}, {
+				title: "Blocks",
+				items: [
+					{
+						title: "p",
+						block: "p",
+					},
+					{
+						title: "div",
+						block: "div",
+					},
+					{
+						title: "pre",
+						block: "pre",
+					},
+				],
+			}, {
+				title: "Containers",
+				items: [
+					{
+						title: "section",
+						block: "section",
+						wrapper: true,
+						merge_siblings: false,
+					},
+					{
+						title: "article",
+						block: "article",
+						wrapper: true,
+						merge_siblings: false,
+					},
+					{
+						title: "blockquote",
+						block: "blockquote",
+						wrapper: true,
+					},
+					{
+						title: "hgroup",
+						block: "hgroup",
+						wrapper: true,
+					},
+					{
+						title: "aside",
+						block: "aside",
+						wrapper: true,
+					},
+					{
+						title: "figure",
+						block: "figure",
+						wrapper: true,
+					},
+				],
+			},
+		],
+		branding: false,
+		resize: false,
+		setup: function (editor) {
+			editor.on("change", function () {
+				editor.save()
+			})
+		},
+	})
 }
 
 /**
@@ -1210,11 +1485,11 @@ const addTinyMCE = function (el) {
  * @returns {*|jQuery}
  */
 const htmlDecode = function (value) {
-    return $("<textarea/>").html(value).text()
+	return $("<textarea/>").html(value).text()
 }
 
 const is_null = function (val) {
-    return val === null || val === undefined
+	return val === null || val === undefined
 }
 
 /**
@@ -1224,18 +1499,18 @@ const is_null = function (val) {
  * @returns {*}
  */
 function decodeHtml (str) {
-    if (!str) {
-        str = ""
-    }
-    var map =
-        {
-            "&amp;": "&",
-            "&lt;": "<",
-            "&gt;": ">",
-            "&quot;": "\"",
-            "&#039;": "'",
-        }
-    return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function (m) {return map[m]})
+	if (!str) {
+		str = ""
+	}
+	let map =
+		{
+			"&amp;": "&",
+			"&lt;": "<",
+			"&gt;": ">",
+			"&quot;": "\"",
+			"&#039;": "'",
+		}
+	return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function (m) {return map[m]})
 }
 
 /**
@@ -1245,196 +1520,196 @@ function decodeHtml (str) {
  * @returns {string}
  */
 function escapeHtml (text) {
-    if (!text) {
-        text = ""
-    }
-    var map = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        "\"": "&quot;",
-        "'": "&#039;",
-    }
-    
-    return text.replace(/[&<>"']/g, function (m) { return map[m] })
+	if (!text) {
+		text = ""
+	}
+	let map = {
+		"&": "&amp;",
+		"<": "&lt;",
+		">": "&gt;",
+		"\"": "&quot;",
+		"'": "&#039;",
+	}
+	
+	return text.replace(/[&<>"']/g, function (m) { return map[m] })
 }
 
 const setInt = function (val) {
-    let returnVal = null
-    if (val) {
-        if (!isNaN(parseInt(val))) {
-            returnVal = val
-        }
-    }
-    return returnVal
+	let returnVal = null
+	if (val) {
+		if (!isNaN(parseInt(val))) {
+			returnVal = val
+		}
+	}
+	return returnVal
 }
 
 const inactivityTime = function () {
-    let time
-    window.onload = resetTimer
-    
-    // DOM Events
-    document.onmousemove = resetTimer
-    document.onkeydown = resetTimer
-    
-    function logout () {
-        location.href = "/logout"
-    }
-    
-    function resetTimer () {
-        clearTimeout(time)
-        time = setTimeout(logout, inactivityTimeout)
-    }
+	let time
+	window.onload = resetTimer
+	
+	// DOM Events
+	document.onmousemove = resetTimer
+	document.onkeydown = resetTimer
+	
+	function logout () {
+		location.href = "/logout"
+	}
+	
+	function resetTimer () {
+		clearTimeout(time)
+		time = setTimeout(logout, inactivityTimeout)
+	}
 }
 
 const htmlEncode = function (value) {
-    return $("<textarea/>").text(value).html()
+	return $("<textarea/>").text(value).html()
 }
 
 const paddy = function (num, padlen, padchar) {
-    var pad_char = typeof padchar !== "undefined" ? padchar : "0"
-    var pad = new Array(1 + padlen).join(pad_char)
-    return (pad + num).slice(-pad.length)
+	let pad_char = typeof padchar !== "undefined" ? padchar : "0"
+	let pad = new Array(1 + padlen).join(pad_char)
+	return (pad + num).slice(-pad.length)
 }
 
 const generateCodeDirectId = function (provider) {
-    if (!provider) {
-        return ""
-    }
-    
-    return "D" + paddy(14, 11)
+	if (!provider) {
+		return ""
+	}
+	
+	return "D" + paddy(14, 11)
 }
 
 const getDate = function (element) {
-    if (element.pickadate("picker")) {
-        return element.pickadate("picker").get()
-    }
+	if (element.pickadate("picker")) {
+		return element.pickadate("picker").get()
+	}
 }
 
 jQuery.extend({
-    postJSON: function (url, data, callback) {
-        let request = $.ajax({
-            url: url,
-            type: "POST",
-            data: data,
-            dataType: "json",
-        })
-        request.done(function (msg) {
-            if ($.isFunction(callback)) {
-                callback(msg, "success")
-                return true
-            }
-        })
-        request.fail(function (jqXHR, textStatus, msg) {
-            /*
-            if (toggleAJAXResponse) {
-                const link = document.createElement("a")
-                link.id = 'someLink' //give it an ID!
-                link.href = "javascript:void(0);"
-                link.addEventListener("click", function () {
-                    var file = new Blob([jqXHR.responseText], { type: "text/html" })
-                    var fileURL = URL.createObjectURL(file)
-                    var win = window.open()
-                    win.document.write('<iframe src="' + fileURL + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>')
-                })
-                let pageFrame = document.getElementById("page")
-                pageFrame.appendChild(link)
-                document.getElementById("someLink").click()
-                link.removeEventListener("click")
-                pageFrame.parentNode.removeChild(link)
-            }
-            //*/
-            /*
-            //console.log("jqXHR", jqXHR)
-            //console.log("jqXHR", jqXHR.responseText)
-            //console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
-            //console.log("textStatus", textStatus)
-            //console.log("msg", msg)
-            //console.log('http://dev.travelsoft.com/error')
-            //*/
-            if (typeof textStatus !== "undefined") {
-                //console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
-            } else {
-                //console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
-            }
-            
-            if ($.isFunction(callback)) {
-                if (jqXHR.responseJSON) {
-                    callback(jqXHR, "failed")
-                } else {
-                    callback(jqXHR, "failed")
-                }
-            }
-            return false
-        })
-        return request
-    },
-    getJSONRequest: function (url, data, callback) {
-        let getRequest = $.ajax({
-            url: url,
-            type: "GET",
-            data: data,
-            dataType: "json",
-            async: true,
-        })
-        getRequest.done(function (msg) {
-            if ($.isFunction(callback)) {
-                callback(msg, "success")
-            }
-        })
-        
-        getRequest.fail(function (jqXHR, textStatus, msg) {
-            let errors = getAjaxError(jqXHR, textStatus, url)
-            
-            if (typeof textStatus !== "undefined") {
-                let err = _display_ajax_error(jqXHR, textStatus, url)
-                //console.log("err", getAjaxError(jqXHR, textStatus, url))
-                //handleError(err.message)
-            } else {
-                let err = _display_ajax_error(jqXHR, textStatus, url)
-                //handleError(err.message)
-            }
-            
-            if ($.isFunction(callback)) {
-                msg = errors.message
-                //console.log("msg -- ", msg)
-                //console.log("msg -- ", errors.message)
-                
-                callback(msg, "failed")
-            }
-        })
-        
-    },
-    getJSON: function (url, data, callback) {
-        let getRequest = $.ajax({
-            url: url,
-            type: "GET",
-            data: data,
-            dataType: "json",
-            async: false,
-        })
-        getRequest.done(function (msg) {
-            if ($.isFunction(callback)) {
-                callback(msg, "success")
-            }
-        })
-        getRequest.fail(function (jqXHR, textStatus, msg) {
-            if (typeof textStatus !== "undefined") {
-                //console.log("Request failed")
-                //console.log(_display_ajax_error(jqXHR, textStatus, url))
-            } else {
-                //console.log("Request failed")
-                //console.log(_display_ajax_error(jqXHR, textStatus, url))
-            }
-            if ($.isFunction(callback)) {
-                callback(msg, "failed")
-            }
-        })
-    },
+	postJSON: function (url, data, callback) {
+		let request = $.ajax({
+			url: url,
+			type: "POST",
+			data: data,
+			dataType: "json",
+		})
+		request.done(function (msg) {
+			if ($.isFunction(callback)) {
+				callback(msg, "success")
+				return true
+			}
+		})
+		request.fail(function (jqXHR, textStatus, msg) {
+			/*
+			if (toggleAJAXResponse) {
+				const link = document.createElement("a")
+				link.id = 'someLink' //give it an ID!
+				link.href = "javascript:void(0);"
+				link.addEventListener("click", function () {
+					let file = new Blob([jqXHR.responseText], { type: "text/html" })
+					let fileURL = URL.createObjectURL(file)
+					let win = window.open()
+					win.document.write('<iframe src="' + fileURL + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>')
+				})
+				let pageFrame = document.getElementById("page")
+				pageFrame.appendChild(link)
+				document.getElementById("someLink").click()
+				link.removeEventListener("click")
+				pageFrame.parentNode.removeChild(link)
+			}
+			//*/
+			/*
+			//console.log("jqXHR", jqXHR)
+			//console.log("jqXHR", jqXHR.responseText)
+			//console.log("_display_ajax_error", _display_ajax_error(jqXHR, textStatus, url))
+			//console.log("textStatus", textStatus)
+			//console.log("msg", msg)
+			//console.log('http://dev.travelsoft.com/error')
+			//*/
+			if (typeof textStatus !== "undefined") {
+				//console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
+			} else {
+				//console.error("Request failed", _display_ajax_error(jqXHR, textStatus, url))
+			}
+			
+			if ($.isFunction(callback)) {
+				if (jqXHR.responseJSON) {
+					callback(jqXHR, "failed")
+				} else {
+					callback(jqXHR, "failed")
+				}
+			}
+			return false
+		})
+		return request
+	},
+	getJSONRequest: function (url, data, callback) {
+		let getRequest = $.ajax({
+			url: url,
+			type: "GET",
+			data: data,
+			dataType: "json",
+			async: true,
+		})
+		getRequest.done(function (msg) {
+			if ($.isFunction(callback)) {
+				callback(msg, "success")
+			}
+		})
+		
+		getRequest.fail(function (jqXHR, textStatus, msg) {
+			let errors = getAjaxError(jqXHR, textStatus, url)
+			
+			if (typeof textStatus !== "undefined") {
+				let err = _display_ajax_error(jqXHR, textStatus, url)
+				//console.log("err", getAjaxError(jqXHR, textStatus, url))
+				//handleError(err.message)
+			} else {
+				let err = _display_ajax_error(jqXHR, textStatus, url)
+				//handleError(err.message)
+			}
+			
+			if ($.isFunction(callback)) {
+				msg = errors.message
+				//console.log("msg -- ", msg)
+				//console.log("msg -- ", errors.message)
+				
+				callback(msg, "failed")
+			}
+		})
+		
+	},
+	getJSON: function (url, data, callback) {
+		let getRequest = $.ajax({
+			url: url,
+			type: "GET",
+			data: data,
+			dataType: "json",
+			async: false,
+		})
+		getRequest.done(function (msg) {
+			if ($.isFunction(callback)) {
+				callback(msg, "success")
+			}
+		})
+		getRequest.fail(function (jqXHR, textStatus, msg) {
+			if (typeof textStatus !== "undefined") {
+				//console.log("Request failed")
+				//console.log(_display_ajax_error(jqXHR, textStatus, url))
+			} else {
+				//console.log("Request failed")
+				//console.log(_display_ajax_error(jqXHR, textStatus, url))
+			}
+			if ($.isFunction(callback)) {
+				callback(msg, "failed")
+			}
+		})
+	},
 })
 
 const infoDialog = function (message, handler) {
-    $(`
+	$(`
         <!--Modal: modalConfirm-->
         <div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirmationLabel" aria-hidden="true">
 	<div class="modal-dialog modal-sm modal-notify modal-info" role="document">
@@ -1461,46 +1736,46 @@ const infoDialog = function (message, handler) {
 </div>
         <!--Modal: modalConfirm-->
     `).appendTo("body")
-    
-    const modal = document.getElementById("modalConfirm")
-    
-    if (modal) {
-        const $modal = $(modal)
-        //Trigger the modal
-        $modal
-            .modal({
-                backdrop: "static",
-                keyboard: false,
-            })
-        
-        //Pass true to a callback function
-        $(".btn-yes")
-            .click(function () {
-                handler(true)
-                $modal
-                    .modal("hide")
-            })
-        
-        //Pass false to callback function
-        $(".btn-no")
-            .click(function () {
-                handler(false)
-                $modal
-                    .modal("hide")
-            })
-        
-        //Remove the modal once it is closed.
-        $modal
-            .on("hidden.bs.modal", function () {
-                $modal
-                    .remove()
-            })
-    }
-    
+	
+	const modal = document.getElementById("modalConfirm")
+	
+	if (modal) {
+		const $modal = $(modal)
+		//Trigger the modal
+		$modal
+			.modal({
+				backdrop: "static",
+				keyboard: false,
+			})
+		
+		//Pass true to a callback function
+		$(".btn-yes")
+			.click(function () {
+				handler(true)
+				$modal
+					.modal("hide")
+			})
+		
+		//Pass false to callback function
+		$(".btn-no")
+			.click(function () {
+				handler(false)
+				$modal
+					.modal("hide")
+			})
+		
+		//Remove the modal once it is closed.
+		$modal
+			.on("hidden.bs.modal", function () {
+				$modal
+					.remove()
+			})
+	}
+	
 }
 
 const confirmDialog = function (message, handler) {
-    $(`
+	$(`
         <!--Modal: modalConfirm-->
         <div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirmationLabel" aria-hidden="true">
             <div class="modal-dialog modal-sm modal-notify modal-info" role="document">
@@ -1533,54 +1808,54 @@ const confirmDialog = function (message, handler) {
         </div>
         <!--Modal: modalConfirm-->
     `)
-        .appendTo("body")
-    
-    const modal = document.getElementById("modalConfirm")
-    
-    if (modal) {
-        
-        const $modal = $(modal)
-        
-        $modal
-            .modal({
-                backdrop: "static",
-                keyboard: false,
-            })
-        
-        //Pass true to a callback function
-        $(".btn-yes")
-            .on("click", function () {
-                handler(true)
-                $modal
-                    .modal("hide")
-            })
-        
-        //Pass false to callback function
-        $(".btn-no")
-            .click(function () {
-                handler(false)
-                $("#modalConfirm")
-                    .modal("hide")
-            })
-            .on("click", function () {
-                handler(false)
-                $modal
-                    .modal("hide")
-            })
-        
-        //Remove the modal once it is closed.
-        $modal
-            .on("hidden.bs.modal", function () {
-                $("#modalConfirm")
-                    .remove()
-            })
-    }
-    
+		.appendTo("body")
+	
+	const modal = document.getElementById("modalConfirm")
+	
+	if (modal) {
+		
+		const $modal = $(modal)
+		
+		$modal
+			.modal({
+				backdrop: "static",
+				keyboard: false,
+			})
+		
+		//Pass true to a callback function
+		$(".btn-yes")
+			.on("click", function () {
+				handler(true)
+				$modal
+					.modal("hide")
+			})
+		
+		//Pass false to callback function
+		$(".btn-no")
+			.click(function () {
+				handler(false)
+				$("#modalConfirm")
+					.modal("hide")
+			})
+			.on("click", function () {
+				handler(false)
+				$modal
+					.modal("hide")
+			})
+		
+		//Remove the modal once it is closed.
+		$modal
+			.on("hidden.bs.modal", function () {
+				$("#modalConfirm")
+					.remove()
+			})
+	}
+	
 }
 
 const deleteDialog = function (message, handler) {
-    
-    $(`
+	
+	$(`
         <!--Modal: modalConfirm-->
         <div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirmationLabel" aria-hidden="true">
 	<div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
@@ -1607,401 +1882,409 @@ const deleteDialog = function (message, handler) {
 </div>
         <!--Modal: modalConfirm-->
     `)
-        .appendTo("body")
-    //Trigger the modal
-    $("#modalConfirm")
-        .modal({
-            backdrop: "static",
-            keyboard: false,
-        })
-    
-    //Pass true to a callback function
-    $(".btn-yes")
-        .click(function () {
-            handler(true)
-            $("#modalConfirm")
-                .modal("hide")
-        })
-    
-    //Pass false to callback function
-    $(".btn-no")
-        .click(function () {
-            handler(false)
-            $("#modalConfirm")
-                .modal("hide")
-        })
-    
-    //Remove the modal once it is closed.
-    $("#modalConfirm")
-        .on("hidden.bs.modal", function () {
-            $("#modalConfirm")
-                .remove()
-        })
-    
+		.appendTo("body")
+	//Trigger the modal
+	$("#modalConfirm")
+		.modal({
+			backdrop: "static",
+			keyboard: false,
+		})
+	
+	//Pass true to a callback function
+	$(".btn-yes")
+		.click(function () {
+			handler(true)
+			$("#modalConfirm")
+				.modal("hide")
+		})
+	
+	//Pass false to callback function
+	$(".btn-no")
+		.click(function () {
+			handler(false)
+			$("#modalConfirm")
+				.modal("hide")
+		})
+	
+	//Remove the modal once it is closed.
+	$("#modalConfirm")
+		.on("hidden.bs.modal", function () {
+			$("#modalConfirm")
+				.remove()
+		})
+	
 }
 
 const formatURL = function (param) {
-    //console.log("formatURL()", param)
-    return encodeURIComponent(param.trim())
+	return encodeURIComponent(param.trim())
 }
 
 const buildMapsURL = function (location) {
-    //console.log("buildMapsURL(location)", location)
-    let name, street_1, street_2, zipcode, city_name, province_name, country_name
-    
-    name = (location.name) ? location.name : null
-    street_1 = (location.street_1) ? location.street_1 : null
-    street_2 = (location.street_2) ? location.street_2 : null
-    zipcode = (location.zipcode) ? location.zipcode : null
-    city_name = (location.city.name) ? location.city.name : null
-    province_name = (location.province.iso2) ? location.province.iso2 : (location.province.iso3) ? location.province.iso3 : (location.province.name) ? location.province.name : null
-    country_name = (location.province.name) ? location.country.name : (location.country.iso2) ? location.country.iso2 : (location.country.iso3) ? location.country.iso3 : null
-    name = (name !== null) ? name : null
-    street_1 = (street_1 !== null) ? street_1 : null
-    street_2 = (street_2 !== null) ? street_2 : null
-    zipcode = (zipcode !== null) ? zipcode : null
-    city_name = (city_name !== null) ? city_name : null
-    province_name = (province_name !== null) ? province_name : null
-    country_name = (country_name !== null) ? country_name : null
-    
-    let tempURL = []
-    
-    if (!is_null(name)) {
-        tempURL.push(name)
-    }
-    
-    if (!is_null(street_1)) {
-        tempURL.push(street_1)
-    }
-    
-    if (!is_null(street_2)) {
-        tempURL.push(street_2)
-    }
-    
-    if (!is_null(city_name)) {
-        //tempURL.push(city_name)
-    }
-    
-    let provinceLine = ""
-    
-    if (!is_null(city_name) && !is_null(province_name) && !is_null(zipcode)) {
-        provinceLine = zipcode + " " + city_name + " " + province_name
-    } else if (is_null(city_name) && !is_null(province_name) && !is_null(zipcode)) {
-        provinceLine = zipcode + " " + province_name
-    } else if (is_null(city_name) && is_null(province_name) && !is_null(zipcode)) {
-        provinceLine = zipcode
-    } else if (!is_null(city_name) && is_null(province_name) && !is_null(zipcode)) {
-        provinceLine = zipcode + " " + city_name
-    } else if (!is_null(city_name) && !is_null(province_name) && is_null(zipcode)) {
-        provinceLine = city_name + " " + province_name
-    } else {
-    
-    }
-    if (provinceLine !== "") {
-        tempURL.push(provinceLine)
-    }
-    
-    if (!is_null(country_name)) {
-        tempURL.push(country_name)
-    }
-    
-    let location_formatted = tempURL.join(", ")
-    location_formatted = formatURL(location_formatted)
-    return `https://maps.google.com/maps?q=${location_formatted}&t=&z=7&ie=UTF8&iwloc=&output=embed`
+	//console.log("buildMapsURL(location)", location)
+	let name, building_number, street_1, street_2, zipcode, city_name, province_name, country_name
+	
+	building_number = (location.building_number) ? location.building_number : null
+	name = (location.name) ? location.name : null
+	street_1 = (location.street_1) ? location.street_1 : null
+	street_2 = (location.street_2) ? location.street_2 : null
+	zipcode = (location.zipcode) ? location.zipcode : null
+	city_name = (location.city.name) ? location.city.name : null
+	province_name = (location.province.iso2) ? location.province.iso2 : (location.province.iso3) ? location.province.iso3 : (location.province.name) ? location.province.name : null
+	country_name = (location.province.name) ? location.country.name : (location.country.iso2) ? location.country.iso2 : (location.country.iso3) ? location.country.iso3 : null
+	
+	building_number = (building_number !== null) ? building_number : null
+	
+	name = (name !== null) ? name : null
+	street_1 = (street_1 !== null) ? street_1 : null
+	street_2 = (street_2 !== null) ? street_2 : null
+	zipcode = (zipcode !== null) ? zipcode : null
+	city_name = (city_name !== null) ? city_name : null
+	province_name = (province_name !== null) ? province_name : null
+	country_name = (country_name !== null) ? country_name : null
+	
+	let tempURL = []
+	
+	if (!is_null(name)) {
+		tempURL.push(name)
+	}
+	
+	if (!is_null(building_number)) {
+		tempURL.push(building_number)
+	}
+	
+	if (!is_null(street_1)) {
+		tempURL.push(street_1)
+	}
+	
+	if (!is_null(street_2)) {
+		tempURL.push(street_2)
+	}
+	
+	if (!is_null(city_name)) {
+		//tempURL.push(city_name)
+	}
+	
+	let provinceLine = ""
+	
+	if (!is_null(city_name) && !is_null(province_name) && !is_null(zipcode)) {
+		provinceLine = zipcode + " " + city_name + " " + province_name
+	} else if (is_null(city_name) && !is_null(province_name) && !is_null(zipcode)) {
+		provinceLine = zipcode + " " + province_name
+	} else if (is_null(city_name) && is_null(province_name) && !is_null(zipcode)) {
+		provinceLine = zipcode
+	} else if (!is_null(city_name) && is_null(province_name) && !is_null(zipcode)) {
+		provinceLine = zipcode + " " + city_name
+	} else if (!is_null(city_name) && !is_null(province_name) && is_null(zipcode)) {
+		provinceLine = city_name + " " + province_name
+	} else {
+	
+	}
+	if (provinceLine !== "") {
+		tempURL.push(provinceLine)
+	}
+	
+	if (!is_null(country_name)) {
+		tempURL.push(country_name)
+	}
+	
+	let location_formatted = tempURL.join(", ")
+	location_formatted = formatURL(location_formatted)
+	return `https://maps.google.com/maps?q=${location_formatted}&t=&z=7&ie=UTF8&iwloc=&output=embed`
 }
 
 const weatherUpdate = function (city) {
-    const xhr = new XMLHttpRequest()
-    const apiKey = "2ad550b2d7e352b38c3ca9da8396aade"
-    let cityName = city
-    xhr.open(
-        "GET",
-        `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`)
-    
-    xhr.send()
-    xhr.onload = () => {
-        if (xhr.status === 404) {
-            //console.log(`${cityName} not found`)
-        } else {
-            let data = JSON.parse(xhr.response)
-            let mainWeatherCityName = data.name
-            let mainWeatherTemperature = `${Math.round(data.main.temp - 273.15)}°C`
-            let mainWeather = data.weather[0].main
-            let mainWeatherDescription = data.weather[0].description
-            let mainWeatherImage = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
-            //console.log("mainWeatherCityName", mainWeatherCityName)
-            //console.log("mainWeatherTemperature", mainWeatherTemperature)
-            //console.log("mainWeather", mainWeather)
-            //console.log("mainWeatherDescription", mainWeatherDescription)
-            //console.log("mainWeatherImage", mainWeatherImage)//100x100
-            //console.log("data", data)
-        }
-    }
+	const xhr = new XMLHttpRequest()
+	const apiKey = "2ad550b2d7e352b38c3ca9da8396aade"
+	let cityName = city
+	xhr.open(
+		"GET",
+		`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`)
+	
+	xhr.send()
+	xhr.onload = () => {
+		if (xhr.status === 404) {
+			//console.log(`${cityName} not found`)
+		} else {
+			let data = JSON.parse(xhr.response)
+			let mainWeatherCityName = data.name
+			let mainWeatherTemperature = `${Math.round(data.main.temp - 273.15)}°C`
+			let mainWeather = data.weather[0].main
+			let mainWeatherDescription = data.weather[0].description
+			let mainWeatherImage = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
+			//console.log("mainWeatherCityName", mainWeatherCityName)
+			//console.log("mainWeatherTemperature", mainWeatherTemperature)
+			//console.log("mainWeather", mainWeather)
+			//console.log("mainWeatherDescription", mainWeatherDescription)
+			//console.log("mainWeatherImage", mainWeatherImage)//100x100
+			//console.log("data", data)
+		}
+	}
 }
 
 const ucwords = function (str) {
-    str = str.toLowerCase()
-    return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
-        function (s) {
-            return s.toUpperCase()
-        })
+	str = str.toLowerCase()
+	
+	return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
+		function (s) {
+			return s.toUpperCase()
+		})
 }
 
 const trimTrailingChars = function (s, charToTrim) {
-    return s.replace(new RegExp(charToTrim + "+$"), "")
+	return s.replace(new RegExp(charToTrim + "+$"), "")
 }
 
 const formatSize = function (bytes, decimals = 2) {
-    const k = 1024
-    const dm = decimals < 0 ? 0 : decimals
-    const units = ["BYTES", "KB", "MB"]
-    let size, unit
-    
-    unit = bytes.toUpperCase()
-    unit = trimTrailingChars(unit, "S")
-    unit = unit.replace(/BYTE/g, "BYTES")
-    unit = unit.replace(/MEGABYTE/g, "MB")
-    unit = unit.replace(/KILOBYTE/g, "KB")
-    
-    if (unit.includes("BYTES")) {
-        let unitType = "BYTES"
-        
-        return (!isNaN(parseInt(unit.replace(`/${unitType}/g`, "")))) ? parseInt(unit.replace(`/${unitType}/g`, "")) : null
-    } else if (unit.includes("KB")) {
-        let unitType = "KB"
-        
-        size = (!isNaN(parseInt((parseFloat(unit.replace(`/${unitType}/g`, "")).toFixed(dm)) * 1024))) ? parseInt((parseFloat(unit.replace(`/${unitType}/g`, "")).toFixed(dm)) * 1024) : null
-        
-        if (size !== null) {
-            return size
-        }
-    } else if (unit.includes("MB")) {
-        let unitType = "MB"
-        
-        size = (!isNaN(parseInt((parseFloat(unit.replace(`/${unitType}/g`, "")).toFixed(dm)) * 2097152))) ? parseInt((parseFloat(unit.replace(`/${unitType}/g`, "")).toFixed(dm)) * 2097152) : null
-        
-        if (size !== null) {
-            return size
-        }
-    }
+	const k = 1024
+	const dm = decimals < 0 ? 0 : decimals
+	const units = ["BYTES", "KB", "MB"]
+	let size, unit
+	
+	unit = bytes.toUpperCase()
+	unit = trimTrailingChars(unit, "S")
+	unit = unit.replace(/BYTE/g, "BYTES")
+	unit = unit.replace(/MEGABYTE/g, "MB")
+	unit = unit.replace(/KILOBYTE/g, "KB")
+	
+	if (unit.includes("BYTES")) {
+		let unitType = "BYTES"
+		
+		return (!isNaN(parseInt(unit.replace(`/${unitType}/g`, "")))) ? parseInt(unit.replace(`/${unitType}/g`, "")) : null
+	} else if (unit.includes("KB")) {
+		let unitType = "KB"
+		
+		size = (!isNaN(parseInt((parseFloat(unit.replace(`/${unitType}/g`, "")).toFixed(dm)) * 1024))) ? parseInt((parseFloat(unit.replace(`/${unitType}/g`, "")).toFixed(dm)) * 1024) : null
+		
+		if (size !== null) {
+			return size
+		}
+	} else if (unit.includes("MB")) {
+		let unitType = "MB"
+		
+		size = (!isNaN(parseInt((parseFloat(unit.replace(`/${unitType}/g`, "")).toFixed(dm)) * 2097152))) ? parseInt((parseFloat(unit.replace(`/${unitType}/g`, "")).toFixed(dm)) * 2097152) : null
+		
+		if (size !== null) {
+			return size
+		}
+	}
 }
 
 /**
  * DEBUG
  */
 $(function () {
-    $(".debug")
-        .on("click", function () {
-            showElements = true
-            if (!$(this).attr("data-shown")) {
-                $(this).attr("data-shown", "true")
-                showElements = true
-            }
-            
-            if ($(this).attr("data-shown") === "false") {
-                $(this).attr("data-shown", "true")
-                showElements = true
-            } else {
-                showElements = false
-                $(this).attr("data-shown", "false")
-            }
-            
-            let els = document.getElementsByClassName("dev-element")
-            
-            for (let i = 0; i < els.length; i++) {
-                
-                let element = els[i]
-                let tagName = element.tagName
-                
-                if (tagName.toLowerCase() === "input") {
-                    
-                    if (showElements === false) {
-                        element.hidden = false
-                        element.type = "text"
-                    } else {
-                        element.hidden = true
-                        element.type = "hidden"
-                    }
-                } else if (tagName.toLowerCase() === "label") {
-                    if (showElements === false) {
-                        $(element).removeClass("d-none")
-                    } else {
-                        $(element).addClass("d-none")
-                    }
-                }
-            }
-        })
-    
-    $(".debug_demo")
-        .on("click", function () {
-            showElements = true
-            if (!$(this).attr("data-shown")) {
-                $(this).attr("data-shown", "true")
-                showElements = true
-            }
-            
-            if ($(this).attr("data-shown") === "false") {
-                $(this).attr("data-shown", "true")
-                showElements = true
-            } else {
-                showElements = false
-                $(this).attr("data-shown", "false")
-            }
-            
-            let els = document.getElementsByClassName("dev-element")
-            
-            for (let i = 0; i < els.length; i++) {
-                
-                let element = els[i]
-                let tagName = element.tagName
-                
-                if (tagName.toLowerCase() === "input") {
-                    
-                    if (showElements === false) {
-                        element.hidden = false
-                        element.type = "text"
-                    } else {
-                        element.hidden = true
-                        element.type = "hidden"
-                    }
-                } else if (tagName.toLowerCase() === "label") {
-                    if (showElements === false) {
-                        $(element).removeClass("d-none")
-                    } else {
-                        $(element).addClass("d-none")
-                    }
-                }
-            }
-        })
+	$(".debug")
+		.on("click", function () {
+			showElements = true
+			if (!$(this).attr("data-shown")) {
+				$(this).attr("data-shown", "true")
+				showElements = true
+			}
+			
+			if ($(this).attr("data-shown") === "false") {
+				$(this).attr("data-shown", "true")
+				showElements = true
+			} else {
+				showElements = false
+				$(this).attr("data-shown", "false")
+			}
+			
+			let els = document.getElementsByClassName("dev-element")
+			
+			for (let i = 0; i < els.length; i++) {
+				
+				let element = els[i]
+				let tagName = element.tagName
+				
+				if (tagName.toLowerCase() === "input") {
+					
+					if (showElements === false) {
+						element.hidden = false
+						element.type = "text"
+					} else {
+						element.hidden = true
+						element.type = "hidden"
+					}
+				} else if (tagName.toLowerCase() === "label") {
+					if (showElements === false) {
+						$(element).removeClass("d-none")
+					} else {
+						$(element).addClass("d-none")
+					}
+				}
+			}
+		})
+	
+	$(".debug_demo")
+		.on("click", function () {
+			showElements = true
+			if (!$(this).attr("data-shown")) {
+				$(this).attr("data-shown", "true")
+				showElements = true
+			}
+			
+			if ($(this).attr("data-shown") === "false") {
+				$(this).attr("data-shown", "true")
+				showElements = true
+			} else {
+				showElements = false
+				$(this).attr("data-shown", "false")
+			}
+			
+			let els = document.getElementsByClassName("dev-element")
+			
+			for (let i = 0; i < els.length; i++) {
+				
+				let element = els[i]
+				let tagName = element.tagName
+				
+				if (tagName.toLowerCase() === "input") {
+					
+					if (showElements === false) {
+						element.hidden = false
+						element.type = "text"
+					} else {
+						element.hidden = true
+						element.type = "hidden"
+					}
+				} else if (tagName.toLowerCase() === "label") {
+					if (showElements === false) {
+						$(element).removeClass("d-none")
+					} else {
+						$(element).addClass("d-none")
+					}
+				}
+			}
+		})
 })
 
 const lowercaseFirstLetter = function (string) {
-    return string.charAt(0).toLowerCase() + string.slice(1)
+	return string.charAt(0).toLowerCase() + string.slice(1)
 }
 
 String.prototype.ucwords = function () {
-    str = this.toLowerCase()
-    return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
-        function (s) {
-            return s.toUpperCase()
-        })
+	str = this.toLowerCase()
+	return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
+		function (s) {
+			return s.toUpperCase()
+		})
 }
 String.prototype.toUCWords = function () {
-    let regex = /(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g
-    
-    return this.toLowerCase().replace(regex,
-        function (s) {
-            return s.toUpperCase()
-        })
+	let regex = /(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g
+	
+	return this.toLowerCase().replace(regex,
+		function (s) {
+			return s.toUpperCase()
+		})
 }
 String.prototype.toSnakeCase = function () {
-    const regexCleanString = /[^A-Za-z0-9]/g
-    
-    return this
-        .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
-        .map(x => x.toLowerCase())
-        .join('_')
+	const regexCleanString = /[^A-Za-z0-9]/g
+	
+	return this
+		.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
+		.map(x => x.toLowerCase())
+		.join('_')
 }
 String.prototype.toCamelCase = function () {
-    const regexCleanString = /[^A-Za-z0-9]/g
-    const regex = /(?:^\w|[A-Z]|\b\w)/g
-    
-    let text = this
-    let str = ""
-    
-    text.replace(/^\s+|\s+$/gm, '')
-    
-    //let str = this.replace(regexCleanString, "")
-    let stringParts = text.split(" ")
-    
-    for (let n = 0; n < stringParts.length; n++) {
-        let stringValue = stringParts[n].replace(regexCleanString, "")
-        
-        if (n === 0) {
-            stringValue = stringValue.toLowerCase()
-        } else {
-            stringValue = stringValue.toUCWords()
-        }
-        
-        str += stringValue
-    }
-    return str
+	const regexCleanString = /[^A-Za-z0-9]/g
+	const regex = /(?:^\w|[A-Z]|\b\w)/g
+	
+	let text = this
+	let str = ""
+	
+	text.replace(/^\s+|\s+$/gm, '')
+	
+	//let str = this.replace(regexCleanString, "")
+	let stringParts = text.split(" ")
+	
+	for (let n = 0; n < stringParts.length; n++) {
+		let stringValue = stringParts[n].replace(regexCleanString, "")
+		
+		if (n === 0) {
+			stringValue = stringValue.toLowerCase()
+		} else {
+			stringValue = stringValue.toUCWords()
+		}
+		
+		str += stringValue
+	}
+	return str
 }
 
 const buildRow = function (attr) {
-    console.log("buildRow(attr)", attr)
-    // ----
-    
-    let el = document.createElement("div")
-    let classes = (attr && attr.classes) ? attr.classes : ["row"]
-    let data = (attr && attr.data) ? attr.data : []
-    let id = (attr && attr.id) ? attr.id : null
-    let idLine = (id !== null) ? `id="${id}"` : ""
-    
-    if (id !== null) {
-        el.setAttribute("id", id)
-    }
-    
-    if (!Array.isArray(classes)) {
-        classes = classes.split(" ")
-    }
-    
-    if (!Array.isArray(data)) {
-        data = data.split(" ")
-    }
-    
-    for (let n = 0; n < classes.length; n++) {
-        el.classList.add(classes[n])
-    }
-    
-    return el
+	console.log("buildRow(attr)", attr)
+	// ----
+	
+	let el = document.createElement("div")
+	let classes = (attr && attr.classes) ? attr.classes : ["row"]
+	let data = (attr && attr.data) ? attr.data : []
+	let id = (attr && attr.id) ? attr.id : null
+	let idLine = (id !== null) ? `id="${id}"` : ""
+	
+	if (id !== null) {
+		el.setAttribute("id", id)
+	}
+	
+	if (!Array.isArray(classes)) {
+		classes = classes.split(" ")
+	}
+	
+	if (!Array.isArray(data)) {
+		data = data.split(" ")
+	}
+	
+	for (let n = 0; n < classes.length; n++) {
+		el.classList.add(classes[n])
+	}
+	
+	return el
 }
 
 const buildColumn = function (attr) {
-    console.log("buildColumn(attr)", attr)
-    // ----
-    
-    let el = document.createElement("div")
-    let classes = (attr && attr.classes) ? attr.classes : ["col"]
-    let data = (attr && attr.data) ? attr.data : []
-    let id = (attr && attr.id) ? attr.id : null
-    let idLine = (id !== null) ? `id="${id}"` : ""
-    
-    if (id !== null) {
-        el.setAttribute("id", id)
-    }
-    
-    for (let n = 0; n < classes.length; n++) {
-        el.classList.add(classes[n])
-    }
-    
-    return el
+	console.log("buildColumn(attr)", attr)
+	// ----
+	
+	let el = document.createElement("div")
+	let classes = (attr && attr.classes) ? attr.classes : ["col"]
+	let data = (attr && attr.data) ? attr.data : []
+	let id = (attr && attr.id) ? attr.id : null
+	let idLine = (id !== null) ? `id="${id}"` : ""
+	
+	if (id !== null) {
+		el.setAttribute("id", id)
+	}
+	
+	for (let n = 0; n < classes.length; n++) {
+		el.classList.add(classes[n])
+	}
+	
+	return el
 }
 
 const isNumeric = function (input, keyCode) {
-    if (!isNaN(parseInt(keyCode))) {
-        keyCode = parseInt(keyCode)
-    }
-    
-    // keyCode: 9   -   tab
-    
-    if (keyCode === 16) {
-        isShift = true
-    }
-    
-    if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || (keyCode === 8) || (keyCode === 46)) {
-        
-        if (keyCode !== 16) {
-            if ((input.value.length === 4 || input.value.length === 7) && keyCode !== 8) {
-                input.value += separatorDate
-            }
-            
-            return true
-        }
-        
-    }
-    
-    return false
+	if (!isNaN(parseInt(keyCode))) {
+		keyCode = parseInt(keyCode)
+	}
+	
+	// keyCode: 9   -   tab
+	
+	if (keyCode === 16) {
+		isShift = true
+	}
+	
+	if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || (keyCode === 8) || (keyCode === 46)) {
+		
+		if (keyCode !== 16) {
+			if ((input.value.length === 4 || input.value.length === 7) && keyCode !== 8) {
+				input.value += separatorDate
+			}
+			
+			return true
+		}
+		
+	}
+	
+	return false
 }
 
 const Console = (function () {
@@ -2087,727 +2370,747 @@ const Icon = (function () {
 })()
 
 const ProductLocation = (function () {
-    "use strict"
-    
-    const _product_location_transport_city_search = document.getElementById("product_location_transport_city_search")
-    const _product_edit_location_id = document.getElementById("product_edit_location_id")
-    const _product_location_search = document.getElementById("product_location_search")
-    const _product_edit_location_city_id = document.getElementById("product_edit_location_city_id")
-    const _product_edit_location_city = document.getElementById("product_edit_location_city")
-    const _product_edit_location_street_1 = document.getElementById("product_edit_location_street_1")
-    const _product_edit_location_street_2 = document.getElementById("product_edit_location_street_2")
-    const _product_edit_location_zipcode = document.getElementById("product_edit_location_zipcode")
-    const _product_edit_location_location_types_id = document.getElementById("product_edit_location_location_types_id")
-    const _product_edit_location_name = document.getElementById("product_edit_location_name")
-    const _button_submit_form_product_edit_location = document.getElementById("button_submit_form_product_edit_location")
-    const _button_clear_form_product_edit_location = document.getElementById("button_clear_form_product_edit_location")
-    const _product_edit_location_city_edit = document.getElementById("product_edit_location_city_edit")
-    const _location_country_id = document.getElementById("location_country_id")
-    const _location_province_id = document.getElementById("location_province_id")
-    const _location_city_id = document.getElementById("location_city_id")
-    const _product_edit_location_form = document.getElementById("product_edit_location_form")
-    const _product_location = document.getElementById("product_location")
-    
-    const _product_id = document.getElementById("product_id")
-    const _category_id = document.getElementById("category_id")
-    
-    let form_rules = {
-        group: {
-            product_edit_location_city: "edit_location_country_id location_province_id location_city_id",
-        },
-        rules: {
-            product_edit_location_city: {
-                required: true,
-            },
-            product_edit_location_name: {
-                required: true,
-            },
-            product_edit_location_location_types_id: {
-                required: true,
-            },
-        },
-        messages: {
-            product_edit_location_city: {
-                required: "Field Required",
-            },
-            product_edit_location_name: {
-                required: "Field Required",
-            },
-            product_edit_location_location_types_id: {
-                required: "Field Required",
-            },
-        },
-    }
-    
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    
-    $(_button_submit_form_product_edit_location)
-        .on("click", function () {
-            save()
-        })
-    
-    $(_button_clear_form_product_edit_location)
-        .on("click", function () {
-            resetForm()
-        })
-    
-    $(_product_edit_location_zipcode)
-        .on("change", function () {
-            ProductLocation.detail.zipcode = (_product_edit_location_zipcode.value !== "") ? _product_edit_location_zipcode.value : null
-            renderMap()
-        })
-    
-    $(_product_edit_location_name)
-        .on("click", function () {
-            ProductLocation.detail.name = (_product_edit_location_name.value !== "") ? _product_edit_location_name.value : null
-            renderMap()
-        })
-    
-    $(_location_country_id)
-        .on("change", function () {
-            let country_id = (!isNaN(parseInt(_location_country_id.value))) ? parseInt(_location_country_id.value) : null
-            
-            if (country_id !== null) {
-                let country = Country.all.get(country_id)
-                ProductLocation.detail.country_id = country_id
-                ProductLocation.detail.country = country
-            }
-        })
-    
-    $(_location_province_id)
-        .on("change", function () {
-            let province_id = (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null
-            
-            if (province_id !== null) {
-                let province = Province.all.get(province_id)
-                ProductLocation.detail.province_id = province_id
-                ProductLocation.detail.province = province
-            }
-        })
-    
-    $(_location_city_id)
-        .on("change", function () {
-            let city_id = (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null
-            
-            if (city_id !== null) {
-                let city = City.all.get(city_id)
-                ProductLocation.detail.city_id = city_id
-                ProductLocation.detail.city = city
-                renderMap()
-            }
-        })
-    
-    $(_product_edit_location_name)
-        .on("change", function () {
-            ProductLocation.detail.name = (_product_edit_location_name.value !== "") ? _product_edit_location_name.value : null
-            renderMap()
-        })
-    
-    $(_product_edit_location_street_1)
-        .on("change", function () {
-            ProductLocation.detail.street_1 = (_product_edit_location_street_1.value !== "") ? _product_edit_location_street_1.value : null
-            renderMap()
-        })
-    
-    $(_product_edit_location_street_2)
-        .on("change", function () {
-            ProductLocation.detail.street_2 = (_product_edit_location_street_2.value !== "") ? _product_edit_location_street_2.value : null
-            renderMap()
-        })
-    
-    $(_location_city_id)
-        .on("change", function () {
-            let cityLine = ""
-            let country_id = (!isNaN(parseInt(_location_country_id.value))) ? parseInt(_location_country_id.value) : null
-            let province_id = (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null
-            let city_id = (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null
-            let country = Country.all.get(country_id)
-            let province = Province.all.get(province_id)
-            let city = City.all.get(city_id)
-            
-            ProductLocation.detail.country = country
-            ProductLocation.detail.country_id = country_id
-            
-            ProductLocation.detail.province = province
-            ProductLocation.detail.province_id = province_id
-            
-            ProductLocation.detail.city = city
-            ProductLocation.detail.city_id = city_id
-            
-            if (country && province && city) {
-                let cityName = city.name
-                let provinceName = province.name
-                let countryName = country.name
-                _product_edit_location_city_id.value = city.id
-                cityLine = `${cityName} (${provinceName}, ${countryName})`
-            } else {
-                cityLine = ``
-                _product_edit_location_city_id.value = ``
-            }
-            
-            _product_edit_location_city.value = cityLine
-        })
-    
-    const initAutoComplete = function () {
-        
-        $(_product_edit_location_city)
-            .on("change", function () {
-                setTimeout(function () {
-                    let cityName = _product_edit_location_city.value
-                    if (cityName === "") {
-                        resetCityForm()
-                    }
-                }, 200)
-            })
-            .on("search", function () {
-                resetCityForm()
-            })
-            .on("click", function (e) {
-                if ($(this).attr("readonly") === "readonly") {
-                    e.preventDefault()
-                } else {
-                    $(this).select()
-                }
-            })
-            .autocomplete({
-                serviceUrl: "/api/v1.0/autocomplete/cities",
-                minChars: 2,
-                cache: false,
-                dataType: "json",
-                triggerSelectOnValidInput: false,
-                paramName: "st",
-                onSelect: function (suggestion) {
-                    if (!suggestion.data) {
-                        return
-                    }
-                    let country, province, city, city_name, country_name, province_name = null
-                    
-                    let product_location = suggestion.data
-                    
-                    let detail = set(product_location)
-                    
-                    if (product_location.country) {
-                        country = product_location.country
-                        Country.set_detail(country)
-                        Country.id = (country.id) ? country.id.toString() : null
-                    }
-                    
-                    if (product_location.province) {
-                        province = product_location.province
-                        Province.set_detail(province)
-                        province_name = province.name
-                        Province.id = (province.id) ? province.id.toString() : null
-                    }
-                    
-                    if (product_location.city) {
-                        city = product_location.city
-                        city_name = city.name
-                        City.set_detail(city)
-                        City.id = (city.id) ? city.id.toString() : null
-                    }
-                    
-                    $(_location_country_id).val((product_location.city.country_id) ? product_location.city.country_id : "").trigger("change")
-                    
-                    _product_location_search.value = `City Center (${city_name}, ${province_name})`
-                    
-                    let name = (_product_edit_location_name && _product_edit_location_name.value !== "") ? _product_edit_location_name.value : null
-                    let zipcode = (_product_edit_location_zipcode && _product_edit_location_zipcode.value !== "") ? _product_edit_location_zipcode.value : null
-                    let street_1 = (_product_edit_location_street_1 && _product_edit_location_street_1.value !== "") ? _product_edit_location_street_1.value : null
-                    let street_2 = (_product_edit_location_street_2 && _product_edit_location_street_2.value !== "") ? _product_edit_location_street_2.value : null
-                    
-                    product_location.name = name
-                    product_location.street_1 = street_1
-                    product_location.street_2 = street_2
-                    product_location.zipcode = zipcode
-                    
-                    //renderMap()
-                },
-            })
-    }
-    
-    const showCityForm = function () {
-        if (_product_edit_location_city_edit) {
-            $(_product_edit_location_city_edit).show()
-        }
-    }
-    
-    const hideCityForm = function () {
-        if (_product_edit_location_city_edit) {
-            //$(_product_edit_location_city_edit).hide()
-        }
-    }
-    
-    const resetCityForm = function () {
-        _product_edit_location_zipcode.value = ""
-        _product_edit_location_city_id.value = ""
-        
-        $(_location_country_id)
-            .val("")
-            .trigger("change")
-        
-        hideCityForm()
-    }
-    
-    const resetForm = function () {
-        _product_edit_location_street_1.value = ""
-        _product_edit_location_street_2.value = ""
-        _product_edit_location_zipcode.value = ""
-        _product_edit_location_city.value = ""
-        _product_edit_location_name.value = ""
-        _product_edit_location_location_types_id.value = ""
-        
-        resetCityForm()
-    }
-    
-    const renderMap = function () {
-        //console.log("ProductLocation.detail", ProductLocation.detail)
-        
-        let url = buildMapsURL(ProductLocation.detail)
-        let elementWidth, elementHeight = null
-        let _locationMap = document.getElementById("locationMap")
-        
-        if (_locationMap) {
-            $(_locationMap)
-                .empty()
-                .append(
-                    $("<iframe/>", {
-                        id: "locationMapContainer",
-                        allowfullscreen: "allowfullscreen",
-                        frameborder: "0",
-                        src: url,
-                    }),
-                )
-            
-            elementWidth = (!isNaN(parseInt($(_locationMap).actual("width")))) ? parseInt($(_locationMap).actual("width")) : null
-            
-            if (elementWidth) {
-                elementHeight = elementWidth / 2
-                
-                $("#locationMapContainer")
-                    .css({
-                        "height": elementHeight + "px",
-                        "width": elementWidth + "px",
-                    })
-            }
-        }
-        
-    }
-    
-    const defaultDetail = function () {
-        return {
-            id: null,
-            city_id: null,
-            location_types_id: null,
-            name: null,
-            street_1: null,
-            street_2: null,
-            zipcode: null,
-            enabled: 1,
-            date_created: formatDateMySQL(),
-            created_by: user_id,
-            date_modified: formatDateMySQL(),
-            modified_by: user_id,
-            note: null,
-            display_long: null,
-            display_medium: null,
-            display_short: null,
-            country: {},
-            province: {},
-            city: {},
-            type: [],
-        }
-    }
-    
-    const set = function (productLocation) {
-        /*
-        //console.log("ProductLocation.set(productLocation) - productLocation ", productLocation)
-        let detail = defaultDetail()
-        
-        if (productLocation) {
-            let locationTypesId = (!isNaN(parseInt(productLocation.location_types_id))) ? parseInt(productLocation.location_types_id) : null
-            
-            detail["zipcode"] = (productLocation.zipcode) ? productLocation.zipcode : null
-            detail["street_1"] = (productLocation.street_1) ? productLocation.street_1 : null
-            detail["street_2"] = (productLocation.street_2) ? productLocation.street_2 : null
-            detail["country"] = (productLocation.country) ? productLocation.country : null
-            detail["province"] = (productLocation.province) ? productLocation.province : null
-            detail["city"] = (productLocation.city) ? productLocation.city : null
-            detail["display_long"] = (productLocation.display_long) ? productLocation.display_long : null
-            detail["display_medium"] = (productLocation.display_medium) ? productLocation.display_medium : null
-            detail["display_short"] = (productLocation.display_short) ? productLocation.display_short : null
-            detail["postal_code"] = (productLocation.postal_code) ? productLocation.postal_code : null
-            
-            detail["enabled"] = (productLocation.enabled) ? productLocation.enabled : 1
-            detail["id"] = (productLocation.id) ? productLocation.id : null
-            detail["name"] = (productLocation.name) ? productLocation.name : null
-            
-            detail["type"] = (productLocation.type) ? productLocation.type : []
-            
-            detail["location_types_id"] = locationTypesId
-            detail["type"] = (productLocation.type) ? productLocation.type : {}
-            detail["city_id"] = (productLocation.city.id) ? productLocation.city.id : null
-            detail["province"].id = (productLocation.province.id) ? productLocation.province.id : null
-            detail["country"].id = (productLocation.country.id) ? productLocation.country.id : null
-        }
-        
-        ProductLocation.detail = detail
-        
-        return detail
-        //*/
-    }
-    
-    const populateForm = function (product_location) {
-        if (!_product_edit_location_form) {
-            return
-        }
-        
-        resetForm()
-        
-        if (product_location) {
-            let detail = product_location
-            let country, province, city = {}
-            
-            ProductLocation.detail = product_location
-            ProductLocation.display_long = product_location.display_long //"City Center (Houston TX - Texas, US - United States)"
-            ProductLocation.display_medium = product_location.display_medium // "City Center (Houston, Texas)"
-            ProductLocation.display_short = product_location.display_short //"City Center (Houston TX, US)"
-            
-            let citySearchDisplay = ""
-            let location_name = (product_location.name) ? product_location.name : null
-            let location_id = (!isNaN(parseInt(product_location.id))) ? parseInt(product_location.id) : null
-            let postal_code = (product_location.postal_code) ? product_location.postal_code : ""
-            let street_1 = (product_location.street_1) ? product_location.street_1 : ""
-            let street_2 = (product_location.street_2) ? product_location.street_2 : ""
-            
-            _product_edit_location_id.value = location_id
-            _product_edit_location_street_1.value = street_1
-            _product_edit_location_street_2.value = street_2
-            _product_edit_location_zipcode.value = postal_code
-            _product_edit_location_city.value = ""
-            _product_edit_location_name.value = location_name
-            
-            $(_product_edit_location_location_types_id).val(product_location.type.id.toString())
-            
-            if (product_location.country) {
-                country = product_location.country
-                Country.set_detail(country)
-                Country.id = (country.id) ? country.id.toString() : null
-            }
-            
-            if (product_location.province) {
-                province = product_location.province
-                Province.set_detail(province)
-                Province.id = (province.id) ? province.id.toString() : null
-            }
-            
-            if (product_location.city) {
-                city = product_location.city
-                City.set_detail(city)
-                City.id = (city.id) ? city.id.toString() : null
-            }
-            
-            ProductLocation.detail.name = (product_location.name) ? product_location.name : null
-            
-            citySearchDisplay = city.name + " (" + province.name + ", " + country.name + ")"
-            _product_edit_location_city.value = citySearchDisplay
-            
-            $(_location_country_id)
-                .val((country.id) ? country.id : "")
-                .trigger("change")
-            
-            renderMap()
-        }
-        
-    }
-    
-    const valid = function () {
-        return $(_product_edit_location_form).valid()
-    }
-    
-    const buildLocationObject = function () {
-        //console.log("ProductLocation.buildLocationObject()")
-        if (valid()) {
-            let id, city_id, location_types_id, name, street_1, street_2,
-                zipcode, enabled, note
-            
-            name = (_product_edit_location_name.value !== "") ? _product_edit_location_name.value : null
-            street_1 = (_product_edit_location_street_1.value !== "") ? _product_edit_location_street_1.value : null
-            street_2 = (_product_edit_location_street_2.value !== "") ? _product_edit_location_street_2.value : null
-            city_id = (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null
-            zipcode = (_product_edit_location_zipcode.value !== "") ? _product_edit_location_zipcode.value : null
-            id = (!isNaN(parseInt(_product_edit_location_id.value))) ? parseInt(_product_edit_location_id.value) : null
-            location_types_id = (!isNaN(parseInt(_product_edit_location_location_types_id.value))) ? parseInt(_product_edit_location_location_types_id.value) : null
-            
-            let productLocation = {
-                product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
-                category_id: (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null,
-                id: id,
-                city_id: city_id,
-                location_types_id: location_types_id,
-                name: name,
-                street_1: street_1,
-                street_2: street_2,
-                zipcode: zipcode,
-                enabled: 1,
-                note: null,
-            }
-            
-            return removeNulls(productLocation)
-        }
-    }
-    
-    const sendUpdateRequest = function (dataToSend, callback) {
-        let url = "/api/v1.0/locations/update"
-        
-        try {
-            sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                if (data) {
-                    return callback(data)
-                }
-            })
-        } catch (e) {
-            //console.log("error", e)
-            handleProductLocationError("Error Updating Location")
-        }
-    }
-    
-    const handleProductLocationError = function (msg) {
-    
-    }
-    
-    const save = function () {
-        let productLocation = buildLocationObject()
-        
-        if (productLocation) {
-            confirmDialog(`Would you like to update?`, (ans) => {
-                if (ans) {
-                    sendUpdateRequest(productLocation, function (data) {
-                        let location
-                        if (data) {
-                            location = data
-                            if (data[0]) {
-                                location = data[0]
-                            }
-                        }
-                        
-                        if (location) {
-                            Product.detail.location = location
-                            
-                            //console.log("location", location)
-                            //console.log("Product.detail.location", Product.detail.location)
-                            Product.updateDisplay()
-                            toastr["success"](`Location ${location.id} has been updated`, "Location Updated")
-                        }
-                    })
-                }
-            })
-        }
-    }
-    
-    const init = function (settings) {
-        //console.log("init(settings)", settings)
-        
-        $(document).ready(function () {
-            let categoryId = (_category_id && (!isNaN(parseInt(_category_id.value)))) ? parseInt(_category_id.value) : null
-            let location
-            
-            if (settings) {
-                
-                _product_edit_location_city_id.value = (settings.product.city_id) ? settings.product.city_id : null
-                
-                if (categoryId === 1) {
-                    if (_product_edit_location_form) {
-                        _product_edit_location_city_id.value = (settings.product.city_id) ? settings.product.city_id : null
-                        location = (settings.product_location) ? settings.product_location : null
-                        if (location) {
-                            validator_init(form_rules)
-                            ProductLocation.validator = $(_product_edit_location_form).validate()
-                            
-                            $(_location_country_id).BuildDropDown({
-                                data: Array.from(Country.all.values()),
-                                title: "Country",
-                                id_field: "id",
-                                text_field: "name",
-                                first_selectable: false,
-                            })
-                            
-                            $(_location_province_id).BuildDropDown({
-                                data: Array.from(Province.all.values()),
-                                title: "Province",
-                                id_field: "id",
-                                text_field: "name",
-                                first_selectable: false,
-                            })
-                            
-                            $(_location_city_id).BuildDropDown({
-                                data: Array.from(City.all.values()),
-                                title: "City",
-                                id_field: "id",
-                                text_field: "name",
-                                first_selectable: false,
-                            })
-                            
-                            Country.init({
-                                dropdowns: [
-                                    "location_country_id",
-                                ],
-                            })
-                            
-                            Province.init({
-                                dropdowns: [
-                                    "location_province_id",
-                                ],
-                            })
-                            
-                            City.init({
-                                dropdowns: [
-                                    "location_city_id",
-                                ],
-                            })
-                            
-                            initAutoComplete()
-                            
-                            populateForm(location)
-                        }
-                    }
-                }
-                
-                if (categoryId === 2) {
-                    //console.log("settings - 2", settings)
-                    let cityId = (settings.product.city_id) ? settings.product.city_id : null
-                    //console.log("cityId - 3", cityId)
-                    _product_edit_location_city_id.value = cityId
-                    if (settings.arriving_location && settings.departing_location) {
-                        Airport.init(settings)
-                    }
-                }
-                
-                if (categoryId === 3) {
-                    //console.log("settings - 3", settings)
-                    let cityId = (settings.product.city_id) ? settings.product.city_id : null
-                    //console.log("cityId - 3", cityId)
-                    _product_edit_location_city_id.value = (settings.product.city_id) ? settings.product.city_id : null
-                    Car.init(settings)
-                }
-                
-                if (categoryId === 4) {
-                
-                }
-                
-                if (categoryId === 5) {
-                
-                }
-                
-                if (categoryId === 6) {
-                    if (_product_edit_location_form) {
-                        _product_edit_location_city_id.value = (settings.product.city_id) ? settings.product.city_id : null
-                        location = (settings.product_location) ? settings.product_location : null
-                        if (location) {
-                            validator_init(form_rules)
-                            ProductLocation.validator = $(_product_edit_location_form).validate()
-                            
-                            $(_location_country_id).BuildDropDown({
-                                data: Array.from(Country.all.values()),
-                                title: "Country",
-                                id_field: "id",
-                                text_field: "name",
-                                first_selectable: false,
-                            })
-                            
-                            $(_location_province_id).BuildDropDown({
-                                data: Array.from(Province.all.values()),
-                                title: "Province",
-                                id_field: "id",
-                                text_field: "name",
-                                first_selectable: false,
-                            })
-                            
-                            $(_location_city_id).BuildDropDown({
-                                data: Array.from(City.all.values()),
-                                title: "City",
-                                id_field: "id",
-                                text_field: "name",
-                                first_selectable: false,
-                            })
-                            
-                            Country.init({
-                                dropdowns: [
-                                    "location_country_id",
-                                ],
-                            })
-                            
-                            Province.init({
-                                dropdowns: [
-                                    "location_province_id",
-                                ],
-                            })
-                            
-                            City.init({
-                                dropdowns: [
-                                    "location_city_id",
-                                ],
-                            })
-                            
-                            initAutoComplete()
-                            
-                            populateForm(location)
-                        }
-                    }
-                }
-                
-                if (categoryId === 7) {
-                
-                }
-                
-                if (categoryId === 8) {
-                
-                }
-                
-                if (categoryId === 9) {
-                
-                }
-                
-            }
-        })
-    }
-    
-    return {
-        validator: null,
-        detail: {
-            id: null,
-            city_id: null,
-            location_types_id: null,
-            name: null,
-            street_1: null,
-            street_2: null,
-            zipcode: null,
-            enabled: 1,
-            date_created: formatDateMySQL(),
-            created_by: user_id,
-            date_modified: formatDateMySQL(),
-            modified_by: user_id,
-            note: null,
-            display_long: null,
-            display_medium: null,
-            display_short: null,
-            country: [],
-            province: [],
-            city: [],
-            type: [],
-        },
-        display_long: null,
-        display_medium: null,
-        display_short: null,
-        init: function (settings) {
-            $(document).ready(function () {
-                init(settings)
-            })
-        },
-    }
+	"use strict"
+	
+	const _product_location_transport_city_search = document.getElementById("product_location_transport_city_search")
+	const _product_edit_location_id = document.getElementById("product_edit_location_id")
+	const _product_location_search = document.getElementById("product_location_search")
+	const _product_edit_location_city_id = document.getElementById("product_edit_location_city_id")
+	const _product_edit_location_city = document.getElementById("product_edit_location_city")
+	const _product_edit_location_street_1 = document.getElementById("product_edit_location_street_1")
+	const _product_edit_location_street_2 = document.getElementById("product_edit_location_street_2")
+	const _product_edit_location_zipcode = document.getElementById("product_edit_location_zipcode")
+	const _product_edit_location_location_types_id = document.getElementById("product_edit_location_location_types_id")
+	const _product_edit_location_name = document.getElementById("product_edit_location_name")
+	const _button_submit_form_product_edit_location = document.getElementById("button_submit_form_product_edit_location")
+	const _button_clear_form_product_edit_location = document.getElementById("button_clear_form_product_edit_location")
+	const _product_edit_location_city_edit = document.getElementById("product_edit_location_city_edit")
+	const _location_country_id = document.getElementById("location_country_id")
+	const _location_province_id = document.getElementById("location_province_id")
+	const _location_city_id = document.getElementById("location_city_id")
+	const _product_edit_location_form = document.getElementById("product_edit_location_form")
+	const _product_location = document.getElementById("product_location")
+	const _product_location_country_id = document.getElementById("product_location_country_id")
+	const _product_location_province_id = document.getElementById("product_location_province_id")
+	const _product_location_city_id = document.getElementById("product_location_city_id")
+	const _product_id = document.getElementById("product_id")
+	const _category_id = document.getElementById("category_id")
+	
+	let form_rules = {
+		group: {
+			product_edit_location_city: "edit_location_country_id location_province_id location_city_id",
+		},
+		rules: {
+			product_edit_location_city: {
+				required: true,
+			},
+			product_edit_location_name: {
+				required: true,
+			},
+			product_edit_location_location_types_id: {
+				required: true,
+			},
+		},
+		messages: {
+			product_edit_location_city: {
+				required: "Field Required",
+			},
+			product_edit_location_name: {
+				required: "Field Required",
+			},
+			product_edit_location_location_types_id: {
+				required: "Field Required",
+			},
+		},
+	}
+	
+	let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+	
+	$(_button_submit_form_product_edit_location)
+		.on("click", function () {
+			save()
+		})
+	
+	$(_button_clear_form_product_edit_location)
+		.on("click", function () {
+			resetForm()
+		})
+	
+	$(_product_edit_location_zipcode)
+		.on("change", function () {
+			ProductLocation.detail.zipcode = (_product_edit_location_zipcode.value !== "") ? _product_edit_location_zipcode.value : null
+			renderMap()
+		})
+	
+	$(_product_edit_location_name)
+		.on("click", function () {
+			ProductLocation.detail.name = (_product_edit_location_name.value !== "") ? _product_edit_location_name.value : null
+			renderMap()
+		})
+	
+	$(_location_country_id)
+		.on("change", function () {
+			let country_id = (!isNaN(parseInt(_location_country_id.value))) ? parseInt(_location_country_id.value) : null
+			
+			if (country_id !== null) {
+				let country = Country.all.get(country_id)
+				ProductLocation.detail.country_id = country_id
+				ProductLocation.detail.country = country
+			}
+		})
+	
+	$(_location_province_id)
+		.on("change", function () {
+			let province_id = (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null
+			
+			if (province_id !== null) {
+				let province = Province.all.get(province_id)
+				ProductLocation.detail.province_id = province_id
+				ProductLocation.detail.province = province
+			}
+		})
+	
+	$(_location_city_id)
+		.on("change", function () {
+			let city_id = (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null
+			
+			if (city_id !== null) {
+				let city = City.all.get(city_id)
+				ProductLocation.detail.city_id = city_id
+				ProductLocation.detail.city = city
+				renderMap()
+			}
+		})
+	
+	$(_product_edit_location_name)
+		.on("change", function () {
+			ProductLocation.detail.name = (_product_edit_location_name.value !== "") ? _product_edit_location_name.value : null
+			renderMap()
+		})
+	
+	$(_product_edit_location_street_1)
+		.on("change", function () {
+			ProductLocation.detail.street_1 = (_product_edit_location_street_1.value !== "") ? _product_edit_location_street_1.value : null
+			renderMap()
+		})
+	
+	$(_product_edit_location_street_2)
+		.on("change", function () {
+			ProductLocation.detail.street_2 = (_product_edit_location_street_2.value !== "") ? _product_edit_location_street_2.value : null
+			renderMap()
+		})
+	
+	$(_location_city_id)
+		.on("change", function () {
+			let cityLine = ""
+			let country_id = (!isNaN(parseInt(_location_country_id.value))) ? parseInt(_location_country_id.value) : null
+			let province_id = (!isNaN(parseInt(_location_province_id.value))) ? parseInt(_location_province_id.value) : null
+			let city_id = (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null
+			let country = Country.all.get(country_id)
+			let province = Province.all.get(province_id)
+			let city = City.all.get(city_id)
+			
+			ProductLocation.detail.country = country
+			ProductLocation.detail.country_id = country_id
+			
+			ProductLocation.detail.province = province
+			ProductLocation.detail.province_id = province_id
+			
+			ProductLocation.detail.city = city
+			ProductLocation.detail.city_id = city_id
+			
+			if (country && province && city) {
+				
+				let cityName = city.name
+				let provinceName = province.name
+				let countryName = country.name
+				if (_product_edit_location_city_id) {
+					_product_edit_location_city_id.value = city.id
+				}
+				if (_product_location_city_id) {
+					_product_location_city_id.value = city.id
+				}
+				cityLine = `${cityName} (${provinceName}, ${countryName})`
+				
+			} else {
+				cityLine = ``
+				
+				if (_product_location_city_id) {
+					_product_location_city_id.value = ``
+				}
+				
+				if (_product_edit_location_city_id) {
+					_product_edit_location_city_id.value = ``
+				}
+				
+			}
+			
+			if (_product_edit_location_city) {
+				_product_edit_location_city.value = cityLine
+			}
+			
+		})
+	
+	const initAutoComplete = function () {
+		
+		$(_product_edit_location_city)
+			.on("change", function () {
+				setTimeout(function () {
+					let cityName = _product_edit_location_city.value
+					if (cityName === "") {
+						resetCityForm()
+					}
+				}, 200)
+			})
+			.on("search", function () {
+				resetCityForm()
+			})
+			.on("click", function (e) {
+				if ($(this).attr("readonly") === "readonly") {
+					e.preventDefault()
+				} else {
+					$(this).select()
+				}
+			})
+			.autocomplete({
+				serviceUrl: "/api/v1.0/autocomplete/cities",
+				minChars: 2,
+				cache: false,
+				dataType: "json",
+				triggerSelectOnValidInput: false,
+				paramName: "st",
+				onSelect: function (suggestion) {
+					if (!suggestion.data) {
+						return
+					}
+					let country, province, city, city_name, country_name, province_name = null
+					
+					let product_location = suggestion.data
+					
+					let detail = set(product_location)
+					
+					if (product_location.country) {
+						country = product_location.country
+						Country.set_detail(country)
+						Country.id = (country.id) ? country.id.toString() : null
+					}
+					
+					if (product_location.province) {
+						province = product_location.province
+						Province.set_detail(province)
+						province_name = province.name
+						Province.id = (province.id) ? province.id.toString() : null
+					}
+					
+					if (product_location.city) {
+						city = product_location.city
+						city_name = city.name
+						City.set_detail(city)
+						City.id = (city.id) ? city.id.toString() : null
+					}
+					
+					$(_location_country_id).val((product_location.city.country_id) ? product_location.city.country_id : "").trigger("change")
+					
+					_product_location_search.value = `City Center (${city_name}, ${province_name})`
+					
+					let name = (_product_edit_location_name && _product_edit_location_name.value !== "") ? _product_edit_location_name.value : null
+					let zipcode = (_product_edit_location_zipcode && _product_edit_location_zipcode.value !== "") ? _product_edit_location_zipcode.value : null
+					let street_1 = (_product_edit_location_street_1 && _product_edit_location_street_1.value !== "") ? _product_edit_location_street_1.value : null
+					let street_2 = (_product_edit_location_street_2 && _product_edit_location_street_2.value !== "") ? _product_edit_location_street_2.value : null
+					
+					product_location.name = name
+					product_location.street_1 = street_1
+					product_location.street_2 = street_2
+					product_location.zipcode = zipcode
+					
+					//renderMap()
+				},
+			})
+	}
+	
+	const showCityForm = function () {
+		if (_product_edit_location_city_edit) {
+			$(_product_edit_location_city_edit).show()
+		}
+	}
+	
+	const hideCityForm = function () {
+		if (_product_edit_location_city_edit) {
+			//$(_product_edit_location_city_edit).hide()
+		}
+	}
+	
+	const resetCityForm = function () {
+		_product_edit_location_zipcode.value = ""
+		_product_edit_location_city_id.value = ""
+		
+		$(_location_country_id)
+			.val("")
+			.trigger("change")
+		
+		hideCityForm()
+	}
+	
+	const resetForm = function () {
+		_product_edit_location_street_1.value = ""
+		_product_edit_location_street_2.value = ""
+		_product_edit_location_zipcode.value = ""
+		_product_edit_location_city.value = ""
+		_product_edit_location_name.value = ""
+		_product_edit_location_location_types_id.value = ""
+		
+		resetCityForm()
+	}
+	
+	const renderMap = function () {
+		//console.log("ProductLocation.detail", ProductLocation.detail)
+		
+		let url = buildMapsURL(ProductLocation.detail)
+		let elementWidth, elementHeight = null
+		let _locationMap = document.getElementById("locationMap")
+		
+		if (_locationMap) {
+			$(_locationMap)
+				.empty()
+				.append(
+					$("<iframe/>", {
+						id: "locationMapContainer",
+						allowfullscreen: "allowfullscreen",
+						frameborder: "0",
+						src: url,
+					}),
+				)
+			
+			elementWidth = (!isNaN(parseInt($(_locationMap).actual("width")))) ? parseInt($(_locationMap).actual("width")) : null
+			
+			if (elementWidth) {
+				elementHeight = elementWidth / 2
+				
+				$("#locationMapContainer")
+					.css({
+						"height": elementHeight + "px",
+						"width": elementWidth + "px",
+					})
+			}
+		}
+		
+	}
+	
+	const defaultDetail = function () {
+		return {
+			id: null,
+			city_id: null,
+			location_types_id: null,
+			name: null,
+			street_1: null,
+			street_2: null,
+			zipcode: null,
+			enabled: 1,
+			date_created: formatDateMySQL(),
+			created_by: user_id,
+			date_modified: formatDateMySQL(),
+			modified_by: user_id,
+			note: null,
+			display_long: null,
+			display_medium: null,
+			display_short: null,
+			country: {},
+			province: {},
+			city: {},
+			type: [],
+		}
+	}
+	
+	const set = function (productLocation) {
+		/*
+		//console.log("ProductLocation.set(productLocation) - productLocation ", productLocation)
+		let detail = defaultDetail()
+		
+		if (productLocation) {
+			let locationTypesId = (!isNaN(parseInt(productLocation.location_types_id))) ? parseInt(productLocation.location_types_id) : null
+			
+			detail["zipcode"] = (productLocation.zipcode) ? productLocation.zipcode : null
+			detail["street_1"] = (productLocation.street_1) ? productLocation.street_1 : null
+			detail["street_2"] = (productLocation.street_2) ? productLocation.street_2 : null
+			detail["country"] = (productLocation.country) ? productLocation.country : null
+			detail["province"] = (productLocation.province) ? productLocation.province : null
+			detail["city"] = (productLocation.city) ? productLocation.city : null
+			detail["display_long"] = (productLocation.display_long) ? productLocation.display_long : null
+			detail["display_medium"] = (productLocation.display_medium) ? productLocation.display_medium : null
+			detail["display_short"] = (productLocation.display_short) ? productLocation.display_short : null
+			detail["postal_code"] = (productLocation.postal_code) ? productLocation.postal_code : null
+			
+			detail["enabled"] = (productLocation.enabled) ? productLocation.enabled : 1
+			detail["id"] = (productLocation.id) ? productLocation.id : null
+			detail["name"] = (productLocation.name) ? productLocation.name : null
+			
+			detail["type"] = (productLocation.type) ? productLocation.type : []
+			
+			detail["location_types_id"] = locationTypesId
+			detail["type"] = (productLocation.type) ? productLocation.type : {}
+			detail["city_id"] = (productLocation.city.id) ? productLocation.city.id : null
+			detail["province"].id = (productLocation.province.id) ? productLocation.province.id : null
+			detail["country"].id = (productLocation.country.id) ? productLocation.country.id : null
+		}
+		
+		ProductLocation.detail = detail
+		
+		return detail
+		//*/
+	}
+	
+	const populateForm = function (product_location) {
+		if (!_product_edit_location_form) {
+			return
+		}
+		
+		resetForm()
+		
+		if (product_location) {
+			let detail = product_location
+			let country, province, city = {}
+			
+			ProductLocation.detail = product_location
+			ProductLocation.display_long = product_location.display_long //"City Center (Houston TX - Texas, US - United States)"
+			ProductLocation.display_medium = product_location.display_medium // "City Center (Houston, Texas)"
+			ProductLocation.display_short = product_location.display_short //"City Center (Houston TX, US)"
+			
+			let citySearchDisplay = ""
+			let location_name = (product_location.name) ? product_location.name : null
+			let location_id = (!isNaN(parseInt(product_location.id))) ? parseInt(product_location.id) : null
+			let postal_code = (product_location.postal_code) ? product_location.postal_code : ""
+			let street_1 = (product_location.street_1) ? product_location.street_1 : ""
+			let street_2 = (product_location.street_2) ? product_location.street_2 : ""
+			
+			_product_edit_location_id.value = location_id
+			_product_edit_location_street_1.value = street_1
+			_product_edit_location_street_2.value = street_2
+			_product_edit_location_zipcode.value = postal_code
+			_product_edit_location_city.value = ""
+			_product_edit_location_name.value = location_name
+			
+			$(_product_edit_location_location_types_id).val(product_location.type.id.toString())
+			
+			if (product_location.country) {
+				country = product_location.country
+				Country.set_detail(country)
+				Country.id = (country.id) ? country.id.toString() : null
+			}
+			
+			if (product_location.province) {
+				province = product_location.province
+				Province.set_detail(province)
+				Province.id = (province.id) ? province.id.toString() : null
+			}
+			
+			if (product_location.city) {
+				city = product_location.city
+				City.set_detail(city)
+				City.id = (city.id) ? city.id.toString() : null
+			}
+			
+			ProductLocation.detail.name = (product_location.name) ? product_location.name : null
+			
+			citySearchDisplay = city.name + " (" + province.name + ", " + country.name + ")"
+			_product_edit_location_city.value = citySearchDisplay
+			
+			$(_location_country_id)
+				.val((country.id) ? country.id : "")
+				.trigger("change")
+			
+			renderMap()
+		}
+		
+	}
+	
+	const valid = function () {
+		return $(_product_edit_location_form).valid()
+	}
+	
+	const buildLocationObject = function () {
+		//console.log("ProductLocation.buildLocationObject()")
+		if (valid()) {
+			let id, city_id, location_types_id, name, street_1, street_2,
+				zipcode, enabled, note
+			
+			name = (_product_edit_location_name.value !== "") ? _product_edit_location_name.value : null
+			street_1 = (_product_edit_location_street_1.value !== "") ? _product_edit_location_street_1.value : null
+			street_2 = (_product_edit_location_street_2.value !== "") ? _product_edit_location_street_2.value : null
+			city_id = (!isNaN(parseInt(_location_city_id.value))) ? parseInt(_location_city_id.value) : null
+			zipcode = (_product_edit_location_zipcode.value !== "") ? _product_edit_location_zipcode.value : null
+			id = (!isNaN(parseInt(_product_edit_location_id.value))) ? parseInt(_product_edit_location_id.value) : null
+			location_types_id = (!isNaN(parseInt(_product_edit_location_location_types_id.value))) ? parseInt(_product_edit_location_location_types_id.value) : null
+			
+			let productLocation = {
+				product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
+				category_id: (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null,
+				id: id,
+				city_id: city_id,
+				location_types_id: location_types_id,
+				name: name,
+				street_1: street_1,
+				street_2: street_2,
+				zipcode: zipcode,
+				enabled: 1,
+				note: null,
+			}
+			
+			return removeNulls(productLocation)
+		}
+	}
+	
+	const sendUpdateRequest = function (dataToSend, callback) {
+		let url = "/api/v1.0/locations/update"
+		
+		try {
+			sendPostRequest(url, dataToSend, function (data, status, xhr) {
+				if (data) {
+					return callback(data)
+				}
+			})
+		} catch (e) {
+			//console.log("error", e)
+			handleProductLocationError("Error Updating Location")
+		}
+	}
+	
+	const handleProductLocationError = function (msg) {
+	
+	}
+	
+	const save = function () {
+		let productLocation = buildLocationObject()
+		
+		if (productLocation) {
+			confirmDialog(`Would you like to update?`, (ans) => {
+				if (ans) {
+					sendUpdateRequest(productLocation, function (data) {
+						let location
+						if (data) {
+							location = data
+							if (data[0]) {
+								location = data[0]
+							}
+						}
+						
+						if (location) {
+							Product.detail.location = location
+							
+							//console.log("location", location)
+							//console.log("Product.detail.location", Product.detail.location)
+							Product.updateDisplay()
+							toastr["success"](`Location ${location.id} has been updated`, "Location Updated")
+						}
+					})
+				}
+			})
+		}
+	}
+	
+	const init = function (settings) {
+		//console.log("init(settings)", settings)
+		
+		$(document).ready(function () {
+			let categoryId = (_category_id && (!isNaN(parseInt(_category_id.value)))) ? parseInt(_category_id.value) : null
+			let location
+			
+			if (settings) {
+				
+				_product_edit_location_city_id.value = (settings.product.city_id) ? settings.product.city_id : null
+				
+				if (categoryId === 1) {
+					if (_product_edit_location_form) {
+						_product_edit_location_city_id.value = (settings.product.city_id) ? settings.product.city_id : null
+						location = (settings.product_location) ? settings.product_location : null
+						if (location) {
+							validator_init(form_rules)
+							ProductLocation.validator = $(_product_edit_location_form).validate()
+							
+							$(_location_country_id).BuildDropDown({
+								data: Array.from(Country.all.values()),
+								title: "Country",
+								id_field: "id",
+								text_field: "name",
+								first_selectable: false,
+							})
+							
+							$(_location_province_id).BuildDropDown({
+								data: Array.from(Province.all.values()),
+								title: "Province",
+								id_field: "id",
+								text_field: "name",
+								first_selectable: false,
+							})
+							
+							$(_location_city_id).BuildDropDown({
+								data: Array.from(City.all.values()),
+								title: "City",
+								id_field: "id",
+								text_field: "name",
+								first_selectable: false,
+							})
+							
+							Country.init({
+								dropdowns: [
+									"location_country_id",
+								],
+							})
+							
+							Province.init({
+								dropdowns: [
+									"location_province_id",
+								],
+							})
+							
+							City.init({
+								dropdowns: [
+									"location_city_id",
+								],
+							})
+							
+							initAutoComplete()
+							
+							populateForm(location)
+						}
+					}
+				}
+				
+				if (categoryId === 2) {
+					//console.log("settings - 2", settings)
+					let cityId = (settings.product.city_id) ? settings.product.city_id : null
+					//console.log("cityId - 3", cityId)
+					_product_edit_location_city_id.value = cityId
+					if (settings.arriving_location && settings.departing_location) {
+						Airport.init(settings)
+					}
+				}
+				
+				if (categoryId === 3) {
+					//console.log("settings - 3", settings)
+					let cityId = (settings.product.city_id) ? settings.product.city_id : null
+					//console.log("cityId - 3", cityId)
+					_product_edit_location_city_id.value = (settings.product.city_id) ? settings.product.city_id : null
+					Car.init(settings)
+				}
+				
+				if (categoryId === 4) {
+				
+				}
+				
+				if (categoryId === 5) {
+				
+				}
+				
+				if (categoryId === 6) {
+					if (_product_edit_location_form) {
+						_product_edit_location_city_id.value = (settings.product.city_id) ? settings.product.city_id : null
+						location = (settings.product_location) ? settings.product_location : null
+						if (location) {
+							validator_init(form_rules)
+							ProductLocation.validator = $(_product_edit_location_form).validate()
+							
+							$(_location_country_id).BuildDropDown({
+								data: Array.from(Country.all.values()),
+								title: "Country",
+								id_field: "id",
+								text_field: "name",
+								first_selectable: false,
+							})
+							
+							$(_location_province_id).BuildDropDown({
+								data: Array.from(Province.all.values()),
+								title: "Province",
+								id_field: "id",
+								text_field: "name",
+								first_selectable: false,
+							})
+							
+							$(_location_city_id).BuildDropDown({
+								data: Array.from(City.all.values()),
+								title: "City",
+								id_field: "id",
+								text_field: "name",
+								first_selectable: false,
+							})
+							
+							Country.init({
+								dropdowns: [
+									"location_country_id",
+								],
+							})
+							
+							Province.init({
+								dropdowns: [
+									"location_province_id",
+								],
+							})
+							
+							City.init({
+								dropdowns: [
+									"location_city_id",
+								],
+							})
+							
+							initAutoComplete()
+							
+							populateForm(location)
+						}
+					}
+				}
+				
+				if (categoryId === 7) {
+				
+				}
+				
+				if (categoryId === 8) {
+				
+				}
+				
+				if (categoryId === 9) {
+				
+				}
+				
+			}
+		})
+	}
+	
+	return {
+		validator: null,
+		detail: {
+			id: null,
+			city_id: null,
+			location_types_id: null,
+			name: null,
+			street_1: null,
+			street_2: null,
+			zipcode: null,
+			enabled: 1,
+			date_created: formatDateMySQL(),
+			created_by: user_id,
+			date_modified: formatDateMySQL(),
+			modified_by: user_id,
+			note: null,
+			display_long: null,
+			display_medium: null,
+			display_short: null,
+			country: [],
+			province: [],
+			city: [],
+			type: [],
+		},
+		display_long: null,
+		display_medium: null,
+		display_short: null,
+		init: function (settings) {
+			$(document).ready(function () {
+				init(settings)
+			})
+		},
+	}
 })()
 
 function ProductSearch (element, options) {
-    console.group("ProductSearch")
+    console.groupCollapsed("ProductSearch")
     // ----
     
     if (!(options && element)) {
@@ -3107,14 +3410,14 @@ function ProductSearch (element, options) {
 }
 
 ProductSearch.prototype.listCallback = function () {
-    console.group("listCallback")
+    console.groupCollapsed("listCallback")
     // ----
     
     // ----
     console.groupEnd()
 }
 ProductSearch.prototype.init = function (options) {
-    console.group("init")
+    console.groupCollapsed("init")
     // ----
     
     let categories = (this.categories) ? Array.from(this.categories.values()) : []
@@ -3138,9 +3441,8 @@ ProductSearch.prototype.init = function (options) {
     // ----
     console.groupEnd()
 }
-
 ProductSearch.prototype.assignEvents = function () {
-    console.group("assignEvents")
+    console.groupCollapsed("assignEvents")
     // ----
     
     let _this = this
@@ -3185,7 +3487,7 @@ ProductSearch.prototype.assignEvents = function () {
     
     this.popup_name_input
         .on("search", function () {
-            console.group("this.popup_name_input: search")
+            console.groupCollapsed("this.popup_name_input: search")
             // ----
             
             _this.resetNameSearch()
@@ -3202,7 +3504,7 @@ ProductSearch.prototype.assignEvents = function () {
             }
         })
         .on("keyup", function () {
-            console.group("this.popup_name_input: keyup")
+            console.groupCollapsed("this.popup_name_input: keyup")
             // ----
             
             _this.global_name_select = false
@@ -3480,7 +3782,7 @@ ProductSearch.prototype.assignEvents = function () {
                         }
                     }
                     
-                    toDate = moment(date, "YYYY-MM-DD").format("YYYY-MM-DD")
+                    toDate = moment(date, defaultDateFormat).format(defaultDateFormat)
                     
                     if (fromSelect) {
                         _this.from_picker.set("min", _this.from_picker.get("select"))
@@ -3547,9 +3849,9 @@ ProductSearch.prototype.assignEvents = function () {
                 if (fromSelect) {
                     let date = new Date(fromSelect.year, fromSelect.month, fromSelect.date)
                     
-                    fromDate = moment(date, "YYYY-MM-DD").format("YYYY-MM-DD")
-                    fromDatePlus1 = moment(date, "YYYY-MM-DD").add(1, "days").format("YYYY-MM-DD")
-                    fromDateSubtract1 = moment(date, "YYYY-MM-DD").subtract(1, "days").format("YYYY-MM-DD")
+                    fromDate = moment(date, defaultDateFormat).format(defaultDateFormat)
+                    fromDatePlus1 = moment(date, defaultDateFormat).add(1, "days").format(defaultDateFormat)
+                    fromDateSubtract1 = moment(date, defaultDateFormat).subtract(1, "days").format(defaultDateFormat)
                     
                     fromYear = fromSelect.year
                     fromMonth = fromSelect.month
@@ -3589,9 +3891,9 @@ ProductSearch.prototype.assignEvents = function () {
                         }
                     }
                     
-                    toDate = moment(toYear + "-" + toMonth + "-" + toDay, "YYYY-MM-DD").format("YYYY-MM-DD")
-                    toDatePlus1 = moment(toYear + "-" + toMonth + "-" + toDay, "YYYY-MM-DD").add(1, "days").format("YYYY-MM-DD")
-                    toDateSubtract1 = moment(toYear + "-" + toMonth + "-" + toDay, "YYYY-MM-DD").subtract(1, "days").format("YYYY-MM-DD")
+                    toDate = moment(toYear + "-" + toMonth + "-" + toDay, defaultDateFormat).format(defaultDateFormat)
+                    toDatePlus1 = moment(toYear + "-" + toMonth + "-" + toDay, defaultDateFormat).add(1, "days").format(defaultDateFormat)
+                    toDateSubtract1 = moment(toYear + "-" + toMonth + "-" + toDay, defaultDateFormat).subtract(1, "days").format(defaultDateFormat)
                     
                 } else {
                     let new_date = moment(fromSelect).add(1, "day")
@@ -3644,7 +3946,7 @@ ProductSearch.prototype.assignEvents = function () {
     listItem.appendChild(listItemRating)
     
     this.sort_by_name.addEventListener("click", function (e) {
-        console.group("sortByName:click(e)")
+        console.groupCollapsed("sortByName:click(e)")
         // ----
         
         let el = e.target
@@ -3666,7 +3968,7 @@ ProductSearch.prototype.assignEvents = function () {
     })
     
     this.sort_by_price.addEventListener("click", function (e) {
-        console.group("sortByPrice:click(e)")
+        console.groupCollapsed("sortByPrice:click(e)")
         // ----
         
         //*
@@ -3755,17 +4057,14 @@ ProductSearch.prototype.assignEvents = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.handleSortClick = function (e) {
-    console.group("handleSortClick")
+    console.groupCollapsed("handleSortClick")
     // ----
     
     // ----
     console.groupEnd()
 }
 ProductSearch.prototype.handleError = function (msg, title, level) {
-    console.group("handleError")
-    console.log("msg", msg)
-    console.log("title", title)
-    console.log("level", level)
+    console.groupCollapsed("handleError")
     // ----
     
     if (!msg) {
@@ -3786,7 +4085,7 @@ ProductSearch.prototype.handleError = function (msg, title, level) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleNumberChange = function (el) {
-    console.group("handleNumberChange")
+    console.groupCollapsed("handleNumberChange")
     console.log("el", el)
     // ----
     
@@ -3829,7 +4128,7 @@ ProductSearch.prototype.handleNumberChange = function (el) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleTabChange = function (categoryId) {
-    console.group("handleTabChange")
+    console.groupCollapsed("handleTabChange")
     // ----
     
     if (!categoryId || isNaN(parseInt(categoryId))) {
@@ -3876,7 +4175,7 @@ ProductSearch.prototype.handleTabChange = function (categoryId) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleDateClear = function (event) {
-    console.group("handleDateClear")
+    console.groupCollapsed("handleDateClear")
     // ----
     
     let dateType = (event && event.target && event.target.dataset && event.target.dataset.type) ? event.target.dataset.type : null
@@ -3892,7 +4191,7 @@ ProductSearch.prototype.handleDateClear = function (event) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleDateBlur = function (event) {
-    console.group("handleDateBlur")
+    console.groupCollapsed("handleDateBlur")
     // ----
     
     let dateType = (event && event.target && event.target.dataset && event.target.dataset.type) ? event.target.dataset.type : null
@@ -3908,7 +4207,7 @@ ProductSearch.prototype.handleDateBlur = function (event) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleDateChange = function (event) {
-    console.group("handleDateChange")
+    console.groupCollapsed("handleDateChange")
     // ----
     
     let dateType = (event && event.target && event.target.dataset && event.target.dataset.type) ? event.target.dataset.type : null
@@ -3925,7 +4224,7 @@ ProductSearch.prototype.handleDateChange = function (event) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleDateKeyUp = function (event) {
-    console.group("handleDateKeyUp")
+    console.groupCollapsed("handleDateKeyUp")
     // ----
     
     let dateType = (event && event.target && event.target.dataset && event.target.dataset.type) ? event.target.dataset.type : null
@@ -3959,7 +4258,7 @@ ProductSearch.prototype.handleDateKeyUp = function (event) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleDateSelect = function (event) {
-    console.group("handleDateSelect")
+    console.groupCollapsed("handleDateSelect")
     // ----
     
     const starts = event.target.selectionStart
@@ -3980,7 +4279,7 @@ ProductSearch.prototype.handleDateSelect = function (event) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleProductNameSelect = function (product) {
-    console.group("handleProductNameSelect")
+    console.groupCollapsed("handleProductNameSelect")
     // ----
     
     this.global_name_select = true
@@ -3993,7 +4292,7 @@ ProductSearch.prototype.handleProductNameSelect = function (product) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleDateKeyDown = function (event) {
-    console.group("handleDateKeyDown")
+    console.groupCollapsed("handleDateKeyDown")
     // ----
     
     let dateType = (event && event.target && event.target.dataset && event.target.dataset.type) ? event.target.dataset.type : null
@@ -4023,7 +4322,7 @@ ProductSearch.prototype.handleDateKeyDown = function (event) {
     
 }
 ProductSearch.prototype.numberIncrease = function (el) {
-    console.group("numberIncrease")
+    console.groupCollapsed("numberIncrease")
     console.log("el", el)
     // ----
     
@@ -4075,7 +4374,7 @@ ProductSearch.prototype.numberIncrease = function (el) {
     console.groupEnd()
 }
 ProductSearch.prototype.numberDecrease = function (el) {
-    console.group("numberDecrease")
+    console.groupCollapsed("numberDecrease")
     console.log("el", el)
     // ----
     
@@ -4126,9 +4425,8 @@ ProductSearch.prototype.numberDecrease = function (el) {
     // ----
     console.groupEnd()
 }
-
 ProductSearch.prototype.createElements = function (options) {
-    console.group("createElements")
+    console.groupCollapsed("createElements")
     // ----
     
     this.createHiddenFields(options)
@@ -4174,14 +4472,14 @@ ProductSearch.prototype.createElements = function (options) {
     console.groupEnd()
 }
 ProductSearch.prototype.createHiddenFields = function () {
-    console.group("createHiddenFields")
+    console.groupCollapsed("createHiddenFields")
     // ----
     
     let _this = this
     let hiddenElements = (this && this.settings && this.settings.hidden_elements) ? this.settings.hidden_elements : []
     let hidden_row_1 = buildRow({ classes: ["row"] })
     
-    console.group("hiddenElements")
+    console.groupCollapsed("hiddenElements")
     $.each(hiddenElements, function (k, el) {
         hidden_row_1.appendChild(_this.buildHiddenField(el))
     })
@@ -4195,11 +4493,11 @@ ProductSearch.prototype.createHiddenFields = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.createTabRow = function (options) {
-    console.group("createTabRow", options)
+    console.groupCollapsed("createTabRow", options)
     // ----
     
     const buildTab = function (category) {
-        console.group("buildTab")
+        console.groupCollapsed("buildTab")
         //console.log("category", category)
         // ----
         
@@ -4231,7 +4529,7 @@ ProductSearch.prototype.createTabRow = function (options) {
         return tabElement
     }
     const buildContainer = function (category) {
-        console.group("buildContainer")
+        console.groupCollapsed("buildContainer")
         //console.log("category", category)
         // ----
         
@@ -4273,7 +4571,7 @@ ProductSearch.prototype.createTabRow = function (options) {
     let tabWrapper = $("<div class='classic-tabs mx-0'/>")
     let tabContentWrapper = $("<div class='tab-content card p-1'/>")
     
-    console.group("categories")
+    console.groupCollapsed("categories")
     $.each(categories, function (k, category) {
         if (categoryCount === 0) {
             _this.category_id.value = category.id
@@ -4299,7 +4597,7 @@ ProductSearch.prototype.createTabRow = function (options) {
     console.groupEnd()
 }
 ProductSearch.prototype.createSearchElements = function (options) {
-    console.group("createSearchElements")
+    console.groupCollapsed("createSearchElements")
     // ----
     
     let fromDateTitle = "Check In"
@@ -4359,14 +4657,8 @@ ProductSearch.prototype.createSearchElements = function (options) {
     // ----
     console.groupEnd()
 }
-
-// ----
-
-// ----
-
-// ----
 ProductSearch.prototype.executeSearch = function () {
-    console.group("executeSearch")
+    console.groupCollapsed("executeSearch")
     // ----
     
     this.search_results.clear()
@@ -4376,7 +4668,7 @@ ProductSearch.prototype.executeSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.resetSearch = function () {
-    console.group("resetSearch")
+    console.groupCollapsed("resetSearch")
     // ----
     
     this.resetNameSearch()
@@ -4398,9 +4690,8 @@ ProductSearch.prototype.resetSearch = function () {
     // ----
     console.groupEnd()
 }
-// ----
 ProductSearch.prototype.populateSearchResultsBlock = function (results) {
-    console.group("populateSearchResultsBlock")
+    console.groupCollapsed("populateSearchResultsBlock")
     console.log("results", results)
     // ----
     
@@ -4408,7 +4699,7 @@ ProductSearch.prototype.populateSearchResultsBlock = function (results) {
     console.groupEnd()
 }
 ProductSearch.prototype.resetSearchResultsBlock = function () {
-    console.group("resetSearchResultsBlock")
+    console.groupCollapsed("resetSearchResultsBlock")
     // ----
     
     this.clearSearchResultsBlock()
@@ -4417,7 +4708,7 @@ ProductSearch.prototype.resetSearchResultsBlock = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.clearSearchResultsBlock = function () {
-    console.group("clearSearchResultsBlock")
+    console.groupCollapsed("clearSearchResultsBlock")
     // ----
     
     //this.product_search_results_element.empty()
@@ -4426,7 +4717,7 @@ ProductSearch.prototype.clearSearchResultsBlock = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.createSearchResultsBlock = function () {
-    console.group("createSearchResultsBlock")
+    console.groupCollapsed("createSearchResultsBlock")
     // ----
     
     let _this = this
@@ -4510,7 +4801,7 @@ ProductSearch.prototype.createSearchResultsBlock = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.renderSearchResultsBlock = function () {
-    console.group("renderSearchResultsBlock")
+    console.groupCollapsed("renderSearchResultsBlock")
     // ----
     
     this.container.append(this.search_results_wrapper)
@@ -4518,10 +4809,8 @@ ProductSearch.prototype.renderSearchResultsBlock = function () {
     // ----
     console.groupEnd()
 }
-// ----
-
 ProductSearch.prototype.buildHiddenField = function (options) {
-    console.group("buildHiddenField")
+    console.groupCollapsed("buildHiddenField")
     // ----
     
     if (!options) {
@@ -4555,7 +4844,7 @@ ProductSearch.prototype.buildHiddenField = function (options) {
     return COL
 }
 ProductSearch.prototype.buildPopoverForm = function (options) {
-    console.group("buildPopoverForm")
+    console.groupCollapsed("buildPopoverForm")
     console.log("options", options)
     // ----
     
@@ -4574,7 +4863,7 @@ ProductSearch.prototype.buildPopoverForm = function (options) {
     
     console.log("popoverForm", popoverForm)
     
-    console.group("classes")
+    console.groupCollapsed("classes")
     console.log("classes", classes)
     $.each(classes, function (i, className) {
         if (className !== null && className !== "") {
@@ -4604,9 +4893,8 @@ ProductSearch.prototype.buildPopoverForm = function (options) {
     // ----
     console.groupEnd()
 }
-
 ProductSearch.prototype.validateDateFormat = function (input, keyCode) {
-    console.group("validateDateFormat")
+    console.groupCollapsed("validateDateFormat")
     // ----
     
     let dateType = (input.dataset && input.dataset.type) ? input.dataset.type : null
@@ -4641,7 +4929,7 @@ ProductSearch.prototype.validateDateFormat = function (input, keyCode) {
                 let theDate = new Date(dateStringYear, dateStringMonth, dateStringDay, 0, 0, 0)
                 
                 picker.set("update", {
-                    date: moment(theDate, "YYYY-MM-DD").format("YYYY-MM-DD"),
+                    date: moment(theDate, defaultDateFormat).format(defaultDateFormat),
                 })
             }
             
@@ -4668,7 +4956,7 @@ ProductSearch.prototype.validateDateFormat = function (input, keyCode) {
     console.groupEnd()
 }
 ProductSearch.prototype.unSetDateError = function (input) {
-    console.group("unSetDateError")
+    console.groupCollapsed("unSetDateError")
     // ----
     
     let $errorElement = $(input).parents("div.form-element").find("div.error")
@@ -4679,7 +4967,7 @@ ProductSearch.prototype.unSetDateError = function (input) {
     console.groupEnd()
 }
 ProductSearch.prototype.loadError = function (input, msg) {
-    console.group("unSetDateError(input)", input)
+    console.groupCollapsed("unSetDateError(input)", input)
     // ----
     
     let $errorElement = $(input).parents("div.form-element").find("div.error")
@@ -4689,9 +4977,8 @@ ProductSearch.prototype.loadError = function (input, msg) {
     // ----
     console.groupEnd()
 }
-
 ProductSearch.prototype.setDateTitle = function () {
-    console.group("setDateTitle")
+    console.groupCollapsed("setDateTitle")
     // ----
     
     let categoryId = (this.category_id && !isNaN(parseInt(this.category_id.value))) ? parseInt(this.category_id.value) : null
@@ -4772,7 +5059,7 @@ ProductSearch.prototype.setDateTitle = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.clearBaseSearchFields = function () {
-    console.group("clearBaseSearchFields")
+    console.groupCollapsed("clearBaseSearchFields")
     // ----
     
     $("[data-hotel-search='true']").hide()
@@ -4789,7 +5076,7 @@ ProductSearch.prototype.clearBaseSearchFields = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.unSelectDateError = function (input) {
-    console.group("unSelectDateError")
+    console.groupCollapsed("unSelectDateError")
     // ----
     
     let $errorElement = $(input).parents("div.form-element").find("div.error")
@@ -4798,9 +5085,8 @@ ProductSearch.prototype.unSelectDateError = function (input) {
     // ----
     console.groupEnd()
 }
-
 ProductSearch.prototype.renderSearchElements = function () {
-    console.group("renderSearchElements")
+    console.groupCollapsed("renderSearchElements")
     // ----
     
     let baseSearchWrapper = buildRow({ classes: "searchbar" })
@@ -4821,10 +5107,8 @@ ProductSearch.prototype.renderSearchElements = function () {
     // ----
     console.groupEnd()
 }
-
-// Search & Reset Button
 ProductSearch.prototype.buildProductSearchButton = function () {
-    console.group("buildProductSearchButton")
+    console.groupCollapsed("buildProductSearchButton")
     // ----
     
     let icon = document.createElement("i")
@@ -4908,7 +5192,7 @@ ProductSearch.prototype.buildProductSearchButton = function () {
     return wrapper
 }
 ProductSearch.prototype.buildProductSearchResetButton = function () {
-    console.group("buildProductSearchResetButton")
+    console.groupCollapsed("buildProductSearchResetButton")
     // ----
     
     let icon = document.createElement("i")
@@ -4991,11 +5275,8 @@ ProductSearch.prototype.buildProductSearchResetButton = function () {
     console.groupEnd()
     return wrapper
 }
-// Search & Reset Button
-
-// ----
 ProductSearch.prototype.clearAllErrors = function () {
-    console.group("clearAllErrors")
+    console.groupCollapsed("clearAllErrors")
     // ----
     
     this.unLoadError("name")
@@ -5008,7 +5289,7 @@ ProductSearch.prototype.clearAllErrors = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.loadError = function (el, message) {
-    console.group("loadError")
+    console.groupCollapsed("loadError")
     // ----
     
     let msg = (message && message !== "") ? message : "Field Invalid"
@@ -5052,7 +5333,7 @@ ProductSearch.prototype.loadError = function (el, message) {
     console.groupEnd()
 }
 ProductSearch.prototype.unLoadError = function (el) {
-    console.group("unLoadError")
+    console.groupCollapsed("unLoadError")
     // ----
     
     if (el) {
@@ -5099,11 +5380,8 @@ ProductSearch.prototype.unLoadError = function (el) {
     // ----
     console.groupEnd()
 }
-// ----
-
-// ----
 ProductSearch.prototype.buildSearchCriteria = function () {
-    console.group("buildSearchCriteria")
+    console.groupCollapsed("buildSearchCriteria")
     // ----
     
     let errors = []
@@ -5222,7 +5500,7 @@ ProductSearch.prototype.buildSearchCriteria = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.sendSearchRequest = function (dataToSend, callback) {
-    console.group("sendSearchRequest")
+    console.groupCollapsed("sendSearchRequest")
     // ----
     
     let _this = this
@@ -5298,7 +5576,7 @@ ProductSearch.prototype.sendSearchRequest = function (dataToSend, callback) {
     console.groupEnd()
 }
 ProductSearch.prototype.renderSearchRequestResultFilters = function (product) {
-    console.group("renderSearchRequestResultFilters")
+    console.groupCollapsed("renderSearchRequestResultFilters")
     // ----
     
     let categoryId = (this.category_id && !isNaN(parseInt(this.category_id.value))) ? parseInt(this.category_id.value) : null
@@ -5345,7 +5623,7 @@ ProductSearch.prototype.renderSearchRequestResultFilters = function (product) {
     console.groupEnd()
 }
 ProductSearch.prototype.renderSearchRequestResults = function (product) {
-    console.group("renderSearchRequestResults")
+    console.groupCollapsed("renderSearchRequestResults")
     // ----
     
     let productAddress, productName, productSKU = ""
@@ -5354,7 +5632,7 @@ ProductSearch.prototype.renderSearchRequestResults = function (product) {
     let rollingPrice, rollingCost, avgPrice, count = 0
     
     const buildRating = function (rating) {
-        console.group("buildRating")
+        console.groupCollapsed("buildRating")
         console.log("rating", rating)
         // ----
         
@@ -5495,11 +5773,8 @@ ProductSearch.prototype.renderSearchRequestResults = function (product) {
     // ----
     console.groupEnd()
 }
-//
-
-// Location Search Fields
 ProductSearch.prototype.createSearchElementsLocation = function (options) {
-    console.group("createSearchElementsLocation")
+    console.groupCollapsed("createSearchElementsLocation")
     // ----
     
     let formId = this.baseId + "_location_form"
@@ -5613,7 +5888,7 @@ ProductSearch.prototype.createSearchElementsLocation = function (options) {
     console.groupEnd()
 }
 ProductSearch.prototype.buildLocationSearchButton = function () {
-    console.group("buildLocationSearchButton")
+    console.groupCollapsed("buildLocationSearchButton")
     // ----
     
     let icon = document.createElement("i")
@@ -5690,7 +5965,7 @@ ProductSearch.prototype.buildLocationSearchButton = function () {
     return wrapper
 }
 ProductSearch.prototype.clickOutsideLocationSearch = function (e) {
-    console.group("clickOutsideLocationSearch")
+    console.groupCollapsed("clickOutsideLocationSearch")
     // ----
     
     let class_name = "btn-location-picker"
@@ -5707,7 +5982,7 @@ ProductSearch.prototype.clickOutsideLocationSearch = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.closeLocationSearch = function () {
-    console.group("closeLocationSearch")
+    console.groupCollapsed("closeLocationSearch")
     // ----
     
     if (this.location_button) {
@@ -5718,7 +5993,7 @@ ProductSearch.prototype.closeLocationSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.resetLocationSearch = function () {
-    console.group("resetLocationSearch")
+    console.groupCollapsed("resetLocationSearch")
     // ----
     
     this.country_id.value = ""
@@ -5733,7 +6008,7 @@ ProductSearch.prototype.resetLocationSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.updateLocationSearch = function () {
-    console.group("updateLocationSearch")
+    console.groupCollapsed("updateLocationSearch")
     // ----
     
     this.closeLocationSearch()
@@ -5741,11 +6016,8 @@ ProductSearch.prototype.updateLocationSearch = function () {
     // ----
     console.groupEnd()
 }
-// Location Search Fields
-
-// From Date Search Fields
 ProductSearch.prototype.createSearchElementsFromDate = function (options) {
-    console.group("createSearchElementsFromDate", options)
+    console.groupCollapsed("createSearchElementsFromDate", options)
     // ----
     
     let formId = this.baseId + "_from_date_form"
@@ -5879,7 +6151,7 @@ ProductSearch.prototype.createSearchElementsFromDate = function (options) {
     console.groupEnd()
 }
 ProductSearch.prototype.buildFromDateSearchButton = function (options) {
-    console.group("buildFromDateSearchButton", options)
+    console.groupCollapsed("buildFromDateSearchButton", options)
     // ----
     
     let categoryId = (this.category_id && !isNaN(parseInt(this.category_id.value))) ? parseInt(this.category_id.value) : null
@@ -5980,7 +6252,7 @@ ProductSearch.prototype.buildFromDateSearchButton = function (options) {
     return wrapper
 }
 ProductSearch.prototype.handleFromPickerOpen = function (e) {
-    console.group("handleFromPickerOpen")
+    console.groupCollapsed("handleFromPickerOpen")
     // ----
     
     //console.log("From Picker", "Open")
@@ -5989,7 +6261,7 @@ ProductSearch.prototype.handleFromPickerOpen = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleFromPickerClose = function (e) {
-    console.group("handleFromPickerClose")
+    console.groupCollapsed("handleFromPickerClose")
     // ----
     
     let formDateVal = this.popup_from_date_button.val()
@@ -6012,14 +6284,14 @@ ProductSearch.prototype.handleFromPickerClose = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleFromPickerSet = function (e) {
-    console.group("handleFromPickerSet")
+    console.groupCollapsed("handleFromPickerSet")
     // ----
     
     // ----
     console.groupEnd()
 }
 ProductSearch.prototype.clickOutsideFromDateSearch = function (e) {
-    console.group("clickOutsideFromDateSearch")
+    console.groupCollapsed("clickOutsideFromDateSearch")
     // ----
     
     let class_name = "btn-from-date-picker"
@@ -6035,7 +6307,7 @@ ProductSearch.prototype.clickOutsideFromDateSearch = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.closeFromDateSearch = function () {
-    console.group("closeFromDateSearch")
+    console.groupCollapsed("closeFromDateSearch")
     // ----
     
     if (this.from_date_button) {
@@ -6046,7 +6318,7 @@ ProductSearch.prototype.closeFromDateSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.resetFromDateSearch = function () {
-    console.group("resetFromDateSearch")
+    console.groupCollapsed("resetFromDateSearch")
     // ----
     
     this.popup_from_date_input.val("")
@@ -6061,7 +6333,7 @@ ProductSearch.prototype.resetFromDateSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.updateFromDateSearch = function (fromDate) {
-    console.group("updateFromDateSearch")
+    console.groupCollapsed("updateFromDateSearch")
     // ----
     
     if (!fromDate) {
@@ -6078,11 +6350,8 @@ ProductSearch.prototype.updateFromDateSearch = function (fromDate) {
     // ----
     console.groupEnd()
 }
-// From Date Search Fields
-
-// To Date Search Fields
 ProductSearch.prototype.createSearchElementsToDate = function (options) {
-    console.group("createSearchElementsToDate")
+    console.groupCollapsed("createSearchElementsToDate")
     // ----
     
     let formId = this.baseId + "_to_date_form"
@@ -6218,7 +6487,7 @@ ProductSearch.prototype.createSearchElementsToDate = function (options) {
     console.groupEnd()
 }
 ProductSearch.prototype.buildToDateSearchButton = function (options) {
-    console.group("buildToDateSearchButton", options)
+    console.groupCollapsed("buildToDateSearchButton", options)
     // ----
     
     let categoryId = (this.category_id && !isNaN(parseInt(this.category_id.value))) ? parseInt(this.category_id.value) : null
@@ -6319,7 +6588,7 @@ ProductSearch.prototype.buildToDateSearchButton = function (options) {
     return wrapper
 }
 ProductSearch.prototype.handleToPickerOpen = function (e) {
-    console.group("handleToPickerOpen")
+    console.groupCollapsed("handleToPickerOpen")
     // ----
     
     //console.log("To Picker", "Open")
@@ -6328,7 +6597,7 @@ ProductSearch.prototype.handleToPickerOpen = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleToPickerClose = function (e) {
-    console.group("handleToPickerClose")
+    console.groupCollapsed("handleToPickerClose")
     // ----
     
     let formDateVal = this.popup_to_date_button.val()
@@ -6351,14 +6620,14 @@ ProductSearch.prototype.handleToPickerClose = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.handleToPickerSet = function (e) {
-    console.group("handleToPickerSet")
+    console.groupCollapsed("handleToPickerSet")
     // ----
     
     // ----
     console.groupEnd()
 }
 ProductSearch.prototype.clickOutsideToDateSearch = function (e) {
-    console.group("clickOutsideToDateSearch")
+    console.groupCollapsed("clickOutsideToDateSearch")
     // ----
     
     let class_name = "btn-to-date-picker"
@@ -6374,7 +6643,7 @@ ProductSearch.prototype.clickOutsideToDateSearch = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.closeToDateSearch = function () {
-    console.group("closeToDateSearch")
+    console.groupCollapsed("closeToDateSearch")
     // ----
     
     if (this.to_date_button) {
@@ -6385,7 +6654,7 @@ ProductSearch.prototype.closeToDateSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.resetToDateSearch = function () {
-    console.group("resetToDateSearch")
+    console.groupCollapsed("resetToDateSearch")
     // ----
     
     this.popup_to_date_input.val("")
@@ -6402,7 +6671,7 @@ ProductSearch.prototype.resetToDateSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.updateToDateSearch = function (toDate) {
-    console.group("updateToDateSearch")
+    console.groupCollapsed("updateToDateSearch")
     // ----
     
     if (!toDate) {
@@ -6417,11 +6686,8 @@ ProductSearch.prototype.updateToDateSearch = function (toDate) {
     // ----
     console.groupEnd()
 }
-// To Date Search Fields
-
-// Name Search Fields
 ProductSearch.prototype.createSearchElementsName = function (options) {
-    console.group("createSearchElementsName")
+    console.groupCollapsed("createSearchElementsName")
     // ----
     
     let formId = this.baseId + "_name_form"
@@ -6524,7 +6790,7 @@ ProductSearch.prototype.createSearchElementsName = function (options) {
     console.groupEnd()
 }
 ProductSearch.prototype.buildNameSearchButton = function () {
-    console.group("buildNameSearchButton")
+    console.groupCollapsed("buildNameSearchButton")
     // ----
     
     let icon = document.createElement("i")
@@ -6600,7 +6866,7 @@ ProductSearch.prototype.buildNameSearchButton = function () {
     return wrapper
 }
 ProductSearch.prototype.clickOutsideNameSearch = function (e) {
-    console.group("clickOutsideNameSearch")
+    console.groupCollapsed("clickOutsideNameSearch")
     // ----
     
     let class_name = "btn-name-picker"
@@ -6615,7 +6881,7 @@ ProductSearch.prototype.clickOutsideNameSearch = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.closeNameSearch = function () {
-    console.group("closeNameSearch")
+    console.groupCollapsed("closeNameSearch")
     // ----
     
     if (this.name_button) {
@@ -6628,7 +6894,7 @@ ProductSearch.prototype.closeNameSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.resetNameSearch = function () {
-    console.group("resetNameSearch")
+    console.groupCollapsed("resetNameSearch")
     // ----
     
     if (this.product_name) {
@@ -6646,7 +6912,7 @@ ProductSearch.prototype.resetNameSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.updateNameSearch = function () {
-    console.group("updateNameSearch")
+    console.groupCollapsed("updateNameSearch")
     // ----
     
     this.generateNameSearchContent()
@@ -6656,7 +6922,7 @@ ProductSearch.prototype.updateNameSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.generateNameSearchContent = function () {
-    console.group("generateNameSearchContent")
+    console.groupCollapsed("generateNameSearchContent")
     // ----
     
     let productName = (this.product_name && this.product_name.value) ? this.product_name.value : ""
@@ -6680,11 +6946,8 @@ ProductSearch.prototype.generateNameSearchContent = function () {
     // ----
     console.groupEnd()
 }
-// Name Search Fields
-
-// Travelers Search Fields
 ProductSearch.prototype.createSearchElementsTravelers = function (options) {
-    console.group("createSearchElementsTravelers")
+    console.groupCollapsed("createSearchElementsTravelers")
     // ----
     
     const renderElements = function () {
@@ -6992,7 +7255,7 @@ ProductSearch.prototype.createSearchElementsTravelers = function (options) {
     console.groupEnd()
 }
 ProductSearch.prototype.buildTravelersSearchButton = function () {
-    console.group("buildTravelersSearchButton")
+    console.groupCollapsed("buildTravelersSearchButton")
     // ----
     
     let icon = document.createElement("i")
@@ -7069,7 +7332,7 @@ ProductSearch.prototype.buildTravelersSearchButton = function () {
     return wrapper
 }
 ProductSearch.prototype.clickOutsideTravelersSearch = function (e) {
-    console.group("clickOutsideTravelersSearch")
+    console.groupCollapsed("clickOutsideTravelersSearch")
     // ----
     
     let class_name = "btn-travelers-picker"
@@ -7084,7 +7347,7 @@ ProductSearch.prototype.clickOutsideTravelersSearch = function (e) {
     console.groupEnd()
 }
 ProductSearch.prototype.closeTravelersSearch = function () {
-    console.group("closeTravelersSearch")
+    console.groupCollapsed("closeTravelersSearch")
     // ----
     
     if (this.travelers_button) {
@@ -7095,7 +7358,7 @@ ProductSearch.prototype.closeTravelersSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.generateTravelersSearchContent = function () {
-    console.group("generateTravelersSearchContent")
+    console.groupCollapsed("generateTravelersSearchContent")
     // ----
     
     let adultCount = (this.adult_count && this.adult_count.value) ? parseInt(this.adult_count.value) : 1
@@ -7117,7 +7380,7 @@ ProductSearch.prototype.generateTravelersSearchContent = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.resetTravelersSearch = function () {
-    console.group("resetTravelersSearch")
+    console.groupCollapsed("resetTravelersSearch")
     // ----
     
     this.popup_travelers_adult_input.value = 1
@@ -7135,7 +7398,7 @@ ProductSearch.prototype.resetTravelersSearch = function () {
     console.groupEnd()
 }
 ProductSearch.prototype.updateTravelersSearch = function () {
-    console.group("updateTravelersSearch")
+    console.groupCollapsed("updateTravelersSearch")
     // ----
     
     this.generateTravelersSearchContent()
@@ -7144,7 +7407,6 @@ ProductSearch.prototype.updateTravelersSearch = function () {
     // ----
     console.groupEnd()
 }
-// Travelers Search Fields
 
 $.fn.productSearch = function (options) {
     return new ProductSearch(document.getElementById($(this).attr("id")), options)
@@ -7834,33 +8096,66 @@ jQuery(($) => {
 
 const tinyEditor = (function () {
     "use strict"
+    
     let but_toggle
     
-    const init = function (settings) {
+    const init = function () {
+        //console.groupCollapsed("tinyEditor.init")
+        // ----
+        
         but_toggle = document.querySelectorAll(".but_toggle")
         but_toggle.forEach(el => el.addEventListener("click", event => {
+            //console.groupCollapsed("tinyEditor.but_toggle:click()")
+            
             if (el.dataset.texted) {
-                let editorId = el.dataset.texted
-                let editor = $("#" + editorId)
-                let cardBlock = editor.parents("div.card")
-                if (tinyMCE.get(editorId)) {
-                    editor.val(htmlEncode(editor.val()))
-                    tinymce.remove("#" + editorId)
-                    cardBlock.removeClass("is-fullscreen")
+                let editorId = (el && el.dataset && el.dataset.texted) ? el.dataset.texted : null
+                let editor = (editorId !== null) ? $("#" + editorId) : null
+                //let cardBlock = (editor !== null && editor.parents("section.card")) ? editor.parents("section.card") : (editor.parents("div.card")) ? editor.parents("div.card") : (editor !== null && editor.parents("div.form-element")) ? editor.parents("div.form-element") : null
+                
+                let cardBlock = (el && $(el).parents("div.card")) ? $(el).parents("div.card") : null
+                let sectionBlock = (el && $(el).parents("section.card")) ? $(el).parents("section.card") : null
+                let editorSection
+                if (!cardBlock) {
+                    if (sectionBlock) {
+                        editorSection = sectionBlock
+                    }
                 } else {
-                    editor.val(decodeHtml(editor.val()))
-                    cardBlock.addClass("is-fullscreen")
-                    addTinyMCE(editorId)
+                    editorSection = cardBlock
                 }
+                //console.log("cardBlock", cardBlock)
+                //console.log("sectionBlock", sectionBlock)
+                
+                if (editorId !== null && cardBlock !== null) {
+                    
+                    if (tinyMCE.get(editorId)) {
+                        editor.val(htmlEncode(editor.val()))
+                        tinymce.remove("#" + editorId)
+                        editorSection.removeClass("is-fullscreen")
+                        $("html").css({ overflow: "auto" })
+                    } else {
+                        editor.val(decodeHtml(editor.val()))
+                        editorSection.addClass("is-fullscreen")
+                        addTinyMCE(editorId)
+                    }
+                }
+                
             }
+            
+            // ----
+            //console.groupEnd()
         }))
+        
+        // ----
+        //console.groupEnd()
     }
-    
     const addTinyMCE = function (el) {
+        //console.groupCollapsed("tinyEditor.addTinyMCE")
+        // ----
+        
         tinymce.init({
             selector: "#" + el,
             menubar: false,
-            height: "400",
+            //height: "400",
             plugins: "print visualblocks visualchars charmap hr pagebreak advlist lists",
             content_css: [
                 "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap",
@@ -7966,6 +8261,10 @@ const tinyEditor = (function () {
                 })
             },
         })
+        
+        $("html").css({ overflow: "hidden" })
+        // ----
+        //console.groupEnd()
     }
     
     return {
@@ -8057,7 +8356,6 @@ const Season = (function () {
     const _product_edit_season_display = document.getElementById("product_edit_season_display")
     const _edit_product_season = document.getElementById("edit_product_season")
     const _product_edit_season_form_edit_season_link = document.getElementById("product_edit_season_form_edit_season_link")
-    const _product_season = document.getElementById("product_season")
     const _product_edit_season_form_season_name_filter = document.getElementById("product_edit_season_form_season_name_filter")
     const _category_id = document.getElementById("category_id")
     const _product_edit_season_form_season_color_scheme_id = document.getElementById("product_edit_season_form_season_color_scheme_id")
@@ -8075,9 +8373,8 @@ const Season = (function () {
     const _button_remove_season_from_product = document.getElementById("button_remove_season_from_product")
     const _calendar_loader = document.getElementById("calendar_loader")
     const _table_season_product_edit_add_new_button = document.getElementById("table_season_product_edit_add_new_button")
-    const _product_edit_season_section = document.getElementById("product_edit_season_section")
     
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let categories = new Map()
     let $table_season_product_edit, disabledDays
     let globalSelectedSeason = false
@@ -8148,6 +8445,9 @@ const Season = (function () {
         })
     
     const updateProgress = function () {
+        console.groupCollapsed("Season.updateProgress")
+        // ----
+        
         let seasons = Array.from(Season.all.values())
         if (seasons.length === 0) {
             $(_panel_tab_season).html(`<span id="tab_span_season">Season</span> <span id="seasonNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
@@ -8155,15 +8455,20 @@ const Season = (function () {
             $(_panel_tab_season).html(`<span id="tab_span_season">Season</span>`)
         }
         Product.updateProgress()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const saveProductSeason = function (dataToSend) {
+        console.groupCollapsed("Season.saveProductSeason")
+        // ----
+        
         if (dataToSend) {
             $(_calendar_loader).fadeIn("fast", function () {
                 updateProductSeason(dataToSend, function (data) {
                     if (data) {
                         let season = (data[0]) ? data[0] : data
-                        //console.log("|__ season", season)
+                        //console.log("season", season)
                         addProductSeasonTableRow(season)
                         buildProductOverview(season)
                     } else {
@@ -8172,9 +8477,14 @@ const Season = (function () {
                 })
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const updateProductSeason = function (dataToSend, callback) {
+        console.groupCollapsed("Season.updateProductSeason")
+        // ----
+        
         let url = "/api/v1.0/seasons/update"
         
         if (dataToSend) {
@@ -8190,9 +8500,14 @@ const Season = (function () {
                 //console.log("error", e)
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const deleteProductSeason = function (dataToSend, callback) {
+        console.groupCollapsed("Season.deleteProductSeason")
+        // ----
+        
         let url = "/api/v1.0/seasons/remove"
         
         if (dataToSend) {
@@ -8209,9 +8524,14 @@ const Season = (function () {
                 return handleSeasonError(e)
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const removeProductSeason = function (dataToSend) {
+        console.groupCollapsed("Season.removeProductSeason")
+        // ----
+        
         if (dataToSend) {
             $(_calendar_loader).fadeIn("fast", function () {
                 deleteProductSeason(dataToSend, function (data) {
@@ -8224,22 +8544,50 @@ const Season = (function () {
                 })
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
-    const handleSeasonError = function (msg) {
-        toastr["error"](`${msg}`, "Season")
+    const handleSeasonError = function (msg, title, level) {
+        console.groupCollapsed("Season.handleSeasonError")
+        // ----
+        
+        if (!msg) {
+            msg = "Season Error"
+        }
+        
+        if (!title) {
+            title = "Season"
+        }
+        
+        if (!level) {
+            level = "error"
+        }
+        
+        toastr[level](`${msg}`, title)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildUpdateRecord = function () {
-        return remove_nulls({
+        console.groupCollapsed("Season.buildUpdateRecord")
+        // ----
+        
+        let data = remove_nulls({
             product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
             season_id: (!isNaN(parseInt(_product_edit_season_form_season_id.value))) ? parseInt(_product_edit_season_form_season_id.value) : null,
             disabled_dow: formatListOfIds(disabledDays.disabled_dows),
         })
+        
+        // ----
+        console.groupEnd()
+        return data
     }
-    
     const defaultDetail = function () {
-        return {
+        console.groupCollapsed("Season.defaultDetail")
+        // ----
+        
+        let details = {
             id: null,
             color_scheme_id: null,
             name: null,
@@ -8251,9 +8599,9 @@ const Season = (function () {
             view_product_package_index: 1,
             enabled: 1,
             date_created: formatDateMySQL(),
-            created_by: user_id,
+            created_by: userId,
             date_modified: formatDateMySQL(),
-            modified_by: user_id,
+            modified_by: userId,
             note: null,
             category_id: null,
             color_scheme: {
@@ -8265,19 +8613,19 @@ const Season = (function () {
                 sort_order: 999,
                 enabled: 1,
                 date_created: formatDateMySQL(),
-                created_by: user_id,
+                created_by: userId,
                 date_modified: formatDateMySQL(),
-                modified_by: user_id,
+                modified_by: userId,
                 note: null,
             },
             product_season_detail: {
-                created_by: user_id,
+                created_by: userId,
                 date_created: formatDateMySQL(),
                 date_modified: formatDateMySQL(),
                 disabled_dow: null,
                 enabled: 1,
                 id: null,
-                modified_by: user_id,
+                modified_by: userId,
                 note: null,
                 product_id: null,
                 season_id: null,
@@ -8286,17 +8634,18 @@ const Season = (function () {
                 seasons_text: null,
             },
         }
+        
+        // ----
+        console.groupEnd()
+        return details
     }
-    
     const formatSeasonType = function (season) {
+        console.groupCollapsed("Season.formatSeasonType")
+        // ----
         
         let detail = defaultDetail()
-        
-        // -----
-        
         let category_id = (!isNaN(parseInt(season.category_id))) ? parseInt(season.category_id) : null
         
-        //
         detail.id = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
         detail.color_scheme_id = (!isNaN(parseInt(season.color_scheme_id))) ? parseInt(season.color_scheme_id) : null
         detail.name = (season.name) ? season.name : null
@@ -8308,9 +8657,9 @@ const Season = (function () {
         detail.view_product_package_index = (season.view_product_package_index) ? season.view_product_package_index : 1
         detail.enabled = (season.enabled) ? season.enabled : 1
         detail.date_created = (season.date_created) ? season.date_created : formatDateMySQL()
-        detail.created_by = (!isNaN(parseInt(season.created_by))) ? parseInt(season.created_by) : user_id
+        detail.created_by = (!isNaN(parseInt(season.created_by))) ? parseInt(season.created_by) : userId
         detail.date_modified = (season.date_modified) ? season.date_modified : formatDateMySQL()
-        detail.modified_by = (!isNaN(parseInt(season.modified_by))) ? parseInt(season.modified_by) : user_id
+        detail.modified_by = (!isNaN(parseInt(season.modified_by))) ? parseInt(season.modified_by) : userId
         detail.note = (season.note) ? season.note : null
         detail.category_id = (!isNaN(parseInt(season.category_id))) ? parseInt(season.category_id) : null
         detail.color_scheme.id = (!isNaN(parseInt(season.color_scheme.id))) ? parseInt(season.color_scheme.id) : null
@@ -8321,9 +8670,9 @@ const Season = (function () {
         detail.color_scheme.sort_order = (!isNaN(parseInt(season.color_scheme.sort_order))) ? parseInt(season.color_scheme.sort_order) : 999
         detail.color_scheme.enabled = season.color_scheme.enabled
         detail.color_scheme.date_created = (season.color_scheme.date_created) ? season.color_scheme.date_created : formatDateMySQL()
-        detail.color_scheme.created_by = (!isNaN(parseInt(season.color_scheme.created_by))) ? parseInt(season.color_scheme.created_by) : user_id
+        detail.color_scheme.created_by = (!isNaN(parseInt(season.color_scheme.created_by))) ? parseInt(season.color_scheme.created_by) : userId
         detail.color_scheme.date_modified = (season.color_scheme.date_modified) ? season.color_scheme.date_modified : formatDateMySQL()
-        detail.color_scheme.modified_by = (!isNaN(parseInt(season.color_scheme.modified_by))) ? parseInt(season.color_scheme.modified_by) : user_id
+        detail.color_scheme.modified_by = (!isNaN(parseInt(season.color_scheme.modified_by))) ? parseInt(season.color_scheme.modified_by) : userId
         detail.color_scheme.note = season.color_scheme.note
         
         if (!categories.get(category_id)) {
@@ -8332,15 +8681,14 @@ const Season = (function () {
             })
         }
         
-        let category = categories.get(category_id)
-        let category_seasons = (category.seasons) ? category.seasons : []
-        //console.log(categories.get(category_id).seasons)
-        //console.log("category", category)
-        //console.log(detail)
+        // ----
+        console.groupEnd()
         return detail
     }
-    
     const loadTypes = function (seasons) {
+        console.groupCollapsed("Season.loadTypes")
+        // ----
+        
         categories = new Map()
         if (seasons) {
             
@@ -8348,25 +8696,29 @@ const Season = (function () {
                 Season.types.set(season.id, formatSeasonType(season))
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const clearProductOverview = function (season) {
-        //console.log("Season.buildProductOverview(season)", season)
+        console.groupCollapsed("Season.clearProductOverview")
+        // ----
+        
         let color_scheme, product_season_detail
         
         if (!season || !season.color_scheme || !season.product_season_detail) {
-            //console.log("|__ season", season)
-            //console.log("|__ color_scheme", season.color_scheme)
-            //console.log("|__ product_season_detail", season.product_season_detail)
+            //console.log("season", season)
+            //console.log("color_scheme", season.color_scheme)
+            //console.log("product_season_detail", season.product_season_detail)
             return
         }
         
         color_scheme = season.color_scheme
         product_season_detail = season.product_season_detail
         
-        //console.log("|__ season", season)
-        //console.log("|__ color_scheme", color_scheme)
-        //console.log("|__ product_season_detail", product_season_detail)
+        //console.log("season", season)
+        //console.log("color_scheme", color_scheme)
+        //console.log("product_season_detail", product_season_detail)
         
         let backgroundColor = (season.color_scheme && season.color_scheme.background_color) ? season.color_scheme.background_color : "#fff"
         let textColor = (season.color_scheme && season.color_scheme.text_color) ? season.color_scheme.text_color : "#0a070d"
@@ -8381,25 +8733,28 @@ const Season = (function () {
             $(`#disabledDOWDisplay${seasonId}`).remove()
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const buildProductOverview = function (season) {
-        //console.log("Season.buildProductOverview(season)", season)
+        console.groupCollapsed("Season.buildProductOverview")
+        // ----
+        
         let color_scheme, product_season_detail
         
         if (!season || !season.color_scheme || !season.product_season_detail) {
-            //console.log("|__ season", season)
-            //console.log("|__ color_scheme", season.color_scheme)
-            //console.log("|__ product_season_detail", season.product_season_detail)
+            //console.log("season", season)
+            //console.log("color_scheme", season.color_scheme)
+            //console.log("product_season_detail", season.product_season_detail)
             return
         }
         
         color_scheme = season.color_scheme
         product_season_detail = season.product_season_detail
         
-        //console.log("|__ season", season)
-        //console.log("|__ color_scheme", color_scheme)
-        //console.log("|__ product_season_detail", product_season_detail)
+        //console.log("season", season)
+        //console.log("color_scheme", color_scheme)
+        //console.log("product_season_detail", product_season_detail)
         
         let backgroundColor = (season.color_scheme && season.color_scheme.background_color) ? season.color_scheme.background_color : "#fff"
         let textColor = (season.color_scheme && season.color_scheme.text_color) ? season.color_scheme.text_color : "#0a070d"
@@ -8439,9 +8794,14 @@ const Season = (function () {
                 </div>
             </div>
         `)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const loadAll = function (seasons) {
+        console.groupCollapsed("Season.loadAll")
+        // ----
+        
         Season.all = new Map()
         if (_table_season_product_edit) {
             buildProductEditTable()
@@ -8462,17 +8822,27 @@ const Season = (function () {
         })
         
         updateProgress()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const set = function (season) {
+        console.groupCollapsed("Season.set")
+        // ----
+        
         let detail = defaultDetail()
         if (season) {
             detail = season
         }
+        
+        // ----
+        console.groupEnd()
         return detail
     }
-    
     const edit = function (season) {
+        console.groupCollapsed("Season.edit")
+        // ----
+        
         if (season) {
             if (season.id) {
                 let seasonId = season.id
@@ -8484,9 +8854,14 @@ const Season = (function () {
         
         clearProductSeasonForm()
         loadProductSeasonForm(season)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildProductEditTable = function () {
+        console.groupCollapsed("Season.buildProductEditTable")
+        // ----
+        
         $table_season_product_edit = $(_table_season_product_edit).table({
             table_type: "display_list",
             data: Season.all,
@@ -8539,9 +8914,14 @@ const Season = (function () {
             ],
             rowClick: Season.edit,
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const deleteProductSeasonTableRow = function (season_id) {
+        console.groupCollapsed("Season.deleteProductSeasonTableRow")
+        // ----
+        
         if (season_id) {
             let hasSeason = Season.all.get(season_id)
             
@@ -8566,9 +8946,14 @@ const Season = (function () {
                 YearCalendar.endLoading()
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const addProductSeasonTableRow = function (season) {
+        console.groupCollapsed("Season.addProductSeasonTableRow")
+        // ----
+        
         if (season) {
             let detail = set(season)
             let hasSeason = Season.all.get(detail.id)
@@ -8598,10 +8983,12 @@ const Season = (function () {
             toastr.success(`Season: ${detail.name} - has been updated`)
             YearCalendar.endLoading()
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const resetForm = function () {
-        console.log("Season.resetForm()")
+        console.groupCollapsed("Season.resetForm")
         // ----
         
         _product_edit_season_form_season_id.value = ""
@@ -8612,22 +8999,42 @@ const Season = (function () {
         updateProgress()
         
         ColorScheme.load()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const loadEditSeasonForm = function () {
+        console.groupCollapsed("Season.loadEditSeasonForm")
+        // ----
+        
         //$(_edit_season).show()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const unLoadEditSeasonForm = function () {
+        console.groupCollapsed("Season.unLoadEditSeasonForm")
+        // ----
+        
         //$(_edit_season).hide()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const clearProductSeasonForm = function () {
+        console.groupCollapsed("Season.clearProductSeasonForm")
+        // ----
+        
         disabledDays.init([])
         unloadProductSeasonForm()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const loadProductSeasonForm = function (season) {
+        console.groupCollapsed("Season.loadProductSeasonForm")
+        // ----
+        
         let disabled_dow = []
         let name = "Details"
         if (season) {
@@ -8651,16 +9058,25 @@ const Season = (function () {
         _display_product_season_name.innerText = name
         disabledDays.init(disabled_dow)
         $(_edit_product_season).show()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const unloadProductSeasonForm = function () {
-        //console.log("unloadProductSeasonForm()")
+        console.groupCollapsed("Season.unloadProductSeasonForm")
+        // ----
+        
         _product_edit_season_form_season_name_filter.disabled = false
         _product_edit_season_form_season_name.disabled = true
         $(_edit_product_season).hide()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const addSeason = function (dataToSend, callback) {
+        console.groupCollapsed("Season.addSeason")
+        // ----
+        
         let url = "/api/v1.0/seasons/add"
         
         if (dataToSend) {
@@ -8679,9 +9095,14 @@ const Season = (function () {
         } else {
             return handleSeasonError("Error Loading Airport - Missing Data")
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const fetchByName = function (dataToSend, callback) {
+        console.groupCollapsed("Season.fetchByName")
+        // ----
+        
         let url = "/api/v1.0/seasons/validate"
         
         if (dataToSend) {
@@ -8700,9 +9121,14 @@ const Season = (function () {
         } else {
             handleSeasonError("Error Loading Airport - Missing Data")
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const seasonExists = function (name) {
+        console.groupCollapsed("Season.seasonExists")
+        // ----
+        
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         if (name && name !== "" && category_id) {
             let dataToSend = {
@@ -8789,9 +9215,14 @@ const Season = (function () {
                 }
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const initAutoComplete = function () {
+        console.groupCollapsed("Season.initAutoComplete")
+        // ----
+        
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         $(_product_edit_season_form_season_name_filter)
@@ -8852,9 +9283,14 @@ const Season = (function () {
                     }
                 },
             })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const init = function (settings) {
+        console.groupCollapsed("Season.init")
+        // ----
+        
         let seasons = []
         if (settings) {
             seasons = settings
@@ -8883,6 +9319,8 @@ const Season = (function () {
             unloadProductSeasonForm()
         }
         
+        // ----
+        console.groupEnd()
     }
     
     return {
@@ -9368,22 +9806,12 @@ const PricingStrategy = (function () {
     "use strict"
     
     /**
-     * Static Variable Decloration
+     * Static Variable Declaration
      */
-    const daysOfTheWeek = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"]
-    const _product_id = document.getElementById("product_id")
     const _pricing_strategy_types_id = document.getElementById("pricing_strategy_types_id")
     const _pricing_strategy_unit_id = document.getElementById("pricing_strategy_unit_id")
     const _pricing_strategy_season_id = document.getElementById("pricing_strategy_season_id")
-    const _pricing_container = document.getElementById("pricing_container")
     const panel_tab_pricing = document.getElementById("panel_tab_pricing")
-    
-    /**
-     * Dynamic Variable Decloration
-     */
-    let variantCombinations = []
-    let variant_id, variant_count, variant_name
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     /**
      * Element Event Handlers
@@ -9401,907 +9829,6 @@ const PricingStrategy = (function () {
             //emptyPricingMatrix()
             //buildPricingMatrix()
         })
-    
-    $(_pricing_strategy_unit_id)
-        .on("change", function () {
-            //unit_id = (!isNaN(parseInt(_pricing_strategy_unit_id.value))) ? parseInt(_pricing_strategy_unit_id.value) : null
-            
-        })
-    
-    /**
-     * buildPricingMatrix
-     */
-    const buildPricingMatrix = function () {
-        let pricingStrategyForm
-        let pricingStrategyTypesId = (!isNaN(parseInt(_pricing_strategy_types_id.value))) ? parseInt(_pricing_strategy_types_id.value) : null
-        let CONTAINER = $("<div/>")
-        
-        const tableDOW = function () {
-            let tableHeadRow = $("<tr/>")
-            let tableHeadRowColumn0 = $("<th/>", {
-                class: "p-1",
-            })
-            let tableHeadRowColumn0Span = $("<span/>", {
-                class: "p-1",
-                html: '&nbsp;',
-            })
-            tableHeadRowColumn0.append(tableHeadRowColumn0Span)
-            tableHeadRow.append(tableHeadRowColumn0)
-            for (let n = 0; n < daysOfTheWeek.length; n++) {
-                let tableHeadRowColumn = $("<th/>", {
-                    class: "p-1",
-                    text: `${ucwords(daysOfTheWeek[n])}`,
-                })
-                
-                tableHeadRow.append(tableHeadRowColumn)
-            }
-            
-            let tableHeadRowColumnSave = $("<th/>", {
-                class: "p-1",
-                html: '&nbsp;',
-            })
-            
-            tableHeadRow.append(tableHeadRowColumnSave)
-            return tableHeadRow
-        }
-        
-        const closeAllToggles = function () {
-            let els = document.getElementsByClassName("collapse-toggle")
-            
-            $.each(els, function (k, element) {
-                collapseWindow(element)
-            })
-        }
-        
-        const openAllToggles = function () {
-            let els = document.getElementsByClassName("collapse-toggle")
-            
-            $.each(els, function (k, element) {
-                expandWindow(element)
-            })
-        }
-        
-        const seasonForm = function (unit, season) {
-            
-            const getMatrix = function (unit, season) {
-                let pricingMatrix = [], seasonId, unitId, productId, matrixId
-                
-                const getVariantCombinations = function (depth, baseString, arrLetters) {
-                    for (let i = 0; i < arrLetters.length; i++) {
-                        if (depth === 1) {
-                            let variantComboId = baseString + arrLetters[i]
-                            
-                            let combos = variantComboId.split('-').map(function (item) {
-                                return parseInt(item, 10)
-                            })
-                            
-                            combos = combos.sort().join("-")
-                            
-                            let hasVariantComboIndex = variantCombinations.indexOf(variantComboId)
-                            if (hasVariantComboIndex < 0) {
-                                variantCombinations.push(combos)
-                            }
-                            
-                        } else {
-                            let id = arrLetters[i]
-                            getVariantCombinations(depth - 1, baseString + arrLetters[i] + "-", arrLetters)
-                        }
-                    }
-                }
-                
-                const buildVariantListCombinations = function (unit, season) {
-                    let variants = getVariantsUsed()
-                    let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                    variantCombinations = []
-                    
-                    if (unitId) {
-                        let unit = Unit.all.get(unitId)
-                        if (unit) {
-                            let min = (!isNaN(parseInt(unit.min_pax))) ? parseInt(unit.min_pax) : 1
-                            let max = (!isNaN(parseInt(unit.max_pax))) ? parseInt(unit.max_pax) : 1
-                            if (min > max) {
-                                let temp = max
-                                max = min
-                                min = temp
-                            }
-                            
-                            for (let n = min; n <= max; n++) {
-                                getVariantCombinations(n, "", variants)
-                            }
-                        }
-                    }
-                    
-                    return variantCombinations
-                }
-                
-                const formatCombos = function (variantList) {
-                    let worksheet = Array.from(variantList.values())
-                    let pricingWorksheet = new Map()
-                    
-                    let sectionName = []
-                    let myPricings = []
-                    let hasWorksheet, code
-                    $.each(worksheet, function (index, variantComboList) {
-                        let name = variantComboList.name
-                        let count = variantComboList.count
-                        code = variantComboList.code
-                        let pricings = variantComboList.pricings
-                        hasWorksheet = pricingWorksheet.get(code)
-                        
-                        if (!hasWorksheet) {
-                            hasWorksheet = {
-                                name: null,
-                                pricings: [],
-                            }
-                        }
-                        
-                        sectionName.push(count + " " + pluralize(name, count))
-                        myPricings.push(pricings)
-                        
-                    })
-                    
-                    let wPricing = []
-                    let pricingGroupName = sectionName.join(", ")
-                    for (let m = 0; m < myPricings.length; m++) {
-                        for (let n = 0; n < myPricings[m].length; n++) {
-                            let priceLine = myPricings[m][n]
-                            
-                            let priceLineCode = priceLine.code
-                            let pricing = Pricing.all.get(priceLineCode)
-                            if (pricing) {
-                                //console.log("pricing", pricing)
-                            } else {
-                                pricing = Pricing.set()
-                            }
-                            
-                            pricing.code = priceLine.code
-                            pricing.count = priceLine.count
-                            pricing.name = priceLine.name
-                            pricing.product_id = productId
-                            pricing.season_id = seasonId
-                            pricing.unit_id = unitId
-                            pricing.variant_id = priceLine.variant_id
-                            wPricing.push(pricing)
-                        }
-                    }
-                    
-                    let matrix = Matrix.all.get(code)
-                    if (!matrix) {
-                        matrix = Matrix.set()
-                        matrix.code = code
-                        matrix.product_id = productId
-                        matrix.season_id = seasonId
-                        matrix.unit_id = unitId
-                    }
-                    
-                    pricingWorksheet.set(code, {
-                        been_saved: matrix.been_saved,
-                        code: matrix.code,
-                        cost: matrix.cost,
-                        created_by: matrix.created_by,
-                        date_created: matrix.date_created,
-                        date_modified: matrix.date_modified,
-                        enabled: matrix.enabled,
-                        has_pricing: matrix.has_pricing,
-                        id: matrix.id,
-                        margin: matrix.margin,
-                        modified_by: matrix.modified_by,
-                        note: matrix.note,
-                        price: matrix.price,
-                        product_id: matrix.product_id,
-                        season_id: matrix.season_id,
-                        unit_id: matrix.unit_id,
-                        name: pricingGroupName,
-                        pricings: wPricing,
-                    })
-                    
-                    return pricingWorksheet
-                }
-                
-                const buildPricingMatrixCombinations = function (combos, unit, season) {
-                    
-                    let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
-                    let seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
-                    let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                    let matrixCode = productId + "-" + unitId + "-" + seasonId
-                    
-                    $.each(combos, function (k, variantComboId) {
-                        let variants = variantComboId.split("-").map(Number)
-                        let variantList = new Map()
-                        
-                        $.each(variants, function (k, variantId) {
-                            let variant = Variant.all.get(variantId)
-                            let hasVariant = variantList.get(variantId)
-                            
-                            if (hasVariant) {
-                                let variantCount = parseInt(hasVariant.count) + 1
-                                let count = variantCount
-                                hasVariant.count = variantCount
-                                hasVariant.pricings.push({
-                                    code: matrixId + "-" + variantId + "-" + count,
-                                    count: count,
-                                    name: variant.name + " " + count,
-                                    product_id: productId,
-                                    season_id: seasonId,
-                                    unit_id: unitId,
-                                    variant_id: parseInt(variantId),
-                                    mon: null,
-                                    tue: null,
-                                    wed: null,
-                                    thu: null,
-                                    fri: null,
-                                    sat: null,
-                                    sun: null,
-                                    monMargin: null,
-                                    tueMargin: null,
-                                    wedMargin: null,
-                                    thuMargin: null,
-                                    friMargin: null,
-                                    satMargin: null,
-                                    sunMargin: null,
-                                    enabled: 1,
-                                    date_created: formatDateMySQL(),
-                                    created_by: user_id,
-                                    date_modified: formatDateMySQL(),
-                                    modified_by: user_id,
-                                    note: null,
-                                })
-                                variantList.set(variantId, hasVariant)
-                            } else {
-                                let variantCount = 0
-                                let count = variantCount + 1
-                                
-                                variantList.set(variantId, {
-                                    count: count,
-                                    name: variant.name,
-                                    code: matrixCode,
-                                    product_id: productId,
-                                    season_id: seasonId,
-                                    unit_id: unitId,
-                                    cost: 0,
-                                    enabled: 1,
-                                    has_pricing: 0,
-                                    id: null,
-                                    margin: 0,
-                                    price: 0,
-                                    modified_by: user_id,
-                                    note: null,
-                                    created_by: user_id,
-                                    date_created: formatDateMySQL(),
-                                    date_modified: formatDateMySQL(),
-                                    pricings: [
-                                        {
-                                            code: matrixCode + "-" + variantId + "-" + count,
-                                            count: count,
-                                            name: variant.name + " " + count,
-                                            product_id: productId,
-                                            season_id: seasonId,
-                                            unit_id: unitId,
-                                            matrix_id: null,
-                                            variant_id: parseInt(variantId),
-                                            mon: 0,
-                                            tue: 0,
-                                            wed: 0,
-                                            thu: 0,
-                                            fri: 0,
-                                            sat: 0,
-                                            sun: 0,
-                                            monMargin: 0,
-                                            tueMargin: 0,
-                                            wedMargin: 0,
-                                            thuMargin: 0,
-                                            friMargin: 0,
-                                            satMargin: 0,
-                                            sunMargin: 0,
-                                            enabled: 1,
-                                            date_created: formatDateMySQL(),
-                                            created_by: user_id,
-                                            date_modified: formatDateMySQL(),
-                                            modified_by: user_id,
-                                            note: null,
-                                        },
-                                    ],
-                                })
-                            }
-                            
-                        })
-                        
-                        let matrixLine = formatCombos(variantList)
-                        
-                        pricingMatrix.push(Array.from(matrixLine.values()))
-                        
-                    })
-                    
-                    return pricingMatrix
-                }
-                
-                let comboMatrix
-                
-                if (unit && season) {
-                    productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
-                    if (productId) {
-                        unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                        seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
-                        
-                        if (unitId && seasonId) {
-                            matrixId = productId + "-" + unitId + "-" + seasonId
-                            let matrix = Matrix.all.get(matrixId)
-                            comboMatrix = buildPricingMatrixCombinations(buildVariantListCombinations(unit, season), unit, season)
-                            
-                            let variantCombinations = buildVariantListCombinations(unit, season)
-                            
-                            if (!matrix) {
-                                matrix = Matrix.set()
-                            } else {
-                                if (matrix.pricings) {
-                                
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                return comboMatrix
-            }
-            
-            const seasonWrapper = function (unit, season) {
-                let seasonWrapperId
-                if (season) {
-                    let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                    let seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
-                    if (unitId && seasonId) {
-                        seasonWrapperId = "seasonForm_container_" + unitId + "_" + seasonId
-                    }
-                    
-                    return $("<div/>", {
-                        id: seasonWrapperId,
-                    })
-                }
-                
-                return null
-                
-            }
-            
-            const seasonCollapse = function (unit, season) {
-                let seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
-                let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                
-                return $("<section/>", {
-                    id: "seasonFormContainer_" + unitId + "_" + seasonId,
-                })
-            }
-            
-            const seasonHeader = function (unit, season) {
-                let TR, HEADING, SPAN, A, HEADINGWRAPPER, TD, colorScheme, backgroundColor, borderColor, textColor,
-                    seasonId, seasonName
-                
-                if (season) {
-                    colorScheme = season.color_scheme
-                    backgroundColor = (colorScheme.background_color) ? colorScheme.background_color : "#fff"
-                    borderColor = (colorScheme.border_color) ? colorScheme.border_color : "#fff"
-                    textColor = (colorScheme.text_color) ? colorScheme.text_color : "#fff"
-                    seasonName = season.name
-                    seasonId = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
-                    
-                    SPAN = $("<span/>", {
-                        class: "",
-                        text: seasonName,
-                    })
-                    
-                    A = $("<a/>", {
-                        href: "javascript:void(0)",
-                        class: "panel_link",
-                        css: {
-                            "color": textColor,
-                        },
-                        html: "<i class='fas fa-angle-down'></i>",
-                    })
-                    
-                    HEADING = $("<h6/>", {
-                        class: "h6-responsive m-0 py-1 px-2",
-                        css: {
-                            "color": textColor,
-                        },
-                    })
-                        .attr("aria-expanded", "true")
-                        .attr("aria-target", "#seasonForm_container_" + unit.id + "_" + seasonId)
-                        .on("click", function () {
-                            let isExpanded = ($(this).attr("aria-expanded") === "true")
-                            if (isExpanded) {
-                                collapseWindow(this)
-                            } else {
-                                expandWindow(this)
-                            }
-                        })
-                        .append(SPAN, A)
-                    
-                    HEADINGWRAPPER = $("<div/>", {
-                        id: "seasonForm_" + unit.id + "_" + seasonId,
-                        class: "p-0 collapse-toggle",
-                        css: {
-                            "background": backgroundColor,
-                            "color": textColor,
-                            "border": "solid 1px " + borderColor,
-                            "cursor": "pointer",
-                        },
-                    })
-                        .append(HEADING)
-                }
-                
-                return HEADINGWRAPPER
-            }
-            
-            const buildMatrixForm = function (unit, season) {
-                let matrix = getMatrix(unit, season)
-                let pricings = (matrix.pricings) ? Array.from(matrix.pricings.values()) : []
-                
-                let WRAPPER = []
-                
-                $.each(pricings, function (index, pricing) {
-                    let matrixId = parseInt(pricing.matrix_id)
-                    let TBODY = $("<tbody/>")
-                        .attr("matrixid", matrixId)
-                    
-                    let TROW = matrixRow(pricing)
-                    
-                    TBODY.append(TROW)
-                    WRAPPER.push(TBODY)
-                })
-                
-                return WRAPPER
-            }
-            
-            const matrixRow = function (pricing) {
-                return $("<tr/>")
-            }
-            
-            let TABLE = $("<table class='table table-bordered'/>")
-            let TABLEHEAD = $("<thead/>")
-            let SEASONHEADER = seasonHeader(unit, season)
-            let SEASONBLOCK = seasonWrapper(unit, season)
-            let DOWROW = tableDOW()
-            
-            let SEASONROW = buildMatrixForm(unit, season)
-            let SEASONCOLLAPSE = seasonCollapse(unit, season)
-            
-            TABLEHEAD.append(DOWROW)
-            TABLE.append(TABLEHEAD)
-            
-            $.each(SEASONROW, function (index, row) {
-                TABLE.append(row)
-            })
-            
-            SEASONBLOCK.append(TABLE)
-            SEASONCOLLAPSE.append(SEASONHEADER, SEASONBLOCK)
-            
-            return SEASONCOLLAPSE
-            
-        }
-        
-        const unitForm = function (units) {
-            let UNITFORM, MATRIXFORM, TABLEBODY
-            
-            const unitFormHiddenFields = function (unit) {
-                
-                if (unit) {
-                    if (unit.id) {
-                        let unitId = (unit && unit.id && !isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                        
-                        return $("<div/>", {
-                            class: "row",
-                        })
-                            .append(
-                                /**
-                                 * columnWrapperMatrixId
-                                 */
-                                $("<div/>", {
-                                    class: "col-3",
-                                })
-                                    .append(
-                                        /**
-                                         * inputWrapperMatrixId
-                                         */
-                                        $("<div/>", {
-                                            class: "form-element",
-                                        })
-                                            .append(
-                                                $("<label>", {
-                                                    class: "d-none",
-                                                    for: "product_edit_matrix_id_" + unitId,
-                                                    text: "product_edit_matrix_id_" + unitId,
-                                                }),
-                                                $("<input/>", {
-                                                    type: "text",
-                                                    placeholder: "product_edit_matrix_id_" + unitId,
-                                                    disabled: "disabled",
-                                                    name: "product_edit_matrix_id_" + unitId,
-                                                    class: "form-control dev-element",
-                                                    id: "product_edit_matrix_id_" + unitId,
-                                                }),
-                                            ),
-                                    ),
-                            )
-                    }
-                }
-                
-                return null
-            }
-            
-            const unitFormBaseFields = function (unit) {
-                let unitId = unit.id
-                
-                let columnWrapperMatrixEnabled = $("<div/>",
-                    {
-                        class: "col-3 d-flex align-self-end justify-content-end pb-2 mb-2",
-                    })
-                    .append(
-                        $("<div/>", { class: "custom-control custom-switch" })
-                            .append(
-                                $("<div/>", { class: "form-element" })
-                                    .append(
-                                        $("<input/>",
-                                            {
-                                                type: "checkbox",
-                                                name: "matrix_enabled_" + unitId,
-                                                class: "custom-control-input",
-                                                id: "matrix_enabled_" + unitId,
-                                            },
-                                        ),
-                                        
-                                        $("<label/>",
-                                            {
-                                                class: "custom-control-label p-0",
-                                                for: "matrix_enabled_" + unitId,
-                                                text: "Enabled:",
-                                            },
-                                        ),
-                                    ),
-                            ),
-                    )
-                
-                let columnWrapperMatrixBaseCost = $("<div/>",
-                    {
-                        class: "col-3",
-                    })
-                    .append(
-                        $("<div/>", { class: "form-element" })
-                            .append(
-                                $("<label>",
-                                    {
-                                        class: "",
-                                        for: "matrix_cost_" + unitId,
-                                        text: "Base Cost:",
-                                    },
-                                ),
-                                
-                                $("<input/>",
-                                    {
-                                        type: "text",
-                                        placeholder: "Base Cost",
-                                        name: "matrix_cost_" + unitId,
-                                        class: "form-control",
-                                        id: "matrix_cost_" + unitId,
-                                    },
-                                )
-                                    .attr("data-type", "cost")
-                                    .attr("data-form", `product_edit_matrix_form_${unitId}`)
-                                    .on("keyup", function (e) {
-                                        let val = $(this).val()
-                                        let form = document.getElementById($(this).attr("data-form"))
-                                        // ----
-                                        
-                                        if (form) {
-                                            let inputs = document.getElementById($(this).attr("data-form")).querySelectorAll("[name='cost']")
-                                            for (let i = 0; i < inputs.length; i++) {
-                                                if (!inputs[i].disabled) {
-                                                    inputs[i].value = val
-                                                    $(inputs[i]).parent("div").find("label").addClass("active")
-                                                } else {
-                                                    inputs[i].value = ""
-                                                    $(inputs[i]).parent("div").find("label").removeClass("active")
-                                                }
-                                            }
-                                        }
-                                    }),
-                            ),
-                    )
-                
-                let columnWrapperMatrixBaseMargin = $("<div/>",
-                    {
-                        class: "col-3",
-                    })
-                    .append(
-                        $("<div/>",
-                            {
-                                class: "form-element",
-                            })
-                            .append(
-                                $("<label>",
-                                    {
-                                        class: "",
-                                        for: "matrix_margin_" + unitId,
-                                        text: "Base Margin:",
-                                    },
-                                ),
-                                
-                                $("<input/>",
-                                    {
-                                        type: "text",
-                                        placeholder: "Base Margin",
-                                        name: "matrix_margin_" + unitId,
-                                        class: "form-control",
-                                        id: "matrix_margin_" + unitId,
-                                    },
-                                )
-                                    .attr("data-type", "margin")
-                                    .attr("data-form", `product_edit_matrix_form_${unitId}`)
-                                    .on("keyup", function (e) {
-                                        let val = $(this).val()
-                                        let form = document.getElementById($(this).attr("data-form"))
-                                        // ----
-                                        
-                                        if (form) {
-                                            let inputs = document.getElementById($(this).attr("data-form")).querySelectorAll("[name='margin']")
-                                            for (let i = 0; i < inputs.length; i++) {
-                                                if (!inputs[i].disabled) {
-                                                    inputs[i].value = val
-                                                    $(inputs[i]).parent("div").find("label").addClass("active")
-                                                } else {
-                                                    inputs[i].value = ""
-                                                    $(inputs[i]).parent("div").find("label").removeClass("active")
-                                                }
-                                            }
-                                        }
-                                    }),
-                            ),
-                    )
-                
-                return $("<div/>", { class: "row" })
-                    .append(columnWrapperMatrixBaseCost, columnWrapperMatrixBaseMargin, columnWrapperMatrixEnabled)
-            }
-            
-            const unitFormContainer = function (unit) {
-                let TABLE = $("<div class=''/>")
-                const tableBody = function (unit) {
-                    let TABLEBODY = $("<div/>")
-                    // ----
-                    
-                    $.each(Array.from(Season.all.values()), function (x, season) {
-                        if (unit && season) {
-                            TABLEBODY.append(seasonForm(unit, season))
-                        }
-                    })
-                    
-                    return TABLEBODY
-                }
-                
-                TABLE.append(tableBody(unit))
-                
-                return TABLE
-            }
-            
-            const unitFormButtons = function (unit) {
-                
-                let BUTTONROW = $("<div/>", {
-                    class: "w-100 text-right w-100",
-                })
-                let BUTTONROWCLEAR = $("<a/>", {
-                    href: "javascript:void(0);",
-                    class: "btn btn-flat primary-text text-center p-1 mx-0 mb-0 waves-effect waves-light",
-                    text: "Reset",
-                })
-                let BUTTONROWSUBMIT = $("<a/>", {
-                    href: "javascript:void(0);",
-                    class: "btn btn-primary btn-sm waves-effect waves-light",
-                    text: "Update",
-                })
-                
-                return BUTTONROW.append(BUTTONROWCLEAR, BUTTONROWSUBMIT)
-            }
-            
-            const unitFormHeading = function (unit) {
-                let SPAN, I, A, HEADING, HEADINGWRAPPER
-                
-                let headingText = "Test Heading Text"
-                let unitId = null
-                if (unit) {
-                    unitId = unit.id
-                    headingText = unit.name
-                }
-                
-                let elementId = "unitForm_" + unitId
-                
-                let wrapper = $("<div/>", {
-                    class: "card-header mb-2 collapse-toggle",
-                    css: {
-                        "cursor": "pointer",
-                        "background": "initial",
-                    },
-                    id: elementId,
-                })
-                    .on("click", function () {
-                        let isExpanded = ($(this).attr("aria-expanded") === "true")
-                        if (isExpanded) {
-                            collapseWindow(this)
-                        } else {
-                            expandWindow(this)
-                        }
-                    })
-                wrapper.attr("aria-expanded", "true")
-                wrapper.attr("aria-target", "#unitForm_container_" + unitId)
-                
-                let heading = $("<h5/>", {
-                    class: "mb-0 w-100 d-flex align-items-center justify-content-between p-1",
-                })
-                
-                SPAN = $("<span/>", {
-                    text: headingText,
-                })
-                
-                I = $("<i/>", {
-                    class: "fas fa-angle-down",
-                })
-                
-                A = $("<a />", {
-                    href: "javascript:void(0);",
-                    class: "panel_link",
-                })
-                A.attr("aria-hidden", "true")
-                A.append(I)
-                
-                wrapper.append(heading.append(SPAN, A))
-                return wrapper
-            }
-            
-            const buildUnitFormCollapse = function (unit) {
-                if (unit) {
-                    let HIDDENFIELDS, BUTTONS, BASEFIELDS, UNITCONTAINER
-                    let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                    HIDDENFIELDS = unitFormHiddenFields(unit)
-                    BUTTONS = unitFormButtons(unit)
-                    BASEFIELDS = unitFormBaseFields(unit)
-                    UNITCONTAINER = unitFormContainer(unit)
-                    
-                    return $("<div/>",
-                        {
-                            id: "unitForm_container_" + unitId,
-                            class: "",
-                        })
-                        .attr("id", "unitForm_container_" + unitId)
-                        .append(HIDDENFIELDS, BASEFIELDS, UNITCONTAINER, BUTTONS)
-                }
-                
-                return null
-            }
-            
-            const buildUnitForm = function (unit) {
-                
-                let UNITFORM = $("<div/>", {
-                    class: "",
-                })
-                
-                if (unit) {
-                    if (unit.id) {
-                        let unitId = (unit && unit.id && !isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                        UNITFORM.attr("id", unitId)
-                    }
-                }
-                
-                if (unit) {
-                    let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                    
-                    let UNITHEADING = unitFormHeading(unit)
-                    let UNITCOLLAPSE = buildUnitFormCollapse(unit)
-                    // ----
-                    if (unitId) {
-                        
-                        UNITFORM
-                            .attr("id", "unitForm_" + unitId)
-                            .append(UNITHEADING, UNITCOLLAPSE)
-                    }
-                    
-                    return UNITFORM
-                }
-                
-                return null
-            }
-            
-            $.each(units, function (k, unit) {
-                if (unit.id) {
-                    let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
-                    
-                    MATRIXFORM = $("<div/>", {
-                        id: "product_edit_matrix_form_" + unitId,
-                        class: "",
-                    })
-                    
-                    UNITFORM = buildUnitForm(unit)
-                    MATRIXFORM.append(UNITFORM)
-                    CONTAINER.append(MATRIXFORM)
-                }
-            })
-            
-            return CONTAINER
-        }
-        
-        const matrixForm = function (units) {
-            unitForm(units)
-            $(_pricing_container).append(unitForm(units))
-        }
-        
-        const buildPricingMatrix = function (units) {
-            matrixForm(units)
-        }
-        
-        if (pricingStrategyTypesId !== null) {
-            switch (pricingStrategyTypesId) {
-                case 1:
-                    //Per Unit
-                    variant_id = 0
-                    variant_count = 0
-                    variant_name = "Other"
-                    //buildPricingMatrix(Array.from(PricingStrategy.unitSeasons.values()))
-                    closeAllToggles()
-                    break
-                case 2:
-                    //Per Person
-                    //console.log("Per Person")
-                    
-                    //buildPricingMatrix(Array.from(PricingStrategy.unitSeasons.values()))
-                    break
-                case 3:
-                    //Per Days
-                    variant_id = 0
-                    variant_count = 0
-                    variant_name = "Other"
-                    
-                    //buildPricingMatrix(Array.from(PricingStrategy.unitSeasons.values()))
-                    openAllToggles()
-                    break
-                default:
-                    return
-            }
-        }
-    }
-    
-    const updatePricingStrategyTypesId = function (pricing_strategy_types_id) {
-        if (pricing_strategy_types_id) {
-            pricing_strategy_types_id = (!isNaN(parseInt(_pricing_strategy_types_id.value))) ? parseInt(_pricing_strategy_types_id.value) : null
-            //emptyPricingMatrix()
-            //buildPricingMatrix()
-        }
-    }
-    
-    const getVariantsUsed = function () {
-        let results = []
-        
-        let variantsUsed = findObjectByKey(Array.from(Variant.all.values()), 'used_in_pricing', 1)
-        $.each(variantsUsed, function (k, variant) {
-            let id = (!isNaN(parseInt(variant.id))) ? parseInt(variant.id) : null
-            if (!is_null(id)) {
-                results.push(id)
-            }
-        })
-        
-        return results.sort()
-        
-    }
-    
-    const collapseWindow = function (_this) {
-        let targetElement = $(_this).attr("aria-target")
-        let icon = $(_this).find("i")
-        icon.removeClass("fa-angle-down").addClass("fa-angle-up")
-        $(_this).attr("aria-expanded", "false")
-        $(targetElement).slideUp()
-    }
-    
-    const expandWindow = function (_this) {
-        let icon = $(_this).find("i")
-        let targetElement = $(_this).attr("aria-target")
-        icon.removeClass("fa-angle-up").addClass("fa-angle-down")
-        $(_this).attr("aria-expanded", "true")
-        $(targetElement).slideDown()
-    }
     
     const buildUnitSeasonValues = function () {
         PricingStrategy.unitSeasons = new Map()
@@ -10325,13 +9852,9 @@ const PricingStrategy = (function () {
     
     const updatePrice = function (el) {
         let costEl = document.getElementById(el)
-        let marginEl = document.getElementById(el.replace('cost', 'margin'))
         let priceEl = document.getElementById(el.replace('cost', 'price'))
-        // ----
-        //let cost = (!isNaN(parseInt(costEl.value))) ? parseInt(costEl.value) : 0
-        //let margin = ((!isNaN(parseInt(marginEl.value))) ? parseInt(marginEl.value) : 0) / 100
         
-        priceEl.value = parseInt(((!isNaN(parseInt(costEl.value))) ? parseInt(costEl.value) : 0 / 100) + (!isNaN(parseInt(costEl.value))) ? parseInt(costEl.value) : 0)
+        priceEl.value = ((!isNaN(parseInt(costEl.value))) ? parseInt(costEl.value) : 0 / 100) + (!isNaN(parseInt(costEl.value))) ? parseInt(costEl.value) : 0
         
     }
     
@@ -10627,6 +10150,7 @@ $.fn.table = function (settings) {
                 pageLength: 5,
                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
                 data: data,
+                searching: true,
                 columnDefs: columnDefs,
             })
             
@@ -11903,7 +11427,7 @@ const PricingWorksheet = (function () {
     let incomplete = '<span class="badge badge-pill badge-danger">Incomplete</span>'
     let seasonList, unitList, variantList = []
     let variantCombinations = []
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     $(_product_edit_pricing_section_reload_worksheet)
         .on("click", function () {
@@ -11956,6 +11480,9 @@ const PricingWorksheet = (function () {
         })
     
     const status = function () {
+        console.groupCollapsed("PricingWorksheet.status")
+        // ----
+        
         let hasIssues = false
         let status = "complete"
         let incompletePricings = Array.from(PricingWorksheet.incompletePricings.values())
@@ -11981,10 +11508,14 @@ const PricingWorksheet = (function () {
                 .html("Pricing")
         }
         
+        // ----
+        console.groupEnd()
         return status
     }
-    
     const isDisabled = function (day, season_id) {
+        console.groupCollapsed("PricingWorksheet.isDisabled")
+        // ----
+        
         let season, dow
         let dowIndex = -1
         let disabled_dow = []
@@ -12000,10 +11531,14 @@ const PricingWorksheet = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
         return dowIndex >= 0
     }
-    
     const tableDOW = function (pricing) {
+        console.groupCollapsed("PricingWorksheet.tableDOW")
+        // ----
+        
         let DOWHEADINGROW = $("<tr/>")
         let DOWHEADINGACTIONCOLUMN = $("<th/>", {
             html: "&nbsp;",
@@ -12041,10 +11576,14 @@ const PricingWorksheet = (function () {
             DOWHEADINGROW.append(DOWHEADINGACTIONCOLUMN)
         }
         
+        // ----
+        console.groupEnd()
         return DOWHEADINGROW
     }
-    
     const buildSeasonWrapper = function (season, matrixId, count) {
+        console.groupCollapsed("PricingWorksheet.buildSeasonWrapper")
+        // ----
+        
         return $("<div/>", {
             class: "accordion md-accordion",
             id: "accordionEx" + matrixId + "-" + count,
@@ -12052,9 +11591,14 @@ const PricingWorksheet = (function () {
             "aria-multiselectable": "true",
         })
             .attr("data-sectiontype", "season-" + season.season_id)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildUnitWrapper = function (unit, count) {
+        console.groupCollapsed("PricingWorksheet.buildUnitWrapper")
+        // ----
+        
         let id = unit.id + "-" + count
         return $("<div/>", {
             class: "accordion md-accordion card card-body p-1 mb-2",
@@ -12064,9 +11608,14 @@ const PricingWorksheet = (function () {
             
         })
             .attr("data-sectiontype", "unit-" + unit.id)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildPricingButtonRow = function (pricing) {
+        console.groupCollapsed("PricingWorksheet.buildPricingButtonRow")
+        // ----
+        
         let matrixCode = pricing.matrix_code
         
         let ROW = $("<div/>", {
@@ -12095,10 +11644,14 @@ const PricingWorksheet = (function () {
         
         COL_6_2.append(UPDATEBUTTON)
         
+        // ----
+        console.groupEnd()
         return ROW.append(COL_6_1, COL_6_2)
     }
-    
     const toggleCompletedMatrices = function (toggle) {
+        console.groupCollapsed("PricingWorksheet.toggleCompletedMatrices")
+        // ----
+        
         let showElements = true
         if (toggle) {
             showElements = toggle
@@ -12126,9 +11679,14 @@ const PricingWorksheet = (function () {
             $("[data-matrixcomplete='true']").hide()
         }
         
+        // ----
+        console.groupEnd()
+        
     }
-    
     const toggleCompletedPricings = function () {
+        console.groupCollapsed("PricingWorksheet.toggleCompletedPricings")
+        // ----
+        
         let showElements = true
         
         if (!$(_button_toggle_completed_pricings).attr("data-shown")) {
@@ -12153,9 +11711,13 @@ const PricingWorksheet = (function () {
             pricingsHidden = true
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const toggleUnitFilter = function () {
+        console.groupCollapsed("PricingWorksheet.toggleUnitFilter")
+        // ----
+        
         let elements = document.querySelectorAll(`[data-type='unit']`)
         let showElements
         
@@ -12181,9 +11743,14 @@ const PricingWorksheet = (function () {
             unitsCollapsed = (showElements === true)
             //pricingsHidden, matricesHidden, unitsCollapsed, seasonsCollapsed = false
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const toggleSeasonFilter = function () {
+        console.groupCollapsed("PricingWorksheet.toggleSeasonFilter")
+        // ----
+        
         let elements = document.querySelectorAll(`[data-type='season']`)
         let showElements = true
         
@@ -12207,9 +11774,14 @@ const PricingWorksheet = (function () {
             $("#" + id).collapse((showElements === true) ? "show" : "hide")
             seasonsCollapsed = (showElements === true)
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const filtersReset = function (callback) {
+        console.groupCollapsed("PricingWorksheet.filtersReset")
+        // ----
+        
         $("[data-matrixcomplete='true']").show()
         $(_button_toggle_completed_matrices).attr("data-shown", "true")
         $(_button_toggle_completed_matrices).text("Hide Completed Matrices")
@@ -12229,10 +11801,14 @@ const PricingWorksheet = (function () {
         $(_button_collapse_seasons).text("Expand Seasons")
         toggleSeasonFilter()
         
+        // ----
+        console.groupEnd()
         return callback(1)
     }
-    
     const resetFilters = function () {
+        console.groupCollapsed("PricingWorksheet.resetFilters")
+        // ----
+        
         $(_product_edit_pricing_section_reset_filters)
             .html("<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span> Loading...")
         filtersReset(function (data) {
@@ -12240,9 +11816,14 @@ const PricingWorksheet = (function () {
                 $(_product_edit_pricing_section_reset_filters).html("Reset Filters")
             }
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const showAllFilterUnits = function () {
+        console.groupCollapsed("PricingWorksheet.showAllFilterUnits")
+        // ----
+        
         let units = Array.from(Unit.all.values())
         $.each(units, function (i, unit) {
             let unitId = unit.id
@@ -12252,9 +11833,14 @@ const PricingWorksheet = (function () {
                 $(el).show()
             })
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const hideAllFilterUnits = function () {
+        console.groupCollapsed("PricingWorksheet.hideAllFilterUnits")
+        // ----
+        
         let units = Array.from(Unit.all.values())
         $.each(units, function (i, unit) {
             let unitId = unit.id
@@ -12264,9 +11850,14 @@ const PricingWorksheet = (function () {
                 $(el).hide()
             })
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const showAllFilterSeasons = function () {
+        console.groupCollapsed("PricingWorksheet.showAllFilterSeasons")
+        // ----
+        
         let seasons = Array.from(Season.all.values())
         $.each(seasons, function (i, season) {
             let seasonId = season.id
@@ -12276,9 +11867,14 @@ const PricingWorksheet = (function () {
                 $(el).show()
             })
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const hideAllFilterSeasons = function () {
+        console.groupCollapsed("PricingWorksheet.hideAllFilterSeasons")
+        // ----
+        
         let seasons = Array.from(Season.all.values())
         $.each(seasons, function (i, season) {
             let seasonId = season.id
@@ -12288,9 +11884,14 @@ const PricingWorksheet = (function () {
                 $(el).hide()
             })
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const filterUnits = function () {
+        console.groupCollapsed("PricingWorksheet.filterUnits")
+        // ----
+        
         hideAllFilterUnits()
         let unitIds = getListOfIds($(_pricing_strategy_unit_id).val())
         if (unitIds.length) {
@@ -12305,9 +11906,13 @@ const PricingWorksheet = (function () {
             showAllFilterUnits()
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const filterSeasons = function () {
+        console.groupCollapsed("PricingWorksheet.filterSeasons")
+        // ----
+        
         hideAllFilterSeasons()
         let seasonIds = getListOfIds($(_pricing_strategy_season_id).val())
         if (seasonIds.length) {
@@ -12322,9 +11927,13 @@ const PricingWorksheet = (function () {
             showAllFilterSeasons()
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const emptyPricingMatrix = function () {
+        console.groupCollapsed("PricingWorksheet.emptyPricingMatrix")
+        // ----
+        
         PricingWorksheet.incompletePricings = new Map()
         PricingWorksheet.incompleteMatrices = new Map()
         $(_product_edit_matrix_form).empty()
@@ -12345,9 +11954,14 @@ const PricingWorksheet = (function () {
                     </div>
                 </div>
             `)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildTableVariantHeadingBaseInputs = function (pricing) {
+        console.groupCollapsed("PricingWorksheet.buildTableVariantHeadingBaseInputs")
+        // ----
+        
         let CONTAINER = $("<div/>", {
             class: "p-2",
         })
@@ -12543,10 +12157,14 @@ const PricingWorksheet = (function () {
             CONTAINER.append(ROW)
         }
         
+        // ----
+        console.groupEnd()
         return CONTAINER
     }
-    
     const getRowValues = function (row) {
+        console.groupCollapsed("PricingWorksheet.getRowValues")
+        // ----
+        
         let pricingId, variantId, pricingCode, matrixId, pricingCount = null, inputs = [],
             vals = {
                 monCost: null,
@@ -12582,6 +12200,8 @@ const PricingWorksheet = (function () {
                 }
             })
             
+            // ----
+            console.groupEnd()
             return remove_nulls(
                 {
                     id: pricingId,
@@ -12609,8 +12229,10 @@ const PricingWorksheet = (function () {
             )
         }
     }
-    
     const buildPricingData = function (table, matrix) {
+        console.groupCollapsed("PricingWorksheet.buildPricingData")
+        // ----
+        
         let pricings = []
         let productId = $(table).attr("data-productid")
         let seasonId = $(table).attr("data-seasonid")
@@ -12680,10 +12302,14 @@ const PricingWorksheet = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
         return pricings
     }
-    
     const getFormValues = function (form) {
+        console.groupCollapsed("PricingWorksheet.getFormValues")
+        // ----
+        
         if (!form) {
             return
         }
@@ -12712,14 +12338,35 @@ const PricingWorksheet = (function () {
         matrix.id = ($(table).attr("data-matrixid")) ? parseInt(($(table).attr("data-matrixid"))) : null
         matrix.pricings = buildPricingData(table, matrix)
         
+        // ----
+        console.groupEnd()
         return remove_nulls(matrix)
     }
-    
-    const handlePricingWorksheetError = function (msg) {
-        toastr.error(msg)
+    const handlePricingWorksheetError = function (msg, title, type) {
+        console.groupCollapsed("PricingWorksheet.handlePricingWorksheetError")
+        // ----
+        
+        if (!msg) {
+            msg = "There was an error."
+        }
+        
+        if (!title) {
+            title = "Pricing Worksheet"
+        }
+        
+        if (!type) {
+            type = "error"
+        }
+        
+        toastr[type](msg, title)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const update = function (dataToSend) {
+        console.groupCollapsed("PricingWorksheet.update")
+        // ----
+        
         if (dataToSend) {
             sendUpdateRequest(dataToSend, function (data) {
                 let matrix
@@ -12746,9 +12393,14 @@ const PricingWorksheet = (function () {
                 }
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const pricingUpdate = function (dataToSend) {
+        console.groupCollapsed("PricingWorksheet.pricingUpdate")
+        // ----
+        
         if (dataToSend) {
             sendUpdateRequestPricing(dataToSend, function (data) {
                 let pricing
@@ -12794,9 +12446,14 @@ const PricingWorksheet = (function () {
                 }
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const sendUpdateRequest = function (dataToSend, callback) {
+        console.groupCollapsed("PricingWorksheet.sendUpdateRequest")
+        // ----
+        
         let url = "/api/v1.0/matrices/update"
         
         if (dataToSend) {
@@ -12812,9 +12469,14 @@ const PricingWorksheet = (function () {
                 //console.log("error", e)
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const sendUpdateRequestPricing = function (dataToSend, callback) {
+        console.groupCollapsed("PricingWorksheet.sendUpdateRequestPricing")
+        // ----
+        
         let url = "/api/v1.0/pricings/update"
         
         if (dataToSend) {
@@ -12830,9 +12492,14 @@ const PricingWorksheet = (function () {
                 //console.log("error", e)
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const updateMatrix = function (_this) {
+        console.groupCollapsed("PricingWorksheet.updateMatrix")
+        // ----
+        
         let dataToSend = getFormValues(document.getElementById($(_this).attr("data-targetform")))
         
         confirmDialog(`Would you like to update?`, (ans) => {
@@ -12840,9 +12507,14 @@ const PricingWorksheet = (function () {
                 update(dataToSend)
             }
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const updatePricing = function (_this, row) {
+        console.groupCollapsed("PricingWorksheet.updatePricing")
+        // ----
+        
         let dataToSend = getRowValues(row)
         
         confirmDialog(`Would you like to update?`, (ans) => {
@@ -12850,13 +12522,22 @@ const PricingWorksheet = (function () {
                 pricingUpdate(dataToSend)
             }
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildMatrixWrapper = function () {
+        console.groupCollapsed("PricingWorksheet.buildMatrixWrapper")
+        // ----
+        
+        // ----
+        console.groupEnd()
         return $("<div/>", {})
     }
-    
     const tableVariantHeading = function (pricing) {
+        console.groupCollapsed("PricingWorksheet.tableVariantHeading")
+        // ----
+        
         let matrix
         let H5 = $("<h5/>", {
             class: "card-title d-flex justify-content-between m-2",
@@ -12888,10 +12569,14 @@ const PricingWorksheet = (function () {
             H5.append(SPAN, incomplete)
         }
         
+        // ----
+        console.groupEnd()
         return H5
     }
-    
     const buildPricingRow = function (pricing) {
+        console.groupCollapsed("PricingWorksheet.buildPricingRow")
+        // ----
+        
         let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
         let matrixCode = pricing.matrix_code
         
@@ -13051,10 +12736,15 @@ const PricingWorksheet = (function () {
         let HR = $("<hr/>", {
             class: "ml-3 mr-3 mt-1 mb-3 color-dark",
         })
+        
+        // ----
+        console.groupEnd()
         return FORM.append(HEADING, HR, BASEELEMENTS, TABLECONTAINERROW, BUTTONROW)
     }
-    
     const buildMarginElement = function (variantPricing, day) {
+        console.groupCollapsed("PricingWorksheet.buildMarginElement")
+        // ----
+        
         let matrixCode = variantPricing.matrix_code
         let pricingCode = matrixCode + "-" + variantPricing.variant_id + "-" + variantPricing.count
         let pricing = Pricing.all.get(pricingCode)
@@ -13116,9 +12806,14 @@ const PricingWorksheet = (function () {
             
             return FORMELEMENT
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildCostElement = function (variantPricing, day) {
+        console.groupCollapsed("PricingWorksheet.buildCostElement")
+        // ----
+        
         let matrixCode = variantPricing.matrix_code
         let pricingCode = matrixCode + "-" + variantPricing.variant_id + "-" + variantPricing.count
         let pricing = Pricing.all.get(pricingCode)
@@ -13178,9 +12873,14 @@ const PricingWorksheet = (function () {
             
             return FORMELEMENT
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildSeasonHeading = function (season, matrixId, count) {
+        console.groupCollapsed("PricingWorksheet.buildSeasonHeading")
+        // ----
+        
         let seasonBackgroundColor, seasonTextColor, seasonBorderColor
         if (season) {
             let seasonName = (season.season_name) ? season.season_name : null
@@ -13227,9 +12927,14 @@ const PricingWorksheet = (function () {
             
             return SEASONHEADINGWRAPPER
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildUnitHeading = function (unit, count) {
+        console.groupCollapsed("PricingWorksheet.buildUnitHeading")
+        // ----
+        
         let id = unit.id + "-" + count
         let unitName = (unit.name) ? unit.name : null
         let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
@@ -13264,9 +12969,13 @@ const PricingWorksheet = (function () {
             
             return UNITHEADINGWRAPPER
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildPricingTables = function (matrices) {
+        console.groupCollapsed("PricingWorksheet.buildPricingTables")
+        // ----
         
         let $ACCORDIONWRAPPER = buildMatrixWrapper()
         
@@ -13350,10 +13059,14 @@ const PricingWorksheet = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
         return $ACCORDIONWRAPPER
     }
-    
     const getVariants = function () {
+        console.groupCollapsed("PricingWorksheet.getVariants")
+        // ----
+        
         let variantsUsed = []
         let pricingStrategyType = (!isNaN(parseInt(_pricing_strategy_types_id.value))) ? parseInt(_pricing_strategy_types_id.value) : null
         switch (pricingStrategyType) {
@@ -13373,30 +13086,42 @@ const PricingWorksheet = (function () {
                 break
         }
         
+        // ----
+        console.groupEnd()
         return variantsUsed
     }
-    
     const getSeasons = function () {
+        console.groupCollapsed("PricingWorksheet.getSeasons")
+        // ----
+        
         var seasonsUsed = []
         var seasonList = Array.from(Season.all.values())
         for (let n = 0; n < seasonList.length; n++) {
             seasonsUsed.push(seasonList[n])
         }
         
+        // ----
+        console.groupEnd()
         return seasonsUsed
     }
-    
     const getUnits = function () {
+        console.groupCollapsed("PricingWorksheet.getUnits")
+        // ----
+        
         var unitsUsed = []
         var unitList = Array.from(Unit.all.values())
         for (let n = 0; n < unitList.length; n++) {
             unitsUsed.push(unitList[n])
         }
         
+        // ----
+        console.groupEnd()
         return unitsUsed
     }
-    
     const getVariantDetails = function (variantId) {
+        console.groupCollapsed("PricingWorksheet.getVariantDetails")
+        // ----
+        
         let name = ""
         if (parseInt(_pricing_strategy_types_id.value) === 1) {
             name = "Unit Pricing"
@@ -13407,14 +13132,14 @@ const PricingWorksheet = (function () {
         let details = {
             category_id: 1,
             code: "VA-00000000036-OTHR",
-            created_by: user_id,
+            created_by: userId,
             date_created: formatDateMySQL(),
             date_modified: formatDateMySQL(),
             enabled: 1,
             id: 36,
             max_age: null,
             min_age: null,
-            modified_by: user_id,
+            modified_by: userId,
             name: name,
             note: null,
             used_in_pricing: 1,
@@ -13424,10 +13149,14 @@ const PricingWorksheet = (function () {
             details = Variant.set(variant)
         }
         
+        // ----
+        console.groupEnd()
         return details
     }
-    
     const addVariantList = function (unit, season, matrixCode, variantComboId) {
+        console.groupCollapsed("PricingWorksheet.addVariantList")
+        // ----
+        
         let variants = variantComboId.trim().split("-").map(Number)
         let seasonId = parseInt(season.id)
         let unitId = parseInt(unit.id)
@@ -13458,7 +13187,7 @@ const PricingWorksheet = (function () {
                             has_pricing: 0,
                             code: matrixCode.toString() + "-" + variantId.toString() + "-" + count.toString(),
                             count: count,
-                            created_by: user_id,
+                            created_by: userId,
                             date_created: formatDateMySQL(),
                             date_modified: formatDateMySQL(),
                             enabled: 1,
@@ -13467,7 +13196,7 @@ const PricingWorksheet = (function () {
                             id: null,
                             matrix_code: matrixCode.toString(),
                             matrix_id: null,
-                            modified_by: user_id,
+                            modified_by: userId,
                             mon: null,
                             monMargin: null,
                             name: variant.name + " " + count,
@@ -13501,7 +13230,7 @@ const PricingWorksheet = (function () {
                         has_pricing: (pricing.has_pricing) ? pricing.has_pricing : 0,
                         code: matrixCode.toString() + "-" + variantId.toString() + "-" + count.toString(),
                         count: count,
-                        created_by: (pricing.created_by) ? pricing.created_by : user_id,
+                        created_by: (pricing.created_by) ? pricing.created_by : userId,
                         date_created: formatDateMySQL(),
                         date_modified: formatDateMySQL(),
                         enabled: (pricing.enabled) ? pricing.enabled : 1,
@@ -13509,7 +13238,7 @@ const PricingWorksheet = (function () {
                         friMargin: (pricing.friMargin) ? pricing.friMargin : null,
                         id: (pricing.id) ? pricing.id : null,
                         matrix_id: (pricing.matrix_id) ? pricing.matrix_id : null,
-                        modified_by: (pricing.modified_by) ? pricing.matrix_id : user_id,
+                        modified_by: (pricing.modified_by) ? pricing.matrix_id : userId,
                         mon: (pricing.mon) ? pricing.mon : null,
                         monMargin: (pricing.monMargin) ? pricing.monMargin : null,
                         name: variant.name + " " + count,
@@ -13544,7 +13273,7 @@ const PricingWorksheet = (function () {
                             been_saved: 0,
                             code: pricingCode,
                             count: count,
-                            created_by: user_id,
+                            created_by: userId,
                             date_created: formatDateMySQL(),
                             date_modified: formatDateMySQL(),
                             enabled: 1,
@@ -13554,7 +13283,7 @@ const PricingWorksheet = (function () {
                             matrix_code: matrixCode,
                             pricing_code: pricingCode,
                             matrix_id: null,
-                            modified_by: user_id,
+                            modified_by: userId,
                             mon: null,
                             monMargin: null,
                             name: variant.name + " " + count,
@@ -13601,7 +13330,7 @@ const PricingWorksheet = (function () {
                                 id: (pricing.id) ? pricing.id : null,
                                 matrix_code: matrixCode,
                                 matrix_id: (pricing.matrix_id) ? parseInt((pricing.matrix_id)) : null,
-                                modified_by: (pricing.modified_by) ? parseInt((pricing.modified_by)) : user_id,
+                                modified_by: (pricing.modified_by) ? parseInt((pricing.modified_by)) : userId,
                                 mon: (pricing.mon) ? parseInt((pricing.mon)) : null,
                                 monMargin: null,
                                 note: "fff",
@@ -13685,8 +13414,8 @@ const PricingWorksheet = (function () {
                     let note = null
                     let date_created = formatDateMySQL()
                     let date_modified = formatDateMySQL()
-                    let created_by = user_id
-                    let modified_by = user_id
+                    let created_by = userId
+                    let modified_by = userId
                     
                     if (matrix) {
                         matrixId = matrix.id
@@ -13771,6 +13500,8 @@ const PricingWorksheet = (function () {
             margin = m.margin
         }
         
+        // ----
+        console.groupEnd()
         return {
             name: name,
             cost: cost,
@@ -13784,8 +13515,10 @@ const PricingWorksheet = (function () {
             variants: myVariants,
         }
     }
-    
     const getVariantCombinations = function (depth, baseString, arrLetters) {
+        console.groupCollapsed("PricingWorksheet.getVariantCombinations")
+        // ----
+        
         for (let i = 0; i < arrLetters.length; i++) {
             if (depth === 1) {
                 let variantComboId = baseString + arrLetters[i]
@@ -13806,9 +13539,14 @@ const PricingWorksheet = (function () {
                 getVariantCombinations(depth - 1, baseString + arrLetters[i] + "-", arrLetters)
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildPricingWorksheet = function () {
+        console.groupCollapsed("PricingWorksheet.buildPricingWorksheet")
+        // ----
+        
         let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
         let worksheet = {
             id: null,
@@ -13918,20 +13656,28 @@ const PricingWorksheet = (function () {
             worksheet.units.push(unitSection)
         }
         
+        // ----
+        console.groupEnd()
         return worksheet
     }
-    
     const pricingWorksheet = function () {
+        console.groupCollapsed("PricingWorksheet.pricingWorksheet")
+        // ----
+        
         resetFilters()
         emptyPricingMatrix()
         variantCombinations = []
         $(_product_edit_matrix_form).empty().append(buildPricingTables(PricingWorksheet.buildPricingWorksheet()))
         status()
     }
-    
     const init = function (settings) {
+        console.groupCollapsed("PricingWorksheet.init")
+        // ----
+        
         let pricingStrategyTypesId = null
         if (settings) {
+            console.log("settings", settings)
+            
             if (settings.pricing_strategy) {
                 if (settings.pricing_strategy.pricing_strategy_types_id) {
                     pricingStrategyTypesId = (!isNaN(parseInt(settings.pricing_strategy.pricing_strategy_types_id))) ? parseInt(settings.pricing_strategy.pricing_strategy_types_id) : null
@@ -13940,14 +13686,16 @@ const PricingWorksheet = (function () {
             
         }
         
-        $(document).ready(function () {
-            PricingWorksheet.pricingStrategyId = pricingStrategyTypesId
-            if (_pricing_strategy_types_id) {
-                $(_pricing_strategy_types_id)
-                    .val(PricingWorksheet.pricingStrategyId)
-                    .trigger("change")
-            }
-        })
+        PricingWorksheet.pricingStrategyId = pricingStrategyTypesId
+        
+        if (_pricing_strategy_types_id) {
+            $(_pricing_strategy_types_id)
+                .val(PricingWorksheet.pricingStrategyId)
+                .trigger("change")
+        }
+        
+        // ----
+        console.groupEnd()
     }
     
     return {
@@ -14137,6 +13885,8 @@ $("#image_manager_clear_button")
     })
 
 $.fn.YearCalendar = function (settings) {
+    console.groupCollapsed("YearCalendar")
+    // ----
     "use strict"
     
     const _calendar_filter_ranges = document.getElementById("calendar_filter_ranges")
@@ -14246,6 +13996,9 @@ $.fn.YearCalendar = function (settings) {
     }
     
     const fetchCalendarEvents = function (dataToSend, callback) {
+        console.groupCollapsed("YearCalendar.fetchCalendarEvents")
+        // ----
+        
         if (dataToSend) {
             try {
                 sendGetRequest("/api/v1.0/calendars", dataToSend, function (data, status, xhr) {
@@ -14262,6 +14015,9 @@ $.fn.YearCalendar = function (settings) {
         } else {
             return callback([])
         }
+        
+        // ----
+        console.groupEnd()
     }
     
     const getDate = function (startYear, monthsOut) {
@@ -14503,6 +14259,9 @@ $.fn.YearCalendar = function (settings) {
     }
     
     const init = function (settings) {
+        console.group("YearCalendar.init")
+        // ----
+        
         calendars = []
         
         if (settings) {
@@ -14515,6 +14274,8 @@ $.fn.YearCalendar = function (settings) {
             product_id: product_id,
         }
         
+        console.group("fetchCalendarEvents")
+        // ----
         fetchCalendarEvents(dataToSend, function (events) {
             if (!events) {
                 events = []
@@ -14537,10 +14298,14 @@ $.fn.YearCalendar = function (settings) {
             YearCalendar.init(settings)
         })
         
+        // ----
+        console.groupEnd()
     }
     
     init(settings)
     
+    // ----
+    console.groupEnd()
     return {
         calendars: [],
     }
@@ -14977,6 +14742,9 @@ const YearCalendar = (function () {
     }
     
     const init = function (settings) {
+        console.groupCollapsed("YearCalendar.init")
+        // ----
+        
         _calendar_filter_unit_id.disabled = true
         _calendar_filter_season_id_assign.disabled = true
         _calendar_filter_unit_id_assign.disabled = true
@@ -14985,6 +14753,8 @@ const YearCalendar = (function () {
         loadSeasonDropdown()
         
         //ContextMenu.init(settings)
+        // ----
+        console.groupEnd()
     }
     
     const checkProgress = function () {
@@ -15105,7 +14875,6 @@ const YearCalendar = (function () {
 
 const ImageManager = (function () {
     "use strict"
-    
     const _button_product_images_toggle = document.getElementById("button_product_images_toggle")
     const _imageManagerCancel = document.getElementById("imageManagerCancel")
     const _imageManagerFormRemoveButton = document.getElementById("imageManagerFormRemoveButton")
@@ -15222,7 +14991,6 @@ const ImageManager = (function () {
     
     $(_image_is_shown)
         .on("change", function () {
-            console.log("ImageManager.image_is_shown:change()", _image_is_shown.checked)
             let imageId = (!isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
             let el = document.getElementById("image_" + imageId + "")
             currentImage = imageId
@@ -15242,7 +15010,6 @@ const ImageManager = (function () {
     
     $(_image_is_cover)
         .on("change", function () {
-            console.log("ImageManager.is_cover:change()", _image_is_cover.checked)
             let imageId = (!isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
             let el = document.getElementById("image_" + imageId + "")
             
@@ -15265,6 +15032,9 @@ const ImageManager = (function () {
         })
     
     const handleImageManagerError = function (msg, title, level) {
+        console.groupCollapsed("ImageManager.handleImageManagerError")
+        // ----
+        
         if (!title) {
             title = "Image"
         }
@@ -15274,10 +15044,14 @@ const ImageManager = (function () {
         }
         
         toastr[level](`${msg}`, title)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const remove = function (image_id) {
-        console.log("ImageManager.remove(image_id)", image_id)
+        console.groupCollapsed("ImageManager.remove")
+        // ----
+        
         if (!image_id || !ImageManager.source || !ImageManager.sourceId) {
             return
         }
@@ -15288,7 +15062,7 @@ const ImageManager = (function () {
             source_id: ImageManager.sourceId,
         }
         
-        console.log("|__ dataToSend", dataToSend)
+        console.log("dataToSend", dataToSend)
         
         sendRemoveRequest({
             image_id: image_id,
@@ -15299,9 +15073,14 @@ const ImageManager = (function () {
                 console.log("data", data)
             }
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const sendRemoveRequest = function (dataToSend, callback) {
+        console.groupCollapsed("ImageManager.sendRemoveRequest")
+        // ----
+        
         if (dataToSend) {
             let url = "/api/v1.0/images/remove"
             try {
@@ -15315,10 +15094,13 @@ const ImageManager = (function () {
                 return handleImageManagerError("Error Removing Image.", "Image Manager", "error")
             }
         }
+        // ----
+        console.groupEnd()
     }
-    
     const submit = function (event) {
-        console.log("ImageManager.submit(event)", event)
+        console.groupCollapsed("ImageManager.submit")
+        // ----
+        
         let isValid = validate()
         if (isValid) {
             confirmDialog(`Would you like to update?`, (ans) => {
@@ -15327,13 +15109,22 @@ const ImageManager = (function () {
                 }
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const validate = function () {
+        console.groupCollapsed("ImageManager.validate")
+        // ----
+        
+        // ----
+        console.groupEnd()
         return $(_imageManagerForm).valid()
     }
-    
     const sendUpdateRequest = function (dataToSend, callback) {
+        console.groupCollapsed("ImageManager.sendUpdateRequest")
+        // ----
+        
         if (dataToSend) {
             let url = "/api/v1.0/images/update"
             try {
@@ -15347,10 +15138,13 @@ const ImageManager = (function () {
                 return handleImageManagerError("Error", "Image Manager", "error")
             }
         }
+        // ----
+        console.groupEnd()
     }
-    
     const uploadFile = function (event) {
-        console.log("ImageManager.uploadFile(event)", event)
+        console.groupCollapsed("ImageManager.uploadFile")
+        // ----
+        
         const _fileToUpload = document.getElementById("fileToUpload")
         let filePath, fileHeight, fileWidth, fileSize, fileExtension, fileName,
             fileType, fileRatio, ratioHeight, ratioWidth, fileDimensions, source, sourceId,
@@ -15400,9 +15194,9 @@ const ImageManager = (function () {
             sendUpdateRequest(dataToSend, function (data) {
                 if (data) {
                     let detail = set((data[0]) ? data[0] : data)
-                    console.log("|__ detail", detail)
+                    console.log("detail", detail)
                     let image = ImageManager.all.get(detail.id)
-                    console.log("|__ image", image)
+                    console.log("image", image)
                     if (image) {
                     
                     }
@@ -15415,7 +15209,7 @@ const ImageManager = (function () {
             
         } else {
             buildImageObject(event, function (data) {
-                console.log("|__ data", data)
+                console.log("data", data)
                 source = data.source
                 sourceId = data.source_id
                 filePath = (data.path) ? data.path : null
@@ -15460,13 +15254,13 @@ const ImageManager = (function () {
                         xhr.send(formData)
                         break
                     case "unit":
-                        console.log("|__ |__ unit")
+                        console.log("unit")
                         break
                     case "company":
-                        console.log("|__ |__ company")
+                        console.log("company")
                         break
                     case "user":
-                        console.log("|__ |__ user")
+                        console.log("user")
                         break
                     default:
                         return
@@ -15474,20 +15268,27 @@ const ImageManager = (function () {
             })
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const uploadProgress = function (event) {
-        console.log("ImageManager.uploadProgress(event)", event)
+        console.groupCollapsed("ImageManager.uploadProgress")
+        // ----
+        
         if (event.lengthComputable) {
             let percentComplete = Math.round(event.loaded * 100 / event.total)
             document.getElementById("progressNumber").innerHTML = percentComplete.toString() + "%"
         } else {
             document.getElementById("progressNumber").innerHTML = "unable to compute"
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const uploadComplete = function (event) {
-        console.log("ImageManager.uploadComplete(event)", event)
+        console.groupCollapsed("ImageManager.uploadComplete")
+        // ----
+        
         let results = null
         
         if (event) {
@@ -15506,14 +15307,14 @@ const ImageManager = (function () {
                                 let allImages = Array.from(ImageManager.all.values())
                                 let counter = allImages.length
                                 
-                                console.log("|__ image", detail)
+                                console.log("image", detail)
                                 
                                 $(_imageManagerFormImagesBlock).append(buildImageThumbnail(detail))
                                 
                                 ImageManager.all.set(detail.id, detail)
                                 
-                                console.log("|__ ImageManager.all", ImageManager.all)
-                                console.log("|__ detail", detail)
+                                console.log("ImageManager.all", ImageManager.all)
+                                console.log("detail", detail)
                                 
                                 clear()
                                 hideImageForm()
@@ -15525,19 +15326,31 @@ const ImageManager = (function () {
                 }
             }
         }
+        // ----
+        console.groupEnd()
     }
-    
     const uploadFailed = function (event) {
-        console.log("ImageManager.uploadFailed(event)", event)
+        console.groupCollapsed("ImageManager.uploadFailed")
+        // ----
+        
+        console.log("ImageManager.uploadFailed")
         console.log("There was an error attempting to upload this file.")
+        // ----
+        console.groupEnd()
     }
-    
     const uploadCanceled = function (event) {
-        console.log("ImageManager.uploadCanceled(event)", event)
+        console.groupCollapsed("ImageManager.uploadCanceled")
+        // ----
+        
+        console.log("ImageManager.uploadCanceled")
         console.log("This upload has been canceled by the user or the browser dropped the connection.")
+        // ----
+        console.groupEnd()
     }
-    
     const defaultDetail = function () {
+        console.groupCollapsed("ImageManager.defaultDetail")
+        // ----
+        
         return {
             alt: null,
             caption: null,
@@ -15560,10 +15373,13 @@ const ImageManager = (function () {
             title: null,
             width: null,
         }
+        // ----
+        console.groupEnd()
     }
-    
     const set = function (image) {
-        console.log("ImageManager.set(image)", image)
+        console.groupCollapsed("ImageManager.set")
+        // ----
+        
         let detail = defaultDetail()
         if (image) {
             detail.alt = (image.alt) ? image.alt : null
@@ -15588,12 +15404,15 @@ const ImageManager = (function () {
             detail.width = (image.width) ? image.width : null
         }
         
+        // ----
+        console.groupEnd()
         ImageManager.detail = detail
         return detail
     }
-    
     const resetFileInput = function (event) {
-        console.log("ImageManager.resetFileInput(event)", event)
+        console.groupCollapsed("ImageManager.resetFileInput")
+        // ----
+        
         let _fileToUpload = document.getElementById("fileToUpload")
         let _fileName = document.getElementById("fileName")
         let _fileSize = document.getElementById("fileSize")
@@ -15609,15 +15428,24 @@ const ImageManager = (function () {
         $(_fileToUploadDisplay).html("CHOOSE FILE")
         $(_imageManagerPreview).attr("src", "/public/img/placeholder.jpg")
         _image_is_shown.checked = true
+        // ----
+        console.groupEnd()
     }
-    
     const clear = function () {
+        console.groupCollapsed("ImageManager.clear")
+        // ----
+        
         resetFileInput()
         resetImageForm()
         $("img.img-thumbnail").removeClass("selected")
+        
+        // ----
+        console.groupEnd()
     }
-    
     const getFileSize = function (file) {
+        console.groupCollapsed("ImageManager.getFileSize")
+        // ----
+        
         let fileSize = null
         
         if (file.size > 1024 * 1024) {
@@ -15626,10 +15454,14 @@ const ImageManager = (function () {
             fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB'
         }
         
+        // ----
+        console.groupEnd()
         return fileSize
     }
-    
     const getFileName = function (file) {
+        console.groupCollapsed("ImageManager.getFileName")
+        // ----
+        
         let fileName, fileExtension = null
         let fileNameTemp = []
         
@@ -15648,13 +15480,17 @@ const ImageManager = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
         return removeNulls({
             "name": fileName,
             "extension": fileExtension,
         })
     }
-    
     const getFileType = function (file) {
+        console.groupCollapsed("ImageManager.getFileType")
+        // ----
+        
         let fileType = null
         
         if (file) {
@@ -15663,11 +15499,14 @@ const ImageManager = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
         return fileType
     }
-    
     const buildImageObject = function (event, callback) {
-        console.log("ImageManager.buildImageObject(event)", event)
+        console.groupCollapsed("ImageManager.buildImageObject")
+        // ----
+        
         const _fileToUpload = document.getElementById("fileToUpload")
         const _imageManagerPreview = document.getElementById("imageManagerPreview")
         const _imageManagerForm = document.getElementById("imageManagerForm")
@@ -15688,12 +15527,12 @@ const ImageManager = (function () {
                     
                     if (_fileToUpload) {
                         let file = _fileToUpload.files[0]
-                        console.log("|__ file", file)
+                        console.log("file", file)
                         $(_imageManagerPreview).attr("src", event.result)
                         
                         if (file) {
                             let fileNameParts = getFileName(file)
-                            console.log("|__ |__ fileNameParts", fileNameParts)
+                            console.log("fileNameParts", fileNameParts)
                             fileExtension = (fileNameParts.extension) ? fileNameParts.extension : null
                             fileName = (fileNameParts.name) ? fileNameParts.name : null
                             fileSize = getFileSize(file)
@@ -15742,10 +15581,14 @@ const ImageManager = (function () {
                 }
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const fileSelected = function (event) {
-        console.log("ImageManager.fileSelected(event)", event)
+        console.groupCollapsed("ImageManager.fileSelected")
+        // ----
+        
         clear()
         
         let _fileToUpload = document.getElementById("fileToUpload")
@@ -15758,7 +15601,7 @@ const ImageManager = (function () {
         
         buildImageObject(event, function (data) {
             if (data) {
-                console.log("|__ data", data)
+                console.log("data", data)
                 let fileName = (data.name) ? data.name : null
                 let fileSize = (data.size) ? data.size : null
                 let fileType = (data.type) ? data.type : null
@@ -15790,10 +15633,14 @@ const ImageManager = (function () {
                 renderImageForm()
             }
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const hideImageForm = function () {
-        console.log("ImageManager.hideImageForm()")
+        console.groupCollapsed("ImageManager.hideImageForm")
+        // ----
+        
         $(_fileToUpload).removeClass("disabled")
         $(_button_product_images_toggle).removeClass("disabled")
         
@@ -15803,20 +15650,27 @@ const ImageManager = (function () {
         _imageManagerFormSubmitButton.innerText = "choose file"
         
         $(_imageManagerFormDetails).hide()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const renderImageForm = function () {
-        console.log("ImageManager.renderImageForm()")
+        console.groupCollapsed("ImageManager.renderImageForm")
+        // ----
+        
         $(_fileToUpload).addClass("disabled")
         $(_button_product_images_toggle).addClass("disabled")
         
         _fileToUpload.disabled = true
         _button_product_images_toggle.disabled = true
         $("#imageManagerFormDetails").show()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const populateImageForm = function (image) {
-        console.log("ImageManager.populateImageForm(image)", image)
+        console.groupCollapsed("ImageManager.populateImageForm")
+        // ----
         
         if (image) {
             console.log(image)
@@ -15870,10 +15724,13 @@ const ImageManager = (function () {
             renderImageForm()
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const resetImageForm = function () {
-        console.log("ImageManager.resetImageForm()")
+        console.groupCollapsed("ImageManager.resetImageForm")
+        // ----
+        
         let filePreview = `/public/img/placeholder.jpg`
         
         _fileName.innerHTML = "&nbsp;"
@@ -15909,10 +15766,14 @@ const ImageManager = (function () {
         }
         
         $("img.img-thumbnail").removeClass("selected")
+        
+        // ----
+        console.groupEnd()
     }
-    
     const edit = function (image) {
-        console.log("ImageManager.edit(image)", image)
+        console.groupCollapsed("ImageManager.edit")
+        // ----
+        
         if (image) {
             clear()
             let imageId = (!isNaN(parseInt(image.id))) ? image.id : null
@@ -15924,10 +15785,14 @@ const ImageManager = (function () {
                 _imageManagerFormSubmitButton.innerText = "Save"
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildImageThumbnail = function (image) {
-        console.log("ImageManager.buildImageThumbnail(image)", image)
+        console.groupCollapsed("ImageManager.buildImageThumbnail")
+        // ----
+        
         let isCoverClass = ""
         let isShownClass = ""
         
@@ -15970,7 +15835,7 @@ const ImageManager = (function () {
                             if (image) {
                                 edit(image)
                             } else {
-                                console.log("|__ |__ ImageManager.all", ImageManager.all)
+                                console.log("ImageManager.all", ImageManager.all)
                             }
                             
                         } else {
@@ -15985,10 +15850,14 @@ const ImageManager = (function () {
             }
             
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const loadAll = function (images) {
-        console.log("ImageManager.loadAll(images)", images)
+        console.groupCollapsed("ImageManager.loadAll")
+        // ----
+        
         ImageManager.all = new Map()
         
         if (images) {
@@ -16000,10 +15869,12 @@ const ImageManager = (function () {
             })
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const get = function (dataToSend, callback) {
-        console.log("ImageManager.get()")
+        console.groupCollapsed("ImageManager.get")
+        // ----
         
         if (dataToSend) {
             let url = `/api/v1.0/images/${ImageManager.source}/${ImageManager.sourceId}`
@@ -16018,10 +15889,13 @@ const ImageManager = (function () {
                 return handleImageManagerError("Error Retrieving Images.", "Image Manager", "error")
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const init = function (options) {
-        console.log("ImageManager.init(settings)", options)
+        console.groupCollapsed("ImageManager.init")
+        // ----
         
         if (options && options.source) {
             source = (options.source) ? options.source : null
@@ -16043,8 +15917,10 @@ const ImageManager = (function () {
             })
             
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     return {
         source: null,
         sourceId: null,
@@ -16273,1159 +16149,1286 @@ const AddressTypes = (function () {
 })()
 
 const City = (function () {
-    "use strict"
-    
-    const class_name = "form-new-city"
-    const form_id = "form_new_city"
-    
-    const _product_location_departing_airport_city_search = document.getElementById("product_location_departing_airport_city_search")
-    const _product_location_departing_airport_city_id = document.getElementById("product_location_departing_airport_city_id")
-    const _product_location_arriving_airport_city_id = document.getElementById("product_location_arriving_airport_city_id")
-    const _product_edit_location_city_id = document.getElementById("product_edit_location_city_id")
-    const _product_location_arriving_airport_city_search = document.getElementById("product_location_arriving_airport_city_search")
-    const _modal_product_city_id = document.getElementById("modal_product_city_id")
-    const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
-    const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
-    const _modal_product_province_id = document.getElementById("modal_product_province_id")
-    const _modal_product_country_id = document.getElementById("modal_product_country_id")
-    
-    const _modal_product_arrive_to_airport_city = document.getElementById("modal_product_arrive_to_airport_city")
-    const _modal_product_arrive_to_airport_country_id = document.getElementById("modal_product_arrive_to_airport_country_id")
-    const _modal_product_arrive_to_airport_province_id = document.getElementById("modal_product_arrive_to_airport_province_id")
-    const _modal_product_arrive_to_airport_city_id = document.getElementById("modal_product_arrive_to_airport_city_id")
-    
-    const _modal_product_depart_from_airport_city = document.getElementById("modal_product_depart_from_airport_city")
-    const _modal_product_depart_from_airport_country_id = document.getElementById("modal_product_depart_from_airport_country_id")
-    const _modal_product_depart_from_airport_province_id = document.getElementById("modal_product_depart_from_airport_province_id")
-    const _modal_product_depart_from_airport_city_id = document.getElementById("modal_product_depart_from_airport_city_id")
-    
-    const _modal_product_arrive_to_station_city = document.getElementById("modal_product_arrive_to_station_city")
-    const _modal_product_arrive_to_station_country_id = document.getElementById("modal_product_arrive_to_station_country_id")
-    const _modal_product_arrive_to_station_province_id = document.getElementById("modal_product_arrive_to_station_province_id")
-    const _modal_product_arrive_to_station_city_id = document.getElementById("modal_product_arrive_to_station_city_id")
-    
-    const _modal_product_depart_from_station_city = document.getElementById("modal_product_depart_from_station_city")
-    const _modal_product_depart_from_station_country_id = document.getElementById("modal_product_depart_from_station_country_id")
-    const _modal_product_depart_from_station_province_id = document.getElementById("modal_product_depart_from_station_province_id")
-    const _modal_product_depart_from_station_city_id = document.getElementById("modal_product_depart_from_station_city_id")
-    
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    
-    $("#product_location_transport_city_search")
-        .on("change", function () {
-            setTimeout(function () {
-            
-            }, 200)
-        })
-        .on("search", function () {
-            _product_edit_location_city_id.value = ""
-        })
-        .on("click", function (e) {
-            if ($(this).attr("readonly") === "readonly") {
-                e.preventDefault()
-            } else {
-                $(this).select()
-            }
-        })
-        .autocomplete({
-            serviceUrl: "/api/v1.0/autocomplete/cities",
-            minChars: 2,
-            cache: false,
-            dataType: "json",
-            triggerSelectOnValidInput: false,
-            paramName: "st",
-            onSelect: function (suggestion) {
-                if (!suggestion.data) {
-                    return
-                }
-                let city = suggestion.data
-                //console.log("city", city)
-                _product_edit_location_city_id.value = city.id
-                
-            },
-        })
-    
-    $("#product_location_cars_city_search")
-        .on("change", function () {
-            setTimeout(function () {
-            
-            }, 200)
-        })
-        .on("search", function () {
-            _product_edit_location_city_id.value = ""
-        })
-        .on("click", function (e) {
-            if ($(this).attr("readonly") === "readonly") {
-                e.preventDefault()
-            } else {
-                $(this).select()
-            }
-            
-        })
-        .autocomplete({
-            serviceUrl: "/api/v1.0/autocomplete/cities",
-            minChars: 2,
-            cache: false,
-            dataType: "json",
-            triggerSelectOnValidInput: false,
-            paramName: "st",
-            onSelect: function (suggestion) {
-                if (!suggestion.data) {
-                    return
-                }
-                let city = suggestion.data
-                
-                _product_edit_location_city_id.value = city.id
-                
-            },
-        })
-    
-    $("#product_location_arriving_airport_city_search")
-        .on("change", function () {
-            setTimeout(function () {
-                let city = $("#product_location_arriving_airport_city_search").val()
-                if (city === "") {
-                    _product_location_arriving_airport_city_id.value = ""
-                }
-            }, 200)
-        })
-        .on("search", function () {
-            _product_location_arriving_airport_city_id.value = ""
-        })
-        .on("click", function (e) {
-            if ($(this).attr("readonly") === "readonly") {
-                e.preventDefault()
-            } else {
-                $(this).select()
-            }
-            
-        })
-        .autocomplete({
-            serviceUrl: "/api/v1.0/autocomplete/cities",
-            minChars: 2,
-            cache: false,
-            dataType: "json",
-            triggerSelectOnValidInput: false,
-            paramName: "st",
-            onSelect: function (suggestion) {
-                if (!suggestion.data) {
-                    return
-                }
-                let city = suggestion.data
-                
-                _product_location_arriving_airport_city_search.value = suggestion.value
-                _product_location_arriving_airport_city_id.value = city.id
-                
-            },
-        })
-    
-    $("#product_location_departing_airport_city_search")
-        
-        .on("change", function () {
-            setTimeout(function () {
-                let city = $("#product_location_departing_airport_city_search").val()
-                if (city === "") {
-                    _product_edit_location_city_id.value = ""
-                    _product_location_departing_airport_city_id.value = ""
-                }
-            }, 200)
-        })
-        .on("search", function () {
-            _product_edit_location_city_id.value = ""
-            _product_location_departing_airport_city_id.value = ""
-        })
-        .on("click", function (e) {
-            if ($(this).attr("readonly") === "readonly") {
-                e.preventDefault()
-            } else {
-                $(this).select()
-            }
-        })
-        .autocomplete({
-            serviceUrl: "/api/v1.0/autocomplete/cities",
-            minChars: 2,
-            cache: false,
-            dataType: "json",
-            triggerSelectOnValidInput: false,
-            paramName: "st",
-            onSelect: function (suggestion) {
-                if (!suggestion.data) {
-                    return
-                }
-                let city = suggestion.data
-                
-                //console.log("city", city)
-                
-                _product_location_departing_airport_city_search.value = suggestion.value
-                _product_location_departing_airport_city_id.value = city.id
-                _product_edit_location_city_id.value = city.id
-                
-                /*
-                `${city.name} (${city.province.name}, ${city.country.name})`
-                
-                    "value": "Abano Terme (Padova, Italy)",
-                    "data": {
-                        "id": 1,
-                        "country_id": 102,
-                        "province_id": 250,
-                        "sort_order": 999,
-                        "name": "Abano Terme",
-                        "enabled": 1,
-                        "date_created": "2021-08-03 14:40:07",
-                        "created_by": 4,
-                        "date_modified": "2021-08-03 14:40:07",
-                        "modified_by": 4,
-                        "note": "",
-                        "province": {
-                            "id": 250,
-                            "country_id": 102,
-                            "name": "Padova",
-                            "iso2": "PD",
-                            "iso3": "",
-                            "sort_order": 999,
-                            "enabled": 1,
-                            "date_created": "2021-12-15 10:58:47",
-                            "created_by": 4,
-                            "date_modified": "2021-12-15 10:58:47",
-                            "modified_by": 4,
-                            "note": null
-                        },
-                        "country": {
-                            "id": 102,
-                            "currency_id": 2,
-                            "sort_order": 0,
-                            "name": "Italy",
-                            "iso2": "IT",
-                            "iso3": "ITA",
-                            "enabled": 1,
-                            "date_created": "2021-08-03 13:04:10",
-                            "created_by": 4,
-                            "date_modified": "2021-08-03 15:13:45",
-                            "modified_by": 4,
-                            "note": ""
-                        }
-                    }
-                //*/
-                
-            },
-        })
-    
-    $("#form_product_search_hotel_product_location")
-        .on("change", function () {
-            setTimeout(function () {
-            
-            }, 200)
-        })
-        .on("search", function () {
-        
-        })
-        .on("click", function (e) {
-            if ($(this).attr("readonly") === "readonly") {
-                e.preventDefault()
-            } else {
-                $(this).select()
-            }
-            
-        })
-        .autocomplete({
-            serviceUrl: "/api/v1.0/autocomplete/cities",
-            minChars: 2,
-            cache: false,
-            dataType: "json",
-            triggerSelectOnValidInput: false,
-            paramName: "st",
-            onSelect: function (suggestion) {
-                //console.log("city", suggestion)
-                if (!suggestion.data) {
-                    return
-                }
-                
-                //console.log("city", suggestion)
-                /*
-                    "value": "Abano Terme (Padova, Italy)",
-                    "data": {
-                        "id": 1,
-                        "country_id": 102,
-                        "province_id": 250,
-                        "sort_order": 999,
-                        "name": "Abano Terme",
-                        "enabled": 1,
-                        "date_created": "2021-08-03 14:40:07",
-                        "created_by": 4,
-                        "date_modified": "2021-08-03 14:40:07",
-                        "modified_by": 4,
-                        "note": "",
-                        "province": {
-                            "id": 250,
-                            "country_id": 102,
-                            "name": "Padova",
-                            "iso2": "PD",
-                            "iso3": "",
-                            "sort_order": 999,
-                            "enabled": 1,
-                            "date_created": "2021-12-15 10:58:47",
-                            "created_by": 4,
-                            "date_modified": "2021-12-15 10:58:47",
-                            "modified_by": 4,
-                            "note": null
-                        },
-                        "country": {
-                            "id": 102,
-                            "currency_id": 2,
-                            "sort_order": 0,
-                            "name": "Italy",
-                            "iso2": "IT",
-                            "iso3": "ITA",
-                            "enabled": 1,
-                            "date_created": "2021-08-03 13:04:10",
-                            "created_by": 4,
-                            "date_modified": "2021-08-03 15:13:45",
-                            "modified_by": 4,
-                            "note": ""
-                        }
-                    }
-                //*/
-                
-            },
-        })
-    
-    $(_modal_product_city_id)
-        .on("change", function () {
-            if (_modal_product_city_id.value === "") {
-                //_modal_product_provider_name.disabled = true
-                //_modal_product_vendor_name.disabled = true
-            } else {
-                //_modal_product_provider_name.disabled = false
-                //_modal_product_vendor_name.disabled = false
-            }
-        })
-    
-    $("#modal_product_depart_from_airport_city")
-        .on("change", function () {
-            setTimeout(function () {
-            
-            }, 200)
-        })
-        .on("search", function () {
-            $(_modal_product_depart_from_airport_city).val("").trigger("change")
-        })
-        .on("click", function (e) {
-            if ($(this).attr("readonly") === "readonly") {
-                e.preventDefault()
-            } else {
-                $(this).select()
-            }
-        })
-        .autocomplete({
-            serviceUrl: "/api/v1.0/autocomplete/cities",
-            minChars: 2,
-            cache: false,
-            dataType: "json",
-            triggerSelectOnValidInput: false,
-            paramName: "st",
-            onSelect: function (suggestion) {
-                if (!suggestion.data) {
-                    return
-                }
-                let city = suggestion.data
-                _modal_product_city_id.value = city.id
-                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
-                
-                _modal_product_depart_from_airport_country_id.value = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
-                _modal_product_depart_from_airport_province_id.value = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
-                _modal_product_depart_from_airport_city_id.value = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
-            },
-        })
-    
-    $("#modal_product_arrive_to_airport_city")
-        .on("change", function () {
-            setTimeout(function () {
-            
-            }, 200)
-        })
-        .on("search", function () {
-            $(_modal_product_arrive_to_airport_city).val("").trigger("change")
-        })
-        .on("click", function (e) {
-            if ($(this).attr("readonly") === "readonly") {
-                e.preventDefault()
-            } else {
-                $(this).select()
-            }
-        })
-        .autocomplete({
-            serviceUrl: "/api/v1.0/autocomplete/cities",
-            minChars: 2,
-            cache: false,
-            dataType: "json",
-            triggerSelectOnValidInput: false,
-            paramName: "st",
-            onSelect: function (suggestion) {
-                if (!suggestion.data) {
-                    return
-                }
-                let city = suggestion.data
-                //_modal_product_city_id.value = city.id
-                //$(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
-                _modal_product_arrive_to_airport_country_id.value = (city.country.id) ? city.country.id : null
-                _modal_product_arrive_to_airport_province_id.value = (city.province.id) ? city.province.id : null
-                _modal_product_arrive_to_airport_city_id.value = (city.id) ? city.id : null
-                /*
-                    "value": "Abano Terme (Padova, Italy)",
-                    "data": {
-                        "id": 1,
-                        "country_id": 102,
-                        "province_id": 250,
-                        "sort_order": 999,
-                        "name": "Abano Terme",
-                        "enabled": 1,
-                        "date_created": "2021-08-03 14:40:07",
-                        "created_by": 4,
-                        "date_modified": "2021-08-03 14:40:07",
-                        "modified_by": 4,
-                        "note": "",
-                        "province": {
-                            "id": 250,
-                            "country_id": 102,
-                            "name": "Padova",
-                            "iso2": "PD",
-                            "iso3": "",
-                            "sort_order": 999,
-                            "enabled": 1,
-                            "date_created": "2021-12-15 10:58:47",
-                            "created_by": 4,
-                            "date_modified": "2021-12-15 10:58:47",
-                            "modified_by": 4,
-                            "note": null
-                        },
-                        "country": {
-                            "id": 102,
-                            "currency_id": 2,
-                            "sort_order": 0,
-                            "name": "Italy",
-                            "iso2": "IT",
-                            "iso3": "ITA",
-                            "enabled": 1,
-                            "date_created": "2021-08-03 13:04:10",
-                            "created_by": 4,
-                            "date_modified": "2021-08-03 15:13:45",
-                            "modified_by": 4,
-                            "note": ""
-                        }
-                    }
-                //*/
-            },
-        })
-    
-    $("#modal_product_depart_from_station_city")
-        .on("change", function () {
-            setTimeout(function () {
-            
-            }, 200)
-        })
-        .on("search", function () {
-            $(_modal_product_country_id)
-                .val("")
-            $(_modal_product_province_id)
-                .val("")
-            $(_modal_product_city_id)
-                .val("")
-                .trigger("change")
-        })
-        .on("click", function (e) {
-            if ($(this).attr("readonly") === "readonly") {
-                e.preventDefault()
-            } else {
-                $(this).select()
-            }
-        })
-        .autocomplete({
-            serviceUrl: "/api/v1.0/autocomplete/cities",
-            minChars: 2,
-            cache: false,
-            dataType: "json",
-            triggerSelectOnValidInput: false,
-            paramName: "st",
-            onSelect: function (suggestion) {
-                if (!suggestion.data) {
-                    return
-                }
-                let city = suggestion.data
-                _modal_product_country_id.value = city.id
-                _modal_product_province_id.value = city.province.id
-                _modal_product_city_id.value = city.country.id
-                _modal_product_depart_from_station_country_id.value = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
-                _modal_product_depart_from_station_province_id.value = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
-                _modal_product_depart_from_station_city_id.value = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
-                
-                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
-                
-            },
-        })
-    
-    $("#modal_product_arrive_to_station_city")
-        .on("change", function () {
-            setTimeout(function () {
-            
-            }, 200)
-        })
-        .on("search", function () {
-            $(_modal_product_city_id).val("").trigger("change")
-        })
-        .on("click", function (e) {
-            if ($(this).attr("readonly") === "readonly") {
-                e.preventDefault()
-            } else {
-                $(this).select()
-            }
-        })
-        .autocomplete({
-            serviceUrl: "/api/v1.0/autocomplete/cities",
-            minChars: 2,
-            cache: false,
-            dataType: "json",
-            triggerSelectOnValidInput: false,
-            paramName: "st",
-            onSelect: function (suggestion) {
-                if (!suggestion.data) {
-                    return
-                }
-                let city = suggestion.data
-                
-                _modal_product_arrive_to_station_country_id.value = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
-                _modal_product_arrive_to_station_province_id.value = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
-                _modal_product_arrive_to_station_city_id.value = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
-            },
-        })
-    
-    $("#modal_product_city")
-        .on("change", function () {
-            setTimeout(function () {
-                let name = $("#modal_product_city").val()
-                if (name === "") {
-                    $(_modal_product_city_id)
-                        .val("")
-                        .trigger("change")
-                }
-            }, 200)
-        })
-        .on("search", function () {
-            
-            if (_modal_product_city_id) {
-                $(_modal_product_city_id)
-                    .val("")
-                    .trigger("change")
-            }
-            
-            if (_modal_product_province_id) {
-                _modal_product_province_id.value = ""
-            }
-            
-            if (_modal_product_country_id) {
-                _modal_product_country_id.value = ""
-            }
-            
-        })
-        .on("click", function (e) {
-            if ($(this).attr("readonly") === "readonly") {
-                e.preventDefault()
-            } else {
-                $(this).select()
-            }
-        })
-        .autocomplete({
-            serviceUrl: "/api/v1.0/autocomplete/cities",
-            minChars: 2,
-            cache: false,
-            dataType: "json",
-            triggerSelectOnValidInput: false,
-            paramName: "st",
-            onSelect: function (suggestion) {
-                if (!suggestion.data) {
-                    return
-                }
-                
-                let city = suggestion.data
-                let cityId = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
-                let provinceId = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
-                let countryId = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
-                
-                if (_modal_product_city_id && cityId) {
-                    _modal_product_city_id.value = cityId
-                }
-                
-                if (_modal_product_province_id && provinceId) {
-                    _modal_product_province_id.value = provinceId
-                }
-                
-                if (_modal_product_country_id && countryId) {
-                    _modal_product_country_id.value = countryId
-                }
-                
-            },
-        })
-    
-    $("#modal_product_city_cars")
-        .on("change", function () {
-            setTimeout(function () {
-            
-            }, 200)
-        })
-        .on("search", function () {
-            $(_modal_product_city_id).val("").trigger("change")
-        })
-        .on("click", function (e) {
-            if ($(this).attr("readonly") === "readonly") {
-                e.preventDefault()
-            } else {
-                $(this).select()
-            }
-            
-        })
-        .autocomplete({
-            serviceUrl: "/api/v1.0/autocomplete/cities",
-            minChars: 2,
-            cache: false,
-            dataType: "json",
-            triggerSelectOnValidInput: false,
-            paramName: "st",
-            onSelect: function (suggestion) {
-                if (!suggestion.data) {
-                    return
-                }
-                let city = suggestion.data
-                _modal_product_city_id.value = city.id
-                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
-                
-            },
-        })
-    
-    $("#modal_product_city_transports")
-        .on("change", function () {
-            setTimeout(function () {
-            
-            }, 200)
-        })
-        .on("search", function () {
-            $(_modal_product_city_id).val("").trigger("change")
-        })
-        .on("click", function (e) {
-            if ($(this).attr("readonly") === "readonly") {
-                e.preventDefault()
-            } else {
-                $(this).select()
-            }
-        })
-        .autocomplete({
-            serviceUrl: "/api/v1.0/autocomplete/cities",
-            minChars: 2,
-            cache: false,
-            dataType: "json",
-            triggerSelectOnValidInput: false,
-            paramName: "st",
-            onSelect: function (suggestion) {
-                if (!suggestion.data) {
-                    return
-                }
-                let city = suggestion.data
-                let province = (city.province) ? city.province : {}
-                let country = (city.country) ? city.country : {}
-                let countryId = (country.id && !isNaN(parseInt(country.id))) ? parseInt(country.id) : null
-                let provinceId = (province.id && !isNaN(parseInt(province.id))) ? parseInt(province.id) : null
-                let cityId = (city.id && !isNaN(parseInt(city.id))) ? parseInt(city.id) : null
-                
-                //*
-                console.log("|__ country", country)
-                console.log("|__ province", province)
-                console.log("|__ city", city)
-                //*/
-                
-                //*
-                console.log("|__ countryId", countryId)
-                console.log("|__ provinceId", provinceId)
-                console.log("|__ cityId", cityId)
-                //*/
-                
-                _modal_product_country_id.value = countryId
-                _modal_product_province_id.value = provinceId
-                $(_modal_product_city_id).val(cityId).trigger("change")
-                
-            },
-        })
-    
-    $("#modal_product_city_tours")
-        .on("change", function () {
-            setTimeout(function () {
-            
-            }, 200)
-        })
-        .on("search", function () {
-            $(_modal_product_city_id).val("").trigger("change")
-        })
-        .on("click", function (e) {
-            if ($(this).attr("readonly") === "readonly") {
-                e.preventDefault()
-            } else {
-                $(this).select()
-            }
-        })
-        .autocomplete({
-            serviceUrl: "/api/v1.0/autocomplete/cities",
-            minChars: 2,
-            cache: false,
-            dataType: "json",
-            triggerSelectOnValidInput: false,
-            paramName: "st",
-            onSelect: function (suggestion) {
-                if (!suggestion.data) {
-                    return
-                }
-                
-                let city = suggestion.data
-                let country = (city.country) ? city.country : {}
-                let province = (city.province) ? city.province : {}
-                
-                _modal_product_country_id.value = (country && !isNaN(parseInt(country.id))) ? parseInt(country.id) : null
-                _modal_product_province_id.value = (province && !isNaN(parseInt(province.id))) ? parseInt(province.id) : null
-                _modal_product_city_id.value = city.id
-                
-                $(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
-                
-            },
-        })
-    
-    const form_rules = {
-        rules: {
-            city_name: "required",
-        },
-        messages: {
-            address_types_list: "City Name is Required",
-        },
-    }
-    
-    const handle_city_error = function (msg) {
-        toastr.error(msg)
-        //console.log("msg", msg)
-    }
-    
-    const on_click_outside = (e) => {
-        let tar = $(e.target).parents("div." + class_name)
-        
-        if (!tar[0] && !e.target.className.includes("select-add-option")) {
-            City.close()
-        }
-    }
-    
-    const build_drop_downs = function (settings) {
-        if (settings) {
-            if (settings.dropdowns) {
-                $.each(settings.dropdowns, function (i, dropdown_id) {
-                    let element = document.getElementById(dropdown_id)
-                    
-                    if (element) {
-                        $(element)
-                            .select2({
-                                
-                                "language": {
-                                    "searching": function () {
-                                    },
-                                },
-                                "escapeMarkup": function (markup) {
-                                    return markup
-                                },
-                                
-                            })
-                            .on("select2:open", function (e) {
-                                let x = document.querySelectorAll("[aria-controls='select2-" + dropdown_id + "-results']")
-                                if (x[0]) {
-                                    let _filterCitySearch = x[0]
-                                    $(_filterCitySearch).attr("id", "" + dropdown_id + "_search")
-                                    if (!document.getElementById("filter_city_add_icon")) {
-                                        let i = document.createElement("i")
-                                        i.classList = "select-add-option fas fa-plus filter_city_add"
-                                        i.id = "filter_city_add_icon"
-                                        i.addEventListener("click", event => {
-                                            let val = _filterCitySearch.value
-                                            $(element).select2("close")
-                                            City.add(this, val, dropdown_id)
-                                        })
-                                        _filterCitySearch.after(i)
-                                    }
-                                    $(".filter_city_add").hide()
-                                    if (_filterCitySearch) {
-                                        _filterCitySearch.addEventListener("keyup", event => {
-                                            if (_filterCitySearch.value !== "") {
-                                                $(".filter_city_add").show()
-                                            } else {
-                                                $(".filter_city_add").hide()
-                                            }
-                                        })
-                                    }
-                                }
-                                
-                            })
-                            .on("change", function () {
-                                let id = $(this)
-                                    .attr("id")
-                                    .replace("city", "city")
-                            })
-                    }
-                })
-            }
-        }
-    }
-    
-    const fetch_city_list = function (dataToSend, callback) {
-        if (dataToSend) {
-            try {
-                sendGetRequest("/api/v1.0/cities", dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    } else {
-                        return handle_city_error("Oops: 1")
-                    }
-                })
-            } catch (e) {
-                //console.log("error", e)
-                return handle_city_error("Error Validating City")
-            }
-        } else {
-            return handle_city_error("Error Loading Province- Missing Data")
-        }
-    }
-    
-    const update_city_record = function ($this, dataToSend) {
-        if (dataToSend) {
-            try {
-                sendPostRequest("/api/v1.0/cities/update", dataToSend, function (data, status, xhr) {
-                    if (data && data[0]) {
-                        let new_city = data[0]
-                        City.all.set(new_city.id, new_city)
-                        let city_elements = $("select[data-type='city']")
-                        
-                        City.id = new_city.id
-                        city_elements.each(function (index, element) {
-                            var newOption = new Option(new_city.name, new_city.id, false, false)
-                            $(element).append(newOption).trigger("change")
-                            
-                        })
-                        $($this).val(new_city.id).trigger("change")
-                        City.close()
-                        toastr.success("City: " + new_city.id + " updated")
-                        
-                    } else {
-                        return handle_city_error("Error: 1")
-                    }
-                })
-            } catch (e) {
-                //console.log("error", e)
-                handle_city_error("Error: Validating City")
-            }
-        } else {
-            //console.log("Error: Missing Data")
-            handle_city_error("Error: Missing Data")
-        }
-    }
-    
-    const destroy_form = function () {
-        let elem = document.getElementById(form_id)
-        if (elem) {
-            elem.parentNode.removeChild(elem)
-            window.removeEventListener("click", on_click_outside)
-        }
-    }
-    
-    const build_form = function (elem, val, dropdown_id) {
-        let id = $(elem).attr("id")
-        let parent = $(elem).parents("div.row")
-        let value = ""
-        
-        if (val) {
-            value = val
-        }
-        
-        if (!id || !parent[0]) {
-            return
-        }
-        
-        if (document.getElementById(form_id)) {
-            return
-        }
-        
-        let new_city_form = document.createElement("div")
-        
-        let heading1 = document.createElement("h5")
-        
-        let row1 = document.createElement("div")
-        let row2 = document.createElement("div")
-        
-        let col1 = document.createElement("div")
-        let col2 = document.createElement("div")
-        let col3 = document.createElement("div")
-        let col4 = document.createElement("div")
-        
-        let col5 = document.createElement("div")
-        
-        let form_element1 = document.createElement("div")
-        let form_element2 = document.createElement("div")
-        let form_element3 = document.createElement("div")
-        let form_element4 = document.createElement("div")
-        
-        let error_element1 = document.createElement("div")
-        
-        let name_text_element = document.createElement("input")
-        let name_label_element = document.createElement("label")
-        
-        let save_button = document.createElement("button")
-        let cancel_button = document.createElement("button")
-        
-        heading1.classList = "card-title"
-        heading1.innerText = "City Details"
-        
-        new_city_form.id = form_id
-        new_city_form.classList = ["card card-body m-3 " + class_name]
-        
-        name_text_element.id = "city_name"
-        name_text_element.name = "city_name"
-        name_text_element.type = "text"
-        name_text_element.classList = ["form-control "]
-        name_label_element.htmlFor = "city_name"
-        name_label_element.innerHTML = "Name:"
-        error_element1.id = "city_name-error"
-        
-        save_button.classList = ["btn btn-primary btn-sm waves-effect waves-light"]
-        save_button.innerText = "save"
-        save_button.type = "button"
-        
-        save_button.addEventListener("click", event => {
-            City.save(elem, dropdown_id)
-        })
-        
-        cancel_button.classList = ["btn btn-outline-danger btn-sm waves-effect waves-light"]
-        cancel_button.innerText = "cancel"
-        cancel_button.type = "button"
-        
-        cancel_button.addEventListener("click", event => {
-            City.close()
-        })
-        
-        row1.classList = ["row"]
-        row2.classList = ["row"]
-        
-        col1.classList = ["col-lg-3 mb-1"]
-        col2.classList = ["col-lg-3 mb-1"]
-        col3.classList = ["col-lg-3 mb-1"]
-        col4.classList = ["col-lg-3 mb-1"]
-        
-        col5.classList = ["col-12 mb-1 text-right"]
-        
-        form_element1.classList = ["form-element"]
-        form_element2.classList = ["form-element"]
-        form_element3.classList = ["form-element"]
-        form_element4.classList = ["form-element"]
-        
-        error_element1.classList = ["error w-100 text-center"]
-        
-        form_element1.appendChild(name_label_element)
-        form_element1.appendChild(name_text_element)
-        form_element1.appendChild(error_element1)
-        
-        col1.appendChild(form_element1)
-        
-        row1.appendChild(col1)
-        row1.appendChild(col2)
-        row1.appendChild(col3)
-        row1.appendChild(col4)
-        
-        col5.append(cancel_button)
-        col5.appendChild(save_button)
-        
-        row2.appendChild(col5)
-        
-        new_city_form.appendChild(heading1)
-        new_city_form.appendChild(row1)
-        new_city_form.appendChild(row2)
-        
-        parent[0].appendChild(new_city_form)
-        
-        name_text_element.value = value
-        name_text_element.focus({ preventScroll: false })
-        
-        window.addEventListener("click", on_click_outside)
-    }
-    
-    const clear_detail = function () {
-        
-        return {
-            id: null,
-            province_id: null,
-            country_id: null,
-            created_by: null,
-            modified_by: null,
-            sort_order: null,
-            name: null,
-            enabled: 1,
-            date_created: formatDateMySQL(),
-            date_modified: formatDateMySQL(),
-            note: null,
-        }
-        
-    }
-    
-    const set_detail = function (city) {
-        let detail = clear_detail()
-        let id = null
-        if (city) {
-            id = validInt(city.id)
-            detail = {
-                id: validInt(city.id),
-                province_id: validInt(city.province_id),
-                created_by: (city.created_by) ? city.created_by : user_id,
-                modified_by: (city.created_by) ? city.created_by : user_id,
-                sort_order: (city.sort_order) ? city.sort_order : null,
-                name: (city.name) ? city.name : null,
-                enabled: (city.enabled) ? city.enabled : 1,
-                date_created: (city.date_created) ? city.date_created : formatDateMySQL(),
-                date_modified: (city.date_modified) ? city.date_modified : formatDateMySQL(),
-                note: (city.note) ? city.note : null,
-            }
-            
-        }
-        
-        //City.id = id
-        City.detail = detail
-        return detail
-    }
-    
-    const get = function (country_id, province_id, el) {
-        City.all = new Map()
-        let city_id = null
-        if (City.id !== null) {
-            city_id = City.id
-        }
-        if (!el) {
-            return
-        }
-        
-        if (!country_id || !province_id || !el) {
-            
-            $(el).BuildDropDown({
-                data: Array.from(City.all.values()),
-                title: "City",
-                id_field: "id",
-                text_field: "name",
-                first_selectable: false,
-            })
-            
-            $(el).val("").trigger("change")
-            return
-        }
-        
-        let dataToSend = {
-            country_id: parseInt(country_id),
-            province_id: parseInt(province_id),
-        }
-        
-        fetch_city_list(dataToSend, function (cities) {
-            if (cities) {
-                load_all(cities)
-                
-                $(el).BuildDropDown({
-                    data: Array.from(City.all.values()),
-                    title: "City",
-                    id_field: "id",
-                    text_field: "name",
-                    first_selectable: false,
-                })
-                
-                if (city_id !== "" && city_id !== null) {
-                    //console.log($(el).attr("id"))
-                    //console.log("city_id", city_id)
-                    $(el).val(city_id).trigger("change")
-                }
-            }
-        })
-        
-    }
-    
-    const add = function (elem, val, dropdown_id) {
-        if (!elem) {
-            return
-        }
-        
-        build_form(elem, val, dropdown_id)
-    }
-    
-    const save = function ($this, dropdown_id) {
-        let city_detail = {}
-        let _name = document.getElementById("city_name")
-        let _province_id = document.getElementById(dropdown_id.replace(/city_id/g, "") + "province_id")
-        let _country_id = document.getElementById(dropdown_id.replace(/city_id/g, "") + "country_id")
-        if (!isNaN(parseInt(_country_id.value)) && !isNaN(parseInt(_province_id.value))) {
-            if (_name, _province_id, _country_id) {
-                city_detail.name = _name.value
-                city_detail.country_id = parseInt(_country_id.value)
-                city_detail.province_id = parseInt(_province_id.value)
-                
-                let r = confirm("Are you sure you want to edit this record?")
-                if (r === true) {
-                    update_city_record($this, remove_nulls(city_detail))
-                }
-            }
-        }
-    }
-    
-    const load_all = function (cities) {
-        City.all = new Map()
-        
-        if (cities) {
-            $.each(cities, function (k, city) {
-                let detail = set_detail(city)
-                City.all.set(detail.id, detail)
-            })
-        }
-    }
-    
-    const init = function (settings) {
-        build_drop_downs(settings)
-    }
-    
-    return {
-        id: null,
-        detail: {
-            id: null,
-            province_id: null,
-            country_id: null,
-            created_by: null,
-            modified_by: null,
-            sort_order: null,
-            name: null,
-            enabled: null,
-            date_created: null,
-            date_modified: null,
-            note: null,
-        },
-        all: [],
-        close: function () {
-            destroy_form()
-        },
-        save: function ($this, dropdown_id) {
-            save($this, dropdown_id)
-        },
-        get: function (country_id, province_id, el) {
-            get(country_id, province_id, el)
-        },
-        add: function (elem, val, dropdown_id) {
-            add(elem, val, dropdown_id)
-        },
-        set_detail: function (city) {
-            set_detail(city)
-        },
-        init: function (settings) {
-            init(settings)
-        },
-    }
-    
+	"use strict"
+	
+	const class_name = "form-new-city"
+	const form_id = "form_new_city"
+	const userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+	const _product_location_departing_airport_city_search = document.getElementById("product_location_departing_airport_city_search")
+	const _product_location_departing_airport_city_id = document.getElementById("product_location_departing_airport_city_id")
+	const _product_location_arriving_airport_city_id = document.getElementById("product_location_arriving_airport_city_id")
+	const _product_edit_location_city_id = document.getElementById("product_edit_location_city_id")
+	const _product_location_arriving_airport_city_search = document.getElementById("product_location_arriving_airport_city_search")
+	const _modal_product_city_id = document.getElementById("modal_product_city_id")
+	const _modal_product_province_id = document.getElementById("modal_product_province_id")
+	const _modal_product_country_id = document.getElementById("modal_product_country_id")
+	const _modal_product_arrive_to_airport_city = document.getElementById("modal_product_arrive_to_airport_city")
+	const _modal_product_arrive_to_airport_country_id = document.getElementById("modal_product_arrive_to_airport_country_id")
+	const _modal_product_arrive_to_airport_province_id = document.getElementById("modal_product_arrive_to_airport_province_id")
+	const _modal_product_arrive_to_airport_city_id = document.getElementById("modal_product_arrive_to_airport_city_id")
+	const _modal_product_depart_from_airport_city = document.getElementById("modal_product_depart_from_airport_city")
+	const _modal_product_depart_from_airport_country_id = document.getElementById("modal_product_depart_from_airport_country_id")
+	const _modal_product_depart_from_airport_province_id = document.getElementById("modal_product_depart_from_airport_province_id")
+	const _modal_product_depart_from_airport_city_id = document.getElementById("modal_product_depart_from_airport_city_id")
+	const _modal_product_arrive_to_station_country_id = document.getElementById("modal_product_arrive_to_station_country_id")
+	const _modal_product_arrive_to_station_province_id = document.getElementById("modal_product_arrive_to_station_province_id")
+	const _modal_product_arrive_to_station_city_id = document.getElementById("modal_product_arrive_to_station_city_id")
+	const _modal_product_depart_from_station_country_id = document.getElementById("modal_product_depart_from_station_country_id")
+	const _modal_product_depart_from_station_province_id = document.getElementById("modal_product_depart_from_station_province_id")
+	const _modal_product_depart_from_station_city_id = document.getElementById("modal_product_depart_from_station_city_id")
+	const formRules = {
+		rules: {
+			city_name: "required",
+		},
+		messages: {
+			address_types_list: "City Name is Required",
+		},
+	}
+	// ----
+	
+	$("#product_location_transport_city_search")
+		.on("change", function () {
+			setTimeout(function () {
+			
+			}, 200)
+		})
+		.on("search", function () {
+			_product_edit_location_city_id.value = ""
+		})
+		.on("click", function (e) {
+			if ($(this).attr("readonly") === "readonly") {
+				e.preventDefault()
+			} else {
+				$(this).select()
+			}
+		})
+		.autocomplete({
+			serviceUrl: "/api/v1.0/autocomplete/cities",
+			minChars: 2,
+			cache: false,
+			dataType: "json",
+			triggerSelectOnValidInput: false,
+			paramName: "st",
+			onSelect: function (suggestion) {
+				if (!suggestion.data) {
+					return
+				}
+				let city = suggestion.data
+				//console.log("city", city)
+				_product_edit_location_city_id.value = city.id
+				
+			},
+		})
+	
+	$("#product_location_cars_city_search")
+		.on("change", function () {
+			setTimeout(function () {
+			
+			}, 200)
+		})
+		.on("search", function () {
+			_product_edit_location_city_id.value = ""
+		})
+		.on("click", function (e) {
+			if ($(this).attr("readonly") === "readonly") {
+				e.preventDefault()
+			} else {
+				$(this).select()
+			}
+			
+		})
+		.autocomplete({
+			serviceUrl: "/api/v1.0/autocomplete/cities",
+			minChars: 2,
+			cache: false,
+			dataType: "json",
+			triggerSelectOnValidInput: false,
+			paramName: "st",
+			onSelect: function (suggestion) {
+				if (!suggestion.data) {
+					return
+				}
+				let city = suggestion.data
+				
+				_product_edit_location_city_id.value = city.id
+				
+			},
+		})
+	
+	$("#product_location_arriving_airport_city_search")
+		.on("change", function () {
+			setTimeout(function () {
+				let city = $("#product_location_arriving_airport_city_search").val()
+				if (city === "") {
+					_product_location_arriving_airport_city_id.value = ""
+				}
+			}, 200)
+		})
+		.on("search", function () {
+			_product_location_arriving_airport_city_id.value = ""
+		})
+		.on("click", function (e) {
+			if ($(this).attr("readonly") === "readonly") {
+				e.preventDefault()
+			} else {
+				$(this).select()
+			}
+			
+		})
+		.autocomplete({
+			serviceUrl: "/api/v1.0/autocomplete/cities",
+			minChars: 2,
+			cache: false,
+			dataType: "json",
+			triggerSelectOnValidInput: false,
+			paramName: "st",
+			onSelect: function (suggestion) {
+				if (!suggestion.data) {
+					return
+				}
+				let city = suggestion.data
+				
+				_product_location_arriving_airport_city_search.value = suggestion.value
+				_product_location_arriving_airport_city_id.value = city.id
+				
+			},
+		})
+	
+	$("#product_location_departing_airport_city_search")
+		
+		.on("change", function () {
+			setTimeout(function () {
+				let city = $("#product_location_departing_airport_city_search").val()
+				if (city === "") {
+					_product_edit_location_city_id.value = ""
+					_product_location_departing_airport_city_id.value = ""
+				}
+			}, 200)
+		})
+		.on("search", function () {
+			_product_edit_location_city_id.value = ""
+			_product_location_departing_airport_city_id.value = ""
+		})
+		.on("click", function (e) {
+			if ($(this).attr("readonly") === "readonly") {
+				e.preventDefault()
+			} else {
+				$(this).select()
+			}
+		})
+		.autocomplete({
+			serviceUrl: "/api/v1.0/autocomplete/cities",
+			minChars: 2,
+			cache: false,
+			dataType: "json",
+			triggerSelectOnValidInput: false,
+			paramName: "st",
+			onSelect: function (suggestion) {
+				if (!suggestion.data) {
+					return
+				}
+				let city = suggestion.data
+				
+				//console.log("city", city)
+				
+				_product_location_departing_airport_city_search.value = suggestion.value
+				_product_location_departing_airport_city_id.value = city.id
+				_product_edit_location_city_id.value = city.id
+				
+				/*
+				`${city.name} (${city.province.name}, ${city.country.name})`
+				
+					"value": "Abano Terme (Padova, Italy)",
+					"data": {
+						"id": 1,
+						"country_id": 102,
+						"province_id": 250,
+						"sort_order": 999,
+						"name": "Abano Terme",
+						"enabled": 1,
+						"date_created": "2021-08-03 14:40:07",
+						"created_by": 4,
+						"date_modified": "2021-08-03 14:40:07",
+						"modified_by": 4,
+						"note": "",
+						"province": {
+							"id": 250,
+							"country_id": 102,
+							"name": "Padova",
+							"iso2": "PD",
+							"iso3": "",
+							"sort_order": 999,
+							"enabled": 1,
+							"date_created": "2021-12-15 10:58:47",
+							"created_by": 4,
+							"date_modified": "2021-12-15 10:58:47",
+							"modified_by": 4,
+							"note": null
+						},
+						"country": {
+							"id": 102,
+							"currency_id": 2,
+							"sort_order": 0,
+							"name": "Italy",
+							"iso2": "IT",
+							"iso3": "ITA",
+							"enabled": 1,
+							"date_created": "2021-08-03 13:04:10",
+							"created_by": 4,
+							"date_modified": "2021-08-03 15:13:45",
+							"modified_by": 4,
+							"note": ""
+						}
+					}
+				//*/
+				
+			},
+		})
+	
+	$("#form_product_search_hotel_product_location")
+		.on("change", function () {
+			setTimeout(function () {
+			
+			}, 200)
+		})
+		.on("search", function () {
+		
+		})
+		.on("click", function (e) {
+			if ($(this).attr("readonly") === "readonly") {
+				e.preventDefault()
+			} else {
+				$(this).select()
+			}
+			
+		})
+		.autocomplete({
+			serviceUrl: "/api/v1.0/autocomplete/cities",
+			minChars: 2,
+			cache: false,
+			dataType: "json",
+			triggerSelectOnValidInput: false,
+			paramName: "st",
+			onSelect: function (suggestion) {
+				//console.log("city", suggestion)
+				//if (!suggestion.data) {
+				//    return
+				//}
+				
+				//console.log("city", suggestion)
+				/*
+					"value": "Abano Terme (Padova, Italy)",
+					"data": {
+						"id": 1,
+						"country_id": 102,
+						"province_id": 250,
+						"sort_order": 999,
+						"name": "Abano Terme",
+						"enabled": 1,
+						"date_created": "2021-08-03 14:40:07",
+						"created_by": 4,
+						"date_modified": "2021-08-03 14:40:07",
+						"modified_by": 4,
+						"note": "",
+						"province": {
+							"id": 250,
+							"country_id": 102,
+							"name": "Padova",
+							"iso2": "PD",
+							"iso3": "",
+							"sort_order": 999,
+							"enabled": 1,
+							"date_created": "2021-12-15 10:58:47",
+							"created_by": 4,
+							"date_modified": "2021-12-15 10:58:47",
+							"modified_by": 4,
+							"note": null
+						},
+						"country": {
+							"id": 102,
+							"currency_id": 2,
+							"sort_order": 0,
+							"name": "Italy",
+							"iso2": "IT",
+							"iso3": "ITA",
+							"enabled": 1,
+							"date_created": "2021-08-03 13:04:10",
+							"created_by": 4,
+							"date_modified": "2021-08-03 15:13:45",
+							"modified_by": 4,
+							"note": ""
+						}
+					}
+				//*/
+				
+			},
+		})
+	
+	$(_modal_product_city_id)
+		.on("change", function () {
+			if (_modal_product_city_id.value === "") {
+				//_modal_product_provider_name.disabled = true
+				//_modal_product_vendor_name.disabled = true
+			} else {
+				//_modal_product_provider_name.disabled = false
+				//_modal_product_vendor_name.disabled = false
+			}
+		})
+	
+	$("#modal_product_depart_from_airport_city")
+		.on("change", function () {
+			setTimeout(function () {
+			
+			}, 200)
+		})
+		.on("search", function () {
+			$(_modal_product_depart_from_airport_city).val("").trigger("change")
+		})
+		.on("click", function (e) {
+			if ($(this).attr("readonly") === "readonly") {
+				e.preventDefault()
+			} else {
+				$(this).select()
+			}
+		})
+		.autocomplete({
+			serviceUrl: "/api/v1.0/autocomplete/cities",
+			minChars: 2,
+			cache: false,
+			dataType: "json",
+			triggerSelectOnValidInput: false,
+			paramName: "st",
+			onSelect: function (suggestion) {
+				if (!suggestion.data) {
+					return
+				}
+				let city = suggestion.data
+				_modal_product_city_id.value = city.id
+				$(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+				
+				_modal_product_depart_from_airport_country_id.value = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
+				_modal_product_depart_from_airport_province_id.value = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
+				_modal_product_depart_from_airport_city_id.value = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+			},
+		})
+	
+	$("#modal_product_arrive_to_airport_city")
+		.on("change", function () {
+			setTimeout(function () {
+			
+			}, 200)
+		})
+		.on("search", function () {
+			$(_modal_product_arrive_to_airport_city).val("").trigger("change")
+		})
+		.on("click", function (e) {
+			if ($(this).attr("readonly") === "readonly") {
+				e.preventDefault()
+			} else {
+				$(this).select()
+			}
+		})
+		.autocomplete({
+			serviceUrl: "/api/v1.0/autocomplete/cities",
+			minChars: 2,
+			cache: false,
+			dataType: "json",
+			triggerSelectOnValidInput: false,
+			paramName: "st",
+			onSelect: function (suggestion) {
+				if (!suggestion.data) {
+					return
+				}
+				let city = suggestion.data
+				//_modal_product_city_id.value = city.id
+				//$(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+				_modal_product_arrive_to_airport_country_id.value = (city.country.id) ? city.country.id : null
+				_modal_product_arrive_to_airport_province_id.value = (city.province.id) ? city.province.id : null
+				_modal_product_arrive_to_airport_city_id.value = (city.id) ? city.id : null
+				/*
+					"value": "Abano Terme (Padova, Italy)",
+					"data": {
+						"id": 1,
+						"country_id": 102,
+						"province_id": 250,
+						"sort_order": 999,
+						"name": "Abano Terme",
+						"enabled": 1,
+						"date_created": "2021-08-03 14:40:07",
+						"created_by": 4,
+						"date_modified": "2021-08-03 14:40:07",
+						"modified_by": 4,
+						"note": "",
+						"province": {
+							"id": 250,
+							"country_id": 102,
+							"name": "Padova",
+							"iso2": "PD",
+							"iso3": "",
+							"sort_order": 999,
+							"enabled": 1,
+							"date_created": "2021-12-15 10:58:47",
+							"created_by": 4,
+							"date_modified": "2021-12-15 10:58:47",
+							"modified_by": 4,
+							"note": null
+						},
+						"country": {
+							"id": 102,
+							"currency_id": 2,
+							"sort_order": 0,
+							"name": "Italy",
+							"iso2": "IT",
+							"iso3": "ITA",
+							"enabled": 1,
+							"date_created": "2021-08-03 13:04:10",
+							"created_by": 4,
+							"date_modified": "2021-08-03 15:13:45",
+							"modified_by": 4,
+							"note": ""
+						}
+					}
+				//*/
+			},
+		})
+	
+	$("#modal_product_depart_from_station_city")
+		.on("change", function () {
+			setTimeout(function () {
+			
+			}, 200)
+		})
+		.on("search", function () {
+			$(_modal_product_country_id)
+				.val("")
+			$(_modal_product_province_id)
+				.val("")
+			$(_modal_product_city_id)
+				.val("")
+				.trigger("change")
+		})
+		.on("click", function (e) {
+			if ($(this).attr("readonly") === "readonly") {
+				e.preventDefault()
+			} else {
+				$(this).select()
+			}
+		})
+		.autocomplete({
+			serviceUrl: "/api/v1.0/autocomplete/cities",
+			minChars: 2,
+			cache: false,
+			dataType: "json",
+			triggerSelectOnValidInput: false,
+			paramName: "st",
+			onSelect: function (suggestion) {
+				if (!suggestion.data) {
+					return
+				}
+				let city = suggestion.data
+				_modal_product_country_id.value = city.id
+				_modal_product_province_id.value = city.province.id
+				_modal_product_city_id.value = city.country.id
+				_modal_product_depart_from_station_country_id.value = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
+				_modal_product_depart_from_station_province_id.value = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
+				_modal_product_depart_from_station_city_id.value = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+				
+				$(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+				
+			},
+		})
+	
+	$("#modal_product_arrive_to_station_city")
+		.on("change", function () {
+			setTimeout(function () {
+			
+			}, 200)
+		})
+		.on("search", function () {
+			$(_modal_product_city_id).val("").trigger("change")
+		})
+		.on("click", function (e) {
+			if ($(this).attr("readonly") === "readonly") {
+				e.preventDefault()
+			} else {
+				$(this).select()
+			}
+		})
+		.autocomplete({
+			serviceUrl: "/api/v1.0/autocomplete/cities",
+			minChars: 2,
+			cache: false,
+			dataType: "json",
+			triggerSelectOnValidInput: false,
+			paramName: "st",
+			onSelect: function (suggestion) {
+				if (!suggestion.data) {
+					return
+				}
+				let city = suggestion.data
+				
+				_modal_product_arrive_to_station_country_id.value = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
+				_modal_product_arrive_to_station_province_id.value = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
+				_modal_product_arrive_to_station_city_id.value = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+			},
+		})
+	
+	$("#modal_product_city")
+		.on("change", function () {
+			setTimeout(function () {
+				let name = $("#modal_product_city").val()
+				if (name === "") {
+					$(_modal_product_city_id)
+						.val("")
+						.trigger("change")
+				}
+			}, 200)
+		})
+		.on("search", function () {
+			
+			if (_modal_product_city_id) {
+				$(_modal_product_city_id)
+					.val("")
+					.trigger("change")
+			}
+			
+			if (_modal_product_province_id) {
+				_modal_product_province_id.value = ""
+			}
+			
+			if (_modal_product_country_id) {
+				_modal_product_country_id.value = ""
+			}
+			
+		})
+		.on("click", function (e) {
+			if ($(this).attr("readonly") === "readonly") {
+				e.preventDefault()
+			} else {
+				$(this).select()
+			}
+		})
+		.autocomplete({
+			serviceUrl: "/api/v1.0/autocomplete/cities",
+			minChars: 2,
+			cache: false,
+			dataType: "json",
+			triggerSelectOnValidInput: false,
+			paramName: "st",
+			onSelect: function (suggestion) {
+				if (!suggestion.data) {
+					return
+				}
+				
+				let city = suggestion.data
+				let cityId = (!isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+				let provinceId = (!isNaN(parseInt(city.province.id))) ? parseInt(city.province.id) : null
+				let countryId = (!isNaN(parseInt(city.country.id))) ? parseInt(city.country.id) : null
+				
+				if (_modal_product_city_id && cityId) {
+					_modal_product_city_id.value = cityId
+				}
+				
+				if (_modal_product_province_id && provinceId) {
+					_modal_product_province_id.value = provinceId
+				}
+				
+				if (_modal_product_country_id && countryId) {
+					_modal_product_country_id.value = countryId
+				}
+				
+			},
+		})
+	
+	$("#modal_product_city_cars")
+		.on("change", function () {
+			setTimeout(function () {
+			
+			}, 200)
+		})
+		.on("search", function () {
+			$(_modal_product_city_id).val("").trigger("change")
+		})
+		.on("click", function (e) {
+			if ($(this).attr("readonly") === "readonly") {
+				e.preventDefault()
+			} else {
+				$(this).select()
+			}
+			
+		})
+		.autocomplete({
+			serviceUrl: "/api/v1.0/autocomplete/cities",
+			minChars: 2,
+			cache: false,
+			dataType: "json",
+			triggerSelectOnValidInput: false,
+			paramName: "st",
+			onSelect: function (suggestion) {
+				if (!suggestion.data) {
+					return
+				}
+				let city = suggestion.data
+				_modal_product_city_id.value = city.id
+				$(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+				
+			},
+		})
+	
+	$("#modal_product_city_transports")
+		.on("change", function () {
+			setTimeout(function () {
+			
+			}, 200)
+		})
+		.on("search", function () {
+			$(_modal_product_city_id).val("").trigger("change")
+		})
+		.on("click", function (e) {
+			if ($(this).attr("readonly") === "readonly") {
+				e.preventDefault()
+			} else {
+				$(this).select()
+			}
+		})
+		.autocomplete({
+			serviceUrl: "/api/v1.0/autocomplete/cities",
+			minChars: 2,
+			cache: false,
+			dataType: "json",
+			triggerSelectOnValidInput: false,
+			paramName: "st",
+			onSelect: function (suggestion) {
+				if (!suggestion.data) {
+					return
+				}
+				let city = suggestion.data
+				let province = (city.province) ? city.province : {}
+				let country = (city.country) ? city.country : {}
+				let countryId = (country.id && !isNaN(parseInt(country.id))) ? parseInt(country.id) : null
+				let provinceId = (province.id && !isNaN(parseInt(province.id))) ? parseInt(province.id) : null
+				let cityId = (city.id && !isNaN(parseInt(city.id))) ? parseInt(city.id) : null
+				
+				//*
+				console.log("|__ country", country)
+				console.log("|__ province", province)
+				console.log("|__ city", city)
+				//*/
+				
+				//*
+				console.log("|__ countryId", countryId)
+				console.log("|__ provinceId", provinceId)
+				console.log("|__ cityId", cityId)
+				//*/
+				
+				_modal_product_country_id.value = countryId
+				_modal_product_province_id.value = provinceId
+				$(_modal_product_city_id).val(cityId).trigger("change")
+				
+			},
+		})
+	
+	$("#modal_product_city_tours")
+		.on("change", function () {
+			setTimeout(function () {
+			
+			}, 200)
+		})
+		.on("search", function () {
+			$(_modal_product_city_id).val("").trigger("change")
+		})
+		.on("click", function (e) {
+			if ($(this).attr("readonly") === "readonly") {
+				e.preventDefault()
+			} else {
+				$(this).select()
+			}
+		})
+		.autocomplete({
+			serviceUrl: "/api/v1.0/autocomplete/cities",
+			minChars: 2,
+			cache: false,
+			dataType: "json",
+			triggerSelectOnValidInput: false,
+			paramName: "st",
+			onSelect: function (suggestion) {
+				if (!suggestion.data) {
+					return
+				}
+				
+				let city = suggestion.data
+				let country = (city.country) ? city.country : {}
+				let province = (city.province) ? city.province : {}
+				
+				_modal_product_country_id.value = (country && !isNaN(parseInt(country.id))) ? parseInt(country.id) : null
+				_modal_product_province_id.value = (province && !isNaN(parseInt(province.id))) ? parseInt(province.id) : null
+				_modal_product_city_id.value = city.id
+				
+				$(_modal_product_city_id).val((city.id) ? city.id : "").trigger("change")
+				
+			},
+		})
+	// ----
+	
+	const handleCityError = function (msg, title, level) {
+		console.groupCollapsed("City.handleCityError")
+		// ----
+		
+		if (!title) {
+			title = "City"
+		}
+		
+		if (!level) {
+			level = "error"
+		}
+		
+		if (!msg) {
+			msg = "Error"
+		}
+		
+		toastr[level](`${msg}`, title)
+		
+		// ----
+		console.groupEnd()
+	}
+	
+	const onClickOutside = (e) => {
+		console.groupCollapsed("City.onClickOutside")
+		// ----
+		
+		let tar = $(e.target).parents("div." + class_name)
+		
+		if (!tar[0] && !e.target.className.includes("select-add-option")) {
+			City.close()
+		}
+		
+		// ----
+		console.groupEnd()
+	}
+	
+	const build_drop_downs = function (settings) {
+		console.groupCollapsed("City.handleCityError")
+		// ----
+		
+		if (settings) {
+			if (settings.dropdowns) {
+				$.each(settings.dropdowns, function (i, dropdown_id) {
+					let element = document.getElementById(dropdown_id)
+					
+					if (element) {
+						$(element)
+							.select2({
+								
+								"language": {
+									"searching": function () {
+									},
+								},
+								"escapeMarkup": function (markup) {
+									return markup
+								},
+								
+							})
+							.on("select2:open", function (e) {
+								let x = document.querySelectorAll("[aria-controls='select2-" + dropdown_id + "-results']")
+								if (x[0]) {
+									let _filterCitySearch = x[0]
+									$(_filterCitySearch).attr("id", "" + dropdown_id + "_search")
+									if (!document.getElementById("filter_city_add_icon")) {
+										let i = document.createElement("i")
+										i.classList = "select-add-option fas fa-plus filter_city_add"
+										i.id = "filter_city_add_icon"
+										i.addEventListener("click", event => {
+											let val = _filterCitySearch.value
+											$(element).select2("close")
+											City.add(this, val, dropdown_id)
+										})
+										_filterCitySearch.after(i)
+									}
+									$(".filter_city_add").hide()
+									if (_filterCitySearch) {
+										_filterCitySearch.addEventListener("keyup", event => {
+											if (_filterCitySearch.value !== "") {
+												$(".filter_city_add").show()
+											} else {
+												$(".filter_city_add").hide()
+											}
+										})
+									}
+								}
+								
+							})
+							.on("change", function () {
+								let id = $(this)
+									.attr("id")
+									.replace("city", "city")
+							})
+					}
+				})
+			}
+		}
+		
+		// ----
+		console.groupEnd()
+	}
+	
+	const fetch_city_list = function (dataToSend, callback) {
+		console.groupCollapsed("City.handleCityError")
+		// ----
+		
+		if (dataToSend) {
+			try {
+				sendGetRequest("/api/v1.0/cities", dataToSend, function (data, status, xhr) {
+					if (data) {
+						return callback(data)
+					} else {
+						return handleCityError("Oops: 1")
+					}
+				})
+			} catch (e) {
+				//console.log("error", e)
+				return handleCityError("Error Validating City")
+			}
+		} else {
+			return handleCityError("Error Loading Province- Missing Data")
+		}
+		
+		// ----
+		console.groupEnd()
+	}
+	
+	const update_city_record = function ($this, dataToSend) {
+		console.groupCollapsed("City.update_city_record")
+		// ----
+		
+		if (dataToSend) {
+			try {
+				sendPostRequest("/api/v1.0/cities/update", dataToSend, function (data, status, xhr) {
+					if (data && data[0]) {
+						let new_city = data[0]
+						City.all.set(new_city.id, new_city)
+						let city_elements = $("select[data-type='city']")
+						
+						City.id = new_city.id
+						city_elements.each(function (index, element) {
+							var newOption = new Option(new_city.name, new_city.id, false, false)
+							$(element).append(newOption).trigger("change")
+							
+						})
+						$($this).val(new_city.id).trigger("change")
+						City.close()
+						toastr.success("City: " + new_city.id + " updated")
+						
+					} else {
+						return handleCityError("Error: 1")
+					}
+				})
+			} catch (e) {
+				return handleCityError("Error: Validating City")
+			}
+		} else {
+			return handleCityError("Error: Missing Data")
+		}
+		
+		// ----
+		console.groupEnd()
+	}
+	
+	const destroy_form = function () {
+		console.groupCollapsed("City.destroy_form")
+		// ----
+		
+		let elem = document.getElementById(form_id)
+		if (elem) {
+			elem.parentNode.removeChild(elem)
+			window.removeEventListener("click", onClickOutside)
+		}
+		
+		// ----
+		console.groupEnd()
+	}
+	
+	const build_form = function (elem, val, dropdown_id) {
+		console.groupCollapsed("City.build_form")
+		// ----
+		
+		console.log("elem", elem)
+		console.log("val", val)
+		console.log("dropdown_id", dropdown_id)
+		
+		let id = $(elem).attr("id")
+		let parent = $(elem).parents("div.row")
+		let value = ""
+		
+		if (val) {
+			value = val
+		}
+		
+		if (!id || !parent[0]) {
+			return
+		}
+		
+		if (document.getElementById(form_id)) {
+			return
+		}
+		
+		let newCityForm = document.createElement("div")
+		let newCityHeading = document.createElement("div")
+		let newCityBody = document.createElement("div")
+		let newCityFooter = document.createElement("div")
+		
+		let heading1 = document.createElement("h5")
+		
+		let row1 = document.createElement("div")
+		let row2 = document.createElement("div")
+		let row3 = document.createElement("div")
+		
+		let col1 = document.createElement("div")
+		let col2 = document.createElement("div")
+		let col3 = document.createElement("div")
+		let col4 = document.createElement("div")
+		
+		let col5 = document.createElement("div")
+		
+		let form_element1 = document.createElement("div")
+		let form_element2 = document.createElement("div")
+		let form_element3 = document.createElement("div")
+		let form_element4 = document.createElement("div")
+		
+		let error_element1 = document.createElement("div")
+		
+		let name_text_element = document.createElement("input")
+		let name_label_element = document.createElement("label")
+		
+		let save_button = document.createElement("button")
+		let cancel_button = document.createElement("button")
+		
+		newCityForm.id = form_id
+		newCityForm.classList.add("card")
+		newCityForm.classList.add("w-100")
+		newCityForm.classList.add("m-2")
+		newCityForm.classList.add(class_name)
+		
+		newCityHeading.classList.add("card-heading")
+		newCityHeading.classList.add("p-1")
+		
+		newCityBody.classList.add("card-body")
+		newCityBody.classList.add("p-1")
+		
+		newCityFooter.classList.add("card-footer")
+		newCityFooter.classList.add("p-1")
+		
+		heading1.classList.add("card-title")
+		heading1.innerText = "City Details"
+		
+		name_text_element.id = "city_name"
+		name_text_element.name = "city_name"
+		name_text_element.type = "text"
+		name_text_element.classList.add("form-control")
+		name_label_element.htmlFor = "city_name"
+		name_label_element.innerHTML = "Name:"
+		
+		error_element1.id = "city_name-error"
+		
+		save_button.classList = ["btn btn-primary btn-sm waves-effect waves-light"]
+		save_button.innerText = "save"
+		save_button.type = "button"
+		
+		save_button.addEventListener("click", event => {
+			City.save(elem, dropdown_id)
+		})
+		
+		cancel_button.classList = ["btn btn-outline-danger btn-sm waves-effect waves-light"]
+		cancel_button.innerText = "cancel"
+		cancel_button.type = "button"
+		
+		cancel_button.addEventListener("click", event => {
+			City.close()
+		})
+		
+		row1.classList.add("row")
+		row2.classList.add("row")
+		row3.classList.add("row")
+		
+		row1.classList.add("mx-1")
+		row2.classList.add("mx-1")
+		row3.classList.add("mx-1")
+		
+		col1.classList = ["col-lg-4 p-1 mb-1"]
+		col2.classList = ["col-lg-4 p-1 mb-1"]
+		col3.classList = ["col-lg-4 p-1 mb-1"]
+		
+		col5.classList = ["col-12 mb-1 text-right"]
+		
+		form_element1.classList = ["form-element"]
+		form_element2.classList = ["form-element"]
+		form_element3.classList = ["form-element"]
+		form_element4.classList = ["form-element"]
+		
+		error_element1.classList = ["error w-100 text-center"]
+		
+		form_element1.appendChild(name_label_element)
+		form_element1.appendChild(name_text_element)
+		form_element1.appendChild(error_element1)
+		
+		col1.appendChild(form_element1)
+		
+		row1.appendChild(col1)
+		row1.appendChild(col2)
+		row1.appendChild(col3)
+		
+		col5.append(cancel_button)
+		col5.appendChild(save_button)
+		
+		row2.appendChild(col5)
+		
+		newCityHeading.appendChild(heading1)
+		newCityBody.appendChild(row1)
+		newCityFooter.appendChild(row2)
+		
+		newCityForm.appendChild(newCityHeading)
+		newCityForm.appendChild(newCityBody)
+		newCityForm.appendChild(newCityFooter)
+		
+		parent[0].appendChild(newCityForm)
+		
+		name_text_element.value = value
+		name_text_element.focus({ preventScroll: false })
+		
+		window.addEventListener("click", onClickOutside)
+		
+		// ----
+		console.groupEnd()
+	}
+	
+	const clear_detail = function () {
+		//console.groupCollapsed("City.clear_detail")
+		// ----
+		
+		let detail = {
+			id: null,
+			province_id: null,
+			country_id: null,
+			created_by: null,
+			modified_by: null,
+			sort_order: null,
+			name: null,
+			enabled: 1,
+			date_created: formatDateMySQL(),
+			date_modified: formatDateMySQL(),
+			note: null,
+		}
+		
+		// ----
+		//console.groupEnd()
+		return detail
+	}
+	
+	const set_detail = function (city) {
+		//console.groupCollapsed("City.set_detail")
+		// ----
+		
+		let detail = clear_detail()
+		let id = null
+		if (city) {
+			id = validInt(city.id)
+			detail = {
+				id: validInt(city.id),
+				province_id: validInt(city.province_id),
+				created_by: (city.created_by) ? city.created_by : userId,
+				modified_by: (city.created_by) ? city.created_by : userId,
+				sort_order: (city.sort_order) ? city.sort_order : null,
+				name: (city.name) ? city.name : null,
+				enabled: (city.enabled) ? city.enabled : 1,
+				date_created: (city.date_created) ? city.date_created : formatDateMySQL(),
+				date_modified: (city.date_modified) ? city.date_modified : formatDateMySQL(),
+				note: (city.note) ? city.note : null,
+			}
+			
+		}
+		
+		City.detail = detail
+		
+		// ----
+		//console.groupEnd()
+		return detail
+	}
+	
+	const get = function (country_id, province_id, el) {
+		console.groupCollapsed("City.get")
+		// ----
+		
+		City.all = new Map()
+		let city_id = null
+		if (City.id !== null) {
+			city_id = City.id
+		}
+		if (!el) {
+			return
+		}
+		
+		if (!country_id || !province_id || !el) {
+			
+			$(el).BuildDropDown({
+				data: Array.from(City.all.values()),
+				title: "City",
+				id_field: "id",
+				text_field: "name",
+				first_selectable: false,
+			})
+			
+			$(el).val("").trigger("change")
+			console.groupEnd()
+			return
+		}
+		
+		let dataToSend = {
+			country_id: parseInt(country_id),
+			province_id: parseInt(province_id),
+		}
+		
+		fetch_city_list(dataToSend, function (cities) {
+			if (cities) {
+				load_all(cities)
+				
+				$(el).BuildDropDown({
+					data: Array.from(City.all.values()),
+					title: "City",
+					id_field: "id",
+					text_field: "name",
+					first_selectable: false,
+				})
+				
+				if (city_id !== "" && city_id !== null) {
+					$(el).val(city_id).trigger("change")
+				}
+			}
+		})
+		
+		// ----
+		console.groupEnd()
+	}
+	
+	const add = function (elem, val, dropdown_id) {
+		console.groupCollapsed("City.add")
+		// ----
+		
+		if (!elem) {
+			return
+		}
+		
+		build_form(elem, val, dropdown_id)
+		
+		// ----
+		console.groupEnd()
+	}
+	
+	const save = function ($this, dropdown_id) {
+		console.groupCollapsed("City.save")
+		// ----
+		
+		let city_detail = {}
+		let _name = document.getElementById("city_name")
+		let _province_id = document.getElementById(dropdown_id.replace(/city_id/g, "") + "province_id")
+		let _country_id = document.getElementById(dropdown_id.replace(/city_id/g, "") + "country_id")
+		if (!isNaN(parseInt(_country_id.value)) && !isNaN(parseInt(_province_id.value))) {
+			if (_name && _province_id && _country_id) {
+				city_detail.name = _name.value
+				city_detail.country_id = parseInt(_country_id.value)
+				city_detail.province_id = parseInt(_province_id.value)
+				
+				let r = confirm("Are you sure you want to edit this record?")
+				if (r === true) {
+					update_city_record($this, remove_nulls(city_detail))
+				}
+			}
+		}
+		
+		// ----
+		console.groupEnd()
+	}
+	
+	const load_all = function (cities) {
+		console.groupCollapsed("City.load_all")
+		// ----
+		
+		City.all = new Map()
+		
+		if (cities) {
+			$.each(cities, function (k, city) {
+				let detail = set_detail(city)
+				City.all.set(detail.id, detail)
+			})
+		}
+		
+		// ----
+		console.groupEnd()
+	}
+	const loadAll = function (cities) {
+		console.groupCollapsed("City.loadAll")
+		// ----
+		
+		City.all = new Map()
+		
+		if (cities) {
+			$.each(cities, function (k, city) {
+				let detail = set_detail(city)
+				City.all.set(detail.id, detail)
+			})
+		}
+		
+		// ----
+		console.groupEnd()
+	}
+	
+	const init = function (settings) {
+		console.groupCollapsed("City.init")
+		// ----
+		
+		build_drop_downs(settings)
+		
+		// ----
+		console.groupEnd()
+	}
+	
+	return {
+		id: null,
+		detail: {
+			id: null,
+			province_id: null,
+			country_id: null,
+			created_by: null,
+			modified_by: null,
+			sort_order: null,
+			name: null,
+			enabled: null,
+			date_created: null,
+			date_modified: null,
+			note: null,
+		},
+		all: [],
+		close: function () {
+			destroy_form()
+		},
+		save: function ($this, dropdown_id) {
+			save($this, dropdown_id)
+		},
+		get: function (country_id, province_id, el) {
+			get(country_id, province_id, el)
+		},
+		add: function (elem, val, dropdown_id) {
+			add(elem, val, dropdown_id)
+		},
+		set_detail: function (city) {
+			set_detail(city)
+		},
+		init: function (settings) {
+			init(settings)
+		},
+		loadAll: function (cities) {
+			loadAll(cities)
+		},
+	}
+	
 })()
 
 const Station = (function () {
@@ -17649,7 +17652,7 @@ const Station = (function () {
         })
     
     const clearDepartFromFields = function () {
-        console.log("Station.clearDepartFromFields()")
+        console.groupCollapsed("Station.clearDepartFromFields")
         // ----
         
         if (_modal_product_depart_from_station_add_block) {
@@ -17677,9 +17680,11 @@ const Station = (function () {
             $(_modal_product_depart_from_station).trigger("change")
         }
         
+        // ----
+        console.groupEnd()
     }
     const clearArriveToFields = function () {
-        console.log("Station.clearArriveToFields()")
+        console.groupCollapsed("Station.clearArriveToFields")
         // ----
         
         let type = "arrive_to"
@@ -17712,9 +17717,11 @@ const Station = (function () {
         toggleEditFormLink(type)
         $(_modal_product_arrive_to_station).trigger("change")
         
+        // ----
+        console.groupEnd()
     }
     const save = function (type) {
-        //console.log("Station.save()")
+        console.groupCollapsed("Station.save")
         // ----
         
         if (type) {
@@ -17728,7 +17735,7 @@ const Station = (function () {
                 
                 if (ans) {
                     
-                    console.log("|__ dataToSend", dataToSend)
+                    console.log("dataToSend", dataToSend)
                     
                     sendSaveRequest(dataToSend, function (data) {
                         console.log("data", data)
@@ -17741,7 +17748,7 @@ const Station = (function () {
                         }
                         
                         if (station) {
-                            //console.log("|__ station", station)
+                            //console.log("station", station)
                             
                             let stationId = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : null
                             
@@ -17776,7 +17783,7 @@ const Station = (function () {
                             
                             /*
                             if (type === "depart_from") {
-                                //console.log("|__ stationId", stationId)
+                                //console.log("stationId", stationId)
                                 
                                 populateStationForm(station, type)
                                 
@@ -17821,9 +17828,11 @@ const Station = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
     }
     const sendSaveRequest = function (dataToSend, callback) {
-        //console.log("Station.sendSaveRequest()")
+        console.groupCollapsed("Station.sendSaveRequest")
         // ----
         
         if (dataToSend) {
@@ -17841,9 +17850,11 @@ const Station = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
     }
     const validDepartFromRecord = function () {
-        //console.log("Station.validDepartFromRecord()")
+        console.groupCollapsed("Station.validDepartFromRecord")
         // ----
         
         let isValid = true
@@ -17862,10 +17873,12 @@ const Station = (function () {
             $(_modal_product_depart_from_station_city).hideError()
         }
         
+        // ----
+        console.groupEnd()
         return isValid
     }
     const validArriveToRecord = function () {
-        //console.log("Station.validArriveToRecord()")
+        console.groupCollapsed("Station.validArriveToRecord")
         // ----
         
         let isValid = true
@@ -17884,16 +17897,20 @@ const Station = (function () {
             $(_modal_product_arrive_to_station_city).hideError()
         }
         
+        // ----
+        console.groupEnd()
         return isValid
     }
     const buildAddStationRecord = function (type) {
-        //console.log("Station.buildAddStationRecord()")
+        console.groupCollapsed("Station.buildAddStationRecord")
         // ----
+        
+        let detail
         
         if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
             
             if (type) {
-                //console.log("|__ type", type)
+                //console.log("type", type)
                 
                 if (type === "depart_from") {
                     
@@ -17915,7 +17932,7 @@ const Station = (function () {
                             enabled: 1,
                         }
                         
-                        return removeNulls(dataToSend)
+                        detail = removeNulls(dataToSend)
                     }
                 } else if (type === "arrive_to") {
                     
@@ -17937,7 +17954,7 @@ const Station = (function () {
                             enabled: 1,
                         }
                         
-                        return removeNulls(dataToSend)
+                        detail = removeNulls(dataToSend)
                     }
                 }
                 
@@ -17945,9 +17962,12 @@ const Station = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
+        return detail
     }
     const cancelAddStationRecord = function (type) {
-        console.log("Station.cancelAddStationRecord()", Station.arrivingStation)
+        console.groupCollapsed("Station.cancelAddStationRecord")
         // ----
         
         if (!type) {
@@ -17967,16 +17987,18 @@ const Station = (function () {
         
         hideStationForm(type)
         
+        // ----
+        console.groupEnd()
     }
     const showStationForm = function (type) {
-        //console.log("Station.showStationForm()")
+        console.groupCollapsed("Station.showStationForm")
         // ----
         
         if (!type || !_modal_product_depart_from_station_add_block || !_modal_product_arrive_to_station_add_block) {
             
-            //console.log("|__ _modal_product_depart_from_station_add_block", _modal_product_depart_from_station_add_block)
-            //console.log("|__ _modal_product_arrive_to_station_add_block", _modal_product_arrive_to_station_add_block)
-            //console.log("|__ type", type)
+            //console.log("_modal_product_depart_from_station_add_block", _modal_product_depart_from_station_add_block)
+            //console.log("_modal_product_arrive_to_station_add_block", _modal_product_arrive_to_station_add_block)
+            //console.log("type", type)
             
             return
         }
@@ -18000,12 +18022,14 @@ const Station = (function () {
             
             toggleEditFormLink(type)
         } else {
-            //console.log("|__ type", type)
+            //console.log("type", type)
         }
         
+        // ----
+        console.groupEnd()
     }
     const stationExists = function (name, type) {
-        //console.log("Station.stationExists()")
+        console.groupCollapsed("Station.stationExists")
         // ----
         
         if (name && name !== "") {
@@ -18107,9 +18131,11 @@ const Station = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
     }
     const fetchByName = function (dataToSend, callback) {
-        //console.log("Station.fetchByName()")
+        console.groupCollapsed("Station.fetchByName")
         // ----
         
         let url = "/api/v1.0/stations/validate"
@@ -18130,9 +18156,12 @@ const Station = (function () {
         } else {
             handleStationError("Error Loading Station - Missing Data")
         }
+        
+        // ----
+        console.groupEnd()
     }
     const handleStationError = function (msg, title, type) {
-        //console.log("Station.handleStationError()")
+        console.groupCollapsed("Station.handleStationError")
         // ----
         
         if (!msg) {
@@ -18149,12 +18178,14 @@ const Station = (function () {
         
         toastr[type](msg, title)
         
+        // ----
+        console.groupEnd()
     }
     const defaultDetail = function () {
-        //console.log("Station.defaultDetail()")
+        console.groupCollapsed("Station.defaultDetail")
         // ----
         
-        return {
+        let details = {
             city: {
                 id: null,
                 country_id: null,
@@ -18217,9 +18248,12 @@ const Station = (function () {
             street_2: null,
         }
         
+        // ----
+        console.groupEnd()
+        return details
     }
     const setDetail = function (station) {
-        //console.log("Station.setDetail()")
+        console.groupCollapsed("Station.setDetail")
         // ----
         
         let detail = defaultDetail()
@@ -18287,10 +18321,12 @@ const Station = (function () {
             detail.wikipedia_link = (station.wikipedia_link) ? station.wikipedia_link : null
         }
         
+        // ----
+        console.groupEnd()
         return detail
     }
     const init = function (settings) {
-        //console.log("Station.init()")
+        console.groupCollapsed("Station.init")
         // ----
         
         let stations = (settings && settings.stations) ? settings.stations : []
@@ -18307,9 +18343,11 @@ const Station = (function () {
             initAutocomplete()
         }
         
+        // ----
+        console.groupEnd()
     }
     const resetStationForm = function (type) {
-        //console.log("Station.resetStationForm()")
+        console.groupCollapsed("Station.resetStationForm")
         // ----
         
         if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
@@ -18324,9 +18362,11 @@ const Station = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
     }
     const hideStationForm = function (type) {
-        //console.log("Station.hideStationForm()")
+        console.groupCollapsed("Station.hideStationForm")
         // ----
         
         if (!type || !_modal_product_depart_from_station_add_block || !_modal_product_arrive_to_station_add_block) {
@@ -18348,14 +18388,17 @@ const Station = (function () {
             
             toggleEditFormLink(type)
         } else {
-            //console.log("|__ type", type)
+            //console.log("type", type)
         }
         
         _modal_product_depart_from_station.disabled = false
         _modal_product_arrive_to_station.disabled = false
+        
+        // ----
+        console.groupEnd()
     }
     const loadAll = function (stations) {
-        //console.log("Station.loadAll()")
+        console.groupCollapsed("Station.loadAll")
         // ----
         
         Station.all = new Map()
@@ -18367,9 +18410,11 @@ const Station = (function () {
             Station.all.set(stationId, detail)
         })
         
+        // ----
+        console.groupEnd()
     }
     const initAutocomplete = function () {
-        //console.log("Station.initAutocomplete()")
+        console.groupCollapsed("Station.initAutocomplete")
         // ----
         
         if (_modal_product_depart_from_station) {
@@ -18430,7 +18475,7 @@ const Station = (function () {
                         globalSelectedStationDepartFrom = true
                         
                         if (station) {
-                            console.log("|__ station", station)
+                            console.log("station", station)
                             
                             populateStationForm(station, type)
                             toggleEditFormLink(type)
@@ -18510,7 +18555,7 @@ const Station = (function () {
                         globalSelectedStationDepartFrom = true
                         
                         if (station) {
-                            console.log("|__ station", station)
+                            console.log("station", station)
                             
                             populateStationForm(station, type)
                             toggleEditFormLink(type)
@@ -18526,9 +18571,11 @@ const Station = (function () {
                 })
         }
         
+        // ----
+        console.groupEnd()
     }
     const populateStationForm = function (station, type) {
-        //console.log("Station.populateStationForm()", station, type)
+        console.groupCollapsed("Station.populateStationForm")
         // ----
         
         if (!type || !_modal_product_depart_from_station_add_block || !_modal_product_arrive_to_station_add_block) {
@@ -18604,9 +18651,11 @@ const Station = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
     }
     const clearStationForm = function (type) {
-        //console.log("Station.clearStationForm()")
+        console.groupCollapsed("Station.clearStationForm")
         // ----
         
         if (!type) {
@@ -18676,28 +18725,31 @@ const Station = (function () {
             $(_modal_product_arrive_to_station_edit_link).hide()
             
         }
+        
+        // ----
+        console.groupEnd()
     }
     const toggleEditFormLink = function (type) {
-        //console.log("Station.toggleEditFormLink(type)", type)
+        console.groupCollapsed("Station.toggleEditFormLink")
         // ----
         
         if (type) {
             /*
-            console.log("|__ _modal_product_depart_from_station_edit_link", _modal_product_depart_from_station_edit_link)
-            console.log("|__ _modal_product_arrive_to_station_edit_link", _modal_product_arrive_to_station_edit_link)
+            console.log("_modal_product_depart_from_station_edit_link", _modal_product_depart_from_station_edit_link)
+            console.log("_modal_product_arrive_to_station_edit_link", _modal_product_arrive_to_station_edit_link)
             //*/
             
             if (type === "depart_from" && _modal_product_depart_from_station_edit_link) {
                 let toggleStatus = (_modal_product_depart_from_station_edit_link.dataset.toggle) ? _modal_product_depart_from_station_edit_link.dataset.toggle : "hidden"
                 
                 /*
-                console.log("|__ toggleStatus", toggleStatus)
-                console.log("|__ _modal_product_depart_from_new_station_id", _modal_product_depart_from_new_station_id)
-                console.log("|__ _modal_product_depart_from_station", _modal_product_depart_from_station)
-                console.log("|__ _modal_product_depart_from_station_city_id", _modal_product_depart_from_station_city_id)
-                console.log("|__ _modal_product_depart_from_new_station_id.value", _modal_product_depart_from_new_station_id.value)
-                console.log("|__ _modal_product_depart_from_new_station_id.value", _modal_product_depart_from_new_station_id.value)
-                console.log("|__ _modal_product_depart_from_station_city_id.value", _modal_product_depart_from_station_city_id.value)
+                console.log("toggleStatus", toggleStatus)
+                console.log("_modal_product_depart_from_new_station_id", _modal_product_depart_from_new_station_id)
+                console.log("_modal_product_depart_from_station", _modal_product_depart_from_station)
+                console.log("_modal_product_depart_from_station_city_id", _modal_product_depart_from_station_city_id)
+                console.log("_modal_product_depart_from_new_station_id.value", _modal_product_depart_from_new_station_id.value)
+                console.log("_modal_product_depart_from_new_station_id.value", _modal_product_depart_from_new_station_id.value)
+                console.log("_modal_product_depart_from_station_city_id.value", _modal_product_depart_from_station_city_id.value)
                 //*/
                 
                 if (_modal_product_depart_from_new_station_id && _modal_product_depart_from_station && _modal_product_depart_from_station_city_id
@@ -18716,16 +18768,6 @@ const Station = (function () {
             } else if (type === "arrive_to" && _modal_product_arrive_to_station_edit_link) {
                 let toggleStatus = (_modal_product_arrive_to_station_edit_link.dataset.toggle) ? _modal_product_arrive_to_station_edit_link.dataset.toggle : "hidden"
                 
-                //*
-                console.log("|__ toggleStatus", toggleStatus)
-                console.log("|__ _modal_product_arrive_to_new_station_id", _modal_product_arrive_to_new_station_id)
-                console.log("|__ _modal_product_arrive_to_station", _modal_product_arrive_to_station)
-                console.log("|__ _modal_product_arrive_to_station_city_id", _modal_product_arrive_to_station_city_id)
-                console.log("|__ _modal_product_arrive_to_new_station_id.value", _modal_product_arrive_to_new_station_id.value)
-                console.log("|__ _modal_product_arrive_to_new_station_id.value", _modal_product_arrive_to_new_station_id.value)
-                console.log("|__ _modal_product_arrive_to_station_city_id.value", _modal_product_arrive_to_station_city_id.value)
-                //*/
-                
                 if (
                     _modal_product_arrive_to_new_station_id &&
                     _modal_product_arrive_to_station &&
@@ -18734,13 +18776,11 @@ const Station = (function () {
                     _modal_product_arrive_to_station.value !== "" &&
                     _modal_product_arrive_to_station_city_id.value !== ""
                 ) {
-                    console.log("|__ |__ shown")
                     _modal_product_arrive_to_station_edit_link.dataset.toggle = "shown"
                     
                     $(_modal_product_arrive_to_station_edit_link).show()
                     
                 } else {
-                    console.log("|__ |__ hidden")
                     
                     _modal_product_arrive_to_station_edit_link.dataset.toggle = "hidden"
                     
@@ -18758,6 +18798,9 @@ const Station = (function () {
             }
             
         }
+        
+        // ----
+        console.groupEnd()
     }
     
     return {
@@ -18771,607 +18814,696 @@ const Station = (function () {
             init(settings)
         },
     }
-    
 })()
 
 const Province = (function () {
-    "use strict"
-    
-    const class_name = "form-new-province"
-    const form_id = "form_new_province"
-    
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    
-    const form_rules = {
-        rules: {
-            province_name: {
-                required: true,
-                //minlength: 3,
-            },
-            province_iso2: {
-                //required: true,
-                minlength: 2,
-                maxlength: 2,
-            },
-            province_iso3: {
-                //required: true,
-                minlength: 1,
-                maxlength: 2,
-            },
-        },
-        messages: {
-            province_name: {
-                required: "required",
-                //minlength: "too short",
-            },
-            province_iso2: {
-                //required: "required",
-                minlength: "too short",
-                maxlength: "too long",
-            },
-            province_iso3: {
-                //required: "required",
-                minlength: "too short",
-                maxlength: "too long",
-            },
-        },
-    }
-    
-    const validate_form = function () {
-        let _name = document.getElementById("province_name")
-        let _province_iso2 = document.getElementById("province_iso2")
-        let _province_iso3 = document.getElementById("province_iso3")
-        let valid = true
-        // ----
-        if (!_name || !_province_iso2 || !_province_iso3) {
-            handle_country_error("Error Processing Data")
-            return false
-        }
-        
-        if (_name.value === "") {
-            $(_name).addClass("is-invalid")
-            $("#province_name-error")
-                .text("Required: Field is required")
-                .show()
-            valid = false
-        } else {
-            $(_name).removeClass("is-invalid")
-            $("#province_name-error")
-                .text("")
-                .hide()
-        }
-        
-        if (_province_iso2.value === "") {
-            $(_province_iso2).addClass("is-invalid")
-            $("#province_iso2-error")
-                .text("Required: Field is required")
-                .show()
-            valid = false
-        } else {
-            $(_province_iso2).removeClass("is-invalid")
-            $("#province_iso2-error")
-                .text("")
-                .hide()
-        }
-        
-        if (_province_iso3.value === "") {
-            $(_province_iso3).addClass("is-invalid")
-            $("#province_iso3-error")
-                .text("Required: Field is required")
-                .show()
-            valid = false
-        } else {
-            $(_province_iso3).removeClass("is-invalid")
-            $("#province_iso3-error")
-                .text("")
-                .hide()
-        }
-        
-        return valid
-    }
-    
-    const handle_province_error = function (msg) {
-        toastr.error(msg)
-        //console.log(msg)
-    }
-    
-    const on_click_outside = (e) => {
-        let tar = $(e.target).parents("div." + class_name)
-        
-        if (!tar[0] && !e.target.className.includes("select-add-option")) {
-            Province.close()
-        }
-    }
-    
-    const build_drop_downs = function (settings) {
-        if (settings) {
-            if (settings.dropdowns) {
-                $.each(settings.dropdowns, function (i, dropdown_id) {
-                    let country_id = Country.id
-                    let province_id = Province.id
-                    let element = document.getElementById(dropdown_id)
-                    if (element) {
-                        
-                        $(element)
-                            .select2({
-                                "language": {
-                                    "searching": function () {
-                                    },
-                                },
-                                "escapeMarkup": function (markup) {
-                                    return markup
-                                },
-                            })
-                            .on("select2:open", function (e) {
-                                let x = document.querySelectorAll("[aria-controls='select2-" + dropdown_id + "-results']")
-                                if (x[0]) {
-                                    let _filterProvinceSearch = x[0]
-                                    $(_filterProvinceSearch).attr("id", "" + dropdown_id + "_search")
-                                    if (!document.getElementById("filter_province_add_icon")) {
-                                        let i = document.createElement("i")
-                                        i.classList = "select-add-option fas fa-plus filter_province_add"
-                                        i.id = "filter_province_add_icon"
-                                        i.addEventListener("click", event => {
-                                            let val = _filterProvinceSearch.value
-                                            $(element).select2("close")
-                                            Province.add(this, val, dropdown_id)
-                                        })
-                                        _filterProvinceSearch.after(i)
-                                    }
-                                    $(".filter_province_add").hide()
-                                    if (_filterProvinceSearch) {
-                                        _filterProvinceSearch.addEventListener("keyup", event => {
-                                            if (_filterProvinceSearch.value !== "") {
-                                                $(".filter_province_add").show()
-                                            } else {
-                                                $(".filter_province_add").hide()
-                                            }
-                                        })
-                                    }
-                                }
-                                
-                            })
-                            .on("change", function () {
-                                let city_el_id = $(this)
-                                    .attr("id")
-                                    .replace("province", "city")
-                                
-                                let country_el_id = $(this)
-                                    .attr("id")
-                                    .replace("province", "country")
-                                
-                                let city_element = document.getElementById(city_el_id)
-                                let country_element = document.getElementById(country_el_id)
-                                
-                                if (city_element) {
-                                    if (country_element) {
-                                        country_id = parseInt(country_element.value)
-                                        if (!isNaN(parseInt(country_element.value))) {
-                                            
-                                            //
-                                            
-                                            if (!isNaN(parseInt($(this).val()))) {
-                                                City.get(country_id, parseInt($(this).val()), city_element)
-                                            } else {
-                                                City.id = null
-                                                City.get(country_id, null, city_element)
-                                                if (City.id) {
-                                                
-                                                }
-                                            }
-                                            //
-                                            
-                                        } else {
-                                            City.id = null
-                                            City.get(null, null, city_element)
-                                        }
-                                    }
-                                }
-                                City.id = null
-                                Province.id = null
-                            })
-                        
-                    }
-                })
-            }
-        }
-    }
-    
-    const fetch_province_list = function (dataToSend, callback) {
-        if (dataToSend) {
-            try {
-                
-                //*
-                sendGetRequest("/api/v1.0/provinces", dataToSend, function (data, status, xhr) {
-                    if (data) {
-                        return callback(data)
-                    } else {
-                        return handle_province_error("Oops: 1")
-                    }
-                })
-                //*/
-            } catch (e) {
-                //console.log("error", e)
-                return handle_province_error("Error Validating Province")
-            }
-        } else {
-            return handle_province_error("Error Loading Province- Missing Data")
-        }
-    }
-    
-    const set_detail = function (province) {
-        let detail = clear_detail()
-        let id = null
-        if (province) {
-            id = validInt(province.id)
-            
-            detail = {
-                id: validInt(province.id),
-                name: (province.name) ? province.name : null,
-                sort_order: (province.sort_order) ? province.sort_order : 9999999,
-                country_id: validInt(province.country_id),
-                iso2: (province.iso2) ? province.iso2 : null,
-                iso3: (province.iso3) ? province.iso3 : null,
-                enabled: (province.enabled) ? province.enabled : 1,
-                date_created: (province.date_created) ? province.date_created : formatDateMySQL(),
-                created_by: (province.created_by) ? province.created_by : user_id,
-                date_modified: (province.date_modified) ? province.date_modified : formatDateMySQL(),
-                modified_by: (province.modified_by) ? province.modified_by : user_id,
-                note: (province.note) ? province.note : null,
-            }
-        }
-        Province.id = id
-        Province.detail = detail
-        return detail
-    }
-    
-    const clear_detail = function () {
-        return {
-            id: null,
-            name: null,
-            sort_order: 9999999,
-            iso2: null,
-            iso3: null,
-            enabled: 1,
-            note: null,
-            created_by: user_id,
-            modified_by: user_id,
-            date_created: formatDateMySQL(),
-            date_modified: formatDateMySQL(),
-        }
-    }
-    
-    const build_form = function (elem, val, dropdown_id) {
-        let id = $(elem).attr("id")
-        let parent = $(elem).parents("div.row")
-        let value = ""
-        
-        if (val) {
-            value = val
-        }
-        
-        if (!id || !parent[0]) {
-            return
-        }
-        
-        if (document.getElementById(form_id)) {
-            return
-        }
-        
-        let newProvinceForm = document.createElement("div")
-        
-        let heading1 = document.createElement("h5")
-        
-        let row1 = document.createElement("div")
-        let row2 = document.createElement("div")
-        let col1 = document.createElement("div")
-        let col2 = document.createElement("div")
-        let col3 = document.createElement("div")
-        let col4 = document.createElement("div")
-        let col5 = document.createElement("div")
-        
-        let form_element1 = document.createElement("div")
-        let form_element2 = document.createElement("div")
-        let form_element3 = document.createElement("div")
-        let form_element4 = document.createElement("div")
-        
-        let error_element1 = document.createElement("div")
-        let error_element2 = document.createElement("div")
-        let error_element3 = document.createElement("div")
-        
-        let name_text_element = document.createElement("input")
-        let name_label_element = document.createElement("label")
-        let iso2_text_element = document.createElement("input")
-        let iso2_label_element = document.createElement("label")
-        let iso3_text_element = document.createElement("input")
-        let iso3_label_element = document.createElement("label")
-        
-        let save_button = document.createElement("button")
-        let cancel_button = document.createElement("button")
-        
-        newProvinceForm.id = form_id
-        newProvinceForm.classList = ["card card-body m-3 " + class_name]
-        
-        heading1.classList = "card-title"
-        heading1.innerText = "Province Details"
-        
-        name_text_element.id = "province_name"
-        name_text_element.name = "province_name"
-        name_text_element.type = "text"
-        name_text_element.classList = ["form-control " + class_name]
-        name_label_element.htmlFor = "province_name"
-        name_label_element.innerHTML = "Name:"
-        error_element1.id = "province_name-error"
-        
-        iso2_text_element.id = "province_iso2"
-        iso2_text_element.name = "province_iso2"
-        iso2_text_element.type = "text"
-        iso2_text_element.maxLength = 2
-        iso2_text_element.classList = ["form-control " + class_name]
-        iso2_label_element.htmlFor = "province_iso2"
-        iso2_label_element.innerHTML = "ISO2:"
-        error_element2.id = "province_iso2-error"
-        
-        iso3_text_element.id = "province_iso3"
-        iso3_text_element.name = "province_iso3"
-        iso3_text_element.type = "text"
-        iso3_text_element.maxLength = 3
-        iso3_text_element.classList = ["form-control " + class_name]
-        iso3_label_element.htmlFor = "province_iso3"
-        iso3_label_element.innerHTML = "ISO3:"
-        error_element3.id = "province_iso3-error"
-        
-        save_button.classList = ["btn btn-primary btn-sm waves-effect waves-light"]
-        save_button.innerText = "save"
-        save_button.type = "button"
-        
-        save_button.addEventListener("click", event => {
-            Province.save(elem, dropdown_id)
-        })
-        
-        cancel_button.classList = ["btn btn-outline-danger btn-sm waves-effect waves-light"]
-        cancel_button.innerText = "cancel"
-        cancel_button.type = "button"
-        
-        cancel_button.addEventListener("click", event => {
-            destroy_form()
-        })
-        
-        row1.classList = ["row"]
-        row2.classList = ["row"]
-        
-        col1.classList = ["col-lg-3 mb-1"]
-        col2.classList = ["col-lg-3 mb-1"]
-        col3.classList = ["col-lg-3 mb-1"]
-        col4.classList = ["col-lg-3 mb-1"]
-        
-        col5.classList = ["col-12 mb-1 text-right"]
-        
-        form_element1.classList = ["form-element"]
-        form_element2.classList = ["form-element"]
-        form_element3.classList = ["form-element"]
-        form_element4.classList = ["form-element"]
-        
-        error_element1.classList = ["error w-100 text-center"]
-        error_element2.classList = ["error w-100 text-center"]
-        error_element3.classList = ["error w-100 text-center"]
-        
-        form_element1.appendChild(name_label_element)
-        form_element1.appendChild(name_text_element)
-        form_element1.appendChild(error_element1)
-        
-        col1.appendChild(form_element1)
-        
-        form_element2.appendChild(iso2_label_element)
-        form_element2.appendChild(iso2_text_element)
-        form_element2.appendChild(error_element2)
-        
-        col2.appendChild(form_element2)
-        
-        form_element3.appendChild(iso3_label_element)
-        form_element3.appendChild(iso3_text_element)
-        form_element3.appendChild(error_element3)
-        
-        col3.appendChild(form_element3)
-        
-        row1.appendChild(col1)
-        row1.appendChild(col2)
-        row1.appendChild(col3)
-        row1.appendChild(col4)
-        
-        col5.append(cancel_button)
-        col5.appendChild(save_button)
-        
-        row2.appendChild(col5)
-        
-        newProvinceForm.appendChild(heading1)
-        newProvinceForm.appendChild(row1)
-        newProvinceForm.appendChild(row2)
-        
-        parent[0].appendChild(newProvinceForm)
-        
-        name_text_element.value = value
-        name_text_element.focus({ preventScroll: false })
-        
-        window.addEventListener("click", on_click_outside)
-    }
-    
-    const destroy_form = function () {
-        let elem = document.getElementById(form_id)
-        if (elem) {
-            elem.parentNode.removeChild(elem)
-            window.removeEventListener("click", on_click_outside)
-        }
-    }
-    
-    const set = function (settings) {
-    
-    }
-    
-    const get = function (country_id, el) {
-        Province.all = new Map()
-        if (!el) {
-            return
-        }
-        let province_id = ""
-        if (Province.id !== null) {
-            province_id = Province.id
-        }
-        
-        if (!country_id) {
-            $(el).BuildDropDown({
-                data: Array.from(Province.all.values()),
-                title: "Province",
-                id_field: "id",
-                text_field: "name",
-                first_selectable: false,
-            })
-            $(el).val("").trigger("change")
-            return
-        }
-        
-        let dataToSend = {
-            country_id: country_id,
-        }
-        
-        fetch_province_list(dataToSend, function (provinces) {
-            if (provinces) {
-                load_all(provinces)
-                $(el).BuildDropDown({
-                    data: Array.from(Province.all.values()),
-                    title: "Province",
-                    id_field: "id",
-                    text_field: "name",
-                    first_selectable: false,
-                })
-                $(el).val(province_id).trigger("change")
-                
-            }
-        })
-        
-    }
-    
-    /**
-     * load provinces into object
-     *
-     * @param provinces
-     */
-    const load_all = function (provinces) {
-        Province.all = new Map()
-        
-        if (provinces) {
-            $.each(provinces, function (k, province) {
-                let detail = set_detail(province)
-                Province.all.set(detail.id, detail)
-            })
-        }
-    }
-    
-    const add = function (elem, val, dropdown_id) {
-        if (!elem) {
-            return
-        }
-        
-        build_form(elem, val, dropdown_id)
-    }
-    
-    const save = function ($this, dropdown_id) {
-        let province_detail = {}
-        let _name = document.getElementById("province_name")
-        let _province_iso2 = document.getElementById("province_iso2")
-        let _province_iso3 = document.getElementById("province_iso3")
-        let _country_id = document.getElementById(dropdown_id.replace(/province_id/g, "") + "country_id")
-        if (!isNaN(parseInt(_country_id.value))) {
-            
-            if (_name, _province_iso2, _province_iso3, _country_id) {
-                if (validate_form()) {
-                    province_detail.name = _name.value
-                    province_detail.iso2 = _province_iso2.value
-                    province_detail.iso3 = _province_iso3.value
-                    province_detail.country_id = parseInt(_country_id.value)
-                    
-                    confirmDialog(`Would you like to update?`, (ans) => {
-                        if (ans) {
-                            update_province_record($this, remove_nulls(province_detail))
-                        }
-                    })
-                }
-            }
-            
-        }
-        
-    }
-    
-    const update_province_record = function ($this, dataToSend) {
-        if (dataToSend) {
-            try {
-                sendPostRequest("/api/v1.0/provinces/update", dataToSend, function (data, status, xhr) {
-                    if (data && data[0]) {
-                        let new_province = data[0]
-                        //console.log("new_province", new_province)
-                        Province.all.set(new_province.id, new_province)
-                        let province_elements = $("select[data-type='province']")
-                        Province.id = new_province.id
-                        City.id = null
-                        province_elements.each(function (index, element) {
-                            var newOption = new Option(new_province.name, new_province.id, false, false)
-                            $(element).append(newOption).trigger("change")
-                        })
-                        
-                        $($this).val(new_province.id).trigger("change")
-                        
-                        Province.close()
-                        toastr.success("Province: " + new_province.id + " updated")
-                        
-                    } else {
-                        return handle_province_error("Error: 1")
-                    }
-                })
-            } catch (e) {
-                //console.log("error", e)
-                handle_province_error("Error: Validating Province")
-            }
-        } else {
-            //console.log("Error: Missing Data")
-            handle_province_error("Error: Missing Data")
-        }
-    }
-    
-    const update_select = function (country_id, elem) {
-    
-    }
-    
-    const init = function (settings) {
-        build_drop_downs(settings)
-    }
-    
-    return {
-        detail: {},
-        all: new Map(),
-        id: null,
-        set_detail: function (province) {
-            set_detail(province)
-        },
-        update_select: function (country_id, elem) {
-            update_select(country_id, elem)
-        },
-        close: function () {
-            destroy_form()
-        },
-        save: function (country_id, dropdown_id) {
-            save(country_id, dropdown_id)
-        },
-        get: function (country_id, el) {
-            get(country_id, el)
-        },
-        add: function (elem, val, dropdown_id) {
-            add(elem, val, dropdown_id)
-        },
-        init: function (settings) {
-            init(settings)
-        },
-    }
-    
+	"use strict"
+	
+	const class_name = "form-new-province"
+	const form_id = "form_new_province"
+	
+	let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+	
+	const validate_form = function () {
+		let _name = document.getElementById("province_name")
+		let _province_iso2 = document.getElementById("province_iso2")
+		let _province_iso3 = document.getElementById("province_iso3")
+		let valid = true
+		// ----
+		if (!_name || !_province_iso2 || !_province_iso3) {
+			handle_country_error("Error Processing Data")
+			return false
+		}
+		
+		if (_name.value === "") {
+			$(_name).addClass("is-invalid")
+			$("#province_name-error")
+				.text("Required: Field is required")
+				.show()
+			valid = false
+		} else {
+			$(_name).removeClass("is-invalid")
+			$("#province_name-error")
+				.text("")
+				.hide()
+		}
+		
+		if (_province_iso2.value === "") {
+			$(_province_iso2).addClass("is-invalid")
+			$("#province_iso2-error")
+				.text("Required: Field is required")
+				.show()
+			valid = false
+		} else {
+			$(_province_iso2).removeClass("is-invalid")
+			$("#province_iso2-error")
+				.text("")
+				.hide()
+		}
+		
+		if (_province_iso3.value === "") {
+			$(_province_iso3).addClass("is-invalid")
+			$("#province_iso3-error")
+				.text("Required: Field is required")
+				.show()
+			valid = false
+		} else {
+			$(_province_iso3).removeClass("is-invalid")
+			$("#province_iso3-error")
+				.text("")
+				.hide()
+		}
+		
+		return valid
+	}
+	
+	const handle_province_error = function (msg) {
+		toastr.error(msg)
+		//console.log(msg)
+	}
+	
+	const on_click_outside = (e) => {
+		let tar = $(e.target).parents("div." + class_name)
+		
+		if (!tar[0] && !e.target.className.includes("select-add-option")) {
+			Province.close()
+		}
+	}
+	
+	const build_drop_downs = function (settings) {
+		if (settings) {
+			if (settings.dropdowns) {
+				$.each(settings.dropdowns, function (i, dropdown_id) {
+					let country_id = Country.id
+					let province_id = Province.id
+					let element = document.getElementById(dropdown_id)
+					if (element) {
+						
+						$(element)
+							.select2({
+								"language": {
+									"searching": function () {
+									},
+								},
+								"escapeMarkup": function (markup) {
+									return markup
+								},
+							})
+							.on("select2:open", function (e) {
+								let x = document.querySelectorAll("[aria-controls='select2-" + dropdown_id + "-results']")
+								if (x[0]) {
+									let _filterProvinceSearch = x[0]
+									$(_filterProvinceSearch).attr("id", "" + dropdown_id + "_search")
+									if (!document.getElementById("filter_province_add_icon")) {
+										let i = document.createElement("i")
+										i.classList = "select-add-option fas fa-plus filter_province_add"
+										i.id = "filter_province_add_icon"
+										i.addEventListener("click", event => {
+											let val = _filterProvinceSearch.value
+											$(element).select2("close")
+											Province.add(this, val, dropdown_id)
+										})
+										_filterProvinceSearch.after(i)
+									}
+									$(".filter_province_add").hide()
+									if (_filterProvinceSearch) {
+										_filterProvinceSearch.addEventListener("keyup", event => {
+											if (_filterProvinceSearch.value !== "") {
+												$(".filter_province_add").show()
+											} else {
+												$(".filter_province_add").hide()
+											}
+										})
+									}
+								}
+								
+							})
+							.on("change", function () {
+								let city_el_id = $(this)
+									.attr("id")
+									.replace("province", "city")
+								
+								let country_el_id = $(this)
+									.attr("id")
+									.replace("province", "country")
+								
+								let city_element = document.getElementById(city_el_id)
+								let country_element = document.getElementById(country_el_id)
+								
+								if (city_element) {
+									if (country_element) {
+										country_id = parseInt(country_element.value)
+										if (!isNaN(parseInt(country_element.value))) {
+											
+											//
+											
+											if (!isNaN(parseInt($(this).val()))) {
+												City.get(country_id, parseInt($(this).val()), city_element)
+											} else {
+												City.id = null
+												City.get(country_id, null, city_element)
+												if (City.id) {
+												
+												}
+											}
+											//
+											
+										} else {
+											City.id = null
+											City.get(null, null, city_element)
+										}
+									}
+								}
+								City.id = null
+								Province.id = null
+							})
+						
+					}
+				})
+			}
+		}
+	}
+	
+	const fetch_province_list = function (dataToSend, callback) {
+		
+		if (dataToSend) {
+			try {
+				
+				sendGetRequest("/api/v1.0/provinces", dataToSend, function (data, status, xhr) {
+					if (data) {
+						
+						return callback(data)
+					}
+				})
+				
+			} catch (e) {
+				
+				return handle_province_error("Error Validating Province")
+			}
+		} else {
+			
+			return handle_province_error("Error Loading Province- Missing Data")
+		}
+		
+	}
+	
+	const set_detail = function (province) {
+		console.groupCollapsed("Province.update_select")
+		// ----
+		
+		let detail = clear_detail()
+		let id = null
+		if (province) {
+			id = validInt(province.id)
+			console.log("province", province)
+			detail = {
+				id: validInt(province.id),
+				name: (province.name) ? province.name : null,
+				sort_order: (province.sort_order) ? province.sort_order : 9999999,
+				country_id: validInt(province.country_id),
+				iso2: (province.iso2) ? province.iso2 : null,
+				iso3: (province.iso3) ? province.iso3 : null,
+				enabled: (province.enabled) ? province.enabled : 1,
+				date_created: (province.date_created) ? province.date_created : formatDateMySQL(),
+				created_by: (province.created_by) ? province.created_by : user_id,
+				date_modified: (province.date_modified) ? province.date_modified : formatDateMySQL(),
+				modified_by: (province.modified_by) ? province.modified_by : user_id,
+				note: (province.note) ? province.note : null,
+			}
+		}
+		Province.id = id
+		Province.detail = detail
+		
+		// ----
+		console.groupEnd()
+		return detail
+	}
+	
+	const clear_detail = function () {
+		return {
+			id: null,
+			name: null,
+			sort_order: 9999999,
+			iso2: null,
+			iso3: null,
+			enabled: 1,
+			note: null,
+			created_by: user_id,
+			modified_by: user_id,
+			date_created: formatDateMySQL(),
+			date_modified: formatDateMySQL(),
+		}
+	}
+	
+	const buildForm = function (elem, val, dropdown_id) {
+		console.groupCollapsed("Province.buildForm")
+		// ----
+		
+		let id = $(elem).attr("id")
+		let parent = $(elem).parents("div.row")
+		let value = ""
+		
+		if (val) {
+			value = val
+		}
+		
+		if (!id || !parent[0]) {
+			return
+		}
+		
+		if (document.getElementById(form_id)) {
+			return
+		}
+		
+		// Form
+		let newProvinceForm = document.createElement("div")
+		let newProvinceFormHeading = document.createElement("div")
+		let newProvinceFormBody = document.createElement("div")
+		let newProvinceFormFooter = document.createElement("div")
+		// Heading
+		let heading1 = document.createElement("h5")
+		// Rows
+		let row1 = document.createElement("div")
+		let row2 = document.createElement("div")
+		let row3 = document.createElement("div")
+		let col1 = document.createElement("div")
+		let col2 = document.createElement("div")
+		let col3 = document.createElement("div")
+		let col4 = document.createElement("div")
+		let col5 = document.createElement("div")
+		let col6 = document.createElement("div")
+		// Form Elements
+		let form_element1 = document.createElement("div")
+		let form_element2 = document.createElement("div")
+		let form_element3 = document.createElement("div")
+		let form_element4 = document.createElement("div")
+		
+		let error_element1 = document.createElement("div")
+		let error_element2 = document.createElement("div")
+		let error_element3 = document.createElement("div")
+		
+		let name_text_element = document.createElement("input")
+		let name_label_element = document.createElement("label")
+		let iso2_text_element = document.createElement("input")
+		let iso2_label_element = document.createElement("label")
+		let iso3_text_element = document.createElement("input")
+		let iso3_label_element = document.createElement("label")
+		
+		let save_button = document.createElement("button")
+		let cancel_button = document.createElement("button")
+		
+		newProvinceForm.id = form_id
+		
+		newProvinceForm.classList.add("card")
+		newProvinceForm.classList.add("w-100")
+		newProvinceForm.classList.add("m-2")
+		newProvinceForm.classList.add(class_name)
+		
+		newProvinceFormHeading.classList.add("card-heading")
+		newProvinceFormHeading.classList.add("p-1")
+		
+		newProvinceFormBody.classList.add("card-body")
+		newProvinceFormBody.classList.add("p-1")
+		
+		newProvinceFormFooter.classList.add("card-footer")
+		newProvinceFormFooter.classList.add("p-1")
+		
+		heading1.classList.add("card-title")
+		heading1.innerText = "Province Details"
+		
+		name_text_element.id = "province_name"
+		name_text_element.name = "province_name"
+		name_text_element.type = "text"
+		name_text_element.classList.add("form-control")
+		name_text_element.classList.add(class_name)
+		
+		name_label_element.htmlFor = "province_name"
+		name_label_element.innerHTML = "Name:"
+		error_element1.id = "province_name-error"
+		
+		iso2_text_element.id = "province_iso2"
+		iso2_text_element.name = "province_iso2"
+		iso2_text_element.type = "text"
+		iso2_text_element.maxLength = 2
+		iso2_text_element.classList.add("form-control")
+		iso2_text_element.classList.add(class_name)
+		
+		iso2_label_element.htmlFor = "province_iso2"
+		iso2_label_element.innerHTML = "ISO2:"
+		error_element2.id = "province_iso2-error"
+		
+		iso3_text_element.id = "province_iso3"
+		iso3_text_element.name = "province_iso3"
+		iso3_text_element.type = "text"
+		iso3_text_element.maxLength = 3
+		iso3_text_element.classList.add("form-control")
+		iso3_text_element.classList.add(class_name)
+		iso3_label_element.htmlFor = "province_iso3"
+		iso3_label_element.innerHTML = "ISO3:"
+		error_element3.id = "province_iso3-error"
+		
+		save_button.classList.add("btn")
+		save_button.classList.add("btn-primary")
+		save_button.classList.add("btn-sm")
+		save_button.classList.add("waves-effect")
+		save_button.classList.add("waves-light")
+		save_button.innerText = "save"
+		save_button.type = "button"
+		
+		save_button.addEventListener("click", event => {
+			Province.save(elem, dropdown_id)
+		})
+		
+		cancel_button.classList.add("btn")
+		cancel_button.classList.add("btn-outline-danger")
+		cancel_button.classList.add("btn-sm")
+		cancel_button.classList.add("waves-effect")
+		cancel_button.classList.add("waves-light")
+		cancel_button.innerText = "cancel"
+		cancel_button.type = "button"
+		
+		cancel_button.addEventListener("click", event => {
+			destroy_form()
+		})
+		
+		row1.classList.add("row")
+		row1.classList.add("mx-1")
+		
+		row2.classList.add("row")
+		row2.classList.add("mx-1")
+		
+		row3.classList.add("row")
+		row3.classList.add("mx-1")
+		
+		col1.classList.add("col-4")
+		col1.classList.add("col-md-4")
+		col1.classList.add("col-lg-4")
+		col1.classList.add("col-xl-4")
+		col1.classList.add("mb-1")
+		col1.classList.add("p-1")
+		
+		col2.classList.add("col-4")
+		col2.classList.add("col-md-4")
+		col2.classList.add("col-lg-4")
+		col2.classList.add("col-xl-4")
+		col2.classList.add("mb-1")
+		col2.classList.add("p-1")
+		
+		col3.classList.add("col-4")
+		col3.classList.add("col-md-4")
+		col3.classList.add("col-lg-4")
+		col3.classList.add("col-xl-4")
+		col3.classList.add("mb-1")
+		col3.classList.add("p-1")
+		
+		col4.classList.add("col-lg-3")
+		col4.classList.add("mb-1")
+		col4.classList.add("p-1")
+		
+		col5.classList.add("col-12")
+		col5.classList.add("mb-1")
+		col5.classList.add("text-right")
+		col5.classList.add("p-1")
+		
+		col6.classList.add("col-12")
+		col6.classList.add("mb-1")
+		col6.classList.add("p-1")
+		
+		let blurbWrapper = document.createElement("section")
+		let blurbTitleWrapper = document.createElement("div")
+		let blurbTitleHeading = document.createElement("h5")
+		let blurbTitleAction = document.createElement("a")
+		let blurbRow = document.createElement("div")
+		let blurbCol = document.createElement("div")
+		let blurbInputWrapper = document.createElement("div")
+		let blurbInput = document.createElement("textarea")
+		let blurbInputError = document.createElement("div")
+		
+		blurbWrapper.classList.add("card")
+		blurbWrapper.classList.add("card-body")
+		blurbWrapper.classList.add("border")
+		blurbWrapper.classList.add("border-medium")
+		blurbWrapper.classList.add("z-depth-0")
+		blurbWrapper.classList.add("rounded-lg")
+		blurbWrapper.classList.add("p-0")
+		blurbWrapper.classList.add("mb-2")
+		
+		form_element1.classList.add("form-element")
+		form_element2.classList.add("form-element")
+		form_element3.classList.add("form-element")
+		form_element4.classList.add("form-element")
+		
+		error_element1.classList.add("error")
+		error_element1.classList.add("w-100")
+		error_element1.classList.add("text-center")
+		
+		error_element2.classList.add("error")
+		error_element2.classList.add("w-100")
+		error_element2.classList.add("text-center")
+		
+		error_element3.classList.add("error")
+		error_element3.classList.add("w-100")
+		error_element3.classList.add("text-center")
+		
+		form_element1.appendChild(name_label_element)
+		form_element1.appendChild(name_text_element)
+		form_element1.appendChild(error_element1)
+		
+		col1.appendChild(form_element1)
+		
+		form_element2.appendChild(iso2_label_element)
+		form_element2.appendChild(iso2_text_element)
+		form_element2.appendChild(error_element2)
+		
+		col2.appendChild(form_element2)
+		
+		form_element3.appendChild(iso3_label_element)
+		form_element3.appendChild(iso3_text_element)
+		form_element3.appendChild(error_element3)
+		
+		col3.appendChild(form_element3)
+		
+		row1.appendChild(col1)
+		row1.appendChild(col2)
+		row1.appendChild(col3)
+		
+		col5.append(cancel_button)
+		col5.appendChild(save_button)
+		
+		col6.appendChild(blurbWrapper)
+		row2.appendChild(col5)
+		
+		row3.appendChild(col6)
+		
+		newProvinceFormHeading.appendChild(heading1)
+		newProvinceFormBody.appendChild(row1)
+		newProvinceFormBody.appendChild(row3)
+		newProvinceFormFooter.appendChild(row2)
+		
+		newProvinceForm.appendChild(newProvinceFormHeading)
+		newProvinceForm.appendChild(newProvinceFormBody)
+		newProvinceForm.appendChild(newProvinceFormFooter)
+		
+		parent[0].appendChild(newProvinceForm)
+		
+		name_text_element.value = value
+		name_text_element.focus({ preventScroll: false })
+		
+		window.addEventListener("click", on_click_outside)
+		
+		// ----
+		console.groupEnd()
+	}
+	
+	const destroy_form = function () {
+		let elem = document.getElementById(form_id)
+		if (elem) {
+			elem.parentNode.removeChild(elem)
+			window.removeEventListener("click", on_click_outside)
+		}
+	}
+	
+	const get = function (country_id, el) {
+		Province.all = new Map()
+		if (!el) {
+			return
+		}
+		let province_id = ""
+		if (Province.id !== null) {
+			province_id = Province.id
+		}
+		
+		if (!country_id) {
+			$(el).BuildDropDown({
+				data: Array.from(Province.all.values()),
+				title: "Province",
+				id_field: "id",
+				text_field: "name",
+				first_selectable: false,
+			})
+			$(el).val("").trigger("change")
+			return
+		}
+		
+		let dataToSend = {
+			country_id: country_id,
+		}
+		
+		fetch_province_list(dataToSend, function (provinces) {
+			if (provinces) {
+				loadAll(provinces)
+				$(el).BuildDropDown({
+					data: Array.from(Province.all.values()),
+					title: "Province",
+					id_field: "id",
+					text_field: "name",
+					first_selectable: false,
+				})
+				$(el).val(province_id).trigger("change")
+				
+			}
+		})
+		
+	}
+	
+	const loadAll = function (provinces) {
+		console.groupCollapsed("Province.loadAll")
+		// ----
+		
+		Province.all = new Map()
+		
+		if (provinces) {
+			$.each(provinces, function (k, province) {
+				let detail = set_detail(province)
+				console.log("province", province)
+				console.log("detail", detail)
+				Province.all.set(detail.id, detail)
+			})
+		}
+		
+		// ----
+		console.groupEnd()
+	}
+	
+	const add = function (elem, val, dropdown_id) {
+		if (!elem) {
+			return
+		}
+		
+		buildForm(elem, val, dropdown_id)
+	}
+	
+	const save = function ($this, dropdown_id) {
+		let province_detail = {}
+		let _name = document.getElementById("province_name")
+		let _province_iso2 = document.getElementById("province_iso2")
+		let _province_iso3 = document.getElementById("province_iso3")
+		let _country_id = document.getElementById(dropdown_id.replace(/province_id/g, "") + "country_id")
+		if (!isNaN(parseInt(_country_id.value))) {
+			
+			if (_name && _province_iso2 && _province_iso3 && _country_id) {
+				if (validate_form()) {
+					province_detail.name = _name.value
+					province_detail.iso2 = _province_iso2.value
+					province_detail.iso3 = _province_iso3.value
+					province_detail.country_id = parseInt(_country_id.value)
+					
+					confirmDialog(`Would you like to update?`, (ans) => {
+						if (ans) {
+							update_province_record($this, remove_nulls(province_detail))
+						}
+					})
+				}
+			}
+			
+		}
+		
+	}
+	
+	const update_province_record = function ($this, dataToSend) {
+		if (dataToSend) {
+			try {
+				sendPostRequest("/api/v1.0/provinces/update", dataToSend, function (data, status, xhr) {
+					if (data && data[0]) {
+						let new_province = data[0]
+						let province_elements = $("select[data-type='province']")
+						
+						Province.all.set(new_province.id, new_province)
+						Province.id = new_province.id
+						City.id = null
+						
+						province_elements.each(function (index, element) {
+							let newOption = new Option(new_province.name, new_province.id, false, false)
+							$(element).append(newOption).trigger("change")
+						})
+						
+						$($this).val(new_province.id).trigger("change")
+						
+						Province.close()
+						toastr.success("Province: " + new_province.id + " updated")
+						
+					} else {
+						return handle_province_error("Error: 1")
+					}
+				})
+			} catch (e) {
+				//console.log("error", e)
+				handle_province_error("Error: Validating Province")
+			}
+		} else {
+			//console.log("Error: Missing Data")
+			handle_province_error("Error: Missing Data")
+		}
+	}
+	
+	const update_select = function (country_id, elem) {
+		console.groupCollapsed("Province.update_select")
+		// ----
+		
+		// ----
+		console.groupEnd()
+	}
+	
+	const init = function (settings) {
+		console.groupCollapsed("Province.init")
+		// ----
+		
+		build_drop_downs(settings)
+		
+		// ----
+		console.groupEnd()
+	}
+	
+	return {
+		detail: {},
+		all: new Map(),
+		id: null,
+		set_detail: function (province) {
+			set_detail(province)
+		},
+		update_select: function (country_id, elem) {
+			//update_select(country_id, elem)
+		},
+		close: function () {
+			destroy_form()
+		},
+		save: function (country_id, dropdown_id) {
+			save(country_id, dropdown_id)
+		},
+		get: function (country_id, el) {
+			get(country_id, el)
+		},
+		add: function (elem, val, dropdown_id) {
+			add(elem, val, dropdown_id)
+		},
+		init: function (settings) {
+			init(settings)
+		},
+		loadAll: function (provinces) {
+			loadAll(provinces)
+		},
+	}
+	
 })()
 
 const Country = (function () {
@@ -21424,8 +21556,6 @@ const Location = (function () {
 const Variant = (function () {
     "use strict"
     
-    // ----
-    
     const _button_remove_variant_from_product = document.getElementById("button_remove_variant_from_product")
     const _product_edit_variant_section = document.getElementById("product_edit_variant_section")
     const _panel_tab_variant = document.getElementById("panel_tab_variant")
@@ -21448,9 +21578,7 @@ const Variant = (function () {
     const _table_variant_product_edit_add_new_button = document.getElementById("table_variant_product_edit_add_new_button")
     const _product_edit_variant_display = document.getElementById("product_edit_variant_display")
     
-    // ----
-    
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $table_variant_product_edit = $(_table_variant_product_edit)
     let globalSelectedVariant = false
     let form_rules = {
@@ -21482,8 +21610,6 @@ const Variant = (function () {
         },
     }
     
-    // ----
-    
     $(_button_remove_variant_from_product)
         .on("click", function () {
             remove()
@@ -21496,7 +21622,7 @@ const Variant = (function () {
     
     $(_table_variant_product_edit_add_new_button)
         .on("click", function () {
-            console.group("table_variant_product_edit_add_new_button:click")
+            console.groupCollapsed("table_variant_product_edit_add_new_button:click")
             // ----
             
             $table_variant_product_edit.clearSelectedRows()
@@ -21510,21 +21636,31 @@ const Variant = (function () {
     
     $(_product_edit_variant_form_clear_button)
         .on("click", function () {
-            //console.log("Variant.product_edit_variant_form_clear_button:click()", this)
+            console.groupCollapsed("product_edit_variant_form_clear_button:click")
             // ----
+            
             resetForm()
             $table_variant_product_edit.clearSelectedRows()
+            
+            // ----
+            console.groupEnd()
         })
     
     $(_product_edit_variant_form_close_button)
         .on("click", function () {
+            console.groupCollapsed("product_edit_variant_form_close_button:click")
+            // ----
+            
             resetForm()
             $table_variant_product_edit.clearSelectedRows()
+            
+            // ----
+            console.groupEnd()
         })
     
     $(_product_edit_variant_form_submit_button)
         .on("click", function () {
-            //console.log("Variant.product_edit_variant_form_submit_button:click()", this)
+            console.groupCollapsed("Variant.product_edit_variant_form_submit_button:click()", this)
             // ----
             save()
         })
@@ -21537,10 +21673,10 @@ const Variant = (function () {
             _product_edit_variant_form_variant_name_filter.disabled = false
         })
     
-    // ----
-    
     const clearProductOverview = function (variant) {
-        //console.log("Variant.clearProductOverview(variant)", variant)
+        console.groupCollapsed("Variant.clearProductOverview")
+        // ----
+        
         let color_scheme, product_unit_detail
         
         if (!variant) {
@@ -21554,13 +21690,15 @@ const Variant = (function () {
             $(`#product_edit_variant_display_${variantId}`).remove()
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const buildProductOverview = function (variant) {
-        //console.log("Variant.buildProductOverview(variant)", variant)
+        console.groupCollapsed("Variant.buildProductOverview")
+        // ----
         
         if (!variant) {
-            //console.log("|__ variant", variant)
+            //console.log("variant", variant)
             return
         }
         
@@ -21603,9 +21741,14 @@ const Variant = (function () {
                 </div>
             </div>
         `)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const remove = function () {
+        console.groupCollapsed("Variant.remove")
+        // ----
+        
         confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
             if (ans) {
                 let dataToSend = {
@@ -21642,9 +21785,14 @@ const Variant = (function () {
                 _product_edit_variant_form_variant_name_filter.disabled = false
             }
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const removeProductVariant = function (dataToSend, callback) {
+        console.groupCollapsed("Variant.removeProductVariant")
+        // ----
+        
         if (dataToSend) {
             let url = "/api/v1.0/variants/remove"
             try {
@@ -21659,9 +21807,14 @@ const Variant = (function () {
                 //console.log("error", e)
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const updateProgress = function () {
+        console.groupCollapsed("Variant.updateProgress")
+        // ----
+        
         let variants = Array.from(Variant.all.values())
         
         if (variants.length === 0) {
@@ -21677,9 +21830,14 @@ const Variant = (function () {
         }
         
         Product.updateProgress()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const initAutoComplete = function () {
+        console.groupCollapsed("Variant.initAutoComplete")
+        // ----
+        
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         $(_product_edit_variant_form_variant_name_filter)
@@ -21739,13 +21897,35 @@ const Variant = (function () {
                     _product_edit_variant_form_variant_name.disabled = true
                 },
             })
+        
+        // ----
+        console.groupEnd()
     }
-    
-    const handleVariantError = function (msg) {
-        toastr["error"](msg, "Variant Error")
+    const handleVariantError = function (msg, title, level) {
+        console.groupCollapsed("Variant.handleVariantError")
+        // ----
+        
+        if (!msg) {
+            msg = "Variant Error"
+        }
+        
+        if (!title) {
+            title = "Variant"
+        }
+        
+        if (!level) {
+            level = "error"
+        }
+        
+        toastr[level](`${msg}`, title)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const fetchByName = function (dataToSend, callback) {
+        console.groupCollapsed("Variant.fetchByName")
+        // ----
+        
         let url = "/api/v1.0/variants/validate"
         
         if (dataToSend) {
@@ -21764,9 +21944,14 @@ const Variant = (function () {
         } else {
             handleVariantError("Error Loading Variant - Missing Data")
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const nameExists = function (name) {
+        console.groupCollapsed("Variant.nameExists")
+        // ----
+        
         if (name && name !== "") {
             
             let dataToSend = remove_nulls({
@@ -21834,9 +22019,14 @@ const Variant = (function () {
                 }
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildProductEditTable = function () {
+        console.groupCollapsed("Variant.buildProductEditTable")
+        // ----
+        
         $table_variant_product_edit = $(_table_variant_product_edit).table({
             table_type: "display_list",
             data: Variant.all,
@@ -21877,10 +22067,15 @@ const Variant = (function () {
             ],
             rowClick: Variant.edit,
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const defaultDetail = function () {
-        return {
+        console.groupCollapsed("Variant.defaultDetail")
+        // ----
+        
+        let details = {
             id: null,
             category_id: null,
             name: null,
@@ -21888,21 +22083,32 @@ const Variant = (function () {
             max_age: null,
             enabled: 1,
             date_created: formatDateMySQL(),
-            created_by: user_id,
+            created_by: userId,
             date_modified: formatDateMySQL(),
-            modified_by: user_id,
+            modified_by: userId,
             used_in_pricing: 1,
             note: null,
         }
+        
+        // ----
+        console.groupEnd()
+        return details
     }
-    
     const resetForm = function () {
+        console.groupCollapsed("Variant.resetForm")
+        // ----
+        
         clearForm()
         disableFormFields()
         hideForm()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const validVariantRecord = function () {
+        console.groupCollapsed("Variant.validVariantRecord")
+        // ----
+        
         let valid = $(_product_edit_variant_form).valid()
         let min_age = (!isNaN(parseInt(_product_edit_variant_form_variant_min_age.value))) ? parseInt(_product_edit_variant_form_variant_min_age.value) : null
         let max_age = (!isNaN(parseInt(_product_edit_variant_form_variant_max_age.value))) ? parseInt(_product_edit_variant_form_variant_max_age.value) : null
@@ -21914,10 +22120,14 @@ const Variant = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
         return valid
     }
-    
     const clearForm = function () {
+        console.groupCollapsed("Variant.clearForm")
+        // ----
+        
         clearValidation(_product_edit_variant_form)
         
         _display_product_variant_name.innerText = "&nbsp;"
@@ -21928,9 +22138,14 @@ const Variant = (function () {
         _product_edit_variant_form_variant_min_age.value = 0
         _product_edit_variant_form_variant_max_age.value = ""
         _product_edit_variant_form_variant_used_in_pricing.checked = true
+        
+        // ----
+        console.groupEnd()
     }
-    
     const populateForm = function (variant) {
+        console.groupCollapsed("Variant.populateForm")
+        // ----
+        
         clearForm()
         
         if (variant) {
@@ -21946,23 +22161,38 @@ const Variant = (function () {
         
         enableFormFields()
         loadForm()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const hideForm = function () {
+        console.groupCollapsed("Variant.hideForm")
+        // ----
+        
         updateProgress()
         _product_edit_variant_form_variant_name_filter.disabled = false
         _product_edit_variant_form_variant_name_filter.value = ""
         
         $(_product_edit_variant_form).hide()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const loadForm = function () {
+        console.groupCollapsed("Variant.loadForm")
+        // ----
+        
         _product_edit_variant_form_variant_name_filter.disabled = true
         
         $(_product_edit_variant_form).show()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const enableFormFields = function () {
+        console.groupCollapsed("Variant.enableFormFields")
+        // ----
+        
         _product_edit_variant_form_variant_used_in_pricing.disabled = false
         _product_edit_variant_form_variant_id.disabled = true
         _product_edit_variant_form_variant_name.disabled = true
@@ -21971,9 +22201,14 @@ const Variant = (function () {
         _product_edit_variant_form_variant_min_age.disabled = false
         _product_edit_variant_form_variant_max_age.disabled = false
         _product_edit_variant_form_submit_button.disabled = false
+        
+        // ----
+        console.groupEnd()
     }
-    
     const disableFormFields = function () {
+        console.groupCollapsed("Variant.disableFormFields")
+        // ----
+        
         _product_edit_variant_form_variant_used_in_pricing.disabled = true
         _product_edit_variant_form_variant_id.disabled = true
         _product_edit_variant_form_variant_name.disabled = true
@@ -21982,9 +22217,14 @@ const Variant = (function () {
         _product_edit_variant_form_variant_min_age.disabled = true
         _product_edit_variant_form_variant_max_age.disabled = true
         _product_edit_variant_form_submit_button.disabled = true
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildVariantRecord = function () {
+        console.groupCollapsed("Variant.buildVariantRecord")
+        // ----
+        
         let dataToSend = {
             id: (!isNaN(parseInt(_product_edit_variant_form_variant_id.value))) ? parseInt(_product_edit_variant_form_variant_id.value) : null,
             category_id: (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null,
@@ -21995,10 +22235,15 @@ const Variant = (function () {
             max_age: (!isNaN(parseInt(_product_edit_variant_form_variant_max_age.value))) ? parseInt(_product_edit_variant_form_variant_max_age.value) : null,
             used_in_pricing: (_product_edit_variant_form_variant_used_in_pricing.checked === true) ? 1 : 0,
         }
+        
+        // ----
+        console.groupEnd()
         return remove_nulls(dataToSend)
     }
-    
     const saveProductVariant = function (dataToSend, callback) {
+        console.groupCollapsed("Variant.saveProductVariant")
+        // ----
+        
         if (dataToSend) {
             let url = "/api/v1.0/variants/update"
             try {
@@ -22013,9 +22258,14 @@ const Variant = (function () {
                 //console.log("error", e)
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const save = function () {
+        console.groupCollapsed("Variant.save")
+        // ----
+        
         if (validVariantRecord()) {
             confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
                 if (ans) {
@@ -22060,10 +22310,14 @@ const Variant = (function () {
                 }
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const loadAll = function (variants) {
-        //console.log("Variant.loadAll(variants)", variants)
+        console.groupCollapsed("Variant.loadAll")
+        // ----
+        
         Variant.all = new Map()
         
         if (variants) {
@@ -22077,13 +22331,17 @@ const Variant = (function () {
                 buildProductOverview(detail)
             })
         }
-    }
-    
-    const init = function (settings) {
-        //console.log("Variant.init(settings)", Variant)
+        
         // ----
+        console.groupEnd()
+    }
+    const init = function (settings) {
+        console.groupCollapsed("Variant.init")
+        // ----
+        
         let variants = []
         if (settings) {
+            console.log("settings", settings)
             if (settings) {
                 variants = settings
             }
@@ -22105,19 +22363,26 @@ const Variant = (function () {
             resetForm()
             updateProgress()
         }
-    }
-    
-    const edit = function (variant) {
-        //console.log("Variant.edit(variant)", variant)
+        
         // ----
+        console.groupEnd()
+    }
+    const edit = function (variant) {
+        console.groupCollapsed("Variant.edit")
+        // ----
+        
         if (variant) {
             let detail = set(variant)
             populateForm(detail)
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const set = function (variant) {
+        console.groupCollapsed("Variant.set")
+        // ----
+        
         let detail = defaultDetail()
         if (variant) {
             detail.id = (variant.id) ? variant.id : null
@@ -22128,18 +22393,19 @@ const Variant = (function () {
             detail.max_age = (variant.max_age) ? variant.max_age : null
             detail.enabled = (variant.enabled) ? variant.enabled : 1
             detail.date_created = (variant.date_created) ? variant.date_created : formatDateMySQL()
-            detail.created_by = (variant.created_by) ? variant.created_by : user_id
+            detail.created_by = (variant.created_by) ? variant.created_by : userId
             detail.date_modified = (variant.date_modified) ? variant.date_modified : formatDateMySQL()
-            detail.modified_by = (variant.modified_by) ? variant.modified_by : user_id
+            detail.modified_by = (variant.modified_by) ? variant.modified_by : userId
             detail.used_in_pricing = (variant.used_in_pricing === 1) ? 1 : 0
             detail.note = (variant.note) ? variant.note : null
         }
         
         Product.detail = detail
+        
+        // ----
+        console.groupEnd()
         return detail
     }
-    
-    // ----
     
     return {
         validator: null,
@@ -22187,8 +22453,6 @@ const Unit = (function () {
     const _product_edit_unit_display = document.getElementById("product_edit_unit_display")
     const _product_edit_unit_images = document.getElementById("unit_images")
     
-    // ----
-    
     let counter = 1
     let $unit_keywords, $unit_amenities
     let tabLabel = "Unit"
@@ -22199,7 +22463,7 @@ const Unit = (function () {
     let maxPaxDefaultValue = null
     let minPaxDefaultValue = 1
     let currentUnit = null
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let $table_unit_product_edit = $(_table_unit_product_edit)
     let category_id
     let globalSelectedUnit = false
@@ -22251,8 +22515,6 @@ const Unit = (function () {
         },
     }
     
-    // ----
-    
     $(_button_remove_unit_from_product)
         .on("click", function () {
             remove()
@@ -22298,12 +22560,12 @@ const Unit = (function () {
             resetForm()
             $table_unit_product_edit.clearSelectedRows()
             disableFormFields()
+            enableFormFields()
+            loadForm()
             _product_edit_unit_form_unit_name_filter.value = ""
             _product_edit_unit_form_unit_name.value = ""
             _product_edit_unit_form_unit_name.disabled = false
-            enableFormFields()
-            loadForm()
-            _product_edit_unit_form_unit_name_filter.disabled = false
+            _product_edit_unit_form_unit_name_filter.disabled = true
         })
     
     $(_panel_tab_unit)
@@ -22315,9 +22577,10 @@ const Unit = (function () {
             _product_edit_unit_form_unit_name.disabled = true
         })
     
-    // ----
-    
     const removeProductUnit = function (dataToSend, callback) {
+        console.groupCollapsed("Unit.removeProductUnit")
+        // ----
+        
         if (dataToSend) {
             let url = "/api/v1.0/units/remove"
             try {
@@ -22332,9 +22595,14 @@ const Unit = (function () {
                 //console.log("error", e)
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const remove = function () {
+        console.groupCollapsed("Unit.remove")
+        // ----
+        
         confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
             if (ans) {
                 let dataToSend = {
@@ -22375,9 +22643,14 @@ const Unit = (function () {
                 })
             }
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const updateProgress = function () {
+        console.groupCollapsed("Unit.updateProgress")
+        // ----
+        
         let units = Array.from(Unit.all.values())
         
         if (units.length === 0) {
@@ -22387,9 +22660,14 @@ const Unit = (function () {
         }
         
         Product.updateProgress()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const initAutoComplete = function () {
+        console.groupCollapsed("Unit.initAutoComplete")
+        // ----
+        
         category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         $(_product_edit_unit_form_unit_name_filter)
@@ -22440,19 +22718,30 @@ const Unit = (function () {
                     if (hasUnit) {
                         detail = set(hasUnit)
                         $table_unit_product_edit.loadRow(detail)
+                        populateForm(detail)
+                        _product_edit_unit_form_unit_name_filter.disabled = true
+                        _button_remove_unit_from_product.disabled = false
+                        $(_button_remove_unit_from_product).removeClass("disabled")
+                        _product_edit_unit_form_unit_name.disabled = true
                     } else {
                         detail = set(unit)
+                        populateForm(detail)
+                        _product_edit_unit_form_unit_name_filter.disabled = true
+                        _button_remove_unit_from_product.disabled = true
+                        $(_button_remove_unit_from_product).addClass("disabled")
+                        _product_edit_unit_form_unit_name.disabled = true
                     }
-                    
-                    populateForm(detail)
-                    _product_edit_unit_form_unit_name_filter.disabled = true
                     
                 },
             })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const nameExists = function (name) {
-        //console.log("Unit.nameExists(unit_name)", name)
+        console.groupCollapsed("Unit.nameExists")
+        // ----
+        
         if (name && name !== "") {
             /**
              * data to send to the server
@@ -22537,13 +22826,35 @@ const Unit = (function () {
                 }
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
-    const handleUnitError = function (msg) {
-        toastr["error"](`${msg}`, "Unit")
+    const handleUnitError = function (msg, title, level) {
+        console.groupCollapsed("Unit.handleUnitError")
+        // ----
+        
+        if (!msg) {
+            msg = "Unit Error"
+        }
+        
+        if (!title) {
+            title = "Unit"
+        }
+        
+        if (!level) {
+            level = "error"
+        }
+        
+        toastr[level](`${msg}`, title)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const fetchByName = function (dataToSend, callback) {
+        console.groupCollapsed("Unit.fetchByName")
+        // ----
+        
         let url = "/api/v1.0/units/validate"
         
         if (dataToSend) {
@@ -22562,15 +22873,20 @@ const Unit = (function () {
         } else {
             handleUnitError("Error Loading Unit - Missing Data")
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const defaultDetail = function () {
+        console.groupCollapsed("Unit.defaultDetail")
+        // ----
+        
         return {
             api_id: null,
             blurb: null,
             category_id: 1,
             cover_image: "/public/img/unit_cover_placeholder.jpg",
-            created_by: user_id,
+            created_by: userId,
             date_created: formatDateMySQL(),
             date_modified: formatDateMySQL(),
             description_long: null,
@@ -22583,7 +22899,7 @@ const Unit = (function () {
             meeting_point: null,
             min_nights: 1,
             min_pax: 1,
-            modified_by: user_id,
+            modified_by: userId,
             name: null,
             note: null,
             room_code: null,
@@ -22593,9 +22909,14 @@ const Unit = (function () {
             amenities: [],
             images: [],
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const set = function (unit) {
+        console.groupCollapsed("Unit.set")
+        // ----
+        
         let detail = defaultDetail()
         
         if (unit) {
@@ -22603,7 +22924,7 @@ const Unit = (function () {
             detail.blurb = (unit.blurb) ? unit.blurb : null
             detail.category_id = (unit.category_id) ? unit.category_id : null
             detail.cover_image = (unit.cover_image) ? unit.cover_image : "/public/img/unit_cover_placeholder.jpg"
-            detail.created_by = (unit.created_by) ? unit.created_by : user_id
+            detail.created_by = (unit.created_by) ? unit.created_by : userId
             detail.date_created = (unit.date_created) ? unit.date_created : formatDateMySQL()
             detail.date_modified = (unit.date_modified) ? unit.date_modified : formatDateMySQL()
             detail.description_long = (unit.description_long) ? unit.description_long : null
@@ -22616,7 +22937,7 @@ const Unit = (function () {
             detail.meeting_point = (unit.meeting_point) ? unit.meeting_point : null
             detail.min_nights = (unit.min_nights) ? unit.min_nights : 1
             detail.min_pax = (unit.min_pax) ? unit.min_pax : 1
-            detail.modified_by = (unit.modified_by) ? unit.modified_by : user_id
+            detail.modified_by = (unit.modified_by) ? unit.modified_by : userId
             detail.name = (unit.name) ? unit.name : null
             detail.note = (unit.note) ? unit.note : null
             detail.room_code = (unit.room_code) ? unit.room_code : null
@@ -22627,11 +22948,14 @@ const Unit = (function () {
             detail.images = (unit.images) ? unit.images : []
         }
         
+        // ----
+        console.groupEnd()
         return detail
     }
-    
     const clearProductOverview = function (unit) {
-        //console.log("Unit.clearProductOverview(unit)", unit)
+        console.groupCollapsed("Unit.clearProductOverview")
+        // ----
+        
         let color_scheme, product_unit_detail
         
         if (!unit) {
@@ -22645,16 +22969,19 @@ const Unit = (function () {
             $(`#product_edit_unit_display_${unitId}`).remove()
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const buildProductOverview = function (unit) {
-        //console.log("Unit.buildProductOverview(unit)", unit)
+        console.groupCollapsed("Unit.buildProductOverview")
+        // ----
+        
         let color_scheme, product_unit_detail
         
         if (!unit) {
-            //console.log("|__ unit", unit)
-            //console.log("|__ color_scheme", season.color_scheme)
-            //console.log("|__ product_season_detail", season.product_season_detail)
+            //console.log("unit", unit)
+            //console.log("color_scheme", season.color_scheme)
+            //console.log("product_season_detail", season.product_season_detail)
             return
         }
         
@@ -22727,10 +23054,12 @@ const Unit = (function () {
                 </div>
             </div>
         `)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const validUnitRecord = function () {
-        console.group("validUnitRecord")
+        console.groupCollapsed("Unit.validUnitRecord")
         // ----
         
         //let valid = $(_product_edit_unit_form).valid()
@@ -22766,9 +23095,10 @@ const Unit = (function () {
         console.groupEnd()
         return valid
     }
-    
     const buildUnitRecord = function () {
-        //console.log("Unit.buildUnitRecord()", Unit)
+        console.groupCollapsed("Unit.buildUnitRecord")
+        // ----
+        
         let dataToSend = {
             id: (!isNaN(parseInt(_product_edit_unit_form_unit_id.value))) ? parseInt(_product_edit_unit_form_unit_id.value) : null,
             product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
@@ -22793,10 +23123,14 @@ const Unit = (function () {
             amenities: $unit_amenities.build(),
         }
         
+        // ----
+        console.groupEnd()
         return remove_nulls(dataToSend)
     }
-    
     const save = function () {
+        console.groupCollapsed("Unit.save")
+        // ----
+        
         if (validUnitRecord()) {
             confirmDialog(`Would you like to update? This change may affect your Pricing Worksheets.`, (ans) => {
                 if (ans) {
@@ -22835,9 +23169,14 @@ const Unit = (function () {
                 }
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const saveProductUnit = function (dataToSend, callback) {
+        console.groupCollapsed("Unit.saveProductUnit")
+        // ----
+        
         if (dataToSend) {
             let url = "/api/v1.0/units/update"
             try {
@@ -22851,9 +23190,14 @@ const Unit = (function () {
                 return handleUnitError("Error")
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const disableFormFields = function () {
+        console.groupCollapsed("Unit.disableFormFields")
+        // ----
+        
         _product_edit_unit_form_unit_id.disabled = true
         _product_edit_unit_form_unit_room_code.disabled = true
         _product_edit_unit_form_unit_min_nights.disabled = true
@@ -22865,9 +23209,14 @@ const Unit = (function () {
         _product_edit_unit_form_unit_description_short.disabled = false
         _product_edit_unit_form_unit_description_long.disabled = false
         _product_edit_unit_form_unit_enabled.disabled = false
+        
+        // ----
+        console.groupEnd()
     }
-    
     const initForm = function () {
+        console.groupCollapsed("Unit.initForm")
+        // ----
+        
         let categoryId = (document.getElementById("category_id") && !isNaN(parseInt(document.getElementById("category_id").value))) ? parseInt(document.getElementById("category_id").value) : null
         
         if (categoryId) {
@@ -22937,10 +23286,14 @@ const Unit = (function () {
             $unit_keywords = $(_unit_keywords).BuildKeyword([])
             $unit_amenities = $(_unit_amenities).BuildKeyword([])
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const loadAll = function (units) {
-        console.log("Unit.loadAll(units)", units)
+        console.groupCollapsed("Unit.loadAll")
+        // ----
+        
         Unit.all = new Map()
         
         if (!units) {
@@ -22948,7 +23301,7 @@ const Unit = (function () {
         }
         
         $.each(units, function (k, unit) {
-            console.log("|__ unit", unit)
+            console.log("unit", unit)
             let detail = set(unit)
             
             $table_unit_product_edit.insertRow(detail)
@@ -22957,9 +23310,14 @@ const Unit = (function () {
         })
         
         updateProgress()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildProductEditTable = function () {
+        console.groupCollapsed("Unit.buildProductEditTable")
+        // ----
+        
         category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         if (category_id === 1) {
@@ -23037,49 +23395,55 @@ const Unit = (function () {
             ],
             rowClick: Unit.edit,
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const init = function (settings) {
+        console.groupCollapsed("Unit.init")
+        // ----
+        
         let units = []
         
         if (settings) {
-            units = settings
-            if (settings.units) {
-                units = settings.units
-            }
+            console.log("settings", settings)
+            units = (settings.units) ? settings.units : []
+            
         }
         
-        $(document).ready(function () {
-            if (_product_edit_unit_form) {
-                initAutoComplete()
-                validator_init(form_rules)
-                Unit.validator = $(_product_edit_unit_form).validate()
-                initForm()
-            }
-            
-            if (_product_edit_unit_images) {
-                Unit.unitImages = $("#unit_images").fileManager({
-                    height: 400,
-                    source: "unit",
-                    //sourceId: 204,
-                    images: [],
-                })
-            }
-            
-            if (_product_edit_unit_form_unit_name_filter) {
-                buildProductEditTable()
-                loadAll(units)
-            }
-            
-            if (_edit_product_unit) {
-                resetForm()
-                updateProgress()
-            }
-        })
+        if (_product_edit_unit_form) {
+            initAutoComplete()
+            validator_init(form_rules)
+            Unit.validator = $(_product_edit_unit_form).validate()
+            initForm()
+        }
+        
+        if (_product_edit_unit_images) {
+            Unit.unitImages = $("#unit_images").fileManager({
+                height: 400,
+                source: "unit",
+                //sourceId: 204,
+                images: [],
+            })
+        }
+        
+        if (_product_edit_unit_form_unit_name_filter) {
+            buildProductEditTable()
+            loadAll(units)
+        }
+        
+        if (_edit_product_unit) {
+            resetForm()
+            updateProgress()
+        }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const edit = function (unit) {
-        console.log("Unit.edit(unit)", unit)
+        console.groupCollapsed("Unit.edit")
+        // ----
+        
         let currentUnitId = (currentUnit && currentUnit.id && (!isNaN(parseInt(currentUnit.id)))) ? parseInt(currentUnit.id) : null
         let editUnitId = (unit && unit.id && (!isNaN(parseInt(unit.id)))) ? parseInt(unit.id) : null
         
@@ -23099,10 +23463,12 @@ const Unit = (function () {
             images: unit.images,
         })
         enableFormFields()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const clearForm = function () {
-        console.log("Unit:clearForm()")
+        console.groupCollapsed("Unit.clearForm")
         // ----
         
         _product_edit_unit_form_unit_id.value = ""
@@ -23115,10 +23481,12 @@ const Unit = (function () {
         _product_edit_unit_form_unit_description_short.value = ""
         _product_edit_unit_form_unit_description_long.value = ""
         _product_edit_unit_form_unit_enabled.checked = true
+        
+        // ----
+        console.groupEnd()
     }
-    
     const hideForm = function () {
-        console.log("Unit:hideForm()")
+        console.groupCollapsed("Unit.hideForm")
         // ----
         
         if (_edit_product_unit) {
@@ -23126,10 +23494,12 @@ const Unit = (function () {
             _product_edit_unit_form_unit_name_filter.disabled = false
             updateProgress()
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const resetForm = function () {
-        console.log("Unit:resetForm()")
+        console.groupCollapsed("Unit.resetForm")
         // ----
         
         let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
@@ -23250,9 +23620,14 @@ const Unit = (function () {
         
         $unit_amenities.clear()
         $unit_keywords.clear()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const loadForm = function () {
+        console.groupCollapsed("Unit.loadForm")
+        // ----
+        
         if (_edit_product_unit) {
             $('label[for="product_edit_unit_form_unit_min_nights"]').html(`Minimum ${nightsLabel}`)
             $('label[for="product_edit_unit_form_unit_max_nights"]').html(`Maximum ${nightsLabel}`)
@@ -23262,9 +23637,14 @@ const Unit = (function () {
             $(_edit_product_unit).show()
             _product_edit_unit_form_unit_name_filter.disabled = true
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const populateForm = function (unit) {
+        console.groupCollapsed("Unit.populateForm")
+        // ----
+        
         resetForm()
         
         if (unit) {
@@ -23313,9 +23693,13 @@ const Unit = (function () {
         }
         
         loadForm()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const enableFormFields = function () {
+        console.groupCollapsed("Unit.enableFormFields")
+        // ----
         
         disableFormFields()
         
@@ -23327,6 +23711,8 @@ const Unit = (function () {
         _product_edit_unit_form_unit_description_short.disabled = false
         _product_edit_unit_form_unit_description_long.disabled = false
         
+        // ----
+        console.groupEnd()
     }
     
     return {
@@ -24626,7 +25012,6 @@ const Airport = (function () {
     "use strict"
     
     const _category_id = document.getElementById("category_id")
-    
     const _product_edit_location_section = document.getElementById("product_edit_location_section")
     const _modal_product_depart_from_airport_local_code = document.getElementById("modal_product_depart_from_airport_local_code")
     const _modal_product_depart_from_airport_home_link = document.getElementById("modal_product_depart_from_airport_home_link")
@@ -24684,21 +25069,13 @@ const Airport = (function () {
     const _product_location_arriving_airport_iata_code = document.getElementById("product_location_arriving_airport_iata_code")
     const _product_location_arriving_airport_home_link = document.getElementById("product_location_arriving_airport_home_link")
     const _product_location_arriving_airport_wikipedia_link = document.getElementById("product_location_arriving_airport_wikipedia_link")
-    const _product_location_arriving_airport_scheduled_service = document.getElementById("product_location_arriving_airport_scheduled_service")
-    const _product_location_arriving_airport_keywords = document.getElementById("product_location_arriving_airport_keywords")
     const _product_location_arriving_airport_enabled = document.getElementById("product_location_arriving_airport_enabled")
-    const _product_location_arriving_airport_date_created = document.getElementById("product_location_arriving_airport_date_created")
-    const _product_location_arriving_airport_created_by = document.getElementById("product_location_arriving_airport_created_by")
-    const _product_location_arriving_airport_date_modified = document.getElementById("product_location_arriving_airport_date_modified")
-    const _product_location_arriving_airport_modified_by = document.getElementById("product_location_arriving_airport_modified_by")
     const _modal_product_arrive_to_airport_local_code = document.getElementById("modal_product_arrive_to_airport_local_code")
     const _product_location_arriving_airport_city_search = document.getElementById("product_location_arriving_airport_city_search")
     const _product_location_arriving_airport_remove_button = document.getElementById("product_location_arriving_airport_remove_button")
     const _product_location_arriving_airport_clear_button = document.getElementById("product_location_arriving_airport_clear_button")
     const _product_location_arriving_airport_save_button = document.getElementById("product_location_arriving_airport_save_button")
-    const _modal_product_depart_from_fields = document.getElementById("modal_product_depart_from_fields")
     const _modal_product_arrive_to_airport_add_block_close_button = document.getElementById("modal_product_arrive_to_airport_add_block_close_button")
-    const _modal_product_arrive_to_fields = document.getElementById("modal_product_arrive_to_fields")
     const _modal_product_arrive_to_airport_postal_code = document.getElementById("modal_product_arrive_to_airport_postal_code")
     const _modal_product_arrive_to_airport_street_1 = document.getElementById("modal_product_arrive_to_airport_street_1")
     const _modal_product_arrive_to_airport_street_2 = document.getElementById("modal_product_arrive_to_airport_street_2")
@@ -24712,7 +25089,6 @@ const Airport = (function () {
     const _modal_product_arrive_to_airport_gps_code = document.getElementById("modal_product_arrive_to_airport_gps_code")
     const _modal_product_arrive_to_airport_home_link = document.getElementById("modal_product_arrive_to_airport_home_link")
     const _modal_product_arrive_to_airport_wikipedia_link = document.getElementById("modal_product_arrive_to_airport_wikipedia_link")
-    
     const _modal_product_day_span_airport = document.getElementById("modal_product_day_span_airport")
     const _modal_product_day_span = document.getElementById("modal_product_day_span")
     
@@ -25014,30 +25390,15 @@ const Airport = (function () {
         })
     
     const toggleEditFormLink = function (type) {
-        //console.log("Airport.toggleEditFormLink(type)", type)
+        console.groupCollapsed("Airport.toggleEditFormLink")
         // ----
-        let hiddenText = ""
+        
         let editText = "Edit"
-        let cancelText = "Cancel"
         
         if (type) {
-            /*
-            console.log("|__ _modal_product_depart_from_airport_edit_link", _modal_product_depart_from_airport_edit_link)
-            console.log("|__ _modal_product_arrive_to_airport_edit_link", _modal_product_arrive_to_airport_edit_link)
-            //*/
             
             if (type === "depart_from" && _modal_product_depart_from_airport_edit_link) {
                 let toggleStatus = (_modal_product_depart_from_airport_edit_link.dataset.toggle) ? _modal_product_depart_from_airport_edit_link.dataset.toggle : "hidden"
-                
-                /*
-                console.log("|__ toggleStatus", toggleStatus)
-                console.log("|__ _modal_product_depart_from_new_airport_id", _modal_product_depart_from_new_airport_id)
-                console.log("|__ _modal_product_depart_from_airport", _modal_product_depart_from_airport)
-                console.log("|__ _modal_product_depart_from_airport_city_id", _modal_product_depart_from_airport_city_id)
-                console.log("|__ _modal_product_depart_from_new_airport_id.value", _modal_product_depart_from_new_airport_id.value)
-                console.log("|__ _modal_product_depart_from_new_airport_id.value", _modal_product_depart_from_new_airport_id.value)
-                console.log("|__ _modal_product_depart_from_airport_city_id.value", _modal_product_depart_from_airport_city_id.value)
-                //*/
                 
                 if (_modal_product_depart_from_new_airport_id && _modal_product_depart_from_airport && _modal_product_depart_from_airport_city_id
                     && _modal_product_depart_from_new_airport_id.value !== "" && _modal_product_depart_from_airport.value !== ""
@@ -25057,16 +25418,6 @@ const Airport = (function () {
             
             if (type === "arrive_to" && _modal_product_arrive_to_airport_edit_link) {
                 let toggleStatus = (_modal_product_arrive_to_airport_edit_link.dataset.toggle) ? _modal_product_arrive_to_airport_edit_link.dataset.toggle : "hidden"
-                
-                /*
-                console.log("|__ toggleStatus", toggleStatus)
-                console.log("|__ _modal_product_arrive_to_new_airport_id", _modal_product_arrive_to_new_airport_id)
-                console.log("|__ _modal_product_arrive_to_airport", _modal_product_arrive_to_airport)
-                console.log("|__ _modal_product_arrive_to_airport_city_id", _modal_product_arrive_to_airport_city_id)
-                console.log("|__ _modal_product_arrive_to_new_airport_id.value", _modal_product_arrive_to_new_airport_id.value)
-                console.log("|__ _modal_product_arrive_to_airport.value", _modal_product_arrive_to_airport.value)
-                console.log("|__ _modal_product_arrive_to_airport_city_id.value", _modal_product_arrive_to_airport_city_id.value)
-                //*/
                 
                 if (_modal_product_arrive_to_new_airport_id && _modal_product_arrive_to_airport && _modal_product_arrive_to_airport_city_id
                     && _modal_product_arrive_to_new_airport_id.value !== "" && _modal_product_arrive_to_airport.value !== ""
@@ -25089,9 +25440,11 @@ const Airport = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
     }
     const cancelAddAirportRecord = function (type) {
-        //console.log("Airport.cancelAddAirportRecord(type)", type)
+        console.groupCollapsed("Airport.cancelAddAirportRecord")
         // ----
         
         if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
@@ -25126,9 +25479,11 @@ const Airport = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
     }
     const validAirport = function (type) {
-        //console.log("Airport.validAirport(type)", type)
+        console.groupCollapsed("Airport.validAirport")
         // ----
         
         if (type) {
@@ -25138,9 +25493,12 @@ const Airport = (function () {
                 return $(_product_location_arriving_airport_form).valid()
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
     const buildAirportUpdateRecord = function (type) {
-        //console.log("Airport.buildAirportUpdateRecord(type)", type)
+        console.groupCollapsed("Airport.buildAirportUpdateRecord")
         // ----
         
         let returnObject = {}
@@ -25181,10 +25539,12 @@ const Airport = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
         return returnObject
     }
     const sendUpdateRequest = function (dataToSend, callback) {
-        //console.log("Airport.sendUpdateRequest(dataToSend)", dataToSend)
+        console.groupCollapsed("Airport.sendUpdateRequest")
         // ----
         
         if (dataToSend) {
@@ -25199,8 +25559,14 @@ const Airport = (function () {
                 //console.log("error", e)
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
     const sendSaveRequest = function (dataToSend, callback) {
+        console.groupCollapsed("Airport.sendSaveRequest")
+        // ----
+        
         if (dataToSend) {
             let url = "/api/v1.0/airports/update"
             try {
@@ -25216,8 +25582,14 @@ const Airport = (function () {
                 //console.log("error", e)
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
     const validDepartFromRecord = function () {
+        console.groupCollapsed("Airport.validDepartFromRecord")
+        // ----
+        
         let isValid = true
         
         if (_modal_product_depart_from_airport_iata_code.value === "") {
@@ -25241,9 +25613,14 @@ const Airport = (function () {
             $(_modal_product_depart_from_airport_city).hideError()
         }
         
+        // ----
+        console.groupEnd()
         return isValid
     }
     const validArriveToRecord = function () {
+        console.groupCollapsed("Airport.validArriveToRecord")
+        // ----
+        
         let isValid = true
         
         if (_modal_product_arrive_to_airport_iata_code.value === "") {
@@ -25267,9 +25644,14 @@ const Airport = (function () {
             $(_modal_product_arrive_to_airport_city).hideError()
         }
         
+        // ----
+        console.groupEnd()
         return isValid
     }
     const buildAddAirportRecord = function (type) {
+        console.groupCollapsed("Airport.buildAddAirportRecord")
+        // ----
+        
         if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
             if (type) {
                 if (type === "depart_from") {
@@ -25333,9 +25715,12 @@ const Airport = (function () {
                 }
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
     const populateAirportForm = function (airport, type) {
-        //console.log("Airport.populateAirportForm(airport, type)", airport, type)
+        console.groupCollapsed("Airport.populateAirportForm")
         // ----
         
         if (!type || !_modal_product_depart_from_airport_add_block || !_modal_product_arrive_to_airport_add_block) {
@@ -25410,9 +25795,11 @@ const Airport = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
     }
     const clearAirportForm = function (type) {
-        //console.log("Airport.clearAirportForm(type)", type)
+        console.groupCollapsed("Airport.clearAirportForm")
         // ----
         
         if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
@@ -25462,9 +25849,11 @@ const Airport = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
     }
     const resetAirportForm = function (type) {
-        //console.log("Airport.resetAirportForm(type)", type)
+        console.groupCollapsed("Airport.resetAirportForm")
         // ----
         
         if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
@@ -25480,9 +25869,12 @@ const Airport = (function () {
             
             toggleEditFormLink(type)
         }
+        
+        // ----
+        console.groupEnd()
     }
     const hideAirportForm = function (type) {
-        //console.log("Airport.hideAirportForm(type)", type)
+        console.groupCollapsed("Airport.hideAirportForm")
         // ----
         
         if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
@@ -25514,9 +25906,12 @@ const Airport = (function () {
                 }
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
     const showAirportForm = function (type) {
-        //console.log("Airport.showAirportForm(type)", type)
+        console.groupCollapsed("Airport.showAirportForm")
         // ----
         
         if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
@@ -25562,9 +25957,11 @@ const Airport = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
     }
     const clearLocationAirportForm = function (type) {
-        //console.log("Airport.clearLocationAirportForm(type)", type)
+        console.groupCollapsed("Airport.clearLocationAirportForm")
         // ----
         
         if (type) {
@@ -25604,9 +26001,11 @@ const Airport = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
     }
     const setLocationAirportForm = function (airport, type) {
-        //console.log("Airport.setLocationAirportForm(type)", type)
+        console.groupCollapsed("Airport.setLocationAirportForm")
         // ----
         
         if (type) {
@@ -25692,17 +26091,15 @@ const Airport = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
     }
     const airportExists = function (name, type) {
-        //console.log("Airport.airportExists(name, type)", name, type)
+        console.groupCollapsed("Airport.airportExists")
         // ----
         
         if (name && name !== "") {
-            /**
-             * data to send to the server
-             *
-             * @type {{name}}
-             */
+            
             let dataToSend = {
                 name: name,
             }
@@ -25817,8 +26214,13 @@ const Airport = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
     }
     const fetchByName = function (dataToSend, callback) {
+        console.groupCollapsed("Airport.fetchByName")
+        // ----
+        
         let url = "/api/v1.0/airports/validate"
         
         if (dataToSend) {
@@ -25837,9 +26239,12 @@ const Airport = (function () {
         } else {
             handleAirportError("Error Loading Airport - Missing Data")
         }
+        
+        // ----
+        console.groupEnd()
     }
     const handleAirportError = function (msg, title, type) {
-        //console.log("Airport.handleAirportError()")
+        console.groupCollapsed("Airport.handleAirportError")
         // ----
         
         if (!msg) {
@@ -25856,9 +26261,13 @@ const Airport = (function () {
         
         toastr[type](msg, title)
         
+        // ----
+        console.groupEnd()
     }
     const update = function (type) {
-        //console.log("Airport.update(type)", type)
+        console.groupCollapsed("Airport.update")
+        // ----
+        
         if (validAirport(type)) {
             confirmDialog(`Would you like to update?`, (ans) => {
                 if (ans) {
@@ -25869,16 +26278,23 @@ const Airport = (function () {
                             if (data[0]) {
                                 airport = data[0]
                             }
-                            //console.log("airport", airport)
+                            
                             let name = (airport.name) ? airport.name : null
                             toastr["success"](`Airport ${name} has been updated`, "Airport Updated")
+                            
                         }
                     })
                 }
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
     const save = function (type) {
+        console.groupCollapsed("Airport.save")
+        // ----
+        
         if (type) {
             let dataToSend = buildAddAirportRecord(type)
             
@@ -25952,9 +26368,15 @@ const Airport = (function () {
                 })
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
     const defaultDetail = function () {
-        return {
+        console.groupCollapsed("Airport.defaultDetail")
+        // ----
+        
+        let details = {
             display_short: null,
             display_medium: null,
             display_long: null,
@@ -25983,10 +26405,15 @@ const Airport = (function () {
             country: {},
             type: {},
         }
+        
+        // ----
+        console.groupEnd()
+        return details
     }
     const setDetail = function (airport) {
-        //console.log("Airport.setDetail()", airport)
+        console.groupCollapsed("Airport.setDetail")
         // ----
+        
         let detail = defaultDetail()
         
         if (airport) {
@@ -26021,10 +26448,13 @@ const Airport = (function () {
         }
         
         Airport.detail = detail
+        
+        // ----
+        console.groupEnd()
         return detail
     }
     const loadAll = function (airports) {
-        //console.log("Airport.loadAll()")
+        console.groupCollapsed("Airport.loadAll")
         // ----
         
         Airport.all = new Map()
@@ -26035,9 +26465,12 @@ const Airport = (function () {
                 Airport.all.set(detail.id, detail)
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
     const initAutocomplete = function () {
-        //console.log("Airport.initAutocomplete()")
+        console.groupCollapsed("Airport.initAutocomplete")
         // ----
         
         if (_product_location_departing_airport_search) {
@@ -26365,10 +26798,13 @@ const Airport = (function () {
                 })
         }
         
+        // ----
+        console.groupEnd()
     }
     const init = function (settings) {
-        //console.log("Airport.init()")
+        console.groupCollapsed("Airport.init")
         // ----
+        
         let airports = (settings && settings.airports) ? settings.airports : []
         
         loadAll(airports)
@@ -26418,7 +26854,9 @@ const Airport = (function () {
         
         hideAirportForm("depart_from")
         hideAirportForm("arrive_to")
-        //})
+        
+        // ----
+        console.groupEnd()
     }
     
     return {
@@ -26435,7 +26873,6 @@ const Airport = (function () {
             init(settings)
         },
     }
-    
 })()
 
 const AirportTypes = (function () {
@@ -26542,6 +26979,11 @@ const AirportTypes = (function () {
 //AirportTypes.init()
 //end object
 
+/**
+ * Category
+ *
+ * @type {{all: Map<any, any>, init: Category.init, get: Category.get, validator: null, save: Category.save, initProductModal: Category.initProductModal, detail: {}, load_all: Category.load_all}}
+ */
 const Category = (function () {
     "use strict"
     
@@ -26552,27 +26994,9 @@ const Category = (function () {
     const _modal_product_rating_types_id = document.getElementById("modal_product_rating_types_id")
     const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
     const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
-    const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
-    const _modal_product_provider_id = document.getElementById("modal_product_provider_id")
-    const _modal_product_vendor_id = document.getElementById("modal_product_vendor_id")
-    const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
-    const _modal_product_provider_location_id = document.getElementById("modal_product_provider_location_id")
-    const _modal_product_location_id = document.getElementById("modal_product_location_id")
-    const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
-    const _modal_product_country_cars = document.getElementById("modal_product_country_cars")
-    const _modal_product_city_id = document.getElementById("modal_product_city_id")
-    const _modal_product_country_id = document.getElementById("modal_product_country_id")
-    const _modal_product_province_id = document.getElementById("modal_product_province_id")
-    const _modal_product_description_short = document.getElementById("modal_product_description_short")
-    const _modal_product_description_long = document.getElementById("modal_product_description_long")
-    const _modal_product_keywords = document.getElementById("modal_product_keywords")
-    const _modal_product_day_span = document.getElementById("modal_product_day_span")
-    const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
-    const _modal_button_submit_add_product = document.getElementById("modal_button_submit_add_product")
-    const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
     const _modal_product_id = document.getElementById("modal_product_id")
     
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     $(_modal_product_category_id)
         .on("change", function () {
@@ -26580,6 +27004,9 @@ const Category = (function () {
         })
     
     const handleCategoryError = function (msg, title, type) {
+        console.groupCollapsed("Category.handleCategoryError")
+        // ----
+        
         if (!msg) {
             msg = "There was an error."
         }
@@ -26593,10 +27020,12 @@ const Category = (function () {
         }
         
         toastr[type](msg, title)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const handleProductChange = function (id) {
-        //console.log("Category.handleProductChange(id)", id)
+        console.groupCollapsed("Category.handleProductChange")
         // ----
         
         $("[data-categoryid]").hide()
@@ -26789,10 +27218,14 @@ const Category = (function () {
             Product.disableNewFormDetails()
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const defaultDetail = function () {
-        return {
+        console.groupCollapsed("Category.defaultDetail")
+        // ----
+        
+        let detail = {
             category_id: 1,
             name: null,
             last_update: null,
@@ -26815,15 +27248,20 @@ const Category = (function () {
             sort_order: null,
             enabled: 1,
             date_created: formatDateMySQL(),
-            created_by: user_id,
+            created_by: userId,
             date_modified: formatDateMySQL(),
-            modified_by: user_id,
+            modified_by: userId,
             note: null,
         }
+        
+        // ----
+        console.groupEnd()
+        return detail
     }
-    
     const set = function (category) {
-        //console.log("Category.set()", category)
+        console.groupCollapsed("Category.set")
+        // ----
+        
         let detail = defaultDetail()
         if (category) {
             detail.id = (category.id) ? category.id : null
@@ -26857,20 +27295,29 @@ const Category = (function () {
         }
         
         Category.detail = detail
+        
+        // ----
+        console.groupEnd()
         return detail
     }
-    
     const save = function (params) {
-    
+        console.groupCollapsed("Category.save")
+        // ----
+        
+        // ----
+        console.groupEnd()
     }
-    
     const get = function () {
+        console.groupCollapsed("Category.get")
+        // ----
+        
         let data_to_send = {}
         
+        // ----
+        console.groupEnd()
     }
-    
     const init = function (settings) {
-        console.log("Category.init()", settings)
+        console.groupCollapsed("Category.init")
         // ----
         
         let categories = []
@@ -26882,16 +27329,19 @@ const Category = (function () {
         }
         
         loadAll(categories)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const initProductModal = function (settings) {
-        console.log("Category.initProductModal()", settings)
+        console.groupCollapsed("Category.initProductModal")
         // ----
         
+        // ----
+        console.groupEnd()
     }
-    
     const loadAll = function (categories) {
-        console.log("Category.loadAll(categories)", categories)
+        console.groupCollapsed("Category.loadAll")
         // ----
         
         Category.all = new Map()
@@ -26905,7 +27355,8 @@ const Category = (function () {
             Category.all.set(detail.id, detail)
         })
         
-        //console.log(" Category.all", Category.all)
+        // ----
+        console.groupEnd()
     }
     
     return {
@@ -26928,7 +27379,6 @@ const Category = (function () {
             initProductModal(settings)
         },
     }
-    
 })()
 
 const ContactTypes = (function () {
@@ -29493,28 +29943,23 @@ const MessageTypes = (function () {
 
 const Pricing = (function () {
     "use strict"
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    
     const _pricing_strategy_unit_id = document.getElementById("pricing_strategy_unit_id")
     const _pricing_strategy_season_id = document.getElementById("pricing_strategy_season_id")
-    const _pricing_strategy_profile_id = document.getElementById("pricing_strategy_profile_id")
     const _pricing_strategy_types_id = document.getElementById("pricing_strategy_types_id")
     const _calendar_filter_profile_id = document.getElementById("calendar_filter_profile_id")
     
-    /**
-     * pricing strategy types id
-     */
+    let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    
     $(_pricing_strategy_types_id)
         .on("change", function () {
             PricingWorksheet.pricingWorksheet()
-            //console.log("Pricing.pricing_strategy_types_id:change()", _pricing_strategy_types_id.value)
         })
     
-    /**
-     * initialize pricing object
-     *
-     * @param settings
-     */
     const init = function (settings) {
+        console.groupCollapsed("Pricing.init")
+        // ----
+        
         resetForm()
         let pricings = []
         let pricing_detail
@@ -29530,60 +29975,36 @@ const Pricing = (function () {
             PricingWorksheet.pricingStrategyId = parseInt(pricing_detail.pricing_strategy_types_id)
         }
         loadAll(pricings)
+        _pricing_strategy_types_id.disabled = true
+        $(_pricing_strategy_types_id).addClass("disabled")
+        
+        // ----
+        console.groupEnd()
     }
     
-    /**
-     * load all pricing templates
-     *
-     * @param pricing_details
-     */
     const loadAll = function (pricing_details) {
-        //console.log("Pricing.loadAll()", pricing_details)
+        console.groupCollapsed("Pricing.loadAll")
+        // ----
+        
         Pricing.all = new Map()
         if (!pricing_details) {
             pricing_details = []
         }
         
         $.each(pricing_details, function (k, matrix) {
-            //console.log("matrix", matrix)
-            // ----
-            let pricings = matrix.pricings
             let pricingCode = matrix.pricing_code
-            let matrixCode = matrix.matrix_code
-            let matrixDetails = Matrix.all.get(matrixCode)
             let detail = set(matrix)
             Pricing.all.set(pricingCode, detail)
-            /*
-            $.each(pricings, function (k, pricing) {
-                //console.log("pricing", pricing)
-                // ----
-                
-                let pricing_code = (pricing.code) ? pricing.code : null
-                
-                if (pricing_code) {
-                    Pricing.all.set(pricing_code, pricing)
-                    let details = set(pricing)
-                    //console.log("details", details)
-                    if (matrixDetails) {
-                        if (!matrixDetails["pricings"]) {
-                            matrixDetails["pricings"] = new Map()
-                        }
-                        
-                        matrixDetails["pricings"].set(pricing_code, pricing)
-                    }
-                }
-                
-            })
-            //*/
         })
         
-        //console.log("Pricings.all", Pricing.all)
+        // ----
+        console.groupEnd()
     }
     
-    /**
-     * load Season Dropdown
-     */
     const loadSeasonDropdown = function () {
+        console.groupCollapsed("Pricing.loadSeasonDropdown")
+        // ----
+        
         let seasons = (Season && Season.all) ? Array.from(Season.all.values()) : []
         let options = ""
         
@@ -29595,12 +30016,15 @@ const Pricing = (function () {
         
         $(_pricing_strategy_season_id).empty()
         $(_pricing_strategy_season_id).html(options)
+        
+        // ----
+        console.groupEnd()
     }
     
-    /**
-     * load Profile Dropdown
-     */
     const loadProfileDropdown = function () {
+        console.groupCollapsed("Pricing.loadProfileDropdown")
+        // ----
+        
         let profiles = (InventoryProfile && InventoryProfile.all) ? Array.from(InventoryProfile.all.values()) : []
         let options = "<option value='' disabled readonly selected>-- Profiles --</option>"
         
@@ -29612,15 +30036,20 @@ const Pricing = (function () {
         
         $(_calendar_filter_profile_id).empty()
         $(_calendar_filter_profile_id).html(options)
+        
+        // ----
+        console.groupEnd()
     }
     
-    /**
-     * load unit dropdown
-     */
     const loadUnitDropdown = function () {
+        console.groupCollapsed("Pricing.loadUnitDropdown")
+        // ----
+        
         let units = (Unit && Unit.all) ? Array.from(Unit.all.values()) : []
         let options = ""
         
+        //*
+        console.log("units", units)
         $.each(units, function (k, unit) {
             let name = unit.name
             let id = unit.id
@@ -29629,20 +30058,28 @@ const Pricing = (function () {
         
         $(_pricing_strategy_unit_id).empty()
         $(_pricing_strategy_unit_id).html(options)
+        
+        // ----
+        console.groupEnd()
     }
     
     const resetForm = function () {
-        //*
+        console.groupCollapsed("Pricing.loadUnitDropdown")
+        // ----
+        
         loadSeasonDropdown()
         loadUnitDropdown()
         loadProfileDropdown()
-        //*/
+        
+        // ----
+        console.groupEnd()
     }
     
     const defaultDetail = function () {
-        //console.log("Pricing.defaultDetail()", Pricing)
+        console.groupCollapsed("Pricing.loadUnitDropdown")
+        // ----
         
-        return {
+        let details = {
             pricing_code: null,
             matrix_code: null,
             code: null,
@@ -29670,17 +30107,24 @@ const Pricing = (function () {
             count: 1,
             enabled: 1,
             date_created: formatDateMySQL(),
-            created_by: user_id,
+            created_by: userId,
             date_modified: formatDateMySQL(),
-            modified_by: user_id,
+            modified_by: userId,
             note: null,
         }
+        
+        // ----
+        console.groupEnd()
+        return details
     }
     
     const set = function (pricing) {
+        console.groupCollapsed("Pricing.set")
+        // ----
+        
         let detail = defaultDetail()
         if (pricing) {
-            //console.log(pricing)
+            console.log("pricing", pricing)
             detail.pricing_code = (pricing.pricing_code) ? pricing.pricing_code : null
             detail.matrix_code = (pricing.matrix_code) ? pricing.matrix_code : null
             detail.code = (pricing.code) ? pricing.code : null
@@ -29708,12 +30152,14 @@ const Pricing = (function () {
             detail.count = (pricing.count) ? pricing.count : null
             detail.enabled = (pricing.enabled) ? pricing.enabled : 1
             detail.date_created = (pricing.date_created) ? pricing.date_created : formatDateMySQL()
-            detail.created_by = (pricing.created_by) ? pricing.created_by : user_id
+            detail.created_by = (pricing.created_by) ? pricing.created_by : userId
             detail.date_modified = (pricing.date_modified) ? pricing.date_modified : formatDateMySQL()
-            detail.modified_by = (pricing.modified_by) ? pricing.modified_by : user_id
+            detail.modified_by = (pricing.modified_by) ? pricing.modified_by : userId
             detail.note = (pricing.note) ? pricing.note : null
         }
-        //console.log("   detail", detail)
+        
+        // ----
+        console.groupEnd()
         Pricing.detail = detail
         return detail
     }
@@ -29733,7 +30179,6 @@ const Pricing = (function () {
             loadProfileDropdown()
         },
     }
-    
 })()
 
 const Matrix = (function () {
@@ -30385,20 +30830,67 @@ const StatusTypes = (function () {
 
 const Types = (function () {
     "use strict"
-    const base_url = "/types"
-    // ----
     
-    const handle_types_error = function (msg) {
-        toastr.error(msg)
+    const userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    const baseURL = "/types"
+    
+    /**
+     * handleTypesError
+     *
+     * @param msg
+     * @param title
+     * @param level
+     */
+    const handleTypesError = function (msg, title, level) {
+        console.groupCollapsed("Types.handleTypesError")
+        // ----
+        
+        if (!title) {
+            title = "Types"
+        }
+        
+        if (!level) {
+            level = "error"
+        }
+        
+        if (!msg) {
+            msg = "Error"
+        }
+        
+        toastr[level](`${msg}`, title)
+        
+        // ----
+        console.groupEnd()
     }
     
+    /**
+     * setType
+     *
+     * @param types
+     * @param types_name
+     */
     const setType = function (types, types_name) {
+        console.groupCollapsed("Types.setType")
+        // ----
+        
         $.each(types, function (k, type) {
             Types[types_name].set(type.id, type)
         })
+        
+        // ----
+        console.groupEnd()
     }
     
+    /**
+     * init
+     *
+     * @param settings
+     */
     const init = function (settings) {
+        console.groupCollapsed("Types.init")
+        console.log("settings", settings)
+        // ----
+        
         Types.address_types = new Map()
         Types.allot_by = new Map()
         Types.airport_types = new Map()
@@ -30414,6 +30906,8 @@ const Types = (function () {
         Types.sales_types = new Map()
         Types.status_types = new Map()
         Country.all = new Map()
+        Province.all = new Map()
+        City.all = new Map()
         // ----
         if (settings.address_types) {
             setType(settings.address_types, "address_types")
@@ -30471,7 +30965,6 @@ const Types = (function () {
         }
         
         if (settings.status_types) {
-            //console.log(settings.status_types)
             setType(settings.status_types, "status_types")
             StatusTypes.init({ status_types: settings.status_types })
         }
@@ -30484,6 +30977,16 @@ const Types = (function () {
             Country.load_all(settings.countries)
         }
         
+        if (settings.provinces) {
+            Province.loadAll(settings.provinces)
+        }
+        
+        if (settings.countries) {
+            City.loadAll(settings.cities)
+        }
+        
+        // ----
+        console.groupEnd()
     }
     
     return {
@@ -30502,11 +31005,8 @@ const Types = (function () {
         rating_types: new Map(),
         sales_types: new Map(),
         status_types: new Map(),
-        
         init: function (settings) {
-            if (settings) {
-                init(settings)
-            }
+            init(settings)
         },
     }
     
@@ -32434,11 +32934,14 @@ const Profile = (function () {
 })()
 
 function FileManager (element, options) {
+    console.groupCollapsed("FileManager")
+    // ----
+    
     if (!(options && options.source && element)) {
         console.log("Missing options.")
-        console.log("|__ options", options)
-        console.log("|__ options.source", options.source)
-        console.log("|__ options.sourceId", options.sourceId)
+        console.log("options", options)
+        console.log("options.source", options.source)
+        console.log("options.sourceId", options.sourceId)
         return
     }
     let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
@@ -32589,10 +33092,13 @@ function FileManager (element, options) {
     this.loadAll()
     
     this.formReset()
+    
+    // ----
+    console.groupEnd()
 }
 
 FileManager.prototype.createPreviewElements = function () {
-    console.log("FileManager.createPreviewElements()")
+    console.groupCollapsed("FileManager.createPreviewElements")
     // ----
     
     let messageWrapper
@@ -32636,9 +33142,12 @@ FileManager.prototype.createPreviewElements = function () {
     }
     
     this.preview = this.previewWrapper
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.setPreview = function (previewable, src) {
-    console.log("FileManager.setPreview(previewable, src)", this)
+    console.groupCollapsed("FileManager.setPreview")
     // ----
     
     let render = this.previewContainer
@@ -32661,9 +33170,12 @@ FileManager.prototype.setPreview = function (previewable, src) {
     }
     
     this.formShow()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.resetPreview = function () {
-    console.log("FileManager.resetPreview()")
+    console.groupCollapsed("FileManager.resetPreview")
     // ----
     
     let render = this.previewContainer
@@ -32674,9 +33186,12 @@ FileManager.prototype.resetPreview = function () {
     render.find("img").remove()
     
     this.hideLoader()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.clearElement = function () {
-    console.log("FileManager.clearElement()")
+    console.groupCollapsed("FileManager.clearElement")
     // ----
     
     if (this.errorsEvent.errors.length === 0) {
@@ -32696,41 +33211,64 @@ FileManager.prototype.clearElement = function () {
         this.displayClear()
         this.formHide()
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.hideLoader = function (input) {
+    console.groupCollapsed("FileManager.hideLoader")
+    // ----
+    
     $(this.loader).hide()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.showLoader = function (input) {
+    console.groupCollapsed("FileManager.showLoader")
+    // ----
+    
     $(this.loader).show()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.clearErrors = function () {
-    console.log("FileManager.clearErrors()")
+    console.groupCollapsed("FileManager.clearErrors")
     // ----
     
     this.preview.removeClass("has-errors")
     if (typeof this.previewErrorsContainer !== "undefined") {
         this.previewErrorsContainer.children("ul").html("")
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.pushError = function (errorKey) {
-    console.log("FileManager.pushError(errorKey)", errorKey)
+    console.groupCollapsed("FileManager.pushError")
     // ----
     
     let e = $.Event("filemanager.error." + errorKey)
     this.errorsEvent.errors.push(e)
     this.inputs.fields.imageFile.trigger(e, [this])
-    console.log("|__ this.errorsEvent.errors", this.errorsEvent.errors)
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.showError = function (errorKey) {
-    console.log("FileManager.showError(errorKey)", errorKey)
+    console.groupCollapsed("FileManager.showError")
     // ----
     
     if (typeof this.previewErrorsContainer !== "undefined") {
         this.previewErrorsContainer.children("ul").append("<li>" + this.getError(errorKey) + "</li>")
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.getError = function (errorKey) {
-    console.log("FileManager.getError(errorKey)", errorKey)
+    console.groupCollapsed("FileManager.getError")
     // ----
     
     let error = this.settings.error[errorKey],
@@ -32756,9 +33294,14 @@ FileManager.prototype.getError = function (errorKey) {
         return error.replace("{{ value }}", value)
     }
     
+    // ----
+    console.groupEnd()
     return error
 }
 FileManager.prototype.createElements = function () {
+    console.groupCollapsed("FileManager.createElements")
+    // ----
+    
     this.isInit = true
     
     // Wrapper Elements
@@ -32828,8 +33371,14 @@ FileManager.prototype.createElements = function () {
     this.detailSection = $(`<section id="${this.baseId + "_detail"}" class="card card-body grey lighten-3 p-3 mb-2"/>`)
     
     this.render()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.fileGallery = function () {
+    console.groupCollapsed("FileManager.fileGallery")
+    // ----
+    
     let sectionName = "gallery"
     let sectionTitle = (this.source) ? this.source.ucwords() + " Images:" : "Files"
     let $WRAPPER_SUBHEADING, $WRAPPER_HEADING_SPAN, $WRAPPER_HEADING, $WRAPPER, $HR,
@@ -32904,9 +33453,14 @@ FileManager.prototype.fileGallery = function () {
     })
         .append($WRAPPER_SUBHEADING, $HR, this.galleryContainer, $ROW_2)
     
+    // ----
+    console.groupEnd()
     return $WRAPPER
 }
 FileManager.prototype.fileFormFields = function () {
+    console.groupCollapsed("FileManager.fileFormFields")
+    // ----
+    
     let $WRAPPER, $ROW_1, $ROW_2, $ROW_3, $ROW_4, $ROW_5, $ROW_6, $CHECK_WRAPPER_ENABLED, $CHECK_WRAPPER_IS_SHOWN,
         $CHECK_WRAPPER_IS_COVER, $COL_1_1, $COL_1_2, $COL_2_1, $COL_2_2, $COL_2_3, $COL_3_1, $COL_4_1, $COL_5_1,
         $COL_6_1, $WRAPPER_ID, $WRAPPER_NAME, $WRAPPER_ENABLED, $WRAPPER_IS_SHOWN, $WRAPPER_IS_COVER,
@@ -32985,9 +33539,14 @@ FileManager.prototype.fileFormFields = function () {
     })
         .append($ROW_1, $ROW_2, $ROW_3, $ROW_4, $ROW_5, $ROW_6, $ROW_7)
     
+    // ----
+    console.groupEnd()
     return $WRAPPER
 }
 FileManager.prototype.fileForm = function () {
+    console.groupCollapsed("FileManager.fileForm")
+    // ----
+    
     let $WRAPPER_SUBHEADING, $WRAPPER_HEADING_SPAN, $WRAPPER_HEADING, $WRAPPER, $HR
     let sectionName = "form"
     
@@ -33012,9 +33571,14 @@ FileManager.prototype.fileForm = function () {
     
     this.form.append($WRAPPER_HEADING, $WRAPPER_SUBHEADING, $HR, this.preview, this.fileDetail(this), this.fileFormFields(this))
     
+    // ----
+    console.groupEnd()
     return this.form
 }
 FileManager.prototype.fileDetail = function () {
+    console.groupCollapsed("FileManager.fileDetail")
+    // ----
+    
     let $ROW_1, $ROW_2, $ROW_3, $ROW_4, $COL_1_1, $COL_1_2, $COL_1_3, $COL_1_4,
         $COL_2_1, $COL_2_2, $COL_2_3, $COL_2_4, $COL_3_1, $COL_3_2, $COL_3_3, $COL_3_4,
         $COL_4_1, $COL_4_2, $COL_4_3, $COL_4_4
@@ -33043,11 +33607,14 @@ FileManager.prototype.fileDetail = function () {
     
     this.detailSection.append($ROW_1, $ROW_2, $ROW_3, $ROW_4)
     
+    // ----
+    console.groupEnd()
     return this.detailSection
 }
 FileManager.prototype.formShow = function () {
-    console.log("this.formShow()")
+    console.groupCollapsed("FileManager.formShow")
     // ----
+    
     let _input_file = document.getElementById(this.inputs.fields.imageFile.attr("id"))
     let _input_toggle = document.getElementById(this.inputs.buttons.toggle.attr("id"))
     
@@ -33055,9 +33622,12 @@ FileManager.prototype.formShow = function () {
     
     _input_toggle.disabled = true
     _input_file.disabled = true
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.formHide = function () {
-    console.log("this.formHide()")
+    console.groupCollapsed("FileManager.formHide")
     // ----
     
     let _input_file = document.getElementById(this.inputs.fields.imageFile.attr("id"))
@@ -33069,9 +33639,12 @@ FileManager.prototype.formHide = function () {
     
     _input_toggle.disabled = false
     _input_file.disabled = false
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.formClear = function () {
-    console.log("FileManager.formClear()", this.inputs)
+    console.groupCollapsed("FileManager.formClear")
     // ----
     
     let _progress_bar = document.getElementById(this.inputs.fields.progress.attr("id"))
@@ -33095,26 +33668,36 @@ FileManager.prototype.formClear = function () {
     })
     
     clearValidation(this.form)
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.formReset = function () {
-    console.log("this.formReset()")
+    console.groupCollapsed("FileManager.formReset")
     // ----
     
     this.formClear()
     this.displayClear()
     this.resetPreview()
     this.clearSelected()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.formCancel = function () {
-    console.log("FileManager.formCancel()")
+    console.groupCollapsed("FileManager.formCancel")
     // ----
     
     this.formReset()
     this.formHide()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.formRemove = function () {
-    console.log("FileManager.formRemove()")
+    console.groupCollapsed("FileManager.formRemove")
     // ----
+    
     const _image_id = this.inputs.fields.imageId[0]
     
     let _this = this
@@ -33123,10 +33706,10 @@ FileManager.prototype.formRemove = function () {
         let imageId = (!isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
         
         if (imageId !== null) {
-            console.log("|__ imageId", imageId)
+            console.log("imageId", imageId)
             let image = _this.all.get(imageId)
             if (image) {
-                console.log("|__ image", image)
+                console.log("image", image)
                 let el = document.getElementById("image_" + imageId)
                 if (el) {
                     confirmDialog(`Would you like to delete this image?`, (ans) => {
@@ -33153,9 +33736,12 @@ FileManager.prototype.formRemove = function () {
             }
         }
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.formLoad = function (image) {
-    console.log("FileManager.formLoad(image)", image)
+    console.groupCollapsed("FileManager.formLoad")
     // ----
     
     if (image) {
@@ -33172,14 +33758,14 @@ FileManager.prototype.formLoad = function (image) {
         let fileExtension = (image.extension) ? image.extension : null
         
         //*
-        console.log("|__ imageId", imageId)
-        console.log("|__ imageName", imageName)
-        console.log("|__ imageTitle", imageTitle)
-        console.log("|__ imageAlt", imageAlt)
-        console.log("|__ imageCaption", imageCaption)
-        console.log("|__ imageEnabled", imageEnabled)
-        console.log("|__ imageIsShown", imageIsShown)
-        console.log("|__ imageIsCover", imageIsCover)
+        console.log("imageId", imageId)
+        console.log("imageName", imageName)
+        console.log("imageTitle", imageTitle)
+        console.log("imageAlt", imageAlt)
+        console.log("imageCaption", imageCaption)
+        console.log("imageEnabled", imageEnabled)
+        console.log("imageIsShown", imageIsShown)
+        console.log("imageIsCover", imageIsCover)
         //*/
         
         $(this.inputs.fields.imageId).val(imageId)
@@ -33193,7 +33779,7 @@ FileManager.prototype.formLoad = function (image) {
         $(this.inputs.fields.imageIsShown).attr("checked", imageIsShown)
         
         let path = (!is_null(filePath) && !is_null(fileName) && !is_null(fileExtension)) ? `${filePath}/${fileName}.${fileExtension}` : (this.settings.defaultFile) ? this.settings.defaultFile : null
-        console.log("|__ path", path)
+        console.log("path", path)
         
         this.setPreview(this.isImage(), path)
         
@@ -33201,15 +33787,21 @@ FileManager.prototype.formLoad = function (image) {
         
         this.form.show()
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.displayReset = function () {
-    console.log("FileManager.displayReset()", this)
+    console.groupCollapsed("FileManager.displayReset")
     // ----
     
     this.displayClear()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.displayClear = function () {
-    console.log("FileManager.displayClear()", this)
+    console.groupCollapsed("FileManager.displayClear")
     // ----
     
     $(this.inputs.displays.imageName).html("&nbsp;")
@@ -33220,9 +33812,12 @@ FileManager.prototype.displayClear = function () {
     $(this.inputs.displays.imageSize).html("&nbsp;")
     $(this.inputs.displays.imageHeight).html("&nbsp;")
     $(this.inputs.displays.imageWidth).html("&nbsp;")
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.displaySet = function () {
-    console.log("FileManager.displaySet()", this.detail)
+    console.groupCollapsed("FileManager.displaySet")
     // ----
     
     this.displayReset()
@@ -33238,7 +33833,6 @@ FileManager.prototype.displaySet = function () {
     imageHeight = (!isNaN(parseInt(this.detail.height))) ? this.detail.height + "px" : '&nbsp;'
     imageWidth = (!isNaN(parseInt(this.detail.width))) ? this.detail.width + "px" : '&nbsp;'
     
-    //*
     $(this.inputs.displays.imageName).html(imageName)
     $(this.inputs.displays.imageType).html(imageType)
     $(this.inputs.displays.imageRatio).html(imageRatio)
@@ -33247,9 +33841,14 @@ FileManager.prototype.displaySet = function () {
     $(this.inputs.displays.imageSize).html(imageSize)
     $(this.inputs.displays.imageHeight).html(imageHeight)
     $(this.inputs.displays.imageWidth).html(imageWidth)
-    //*/
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.handleError = function (msg, title, level) {
+    console.groupCollapsed("FileManager.handleError")
+    // ----
+    
     if (!level) {
         level = "error"
     }
@@ -33258,8 +33857,14 @@ FileManager.prototype.handleError = function (msg, title, level) {
     }
     
     toastr[level](msg, title)
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.defaultDetail = function () {
+    console.groupCollapsed("FileManager.defaultDetail")
+    // ----
+    
     this.detail = {
         alt: null,
         caption: null,
@@ -33282,9 +33887,12 @@ FileManager.prototype.defaultDetail = function () {
         title: null,
         width: null,
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.setDetail = function (image) {
-    console.log("FileManager.setDetail(image)", image)
+    console.groupCollapsed("FileManager.setDetail")
     // ----
     
     this.defaultDetail()
@@ -33313,14 +33921,16 @@ FileManager.prototype.setDetail = function (image) {
         
         this.setFile(image)
         
-        console.log("|__ this.detail", this.detail)
-        console.log("|__ this.file", this.file)
+        console.log("this.detail", this.detail)
+        console.log("this.file", this.file)
         
-        return this.detail
     }
+    // ----
+    console.groupEnd()
+    return this.detail
 }
 FileManager.prototype.loadAll = function () {
-    console.log("this.loadAll()")
+    console.log("FileManager.loadAll")
     // ----
     
     if (!this.images) {
@@ -33338,9 +33948,11 @@ FileManager.prototype.loadAll = function () {
     
     this.all = all
     
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.buildImageThumbnails = function (image) {
-    console.log("this.buildImageThumbnails(image)", image)
+    console.log("FileManager.buildImageThumbnails")
     // ----
     
     let isCoverClass = ""
@@ -33378,21 +33990,27 @@ FileManager.prototype.buildImageThumbnails = function (image) {
                 .append($IMG)
         }
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.clearSelected = function () {
-    console.log("this.clearSelected()")
+    console.log("FileManager.clearSelected")
     // ----
     
     $("img.selected").removeClass("selected")
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.translateMessages = function () {
-    console.log("FileManager.translateMessages()")
+    console.groupCollapsed("FileManager.translateMessages")
     // ----
     
     for (let name in this.settings.tpl) {
-        console.log("|__ name", name)
+        console.log("name", name)
         for (let key in this.settings.messages) {
-            console.log("|__ |__ key", key)
+            console.log("|__ key", key)
             if (this.settings.tpl[name]) {
                 this.settings.tpl[name] = this.settings.tpl[name].replace("{{ " + key + " }}", this.settings.messages[key])
             } else if (this.settings.tpl.preview[name]) {
@@ -33401,16 +34019,27 @@ FileManager.prototype.translateMessages = function () {
             
         }
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.cleanFilename = function (src) {
-    var filename = src.split("\\").pop()
+    console.groupCollapsed("FileManager.cleanFilename")
+    // ----
+    
+    let filename = src.split("\\").pop()
     if (filename === src) {
         filename = src.split("/").pop()
     }
     
+    // ----
+    console.groupEnd()
     return src !== "" ? filename : ""
 }
 FileManager.prototype.validateImage = function () {
+    console.groupCollapsed("FileManager.validateImage")
+    // ----
+    
     if (this.settings.minWidth !== 0 && this.settings.minWidth >= this.file.width) {
         this.pushError("minWidth")
     }
@@ -33430,14 +34059,23 @@ FileManager.prototype.validateImage = function () {
     if (this.settings.allowedFormats.indexOf(this.getImageFormat()) === "-1") {
         this.pushError("imageFormat")
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.checkFileSize = function () {
+    console.groupCollapsed("FileManager.checkFileSize")
+    // ----
+    
     if (this.sizeToByte(this.settings.maxFileSize) !== 0 && this.file.size > this.sizeToByte(this.settings.maxFileSize)) {
         this.pushError("fileSize")
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.isFileExtensionAllowed = function () {
-    console.log("FileManager.isFileExtensionAllowed")
+    console.groupCollapsed("FileManager.isFileExtensionAllowed")
     // ----
     
     if (this.settings.allowedFileExtensions.indexOf("*") !== "-1" ||
@@ -33447,10 +34085,12 @@ FileManager.prototype.isFileExtensionAllowed = function () {
     
     this.pushError("fileExtension")
     
+    // ----
+    console.groupEnd()
     return false
 }
 FileManager.prototype.isImage = function (image) {
-    console.log("FileManager.isImage")
+    console.groupCollapsed("FileManager.isImage")
     // ----
     
     let allowedExtensions = this.settings.imgFileExtensions
@@ -33458,34 +34098,47 @@ FileManager.prototype.isImage = function (image) {
     let index = allowedExtensions.indexOf(fileType)
     
     /*
-    console.log("|__ allowedExtensions", allowedExtensions)
-    console.log("|__ fileType", fileType)
-    console.log("|__ index", index)
+    console.log("allowedExtensions", allowedExtensions)
+    console.log("fileType", fileType)
+    console.log("index", index)
     //*/
     
+    // ----
+    console.groupEnd()
     return index >= 0
 }
 FileManager.prototype.getFileType = function () {
-    console.log("FileManager.getFileType()")
+    console.groupCollapsed("FileManager.getFileType")
     // ----
     
+    // ----
+    console.groupEnd()
     return this.file.name.split(".").pop().toLowerCase()
 }
 FileManager.prototype.getImageFormat = function () {
+    console.groupCollapsed("FileManager.getImageFormat")
+    // ----
+    
+    let imageFormat
+    
     if (this.file.width === this.file.height) {
-        return "square"
+        imageFormat = "square"
     }
     
     if (this.file.width < this.file.height) {
-        return "portrait"
+        imageFormat = "portrait"
     }
     
     if (this.file.width > this.file.height) {
-        return "landscape"
+        imageFormat = "landscape"
     }
+    
+    // ----
+    console.groupEnd()
+    return imageFormat
 }
 FileManager.prototype.setFileName = function (file) {
-    console.log("FileManager.setFileName(file)", file)
+    console.groupCollapsed("FileManager.setFileName")
     // ----
     
     let fileName, fileExtension = null
@@ -33508,9 +34161,12 @@ FileManager.prototype.setFileName = function (file) {
     
     this.detail.name = fileName
     this.detail.extension = fileExtension
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.setFileDetail = function (file) {
-    console.log("FileManager.setFileDetail(file)", file)
+    console.groupCollapsed("FileManager.setFileDetail")
     // ----
     
     this.detail.path = `/public/img/${this.source}/${this.sourceId}`
@@ -33528,9 +34184,12 @@ FileManager.prototype.setFileDetail = function (file) {
     this.detail.created_by = this.userId
     this.detail.modified_by = this.userId
     this.detail.note = null
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.setFileDimensions = function (width, height) {
-    console.log("FileManager.setFileDimensions(width, height)", width, height)
+    console.groupCollapsed("FileManager.setFileDimensions")
     // ----
     
     this.file.width = null
@@ -33546,9 +34205,12 @@ FileManager.prototype.setFileDimensions = function (width, height) {
         this.detail.width = width
         this.detail.height = height
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.setFileSize = function (file) {
-    console.log("FileManager.setFileSize(file)", file)
+    console.groupCollapsed("FileManager.setFileSize")
     // ----
     
     let fileSize = null
@@ -33560,9 +34222,12 @@ FileManager.prototype.setFileSize = function (file) {
     }
     
     this.detail.size = fileSize
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.setFileInformation = function (file) {
-    console.log("FileManager.setFileInformation(file)", file)
+    console.groupCollapsed("FileManager.setFileInformation")
     // ----
     
     this.file.object = file
@@ -33573,8 +34238,14 @@ FileManager.prototype.setFileInformation = function (file) {
     this.file.height = null
     
     this.detail.type = file.type
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.sizeToByte = function (size) {
+    console.groupCollapsed("FileManager.sizeToByte")
+    // ----
+    
     let value = 0
     
     if (size !== 0) {
@@ -33592,10 +34263,12 @@ FileManager.prototype.sizeToByte = function (size) {
         }
     }
     
+    // ----
+    console.groupEnd()
     return value
 }
 FileManager.prototype.findClosest = function (arrSorted, value) {
-    console.log("FileManager.findClosest(arrSorted, value)", arrSorted, value)
+    console.groupCollapsed("FileManager.findClosest")
     // ----
     
     let closest = arrSorted[0]
@@ -33610,10 +34283,13 @@ FileManager.prototype.findClosest = function (arrSorted, value) {
             return closest
         }
     }
+    
+    // ----
+    console.groupEnd()
     return arrSorted[arrSorted.length - 1]
 }
 FileManager.prototype.estimateAspectRatio = function (width, height) {
-    console.log("FileManager.estimateAspectRatio(width, height)", width, height)
+    console.groupCollapsed("FileManager.estimateAspectRatio")
     // ----
     
     let ratio = Math.max(width, height) / Math.min(width, height)
@@ -33629,9 +34305,12 @@ FileManager.prototype.estimateAspectRatio = function (width, height) {
     }
     
     this.detail.ratio = Math.round(ratio * 100) / 100 + ":1"
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.resetFile = function () {
-    console.log("FileManager.resetFile()")
+    console.groupCollapsed("FileManager.resetFile")
     // ----
     
     this.file.object = null
@@ -33641,9 +34320,12 @@ FileManager.prototype.resetFile = function () {
     this.file.type = null
     this.file.width = null
     this.file.height = null
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.setFile = function (file) {
-    console.log("FileManager.setFile(file)", file)
+    console.groupCollapsed("FileManager.setFile")
     // ----
     
     this.resetFile()
@@ -33657,12 +34339,12 @@ FileManager.prototype.setFile = function (file) {
         let fileHeight = (file.height && (!isNaN(parseInt(file.height)))) ? parseInt(file.height) : null
         
         /*
-        console.log("|__ fileName", fileName)
-        console.log("|__ fileType", fileType)
-        console.log("|__ fileSize", fileSize)
-        console.log("|__ fileSizeFormatted", fileSizeFormatted)
-        console.log("|__ fileWidth", fileWidth)
-        console.log("|__ fileHeight", fileHeight)
+        console.log("fileName", fileName)
+        console.log("fileType", fileType)
+        console.log("fileSize", fileSize)
+        console.log("fileSizeFormatted", fileSizeFormatted)
+        console.log("fileWidth", fileWidth)
+        console.log("fileHeight", fileHeight)
         //*/
         
         this.file.object = (file.object) ? file.object : null
@@ -33679,15 +34361,21 @@ FileManager.prototype.setFile = function (file) {
         this.setFileDimensions(this.file.width, this.file.height)
         this.estimateAspectRatio(this.file.width, this.file.height)
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.fileSelected = function (event) {
-    console.log("FileManager.fileSelected(event)", event)
+    console.groupCollapsed("FileManager.fileSelected")
     // ----
     
     this.readFile(this.inputs.fields.imageFile[0])
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.readFile = function (input) {
-    console.log("FileManager.readFile(input)", input)
+    console.groupCollapsed("FileManager.readFile")
     // ----
     
     if (!input || !input.files[0]) {
@@ -33725,8 +34413,8 @@ FileManager.prototype.readFile = function (input) {
                 _this.validateImage()
                 $(_this.input).trigger(eventFileReady, [true, srcBase64])
                 //*
-                console.log("|__ file", _this.file)
-                console.log("|__ detail", _this.detail)
+                console.log("file", _this.file)
+                console.log("detail", _this.detail)
                 //*/
                 _this.displaySet()
                 _remove_button.disabled = true
@@ -33736,14 +34424,16 @@ FileManager.prototype.readFile = function (input) {
         this.onFileReady(false)
     }
     
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.onFileReady = function (event, previewable, src) {
-    console.log("FileManager.onFileReady(event, previewable, src)", event)
+    console.groupCollapsed("FileManager.onFileReady")
     // ----
     
     $(this.inputs.fields.imageFile).off("fileManager.fileReady", this.onFileReady)
     //*
-    console.log("|__ this.errorsEvent.errors", this.errorsEvent.errors)
+    console.log("this.errorsEvent.errors", this.errorsEvent.errors)
     //*/
     if (this.errorsEvent.errors.length === 0) {
         this.setPreview(previewable, src)
@@ -33768,23 +34458,33 @@ FileManager.prototype.onFileReady = function (event, previewable, src) {
         
         this.resetPreview()
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.onChange = function (event) {
+    console.groupCollapsed("FileManager.onChange")
+    // ----
+    
     if ($(this.inputs.fields.imageFile).val() !== "") {
         this.formReset()
         this.fileSelected(event)
     } else {
         this.formReset(event)
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.isShown = function () {
-    console.log("FileManager.isShown()")
+    console.groupCollapsed("FileManager.isShown")
     // ----
+    
     const _is_shown = document.getElementById($(this.inputs.fields.imageIsShown).attr("id"))
     const _image_id = document.getElementById($(this.inputs.fields.imageId).attr("id"))
     //*
-    console.log("|__ _is_shown", _is_shown)
-    console.log("|__ _image_id", _image_id)
+    console.log("_is_shown", _is_shown)
+    console.log("_image_id", _image_id)
     //*/
     if (_is_shown && _image_id) {
         let imageId = (!isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
@@ -33799,15 +34499,19 @@ FileManager.prototype.isShown = function () {
             }
         }
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.isCover = function () {
-    console.log("FileManager.isCover()")
+    console.groupCollapsed("FileManager.isCover")
     // ----
+    
     const _is_cover = document.getElementById($(this.inputs.fields.imageIsCover).attr("id"))
     const _image_id = document.getElementById($(this.inputs.fields.imageId).attr("id"))
     //*
-    console.log("|__ _is_cover", _is_cover)
-    console.log("|__ _image_id", _image_id)
+    console.log("_is_cover", _is_cover)
+    console.log("_image_id", _image_id)
     //*/
     if (_is_cover && _image_id) {
         let imageId = (!isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
@@ -33823,10 +34527,14 @@ FileManager.prototype.isCover = function () {
             }
         }
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.formUpload = function () {
-    console.log("FileManager.formUpload()")
+    console.groupCollapsed("FileManager.formUpload")
     // ----
+    
     const _image_id = document.getElementById($(this.inputs.fields.imageId).attr("id"))
     const _image_alt = document.getElementById($(this.inputs.fields.imageAlt).attr("id"))
     const _image_title = document.getElementById($(this.inputs.fields.imageTitle).attr("id"))
@@ -33909,12 +34617,12 @@ FileManager.prototype.formUpload = function () {
                 if (ans) {
                     this.sendUpdateRequest(removeNulls(dataToSend), function (data) {
                         if (data) {
-                            console.log("|__ data", data)
+                            console.log("data", data)
                             let detail = _this.setDetail((data[0]) ? data[0] : data)
                             if (detail.id && detail.name) {
-                                console.log("|__ detail", detail)
+                                console.log("detail", detail)
                                 let image = _this.all.get(detail.id)
-                                console.log("|__ image", image)
+                                console.log("image", image)
                                 
                                 _this.all.set(detail.id, detail)
                                 
@@ -33923,7 +34631,7 @@ FileManager.prototype.formUpload = function () {
                                 
                                 toastr["success"](`${detail.name} - has been updated`, "File Manager")
                             } else {
-                                console.log("|__ data", data)
+                                console.log("data", data)
                                 toastr["error"](`${detail.name} - has not been updated`, "File Manager")
                             }
                         }
@@ -33987,9 +34695,12 @@ FileManager.prototype.formUpload = function () {
             })
         }
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.uploadComplete = function (event) {
-    console.log("FileManager.uploadComplete(event)", event)
+    console.groupCollapsed("FileManager.uploadComplete")
     // ----
     
     let results = null
@@ -34031,9 +34742,12 @@ FileManager.prototype.uploadComplete = function (event) {
             }
         }
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.uploadProgress = function (event) {
-    console.log("FileManager.uploadProgress(event)", event)
+    console.groupCollapsed("FileManager.uploadProgress")
     // ----
     
     let _progress_bar = document.getElementById(this.inputs.fields.progress.attr("id"))
@@ -34055,19 +34769,26 @@ FileManager.prototype.uploadProgress = function (event) {
             "color": "#06030a",
         })
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.uploadFailed = function (event) {
-    console.log("FileManager.uploadFailed(event)", event)
+    console.groupCollapsed("FileManager.uploadFailed")
     // ----
     
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.uploadCanceled = function (event) {
-    console.log("FileManager.uploadFailed(event)", event)
+    console.groupCollapsed("FileManager.uploadFailed")
     // ----
     
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.sendRemoveRequest = function (dataToSend, callback) {
-    console.log("FileManager.sendRemoveRequest(dataToSend, callback)", dataToSend, callback)
+    console.groupCollapsed("FileManager.sendRemoveRequest")
     // ----
     
     if (dataToSend) {
@@ -34083,9 +34804,11 @@ FileManager.prototype.sendRemoveRequest = function (dataToSend, callback) {
             return this.handleError("Error Removing Image.", "Image Manager", "error")
         }
     }
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.sendUpdateRequest = function (dataToSend, callback) {
-    console.log("FileManager.sendUpdateRequest(dataToSend, callback)", dataToSend, callback)
+    console.groupCollapsed("FileManager.sendUpdateRequest")
     // ----
     
     let _this = this
@@ -34094,6 +34817,8 @@ FileManager.prototype.sendUpdateRequest = function (dataToSend, callback) {
     
     if (dataToSend && source !== null && sourceId !== null) {
         let url = `/api/v1.0/images/update`
+        console.groupCollapsed("sendUpdateRequest")
+        // ----
         try {
             sendPostRequest(url, dataToSend, function (data, status, xhr) {
                 if (data) {
@@ -34104,17 +34829,26 @@ FileManager.prototype.sendUpdateRequest = function (dataToSend, callback) {
             console.log("error", e)
             return _this.handleError("Error Retrieving Images.", "Image Manager", "error")
         }
+        // ----
+        console.groupEnd()
     }
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.validate = function () {
-    console.log("FileManager.validate()")
+    console.groupCollapsed("FileManager.validate")
     // ----
+    
     let _form = this.form[0]
+    
+    // ----
+    console.groupEnd()
     return $(_form).valid()
 }
 FileManager.prototype.formRules = function () {
-    console.log("FileManager.formRules()")
+    console.groupCollapsed("FileManager.formRules")
     // ----
+    
     let rules = {}
     let messages = {}
     
@@ -34138,13 +34872,15 @@ FileManager.prototype.formRules = function () {
         required: "Field is required.",
     }
     
+    // ----
+    console.groupEnd()
     return {
         rules: rules,
         messages: messages,
     }
 }
 FileManager.prototype.assignEvents = function () {
-    console.log("FileManager.assignEvents()")
+    console.groupCollapsed("FileManager.assignEvents")
     // ----
     
     let _form = this.form[0]
@@ -34163,9 +34899,11 @@ FileManager.prototype.assignEvents = function () {
     this.inputs.fields.imageIsCover.on("change", this.isCover)
     this.validator = $(_form).validate()
     
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.edit = function (imageId) {
-    console.log("FileManager.edit(imageId)", imageId)
+    console.groupCollapsed("FileManager.edit")
     // ----
     
     let _remove_button = document.getElementById($(this.inputs.buttons.remove).attr("id"))
@@ -34187,33 +34925,40 @@ FileManager.prototype.edit = function (imageId) {
             _remove_button.disabled = false
         }
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.open = function () {
-    console.log("FileManager.open()")
+    console.groupCollapsed("FileManager.open")
     // ----
     
     $(this.inputs.fields.imageFile).trigger("click")
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.render = function () {
+    console.groupCollapsed("FileManager.render")
+    // ----
+    
     this.form = this.fileForm()
     this.gallery = this.fileGallery()
     
     $(this.element).append(this.form, this.gallery)
     this.input = $(this.inputs.fields.imageFile)[0]
     
-    /**
-     * Initialize Validation
-     */
     let _form = document.getElementById($(this.form).attr("id"))
-    //*
+    
     initializeValidator()
-    //*/
-    //console.log("_form", _form)
-    //return $(_form).valid()
+    
     this.formHide()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.load = function (options) {
-    console.log("FileManager.load(options)", options)
+    console.groupCollapsed("FileManager.load")
     // ----
     
     if (options && options.source && options.sourceId) {
@@ -34226,9 +34971,12 @@ FileManager.prototype.load = function (options) {
         this.galleryContainer.empty()
         this.loadAll()
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.init = function (options) {
-    console.log("FileManager.init(options)", options)
+    console.groupCollapsed("FileManager.init")
     // ----
     
     /**
@@ -34327,6 +35075,8 @@ FileManager.prototype.init = function (options) {
         "remove": `/api/v1.0/images/remove`,
     }
     
+    // ----
+    console.groupEnd()
 }
 
 $.fn.fileManager = function (options) {
@@ -34339,7 +35089,6 @@ const Product = (function () {
     "use strict"
     
     const base_url = "/products"
-    const regex = /[^A-Za-z0-9]/g
     const _product_edit_meta_description_long_update_button = document.getElementById("product_edit_meta_description_long_update_button")
     const _product_edit_meta_description_short_update_button = document.getElementById("product_edit_meta_description_short_update_button")
     const _product_edit_meta_product_amenities_update_button = document.getElementById("product_edit_meta_product_amenities_update_button")
@@ -34353,8 +35102,6 @@ const Product = (function () {
     const _modal_product_arrive_to_date = document.getElementById("modal_product_arrive_to_date")
     const _modal_product_depart_from_station = document.getElementById("modal_product_depart_from_station")
     const _modal_product_arrive_to_station = document.getElementById("modal_product_arrive_to_station")
-    const _modal_product_depart_from_airport = document.getElementById("modal_product_depart_from_airport")
-    const _modal_product_arrive_to_airport = document.getElementById("modal_product_arrive_to_airport")
     const _modal_product_depart_from_station_id = document.getElementById("modal_product_depart_from_station_id")
     const _modal_product_arrive_to_station_id = document.getElementById("modal_product_arrive_to_station_id")
     const _modal_product_depart_from_airport_id = document.getElementById("modal_product_depart_from_airport_id")
@@ -34390,7 +35137,6 @@ const Product = (function () {
     const _modal_product_arrive_to_station_date = document.getElementById("modal_product_arrive_to_station_date")
     const _modal_product_depart_from_station_time = document.getElementById("modal_product_depart_from_station_time")
     const _modal_product_arrive_to_station_time = document.getElementById("modal_product_arrive_to_station_time")
-    
     const _product_edit_page = document.getElementById("product_edit_page")
     const _product_panel_link_overview = document.getElementById("product_panel_link_overview")
     const _panel_tab_product_o = document.getElementById("panel_tab_product_o")
@@ -34407,8 +35153,6 @@ const Product = (function () {
     const _product_panel_link_pricing = document.getElementById("product_panel_link_pricing")
     const _panel_tab_pricing = document.getElementById("panel_tab_pricing")
     const _panel_tab_location = document.getElementById("panel_tab_location")
-    const _panel_tab_product_location = document.getElementById("panel_tab_product_location")
-    const _panel_tab_product_meta = document.getElementById("panel_tab_product_meta")
     const _panel_tab_meta = document.getElementById("panel_tab_meta")
     const _product_panel_link_meta = document.getElementById("product_panel_link_meta")
     const _product_panel_link_location = document.getElementById("product_panel_link_location")
@@ -34451,8 +35195,6 @@ const Product = (function () {
     const _modal_product_description_short = document.getElementById("modal_product_description_short")
     const _modal_product_description_long = document.getElementById("modal_product_description_long")
     const _modal_product_keywords = document.getElementById("modal_product_keywords")
-    const _modal_product_meta_fields = document.getElementById("modal_product_meta_fields")
-    const _modal_product_detail_fields = document.getElementById("modal_product_detail_fields")
     const _modal_product_depart_from_fields = document.getElementById("modal_product_depart_from_fields")
     const _modal_product_arrive_to_fields = document.getElementById("modal_product_arrive_to_fields")
     const _modal_product_hotel_fields = document.getElementById("modal_product_hotel_fields")
@@ -34466,7 +35208,6 @@ const Product = (function () {
     let radios = document.querySelectorAll('input[type=radio][name="location_to_use"]')
     let userId, categoryId, productId, $product_keywords, $product_amenities, $index_table
     let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
-    
     let addProductRules = {
         groups: {
             /*
@@ -34804,11 +35545,6 @@ const Product = (function () {
             _modal_product_day_span.value = daySpan
         })
     
-    $("#page")
-        .on("change", function () {
-            updateProgress()
-        })
-    
     $("#button_view_calendar")
         .on("click", function () {
             $("#seasonCalendarModal").modal("show")
@@ -34816,36 +35552,36 @@ const Product = (function () {
     
     $(_product_edit_meta_description_long_update_button)
         .on("click", function () {
-            //console.log("Product.product_edit_meta_description_long_update_button.click()")
+            console.groupCollapsed("Product.product_edit_meta_description_long_update_button.click()")
             updateMeta()
         })
     
     $(_product_edit_meta_description_short_update_button)
         .on("click", function () {
-            //console.log("Product.product_edit_meta_description_short_update_button.click()")
+            console.groupCollapsed("Product.product_edit_meta_description_short_update_button.click()")
             updateMeta()
         })
     
     $(_product_edit_meta_product_amenities_update_button)
         .on("click", function () {
-            //console.log("Product.product_edit_meta_product_amenities_update_button.click()")
+            console.groupCollapsed("Product.product_edit_meta_product_amenities_update_button.click()")
             updateMeta()
         })
     
     $(_product_edit_meta_product_keywords_update_button)
         .on("click", function () {
-            //console.log("Product.product_edit_meta_product_keywords_update_button.click()")
+            console.groupCollapsed("Product.product_edit_meta_product_keywords_update_button.click()")
             updateMeta()
         })
     
     $(_product_edit_details_section_publish)
         .on("click", function () {
-            //console.log("Product.product_edit_details_section_publish.click()")
+            console.groupCollapsed("Product.product_edit_details_section_publish.click()")
         })
     
     $(_product_edit_details_section_save_draft)
         .on("click", function () {
-            //console.log("Product.product_edit_details_section_save_draft.click()")
+            console.groupCollapsed("Product.product_edit_details_section_save_draft.click()")
         })
     
     $(_product_edit_details_name)
@@ -34887,7 +35623,7 @@ const Product = (function () {
     
     $(_modal_button_submit_add_product)
         .on("click", function () {
-            console.log("Product.modal_button_submit_add_product:click()")
+            console.groupCollapsed("Product.modal_button_submit_add_product:click()")
             // ----
             
             if (validateNewProduct()) {
@@ -34949,16 +35685,18 @@ const Product = (function () {
         })
     
     const setNewProductModal = function () {
-        //console.log("Product.setNewProductModal()")
+        console.groupCollapsed("Product.setNewProductModal")
         // ----
         
         clearModalForm()
         
         $(_modal_new_product).modal("show")
         
+        // ----
+        console.groupEnd()
     }
     const clearModalForm = function () {
-        //console.log("Product.clearModalForm()")
+        console.groupCollapsed("Product.clearModalForm")
         // ----
         
         if (_modal_new_product) {
@@ -35024,9 +35762,11 @@ const Product = (function () {
             $("[data-categoryid]").hide()
         }
         
+        // ----
+        console.groupEnd()
     }
     const clearModalFormValidation = function () {
-        //console.log("Product.clearNewProductValidation()")
+        console.groupCollapsed("Product.clearNewProductValidation")
         // ----
         
         if (Product.validator) {
@@ -35036,13 +35776,15 @@ const Product = (function () {
         
         clearAllValidation()
         
+        // ----
+        console.groupEnd()
     }
     const validateNewProduct = function () {
-        console.log("Product.validateNewProduct()")
+        console.groupCollapsed("Product.validateNewProduct")
         // ----
         
         if (!_form_product_add) {
-            console.log("|__ Missing _form_product_add")
+            console.log("Missing _form_product_add")
             return false
         }
         let isValid = false
@@ -35052,22 +35794,26 @@ const Product = (function () {
             isValid = true
         } else {
             let validator = $(_form_product_add).validate()
-            console.log("|__ validator", validator)
-            console.log("|__ isValid", isValid)
+            console.log("validator", validator)
+            console.log("isValid", isValid)
         }
         
+        // ----
+        console.groupEnd()
         return isValid
     }
     const saveNewProduct = function () {
-        console.log("Product.saveNewProduct()")
+        console.groupCollapsed("Product.saveNewProduct()")
         // ----
         
         let dataToSend = buildInsertData()
         let product
         
-        //console.log("|__ dataToSend", dataToSend)
+        //console.log("dataToSend", dataToSend)
         newProduct(dataToSend, function (data) {
-            //console.log("data", data)
+            console.groupCollapsed("Product.saveNewProduct - newProduct")
+            // ----
+            
             if (data) {
                 product = data
                 if (data.length === 1) {
@@ -35076,7 +35822,7 @@ const Product = (function () {
                 
                 if (product.id) {
                     let detail = set(product)
-                    //console.log("|__ detail", detail)
+                    //console.log("detail", detail)
                     _modal_product_id.value = (!isNaN(parseInt(product.id))) ? parseInt(product.id) : ""
                     
                     $index_table.insertRow(detail)
@@ -35085,13 +35831,19 @@ const Product = (function () {
                     $index_table.clearSelectedRows()
                     
                     toastr["success"](`Product - ${product.id} was created, would you like to edit?`, "Product Created")
-                    //window.location.replace("/products/" + product.id)
+                    window.location.replace("/products/" + product.id)
                 }
             }
+            
+            // ----
+            console.groupEnd()
         })
+        
+        // ----
+        console.groupEnd()
     }
     const newProduct = function (dataToSend, callback) {
-        //console.log("Product.newProduct(dataToSend)", dataToSend)
+        console.groupCollapsed("Product.newProduct(dataToSend)", dataToSend)
         // ----
         
         let url = "/api/v1.0/products/add"
@@ -35110,14 +35862,19 @@ const Product = (function () {
                 handleProductError("Oops: 1")
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
     const setNewFormDetails = function (categoryId) {
-        console.group("Product.setNewFormDetails(categoryId)", categoryId)
+        console.groupCollapsed("Product.setNewFormDetails")
         // ----
         
+        // ----
+        console.groupEnd()
     }
     const disableNewFormDetails = function () {
-        //console.log("Product.disableNewFormDetails()")
+        console.groupCollapsed("Product.disableNewFormDetails")
         // ----
         
         //*
@@ -35151,10 +35908,13 @@ const Product = (function () {
         _modal_product_sku.disabled = true
         _modal_product_id.disabled = true
         
+        // ----
+        console.groupEnd()
     }
     const enableNewFormDetails = function () {
-        //console.log("Product.disableNewFormDetails()")
+        console.groupCollapsed("Product.enableNewFormDetails")
         // ----
+        
         disableNewFormDetails()
         
         let categoryId = (_modal_product_category_id && !isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null
@@ -35253,18 +36013,21 @@ const Product = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
     }
     const buildInsertData = function () {
-        //console.log("Category.buildInsertData()")
+        console.groupCollapsed("Product.buildInsertData()")
         // ----
+        
         let productId = (_modal_product_id && !isNaN(parseInt(_modal_product_id.value))) ? parseInt(_modal_product_id.value) : null
         let categoryId = (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null
         let productName, productSKU, currencyId, pricingStrategyTypesId, ratingTypesId, providerId, vendorId, daySpan, productDescriptionShort, productDescriptionLong
         let depart_from, arrive_to, street1, street2, postalCode, provinceId, countryId, cityId, depart_date, depart_time, arrive_date, arrive_time
         let defaultDepartureTime, defaultArrivalTime = "12:00"
-        let startDate = moment(new Date()).format("YYYY-MM-DD")
-        let defaultDepartureDate = moment(startDate, "YYYY-MM-DD").add(3, "months").format("YYYY-MM-DD")
-        let defaultArrivalDate = moment(defaultDepartureDate, "YYYY-MM-DD").add(1, "days").format("YYYY-MM-DD")
+        let startDate = moment(new Date()).format(defaultDateFormat)
+        let defaultDepartureDate = moment(startDate, defaultDateFormat).add(3, "months").format(defaultDateFormat)
+        let defaultArrivalDate = moment(defaultDepartureDate, defaultDateFormat).add(1, "days").format(defaultDateFormat)
         let dataToSend
         let location = {
             name: null,
@@ -35493,10 +36256,12 @@ const Product = (function () {
             location: location,
         }
         
+        // ----
+        console.groupEnd()
         return remove_nulls(dataToSend)
     }
     const resetNewProductDetails = function () {
-        //console.log("Product.resetNewProductDetails()")
+        console.groupCollapsed("Product.resetNewProductDetails")
         // ----
         
         clearModalFormValidation()
@@ -35537,12 +36302,13 @@ const Product = (function () {
         //_modal_product_hotel_fields.disabled = true
         
         clearAllValidation(_form_product_add)
+        
+        // ----
+        console.groupEnd()
     }
     
-    //
-    
     const buildMetaObject = function () {
-        //console.log("Product.buildMetaObject()")
+        console.groupCollapsed("Product.buildMetaObject")
         // ----
         
         let id = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
@@ -35551,6 +36317,8 @@ const Product = (function () {
         let description_short = (_product_edit_meta_description_short.value !== "") ? _product_edit_meta_description_short.value : null
         let description_long = (_product_edit_meta_description_long.value !== "") ? _product_edit_meta_description_long.value : null
         
+        // ----
+        console.groupEnd()
         return removeNulls({
             amenities: amenities,
             keywords: keywords,
@@ -35560,15 +36328,17 @@ const Product = (function () {
         })
     }
     const updateMeta = function () {
-        //console.log("Product.updateMeta()")
+        console.groupCollapsed("Product.updateMeta")
+        // ----
+        
         let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
-        //console.log("|__ productId", productId)
+        //console.log("productId", productId)
         let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
-        //console.log("|__ categoryId", categoryId)
+        //console.log("categoryId", categoryId)
         let userId = (!isNaN(parseInt(_user_id.value))) ? parseInt(_user_id.value) : null
-        //console.log("|__ userId", userId)
+        //console.log("userId", userId)
         let dataToSend = buildMetaObject()
-        //console.log("|__ dataToSend", dataToSend)
+        //console.log("dataToSend", dataToSend)
         
         confirmDialog(`Would you like to update?`, (ans) => {
             if (ans) {
@@ -35591,9 +36361,14 @@ const Product = (function () {
                 })
             }
         })
+        
+        // ----
+        console.groupEnd()
     }
     const sendRequestUpdateProductMeta = function (dataToSend, callback) {
-        //console.log("Product.sendRequestUpdateProductMeta(dataToSend, callback)", dataToSend)
+        console.groupCollapsed("Product.sendRequestUpdateProductMeta")
+        // ----
+        
         if (dataToSend) {
             let url = "/api/v1.0/products/update_meta"
             try {
@@ -35607,12 +36382,12 @@ const Product = (function () {
                 return handleProductError("Error")
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
-    //
-    
     const buildProductDetailRecord = function () {
-        //console.log("Product.buildProductDetailRecord()")
+        console.groupCollapsed("Product.buildProductDetailRecord")
         let sku = updateProductSKU()
         let enabled = (_product_edit_details_enabled && _product_edit_details_enabled.checked === true) ? 1 : 0
         let rating_types_id = (!isNaN(parseInt(_product_edit_details_rating_types_id.value))) ? parseInt(_product_edit_details_rating_types_id.value) : null
@@ -35622,6 +36397,8 @@ const Product = (function () {
         let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         let userId = (!isNaN(parseInt(_user_id.value))) ? parseInt(_user_id.value) : null
         
+        // ----
+        console.groupEnd()
         return removeNulls({
             id: (productId) ? productId : null,
             rating_types_id: (rating_types_id) ? rating_types_id : null,
@@ -35631,14 +36408,15 @@ const Product = (function () {
             enabled: enabled,
         })
     }
-    
     const sendRequestUpdateProductDetail = function (dataToSend, callback) {
-        //console.log("Product.sendRequestUpdateProductDetail(dataToSend)", dataToSend)
+        console.groupCollapsed("Product.sendRequestUpdateProductDetail")
+        // ----
+        
         if (dataToSend) {
             let url = "/api/v1.0/products/update_detail"
             try {
                 sendPostRequest(url, dataToSend, function (data, status, xhr) {
-                    //console.log("|__ |__ data", data)
+                    //console.log("data", data)
                     if (data) {
                         return callback(data)
                     }
@@ -35648,15 +36426,22 @@ const Product = (function () {
                 return handleProductError("Error")
             }
         }
-    }
-    
-    const validateProductRecord = function () {
-        //let isValid = true
         
+        // ----
+        console.groupEnd()
+    }
+    const validateProductRecord = function () {
+        console.groupCollapsed("Product.validateProductRecord")
+        // ----
+        
+        // ----
+        console.groupEnd()
         return true
     }
-    
     const sendUpdateRequest = function (dataToSend, callback) {
+        console.groupCollapsed("Product.sendUpdateRequest")
+        // ----
+        
         let url = "/api/v1.0/products/update"
         
         if (dataToSend) {
@@ -35673,9 +36458,14 @@ const Product = (function () {
                 handleProductError("Oops: 1")
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildProductRecord = function () {
+        console.groupCollapsed("Product.buildProductRecord")
+        // ----
+        
         if (validateProductRecord()) {
             let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
             let arrive_to, depart_from
@@ -35718,9 +36508,13 @@ const Product = (function () {
             
             return removeNulls(detail)
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const save = function () {
+        console.groupCollapsed("Product.save")
+        // ----
         
         let dataToSend = buildProductRecord()
         
@@ -35746,23 +36540,37 @@ const Product = (function () {
             })
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const navigate = function (product) {
+        console.groupCollapsed("Product.navigate")
+        // ----
+        
         if (product && product.id) {
             window.location.replace(base_url + "/" + product.id)
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const get = function (id) {
+        console.groupCollapsed("Product.get")
+        // ----
+        
         let data_to_send = {}
         if (id) {
             data_to_send.id = id
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const defaultDetail = function () {
-        return {
+        console.groupCollapsed("Product.defaultDetail")
+        // ----
+        
+        let details = {
             id: null,
             category_id: null,
             pricing_strategy_types_id: null,
@@ -35810,10 +36618,15 @@ const Product = (function () {
             profiles: [],
             provider: {},
         }
+        
+        // ----
+        console.groupEnd()
+        return details
     }
-    
     const set = function (product) {
-        //console.log("Product.set(product)", product)
+        console.groupCollapsed("Product.set")
+        // ----
+        
         let detail = defaultDetail()
         
         if (product) {
@@ -35865,10 +36678,15 @@ const Product = (function () {
         }
         
         Product.detail = detail
+        
+        // ----
+        console.groupEnd()
         return detail
     }
-    
     const loadAll = function (products) {
+        console.groupCollapsed("Product.loadAll")
+        // ----
+        
         Product.all = new Map()
         
         if (!products) {
@@ -35881,9 +36699,12 @@ const Product = (function () {
             Product.all.set("id", detail)
         })
         
+        // ----
+        console.groupEnd()
     }
-    
     const buildIndexTable = function () {
+        console.groupCollapsed("Product.buildIndexTable")
+        // ----
         
         $index_table = $(_product_index_table).table({
             table_type: "display_list",
@@ -35949,10 +36770,15 @@ const Product = (function () {
             ],
             rowClick: Product.navigate,
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const setDefaultProductDetails = function () {
-        return {
+        console.groupCollapsed("Product.setDefaultProductDetails")
+        // ----
+        
+        let details = {
             location: {},
             provider: {},
             vendor: {},
@@ -35962,10 +36788,15 @@ const Product = (function () {
             profiles: [],
             matrix: [],
         }
+        
+        // ----
+        console.groupEnd()
+        return details
     }
-    
     const handleProductError = function (msg, title, level) {
-        //console.log("Product.handleProductError(msg)", msg)
+        console.groupCollapsed("Product.handleProductError")
+        // ----
+        
         if (!title) {
             title = "Product"
         }
@@ -35975,10 +36806,14 @@ const Product = (function () {
         }
         
         toastr[level](`${msg}`, title)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const updateProgress = function () {
-        //console.log("Product.updateProgress()")
+        console.groupCollapsed("Product.updateProgress")
+        // ----
+        
         if (_product_edit_page) {
             let variants = Array.from(Variant.all.values())
             let profiles = Array.from(InventoryProfile.all.values())
@@ -36035,10 +36870,14 @@ const Product = (function () {
             
             updateDisplay()
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const updateDisplay = function () {
-        //console.log("Product.updateDisplay()", Product.detail)
+        console.groupCollapsed("Product.updateDisplay")
+        // ----
+        
         if (_product_edit_page) {
             //LOCATION DISPLAY UPDATE
             let provider, vendor, seasons, units, variants, profiles, product_location,
@@ -36156,10 +36995,12 @@ const Product = (function () {
             
             updateProductSKU()
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const updateProductSKU = function () {
-        //console.log("Product.updateProductSKU()")
+        console.groupCollapsed("Product.updateProductSKU")
         // ----
         
         let att1 = Product.attr1
@@ -36185,25 +37026,28 @@ const Product = (function () {
             
             if (is_null(att1)) {
                 //console.log("att1 is null", att1)
-                return
+                //return
             }
             
             if (is_null(att2)) {
                 //console.log("att2 is null", att2)
-                return
+                //return
             }
             
             if (is_null(att3)) {
                 //console.log("att3 is null", att3)
-                return
+                //return
             }
         }
         
+        // ----
+        console.groupEnd()
         return sku
     }
-    
     const updateProductDetails = function () {
-        //console.log("Product.updateProductDetails()")
+        console.groupCollapsed("Product.updateProductDetails")
+        // ----
+        
         let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
         let categoryId = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         let userId = (!isNaN(parseInt(_user_id.value))) ? parseInt(_user_id.value) : null
@@ -36219,7 +37063,7 @@ const Product = (function () {
                         if (data[0]) {
                             product = data[0]
                         }
-                        //console.log("|__ |__ product", product)
+                        //console.log("product", product)
                         let detail = set(product)
                         if (_product_edit_page) {
                             updateProgress()
@@ -36229,10 +37073,12 @@ const Product = (function () {
                 })
             }
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const setEditFormValues = function (product) {
-        //console.log("Product.setEditFormValues(product)", product)
+        console.groupCollapsed("Product.setEditFormValues")
         // ----
         
         let detail = set(product)
@@ -36273,9 +37119,19 @@ const Product = (function () {
         _product_edit_details_rating_types_id.value = ratings_type_id
         
         Product.attr1 = (category.attribute_id) ? category.attribute_id : null
+        
+        $("#page")
+            .on("change", function () {
+                updateProgress()
+            })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const initEditForm = function (settings) {
+        console.groupCollapsed("Product.initEditForm")
+        // ----
+        
         let product = setDefaultProductDetails()
         
         if (settings) {
@@ -36287,10 +37143,12 @@ const Product = (function () {
         })
         
         setEditFormValues(product)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const index = function (settings) {
-        //console.log("Product.index(settings)", settings)
+        console.groupCollapsed("Product.index")
         // ----
         
         let categories, products, stations, airports
@@ -36305,11 +37163,11 @@ const Product = (function () {
             airports = (settings.airports) ? settings.airports : []
             categories = (settings.category) ? settings.category : []
             /*
-            console.log("|__ settings", settings)
-            console.log("|__ products", products)
-            console.log("|__ stations", stations)
-            console.log("|__ airports", airports)
-            console.log("|__ products", categories)
+            console.log("settings", settings)
+            console.log("products", products)
+            console.log("stations", stations)
+            console.log("airports", airports)
+            console.log("products", categories)
             //*/
         }
         
@@ -36385,10 +37243,12 @@ const Product = (function () {
             })
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const init = function (settings) {
-        //console.log("Product.init(settings)", settings)
+        console.groupCollapsed("Product.init")
+        console.log("settings", settings)
         // ----
         
         let product_details, variants, seasons, units, profiles, provider, vendor,
@@ -36607,10 +37467,12 @@ const Product = (function () {
         if (_product_index_page) {
             Product.index(settings)
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const initAutoComplete = function (categoryId) {
-        //console.log("Product.initAutoComplete()")
+        console.groupCollapsed("Product.initAutoComplete")
         // ----
         
         let category_id = (categoryId && (!isNaN(parseInt(categoryId)))) ? parseInt(categoryId) : (!isNaN(parseInt(_modal_product_category_id.value))) ? parseInt(_modal_product_category_id.value) : null
@@ -36664,6 +37526,8 @@ const Product = (function () {
                 })
         }
         
+        // ----
+        console.groupEnd()
     }
     
     return {
@@ -36731,7 +37595,6 @@ const Product = (function () {
             initAutoComplete()
         },
     }
-    
 })()
 
 $(function () {
@@ -36786,7 +37649,7 @@ $(document).ready(function () {
         const inputs = document.getElementsByTagName("input")
         
         if (mdbPreloader) {
-            $(mdbPreloader).delay(1000).fadeOut(300)
+            $(mdbPreloader).delay(500).fadeOut(300)
         }
         
         for (let i = 0; i < inputs.length; i++) {
@@ -36831,16 +37694,16 @@ $(document).ready(function () {
     $.fn.dataTableExt.afnFiltering.push(
         function (oSettings, aData, iDataIndex) {
             if (oSettings.nTable.id === "dates_table") {
-                var iFini = document.getElementById("min").value
-                var iFfin = document.getElementById("max").value
-                var iStartDateCol = 1
-                var iEndDateCol = 1
+                let iFini = document.getElementById("min").value
+                let iFfin = document.getElementById("max").value
+                let iStartDateCol = 1
+                let iEndDateCol = 1
                 
                 iFini = iFini.substring(6, 10) + iFini.substring(3, 5) + iFini.substring(0, 2)
                 iFfin = iFfin.substring(6, 10) + iFfin.substring(3, 5) + iFfin.substring(0, 2)
                 
-                var datofini = aData[iStartDateCol].substring(6, 10) + aData[iStartDateCol].substring(3, 5) + aData[iStartDateCol].substring(0, 2)
-                var datoffin = aData[iEndDateCol].substring(6, 10) + aData[iEndDateCol].substring(3, 5) + aData[iEndDateCol].substring(0, 2)
+                let datofini = aData[iStartDateCol].substring(6, 10) + aData[iStartDateCol].substring(3, 5) + aData[iStartDateCol].substring(0, 2)
+                let datoffin = aData[iEndDateCol].substring(6, 10) + aData[iEndDateCol].substring(3, 5) + aData[iEndDateCol].substring(0, 2)
                 
                 if (iFini === "" && iFfin === "") {
                     return true
@@ -36852,6 +37715,32 @@ $(document).ready(function () {
                     return true
                 }
                 return false
+            }
+            if (oSettings.nTable.id === "package_index_table") {
+                /*
+                let iFini = document.getElementById("package_index_table_available_start_filter").value
+                let iFfin = document.getElementById("package_index_table_available_end_filter").value
+                let iStartDateCol = 5
+                let iEndDateCol = 6
+                
+                iFini = iFini.substring(6, 10) + iFini.substring(3, 5) + iFini.substring(0, 2)
+                iFfin = iFfin.substring(6, 10) + iFfin.substring(3, 5) + iFfin.substring(0, 2)
+                
+                let datofini = aData[iStartDateCol].substring(6, 10) + aData[iStartDateCol].substring(3, 5) + aData[iStartDateCol].substring(0, 2)
+                let datoffin = aData[iEndDateCol].substring(6, 10) + aData[iEndDateCol].substring(3, 5) + aData[iEndDateCol].substring(0, 2)
+                
+                if (iFini === "" && iFfin === "") {
+                    return true
+                } else if (iFini <= datofini && iFfin === "") {
+                    return true
+                } else if (iFfin >= datoffin && iFini === "") {
+                    return true
+                } else if (iFini <= datofini && iFfin >= datoffin) {
+                    return true
+                }
+                return false
+                //*/
+                return true
             } else {
                 return true
             }

@@ -124,8 +124,53 @@
 </script>
 <!-- /Product -->
 
-<!-- Station -->
 <script type="text/javascript">
-
+	const dateRegEx = /(((19|20)\d\d)\-(0[1-9]|1[0-2])\-((0|1)[0-9]|2[0-9]|3[0-1]))$/
+	const loadDateError = function (input) {
+		let $errorElement = $(input).parents("div.form-element").find("div.error")
+		
+		$errorElement.html("Invalid Date. Only YYYY-MM-DD format allowed.").show()
+	}
+	const unLoadDateError = function (input) {
+		let $errorElement = $(input).parents("div.form-element").find("div.error")
+		
+		$errorElement.html("").hide()
+	}
+	const isDateValid = function (input) {
+		let dateString = input.value
+		
+		if (dateRegEx.test(dateString) || dateString.length === 0) {
+			unLoadDateError(input)
+		} else {
+			loadDateError(input)
+		}
+		
+	}
+	const isNumber = function (input, keyCode) {
+		let separatorDate = "-"
+		let isShift = false
+		
+		if (!isNaN(parseInt(keyCode))) {
+			keyCode = parseInt(keyCode)
+		}
+		
+		if (keyCode === 16) {
+			isShift = true
+		}
+		
+		if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || (keyCode === 8) || (keyCode === 46)) {
+			
+			if (keyCode !== 16) {
+				if ((input.value.length === 4 || input.value.length === 7) && keyCode !== 8) {
+					input.value += separatorDate
+				}
+				
+				return true
+			}
+			
+		}
+		
+		return false
+	}
 </script>
-<!-- /Station -->
+

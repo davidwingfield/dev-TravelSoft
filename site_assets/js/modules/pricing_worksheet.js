@@ -19,7 +19,7 @@ const PricingWorksheet = (function () {
     let incomplete = '<span class="badge badge-pill badge-danger">Incomplete</span>'
     let seasonList, unitList, variantList = []
     let variantCombinations = []
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     $(_product_edit_pricing_section_reload_worksheet)
         .on("click", function () {
@@ -72,6 +72,9 @@ const PricingWorksheet = (function () {
         })
     
     const status = function () {
+        console.groupCollapsed("PricingWorksheet.status")
+        // ----
+        
         let hasIssues = false
         let status = "complete"
         let incompletePricings = Array.from(PricingWorksheet.incompletePricings.values())
@@ -97,10 +100,14 @@ const PricingWorksheet = (function () {
                 .html("Pricing")
         }
         
+        // ----
+        console.groupEnd()
         return status
     }
-    
     const isDisabled = function (day, season_id) {
+        console.groupCollapsed("PricingWorksheet.isDisabled")
+        // ----
+        
         let season, dow
         let dowIndex = -1
         let disabled_dow = []
@@ -116,10 +123,14 @@ const PricingWorksheet = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
         return dowIndex >= 0
     }
-    
     const tableDOW = function (pricing) {
+        console.groupCollapsed("PricingWorksheet.tableDOW")
+        // ----
+        
         let DOWHEADINGROW = $("<tr/>")
         let DOWHEADINGACTIONCOLUMN = $("<th/>", {
             html: "&nbsp;",
@@ -157,10 +168,14 @@ const PricingWorksheet = (function () {
             DOWHEADINGROW.append(DOWHEADINGACTIONCOLUMN)
         }
         
+        // ----
+        console.groupEnd()
         return DOWHEADINGROW
     }
-    
     const buildSeasonWrapper = function (season, matrixId, count) {
+        console.groupCollapsed("PricingWorksheet.buildSeasonWrapper")
+        // ----
+        
         return $("<div/>", {
             class: "accordion md-accordion",
             id: "accordionEx" + matrixId + "-" + count,
@@ -168,9 +183,14 @@ const PricingWorksheet = (function () {
             "aria-multiselectable": "true",
         })
             .attr("data-sectiontype", "season-" + season.season_id)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildUnitWrapper = function (unit, count) {
+        console.groupCollapsed("PricingWorksheet.buildUnitWrapper")
+        // ----
+        
         let id = unit.id + "-" + count
         return $("<div/>", {
             class: "accordion md-accordion card card-body p-1 mb-2",
@@ -180,9 +200,14 @@ const PricingWorksheet = (function () {
             
         })
             .attr("data-sectiontype", "unit-" + unit.id)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildPricingButtonRow = function (pricing) {
+        console.groupCollapsed("PricingWorksheet.buildPricingButtonRow")
+        // ----
+        
         let matrixCode = pricing.matrix_code
         
         let ROW = $("<div/>", {
@@ -211,10 +236,14 @@ const PricingWorksheet = (function () {
         
         COL_6_2.append(UPDATEBUTTON)
         
+        // ----
+        console.groupEnd()
         return ROW.append(COL_6_1, COL_6_2)
     }
-    
     const toggleCompletedMatrices = function (toggle) {
+        console.groupCollapsed("PricingWorksheet.toggleCompletedMatrices")
+        // ----
+        
         let showElements = true
         if (toggle) {
             showElements = toggle
@@ -242,9 +271,14 @@ const PricingWorksheet = (function () {
             $("[data-matrixcomplete='true']").hide()
         }
         
+        // ----
+        console.groupEnd()
+        
     }
-    
     const toggleCompletedPricings = function () {
+        console.groupCollapsed("PricingWorksheet.toggleCompletedPricings")
+        // ----
+        
         let showElements = true
         
         if (!$(_button_toggle_completed_pricings).attr("data-shown")) {
@@ -269,9 +303,13 @@ const PricingWorksheet = (function () {
             pricingsHidden = true
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const toggleUnitFilter = function () {
+        console.groupCollapsed("PricingWorksheet.toggleUnitFilter")
+        // ----
+        
         let elements = document.querySelectorAll(`[data-type='unit']`)
         let showElements
         
@@ -297,9 +335,14 @@ const PricingWorksheet = (function () {
             unitsCollapsed = (showElements === true)
             //pricingsHidden, matricesHidden, unitsCollapsed, seasonsCollapsed = false
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const toggleSeasonFilter = function () {
+        console.groupCollapsed("PricingWorksheet.toggleSeasonFilter")
+        // ----
+        
         let elements = document.querySelectorAll(`[data-type='season']`)
         let showElements = true
         
@@ -323,9 +366,14 @@ const PricingWorksheet = (function () {
             $("#" + id).collapse((showElements === true) ? "show" : "hide")
             seasonsCollapsed = (showElements === true)
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const filtersReset = function (callback) {
+        console.groupCollapsed("PricingWorksheet.filtersReset")
+        // ----
+        
         $("[data-matrixcomplete='true']").show()
         $(_button_toggle_completed_matrices).attr("data-shown", "true")
         $(_button_toggle_completed_matrices).text("Hide Completed Matrices")
@@ -345,10 +393,14 @@ const PricingWorksheet = (function () {
         $(_button_collapse_seasons).text("Expand Seasons")
         toggleSeasonFilter()
         
+        // ----
+        console.groupEnd()
         return callback(1)
     }
-    
     const resetFilters = function () {
+        console.groupCollapsed("PricingWorksheet.resetFilters")
+        // ----
+        
         $(_product_edit_pricing_section_reset_filters)
             .html("<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span> Loading...")
         filtersReset(function (data) {
@@ -356,9 +408,14 @@ const PricingWorksheet = (function () {
                 $(_product_edit_pricing_section_reset_filters).html("Reset Filters")
             }
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const showAllFilterUnits = function () {
+        console.groupCollapsed("PricingWorksheet.showAllFilterUnits")
+        // ----
+        
         let units = Array.from(Unit.all.values())
         $.each(units, function (i, unit) {
             let unitId = unit.id
@@ -368,9 +425,14 @@ const PricingWorksheet = (function () {
                 $(el).show()
             })
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const hideAllFilterUnits = function () {
+        console.groupCollapsed("PricingWorksheet.hideAllFilterUnits")
+        // ----
+        
         let units = Array.from(Unit.all.values())
         $.each(units, function (i, unit) {
             let unitId = unit.id
@@ -380,9 +442,14 @@ const PricingWorksheet = (function () {
                 $(el).hide()
             })
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const showAllFilterSeasons = function () {
+        console.groupCollapsed("PricingWorksheet.showAllFilterSeasons")
+        // ----
+        
         let seasons = Array.from(Season.all.values())
         $.each(seasons, function (i, season) {
             let seasonId = season.id
@@ -392,9 +459,14 @@ const PricingWorksheet = (function () {
                 $(el).show()
             })
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const hideAllFilterSeasons = function () {
+        console.groupCollapsed("PricingWorksheet.hideAllFilterSeasons")
+        // ----
+        
         let seasons = Array.from(Season.all.values())
         $.each(seasons, function (i, season) {
             let seasonId = season.id
@@ -404,9 +476,14 @@ const PricingWorksheet = (function () {
                 $(el).hide()
             })
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const filterUnits = function () {
+        console.groupCollapsed("PricingWorksheet.filterUnits")
+        // ----
+        
         hideAllFilterUnits()
         let unitIds = getListOfIds($(_pricing_strategy_unit_id).val())
         if (unitIds.length) {
@@ -421,9 +498,13 @@ const PricingWorksheet = (function () {
             showAllFilterUnits()
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const filterSeasons = function () {
+        console.groupCollapsed("PricingWorksheet.filterSeasons")
+        // ----
+        
         hideAllFilterSeasons()
         let seasonIds = getListOfIds($(_pricing_strategy_season_id).val())
         if (seasonIds.length) {
@@ -438,9 +519,13 @@ const PricingWorksheet = (function () {
             showAllFilterSeasons()
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const emptyPricingMatrix = function () {
+        console.groupCollapsed("PricingWorksheet.emptyPricingMatrix")
+        // ----
+        
         PricingWorksheet.incompletePricings = new Map()
         PricingWorksheet.incompleteMatrices = new Map()
         $(_product_edit_matrix_form).empty()
@@ -461,9 +546,14 @@ const PricingWorksheet = (function () {
                     </div>
                 </div>
             `)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildTableVariantHeadingBaseInputs = function (pricing) {
+        console.groupCollapsed("PricingWorksheet.buildTableVariantHeadingBaseInputs")
+        // ----
+        
         let CONTAINER = $("<div/>", {
             class: "p-2",
         })
@@ -659,10 +749,14 @@ const PricingWorksheet = (function () {
             CONTAINER.append(ROW)
         }
         
+        // ----
+        console.groupEnd()
         return CONTAINER
     }
-    
     const getRowValues = function (row) {
+        console.groupCollapsed("PricingWorksheet.getRowValues")
+        // ----
+        
         let pricingId, variantId, pricingCode, matrixId, pricingCount = null, inputs = [],
             vals = {
                 monCost: null,
@@ -698,6 +792,8 @@ const PricingWorksheet = (function () {
                 }
             })
             
+            // ----
+            console.groupEnd()
             return remove_nulls(
                 {
                     id: pricingId,
@@ -725,8 +821,10 @@ const PricingWorksheet = (function () {
             )
         }
     }
-    
     const buildPricingData = function (table, matrix) {
+        console.groupCollapsed("PricingWorksheet.buildPricingData")
+        // ----
+        
         let pricings = []
         let productId = $(table).attr("data-productid")
         let seasonId = $(table).attr("data-seasonid")
@@ -796,10 +894,14 @@ const PricingWorksheet = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
         return pricings
     }
-    
     const getFormValues = function (form) {
+        console.groupCollapsed("PricingWorksheet.getFormValues")
+        // ----
+        
         if (!form) {
             return
         }
@@ -828,14 +930,35 @@ const PricingWorksheet = (function () {
         matrix.id = ($(table).attr("data-matrixid")) ? parseInt(($(table).attr("data-matrixid"))) : null
         matrix.pricings = buildPricingData(table, matrix)
         
+        // ----
+        console.groupEnd()
         return remove_nulls(matrix)
     }
-    
-    const handlePricingWorksheetError = function (msg) {
-        toastr.error(msg)
+    const handlePricingWorksheetError = function (msg, title, type) {
+        console.groupCollapsed("PricingWorksheet.handlePricingWorksheetError")
+        // ----
+        
+        if (!msg) {
+            msg = "There was an error."
+        }
+        
+        if (!title) {
+            title = "Pricing Worksheet"
+        }
+        
+        if (!type) {
+            type = "error"
+        }
+        
+        toastr[type](msg, title)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const update = function (dataToSend) {
+        console.groupCollapsed("PricingWorksheet.update")
+        // ----
+        
         if (dataToSend) {
             sendUpdateRequest(dataToSend, function (data) {
                 let matrix
@@ -862,9 +985,14 @@ const PricingWorksheet = (function () {
                 }
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const pricingUpdate = function (dataToSend) {
+        console.groupCollapsed("PricingWorksheet.pricingUpdate")
+        // ----
+        
         if (dataToSend) {
             sendUpdateRequestPricing(dataToSend, function (data) {
                 let pricing
@@ -910,9 +1038,14 @@ const PricingWorksheet = (function () {
                 }
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const sendUpdateRequest = function (dataToSend, callback) {
+        console.groupCollapsed("PricingWorksheet.sendUpdateRequest")
+        // ----
+        
         let url = "/api/v1.0/matrices/update"
         
         if (dataToSend) {
@@ -928,9 +1061,14 @@ const PricingWorksheet = (function () {
                 //console.log("error", e)
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const sendUpdateRequestPricing = function (dataToSend, callback) {
+        console.groupCollapsed("PricingWorksheet.sendUpdateRequestPricing")
+        // ----
+        
         let url = "/api/v1.0/pricings/update"
         
         if (dataToSend) {
@@ -946,9 +1084,14 @@ const PricingWorksheet = (function () {
                 //console.log("error", e)
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const updateMatrix = function (_this) {
+        console.groupCollapsed("PricingWorksheet.updateMatrix")
+        // ----
+        
         let dataToSend = getFormValues(document.getElementById($(_this).attr("data-targetform")))
         
         confirmDialog(`Would you like to update?`, (ans) => {
@@ -956,9 +1099,14 @@ const PricingWorksheet = (function () {
                 update(dataToSend)
             }
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const updatePricing = function (_this, row) {
+        console.groupCollapsed("PricingWorksheet.updatePricing")
+        // ----
+        
         let dataToSend = getRowValues(row)
         
         confirmDialog(`Would you like to update?`, (ans) => {
@@ -966,13 +1114,22 @@ const PricingWorksheet = (function () {
                 pricingUpdate(dataToSend)
             }
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildMatrixWrapper = function () {
+        console.groupCollapsed("PricingWorksheet.buildMatrixWrapper")
+        // ----
+        
+        // ----
+        console.groupEnd()
         return $("<div/>", {})
     }
-    
     const tableVariantHeading = function (pricing) {
+        console.groupCollapsed("PricingWorksheet.tableVariantHeading")
+        // ----
+        
         let matrix
         let H5 = $("<h5/>", {
             class: "card-title d-flex justify-content-between m-2",
@@ -1004,10 +1161,14 @@ const PricingWorksheet = (function () {
             H5.append(SPAN, incomplete)
         }
         
+        // ----
+        console.groupEnd()
         return H5
     }
-    
     const buildPricingRow = function (pricing) {
+        console.groupCollapsed("PricingWorksheet.buildPricingRow")
+        // ----
+        
         let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
         let matrixCode = pricing.matrix_code
         
@@ -1167,10 +1328,15 @@ const PricingWorksheet = (function () {
         let HR = $("<hr/>", {
             class: "ml-3 mr-3 mt-1 mb-3 color-dark",
         })
+        
+        // ----
+        console.groupEnd()
         return FORM.append(HEADING, HR, BASEELEMENTS, TABLECONTAINERROW, BUTTONROW)
     }
-    
     const buildMarginElement = function (variantPricing, day) {
+        console.groupCollapsed("PricingWorksheet.buildMarginElement")
+        // ----
+        
         let matrixCode = variantPricing.matrix_code
         let pricingCode = matrixCode + "-" + variantPricing.variant_id + "-" + variantPricing.count
         let pricing = Pricing.all.get(pricingCode)
@@ -1232,9 +1398,14 @@ const PricingWorksheet = (function () {
             
             return FORMELEMENT
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildCostElement = function (variantPricing, day) {
+        console.groupCollapsed("PricingWorksheet.buildCostElement")
+        // ----
+        
         let matrixCode = variantPricing.matrix_code
         let pricingCode = matrixCode + "-" + variantPricing.variant_id + "-" + variantPricing.count
         let pricing = Pricing.all.get(pricingCode)
@@ -1294,9 +1465,14 @@ const PricingWorksheet = (function () {
             
             return FORMELEMENT
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildSeasonHeading = function (season, matrixId, count) {
+        console.groupCollapsed("PricingWorksheet.buildSeasonHeading")
+        // ----
+        
         let seasonBackgroundColor, seasonTextColor, seasonBorderColor
         if (season) {
             let seasonName = (season.season_name) ? season.season_name : null
@@ -1343,9 +1519,14 @@ const PricingWorksheet = (function () {
             
             return SEASONHEADINGWRAPPER
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildUnitHeading = function (unit, count) {
+        console.groupCollapsed("PricingWorksheet.buildUnitHeading")
+        // ----
+        
         let id = unit.id + "-" + count
         let unitName = (unit.name) ? unit.name : null
         let unitId = (!isNaN(parseInt(unit.id))) ? parseInt(unit.id) : null
@@ -1380,9 +1561,13 @@ const PricingWorksheet = (function () {
             
             return UNITHEADINGWRAPPER
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildPricingTables = function (matrices) {
+        console.groupCollapsed("PricingWorksheet.buildPricingTables")
+        // ----
         
         let $ACCORDIONWRAPPER = buildMatrixWrapper()
         
@@ -1466,10 +1651,14 @@ const PricingWorksheet = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
         return $ACCORDIONWRAPPER
     }
-    
     const getVariants = function () {
+        console.groupCollapsed("PricingWorksheet.getVariants")
+        // ----
+        
         let variantsUsed = []
         let pricingStrategyType = (!isNaN(parseInt(_pricing_strategy_types_id.value))) ? parseInt(_pricing_strategy_types_id.value) : null
         switch (pricingStrategyType) {
@@ -1489,30 +1678,42 @@ const PricingWorksheet = (function () {
                 break
         }
         
+        // ----
+        console.groupEnd()
         return variantsUsed
     }
-    
     const getSeasons = function () {
+        console.groupCollapsed("PricingWorksheet.getSeasons")
+        // ----
+        
         var seasonsUsed = []
         var seasonList = Array.from(Season.all.values())
         for (let n = 0; n < seasonList.length; n++) {
             seasonsUsed.push(seasonList[n])
         }
         
+        // ----
+        console.groupEnd()
         return seasonsUsed
     }
-    
     const getUnits = function () {
+        console.groupCollapsed("PricingWorksheet.getUnits")
+        // ----
+        
         var unitsUsed = []
         var unitList = Array.from(Unit.all.values())
         for (let n = 0; n < unitList.length; n++) {
             unitsUsed.push(unitList[n])
         }
         
+        // ----
+        console.groupEnd()
         return unitsUsed
     }
-    
     const getVariantDetails = function (variantId) {
+        console.groupCollapsed("PricingWorksheet.getVariantDetails")
+        // ----
+        
         let name = ""
         if (parseInt(_pricing_strategy_types_id.value) === 1) {
             name = "Unit Pricing"
@@ -1523,14 +1724,14 @@ const PricingWorksheet = (function () {
         let details = {
             category_id: 1,
             code: "VA-00000000036-OTHR",
-            created_by: user_id,
+            created_by: userId,
             date_created: formatDateMySQL(),
             date_modified: formatDateMySQL(),
             enabled: 1,
             id: 36,
             max_age: null,
             min_age: null,
-            modified_by: user_id,
+            modified_by: userId,
             name: name,
             note: null,
             used_in_pricing: 1,
@@ -1540,10 +1741,14 @@ const PricingWorksheet = (function () {
             details = Variant.set(variant)
         }
         
+        // ----
+        console.groupEnd()
         return details
     }
-    
     const addVariantList = function (unit, season, matrixCode, variantComboId) {
+        console.groupCollapsed("PricingWorksheet.addVariantList")
+        // ----
+        
         let variants = variantComboId.trim().split("-").map(Number)
         let seasonId = parseInt(season.id)
         let unitId = parseInt(unit.id)
@@ -1574,7 +1779,7 @@ const PricingWorksheet = (function () {
                             has_pricing: 0,
                             code: matrixCode.toString() + "-" + variantId.toString() + "-" + count.toString(),
                             count: count,
-                            created_by: user_id,
+                            created_by: userId,
                             date_created: formatDateMySQL(),
                             date_modified: formatDateMySQL(),
                             enabled: 1,
@@ -1583,7 +1788,7 @@ const PricingWorksheet = (function () {
                             id: null,
                             matrix_code: matrixCode.toString(),
                             matrix_id: null,
-                            modified_by: user_id,
+                            modified_by: userId,
                             mon: null,
                             monMargin: null,
                             name: variant.name + " " + count,
@@ -1617,7 +1822,7 @@ const PricingWorksheet = (function () {
                         has_pricing: (pricing.has_pricing) ? pricing.has_pricing : 0,
                         code: matrixCode.toString() + "-" + variantId.toString() + "-" + count.toString(),
                         count: count,
-                        created_by: (pricing.created_by) ? pricing.created_by : user_id,
+                        created_by: (pricing.created_by) ? pricing.created_by : userId,
                         date_created: formatDateMySQL(),
                         date_modified: formatDateMySQL(),
                         enabled: (pricing.enabled) ? pricing.enabled : 1,
@@ -1625,7 +1830,7 @@ const PricingWorksheet = (function () {
                         friMargin: (pricing.friMargin) ? pricing.friMargin : null,
                         id: (pricing.id) ? pricing.id : null,
                         matrix_id: (pricing.matrix_id) ? pricing.matrix_id : null,
-                        modified_by: (pricing.modified_by) ? pricing.matrix_id : user_id,
+                        modified_by: (pricing.modified_by) ? pricing.matrix_id : userId,
                         mon: (pricing.mon) ? pricing.mon : null,
                         monMargin: (pricing.monMargin) ? pricing.monMargin : null,
                         name: variant.name + " " + count,
@@ -1660,7 +1865,7 @@ const PricingWorksheet = (function () {
                             been_saved: 0,
                             code: pricingCode,
                             count: count,
-                            created_by: user_id,
+                            created_by: userId,
                             date_created: formatDateMySQL(),
                             date_modified: formatDateMySQL(),
                             enabled: 1,
@@ -1670,7 +1875,7 @@ const PricingWorksheet = (function () {
                             matrix_code: matrixCode,
                             pricing_code: pricingCode,
                             matrix_id: null,
-                            modified_by: user_id,
+                            modified_by: userId,
                             mon: null,
                             monMargin: null,
                             name: variant.name + " " + count,
@@ -1717,7 +1922,7 @@ const PricingWorksheet = (function () {
                                 id: (pricing.id) ? pricing.id : null,
                                 matrix_code: matrixCode,
                                 matrix_id: (pricing.matrix_id) ? parseInt((pricing.matrix_id)) : null,
-                                modified_by: (pricing.modified_by) ? parseInt((pricing.modified_by)) : user_id,
+                                modified_by: (pricing.modified_by) ? parseInt((pricing.modified_by)) : userId,
                                 mon: (pricing.mon) ? parseInt((pricing.mon)) : null,
                                 monMargin: null,
                                 note: "fff",
@@ -1801,8 +2006,8 @@ const PricingWorksheet = (function () {
                     let note = null
                     let date_created = formatDateMySQL()
                     let date_modified = formatDateMySQL()
-                    let created_by = user_id
-                    let modified_by = user_id
+                    let created_by = userId
+                    let modified_by = userId
                     
                     if (matrix) {
                         matrixId = matrix.id
@@ -1887,6 +2092,8 @@ const PricingWorksheet = (function () {
             margin = m.margin
         }
         
+        // ----
+        console.groupEnd()
         return {
             name: name,
             cost: cost,
@@ -1900,8 +2107,10 @@ const PricingWorksheet = (function () {
             variants: myVariants,
         }
     }
-    
     const getVariantCombinations = function (depth, baseString, arrLetters) {
+        console.groupCollapsed("PricingWorksheet.getVariantCombinations")
+        // ----
+        
         for (let i = 0; i < arrLetters.length; i++) {
             if (depth === 1) {
                 let variantComboId = baseString + arrLetters[i]
@@ -1922,9 +2131,14 @@ const PricingWorksheet = (function () {
                 getVariantCombinations(depth - 1, baseString + arrLetters[i] + "-", arrLetters)
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildPricingWorksheet = function () {
+        console.groupCollapsed("PricingWorksheet.buildPricingWorksheet")
+        // ----
+        
         let productId = (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null
         let worksheet = {
             id: null,
@@ -2034,20 +2248,28 @@ const PricingWorksheet = (function () {
             worksheet.units.push(unitSection)
         }
         
+        // ----
+        console.groupEnd()
         return worksheet
     }
-    
     const pricingWorksheet = function () {
+        console.groupCollapsed("PricingWorksheet.pricingWorksheet")
+        // ----
+        
         resetFilters()
         emptyPricingMatrix()
         variantCombinations = []
         $(_product_edit_matrix_form).empty().append(buildPricingTables(PricingWorksheet.buildPricingWorksheet()))
         status()
     }
-    
     const init = function (settings) {
+        console.groupCollapsed("PricingWorksheet.init")
+        // ----
+        
         let pricingStrategyTypesId = null
         if (settings) {
+            console.log("settings", settings)
+            
             if (settings.pricing_strategy) {
                 if (settings.pricing_strategy.pricing_strategy_types_id) {
                     pricingStrategyTypesId = (!isNaN(parseInt(settings.pricing_strategy.pricing_strategy_types_id))) ? parseInt(settings.pricing_strategy.pricing_strategy_types_id) : null
@@ -2056,14 +2278,16 @@ const PricingWorksheet = (function () {
             
         }
         
-        $(document).ready(function () {
-            PricingWorksheet.pricingStrategyId = pricingStrategyTypesId
-            if (_pricing_strategy_types_id) {
-                $(_pricing_strategy_types_id)
-                    .val(PricingWorksheet.pricingStrategyId)
-                    .trigger("change")
-            }
-        })
+        PricingWorksheet.pricingStrategyId = pricingStrategyTypesId
+        
+        if (_pricing_strategy_types_id) {
+            $(_pricing_strategy_types_id)
+                .val(PricingWorksheet.pricingStrategyId)
+                .trigger("change")
+        }
+        
+        // ----
+        console.groupEnd()
     }
     
     return {

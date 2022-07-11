@@ -1,6 +1,5 @@
 const ImageManager = (function () {
     "use strict"
-    
     const _button_product_images_toggle = document.getElementById("button_product_images_toggle")
     const _imageManagerCancel = document.getElementById("imageManagerCancel")
     const _imageManagerFormRemoveButton = document.getElementById("imageManagerFormRemoveButton")
@@ -117,7 +116,6 @@ const ImageManager = (function () {
     
     $(_image_is_shown)
         .on("change", function () {
-            console.log("ImageManager.image_is_shown:change()", _image_is_shown.checked)
             let imageId = (!isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
             let el = document.getElementById("image_" + imageId + "")
             currentImage = imageId
@@ -137,7 +135,6 @@ const ImageManager = (function () {
     
     $(_image_is_cover)
         .on("change", function () {
-            console.log("ImageManager.is_cover:change()", _image_is_cover.checked)
             let imageId = (!isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
             let el = document.getElementById("image_" + imageId + "")
             
@@ -160,6 +157,9 @@ const ImageManager = (function () {
         })
     
     const handleImageManagerError = function (msg, title, level) {
+        console.groupCollapsed("ImageManager.handleImageManagerError")
+        // ----
+        
         if (!title) {
             title = "Image"
         }
@@ -169,10 +169,14 @@ const ImageManager = (function () {
         }
         
         toastr[level](`${msg}`, title)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const remove = function (image_id) {
-        console.log("ImageManager.remove(image_id)", image_id)
+        console.groupCollapsed("ImageManager.remove")
+        // ----
+        
         if (!image_id || !ImageManager.source || !ImageManager.sourceId) {
             return
         }
@@ -183,7 +187,7 @@ const ImageManager = (function () {
             source_id: ImageManager.sourceId,
         }
         
-        console.log("|__ dataToSend", dataToSend)
+        console.log("dataToSend", dataToSend)
         
         sendRemoveRequest({
             image_id: image_id,
@@ -194,9 +198,14 @@ const ImageManager = (function () {
                 console.log("data", data)
             }
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const sendRemoveRequest = function (dataToSend, callback) {
+        console.groupCollapsed("ImageManager.sendRemoveRequest")
+        // ----
+        
         if (dataToSend) {
             let url = "/api/v1.0/images/remove"
             try {
@@ -210,10 +219,13 @@ const ImageManager = (function () {
                 return handleImageManagerError("Error Removing Image.", "Image Manager", "error")
             }
         }
+        // ----
+        console.groupEnd()
     }
-    
     const submit = function (event) {
-        console.log("ImageManager.submit(event)", event)
+        console.groupCollapsed("ImageManager.submit")
+        // ----
+        
         let isValid = validate()
         if (isValid) {
             confirmDialog(`Would you like to update?`, (ans) => {
@@ -222,13 +234,22 @@ const ImageManager = (function () {
                 }
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const validate = function () {
+        console.groupCollapsed("ImageManager.validate")
+        // ----
+        
+        // ----
+        console.groupEnd()
         return $(_imageManagerForm).valid()
     }
-    
     const sendUpdateRequest = function (dataToSend, callback) {
+        console.groupCollapsed("ImageManager.sendUpdateRequest")
+        // ----
+        
         if (dataToSend) {
             let url = "/api/v1.0/images/update"
             try {
@@ -242,10 +263,13 @@ const ImageManager = (function () {
                 return handleImageManagerError("Error", "Image Manager", "error")
             }
         }
+        // ----
+        console.groupEnd()
     }
-    
     const uploadFile = function (event) {
-        console.log("ImageManager.uploadFile(event)", event)
+        console.groupCollapsed("ImageManager.uploadFile")
+        // ----
+        
         const _fileToUpload = document.getElementById("fileToUpload")
         let filePath, fileHeight, fileWidth, fileSize, fileExtension, fileName,
             fileType, fileRatio, ratioHeight, ratioWidth, fileDimensions, source, sourceId,
@@ -295,9 +319,9 @@ const ImageManager = (function () {
             sendUpdateRequest(dataToSend, function (data) {
                 if (data) {
                     let detail = set((data[0]) ? data[0] : data)
-                    console.log("|__ detail", detail)
+                    console.log("detail", detail)
                     let image = ImageManager.all.get(detail.id)
-                    console.log("|__ image", image)
+                    console.log("image", image)
                     if (image) {
                     
                     }
@@ -310,7 +334,7 @@ const ImageManager = (function () {
             
         } else {
             buildImageObject(event, function (data) {
-                console.log("|__ data", data)
+                console.log("data", data)
                 source = data.source
                 sourceId = data.source_id
                 filePath = (data.path) ? data.path : null
@@ -355,13 +379,13 @@ const ImageManager = (function () {
                         xhr.send(formData)
                         break
                     case "unit":
-                        console.log("|__ |__ unit")
+                        console.log("unit")
                         break
                     case "company":
-                        console.log("|__ |__ company")
+                        console.log("company")
                         break
                     case "user":
-                        console.log("|__ |__ user")
+                        console.log("user")
                         break
                     default:
                         return
@@ -369,20 +393,27 @@ const ImageManager = (function () {
             })
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const uploadProgress = function (event) {
-        console.log("ImageManager.uploadProgress(event)", event)
+        console.groupCollapsed("ImageManager.uploadProgress")
+        // ----
+        
         if (event.lengthComputable) {
             let percentComplete = Math.round(event.loaded * 100 / event.total)
             document.getElementById("progressNumber").innerHTML = percentComplete.toString() + "%"
         } else {
             document.getElementById("progressNumber").innerHTML = "unable to compute"
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const uploadComplete = function (event) {
-        console.log("ImageManager.uploadComplete(event)", event)
+        console.groupCollapsed("ImageManager.uploadComplete")
+        // ----
+        
         let results = null
         
         if (event) {
@@ -401,14 +432,14 @@ const ImageManager = (function () {
                                 let allImages = Array.from(ImageManager.all.values())
                                 let counter = allImages.length
                                 
-                                console.log("|__ image", detail)
+                                console.log("image", detail)
                                 
                                 $(_imageManagerFormImagesBlock).append(buildImageThumbnail(detail))
                                 
                                 ImageManager.all.set(detail.id, detail)
                                 
-                                console.log("|__ ImageManager.all", ImageManager.all)
-                                console.log("|__ detail", detail)
+                                console.log("ImageManager.all", ImageManager.all)
+                                console.log("detail", detail)
                                 
                                 clear()
                                 hideImageForm()
@@ -420,19 +451,31 @@ const ImageManager = (function () {
                 }
             }
         }
+        // ----
+        console.groupEnd()
     }
-    
     const uploadFailed = function (event) {
-        console.log("ImageManager.uploadFailed(event)", event)
+        console.groupCollapsed("ImageManager.uploadFailed")
+        // ----
+        
+        console.log("ImageManager.uploadFailed")
         console.log("There was an error attempting to upload this file.")
+        // ----
+        console.groupEnd()
     }
-    
     const uploadCanceled = function (event) {
-        console.log("ImageManager.uploadCanceled(event)", event)
+        console.groupCollapsed("ImageManager.uploadCanceled")
+        // ----
+        
+        console.log("ImageManager.uploadCanceled")
         console.log("This upload has been canceled by the user or the browser dropped the connection.")
+        // ----
+        console.groupEnd()
     }
-    
     const defaultDetail = function () {
+        console.groupCollapsed("ImageManager.defaultDetail")
+        // ----
+        
         return {
             alt: null,
             caption: null,
@@ -455,10 +498,13 @@ const ImageManager = (function () {
             title: null,
             width: null,
         }
+        // ----
+        console.groupEnd()
     }
-    
     const set = function (image) {
-        console.log("ImageManager.set(image)", image)
+        console.groupCollapsed("ImageManager.set")
+        // ----
+        
         let detail = defaultDetail()
         if (image) {
             detail.alt = (image.alt) ? image.alt : null
@@ -483,12 +529,15 @@ const ImageManager = (function () {
             detail.width = (image.width) ? image.width : null
         }
         
+        // ----
+        console.groupEnd()
         ImageManager.detail = detail
         return detail
     }
-    
     const resetFileInput = function (event) {
-        console.log("ImageManager.resetFileInput(event)", event)
+        console.groupCollapsed("ImageManager.resetFileInput")
+        // ----
+        
         let _fileToUpload = document.getElementById("fileToUpload")
         let _fileName = document.getElementById("fileName")
         let _fileSize = document.getElementById("fileSize")
@@ -504,15 +553,24 @@ const ImageManager = (function () {
         $(_fileToUploadDisplay).html("CHOOSE FILE")
         $(_imageManagerPreview).attr("src", "/public/img/placeholder.jpg")
         _image_is_shown.checked = true
+        // ----
+        console.groupEnd()
     }
-    
     const clear = function () {
+        console.groupCollapsed("ImageManager.clear")
+        // ----
+        
         resetFileInput()
         resetImageForm()
         $("img.img-thumbnail").removeClass("selected")
+        
+        // ----
+        console.groupEnd()
     }
-    
     const getFileSize = function (file) {
+        console.groupCollapsed("ImageManager.getFileSize")
+        // ----
+        
         let fileSize = null
         
         if (file.size > 1024 * 1024) {
@@ -521,10 +579,14 @@ const ImageManager = (function () {
             fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB'
         }
         
+        // ----
+        console.groupEnd()
         return fileSize
     }
-    
     const getFileName = function (file) {
+        console.groupCollapsed("ImageManager.getFileName")
+        // ----
+        
         let fileName, fileExtension = null
         let fileNameTemp = []
         
@@ -543,13 +605,17 @@ const ImageManager = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
         return removeNulls({
             "name": fileName,
             "extension": fileExtension,
         })
     }
-    
     const getFileType = function (file) {
+        console.groupCollapsed("ImageManager.getFileType")
+        // ----
+        
         let fileType = null
         
         if (file) {
@@ -558,11 +624,14 @@ const ImageManager = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
         return fileType
     }
-    
     const buildImageObject = function (event, callback) {
-        console.log("ImageManager.buildImageObject(event)", event)
+        console.groupCollapsed("ImageManager.buildImageObject")
+        // ----
+        
         const _fileToUpload = document.getElementById("fileToUpload")
         const _imageManagerPreview = document.getElementById("imageManagerPreview")
         const _imageManagerForm = document.getElementById("imageManagerForm")
@@ -583,12 +652,12 @@ const ImageManager = (function () {
                     
                     if (_fileToUpload) {
                         let file = _fileToUpload.files[0]
-                        console.log("|__ file", file)
+                        console.log("file", file)
                         $(_imageManagerPreview).attr("src", event.result)
                         
                         if (file) {
                             let fileNameParts = getFileName(file)
-                            console.log("|__ |__ fileNameParts", fileNameParts)
+                            console.log("fileNameParts", fileNameParts)
                             fileExtension = (fileNameParts.extension) ? fileNameParts.extension : null
                             fileName = (fileNameParts.name) ? fileNameParts.name : null
                             fileSize = getFileSize(file)
@@ -637,10 +706,14 @@ const ImageManager = (function () {
                 }
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const fileSelected = function (event) {
-        console.log("ImageManager.fileSelected(event)", event)
+        console.groupCollapsed("ImageManager.fileSelected")
+        // ----
+        
         clear()
         
         let _fileToUpload = document.getElementById("fileToUpload")
@@ -653,7 +726,7 @@ const ImageManager = (function () {
         
         buildImageObject(event, function (data) {
             if (data) {
-                console.log("|__ data", data)
+                console.log("data", data)
                 let fileName = (data.name) ? data.name : null
                 let fileSize = (data.size) ? data.size : null
                 let fileType = (data.type) ? data.type : null
@@ -685,10 +758,14 @@ const ImageManager = (function () {
                 renderImageForm()
             }
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const hideImageForm = function () {
-        console.log("ImageManager.hideImageForm()")
+        console.groupCollapsed("ImageManager.hideImageForm")
+        // ----
+        
         $(_fileToUpload).removeClass("disabled")
         $(_button_product_images_toggle).removeClass("disabled")
         
@@ -698,20 +775,27 @@ const ImageManager = (function () {
         _imageManagerFormSubmitButton.innerText = "choose file"
         
         $(_imageManagerFormDetails).hide()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const renderImageForm = function () {
-        console.log("ImageManager.renderImageForm()")
+        console.groupCollapsed("ImageManager.renderImageForm")
+        // ----
+        
         $(_fileToUpload).addClass("disabled")
         $(_button_product_images_toggle).addClass("disabled")
         
         _fileToUpload.disabled = true
         _button_product_images_toggle.disabled = true
         $("#imageManagerFormDetails").show()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const populateImageForm = function (image) {
-        console.log("ImageManager.populateImageForm(image)", image)
+        console.groupCollapsed("ImageManager.populateImageForm")
+        // ----
         
         if (image) {
             console.log(image)
@@ -765,10 +849,13 @@ const ImageManager = (function () {
             renderImageForm()
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const resetImageForm = function () {
-        console.log("ImageManager.resetImageForm()")
+        console.groupCollapsed("ImageManager.resetImageForm")
+        // ----
+        
         let filePreview = `/public/img/placeholder.jpg`
         
         _fileName.innerHTML = "&nbsp;"
@@ -804,10 +891,14 @@ const ImageManager = (function () {
         }
         
         $("img.img-thumbnail").removeClass("selected")
+        
+        // ----
+        console.groupEnd()
     }
-    
     const edit = function (image) {
-        console.log("ImageManager.edit(image)", image)
+        console.groupCollapsed("ImageManager.edit")
+        // ----
+        
         if (image) {
             clear()
             let imageId = (!isNaN(parseInt(image.id))) ? image.id : null
@@ -819,10 +910,14 @@ const ImageManager = (function () {
                 _imageManagerFormSubmitButton.innerText = "Save"
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildImageThumbnail = function (image) {
-        console.log("ImageManager.buildImageThumbnail(image)", image)
+        console.groupCollapsed("ImageManager.buildImageThumbnail")
+        // ----
+        
         let isCoverClass = ""
         let isShownClass = ""
         
@@ -865,7 +960,7 @@ const ImageManager = (function () {
                             if (image) {
                                 edit(image)
                             } else {
-                                console.log("|__ |__ ImageManager.all", ImageManager.all)
+                                console.log("ImageManager.all", ImageManager.all)
                             }
                             
                         } else {
@@ -880,10 +975,14 @@ const ImageManager = (function () {
             }
             
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const loadAll = function (images) {
-        console.log("ImageManager.loadAll(images)", images)
+        console.groupCollapsed("ImageManager.loadAll")
+        // ----
+        
         ImageManager.all = new Map()
         
         if (images) {
@@ -895,10 +994,12 @@ const ImageManager = (function () {
             })
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const get = function (dataToSend, callback) {
-        console.log("ImageManager.get()")
+        console.groupCollapsed("ImageManager.get")
+        // ----
         
         if (dataToSend) {
             let url = `/api/v1.0/images/${ImageManager.source}/${ImageManager.sourceId}`
@@ -913,10 +1014,13 @@ const ImageManager = (function () {
                 return handleImageManagerError("Error Retrieving Images.", "Image Manager", "error")
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const init = function (options) {
-        console.log("ImageManager.init(settings)", options)
+        console.groupCollapsed("ImageManager.init")
+        // ----
         
         if (options && options.source) {
             source = (options.source) ? options.source : null
@@ -938,8 +1042,10 @@ const ImageManager = (function () {
             })
             
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     return {
         source: null,
         sourceId: null,

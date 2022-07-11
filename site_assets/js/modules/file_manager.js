@@ -1,9 +1,12 @@
 function FileManager (element, options) {
+    console.groupCollapsed("FileManager")
+    // ----
+    
     if (!(options && options.source && element)) {
         console.log("Missing options.")
-        console.log("|__ options", options)
-        console.log("|__ options.source", options.source)
-        console.log("|__ options.sourceId", options.sourceId)
+        console.log("options", options)
+        console.log("options.source", options.source)
+        console.log("options.sourceId", options.sourceId)
         return
     }
     let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
@@ -154,10 +157,13 @@ function FileManager (element, options) {
     this.loadAll()
     
     this.formReset()
+    
+    // ----
+    console.groupEnd()
 }
 
 FileManager.prototype.createPreviewElements = function () {
-    console.log("FileManager.createPreviewElements()")
+    console.groupCollapsed("FileManager.createPreviewElements")
     // ----
     
     let messageWrapper
@@ -201,9 +207,12 @@ FileManager.prototype.createPreviewElements = function () {
     }
     
     this.preview = this.previewWrapper
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.setPreview = function (previewable, src) {
-    console.log("FileManager.setPreview(previewable, src)", this)
+    console.groupCollapsed("FileManager.setPreview")
     // ----
     
     let render = this.previewContainer
@@ -226,9 +235,12 @@ FileManager.prototype.setPreview = function (previewable, src) {
     }
     
     this.formShow()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.resetPreview = function () {
-    console.log("FileManager.resetPreview()")
+    console.groupCollapsed("FileManager.resetPreview")
     // ----
     
     let render = this.previewContainer
@@ -239,9 +251,12 @@ FileManager.prototype.resetPreview = function () {
     render.find("img").remove()
     
     this.hideLoader()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.clearElement = function () {
-    console.log("FileManager.clearElement()")
+    console.groupCollapsed("FileManager.clearElement")
     // ----
     
     if (this.errorsEvent.errors.length === 0) {
@@ -261,41 +276,64 @@ FileManager.prototype.clearElement = function () {
         this.displayClear()
         this.formHide()
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.hideLoader = function (input) {
+    console.groupCollapsed("FileManager.hideLoader")
+    // ----
+    
     $(this.loader).hide()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.showLoader = function (input) {
+    console.groupCollapsed("FileManager.showLoader")
+    // ----
+    
     $(this.loader).show()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.clearErrors = function () {
-    console.log("FileManager.clearErrors()")
+    console.groupCollapsed("FileManager.clearErrors")
     // ----
     
     this.preview.removeClass("has-errors")
     if (typeof this.previewErrorsContainer !== "undefined") {
         this.previewErrorsContainer.children("ul").html("")
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.pushError = function (errorKey) {
-    console.log("FileManager.pushError(errorKey)", errorKey)
+    console.groupCollapsed("FileManager.pushError")
     // ----
     
     let e = $.Event("filemanager.error." + errorKey)
     this.errorsEvent.errors.push(e)
     this.inputs.fields.imageFile.trigger(e, [this])
-    console.log("|__ this.errorsEvent.errors", this.errorsEvent.errors)
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.showError = function (errorKey) {
-    console.log("FileManager.showError(errorKey)", errorKey)
+    console.groupCollapsed("FileManager.showError")
     // ----
     
     if (typeof this.previewErrorsContainer !== "undefined") {
         this.previewErrorsContainer.children("ul").append("<li>" + this.getError(errorKey) + "</li>")
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.getError = function (errorKey) {
-    console.log("FileManager.getError(errorKey)", errorKey)
+    console.groupCollapsed("FileManager.getError")
     // ----
     
     let error = this.settings.error[errorKey],
@@ -321,9 +359,14 @@ FileManager.prototype.getError = function (errorKey) {
         return error.replace("{{ value }}", value)
     }
     
+    // ----
+    console.groupEnd()
     return error
 }
 FileManager.prototype.createElements = function () {
+    console.groupCollapsed("FileManager.createElements")
+    // ----
+    
     this.isInit = true
     
     // Wrapper Elements
@@ -393,8 +436,14 @@ FileManager.prototype.createElements = function () {
     this.detailSection = $(`<section id="${this.baseId + "_detail"}" class="card card-body grey lighten-3 p-3 mb-2"/>`)
     
     this.render()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.fileGallery = function () {
+    console.groupCollapsed("FileManager.fileGallery")
+    // ----
+    
     let sectionName = "gallery"
     let sectionTitle = (this.source) ? this.source.ucwords() + " Images:" : "Files"
     let $WRAPPER_SUBHEADING, $WRAPPER_HEADING_SPAN, $WRAPPER_HEADING, $WRAPPER, $HR,
@@ -469,9 +518,14 @@ FileManager.prototype.fileGallery = function () {
     })
         .append($WRAPPER_SUBHEADING, $HR, this.galleryContainer, $ROW_2)
     
+    // ----
+    console.groupEnd()
     return $WRAPPER
 }
 FileManager.prototype.fileFormFields = function () {
+    console.groupCollapsed("FileManager.fileFormFields")
+    // ----
+    
     let $WRAPPER, $ROW_1, $ROW_2, $ROW_3, $ROW_4, $ROW_5, $ROW_6, $CHECK_WRAPPER_ENABLED, $CHECK_WRAPPER_IS_SHOWN,
         $CHECK_WRAPPER_IS_COVER, $COL_1_1, $COL_1_2, $COL_2_1, $COL_2_2, $COL_2_3, $COL_3_1, $COL_4_1, $COL_5_1,
         $COL_6_1, $WRAPPER_ID, $WRAPPER_NAME, $WRAPPER_ENABLED, $WRAPPER_IS_SHOWN, $WRAPPER_IS_COVER,
@@ -550,9 +604,14 @@ FileManager.prototype.fileFormFields = function () {
     })
         .append($ROW_1, $ROW_2, $ROW_3, $ROW_4, $ROW_5, $ROW_6, $ROW_7)
     
+    // ----
+    console.groupEnd()
     return $WRAPPER
 }
 FileManager.prototype.fileForm = function () {
+    console.groupCollapsed("FileManager.fileForm")
+    // ----
+    
     let $WRAPPER_SUBHEADING, $WRAPPER_HEADING_SPAN, $WRAPPER_HEADING, $WRAPPER, $HR
     let sectionName = "form"
     
@@ -577,9 +636,14 @@ FileManager.prototype.fileForm = function () {
     
     this.form.append($WRAPPER_HEADING, $WRAPPER_SUBHEADING, $HR, this.preview, this.fileDetail(this), this.fileFormFields(this))
     
+    // ----
+    console.groupEnd()
     return this.form
 }
 FileManager.prototype.fileDetail = function () {
+    console.groupCollapsed("FileManager.fileDetail")
+    // ----
+    
     let $ROW_1, $ROW_2, $ROW_3, $ROW_4, $COL_1_1, $COL_1_2, $COL_1_3, $COL_1_4,
         $COL_2_1, $COL_2_2, $COL_2_3, $COL_2_4, $COL_3_1, $COL_3_2, $COL_3_3, $COL_3_4,
         $COL_4_1, $COL_4_2, $COL_4_3, $COL_4_4
@@ -608,11 +672,14 @@ FileManager.prototype.fileDetail = function () {
     
     this.detailSection.append($ROW_1, $ROW_2, $ROW_3, $ROW_4)
     
+    // ----
+    console.groupEnd()
     return this.detailSection
 }
 FileManager.prototype.formShow = function () {
-    console.log("this.formShow()")
+    console.groupCollapsed("FileManager.formShow")
     // ----
+    
     let _input_file = document.getElementById(this.inputs.fields.imageFile.attr("id"))
     let _input_toggle = document.getElementById(this.inputs.buttons.toggle.attr("id"))
     
@@ -620,9 +687,12 @@ FileManager.prototype.formShow = function () {
     
     _input_toggle.disabled = true
     _input_file.disabled = true
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.formHide = function () {
-    console.log("this.formHide()")
+    console.groupCollapsed("FileManager.formHide")
     // ----
     
     let _input_file = document.getElementById(this.inputs.fields.imageFile.attr("id"))
@@ -634,9 +704,12 @@ FileManager.prototype.formHide = function () {
     
     _input_toggle.disabled = false
     _input_file.disabled = false
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.formClear = function () {
-    console.log("FileManager.formClear()", this.inputs)
+    console.groupCollapsed("FileManager.formClear")
     // ----
     
     let _progress_bar = document.getElementById(this.inputs.fields.progress.attr("id"))
@@ -660,26 +733,36 @@ FileManager.prototype.formClear = function () {
     })
     
     clearValidation(this.form)
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.formReset = function () {
-    console.log("this.formReset()")
+    console.groupCollapsed("FileManager.formReset")
     // ----
     
     this.formClear()
     this.displayClear()
     this.resetPreview()
     this.clearSelected()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.formCancel = function () {
-    console.log("FileManager.formCancel()")
+    console.groupCollapsed("FileManager.formCancel")
     // ----
     
     this.formReset()
     this.formHide()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.formRemove = function () {
-    console.log("FileManager.formRemove()")
+    console.groupCollapsed("FileManager.formRemove")
     // ----
+    
     const _image_id = this.inputs.fields.imageId[0]
     
     let _this = this
@@ -688,10 +771,10 @@ FileManager.prototype.formRemove = function () {
         let imageId = (!isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
         
         if (imageId !== null) {
-            console.log("|__ imageId", imageId)
+            console.log("imageId", imageId)
             let image = _this.all.get(imageId)
             if (image) {
-                console.log("|__ image", image)
+                console.log("image", image)
                 let el = document.getElementById("image_" + imageId)
                 if (el) {
                     confirmDialog(`Would you like to delete this image?`, (ans) => {
@@ -718,9 +801,12 @@ FileManager.prototype.formRemove = function () {
             }
         }
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.formLoad = function (image) {
-    console.log("FileManager.formLoad(image)", image)
+    console.groupCollapsed("FileManager.formLoad")
     // ----
     
     if (image) {
@@ -737,14 +823,14 @@ FileManager.prototype.formLoad = function (image) {
         let fileExtension = (image.extension) ? image.extension : null
         
         //*
-        console.log("|__ imageId", imageId)
-        console.log("|__ imageName", imageName)
-        console.log("|__ imageTitle", imageTitle)
-        console.log("|__ imageAlt", imageAlt)
-        console.log("|__ imageCaption", imageCaption)
-        console.log("|__ imageEnabled", imageEnabled)
-        console.log("|__ imageIsShown", imageIsShown)
-        console.log("|__ imageIsCover", imageIsCover)
+        console.log("imageId", imageId)
+        console.log("imageName", imageName)
+        console.log("imageTitle", imageTitle)
+        console.log("imageAlt", imageAlt)
+        console.log("imageCaption", imageCaption)
+        console.log("imageEnabled", imageEnabled)
+        console.log("imageIsShown", imageIsShown)
+        console.log("imageIsCover", imageIsCover)
         //*/
         
         $(this.inputs.fields.imageId).val(imageId)
@@ -758,7 +844,7 @@ FileManager.prototype.formLoad = function (image) {
         $(this.inputs.fields.imageIsShown).attr("checked", imageIsShown)
         
         let path = (!is_null(filePath) && !is_null(fileName) && !is_null(fileExtension)) ? `${filePath}/${fileName}.${fileExtension}` : (this.settings.defaultFile) ? this.settings.defaultFile : null
-        console.log("|__ path", path)
+        console.log("path", path)
         
         this.setPreview(this.isImage(), path)
         
@@ -766,15 +852,21 @@ FileManager.prototype.formLoad = function (image) {
         
         this.form.show()
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.displayReset = function () {
-    console.log("FileManager.displayReset()", this)
+    console.groupCollapsed("FileManager.displayReset")
     // ----
     
     this.displayClear()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.displayClear = function () {
-    console.log("FileManager.displayClear()", this)
+    console.groupCollapsed("FileManager.displayClear")
     // ----
     
     $(this.inputs.displays.imageName).html("&nbsp;")
@@ -785,9 +877,12 @@ FileManager.prototype.displayClear = function () {
     $(this.inputs.displays.imageSize).html("&nbsp;")
     $(this.inputs.displays.imageHeight).html("&nbsp;")
     $(this.inputs.displays.imageWidth).html("&nbsp;")
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.displaySet = function () {
-    console.log("FileManager.displaySet()", this.detail)
+    console.groupCollapsed("FileManager.displaySet")
     // ----
     
     this.displayReset()
@@ -803,7 +898,6 @@ FileManager.prototype.displaySet = function () {
     imageHeight = (!isNaN(parseInt(this.detail.height))) ? this.detail.height + "px" : '&nbsp;'
     imageWidth = (!isNaN(parseInt(this.detail.width))) ? this.detail.width + "px" : '&nbsp;'
     
-    //*
     $(this.inputs.displays.imageName).html(imageName)
     $(this.inputs.displays.imageType).html(imageType)
     $(this.inputs.displays.imageRatio).html(imageRatio)
@@ -812,9 +906,14 @@ FileManager.prototype.displaySet = function () {
     $(this.inputs.displays.imageSize).html(imageSize)
     $(this.inputs.displays.imageHeight).html(imageHeight)
     $(this.inputs.displays.imageWidth).html(imageWidth)
-    //*/
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.handleError = function (msg, title, level) {
+    console.groupCollapsed("FileManager.handleError")
+    // ----
+    
     if (!level) {
         level = "error"
     }
@@ -823,8 +922,14 @@ FileManager.prototype.handleError = function (msg, title, level) {
     }
     
     toastr[level](msg, title)
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.defaultDetail = function () {
+    console.groupCollapsed("FileManager.defaultDetail")
+    // ----
+    
     this.detail = {
         alt: null,
         caption: null,
@@ -847,9 +952,12 @@ FileManager.prototype.defaultDetail = function () {
         title: null,
         width: null,
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.setDetail = function (image) {
-    console.log("FileManager.setDetail(image)", image)
+    console.groupCollapsed("FileManager.setDetail")
     // ----
     
     this.defaultDetail()
@@ -878,14 +986,16 @@ FileManager.prototype.setDetail = function (image) {
         
         this.setFile(image)
         
-        console.log("|__ this.detail", this.detail)
-        console.log("|__ this.file", this.file)
+        console.log("this.detail", this.detail)
+        console.log("this.file", this.file)
         
-        return this.detail
     }
+    // ----
+    console.groupEnd()
+    return this.detail
 }
 FileManager.prototype.loadAll = function () {
-    console.log("this.loadAll()")
+    console.log("FileManager.loadAll")
     // ----
     
     if (!this.images) {
@@ -903,9 +1013,11 @@ FileManager.prototype.loadAll = function () {
     
     this.all = all
     
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.buildImageThumbnails = function (image) {
-    console.log("this.buildImageThumbnails(image)", image)
+    console.log("FileManager.buildImageThumbnails")
     // ----
     
     let isCoverClass = ""
@@ -943,21 +1055,27 @@ FileManager.prototype.buildImageThumbnails = function (image) {
                 .append($IMG)
         }
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.clearSelected = function () {
-    console.log("this.clearSelected()")
+    console.log("FileManager.clearSelected")
     // ----
     
     $("img.selected").removeClass("selected")
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.translateMessages = function () {
-    console.log("FileManager.translateMessages()")
+    console.groupCollapsed("FileManager.translateMessages")
     // ----
     
     for (let name in this.settings.tpl) {
-        console.log("|__ name", name)
+        console.log("name", name)
         for (let key in this.settings.messages) {
-            console.log("|__ |__ key", key)
+            console.log("|__ key", key)
             if (this.settings.tpl[name]) {
                 this.settings.tpl[name] = this.settings.tpl[name].replace("{{ " + key + " }}", this.settings.messages[key])
             } else if (this.settings.tpl.preview[name]) {
@@ -966,16 +1084,27 @@ FileManager.prototype.translateMessages = function () {
             
         }
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.cleanFilename = function (src) {
-    var filename = src.split("\\").pop()
+    console.groupCollapsed("FileManager.cleanFilename")
+    // ----
+    
+    let filename = src.split("\\").pop()
     if (filename === src) {
         filename = src.split("/").pop()
     }
     
+    // ----
+    console.groupEnd()
     return src !== "" ? filename : ""
 }
 FileManager.prototype.validateImage = function () {
+    console.groupCollapsed("FileManager.validateImage")
+    // ----
+    
     if (this.settings.minWidth !== 0 && this.settings.minWidth >= this.file.width) {
         this.pushError("minWidth")
     }
@@ -995,14 +1124,23 @@ FileManager.prototype.validateImage = function () {
     if (this.settings.allowedFormats.indexOf(this.getImageFormat()) === "-1") {
         this.pushError("imageFormat")
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.checkFileSize = function () {
+    console.groupCollapsed("FileManager.checkFileSize")
+    // ----
+    
     if (this.sizeToByte(this.settings.maxFileSize) !== 0 && this.file.size > this.sizeToByte(this.settings.maxFileSize)) {
         this.pushError("fileSize")
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.isFileExtensionAllowed = function () {
-    console.log("FileManager.isFileExtensionAllowed")
+    console.groupCollapsed("FileManager.isFileExtensionAllowed")
     // ----
     
     if (this.settings.allowedFileExtensions.indexOf("*") !== "-1" ||
@@ -1012,10 +1150,12 @@ FileManager.prototype.isFileExtensionAllowed = function () {
     
     this.pushError("fileExtension")
     
+    // ----
+    console.groupEnd()
     return false
 }
 FileManager.prototype.isImage = function (image) {
-    console.log("FileManager.isImage")
+    console.groupCollapsed("FileManager.isImage")
     // ----
     
     let allowedExtensions = this.settings.imgFileExtensions
@@ -1023,34 +1163,47 @@ FileManager.prototype.isImage = function (image) {
     let index = allowedExtensions.indexOf(fileType)
     
     /*
-    console.log("|__ allowedExtensions", allowedExtensions)
-    console.log("|__ fileType", fileType)
-    console.log("|__ index", index)
+    console.log("allowedExtensions", allowedExtensions)
+    console.log("fileType", fileType)
+    console.log("index", index)
     //*/
     
+    // ----
+    console.groupEnd()
     return index >= 0
 }
 FileManager.prototype.getFileType = function () {
-    console.log("FileManager.getFileType()")
+    console.groupCollapsed("FileManager.getFileType")
     // ----
     
+    // ----
+    console.groupEnd()
     return this.file.name.split(".").pop().toLowerCase()
 }
 FileManager.prototype.getImageFormat = function () {
+    console.groupCollapsed("FileManager.getImageFormat")
+    // ----
+    
+    let imageFormat
+    
     if (this.file.width === this.file.height) {
-        return "square"
+        imageFormat = "square"
     }
     
     if (this.file.width < this.file.height) {
-        return "portrait"
+        imageFormat = "portrait"
     }
     
     if (this.file.width > this.file.height) {
-        return "landscape"
+        imageFormat = "landscape"
     }
+    
+    // ----
+    console.groupEnd()
+    return imageFormat
 }
 FileManager.prototype.setFileName = function (file) {
-    console.log("FileManager.setFileName(file)", file)
+    console.groupCollapsed("FileManager.setFileName")
     // ----
     
     let fileName, fileExtension = null
@@ -1073,9 +1226,12 @@ FileManager.prototype.setFileName = function (file) {
     
     this.detail.name = fileName
     this.detail.extension = fileExtension
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.setFileDetail = function (file) {
-    console.log("FileManager.setFileDetail(file)", file)
+    console.groupCollapsed("FileManager.setFileDetail")
     // ----
     
     this.detail.path = `/public/img/${this.source}/${this.sourceId}`
@@ -1093,9 +1249,12 @@ FileManager.prototype.setFileDetail = function (file) {
     this.detail.created_by = this.userId
     this.detail.modified_by = this.userId
     this.detail.note = null
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.setFileDimensions = function (width, height) {
-    console.log("FileManager.setFileDimensions(width, height)", width, height)
+    console.groupCollapsed("FileManager.setFileDimensions")
     // ----
     
     this.file.width = null
@@ -1111,9 +1270,12 @@ FileManager.prototype.setFileDimensions = function (width, height) {
         this.detail.width = width
         this.detail.height = height
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.setFileSize = function (file) {
-    console.log("FileManager.setFileSize(file)", file)
+    console.groupCollapsed("FileManager.setFileSize")
     // ----
     
     let fileSize = null
@@ -1125,9 +1287,12 @@ FileManager.prototype.setFileSize = function (file) {
     }
     
     this.detail.size = fileSize
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.setFileInformation = function (file) {
-    console.log("FileManager.setFileInformation(file)", file)
+    console.groupCollapsed("FileManager.setFileInformation")
     // ----
     
     this.file.object = file
@@ -1138,8 +1303,14 @@ FileManager.prototype.setFileInformation = function (file) {
     this.file.height = null
     
     this.detail.type = file.type
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.sizeToByte = function (size) {
+    console.groupCollapsed("FileManager.sizeToByte")
+    // ----
+    
     let value = 0
     
     if (size !== 0) {
@@ -1157,10 +1328,12 @@ FileManager.prototype.sizeToByte = function (size) {
         }
     }
     
+    // ----
+    console.groupEnd()
     return value
 }
 FileManager.prototype.findClosest = function (arrSorted, value) {
-    console.log("FileManager.findClosest(arrSorted, value)", arrSorted, value)
+    console.groupCollapsed("FileManager.findClosest")
     // ----
     
     let closest = arrSorted[0]
@@ -1175,10 +1348,13 @@ FileManager.prototype.findClosest = function (arrSorted, value) {
             return closest
         }
     }
+    
+    // ----
+    console.groupEnd()
     return arrSorted[arrSorted.length - 1]
 }
 FileManager.prototype.estimateAspectRatio = function (width, height) {
-    console.log("FileManager.estimateAspectRatio(width, height)", width, height)
+    console.groupCollapsed("FileManager.estimateAspectRatio")
     // ----
     
     let ratio = Math.max(width, height) / Math.min(width, height)
@@ -1194,9 +1370,12 @@ FileManager.prototype.estimateAspectRatio = function (width, height) {
     }
     
     this.detail.ratio = Math.round(ratio * 100) / 100 + ":1"
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.resetFile = function () {
-    console.log("FileManager.resetFile()")
+    console.groupCollapsed("FileManager.resetFile")
     // ----
     
     this.file.object = null
@@ -1206,9 +1385,12 @@ FileManager.prototype.resetFile = function () {
     this.file.type = null
     this.file.width = null
     this.file.height = null
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.setFile = function (file) {
-    console.log("FileManager.setFile(file)", file)
+    console.groupCollapsed("FileManager.setFile")
     // ----
     
     this.resetFile()
@@ -1222,12 +1404,12 @@ FileManager.prototype.setFile = function (file) {
         let fileHeight = (file.height && (!isNaN(parseInt(file.height)))) ? parseInt(file.height) : null
         
         /*
-        console.log("|__ fileName", fileName)
-        console.log("|__ fileType", fileType)
-        console.log("|__ fileSize", fileSize)
-        console.log("|__ fileSizeFormatted", fileSizeFormatted)
-        console.log("|__ fileWidth", fileWidth)
-        console.log("|__ fileHeight", fileHeight)
+        console.log("fileName", fileName)
+        console.log("fileType", fileType)
+        console.log("fileSize", fileSize)
+        console.log("fileSizeFormatted", fileSizeFormatted)
+        console.log("fileWidth", fileWidth)
+        console.log("fileHeight", fileHeight)
         //*/
         
         this.file.object = (file.object) ? file.object : null
@@ -1244,15 +1426,21 @@ FileManager.prototype.setFile = function (file) {
         this.setFileDimensions(this.file.width, this.file.height)
         this.estimateAspectRatio(this.file.width, this.file.height)
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.fileSelected = function (event) {
-    console.log("FileManager.fileSelected(event)", event)
+    console.groupCollapsed("FileManager.fileSelected")
     // ----
     
     this.readFile(this.inputs.fields.imageFile[0])
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.readFile = function (input) {
-    console.log("FileManager.readFile(input)", input)
+    console.groupCollapsed("FileManager.readFile")
     // ----
     
     if (!input || !input.files[0]) {
@@ -1290,8 +1478,8 @@ FileManager.prototype.readFile = function (input) {
                 _this.validateImage()
                 $(_this.input).trigger(eventFileReady, [true, srcBase64])
                 //*
-                console.log("|__ file", _this.file)
-                console.log("|__ detail", _this.detail)
+                console.log("file", _this.file)
+                console.log("detail", _this.detail)
                 //*/
                 _this.displaySet()
                 _remove_button.disabled = true
@@ -1301,14 +1489,16 @@ FileManager.prototype.readFile = function (input) {
         this.onFileReady(false)
     }
     
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.onFileReady = function (event, previewable, src) {
-    console.log("FileManager.onFileReady(event, previewable, src)", event)
+    console.groupCollapsed("FileManager.onFileReady")
     // ----
     
     $(this.inputs.fields.imageFile).off("fileManager.fileReady", this.onFileReady)
     //*
-    console.log("|__ this.errorsEvent.errors", this.errorsEvent.errors)
+    console.log("this.errorsEvent.errors", this.errorsEvent.errors)
     //*/
     if (this.errorsEvent.errors.length === 0) {
         this.setPreview(previewable, src)
@@ -1333,23 +1523,33 @@ FileManager.prototype.onFileReady = function (event, previewable, src) {
         
         this.resetPreview()
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.onChange = function (event) {
+    console.groupCollapsed("FileManager.onChange")
+    // ----
+    
     if ($(this.inputs.fields.imageFile).val() !== "") {
         this.formReset()
         this.fileSelected(event)
     } else {
         this.formReset(event)
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.isShown = function () {
-    console.log("FileManager.isShown()")
+    console.groupCollapsed("FileManager.isShown")
     // ----
+    
     const _is_shown = document.getElementById($(this.inputs.fields.imageIsShown).attr("id"))
     const _image_id = document.getElementById($(this.inputs.fields.imageId).attr("id"))
     //*
-    console.log("|__ _is_shown", _is_shown)
-    console.log("|__ _image_id", _image_id)
+    console.log("_is_shown", _is_shown)
+    console.log("_image_id", _image_id)
     //*/
     if (_is_shown && _image_id) {
         let imageId = (!isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
@@ -1364,15 +1564,19 @@ FileManager.prototype.isShown = function () {
             }
         }
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.isCover = function () {
-    console.log("FileManager.isCover()")
+    console.groupCollapsed("FileManager.isCover")
     // ----
+    
     const _is_cover = document.getElementById($(this.inputs.fields.imageIsCover).attr("id"))
     const _image_id = document.getElementById($(this.inputs.fields.imageId).attr("id"))
     //*
-    console.log("|__ _is_cover", _is_cover)
-    console.log("|__ _image_id", _image_id)
+    console.log("_is_cover", _is_cover)
+    console.log("_image_id", _image_id)
     //*/
     if (_is_cover && _image_id) {
         let imageId = (!isNaN(parseInt(_image_id.value))) ? parseInt(_image_id.value) : null
@@ -1388,10 +1592,14 @@ FileManager.prototype.isCover = function () {
             }
         }
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.formUpload = function () {
-    console.log("FileManager.formUpload()")
+    console.groupCollapsed("FileManager.formUpload")
     // ----
+    
     const _image_id = document.getElementById($(this.inputs.fields.imageId).attr("id"))
     const _image_alt = document.getElementById($(this.inputs.fields.imageAlt).attr("id"))
     const _image_title = document.getElementById($(this.inputs.fields.imageTitle).attr("id"))
@@ -1474,12 +1682,12 @@ FileManager.prototype.formUpload = function () {
                 if (ans) {
                     this.sendUpdateRequest(removeNulls(dataToSend), function (data) {
                         if (data) {
-                            console.log("|__ data", data)
+                            console.log("data", data)
                             let detail = _this.setDetail((data[0]) ? data[0] : data)
                             if (detail.id && detail.name) {
-                                console.log("|__ detail", detail)
+                                console.log("detail", detail)
                                 let image = _this.all.get(detail.id)
-                                console.log("|__ image", image)
+                                console.log("image", image)
                                 
                                 _this.all.set(detail.id, detail)
                                 
@@ -1488,7 +1696,7 @@ FileManager.prototype.formUpload = function () {
                                 
                                 toastr["success"](`${detail.name} - has been updated`, "File Manager")
                             } else {
-                                console.log("|__ data", data)
+                                console.log("data", data)
                                 toastr["error"](`${detail.name} - has not been updated`, "File Manager")
                             }
                         }
@@ -1552,9 +1760,12 @@ FileManager.prototype.formUpload = function () {
             })
         }
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.uploadComplete = function (event) {
-    console.log("FileManager.uploadComplete(event)", event)
+    console.groupCollapsed("FileManager.uploadComplete")
     // ----
     
     let results = null
@@ -1596,9 +1807,12 @@ FileManager.prototype.uploadComplete = function (event) {
             }
         }
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.uploadProgress = function (event) {
-    console.log("FileManager.uploadProgress(event)", event)
+    console.groupCollapsed("FileManager.uploadProgress")
     // ----
     
     let _progress_bar = document.getElementById(this.inputs.fields.progress.attr("id"))
@@ -1620,19 +1834,26 @@ FileManager.prototype.uploadProgress = function (event) {
             "color": "#06030a",
         })
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.uploadFailed = function (event) {
-    console.log("FileManager.uploadFailed(event)", event)
+    console.groupCollapsed("FileManager.uploadFailed")
     // ----
     
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.uploadCanceled = function (event) {
-    console.log("FileManager.uploadFailed(event)", event)
+    console.groupCollapsed("FileManager.uploadFailed")
     // ----
     
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.sendRemoveRequest = function (dataToSend, callback) {
-    console.log("FileManager.sendRemoveRequest(dataToSend, callback)", dataToSend, callback)
+    console.groupCollapsed("FileManager.sendRemoveRequest")
     // ----
     
     if (dataToSend) {
@@ -1648,9 +1869,11 @@ FileManager.prototype.sendRemoveRequest = function (dataToSend, callback) {
             return this.handleError("Error Removing Image.", "Image Manager", "error")
         }
     }
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.sendUpdateRequest = function (dataToSend, callback) {
-    console.log("FileManager.sendUpdateRequest(dataToSend, callback)", dataToSend, callback)
+    console.groupCollapsed("FileManager.sendUpdateRequest")
     // ----
     
     let _this = this
@@ -1659,6 +1882,8 @@ FileManager.prototype.sendUpdateRequest = function (dataToSend, callback) {
     
     if (dataToSend && source !== null && sourceId !== null) {
         let url = `/api/v1.0/images/update`
+        console.groupCollapsed("sendUpdateRequest")
+        // ----
         try {
             sendPostRequest(url, dataToSend, function (data, status, xhr) {
                 if (data) {
@@ -1669,17 +1894,26 @@ FileManager.prototype.sendUpdateRequest = function (dataToSend, callback) {
             console.log("error", e)
             return _this.handleError("Error Retrieving Images.", "Image Manager", "error")
         }
+        // ----
+        console.groupEnd()
     }
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.validate = function () {
-    console.log("FileManager.validate()")
+    console.groupCollapsed("FileManager.validate")
     // ----
+    
     let _form = this.form[0]
+    
+    // ----
+    console.groupEnd()
     return $(_form).valid()
 }
 FileManager.prototype.formRules = function () {
-    console.log("FileManager.formRules()")
+    console.groupCollapsed("FileManager.formRules")
     // ----
+    
     let rules = {}
     let messages = {}
     
@@ -1703,13 +1937,15 @@ FileManager.prototype.formRules = function () {
         required: "Field is required.",
     }
     
+    // ----
+    console.groupEnd()
     return {
         rules: rules,
         messages: messages,
     }
 }
 FileManager.prototype.assignEvents = function () {
-    console.log("FileManager.assignEvents()")
+    console.groupCollapsed("FileManager.assignEvents")
     // ----
     
     let _form = this.form[0]
@@ -1728,9 +1964,11 @@ FileManager.prototype.assignEvents = function () {
     this.inputs.fields.imageIsCover.on("change", this.isCover)
     this.validator = $(_form).validate()
     
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.edit = function (imageId) {
-    console.log("FileManager.edit(imageId)", imageId)
+    console.groupCollapsed("FileManager.edit")
     // ----
     
     let _remove_button = document.getElementById($(this.inputs.buttons.remove).attr("id"))
@@ -1752,33 +1990,40 @@ FileManager.prototype.edit = function (imageId) {
             _remove_button.disabled = false
         }
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.open = function () {
-    console.log("FileManager.open()")
+    console.groupCollapsed("FileManager.open")
     // ----
     
     $(this.inputs.fields.imageFile).trigger("click")
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.render = function () {
+    console.groupCollapsed("FileManager.render")
+    // ----
+    
     this.form = this.fileForm()
     this.gallery = this.fileGallery()
     
     $(this.element).append(this.form, this.gallery)
     this.input = $(this.inputs.fields.imageFile)[0]
     
-    /**
-     * Initialize Validation
-     */
     let _form = document.getElementById($(this.form).attr("id"))
-    //*
+    
     initializeValidator()
-    //*/
-    //console.log("_form", _form)
-    //return $(_form).valid()
+    
     this.formHide()
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.load = function (options) {
-    console.log("FileManager.load(options)", options)
+    console.groupCollapsed("FileManager.load")
     // ----
     
     if (options && options.source && options.sourceId) {
@@ -1791,9 +2036,12 @@ FileManager.prototype.load = function (options) {
         this.galleryContainer.empty()
         this.loadAll()
     }
+    
+    // ----
+    console.groupEnd()
 }
 FileManager.prototype.init = function (options) {
-    console.log("FileManager.init(options)", options)
+    console.groupCollapsed("FileManager.init")
     // ----
     
     /**
@@ -1892,6 +2140,8 @@ FileManager.prototype.init = function (options) {
         "remove": `/api/v1.0/images/remove`,
     }
     
+    // ----
+    console.groupEnd()
 }
 
 $.fn.fileManager = function (options) {

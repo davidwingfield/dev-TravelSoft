@@ -1,0 +1,76 @@
+<?php
+	if (!isset($page_data)) {
+		$page_data = array(
+			"packages" => [],
+		);
+	}
+	
+	$temp = [];
+	$categories = (isset($page_data) && isset($page_data["types"]) && isset($page_data["types"]["category"])) ? $page_data["types"]["category"] : [];
+	$temp["countries"] = (isset($page_data) && isset($page_data["types"]) && isset($page_data["types"]["countries"])) ? $page_data["types"]["countries"] : [];
+	$temp["provinces"] = (isset($page_data) && isset($page_data["types"]) && isset($page_data["types"]["provinces"])) ? $page_data["types"]["provinces"] : [];
+	$temp["cities"] = (isset($page_data) && isset($page_data["types"]) && isset($page_data["types"]["cities"])) ? $page_data["types"]["cities"] : [];
+	$temp["packages"] = (isset($page_data) && isset($page_data["packages"])) ? $page_data["packages"] : [];
+	
+	$settings = json_encode($temp, 1);
+	$init = "Package.initIndexPage($settings);";
+?>
+<!-- Package Index -->
+<section id="package_index" class="section">
+	
+	<div class="row mx-1">
+		
+		<!-- Left Side -->
+		<div class="col-12 col-md-9 col-lg-9 col-xl-10 ml-0 pl-0 pr-0 mr-0 order-2 order-md-1 p-1">
+			<div class="row">
+				<div class="col-3">
+					<button type="button" id="testClearStartFilter" class="btn btn-primary">Clear Start Filter</button>
+				</div>
+			</div>
+			<?php include_once(VIEWS_PATH . "/packages/tables/package_index_table.phtml"); ?>
+		</div>
+		<!-- /Left Side -->
+		
+		<!-- Right Side -->
+		<div class="col-12 col-md-3 col-lg-3 col-xl-2 ml-0 pl-0 pr-0 mr-0 order-1 order-md-2 p-1">
+		
+		</div>
+		<!-- /Right Side -->
+	
+	</div>
+	
+	<?php //*?>
+	<!-- Test Elements -->
+	<div id="testElements">
+		<div class="row mx-1 my-0">
+			<?php //displayJsonOnPage($temp["countries"], "countries"); ?>
+			<?php //displayJsonOnPage($temp["provinces"], "provinces"); ?>
+			<?php //displayJsonOnPage($temp["cities"], "cities"); ?>
+			<?php //displayJsonOnPage($pricings, "Pricings"); ?>
+			<?php //displayJsonOnPage($vendor, "Vendor"); ?>
+			<?php //displayJsonOnPage($product, "Product"); ?>
+			<?php //displayJsonOnPage($location, "Location"); ?>
+		</div>
+	</div>
+	<!-- /Test Elements -->
+	<?php //*/ ?>
+
+</section>
+<!-- /Package Index -->
+
+<!-- New Package Modal -->
+<?php include_once(VIEWS_PATH . "/products/modals/new_package_modal.phtml"); ?>
+<!-- /New Package Modal -->
+
+<script type="text/javascript">
+	$(function () {
+		console.groupCollapsed("TYPES")
+		Types.init(<?php echo TYPES;?>)
+		console.groupEnd()
+		
+		<?php echo $init;?>
+		
+		
+	})
+</script>
+

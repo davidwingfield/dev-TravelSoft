@@ -795,6 +795,22 @@
 			return $products;
 		}
 		
+		public static function search(array $params = null): void
+		{
+			$products = [];
+			
+			foreach (ProductModel::fetchProducts($params) AS $k => $product) {
+				$products[] = self::formatSearchResults($product);
+			}
+			
+			/**
+			 * render results json page
+			 */
+			header("Content-type:application/json");
+			View::render_json($products);
+			exit(0);
+		}
+		
 		private static function updateMeta(array $params = []): array
 		{
 			$products = [];
@@ -832,7 +848,6 @@
 			$rooms = [];
 			$arrivingLocation = [];
 			$departingLocation = [];
-			
 			$images = Image::getByProductId($productId);
 			$matrices = Matrix::getMatricesByProductId((int)$product["product_id"]);
 			$profiles = Profile::getByProductId((int)$product["product_id"]);
@@ -845,13 +860,60 @@
 			$provider = (isset($provider[0])) ? $provider[0] : [];
 			$vendor = Vendor::getByVendorId((int)$product["product_vendor_id"]);
 			$vendor = (isset($vendor[0])) ? $vendor[0] : [];
-			
 			$use_provider_location = false;
 			$street_1 = (isset($product["product_street_1"])) ? $product["product_street_1"] : null;
 			$street_2 = (isset($product["product_street_2"])) ? $product["product_street_2"] : null;
 			$zipcode = (isset($product["product_postal_code"])) ? $product["product_postal_code"] : null;
 			$departingFromId = (isset($product["product_depart_from"])) ? $product["product_depart_from"] : null;
 			$arrivingToId = (isset($product["product_arrive_to"])) ? $product["product_arrive_to"] : null;
+			
+			$country = array(
+				"id" => ($product && $product["country_id"]) ? (int)$product["country_id"] : null,
+				"currency_id" => ($product && $product["country_currency_id"]) ? (int)$product["country_currency_id"] : null,
+				"sort_order" => ($product && $product["country_sort_order"]) ? (int)$product["country_sort_order"] : null,
+				"name" => ($product && $product["country_name"]) ? $product["country_name"] : null,
+				"iso2" => ($product && $product["country_iso2"]) ? $product["country_iso2"] : null,
+				"iso3" => ($product && $product["country_iso3"]) ? $product["country_iso3"] : null,
+				"blurb" => ($product && $product["country_blurb"]) ? $product["country_blurb"] : null,
+				"enabled" => ($product && $product["country_enabled"]) ? $product["country_enabled"] : null,
+				"date_created" => ($product && $product["country_date_created"]) ? $product["country_date_created"] : null,
+				"created_by" => ($product && $product["country_created_by"]) ? (int)$product["country_created_by"] : null,
+				"date_modified" => ($product && $product["country_date_modified"]) ? $product["country_date_modified"] : null,
+				"modified_by" => ($product && $product["country_modified_by"]) ? (int)$product["country_modified_by"] : null,
+				"note" => ($product && $product["country_note"]) ? $product["country_note"] : null,
+			);
+			
+			$province = array(
+				"id" => ($product && $product["province_id"]) ? (int)$product["province_id"] : null,
+				"country_id" => ($product && $product["province_country_id"]) ? (int)$product["province_country_id"] : null,
+				"name" => ($product && $product["province_name"]) ? $product["province_name"] : null,
+				"iso2" => ($product && $product["province_iso2"]) ? $product["province_iso2"] : null,
+				"iso3" => ($product && $product["province_iso3"]) ? $product["province_iso3"] : null,
+				"sort_order" => ($product && $product["province_sort_order"]) ? (int)$product["province_sort_order"] : null,
+				"blurb" => ($product && $product["province_blurb"]) ? $product["province_blurb"] : null,
+				"enabled" => ($product && $product["province_enabled"]) ? $product["province_enabled"] : null,
+				"date_created" => ($product && $product["province_date_created"]) ? $product["province_date_created"] : null,
+				"created_by" => ($product && $product["province_created_by"]) ? (int)$product["province_created_by"] : null,
+				"date_modified" => ($product && $product["province_date_modified"]) ? $product["province_date_modified"] : null,
+				"modified_by" => ($product && $product["province_modified_by"]) ? (int)$product["province_modified_by"] : null,
+				"note" => ($product && $product["province_note"]) ? $product["province_note"] : null,
+			);
+			
+			$city = array(
+				"id" => ($product && $product["city_id"]) ? (int)$product["city_id"] : null,
+				"province_id" => ($product && $product["city_province_id"]) ? (int)$product["city_province_id"] : null,
+				"country_id" => ($product && $product["city_country_id"]) ? (int)$product["city_country_id"] : null,
+				"sort_order" => ($product && $product["city_sort_order"]) ? (int)$product["city_sort_order"] : null,
+				"name" => ($product && $product["city_name"]) ? $product["city_name"] : null,
+				"blurb" => ($product && $product["city_blurb"]) ? $product["city_blurb"] : null,
+				"is_capital" => ($product && $product["city_is_capital"]) ? $product["city_is_capital"] : null,
+				"enabled" => ($product && $product["city_enabled"]) ? $product["city_enabled"] : null,
+				"date_created" => ($product && $product["city_date_created"]) ? $product["city_date_created"] : null,
+				"created_by" => ($product && $product["city_created_by"]) ? (int)$product["city_created_by"] : null,
+				"date_modified" => ($product && $product["city_date_modified"]) ? $product["city_date_modified"] : null,
+				"modified_by" => ($product && $product["city_modified_by"]) ? (int)$product["city_modified_by"] : null,
+				"note" => ($product && $product["city_note"]) ? $product["city_note"] : null,
+			);
 			
 			foreach ($seasons AS $season) {
 				$season_name = $season["name"];
@@ -894,7 +956,7 @@
 			
 			$location_id = (int)$product["product_location_id"];
 			
-			return array(
+			$results = array(
 				"id" => $product["product_id"],
 				"use_provider_location" => $use_provider_location,
 				"category_id" => $category_id,
@@ -984,7 +1046,14 @@
 				"profiles" => $profiles,
 				"matrices" => $matrices,
 				"pricings" => $pricings,
+				"country" => $country,
+				"province" => $province,
+				"city" => $city,
 			);
+			
+			Log::$debug_log->trace($results);
+			
+			return $results;
 		}
 		
 		private static function format_ac(array $products = []): array
@@ -1000,6 +1069,116 @@
 			}
 			
 			return $data;
+		}
+		
+		private static function formatSearchResults(array $product = null): array
+		{
+			if (is_null($product)) {
+				return [];
+			}
+			
+			$productName = (isset($product["product_name"])) ? $product["product_name"] : null;
+			$productId = (isset($product["product_id"]) && (int)$product["product_id"] > 0) ? (int)$product["product_id"] : null;
+			$rating = (isset($product["product_rating_types_id"]) && (int)$product["product_rating_types_id"] > 0) ? (int)$product["product_rating_types_id"] : 0;
+			$country = array(
+				"id" => ($product && $product["country_id"]) ? (int)$product["country_id"] : null,
+				"currency_id" => ($product && $product["country_currency_id"]) ? (int)$product["country_currency_id"] : null,
+				"sort_order" => ($product && $product["country_sort_order"]) ? (int)$product["country_sort_order"] : null,
+				"name" => ($product && $product["country_name"]) ? $product["country_name"] : null,
+				"iso2" => ($product && $product["country_iso2"]) ? $product["country_iso2"] : null,
+				"iso3" => ($product && $product["country_iso3"]) ? $product["country_iso3"] : null,
+				"blurb" => ($product && $product["country_blurb"]) ? $product["country_blurb"] : null,
+				"enabled" => ($product && $product["country_enabled"]) ? $product["country_enabled"] : null,
+				"date_created" => ($product && $product["country_date_created"]) ? $product["country_date_created"] : null,
+				"created_by" => ($product && $product["country_created_by"]) ? (int)$product["country_created_by"] : null,
+				"date_modified" => ($product && $product["country_date_modified"]) ? $product["country_date_modified"] : null,
+				"modified_by" => ($product && $product["country_modified_by"]) ? (int)$product["country_modified_by"] : null,
+				"note" => ($product && $product["country_note"]) ? $product["country_note"] : null,
+			);
+			$province = array(
+				"id" => ($product && $product["province_id"]) ? (int)$product["province_id"] : null,
+				"country_id" => ($product && $product["province_country_id"]) ? (int)$product["province_country_id"] : null,
+				"name" => ($product && $product["province_name"]) ? $product["province_name"] : null,
+				"iso2" => ($product && $product["province_iso2"]) ? $product["province_iso2"] : null,
+				"iso3" => ($product && $product["province_iso3"]) ? $product["province_iso3"] : null,
+				"sort_order" => ($product && $product["province_sort_order"]) ? (int)$product["province_sort_order"] : null,
+				"blurb" => ($product && $product["province_blurb"]) ? $product["province_blurb"] : null,
+				"enabled" => ($product && $product["province_enabled"]) ? $product["province_enabled"] : null,
+				"date_created" => ($product && $product["province_date_created"]) ? $product["province_date_created"] : null,
+				"created_by" => ($product && $product["province_created_by"]) ? (int)$product["province_created_by"] : null,
+				"date_modified" => ($product && $product["province_date_modified"]) ? $product["province_date_modified"] : null,
+				"modified_by" => ($product && $product["province_modified_by"]) ? (int)$product["province_modified_by"] : null,
+				"note" => ($product && $product["province_note"]) ? $product["province_note"] : null,
+			);
+			$city = array(
+				"id" => ($product && $product["city_id"]) ? (int)$product["city_id"] : null,
+				"province_id" => ($product && $product["city_province_id"]) ? (int)$product["city_province_id"] : null,
+				"country_id" => ($product && $product["city_country_id"]) ? (int)$product["city_country_id"] : null,
+				"sort_order" => ($product && $product["city_sort_order"]) ? (int)$product["city_sort_order"] : null,
+				"name" => ($product && $product["city_name"]) ? $product["city_name"] : null,
+				"blurb" => ($product && $product["city_blurb"]) ? $product["city_blurb"] : null,
+				"is_capital" => ($product && $product["city_is_capital"]) ? $product["city_is_capital"] : null,
+				"enabled" => ($product && $product["city_enabled"]) ? $product["city_enabled"] : null,
+				"date_created" => ($product && $product["city_date_created"]) ? $product["city_date_created"] : null,
+				"created_by" => ($product && $product["city_created_by"]) ? (int)$product["city_created_by"] : null,
+				"date_modified" => ($product && $product["city_date_modified"]) ? $product["city_date_modified"] : null,
+				"modified_by" => ($product && $product["city_modified_by"]) ? (int)$product["city_modified_by"] : null,
+				"note" => ($product && $product["city_note"]) ? $product["city_note"] : null,
+			);
+			$category = array(
+				"id" => $product["category_id"],
+				"pricing_strategy_types_id" => $product["category_pricing_strategy_types_id"],
+				"attribute_id" => $product["category_attribute_id"],
+				"name" => $product["category_name"],
+				"icon" => $product["category_icon"],
+				"view_product_index" => $product["category_view_product_index"],
+				"view_product_index_filter" => $product["category_view_product_index_filter"],
+				"view_product_index_search" => $product["category_view_product_index_search"],
+				"view_product_edit" => $product["category_view_product_edit"],
+				"view_product_package_edit" => $product["category_view_product_package_edit"],
+				"view_product_package_index" => $product["category_view_product_package_index"],
+				"all_day" => $product["category_all_day"],
+				"overlap" => $product["category_overlap"],
+				"editable" => $product["category_editable"],
+				"duration_editable" => $product["category_duration_editable"],
+				"start_editable" => $product["category_start_editable"],
+				"display" => $product["category_display"],
+				"background_color" => $product["category_background_color"],
+				"text_color" => $product["category_text_color"],
+				"border_color" => $product["category_border_color"],
+				"sort_order" => $product["category_sort_order"],
+				"enabled" => $product["category_enabled"],
+				"date_created" => $product["category_date_created"],
+				"created_by" => $product["category_created_by"],
+				"date_modified" => $product["category_date_modified"],
+				"modified_by" => $product["category_modified_by"],
+				"note" => $product["category_note"],
+			);
+			
+			$ratingText = str_repeat("<li class=''><i class='fas fa-star'></i></li>", $rating);
+			$productStreet1 = (isset($product["product_street_1"])) ? $product["product_street_1"] : null;
+			$productStreet2 = (isset($product["product_street_2"])) ? $product["product_street_2"] : null;
+			$productPostalCode = (isset($product["product_postal_code"])) ? $product["product_postal_code"] : null;
+			$productDescriptionShort = (isset($product["product_description_short"])) ? $product["product_description_short"] : null;
+			$locationNames = generateLocationNames($country, $province, $city);
+			
+			return array(
+				"street_1" => $productStreet1,
+				"street_2" => $productStreet2,
+				"postal_code" => $productPostalCode,
+				"description_short" => $productDescriptionShort,
+				"display_short" => (isset($locationNames) && isset($locationNames["short"])) ? $locationNames["short"] : null,
+				"display_medium" => (isset($locationNames) && isset($locationNames["medium"])) ? $locationNames["medium"] : null,
+				"display_long" => (isset($locationNames) && isset($locationNames["long"])) ? $locationNames["long"] : null,
+				"id" => $productId,
+				"name" => $productName,
+				"rating_id" => $rating,
+				"rating_text" => $ratingText,
+				"category" => $category,
+				"country" => $country,
+				"province" => $province,
+				"city" => $city,
+			);
 		}
 		
 	}

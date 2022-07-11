@@ -94,12 +94,10 @@
 		public static function get(int $id = null): array
 		{
 			$where = "";
-			
-			try {
-				if (!is_null($id)) {
-					$where = "AND         COUNTRY.id = $id";
-				}
-				$sql = "
+			if (!is_null($id)) {
+				$where = "AND         COUNTRY.id = $id";
+			}
+			$sql = "
                 SELECT
                                 COUNTRY.id AS 'country_id',
                                 COUNTRY.currency_id AS 'country_currency_id',
@@ -117,10 +115,13 @@
                 WHERE			COUNTRY.enabled = 1
                     $where
                 ORDER BY		COUNTRY.sort_order ASC, COUNTRY.name ASC;";
+			
+			try {
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -129,22 +130,21 @@
 		public static function fetchByCountryName(string $name = ""): array
 		{
 			$searchTerm = addslashes($name);
-			
-			try {
-				
-				$sqlCondition = "
+			$sqlCondition = "
 					WHERE		COUNTRY.name = '$searchTerm'
 				";
-				
-				$sql = self::$selectQuery . $sqlCondition . "
+			
+			$sql = self::$selectQuery . $sqlCondition . "
                     ORDER BY	CONCAT( COUNTRY.iso3, ' - ', COUNTRY.name )
                     LIMIT 20;
                 ";
-				Log::$debug_log->trace($sql);
+			
+			try {
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -152,18 +152,20 @@
 		
 		public static function country_ac(string $st = ""): array
 		{
-			try {
-				$searchTerm = addslashes($st);
-				$sqlCondition = "
+			$searchTerm = addslashes($st);
+			$sqlCondition = "
 					WHERE		IF(COUNTRY.iso3 IS NULL, COUNTRY.name, CONCAT(COUNTRY.iso3, ' - ', COUNTRY.name)) LIKE '%$searchTerm%'
 				";
-				$sql = self::$selectQuery . $sqlCondition . "
+			$sql = self::$selectQuery . $sqlCondition . "
                     ORDER BY	CONCAT( COUNTRY.iso3, ' - ', COUNTRY.name )
                     LIMIT 20;";
+			
+			try {
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -225,7 +227,8 @@
 				
 				return self::get($id);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}

@@ -1,4 +1,6 @@
 $.fn.YearCalendar = function (settings) {
+    console.groupCollapsed("YearCalendar")
+    // ----
     "use strict"
     
     const _calendar_filter_ranges = document.getElementById("calendar_filter_ranges")
@@ -108,6 +110,9 @@ $.fn.YearCalendar = function (settings) {
     }
     
     const fetchCalendarEvents = function (dataToSend, callback) {
+        console.groupCollapsed("YearCalendar.fetchCalendarEvents")
+        // ----
+        
         if (dataToSend) {
             try {
                 sendGetRequest("/api/v1.0/calendars", dataToSend, function (data, status, xhr) {
@@ -124,6 +129,9 @@ $.fn.YearCalendar = function (settings) {
         } else {
             return callback([])
         }
+        
+        // ----
+        console.groupEnd()
     }
     
     const getDate = function (startYear, monthsOut) {
@@ -365,6 +373,9 @@ $.fn.YearCalendar = function (settings) {
     }
     
     const init = function (settings) {
+        console.group("YearCalendar.init")
+        // ----
+        
         calendars = []
         
         if (settings) {
@@ -377,6 +388,8 @@ $.fn.YearCalendar = function (settings) {
             product_id: product_id,
         }
         
+        console.group("fetchCalendarEvents")
+        // ----
         fetchCalendarEvents(dataToSend, function (events) {
             if (!events) {
                 events = []
@@ -399,10 +412,14 @@ $.fn.YearCalendar = function (settings) {
             YearCalendar.init(settings)
         })
         
+        // ----
+        console.groupEnd()
     }
     
     init(settings)
     
+    // ----
+    console.groupEnd()
     return {
         calendars: [],
     }
@@ -839,6 +856,9 @@ const YearCalendar = (function () {
     }
     
     const init = function (settings) {
+        console.groupCollapsed("YearCalendar.init")
+        // ----
+        
         _calendar_filter_unit_id.disabled = true
         _calendar_filter_season_id_assign.disabled = true
         _calendar_filter_unit_id_assign.disabled = true
@@ -847,6 +867,8 @@ const YearCalendar = (function () {
         loadSeasonDropdown()
         
         //ContextMenu.init(settings)
+        // ----
+        console.groupEnd()
     }
     
     const checkProgress = function () {

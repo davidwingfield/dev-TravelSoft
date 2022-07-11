@@ -70,7 +70,8 @@
 				return Model::$db->rawQuery($sql);
 				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -108,14 +109,15 @@
 		public static function getByName(string $name): array
 		{
 			$searchTerm = addslashes($name);
+			$where = "WHERE			COMPANY.name LIKE '$searchTerm'";
+			$sql = self::$selectQuery . " " . $where;
 			
 			try {
-				$where = "WHERE			COMPANY.name LIKE '$searchTerm'";
-				$sql = self::$selectQuery . " " . $where;
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -199,7 +201,7 @@
 				
 				return [];
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
 				
 				return [];
 			}
@@ -214,16 +216,18 @@
 		 */
 		public static function company_ac(string $st = ""): array
 		{
-			try {
-				$searchTerm = addslashes($st);
-				$sql = self::$selectQuery . "
+			$searchTerm = addslashes($st);
+			$sql = self::$selectQuery . "
                     WHERE		COMPANY.name LIKE '%$searchTerm%'
                     ORDER BY    LENGTH(Company.name), CAST(Company.name AS UNSIGNED), Company.name ASC
                     LIMIT 20;";
+			
+			try {
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}

@@ -95,10 +95,52 @@
 								CATEGORY.created_by AS 'category_created_by',
 								CATEGORY.date_modified AS 'category_date_modified',
 								CATEGORY.modified_by AS 'category_modified_by',
-								CATEGORY.note AS 'category_note'
+								CATEGORY.note AS 'category_note',
+        	       				COUNTRY.id AS 'country_id',
+								COUNTRY.currency_id AS 'country_currency_id',
+								COUNTRY.sort_order AS 'country_sort_order',
+								COUNTRY.name AS 'country_name',
+								COUNTRY.iso2 AS 'country_iso2',
+								COUNTRY.iso3 AS 'country_iso3',
+								COUNTRY.blurb AS 'country_blurb',
+								COUNTRY.enabled AS 'country_enabled',
+								COUNTRY.date_created AS 'country_date_created',
+								COUNTRY.created_by AS 'country_created_by',
+								COUNTRY.date_modified AS 'country_date_modified',
+								COUNTRY.modified_by AS 'country_modified_by',
+								COUNTRY.note AS 'country_note',
+        	       				PROVINCE.id AS 'province_id',
+								PROVINCE.country_id AS 'province_country_id',
+								PROVINCE.name AS 'province_name',
+								PROVINCE.iso2 AS 'province_iso2',
+								PROVINCE.iso3 AS 'province_iso3',
+								PROVINCE.sort_order AS 'province_sort_order',
+								PROVINCE.blurb AS 'province_blurb',
+								PROVINCE.enabled AS 'province_enabled',
+								PROVINCE.date_created AS 'province_date_created',
+								PROVINCE.created_by AS 'province_created_by',
+								PROVINCE.date_modified AS 'province_date_modified',
+								PROVINCE.modified_by AS 'province_modified_by',
+								PROVINCE.note AS 'province_note',
+        	       				CITY.id AS 'city_id',
+								CITY.province_id AS 'city_province_id',
+								CITY.country_id AS 'city_country_id',
+								CITY.sort_order AS 'city_sort_order',
+								CITY.name AS 'city_name',
+								CITY.blurb AS 'city_blurb',
+								CITY.is_capital AS 'city_is_capital',
+								CITY.enabled AS 'city_enabled',
+								CITY.date_created AS 'city_date_created',
+								CITY.created_by AS 'city_created_by',
+								CITY.date_modified AS 'city_date_modified',
+								CITY.modified_by AS 'city_modified_by',
+								CITY.note AS 'city_note'
             FROM 				product PRODUCT
             JOIN 				category CATEGORY ON CATEGORY.id = PRODUCT.category_id
             JOIN 				status_types STATUS_TYPES ON STATUS_TYPES.id = COALESCE(PRODUCT.status_types_id, 1)
+        	LEFT JOIN			city CITY ON CITY.id = PRODUCT.city_id
+        	LEFT JOIN			province PROVINCE ON PROVINCE.id = CITY.province_id
+        	LEFT JOIN			country COUNTRY ON COUNTRY.id = CITY.country_id
             WHERE   			PRODUCT.enabled = 1
         ";
 		
@@ -375,15 +417,14 @@
 				return [];
 			}
 			
-			try {
-				$searchTerm = addslashes($st);
-				$sql = self::$sql . "
+			$searchTerm = addslashes($st);
+			$sql = self::$sql . "
                     AND			PRODUCT.name LIKE '%$searchTerm%'
                     AND         PRODUCT.category_id = $category_id
                     ORDER BY    LENGTH(PRODUCT.name), CAST(PRODUCT.name AS UNSIGNED), PRODUCT.name ASC
                     LIMIT 20;";
-				
-				//Log::$debug_log->trace($sql);
+			
+			try {
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
@@ -801,6 +842,162 @@
 				}
 			} catch (Exception $e) {
 				Log::$debug_log->error($e->getMessage());
+				
+				return [];
+			}
+		}
+		
+		public static function fetchProducts(array $params = null): array
+		{
+			if (is_null($params)) {
+				return [];
+			}
+			
+			$categoryId = (isset($params) && isset($params["category_id"]) && (int)$params["category_id"] > 0) ? (int)$params["category_id"] : null;
+			$productId = (isset($params) && isset($params["product_id"]) && (int)$params["product_id"] > 0) ? (int)$params["product_id"] : null;
+			$countryId = (isset($params) && isset($params["country_id"]) && (int)$params["country_id"] > 0) ? (int)$params["country_id"] : null;
+			$provinceId = (isset($params) && isset($params["province_id"]) && (int)$params["province_id"] > 0) ? (int)$params["province_id"] : null;
+			$cityId = (isset($params) && isset($params["city_id"]) && (int)$params["city_id"] > 0) ? (int)$params["city_id"] : null;
+			
+			$where = "";
+			$order = "";
+			$whereCondition = [];
+			$orderCondition = [
+				"PRODUCT.name ASC",
+				"LENGTH(PRODUCT.name)",
+				"CAST(PRODUCT.name AS UNSIGNED)",
+			];
+			
+			if (!is_null($categoryId)) {
+				$whereCondition[] = "PRODUCT.category_id = $categoryId";
+			}
+			
+			if (!is_null($productId)) {
+				$whereCondition[] = "PRODUCT.product_id = $productId";
+			}
+			
+			if (!is_null($countryId)) {
+				$whereCondition[] = "PRODUCT.country_id = $countryId";
+			}
+			
+			if (!is_null($provinceId)) {
+				$whereCondition[] = "PRODUCT.province_id = $provinceId";
+			}
+			
+			if (!is_null($cityId)) {
+				$whereCondition[] = "PRODUCT.city_id = $cityId";
+			}
+			
+			if (count($whereCondition) > 0) {
+				$where = "WHERE   			" . implode(" AND ", $whereCondition);
+			}
+			
+			if (count($orderCondition) > 0) {
+				$order = "ORDER BY            " . implode(", ", $orderCondition);
+			}
+			
+			$sql = "
+			SELECT      		PRODUCT.id AS 'product_id',
+					            PRODUCT.status_types_id AS 'product_status_types_id',
+					            PRODUCT.currency_id AS 'product_currency_id',
+					            PRODUCT.provider_id AS 'product_provider_id',
+					            PRODUCT.vendor_id AS 'product_vendor_id',
+					            PRODUCT.rating_types_id AS 'product_rating_types_id',
+					            PRODUCT.name AS 'product_name',
+					            PRODUCT.street_1 AS 'product_street_1',
+					            PRODUCT.street_2 AS 'product_street_2',
+					            PRODUCT.postal_code AS 'product_postal_code',
+					            PRODUCT.description_short AS 'product_description_short',
+					            PRODUCT.keywords AS 'product_keywords',
+					            PRODUCT.sku AS 'product_sku',
+					            PRODUCT.day_span AS 'product_day_span',
+					            PRODUCT.cover_image AS 'product_cover_image',
+					            PRODUCT.api_id AS 'product_api_id',
+					            PRODUCT.from_api AS 'product_from_api',
+					            PRODUCT.hotel_code AS 'product_hotel_code',
+					            PRODUCT.sort_order AS 'product_sort_order',
+					            PRODUCT.amenities AS 'product_amenities',
+					            PRODUCT.note AS 'product_note',
+					            COUNTRY.id AS 'country_id',
+								COUNTRY.currency_id AS 'country_currency_id',
+								COUNTRY.sort_order AS 'country_sort_order',
+								COUNTRY.name AS 'country_name',
+								COUNTRY.iso2 AS 'country_iso2',
+								COUNTRY.iso3 AS 'country_iso3',
+								COUNTRY.blurb AS 'country_blurb',
+								COUNTRY.enabled AS 'country_enabled',
+								COUNTRY.date_created AS 'country_date_created',
+								COUNTRY.created_by AS 'country_created_by',
+								COUNTRY.date_modified AS 'country_date_modified',
+								COUNTRY.modified_by AS 'country_modified_by',
+								COUNTRY.note AS 'country_note',
+					            PROVINCE.id AS 'province_id',
+								PROVINCE.country_id AS 'province_country_id',
+								PROVINCE.name AS 'province_name',
+								PROVINCE.iso2 AS 'province_iso2',
+								PROVINCE.iso3 AS 'province_iso3',
+								PROVINCE.sort_order AS 'province_sort_order',
+								PROVINCE.blurb AS 'province_blurb',
+								PROVINCE.enabled AS 'province_enabled',
+								PROVINCE.date_created AS 'province_date_created',
+								PROVINCE.created_by AS 'province_created_by',
+								PROVINCE.date_modified AS 'province_date_modified',
+								PROVINCE.modified_by AS 'province_modified_by',
+								PROVINCE.note AS 'province_note',
+					            CITY.id AS 'city_id',
+								CITY.province_id AS 'city_province_id',
+								CITY.country_id AS 'city_country_id',
+								CITY.sort_order AS 'city_sort_order',
+								CITY.name AS 'city_name',
+								CITY.blurb AS 'city_blurb',
+								CITY.is_capital AS 'city_is_capital',
+								CITY.enabled AS 'city_enabled',
+								CITY.date_created AS 'city_date_created',
+								CITY.created_by AS 'city_created_by',
+								CITY.date_modified AS 'city_date_modified',
+								CITY.modified_by AS 'city_modified_by',
+								CITY.note AS 'city_note',
+			       				CATEGORY.id AS 'category_id',
+								CATEGORY.pricing_strategy_types_id AS 'category_pricing_strategy_types_id',
+								CATEGORY.attribute_id AS 'category_attribute_id',
+								CATEGORY.name AS 'category_name',
+								CATEGORY.icon AS 'category_icon',
+								CATEGORY.view_product_index AS 'category_view_product_index',
+								CATEGORY.view_product_index_filter AS 'category_view_product_index_filter',
+								CATEGORY.view_product_index_search AS 'category_view_product_index_search',
+								CATEGORY.view_product_edit AS 'category_view_product_edit',
+								CATEGORY.view_product_package_edit AS 'category_view_product_package_edit',
+								CATEGORY.view_product_package_index AS 'category_view_product_package_index',
+								CATEGORY.all_day AS 'category_all_day',
+								CATEGORY.overlap AS 'category_overlap',
+								CATEGORY.editable AS 'category_editable',
+								CATEGORY.duration_editable AS 'category_duration_editable',
+								CATEGORY.start_editable AS 'category_start_editable',
+								CATEGORY.display AS 'category_display',
+								CATEGORY.background_color AS 'category_background_color',
+								CATEGORY.text_color AS 'category_text_color',
+								CATEGORY.border_color AS 'category_border_color',
+								CATEGORY.sort_order AS 'category_sort_order',
+								CATEGORY.enabled AS 'category_enabled',
+								CATEGORY.date_created AS 'category_date_created',
+								CATEGORY.created_by AS 'category_created_by',
+								CATEGORY.date_modified AS 'category_date_modified',
+								CATEGORY.modified_by AS 'category_modified_by',
+								CATEGORY.note AS 'category_note'
+			FROM        		product PRODUCT
+			JOIN				category CATEGORY ON CATEGORY.id = PRODUCT.category_id
+			LEFT JOIN   		city CITY ON CITY.id = PRODUCT.city_id
+			LEFT JOIN   		province PROVINCE ON PROVINCE.id = CITY.province_id
+			LEFT JOIN   		country COUNTRY ON COUNTRY.id = PROVINCE.country_id
+			$where
+			$order
+			";
+			
+			try {
+				return Model::$db->rawQuery($sql);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}

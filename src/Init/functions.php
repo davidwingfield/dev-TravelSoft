@@ -436,6 +436,153 @@
 		return $ret;
 	}
 	
+	function generateLocationNames(array $country = null, array $province = null, array $city = null): array
+	{
+		
+		/*
+		Log::$debug_log->trace($country);
+		Log::$debug_log->trace($province);
+		Log::$debug_log->trace($city);
+		//*/
+		
+		$countryName = (!is_null($country) && isset($country["name"])) ? $country["name"] : null;
+		$countryISO2 = (!is_null($country) && isset($country["iso2"])) ? $country["iso2"] : null;
+		$countryISO3 = (!is_null($country) && isset($country["iso3"])) ? $country["iso3"] : null;
+		
+		/*
+		Log::$debug_log->trace($countryName);
+		Log::$debug_log->trace($countryISO2);
+		Log::$debug_log->trace($countryISO3);
+		//*/
+		
+		$provinceName = (!is_null($province) && isset($province["name"])) ? $province["name"] : null;
+		$provinceISO2 = (!is_null($province) && isset($province["iso2"])) ? $province["iso2"] : null;
+		$provinceISO3 = (!is_null($province) && isset($province["iso3"])) ? $province["iso3"] : null;
+		
+		/*
+		Log::$debug_log->trace($provinceName);
+		Log::$debug_log->trace($provinceISO2);
+		Log::$debug_log->trace($provinceISO3);
+		//*/
+		
+		$cityName = (!is_null($city) && isset($city["name"])) ? $city["name"] : null;
+		
+		/*
+		Log::$debug_log->trace($cityName);
+		//*/
+		
+		if (!is_null($provinceISO2)) {
+			$provinceLong = $provinceISO2;
+			$provinceMedium = $provinceISO2;
+			$provinceShort = $provinceISO2;
+		}
+		
+		if (!is_null($provinceISO3)) {
+			$provinceLong = $provinceISO3;
+			$provinceMedium = $provinceISO3;
+			if (is_null($provinceShort)) {
+				$provinceShort = $provinceISO3;
+			}
+		}
+		
+		if (!is_null($provinceName)) {
+			$provinceLong = $provinceName;
+			if (is_null($provinceMedium)) {
+				$provinceShort = $provinceName;
+			}
+			if (is_null($provinceShort)) {
+				$provinceShort = $provinceName;
+			}
+		}
+		
+		/*
+		Log::$debug_log->trace($provinceLong);
+		Log::$debug_log->trace($provinceMedium);
+		Log::$debug_log->trace($provinceShort);
+		//*/
+		
+		if (!is_null($countryISO2)) {
+			$countryLong = $countryISO2;
+			$countryMedium = $countryISO2;
+			$countryShort = $countryISO2;
+		}
+		
+		if (!is_null($countryISO3)) {
+			$countryLong = $countryISO3;
+			$countryMedium = $countryISO3;
+			if (is_null($countryShort)) {
+				$countryShort = $countryISO3;
+			}
+		}
+		
+		if (!is_null($countryName)) {
+			$countryLong = $countryName;
+			if (is_null($countryMedium)) {
+				$countryShort = $countryName;
+			}
+			if (is_null($countryShort)) {
+				$countryShort = $countryName;
+			}
+		}
+		
+		/*
+		Log::$debug_log->trace($countryLong);
+		Log::$debug_log->trace($countryMedium);
+		Log::$debug_log->trace($countryShort);
+		//*/
+		
+		/*
+		 * (!is_null($provinceName)) ? $provinceName : null
+		 * (!is_null($provinceISO2)) ? $provinceISO2 : null
+		 * (!is_null($provinceISO3)) ? $provinceISO3 : null
+		 * (!is_null($countryName)) ? $countryName : null
+		 * (!is_null($countryISO2)) ? $countryISO2 : null
+		 * (!is_null($countryISO3)) ? $countryISO3 : null
+		 */
+		
+		if (!is_null($provinceLong) && !is_null($countryLong)) {
+			$displayLong = "($provinceLong, $countryLong)";
+		} else if (is_null($provinceLong) && !is_null($countryLong)) {
+			$displayLong = "($countryLong)";
+		} else if (!is_null($provinceLong) && is_null($countryLong)) {
+			$displayLong = "($provinceLong)";
+		} else {
+			$displayLong = "";
+		}
+		
+		if (!is_null($provinceMedium) && !is_null($countryMedium)) {
+			$displayMedium = "($provinceMedium, $countryMedium)";
+		} else if (is_null($provinceMedium) && !is_null($countryMedium)) {
+			$displayMedium = "($countryMedium)";
+		} else if (!is_null($provinceMedium) && is_null($countryMedium)) {
+			$displayMedium = "($provinceMedium)";
+		} else {
+			$displayMedium = "";
+		}
+		
+		if (!is_null($provinceShort) && !is_null($countryShort)) {
+			$displayShort = "($provinceShort, $countryShort)";
+		} else if (is_null($provinceShort) && !is_null($countryShort)) {
+			$displayShort = "($countryShort)";
+		} else if (!is_null($provinceShort) && is_null($countryShort)) {
+			$displayShort = "($provinceShort)";
+		} else {
+			$displayShort = "";
+		}
+		
+		if (!is_null($cityName)) {
+			$displayLong = "$cityName $displayLong";
+			$displayMedium = "$cityName $displayMedium";
+			$displayShort = "$cityName $displayShort";
+		}
+		
+		return array(
+			"short" => $displayShort,
+			"medium" => $displayMedium,
+			"long" => $displayLong,
+		);
+	}
+	
 	
 	
 	

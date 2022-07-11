@@ -116,7 +116,7 @@
 							return [];
 					}
 				} catch (Exception $e) {
-					Log::$debug_log->error($e);
+					Log::$debug_log->error($e->getMessage());
 					
 					return [];
 				}

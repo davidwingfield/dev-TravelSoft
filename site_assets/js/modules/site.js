@@ -4,7 +4,7 @@ $(document).ready(function () {
         const inputs = document.getElementsByTagName("input")
         
         if (mdbPreloader) {
-            $(mdbPreloader).delay(1000).fadeOut(300)
+            $(mdbPreloader).delay(500).fadeOut(300)
         }
         
         for (let i = 0; i < inputs.length; i++) {
@@ -49,16 +49,16 @@ $(document).ready(function () {
     $.fn.dataTableExt.afnFiltering.push(
         function (oSettings, aData, iDataIndex) {
             if (oSettings.nTable.id === "dates_table") {
-                var iFini = document.getElementById("min").value
-                var iFfin = document.getElementById("max").value
-                var iStartDateCol = 1
-                var iEndDateCol = 1
+                let iFini = document.getElementById("min").value
+                let iFfin = document.getElementById("max").value
+                let iStartDateCol = 1
+                let iEndDateCol = 1
                 
                 iFini = iFini.substring(6, 10) + iFini.substring(3, 5) + iFini.substring(0, 2)
                 iFfin = iFfin.substring(6, 10) + iFfin.substring(3, 5) + iFfin.substring(0, 2)
                 
-                var datofini = aData[iStartDateCol].substring(6, 10) + aData[iStartDateCol].substring(3, 5) + aData[iStartDateCol].substring(0, 2)
-                var datoffin = aData[iEndDateCol].substring(6, 10) + aData[iEndDateCol].substring(3, 5) + aData[iEndDateCol].substring(0, 2)
+                let datofini = aData[iStartDateCol].substring(6, 10) + aData[iStartDateCol].substring(3, 5) + aData[iStartDateCol].substring(0, 2)
+                let datoffin = aData[iEndDateCol].substring(6, 10) + aData[iEndDateCol].substring(3, 5) + aData[iEndDateCol].substring(0, 2)
                 
                 if (iFini === "" && iFfin === "") {
                     return true
@@ -70,6 +70,32 @@ $(document).ready(function () {
                     return true
                 }
                 return false
+            }
+            if (oSettings.nTable.id === "package_index_table") {
+                /*
+                let iFini = document.getElementById("package_index_table_available_start_filter").value
+                let iFfin = document.getElementById("package_index_table_available_end_filter").value
+                let iStartDateCol = 5
+                let iEndDateCol = 6
+                
+                iFini = iFini.substring(6, 10) + iFini.substring(3, 5) + iFini.substring(0, 2)
+                iFfin = iFfin.substring(6, 10) + iFfin.substring(3, 5) + iFfin.substring(0, 2)
+                
+                let datofini = aData[iStartDateCol].substring(6, 10) + aData[iStartDateCol].substring(3, 5) + aData[iStartDateCol].substring(0, 2)
+                let datoffin = aData[iEndDateCol].substring(6, 10) + aData[iEndDateCol].substring(3, 5) + aData[iEndDateCol].substring(0, 2)
+                
+                if (iFini === "" && iFfin === "") {
+                    return true
+                } else if (iFini <= datofini && iFfin === "") {
+                    return true
+                } else if (iFfin >= datoffin && iFini === "") {
+                    return true
+                } else if (iFini <= datofini && iFfin >= datoffin) {
+                    return true
+                }
+                return false
+                //*/
+                return true
             } else {
                 return true
             }

@@ -4,7 +4,6 @@ const Season = (function () {
     const _product_edit_season_display = document.getElementById("product_edit_season_display")
     const _edit_product_season = document.getElementById("edit_product_season")
     const _product_edit_season_form_edit_season_link = document.getElementById("product_edit_season_form_edit_season_link")
-    const _product_season = document.getElementById("product_season")
     const _product_edit_season_form_season_name_filter = document.getElementById("product_edit_season_form_season_name_filter")
     const _category_id = document.getElementById("category_id")
     const _product_edit_season_form_season_color_scheme_id = document.getElementById("product_edit_season_form_season_color_scheme_id")
@@ -22,9 +21,8 @@ const Season = (function () {
     const _button_remove_season_from_product = document.getElementById("button_remove_season_from_product")
     const _calendar_loader = document.getElementById("calendar_loader")
     const _table_season_product_edit_add_new_button = document.getElementById("table_season_product_edit_add_new_button")
-    const _product_edit_season_section = document.getElementById("product_edit_season_section")
     
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     let categories = new Map()
     let $table_season_product_edit, disabledDays
     let globalSelectedSeason = false
@@ -95,6 +93,9 @@ const Season = (function () {
         })
     
     const updateProgress = function () {
+        console.groupCollapsed("Season.updateProgress")
+        // ----
+        
         let seasons = Array.from(Season.all.values())
         if (seasons.length === 0) {
             $(_panel_tab_season).html(`<span id="tab_span_season">Season</span> <span id="seasonNeedsAttention" class="badge rounded-pill badge-notification bg-danger">!</span>`)
@@ -102,15 +103,20 @@ const Season = (function () {
             $(_panel_tab_season).html(`<span id="tab_span_season">Season</span>`)
         }
         Product.updateProgress()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const saveProductSeason = function (dataToSend) {
+        console.groupCollapsed("Season.saveProductSeason")
+        // ----
+        
         if (dataToSend) {
             $(_calendar_loader).fadeIn("fast", function () {
                 updateProductSeason(dataToSend, function (data) {
                     if (data) {
                         let season = (data[0]) ? data[0] : data
-                        //console.log("|__ season", season)
+                        //console.log("season", season)
                         addProductSeasonTableRow(season)
                         buildProductOverview(season)
                     } else {
@@ -119,9 +125,14 @@ const Season = (function () {
                 })
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const updateProductSeason = function (dataToSend, callback) {
+        console.groupCollapsed("Season.updateProductSeason")
+        // ----
+        
         let url = "/api/v1.0/seasons/update"
         
         if (dataToSend) {
@@ -137,9 +148,14 @@ const Season = (function () {
                 //console.log("error", e)
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const deleteProductSeason = function (dataToSend, callback) {
+        console.groupCollapsed("Season.deleteProductSeason")
+        // ----
+        
         let url = "/api/v1.0/seasons/remove"
         
         if (dataToSend) {
@@ -156,9 +172,14 @@ const Season = (function () {
                 return handleSeasonError(e)
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const removeProductSeason = function (dataToSend) {
+        console.groupCollapsed("Season.removeProductSeason")
+        // ----
+        
         if (dataToSend) {
             $(_calendar_loader).fadeIn("fast", function () {
                 deleteProductSeason(dataToSend, function (data) {
@@ -171,22 +192,50 @@ const Season = (function () {
                 })
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
-    const handleSeasonError = function (msg) {
-        toastr["error"](`${msg}`, "Season")
+    const handleSeasonError = function (msg, title, level) {
+        console.groupCollapsed("Season.handleSeasonError")
+        // ----
+        
+        if (!msg) {
+            msg = "Season Error"
+        }
+        
+        if (!title) {
+            title = "Season"
+        }
+        
+        if (!level) {
+            level = "error"
+        }
+        
+        toastr[level](`${msg}`, title)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildUpdateRecord = function () {
-        return remove_nulls({
+        console.groupCollapsed("Season.buildUpdateRecord")
+        // ----
+        
+        let data = remove_nulls({
             product_id: (!isNaN(parseInt(_product_id.value))) ? parseInt(_product_id.value) : null,
             season_id: (!isNaN(parseInt(_product_edit_season_form_season_id.value))) ? parseInt(_product_edit_season_form_season_id.value) : null,
             disabled_dow: formatListOfIds(disabledDays.disabled_dows),
         })
+        
+        // ----
+        console.groupEnd()
+        return data
     }
-    
     const defaultDetail = function () {
-        return {
+        console.groupCollapsed("Season.defaultDetail")
+        // ----
+        
+        let details = {
             id: null,
             color_scheme_id: null,
             name: null,
@@ -198,9 +247,9 @@ const Season = (function () {
             view_product_package_index: 1,
             enabled: 1,
             date_created: formatDateMySQL(),
-            created_by: user_id,
+            created_by: userId,
             date_modified: formatDateMySQL(),
-            modified_by: user_id,
+            modified_by: userId,
             note: null,
             category_id: null,
             color_scheme: {
@@ -212,19 +261,19 @@ const Season = (function () {
                 sort_order: 999,
                 enabled: 1,
                 date_created: formatDateMySQL(),
-                created_by: user_id,
+                created_by: userId,
                 date_modified: formatDateMySQL(),
-                modified_by: user_id,
+                modified_by: userId,
                 note: null,
             },
             product_season_detail: {
-                created_by: user_id,
+                created_by: userId,
                 date_created: formatDateMySQL(),
                 date_modified: formatDateMySQL(),
                 disabled_dow: null,
                 enabled: 1,
                 id: null,
-                modified_by: user_id,
+                modified_by: userId,
                 note: null,
                 product_id: null,
                 season_id: null,
@@ -233,17 +282,18 @@ const Season = (function () {
                 seasons_text: null,
             },
         }
+        
+        // ----
+        console.groupEnd()
+        return details
     }
-    
     const formatSeasonType = function (season) {
+        console.groupCollapsed("Season.formatSeasonType")
+        // ----
         
         let detail = defaultDetail()
-        
-        // -----
-        
         let category_id = (!isNaN(parseInt(season.category_id))) ? parseInt(season.category_id) : null
         
-        //
         detail.id = (!isNaN(parseInt(season.id))) ? parseInt(season.id) : null
         detail.color_scheme_id = (!isNaN(parseInt(season.color_scheme_id))) ? parseInt(season.color_scheme_id) : null
         detail.name = (season.name) ? season.name : null
@@ -255,9 +305,9 @@ const Season = (function () {
         detail.view_product_package_index = (season.view_product_package_index) ? season.view_product_package_index : 1
         detail.enabled = (season.enabled) ? season.enabled : 1
         detail.date_created = (season.date_created) ? season.date_created : formatDateMySQL()
-        detail.created_by = (!isNaN(parseInt(season.created_by))) ? parseInt(season.created_by) : user_id
+        detail.created_by = (!isNaN(parseInt(season.created_by))) ? parseInt(season.created_by) : userId
         detail.date_modified = (season.date_modified) ? season.date_modified : formatDateMySQL()
-        detail.modified_by = (!isNaN(parseInt(season.modified_by))) ? parseInt(season.modified_by) : user_id
+        detail.modified_by = (!isNaN(parseInt(season.modified_by))) ? parseInt(season.modified_by) : userId
         detail.note = (season.note) ? season.note : null
         detail.category_id = (!isNaN(parseInt(season.category_id))) ? parseInt(season.category_id) : null
         detail.color_scheme.id = (!isNaN(parseInt(season.color_scheme.id))) ? parseInt(season.color_scheme.id) : null
@@ -268,9 +318,9 @@ const Season = (function () {
         detail.color_scheme.sort_order = (!isNaN(parseInt(season.color_scheme.sort_order))) ? parseInt(season.color_scheme.sort_order) : 999
         detail.color_scheme.enabled = season.color_scheme.enabled
         detail.color_scheme.date_created = (season.color_scheme.date_created) ? season.color_scheme.date_created : formatDateMySQL()
-        detail.color_scheme.created_by = (!isNaN(parseInt(season.color_scheme.created_by))) ? parseInt(season.color_scheme.created_by) : user_id
+        detail.color_scheme.created_by = (!isNaN(parseInt(season.color_scheme.created_by))) ? parseInt(season.color_scheme.created_by) : userId
         detail.color_scheme.date_modified = (season.color_scheme.date_modified) ? season.color_scheme.date_modified : formatDateMySQL()
-        detail.color_scheme.modified_by = (!isNaN(parseInt(season.color_scheme.modified_by))) ? parseInt(season.color_scheme.modified_by) : user_id
+        detail.color_scheme.modified_by = (!isNaN(parseInt(season.color_scheme.modified_by))) ? parseInt(season.color_scheme.modified_by) : userId
         detail.color_scheme.note = season.color_scheme.note
         
         if (!categories.get(category_id)) {
@@ -279,15 +329,14 @@ const Season = (function () {
             })
         }
         
-        let category = categories.get(category_id)
-        let category_seasons = (category.seasons) ? category.seasons : []
-        //console.log(categories.get(category_id).seasons)
-        //console.log("category", category)
-        //console.log(detail)
+        // ----
+        console.groupEnd()
         return detail
     }
-    
     const loadTypes = function (seasons) {
+        console.groupCollapsed("Season.loadTypes")
+        // ----
+        
         categories = new Map()
         if (seasons) {
             
@@ -295,25 +344,29 @@ const Season = (function () {
                 Season.types.set(season.id, formatSeasonType(season))
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const clearProductOverview = function (season) {
-        //console.log("Season.buildProductOverview(season)", season)
+        console.groupCollapsed("Season.clearProductOverview")
+        // ----
+        
         let color_scheme, product_season_detail
         
         if (!season || !season.color_scheme || !season.product_season_detail) {
-            //console.log("|__ season", season)
-            //console.log("|__ color_scheme", season.color_scheme)
-            //console.log("|__ product_season_detail", season.product_season_detail)
+            //console.log("season", season)
+            //console.log("color_scheme", season.color_scheme)
+            //console.log("product_season_detail", season.product_season_detail)
             return
         }
         
         color_scheme = season.color_scheme
         product_season_detail = season.product_season_detail
         
-        //console.log("|__ season", season)
-        //console.log("|__ color_scheme", color_scheme)
-        //console.log("|__ product_season_detail", product_season_detail)
+        //console.log("season", season)
+        //console.log("color_scheme", color_scheme)
+        //console.log("product_season_detail", product_season_detail)
         
         let backgroundColor = (season.color_scheme && season.color_scheme.background_color) ? season.color_scheme.background_color : "#fff"
         let textColor = (season.color_scheme && season.color_scheme.text_color) ? season.color_scheme.text_color : "#0a070d"
@@ -328,25 +381,28 @@ const Season = (function () {
             $(`#disabledDOWDisplay${seasonId}`).remove()
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const buildProductOverview = function (season) {
-        //console.log("Season.buildProductOverview(season)", season)
+        console.groupCollapsed("Season.buildProductOverview")
+        // ----
+        
         let color_scheme, product_season_detail
         
         if (!season || !season.color_scheme || !season.product_season_detail) {
-            //console.log("|__ season", season)
-            //console.log("|__ color_scheme", season.color_scheme)
-            //console.log("|__ product_season_detail", season.product_season_detail)
+            //console.log("season", season)
+            //console.log("color_scheme", season.color_scheme)
+            //console.log("product_season_detail", season.product_season_detail)
             return
         }
         
         color_scheme = season.color_scheme
         product_season_detail = season.product_season_detail
         
-        //console.log("|__ season", season)
-        //console.log("|__ color_scheme", color_scheme)
-        //console.log("|__ product_season_detail", product_season_detail)
+        //console.log("season", season)
+        //console.log("color_scheme", color_scheme)
+        //console.log("product_season_detail", product_season_detail)
         
         let backgroundColor = (season.color_scheme && season.color_scheme.background_color) ? season.color_scheme.background_color : "#fff"
         let textColor = (season.color_scheme && season.color_scheme.text_color) ? season.color_scheme.text_color : "#0a070d"
@@ -386,9 +442,14 @@ const Season = (function () {
                 </div>
             </div>
         `)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const loadAll = function (seasons) {
+        console.groupCollapsed("Season.loadAll")
+        // ----
+        
         Season.all = new Map()
         if (_table_season_product_edit) {
             buildProductEditTable()
@@ -409,17 +470,27 @@ const Season = (function () {
         })
         
         updateProgress()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const set = function (season) {
+        console.groupCollapsed("Season.set")
+        // ----
+        
         let detail = defaultDetail()
         if (season) {
             detail = season
         }
+        
+        // ----
+        console.groupEnd()
         return detail
     }
-    
     const edit = function (season) {
+        console.groupCollapsed("Season.edit")
+        // ----
+        
         if (season) {
             if (season.id) {
                 let seasonId = season.id
@@ -431,9 +502,14 @@ const Season = (function () {
         
         clearProductSeasonForm()
         loadProductSeasonForm(season)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const buildProductEditTable = function () {
+        console.groupCollapsed("Season.buildProductEditTable")
+        // ----
+        
         $table_season_product_edit = $(_table_season_product_edit).table({
             table_type: "display_list",
             data: Season.all,
@@ -486,9 +562,14 @@ const Season = (function () {
             ],
             rowClick: Season.edit,
         })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const deleteProductSeasonTableRow = function (season_id) {
+        console.groupCollapsed("Season.deleteProductSeasonTableRow")
+        // ----
+        
         if (season_id) {
             let hasSeason = Season.all.get(season_id)
             
@@ -513,9 +594,14 @@ const Season = (function () {
                 YearCalendar.endLoading()
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const addProductSeasonTableRow = function (season) {
+        console.groupCollapsed("Season.addProductSeasonTableRow")
+        // ----
+        
         if (season) {
             let detail = set(season)
             let hasSeason = Season.all.get(detail.id)
@@ -545,10 +631,12 @@ const Season = (function () {
             toastr.success(`Season: ${detail.name} - has been updated`)
             YearCalendar.endLoading()
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const resetForm = function () {
-        console.log("Season.resetForm()")
+        console.groupCollapsed("Season.resetForm")
         // ----
         
         _product_edit_season_form_season_id.value = ""
@@ -559,22 +647,42 @@ const Season = (function () {
         updateProgress()
         
         ColorScheme.load()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const loadEditSeasonForm = function () {
+        console.groupCollapsed("Season.loadEditSeasonForm")
+        // ----
+        
         //$(_edit_season).show()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const unLoadEditSeasonForm = function () {
+        console.groupCollapsed("Season.unLoadEditSeasonForm")
+        // ----
+        
         //$(_edit_season).hide()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const clearProductSeasonForm = function () {
+        console.groupCollapsed("Season.clearProductSeasonForm")
+        // ----
+        
         disabledDays.init([])
         unloadProductSeasonForm()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const loadProductSeasonForm = function (season) {
+        console.groupCollapsed("Season.loadProductSeasonForm")
+        // ----
+        
         let disabled_dow = []
         let name = "Details"
         if (season) {
@@ -598,16 +706,25 @@ const Season = (function () {
         _display_product_season_name.innerText = name
         disabledDays.init(disabled_dow)
         $(_edit_product_season).show()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const unloadProductSeasonForm = function () {
-        //console.log("unloadProductSeasonForm()")
+        console.groupCollapsed("Season.unloadProductSeasonForm")
+        // ----
+        
         _product_edit_season_form_season_name_filter.disabled = false
         _product_edit_season_form_season_name.disabled = true
         $(_edit_product_season).hide()
+        
+        // ----
+        console.groupEnd()
     }
-    
     const addSeason = function (dataToSend, callback) {
+        console.groupCollapsed("Season.addSeason")
+        // ----
+        
         let url = "/api/v1.0/seasons/add"
         
         if (dataToSend) {
@@ -626,9 +743,14 @@ const Season = (function () {
         } else {
             return handleSeasonError("Error Loading Airport - Missing Data")
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const fetchByName = function (dataToSend, callback) {
+        console.groupCollapsed("Season.fetchByName")
+        // ----
+        
         let url = "/api/v1.0/seasons/validate"
         
         if (dataToSend) {
@@ -647,9 +769,14 @@ const Season = (function () {
         } else {
             handleSeasonError("Error Loading Airport - Missing Data")
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const seasonExists = function (name) {
+        console.groupCollapsed("Season.seasonExists")
+        // ----
+        
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         if (name && name !== "" && category_id) {
             let dataToSend = {
@@ -736,9 +863,14 @@ const Season = (function () {
                 }
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
-    
     const initAutoComplete = function () {
+        console.groupCollapsed("Season.initAutoComplete")
+        // ----
+        
         let category_id = (!isNaN(parseInt(_category_id.value))) ? parseInt(_category_id.value) : null
         
         $(_product_edit_season_form_season_name_filter)
@@ -799,9 +931,14 @@ const Season = (function () {
                     }
                 },
             })
+        
+        // ----
+        console.groupEnd()
     }
-    
     const init = function (settings) {
+        console.groupCollapsed("Season.init")
+        // ----
+        
         let seasons = []
         if (settings) {
             seasons = settings
@@ -830,6 +967,8 @@ const Season = (function () {
             unloadProductSeasonForm()
         }
         
+        // ----
+        console.groupEnd()
     }
     
     return {

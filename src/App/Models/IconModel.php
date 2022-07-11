@@ -53,14 +53,14 @@
 			if (!is_null($icon_id)) {
 				$whereCondition = "WHERE		ICON.id = $icon_id";
 			}
-			
+			$sql = self::$selectQuery . $whereCondition . $orderCondition;
 			try {
-				$sql = self::$selectQuery . $whereCondition . $orderCondition;
 				
 				return Model::$db->rawQuery($sql);
 				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}

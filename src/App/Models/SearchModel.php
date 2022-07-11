@@ -18,7 +18,8 @@
 		public static function fetchProductSearch(array $params = []): array
 		{
 			$errors = [];
-			
+			$from_date = "";
+			$to_date = "";
 			if (!isset($params["category_id"])) {
 				$errors[] = array("message" => "Missing Category Details");
 			} else {
@@ -102,18 +103,16 @@
 				return array();
 			} else {
 				if (isset($category_id) && isset($city_id)) {
+					
+					$sql = "CALL getRatesAndAvailability($category_id, $city_id, '$from_date', '$to_date', $pax);";
+					
 					try {
-						$sql = "CALL getRatesAndAvailability($category_id, $city_id, '$from_date', '$to_date', $pax);";
 						
-						$results = Model::$db->rawQuery($sql);
+						return Model::$db->rawQuery($sql);
 						
-						if ($results) {
-							return $results;
-						}
-						
-						return array();
 					} catch (Exception $e) {
-						Log::$debug_log->error($e);
+						Log::$debug_log->error($e->getMessage());
+						Log::$debug_log->info($sql);
 						
 						return array();
 					}

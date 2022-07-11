@@ -34,8 +34,6 @@
 		
 		public static function fetchAll(): array
 		{
-			Log::$debug_log->trace("StageModel::fetchAll()");
-			
 			$whereConditions = "
 			
 			";
@@ -57,8 +55,8 @@
 		
 		public static function fetchByStageId(int $stageId): array
 		{
-			Log::$debug_log->trace("StageModel::fetchByStageId()");
-			Log::$debug_log->info("stageId: $stageId");
+			//Log::$debug_log->trace("StageModel::fetchByStageId()");
+			//Log::$debug_log->info("stageId: $stageId");
 			// ----
 			
 			$whereConditions = "
@@ -82,8 +80,8 @@
 		
 		public static function fetchByUserId(int $userId): array
 		{
-			Log::$debug_log->trace("StageModel::fetchByUserId()");
-			Log::$debug_log->info("userId: $userId");
+			//Log::$debug_log->trace("StageModel::fetchByUserId()");
+			//Log::$debug_log->info("userId: $userId");
 			// ----
 			
 			$whereConditions = "

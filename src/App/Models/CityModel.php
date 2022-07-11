@@ -17,7 +17,21 @@
 	{
 		
 		protected static $dbTable = "city";
-		protected static $dbFields = Array();
+		protected static $baseSQL = "
+			SELECT          CITY.id AS 'city_id',
+	                        CITY.province_id AS 'city_province_id',
+	                        CITY.country_id AS 'city_country_id',
+	                        CITY.sort_order AS 'city_sort_order',
+	                        CITY.name AS 'city_name',
+	                        CITY.enabled AS 'city_enabled',
+	                        CITY.date_created AS 'city_date_created',
+	                        CITY.created_by AS 'city_created_by',
+	                        CITY.date_modified AS 'city_date_modified',
+	                        CITY.modified_by AS 'city_modified_by',
+	                        CITY.note AS 'city_note'
+			FROM 			city CITY
+		";
+		
 		protected static $selectQuery = "
             SELECT 		CONCAT( CITY.name, ' (',  PROVINCE.name, ', ', COUNTRY.name, ')') AS 'location',
                         CITY.id AS 'city_id',
@@ -60,16 +74,45 @@
             JOIN 		country COUNTRY ON COUNTRY.id = PROVINCE.country_id
         ";
 		
+		/**
+		 * City autocomplete method
+		 *
+		 * @param string $st
+		 *
+		 * @return array
+		 */
 		public static function city_ac(string $st = ""): array
 		{
+			$baseSQL = self::$selectQuery;
+			$whereCondition = [];
+			$orderCondition = [];
+			$limitCondition = 20;
+			$searchTerm = addslashes($st);
+			
+			//
+			
+			$orderCondition[] = "CONCAT( CITY.name, ' (',  PROVINCE.name, ', ', COUNTRY.name, ')') ASC";
+			$orderCondition[] = "CAST(CONCAT( CITY.name, ' (',  PROVINCE.name, ', ', COUNTRY.name, ')') AS UNSIGNED) ASC";
+			
+			//
+			
+			$whereCondition[] = "CITY.enabled = 1";
+			$whereCondition[] = "CONCAT( CITY.name, ' (',  PROVINCE.name, ', ', COUNTRY.name, ')') LIKE '%$searchTerm%'";
+			
+			//
+			
+			$limit = ((int)$limitCondition > 0) ? "LIMIT        $limitCondition" : "";
+			$where = (count($whereCondition) > 0) ? "WHERE   			" . implode(" AND ", $whereCondition) : "";
+			$order = (count($orderCondition) > 0) ? "ORDER BY   			" . implode(", ", $orderCondition) : "";
+			
+			$selectQuery = "
+                $baseSQL
+                $where
+                $order
+                $limit;";
+			
 			try {
-				$searchTerm = addslashes($st);
-				$sql = self::$selectQuery . "
-                    WHERE		CONCAT( CITY.name, ' (',  PROVINCE.name, ', ', COUNTRY.name, ')') LIKE '%$searchTerm%'
-                    ORDER BY	CONCAT( CITY.name, ' (',  PROVINCE.name, ', ', COUNTRY.name, ')')
-                    LIMIT 20;";
-				
-				return Model::$db->rawQuery($sql);
+				return Model::$db->rawQuery($selectQuery);
 			} catch (Exception $e) {
 				Log::$debug_log->error($e->getMessage());
 				
@@ -79,43 +122,48 @@
 		
 		public static function get(int $country_id = null, int $province_id = null, int $city_id = null): array
 		{
-			$where = "WHERE			CITY.enabled = 1";
+			$baseSQL = self::$baseSQL;
+			$whereCondition = [];
+			$orderCondition = [];
+			$limitCondition = 0;
+			// ----
 			
+			$orderCondition[] = "CITY.sort_order ASC";
+			$orderCondition[] = "CITY.name ASC";
+			$orderCondition[] = "CAST(CITY.name AS UNSIGNED)";
+			// ----
+			
+			$whereCondition[] = "CITY.enabled = 1";
 			if (!is_null($country_id)) {
-				$where .= " AND         CITY.country_id = $country_id";
+				$whereCondition[] = "CITY.country_id = $country_id";
 			}
-			
 			if (!is_null($province_id)) {
-				$where .= " AND         CITY.province_id = $province_id";
+				$whereCondition[] = "CITY.province_id = $province_id";
 			}
-			
 			if (!is_null($city_id)) {
-				$where .= " AND         CITY.id = $city_id";
+				$whereCondition[] = "CITY.id = $city_id";
 			}
+			// ----
 			
-			$sql = "
-                SELECT
-                                CITY.id AS 'city_id',
-                                CITY.country_id AS 'city_country_id',
-                                CITY.province_id AS 'city_province_id',
-                                CITY.name AS 'city_name',
-                                CITY.sort_order AS 'city_sort_order',
-                                CITY.enabled AS 'city_enabled',
-                                CITY.date_created AS 'city_date_created',
-                                CITY.created_by AS 'city_created_by',
-                                CITY.date_modified AS 'city_date_modified',
-                                CITY.modified_by AS 'city_modified_by',
-                                CITY.note AS 'city_note'
-                FROM 			city CITY
+			$limit = ((int)$limitCondition > 0) ? "LIMIT        $limitCondition" : "";
+			$where = (count($whereCondition) > 0) ? "WHERE   			" . implode(" AND ", $whereCondition) : "";
+			$order = (count($orderCondition) > 0) ? "ORDER BY   			" . implode(", ", $orderCondition) : "";
+			
+			$selectQuery = "
+                $baseSQL
                 $where
-                ORDER BY 		CITY.sort_order ASC, CITY.name ASC;";
+                $order
+                $limit;";
+			// ----
 			
 			try {
-				
-				return Model::$db->rawQuery($sql);
+				return Model::$db->rawQuery($selectQuery);
 			} catch (Exception $e) {
+				Log::$debug_log->error($e->getMessage());
+				
 				return [];
 			}
+			// ----
 		}
 		
 		public static function getOne(int $id = null): array
@@ -129,6 +177,8 @@
 				
 				return self::$db->getOne(self::$dbTable);
 			} catch (Exception $e) {
+				Log::$debug_log->error($e->getMessage());
+				
 				return [];
 			}
 		}

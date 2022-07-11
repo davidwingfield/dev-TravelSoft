@@ -18,7 +18,9 @@ SELECT
 		PRODUCT_UNIT.created_by AS 'product_unit_created_by',
 		PRODUCT_UNIT.date_modified AS 'product_unit_date_modified',
 		PRODUCT_UNIT.modified_by AS 'product_unit_modified_by',
-		PRODUCT_UNIT.note AS 'product_unit_note'
+		PRODUCT_UNIT.amenities AS 'product_unit_amenities',
+		PRODUCT_UNIT.note AS 'product_unit_note',
+		PRODUCT_UNIT.keywords AS 'product_unit_keywords'
 FROM 	product_unit PRODUCT_UNIT
 -- JOIN 	product_unit PRODUCT_UNIT ON PRODUCT_UNIT.id = {FK_TABLE}.product_unit_id
 
@@ -42,5 +44,7 @@ FROM 	product_unit PRODUCT_UNIT
 'created_by'=>$product_unit['product_unit_created_by'],
 'date_modified'=>$product_unit['product_unit_date_modified'],
 'modified_by'=>$product_unit['product_unit_modified_by'],
-'note'=>$product_unit['product_unit_note']
+'amenities'=>$product_unit['product_unit_amenities'],
+'note'=>$product_unit['product_unit_note'],
+'keywords'=>$product_unit['product_unit_keywords']
 */

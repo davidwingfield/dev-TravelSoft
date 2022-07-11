@@ -1,19 +1,66 @@
 const Types = (function () {
     "use strict"
-    const base_url = "/types"
-    // ----
     
-    const handle_types_error = function (msg) {
-        toastr.error(msg)
+    const userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    const baseURL = "/types"
+    
+    /**
+     * handleTypesError
+     *
+     * @param msg
+     * @param title
+     * @param level
+     */
+    const handleTypesError = function (msg, title, level) {
+        console.groupCollapsed("Types.handleTypesError")
+        // ----
+        
+        if (!title) {
+            title = "Types"
+        }
+        
+        if (!level) {
+            level = "error"
+        }
+        
+        if (!msg) {
+            msg = "Error"
+        }
+        
+        toastr[level](`${msg}`, title)
+        
+        // ----
+        console.groupEnd()
     }
     
+    /**
+     * setType
+     *
+     * @param types
+     * @param types_name
+     */
     const setType = function (types, types_name) {
+        console.groupCollapsed("Types.setType")
+        // ----
+        
         $.each(types, function (k, type) {
             Types[types_name].set(type.id, type)
         })
+        
+        // ----
+        console.groupEnd()
     }
     
+    /**
+     * init
+     *
+     * @param settings
+     */
     const init = function (settings) {
+        console.groupCollapsed("Types.init")
+        console.log("settings", settings)
+        // ----
+        
         Types.address_types = new Map()
         Types.allot_by = new Map()
         Types.airport_types = new Map()
@@ -29,6 +76,8 @@ const Types = (function () {
         Types.sales_types = new Map()
         Types.status_types = new Map()
         Country.all = new Map()
+        Province.all = new Map()
+        City.all = new Map()
         // ----
         if (settings.address_types) {
             setType(settings.address_types, "address_types")
@@ -86,7 +135,6 @@ const Types = (function () {
         }
         
         if (settings.status_types) {
-            //console.log(settings.status_types)
             setType(settings.status_types, "status_types")
             StatusTypes.init({ status_types: settings.status_types })
         }
@@ -99,6 +147,16 @@ const Types = (function () {
             Country.load_all(settings.countries)
         }
         
+        if (settings.provinces) {
+            Province.loadAll(settings.provinces)
+        }
+        
+        if (settings.countries) {
+            City.loadAll(settings.cities)
+        }
+        
+        // ----
+        console.groupEnd()
     }
     
     return {
@@ -117,11 +175,8 @@ const Types = (function () {
         rating_types: new Map(),
         sales_types: new Map(),
         status_types: new Map(),
-        
         init: function (settings) {
-            if (settings) {
-                init(settings)
-            }
+            init(settings)
         },
     }
     

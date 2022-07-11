@@ -245,6 +245,13 @@ Long ProductModel Description</p>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Framework-App-Models-ProductModel.html#method_fetchProducts">fetchProducts()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-ProductModel.html#method_get">get()</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
@@ -546,10 +553,52 @@ Long ProductModel Description</p>
 								CATEGORY.created_by AS &#039;category_created_by&#039;,
 								CATEGORY.date_modified AS &#039;category_date_modified&#039;,
 								CATEGORY.modified_by AS &#039;category_modified_by&#039;,
-								CATEGORY.note AS &#039;category_note&#039;
+								CATEGORY.note AS &#039;category_note&#039;,
+        	       				COUNTRY.id AS &#039;country_id&#039;,
+								COUNTRY.currency_id AS &#039;country_currency_id&#039;,
+								COUNTRY.sort_order AS &#039;country_sort_order&#039;,
+								COUNTRY.name AS &#039;country_name&#039;,
+								COUNTRY.iso2 AS &#039;country_iso2&#039;,
+								COUNTRY.iso3 AS &#039;country_iso3&#039;,
+								COUNTRY.blurb AS &#039;country_blurb&#039;,
+								COUNTRY.enabled AS &#039;country_enabled&#039;,
+								COUNTRY.date_created AS &#039;country_date_created&#039;,
+								COUNTRY.created_by AS &#039;country_created_by&#039;,
+								COUNTRY.date_modified AS &#039;country_date_modified&#039;,
+								COUNTRY.modified_by AS &#039;country_modified_by&#039;,
+								COUNTRY.note AS &#039;country_note&#039;,
+        	       				PROVINCE.id AS &#039;province_id&#039;,
+								PROVINCE.country_id AS &#039;province_country_id&#039;,
+								PROVINCE.name AS &#039;province_name&#039;,
+								PROVINCE.iso2 AS &#039;province_iso2&#039;,
+								PROVINCE.iso3 AS &#039;province_iso3&#039;,
+								PROVINCE.sort_order AS &#039;province_sort_order&#039;,
+								PROVINCE.blurb AS &#039;province_blurb&#039;,
+								PROVINCE.enabled AS &#039;province_enabled&#039;,
+								PROVINCE.date_created AS &#039;province_date_created&#039;,
+								PROVINCE.created_by AS &#039;province_created_by&#039;,
+								PROVINCE.date_modified AS &#039;province_date_modified&#039;,
+								PROVINCE.modified_by AS &#039;province_modified_by&#039;,
+								PROVINCE.note AS &#039;province_note&#039;,
+        	       				CITY.id AS &#039;city_id&#039;,
+								CITY.province_id AS &#039;city_province_id&#039;,
+								CITY.country_id AS &#039;city_country_id&#039;,
+								CITY.sort_order AS &#039;city_sort_order&#039;,
+								CITY.name AS &#039;city_name&#039;,
+								CITY.blurb AS &#039;city_blurb&#039;,
+								CITY.is_capital AS &#039;city_is_capital&#039;,
+								CITY.enabled AS &#039;city_enabled&#039;,
+								CITY.date_created AS &#039;city_date_created&#039;,
+								CITY.created_by AS &#039;city_created_by&#039;,
+								CITY.date_modified AS &#039;city_date_modified&#039;,
+								CITY.modified_by AS &#039;city_modified_by&#039;,
+								CITY.note AS &#039;city_note&#039;
             FROM 				product PRODUCT
             JOIN 				category CATEGORY ON CATEGORY.id = PRODUCT.category_id
             JOIN 				status_types STATUS_TYPES ON STATUS_TYPES.id = COALESCE(PRODUCT.status_types_id, 1)
+        	LEFT JOIN			city CITY ON CITY.id = PRODUCT.city_id
+        	LEFT JOIN			province PROVINCE ON PROVINCE.id = CITY.province_id
+        	LEFT JOIN			country COUNTRY ON COUNTRY.id = CITY.country_id
             WHERE   			PRODUCT.enabled = 1
         &quot;</span></code>
 
@@ -580,7 +629,7 @@ Long ProductModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProductModel.php"><a href="files/app-models-productmodel.html"><abbr title="App/Models/ProductModel.php">ProductModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">396</span>
+    <span class="phpdocumentor-element-found-in__line">437</span>
 
     </aside>
 
@@ -749,6 +798,50 @@ Long ProductModel Description</p>
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_fetchProducts">
+        fetchProducts()
+        <a href="classes/Framework-App-Models-ProductModel.html#method_fetchProducts" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProductModel.php"><a href="files/app-models-productmodel.html"><abbr title="App/Models/ProductModel.php">ProductModel.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">850</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fetchProducts</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_get">
         get()
         <a href="classes/Framework-App-Models-ProductModel.html#method_get" class="headerlink"><i class="fas fa-link"></i></a>
@@ -756,7 +849,7 @@ Long ProductModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProductModel.php"><a href="files/app-models-productmodel.html"><abbr title="App/Models/ProductModel.php">ProductModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">105</span>
+    <span class="phpdocumentor-element-found-in__line">147</span>
 
     </aside>
 
@@ -800,7 +893,7 @@ Long ProductModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProductModel.php"><a href="files/app-models-productmodel.html"><abbr title="App/Models/ProductModel.php">ProductModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">123</span>
+    <span class="phpdocumentor-element-found-in__line">165</span>
 
     </aside>
 
@@ -877,7 +970,7 @@ Long ProductModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProductModel.php"><a href="files/app-models-productmodel.html"><abbr title="App/Models/ProductModel.php">ProductModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">372</span>
+    <span class="phpdocumentor-element-found-in__line">414</span>
 
     </aside>
 
@@ -1105,7 +1198,7 @@ Long ProductModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProductModel.php"><a href="files/app-models-productmodel.html"><abbr title="App/Models/ProductModel.php">ProductModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">307</span>
+    <span class="phpdocumentor-element-found-in__line">349</span>
 
     </aside>
 
@@ -1149,7 +1242,7 @@ Long ProductModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProductModel.php"><a href="files/app-models-productmodel.html"><abbr title="App/Models/ProductModel.php">ProductModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">258</span>
+    <span class="phpdocumentor-element-found-in__line">300</span>
 
     </aside>
 
@@ -1193,7 +1286,7 @@ Long ProductModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProductModel.php"><a href="files/app-models-productmodel.html"><abbr title="App/Models/ProductModel.php">ProductModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">726</span>
+    <span class="phpdocumentor-element-found-in__line">767</span>
 
     </aside>
 
@@ -1237,7 +1330,7 @@ Long ProductModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProductModel.php"><a href="files/app-models-productmodel.html"><abbr title="App/Models/ProductModel.php">ProductModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">644</span>
+    <span class="phpdocumentor-element-found-in__line">685</span>
 
     </aside>
 
@@ -1281,7 +1374,7 @@ Long ProductModel Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/ProductModel.php"><a href="files/app-models-productmodel.html"><abbr title="App/Models/ProductModel.php">ProductModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">138</span>
+    <span class="phpdocumentor-element-found-in__line">180</span>
 
     </aside>
 

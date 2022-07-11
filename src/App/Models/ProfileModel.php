@@ -155,16 +155,19 @@
 		{
 			
 			$where = "";
+			
 			if (!is_null($id)) {
 				$where = "WHERE PROFILE.id = $id";
 			}
 			
+			$sql = self::$base_sql . $where;
+			
 			try {
-				$sql = self::$base_sql . $where;
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -173,17 +176,18 @@
 		public static function fetchProfilesByProductId(int $product_id = null): array
 		{
 			$where = "";
+			
 			if (!is_null($product_id)) {
 				$where = "WHERE	PROFILE.product_id = $product_id";
 			}
 			
+			$sql = self::$sql . $where;
+			
 			try {
-				
-				$sql = self::$sql . $where;
-				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -192,19 +196,20 @@
 		public static function fetchProfileByProfileId(int $profile_id = null): array
 		{
 			$where = "";
+			
 			if (!is_null($profile_id)) {
 				$where = "WHERE	PROFILE.id = $profile_id";
 			} else {
 				return [];
 			}
 			
+			$sql = self::$sql . $where;
+			
 			try {
-				
-				$sql = self::$sql . $where;
-				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -224,13 +229,14 @@
 				$whereExpr = "WHERE " . implode(" AND ", $where);
 			}
 			
+			$sql = self::$sql . $whereExpr;
+			
 			try {
-				
-				$sql = self::$sql . $whereExpr;
 				
 				return Model::$db->rawQuery($sql);
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -238,24 +244,25 @@
 		
 		public static function profile_ac(string $st = "", int $product_id = null): array
 		{
-			try {
-				$searchTerm = addslashes($st);
-				$and = "";
-				if ($product_id !== null) {
-					$and = "	AND			PROFILE.product_id = $product_id";
-				}
-				
-				$sql = self::$sql . "
+			$searchTerm = addslashes($st);
+			$and = "";
+			if ($product_id !== null) {
+				$and = "	AND			PROFILE.product_id = $product_id";
+			}
+			
+			$sql = self::$sql . "
                     WHERE			PROFILE.name LIKE '%$searchTerm%'
                     $and
                     ORDER BY    LENGTH(PROFILE.name), CAST(PROFILE.name AS UNSIGNED), PROFILE.name ASC
                     LIMIT 20;";
-				Log::$debug_log->trace($sql);
+			
+			try {
 				
 				return Model::$db->rawQuery($sql);
 				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -266,13 +273,11 @@
 			$user_id = (isset($_SESSION["user_id"])) ? intval($_SESSION["user_id"]) : 4;
 			$created_by = Model::setInt($user_id);
 			$modified_by = Model::setInt($user_id);
-			
 			$id = Model::setInt((isset($profile["id"])) ? $profile["id"] : null);
 			$allot_by_id = Model::setInt((isset($profile["allot_by_id"])) ? $profile["allot_by_id"] : 3);
 			$sales_types_id = Model::setInt((isset($profile["sales_types_id"])) ? $profile["sales_types_id"] : null);
 			$transfer_sales_types_id = Model::setInt((isset($profile["transfer_sales_types_id"])) ? $profile["transfer_sales_types_id"] : null);
 			$product_id = Model::setInt((isset($profile["product_id"])) ? $profile["product_id"] : null);
-			
 			$quantity = Model::setInt((isset($profile["quantity"])) ? $profile["quantity"] : null);
 			$days_out = Model::setInt((isset($profile["days_out"])) ? $profile["days_out"] : null);
 			$release_amt = Model::setInt((isset($profile["release_amt"])) ? $profile["release_amt"] : null);
@@ -282,7 +287,6 @@
 			$equal_duration = Model::setInt((isset($profile["equal_duration"])) ? $profile["equal_duration"] : null);
 			$advanced_booking_min = Model::setInt((isset($profile["advanced_booking_min"])) ? $profile["advanced_booking_min"] : null);
 			$advanced_booking_max = Model::setInt((isset($profile["advanced_booking_max"])) ? $profile["advanced_booking_max"] : null);
-			
 			$advanced_booking_date = Model::setString((isset($profile["advanced_booking_date"])) ? $profile["advanced_booking_date"] : null);
 			$name = Model::setString((isset($profile["name"])) ? $profile["name"] : null);
 			$expires = Model::setString((isset($profile["expires"])) ? str_replace(" ", "", str_replace("-", "-", trim($profile["expires"]))) : null);
@@ -292,11 +296,8 @@
 			$weekday_dow = Model::setString((isset($profile["weekday_dow"])) ? $profile["weekday_dow"] : "0,1,2,3,4,5,6");
 			$return_dow = Model::setString((isset($profile["return_dow"])) ? $profile["return_dow"] : "0,1,2,3,4,5,6");
 			$inc_days_dow = Model::setString((isset($profile["inc_days_dow"])) ? $profile["inc_days_dow"] : "0,1,2,3,4,5,6");
-			
-			$description_short = Model::setString((isset($profile["description_short"])) ? $profile["description_short"] : null);
 			$enabled = Model::setBool((isset($profile["enabled"])) ? $profile["enabled"] : null);
 			$note = Model::setLongText((isset($profile["note"])) ? $profile["note"] : null);
-			$description_long = Model::setLongText((isset($profile["description_long"])) ? $profile["description_long"] : null);
 			
 			$sql = "
             INSERT INTO profile (
@@ -339,7 +340,6 @@
             ";
 			
 			try {
-				//Log::$debug_log->trace($sql);
 				Model::$db->rawQuery($sql);
 				$profile_id = Model::$db->getInsertId();
 				if ($profile_id) {
@@ -352,7 +352,8 @@
 					return [];
 				}
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -372,14 +373,14 @@
 					
 					return array("profile_id" => $profile_id);
 				} catch (Exception $e) {
-					Log::$debug_log->error($e);
+					Log::$debug_log->error($e->getMessage());
 					
 					return [];
 				}
 			} else {
 				Log::$debug_log->error("Missing Fields");
-				Log::$debug_log->trace("Profile ID $profile_id");
-				Log::$debug_log->trace("Product ID $product_id");
+				Log::$debug_log->info("Profile ID $profile_id");
+				Log::$debug_log->info("Product ID $product_id");
 				
 				return [];
 			}

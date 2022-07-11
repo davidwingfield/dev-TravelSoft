@@ -1,3 +1,8 @@
+/**
+ * Category
+ *
+ * @type {{all: Map<any, any>, init: Category.init, get: Category.get, validator: null, save: Category.save, initProductModal: Category.initProductModal, detail: {}, load_all: Category.load_all}}
+ */
 const Category = (function () {
     "use strict"
     
@@ -8,27 +13,9 @@ const Category = (function () {
     const _modal_product_rating_types_id = document.getElementById("modal_product_rating_types_id")
     const _modal_product_currency_id = document.getElementById("modal_product_currency_id")
     const _modal_product_pricing_strategies_types_id = document.getElementById("modal_product_pricing_strategies_types_id")
-    const _modal_product_vendor_name = document.getElementById("modal_product_vendor_name")
-    const _modal_product_provider_id = document.getElementById("modal_product_provider_id")
-    const _modal_product_vendor_id = document.getElementById("modal_product_vendor_id")
-    const _modal_product_provider_company_id = document.getElementById("modal_product_provider_company_id")
-    const _modal_product_provider_location_id = document.getElementById("modal_product_provider_location_id")
-    const _modal_product_location_id = document.getElementById("modal_product_location_id")
-    const _modal_product_vendor_company_id = document.getElementById("modal_product_vendor_company_id")
-    const _modal_product_country_cars = document.getElementById("modal_product_country_cars")
-    const _modal_product_city_id = document.getElementById("modal_product_city_id")
-    const _modal_product_country_id = document.getElementById("modal_product_country_id")
-    const _modal_product_province_id = document.getElementById("modal_product_province_id")
-    const _modal_product_description_short = document.getElementById("modal_product_description_short")
-    const _modal_product_description_long = document.getElementById("modal_product_description_long")
-    const _modal_product_keywords = document.getElementById("modal_product_keywords")
-    const _modal_product_day_span = document.getElementById("modal_product_day_span")
-    const _modal_product_provider_name = document.getElementById("modal_product_provider_name")
-    const _modal_button_submit_add_product = document.getElementById("modal_button_submit_add_product")
-    const _modal_product_provider_vendor_match = document.getElementById("modal_product_provider_vendor_match")
     const _modal_product_id = document.getElementById("modal_product_id")
     
-    let user_id = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
+    let userId = (document.getElementById("user_id")) ? (!isNaN(parseInt(document.getElementById("user_id").value))) ? parseInt(document.getElementById("user_id").value) : 4 : 4
     
     $(_modal_product_category_id)
         .on("change", function () {
@@ -36,6 +23,9 @@ const Category = (function () {
         })
     
     const handleCategoryError = function (msg, title, type) {
+        console.groupCollapsed("Category.handleCategoryError")
+        // ----
+        
         if (!msg) {
             msg = "There was an error."
         }
@@ -49,10 +39,12 @@ const Category = (function () {
         }
         
         toastr[type](msg, title)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const handleProductChange = function (id) {
-        //console.log("Category.handleProductChange(id)", id)
+        console.groupCollapsed("Category.handleProductChange")
         // ----
         
         $("[data-categoryid]").hide()
@@ -245,10 +237,14 @@ const Category = (function () {
             Product.disableNewFormDetails()
         }
         
+        // ----
+        console.groupEnd()
     }
-    
     const defaultDetail = function () {
-        return {
+        console.groupCollapsed("Category.defaultDetail")
+        // ----
+        
+        let detail = {
             category_id: 1,
             name: null,
             last_update: null,
@@ -271,15 +267,20 @@ const Category = (function () {
             sort_order: null,
             enabled: 1,
             date_created: formatDateMySQL(),
-            created_by: user_id,
+            created_by: userId,
             date_modified: formatDateMySQL(),
-            modified_by: user_id,
+            modified_by: userId,
             note: null,
         }
+        
+        // ----
+        console.groupEnd()
+        return detail
     }
-    
     const set = function (category) {
-        //console.log("Category.set()", category)
+        console.groupCollapsed("Category.set")
+        // ----
+        
         let detail = defaultDetail()
         if (category) {
             detail.id = (category.id) ? category.id : null
@@ -313,20 +314,29 @@ const Category = (function () {
         }
         
         Category.detail = detail
+        
+        // ----
+        console.groupEnd()
         return detail
     }
-    
     const save = function (params) {
-    
+        console.groupCollapsed("Category.save")
+        // ----
+        
+        // ----
+        console.groupEnd()
     }
-    
     const get = function () {
+        console.groupCollapsed("Category.get")
+        // ----
+        
         let data_to_send = {}
         
+        // ----
+        console.groupEnd()
     }
-    
     const init = function (settings) {
-        console.log("Category.init()", settings)
+        console.groupCollapsed("Category.init")
         // ----
         
         let categories = []
@@ -338,16 +348,19 @@ const Category = (function () {
         }
         
         loadAll(categories)
+        
+        // ----
+        console.groupEnd()
     }
-    
     const initProductModal = function (settings) {
-        console.log("Category.initProductModal()", settings)
+        console.groupCollapsed("Category.initProductModal")
         // ----
         
+        // ----
+        console.groupEnd()
     }
-    
     const loadAll = function (categories) {
-        console.log("Category.loadAll(categories)", categories)
+        console.groupCollapsed("Category.loadAll")
         // ----
         
         Category.all = new Map()
@@ -361,7 +374,8 @@ const Category = (function () {
             Category.all.set(detail.id, detail)
         })
         
-        //console.log(" Category.all", Category.all)
+        // ----
+        console.groupEnd()
     }
     
     return {
@@ -384,5 +398,4 @@ const Category = (function () {
             initProductModal(settings)
         },
     }
-    
 })()

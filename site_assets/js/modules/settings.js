@@ -268,3 +268,51 @@ const pickadateSettings = {
     selectMonths: true,
 }
 const regex = /(((19|20)\d\d)\-(0[1-9]|1[0-2])\-((0|1)[0-9]|2[0-9]|3[0-1]))$/
+
+const categoryColors = {
+    hotels: {
+        color: "#065565",
+        border: "#0bb2d4",
+        background: "#c2f5ff",
+    },
+    flights: {
+        color: "#5a4907",
+        border: "#997b71",
+        background: "#f5e2da",
+    },
+    cars: {
+        color: "#574400",
+        border: "#ffcd17",
+        background: "#fff6b5",
+    },
+    rails: {
+        color: "#eb6709",
+        border: "#ffa853",
+        background: "#ffe1c4",
+    },
+    transports: {
+        color: "#7f0638",
+        border: "#ab7474",
+        background: "#eed3d3",
+    },
+    tours: {
+        color: "#06562f",
+        border: "#11c26d",
+        background: "#c2fadc",
+    },
+    cruises: {
+        color: "#490ac7",
+        border: "#9463f7",
+        background: "#eae1fc",
+    },
+    packages: {
+        color: "#063f89",
+        border: "#3e8ef7",
+        background: "#d9e9ff",
+    },
+    other: {
+        color: "#304809",
+        border: "#6da611",
+        background: "#DCF7B0",
+    },
+}

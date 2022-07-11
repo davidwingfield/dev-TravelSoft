@@ -34,6 +34,7 @@
 	
 	Router::get("admin/pages", "Page@index");
 	Router::get('admin/pages/${page_id}', "Page@edit");
+	
 	/**
 	 * Provider Page Routes
 	 */
@@ -59,9 +60,7 @@
 	 * Package Page Routes
 	 */
 	Router::get("packages", "Package@index");
-	Router::get('packages/new', "Package@new");
 	Router::get('packages/${package_id}', "Package@edit");
-	Router::get('packages/${package_id}/products/${product_id}', "Package@editPackageProduct");
 	
 	/**
 	 * User Page Routes

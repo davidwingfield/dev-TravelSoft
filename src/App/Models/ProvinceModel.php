@@ -17,7 +17,22 @@
 	{
 		
 		protected static $dbTable = "province";
-		protected static $dbFields = Array();
+		protected static $baseSQL = "
+			SELECT          PROVINCE.id AS 'province_id',
+							PROVINCE.country_id AS 'province_country_id',
+							PROVINCE.name AS 'province_name',
+							PROVINCE.iso2 AS 'province_iso2',
+							PROVINCE.iso3 AS 'province_iso3',
+							PROVINCE.sort_order AS 'province_sort_order',
+							PROVINCE.blurb AS 'province_blurb',
+							PROVINCE.enabled AS 'province_enabled',
+							PROVINCE.date_created AS 'province_date_created',
+							PROVINCE.created_by AS 'province_created_by',
+							PROVINCE.date_modified AS 'province_date_modified',
+							PROVINCE.modified_by AS 'province_modified_by',
+							PROVINCE.note AS 'province_note'
+			FROM 			province PROVINCE
+		";
 		
 		public static function get(int $country_id = null, int $province_id = null): array
 		{
@@ -122,6 +137,46 @@
 			}
 		}
 		
-		// ----
+		public static function fetchProvinces(int $id = null): array
+		{
+			$baseSQL = self::$baseSQL;
+			$where = "";
+			$order = "";
+			$whereCondition = [];
+			$orderCondition = [];
+			
+			$whereCondition[] = "PROVINCE.enabled = 1";
+			
+			if (!is_null($id)) {
+				$whereCondition[] = "PROVINCE.id = $id";
+			}
+			
+			if (count($whereCondition) > 0) {
+				$where = "WHERE   			" . implode(" AND ", $whereCondition);
+			}
+			
+			$orderCondition = [
+				"PROVINCE.name ASC",
+				"LENGTH(PROVINCE.name)",
+				"CAST(PROVINCE.name AS UNSIGNED)",
+			];
+			if (count($orderCondition) > 0) {
+				$order = "ORDER BY            " . implode(", ", $orderCondition);
+			}
+			
+			$selectQuery = "
+				$baseSQL
+				$where
+				$order
+			";
+			
+			try {
+				return Model::$db->rawQuery($selectQuery);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e->getMessage());
+				
+				return [];
+			}
+		}
 		
 	}

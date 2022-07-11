@@ -27,11 +27,9 @@
 						AIRPORT.gps_code AS 'airport_gps_code',
 						AIRPORT.local_code AS 'airport_local_code',
 						AIRPORT.home_link AS 'airport_home_link',
-                       
                        	AIRPORT.street_1 AS 'airport_street_1',
                        	AIRPORT.street_2 AS 'airport_street_2',
                        	AIRPORT.postal_code AS 'airport_postal_code',
-                       
 						AIRPORT.wikipedia_link AS 'airport_wikipedia_link',
 						AIRPORT.scheduled_service AS 'airport_scheduled_service',
 						AIRPORT.keywords AS 'airport_keywords',
@@ -124,7 +122,8 @@
 				return Model::$db->rawQuery($sql);
 				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -147,7 +146,8 @@
 				return Model::$db->rawQuery($sql);
 				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -162,7 +162,8 @@
 				return Model::$db->rawQuery($sql);
 				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -170,41 +171,39 @@
 		
 		public static function airport_ac(string $st = ""): array
 		{
+			$searchTerm = addslashes($st);
 			
-			try {
-				$searchTerm = addslashes($st);
-				
-				$searchDisplayShort = "CONCAT(COALESCE(AIRPORT.iata_code, ''), ' - ', AIRPORT.name, ' (', CITY.name, ', ', COUNTRY.iso3, ')')";
-				$searchDisplayMedium = "CONCAT(COALESCE(AIRPORT.iata_code, ''), ' - ', AIRPORT.name, ' (', CITY.name, ', ', PROVINCE.iso2, ', ', COUNTRY.iso3, ')')";
-				$searchDisplayLong = "CONCAT(COALESCE(AIRPORT.iata_code, ''), ' - ', AIRPORT.name, ' (', CITY.name, ', ', PROVINCE.name, ', ', COUNTRY.name, ')')";
-				
-				$and = "AIRPORT.name";
-				
-				if (LOCATIONDISPLAY === "short") {
-					$order = "LENGTH($searchDisplayShort), CAST($searchDisplayShort AS UNSIGNED), $searchDisplayShort ASC";
-					$and = $searchDisplayShort;
-				} else if (LOCATIONDISPLAY === "medium") {
-					$order = "LENGTH($searchDisplayMedium), CAST($searchDisplayMedium AS UNSIGNED), $searchDisplayMedium ASC";
-					$and = $searchDisplayMedium;
-				} else if (LOCATIONDISPLAY === "long") {
-					$order = "LENGTH($searchDisplayLong), CAST($searchDisplayLong AS UNSIGNED), $searchDisplayLong ASC";
-					$and = $searchDisplayLong;
-				} else {
-					$order = "LENGTH(AIRPORT.name), CAST(AIRPORT.name AS UNSIGNED), AIRPORT.name ASC";
-				}
-				
-				$sql = self::$selectQuery . "
+			$searchDisplayShort = "CONCAT(COALESCE(AIRPORT.iata_code, ''), ' - ', AIRPORT.name, ' (', CITY.name, ', ', COUNTRY.iso3, ')')";
+			$searchDisplayMedium = "CONCAT(COALESCE(AIRPORT.iata_code, ''), ' - ', AIRPORT.name, ' (', CITY.name, ', ', PROVINCE.iso2, ', ', COUNTRY.iso3, ')')";
+			$searchDisplayLong = "CONCAT(COALESCE(AIRPORT.iata_code, ''), ' - ', AIRPORT.name, ' (', CITY.name, ', ', PROVINCE.name, ', ', COUNTRY.name, ')')";
+			
+			$and = "AIRPORT.name";
+			
+			if (LOCATIONDISPLAY === "short") {
+				$order = "LENGTH($searchDisplayShort), CAST($searchDisplayShort AS UNSIGNED), $searchDisplayShort ASC";
+				$and = $searchDisplayShort;
+			} else if (LOCATIONDISPLAY === "medium") {
+				$order = "LENGTH($searchDisplayMedium), CAST($searchDisplayMedium AS UNSIGNED), $searchDisplayMedium ASC";
+				$and = $searchDisplayMedium;
+			} else if (LOCATIONDISPLAY === "long") {
+				$order = "LENGTH($searchDisplayLong), CAST($searchDisplayLong AS UNSIGNED), $searchDisplayLong ASC";
+				$and = $searchDisplayLong;
+			} else {
+				$order = "LENGTH(AIRPORT.name), CAST(AIRPORT.name AS UNSIGNED), AIRPORT.name ASC";
+			}
+			
+			$sql = self::$selectQuery . "
                     AND			$and LIKE '%$searchTerm%'
                     
                     ORDER BY    $order
                     LIMIT 20;";
+			try {
 				
-				$dataSet = Model::$db->rawQuery($sql);
-				
-				return $dataSet;
+				return Model::$db->rawQuery($sql);
 				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}
@@ -223,11 +222,9 @@
 			$airport_types_id = Model::setInt((isset($airport["airport_types_id"])) ? $airport["airport_types_id"] : 1);
 			$city_id = Model::setInt((isset($airport["city_id"])) ? $airport["city_id"] : null);
 			$name = Model::setString((isset($airport["name"])) ? $airport["name"] : null);
-			
 			$postal_code = Model::setString((isset($airport["postal_code"])) ? $airport["postal_code"] : null);
 			$street_1 = Model::setString((isset($airport["street_1"])) ? $airport["street_1"] : null);
 			$street_2 = Model::setString((isset($airport["street_2"])) ? $airport["street_2"] : null);
-			
 			$iata_code = Model::setString((isset($airport["iata_code"])) ? $airport["iata_code"] : null);
 			$gps_code = Model::setString((isset($airport["gps_code"])) ? $airport["gps_code"] : null);
 			$local_code = Model::setString((isset($airport["local_code"])) ? $airport["local_code"] : null);
@@ -238,14 +235,7 @@
 			$keywords = Model::setLongText((isset($airport["keywords"])) ? $airport["keywords"] : null);
 			$note = Model::setLongText((isset($airport["note"])) ? $airport["note"] : null);
 			
-			$tempKeywords = buildKeywordsList($name, array(
-				"name" => $name,
-			
-			));
-			
-			try {
-				
-				$sql = "
+			$sql = "
                     INSERT INTO airport (
 						id, airport_types_id, city_id, name, iata_code,
 						postal_code, street_1, street_2,
@@ -278,17 +268,15 @@
 						date_modified = VALUES(date_modified),
 						enabled = VALUES(enabled)
                 ";
-				Log::$debug_log->trace($sql);
+			
+			try {
 				Model::$db->rawQuery($sql);
-				
 				$airport_id = Model::$db->getInsertId();
 				
-				//Log::$debug_log->trace($airport_id);
-				
 				return self::fetchByAirportId($airport_id);
-				
 			} catch (Exception $e) {
-				Log::$debug_log->error($e);
+				Log::$debug_log->error($e->getMessage());
+				Log::$debug_log->info($sql);
 				
 				return [];
 			}

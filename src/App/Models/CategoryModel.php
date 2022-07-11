@@ -1,24 +1,24 @@
 <?php
-    
-    namespace Framework\App\Models;
-    
-    use Exception;
-    use Framework\Core\Model;
-    use Framework\Logger\Log;
-    
-    /**
-     * Short Category Description
-     * Long Category Description
-     *
-     * @package            Framework\App
-     * @subpackage         Models
-     */
-    class CategoryModel extends Model
-    {
-        
-        protected static $dbTable = "category";
-        protected static $dbFields = Array();
-        protected static $getTypesSQL = "
+	
+	namespace Framework\App\Models;
+	
+	use Exception;
+	use Framework\Core\Model;
+	use Framework\Logger\Log;
+	
+	/**
+	 * Short Category Description
+	 * Long Category Description
+	 *
+	 * @package            Framework\App
+	 * @subpackage         Models
+	 */
+	class CategoryModel extends Model
+	{
+		
+		protected static $dbTable = "category";
+		protected static $dbFields = Array();
+		protected static $getTypesSQL = "
 		SELECT
                         SEASON.id AS 'season_id',
                         SEASON.color_scheme_id AS 'season_color_scheme_id',
@@ -91,79 +91,79 @@
         LEFT JOIN 			season SEASON ON CATEGORY.id = SEASON.category_id
         LEFT JOIN 			color_scheme COLOR_SCHEME ON COLOR_SCHEME.id = SEASON.color_scheme_id
 		";
-        
-        public static function get(int $id = null): array
-        {
-            
-            try {
-                if (!is_null($id)) {
-                    self::$db->where("id", $id);
-                }
-                
-                self::$db->where("enabled", 1);
-                
-                return self::$db->get(self::$dbTable);
-            } catch (Exception $e) {
-                return [];
-            }
-        }
-        
-        public static function getAllTypes(array $params = []): array
-        {
-            $where = [];
-            $whereLine = "";
-            $category_id = null;
-            $color_scheme_id = null;
-            $season_id = null;
-            extract($params);
-            if (isset($params["category_id"])) {
-                $where[] = "CATEGORY.id = $category_id";
-            }
-            
-            if (isset($params["season_id"])) {
-                $where[] = "SEASON.id = $season_id";
-            }
-            
-            if (isset($params["color_scheme_id"])) {
-                $where[] = "COLOR_SCHEME.id = $color_scheme_id";
-            }
-            
-            if (count($where) > 0) {
-                $whereLine = "WHERE \t\t\t" . implode(" AND \n", $where);
-            }
+		
+		public static function get(int $id = null): array
+		{
+			
+			try {
+				if (!is_null($id)) {
+					self::$db->where("id", $id);
+				}
+				
+				self::$db->where("enabled", 1);
+				
+				return self::$db->get(self::$dbTable);
+			} catch (Exception $e) {
+				return [];
+			}
+		}
+		
+		public static function getAllTypes(array $params = []): array
+		{
+			$where = [];
+			$whereLine = "";
+			$category_id = null;
+			$color_scheme_id = null;
+			$season_id = null;
+			extract($params);
+			if (isset($params["category_id"])) {
+				$where[] = "CATEGORY.id = $category_id";
+			}
+			
+			if (isset($params["season_id"])) {
+				$where[] = "SEASON.id = $season_id";
+			}
+			
+			if (isset($params["color_scheme_id"])) {
+				$where[] = "COLOR_SCHEME.id = $color_scheme_id";
+			}
+			
+			if (count($where) > 0) {
+				$whereLine = "WHERE \t\t\t" . implode(" AND \n", $where);
+			}
 
 //            Log::$debug_log->trace($where);
-            try {
-                
-                return Model::$db->rawQuery(self::$getTypesSQL);
-            } catch (Exception $e) {
-                Log::$debug_log->error($e);
-                
-                return [];
-            }
-            
-        }
-        
-        public static function getOne(int $id = null): array
-        {
-            try {
-                if (!is_null($id)) {
-                    self::$db->where("id", $id);
-                }
-                self::$db->orderBy("sort_order", "ASC");
-                self::$db->where("enabled", 1);
-                
-                return self::$db->getOne(self::$dbTable);
-            } catch (Exception $e) {
-                return [];
-            }
-        }
-        
-        public static function update(array $params = []): array
-        {
-            $id = 1;
-            
-            return self::get($id);
-        }
-        
-    }
+			try {
+				
+				return Model::$db->rawQuery(self::$getTypesSQL);
+			} catch (Exception $e) {
+				Log::$debug_log->error($e->getMessage());
+				
+				return [];
+			}
+			
+		}
+		
+		public static function getOne(int $id = null): array
+		{
+			try {
+				if (!is_null($id)) {
+					self::$db->where("id", $id);
+				}
+				self::$db->orderBy("sort_order", "ASC");
+				self::$db->where("enabled", 1);
+				
+				return self::$db->getOne(self::$dbTable);
+			} catch (Exception $e) {
+				return [];
+			}
+		}
+		
+		public static function update(array $params = []): array
+		{
+			$id = 1;
+			
+			return self::get($id);
+		}
+		
+	}

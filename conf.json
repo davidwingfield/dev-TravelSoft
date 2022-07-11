@@ -1,6 +1,12 @@
-"plugins": [],
+{
+	"opts": {
+		"encoding": "utf8",
+		"destination": "./docs/JS/"
+	},
+	"plugins": [],
     "recurseDepth": 10,
     "source": {
+		"include": ["./site_assets/js/modules.js", "./site_assets/js/modules/product_search.js"],
         "includePattern": ".+\\.js(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_"
     },
@@ -13,3 +19,4 @@
         "cleverLinks": false,
         "monospaceLinks": false
     }
+}

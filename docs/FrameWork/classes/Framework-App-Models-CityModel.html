@@ -196,7 +196,7 @@ Long City Description</p>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/Framework-App-Models-CityModel.html#property_dbFields">$dbFields</a>
+    <a href="classes/Framework-App-Models-CityModel.html#property_baseSQL">$baseSQL</a>
     <span>
                 &nbsp;: mixed            </span>
 </dt>
@@ -242,7 +242,7 @@ Long City Description</p>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd></dd>
+<dd>City autocomplete method</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Framework-App-Models-CityModel.html#method_fetchCitiesByCountryId">fetchCitiesByCountryId()</a>
@@ -358,9 +358,9 @@ Long City Description</p>
             -protected
             -static                                            "
 >
-    <h4 class="phpdocumentor-element__name" id="property_dbFields">
-        $dbFields
-        <a href="classes/Framework-App-Models-CityModel.html#property_dbFields" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_baseSQL">
+        $baseSQL
+        <a href="classes/Framework-App-Models-CityModel.html#property_baseSQL" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -375,8 +375,21 @@ Long City Description</p>
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$dbFields</span>
-     = <span class="phpdocumentor-signature__default-value">array()</span></code>
+    <span class="phpdocumentor-signature__name">$baseSQL</span>
+     = <span class="phpdocumentor-signature__default-value">&quot;
+			SELECT          CITY.id AS &#039;city_id&#039;,
+	                        CITY.province_id AS &#039;city_province_id&#039;,
+	                        CITY.country_id AS &#039;city_country_id&#039;,
+	                        CITY.sort_order AS &#039;city_sort_order&#039;,
+	                        CITY.name AS &#039;city_name&#039;,
+	                        CITY.enabled AS &#039;city_enabled&#039;,
+	                        CITY.date_created AS &#039;city_date_created&#039;,
+	                        CITY.created_by AS &#039;city_created_by&#039;,
+	                        CITY.date_modified AS &#039;city_date_modified&#039;,
+	                        CITY.modified_by AS &#039;city_modified_by&#039;,
+	                        CITY.note AS &#039;city_note&#039;
+			FROM 			city CITY
+		&quot;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -435,7 +448,7 @@ Long City Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CityModel.php"><a href="files/app-models-citymodel.html"><abbr title="App/Models/CityModel.php">CityModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">21</span>
+    <span class="phpdocumentor-element-found-in__line">35</span>
 
     </aside>
 
@@ -645,17 +658,17 @@ Long City Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CityModel.php"><a href="files/app-models-citymodel.html"><abbr title="App/Models/CityModel.php">CityModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">63</span>
+    <span class="phpdocumentor-element-found-in__line">84</span>
 
     </aside>
 
-    
+        <p class="phpdocumentor-summary">City autocomplete method</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">city_ac</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$st</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -663,8 +676,7 @@ Long City Description</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
@@ -689,7 +701,7 @@ Long City Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CityModel.php"><a href="files/app-models-citymodel.html"><abbr title="App/Models/CityModel.php">CityModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">179</span>
+    <span class="phpdocumentor-element-found-in__line">229</span>
 
     </aside>
 
@@ -733,7 +745,7 @@ Long City Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CityModel.php"><a href="files/app-models-citymodel.html"><abbr title="App/Models/CityModel.php">CityModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">80</span>
+    <span class="phpdocumentor-element-found-in__line">123</span>
 
     </aside>
 
@@ -793,7 +805,7 @@ Long City Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CityModel.php"><a href="files/app-models-citymodel.html"><abbr title="App/Models/CityModel.php">CityModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">121</span>
+    <span class="phpdocumentor-element-found-in__line">169</span>
 
     </aside>
 
@@ -1046,7 +1058,7 @@ Long City Description</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="App/Models/CityModel.php"><a href="files/app-models-citymodel.html"><abbr title="App/Models/CityModel.php">CityModel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">136</span>
+    <span class="phpdocumentor-element-found-in__line">186</span>
 
     </aside>
 

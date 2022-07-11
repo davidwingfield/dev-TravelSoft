@@ -219,7 +219,7 @@ const Station = (function () {
         })
     
     const clearDepartFromFields = function () {
-        console.log("Station.clearDepartFromFields()")
+        console.groupCollapsed("Station.clearDepartFromFields")
         // ----
         
         if (_modal_product_depart_from_station_add_block) {
@@ -247,9 +247,11 @@ const Station = (function () {
             $(_modal_product_depart_from_station).trigger("change")
         }
         
+        // ----
+        console.groupEnd()
     }
     const clearArriveToFields = function () {
-        console.log("Station.clearArriveToFields()")
+        console.groupCollapsed("Station.clearArriveToFields")
         // ----
         
         let type = "arrive_to"
@@ -282,9 +284,11 @@ const Station = (function () {
         toggleEditFormLink(type)
         $(_modal_product_arrive_to_station).trigger("change")
         
+        // ----
+        console.groupEnd()
     }
     const save = function (type) {
-        //console.log("Station.save()")
+        console.groupCollapsed("Station.save")
         // ----
         
         if (type) {
@@ -298,7 +302,7 @@ const Station = (function () {
                 
                 if (ans) {
                     
-                    console.log("|__ dataToSend", dataToSend)
+                    console.log("dataToSend", dataToSend)
                     
                     sendSaveRequest(dataToSend, function (data) {
                         console.log("data", data)
@@ -311,7 +315,7 @@ const Station = (function () {
                         }
                         
                         if (station) {
-                            //console.log("|__ station", station)
+                            //console.log("station", station)
                             
                             let stationId = (!isNaN(parseInt(station.id))) ? parseInt(station.id) : null
                             
@@ -346,7 +350,7 @@ const Station = (function () {
                             
                             /*
                             if (type === "depart_from") {
-                                //console.log("|__ stationId", stationId)
+                                //console.log("stationId", stationId)
                                 
                                 populateStationForm(station, type)
                                 
@@ -391,9 +395,11 @@ const Station = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
     }
     const sendSaveRequest = function (dataToSend, callback) {
-        //console.log("Station.sendSaveRequest()")
+        console.groupCollapsed("Station.sendSaveRequest")
         // ----
         
         if (dataToSend) {
@@ -411,9 +417,11 @@ const Station = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
     }
     const validDepartFromRecord = function () {
-        //console.log("Station.validDepartFromRecord()")
+        console.groupCollapsed("Station.validDepartFromRecord")
         // ----
         
         let isValid = true
@@ -432,10 +440,12 @@ const Station = (function () {
             $(_modal_product_depart_from_station_city).hideError()
         }
         
+        // ----
+        console.groupEnd()
         return isValid
     }
     const validArriveToRecord = function () {
-        //console.log("Station.validArriveToRecord()")
+        console.groupCollapsed("Station.validArriveToRecord")
         // ----
         
         let isValid = true
@@ -454,16 +464,20 @@ const Station = (function () {
             $(_modal_product_arrive_to_station_city).hideError()
         }
         
+        // ----
+        console.groupEnd()
         return isValid
     }
     const buildAddStationRecord = function (type) {
-        //console.log("Station.buildAddStationRecord()")
+        console.groupCollapsed("Station.buildAddStationRecord")
         // ----
+        
+        let detail
         
         if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
             
             if (type) {
-                //console.log("|__ type", type)
+                //console.log("type", type)
                 
                 if (type === "depart_from") {
                     
@@ -485,7 +499,7 @@ const Station = (function () {
                             enabled: 1,
                         }
                         
-                        return removeNulls(dataToSend)
+                        detail = removeNulls(dataToSend)
                     }
                 } else if (type === "arrive_to") {
                     
@@ -507,7 +521,7 @@ const Station = (function () {
                             enabled: 1,
                         }
                         
-                        return removeNulls(dataToSend)
+                        detail = removeNulls(dataToSend)
                     }
                 }
                 
@@ -515,9 +529,12 @@ const Station = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
+        return detail
     }
     const cancelAddStationRecord = function (type) {
-        console.log("Station.cancelAddStationRecord()", Station.arrivingStation)
+        console.groupCollapsed("Station.cancelAddStationRecord")
         // ----
         
         if (!type) {
@@ -537,16 +554,18 @@ const Station = (function () {
         
         hideStationForm(type)
         
+        // ----
+        console.groupEnd()
     }
     const showStationForm = function (type) {
-        //console.log("Station.showStationForm()")
+        console.groupCollapsed("Station.showStationForm")
         // ----
         
         if (!type || !_modal_product_depart_from_station_add_block || !_modal_product_arrive_to_station_add_block) {
             
-            //console.log("|__ _modal_product_depart_from_station_add_block", _modal_product_depart_from_station_add_block)
-            //console.log("|__ _modal_product_arrive_to_station_add_block", _modal_product_arrive_to_station_add_block)
-            //console.log("|__ type", type)
+            //console.log("_modal_product_depart_from_station_add_block", _modal_product_depart_from_station_add_block)
+            //console.log("_modal_product_arrive_to_station_add_block", _modal_product_arrive_to_station_add_block)
+            //console.log("type", type)
             
             return
         }
@@ -570,12 +589,14 @@ const Station = (function () {
             
             toggleEditFormLink(type)
         } else {
-            //console.log("|__ type", type)
+            //console.log("type", type)
         }
         
+        // ----
+        console.groupEnd()
     }
     const stationExists = function (name, type) {
-        //console.log("Station.stationExists()")
+        console.groupCollapsed("Station.stationExists")
         // ----
         
         if (name && name !== "") {
@@ -677,9 +698,11 @@ const Station = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
     }
     const fetchByName = function (dataToSend, callback) {
-        //console.log("Station.fetchByName()")
+        console.groupCollapsed("Station.fetchByName")
         // ----
         
         let url = "/api/v1.0/stations/validate"
@@ -700,9 +723,12 @@ const Station = (function () {
         } else {
             handleStationError("Error Loading Station - Missing Data")
         }
+        
+        // ----
+        console.groupEnd()
     }
     const handleStationError = function (msg, title, type) {
-        //console.log("Station.handleStationError()")
+        console.groupCollapsed("Station.handleStationError")
         // ----
         
         if (!msg) {
@@ -719,12 +745,14 @@ const Station = (function () {
         
         toastr[type](msg, title)
         
+        // ----
+        console.groupEnd()
     }
     const defaultDetail = function () {
-        //console.log("Station.defaultDetail()")
+        console.groupCollapsed("Station.defaultDetail")
         // ----
         
-        return {
+        let details = {
             city: {
                 id: null,
                 country_id: null,
@@ -787,9 +815,12 @@ const Station = (function () {
             street_2: null,
         }
         
+        // ----
+        console.groupEnd()
+        return details
     }
     const setDetail = function (station) {
-        //console.log("Station.setDetail()")
+        console.groupCollapsed("Station.setDetail")
         // ----
         
         let detail = defaultDetail()
@@ -857,10 +888,12 @@ const Station = (function () {
             detail.wikipedia_link = (station.wikipedia_link) ? station.wikipedia_link : null
         }
         
+        // ----
+        console.groupEnd()
         return detail
     }
     const init = function (settings) {
-        //console.log("Station.init()")
+        console.groupCollapsed("Station.init")
         // ----
         
         let stations = (settings && settings.stations) ? settings.stations : []
@@ -877,9 +910,11 @@ const Station = (function () {
             initAutocomplete()
         }
         
+        // ----
+        console.groupEnd()
     }
     const resetStationForm = function (type) {
-        //console.log("Station.resetStationForm()")
+        console.groupCollapsed("Station.resetStationForm")
         // ----
         
         if (_modal_product_depart_from_station_add_block && _modal_product_arrive_to_station_add_block) {
@@ -894,9 +929,11 @@ const Station = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
     }
     const hideStationForm = function (type) {
-        //console.log("Station.hideStationForm()")
+        console.groupCollapsed("Station.hideStationForm")
         // ----
         
         if (!type || !_modal_product_depart_from_station_add_block || !_modal_product_arrive_to_station_add_block) {
@@ -918,14 +955,17 @@ const Station = (function () {
             
             toggleEditFormLink(type)
         } else {
-            //console.log("|__ type", type)
+            //console.log("type", type)
         }
         
         _modal_product_depart_from_station.disabled = false
         _modal_product_arrive_to_station.disabled = false
+        
+        // ----
+        console.groupEnd()
     }
     const loadAll = function (stations) {
-        //console.log("Station.loadAll()")
+        console.groupCollapsed("Station.loadAll")
         // ----
         
         Station.all = new Map()
@@ -937,9 +977,11 @@ const Station = (function () {
             Station.all.set(stationId, detail)
         })
         
+        // ----
+        console.groupEnd()
     }
     const initAutocomplete = function () {
-        //console.log("Station.initAutocomplete()")
+        console.groupCollapsed("Station.initAutocomplete")
         // ----
         
         if (_modal_product_depart_from_station) {
@@ -1000,7 +1042,7 @@ const Station = (function () {
                         globalSelectedStationDepartFrom = true
                         
                         if (station) {
-                            console.log("|__ station", station)
+                            console.log("station", station)
                             
                             populateStationForm(station, type)
                             toggleEditFormLink(type)
@@ -1080,7 +1122,7 @@ const Station = (function () {
                         globalSelectedStationDepartFrom = true
                         
                         if (station) {
-                            console.log("|__ station", station)
+                            console.log("station", station)
                             
                             populateStationForm(station, type)
                             toggleEditFormLink(type)
@@ -1096,9 +1138,11 @@ const Station = (function () {
                 })
         }
         
+        // ----
+        console.groupEnd()
     }
     const populateStationForm = function (station, type) {
-        //console.log("Station.populateStationForm()", station, type)
+        console.groupCollapsed("Station.populateStationForm")
         // ----
         
         if (!type || !_modal_product_depart_from_station_add_block || !_modal_product_arrive_to_station_add_block) {
@@ -1174,9 +1218,11 @@ const Station = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
     }
     const clearStationForm = function (type) {
-        //console.log("Station.clearStationForm()")
+        console.groupCollapsed("Station.clearStationForm")
         // ----
         
         if (!type) {
@@ -1246,28 +1292,31 @@ const Station = (function () {
             $(_modal_product_arrive_to_station_edit_link).hide()
             
         }
+        
+        // ----
+        console.groupEnd()
     }
     const toggleEditFormLink = function (type) {
-        //console.log("Station.toggleEditFormLink(type)", type)
+        console.groupCollapsed("Station.toggleEditFormLink")
         // ----
         
         if (type) {
             /*
-            console.log("|__ _modal_product_depart_from_station_edit_link", _modal_product_depart_from_station_edit_link)
-            console.log("|__ _modal_product_arrive_to_station_edit_link", _modal_product_arrive_to_station_edit_link)
+            console.log("_modal_product_depart_from_station_edit_link", _modal_product_depart_from_station_edit_link)
+            console.log("_modal_product_arrive_to_station_edit_link", _modal_product_arrive_to_station_edit_link)
             //*/
             
             if (type === "depart_from" && _modal_product_depart_from_station_edit_link) {
                 let toggleStatus = (_modal_product_depart_from_station_edit_link.dataset.toggle) ? _modal_product_depart_from_station_edit_link.dataset.toggle : "hidden"
                 
                 /*
-                console.log("|__ toggleStatus", toggleStatus)
-                console.log("|__ _modal_product_depart_from_new_station_id", _modal_product_depart_from_new_station_id)
-                console.log("|__ _modal_product_depart_from_station", _modal_product_depart_from_station)
-                console.log("|__ _modal_product_depart_from_station_city_id", _modal_product_depart_from_station_city_id)
-                console.log("|__ _modal_product_depart_from_new_station_id.value", _modal_product_depart_from_new_station_id.value)
-                console.log("|__ _modal_product_depart_from_new_station_id.value", _modal_product_depart_from_new_station_id.value)
-                console.log("|__ _modal_product_depart_from_station_city_id.value", _modal_product_depart_from_station_city_id.value)
+                console.log("toggleStatus", toggleStatus)
+                console.log("_modal_product_depart_from_new_station_id", _modal_product_depart_from_new_station_id)
+                console.log("_modal_product_depart_from_station", _modal_product_depart_from_station)
+                console.log("_modal_product_depart_from_station_city_id", _modal_product_depart_from_station_city_id)
+                console.log("_modal_product_depart_from_new_station_id.value", _modal_product_depart_from_new_station_id.value)
+                console.log("_modal_product_depart_from_new_station_id.value", _modal_product_depart_from_new_station_id.value)
+                console.log("_modal_product_depart_from_station_city_id.value", _modal_product_depart_from_station_city_id.value)
                 //*/
                 
                 if (_modal_product_depart_from_new_station_id && _modal_product_depart_from_station && _modal_product_depart_from_station_city_id
@@ -1286,16 +1335,6 @@ const Station = (function () {
             } else if (type === "arrive_to" && _modal_product_arrive_to_station_edit_link) {
                 let toggleStatus = (_modal_product_arrive_to_station_edit_link.dataset.toggle) ? _modal_product_arrive_to_station_edit_link.dataset.toggle : "hidden"
                 
-                //*
-                console.log("|__ toggleStatus", toggleStatus)
-                console.log("|__ _modal_product_arrive_to_new_station_id", _modal_product_arrive_to_new_station_id)
-                console.log("|__ _modal_product_arrive_to_station", _modal_product_arrive_to_station)
-                console.log("|__ _modal_product_arrive_to_station_city_id", _modal_product_arrive_to_station_city_id)
-                console.log("|__ _modal_product_arrive_to_new_station_id.value", _modal_product_arrive_to_new_station_id.value)
-                console.log("|__ _modal_product_arrive_to_new_station_id.value", _modal_product_arrive_to_new_station_id.value)
-                console.log("|__ _modal_product_arrive_to_station_city_id.value", _modal_product_arrive_to_station_city_id.value)
-                //*/
-                
                 if (
                     _modal_product_arrive_to_new_station_id &&
                     _modal_product_arrive_to_station &&
@@ -1304,13 +1343,11 @@ const Station = (function () {
                     _modal_product_arrive_to_station.value !== "" &&
                     _modal_product_arrive_to_station_city_id.value !== ""
                 ) {
-                    console.log("|__ |__ shown")
                     _modal_product_arrive_to_station_edit_link.dataset.toggle = "shown"
                     
                     $(_modal_product_arrive_to_station_edit_link).show()
                     
                 } else {
-                    console.log("|__ |__ hidden")
                     
                     _modal_product_arrive_to_station_edit_link.dataset.toggle = "hidden"
                     
@@ -1328,6 +1365,9 @@ const Station = (function () {
             }
             
         }
+        
+        // ----
+        console.groupEnd()
     }
     
     return {
@@ -1341,5 +1381,4 @@ const Station = (function () {
             init(settings)
         },
     }
-    
 })()

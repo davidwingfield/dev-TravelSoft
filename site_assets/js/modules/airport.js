@@ -2,7 +2,6 @@ const Airport = (function () {
     "use strict"
     
     const _category_id = document.getElementById("category_id")
-    
     const _product_edit_location_section = document.getElementById("product_edit_location_section")
     const _modal_product_depart_from_airport_local_code = document.getElementById("modal_product_depart_from_airport_local_code")
     const _modal_product_depart_from_airport_home_link = document.getElementById("modal_product_depart_from_airport_home_link")
@@ -60,21 +59,13 @@ const Airport = (function () {
     const _product_location_arriving_airport_iata_code = document.getElementById("product_location_arriving_airport_iata_code")
     const _product_location_arriving_airport_home_link = document.getElementById("product_location_arriving_airport_home_link")
     const _product_location_arriving_airport_wikipedia_link = document.getElementById("product_location_arriving_airport_wikipedia_link")
-    const _product_location_arriving_airport_scheduled_service = document.getElementById("product_location_arriving_airport_scheduled_service")
-    const _product_location_arriving_airport_keywords = document.getElementById("product_location_arriving_airport_keywords")
     const _product_location_arriving_airport_enabled = document.getElementById("product_location_arriving_airport_enabled")
-    const _product_location_arriving_airport_date_created = document.getElementById("product_location_arriving_airport_date_created")
-    const _product_location_arriving_airport_created_by = document.getElementById("product_location_arriving_airport_created_by")
-    const _product_location_arriving_airport_date_modified = document.getElementById("product_location_arriving_airport_date_modified")
-    const _product_location_arriving_airport_modified_by = document.getElementById("product_location_arriving_airport_modified_by")
     const _modal_product_arrive_to_airport_local_code = document.getElementById("modal_product_arrive_to_airport_local_code")
     const _product_location_arriving_airport_city_search = document.getElementById("product_location_arriving_airport_city_search")
     const _product_location_arriving_airport_remove_button = document.getElementById("product_location_arriving_airport_remove_button")
     const _product_location_arriving_airport_clear_button = document.getElementById("product_location_arriving_airport_clear_button")
     const _product_location_arriving_airport_save_button = document.getElementById("product_location_arriving_airport_save_button")
-    const _modal_product_depart_from_fields = document.getElementById("modal_product_depart_from_fields")
     const _modal_product_arrive_to_airport_add_block_close_button = document.getElementById("modal_product_arrive_to_airport_add_block_close_button")
-    const _modal_product_arrive_to_fields = document.getElementById("modal_product_arrive_to_fields")
     const _modal_product_arrive_to_airport_postal_code = document.getElementById("modal_product_arrive_to_airport_postal_code")
     const _modal_product_arrive_to_airport_street_1 = document.getElementById("modal_product_arrive_to_airport_street_1")
     const _modal_product_arrive_to_airport_street_2 = document.getElementById("modal_product_arrive_to_airport_street_2")
@@ -88,7 +79,6 @@ const Airport = (function () {
     const _modal_product_arrive_to_airport_gps_code = document.getElementById("modal_product_arrive_to_airport_gps_code")
     const _modal_product_arrive_to_airport_home_link = document.getElementById("modal_product_arrive_to_airport_home_link")
     const _modal_product_arrive_to_airport_wikipedia_link = document.getElementById("modal_product_arrive_to_airport_wikipedia_link")
-    
     const _modal_product_day_span_airport = document.getElementById("modal_product_day_span_airport")
     const _modal_product_day_span = document.getElementById("modal_product_day_span")
     
@@ -390,30 +380,15 @@ const Airport = (function () {
         })
     
     const toggleEditFormLink = function (type) {
-        //console.log("Airport.toggleEditFormLink(type)", type)
+        console.groupCollapsed("Airport.toggleEditFormLink")
         // ----
-        let hiddenText = ""
+        
         let editText = "Edit"
-        let cancelText = "Cancel"
         
         if (type) {
-            /*
-            console.log("|__ _modal_product_depart_from_airport_edit_link", _modal_product_depart_from_airport_edit_link)
-            console.log("|__ _modal_product_arrive_to_airport_edit_link", _modal_product_arrive_to_airport_edit_link)
-            //*/
             
             if (type === "depart_from" && _modal_product_depart_from_airport_edit_link) {
                 let toggleStatus = (_modal_product_depart_from_airport_edit_link.dataset.toggle) ? _modal_product_depart_from_airport_edit_link.dataset.toggle : "hidden"
-                
-                /*
-                console.log("|__ toggleStatus", toggleStatus)
-                console.log("|__ _modal_product_depart_from_new_airport_id", _modal_product_depart_from_new_airport_id)
-                console.log("|__ _modal_product_depart_from_airport", _modal_product_depart_from_airport)
-                console.log("|__ _modal_product_depart_from_airport_city_id", _modal_product_depart_from_airport_city_id)
-                console.log("|__ _modal_product_depart_from_new_airport_id.value", _modal_product_depart_from_new_airport_id.value)
-                console.log("|__ _modal_product_depart_from_new_airport_id.value", _modal_product_depart_from_new_airport_id.value)
-                console.log("|__ _modal_product_depart_from_airport_city_id.value", _modal_product_depart_from_airport_city_id.value)
-                //*/
                 
                 if (_modal_product_depart_from_new_airport_id && _modal_product_depart_from_airport && _modal_product_depart_from_airport_city_id
                     && _modal_product_depart_from_new_airport_id.value !== "" && _modal_product_depart_from_airport.value !== ""
@@ -433,16 +408,6 @@ const Airport = (function () {
             
             if (type === "arrive_to" && _modal_product_arrive_to_airport_edit_link) {
                 let toggleStatus = (_modal_product_arrive_to_airport_edit_link.dataset.toggle) ? _modal_product_arrive_to_airport_edit_link.dataset.toggle : "hidden"
-                
-                /*
-                console.log("|__ toggleStatus", toggleStatus)
-                console.log("|__ _modal_product_arrive_to_new_airport_id", _modal_product_arrive_to_new_airport_id)
-                console.log("|__ _modal_product_arrive_to_airport", _modal_product_arrive_to_airport)
-                console.log("|__ _modal_product_arrive_to_airport_city_id", _modal_product_arrive_to_airport_city_id)
-                console.log("|__ _modal_product_arrive_to_new_airport_id.value", _modal_product_arrive_to_new_airport_id.value)
-                console.log("|__ _modal_product_arrive_to_airport.value", _modal_product_arrive_to_airport.value)
-                console.log("|__ _modal_product_arrive_to_airport_city_id.value", _modal_product_arrive_to_airport_city_id.value)
-                //*/
                 
                 if (_modal_product_arrive_to_new_airport_id && _modal_product_arrive_to_airport && _modal_product_arrive_to_airport_city_id
                     && _modal_product_arrive_to_new_airport_id.value !== "" && _modal_product_arrive_to_airport.value !== ""
@@ -465,9 +430,11 @@ const Airport = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
     }
     const cancelAddAirportRecord = function (type) {
-        //console.log("Airport.cancelAddAirportRecord(type)", type)
+        console.groupCollapsed("Airport.cancelAddAirportRecord")
         // ----
         
         if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
@@ -502,9 +469,11 @@ const Airport = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
     }
     const validAirport = function (type) {
-        //console.log("Airport.validAirport(type)", type)
+        console.groupCollapsed("Airport.validAirport")
         // ----
         
         if (type) {
@@ -514,9 +483,12 @@ const Airport = (function () {
                 return $(_product_location_arriving_airport_form).valid()
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
     const buildAirportUpdateRecord = function (type) {
-        //console.log("Airport.buildAirportUpdateRecord(type)", type)
+        console.groupCollapsed("Airport.buildAirportUpdateRecord")
         // ----
         
         let returnObject = {}
@@ -557,10 +529,12 @@ const Airport = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
         return returnObject
     }
     const sendUpdateRequest = function (dataToSend, callback) {
-        //console.log("Airport.sendUpdateRequest(dataToSend)", dataToSend)
+        console.groupCollapsed("Airport.sendUpdateRequest")
         // ----
         
         if (dataToSend) {
@@ -575,8 +549,14 @@ const Airport = (function () {
                 //console.log("error", e)
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
     const sendSaveRequest = function (dataToSend, callback) {
+        console.groupCollapsed("Airport.sendSaveRequest")
+        // ----
+        
         if (dataToSend) {
             let url = "/api/v1.0/airports/update"
             try {
@@ -592,8 +572,14 @@ const Airport = (function () {
                 //console.log("error", e)
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
     const validDepartFromRecord = function () {
+        console.groupCollapsed("Airport.validDepartFromRecord")
+        // ----
+        
         let isValid = true
         
         if (_modal_product_depart_from_airport_iata_code.value === "") {
@@ -617,9 +603,14 @@ const Airport = (function () {
             $(_modal_product_depart_from_airport_city).hideError()
         }
         
+        // ----
+        console.groupEnd()
         return isValid
     }
     const validArriveToRecord = function () {
+        console.groupCollapsed("Airport.validArriveToRecord")
+        // ----
+        
         let isValid = true
         
         if (_modal_product_arrive_to_airport_iata_code.value === "") {
@@ -643,9 +634,14 @@ const Airport = (function () {
             $(_modal_product_arrive_to_airport_city).hideError()
         }
         
+        // ----
+        console.groupEnd()
         return isValid
     }
     const buildAddAirportRecord = function (type) {
+        console.groupCollapsed("Airport.buildAddAirportRecord")
+        // ----
+        
         if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
             if (type) {
                 if (type === "depart_from") {
@@ -709,9 +705,12 @@ const Airport = (function () {
                 }
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
     const populateAirportForm = function (airport, type) {
-        //console.log("Airport.populateAirportForm(airport, type)", airport, type)
+        console.groupCollapsed("Airport.populateAirportForm")
         // ----
         
         if (!type || !_modal_product_depart_from_airport_add_block || !_modal_product_arrive_to_airport_add_block) {
@@ -786,9 +785,11 @@ const Airport = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
     }
     const clearAirportForm = function (type) {
-        //console.log("Airport.clearAirportForm(type)", type)
+        console.groupCollapsed("Airport.clearAirportForm")
         // ----
         
         if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
@@ -838,9 +839,11 @@ const Airport = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
     }
     const resetAirportForm = function (type) {
-        //console.log("Airport.resetAirportForm(type)", type)
+        console.groupCollapsed("Airport.resetAirportForm")
         // ----
         
         if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
@@ -856,9 +859,12 @@ const Airport = (function () {
             
             toggleEditFormLink(type)
         }
+        
+        // ----
+        console.groupEnd()
     }
     const hideAirportForm = function (type) {
-        //console.log("Airport.hideAirportForm(type)", type)
+        console.groupCollapsed("Airport.hideAirportForm")
         // ----
         
         if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
@@ -890,9 +896,12 @@ const Airport = (function () {
                 }
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
     const showAirportForm = function (type) {
-        //console.log("Airport.showAirportForm(type)", type)
+        console.groupCollapsed("Airport.showAirportForm")
         // ----
         
         if (_modal_product_depart_from_airport_add_block && _modal_product_arrive_to_airport_add_block) {
@@ -938,9 +947,11 @@ const Airport = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
     }
     const clearLocationAirportForm = function (type) {
-        //console.log("Airport.clearLocationAirportForm(type)", type)
+        console.groupCollapsed("Airport.clearLocationAirportForm")
         // ----
         
         if (type) {
@@ -980,9 +991,11 @@ const Airport = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
     }
     const setLocationAirportForm = function (airport, type) {
-        //console.log("Airport.setLocationAirportForm(type)", type)
+        console.groupCollapsed("Airport.setLocationAirportForm")
         // ----
         
         if (type) {
@@ -1068,17 +1081,15 @@ const Airport = (function () {
             }
         }
         
+        // ----
+        console.groupEnd()
     }
     const airportExists = function (name, type) {
-        //console.log("Airport.airportExists(name, type)", name, type)
+        console.groupCollapsed("Airport.airportExists")
         // ----
         
         if (name && name !== "") {
-            /**
-             * data to send to the server
-             *
-             * @type {{name}}
-             */
+            
             let dataToSend = {
                 name: name,
             }
@@ -1193,8 +1204,13 @@ const Airport = (function () {
             
         }
         
+        // ----
+        console.groupEnd()
     }
     const fetchByName = function (dataToSend, callback) {
+        console.groupCollapsed("Airport.fetchByName")
+        // ----
+        
         let url = "/api/v1.0/airports/validate"
         
         if (dataToSend) {
@@ -1213,9 +1229,12 @@ const Airport = (function () {
         } else {
             handleAirportError("Error Loading Airport - Missing Data")
         }
+        
+        // ----
+        console.groupEnd()
     }
     const handleAirportError = function (msg, title, type) {
-        //console.log("Airport.handleAirportError()")
+        console.groupCollapsed("Airport.handleAirportError")
         // ----
         
         if (!msg) {
@@ -1232,9 +1251,13 @@ const Airport = (function () {
         
         toastr[type](msg, title)
         
+        // ----
+        console.groupEnd()
     }
     const update = function (type) {
-        //console.log("Airport.update(type)", type)
+        console.groupCollapsed("Airport.update")
+        // ----
+        
         if (validAirport(type)) {
             confirmDialog(`Would you like to update?`, (ans) => {
                 if (ans) {
@@ -1245,16 +1268,23 @@ const Airport = (function () {
                             if (data[0]) {
                                 airport = data[0]
                             }
-                            //console.log("airport", airport)
+                            
                             let name = (airport.name) ? airport.name : null
                             toastr["success"](`Airport ${name} has been updated`, "Airport Updated")
+                            
                         }
                     })
                 }
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
     const save = function (type) {
+        console.groupCollapsed("Airport.save")
+        // ----
+        
         if (type) {
             let dataToSend = buildAddAirportRecord(type)
             
@@ -1328,9 +1358,15 @@ const Airport = (function () {
                 })
             }
         }
+        
+        // ----
+        console.groupEnd()
     }
     const defaultDetail = function () {
-        return {
+        console.groupCollapsed("Airport.defaultDetail")
+        // ----
+        
+        let details = {
             display_short: null,
             display_medium: null,
             display_long: null,
@@ -1359,10 +1395,15 @@ const Airport = (function () {
             country: {},
             type: {},
         }
+        
+        // ----
+        console.groupEnd()
+        return details
     }
     const setDetail = function (airport) {
-        //console.log("Airport.setDetail()", airport)
+        console.groupCollapsed("Airport.setDetail")
         // ----
+        
         let detail = defaultDetail()
         
         if (airport) {
@@ -1397,10 +1438,13 @@ const Airport = (function () {
         }
         
         Airport.detail = detail
+        
+        // ----
+        console.groupEnd()
         return detail
     }
     const loadAll = function (airports) {
-        //console.log("Airport.loadAll()")
+        console.groupCollapsed("Airport.loadAll")
         // ----
         
         Airport.all = new Map()
@@ -1411,9 +1455,12 @@ const Airport = (function () {
                 Airport.all.set(detail.id, detail)
             })
         }
+        
+        // ----
+        console.groupEnd()
     }
     const initAutocomplete = function () {
-        //console.log("Airport.initAutocomplete()")
+        console.groupCollapsed("Airport.initAutocomplete")
         // ----
         
         if (_product_location_departing_airport_search) {
@@ -1741,10 +1788,13 @@ const Airport = (function () {
                 })
         }
         
+        // ----
+        console.groupEnd()
     }
     const init = function (settings) {
-        //console.log("Airport.init()")
+        console.groupCollapsed("Airport.init")
         // ----
+        
         let airports = (settings && settings.airports) ? settings.airports : []
         
         loadAll(airports)
@@ -1794,7 +1844,9 @@ const Airport = (function () {
         
         hideAirportForm("depart_from")
         hideAirportForm("arrive_to")
-        //})
+        
+        // ----
+        console.groupEnd()
     }
     
     return {
@@ -1811,5 +1863,4 @@ const Airport = (function () {
             init(settings)
         },
     }
-    
 })()

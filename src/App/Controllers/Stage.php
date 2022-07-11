@@ -23,8 +23,8 @@
 		
 		public static function get(array $params = []): array
 		{
-			Log::$debug_log->trace("Itinerary::get()");
-			Log::$debug_log->info($params);
+			//Log::$debug_log->trace("Itinerary::get()");
+			//Log::$debug_log->info($params);
 			// ----
 			
 			$stages = [];
@@ -50,8 +50,8 @@
 		
 		public static function format(array $stage = null): array
 		{
-			Log::$debug_log->trace("Stage::format()");
-			Log::$debug_log->info($stage);
+			//Log::$debug_log->trace("Stage::format()");
+			//Log::$debug_log->info($stage);
 			
 			if (is_null($stage)) {
 				return [];

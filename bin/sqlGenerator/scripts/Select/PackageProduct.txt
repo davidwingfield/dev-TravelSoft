@@ -1,18 +1,34 @@
 SELECT
-	PACKAGE_PRODUCT.id AS 'package_product_id',
-	PACKAGE_PRODUCT.package_id AS 'package_product_package_id',
-	PACKAGE_PRODUCT.product_id AS 'package_product_product_id',
-	PACKAGE_PRODUCT.unit_id AS 'package_product_unit_id',
-	PACKAGE_PRODUCT.product_label AS 'package_product_product_label',
-	PACKAGE_PRODUCT.unit_label AS 'package_product_unit_label',
-	PACKAGE_PRODUCT.day_span AS 'package_product_day_span',
-	PACKAGE_PRODUCT.sort_order AS 'package_product_sort_order',
-	PACKAGE_PRODUCT.allow_substitution AS 'package_product_allow_substitution',
-	PACKAGE_PRODUCT.enabled AS 'package_product_enabled',
-	PACKAGE_PRODUCT.date_created AS 'package_product_date_created',
-	PACKAGE_PRODUCT.created_by AS 'package_product_created_by',
-	PACKAGE_PRODUCT.date_modified AS 'package_product_date_modified',
-	PACKAGE_PRODUCT.modified_by AS 'package_product_modified_by',
-	PACKAGE_PRODUCT.note AS 'package_product_note'
+		PACKAGE_PRODUCT.package_id AS 'package_product_package_id',
+		PACKAGE_PRODUCT.product_id AS 'package_product_product_id',
+		PACKAGE_PRODUCT.unit_id AS 'package_product_unit_id',
+		PACKAGE_PRODUCT.product_label AS 'package_product_product_label',
+		PACKAGE_PRODUCT.unit_label AS 'package_product_unit_label',
+		PACKAGE_PRODUCT.day_span AS 'package_product_day_span',
+		PACKAGE_PRODUCT.sort_order AS 'package_product_sort_order',
+		PACKAGE_PRODUCT.allow_substitution AS 'package_product_allow_substitution',
+		PACKAGE_PRODUCT.enabled AS 'package_product_enabled',
+		PACKAGE_PRODUCT.date_created AS 'package_product_date_created',
+		PACKAGE_PRODUCT.created_by AS 'package_product_created_by',
+		PACKAGE_PRODUCT.date_modified AS 'package_product_date_modified',
+		PACKAGE_PRODUCT.modified_by AS 'package_product_modified_by',
+		PACKAGE_PRODUCT.note AS 'package_product_note'
 FROM 	package_product PACKAGE_PRODUCT
 -- JOIN 	package_product PACKAGE_PRODUCT ON PACKAGE_PRODUCT.id = {FK_TABLE}.package_product_id
+
+/*
+'package_id'=>$package_product['package_product_package_id'],
+'product_id'=>$package_product['package_product_product_id'],
+'unit_id'=>$package_product['package_product_unit_id'],
+'product_label'=>$package_product['package_product_product_label'],
+'unit_label'=>$package_product['package_product_unit_label'],
+'day_span'=>$package_product['package_product_day_span'],
+'sort_order'=>$package_product['package_product_sort_order'],
+'allow_substitution'=>$package_product['package_product_allow_substitution'],
+'enabled'=>$package_product['package_product_enabled'],
+'date_created'=>$package_product['package_product_date_created'],
+'created_by'=>$package_product['package_product_created_by'],
+'date_modified'=>$package_product['package_product_date_modified'],
+'modified_by'=>$package_product['package_product_modified_by'],
+'note'=>$package_product['package_product_note']
+*/

@@ -68,6 +68,8 @@
 				"contact_types" => ContactTypesModel::get(),
 				"currency" => CurrencyModel::get(),
 				"countries" => Country::get(),
+				"provinces" => Province::fetch(),
+				"cities" => City::get(),
 				"icons" => self::getIcons(),
 				"location_types" => LocationTypesModel::get(),
 				"message_types" => MessageTypesModel::get(),
